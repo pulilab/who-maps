@@ -1,8 +1,8 @@
 import angular from 'angular';
 import SampleController from './SampleModuleController';
-import SampleComponent from './SampleComponent/sampleComponent';
+import sampleComponent from './SampleComponent/sampleComponent';
 
-import sampleTemplate from './SampleModule.html';
+import sampleTemplate from './sampleModule.html';
 import uiRoute from 'angular-ui-router';
 
 const moduleName = 'sampleModule';
@@ -23,7 +23,7 @@ config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
 angular.module(moduleName, [uiRoute])
     .controller('sampleModule.sampleModuleController', SampleController)
-    .component('sampleComponent', SampleComponent)
+    .component('sampleComponent', sampleComponent)
     .config(config);
 
 export default moduleName;

@@ -1,4 +1,4 @@
 import angular from 'angular';
-import { default as sampleModule } from './SampleModule/';
+import { default as app } from './App/';
 
-angular.bootstrap(document, [sampleModule]);
+angular.bootstrap(document, [app]);

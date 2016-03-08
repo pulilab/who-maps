@@ -1,4 +1,17 @@
 const webpack = require('webpack');
+// Determine if is a production build based on environment variable
+const production = process.argv.indexOf('--dist') > -1;
+
+const distPlugins = [
+    new webpack.optimize.UglifyJsPlugin(
+    {
+        compress: {
+            warnings: false
+        }
+    }
+)];
+
+const devPlugins = [];
 
 module.exports = {
     entry: './src',
@@ -18,7 +31,7 @@ module.exports = {
             {
                 test: /\.js/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel', // 'babel-loader' is also a legal name to reference
+                loader: 'babel',
                 query: {
                     presets: ['es2015']
                 }
@@ -33,14 +46,6 @@ module.exports = {
             }
         ]
     },
-    devtool: 'source-maps',
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin(
-            {
-                compress: {
-                    warnings: false
-                }
-            }
-        )
-    ]
+    devtool: production ? false : 'source-maps',
+    plugins: production ? distPlugins : devPlugins
 };

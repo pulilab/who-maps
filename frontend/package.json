@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "karma start"
+    "test": "karma start",
+    "serve": "webpack-dev-server --progress --colors",
+    "dist": "webpack --dist"
   },
   "author": "",
   "license": "ISC",
