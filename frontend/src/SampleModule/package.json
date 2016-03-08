@@ -2,5 +2,5 @@
   "name": "SampleModule",
   "version": "0.0.0",
   "private": true,
-  "main": "./SampleModule.js"
+  "main": "./sampleModule.js"
 }

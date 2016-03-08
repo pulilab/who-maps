@@ -1,15 +1,9 @@
-
-
-
-
 function sampleComponentController() {
     require('./SampleComponent.scss');
-    console.log('Test')
+    console.log('Test');
 }
 
-
-
-var sampleComponent = {
+const sampleComponent = {
     controller: sampleComponentController,
     bindings: {
         testData: '='

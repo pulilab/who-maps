@@ -1,13 +1,11 @@
 
-
 class SampleModuleController {
 
-    printAndReturnSome(){
+    static printAndReturnSome() {
         console.log('some');
-        return "some"
+        return 'some';
     }
 
 }
-
 
 export default SampleModuleController;
