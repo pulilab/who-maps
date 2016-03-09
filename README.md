@@ -21,6 +21,7 @@ $ eval "$(docker-machine env who-maps)"
 4. Build the containers:
 
 ```bash
+$ cd your/project/root
 $ docker-compose build
 ```
 
