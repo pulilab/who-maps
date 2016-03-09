@@ -37,7 +37,7 @@ class HssModuleController {
     motherMiddleColumnDecorator() {
         return _.map(this.cell, (value)=> {
             return {
-                content: hss[value].titleMother,
+                content: hss[value].mother.title,
                 colSpan: 1,
                 rowSpan: 1
             };
@@ -47,8 +47,8 @@ class HssModuleController {
     childMiddleColumnDecorator() {
         return _.map(this.cell, (value)=> {
             return {
-                content: hss[value].titleChild,
-                className: !hss[value].titleChild ? 'empty' : '',
+                content: hss[value].child.title,
+                className: !hss[value].child.title ? 'empty' : '',
                 colSpan: 1,
                 rowSpan: 1
             };
