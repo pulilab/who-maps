@@ -108,7 +108,54 @@ export const applicationsLib = [
     }
 ];
 
-export const taxonomyLib = {};
+export const taxonomyLib = {
+    'Information': [
+        'Lack of population enumeration',
+        'Delayed reporting of events',
+        'Quality / unreliability of data',
+        'Communication roadblock',
+        'Access to information or data'
+    ],
+    'Availability': [
+        'Supply of commodities',
+        'Supply of services',
+        'Supply of equipment',
+        'Diversity of treatment options'
+    ],
+    'Quality': [
+        'Quality of care',
+        'Health worker competence',
+        'Quality of commodity',
+        'Health worker motivation',
+        'Continuity of care',
+        'Supportive supervision'
+    ],
+    'Acceptability': [
+        'Alignment with local norms',
+        'Addressing individual beliefs and practices',
+        'Stigma'
+    ],
+    'Utilization': [
+        'Demand for services',
+        'Geographic inaccessibility',
+        'Low adherence to treatments',
+        'Loss to follow up'
+    ],
+    'Efficiency': [
+        'Workflow management',
+        'Effective resource allocation',
+        'Unnecessary referrals / transportation',
+        'Planning and coordination',
+        'Timeliness of care'
+    ],
+    'Cost': [
+        'Expenses related to commodity production',
+        'Expenses related to commodity supply',
+        'Expenses related to commodity disbursement',
+        'Expenses related to service delivery',
+        'Client-side expenses'
+    ]
+};
 
 // Bindable things
 // ***************
@@ -116,10 +163,16 @@ export const taxonomyLib = {};
 export const hss = [
     {
         'id': 'column0',
-        'titleMother': 'Adolenscence',
-        'titleChild': null,
-        'activatedMother': false,
-        'activatedChild': false,
+        'mother': {
+            'title': 'Adolenscence',
+            'span': 1,
+            'activated': false
+        },
+        'child': {
+            'title': null,
+            'span': 1,
+            'activated': false
+        },
         'interventions': {
         },
         'applications': {
@@ -127,10 +180,16 @@ export const hss = [
     },
     {
         'id': 'column1',
-        'titleMother': 'Before Pregnancy',
-        'titleChild': null,
-        'activatedMother': false,
-        'activatedChild': false,
+        'mother': {
+            'title': 'Before Pregnancy',
+            'span': 1,
+            'activated': false
+        },
+        'child': {
+            'title': null,
+            'span': 1,
+            'activated': false
+        },
         'interventions': {
         },
         'applications': {
@@ -138,10 +197,16 @@ export const hss = [
     },
     {
         'id': 'column2',
-        'titleMother': 'Pregnancy',
-        'titleChild': null,
-        'activatedMother': false,
-        'activatedChild': false,
+        'mother': {
+            'title': 'Pregnancy',
+            'span': 1,
+            'activated': false
+        },
+        'child': {
+            'title': null,
+            'span': 1,
+            'activated': false
+        },
         'interventions': {
         },
         'applications': {
@@ -149,10 +214,16 @@ export const hss = [
     },
     {
         'id': 'column3',
-        'titleMother': 'Birth',
-        'titleChild': null,
-        'activatedMother': true,
-        'activatedChild': false,
+        'mother': {
+            'title': 'Birth',
+            'span': 1,
+            'activated': true
+        },
+        'child': {
+            'title': null,
+            'span': 1,
+            'activated': false
+        },
         'interventions': {
             'Community': 0
         },
@@ -169,10 +240,16 @@ export const hss = [
     },
     {
         'id': 'column4',
-        'titleMother': 'Postpartum Mother',
-        'titleChild': 'Postnatal Newborn',
-        'activatedMother': true,
-        'activatedChild': true,
+        'mother': {
+            'title': 'Postpartum Mother',
+            'span': 1,
+            'activated': true
+        },
+        'child': {
+            'title': 'Postnatal Newborn',
+            'span': 1,
+            'activated': true
+        },
         'interventions': {
             'Community': 1,
             '1st level': 0
@@ -200,8 +277,16 @@ export const hss = [
         'id': 'column5',
         'titleMother': 'Maternal Health',
         'titleChild': 'Infancy',
-        'activatedMother': true,
-        'activatedChild': true,
+        'mother': {
+            'title': 'Maternal Health',
+            'span': 2,
+            'activated': true
+        },
+        'child': {
+            'title': 'Infancy',
+            'span': 1,
+            'activated': true
+        },
         'interventions': {
             'Community': 1
         },
@@ -210,10 +295,13 @@ export const hss = [
     },
     {
         'id': 'column6',
-        'titleMother': 'Maternal Health',
-        'titleChild': 'Childhood',
-        'activatedMother': true,
-        'activatedChild': true,
+        'mother': {
+        },
+        'child': {
+            'title': 'Childhood',
+            'span': 1,
+            'activated': true
+        },
         'interventions': {
         },
         'applications': {
@@ -223,9 +311,23 @@ export const hss = [
 ];
 
 export const taxonomy = {
-    '1': ['Demand for services', 'Loss to follow up'],
-    '3': ['Lack of population enumeration'],
-    '4': ['Delayed reporting of events', 'Supportive supervision'],
-    '5': ['Access to information or data', 'Continuity of care'],
-    '8a': ['Quality of care', 'Timeliness of care']
+    '1': [
+        { 'Utilization': 0 },
+        { 'Utilization': 3 }
+    ],
+    '3': [
+        { 'Information': 0 }
+    ],
+    '4': [
+        { 'Information': 1 },
+        { 'Quality': 5 }
+    ],
+    '5': [
+        { 'Information': 4 },
+        { 'Quality': 4 }
+    ],
+    '8a': [
+        { 'Quality': 0 },
+        { 'Efficiency': 4 }
+    ]
 };
