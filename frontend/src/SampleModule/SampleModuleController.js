@@ -5,7 +5,6 @@ class SampleModuleController {
         console.log('some');
         return 'some';
     }
-
 }
 
 export default SampleModuleController;

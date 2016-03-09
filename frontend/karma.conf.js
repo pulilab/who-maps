@@ -6,21 +6,36 @@ module.exports = function(config) {
         ],
         frameworks: ['jasmine'],
         preprocessors: {
-            'test-context.js': ['webpack']
+            'test-context.js': ['webpack', 'sourcemap']
         },
+        coverageReporter: {
+            reporters: [
+                { type: 'html', subdir: 'html' },
+                { type: 'text' }
+            ]
+        },
+        reporters: ['progress', 'coverage'],
         webpack: {
+            devtool: 'inline-source-map',
             module: {
                 loaders: [
-                    { test: /\.js/,
+                    {
+                        test: /\.js$/,
                         exclude: /node_modules/,
                         loader: 'babel',
                         query: {
                             presets: ['es2015']
                         }
                     }
+                ],
+                postLoaders: [
+                    {
+                        test: /^((?!-spec).)*.js$/,
+                        exclude: /(node_modules|bower_components)/,
+                        loader: 'istanbul-instrumenter'
+                    }
                 ]
-            },
-            watch: true
+            }
         },
         webpackServer: {
             noInfo: true
