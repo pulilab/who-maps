@@ -1,0 +1,9 @@
+@import '../../node_modules/angular-material/angular-material.css';
+
+md-grid-tile {
+  background: gray;
+
+  &.empty {
+    background: transparent;
+  }
+}

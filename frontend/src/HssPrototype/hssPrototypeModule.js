@@ -1,17 +1,17 @@
 import angular from 'angular';
+import uiRoute from 'angular-ui-router';
+import ngMaterial from 'angular-material';
+
 import HssModuleController from './HssModuleController';
 
 import hssTemplate from './hssPrototype.html';
-import uiRoute from 'angular-ui-router';
+import './hssModule.scss';
 
 const moduleName = 'hssPrototype';
 
-console.log(moduleName, ' loaded');
-
 function config($stateProvider) {
     $stateProvider
-        .state(moduleName,
-        {
+        .state(moduleName, {
             url: '/hssPrototype',
             parent: 'app',
             views: {
@@ -27,7 +27,11 @@ function config($stateProvider) {
 
 config.$inject = ['$stateProvider'];
 
-angular.module(moduleName, [uiRoute])
+angular.module(moduleName,
+    [
+        uiRoute,
+        ngMaterial
+    ])
     .controller(moduleName + '.hssModuleController', HssModuleController)
     .config(config);
 
