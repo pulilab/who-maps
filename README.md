@@ -13,20 +13,23 @@ https://docs.docker.com/mac/step_one/
 $ docker-machine create --driver virtualbox who-maps
 ```
 
-3. Connect your shell to the VM:
+
+3, Connect your shell to the VM:
 
 ```bash
 $ eval "$(docker-machine env who-maps)"
 ```
 
-4. Build the containers:
+
+4, Build the containers:
 
 ```bash
 $ cd your/project/root
 $ docker-compose build
 ```
 
-5. Run the containers:
+
+5, Run the containers:
 
 ```bash
 $ docker-compose up
@@ -38,19 +41,19 @@ It also can be run with option "-d" so that it starts detached mode (in the back
 $ docker-compose up -d
 ```
 
-5. Initialize the database:
+6, Initialize the database:
 
 ```bash
 $ docker exec -it whomaps_django_1 python manage.py migrate
 ```
 
-6. Check for the IP of the VM:
+7, Check for the IP of the VM:
 
 ```bash
 $ docker-machine ip who-maps
 ```
 
-7. Open a browser on the given IP and load the application:
+8, Open a browser on the given IP and load the application:
 
 ```bash
 $ open http://192.168.99.100
@@ -58,7 +61,7 @@ $ open http://192.168.99.100
 
 You're done!
 
-7. Useful commands for managing the VM and the containers:
+Useful commands for managing the VM and the containers:
 
 ```bash
 $ docker-machine ls
