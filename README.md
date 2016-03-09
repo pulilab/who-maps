@@ -1,12 +1,13 @@
 ## Setting up the backend on Mac
 
-1. Follow instructions here to install Docker:
+1, Follow instructions here to install Docker:
 
 https://docs.docker.com/mac/step_one/
 
 "Step 3: Verify your installation" is not needed.
 
-2. Create a VirtualBox VM for running the images:
+
+2, Create a VirtualBox VM for running the images:
 
 ```bash
 $ docker-machine create --driver virtualbox who-maps
