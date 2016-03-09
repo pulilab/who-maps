@@ -1,0 +1,39 @@
+django:
+  restart: always
+  build: ./django
+  expose:
+    - "8000"
+  links:
+    - postgres:postgres
+  volumes:
+    - ./django:/src
+  command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload
+
+nginx:
+  restart: always
+  image: nginx:1.9.5
+  ports:
+    - "80:80"
+  volumes:
+    - ./nginx/site:/usr/share/nginx/html:ro
+    - ./nginx/conf.d:/etc/nginx/conf.d:ro
+  links:
+    - django:django
+
+postgres:
+  restart: always
+  image: postgres:9.5.1
+  environment:
+    - POSTGRESQL_DB=postgres
+    - POSTGRESQL_USER=postgres
+    - POSTGRESQL_PASSWORD=postgres
+  volumes_from:
+    - postgresdata
+  ports:
+    - "5432:5432"
+
+postgresdata:
+  image: postgres:9.5.1
+  volumes:
+    - /var/lib/postgresql
+  command: "/bin/true"
