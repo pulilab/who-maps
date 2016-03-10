@@ -4,14 +4,97 @@
 
 export const interventionsLib = {
 
+    // Data-fragments with rowheader-like approach
     'Community': ['Birth notification', 'Routine immunizations'],
 
     '1st level': ['Postnatal care for mother and child'],
 
     'Referral': [],
 
-    'Key supplies & commodities': []
+    'Key supplies & commodities': [],
 
+    // All the real ones from the 13. page of the .pdf pr. column
+    '0': [
+        'Safe sex',
+        'Family planning',
+        'Birth spacing',
+        'Infertility',
+        'Sexual and domestic violence',
+        'HIV/AIDS',
+        'Generalized epidemics',
+        'STIs, except HIV/AIDs',
+        'Cancer',
+        'Key supplies and commodities'
+    ],
+    '1': [
+        'Safe sex',
+        'Family planning',
+        'Birth spacing',
+        'Infertility',
+        'Sexual and domestic violence',
+        'HIV/AIDS',
+        'Generalized epidemics',
+        'STIs, except HIV/AIDs',
+        'Cancer',
+        'Key supplies and commodities'
+    ],
+    '2': [
+        'Pregnancy registration',
+        'Antenatal care',
+        'Nutrition',
+        'Safe sex',
+        'HIV/AIDS',
+        'Smoking/Alcohol use',
+        'Malaria',
+        'Birth planning',
+        'Domestic violence',
+        'Pregnancy complications',
+        'Immunizations',
+        'Key supplies and commodities'
+    ],
+    '3': [
+        'Transportation',
+        'Skilled attendance at birth',
+        'Labor and delivery care',
+        'Immediate care of newborn',
+        'Immediate postpartum care',
+        'Obstetric complications',
+        'HIV/AIDS',
+        'PMTCT',
+        'Key supplies and commodities'
+    ],
+    '4': [
+        'Postpartum care',
+        'Exclusive Breastfeeding',
+        'Vital registration',
+        'Family planning',
+        'Malaria',
+        'Depression',
+        'Postnatal care',
+        'HIV/AIDs',
+        'PMTCT',
+        'Newborn illnesses',
+        'Low birth weight/pre term care',
+        'Key supplies and commodities'
+    ],
+    '5': [
+        'Exclusive breastfeeding',
+        'Childhood illnesses',
+        'Malaria',
+        'Immunizations',
+        'Growth monitoring and Nutrition',
+        'PMTCT',
+        'Micronutrient supplementation',
+        'Key supplies and commodities'
+    ],
+    '6': [
+        'Childhood illnesses',
+        'Malaria',
+        'Growth monitoring and Nutrition',
+        'PMTCT',
+        'Micronutrient supplementation',
+        'Key supplies and commodities'
+    ]
 };
 
 export const applicationsLib = [
