@@ -1,5 +1,8 @@
 <h1 xmlns="">HSS Prototype</h1>
-<md-grid-list md-cols="11" md-gutter="1px" md-row-height="3em">
+<md-switch ng-model="vm.editMode" aria-label="EditMode">
+    Edit Enabled: {{vm.editMode}}
+</md-switch>
+<md-grid-list md-cols="11" md-gutter="1px" md-row-height="4em">
 
     <md-grid-tile ng-repeat="tile in vm.zeroRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
         {{tile.content}}
@@ -13,7 +16,63 @@
         {{tile.content}}
     </md-grid-tile>
 
+    <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > InterventionHeader</md-grid-tile>
+
     <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
-        {{tile.content}}
+        <md-list flex ng-if="!tile.isInput || !vm.editMode">
+            <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                <div class="md-list-item-text" layout="column">
+                    <p>{{item}}</p>
+                </div>
+            </md-list-item>
+        </md-list>
+        <md-input-container ng-if="tile.isInput && vm.editMode">
+            <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true">
+                <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
+                    {{option}}
+                </md-option>
+            </md-select>
+        </md-input-container>
     </md-grid-tile>
+
+    <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > Other Box</md-grid-tile>
+
+    <md-grid-tile md-colspan="2">
+        common and mHealth ict application
+    </md-grid-tile>
+    <md-grid-tile md-colspan="7">
+
+    </md-grid-tile>
+    <md-grid-tile md-colspan="2" md-rowspan="2">
+        <div flex="100" layout="column">
+            <div>
+                <legend></legend>
+                <div layout="row" layout-wrap flex>
+                    <div flex="50" ng-repeat="constraint in vm.constraintsToggle">
+                        <md-checkbox ng-model="constraint.toggled">
+                            {{ constraint.name }}
+                        </md-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-grid-tile>
+    <md-grid-tile md-colspan="9" class="empty">
+
+    </md-grid-tile>
+
+    <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="tile.className" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
+        <section resizable r-directions="['bottom', 'right']" r-flex="true" >
+            <div ng-if="!tile.isInput || !vm.editMode">
+
+                <div>{{tile.content}}</div>
+                <a ng-show="tile.subApplications.length > 0 " ng-click="vm.enableSubApp(tile.model)">Show sub applications</a>
+
+            </div>
+            <md-input-container  ng-if="tile.isInput && vm.editMode" md-no-float class="md-block">
+                <input aria-label="tile content" ng-model="tile.content">
+            </md-input-container>
+        </section>
+    </md-grid-tile>
+
 </md-grid-list>

@@ -6,4 +6,25 @@ md-grid-tile {
   &.empty {
     background: transparent;
   }
+  &.sub {
+    background:red;
+  }
+
+  md-input-container {
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    vertical-align: top;
+    margin:0;
+
+    .md-select-value .md-text {
+      display: block;
+      word-break: break-all;
+      word-wrap: break-word;
+      width: 99%;
+      float: left;
+    }
+  }
 }
+
