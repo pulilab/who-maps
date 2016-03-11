@@ -8,11 +8,11 @@
         {{tile.content}}
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.firstRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
+    <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
         {{tile.content}}
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.secondRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
+    <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
         {{tile.content}}
     </md-grid-tile>
 
@@ -46,7 +46,6 @@
     <md-grid-tile md-colspan="2" md-rowspan="2">
         <div flex="100" layout="column">
             <div>
-                <legend></legend>
                 <div layout="row" layout-wrap flex>
                     <div flex="50" ng-repeat="constraint in vm.constraintsToggle">
                         <md-checkbox ng-model="constraint.toggled">
@@ -61,18 +60,23 @@
 
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="tile.className" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
-        <section resizable r-directions="['bottom', 'right']" r-flex="true" >
-            <div ng-if="!tile.isInput || !vm.editMode">
+    <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="vm.classGenerator(tile)" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
+        <div ng-if="!tile.isInput">
+            <div>{{tile.content}}</div>
+            <a ng-show="tile.subApplications.length > 0 " ng-click="vm.enableSubApp(tile.model)">Show sub applications</a>
+        </div>
 
-                <div>{{tile.content}}</div>
-                <a ng-show="tile.subApplications.length > 0 " ng-click="vm.enableSubApp(tile.model)">Show sub applications</a>
-
+        <div ng-if="tile.isInput && tile.activated" class="grid-selector"  ng-click="vm.clickHandler(tile)" >
+            <div ng-if="vm.editMode && tile.isDefined">
+                <md-input-container  md-no-float class="md-block" >
+                    <input aria-label="tile content" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
+                </md-input-container>
             </div>
-            <md-input-container  ng-if="tile.isInput && vm.editMode" md-no-float class="md-block">
-                <input aria-label="tile content" ng-model="tile.content">
-            </md-input-container>
-        </section>
+            <div ng-if="!vm.editMode">
+                {{tile.content}}
+            </div>
+
+        </div>
     </md-grid-tile>
 
 </md-grid-list>

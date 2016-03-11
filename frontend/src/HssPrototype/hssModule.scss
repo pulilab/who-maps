@@ -10,6 +10,18 @@ md-grid-tile {
     background:red;
   }
 
+  &.activated {
+    border: 1px solid greenyellow;
+  }
+
+  &.head {
+    background: blue;
+  }
+
+  &.tail {
+    background: yellow;
+  }
+
   md-input-container {
     width:100%;
     position: absolute;
@@ -25,6 +37,15 @@ md-grid-tile {
       width: 99%;
       float: left;
     }
+  }
+
+  .grid-selector {
+    width:100%;
+    height:100%
+  }
+
+  .selected {
+    background: green;
   }
 }
 
