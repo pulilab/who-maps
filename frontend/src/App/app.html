@@ -1,12 +1,28 @@
-<h1>MAPS toolkit</h1>
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis pulvinar sagittis.
-    Sed fermentum lacinia felis quis euismod. Vestibulum eu porta mauris, eget ornare neque. Aenean ut ex qui
-    s mi dignissim convallis vitae ac dui. Phasellus nunc turpis, consequat ac dictum a, gravida vel diam. Donec
-    eleifend ipsum ut dui ornare viverra. Phasellus scelerisque turpis vel enim venenatis, ac vehicula ante sollic
-    itudin. Nam ut varius massa. In orci nisi, gravida et molestie et, dictum et nulla. Nunc at dapibus nisl.
-    Sed lacinia tincidunt mattis.
-</p>
+<md-content>
+    <md-toolbar class="md-medium-tall">
+        <div class="md-toolbar-tools">
+            <h2>
+                <span>MAPS Toolkit</span>
+            </h2>
+            <span flex></span>
+            <md-button class="" aria-label="Settings"  ui-sref="settings">
+                <md-icon class="material-icons md-light md-48">settings</md-icon>
+                Settings
+            </md-button>
+            <md-button class="" aria-label="Share" >
+                <md-icon class="material-icons md-light md-48">share</md-icon>
+                Share Link
+            </md-button>
+            <md-button class="" aria-label="More" >
+                <md-icon class="material-icons md-light md-48">more_vert</md-icon>
+                More Actions
+            </md-button>
+        </div>
+        <div class="md-toolbar-tools md-toolbar-tools-bottom">
+            <md-button ui-sref="hssPrototype">Visualize Project</md-button>
+        </div>
+    </md-toolbar>
+    <ui-view name="main"></ui-view>
+</md-content>
 
-<a ui-sref="hssPrototype">HSS FRAMEWORK PROTOTYPE</a>
-<ui-view name="main"></ui-view>
+

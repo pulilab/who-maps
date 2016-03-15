@@ -1,8 +1,11 @@
 import angular from 'angular';
+import uiRoute from 'angular-ui-router';
+import angularMd from 'angular-material';
+
 import AppController from './AppModuleController';
+import './app.scss';
 
 import appTemplate from './app.html';
-import uiRoute from 'angular-ui-router';
 
 import hssPrototype from '../HssPrototype/';
 
@@ -26,7 +29,8 @@ config.$inject = ['$stateProvider', '$urlRouterProvider'];
 angular.module(moduleName,
     [
         uiRoute,
-        hssPrototype
+        hssPrototype,
+        angularMd
     ]
 )
     .controller(moduleName + '.appController', AppController)
