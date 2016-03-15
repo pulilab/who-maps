@@ -28,9 +28,9 @@ class HssModuleController {
     }
 
     headerMiddleColumnDecorator() {
-        return _.map(this.cell, ()=> {
+        return _.map(this.cell, () => {
             return {
-                content: 'SOMEICON',
+                content: '',
                 colSpan: 1,
                 rowSpan: 1
             };
