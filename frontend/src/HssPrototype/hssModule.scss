@@ -1,51 +1,86 @@
 @import '../../node_modules/angular-material/angular-material.css';
 
-md-grid-tile {
-  background: gray;
+.hss-prototype {
 
-  &.empty {
-    background: transparent;
-  }
-  &.sub {
-    background:red;
+  .text-center {
+    text-align: center;
   }
 
-  &.activated {
-    border: 1px solid greenyellow;
+  md-grid-list {
+    background: white;
   }
 
-  &.head {
-    background: blue;
-  }
+  md-grid-tile {
+    background: white;
+    border-right: 1px solid #cbcbcb;
+    border-bottom: 1px solid #cbcbcb;
 
-  &.tail {
-    background: yellow;
-  }
 
-  md-input-container {
-    width:100%;
-    position: absolute;
-    top:0;
-    left:0;
-    vertical-align: top;
-    margin:0;
+    &.odd {
+      background: #dddddd;
+    }
 
-    .md-select-value .md-text {
-      display: block;
-      word-break: break-all;
-      word-wrap: break-word;
-      width: 99%;
-      float: left;
+    &.empty {
+      background: transparent;
+      border-right:0;
+    }
+    &.sub {
+      background: red;
+    }
+
+    &.activated {
+      border: 1px solid greenyellow;
+    }
+
+    &.head {
+      background: blue;
+    }
+
+    &.tail {
+      background: yellow;
+    }
+
+    &.header-line {
+      background: lightgray;
+    }
+
+    &.taxonomy {
+      border-bottom:0;
+    }
+
+    .md-button {
+      text-transform: none;
+      font-size:10px;
+      text-align: left;
+      white-space: normal;
+      line-height: 10px;
+    }
+
+    md-input-container {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      vertical-align: top;
+      margin: 0;
+
+      .md-select-value .md-text {
+        display: block;
+        word-break: break-all;
+        word-wrap: break-word;
+        width: 99%;
+        float: left;
+      }
+    }
+
+    .grid-selector {
+      width: 100%;
+      height: 100%
+    }
+
+    .selected {
+      background: green;
     }
   }
 
-  .grid-selector {
-    width:100%;
-    height:100%
-  }
-
-  .selected {
-    background: green;
-  }
 }
-

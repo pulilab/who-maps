@@ -1,82 +1,93 @@
-<h1 xmlns="">HSS Prototype</h1>
-<md-switch ng-model="vm.editMode" aria-label="EditMode">
-    Edit Enabled: {{vm.editMode}}
-</md-switch>
-<md-grid-list md-cols="11" md-gutter="1px" md-row-height="4em">
+<div class="md-padding hss-prototype">
+    <h1 class="md-display-3 text-center">My digita strategy to improve RNMNCH outcomes </h1>
+    <h6 class="md-subhead text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</h6>
+    <md-grid-list md-whiteframe="2" md-cols="11" md-gutter="0px" md-row-height="4em">
 
-    <md-grid-tile ng-repeat="tile in vm.zeroRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
-        {{tile.content}}
-    </md-grid-tile>
+        <md-grid-tile ng-repeat="tile in vm.zeroRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
+            {{tile.content}}
+        </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
-        {{tile.content}}
-    </md-grid-tile>
+        <md-grid-tile md-colspan="2" md-rowspan="3">
+            <md-switch ng-model="vm.editMode" aria-label="EditMode">
+                Edit Enabled: {{vm.editMode}}
+            </md-switch>
+        </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
-        {{tile.content}}
-    </md-grid-tile>
+        <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
+            {{tile.content}}
+        </md-grid-tile>
 
-    <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > InterventionHeader</md-grid-tile>
+        <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
+            {{tile.content}}
+        </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
-        <md-list flex ng-if="!tile.isInput || !vm.editMode">
-            <md-list-item class="md-1-line" ng-repeat="item in tile.content">
-                <div class="md-list-item-text" layout="column">
-                    <p>{{item}}</p>
-                </div>
-            </md-list-item>
-        </md-list>
-        <md-input-container ng-if="tile.isInput && vm.editMode">
-            <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true">
-                <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
-                    {{option}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-    </md-grid-tile>
+        <md-grid-tile md-colspan="9" md-rowspan="1" class="header-line">RMNCH Essential Interventions</md-grid-tile>
+        <md-grid-tile md-colspan="2" md-rowspan="1"></md-grid-tile>
 
-    <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > Other Box</md-grid-tile>
+        <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > </md-grid-tile>
 
-    <md-grid-tile md-colspan="2">
-        common and mHealth ict application
-    </md-grid-tile>
-    <md-grid-tile md-colspan="7">
+        <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-class="tile.className">
+            <md-list flex ng-if="!tile.isInput || !vm.editMode">
+                <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                    <div class="md-list-item-text" layout="column">
+                        <p>{{item}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-input-container ng-if="tile.isInput && vm.editMode">
+                <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true">
+                    <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
+                        {{option}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </md-grid-tile>
 
-    </md-grid-tile>
-    <md-grid-tile md-colspan="2" md-rowspan="2">
-        <div flex="100" layout="column">
-            <div>
-                <div layout="row" layout-wrap flex>
-                    <div flex="50" ng-repeat="constraint in vm.constraintsToggle">
-                        <md-checkbox ng-model="constraint.toggled">
-                            {{ constraint.name }}
-                        </md-checkbox>
+        <md-grid-tile md-colspan="2" md-rowspan="5">
+            <div flex="100" layout="column">
+                <div>
+                    <div layout="row" layout-wrap flex>
+                        <div flex="50" ng-repeat="constraint in vm.constraintsToggle">
+                            <md-checkbox ng-model="constraint.toggled">
+                                {{ constraint.name }}
+                            </md-checkbox>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </md-grid-tile>
-    <md-grid-tile md-colspan="9" class="empty">
+        </md-grid-tile>
 
-    </md-grid-tile>
+        <md-grid-tile class="header-line" md-colspan="9" md-rowspan="1">
+            common and mHealth ict application
+        </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="vm.classGenerator(tile)" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
-        <div ng-if="!tile.isInput">
-            <div>{{tile.content}}</div>
-            <a ng-show="tile.subApplications.length > 0 " ng-click="vm.enableSubApp(tile.model)">Show sub applications</a>
-        </div>
-
-        <div ng-if="tile.isInput && tile.activated" class="grid-selector"  ng-click="vm.clickHandler(tile)" >
-            <div ng-if="vm.editMode && tile.isDefined">
-                <md-input-container  md-no-float class="md-block" >
-                    <input aria-label="tile content" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
-                </md-input-container>
+        <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="vm.classGenerator(tile)" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
+            <div ng-if="!tile.isInput">
+                <md-list flex>
+                    <md-list-item >
+                        <md-icon  class="md-avatar-icon"> </md-icon>
+                        <div class="md-list-item-text" layout="column">
+                            <md-button class=""  ng-click="vm.enableSubApp(tile.model)">
+                                <span>{{tile.content}}</span>
+                                <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 ">keyboard_arrow_down</md-icon>
+                            </md-button>
+                        </div>
+                    </md-list-item>
+                    </md-list>
             </div>
-            <div ng-if="!vm.editMode">
-                {{tile.content}}
+
+            <div ng-if="tile.isInput && tile.activated" class="grid-selector"  ng-click="vm.clickHandler(tile)" >
+                <div ng-if="vm.editMode && tile.isDefined">
+                    <md-input-container  md-no-float class="md-block" >
+                        <input aria-label="tile content" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
+                    </md-input-container>
+                </div>
+                <div ng-if="!vm.editMode">
+                    {{tile.content}}
+                </div>
+
             </div>
+        </md-grid-tile>
 
-        </div>
-    </md-grid-tile>
-
-</md-grid-list>
+    </md-grid-list>
+</div>

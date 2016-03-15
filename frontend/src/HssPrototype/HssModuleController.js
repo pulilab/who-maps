@@ -28,11 +28,12 @@ class HssModuleController {
     }
 
     headerMiddleColumnDecorator() {
-        return _.map(this.cell, () => {
+        return _.map(this.cell, (value) => {
             return {
                 content: '',
                 colSpan: 1,
-                rowSpan: 1
+                rowSpan: 1,
+                className: (value + 1) % 2 === 0 ? 'even' : 'odd'
             };
         });
     }
@@ -70,7 +71,8 @@ class HssModuleController {
                     invisible: _.isEmpty(hss[value].mother),
                     clickHandler: this.motherClickHandler.bind(this),
                     columnId: value,
-                    activated: hss[value].activated
+                    activated: hss[value].activated,
+                    className: (value + 1) % 2 === 0 ? 'even' : 'odd'
                 };
             })
             .filter({
@@ -83,7 +85,7 @@ class HssModuleController {
         return _.map(this.cell, (value)=> {
             return {
                 content: hss[value].child.title,
-                className: !hss[value].child.title ? 'empty' : '',
+                className: (!hss[value].child.title ? 'empty' : '') + ' ' + ((value + 1) % 2 === 0 ? 'even' : 'odd'),
                 colSpan: 1,
                 rowSpan: 1,
                 columnId: value,
@@ -105,7 +107,7 @@ class HssModuleController {
         return _.map(this.cell, (value) => {
             return {
                 content: null,
-                className: '',
+                className: (value + 1) % 2 === 0 ? 'even' : 'odd',
                 colSpan: 1,
                 rowSpan: 4,
                 isInput: true,
@@ -116,19 +118,12 @@ class HssModuleController {
 
     headerRow() {
         const row = [{
-            content: 'mHealth-Something',
-            className: 'title',
+            content: '',
+            className: 'even',
             colSpan: 2,
             rowSpan: 1
         }];
-        const lastCol = [{
-            content: 'health system goals',
-            className: 'title',
-            colSpan: 2,
-            rowSpan: 3
-        }];
-        return row.concat(this.headerMiddleColumnDecorator())
-            .concat(lastCol);
+        return row.concat(this.headerMiddleColumnDecorator());
     }
 
     motherColumns() {
@@ -165,7 +160,8 @@ class HssModuleController {
             colSpan: 2,
             rowSpan: 1,
             model: this.applications[index],
-            subApplications: subApp
+            subApplications: subApp,
+            appId: this.applications[index].id
         }];
         return row;
     }
@@ -174,7 +170,7 @@ class HssModuleController {
         return _.map(this.cell, (value) => {
             return {
                 content: '',
-                className: '',
+                className: (value + 1) % 2 === 0 ? 'even' : 'odd',
                 rowIndex: index,
                 columnId: value,
                 colSpan: 1,
@@ -191,10 +187,11 @@ class HssModuleController {
 
     taxonomyColumnGenerator() {
         return [{
-            content: 'taxonomy',
-            className: 'title',
+            content: '',
+            className: 'taxonomy',
             colSpan: 2,
-            rowSpan: 1
+            rowSpan: 1,
+            isInput: true
         }];
     }
 
@@ -233,11 +230,12 @@ class HssModuleController {
 
     subAppTaxonomyColumnGenerator(id) {
         return [{
-            content: 'taxonomy',
-            className: 'title',
+            content: '',
+            className: 'taxonomy',
             colSpan: 2,
             rowSpan: 1,
             fatherId: id,
+            isInput: true,
             disabled: true
         }];
     }
