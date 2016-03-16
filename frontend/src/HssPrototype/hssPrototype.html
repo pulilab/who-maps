@@ -27,20 +27,22 @@
         <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > </md-grid-tile>
 
         <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-class="vm.classGenerator(tile)">
-            <md-list flex ng-if="!tile.isInput || !vm.editMode">
-                <md-list-item class="md-1-line" ng-repeat="item in tile.content">
-                    <div class="md-list-item-text" layout="column">
-                        <p>{{item}}</p>
-                    </div>
-                </md-list-item>
-            </md-list>
-            <md-input-container ng-if="tile.isInput && vm.editMode">
-                <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true">
-                    <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
-                        {{option}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
+            <div ng-if="tile.activated">
+                <md-list flex ng-if="!tile.isInput || !vm.editMode">
+                    <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                        <div class="md-list-item-text" layout="column">
+                            <p>{{item}}</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+                <md-input-container ng-if="tile.isInput && vm.editMode">
+                    <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true">
+                        <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
+                            {{option}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
         </md-grid-tile>
 
         <md-grid-tile md-colspan="2" md-rowspan="5" layout-padding>
@@ -68,7 +70,7 @@
 
         <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="vm.classGenerator(tile)" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
             <div ng-if="tile.isHeader" class="wide">
-                <div class="app-number">{{tile.appId}}</div>
+                <div class="app-number" ng-class="tile.classGenerator(tile)">{{tile.appLabel}}</div>
                 <div class="app-button">
                     <md-button class="md-button-override"  ng-click="vm.enableSubApp(tile)">
                         <span>{{tile.content}}</span>
@@ -77,17 +79,19 @@
                 </div>
             </div>
 
-            <div ng-if="tile.isInput && tile.activated" class="grid-selector"  ng-click="vm.clickHandler(tile)" >
+            <div ng-if="tile.isInput && tile.activated" class="grid-selector" ng-class="tile.status" ng-click="vm.clickHandler(tile)" >
                 <div ng-if="vm.editMode && tile.isDefined">
-                    <md-input-container  md-no-float class="md-block" >
+                    <div class="app-number white-number">{{tile.appLabel}}</div>
+                    <md-input-container  md-no-float class="" >
                         <input aria-label="tile content" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
                     </md-input-container>
                 </div>
-                <div ng-if="!vm.editMode">
-                    {{tile.content}}
+                <div ng-if="!vm.editMode && tile.content">
+                    <div class="app-number white-number">{{tile.appLabel}}</div>
+                    <div class="app-text" >{{tile.content}}</div>
                 </div>
             </div>
-            <div ng-if="tile.isSelect">
+            <div ng-if="tile.isSelect && tile.rowEnabled">
                 <div ng-if="!vm.editMode">
                     <div ng-repeat="tax in tile.content">
                         {{tax}}

@@ -3,8 +3,7 @@ import { hss, interventionsLib, applicationsLib, taxonomyLib } from './hssMockDa
 
 class HssModuleController {
 
-    constructor($timeout) {
-        this.$timeout = $timeout;
+    constructor() {
         this.cell = [0, 1, 2, 3, 4, 5, 6];
         this.editMode = true;
         this.interventions = interventionsLib;
@@ -171,17 +170,27 @@ class HssModuleController {
         return cols;
     }
 
+    applicationClassGenerator(tile) {
+        return tile.rowBubbles.length > 0 ? tile.applicationStyle : 'application_disabled';
+    }
+
     applicationHeaderGenerator(index) {
         const subApp = _.values(this.applications[index].subApplications);
         return [{
             content: this.applications[index].name,
-            className: 'title',
+            applicationStyle: 'application_' + this.applications[index].id,
+            className: '',
             colSpan: 2,
             rowSpan: 1,
+            rowIndex: index,
             model: this.applications[index],
             subApplications: subApp,
-            appId: this.applications[index].id,
-            isHeader: true
+            applicationId: this.applications[index].id,
+            appLabel: this.applications[index].id,
+            isHeader: true,
+            isMain: true,
+            rowBubbles: [],
+            classGenerator: this.applicationClassGenerator.bind(this)
         }];
     }
 
@@ -199,20 +208,26 @@ class HssModuleController {
                 insertMode: false,
                 invisible: false,
                 subAppOpen: false,
+                isMain: true,
                 applicationId: this.applications[index].id,
+                appLabel: this.applications[index].id,
                 activated: hss[value].activated
             };
         });
     }
 
-    taxonomyColumnGenerator() {
+    taxonomyColumnGenerator(index) {
         return [{
             content: '',
             className: 'taxonomy',
             colSpan: 2,
             rowSpan: 1,
             isInput: false,
-            isSelect: true
+            isSelect: true,
+            isTax: true,
+            isMain: true,
+            rowIndex: index,
+            rowEnabled: false
         }];
     }
 
@@ -224,13 +239,19 @@ class HssModuleController {
             colSpan: 2,
             rowSpan: 1,
             isInput: false,
+            isHeader: true,
+            rowIndex: index,
             fatherId: id,
-            appId: id + alphabet[index],
-            disabled: true
+            applicationStyle: 'application_' + id,
+            appLabel: id + alphabet[index],
+            disabled: true,
+            rowBubbles: [],
+            classGenerator: this.applicationClassGenerator.bind(this)
         }];
     }
 
     subAppMiddleColumnDecorator(index, id) {
+        const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
         return _.map(this.cell, (value) => {
             return {
                 content: '',
@@ -243,15 +264,16 @@ class HssModuleController {
                 isInput: true,
                 insertMode: false,
                 invisible: false,
-                applicationId: this.applications[index].id,
+                appLabel: id + alphabet[index],
                 activated: hss[value].activated,
                 fatherId: id,
-                disabled: true
+                disabled: true,
+                isMain: false
             };
         });
     }
 
-    subAppTaxonomyColumnGenerator(id) {
+    subAppTaxonomyColumnGenerator(index, id) {
         return [{
             content: '',
             className: 'taxonomy',
@@ -260,7 +282,10 @@ class HssModuleController {
             fatherId: id,
             isInput: true,
             isSelect: true,
-            disabled: true
+            disabled: true,
+            isTax: true,
+            rowIndex: index,
+            rowEnabled: false
         }];
     }
 
@@ -272,7 +297,7 @@ class HssModuleController {
         for (let i = 0; i < subApp.length; i = i + 1) {
             cols = cols.concat(this.subApplicationHeaderGenerator(subApp, i, appId));
             cols = cols.concat(this.subAppMiddleColumnDecorator(i, appId));
-            cols = cols.concat(this.subAppTaxonomyColumnGenerator(appId));
+            cols = cols.concat(this.subAppTaxonomyColumnGenerator(i, appId));
         }
         return cols;
     }
@@ -283,7 +308,7 @@ class HssModuleController {
         for (let i = 0; i < appNumber; i = i + 1) {
             cols = cols.concat(this.applicationHeaderGenerator(i));
             cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
-            cols = cols.concat(this.taxonomyColumnGenerator());
+            cols = cols.concat(this.taxonomyColumnGenerator(i));
             cols = cols.concat(this.subApplicationRows(i));
         }
         return cols;
@@ -335,23 +360,53 @@ class HssModuleController {
     }
 
     tileBalloonStartHandler(tile) {
-        tile.status = 'head';
         this.startTile = tile;
     }
 
     tileBalloonEndHandler(tile) {
-        tile.status = 'tail';
+        let applicationStyle;
         const rowColumns = this.findSameRowCandidate(tile);
-        console.log(rowColumns);
+
+        if (rowColumns.length === 0) {
+            this.startTile = void 0;
+            return;
+        }
+
+        this.applicationRow = _.map(this.applicationRow, (value) => {
+            if (tile.isMain) {
+                if (value.rowIndex === tile.rowIndex && value.isMain) {
+                    if (value.isHeader) {
+                        applicationStyle = value.applicationStyle;
+                        value.rowBubbles.push(rowColumns);
+                    }
+                    if (value.isTax) {
+                        value.rowEnabled = true;
+                    }
+                }
+            }
+            else if (value.rowIndex === tile.rowIndex && value.fatherId === tile.fatherId && !value.isMain) {
+                if (value.isHeader) {
+                    value.rowBubbles.push(rowColumns);
+                    applicationStyle = value.applicationStyle;
+                }
+                if (value.isTax) {
+                    value.rowEnabled = true;
+                }
+            }
+            return value;
+        });
+
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;
                 value.isDefined = true;
+                value.status = applicationStyle;
             }
             else {
                 value.invisible = true;
             }
         });
+
         this.applicationRow = _.filter(this.applicationRow, (value) => {
             return !value.invisible || !value.isInput;
         });
@@ -368,7 +423,7 @@ class HssModuleController {
 
     classGenerator(tile) {
         return tile.className + ' ' + (tile.activated ? 'activated' : '')
-            + ' ' + tile.status + ' ' + (tile.subAppOpen ? 'app-open' : 'app-closed');
+            + ' ' + (tile.subAppOpen ? 'app-open' : 'app-closed');
     }
 
 }
