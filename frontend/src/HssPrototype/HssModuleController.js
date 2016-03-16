@@ -14,9 +14,12 @@ class HssModuleController {
         this.constraintsToggle = _.map(this.constraints, (value) => {
             return {
                 name: value,
+                icon: taxonomyLib[value].icon,
                 toggled: false
             };
         });
+        this.availableConstraints = [];
+
         this.zeroRow = this.headerRow();
         this.motherRow = this.motherColumns();
         this.childRow = this.childColumns();
@@ -47,13 +50,13 @@ class HssModuleController {
         for (let i = tile.columnId; i < tile.columnId + tile.colSpan; i = i + 1) {
             idList.push(i);
         }
-        this.applicationRow = _.map(this.applicationRow, (value) => {
+        this.interventionRow = _.map(this.interventionRow, (value) => {
             if (_.includes(idList, value.columnId)) {
                 value.activated = !value.activated;
             }
             return value;
         });
-        this.childRow = _.map(this.childRow, (value) => {
+        this.applicationRow = _.map(this.applicationRow, (value) => {
             if (_.includes(idList, value.columnId)) {
                 value.activated = !value.activated;
             }
@@ -72,7 +75,7 @@ class HssModuleController {
                     clickHandler: this.motherClickHandler.bind(this),
                     columnId: value,
                     activated: hss[value].activated,
-                    className: (value + 1) % 2 === 0 ? 'even' : 'odd'
+                    className: ((value + 1) % 2 === 0 ? 'even' : 'odd') + ' mother'
                 };
             })
             .filter({
@@ -81,15 +84,29 @@ class HssModuleController {
             .value();
     }
 
+    childClickHandler(tile) {
+        const mother = _.filter(this.motherRow, (value) => {
+            return value.columnId === tile.columnId;
+        })[0];
+        if (tile.empty || !mother.activated) {
+            return;
+        }
+        tile.activated = !tile.activated;
+    }
+
     childMiddleColumnDecorator() {
         return _.map(this.cell, (value)=> {
             return {
                 content: hss[value].child.title,
-                className: (!hss[value].child.title ? 'empty' : '') + ' ' + ((value + 1) % 2 === 0 ? 'even' : 'odd'),
+                className: (!hss[value].child.title ? 'empty' : '')
+                + ' ' + ((value + 1) % 2 === 0 ? 'even' : 'odd')
+                + ' child',
                 colSpan: 1,
                 rowSpan: 1,
                 columnId: value,
-                activated: hss[value].activated
+                activated: hss[value].activated,
+                empty: !hss[value].child.title,
+                clickHandler: this.childClickHandler.bind(this)
             };
         });
     }
@@ -111,6 +128,8 @@ class HssModuleController {
                 colSpan: 1,
                 rowSpan: 4,
                 isInput: true,
+                columnId: value,
+                activated: false,
                 selectValues: this.interventions[value]
             };
         });
@@ -154,16 +173,16 @@ class HssModuleController {
 
     applicationHeaderGenerator(index) {
         const subApp = _.values(this.applications[index].subApplications);
-        const row = [{
+        return [{
             content: this.applications[index].name,
             className: 'title',
             colSpan: 2,
             rowSpan: 1,
             model: this.applications[index],
             subApplications: subApp,
-            appId: this.applications[index].id
+            appId: this.applications[index].id,
+            isHeader: true
         }];
-        return row;
     }
 
     applicationsMiddleColumnDecorator(index) {
@@ -179,6 +198,7 @@ class HssModuleController {
                 isInput: true,
                 insertMode: false,
                 invisible: false,
+                subAppOpen: false,
                 applicationId: this.applications[index].id,
                 activated: hss[value].activated
             };
@@ -191,7 +211,8 @@ class HssModuleController {
             className: 'taxonomy',
             colSpan: 2,
             rowSpan: 1,
-            isInput: true
+            isInput: false,
+            isSelect: true
         }];
     }
 
@@ -238,6 +259,7 @@ class HssModuleController {
             rowSpan: 1,
             fatherId: id,
             isInput: true,
+            isSelect: true,
             disabled: true
         }];
     }
@@ -271,6 +293,7 @@ class HssModuleController {
         if (!tile.subApplications) {
             return;
         }
+        tile.subAppOpen = !tile.subAppOpen;
         const appId = tile.model.id;
         _.map(this.applicationRow, (value) => {
             if (value.fatherId && value.fatherId === appId) {
@@ -334,8 +357,18 @@ class HssModuleController {
         });
     }
 
+    constraintChanged() {
+        this.availableConstraints = [];
+        _.forEach(this.constraintsToggle, (value) => {
+            if (value.toggled) {
+                this.availableConstraints = this.availableConstraints.concat(taxonomyLib[value.name].values);
+            }
+        });
+    }
+
     classGenerator(tile) {
-        return tile.className + ' ' + (tile.activated ? 'activated' : '') + ' ' + tile.status;
+        return tile.className + ' ' + (tile.activated ? 'activated' : '')
+            + ' ' + tile.status + ' ' + (tile.subAppOpen ? 'app-open' : 'app-closed');
     }
 
 }

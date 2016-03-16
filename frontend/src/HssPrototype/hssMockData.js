@@ -192,52 +192,73 @@ export const applicationsLib = [
 ];
 
 export const taxonomyLib = {
-    'Information': [
-        'Lack of population enumeration',
-        'Delayed reporting of events',
-        'Quality / unreliability of data',
-        'Communication roadblock',
-        'Access to information or data'
-    ],
-    'Availability': [
-        'Supply of commodities',
-        'Supply of services',
-        'Supply of equipment',
-        'Diversity of treatment options'
-    ],
-    'Quality': [
-        'Quality of care',
-        'Health worker competence',
-        'Quality of commodity',
-        'Health worker motivation',
-        'Continuity of care',
-        'Supportive supervision'
-    ],
-    'Acceptability': [
-        'Alignment with local norms',
-        'Addressing individual beliefs and practices',
-        'Stigma'
-    ],
-    'Utilization': [
-        'Demand for services',
-        'Geographic inaccessibility',
-        'Low adherence to treatments',
-        'Loss to follow up'
-    ],
-    'Efficiency': [
-        'Workflow management',
-        'Effective resource allocation',
-        'Unnecessary referrals / transportation',
-        'Planning and coordination',
-        'Timeliness of care'
-    ],
-    'Cost': [
-        'Expenses related to commodity production',
-        'Expenses related to commodity supply',
-        'Expenses related to commodity disbursement',
-        'Expenses related to service delivery',
-        'Client-side expenses'
-    ]
+    'Information': {
+        icon: 'info',
+        values: [
+            'Lack of population enumeration',
+            'Delayed reporting of events',
+            'Quality / unreliability of data',
+            'Communication roadblock',
+            'Access to information or data'
+        ]
+    },
+    'Availability': {
+        icon: 'check',
+        values: [
+            'Supply of commodities',
+            'Supply of services',
+            'Supply of equipment',
+            'Diversity of treatment options'
+        ]
+    },
+    'Quality': {
+        icon: 'star',
+        values: [
+            'Quality of care',
+            'Health worker competence',
+            'Quality of commodity',
+            'Health worker motivation',
+            'Continuity of care',
+            'Supportive supervision'
+        ]
+    },
+    'Acceptability': {
+        icon: 'accessibility',
+        values: [
+            'Alignment with local norms',
+            'Addressing individual beliefs and practices',
+            'Stigma'
+        ]
+    },
+    'Utilization': {
+        icon: 'pan_tool',
+        values: [
+            'Demand for services',
+            'Geographic inaccessibility',
+            'Low adherence to treatments',
+            'Loss to follow up'
+        ]
+    },
+    'Efficiency': {
+        icon: 'trending_up',
+        values: [
+            'Workflow management',
+            'Effective resource allocation',
+            'Unnecessary referrals / transportation',
+            'Planning and coordination',
+            'Timeliness of care'
+        ]
+    },
+    'Cost': {
+        icon: 'monetization_on',
+        values: [
+            'Expenses related to commodity production',
+            'Expenses related to commodity supply',
+            'Expenses related to commodity disbursement',
+            'Expenses related to service delivery',
+            'Client-side expenses'
+        ]
+    }
 };
 
 // Bindable things

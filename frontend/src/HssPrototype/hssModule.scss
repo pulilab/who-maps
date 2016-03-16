@@ -14,6 +14,7 @@
     background: white;
     border-right: 1px solid #cbcbcb;
     border-bottom: 1px solid #cbcbcb;
+    outline:none;
 
     .app-number {
       width: 3em;
@@ -46,17 +47,25 @@
       border-bottom:0;
     }
 
+    &.app-open {
+      border-bottom: 0;
+    }
 
     &.activated {
-      border: 1px solid greenyellow;
-    }
+      border-left: 1px solid #7CB342;
+      border-right: 1px solid #7CB342;
 
-    &.head {
-      background: blue;
-    }
+      &.child {
+        background: #7CB342;
+        border-right: 1px solid #cbcbcb;
+        border-bottom: 1px solid #cbcbcb;
+      }
 
-    &.tail {
-      background: yellow;
+      &.mother {
+        background: #7CB342;
+        border-right: 1px solid #cbcbcb;
+        border-bottom: 1px solid #cbcbcb;
+      }
     }
 
     &.header-line {
@@ -67,7 +76,7 @@
       border-bottom:0;
     }
 
-    .md-button {
+    .md-button-override {
       text-transform: none;
       font-size:10px;
       text-align: left;

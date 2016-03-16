@@ -8,7 +8,7 @@
         </md-grid-tile>
 
         <md-grid-tile md-colspan="2" md-rowspan="3">
-            <md-switch ng-model="vm.editMode" aria-label="EditMode">
+            <md-switch ng-model="vm.editMode" aria-label="EditMode" class="md-primary">
                 Edit Enabled: {{vm.editMode}}
             </md-switch>
         </md-grid-tile>
@@ -17,7 +17,7 @@
             {{tile.content}}
         </md-grid-tile>
 
-        <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
+        <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
             {{tile.content}}
         </md-grid-tile>
 
@@ -26,7 +26,7 @@
 
         <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > </md-grid-tile>
 
-        <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-class="tile.className">
+        <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-class="vm.classGenerator(tile)">
             <md-list flex ng-if="!tile.isInput || !vm.editMode">
                 <md-list-item class="md-1-line" ng-repeat="item in tile.content">
                     <div class="md-list-item-text" layout="column">
@@ -43,15 +43,20 @@
             </md-input-container>
         </md-grid-tile>
 
-        <md-grid-tile md-colspan="2" md-rowspan="5">
-            <div flex="100" layout="column">
-                <div>
-                    <div layout="row" layout-wrap flex>
-                        <div flex="50" ng-repeat="constraint in vm.constraintsToggle">
-                            <md-checkbox ng-model="constraint.toggled">
-                                {{ constraint.name }}
-                            </md-checkbox>
-                        </div>
+        <md-grid-tile md-colspan="2" md-rowspan="5" layout-padding>
+            <div layout="{{vm.editMode ? 'column' : 'row'}}" layout-wrap flex>
+                <div ng-repeat="constraint in vm.constraintsToggle">
+                    <div flex="100" ng-if="vm.editMode">
+                        <md-checkbox ng-model="constraint.toggled" class="md-primary" ng-change="vm.constraintChanged(constraint)">
+                            {{ constraint.name }}
+                        </md-checkbox>
+                    </div>
+                    <div flex="33" ng-if="!vm.editMode">
+                        <md-button class="md-fab md-mini md-primary" ng-disabled="!constraint.toggled" >
+                            <md-icon class="material-icons">
+                                {{ constraint.icon }}
+                            </md-icon>
+                        </md-button>
                     </div>
                 </div>
             </div>
@@ -62,13 +67,13 @@
         </md-grid-tile>
 
         <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="vm.classGenerator(tile)" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
-            <div ng-if="!tile.isInput" class="wide">
-                    <div class="app-number">{{tile.appId}}</div>
-                    <div class="app-button">
-                        <md-button class=""  ng-click="vm.enableSubApp(tile)">
-                            <span>{{tile.content}}</span>
-                            <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 ">keyboard_arrow_down</md-icon>
-                        </md-button>
+            <div ng-if="tile.isHeader" class="wide">
+                <div class="app-number">{{tile.appId}}</div>
+                <div class="app-button">
+                    <md-button class="md-button-override"  ng-click="vm.enableSubApp(tile)">
+                        <span>{{tile.content}}</span>
+                        <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 ">keyboard_arrow_down</md-icon>
+                    </md-button>
                 </div>
             </div>
 
@@ -81,7 +86,22 @@
                 <div ng-if="!vm.editMode">
                     {{tile.content}}
                 </div>
-
+            </div>
+            <div ng-if="tile.isSelect">
+                <div ng-if="!vm.editMode">
+                    <div ng-repeat="tax in tile.content">
+                        {{tax}}
+                    </div>
+                </div>
+                <div ng-if="vm.editMode" >
+                    <md-input-container >
+                        <md-select ng-model="tile.content" aria-label="taxonomy-option" multiple="true">
+                            <md-option ng-repeat="option in vm.availableConstraints" value="{{option}}">
+                                {{option}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
             </div>
         </md-grid-tile>
 
