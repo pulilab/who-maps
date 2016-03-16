@@ -1,5 +1,5 @@
 <div class="md-padding hss-prototype">
-    <h1 class="md-display-3 text-center">My digita strategy to improve RNMNCH outcomes </h1>
+    <h1 class="md-display-3 text-center">My digital strategy to improve RNMNCH outcomes </h1>
     <h6 class="md-subhead text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</h6>
     <md-grid-list md-whiteframe="2" md-cols="11" md-gutter="0px" md-row-height="4em">
 
@@ -62,18 +62,14 @@
         </md-grid-tile>
 
         <md-grid-tile ng-repeat="tile in vm.applicationRow" md-colspan="{{tile.colSpan}}" ng-class="vm.classGenerator(tile)" md-rowspan="{{tile.rowSpan}}" ng-if="!tile.disabled">
-            <div ng-if="!tile.isInput">
-                <md-list flex>
-                    <md-list-item >
-                        <md-icon  class="md-avatar-icon"> </md-icon>
-                        <div class="md-list-item-text" layout="column">
-                            <md-button class=""  ng-click="vm.enableSubApp(tile.model)">
-                                <span>{{tile.content}}</span>
-                                <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 ">keyboard_arrow_down</md-icon>
-                            </md-button>
-                        </div>
-                    </md-list-item>
-                    </md-list>
+            <div ng-if="!tile.isInput" class="wide">
+                    <div class="app-number">{{tile.appId}}</div>
+                    <div class="app-button">
+                        <md-button class=""  ng-click="vm.enableSubApp(tile)">
+                            <span>{{tile.content}}</span>
+                            <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 ">keyboard_arrow_down</md-icon>
+                        </md-button>
+                </div>
             </div>
 
             <div ng-if="tile.isInput && tile.activated" class="grid-selector"  ng-click="vm.clickHandler(tile)" >

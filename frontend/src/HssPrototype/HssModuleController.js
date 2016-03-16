@@ -196,13 +196,15 @@ class HssModuleController {
     }
 
     subApplicationHeaderGenerator(subApp, index, id) {
+        const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
         return [{
             content: subApp[index],
-            className: 'sub',
+            className: index === subApp.length - 1 ? 'lastSub' : 'sub',
             colSpan: 2,
             rowSpan: 1,
             isInput: false,
             fatherId: id,
+            appId: id + alphabet[index],
             disabled: true
         }];
     }
@@ -211,7 +213,7 @@ class HssModuleController {
         return _.map(this.cell, (value) => {
             return {
                 content: '',
-                className: 'sub',
+                className: (value + 1) % 2 === 0 ? 'even' : 'odd',
                 rowIndex: index,
                 columnId: value,
                 colSpan: 1,
@@ -265,8 +267,11 @@ class HssModuleController {
         return cols;
     }
 
-    enableSubApp(application) {
-        const appId = application.id;
+    enableSubApp(tile) {
+        if (!tile.subApplications) {
+            return;
+        }
+        const appId = tile.model.id;
         _.map(this.applicationRow, (value) => {
             if (value.fatherId && value.fatherId === appId) {
                 value.disabled = !value.disabled;
