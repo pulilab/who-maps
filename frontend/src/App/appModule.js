@@ -1,6 +1,9 @@
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import angularMd from 'angular-material';
+import { EE } from '../Common/';
+
+EE.initialize();
 
 import AppController from './AppModuleController';
 import './app.scss';

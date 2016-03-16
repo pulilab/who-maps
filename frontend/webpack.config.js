@@ -46,6 +46,14 @@ module.exports = {
             }
         ]
     },
+    devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://192.168.99.100/api/',
+                secure: false
+            }
+        }
+    },
     devtool: production ? false : 'source-maps',
     plugins: production ? distPlugins : devPlugins
 };
