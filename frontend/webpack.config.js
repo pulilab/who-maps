@@ -16,7 +16,7 @@ const devPlugins = [];
 module.exports = {
     entry: './src',
     output: {
-        path: 'builds',
+        path: production ? '../nginx/site/app/' : 'builds',
         filename: 'bundle.js'
     },
     module: {
