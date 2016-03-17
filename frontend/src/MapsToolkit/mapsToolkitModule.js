@@ -1,17 +1,17 @@
 import angular from 'angular';
-import SampleController from './SampleModuleController';
+import MapsToolkitModuleController from './MapsToolkitModuleController';
 import sampleComponent from './SampleComponent/sampleComponent';
 
-import _template from './sampleModule.html';
+import _template from './MapsToolkitModule.html';
 import uiRoute from 'angular-ui-router';
 
-const moduleName = 'sampleModule';
+const moduleName = 'mapsToolkitModule';
 
 function config($stateProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/sampleModule',
+            url: '/maps',
             parent: 'app',
             views: {
                 main: {
@@ -26,7 +26,7 @@ function config($stateProvider) {
 config.$inject = ['$stateProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .controller(moduleName + '.' + moduleName + 'Controller', SampleController)
+    .controller(moduleName + '.' + moduleName + 'Controller', MapsToolkitModuleController)
     .component('sampleComponent', sampleComponent)
     .config(config);
 
