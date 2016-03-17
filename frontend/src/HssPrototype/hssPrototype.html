@@ -1,19 +1,21 @@
 <div class="md-padding hss-prototype">
     <h1 class="md-display-3 text-center">My digital strategy to improve RNMNCH outcomes </h1>
-    <h6 class="md-subhead text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</h6>
+    <h6 class="md-subhead text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        . Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</h6>
+    <md-button ng-click="vm.startIntro()">Run the Intro</md-button>
     <md-grid-list md-whiteframe="2" md-cols="11" md-gutter="0px" md-row-height="4em">
 
         <md-grid-tile ng-repeat="tile in vm.zeroRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
             {{tile.content}}
         </md-grid-tile>
 
-        <md-grid-tile md-colspan="2" md-rowspan="3">
+        <md-grid-tile class="intro_edit_mode" md-colspan="2" md-rowspan="3" >
             <md-switch ng-model="vm.editMode" aria-label="EditMode" class="md-primary">
                 Edit Enabled: {{vm.editMode}}
             </md-switch>
         </md-grid-tile>
 
-        <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
+        <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile, $first)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
             {{tile.content}}
         </md-grid-tile>
 
@@ -45,7 +47,7 @@
             </div>
         </md-grid-tile>
 
-        <md-grid-tile md-colspan="2" md-rowspan="5" layout-padding>
+        <md-grid-tile md-colspan="2" md-rowspan="5" layout-padding class="intro_constraints">
             <div layout="{{vm.editMode ? 'column' : 'row'}}" layout-wrap flex>
                 <div ng-repeat="constraint in vm.constraintsToggle">
                     <div flex="100" ng-if="vm.editMode">
