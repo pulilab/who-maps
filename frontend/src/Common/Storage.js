@@ -17,8 +17,7 @@ class SessionStorage {
     get(key) {
         try {
             return JSON.parse(sessionStorage.getItem(key));
-        }
-        catch (e) {
+        } catch (e) {
             return null;
         }
     }
