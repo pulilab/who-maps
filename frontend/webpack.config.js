@@ -43,6 +43,10 @@ module.exports = {
             {
                 test: /\.html/,
                 loader: 'html'
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: 'file?name=public/fonts/[name].[ext]'
             }
         ]
     },
