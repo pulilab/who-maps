@@ -16,7 +16,7 @@ const devPlugins = [];
 module.exports = {
     entry: './src',
     output: {
-        path: 'builds',
+        path: production ? '../nginx/site/app/' : 'builds',
         filename: 'bundle.js'
     },
     module: {
@@ -45,6 +45,14 @@ module.exports = {
                 loader: 'html'
             }
         ]
+    },
+    devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://192.168.99.100/api/',
+                secure: false
+            }
+        }
     },
     devtool: production ? false : 'source-maps',
     plugins: production ? distPlugins : devPlugins
