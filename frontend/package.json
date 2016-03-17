@@ -5,7 +5,10 @@
   "scripts": {
     "test": "karma start",
     "serve": "webpack-dev-server --progress --colors --inline",
-    "dist": "webpack --dist"
+    "dist": "webpack --dist",
+    "e2e-init": "node_modules/protractor/bin/webdriver-manager update",
+    "e2e-server": "node_modules/protractor/bin/webdriver-manager start",
+    "e2e": "node_modules/protractor/bin/protractor e2e/conf.js"
   },
   "author": "",
   "license": "ISC",
@@ -36,6 +39,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "node-sass": "^3.4.2",
+    "protractor": "^3.1.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.14",
