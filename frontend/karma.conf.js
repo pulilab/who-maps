@@ -28,7 +28,7 @@ module.exports = function(config) {
                         }
                     },
                     {
-                        test: /\.scss/,
+                        test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
                         loaders: ['null']
                     }
                 ],
