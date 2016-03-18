@@ -9,9 +9,31 @@
     </md-grid-tile>
 
     <md-grid-tile md-colspan="2" md-rowspan="3" class="hss-controls">
-        <md-switch ng-model="vm.editMode" aria-label="EditMode" class="md-primary">
+        <md-switch ng-model="vm.editMode" aria-label="EditMode" class="md-primary" ng-change="vm.editModeChange()">
             Edit Enabled: {{vm.editMode}}
         </md-switch>
+    </md-grid-tile>
+
+    <md-grid-tile md-colspan="2" md-rowspan="1" class="" layout="row">
+        <img flex="20" src="./images/icon-mother.svg" />
+        <span flex="80">Mother</span>
+    </md-grid-tile>
+
+    <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="tile.className"
+                  md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}"
+                  ng-click="tile.clickHandler(tile)">
+        <span>{{tile.content}}</span>
+    </md-grid-tile>
+
+    <md-grid-tile md-colspan="2" md-rowspan="1" class="" layout="row">
+        <img flex="20" src="./images/icon-child.svg" />
+        <span flex="80" >Child</span>
+    </md-grid-tile>
+
+    <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.className"
+                  md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}
+                  ng-click="tile.clickHandler(tile)"">
+        <span>{{tile.content}}</span>
     </md-grid-tile>
 
 </md-grid-list>
