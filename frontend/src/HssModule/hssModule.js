@@ -3,6 +3,7 @@ import uiRoute from 'angular-ui-router';
 import ngMaterial from 'angular-material';
 
 import HssModuleController from './HssModuleController';
+import Continuum from './Continuum/';
 
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
@@ -33,6 +34,7 @@ angular.module(moduleName,
         ngMaterial
     ])
     .controller(moduleName + '.hssModuleController', HssModuleController)
+    .component(Continuum.name, Continuum)
     .config(config);
 
 export default moduleName;

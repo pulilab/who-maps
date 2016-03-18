@@ -4,7 +4,7 @@ module.exports = function(config) {
         files: [
             { pattern: 'test-context.js', watched: false }
         ],
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'phantomjs-shim'],
         preprocessors: {
             'test-context.js': ['webpack', 'sourcemap']
         },
@@ -26,6 +26,10 @@ module.exports = function(config) {
                         query: {
                             presets: ['es2015']
                         }
+                    },
+                    {
+                        test: /\.scss/,
+                        loaders: ['null']
                     }
                 ],
                 postLoaders: [

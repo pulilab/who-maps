@@ -3,6 +3,8 @@
     <h6 class="md-subhead text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit
         . Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</h6>
     <md-button ng-click="vm.startIntro()">Run the Intro</md-button>
+
+    <continuum tiles="7" ></continuum>
     <md-grid-list md-whiteframe="2" md-cols="11" md-gutter="0px" md-row-height="4em">
 
         <md-grid-tile ng-repeat="tile in vm.zeroRow" ng-class="tile.className" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}">
