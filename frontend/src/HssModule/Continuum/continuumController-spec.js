@@ -1,7 +1,7 @@
 import ContinuumController from './ContinuumController';
 import { EE } from '../../Common/';
 
-/* global define, it, describe, expect, beforeEach, jasmine */
+/* global define, it, describe, expect, beforeEach, jasmine, spyOn */
 
 let cc = {};
 const $timeout = arg => {
@@ -16,16 +16,15 @@ describe('continuumController', () => {
         cc.tiles = 7;
     });
 
-    it('should have a function that emit an event if editMode is changed', () => {
+    it('should have a function that emits an event if editMode is changed', () => {
         cc.editMode = true;
         const spy = jasmine.createSpy();
-        window.EE.on('editMode', spy);
+        window.EE.on('hssEditMode', spy);
         cc.editModeChange();
         expect(spy).toHaveBeenCalled();
     });
 
-
-    it('should have a function that return the icon header map of tiles', () => {
+    it('should have a function that returns the icon header map of tiles', () => {
         const firstRow = cc.firstRowGenerator();
         expect(firstRow.length).toBe(cc.tiles);
 
@@ -37,7 +36,7 @@ describe('continuumController', () => {
 
     });
 
-    it('should have a function that return the mother header map of tiles', () => {
+    it('should have a function that returns the mother header map of tiles', () => {
         const motherRow = cc.motherRowGenerator();
 
         motherRow.forEach(value => {
@@ -50,7 +49,7 @@ describe('continuumController', () => {
 
     });
 
-    it('should have a function that return the child header map of tiles', () => {
+    it('should have a function that returns the child header map of tiles', () => {
         const childRow = cc.childRowGenerator();
 
         childRow.forEach(value => {
@@ -62,4 +61,26 @@ describe('continuumController', () => {
         });
 
     });
+
+    it('has a function for activating columns, which runs only in edit mode, and emits globally', () => {
+
+        cc.editMode = true;
+        const tileMock = {
+            activated: false,
+            columnId: 3
+        };
+        spyOn(window.EE, 'emit');
+
+        cc.toggleColumnActivationClick(tileMock);
+
+        expect(tileMock.activated).toBe(true);
+        expect(window.EE.emit).toHaveBeenCalledWith('hssColumnActiveState', [3, true]);
+
+        cc.editMode = false;
+        cc.toggleColumnActivationClick(tileMock);
+
+        expect(tileMock.activated).toBe(true);
+
+    });
+
 });

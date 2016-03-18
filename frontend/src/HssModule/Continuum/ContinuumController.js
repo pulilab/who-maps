@@ -16,7 +16,7 @@ class ContinuumController {
 
     editModeChange() {
         const vm = this;
-        this.EE.emit('editMode', vm.editMode);
+        this.EE.emit('hssEditMode', vm.editMode);
     }
 
     firstRowGenerator() {
@@ -31,6 +31,7 @@ class ContinuumController {
     }
 
     motherRowGenerator() {
+        const self = this;
         return _.chain(this.tiles)
             .range()
             .map(value => {
@@ -39,7 +40,7 @@ class ContinuumController {
                     colSpan: hss[value].mother.span,
                     rowSpan: 1,
                     invisible: _.isEmpty(hss[value].mother),
-                    clickHandler: void 0, // wire the clicking function
+                    clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
                     activated: hss[value].activated,
                     className: ((value + 1) % 2 === 0 ? 'even' : 'odd') + ' mother',
@@ -53,6 +54,7 @@ class ContinuumController {
     }
 
     childRowGenerator() {
+        const self = this;
         return _.chain(this.tiles)
             .range()
             .map(value => {
@@ -66,12 +68,21 @@ class ContinuumController {
                     columnId: value,
                     activated: hss[value].activated,
                     empty: !hss[value].child.title,
-                    clickHandler: void 0, // wire the clicking function
+                    clickHandler: this.toggleColumnActivationClick.bind(self),
                     introName: 'child_middle_' + value,
                     invisible: false
                 };
             })
             .value();
+    }
+
+    toggleColumnActivationClick(tile) {
+
+        if (this.editMode) {
+            const toState = !tile.activated;
+            tile.activated = toState;
+            this.EE.emit('hssColumnActiveState', [tile.columnId, toState]);
+        }
     }
 
 
