@@ -20,7 +20,7 @@ class ContinuumController {
     }
 
     firstRowGenerator() {
-        return _.map(_.range(this.tiles), (value) => {
+        return _.map(_.range(this.tiles), value => {
             return {
                 icon: require('./images/continuum-' + (value + 1) + '.svg'),
                 colSpan: 1,
@@ -33,7 +33,7 @@ class ContinuumController {
     motherRowGenerator() {
         return _.chain(this.tiles)
             .range()
-            .map((value) => {
+            .map(value => {
                 return {
                     content: hss[value].mother.title,
                     colSpan: hss[value].mother.span,
@@ -55,7 +55,7 @@ class ContinuumController {
     childRowGenerator() {
         return _.chain(this.tiles)
             .range()
-            .map((value) => {
+            .map(value => {
                 return {
                     content: hss[value].child.title,
                     className: (!hss[value].child.title ? 'empty' : '')
