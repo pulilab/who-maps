@@ -11,7 +11,7 @@ import './app.scss';
 
 import appTemplate from './app.html';
 
-import hssPrototype from '../HssPrototype/';
+import hssModule from '../HssModule/';
 import cms from '../Cms/';
 import countryView from '../CountryView/';
 import dashboard from '../Dashboard/';
@@ -40,7 +40,7 @@ angular.module(moduleName,
     [
         uiRoute,
         angularMd,
-        hssPrototype,
+        hssModule,
         cms,
         countryView,
         dashboard,
