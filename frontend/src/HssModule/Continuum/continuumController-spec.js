@@ -36,6 +36,16 @@ describe('continuumController', () => {
 
     });
 
+    it('should have a function that return a string of css classes', () => {
+        const tileMock = {
+            activated: true,
+            columnId: 1,
+            className: 'test'
+        };
+        const classString = cc.classGenerator(tileMock);
+        expect(classString).toContain('test even activated');
+    });
+
     it('should have a function that returns the mother header map of tiles', () => {
         const motherRow = cc.motherRowGenerator();
 
@@ -47,6 +57,17 @@ describe('continuumController', () => {
             });
         });
 
+    });
+
+    it('should have a function that return a string of classes for the child row', () => {
+        const tileMock = {
+            activated: true,
+            columnId: 0,
+            className: 'child'
+
+        };
+        const classString = cc.childClassGenerator(tileMock);
+        expect(classString).toContain('child odd activated empty');
     });
 
     it('should have a function that returns the child header map of tiles', () => {
@@ -80,6 +101,7 @@ describe('continuumController', () => {
         cc.toggleColumnActivationClick(tileMock);
 
         expect(tileMock.activated).toBe(true);
+        expect(window.EE.emit).toHaveBeenCalledTimes(1);
 
     });
 

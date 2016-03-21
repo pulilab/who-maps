@@ -19,7 +19,7 @@
         <span flex="80">Mother</span>
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="tile.className"
+    <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="tile.classGenerator(tile)"
                   md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}"
                   ng-click="tile.clickHandler(tile)">
         <span>{{tile.content}}</span>
@@ -30,7 +30,7 @@
         <span flex="80" >Child</span>
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.className"
+    <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.classGenerator(tile)"
                   md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}"
                   ng-click="tile.clickHandler(tile)">
         <span>{{tile.content}}</span>

@@ -30,6 +30,13 @@ class ContinuumController {
         });
     }
 
+    classGenerator(tile) {
+        let classString = tile.className;
+        classString = classString + ' ' + ((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
+        classString = classString + ' ' + (tile.activated ? 'activated' : 'deactivated');
+        return classString;
+    }
+
     motherRowGenerator() {
         const self = this;
         return _.chain(this.tiles)
@@ -43,14 +50,21 @@ class ContinuumController {
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
                     activated: hss[value].activated,
-                    className: ((value + 1) % 2 === 0 ? 'even' : 'odd') + ' mother',
-                    introName: 'mother_middle_' + value
+                    className: 'mother',
+                    introName: 'mother_middle_' + value,
+                    classGenerator: this.classGenerator.bind(self)
                 };
             })
             .filter({
                 invisible: false
             })
             .value();
+    }
+
+    childClassGenerator(tile) {
+        let classString = this.classGenerator(tile);
+        classString = classString + ' ' + (!hss[tile.columnId].child.title ? 'empty' : 'filled');
+        return classString;
     }
 
     childRowGenerator() {
@@ -60,9 +74,7 @@ class ContinuumController {
             .map(value => {
                 return {
                     content: hss[value].child.title,
-                    className: (!hss[value].child.title ? 'empty' : '')
-                    + ' ' + ((value + 1) % 2 === 0 ? 'even' : 'odd')
-                    + ' child',
+                    className: 'child',
                     colSpan: 1,
                     rowSpan: 1,
                     columnId: value,
@@ -70,18 +82,17 @@ class ContinuumController {
                     empty: !hss[value].child.title,
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     introName: 'child_middle_' + value,
-                    invisible: false
+                    invisible: false,
+                    classGenerator: this.childClassGenerator.bind(self)
                 };
             })
             .value();
     }
 
     toggleColumnActivationClick(tile) {
-
-        if (this.editMode) {
-            const toState = !tile.activated;
-            tile.activated = toState;
-            this.EE.emit('hssColumnActiveState', [tile.columnId, toState]);
+        if (this.editMode && !tile.empty) {
+            tile.activated = !tile.activated;
+            this.EE.emit('hssColumnActiveState', [tile.columnId, tile.activated]);
         }
     }
 
