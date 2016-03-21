@@ -4,5 +4,26 @@
     background: #dddddd;
   }
 
+  .empty {
+    background: transparent;
+    border-right:0;
+  }
+
+  .activated {
+    border-left: 1px solid #7CB342;
+    border-right: 1px solid #7CB342;
+
+    &.child {
+      background: #7CB342;
+      border-right: 1px solid #cbcbcb;
+      border-bottom: 1px solid #cbcbcb;
+    }
+
+    &.mother {
+      background: #7CB342;
+      border-right: 1px solid #cbcbcb;
+      border-bottom: 1px solid #cbcbcb;
+    }
+  }
 
 }
