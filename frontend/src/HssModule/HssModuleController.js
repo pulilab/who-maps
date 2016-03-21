@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { hss, interventionsLib, applicationsLib, taxonomyLib } from './hssMockData';
+import { hss, applicationsLib, taxonomyLib } from './hssMockData';
 import intro from 'intro.js';
 
 class HssModuleController {
@@ -7,7 +7,6 @@ class HssModuleController {
     constructor() {
         this.cell = [0, 1, 2, 3, 4, 5, 6];
         this.editMode = true;
-        this.interventions = interventionsLib;
         this.applications = applicationsLib;
         this.taxonomy = taxonomyLib;
         this.constraints = _.keys(taxonomyLib);
@@ -20,11 +19,6 @@ class HssModuleController {
         });
         this.availableConstraints = [];
 
-        this.zeroRow = this.headerRow();
-        this.motherRow = this.motherColumns();
-        this.childRow = this.childColumns();
-        this.intervertionLogoColumn = this.interventionHeaderLogoGenerator();
-        this.interventionRow = this.interventionRows();
         this.applicationRow = this.applicationRows();
         this.tileClickCounter = 0;
         this.startTile = {};
@@ -48,7 +42,7 @@ class HssModuleController {
         }
         const idList = [];
         tile.activated = !tile.activated;
-        for (let i = tile.columnId; i < tile.columnId + tile.colSpan; i = i + 1) {
+        for (let i = tile.columnId; i < tile.columnId + tile.colSpan; i += 1) {
             idList.push(i);
         }
         this.interventionRow = _.map(this.interventionRow, (value) => {
@@ -114,30 +108,6 @@ class HssModuleController {
         });
     }
 
-    interventionHeaderLogoGenerator() {
-        return {
-            content: 'Interventions and stuff',
-            className: '',
-            colSpan: 2,
-            rowSpan: 4
-        };
-    }
-
-    interventionsMiddleColumnDecorator() {
-        return _.map(this.cell, (value) => {
-            return {
-                content: null,
-                className: (value + 1) % 2 === 0 ? 'even' : 'odd',
-                colSpan: 1,
-                rowSpan: 4,
-                isInput: true,
-                columnId: value,
-                activated: false,
-                selectValues: this.interventions[value],
-                introName: 'interventions_middle_' + value
-            };
-        });
-    }
 
     headerRow() {
         const row = [{
@@ -302,7 +272,7 @@ class HssModuleController {
         const subApp = _.values(this.applications[index].subApplications);
         const appId = this.applications[index].id;
 
-        for (let i = 0; i < subApp.length; i = i + 1) {
+        for (let i = 0; i < subApp.length; i += 1) {
             cols = cols.concat(this.subApplicationHeaderGenerator(subApp, i, appId));
             cols = cols.concat(this.subAppMiddleColumnDecorator(i, appId));
             cols = cols.concat(this.subAppTaxonomyColumnGenerator(i, appId));
@@ -313,7 +283,7 @@ class HssModuleController {
     applicationRows() {
         const appNumber = this.applications.length;
         let cols = [];
-        for (let i = 0; i < appNumber; i = i + 1) {
+        for (let i = 0; i < appNumber; i += 1) {
             cols = cols.concat(this.applicationHeaderGenerator(i));
             cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
             cols = cols.concat(this.taxonomyColumnGenerator(i));

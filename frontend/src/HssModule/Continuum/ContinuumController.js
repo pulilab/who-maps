@@ -92,7 +92,10 @@ class ContinuumController {
     toggleColumnActivationClick(tile) {
         if (this.editMode && !tile.empty) {
             tile.activated = !tile.activated;
-            this.EE.emit('hssColumnActiveState', [tile.columnId, tile.activated]);
+            this.EE.emit('hssColumnActiveState', {
+                columnId: tile.columnId,
+                activated: tile.activated
+            });
         }
     }
 

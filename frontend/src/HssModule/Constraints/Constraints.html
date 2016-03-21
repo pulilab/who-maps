@@ -1,0 +1,20 @@
+<div>
+
+    <div layout="{{vm.editMode ? 'column' : 'row'}}" layout-wrap flex>
+        <div ng-repeat="constraint in vm.constraintsToggle">
+            <div flex="100" ng-if="vm.editMode">
+                <md-checkbox ng-model="constraint.toggled" class="md-primary" ng-change="vm.constraintChanged(constraint)">
+                    {{ constraint.name }}
+                </md-checkbox>
+            </div>
+            <div flex="33" ng-if="!vm.editMode">
+                <md-button class="md-fab md-mini md-primary" ng-disabled="!constraint.toggled" >
+                    <md-icon class="material-icons">
+                        {{ constraint.icon }}
+                    </md-icon>
+                </md-button>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -4,6 +4,8 @@ import ngMaterial from 'angular-material';
 
 import HssModuleController from './HssModuleController';
 import Continuum from './Continuum/';
+import Interventions from './Interventions/';
+import Constraints from './Constraints/';
 
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
@@ -35,6 +37,8 @@ angular.module(moduleName,
     ])
     .controller(moduleName + '.hssModuleController', HssModuleController)
     .component(Continuum.name, Continuum)
+    .component(Interventions.name, Interventions)
+    .component(Constraints.name, Constraints)
     .config(config);
 
 export default moduleName;

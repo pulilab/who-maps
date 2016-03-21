@@ -6,52 +6,8 @@
 
     <div md-whiteframe="2" >
         <continuum tiles="7" ></continuum>
+        <interventions tiles="7" ></interventions>
         <md-grid-list  md-cols="11" md-gutter="0px" md-row-height="4em">
-
-
-
-            <md-grid-tile md-colspan="9" md-rowspan="1" class="header-line">RMNCH Essential Interventions</md-grid-tile>
-            <md-grid-tile md-colspan="2" md-rowspan="1"></md-grid-tile>
-
-            <md-grid-tile md-colspan="{{vm.intervertionLogoColumn.colSpan}}" md-rowspan="{{vm.intervertionLogoColumn.rowSpan}}" > </md-grid-tile>
-
-            <md-grid-tile ng-repeat="tile in vm.interventionRow" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-class="vm.classGenerator(tile)">
-                <div ng-if="tile.activated">
-                    <md-list flex ng-if="!tile.isInput || !vm.editMode">
-                        <md-list-item class="md-1-line" ng-repeat="item in tile.content">
-                            <div class="md-list-item-text" layout="column">
-                                <p>{{item}}</p>
-                            </div>
-                        </md-list-item>
-                    </md-list>
-                    <md-input-container ng-if="tile.isInput && vm.editMode">
-                        <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true">
-                            <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
-                                {{option}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                </div>
-            </md-grid-tile>
-
-            <md-grid-tile md-colspan="2" md-rowspan="5" layout-padding class="intro_constraints">
-                <div layout="{{vm.editMode ? 'column' : 'row'}}" layout-wrap flex>
-                    <div ng-repeat="constraint in vm.constraintsToggle">
-                        <div flex="100" ng-if="vm.editMode">
-                            <md-checkbox ng-model="constraint.toggled" class="md-primary" ng-change="vm.constraintChanged(constraint)">
-                                {{ constraint.name }}
-                            </md-checkbox>
-                        </div>
-                        <div flex="33" ng-if="!vm.editMode">
-                            <md-button class="md-fab md-mini md-primary" ng-disabled="!constraint.toggled" >
-                                <md-icon class="material-icons">
-                                    {{ constraint.icon }}
-                                </md-icon>
-                            </md-button>
-                        </div>
-                    </div>
-                </div>
-            </md-grid-tile>
 
             <md-grid-tile class="header-line" md-colspan="9" md-rowspan="1">
                 common and mHealth ict application

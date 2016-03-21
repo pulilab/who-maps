@@ -95,7 +95,7 @@ describe('continuumController', () => {
         cc.toggleColumnActivationClick(tileMock);
 
         expect(tileMock.activated).toBe(true);
-        expect(window.EE.emit).toHaveBeenCalledWith('hssColumnActiveState', [3, true]);
+        expect(window.EE.emit).toHaveBeenCalledWith('hssColumnActiveState', {columnId:3, activated:true});
 
         cc.editMode = false;
         cc.toggleColumnActivationClick(tileMock);
