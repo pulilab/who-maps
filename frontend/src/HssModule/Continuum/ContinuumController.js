@@ -31,10 +31,10 @@ class ContinuumController {
     }
 
     classGenerator(tile) {
-        let classString = tile.className;
-        classString = classString + ' ' + ((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
-        classString = classString + ' ' + (tile.activated ? 'activated' : 'deactivated');
-        return classString;
+        const classString = [tile.className];
+        classString.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
+        classString.push(tile.activated ? 'activated' : 'deactivated');
+        return classString.join(' ');
     }
 
     motherRowGenerator() {
@@ -62,9 +62,9 @@ class ContinuumController {
     }
 
     childClassGenerator(tile) {
-        let classString = this.classGenerator(tile);
-        classString = classString + ' ' + (!hss[tile.columnId].child.title ? 'empty' : 'filled');
-        return classString;
+        const classString = this.classGenerator(tile).split(' ');
+        classString.push(!hss[tile.columnId].child.title ? 'empty' : 'filled');
+        return classString.join(' ');
     }
 
     childRowGenerator() {
