@@ -1,12 +1,19 @@
-
+import { taxonomyLib } from '../hssMockData';
+import _ from 'lodash';
 class ConstraintsController {
 
-    constructor($timeout) {
+    constructor() {
         const vm = this;
-        $timeout(() => {
-            vm.EE = window.EE;
-            vm.editMode = false;
-            vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
+        vm.EE = window.EE;
+        vm.editMode = false;
+        vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
+        this.constraints = _.keys(taxonomyLib);
+        this.constraintsToggle = _.map(this.constraints, (value) => {
+            return {
+                name: value,
+                icon: taxonomyLib[value].icon,
+                toggled: false
+            };
         });
     }
 
@@ -17,11 +24,11 @@ class ConstraintsController {
 
     static constraintsFactory() {
         require('./Constraints.scss');
-        function constraints($timeout) {
-            return new ConstraintsController($timeout);
+        function constraints() {
+            return new ConstraintsController();
         }
 
-        constraints.$inject = ['$timeout'];
+        constraints.$inject = [];
 
         return constraints;
     }
