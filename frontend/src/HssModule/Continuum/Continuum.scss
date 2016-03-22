@@ -1,5 +1,26 @@
 .continuum-component{
 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+
+  .hss-controls {
+    .hss-control {
+      margin: 16px 0;
+
+      p, .hss-c-s {
+        display: inline-block;
+        margin: 0;
+      }
+
+      &.hss-control-export :hover {
+        color: red;
+        cursor: not-allowed;
+      }
+    }
+  }
+
   .odd {
     background: #dddddd;
   }
@@ -23,6 +44,13 @@
       background: #7CB342;
       border-right: 1px solid #cbcbcb;
       border-bottom: 1px solid #cbcbcb;
+    }
+  }
+
+  .deactivated {
+
+    &.firstrow {
+      opacity: 0.4;
     }
   }
 

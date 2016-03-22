@@ -435,3 +435,8 @@ export const taxonomy = {
         { 'Efficiency': 4 }
     ]
 };
+
+export const projectScale = `Lorem ipsum dolor sit amet,
+ consectetur adipiscing elit. Donec eros lacus,
+ posuere sed elit egestas, dapibus egestas nulla.
+ Suspendisse non tellus tellus.`;
