@@ -6,7 +6,7 @@ import HssModuleController from './HssModuleController';
 import Continuum from './Continuum/';
 import Interventions from './Interventions/';
 import Constraints from './Constraints/';
-import Applications from './Apllications/';
+import Applications from 'Applications/';
 import ProjectScale from './ProjectScale/';
 
 import hssTemplate from './HssModule.html';

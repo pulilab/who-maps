@@ -14,7 +14,7 @@ describe('interventionsController', () => {
         EE.initialize();
         ic = InterventionsController.interventionsFactory()($timeout);
         ic.tiles = 7;
-        ic.interventionRow = ic.applicationRowGenerator();
+        ic.interventionRow = ic.middleColumnGenerator();
     });
 
     it('should have a function that change the edit mode', () => {
@@ -32,7 +32,7 @@ describe('interventionsController', () => {
             columnId: 0,
             activated: true
         };
-        
+
         ic.handleColumnActivation(mockEvent);
 
         const firstTile = ic.interventionRow[mockEvent.columnId];
