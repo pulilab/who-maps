@@ -7,18 +7,28 @@ class ConstraintsController {
         vm.EE = window.EE;
         vm.editMode = false;
         vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-        this.constraints = _.keys(taxonomyLib);
-        this.constraintsToggle = _.map(this.constraints, (value) => {
-            return {
-                name: value,
-                icon: taxonomyLib[value].icon,
-                toggled: false
-            };
-        });
+        this.constraints = this.constraintsToggleGenerator();
     }
 
     handleEditMode(value) {
         this.editMode = value;
+    }
+
+    constraintsToggleGenerator() {
+        return _.chain(taxonomyLib)
+            .keys()
+            .map(value => {
+                return {
+                    name: value,
+                    icon: taxonomyLib[value].icon,
+                    active: false
+                };
+            })
+            .value();
+    }
+
+    constraintChanged() {
+        this.EE.emit('hssConstraintsSelected', this.constraints);
     }
 
 

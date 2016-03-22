@@ -9,16 +9,7 @@ class HssModuleController {
         this.editMode = true;
         this.applications = applicationsLib;
         this.taxonomy = taxonomyLib;
-        this.constraints = _.keys(taxonomyLib);
-        this.constraintsToggle = _.map(this.constraints, (value) => {
-            return {
-                name: value,
-                icon: taxonomyLib[value].icon,
-                toggled: false
-            };
-        });
-        this.availableConstraints = [];
-
+        this.selectedConstraints = [];
         this.applicationRow = this.applicationRows();
         this.tileClickCounter = 0;
         this.startTile = {};
@@ -90,60 +81,6 @@ class HssModuleController {
         tile.activated = !tile.activated;
     }
 
-    childMiddleColumnDecorator() {
-        return _.map(this.cell, (value)=> {
-            return {
-                content: hss[value].child.title,
-                className: (!hss[value].child.title ? 'empty' : '')
-                + ' ' + ((value + 1) % 2 === 0 ? 'even' : 'odd')
-                + ' child',
-                colSpan: 1,
-                rowSpan: 1,
-                columnId: value,
-                activated: hss[value].activated,
-                empty: !hss[value].child.title,
-                clickHandler: this.childClickHandler.bind(this),
-                introName: 'child_middle_' + value
-            };
-        });
-    }
-
-
-    headerRow() {
-        const row = [{
-            content: '',
-            className: 'even',
-            colSpan: 2,
-            rowSpan: 1
-        }];
-        return row.concat(this.headerMiddleColumnDecorator());
-    }
-
-    motherColumns() {
-        const row = [{
-            content: 'Mother',
-            className: 'title',
-            colSpan: 2,
-            rowSpan: 1
-        }];
-        return row.concat(this.motherMiddleColumnDecorator());
-    }
-
-    childColumns() {
-        const row = [{
-            content: 'Child',
-            className: 'title',
-            colSpan: 2,
-            rowSpan: 1
-        }];
-        return row.concat(this.childMiddleColumnDecorator());
-    }
-
-    interventionRows() {
-        let cols = [];
-        cols = cols.concat(this.interventionsMiddleColumnDecorator());
-        return cols;
-    }
 
     applicationClassGenerator(tile) {
         return tile.rowBubbles.length > 0 ? tile.applicationStyle : 'application_disabled';
@@ -391,10 +328,10 @@ class HssModuleController {
     }
 
     constraintChanged() {
-        this.availableConstraints = [];
-        _.forEach(this.constraintsToggle, (value) => {
+        this.selectedConstraints = [];
+        _.forEach(this.constraints, (value) => {
             if (value.toggled) {
-                this.availableConstraints = this.availableConstraints.concat(taxonomyLib[value.name].values);
+                this.selectedConstraints = this.selectedConstraints.concat(taxonomyLib[value.name].values);
             }
         });
     }

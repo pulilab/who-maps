@@ -28,9 +28,9 @@ class InterventionsController {
     }
 
     classGenerator(tile) {
-        const classString = [tile.className];
-        classString.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
-        return classString.join(' ');
+        const classArray = [tile.className];
+        classArray.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
+        return classArray.join(' ');
     }
 
     middleColumnGenerator() {

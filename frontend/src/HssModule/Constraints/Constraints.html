@@ -1,20 +1,20 @@
-<div>
-
-    <div layout="{{vm.editMode ? 'column' : 'row'}}" layout-wrap flex>
-        <div ng-repeat="constraint in vm.constraintsToggle">
-            <div flex="100" ng-if="vm.editMode">
-                <md-checkbox ng-model="constraint.toggled" class="md-primary" ng-change="vm.constraintChanged(constraint)">
-                    {{ constraint.name }}
-                </md-checkbox>
-            </div>
-            <div flex="33" ng-if="!vm.editMode">
-                <md-button class="md-fab md-mini md-primary" ng-disabled="!constraint.toggled" >
-                    <md-icon class="material-icons">
-                        {{ constraint.icon }}
-                    </md-icon>
-                </md-button>
-            </div>
+<div class="constraints-component" layout="column" layout-wrap layout-align="start start" flex>
+    <div class="wide">
+        <h4>Health system constraints</h4>
+    </div>
+    <div ng-repeat="constraint in vm.constraints">
+        <div flex="100" ng-if="vm.editMode">
+            <md-checkbox ng-model="constraint.active" class="md-primary left-padding" ng-change="vm.constraintChanged(constraint)">
+                {{ constraint.name }}
+            </md-checkbox>
+        </div>
+        <div flex="100" ng-if="!vm.editMode && constraint.active">
+            <md-button class="md-fab md-mini md-primary" ng-disabled="!constraint.active" >
+                <md-icon class="material-icons">
+                    {{ constraint.icon }}
+                </md-icon>
+            </md-button>
+            {{constraint.name}}
         </div>
     </div>
-
 </div>
