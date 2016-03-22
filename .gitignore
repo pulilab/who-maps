@@ -5,3 +5,6 @@ node_modules/
 .DS_Store
 /frontend/coverage/
 frontend/builds/
+.cache/
+.coverage
+*/.cache/
