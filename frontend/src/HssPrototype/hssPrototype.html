@@ -49,7 +49,7 @@
 
         <md-grid-tile md-colspan="2" md-rowspan="5" layout-padding class="intro_constraints">
             <div layout="{{vm.editMode ? 'column' : 'row'}}" layout-wrap flex>
-                <div ng-repeat="constraint in vm.constraintsToggle">
+                <div ng-repeat="constraint in vm.constraints">
                     <div flex="100" ng-if="vm.editMode">
                         <md-checkbox ng-model="constraint.toggled" class="md-primary" ng-change="vm.constraintChanged(constraint)">
                             {{ constraint.name }}
@@ -102,7 +102,7 @@
                 <div ng-if="vm.editMode" >
                     <md-input-container >
                         <md-select ng-model="tile.content" aria-label="taxonomy-option" multiple="true">
-                            <md-option ng-repeat="option in vm.availableConstraints" value="{{option}}">
+                            <md-option ng-repeat="option in vm.selectedConstraints" value="{{option}}">
                                 {{option}}
                             </md-option>
                         </md-select>

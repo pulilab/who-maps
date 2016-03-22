@@ -4,25 +4,75 @@
 
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.firstRow" ng-class="tile.className"
-    md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" class="cell-icons">
-        <img ng-src="{{tile.icon}}" >
+
+    <md-grid-tile
+        ng-repeat="tile in vm.firstRow"
+        ng-class="vm.classGenerator(tile)"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-icons firstrow">
+        <img ng-src="{{tile.icon}}">
     </md-grid-tile>
 
-    <md-grid-tile md-colspan="2" md-rowspan="3" class="hss-controls">
-        <md-switch ng-model="vm.editMode" aria-label="EditMode" class="md-primary" ng-change="vm.editModeChange()">
-            Edit Enabled: {{vm.editMode}}
-        </md-switch>
+    <md-grid-tile md-colspan="2" md-rowspan="3">
+
+        <div class="hss-controls">
+
+            <div class="hss-control">
+
+                <p>Edit Mode: {{vm.editMode ? 'On' : 'Off'}}</p>
+
+                <md-switch
+                    class="md-primary hss-c-s"
+                    ng-model="vm.editMode"
+                    aria-label="EditMode"
+                    ng-change="vm.editModeChange()">
+                </md-switch>
+
+            </div>
+
+            <div class="hss-control hss-control-export"
+                ng-if="!vm.editMode"
+                ng-click="vm.exportPdf()">
+
+                <p>Export (pdf)<i class="material-icons hss-c-s">file_upload</i></p>
+
+            </div>
+
+            <div class="hss-control">
+
+                <p>Progress: {{vm.mapsProgressPercentage}}%</p>
+
+                <md-progress-circular
+                    class="hss-c-s"
+                    md-mode="determinate"
+                    md-diameter="25"
+                    value="{{vm.mapsProgressPercentage}}">
+                </md-progress-circular>
+
+            </div>
+        </div>
     </md-grid-tile>
 
-    <md-grid-tile md-colspan="2" md-rowspan="1" class="row-title-mother" layout="row">
-        <span flex="20" class="continuum-icon"><img src="./images/icon-mother.svg" /></span>
+    <md-grid-tile
+        md-colspan="2"
+        md-rowspan="1"
+        class="row-title-mother"
+        layout="row">
+
+        <span flex="20" class="continuum-icon">
+            <img src="./images/icon-mother.svg" />
+        </span>
         <span flex="80" class="continuum-row-title">Mother</span>
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="tile.classGenerator(tile)"
-                  md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" class="cell-mother"
-                  ng-click="tile.clickHandler(tile)">
+    <md-grid-tile ng-repeat="tile in vm.motherRow"
+        ng-class="tile.classGenerator(tile)"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-mother"
+        ng-click="tile.clickHandler(tile)">
+
         <span class="continuum-title">{{tile.content}}</span>
     </md-grid-tile>
 

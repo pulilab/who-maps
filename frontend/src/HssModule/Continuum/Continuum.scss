@@ -2,11 +2,33 @@
 @import '../../variables';
 @import '../../mixins';
 
+
 .continuum-component {
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+
+  .hss-controls {
+    .hss-control {
+      margin: 16px 0;
+
+      p, .hss-c-s {
+        display: inline-block;
+        margin: 0;
+      }
+
+      &.hss-control-export :hover {
+        color: red;
+        cursor: not-allowed;
+      }
+    }
+  }
 
   md-grid-tile {
 
-    &.cell-icons
+    &.cell-icons,
     &.cell-child {
       background: $color-white !important;
     }
@@ -95,10 +117,6 @@
           background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
         }
       }
-      + .mother + .mother { z-index: 90; }
-      + .mother + .mother + .mother { z-index: 80; }
-      + .mother + .mother + .mother + .mother { z-index: 70; }
-      + .mother + .mother + .mother + .mother + .mother { z-index: 60; }
     }
 
     &.row-title-child {
@@ -120,6 +138,13 @@
     &.child {
       background: $color-blue !important;
       color: $color-white;
+    }
+  }
+
+  .deactivated {
+
+    &.firstrow {
+      opacity: 0.4;
     }
   }
 

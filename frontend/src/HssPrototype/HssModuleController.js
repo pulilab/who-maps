@@ -11,14 +11,14 @@ class HssModuleController {
         this.applications = applicationsLib;
         this.taxonomy = taxonomyLib;
         this.constraints = _.keys(taxonomyLib);
-        this.constraintsToggle = _.map(this.constraints, (value) => {
+        this.constraints = _.map(this.constraints, (value) => {
             return {
                 name: value,
                 icon: taxonomyLib[value].icon,
                 toggled: false
             };
         });
-        this.availableConstraints = [];
+        this.selectedConstraints = [];
 
         this.zeroRow = this.headerRow();
         this.motherRow = this.motherColumns();
@@ -421,10 +421,10 @@ class HssModuleController {
     }
 
     constraintChanged() {
-        this.availableConstraints = [];
-        _.forEach(this.constraintsToggle, (value) => {
+        this.selectedConstraints = [];
+        _.forEach(this.constraints, (value) => {
             if (value.toggled) {
-                this.availableConstraints = this.availableConstraints.concat(taxonomyLib[value.name].values);
+                this.selectedConstraints = this.selectedConstraints.concat(taxonomyLib[value.name].values);
             }
         });
     }
