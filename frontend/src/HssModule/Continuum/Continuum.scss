@@ -1,4 +1,9 @@
-.continuum-component{
+@import '../../../node_modules/angular-material/angular-material';
+@import '../../variables';
+@import '../../mixins';
+
+
+.continuum-component {
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -21,29 +26,118 @@
     }
   }
 
-  .odd {
-    background: #dddddd;
-  }
+  md-grid-tile {
 
-  .empty {
-    background: transparent;
-    border-right:0;
+    &.cell-icons,
+    &.cell-child {
+      background: $color-white !important;
+    }
+
+    &.cell-mother,
+    &.cell-child {
+      background-color: $color-gray-lighter !important;
+      color: $color-gray-light;
+      text-align: center;
+      font-size: $caption-font-size-base;
+      font-weight: 500;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 11px;
+        height: 50px;
+        background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
+      }
+
+      &.empty {
+        background: $color-white !important;
+        cursor: default;
+
+        &:after {
+          display: none;
+        }
+      }
+
+      .continuum-title {
+        padding: 0 10px;
+      }
+    }
+
+    &.hss-controls,
+    &.cell-child,
+    &.row-title-child {
+      border-bottom: 1px solid $color-gray !important;
+    }
+
+    &.row-title-mother,
+    &.row-title-child {
+      .continuum-icon {
+        img {
+          float: right;
+          padding: 0 10px;
+        }
+      }
+      .continuum-row-title {
+        font-size: $body-font-size-base;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 50px;
+      }
+    }
+
+    &.row-title-mother {
+      &::before {
+        background: transparent url("./images/continuum-triangle-mother.svg") 100% 100% no-repeat;
+      }
+      .continuum-row-title {
+        position: relative;
+        color: $color-green;
+      }
+
+      + .mother {
+        z-index: 100;
+        &:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 11px;
+          height: 50px;
+          background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
+        }
+      }
+    }
+
+    &.row-title-child {
+      &::before {
+        background: transparent url("./images/continuum-triangle-child.svg") 100% 100% no-repeat;
+      }
+      .continuum-row-title {
+        color: $color-blue;
+      }
+    }
+
   }
 
   .activated {
-    border-left: 1px solid #7CB342;
-    border-right: 1px solid #7CB342;
-
-    &.child {
-      background: #7CB342;
-      border-right: 1px solid #cbcbcb;
-      border-bottom: 1px solid #cbcbcb;
-    }
-
     &.mother {
-      background: #7CB342;
-      border-right: 1px solid #cbcbcb;
-      border-bottom: 1px solid #cbcbcb;
+      background: $color-green !important;
+      color: $color-white;
+    }
+    &.child {
+      background: $color-blue !important;
+      color: $color-white;
     }
   }
 

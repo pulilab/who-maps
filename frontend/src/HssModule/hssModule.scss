@@ -1,5 +1,7 @@
 @import '../../node_modules/angular-material/angular-material.css';
 @import '../../node_modules/intro.js/introjs.css';
+@import '../variables';
+@import '../mixins';
 
 .hss-prototype {
 
@@ -34,20 +36,14 @@
     background: #43A047 !important;
   }
 
-
-  .text-center {
-    text-align: center;
-  }
-
   md-grid-list {
-    background: white;
+    background: $color-white;
   }
 
   md-grid-tile {
-    background: white;
-    border-right: 1px solid #cbcbcb;
-    border-bottom: 1px solid #cbcbcb;
-    outline:none;
+    border-bottom: 1px solid $color-gray-lighter;
+    background: $color-white;
+    outline: none;
 
     .app-number {
       width: 3em;
@@ -74,23 +70,23 @@
       width: calc( 100% - 70px );
       padding-top: 5px;
       position: absolute;
-      right:10px;
+      right: 10px;
     }
 
     .wide {
-      width:100%;
+      width: 100%;
     }
 
     &.odd {
-      background: #dddddd;
+      background: #F8F8F8;
     }
 
     &.empty {
       background: transparent;
-      border-right:0;
+      border-right: 0;
     }
     &.sub {
-      border-bottom:0;
+      border-bottom: 0;
     }
 
     &.app-open {
@@ -98,7 +94,7 @@
     }
 
     &.header-line {
-      background: lightgray;
+      background: #EEEEEE;
     }
 
     &.taxonomy {

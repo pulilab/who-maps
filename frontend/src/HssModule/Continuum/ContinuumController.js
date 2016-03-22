@@ -90,6 +90,7 @@ class ContinuumController {
         classes.push(tile.type);
         classes.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
         classes.push(tile.activated ? 'activated' : 'deactivated');
+        classes.push('zindex-' + (100 - (tile.columnId * 10)));
 
         if (tile.type === 'child') {
             classes.push(hss[tile.columnId].child.title ? 'filled' : 'empty');
