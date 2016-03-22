@@ -13,8 +13,6 @@ class ContinuumController {
             vm.childRow = this.childRowGenerator();
             vm.motherRow.forEach(tile => {
                 vm.checkColumnActivation(tile);
-
-                console.log(tile.columnId + ' activated? ' + vm.firstRow[tile.columnId].activated);
             });
 
             vm.exportPdf = this.exportPdf;
