@@ -5,23 +5,23 @@
 
 .continuum-component {
 
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  cursor: default;
-
   .hss-controls {
+    border-bottom: 1px solid $color-gray !important;
+    
     .hss-control {
       margin: 16px 0;
 
-      p, .hss-c-s {
+      p,
+      .hss-c-s {
         display: inline-block;
         margin: 0;
       }
 
-      &.hss-control-export :hover {
-        color: red;
-        cursor: not-allowed;
+      &.hss-control-export {
+        &:hover {
+          color: $color-red;
+          cursor: not-allowed;
+        }
       }
     }
   }
@@ -41,7 +41,8 @@
       font-size: $caption-font-size-base;
       font-weight: 500;
       text-transform: uppercase;
-      cursor: pointer;
+      cursor: default;
+      @include user-select();
 
       &::after {
         content: "";
@@ -55,7 +56,6 @@
 
       &.empty {
         background: $color-white !important;
-        cursor: default;
 
         &:after {
           display: none;
@@ -67,7 +67,6 @@
       }
     }
 
-    &.hss-controls,
     &.cell-child,
     &.row-title-child {
       border-bottom: 1px solid $color-gray !important;
@@ -105,18 +104,7 @@
         color: $color-green;
       }
 
-      + .mother {
-        z-index: 100;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 11px;
-          height: 50px;
-          background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
-        }
-      }
+
     }
 
     &.row-title-child {
@@ -142,9 +130,10 @@
   }
 
   .deactivated {
-
-    &.firstrow {
-      opacity: 0.4;
+    &.cell-icons {
+      img {
+        opacity: .35;
+      }
     }
   }
 
