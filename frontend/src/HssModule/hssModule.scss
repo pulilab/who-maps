@@ -1,26 +1,24 @@
 @import '../../node_modules/angular-material/angular-material.css';
 @import '../../node_modules/intro.js/introjs.css';
+@import '../variables';
+@import '../mixins';
 
 .hss-prototype {
 
-  .text-center {
-    text-align: center;
-  }
 
   md-grid-list {
-    background: white;
+    background: $color-white;
   }
 
   md-grid-tile {
-    background: white;
-    border-right: 1px solid #cbcbcb;
-    border-bottom: 1px solid #cbcbcb;
-    outline:none;
+    border-bottom: 1px solid $color-gray-lighter;
+    background: $color-white;
+    outline: none;
 
 
 
     &.sub {
-      border-bottom:0;
+      border-bottom: 0;
     }
 
     &.app-open {
@@ -28,7 +26,7 @@
     }
 
     &.header-line {
-      background: lightgray;
+      background: #EEEEEE;
     }
 
 

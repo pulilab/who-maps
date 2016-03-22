@@ -1,14 +1,16 @@
-<md-grid-list md-cols="11" md-gutter="0px" md-row-height="4em" class="continuum-component">
+<md-grid-list md-cols="11" md-gutter="0px" md-row-height="50px" class="continuum-component">
 
-    <md-grid-tile md-colspan="2" md-rowspan="1" class="empty-cell">
+    <md-grid-tile md-colspan="2" md-rowspan="1" class="cell-empty">
 
     </md-grid-tile>
 
+
     <md-grid-tile
         ng-repeat="tile in vm.firstRow"
-        ng-class="[vm.classGenerator(tile), 'firstrow']"
+        ng-class="vm.classGenerator(tile)"
         md-colspan="{{tile.colSpan}}"
-        md-rowspan="{{tile.rowSpan}}">
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-icons firstrow">
         <img ng-src="{{tile.icon}}">
     </md-grid-tile>
 
@@ -55,32 +57,34 @@
     <md-grid-tile
         md-colspan="2"
         md-rowspan="1"
-        class=""
+        class="row-title-mother"
         layout="row">
 
-        <img flex="20" src="./images/icon-mother.svg" />
-
-        <span flex="80">Mother</span>
+        <span flex="20" class="continuum-icon">
+            <img src="./images/icon-mother.svg" />
+        </span>
+        <span flex="80" class="continuum-row-title">Mother</span>
     </md-grid-tile>
 
     <md-grid-tile ng-repeat="tile in vm.motherRow"
         ng-class="tile.classGenerator(tile)"
-        md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-mother"
         ng-click="tile.clickHandler(tile)">
 
-        <span>{{tile.content}}</span>
-
+        <span class="continuum-title">{{tile.content}}</span>
     </md-grid-tile>
 
-    <md-grid-tile md-colspan="2" md-rowspan="1" class="" layout="row">
-        <img flex="20" src="./images/icon-child.svg" />
-        <span flex="80" >Child</span>
+    <md-grid-tile md-colspan="2" md-rowspan="1" class="row-title-child" layout="row">
+        <span flex="20" class="continuum-icon"><img src="./images/icon-child.svg" /></span>
+        <span flex="80" class="continuum-row-title">Child</span>
     </md-grid-tile>
 
     <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.classGenerator(tile)"
-                  md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}"
+                  md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" class="cell-child"
                   ng-click="tile.clickHandler(tile)">
-        <span>{{tile.content}}</span>
+        <span class="continuum-title">{{tile.content}}</span>
     </md-grid-tile>
 
 </md-grid-list>
