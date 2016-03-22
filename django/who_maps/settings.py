@@ -37,8 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
+    'django.contrib.sites',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'corsheaders',
+    'user',
 ]
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +60,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.ExceptionLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'who_maps.urls'
@@ -122,3 +134,62 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+# django-allauth and rest-auth settings
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'user.serializers.ProfileTokenSerializer'
+}
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# Mailgun settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.mailgun.org"
+EMAIL_HOST_USER = "postmaster@sandbox303416e0bcf6455f8a95ec08fd0b7cf8.mailgun.org"
+EMAIL_HOST_PASSWORD = "5c9cd07aad4610f094a0713c2233c2f4"
+EMAIL_PORT = 587
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'logfile': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/tmp/whomaps.log',
+            'maxBytes': 10000000,
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console', 'logfile'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

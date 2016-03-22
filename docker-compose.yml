@@ -7,7 +7,7 @@ django:
     - postgres:postgres
   volumes:
     - ./django:/src
-  command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload
+  command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
 
 nginx:
   restart: always
