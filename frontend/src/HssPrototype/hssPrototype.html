@@ -15,11 +15,11 @@
             </md-switch>
         </md-grid-tile>
 
-        <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile, $first)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
+        <md-grid-tile ng-repeat="tile in vm.motherRow" ng-class="vm.classGenerator(tile, $first)" md-colspan="{{tile.colSpan}}"  md-rowspan="{{tile.rowSpan}}" ng-click="tile.appClickHandler(tile)">
             {{tile.content}}
         </md-grid-tile>
 
-        <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-click="tile.clickHandler(tile)">
+        <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="vm.classGenerator(tile)" md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-click="tile.appClickHandler(tile)">
             {{tile.content}}
         </md-grid-tile>
 
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <div ng-if="tile.isInput && tile.activated" class="grid-selector" ng-class="tile.status" ng-click="vm.clickHandler(tile)" >
+            <div ng-if="tile.isInput && tile.activated" class="grid-selector" ng-class="tile.status" ng-click="vm.appClickHandler(tile)" >
                 <div ng-if="vm.editMode && tile.isDefined">
                     <div class="app-number white-number">{{tile.appLabel}}</div>
                     <md-input-container  md-no-float class="" >

@@ -14,7 +14,7 @@
 
     </md-grid-tile>
 
-    <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.middleRow" >
+    <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.interventionRow" >
         <div ng-class="tile.classGenerator(tile)" >
             <div ng-if="tile.activated">
                 <md-list flex ng-if="!vm.editMode">

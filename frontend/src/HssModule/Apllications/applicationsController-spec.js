@@ -1,4 +1,4 @@
-import InterventionsController from './InterventionsController';
+import InterventionsController from './ApplicationsController';
 import { EE } from '../../Common/';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn */
@@ -12,7 +12,7 @@ describe('interventionsController', () => {
 
     beforeEach(() => {
         EE.initialize();
-        ic = InterventionsController.interventionsFactory()($timeout);
+        ic = InterventionsController.applicationsFactory()($timeout);
         ic.tiles = 7;
         ic.interventionRow = ic.applicationRowGenerator();
     });
@@ -32,7 +32,7 @@ describe('interventionsController', () => {
             columnId: 0,
             activated: true
         };
-        
+
         ic.handleColumnActivation(mockEvent);
 
         const firstTile = ic.interventionRow[mockEvent.columnId];
