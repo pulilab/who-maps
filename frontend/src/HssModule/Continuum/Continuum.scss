@@ -1,5 +1,10 @@
 .continuum-component{
 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+
   .hss-controls {
     .hss-control {
       margin: 16px 0;
@@ -10,7 +15,8 @@
       }
 
       &.hss-control-export :hover {
-        color: blue;
+        color: red;
+        cursor: not-allowed;
       }
     }
   }
