@@ -11,6 +11,11 @@ class ContinuumController {
             vm.firstRow = this.firstRowGenerator();
             vm.motherRow = this.motherRowGenerator();
             vm.childRow = this.childRowGenerator();
+            vm.motherRow.forEach(tile => {
+                vm.checkColumnActivation(tile);
+
+                console.log(tile.columnId + ' activated? ' + vm.firstRow[tile.columnId].activated);
+            });
 
             vm.exportPdf = this.exportPdf;
             vm.mapsProgressPercentage = 68; // Placeholder!!
@@ -48,7 +53,7 @@ class ContinuumController {
                     invisible: _.isEmpty(hss[value].mother),
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
-                    activated: hss[value].activated,
+                    activated: hss[value].mother.activated,
                     introName: 'mother_middle_' + value,
                     classGenerator: this.classGenerator
                 };
@@ -71,7 +76,7 @@ class ContinuumController {
                     colSpan: 1,
                     rowSpan: 1,
                     columnId: value,
-                    activated: hss[value].activated,
+                    activated: hss[value].child.activated,
                     empty: !hss[value].child.title,
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     introName: 'child_middle_' + value,
@@ -100,33 +105,34 @@ class ContinuumController {
         if (this.editMode && !tile.empty) {
 
             tile.activated = !tile.activated;
-
-            // Global Column activation handlings (missing childs/double)
-            if (tile.columnId < 4) {
-                this.firstRow[tile.columnId].activated = tile.activated;
-                this.columnChEmit(tile.columnId, tile.activated);
-            }
-            else if (tile.columnId === 4) {
-                this.firstRow[tile.columnId].activated = tile.activated ||
-                    this.motherRow[4].activated ||
-                    this.childRow[4].activated;
-                this.columnChEmit(4, this.firstRow[tile.columnId].activated);
-            }
-            else if (tile.columnId === 5) {
-                this.firstRow[5].activated = this.childRow[5].activated || this.motherRow[5].activated;
-                this.columnChEmit(5, this.firstRow[5].activated);
-
-                this.firstRow[6].activated = this.childRow[6].activated || this.motherRow[5].activated;
-                this.columnChEmit(6, this.firstRow[6].activated);
-            }
-            else {
-                this.firstRow[6].activated = this.childRow[6].activated || this.motherRow[5].activated;
-                this.columnChEmit(6, this.firstRow[6].activated);
-            }
-
+            this.checkColumnActivation(tile);
         }
 
+    }
 
+    // Global Column activation handling (missing childs/double)
+    checkColumnActivation(tile) {
+        if (tile.columnId < 4) {
+            this.firstRow[tile.columnId].activated = tile.activated;
+            this.columnChEmit(tile.columnId, tile.activated);
+        }
+        else if (tile.columnId === 4) {
+            this.firstRow[tile.columnId].activated = tile.activated ||
+                this.motherRow[4].activated ||
+                this.childRow[4].activated;
+            this.columnChEmit(4, this.firstRow[tile.columnId].activated);
+        }
+        else if (tile.columnId === 5) {
+            this.firstRow[5].activated = this.childRow[5].activated || this.motherRow[5].activated;
+            this.columnChEmit(5, this.firstRow[5].activated);
+
+            this.firstRow[6].activated = this.childRow[6].activated || this.motherRow[5].activated;
+            this.columnChEmit(6, this.firstRow[6].activated);
+        }
+        else {
+            this.firstRow[6].activated = this.childRow[6].activated || this.motherRow[5].activated;
+            this.columnChEmit(6, this.firstRow[6].activated);
+        }
     }
 
     columnChEmit(column, state) {
