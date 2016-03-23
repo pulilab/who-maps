@@ -1,4 +1,31 @@
+// Zoli's magic needed here...
 projectpartners {
-	/* Your style here */
 
+	width: 100%;
+
+	.partnerscontainer {
+
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		align-items: center;
+
+		.partneritem {
+
+			flex: 20;
+			position: relative;
+
+			img {
+				max-width: 100%;
+				max-height: 100%;
+			}
+
+			img.deletable:hover {
+				border: 3px solid red;
+				// which "means" its deletable with a click
+			}
+
+		}
+	}
 }

@@ -1,2 +1,26 @@
 <span flex="100" class="md-subhead">Project Partners</span>
-<div flex="20" class="partner-logo-canvas" ng-repeat="n in [1,2,3]"></div>
+
+<p ng-if="!vm.logos.length">There is no Project partner logo uploaded yet...</p>
+
+<div class="partnerscontainer">
+
+	<div
+		ng-repeat="logo in vm.logos track by $index"
+		ng-if="vm.logos.length"
+		class="partneritem">
+
+		<img ng-src="{{logo}}" ng-class="{'deletable': vm.editMode}" ng-click="vm.delLogo(logo)">
+
+	</div>
+	<div
+		ng-if="vm.editMode"
+		class="partneritem"
+		ng-click="vm.addLogo()">
+
+		<p>Click here to add new logo!</p>
+
+	</div>
+
+
+
+</div>

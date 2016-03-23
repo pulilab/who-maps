@@ -1,5 +1,5 @@
 // import _ from 'lodash';
-import { projectPartners } from '../hssMockData';
+import { partnerLogoUrls } from '../hssMockData';
 
 class ProjectPartnersController {
 
@@ -8,11 +8,23 @@ class ProjectPartnersController {
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
-            vm.string = projectPartners;
             vm.EE.on('hssEditMode', bool => {
                 vm.editMode = bool;
             });
+
+            vm.logos = partnerLogoUrls;
         });
+    }
+
+    delLogo(logo) {
+        if (this.editMode) {
+            this.logos = this.logos.filter(l => l !== logo);
+        }
+        // handle backend here!
+    }
+
+    addLogo() {
+        console.warn('should show modal with upload features');
     }
 
     static projectPartnersFactory() {

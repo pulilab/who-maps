@@ -440,3 +440,10 @@ export const projectScale = `Lorem ipsum dolor sit amet,
  consectetur adipiscing elit. Donec eros lacus,
  posuere sed elit egestas, dapibus egestas nulla.
  Suspendisse non tellus tellus.`;
+
+export const partnerLogoUrls = [
+    'http://celebrityhockeyclassics.com/wp-content/uploads/Logo-Placeholder.png',
+    'https://d13yacurqjgara.cloudfront.net/users/3813/screenshots/285235/screen_shot_2011-10-05_at_10.54.15_am.png',
+    'http://www.abbotts.net.au/sites/live.abbotts.devshop.abbotts.net.au/files/field/logo/client-logo-placeholder_4.jpg',
+    'http://twistedems.com/cms/wp-content/uploads/2016/02/client-logo-placeholder-300x115.jpg'
+];
