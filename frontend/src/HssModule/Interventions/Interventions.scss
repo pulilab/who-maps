@@ -7,15 +7,27 @@ interventions {
   .header {
     height: 100%;
     width: 100%;
-    background: #EEEEEE url('images/asset-bg-who.svg') no-repeat 0 0;
-    background-size: contain;
-    padding-left: 90px;
-    text-transform: uppercase;
+    background-color: #EEEEEE;
 
+    h2 {
+      z-index: 10;
+      padding-left: 40px;
+    }
+
+    &::before {
+      z-index: 1;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #EEEEEE url('./images/asset-bg-who.svg') no-repeat -10px -9px;
+      opacity: .2;
+    }
   }
 
-  .intervention {
-    width: 100%;
-    height: 100%;
+  .list-interventions {
+    
   }
 }

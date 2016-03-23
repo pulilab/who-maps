@@ -3,6 +3,30 @@
 @import '../../node_modules/angular-material/angular-material';
 
 
+// Progress Circular
+md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
+  border-width: 16px !important;
+}
+
+
+// Select - small size
+md-select.small {
+  font-size: $caption-font-size-base;
+}
+
+md-select-menu-container.small {}
+
+
+// Select - multiple
+md-select.multiple {
+
+}
+
+md-select-menu-container.multiple {}
+
+
+// Custom colors
+
 .md-gray {
 
   // Progress Circular
