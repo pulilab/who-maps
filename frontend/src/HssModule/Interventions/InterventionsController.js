@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { interventionsLib } from '../hssMockData';
+import { hss, interventionsLib } from '../hssMockData';
 
 class InterventionsController {
 
@@ -8,7 +8,7 @@ class InterventionsController {
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
-            this.middleRow = this.middleColumnGenerator();
+            this.interventionRow = this.middleColumnGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssColumnActiveState', this.handleColumnActivation.bind(this));
         });
@@ -19,7 +19,7 @@ class InterventionsController {
     }
 
     handleColumnActivation(event) {
-        _.map(this.middleRow, (value) => {
+        _.map(this.interventionRow, (value) => {
             if (value.columnId === event.columnId) {
                 value.activated = event.activated;
             }
@@ -38,13 +38,17 @@ class InterventionsController {
         return _.chain(this.tiles)
             .range()
             .map((value) => {
+                let _activated = hss[value].mother.activated;
+                if (hss[value].child) {
+                    _activated = _activated || hss[value].child.activated;
+                }
                 return {
                     content: null,
                     className: 'intervention',
                     colSpan: 1,
                     rowSpan: 4,
                     columnId: value,
-                    activated: false,
+                    activated: _activated,
                     selectValues: interventionsLib[value],
                     introName: 'interventions_middle_' + value,
                     classGenerator: self.classGenerator

@@ -9,6 +9,10 @@ class ProjectScaleController {
             vm.EE = window.EE;
             vm.editMode = false;
             vm.string = projectScale;
+            vm.EE.on('hssEditMode', bool => {
+                vm.editMode = bool;
+                // console.log(bool);
+            });
         });
     }
 

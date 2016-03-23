@@ -28,11 +28,11 @@
     <md-grid-tile
         md-colspan="{{tile.colSpan}}"
         md-rowspan="{{tile.rowSpan}}"
-        ng-repeat="tile in vm.middleRow"
+        ng-repeat="tile in vm.interventionRow"
         class="list-interventions">
 
-        <div ng-class="tile.classGenerator(tile)">
-            <div ng-if="tile.activated">
+        <div ng-class="tile.classGenerator(tile)" ng-if="tile.activated">
+
                 <md-list flex ng-if="!vm.editMode">
                     <md-list-item class="md-1-line" ng-repeat="item in tile.content">
                         <div class="md-list-item-text" layout="column">
@@ -47,7 +47,6 @@
                         </md-option>
                     </md-select>
                 </md-input-container>
-            </div>
 
         </div>
     </md-grid-tile>

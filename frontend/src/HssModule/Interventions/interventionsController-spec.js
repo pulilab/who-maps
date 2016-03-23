@@ -14,7 +14,7 @@ describe('interventionsController', () => {
         EE.initialize();
         ic = InterventionsController.interventionsFactory()($timeout);
         ic.tiles = 7;
-        ic.middleRow = ic.middleColumnGenerator();
+        ic.interventionRow = ic.middleColumnGenerator();
     });
 
     it('should have a function that change the edit mode', () => {
@@ -32,13 +32,13 @@ describe('interventionsController', () => {
             columnId: 0,
             activated: true
         };
-        
+
         ic.handleColumnActivation(mockEvent);
 
-        const firstTile = ic.middleRow[mockEvent.columnId];
+        const firstTile = ic.interventionRow[mockEvent.columnId];
         expect(firstTile.activated).toBeTruthy();
 
-        const secondTile = ic.middleRow[mockEvent.columnId + 1];
+        const secondTile = ic.interventionRow[mockEvent.columnId + 1];
         expect(secondTile.activated).toBeFalsy();
     });
 
@@ -53,7 +53,7 @@ describe('interventionsController', () => {
 
     it('should have a function that returns the interventions map of tiles', () => {
 
-        ic.middleRow.forEach(value => {
+        ic.interventionRow.forEach(value => {
             ['content', 'colSpan', 'rowSpan', 'className',
                 'columnId', 'activated', 'introName', 'selectValues',
                 'classGenerator']
