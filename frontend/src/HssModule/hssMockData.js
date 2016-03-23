@@ -270,7 +270,7 @@ export const hss = [
         'mother': {
             'title': 'Adolenscence',
             'span': 1,
-            'activated': false
+            'activated': true
         },
         'child': {
             'title': null,

@@ -74,7 +74,7 @@
             <div ng-if="tile.isHeader" class="wide">
                 <div class="app-number" ng-class="tile.classGenerator(tile)">{{tile.appLabel}}</div>
                 <div class="app-button">
-                    <md-button class="md-button-override"  ng-click="vm.enableSubApp(tile)">
+                    <md-button class="md-button-override"  ng-click="vm.toggleSubApp(tile)">
                         <span>{{tile.content}}</span>
                         <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 ">keyboard_arrow_down</md-icon>
                     </md-button>

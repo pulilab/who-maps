@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { hss, applicationsLib } from '../hssMockData';
+import { hss, applicationsLib, taxonomyLib } from '../hssMockData';
 
 class ApplicationsController {
 
@@ -10,14 +10,17 @@ class ApplicationsController {
             vm.editMode = false;
             this.startTile = {};
             this.tileClickCounter = 0;
+            this.selectedConstraints = [];
             this.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssColumnActiveState', this.handleColumnActivation.bind(this));
+            vm.EE.on('hssConstraintsSelected', this.constraintsUpdated.bind(this));
         });
     }
 
     handleEditMode(value) {
         this.editMode = value;
+        this.applicationRow = this.setSubAppEnabled(this.applicationRow);
     }
 
     handleColumnActivation(event) {
@@ -29,14 +32,17 @@ class ApplicationsController {
         });
     }
 
+    constraintsUpdated(event) {
+        this.selectedConstraints = _.map(event, value => {
+            value.taxonomy = taxonomyLib[value.name].values;
+            return value;
+        });
+    }
+
     classGenerator(tile) {
         const classArray = [tile.className];
         classArray.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
         return classArray.join(' ');
-    }
-
-    inspect(tile) {
-        console.log(tile);
     }
 
     applicationClassGenerator(tile) {
@@ -44,7 +50,7 @@ class ApplicationsController {
 
         classArray.push(tile.rowBubbles && tile.rowBubbles.length > 0
             ? tile.applicationStyle : 'application_disabled');
-        classArray.push(tile.status ? tile.status : 'no-bubble' );
+        classArray.push(tile.status ? tile.status : 'no-bubble');
         classArray.push(tile.activated ? 'activated' : 'not-activated');
         classArray.push(tile.subAppOpen ? 'app-open' : 'app-closed');
         classArray.push(tile.introName);
@@ -74,7 +80,7 @@ class ApplicationsController {
             isMain: true,
             rowBubbles: [],
             classGenerator: this.applicationClassGenerator.bind(this),
-            clickHandler: this.enableSubApp.bind(this),
+            clickHandler: this.toggleSubApp.bind(this),
             introName: 'applications_header_' + index,
             applicationStyle: 'application_' + applicationsLib[index].id
         }];
@@ -101,7 +107,8 @@ class ApplicationsController {
                     activated: this.applicationActivated(value),
                     introName: 'applications_middle_' + value,
                     classGenerator: this.applicationClassGenerator.bind(this),
-                    clickHandler: this.appClickHandler.bind(this)
+                    clickHandler: this.appClickHandler.bind(this),
+                    fatherId: 'root'
                 };
             })
             .value();
@@ -139,7 +146,7 @@ class ApplicationsController {
         }];
     }
 
-    subAppMiddleColumnDecorator(index, id) {
+    subAppMiddleColumnDecorator(subApp, index, id) {
 
         return _.chain(this.tiles)
             .range()
@@ -155,12 +162,13 @@ class ApplicationsController {
                     isInput: true,
                     insertMode: false,
                     invisible: false,
-                    appLabel: this.appLabelGenerator(id, index),
+                    applicationId: this.appLabelGenerator(id, index),
                     activated: this.applicationActivated(value),
                     fatherId: id,
                     disabled: true,
                     isMain: false,
-                    clickHandler: this.appClickHandler.bind(this)
+                    clickHandler: this.appClickHandler.bind(this),
+                    classGenerator: this.subApplicationClassGenerator.bind(this, subApp)
                 };
             })
             .value();
@@ -173,8 +181,9 @@ class ApplicationsController {
             colSpan: 2,
             rowSpan: 1,
             fatherId: id,
-            isInput: true,
+            isInput: false,
             isSelect: true,
+            isMain: !isSubApp,
             disabled: isSubApp,
             isTax: true,
             rowIndex: index,
@@ -189,10 +198,10 @@ class ApplicationsController {
 
         for (let i = 0; i < subApp.length; i += 1) {
             cols = cols.concat(this.subApplicationHeaderGenerator(subApp, i, appId));
-            cols = cols.concat(this.subAppMiddleColumnDecorator(i, appId));
+            cols = cols.concat(this.subAppMiddleColumnDecorator(subApp, i, appId));
             cols = cols.concat(this.taxonomyColumnGenerator(i, appId, true));
         }
-        return cols;
+        return this.setSubAppEnabled(cols);
     }
 
     applicationRowGenerator() {
@@ -207,21 +216,44 @@ class ApplicationsController {
         return cols;
     }
 
-    enableSubApp(tile) {
-        if (!tile.subApplications) {
+    setSubAppEnabled(rows) {
+        return _.map(rows, tile => {
+            if (!tile.isMain) {
+                return _.chain(rows)
+                    .filter(value => {
+                        const conditions = value.fatherId === tile.fatherId
+                            && !_.isNil(value.content)
+                            && value.content.length > 0
+                            && value.isInput;
+                        return conditions
+                            && (!this.editMode ? (value.rowIndex === tile.rowIndex) : true);
+                    })
+                    .thru(result => {
+                        tile.disabled = result.length === 0;
+                        return tile;
+                    })
+                    .value();
+            }
+            return tile;
+        });
+
+    }
+
+    toggleSubApp(tile) {
+        if (!tile.subApplications || !this.editMode) {
             return;
         }
         tile.subAppOpen = !tile.subAppOpen;
         _.map(this.applicationRow, (value) => {
             if (value.fatherId && value.fatherId === tile.applicationId) {
-                value.disabled = !value.disabled;
+                value.disabled = !tile.subAppOpen;
             }
             return value;
         });
     }
 
     appClickHandler(tile) {
-        if (tile.bubbleDrawn) {
+        if (tile.bubbleDrawn || !this.editMode) {
             return;
         }
         if (this.tileClickCounter === 0) {
@@ -242,13 +274,46 @@ class ApplicationsController {
 
     findSameRowCandidate(tile) {
         return _.chain(this.applicationRow)
-            .filter({ rowIndex: tile.rowIndex, activated: true })
             .filter((value) => {
-                return value.columnId >= this.startTile.columnId
-                    && value.columnId <= tile.columnId
-                    && this.startTile.fatherId === value.fatherId;
+                return value.rowIndex === tile.rowIndex
+                    && tile.rowIndex === this.startTile.rowIndex
+                    && this.startTile.fatherId === value.fatherId
+                    && value.activated === true
+                    && value.columnId >= this.startTile.columnId
+                    && value.columnId <= tile.columnId;
+            })
+            .thru(result => {
+                return this.isRowContiguous(result);
             })
             .value();
+
+    }
+
+    isRowContiguous(input) {
+        let result = input;
+        let columnIds = _.map(result, value => {
+            return parseInt(value.columnId, 10);
+        });
+        const max = _.max(columnIds);
+        const min = _.min(columnIds);
+
+        if (columnIds.length !== max - min + 1) {
+            result = [];
+        }
+
+        columnIds = _.map(columnIds, value => {
+            return value - min + 1;
+        });
+        for (let i = 0; i < columnIds.length; i += 1) {
+            const x = Math.abs(columnIds[i]);
+            if (columnIds[x - 1] > 0) {
+                columnIds[x - 1] = columnIds[x - 1] * -1;
+            }
+            else {
+                result = [];
+            }
+        }
+        return result;
     }
 
     tileBalloonStartHandler(tile) {
@@ -258,7 +323,6 @@ class ApplicationsController {
     tileBalloonEndHandler(tile) {
         let applicationStyle;
         const rowColumns = this.findSameRowCandidate(tile);
-
         if (rowColumns.length === 0) {
             this.startTile = void 0;
             return;
@@ -279,7 +343,6 @@ class ApplicationsController {
             }
             return value;
         });
-        console.log(rowColumns);
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;

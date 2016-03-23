@@ -3,7 +3,7 @@ import intro from 'intro.js';
 class HssModuleController {
 
     constructor() {
-        this.editMode = true;
+        this.EE = window.EE;
         this.startIntro = this.hssIntro;
     }
 
