@@ -3,15 +3,17 @@ import { partnerLogoUrls } from '../hssMockData';
 
 class ProjectPartnersController {
 
-    constructor($timeout) {
+    constructor($timeout, $mdDialog) {
         const vm = this;
         $timeout(() => {
             vm.EE = window.EE;
-            vm.editMode = false;
+            vm.dialog = $mdDialog;
+
             vm.EE.on('hssEditMode', bool => {
                 vm.editMode = bool;
             });
 
+            vm.editMode = false;
             vm.logos = partnerLogoUrls;
         });
     }
@@ -23,17 +25,30 @@ class ProjectPartnersController {
         // handle backend here!
     }
 
-    addLogo() {
+    addLogoDialog() {
         console.warn('should show modal with upload features');
+
+        const modal = this.dialog.alert()
+            .clickOutsideToClose(true)
+            .title('Upload Project Partner logos')
+            // .textContent('Content, should template this somehow')
+            .textContent('Content, should template this somehow')
+            .ariaLabel('Modal for uploading Project Partners logos')
+            .ok('Done uploading')
+            // You can specify either string with query selector (docs...)
+            .openFrom('#uploadmodalanchor')
+            .closeTo('#uploadmodalanchor');
+
+        this.dialog.show(modal);
     }
 
     static projectPartnersFactory() {
         require('./ProjectPartners.scss');
-        function project($timeout) {
-            return new ProjectPartnersController($timeout);
+        function project($timeout, $mdDialog) {
+            return new ProjectPartnersController($timeout, $mdDialog);
         }
 
-        project.$inject = ['$timeout'];
+        project.$inject = ['$timeout', '$mdDialog'];
 
         return project;
     }
