@@ -1,23 +1,56 @@
 /* TYPOGRAPHY
    ============================= */
 
-.text-center {
-  text-align: center;
-}
-
 @mixin user-select($property: none) {
   -webkit-user-select: $property;
   -moz-user-select: $property;
   -ms-user-select: $property;
 }
 
+// Text truncate
+// Requires inline-block or block for proper styling
+@mixin text-truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-truncate {
+  @include text-truncate();
+}
+
+// CSS image replacement
+@mixin text-hide() {
+  font: "0/0" a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+.text-hide {
+  @include text-hide();
+}
+
+.text-justify        { text-align: justify !important; }
+.text-nowrap         { white-space: nowrap !important; }
+.text-truncate       { @include text-truncate; }
+
+.text-center         { text-align: center; }
+
+.text-lowercase      { text-transform: lowercase !important; }
+.text-uppercase      { text-transform: uppercase !important; }
+.text-capitalize     { text-transform: capitalize !important; }
+
 
 /* UTILITIES
    ============================= */
 
 .clickable {
-  cursor: pointer;
+  cursor: pointer !important;
 }
+
+// Z-index for continuum
 
 .zindex-100 { z-index: 100 }
 .zindex-90  { z-index: 90 }
@@ -29,3 +62,32 @@
 .zindex-30  { z-index: 30 }
 .zindex-20  { z-index: 20 }
 .zindex-10  { z-index: 10 }
+
+// Center-align a block level element
+@mixin center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center-block {
+  @include center-block();
+}
+
+// Sizing shortcuts
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin clearfix() {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+.clearfix {
+  @include clearfix();
+}

@@ -1,4 +1,4 @@
-<md-grid-list md-cols="11" md-gutter="0px" md-row-height="50px" class="continuum-component">
+<md-grid-list md-cols="11" md-gutter="0px" md-row-height="51px" class="continuum-component">
 
     <md-grid-tile md-colspan="2" md-rowspan="1" class="cell-empty">
 
@@ -15,43 +15,45 @@
     </md-grid-tile>
 
     <md-grid-tile md-colspan="2" md-rowspan="3">
-
         <div class="hss-controls">
-
             <div class="hss-control">
-
-                <p>Edit Mode: {{vm.editMode ? 'On' : 'Off'}}</p>
-
-                <md-switch
-                    class="md-primary hss-c-s"
-                    ng-model="vm.editMode"
-                    aria-label="EditMode"
-                    ng-change="vm.editModeChange()">
-                </md-switch>
-
+                <span>
+                  <md-switch
+                      class="md-green hss-edit"
+                      ng-model="vm.editMode"
+                      aria-label="EditMode"
+                      ng-change="vm.editModeChange()">
+                  </md-switch>
+                </span>
+                <span>Edit Mode: {{vm.editMode ? 'On' : 'Off'}}</span>
             </div>
 
-            <div class="hss-control hss-control-export"
+            <!--
+            <div class="hss-control"
                 ng-if="!vm.editMode"
                 ng-click="vm.exportPdf()">
-
-                <p>Export (pdf)<i class="material-icons hss-c-s">file_upload</i></p>
-
+                <a href="#" class="hss-export">
+                  <i class="material-icons hss-c-s">file_upload</i>
+                  <span>Export (pdf)</span>
+                </a>
             </div>
+            -->
 
             <div class="hss-control">
-
-                <p>Progress: {{vm.mapsProgressPercentage}}%</p>
-
-                <md-progress-circular
-                    class="hss-c-s"
-                    md-mode="determinate"
-                    md-diameter="25"
-                    value="{{vm.mapsProgressPercentage}}">
-                </md-progress-circular>
-
+                <span>
+                  <md-progress-circular
+                      class="md-gray hss-progress"
+                      md-mode="determinate"
+                      md-diameter="20"
+                      value="{{vm.mapsProgressPercentage}}">
+                  </md-progress-circular>
+                </span>
+                <span>Progress: {{vm.mapsProgressPercentage}}%</span>
             </div>
         </div>
+
+        <span class="to-be-continued mother end"></span>
+        <span class="to-be-continued child end"></span>
     </md-grid-tile>
 
     <md-grid-tile
@@ -64,10 +66,12 @@
             <img src="./images/icon-mother.svg" />
         </span>
         <span flex="80" class="continuum-row-title">Mother</span>
+        <span class="to-be-continued mother"></span>
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.motherRow"
-        ng-class="tile.classGenerator(tile)"
+    <md-grid-tile
+        ng-repeat="tile in vm.motherRow"
+        ng-class="[{'clickable': vm.editMode}, tile.classGenerator(tile)]"
         md-colspan="{{tile.colSpan}}"
         md-rowspan="{{tile.rowSpan}}"
         class="cell-mother"
@@ -76,14 +80,24 @@
         <span class="continuum-title">{{tile.content}}</span>
     </md-grid-tile>
 
-    <md-grid-tile md-colspan="2" md-rowspan="1" class="row-title-child" layout="row">
+    <md-grid-tile
+        md-colspan="2"
+        md-rowspan="1"
+        class="row-title-child"
+        layout="row">
+
         <span flex="20" class="continuum-icon"><img src="./images/icon-child.svg" /></span>
         <span flex="80" class="continuum-row-title">Child</span>
     </md-grid-tile>
 
-    <md-grid-tile ng-repeat="tile in vm.childRow" ng-class="tile.classGenerator(tile)"
-                  md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" class="cell-child"
-                  ng-click="tile.clickHandler(tile)">
+    <md-grid-tile
+        ng-repeat="tile in vm.childRow"
+        ng-class="[tile.classGenerator(tile), {'clickable': vm.editMode && !tile.empty}]"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-child"
+        ng-click="tile.clickHandler(tile)">
+
         <span class="continuum-title">{{tile.content}}</span>
     </md-grid-tile>
 

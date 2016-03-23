@@ -1,36 +1,22 @@
-@import '../../../node_modules/angular-material/angular-material';
 @import '../../variables';
 @import '../../mixins';
+@import '../../App/app';
 
 
 .continuum-component {
-
-  .hss-controls {
-    border-bottom: 1px solid $color-gray !important;
-    
-    .hss-control {
-      margin: 16px 0;
-
-      p,
-      .hss-c-s {
-        display: inline-block;
-        margin: 0;
-      }
-
-      &.hss-control-export {
-        &:hover {
-          color: $color-red;
-          cursor: not-allowed;
-        }
-      }
-    }
-  }
 
   md-grid-tile {
 
     &.cell-icons,
     &.cell-child {
       background: $color-white !important;
+    }
+
+    &.cell-icons {
+      img {
+        margin-left: 10px;
+        transition: opacity .2s ease-in-out;
+      }
     }
 
     &.cell-mother,
@@ -62,11 +48,26 @@
         }
       }
 
+      // first items in a row
+      &.zindex-100,
+      &.zindex-60 {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 10px;
+          height: 50px;
+          background: transparent url("./images/continuum-first-in-a-row.svg") 100% 100% no-repeat;
+        }
+      }
+
       .continuum-title {
-        padding: 0 10px;
+        padding: 0 5px 0 15px;
       }
     }
 
+    &.hss-controls,
     &.cell-child,
     &.row-title-child {
       border-bottom: 1px solid $color-gray !important;
@@ -100,11 +101,8 @@
         background: transparent url("./images/continuum-triangle-mother.svg") 100% 100% no-repeat;
       }
       .continuum-row-title {
-        position: relative;
         color: $color-green;
       }
-
-
     }
 
     &.row-title-child {
@@ -112,7 +110,45 @@
         background: transparent url("./images/continuum-triangle-child.svg") 100% 100% no-repeat;
       }
       .continuum-row-title {
+        position: relative;
         color: $color-blue;
+      }
+    }
+
+    .hss-controls {
+      .hss-control {
+        display: block;
+        width: 100%;
+
+        .hss-progress {
+          background-color: $color-gray-lightest;
+          border-radius: 20px;
+        }
+
+        .hss-edit,
+        .hss-progress {
+          display: inline-block !important;
+          margin: 0;
+        }
+
+        .hss-progress {
+          margin: 2px 0;
+        }
+
+        span:nth-of-type(1) {
+          display: inline-block;
+          width: 50px;
+        }
+
+        span:nth-of-type(2) {
+          float: left;
+          display: inline-block;
+          width: 105px;
+          padding: 0 10px;
+          text-align: right;
+          font-size: $body-font-size-base;
+          line-height: 24px;
+        }
       }
     }
 
@@ -122,10 +158,19 @@
     &.mother {
       background: $color-green !important;
       color: $color-white;
+
+      &::after {
+        background-image: url("./images/continuum-mother-end.svg");
+      }
     }
+
     &.child {
       background: $color-blue !important;
       color: $color-white;
+
+      &::after {
+        background-image: url("./images/continuum-child-end.svg");
+      }
     }
   }
 
@@ -133,6 +178,66 @@
     &.cell-icons {
       img {
         opacity: .35;
+      }
+    }
+  }
+
+  .to-be-continued {
+    &.mother,
+    &.child {
+      &::before,
+      &::after {
+        z-index: 200;
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 18px;
+        height: 50px;
+        background: transparent 100% 100% no-repeat;
+      }
+      &::before {
+        right: -9px;
+        opacity: .5;
+      }
+      &::after {
+        right: 0;
+        opacity: .2;
+      }
+
+      &.end {
+        &::before,
+        &::after {
+          top: 51px;
+          right: auto;
+        }
+        &::before {
+          left: 1px;
+        }
+        &::after {
+          left: 10px;
+        }
+      }
+    }
+
+    &.mother {
+      &::before,
+      &::after {
+        background-image: url("./images/continuum-arrow-mother.svg");
+      }
+
+    }
+
+    &.child {
+      &::before,
+      &::after {
+        background-image: url("./images/continuum-arrow-child.svg");
+      }
+
+      &.end {
+        &::before,
+        &::after {
+          top: 102px;
+        }
       }
     }
   }

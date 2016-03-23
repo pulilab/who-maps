@@ -1,1 +1,33 @@
+@import '../variables';
+@import '../mixins';
 @import '../../node_modules/angular-material/angular-material';
+
+
+.md-gray {
+
+  // Progress Circular
+  .md-left .md-half-circle {
+    border-left-color: $color-gray-light !important;
+    border-top-color: $color-gray-light !important;
+  }
+  .md-right .md-half-circle {
+    border-right-color: $color-gray-light !important;
+    border-top-color: $color-gray-light !important;
+  }
+
+}
+
+.md-green {
+
+  // Switch
+  &.md-checked .md-bar {
+    background-color: rgba($color-green, 0.49) !important;
+  }
+  &.md-checked .md-thumb {
+    background-color: $color-green !important;
+  }
+  &.md-checked .md-ink-ripple,
+  &.md-checked .md-ripple-container {
+    color: $color-green !important;
+  }
+}
