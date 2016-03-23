@@ -89,7 +89,7 @@ describe('continuumController', () => {
 
         };
         const classString = cc.classGenerator(tileMock);
-        expect(classString).toContain('child odd activated empty');
+        expect(classString).toContain('child odd activated zindex-100 empty');
     });
 
     describe('has a function for activating columns', () => {

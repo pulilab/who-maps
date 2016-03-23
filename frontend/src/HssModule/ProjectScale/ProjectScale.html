@@ -1,8 +1,9 @@
 <span class="md-subhead">Project Scale</span>
-<md-card>
-    <p ng-if="!vm.editMode">{{vm.string}}</p>
-    <md-input-container ng-if="vm.editMode" class="md-block">
-      <!-- <label>Biography</label> -->
-      <textarea ng-model="vm.string" md-maxlength="210" rows="4" md-select-on-focus></textarea>
-    </md-input-container>
-</md-card>
+
+<p ng-if="!vm.editMode">{{vm.string}}</p>
+
+<md-input-container ng-if="vm.editMode" class="md-block">
+
+  <textarea aria-label="Edit Project Scale" ng-model="vm.string" md-maxlength="210" rows="4" md-select-on-focus></textarea>
+
+</md-input-container>

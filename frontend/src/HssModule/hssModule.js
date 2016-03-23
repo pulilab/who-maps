@@ -8,6 +8,7 @@ import Interventions from './Interventions/';
 import Constraints from './Constraints/';
 import Applications from './Applications/';
 import ProjectScale from './ProjectScale/';
+import ProjectPartners from './ProjectPartners';
 
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
@@ -43,6 +44,7 @@ angular.module(moduleName,
     .component(Constraints.name, Constraints)
     .component(Applications.name, Applications)
     .component(ProjectScale.name, ProjectScale)
+    .component(ProjectPartners.name, ProjectPartners)
     .config(config);
 
 export default moduleName;

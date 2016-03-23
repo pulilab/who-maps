@@ -11,7 +11,7 @@ class ProjectScaleController {
             vm.string = projectScale;
             vm.EE.on('hssEditMode', bool => {
                 vm.editMode = bool;
-                console.log(bool);
+                // console.log(bool);
             });
         });
     }

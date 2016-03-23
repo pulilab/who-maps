@@ -10,21 +10,18 @@
         <applications tiles="7"></applications>
         <div layout-padding md-whiteframe="1" flex layout="row">
 
-            <div flex="33" >
+            <div flex="50">
                 <projectscale></projectscale>
-<!--                 <span class="md-subhead">Project Scale</span>
-                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                    . Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</p> -->
             </div>
 
-            <div flex="33" layout="row" layout-wrap>
-                <span flex="100" class="md-subhead">Project Partners</span>
-                <div flex="20" class="partner-logo-canvas" ng-repeat="n in [1,2,3]"></div>
+            <div flex="50" layout="row" layout-wrap>
+                <projectpartners></projectpartners>
             </div>
-            <div flex="33" layout="row" layout-wrap>
+
+            <!-- <div flex="33" layout="row" layout-wrap>
                 <span flex="100" class="md-subhead">Project Progress</span>
                 <img flex="20" src="images/circle_progress.svg" />
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
