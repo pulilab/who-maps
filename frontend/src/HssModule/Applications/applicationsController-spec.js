@@ -163,8 +163,7 @@ describe('applicationsController', () => {
                     && value.columnId === 1;
             })
             .map(value => {
-                console.log(value)
-                return value
+                return value;
             })
             .value();
     });
