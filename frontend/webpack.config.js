@@ -1,17 +1,27 @@
 const webpack = require('webpack');
 // Determine if is a production build based on environment variable
 const production = process.argv.indexOf('--dist') > -1;
+const siteBuild = process.argv.indexOf('--site-build') > -1;
 
 const distPlugins = [
     new webpack.optimize.UglifyJsPlugin(
-    {
-        compress: {
-            warnings: false
+        {
+            compress: {
+                warnings: false
+            }
         }
-    }
-)];
+    )];
 
 const devPlugins = [];
+
+const devPreLoaders = [
+    {
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/
+    }
+];
+
 
 module.exports = {
     entry: './src',
@@ -20,13 +30,8 @@ module.exports = {
         filename: 'bundle.js'
     },
     module: {
-        preLoaders: [
-            {
-                test: /\.js$/,
-                loader: 'eslint-loader',
-                exclude: /node_modules/
-            }
-        ],
+        preLoaders: siteBuild ? [] : devPreLoaders,
+
         loaders: [
             {
                 test: /\.js/,
@@ -58,6 +63,6 @@ module.exports = {
             }
         }
     },
-    devtool: production ? false : 'eval-cheap-source-map',
+    devtool: production || siteBuild ? false : 'eval-cheap-source-map',
     plugins: production ? distPlugins : devPlugins
 };

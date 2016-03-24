@@ -5,6 +5,7 @@
   "scripts": {
     "test": "karma start",
     "serve": "webpack-dev-server --progress --colors --inline",
+    "site-build": "webpack-dev-server --progress --colors --inline --site-build",
     "dist": "webpack --dist",
     "e2e-init": "node_modules/protractor/bin/webdriver-manager update",
     "e2e-server": "node_modules/protractor/bin/webdriver-manager start",
