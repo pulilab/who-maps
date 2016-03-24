@@ -1,3 +1,7 @@
+@import '../../variables';
+@import '../../mixins';
+@import '../../App/app';
+
 interventions {
 
   .odd {
@@ -5,8 +9,8 @@ interventions {
   }
 
   .header {
-    height: 100%;
     width: 100%;
+    height: 100%;
     background-color: #EEEEEE;
 
     h2 {
@@ -27,7 +31,31 @@ interventions {
     }
   }
 
-  .list-interventions {
-    
+  .intervention {
+    width: 100%;
+    height: 100%;
+
+    md-list-item {
+      padding: 5px;
+      min-height: auto;
+
+      .md-list-item-text {
+        font-size: $caption-font-size-base;
+      }
+    }
+
+    md-input-container {
+      margin: 5px;
+      padding: 0;
+      width: calc(100% - 10px);
+
+      md-select-value {
+        span {
+          display: block;
+          width: calc(100% - 15px);
+        }
+      }
+    }
+
   }
 }

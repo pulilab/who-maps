@@ -7,6 +7,8 @@
 
   md-grid-tile {
 
+    border-right: none !important;
+
     &.cell-icons,
     &.cell-child {
       background: $color-white !important;
@@ -22,7 +24,7 @@
     &.cell-mother,
     &.cell-child {
       background-color: $color-gray-lighter !important;
-      color: $color-gray-light;
+      color: $text-disabled;
       text-align: center;
       font-size: $caption-font-size-base;
       font-weight: 500;
