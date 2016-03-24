@@ -1,5 +1,7 @@
-/* TYPOGRAPHY
-   ============================= */
+// Angular Material's mixins
+@import "../node_modules/angular-material-source/src/core/style/mixins";
+
+// WHO MAPS specific mixins
 
 // Text truncate
 // Requires inline-block or block for proper styling
@@ -52,10 +54,6 @@
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
-
-
-/* UTILITIES
-   ============================= */
 
 .clickable {
   cursor: pointer !important;

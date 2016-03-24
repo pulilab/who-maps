@@ -1,7 +1,5 @@
 @import '../../variables';
 @import '../../mixins';
-@import '../../App/app';
-
 
 .continuum-component {
 
@@ -117,11 +115,6 @@
         display: block;
         width: 100%;
 
-        .hss-progress {
-          background-color: $color-gray-lightest;
-          border-radius: 20px;
-        }
-
         .hss-edit,
         .hss-progress {
           display: inline-block !important;
@@ -130,6 +123,8 @@
 
         .hss-progress {
           margin: 2px 0;
+          background-color: $color-gray-lightest;
+          border-radius: 20px;
         }
 
         span:nth-of-type(1) {
@@ -143,8 +138,6 @@
           width: 105px;
           padding: 0 10px;
           text-align: right;
-          font-size: $body-font-size-base;
-          line-height: 24px;
         }
       }
     }

@@ -1,6 +1,5 @@
 @import '../../variables';
 @import '../../mixins';
-@import '../../App/app';
 
 constraints {
 
@@ -15,5 +14,9 @@ constraints {
     font-size: $body-font-size-base;
     font-weight: 500;
     text-transform: uppercase;
+  }
+
+  .md-fab {
+    box-shadow: none !important;
   }
 }

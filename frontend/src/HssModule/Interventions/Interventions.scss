@@ -1,6 +1,5 @@
 @import '../../variables';
 @import '../../mixins';
-@import '../../App/app';
 
 interventions {
 
@@ -38,10 +37,6 @@ interventions {
     md-list-item {
       padding: 5px;
       min-height: auto;
-
-      .md-list-item-text {
-        font-size: $caption-font-size-base;
-      }
     }
 
     md-input-container {

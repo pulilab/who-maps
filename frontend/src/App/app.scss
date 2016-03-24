@@ -1,6 +1,14 @@
+@import '../../node_modules/angular-material/angular-material';
 @import '../variables';
 @import '../mixins';
-@import '../../node_modules/angular-material/angular-material';
+
+
+/* TYPOGRAPY
+   ============================= */
+
+.md-small {
+  font-size: $caption-font-size-base;
+}
 
 /* UI ELEMENTS
    ============================= */
@@ -101,5 +109,24 @@ md-checkbox.small {
   &.md-checked .md-ink-ripple,
   &.md-checked .md-ripple-container {
     color: $color-green !important;
+  }
+}
+
+.md-black {
+
+  // Checkbox
+  &.md-checked {
+    .md-icon {
+      border-color: $text-primary !important;
+      background-color: $text-primary !important;
+    }
+    .md-ink-ripple {
+      color: $text-primary !important;
+    }
+  }
+
+  // FAB
+  &.md-fab {
+    background-color: $text-primary;
   }
 }
