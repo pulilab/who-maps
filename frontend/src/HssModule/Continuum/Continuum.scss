@@ -15,7 +15,7 @@
     &.cell-icons {
       img {
         margin-left: 10px;
-        transition: opacity .2s ease-in-out;
+        transition: $swift-ease-in-out;
       }
     }
 

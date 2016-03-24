@@ -18,7 +18,6 @@ md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
   border-width: 16px !important;
 }
 
-
 // Select - small
 md-select.small {
   font-size: $caption-font-size-base;
@@ -55,12 +54,11 @@ md-select.small {
 md-select.multiple {}
 md-select-menu-container.multiple {}
 
-
 // Checkbox - small
 $checkbox-size-small: 16px;
 
 md-checkbox.small {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: $caption-font-size-base;
 
   .md-container,
@@ -94,7 +92,6 @@ md-checkbox.small {
     border-right-color: $color-gray-light !important;
     border-top-color: $color-gray-light !important;
   }
-
 }
 
 .md-green {
@@ -126,7 +123,8 @@ md-checkbox.small {
   }
 
   // FAB
-  &.md-fab {
+  &.md-fab,
+  &.md-fab:not([disabled]):hover {
     background-color: $text-primary;
   }
 }

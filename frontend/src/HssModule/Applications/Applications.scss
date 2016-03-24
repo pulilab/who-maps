@@ -1,9 +1,13 @@
+@import '../../variables';
+@import '../../mixins';
+
 applications {
 
   div {
     width: 100%;
     height: 100%;
   }
+
   .application_1 {
     background: #26C6DA !important;
   }
@@ -35,19 +39,18 @@ applications {
     background: #43A047 !important;
   }
 
-  .tile {
-    width:100%;
-    height:100%;
-  }
-
   .app-number {
-    width: 3em;
-    height: 3em;
     float: left;
+    width: 30px;
+    height: 30px;
+    margin: 10px 0 0 12px;
+    background: #BDBDBD;
+    font-size: $caption-font-size-base;
+    line-height: 30px;
+    font-weight: 500;
     text-align: center;
-    line-height: 3em;
-    background: lightgray;
-    border-radius: 40px;
+    color: $color-white;
+    border-radius: 30px;
   }
 
   .white-number {
@@ -57,7 +60,7 @@ applications {
   }
 
   .app-button {
-    width: calc( 100% - 3em );
+    width: calc( 100% - 42px );
     float: left;
   }
 
@@ -65,7 +68,7 @@ applications {
     width: calc( 100% - 70px );
     padding-top: 5px;
     position: absolute;
-    right:10px;
+    right: 10px;
   }
 
   &.sub {
@@ -81,11 +84,49 @@ applications {
   }
 
   .md-button-override {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 5px;
+    padding-right: 30px;
     text-transform: none;
-    font-size:10px;
+    font-size: 12px;
     text-align: left;
     white-space: normal;
-    line-height: 10px;
+    line-height: 16px;
+    background-color: transparent !important;
+
+    md-icon {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+    }
+  }
+
+  .tile {
+    width: 100%;
+    height: 100%;
+
+    &.empty-tile {
+      &.activated {
+        cursor: pointer;
+
+        &:hover {
+          .bubble {
+            opacity: .8;
+            transform: scale(1.25);
+          }
+          md-icon {
+            opacity: 1;
+          }
+        }
+      }
+
+      &.not-activated {
+        cursor: not-allowed;
+      }
+    }
   }
 
   md-input-container {
@@ -105,10 +146,15 @@ applications {
     }
   }
 
+  md-select {
+    margin: 0 20px;
+  }
+
   .bubble-shape {
     width: calc( 100% + 20px );
-    height: 100%;
+    height: calc( 100% - 4px );
     position: absolute;
+    top: 2px;
     left: -10px;
     z-index: 100;
     border-radius: 35px;
@@ -116,7 +162,28 @@ applications {
     md-input-container {
       width: calc( 100% - 60px );
       right: 5px;
-      left:50px;
+      left: 50px;
+    }
+  }
+
+  .bubble {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    opacity: .2;
+    transition: $swift-ease-out;
+
+    &.bubble-allowed {
+      background-color: $color-green;
+      md-icon {
+        opacity: 0;
+        transition: $swift-ease-out;
+        color: $color-white;
+      }
+    }
+    &.bubble-notallowed {
+      background-color: $color-red;
     }
   }
 
@@ -128,18 +195,29 @@ applications {
     background: #FAFAFA;
   }
 
-  .empty {
-
-  }
+  .empty {}
 
   .header {
-    height: 100%;
     width: 100%;
-    background: #EEEEEE url('./images/asset-bg-apps.svg') no-repeat 0 0;
-    background-size: contain;
-    padding-left: 90px;
-    text-transform: uppercase;
+    height: 100%;
+    background-color: #EEEEEE;
 
+    h2 {
+      z-index: 10;
+      padding-left: 40px;
+    }
+
+    &::before {
+      z-index: 1;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #EEEEEE url('./images/asset-bg-apps.svg') no-repeat -10px 4px;
+      opacity: .2;
+    }
   }
 
 }
