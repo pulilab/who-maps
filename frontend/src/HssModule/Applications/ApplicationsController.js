@@ -82,7 +82,8 @@ class ApplicationsController {
             classGenerator: this.applicationClassGenerator.bind(this),
             clickHandler: this.toggleSubApp.bind(this),
             introName: 'applications_header_' + index,
-            applicationStyle: 'application_' + applicationsLib[index].id
+            applicationStyle: 'application_' + applicationsLib[index].id,
+            fatherId: 0
         }];
     }
 
@@ -108,7 +109,7 @@ class ApplicationsController {
                     introName: 'applications_middle_' + value,
                     classGenerator: this.applicationClassGenerator.bind(this),
                     clickHandler: this.appClickHandler.bind(this),
-                    fatherId: 'root'
+                    fatherId: 0
                 };
             })
             .value();
@@ -210,7 +211,7 @@ class ApplicationsController {
         for (let i = 0; i < appNumber; i += 1) {
             cols = cols.concat(this.applicationHeaderGenerator(i));
             cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
-            cols = cols.concat(this.taxonomyColumnGenerator(i, false));
+            cols = cols.concat(this.taxonomyColumnGenerator(i, 0));
             cols = cols.concat(this.subApplicationRows(i));
         }
         return cols;
@@ -329,12 +330,12 @@ class ApplicationsController {
         }
 
         this.applicationRow = _.map(this.applicationRow, (value) => {
-            if (value.rowIndex === tile.rowIndex) {
+            if (value.rowIndex === tile.rowIndex && value.fatherId === tile.fatherId) {
                 if (tile.isMain && value.isMain && value.isHeader) {
                     applicationStyle = value.applicationStyle;
                     value.rowBubbles.push(rowColumns);
                 }
-                else if (value.fatherId === tile.fatherId && !value.isMain && value.isHeader) {
+                else if (!value.isMain && value.isHeader) {
                     value.rowBubbles.push(rowColumns);
                     applicationStyle = value.applicationStyle;
                 }
