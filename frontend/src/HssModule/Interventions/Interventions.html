@@ -15,7 +15,7 @@
     <md-grid-tile
         md-colspan="2"
         md-rowspan="5"
-        class="list-constraints">
+        class="constraints">
         <constraints></constraints>
     </md-grid-tile>
 
@@ -29,25 +29,25 @@
         md-colspan="{{tile.colSpan}}"
         md-rowspan="{{tile.rowSpan}}"
         ng-repeat="tile in vm.interventionRow"
-        class="list-interventions">
+        class="intervention">
 
-        <div ng-class="tile.classGenerator(tile)" ng-if="tile.activated">
-
-                <md-list flex ng-if="!vm.editMode">
-                    <md-list-item class="md-1-line" ng-repeat="item in tile.content">
-                        <div class="md-list-item-text" layout="column">
-                            <p>{{item}}</p>
-                        </div>
-                    </md-list-item>
-                </md-list>
-                <md-input-container ng-if="vm.editMode">
-                    <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true" md-container-class="small multiple" class="small multiple">
-                        <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
-                            {{option}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-
+        <div ng-class="tile.classGenerator(tile)">
+            <div ng-if="tile.activated">
+              <md-list flex ng-if="!vm.editMode">
+                  <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                      <div class="md-list-item-text md-small" layout="column">
+                          {{item}}
+                      </div>
+                  </md-list-item>
+              </md-list>
+              <md-input-container ng-if="vm.editMode">
+                  <md-select ng-model="tile.content" aria-label="intervention-option" multiple="true" placeholder="Select item(s)" md-container-class="small multiple" class="small multiple">
+                      <md-option ng-repeat="option in tile.selectValues" value="{{option}}">
+                          {{option}}
+                      </md-option>
+                  </md-select>
+              </md-input-container>
+            </div>
         </div>
     </md-grid-tile>
 
