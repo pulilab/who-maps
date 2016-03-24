@@ -58,6 +58,6 @@ module.exports = {
             }
         }
     },
-    devtool: production ? false : 'source-maps',
+    devtool: production ? false : 'eval-cheap-source-map',
     plugins: production ? distPlugins : devPlugins
 };
