@@ -1,5 +1,6 @@
 // import _ from 'lodash';
 import { partnerLogoUrls } from '../hssMockData';
+import modalHtml from './UploadModal.html';
 
 class ProjectPartnersController {
 
@@ -26,20 +27,19 @@ class ProjectPartnersController {
     }
 
     addLogoDialog() {
-        console.warn('should show modal with upload features');
 
-        const modal = this.dialog.alert()
-            .clickOutsideToClose(true)
-            .title('Upload Project Partner logos')
-            // .textContent('Content, should template this somehow')
-            .textContent('Content, should template this somehow')
-            .ariaLabel('Modal for uploading Project Partners logos')
-            .ok('Done uploading')
-            // You can specify either string with query selector (docs...)
-            .openFrom('#uploadmodalanchor')
-            .closeTo('#uploadmodalanchor');
+        this.dialog.show(
+            {
+                template: modalHtml,
+                openFrom: '#uploadmodalanchor',
+                closeTo: '#uploadmodalanchor',
+                clickOutsideToClose: true
+            }
+        );
+    }
 
-        this.dialog.show(modal);
+    upLoadLogo() {
+        // dont forget to refresh the view!
     }
 
     static projectPartnersFactory() {
