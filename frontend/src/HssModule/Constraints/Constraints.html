@@ -1,15 +1,13 @@
 <div class="constraints-component" layout="column" layout-wrap layout-align="start start" flex>
-    <div class="wide">
-        <h4>Health system constraints</h4>
-    </div>
+    <h4>Health system constraints</h4>
     <div ng-repeat="constraint in vm.constraints">
         <div flex="100" ng-if="vm.editMode">
-            <md-checkbox ng-model="constraint.active" class="md-primary left-padding" ng-change="vm.constraintChanged(constraint)">
+            <md-checkbox ng-model="constraint.active" class="md-black small" ng-change="vm.constraintChanged(constraint)">
                 {{ constraint.name }}
             </md-checkbox>
         </div>
         <div flex="100" ng-if="!vm.editMode && constraint.active">
-            <md-button class="md-fab md-mini md-primary" ng-disabled="!constraint.active" >
+            <md-button class="md-fab md-mini md-black" ng-disabled="!constraint.active" >
                 <md-icon class="material-icons">
                     {{ constraint.icon }}
                 </md-icon>
