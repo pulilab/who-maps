@@ -5,3 +5,5 @@ node_modules/
 .DS_Store
 /frontend/coverage/
 frontend/builds/
+npm-debug.log
+*.cache*
