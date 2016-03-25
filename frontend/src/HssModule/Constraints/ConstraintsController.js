@@ -28,7 +28,7 @@ class ConstraintsController {
     }
 
     constraintChanged() {
-        this.EE.emit('hssConstraintsSelected', this.constraints);
+        this.EE.emit('hssConstraintsSelected', _.cloneDeep(this.constraints));
     }
 
 

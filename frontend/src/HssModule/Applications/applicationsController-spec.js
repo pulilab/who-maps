@@ -1,7 +1,7 @@
-import ApplicationsController from './ApplicationsController';
-import _ from 'lodash';
-import { hss, applicationsLib } from '../hssMockData';
-import { EE } from '../../Common/';
+import ApplicationsController from "./ApplicationsController";
+import _ from "lodash";
+import {hss, applicationsLib} from "../hssMockData";
+import {EE} from "../../Common/";
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
@@ -18,6 +18,7 @@ function testObjectProperty(properties, collection) {
         });
     });
 }
+
 
 describe('applicationsController', () => {
 
@@ -52,6 +53,12 @@ describe('applicationsController', () => {
         const secondColumn = ac.applicationRow[2].activated;
         expect(secondColumn.activated).toBeFalsy();
 
+    });
+
+    it('should have a function that handle the constraints change event', () => {
+        const mockEvent = [ { name: 'Information' } ];
+        ac.constraintsUpdated(mockEvent);
+        expect(ac.selectedConstraints.length).toBeGreaterThan(0);
     });
 
     it('should have a function that returns a base string of class ', () => {
@@ -156,15 +163,169 @@ describe('applicationsController', () => {
     });
 
     it('should have a function that set sub application tiles as enabled when appropriate', () => {
-        _.chain(ac.applicationRow)
-            .filter(value => {
-                return value.fatherId === '2'
-                    && value.isInput
-                    && value.columnId === 1;
-            })
+
+        function customFilterRowTwo(value) {
+            return value.fatherId === '2'
+                && value.isInput
+                && value.columnId === 1;
+        }
+
+        function customFilterRowThree(value) {
+            return value.fatherId === '3'
+                && value.isInput
+                && value.columnId === 1;
+        }
+
+        ac.applicationRow = _.chain(ac.applicationRow)
+            .filter(customFilterRowTwo)
             .map(value => {
+                value.content = 'test';
                 return value;
             })
             .value();
+        ac.applicationRow = ac.setSubAppEnabled(ac.applicationRow);
+
+        _.chain(ac.applicationRow)
+            .filter(customFilterRowTwo)
+            .forEach(value => {
+                expect(value.disabled).toBeFalsy();
+            })
+            .value();
+
+        _.chain(ac.applicationRow)
+            .filter(customFilterRowThree)
+            .forEach(value => {
+                expect(value.disabled).toBeTruthy();
+            })
+            .value();
+    });
+
+    it('should have a function that enable the view of sub applications only in edit mode', () => {
+        const firstHeader = _.cloneDeep(ac.applicationRow[0]);
+
+        ac.toggleSubApp(ac.applicationRow[0]);
+        expect(_.isEqual(firstHeader, ac.applicationRow[0])).toBeTruthy();
+
+        ac.editMode = true;
+
+        ac.toggleSubApp(ac.applicationRow[0]);
+        expect(_.isEqual(firstHeader, ac.applicationRow[0])).toBeFalsy();
+
+        _.chain(ac.applicationRow)
+            .filter(value => {
+                return value.fatherId && value.fatherId === firstHeader.applicationId;
+            })
+            .forEach(value => {
+                expect(value.disabled).toBeFalsy();
+            })
+            .value();
+    });
+
+    it('should have a function that counts click and execute appropriate functions based on click number, only in edit mode', () => {
+        spyOn(ac, 'tileBalloonStartHandler');
+        spyOn(ac, 'tileBalloonEndHandler');
+
+
+        expect(ac.tileClickCounter).toBe(0);
+        const firstColumn = ac.applicationRow[1];
+
+        ac.appClickHandler(firstColumn);
+        expect(ac.tileClickCounter).toBe(0);
+        expect(ac.tileBalloonStartHandler).not.toHaveBeenCalled();
+        expect(ac.tileBalloonEndHandler).not.toHaveBeenCalled();
+
+        ac.editMode = true;
+        ac.appClickHandler(firstColumn);
+        expect(ac.tileClickCounter).toBe(1);
+        expect(ac.tileBalloonStartHandler).toHaveBeenCalled();
+        expect(ac.tileBalloonEndHandler).not.toHaveBeenCalled();
+
+        ac.appClickHandler(firstColumn);
+        expect(ac.tileClickCounter).toBe(0);
+        expect(ac.tileBalloonStartHandler).toHaveBeenCalledTimes(1);
+        expect(ac.tileBalloonEndHandler).toHaveBeenCalled();
+    });
+
+    it('should have a function that catches the enter key', () => {
+        const mockEvent = {
+            which: 14
+        };
+        const tile = {
+            insertMode: true
+        };
+        ac.inputHandler(tile, mockEvent);
+        expect(tile.insertMode).toBeTruthy();
+
+        mockEvent.which = 13;
+        ac.inputHandler(tile, mockEvent);
+        expect(tile.insertMode).toBeFalsy();
+    });
+
+    it('should have a function that find proper tiles candidate to create a bubble', () => {
+
+        ac.startTile = ac.applicationRow[5];
+        let candidates = ac.findSameRowCandidate(ac.applicationRow[6]);
+        expect(candidates.length).toBe(2);
+
+        _.forEach(candidates, candidate => {
+            expect(candidate.rowIndex).toBe(ac.startTile.rowIndex);
+            expect(candidate.fatherId).toBe(ac.startTile.fatherId);
+            expect(candidate.columnId).toBeLessThan(ac.applicationRow[6].columnId + 1);
+            expect(candidate.columnId).toBeGreaterThan(ac.startTile.columnId - 1);
+        });
+
+        ac.startTile = ac.applicationRow[1];
+        candidates = ac.findSameRowCandidate(ac.applicationRow[4]);
+        expect(candidates.length).toBe(0);
+    });
+
+    it('should have a function that return an empty list if a list with no contiguous activated tile is provided ', () =>{
+        const mockTiles = [
+            { columnId: 2 },
+            { columnId: 3 },
+            { columnId: 4 }];
+        let result = ac.isRowContiguous(mockTiles);
+        expect(result.length).toBe(3);
+
+        mockTiles[2].columnId = 99;
+        result = ac.isRowContiguous(mockTiles);
+        expect(result.length).toBe(0);
+    });
+
+    it('should have a function that set the startTile ', () => {
+
+        expect(_.isEmpty(ac.startTile)).toBeTruthy();
+
+        ac.tileBalloonStartHandler({ columnId: 1 });
+        expect(_.isEmpty(ac.startTile)).toBeFalsy();
+    });
+
+    it('should have a function that redesign the tile when a balloon ' +
+        'is created and reset the startTile if invalid tile is supplied', () => {
+
+        // This guy here should probably be an inner describe... @___@
+
+        const initialTiles = ac.applicationRow.length;
+        ac.startTile = ac.applicationRow[5];
+
+        const tile = ac.applicationRow[5];
+        expect(tile.colSpan).toBe(1);
+
+        ac.tileBalloonEndHandler(ac.applicationRow[7]);
+
+        expect(tile.colSpan).toBe(3);
+        expect(tile.bubbleDrawn).toBeTruthy();
+
+        expect(tile.status).toBe(ac.applicationRow[0].applicationStyle);
+        expect(ac.applicationRow.length).toBe(initialTiles - 2);
+
+        ac.tileBalloonEndHandler(ac.applicationRow[4]);
+        expect(ac.startTile).toBeUndefined();
+
+        ac.toggleSubApp(ac.applicationRow[0]);
+        ac.startTile = ac.applicationRow[12];
+        ac.tileBalloonEndHandler(ac.applicationRow[14]);
+        expect(ac.applicationRow[12].colSpan).toBe(3);
+
     });
 });
