@@ -103,6 +103,9 @@ md-checkbox.small {
   &.md-checked .md-thumb {
     background-color: $color-green !important;
   }
+  &.md-checked .md-thumb::before {
+    background-color: rgba($color-green, 0.26) !important;
+  }
   &.md-checked .md-ink-ripple,
   &.md-checked .md-ripple-container {
     color: $color-green !important;
