@@ -70,7 +70,7 @@ class ApplicationsController {
         const subApp = _.values(applicationsLib[index].subApplications);
         return [{
             content: applicationsLib[index].name,
-            className: '',
+            className: 'app-header',
             colSpan: 2,
             rowSpan: 1,
             rowIndex: index,
@@ -93,7 +93,7 @@ class ApplicationsController {
             .map(value => {
                 return {
                     content: '',
-                    className: '',
+                    className: 'app',
                     rowIndex: index,
                     columnId: value,
                     colSpan: 1,
@@ -129,7 +129,7 @@ class ApplicationsController {
     subApplicationHeaderGenerator(subApp, index, id) {
         return [{
             content: subApp[index],
-            className: '',
+            className: 'app-header',
             colSpan: 2,
             rowSpan: 1,
             isInput: false,
@@ -154,7 +154,7 @@ class ApplicationsController {
             .map(value => {
                 return {
                     content: '',
-                    className: '',
+                    className: 'app',
                     rowIndex: index,
                     columnId: value,
                     colSpan: 1,
@@ -178,7 +178,7 @@ class ApplicationsController {
     taxonomyColumnGenerator(index, id, isSubApp) {
         return [{
             content: '',
-            className: 'taxonomy',
+            className: 'app-tax',
             colSpan: 2,
             rowSpan: 1,
             fatherId: id,
@@ -188,7 +188,8 @@ class ApplicationsController {
             disabled: isSubApp,
             isTax: true,
             rowIndex: index,
-            rowEnabled: false
+            rowEnabled: false,
+            classGenerator: this.classGenerator.bind(this)
         }];
     }
 

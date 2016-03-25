@@ -2,6 +2,7 @@ class HssModuleController {
 
     constructor(introJs) {
         this.EE = window.EE;
+        this.introJsSource = introJs;
     }
 
     static hssControllerFactory() {

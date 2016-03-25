@@ -30,6 +30,10 @@ module.exports = function(config) {
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
                         loaders: ['null']
+                    },
+                    {
+                        test: /\.json/,
+                        loader: 'json'
                     }
                 ],
                 postLoaders: [
