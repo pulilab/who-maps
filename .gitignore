@@ -10,3 +10,8 @@ frontend/builds/
 */.cache/
 npm-debug.log
 *.cache*
+.cache/
+.coverage
+*/.cache/
+*.py,cover
+*htmlcov/
