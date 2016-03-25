@@ -5,3 +5,13 @@ node_modules/
 .DS_Store
 /frontend/coverage/
 frontend/builds/
+.cache/
+.coverage
+*/.cache/
+npm-debug.log
+*.cache*
+.cache/
+.coverage
+*/.cache/
+*.py,cover
+*htmlcov/

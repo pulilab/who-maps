@@ -9,6 +9,7 @@ import Constraints from './Constraints/';
 import Applications from './Applications/';
 import ProjectScale from './ProjectScale/';
 import ProjectPartners from './ProjectPartners';
+import { IntroJs } from '../Common/';
 
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
@@ -38,13 +39,14 @@ angular.module(moduleName,
         uiRoute,
         ngMaterial
     ])
-    .controller(moduleName + '.hssModuleController', HssModuleController)
+    .controller(moduleName + '.hssModuleController', HssModuleController.hssControllerFactory())
     .component(Continuum.name, Continuum)
     .component(Interventions.name, Interventions)
     .component(Constraints.name, Constraints)
     .component(Applications.name, Applications)
     .component(ProjectScale.name, ProjectScale)
     .component(ProjectPartners.name, ProjectPartners)
+    .component(IntroJs.name, IntroJs)
     .config(config);
 
 export default moduleName;
