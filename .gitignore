@@ -8,3 +8,10 @@ frontend/builds/
 .cache/
 .coverage
 */.cache/
+npm-debug.log
+*.cache*
+.cache/
+.coverage
+*/.cache/
+*.py,cover
+*htmlcov/

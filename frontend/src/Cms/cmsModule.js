@@ -1,17 +1,17 @@
 import angular from 'angular';
-import SampleController from './SampleModuleController';
+import CmsModuleController from './CmsModuleController';
 import sampleComponent from './SampleComponent/sampleComponent';
 
-import _template from './sampleModule.html';
+import _template from './CmsModule.html';
 import uiRoute from 'angular-ui-router';
 
-const moduleName = 'sampleModule';
+const moduleName = 'cmsModule';
 
 function config($stateProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/sampleModule',
+            url: '/cms',
             parent: 'app',
             views: {
                 main: {
@@ -26,7 +26,7 @@ function config($stateProvider) {
 config.$inject = ['$stateProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .controller(moduleName + '.' + moduleName + 'Controller', SampleController)
+    .controller(moduleName + '.' + moduleName + 'Controller', CmsModuleController)
     .component('sampleComponent', sampleComponent)
     .config(config);
 

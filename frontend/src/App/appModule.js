@@ -1,10 +1,23 @@
+// General imports
 import angular from 'angular';
+import uiRoute from 'angular-ui-router';
+import angularMd from 'angular-material';
+import { EE } from '../Common/';
+
+EE.initialize();
+
 import AppController from './AppModuleController';
+import './app.scss';
 
 import appTemplate from './app.html';
-import uiRoute from 'angular-ui-router';
 
 import hssPrototype from '../HssPrototype/';
+import cms from '../Cms/';
+import countryView from '../CountryView/';
+import dashboard from '../Dashboard/';
+import landingPage from '../LandingPage/';
+import mapsToolkit from '../MapsToolkit/';
+
 
 const moduleName = 'app';
 
@@ -26,7 +39,13 @@ config.$inject = ['$stateProvider', '$urlRouterProvider'];
 angular.module(moduleName,
     [
         uiRoute,
-        hssPrototype
+        angularMd,
+        hssPrototype,
+        cms,
+        countryView,
+        dashboard,
+        landingPage,
+        mapsToolkit
     ]
 )
     .controller(moduleName + '.appController', AppController)
