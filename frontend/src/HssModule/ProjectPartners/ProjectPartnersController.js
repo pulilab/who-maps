@@ -1,16 +1,23 @@
-// import _ from 'lodash';
 import { partnerLogoUrls } from '../hssMockData';
 
 class ProjectPartnersController {
 
-    constructor($timeout, $mdDialog) {
+    constructor($scope, $timeout) {
+
         const vm = this;
+
         $timeout(() => {
+            vm.scope = $scope;
             vm.EE = window.EE;
-            vm.dialog = $mdDialog;
+            vm.file = document.getElementById('file-input');
+            window.fileChange = vm.fileChange;
 
             vm.EE.on('hssEditMode', bool => {
                 vm.editMode = bool;
+            });
+
+            vm.EE.on('uploadLogo', file => {
+                vm.uploadLogo(file);
             });
 
             vm.editMode = false;
@@ -19,36 +26,40 @@ class ProjectPartnersController {
     }
 
     delLogo(logo) {
+
         if (this.editMode) {
             this.logos = this.logos.filter(l => l !== logo);
         }
-        // handle backend here!
+
+        // backend update...
     }
 
-    addLogoDialog() {
-        console.warn('should show modal with upload features');
+    // It gets out to the global, because Angular doesn't let binding to the file,
+    // so ng-change isn't working
+    fileChange() {
 
-        const modal = this.dialog.alert()
-            .clickOutsideToClose(true)
-            .title('Upload Project Partner logos')
-            // .textContent('Content, should template this somehow')
-            .textContent('Content, should template this somehow')
-            .ariaLabel('Modal for uploading Project Partners logos')
-            .ok('Done uploading')
-            // You can specify either string with query selector (docs...)
-            .openFrom('#uploadmodalanchor')
-            .closeTo('#uploadmodalanchor');
+        const fileElement = document.getElementById('file-input');
+        const fileObj = fileElement ? fileElement.files[0] : null;
 
-        this.dialog.show(modal);
+        if (fileObj) {
+            window.EE.emit('uploadLogo', fileObj);
+        }
+    }
+
+    uploadLogo(/* fileObj */) {
+
+        // upload to API...
+
+        // refresh view/img sources from API...
     }
 
     static projectPartnersFactory() {
         require('./ProjectPartners.scss');
-        function project($timeout, $mdDialog) {
-            return new ProjectPartnersController($timeout, $mdDialog);
+        function project($scope, $timeout) {
+            return new ProjectPartnersController($scope, $timeout);
         }
 
-        project.$inject = ['$timeout', '$mdDialog'];
+        project.$inject = ['$scope', '$timeout'];
 
         return project;
     }
