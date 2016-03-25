@@ -1,26 +1,53 @@
 <span flex="100" class="md-subhead">Project Partners</span>
 
-<p ng-if="!vm.logos.length">There is no Project partner logo uploaded yet...</p>
-
-<div class="partnerscontainer">
+<div class="partnerscontainer" layout="row" flex-wrap>
 
 	<div
 		ng-repeat="logo in vm.logos track by $index"
-		ng-if="vm.logos.length"
-		class="partneritem">
+		class="partner"
+		flex="25"
+		layout="column"
+		layout-align="start center"
+		ng-if="vm.logos.length">
 
-		<img ng-src="{{logo}}" ng-class="{'deletable': vm.editMode}" ng-click="vm.delLogo(logo)">
+		<img
+			class="logoimg"
+			ng-src="{{logo}}">
+
+		<md-button
+			class="md-warn"
+			ng-if="vm.editMode"
+			ng-click="vm.delLogo(logo)">
+				remove
+		</md-button>
 
 	</div>
+
 	<div
-		ng-if="vm.editMode"
-		class="partneritem"
-		ng-click="vm.addLogoDialog()">
+		class="partner"
+		flex="25"
+		ng-hide="!vm.editMode"
+		layout="column"
+		layout-align="start center">
 
-		<p id="uploadmodalanchor">Click here to add new logo!</p>
+		<div
+			class="logoimg"
+			ng-click="vm.addLogo()">
+
+			<label for="file-input">
+
+				<i class="material-icons">add_circle_outline</i>
+
+				<input type="file" id="file-input" onchange="fileChange()">
+			</label>
+		</div>
+
+		<p>
+			Upload Partner Logo<br>
+			<small>File format: jpeg, gif, png</small><br>
+			<small>Max.file size: 2MB</small>
+		</p>
 
 	</div>
-
-
 
 </div>

@@ -1,47 +1,61 @@
 import intro from 'intro.js';
 import _ from 'lodash';
 
+const introText = 'IntroJS Component: ';
 class IntroJsController {
 
     constructor($timeout) {
         const vm = this;
         vm.introJs = intro.introJs();
+        vm.options = {};
         $timeout(() => {
-            vm.options = vm.parseInboundString();
-            vm.introJs.setOptions();
+            vm.parseOptions();
+            vm.introJs.setOptions(
+                vm.options
+            );
         });
     }
 
-    parseInboundString() {
-        console.log(this.sourceString);
-        const obj = this.sourceString;
-        if (!obj.hasOwnProperty('steps')) {
-            console.error('Supplied json is missing the required field STEPS');
-            return;
+    parseOptions() {
+        if (!(this.sourceString instanceof Object)) {
+            console.error(introText + 'invalid object');
+            this.options.steps = {};
         }
+        else {
 
-        this.sourceString = _.chain(obj.steps)
-            .map((value, key) => {
-                if (!value.hasOwnProperty('intro')) {
-                    console.error('the step number ' + key + ' is missing the required field INTRO');
-                    value.toDelete = true;
-                }
 
-                if (value.element) {
-                    value.element = this.element(value.element);
-                    if (value.element.length > 1) {
-                        console.warn('The selector provided in the json match' +
-                            ' more than one element, only the first will be used');
+            if (!this.sourceString.hasOwnProperty('steps')) {
+                console.error(introText + 'supplied json is missing the required field STEPS');
+                this.options.steps = {};
+            }
+
+            this.options.steps = _.chain(this.sourceString.steps)
+                .map((value, key) => {
+                    value.toDelete = false;
+                    if (!value.hasOwnProperty('intro')) {
+                        console.error(introText + 'the step number ' + key + ' is missing the required field INTRO');
+                        value.toDelete = true;
                     }
-                    value.element = value.element[0];
-                }
 
-                return value;
-            })
-            .filter(item => {
-                return item.toDelete === false;
-            })
-            .value();
+                    if (value.element) {
+                        const selector = this.element(value.element);
+                        if (selector.length > 1) {
+                            console.warn(introText + 'The selector provided in the json match' +
+                                ' more than one element, only the first will be used');
+                        }
+                        if (selector.length === 0) {
+                            value.toDelete = true;
+                            console.warn(introText + 'no element found matching the selector: ' + value.element);
+                        }
+                        value.element = selector.item(0);
+                    }
+                    return value;
+                })
+                .filter(item => {
+                    return !item.toDelete;
+                })
+                .value();
+        }
     }
 
     element(name) {
