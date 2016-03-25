@@ -26,6 +26,28 @@ class AuthApi {
             });
     }
 
+    post(endpoint, data) {
+        const request = _.cloneDeep(this.request);
+        const body = new FormData();
+        _.forEach(data, item => {
+            if (!item.hasOwnProperty('key')) {
+                console.warn('AuthApi: key property missing, record skipped ');
+                return;
+            }
+            if (!item.hasOwnProperty('value')) {
+                console.warn('AuthApi: value property missing, record skipped ');
+                return;
+            }
+            body.append(item.key, item.value);
+        });
+        request.method = 'POST';
+        request.body = body;
+        return fetch(this.baseUrl + endpoint, request)
+            .then((response) => {
+                return response;
+            });
+    }
+
     retrieveToken() {
         return window.sessionStorage.getItem('token');
     }
