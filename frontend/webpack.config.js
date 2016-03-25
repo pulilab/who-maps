@@ -16,7 +16,7 @@ const devPlugins = [];
 module.exports = {
     entry: './src',
     output: {
-        path: 'builds',
+        path: production ? '../nginx/site/app/' : 'builds',
         filename: 'bundle.js'
     },
     module: {
@@ -43,9 +43,21 @@ module.exports = {
             {
                 test: /\.html/,
                 loader: 'html'
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: 'file?name=public/fonts/[name].[ext]'
             }
         ]
     },
-    devtool: production ? false : 'source-maps',
+    devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://192.168.99.100/api/',
+                secure: false
+            }
+        }
+    },
+    devtool: production ? false : 'eval-cheap-source-map',
     plugins: production ? distPlugins : devPlugins
 };

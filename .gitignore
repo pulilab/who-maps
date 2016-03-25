@@ -8,3 +8,5 @@ frontend/builds/
 .cache/
 .coverage
 */.cache/
+npm-debug.log
+*.cache*
