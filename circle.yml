@@ -1,0 +1,47 @@
+machine:
+  python:
+    version: 3.4.3
+  # node:
+    # version: 4.2.2
+  environment:
+    DATABASE_URL: localhost
+  services:
+    # - docker
+    - postgresql
+  pre:
+    # - sudo curl -L -o /usr/bin/docker 'http://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.1-circleci'
+    # - sudo chmod 0755 /usr/bin/docker
+
+dependencies:
+  cache_directories:
+    - "frontend/node_modules"
+  override:
+    # - sudo pip install docker-compose
+    - cd frontend && npm install
+    - cd frontend && npm install -g webpack
+    - cd django && pip install -r requirements.txt
+    - cd django && python manage.py migrate
+
+test:
+  pre:
+    - cd django && py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc
+    - cd frontend && npm run test -- --single-run
+    # - docker build ./django
+    # - docker-compose up -d
+    # - docker exec -it whomaps_django_1 python manage.py migrate
+    # - docker exec -it whomaps_django_1 python manage.py test
+
+general:
+  branches:
+    ignore:
+      - gh-pages
+      - site-build
+  artifacts:
+    - "frontend/coverage"
+    - "django/htmlcov"
+
+experimental:
+  notify:
+    branches:
+      ignore:
+        - site-build
