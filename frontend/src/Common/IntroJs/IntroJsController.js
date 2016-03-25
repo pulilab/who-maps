@@ -4,32 +4,28 @@ import _ from 'lodash';
 const introText = 'IntroJS Component: ';
 class IntroJsController {
 
-    constructor($timeout) {
+    constructor() {
         const vm = this;
         vm.introJs = intro.introJs();
-        vm.options = {};
-        $timeout(() => {
-            vm.parseOptions();
-            vm.introJs.setOptions(
-                vm.options
-            );
-        });
     }
 
     parseOptions() {
+        const result = {
+            steps: []
+        };
         if (!(this.sourceString instanceof Object)) {
             console.error(introText + 'invalid object');
-            this.options.steps = {};
+            result.steps = [];
         }
         else {
 
 
             if (!this.sourceString.hasOwnProperty('steps')) {
                 console.error(introText + 'supplied json is missing the required field STEPS');
-                this.options.steps = {};
+                result.steps = [];
             }
 
-            this.options.steps = _.chain(this.sourceString.steps)
+            result.steps = _.chain(this.sourceString.steps)
                 .map((value, key) => {
                     value.toDelete = false;
                     if (!value.hasOwnProperty('intro')) {
@@ -56,6 +52,7 @@ class IntroJsController {
                 })
                 .value();
         }
+        return result;
     }
 
     element(name) {
@@ -63,17 +60,18 @@ class IntroJsController {
     }
 
     start() {
+        this.introJs.setOptions(this.parseOptions());
         this.introJs.start();
     }
 
 
     static introJsFactory() {
         require('./IntroJs.scss');
-        function introJs($timeout) {
-            return new IntroJsController($timeout);
+        function introJs() {
+            return new IntroJsController();
         }
 
-        introJs.$inject = ['$timeout'];
+        introJs.$inject = [];
 
         return introJs;
     }
