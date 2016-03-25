@@ -92,13 +92,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'HOST': 'postgres',
+        'HOST': os.environ.get("DATABASE_URL", 'postgres'),
         'PORT': 5432,
     }
 }
-
-if os.environ["DATABASE_URL"]:
-    DATABASES['default']['HOST'] = os.environ["DATABASE_URL"]
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
