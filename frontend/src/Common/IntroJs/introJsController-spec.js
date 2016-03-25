@@ -1,21 +1,24 @@
 import IntroJsController from './IntroJsController';
+import _ from 'lodash';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let ic = {};
-const $timeout = arg => {
-    arg();
+const createDiv =  (className) => {
+    const elemDiv = document.createElement('div');
+    elemDiv.className = className;
+    return elemDiv
 };
+
+
 
 describe('introJsController', () => {
 
     beforeEach(() => {
-        ic = IntroJsController.introJsFactory()($timeout);
+        ic = IntroJsController.introJsFactory()();
     });
 
     it('should have a function that can parse an object in an introJS configuration object', () => {
-        const elemDiv = document.createElement('div');
-        elemDiv.className = 'test';
 
         ic.sourceString = {
             steps: [
@@ -26,23 +29,23 @@ describe('introJsController', () => {
             ]
         };
 
-        ic.parseOptions();
-        expect(ic.options.steps.length).toBe(0);
+        let result = ic.parseOptions();
+        expect(result.steps.length).toBe(0);
 
-        document.body.appendChild(elemDiv);
-        document.body.appendChild(elemDiv);
+        document.body.appendChild(createDiv('test'));
+        document.body.appendChild(createDiv('test'));
 
-        ic.parseOptions();
-        expect(ic.options.steps.length).toBe(1);
-        expect(ic.options.steps[0].element).toBeDefined();
+        result = ic.parseOptions();
+        expect(result.steps.length).toBe(1);
+        expect(result.steps[0].element).toBeDefined();
 
         ic.sourceString.steps.push({ element: '.test' }); // invalid element
-        ic.parseOptions();
-        expect(ic.options.steps.length).toBe(1);
+        result = ic.parseOptions();
+        expect(result.steps.length).toBe(1);
 
         delete(ic.sourceString.steps);
-        ic.parseOptions();
-        expect(ic.options.steps.length).toBe(0);
+        result = ic.parseOptions();
+        expect(result.steps.length).toBe(0);
     });
 
     it('should have a function that return a dom element from a class string', () => {
