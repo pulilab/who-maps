@@ -1,6 +1,10 @@
+from datetime import timedelta
+from django.utils import timezone
+from django.conf import settings
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
+from mock import patch
 
 from allauth.account.models import EmailConfirmation
 
@@ -33,6 +37,9 @@ class UserTests(TestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
+
+        # Store to be able to mock later.
+        self.timezone_now = timezone.now()
 
     def test_register_user(self):
         url = reverse("rest_register")
@@ -75,23 +82,31 @@ class UserTests(TestCase):
         self.assertIn(response.json()["message"], "ok")
 
     def test_login_user(self):
-        url = reverse("rest_login")
+        url = reverse("api_token_auth")
         data = {
-            "email": "test_user1@gmail.com",
+            "username": "test_user1@gmail.com",
             "password": "123456"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("key", response.json())
+        self.assertIn("token", response.json())
         self.assertIn("userprofile", response.json())
 
     def test_login_user_wrong_credentials(self):
-        url = reverse("rest_login")
+        url = reverse("api_token_auth")
         data = {
-            "email": "testuser1@gmail.com",
+            "username": "aaaaaa@gmail.com",
             "password": "12345"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(response.json()["non_field_errors"][0], "Unable to log in with provided credentials.")
+
+    @patch("django.utils.timezone.now")
+    def test_expired_token(self, mock_timezone_now):
+        mock_timezone_now.return_value = self.timezone_now + settings.EXPIRING_TOKEN_LIFESPAN + timedelta(days=1)
+        url = reverse("rest_user_details")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json().get("detail"), "Token has expired")
 
 
 class UserProfileTests(TestCase):
@@ -105,7 +120,6 @@ class UserProfileTests(TestCase):
             "password2": "123456"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("key")
-        self.test_user_client = Client(HTTP_AUTHORIZATION="Token {}".format(test_user_key))
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
@@ -115,15 +129,13 @@ class UserProfileTests(TestCase):
         }
         response = self.client.post(url, data)
 
-        # Create a second test user without profile.
+        # Create a test user with profile.
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
-        test_user2_key = response.json().get("key")
-        self.test_user2_client = Client(HTTP_AUTHORIZATION="Token {}".format(test_user2_key))
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user2@gmail.com").key
@@ -133,23 +145,14 @@ class UserProfileTests(TestCase):
         }
         response = self.client.post(url, data)
 
-        # Create a test user with profile.
-        url = reverse("rest_register")
+        # Log in.
+        url = reverse("api_token_auth")
         data = {
-            "email": "test_user3@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
         response = self.client.post(url, data)
-        test_user3_key = response.json().get("key")
-        self.test_user3_client = Client(HTTP_AUTHORIZATION="Token {}".format(test_user3_key))
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user3@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        url = reverse("userprofile-list")
+        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
 
         # Create profile.
         url = reverse("userprofile-list")
@@ -157,47 +160,65 @@ class UserProfileTests(TestCase):
             "name": "Test Name",
             "organisation": "test_org",
             "country": "test_country"}
-        response = self.test_user3_client.post(url, data)
+        response = client.post(url, data)
 
-    def test_retrieve_nonexistent_user_profile_after_login(self):
-        url = reverse("rest_login")
+    def test_retrieve_nonexistent_user_profile_on_login(self):
+        url = reverse("api_token_auth")
         data = {
-            "email": "test_user2@gmail.com",
+            "username": "test_user1@gmail.com",
             "password": "123456"}
-        response = self.test_user2_client.post(url, data)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("key", response.json())
+        self.assertIn("token", response.json())
         self.assertIn("userprofile", response.json())
         self.assertFalse(response.json().get("userprofile"))
 
     def test_retrieve_nonexistent_user_profile(self):
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user1@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        response = self.test_user2_client.get(url)
+        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual([], response.json())
 
-    def test_retrieve_existent_user_profile_after_login(self):
-        url = reverse("rest_login")
+    def test_retrieve_existent_user_profile_on_login(self):
+        url = reverse("api_token_auth")
         data = {
-            "email": "test_user3@gmail.com",
+            "username": "test_user2@gmail.com",
             "password": "123456"}
-        response = self.test_user3_client.post(url, data)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("key", response.json())
+        self.assertIn("token", response.json())
         self.assertIn("userprofile", response.json())
         self.assertTrue(response.json().get("userprofile"))
 
     def test_retrieve_existent_user_profile(self):
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        response = self.test_user3_client.get(url)
+        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual([], response.json())
 
     def test_create_user_profile(self):
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user1@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
         url = reverse("userprofile-list")
+        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
         data = {
             "name": "Test Name",
             "organisation": "test_org",
             "country": "test_country"}
-        response = self.test_user_client.post(url, data)
+        response = client.post(url, data)
         self.assertEqual(response.status_code, 201)

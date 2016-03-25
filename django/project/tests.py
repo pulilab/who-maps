@@ -21,8 +21,6 @@ class ProjectTests(TestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
-        self.test_user_key = response.json().get("key")
-        self.test_user_client = Client(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -32,19 +30,21 @@ class ProjectTests(TestCase):
         }
         response = self.client.post(url, data)
 
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        self.test_user_key = response.json().get("token")
+        self.test_user_client = Client(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+
         # Create profile.
         url = reverse("userprofile-list")
         data = {
             "name": "Test Name",
             "organisation": "test_org",
             "country": "test_country"}
-        response = self.test_user_client.post(url, data)
-
-        # Log in the user.
-        url = reverse("rest_login")
-        data = {
-            "email": "test_user@gmail.com",
-            "password": "123456"}
         response = self.test_user_client.post(url, data)
 
         # Creating basic data.

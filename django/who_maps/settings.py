@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
+    'rest_framework_expiring_authtoken',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -143,7 +144,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_expiring_authtoken.authentication.ExpiringTokenAuthentication',
     ),
 }
 
@@ -158,6 +159,9 @@ AUTHENTICATION_BACKENDS = (
 REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'user.serializers.ProfileTokenSerializer'
 }
+
+import datetime
+EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=1)
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
