@@ -71,18 +71,6 @@ applications {
     right: 10px;
   }
 
-  &.sub {
-    border-bottom:0;
-  }
-
-  &.app-open {
-    border-bottom: 0;
-  }
-
-  &.taxonomy {
-    border-bottom:0;
-  }
-
   .md-button-override {
     display: block;
     width: 100%;
@@ -107,6 +95,15 @@ applications {
   .tile {
     width: 100%;
     height: 100%;
+    border-top: 1px solid $color-gray-lighter;
+    box-sizing: border-box;
+
+    &.application_disabled {
+      background-color: #fff !important;
+    }
+
+    &.sub,
+    &.app-open {}
 
     &.empty-tile {
       &.activated {
@@ -200,16 +197,12 @@ applications {
     background: green;
   }
 
-  .odd {
-    background: #FAFAFA;
-  }
-
   .empty {}
 
   .header {
     width: 100%;
     height: 100%;
-    background-color: #EEEEEE;
+    background-color: #EEEEEE !important;
 
     h2 {
       z-index: 10;

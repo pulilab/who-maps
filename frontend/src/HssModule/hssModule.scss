@@ -4,26 +4,25 @@
 
 .hss-module {
 
-  md-grid-list {
-    background: $color-white;
-  }
+  md-grid-list {}
 
   md-grid-tile {
-    border-right: 1px solid rgba(0,0,0,.08);
-    border-bottom: 1px solid $color-gray-lighter;
-    background: $color-white;
-    outline: none;
 
-    &.sub {
-      border-bottom: 0;
-    }
+    figure > div {
+      border-right: 1px solid rgba(0,0,0,.1);
+      background: $color-white;
 
-    &.app-open {
-      border-bottom: 0;
-    }
+      &.odd {
+        background: #FAFAFA;
+      }
 
-    &.header-line {
-      background: #EEEEEE;
+      &.sub {
+        // border-bottom: 0;
+      }
+
+      &.app-open {
+        // border-bottom: 0;
+      }
     }
 
   }

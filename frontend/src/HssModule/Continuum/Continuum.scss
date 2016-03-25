@@ -5,13 +5,6 @@
 
   md-grid-tile {
 
-    border-right: none !important;
-
-    &.cell-icons,
-    &.cell-child {
-      background: $color-white !important;
-    }
-
     &.cell-icons {
       img {
         margin-left: 10px;
@@ -28,6 +21,7 @@
       font-weight: 500;
       text-transform: uppercase;
       cursor: default;
+      outline: none;
       @include not-selectable();
 
       &::after {
@@ -67,10 +61,15 @@
       }
     }
 
+    &.cell-mother,
+    &.row-title-mother {
+      border-bottom: 1px solid $color-gray-lighter;
+    }
+
     &.hss-controls,
     &.cell-child,
     &.row-title-child {
-      border-bottom: 1px solid $color-gray !important;
+      border-bottom: 1px solid $color-gray;
     }
 
     &.row-title-mother,
@@ -111,6 +110,11 @@
     }
 
     &.hss-controls {
+
+      figure > div {
+        border: 0;
+      }
+
       .hss-control {
         display: block;
         width: 100%;
