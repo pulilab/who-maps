@@ -25,7 +25,7 @@ md-select.small {
 
 .md-select-menu-container.small {
   md-option {
-    padding: 0 12px 0 24px;
+    padding: 0 12px 0 26px;
     height: 24px;
 
     .md-text {
@@ -39,7 +39,7 @@ md-select.small {
         content: "done";
         position: absolute;
         top: 6px;
-        left: 6px;
+        left: 8px;
         color: $text-primary;
       }
 
@@ -52,7 +52,18 @@ md-select.small {
 
 // Select - multiple
 md-select.multiple {}
-md-select-menu-container.multiple {}
+
+.md-select-menu-container.multiple {
+  span {
+    display: block;
+    padding: 10px 0 5px 10px;
+    border-bottom: 1px solid $color-gray-lightest;
+    font-size: $caption-font-size-base;
+    font-weight: 500;
+    color: $color-gray-light;
+    text-transform: uppercase;
+  }
+}
 
 // Checkbox - small
 $checkbox-size-small: 16px;
