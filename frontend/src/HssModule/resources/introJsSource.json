@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "intro": "HSS Framework short tutorial"
+    },
+    {
+      "intro": "to switch between edit mode and view mode do not use it for now",
+      "element": ".intro_edit_mode"
+    },
+    {
+      "intro": "Activate main continuum element by clicking here, do it now!",
+      "element": ".mother_middle_1"
+    },
+    {
+      "intro": "Select this one too for the sake of tutorial",
+      "element": ".mother_middle_2"
+    },
+    {
+      "intro": "Activate sub continuum element by clicking here, this element can not be activated because his mother column is not",
+      "element": ".child_middle_5"
+    },
+    {
+      "intro": "Once a column is activate select interventions from the select menu here",
+      "element": ".interventions_middle_1"
+    },
+    {
+      "intro": "Select one or more constraints from here",
+      "element": ".intro_constraints"
+    },
+    {
+      "intro": "To create an editing bubble click on an activated application cell",
+      "element": ".applications_middle_1"
+    },
+    {
+      "intro": "And then click to another application cell",
+      "element": ".applications_middle_2"
+    },
+    {
+      "intro": "Is now possible to edit the newly created bubble",
+      "element": ".applications_middle_1"
+    },
+    {
+      "intro": "Once a bubble is created the row get activated and it is possible to select constraints",
+      "element": ".taxonomy_column_0"
+    },
+    {
+      "intro": "The application is now active, to show the subapp click on the application name",
+      "element": ".applications_header_0"
+    }
+
+  ]
+}

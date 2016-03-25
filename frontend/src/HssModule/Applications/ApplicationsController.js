@@ -319,6 +319,7 @@ class ApplicationsController {
 
     tileBalloonStartHandler(tile) {
         this.startTile = tile;
+        tile.className += 'selected';
     }
 
     tileBalloonEndHandler(tile) {
