@@ -7,3 +7,8 @@ node_modules/
 frontend/builds/
 npm-debug.log
 *.cache*
+.cache/
+.coverage
+*/.cache/
+*.py,cover
+*htmlcov/
