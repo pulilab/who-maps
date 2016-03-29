@@ -1,7 +1,7 @@
 import ContinuumController from './ContinuumController';
 import { EE } from '../../Common/';
 
-/* global define, it, describe, expect, beforeEach, jasmine, spyOn */
+/* global define, it, describe, expect, beforeEach, jasmine, spyOn, xit */
 
 let cc = {};
 const $timeout = arg => {
@@ -115,8 +115,24 @@ describe('continuumController', () => {
             expect(tileMock.activated).toBe(false);
         });
 
+        it(', which emits to hss controller, and uses response event to simply activate col', () => {
+            spyOn(window.EE, 'emit');
+            spyOn(cc, 'checkColumnActivation');
+            const tileMock = {
+                activated: false,
+                columnId: 3
+            };
+            cc.editMode = true;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.emit).toHaveBeenCalledWith('hssPleaseActivateColumn', {
+                columnId: 3,
+                activated: true
+            });
+            expect(cc.checkColumnActivation).toHaveBeenCalledWith(tileMock);
 
-        it(', which handles row logic, and emits globally', () => {
+        });
+
+        xit(', which handles row logic, and emits globally', () => {
             spyOn(window.EE, 'emit');
 
             cc.editMode = true;
@@ -140,7 +156,7 @@ describe('continuumController', () => {
         });
     });
 
-    it('has a fn., that emits on columnactivation', () => {
+    xit('has a fn., that emits on columnactivation', () => {
         expect(cc.columnChEmit).toBeDefined();
         spyOn(window.EE, 'emit');
         cc.columnChEmit(2, true);

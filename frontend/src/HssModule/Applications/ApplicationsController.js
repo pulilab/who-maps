@@ -13,8 +13,9 @@ class ApplicationsController {
             this.selectedConstraints = [];
             this.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-            vm.EE.on('hssColumnActiveState', this.handleColumnActivation.bind(this));
+            vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
             vm.EE.on('hssConstraintsSelected', this.constraintsUpdated.bind(this));
+            this.searchForFilledColumns();
         });
     }
 
@@ -360,6 +361,25 @@ class ApplicationsController {
         this.applicationRow = _.filter(this.applicationRow, (value) => {
             return !value.invisible || !value.isInput;
         });
+
+        this.searchForFilledColumns();
+    }
+
+    searchForFilledColumns() {
+
+        const containArr = [false, false, false, false, false, false, false];
+
+        const notEmpties = this.applicationRow.filter(el => {
+            return el.bubbleDrawn;
+        });
+
+        notEmpties.forEach(el => {
+            for (let i = +el.columnId; i <= el.columnId + el.colSpan - 1; i += 1) {
+                containArr[i] = true;
+            }
+        });
+
+        this.EE.emit('hssColumnContents', containArr);
     }
 
     static applicationsFactory() {

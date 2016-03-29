@@ -154,7 +154,7 @@
     "no-array-constructor": 1,
     "no-continue": 1,
     "no-inline-comments": 0,
-    "no-lonely-if": 1,
+    "no-lonely-if": 0,
     "no-mixed-spaces-and-tabs": 1,
     "no-multiple-empty-lines": [1, { "max": 2 }],
     "no-nested-ternary": 0,
