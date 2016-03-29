@@ -2,6 +2,8 @@ import _ from 'lodash';
 import 'whatwg-fetch';
 import 'es6-promise';
 
+/* global Promise */
+
 class AuthApi {
 
     constructor() {
