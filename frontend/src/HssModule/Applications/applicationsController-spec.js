@@ -73,7 +73,7 @@ describe('applicationsController', () => {
     it('should have a function that returns an application specific string of class ', () => {
         const firstColumn = ac.applicationRow[1];
         const classString = ac.applicationClassGenerator(firstColumn);
-        expect(classString).toContain('app odd app-main application_disabled no-bubble activated app-closed applications_middle_0 empty-tile');
+        expect(classString).toContain('app odd app-main application_disabled no-bubble activated app-closed applications_middle_0');
     });
 
     it('should have a function that return the activated state of the column if the mother or child continuum are activated', () => {
@@ -109,7 +109,7 @@ describe('applicationsController', () => {
         firstColumn.isMain = false;
         const subApp = _.values(applicationsLib[1].subApplications);
         const classString = ac.subApplicationClassGenerator(subApp, firstColumn);
-        expect(classString).toContain('odd app-sub application_disabled no-bubble activated app-closed applications_middle_0 empty-tile');
+        expect(classString).toContain('odd app-sub application_disabled no-bubble activated app-closed applications_middle_0');
     });
 
     it('should have a function that returns a string label for sub applications', () => {

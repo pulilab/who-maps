@@ -58,7 +58,6 @@ class ApplicationsController {
         classArray.push(tile.activated ? 'activated' : 'not-activated');
         classArray.push(tile.subAppOpen ? 'app-open' : 'app-closed');
         classArray.push(tile.introName);
-        // classArray.push(tile.bubbleDrawn ? 'bubble-shape' : 'empty-tile');
         return classArray.join(' ');
     }
 
