@@ -33,70 +33,80 @@ applications {
   }
 
   .application_1 .bubble-shape,
-  .application_1 .app-number  {
+  .application_1 .app-number,
+  .tile.application_1.sub .app-number::before {
     background: #26C6DA;
   }
   .application_1 .white-number {
     color: #26C6DA;
   }
   .application_2 .bubble-shape,
-  .application_2 .app-number {
+  .application_2 .app-number,
+  .tile.application_2.sub .app-number::before {
     background: #039BE5;
   }
   .application_2 .white-number {
     color: #039BE5;
   }
   .application_3 .bubble-shape,
-  .application_3 .app-number {
+  .application_3 .app-number,
+  .tile.application_3.sub .app-number::before {
     background: #9575CD;
   }
   .application_3 .white-number {
     color: #9575CD;
   }
   .application_4 .bubble-shape,
-  .application_4 .app-number{
+  .application_4 .app-number,
+  .tile.application_4.sub .app-number::before {
     background: #673AB7;
   }
   .application_4 .white-number {
     color: #673AB7;
   }
   .application_5 .bubble-shape,
-  .application_5 .app-number{
-    background: #F06292;
+  .application_5 .app-number,
+  .tile.application_5.sub .app-number::before {
+    background-color: #F06292;
   }
   .application_5 .white-number {
     color: #F06292;
   }
   .application_6 .bubble-shape,
-  .application_6 .app-number {
+  .application_6 .app-number,
+  .tile.application_6.sub .app-number::before {
     background: #F44336;
   }
   .application_6 .white-number {
     color: #F44336;
   }
   .application_7 .bubble-shape,
-  .application_7 .app-number{
+  .application_7 .app-number,
+  .tile.application_7.sub .app-number::before {
     background: #F9A825;
   }
   .application_7 .white-number {
     color: #F9A825;
   }
   .application_8 .bubble-shape,
-  .application_8 .app-number {
+  .application_8 .app-number,
+  .tile.application_8.sub .app-number::before {
     background: #F57C00;
   }
   .application_8 .white-number {
     color: #F57C00;
   }
   .application_9 .bubble-shape,
-  .application_9 .app-number {
+  .application_9 .app-number,
+  .tile.application_9.sub .app-number::before {
     background: #9E9D24;
   }
   .application_9 .white-number {
     color: #9E9D24;
   }
   .application_10 .bubble-shape,
-  .application_10 .app-number {
+  .application_10 .app-number,
+  .tile.application_10.sub .app-number::before {
     background: #43A047;
   }
   .application_10 .white-number {
@@ -156,14 +166,32 @@ applications {
         }
       }
     }
+
+    &.sub {
+      border-top: none !important;
+
+      .app-number {
+        &::before {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          display: inline-block;
+          width: 1px;
+          height: 21px;
+          background-color: #BDBDBD;
+        }
+      }
+    }
   }
 
   .app-number {
+    position: relative;
     float: left;
     width: 30px;
     height: 30px;
     margin: 10px 0 0 12px;
-    background: #BDBDBD;
+    background-color: #BDBDBD;
     font-size: $caption-font-size-base;
     line-height: 30px;
     font-weight: 500;
@@ -176,6 +204,10 @@ applications {
     position: relative;
     margin: 8px 0 0 9px;
     background: $color-white !important;
+
+    &::before {
+      display: none !important;
+    }
   }
 
   .app-button {
