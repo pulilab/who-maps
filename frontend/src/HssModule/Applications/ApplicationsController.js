@@ -149,12 +149,11 @@ class ApplicationsController {
             rowBubbles: [],
             classGenerator: this.subApplicationClassGenerator.bind(this, subApp),
             clickHandler: void 0,
-            applicationStyle: 'application_' + applicationsLib[index].id
+            applicationStyle: 'application_' + applicationsLib[id - 1].id
         }];
     }
 
     subAppMiddleColumnDecorator(subApp, index, id) {
-
         return _.chain(this.tiles)
             .range()
             .map(value => {
