@@ -303,6 +303,37 @@ applications {
     transform: translateY(-50%);
   }
 
+  .app-delete {
+    z-index: 20;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    cursor: pointer;
+
+      > span {
+        position: absolute;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-color: $text-primary;
+        font-size: 1.1rem;
+        color: $color-white;
+        text-align: center;
+        line-height: 16px;
+        border-radius: 16px;
+        transition: $swift-ease-out;
+      }
+
+      &:hover > span {
+        transform: scale(1.25);
+      }
+  }
+
   .md-list-tax-text {
     display: block;
     width: calc( 100% - 40px );

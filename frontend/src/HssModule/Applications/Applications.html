@@ -33,6 +33,7 @@
                     <md-input-container md-no-float class="" >
                         <input aria-label="tile content" placeholder="Add text here" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
                     </md-input-container>
+                    <span class="app-delete"><span>&times;</span></span>
                 </div>
 
                 <div ng-if="!vm.editMode && tile.content && tile.activated" class="bubble-shape">
