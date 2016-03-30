@@ -129,7 +129,68 @@ describe('continuumController', () => {
                 activated: true
             });
             expect(cc.checkColumnActivation).toHaveBeenCalledWith(tileMock);
+        });
 
+        it(', which handles deactivation logic', () => {
+            spyOn(window.EE, 'once');
+            spyOn(window.EE, 'emit');
+            cc.constructor($timeout);
+            cc.editMode = true;
+
+            let tileMock = {
+                columnId: 1,
+                activated: true
+            };
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
+
+            tileMock = {
+                columnId: 4,
+                activated: true
+            };
+            cc.firstRow[4] = {};
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
+
+            tileMock = {
+                columnId: 4,
+                activated: true
+            };
+            cc.motherRow[4].activated = false;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
+
+            tileMock = {
+                columnId: 5,
+                activated: true,
+                type: 'mother'
+            };
+            cc.childRow[5].activated = true;
+            cc.childRow[6].actiavted = true;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(tileMock.activated).toBe(false);
+
+            tileMock = {
+                columnId: 6,
+                activated: true,
+                type: 'child'
+            };
+            cc.motherRow[5].activated = true;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(tileMock.activated).toBe(false);
+
+            tileMock = {
+                columnId: 6,
+                activated: true,
+                type: 'child'
+            };
+            cc.motherRow[5].activated = false;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
         });
 
         xit(', which handles row logic, and emits globally', () => {
@@ -152,7 +213,6 @@ describe('continuumController', () => {
             expect(tileMock.activated).toBe(false);
 
             expect(window.EE.emit).toHaveBeenCalled();
-
         });
     });
 
