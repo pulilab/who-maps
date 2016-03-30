@@ -295,7 +295,8 @@ applications {
     -webkit-box-orient: vertical;
     //
     width: 100%;
-    height: 36px;
+    height: auto;
+    max-height: 36px;
     font-size: $caption-font-size-base;
     line-height: 16px;
     color: $color-white !important;
