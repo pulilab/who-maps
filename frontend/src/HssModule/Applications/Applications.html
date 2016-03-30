@@ -7,7 +7,7 @@
       md-colspan="9"
       md-rowspan="1" >
         <div class="header" layout="row" layout-align="start center">
-            <h2 class="md-title text-uppercase">Common mHEALTH &amp; ICT Applications</h2>
+            <h2 class="md-title text-uppercase">Common <span class="text-lowercase">m</span>HEALTH &amp; ICT Applications</h2>
         </div>
     </md-grid-tile>
 
@@ -16,26 +16,27 @@
     <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.applicationRow" ng-if="!tile.disabled">
         <div class="tile" ng-class="tile.classGenerator(tile)">
 
-            <div ng-if="tile.isHeader" class="">
+            <div ng-if="tile.isHeader">
                 <div class="app-number">{{tile.applicationId}}</div>
                 <div class="app-button">
                     <md-button md-no-ink class="md-button-override"  ng-click="tile.clickHandler(tile)">
                         <span>{{tile.content}}</span>
-                        <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 && vm.editMode">arrow_drop_down</md-icon>
+                        <md-icon class="material-icons" ng-show="tile.subApplications.length > 0 && vm.editMode"></md-icon>
                     </md-button>
                 </div>
             </div>
 
             <div ng-if="tile.isInput" ng-click="tile.clickHandler(tile)" >
 
-                <div ng-if="vm.editMode && tile.bubbleDrawn && tile.activated">
+                <div ng-if="vm.editMode && tile.bubbleDrawn && tile.activated" class="bubble-shape">
                     <div class="app-number white-number">{{tile.applicationId}}</div>
                     <md-input-container md-no-float class="" >
-                        <input aria-label="tile content" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
+                        <input aria-label="tile content" placeholder="Add text here" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
                     </md-input-container>
+                    <span class="app-delete"><span>&times;</span></span>
                 </div>
 
-                <div ng-if="!vm.editMode && tile.content && tile.activated">
+                <div ng-if="!vm.editMode && tile.content && tile.activated" class="bubble-shape">
                     <div class="app-number white-number">{{tile.applicationId}}</div>
                     <div class="app-text" >{{tile.content}}</div>
                 </div>
@@ -50,7 +51,9 @@
             <div ng-if="tile.isSelect && tile.rowEnabled">
                 <div ng-if="!vm.editMode">
                     <div ng-repeat="tax in tile.content">
-                        {{tax}}
+                        <div class="md-list-tax-text md-small">
+                            {{tax}}
+                        </div>
                     </div>
                 </div>
                 <div ng-if="vm.editMode" >
