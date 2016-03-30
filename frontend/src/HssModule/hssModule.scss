@@ -7,30 +7,21 @@
   md-grid-list {}
 
   md-grid-tile {
-
     figure > div {
       border-right: 1px solid rgba(0,0,0,.1);
       background: $color-white;
-
       &.odd {
         background: #FAFAFA;
       }
-
-      &.sub {
-        // border-bottom: 0;
-      }
-
-      &.app-open {
-        // border-bottom: 0;
-      }
     }
-
   }
-  .partner-logo-canvas {
-    background: $color-gray-lighter;
-    margin: 1px;
-    width: 50px;
-    height: 50px;
+
+  .hss-module-bottom {
+    margin-top: 1px;
+    border-top: 1px solid $color-gray-lighter;
+    > div {
+      padding: 50px;
+    }
   }
 
 }

@@ -6,6 +6,17 @@
 /* TYPOGRAPY
    ============================= */
 
+.page-title {
+  color: $color-primary;
+
+  + .md-subhead {
+    max-width: 80%;
+    margin-top: 0;
+    margin-left: 10%;
+    color: $color-gray;
+  }
+}
+
 .md-small {
   font-size: $caption-font-size-base;
 }
