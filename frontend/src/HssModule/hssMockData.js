@@ -436,7 +436,8 @@ export const taxonomy = {
     ]
 };
 
-export const projectScale = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eros lacus,  posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.`;
+export const projectScale = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+    ' Donec eros lacus,  posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.';
 
 export const partnerLogoUrls = [
     'http://placehold.it/350x150',
