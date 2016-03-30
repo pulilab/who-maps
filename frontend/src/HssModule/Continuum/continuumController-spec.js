@@ -192,38 +192,6 @@ describe('continuumController', () => {
             expect(window.EE.once).toHaveBeenCalled();
             expect(window.EE.emit).toHaveBeenCalled();
         });
-
-        xit(', which handles row logic, and emits globally', () => {
-            spyOn(window.EE, 'emit');
-
-            cc.editMode = true;
-            const tileMock = {
-                activated: false,
-                columnId: 3
-            };
-            cc.firstRow = [0, 1, 2, {
-                activated: false
-            }];
-            cc.toggleColumnActivationClick(tileMock);
-            expect(cc.firstRow[3].activated).toBe(true);
-            expect(tileMock.activated).toBe(true);
-
-            cc.toggleColumnActivationClick(tileMock);
-            expect(cc.firstRow[3].activated).toBe(false);
-            expect(tileMock.activated).toBe(false);
-
-            expect(window.EE.emit).toHaveBeenCalled();
-        });
-    });
-
-    xit('has a fn., that emits on columnactivation', () => {
-        expect(cc.columnChEmit).toBeDefined();
-        spyOn(window.EE, 'emit');
-        cc.columnChEmit(2, true);
-        expect(window.EE.emit).toHaveBeenCalledWith('hssColumnActiveState', {
-            columnId: 2,
-            activated: true
-        });
     });
 
     it('has a function for exporting a -pdf file', () => {

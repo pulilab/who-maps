@@ -6,26 +6,36 @@ class HssModuleController {
 
         this.columnHasContent = [];
 
-        this.EE.on('hssColumnContents', columnContentsArray => {
-            this.columnHasContent = columnContentsArray;
-        });
+        this.EE.on('hssColumnContents', this.reFresh);
 
-        this.EE.on('hssHasColumnContent', id => {
-            this.EE.emit('hssGuysActivateColumn', {
-                columnId: id,
-                activated: this.columnHasContent[id]
-            });
-        });
-        this.EE.on('hssHasColumnContentLastTwo', () => {
-            this.EE.emit('hssHasContentLastTwo', {
-                five: this.columnHasContent[5],
-                six: this.columnHasContent[6]
-            });
-        });
+        this.EE.on('hssHasColumnContent', this.onAskIfColumnGotContent);
 
-        this.EE.on('hssPleaseActivateColumn', obj => {
-            this.EE.emit('hssGuysActivateColumn', obj);
+        this.EE.on('hssHasColumnContentLastTwo', this.onLastTwoContentAsked);
+
+        this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn);
+
+    }
+
+    reFresh(columnContentsArray) {
+        this.columnHasContent = columnContentsArray;
+    }
+
+    onAskIfColumnGotContent() {
+        this.EE.emit('hssHasContentLastTwo', {
+            five: this.columnHasContent[5],
+            six: this.columnHasContent[6]
         });
+    }
+
+    onLastTwoContentAsked() {
+        this.EE.emit('hssHasContentLastTwo', {
+            five: this.columnHasContent[5],
+            six: this.columnHasContent[6]
+        });
+    }
+
+    askedToActivateColumn(obj) {
+        this.EE.emit('hssGuysActivateColumn', obj);
     }
 
     static hssControllerFactory() {
