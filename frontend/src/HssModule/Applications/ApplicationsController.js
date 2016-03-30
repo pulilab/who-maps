@@ -383,7 +383,7 @@ class ApplicationsController {
         const containArr = [false, false, false, false, false, false, false];
 
         const notEmpties = this.applicationRow.filter(el => {
-            return el.bubbleDrawn;
+            return el.content.length > 0 && el.isInput;
         });
 
         notEmpties.forEach(el => {
