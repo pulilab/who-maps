@@ -6,13 +6,13 @@ class HssModuleController {
 
         this.columnHasContent = [];
 
-        this.EE.on('hssColumnContents', this.reFresh);
+        this.EE.on('hssColumnContents', this.reFresh.bind(this));
 
-        this.EE.on('hssHasColumnContent', this.onAskIfColumnGotContent);
+        this.EE.on('hssHasColumnContent', this.onAskIfColumnGotContent.bind(this));
 
-        this.EE.on('hssHasColumnContentLastTwo', this.onLastTwoContentAsked);
+        this.EE.on('hssHasColumnContentLastTwo', this.onLastTwoContentAsked.bind(this));
 
-        this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn);
+        this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn.bind(this));
 
     }
 
