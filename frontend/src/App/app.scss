@@ -24,6 +24,10 @@
 /* UI ELEMENTS
    ============================= */
 
+.md-fab-not-raised {
+  box-shadow: none !important;
+}
+
 // Progress Circular
 md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
   border-width: 16px !important;
@@ -150,5 +154,12 @@ md-checkbox.small {
   &.md-fab,
   &.md-fab:not([disabled]):hover {
     background-color: $text-primary;
+  }
+
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    background-color: $text-primary;
+    color: $color-white;
   }
 }

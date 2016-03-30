@@ -13,28 +13,47 @@ projectpartners {
   }
 
 	.partnerscontainer {
-
-		display: flex;
-		flex-wrap: wrap;
+    @include clearfix();
 
 		.partner {
+      float: left;
+      margin: 0 20px 20px 0;
+      text-align: center;
 
 			.logoimg {
-
-				height: 100px;
+        display: block;
 				width: auto;
-
-				i {
-					font-size: 100px;
-					align: center;
-					opacity: 0.4;
-					color: green;
-				}
-
-				#file-input {
-					display: none;
-				}
+        height: 80px;
 			}
+
+      md-icon {
+        outline: none;
+      }
 		}
+
+    .add-partner {
+      float: left;
+      width: 100%;
+      margin: 20px 0;
+
+      .file-upload {
+        float: left;
+
+        label {
+          button {
+            margin: 0 20px 0 0;
+          }
+
+          #file-input {
+            display: none;
+          }
+        }
+      }
+
+      .file-upload-info {
+        display: inline-block;
+        color: $color-gray-light;
+      }
+    }
 	}
 }

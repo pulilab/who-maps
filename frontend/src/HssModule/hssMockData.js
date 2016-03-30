@@ -440,7 +440,7 @@ export const projectScale = `Lorem ipsum dolor sit amet, consectetur adipiscing 
 
 export const partnerLogoUrls = [
     'http://placehold.it/350x150',
-    'http://placehold.it/350x150',
-    'http://placehold.it/350x150',
-    'http://placehold.it/350x150'
+    'http://placehold.it/350x350',
+    'http://placehold.it/170x100',
+    'http://placehold.it/500x500'
 ];

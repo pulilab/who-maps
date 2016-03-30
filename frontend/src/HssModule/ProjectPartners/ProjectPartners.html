@@ -2,54 +2,42 @@
 	<h4>Project Partners</h4>
 </div>
 
-<div class="partnerscontainer" layout="row" flex-wrap>
+<div class="partnerscontainer">
 
 	<div
 		ng-repeat="logo in vm.logos track by $index"
 		class="partner"
-		flex="25"
-		layout="column"
-		layout-align="start center"
 		ng-if="vm.logos.length">
 
 		<img
 			class="logoimg"
 			ng-src="{{logo}}">
 
-		<md-button
-			class="md-warn"
-			ng-if="vm.editMode"
-			ng-click="vm.delLogo(logo)">
-				remove
-		</md-button>
 
+    <md-button class="md-icon-button" aria-label="Remove logo">
+        <md-icon class="material-icons md-warn logo-remove" ng-if="vm.editMode"
+        ng-click="vm.delLogo(logo)">delete_forever</md-icon>
+    </md-button>
 	</div>
 
 	<div
-		class="partner"
-		flex="25"
-		ng-hide="!vm.editMode"
-		layout="column"
-		layout-align="start center">
+		class="add-partner"
+		ng-hide="!vm.editMode">
 
 		<div
-			class="logoimg"
+			class="file-upload"
 			ng-click="vm.addLogo()">
 
 			<label for="file-input">
-
-				<i class="material-icons">add_circle_outline</i>
-
+				<md-button class="md-black">Upload logo</md-button>
 				<input type="file" id="file-input" onchange="fileChange()">
 			</label>
 		</div>
 
-		<p>
-			Upload Partner Logo<br>
-			<small>File format: jpeg, gif, png</small><br>
-			<small>Max.file size: 2MB</small>
-		</p>
+		<span class="file-upload-info md-small">
+			File format: jpeg, gif, png<br>
+			Max.file size: 2MB
+		</span>
 
 	</div>
-
 </div>
