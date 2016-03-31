@@ -10,9 +10,9 @@
   color: $color-primary;
 
   + .md-subhead {
-    max-width: 80%;
     margin-top: 0;
     margin-left: 10%;
+    max-width: 80%;
     color: $color-gray;
   }
 }
@@ -44,18 +44,19 @@ md-select.small {
     height: 24px;
 
     .md-text {
-      font-size: $caption-font-size-base;
       color: $text-secondary;
+      font-size: $caption-font-size-base;
     }
 
     &[selected="selected"] {
       &::before {
-        @include md-icon($body-font-size-base);
-        content: "done";
         position: absolute;
         top: 6px;
         left: 8px;
         color: $text-primary;
+        content: "done";
+
+        @include md-icon($body-font-size-base);
       }
 
       .md-text {
@@ -72,10 +73,10 @@ md-select.multiple {}
   span {
     display: block;
     padding: 10px 0 5px 10px;
-    font-size: $caption-font-size-base;
-    font-weight: 500;
     color: $color-gray-light;
     text-transform: uppercase;
+    font-weight: 500;
+    font-size: $caption-font-size-base;
   }
 }
 
@@ -92,8 +93,8 @@ md-checkbox.small {
     height: $checkbox-size-small;
   }
   &.md-checked .md-icon:after {
-    left: $checkbox-size-small / 3;
     top: $checkbox-size-small / 7;
+    left: $checkbox-size-small / 3;
     width: $checkbox-size-small / 3;
     height: $checkbox-size-small * 2 / 3;
   }
@@ -110,12 +111,12 @@ md-checkbox.small {
 
   // Progress Circular
   .md-left .md-half-circle {
-    border-left-color: $color-gray-light !important;
     border-top-color: $color-gray-light !important;
+    border-left-color: $color-gray-light !important;
   }
   .md-right .md-half-circle {
-    border-right-color: $color-gray-light !important;
     border-top-color: $color-gray-light !important;
+    border-right-color: $color-gray-light !important;
   }
 }
 
