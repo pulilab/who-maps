@@ -3,6 +3,7 @@ import LandingPageModuleController from './LandingPageModuleController';
 
 import _template from './LandingPageModule.html';
 import uiRoute from 'angular-ui-router';
+import { projectComponent } from '../Common/';
 import './landingPage.scss';
 
 const moduleName = 'landingPageModule';
@@ -27,6 +28,7 @@ config.$inject = ['$stateProvider'];
 
 angular.module(moduleName, [uiRoute])
     .controller(moduleName + '.' + moduleName + 'Controller', LandingPageModuleController)
+    .component(projectComponent.name, projectComponent)
     .config(config);
 
 export default moduleName;
