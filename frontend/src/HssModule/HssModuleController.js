@@ -20,10 +20,10 @@ class HssModuleController {
         this.columnHasContent = columnContentsArray;
     }
 
-    onAskIfColumnGotContent() {
-        this.EE.emit('hssHasContentLastTwo', {
-            five: this.columnHasContent[5],
-            six: this.columnHasContent[6]
+    onAskIfColumnGotContent(id) {
+        this.EE.emit('hssGuysActivateColumn', {
+            columnId: id,
+            activated: this.columnHasContent[id]
         });
     }
 
