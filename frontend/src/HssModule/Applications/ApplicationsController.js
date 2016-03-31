@@ -23,7 +23,6 @@ class ApplicationsController {
     handleEditMode(value) {
         this.editMode = value;
         this.preProcessRows();
-        // this.applicationRow = this.createRowStructure(this.applicationRow);
     }
 
     handleColumnActivation(event) {
@@ -252,6 +251,7 @@ class ApplicationsController {
                 'father_' + item.fatherId + '.rowIndex_' + item.rowIndex + '.columnId_' + item.columnId,
                 item);
         });
+        console.log(vm.rowObject);
         this.preProcessRows();
     }
 
@@ -260,11 +260,10 @@ class ApplicationsController {
             return;
         }
         tile.subAppOpen = !tile.subAppOpen;
-        _.map(this.applicationRow, (value) => {
-            if (value.fatherId && value.fatherId === tile.applicationId) {
-                value.disabled = !tile.subAppOpen;
-            }
-            return value;
+        _.forEach(this.rowObject['father_' + tile.applicationId], value => {
+            _.forEach(value, item => {
+                item.disabled = !tile.subAppOpen;
+            });
         });
     }
 
@@ -289,12 +288,13 @@ class ApplicationsController {
     }
 
     findSameRowCandidate(tile) {
-        return _.chain(this.applicationRow)
-            .filter((value) => {
-                return value.rowIndex === tile.rowIndex
-                    && tile.rowIndex === this.startTile.rowIndex
-                    && this.startTile.fatherId === value.fatherId
-                    && value.activated === true
+        if (tile.rowIndex !== this.startTile.rowIndex
+            && this.startTile.fatherId !== tile.fatherId) {
+            return [];
+        }
+        return _.chain(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex])
+            .filter(value => {
+                return value.activated === true
                     && value.columnId >= this.startTile.columnId
                     && value.columnId <= tile.columnId;
             })
@@ -345,21 +345,15 @@ class ApplicationsController {
             return;
         }
 
-        this.applicationRow = _.map(this.applicationRow, (value) => {
-            if (value.rowIndex === tile.rowIndex && value.fatherId === tile.fatherId) {
-                if (tile.isMain && value.isMain && value.isHeader) {
-                    applicationStyle = value.applicationStyle;
-                    value.rowBubbles.push(rowColumns);
-                }
-                else if (!value.isMain && value.isHeader) {
-                    value.rowBubbles.push(rowColumns);
-                    applicationStyle = value.applicationStyle;
-                }
-
-                value.rowEnabled = true;
+        _.map(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex], value => {
+            if (value.isHeader) {
+                applicationStyle = value.applicationStyle;
+                value.rowBubbles.push(rowColumns);
             }
+            value.rowEnabled = true;
             return value;
         });
+
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;
@@ -376,6 +370,10 @@ class ApplicationsController {
         });
 
         this.searchForFilledColumns();
+    }
+
+    deleteBubble(tile) {
+        console.log(tile);
     }
 
     searchForFilledColumns() {
