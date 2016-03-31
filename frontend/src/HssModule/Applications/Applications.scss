@@ -311,7 +311,7 @@ applications {
 
   .bubble-shape {
     position: absolute;
-    top: 2px;
+    top: 1px;
     left: -11px;
     z-index: 20;
     overflow: hidden;
@@ -380,10 +380,11 @@ applications {
       }
   }
 
-  .md-list-tax-text {
+  .md-tax-text {
     display: block;
-    margin: 8px 20px 0;
+    margin: 5px 20px 1px;
     width: calc( 100% - 40px );
+    line-height: 16px;
 
     @include text-truncate();
   }
