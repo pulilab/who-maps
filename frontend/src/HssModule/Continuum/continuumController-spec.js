@@ -1,7 +1,7 @@
 import ContinuumController from './ContinuumController';
 import { EE } from '../../Common/';
 
-/* global define, it, describe, expect, beforeEach, jasmine, spyOn */
+/* global define, it, describe, expect, beforeEach, jasmine, spyOn, xit */
 
 let cc = {};
 const $timeout = arg => {
@@ -115,38 +115,82 @@ describe('continuumController', () => {
             expect(tileMock.activated).toBe(false);
         });
 
-
-        it(', which handles row logic, and emits globally', () => {
+        it(', which emits to hss controller, and uses response event to simply activate col', () => {
             spyOn(window.EE, 'emit');
-
-            cc.editMode = true;
+            spyOn(cc, 'checkColumnActivation');
             const tileMock = {
                 activated: false,
                 columnId: 3
             };
-            cc.firstRow = [0, 1, 2, {
-                activated: false
-            }];
+            cc.editMode = true;
             cc.toggleColumnActivationClick(tileMock);
-            expect(cc.firstRow[3].activated).toBe(true);
-            expect(tileMock.activated).toBe(true);
+            expect(window.EE.emit).toHaveBeenCalledWith('hssPleaseActivateColumn', {
+                columnId: 3,
+                activated: true
+            });
+            expect(cc.checkColumnActivation).toHaveBeenCalledWith(tileMock);
+        });
 
+        it(', which handles deactivation logic', () => {
+            spyOn(window.EE, 'once');
+            spyOn(window.EE, 'emit');
+            cc.constructor($timeout);
+            cc.editMode = true;
+
+            let tileMock = {
+                columnId: 1,
+                activated: true
+            };
             cc.toggleColumnActivationClick(tileMock);
-            expect(cc.firstRow[3].activated).toBe(false);
-            expect(tileMock.activated).toBe(false);
-
+            expect(window.EE.once).toHaveBeenCalled();
             expect(window.EE.emit).toHaveBeenCalled();
 
-        });
-    });
+            tileMock = {
+                columnId: 4,
+                activated: true
+            };
+            cc.firstRow[4] = {};
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
 
-    it('has a fn., that emits on columnactivation', () => {
-        expect(cc.columnChEmit).toBeDefined();
-        spyOn(window.EE, 'emit');
-        cc.columnChEmit(2, true);
-        expect(window.EE.emit).toHaveBeenCalledWith('hssColumnActiveState', {
-            columnId: 2,
-            activated: true
+            tileMock = {
+                columnId: 4,
+                activated: true
+            };
+            cc.motherRow[4].activated = false;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
+
+            tileMock = {
+                columnId: 5,
+                activated: true,
+                type: 'mother'
+            };
+            cc.childRow[5].activated = true;
+            cc.childRow[6].actiavted = true;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(tileMock.activated).toBe(false);
+
+            tileMock = {
+                columnId: 6,
+                activated: true,
+                type: 'child'
+            };
+            cc.motherRow[5].activated = true;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(tileMock.activated).toBe(false);
+
+            tileMock = {
+                columnId: 6,
+                activated: true,
+                type: 'child'
+            };
+            cc.motherRow[5].activated = false;
+            cc.toggleColumnActivationClick(tileMock);
+            expect(window.EE.once).toHaveBeenCalled();
+            expect(window.EE.emit).toHaveBeenCalled();
         });
     });
 

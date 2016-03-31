@@ -1,5 +1,8 @@
 import _ from 'lodash';
-import fetch from 'whatwg-fetch';
+import 'whatwg-fetch';
+import 'es6-promise';
+
+/* global Promise */
 
 class AuthApi {
 
@@ -26,13 +29,51 @@ class AuthApi {
             });
     }
 
+    post(endpoint, data) {
+        const request = _.cloneDeep(this.request);
+        const body = new FormData();
+        let performRequest = true;
+        _.forEach(data, item => {
+            if (!item.hasOwnProperty('name')) {
+                console.warn('AuthApi: name property missing, record skipped ');
+                performRequest = false;
+                return;
+            }
+            if (!item.hasOwnProperty('value')) {
+                console.warn('AuthApi: value property missing, record skipped ');
+                performRequest = false;
+                return;
+            }
+            body.append(item.name, item.value);
+        });
+
+        if (!performRequest) {
+            return Promise.reject('Empty data to post');
+        }
+
+        request.method = 'POST';
+        request.body = body;
+        return fetch(this.baseUrl + endpoint, request)
+            .then((response) => {
+                return response;
+            });
+    }
+
+    postSingle(endpoint, keyString, data) {
+        const item = [{
+            name: keyString,
+            value: data
+        }];
+        return this.post(endpoint, item);
+    }
+
     retrieveToken() {
         return window.sessionStorage.getItem('token');
     }
 
     generateHeaders() {
         const headers = new Headers();
-        headers.append('Authorization', this.token);
+        headers.append('HTTP_AUTHORIZATION', this.token);
         return headers;
     }
 

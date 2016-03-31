@@ -8,6 +8,7 @@ class ContinuumController {
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
+            vm.timeout = $timeout;
             vm.firstRow = this.firstRowGenerator();
             vm.motherRow = this.motherRowGenerator();
             vm.childRow = this.childRowGenerator();
@@ -101,44 +102,107 @@ class ContinuumController {
 
     toggleColumnActivationClick(tile) {
 
-        if (this.editMode && !tile.empty) {
-
-            tile.activated = !tile.activated;
-            this.checkColumnActivation(tile);
+        if (!this.editMode || tile.empty) {
+            return;
         }
 
+        // ACTIVATING
+        else if (!tile.activated) {
+            this.EE.once('hssGuysActivateColumn', () => {
+                tile.activated = true;
+            });
+            this.EE.emit('hssPleaseActivateColumn', {
+                columnId: tile.columnId,
+                activated: true
+            });
+            if (tile.type === 'mother' && tile.columnId === 5) {
+                this.EE.emit('hssPleaseActivateColumn', {
+                    columnId: 6,
+                    activated: true
+                });
+            }
+        }
+
+        // DEACTIVATING
+        else {
+
+            if (tile.columnId < 4) {
+                this.EE.once('hssGuysActivateColumn', obj => {
+                    tile.activated = obj.activated;
+                });
+                this.EE.emit('hssHasColumnContent', tile.columnId);
+            }
+
+            else if (tile.columnId === 4 &&
+                     this.motherRow[tile.columnId].activated &&
+                     this.childRow[tile.columnId].activated) {
+
+                tile.activated = false;
+            }
+
+            else if (tile.columnId === 4) {
+                this.EE.once('hssGuysActivateColumn', obj => {
+                    tile.activated = obj.activated;
+                });
+                this.EE.emit('hssHasColumnContent', tile.columnId);
+            }
+
+            else if (tile.type === 'mother') {
+                if (this.childRow[5].activated && this.childRow[6].activated) {
+                    tile.activated = false;
+                }
+                this.EE.once('hssHasContentLastTwo', obj => {
+
+                    const needed = (obj.five && this.childRow[5].activated === false) ||
+                        (obj.six && this.childRow[6].activated === false);
+
+                    if (!needed) {
+                        tile.activated = false;
+                        if (!obj.six && this.childRow[6].activated === false) {
+                            this.EE.emit('hssHasColumnContent', 6);
+                        }
+                        if (!obj.five && this.childRow[5].activated === false) {
+                            this.EE.emit('hssHasColumnContent', 5);
+                        }
+                    }
+                });
+
+                this.EE.emit('hssHasColumnContentLastTwo');
+            }
+
+            else {
+                if (this.motherRow[5].activated) {
+                    tile.activated = false;
+                }
+                else {
+                    this.EE.once('hssGuysActivateColumn', obj => {
+                        tile.activated = obj.activated;
+                    });
+                    this.EE.emit('hssHasColumnContent', tile.columnId);
+                }
+            }
+        }
+
+        this.checkColumnActivation(tile);
     }
 
-    // Global Column activation handling (missing childs/double)
+    // First row activation handling for ng-class bindings (missing childs/double)
     checkColumnActivation(tile) {
         if (tile.columnId < 4) {
             this.firstRow[tile.columnId].activated = tile.activated;
-            this.columnChEmit(tile.columnId, tile.activated);
         }
         else if (tile.columnId === 4) {
             this.firstRow[tile.columnId].activated = tile.activated ||
                 this.motherRow[4].activated ||
                 this.childRow[4].activated;
-            this.columnChEmit(4, this.firstRow[tile.columnId].activated);
         }
         else if (tile.columnId === 5) {
             this.firstRow[5].activated = this.childRow[5].activated || this.motherRow[5].activated;
-            this.columnChEmit(5, this.firstRow[5].activated);
-
             this.firstRow[6].activated = this.childRow[6].activated || this.motherRow[5].activated;
-            this.columnChEmit(6, this.firstRow[6].activated);
         }
         else {
             this.firstRow[6].activated = this.childRow[6].activated || this.motherRow[5].activated;
-            this.columnChEmit(6, this.firstRow[6].activated);
         }
-    }
-
-    columnChEmit(column, state) {
-        this.EE.emit('hssColumnActiveState', {
-            columnId: column,
-            activated: state
-        });
     }
 
     exportPdf() {

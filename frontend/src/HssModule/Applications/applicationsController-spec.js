@@ -1,14 +1,42 @@
-import ApplicationsController from "./ApplicationsController";
-import _ from "lodash";
-import {hss, applicationsLib} from "../hssMockData";
-import {EE} from "../../Common/";
+import ApplicationsController from './ApplicationsController';
+import _ from 'lodash';
+import { hss, applicationsLib } from '../hssMockData';
+import { EE } from '../../Common/';
+import 'es6-promise';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
+
+/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let ac = {};
 const $timeout = arg => {
     arg();
 };
+const $dialog =  {
+    confirm: () => {
+    },
+
+    show: () =>{
+        return Promise.resolve();
+    }
+};
+const confirmMock = {
+    title: () => {
+        return confirmMock;
+    },
+    textContent: () => {
+        return confirmMock;
+    },
+    ariaLabel: () => {
+        return confirmMock;
+    },
+    ok: () => {
+        return confirmMock;
+    },
+    cancel: () => {
+        return confirmMock;
+    }
+}
+
 const hssBackup = _.cloneDeep(hss);
 
 function testObjectProperty(properties, collection) {
@@ -24,7 +52,7 @@ describe('applicationsController', () => {
 
     beforeEach(() => {
         EE.initialize();
-        ac = ApplicationsController.applicationsFactory()($timeout);
+        ac = ApplicationsController.applicationsFactory()($timeout, $dialog);
         ac.tiles = 7;
         ac.applicationRow = ac.applicationRowGenerator();
     });
@@ -73,7 +101,7 @@ describe('applicationsController', () => {
     it('should have a function that returns an application specific string of class ', () => {
         const firstColumn = ac.applicationRow[1];
         const classString = ac.applicationClassGenerator(firstColumn);
-        expect(classString).toContain('odd application_disabled no-bubble activated app-closed applications_middle_0 empty-tile');
+        expect(classString).toContain('app odd app-main application_disabled no-bubble activated app-closed applications_middle_0');
     });
 
     it('should have a function that return the activated state of the column if the mother or child continuum are activated', () => {
@@ -106,9 +134,10 @@ describe('applicationsController', () => {
 
     it('should have a function that returns a subApplication specific string of class', () => {
         const firstColumn = ac.applicationRow[1];
+        firstColumn.isMain = false;
         const subApp = _.values(applicationsLib[1].subApplications);
         const classString = ac.subApplicationClassGenerator(subApp, firstColumn);
-        expect(classString).toContain('odd application_disabled no-bubble activated app-closed applications_middle_0 empty-tile');
+        expect(classString).toContain('odd app-sub application_disabled no-bubble activated app-closed applications_middle_0');
     });
 
     it('should have a function that returns a string label for sub applications', () => {
@@ -183,7 +212,10 @@ describe('applicationsController', () => {
                 return value;
             })
             .value();
-        ac.applicationRow = ac.setSubAppEnabled(ac.applicationRow);
+
+        ac.applicationRow = ac.createRowStructure(ac.applicationRow);
+
+        expect(ac.rowObject).toBeDefined();
 
         _.chain(ac.applicationRow)
             .filter(customFilterRowTwo)
@@ -277,6 +309,11 @@ describe('applicationsController', () => {
         ac.startTile = ac.applicationRow[1];
         candidates = ac.findSameRowCandidate(ac.applicationRow[4]);
         expect(candidates.length).toBe(0);
+
+        ac.startTile = ac.applicationRow[5];
+        ac.startTile.fatherId = 9;
+        candidates = ac.findSameRowCandidate(ac.applicationRow[6]);
+        expect(candidates.length).toBe(0);
     });
 
     it('should have a function that return an empty list if a list with no contiguous activated tile is provided ', () =>{
@@ -327,5 +364,29 @@ describe('applicationsController', () => {
         ac.tileBalloonEndHandler(ac.applicationRow[14]);
         expect(ac.applicationRow[12].colSpan).toBe(3);
 
+    });
+
+    it('should have a function that perform a bubble deletion', () => {
+        ac.startTile = ac.applicationRow[5];
+        ac.tileBalloonEndHandler(ac.applicationRow[7]);
+        const tile = ac.applicationRow[5];
+        expect(tile.bubbleDrawn).toBeTruthy();
+
+        ac.deleteBubble(tile);
+        expect(tile.bubbleDrawn).toBeFalsy();
+        expect(ac.applicationRow[6].colSpan).toBe(1);
+        expect(ac.applicationRow[0].rowBubbles.length).toBe(0);
+    });
+
+    it('should have a function that call a confirm dialog', () => {
+        spyOn(ac.dialog, 'confirm').and.returnValue(confirmMock);
+        ac.confirmDeleteBubble({});
+        expect(ac.dialog.confirm).toHaveBeenCalled();
+    });
+
+    it('should have a function that search for columns with content', () => {
+        spyOn(window.EE, 'emit');
+        ac.searchForFilledColumns();
+        expect(window.EE.emit).toHaveBeenCalled();
     });
 });
