@@ -1,0 +1,70 @@
+<md-input-container class="md-block">
+    <md-icon md-font-library="material-icons">search</md-icon>
+    <input
+        type="text"
+        ng-model="vm.searchStr"
+        ng-click="vm.showSearch = true"
+        aria-label="search input field">
+</md-input-container>
+
+<md-card
+    layout="column"
+    class="md-whiteframe-10dp searchcard"
+    layout-padding
+    ng-hide="!vm.showSearch">
+
+    <md-button
+        ng-click="vm.showSearch = false"
+        class="md-raised md-warn closebtn">
+
+        X
+    </md-button>
+
+    <md-subheader class="md-no-sticky">
+        Filters
+    </md-subheader>
+    <div>
+        <div layout="row" layout-wrap flex>
+            <div ng-repeat="(key, value) in vm.filters" flex="33">
+                <md-checkbox class="md-primary" ng-model="value">
+                    {{key}}
+                </md-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <!-- Some kind of divider needed -->
+    <md-divider
+        ng-if="vm.searchStr"></md-divider>
+
+    <md-subheader
+        class="md-no-sticky"
+        ng-if="vm.searchStr">
+
+        Results ( 3 from {{vm.resultNr}} )
+    </md-subheader>
+
+    <projectcomp
+        ng-if="vm.searchStr"
+        ng-model="vm.projects[0]"
+        has-link=true
+        has-logo=false>
+    </projectcomp>
+
+    <projectcomp
+        ng-if="vm.searchStr"
+        ng-model="vm.projects[1]"
+        has-link=true
+        has-logo=false>
+    </projectcomp>
+
+    <projectcomp
+        ng-if="vm.searchStr"
+        ng-model="vm.projects[2]"
+        has-link=true
+        has-logo=false>
+    </projectcomp>
+
+    <a href="" ng-if="vm.searchStr">See all results...</a>
+</md-card>
+
