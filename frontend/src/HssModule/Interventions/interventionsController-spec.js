@@ -74,7 +74,7 @@ describe('interventionsController', () => {
 
     it('should have a function that resize all the rows', () => {
         ic.resizeRow(9);
-        expect(ic.interventionsRowSpan).toBe(9);
+        expect(ic.interventionsRowSpan.size).toBe(9);
         _.forEach(ic.interventionRow, item => {
             expect(item.rowSpan).toBe(9);
         })
