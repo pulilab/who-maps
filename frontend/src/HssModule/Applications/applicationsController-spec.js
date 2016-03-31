@@ -385,8 +385,6 @@ describe('applicationsController', () => {
     });
 
     it('should have a function that search for columns with content', () => {
-        
-        
         spyOn(window.EE, 'emit');
         ac.searchForFilledColumns();
         expect(window.EE.emit).toHaveBeenCalled();

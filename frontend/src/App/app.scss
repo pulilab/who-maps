@@ -24,6 +24,16 @@
 /* UI ELEMENTS
    ============================= */
 
+md-backdrop {
+  &.md-dialog-backdrop {
+    z-index: 200;
+  }
+}
+
+.md-dialog-container {
+  z-index:201;
+}
+
 .md-fab-not-raised {
   box-shadow: none !important;
 }

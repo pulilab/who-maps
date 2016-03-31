@@ -403,7 +403,7 @@ class ApplicationsController {
             value.rowEnabled = false;
             return value;
         });
-
+        this.searchForFilledColumns();
     }
 
     confirmDeleteBubble(bubble) {
