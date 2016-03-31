@@ -1,9 +1,9 @@
 import angular from 'angular';
 import LandingPageModuleController from './LandingPageModuleController';
-import sampleComponent from './SampleComponent/sampleComponent';
 
 import _template from './LandingPageModule.html';
 import uiRoute from 'angular-ui-router';
+import './landingPage.scss';
 
 const moduleName = 'landingPageModule';
 
@@ -27,7 +27,6 @@ config.$inject = ['$stateProvider'];
 
 angular.module(moduleName, [uiRoute])
     .controller(moduleName + '.' + moduleName + 'Controller', LandingPageModuleController)
-    .component('sampleComponent', sampleComponent)
     .config(config);
 
 export default moduleName;
