@@ -33,25 +33,25 @@
 
         <div ng-class="tile.classGenerator(tile)">
             <div ng-if="tile.activated">
-              <md-list flex ng-if="!vm.editMode">
-                  <md-list-item class="md-1-line" ng-repeat="item in tile.content">
-                      <div class="md-list-item-text md-small" layout="column">
-                          {{item}}
-                      </div>
-                  </md-list-item>
-              </md-list>
-                  <ssmenu ng-if="vm.editMode"
-                          ng-model="tile.content"
-                          options="tile.selectValues"
-                          aria-label="intervention-option"
-                          multiple="true"
-                          data-placeholder="Select item(s)"
-                          md-container-class="small multiple"
-                          replace-comma="true"
-                          searchable="true"
-                          class="small multiple" >
-
-                  </ssmenu>
+                <md-list flex ng-if="!vm.editMode">
+                    <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                        <div class="md-list-item-text md-small" layout="column">
+                            {{item}}
+                        </div>
+                    </md-list-item>
+                </md-list>
+                <ssmenu
+                    ng-if="vm.editMode"
+                    ng-model="tile.content"
+                    options="tile.selectValues"
+                    aria-label="intervention-option"
+                    multiple="true"
+                    data-placeholder="Select item(s)"
+                    md-container-class="small"
+                    replace-comma="true"
+                    searchable="true"
+                    class="small multiline">
+                </ssmenu>
             </div>
         </div>
     </md-grid-tile>

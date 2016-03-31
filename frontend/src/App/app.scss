@@ -26,12 +26,12 @@
 
 md-backdrop {
   &.md-dialog-backdrop {
-    z-index: 200;
+    z-index: 1200;
   }
 }
 
 .md-dialog-container {
-  z-index:201;
+  z-index: 1201;
 }
 
 .md-fab-not-raised {
@@ -44,7 +44,8 @@ md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
 }
 
 // Select - small
-md-select.small {
+md-select.small,
+ssmenu.small {
   font-size: $caption-font-size-base;
 }
 
@@ -77,9 +78,24 @@ md-select.small {
 }
 
 // Select - multiple
-md-select.multiple {}
+md-select.multiline,
+ssmenu.multiline {
+  .md-select-value {
+    .md-text {
+      display: block;
+      margin: 3px 0 4px;
 
-.md-select-menu-container.multiple {
+      @include text-truncate();
+    }
+    .md-select-icon {
+      margin-bottom: 4px;
+
+      align-self: flex-end;
+    }
+  }
+}
+
+.md-select-menu-container {
   span {
     display: block;
     padding: 10px 0 5px 10px;
@@ -87,6 +103,22 @@ md-select.multiple {}
     text-transform: uppercase;
     font-weight: 500;
     font-size: $caption-font-size-base;
+  }
+
+  input {
+    box-sizing: border-box;
+    margin: 10px 10px 5px;
+    padding: 2px;
+    width: calc( 100% - 20px );
+    outline: none;
+    border: 1px solid $color-gray-lighter;
+    color: $text-primary;
+    font-size: $caption-font-size-base;
+    transition: $swift-ease-out;
+
+    &:focus {
+      background-color: $color-gray-lightest;
+    }
   }
 }
 

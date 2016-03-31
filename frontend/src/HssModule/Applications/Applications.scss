@@ -10,8 +10,10 @@ applications {
   }
 
   .header {
+    z-index: 30;
     width: 100%;
     height: 100%;
+    border-bottom: 1px solid $color-gray-lighter;
     background-color: #EEEEEE !important;
 
     h2 {
@@ -116,10 +118,11 @@ applications {
   .tile {
     width: 100%;
     height: 100%;
-    border-top: 1px solid $color-gray-lighter;
+    border-top: 1px solid #EEEEEE;
 
     &.app-header,
     &.app-tax {
+      border-right: none !important;
       background-color: #fff !important;
     }
 
@@ -127,6 +130,23 @@ applications {
       md-icon {
         &:before {
           content: "arrow_drop_up";
+        }
+      }
+    }
+
+    &.app-sub {
+      border-top: none !important;
+
+      .app-number {
+        &::before {
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          display: inline-block;
+          width: 1px;
+          height: 21px;
+          background-color: #BDBDBD;
+          content: "";
         }
       }
     }
@@ -166,23 +186,6 @@ applications {
             content: "done";
             opacity: 1;
           }
-        }
-      }
-    }
-
-    &.sub {
-      border-top: none !important;
-
-      .app-number {
-        &::before {
-          position: absolute;
-          bottom: 100%;
-          left: 50%;
-          display: inline-block;
-          width: 1px;
-          height: 21px;
-          background-color: #BDBDBD;
-          content: "";
         }
       }
     }
@@ -333,7 +336,6 @@ applications {
     display: -webkit-box;
     overflow: hidden;
     max-height: 36px;
-    //
     width: 100%;
     height: auto;
     color: $color-white !important;
@@ -355,6 +357,7 @@ applications {
     padding: 4px;
     width: 24px;
     height: 24px;
+    outline: none;
     cursor: pointer;
     transform: translateY(-50%);
 
