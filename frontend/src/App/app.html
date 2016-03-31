@@ -1,9 +1,39 @@
 <md-content>
-    <md-toolbar class="md-medium-tall">
+    <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
             <h2>
                 <span>MAPS Toolkit</span>
             </h2>
+            <md-button class="md-icon-button" aria-label="Apps"  ui-sref="settings">
+                <md-icon class="material-icons md-light md-48">apps</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Public" >
+                <md-icon class="material-icons md-light md-48">public</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Help" >
+                <md-icon class="material-icons md-light md-48">help_outline</md-icon>
+            </md-button>
+            <span flex ></span>
+            <md-button ui-sref="info" ui-sref-active="active">What is MAPS Toolkit?</md-button>
+            <md-button class="md-icon-button" aria-label="Search" >
+                <md-icon class="material-icons md-light md-48">search</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="User" >
+                <md-icon class="material-icons md-light md-48">person_outline</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Notification" >
+                <md-icon class="material-icons md-light md-48">mail_outline</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Plus" >
+                <md-icon class="material-icons md-light md-48">add</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-toolbar class="md-medium-tall">
+        <div class="md-toolbar-tools">
+            <h3>
+                <span>PROJECT</span>
+            </h3>
             <span flex></span>
             <md-button class="" aria-label="Settings"  ui-sref="settings">
                 <md-icon class="material-icons md-light md-48">settings</md-icon>
@@ -18,8 +48,15 @@
                 More Actions
             </md-button>
         </div>
+
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <md-button ui-sref="hssModule" ui-sref-active="active">Visualize Project</md-button>
+            <md-button ui-sref="maps" ui-sref-active="active">Improve Project</md-button>
+            <md-button ui-sref="dashboard" ui-sref-active="active">Update Score</md-button>
+
+            <span flex></span>
+
+            <div> project info</div>
         </div>
     </md-toolbar>
     <ui-view name="main"></ui-view>
