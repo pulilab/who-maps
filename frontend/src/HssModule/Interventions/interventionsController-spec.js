@@ -63,4 +63,20 @@ describe('interventionsController', () => {
         });
 
     });
+
+    it('should have a function that check the max number of interventions selected', () => {
+        spyOn(ic, 'resizeRow');
+        ic.interventionRow[0].content = [1, 2, 3];
+        ic.checkSelected();
+        expect(ic.resizeRow).toHaveBeenCalledWith(2);
+
+    });
+
+    it('should have a function that resize all the rows', () => {
+        ic.resizeRow(9);
+        expect(ic.interventionsRowSpan).toBe(9);
+        _.forEach(ic.interventionRow, item => {
+            expect(item.rowSpan).toBe(9);
+        })
+    });
 });
