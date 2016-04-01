@@ -3,11 +3,12 @@ import { hss, applicationsLib, taxonomyLib } from '../hssMockData';
 
 class ApplicationsController {
 
-    constructor($timeout) {
+    constructor($timeout, $mdDialog) {
         const vm = this;
         this.rowObject = {};
         $timeout(() => {
             vm.EE = window.EE;
+            this.dialog = $mdDialog;
             vm.editMode = false;
             this.startTile = {};
             this.tileClickCounter = 0;
@@ -22,7 +23,7 @@ class ApplicationsController {
 
     handleEditMode(value) {
         this.editMode = value;
-        this.preProcessRows();
+        this.processRows();
     }
 
     handleColumnActivation(event) {
@@ -224,7 +225,7 @@ class ApplicationsController {
         return cols;
     }
 
-    preProcessRows() {
+    processRows() {
         _.chain(11)
             .range()
             .forEach(value => {
@@ -251,8 +252,7 @@ class ApplicationsController {
                 'father_' + item.fatherId + '.rowIndex_' + item.rowIndex + '.columnId_' + item.columnId,
                 item);
         });
-        console.log(vm.rowObject);
-        this.preProcessRows();
+        this.processRows();
     }
 
     toggleSubApp(tile) {
@@ -289,7 +289,7 @@ class ApplicationsController {
 
     findSameRowCandidate(tile) {
         if (tile.rowIndex !== this.startTile.rowIndex
-            && this.startTile.fatherId !== tile.fatherId) {
+            || this.startTile.fatherId !== tile.fatherId) {
             return [];
         }
         return _.chain(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex])
@@ -348,7 +348,7 @@ class ApplicationsController {
         _.map(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex], value => {
             if (value.isHeader) {
                 applicationStyle = value.applicationStyle;
-                value.rowBubbles.push(rowColumns);
+                value.rowBubbles.push(rowColumns[0].columnId);
             }
             value.rowEnabled = true;
             return value;
@@ -372,8 +372,51 @@ class ApplicationsController {
         this.searchForFilledColumns();
     }
 
-    deleteBubble(tile) {
-        console.log(tile);
+    deleteBubble(bubble) {
+        const toAdd = [];
+        const index = _.findIndex(this.applicationRow, bubble);
+        _.chain(bubble.colSpan)
+            .range()
+            .forEach(tileIndex => {
+                const colId = 'columnId_' + (bubble.columnId + tileIndex);
+                const item = this.rowObject['father_' + bubble.fatherId]['rowIndex_' + bubble.rowIndex][colId];
+                item.colSpan = 1;
+                item.content = '';
+                item.bubbleDrawn = false;
+                item.status = '';
+                item.invisible = false;
+                item.className = _.replace(item.className, 'selected', '');
+                if (tileIndex !== 0) {
+                    toAdd.push(item);
+                }
+            })
+            .value();
+        _.forEach(toAdd, (value, key) => {
+            this.applicationRow.splice((index + key), 0, value);
+        });
+        _.map(this.rowObject['father_' + bubble.fatherId]['rowIndex_' + bubble.rowIndex], value => {
+            if (value.isHeader) {
+                _.remove(value.rowBubbles, n => {
+                    return n === bubble.columnId;
+                });
+            }
+            value.rowEnabled = false;
+            return value;
+        });
+        this.searchForFilledColumns();
+    }
+
+    confirmDeleteBubble(bubble) {
+        const vm = this;
+        const confirm = this.dialog.confirm()
+            .title('Warning')
+            .textContent('Are you sure?')
+            .ariaLabel('Bubble Delete')
+            .ok('Ok')
+            .cancel('Cancel');
+        this.dialog.show(confirm).then(() => {
+            vm.deleteBubble(bubble);
+        });
     }
 
     searchForFilledColumns() {
@@ -381,7 +424,7 @@ class ApplicationsController {
         const containArr = [false, false, false, false, false, false, false];
 
         const notEmpties = this.applicationRow.filter(el => {
-            return el.content.length > 0 && el.isInput;
+            return el.bubbleDrawn;
         });
 
         notEmpties.forEach(el => {
@@ -395,11 +438,11 @@ class ApplicationsController {
 
     static applicationsFactory() {
         require('./Applications.scss');
-        function applications($timeout) {
-            return new ApplicationsController($timeout);
+        function applications($timeout, $mdDialog) {
+            return new ApplicationsController($timeout, $mdDialog);
         }
 
-        applications.$inject = ['$timeout'];
+        applications.$inject = ['$timeout', '$mdDialog'];
 
         return applications;
     }

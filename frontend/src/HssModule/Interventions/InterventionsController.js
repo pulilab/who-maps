@@ -8,6 +8,10 @@ class InterventionsController {
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
+            vm.interventionsRowSpan = {
+                size: 4
+            };
+            this.resizeRow = this.resizeRow.bind(this);
             this.interventionRow = this.middleColumnGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssColumnActiveState', this.handleColumnActivation.bind(this));
@@ -16,6 +20,7 @@ class InterventionsController {
 
     handleEditMode(value) {
         this.editMode = value;
+        this.checkSelected();
     }
 
     handleColumnActivation(event) {
@@ -55,6 +60,27 @@ class InterventionsController {
                 };
             })
             .value();
+    }
+
+    checkSelected() {
+        const max = _.maxBy(this.interventionRow, item => {
+            if (item && item.content) {
+                return item.content.length;
+            }
+            return 0;
+        });
+        if (max.content) {
+            this.resizeRow(Math.abs(max.content.length / 1.5));
+        }
+
+    }
+
+    resizeRow(newValue) {
+        const rowSpan = Math.max(newValue, this.interventionsRowSpan.size);
+        this.interventionsRowSpan.size = rowSpan;
+        _.forEach(this.interventionRow, item => {
+            item.rowSpan = rowSpan;
+        });
     }
 
     static interventionsFactory() {

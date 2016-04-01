@@ -12,6 +12,14 @@ class ConstraintsController {
 
     handleEditMode(value) {
         this.editMode = value;
+        this.checkSizeAndFireCallback();
+    }
+
+    checkSizeAndFireCallback() {
+        const active = _.filter(this.constraints, { active: true });
+        if (this.resizeCallback) {
+            this.resizeCallback(active.length);
+        }
     }
 
     constraintsToggleGenerator() {

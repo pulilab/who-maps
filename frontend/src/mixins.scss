@@ -17,11 +17,11 @@
 
 // CSS image replacement
 @mixin text-hide() {
-  font: "0/0" a;
+  border: 0;
+  background-color: transparent;
   color: transparent;
   text-shadow: none;
-  background-color: transparent;
-  border: 0;
+  font: "0/0" a;
 }
 
 .text-hide {
@@ -40,17 +40,18 @@
 
 // MD icon inline
 @mixin md-icon($font-size: 24px) {
-  font-family: 'Material Icons';
+  display: inline-block;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  letter-spacing: normal;
   font-weight: normal;
   font-style: normal;
   font-size: $font-size;
+  font-family: 'Material Icons';
   line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
   direction: ltr;
+
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
@@ -74,8 +75,8 @@
 // Center-align a block level element
 @mixin center-block() {
   display: block;
-  margin-left: auto;
   margin-right: auto;
+  margin-left: auto;
 }
 
 .center-block {
@@ -90,9 +91,9 @@
 
 @mixin clearfix() {
   &::after {
-    content: "";
     display: table;
     clear: both;
+    content: "";
   }
 }
 

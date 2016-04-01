@@ -41,4 +41,11 @@ describe('constraintsController', () => {
             .toHaveBeenCalledWith('hssConstraintsSelected', cc.constraints);
     });
 
+    it('should have a function that check the number of selected constraints and fire a callback if present', () => {
+        const cb = jasmine.createSpy('callback');
+        cc.resizeCallback = cb;
+        cc.checkSizeAndFireCallback();
+        expect(cb).toHaveBeenCalled();
+    })
+
 });

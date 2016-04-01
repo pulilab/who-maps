@@ -14,14 +14,14 @@
 
     <md-grid-tile
         md-colspan="2"
-        md-rowspan="5"
+        md-rowspan="{{vm.interventionsRowSpan.size + 1}}"
         class="constraints">
-        <constraints></constraints>
+        <constraints resize-callback="vm.resizeRow"></constraints>
     </md-grid-tile>
 
     <md-grid-tile
         md-colspan="2"
-        md-rowspan="4">
+        md-rowspan="{{vm.interventionsRowSpan.size}}"
         <!-- This is empty! -->
     </md-grid-tile>
 
