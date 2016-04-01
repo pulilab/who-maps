@@ -36,8 +36,27 @@ ui-view > md-content {
    ============================= */
 
 .md-button {
+
   &.wide {
     padding: $button-padding-wide;
+  }
+
+  &.md-fab {
+    &.md-tiny {
+      padding: 0;
+      min-height: 0;
+      width: $button-fab-tiny-width;
+      height: $button-fab-tiny-height;
+      line-height: $button-fab-tiny-line-height;
+
+      .material-icons {
+        width: $button-fab-tiny-width;
+        height: $button-fab-tiny-height;
+        vertical-align: baseline;
+        font-size: 18px;
+        line-height: $button-fab-tiny-height;
+      }
+    }
   }
 }
 
