@@ -5,7 +5,6 @@ class AppModuleController {
         this.user = {
             username: 'John Snow',
             role: 'Admin',
-
             projects: ['Project 1', 'Project 2']
         };
 

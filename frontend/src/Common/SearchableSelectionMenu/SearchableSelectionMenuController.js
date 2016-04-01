@@ -16,13 +16,11 @@ class SearchableSelectionMenuController {
 
     selectOpen() {
         this.isOpen = true;
-        console.log(this);
     }
 
     selectClose() {
         this.isOpen = false;
         this.fixComma();
-        console.log(this);
     }
 
     fixComma() {
