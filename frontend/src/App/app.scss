@@ -2,6 +2,17 @@
 @import '../variables';
 @import '../mixins';
 
+/* GENERAL
+   ============================= */
+
+ui-view > md-content {
+  background-color: $color-page-background;
+}
+
+.page-wrapper {
+  background-color: $color-white;
+}
+
 
 /* TYPOGRAPY
    ============================= */
@@ -9,7 +20,7 @@
 .page-title {
   color: $color-primary;
 
-  + .md-subhead {
+  .md-subhead {
     margin-top: 0;
     margin-left: 10%;
     max-width: 80%;
@@ -23,6 +34,12 @@
 
 /* UI ELEMENTS
    ============================= */
+
+.md-button {
+  &.wide {
+    padding: $button-padding-wide;
+  }
+}
 
 md-backdrop {
   &.md-dialog-backdrop {
