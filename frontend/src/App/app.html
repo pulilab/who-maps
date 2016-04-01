@@ -62,7 +62,7 @@
                 <md-menu-content width="6">
                     <md-menu-item ng-repeat="notification in vm.notifications">
                         <p>
-                        Pabst pop-up jean shorts portland gastropub everyday carry.
+                            Pabst pop-up jean shorts portland gastropub everyday carry.
                         </p>
                     </md-menu-item>
                 </md-menu-content>
@@ -104,7 +104,7 @@
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
             <h3>
-               <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.user.currentProject" ></ssmenu>
+                <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" ></ssmenu>
             </h3>
             <span flex></span>
             <md-button class="" aria-label="Settings"  ui-sref="settings">
@@ -128,7 +128,25 @@
 
             <span flex></span>
 
-            <div> project info</div>
+            <span layout="row" layout-align="center start">
+                <span >
+                    <b>
+                        Version {{vm.currentProject.version.id}}
+                    </b>
+                    {{vm.currentProject.version.date}}
+                </span>
+                <span>
+                    Organization:
+                    {{vm.currentProject.organization}}
+                </span>
+                <md-button ng-href="mailto:{{vm.currentProject.contact.email}}">
+                    <md-icon class="material-icons md-light md-48">
+                        mail_outline
+                    </md-icon>
+                    {{vm.currentProject.contact.name}}
+                </md-button>
+
+            </span>
         </div>
     </md-toolbar>
     <ui-view name="main"></ui-view>
