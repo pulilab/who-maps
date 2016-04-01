@@ -290,6 +290,7 @@ applications {
       background-color: $color-green;
 
       &::after {
+        float: left;
         display: inline-block;
         width: 100%;
         height: 100%;
@@ -301,7 +302,7 @@ applications {
         transition: $swift-ease-out;
         transform: translate3d(0,0,0);
 
-        @include md-icon(21px);
+        @include md-icon(23px);
       }
     }
     &.bubble-notallowed {
