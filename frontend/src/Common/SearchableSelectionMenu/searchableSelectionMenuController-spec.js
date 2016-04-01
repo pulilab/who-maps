@@ -5,7 +5,7 @@ import SearchableSelectionMenuController from './SearchableSelectionMenuControll
 let sc = {};
 let tmp = void 0;
 
-describe('introJsController', () => {
+describe('searchableSelectionMenuController', () => {
 
     beforeEach(() => {
         sc = SearchableSelectionMenuController.ssMenuFactory()();

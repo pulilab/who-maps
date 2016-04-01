@@ -1,17 +1,19 @@
 <md-input-container ng-class="vm.mdContainerClass">
     <md-select ng-model="vm.ngModel"
                aria-label="vm.ariaLabel"
-               multiple placeholder="{{vm.placeholder}}"
+               placeholder="{{vm.placeholder}}"
                md-on-close="vm.selectClose()"
                md-on-open="vm.selectOpen()"
                md-container-class="{{vm.mdContainerClass}}"
-               >
+               ng-multiple="vm.multiple"
+    >
+
+
         <input ng-if="vm.isOpen && vm.searchable"
                ng-keydown="vm.searchKey($event)"
                type="text"
                ng-model="vm.search.text"
         />
-
         <md-option
                 ng-repeat="option in vm.options | filter:vm.search.text"
                 value="{{option}}">

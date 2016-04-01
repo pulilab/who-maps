@@ -1,14 +1,14 @@
 
 class AppModuleController {
 
-    constructor(){
+    constructor() {
         this.user = {
             username: 'John Snow',
             role: 'Admin',
             currentProject: 'Project 1',
-            projects: ['Project 1', 'Project 2', 'Project 3']
+            projects: ['Project 1', 'Project 2']
         };
-        
+
         this.notifications = [1, 2, 3];
     }
 

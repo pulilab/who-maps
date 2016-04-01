@@ -2,16 +2,11 @@ import _ from 'lodash';
 import angular from 'angular';
 class SearchableSelectionMenuController {
 
-    constructor($element, $timeout) {
+    constructor($element) {
         const vm = this;
         vm.element = $element;
         this.search = {};
         this.isOpen = false;
-
-        $timeout(() => {
-            
-            console.log(vm.options)
-        },100)
     }
 
 
@@ -43,11 +38,11 @@ class SearchableSelectionMenuController {
 
     static ssMenuFactory() {
         require('./SearchableSelectionMenu.scss');
-        function ssMenu($element, $timeout) {
-            return new SearchableSelectionMenuController($element, $timeout);
+        function ssMenu($element) {
+            return new SearchableSelectionMenuController($element);
         }
 
-        ssMenu.$inject = ['$element', '$timeout'];
+        ssMenu.$inject = ['$element'];
 
         return ssMenu;
     }
