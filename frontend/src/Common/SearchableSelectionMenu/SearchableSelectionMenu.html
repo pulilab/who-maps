@@ -4,8 +4,8 @@
                multiple placeholder="{{vm.placeholder}}"
                md-on-close="vm.selectClose()"
                md-on-open="vm.selectOpen()"
-               md-container-class="{{vm.mdContainerClass}}">
-
+               md-container-class="{{vm.mdContainerClass}}"
+               >
         <input ng-if="vm.isOpen && vm.searchable"
                ng-keydown="vm.searchKey($event)"
                type="text"

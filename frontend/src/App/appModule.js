@@ -17,6 +17,7 @@ import countryView from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
+import { Components } from '../Common/';
 
 
 const moduleName = 'app';
@@ -40,6 +41,7 @@ angular.module(moduleName,
     [
         uiRoute,
         angularMd,
+        Components,
         hssModule,
         cms,
         countryView,
@@ -48,7 +50,7 @@ angular.module(moduleName,
         mapsToolkit
     ]
 )
-    .controller(moduleName + '.appController', AppController)
+    .controller(moduleName + '.appController', AppController.appControllerFactory())
     .config(config);
 
 export default moduleName;

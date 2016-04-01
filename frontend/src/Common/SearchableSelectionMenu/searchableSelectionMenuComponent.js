@@ -14,7 +14,8 @@ const searchableSelectionMenuComponent = {
         placeholder: '@',
         mdContainerClass: '@',
         replaceComma: '<',
-        searchable: '<'
+        searchable: '<',
+        multiple: '<'
 
     }
 };

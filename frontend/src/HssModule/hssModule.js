@@ -9,8 +9,6 @@ import Constraints from './Constraints/';
 import Applications from './Applications/';
 import ProjectScale from './ProjectScale/';
 import ProjectPartners from './ProjectPartners';
-import { IntroJs } from '../Common/';
-import { SearchableSelectionMenu } from '../Common/';
 
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
@@ -47,8 +45,6 @@ angular.module(moduleName,
     .component(Applications.name, Applications)
     .component(ProjectScale.name, ProjectScale)
     .component(ProjectPartners.name, ProjectPartners)
-    .component(IntroJs.name, IntroJs)
-    .component(SearchableSelectionMenu.name, SearchableSelectionMenu)
     .config(config);
 
 export default moduleName;
