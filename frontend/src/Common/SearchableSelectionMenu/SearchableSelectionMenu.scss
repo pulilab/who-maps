@@ -1,7 +1,34 @@
 @import '../../variables';
 @import '../../mixins';
 
-// md-select.small,
+.md-select-menu-container {
+  md-option {
+    padding: 0 20px 0 36px;
+
+    .md-text {
+      color: $text-secondary;
+    }
+
+    &[selected="selected"] {
+      &::before {
+        position: absolute;
+        top: 55%;
+        left: 10px;
+        color: $text-primary;
+        content: "done";
+        transform: translateY(-50%);
+
+        @include md-icon(inherit);
+      }
+
+      .md-text {
+        color: $text-primary;
+      }
+    }
+  }
+}
+
+md-select.small,
 ssmenu.small {
   font-size: $caption-font-size-base;
 }
@@ -12,30 +39,21 @@ ssmenu.small {
     height: 24px;
 
     .md-text {
-      color: $text-secondary;
       font-size: $caption-font-size-base;
     }
 
     &[selected="selected"] {
       &::before {
-        position: absolute;
-        top: 6px;
+        top: 55%;
         left: 8px;
-        color: $text-primary;
-        content: "done";
 
         @include md-icon($body-font-size-base);
-      }
-
-      .md-text {
-        color: $text-primary;
       }
     }
   }
 }
 
-// Select - multiple
-// md-select.multiline,
+md-select.multiline,
 ssmenu.multiline {
   .md-select-value {
     .md-text {
@@ -65,16 +83,17 @@ ssmenu.multiline {
   .ssmenu-search-input {
     position: relative;
     display: inline-block;
-    width: calc( 100% - 20px );
     margin: 10px 10px 5px;
+    width: calc( 100% - 20px );
 
     &::before {
       position: absolute;
       top: 50%;
       left: 3px;
-      content: "search";
       color: $color-gray-light;
+      content: "search";
       transform: translateY(-50%);
+
       @include md-icon(16px);
     }
   }
