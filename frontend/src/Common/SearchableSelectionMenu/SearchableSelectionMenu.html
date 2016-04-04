@@ -8,15 +8,16 @@
                ng-multiple="vm.multiple"
     >
 
-        <span class="ssmenu-serch-input">
-          <input ng-if="vm.isOpen && vm.searchable"
-                 ng-keydown="vm.searchKey($event)"
-                 type="text"
-                 ng-model="vm.search.text"
-          />
+        <span ng-if="vm.searchable" class="ssmenu-search-input">
+            <input ng-if="vm.isOpen"
+                   ng-keydown="vm.searchKey($event)"
+                   type="text"
+                   ng-model="vm.search.text"
+                   placeholder="Search"
+            />
         </span>
         <div ng-repeat="group in vm.options">
-            <span ng-if="vm.subHeader" class="option-group">{{group[vm.subHeader]}}</span>
+            <span ng-if="vm.subHeader" class="option-group-title">{{group[vm.subHeader]}}</span>
             <md-option
                     ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
                     value="{{option}}">
