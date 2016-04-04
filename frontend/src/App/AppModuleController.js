@@ -21,8 +21,6 @@ class AppModuleController {
             }
         };
 
-
-
         this.notifications = [1, 2, 3];
     }
 
