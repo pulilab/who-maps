@@ -209,6 +209,10 @@ md-checkbox.small {
 
   .md-toolbar-tools {
     background-color: $color-primary;
+
+    .md-button {
+      margin: 0 0 0 10px;
+    }
   }
 
   .project-selector {
@@ -225,6 +229,16 @@ md-checkbox.small {
         .md-select-icon {
           font-size: $caption-font-size-base;
         }
+      }
+    }
+  }
+
+  .project-menu {
+    .md-button {
+      margin: 0 20px 0 0;
+
+      &:first-child {
+        margin-left: -6px;
       }
     }
   }
