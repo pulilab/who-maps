@@ -1,3 +1,80 @@
-ssmenu {
+@import '../../variables';
+@import '../../mixins';
 
+// md-select.small,
+ssmenu.small {
+  font-size: $caption-font-size-base;
+}
+
+.md-select-menu-container.small {
+  md-option {
+    padding: 0 12px 0 26px;
+    height: 24px;
+
+    .md-text {
+      color: $text-secondary;
+      font-size: $caption-font-size-base;
+    }
+
+    &[selected="selected"] {
+      &::before {
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        color: $text-primary;
+        content: "done";
+
+        @include md-icon($body-font-size-base);
+      }
+
+      .md-text {
+        color: $text-primary;
+      }
+    }
+  }
+}
+
+// Select - multiple
+// md-select.multiline,
+ssmenu.multiline {
+  .md-select-value {
+    .md-text {
+      display: block;
+      margin: 3px 0 4px;
+
+      @include text-truncate();
+    }
+    .md-select-icon {
+      margin-bottom: 4px;
+
+      align-self: flex-end;
+    }
+  }
+}
+
+.md-select-menu-container {
+  span {
+    display: block;
+    padding: 10px 0 5px 10px;
+    color: $color-gray-light;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: $caption-font-size-base;
+  }
+
+  input {
+    box-sizing: border-box;
+    margin: 10px 10px 5px;
+    padding: 2px;
+    width: calc( 100% - 20px );
+    outline: none;
+    border: 1px solid $color-gray-lighter;
+    color: $text-primary;
+    font-size: $caption-font-size-base;
+    transition: $swift-ease-out;
+
+    &:focus {
+      background-color: $color-gray-lightest;
+    }
+  }
 }
