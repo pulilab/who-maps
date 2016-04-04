@@ -80,7 +80,7 @@ class InterventionsController {
         if (!newValue.length) {
             return;
         }
-        this.resizeRow(newValue * 0.5);
+        this.resizeRow(newValue.length * 0.5);
     }
 
     resizeRow(newValue) {
