@@ -30,3 +30,15 @@
   }
 
 }
+
+.main-toolbar {
+  .md-toolbar-tools {
+    background-color: #1A237E;
+  }
+}
+
+.md-medium-tall {
+  .md-toolbar-tools {
+    background-color: $color-primary;
+  }
+}
