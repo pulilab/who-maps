@@ -12,6 +12,7 @@ class InterventionsController {
                 size: 4
             };
             this.resizeRow = this.resizeRow.bind(this);
+            this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
             this.interventionRow = this.middleColumnGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssColumnActiveState', this.handleColumnActivation.bind(this));
@@ -75,7 +76,17 @@ class InterventionsController {
 
     }
 
+    calculateInterventionHeight(newValue) {
+        if (!newValue.length) {
+            return;
+        }
+        this.resizeRow(newValue * 0.5);
+    }
+
     resizeRow(newValue) {
+        if (!newValue) {
+            return;
+        }
         const rowSpan = Math.max(newValue, this.interventionsRowSpan.size);
         this.interventionsRowSpan.size = rowSpan;
         _.forEach(this.interventionRow, item => {

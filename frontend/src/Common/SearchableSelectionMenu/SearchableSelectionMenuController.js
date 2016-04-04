@@ -1,20 +1,29 @@
 import _ from 'lodash';
 import angular from 'angular';
+
 class SearchableSelectionMenuController {
 
     constructor($element, $timeout) {
         const vm = this;
         vm.element = $element;
+        vm.timeout = $timeout;
         this.search = {};
         this.isOpen = false;
-        $timeout(()=> {
-            if (vm.subOptions === void 0) {
-                vm.subOptions = 0;
-                const temp = _.cloneDeep(vm.options);
-                vm.options = [{}];
-                vm.options[0][vm.subOptions] = _.cloneDeep(temp);
-            }
-        });
+        vm.timeout(this.initialization.bind(this));
+    }
+
+    initialization() {
+        this.prepareOptionsArray();
+        this.timeout(this.fixComma.bind(this));
+    }
+
+    prepareOptionsArray() {
+        const temp = _.cloneDeep(this.options);
+        if (this.subOptions === void 0) {
+            this.subOptions = 0;
+            this.options = [{}];
+            this.options[0][this.subOptions] = _.cloneDeep(temp);
+        }
     }
 
 
@@ -24,11 +33,17 @@ class SearchableSelectionMenuController {
 
     selectOpen() {
         this.isOpen = true;
+        if (this.onOpenCallback) {
+            this.onOpenCallback();
+        }
     }
 
     selectClose() {
         this.isOpen = false;
         this.fixComma();
+        if (this.onCloseCallback) {
+            this.onCloseCallback(this.ngModel);
+        }
     }
 
     fixComma() {

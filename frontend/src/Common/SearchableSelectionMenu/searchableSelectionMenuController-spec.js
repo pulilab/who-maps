@@ -21,6 +21,10 @@ describe('searchableSelectionMenuController', () => {
         tmp.innerHTML = 'a,b,c,d';
     });
 
+    it('should have a class constructor function ', () => {
+        sc._classCallCheck(null, null);
+    });
+
     it('should have a function that stop events immediate propagation', () => {
         const eventSpy = jasmine.createSpy('eventSpy');
         const mockEvent = document.createEvent('Event');
@@ -37,6 +41,13 @@ describe('searchableSelectionMenuController', () => {
         expect(sc.isOpen).toBeTruthy();
     });
 
+    it('should call the onOpenCallback when the select get open', () => {
+        const spy = jasmine.createSpy('onOpen');
+        sc.onOpenCallback = spy;
+        sc.selectOpen();
+        expect(sc.onOpenCallback).toHaveBeenCalled();
+    });
+
     it('should have a function that set the open flag to false and call the fix comma function', () => {
         spyOn(sc, 'fixComma');
         sc.isOpen = true;
@@ -45,13 +56,20 @@ describe('searchableSelectionMenuController', () => {
         expect(sc.fixComma).toHaveBeenCalled();
     });
 
-    it('should have a function that remove commas from a underlying span when replaceComma is trud', () => {
+    it('should call the onOpenCallback when the select get close', () => {
+        const spy = jasmine.createSpy('onclose');
+        sc.onCloseCallback = spy;
+        sc.selectClose();
+        expect(sc.onCloseCallback).toHaveBeenCalled();
+    });
+
+    it('should have a function that remove commas from a underlying span when replaceComma is true', () => {
         sc.replaceComma = true;
         sc.fixComma();
         expect(tmp.innerHTML).not.toContain(',');
     });
 
-    it('should have a function that remove commas from a underlying span when replaceComma is trud', () => {
+    it('should have a function that remove commas from a underlying span only when replaceComma is true', () => {
         sc.replaceComma = false;
         sc.fixComma();
         expect(tmp.innerHTML).toContain(',');

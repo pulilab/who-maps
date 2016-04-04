@@ -10,14 +10,16 @@ const searchableSelectionMenuComponent = {
     bindings: {
         ngModel: '=',
         ariaLabel: '@',
-        options: '=',
+        options: '<',
         subOptions: '@',
         subHeader: '@',
         placeholder: '@',
         mdContainerClass: '@',
         replaceComma: '<',
         searchable: '<',
-        multiple: '<'
+        multiple: '<',
+        onCloseCallback: '=',
+        onOpenCallback: '='
 
     }
 };
