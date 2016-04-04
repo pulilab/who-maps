@@ -188,6 +188,9 @@ md-checkbox.small {
   }
 
   .md-menu {
+    .has-message {
+      color: $color-white !important;
+    }
     badge {
       height: 1.25em;
       min-width: 1.25em;
@@ -272,6 +275,6 @@ md-checkbox.small {
   .md-button .md-light,
   .md-button .md-icon,
   .md-button span {
-    color: $color-primary-muted !important;
+    color: $color-primary-muted;
   }
 }
