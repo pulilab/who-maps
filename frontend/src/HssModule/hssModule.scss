@@ -4,11 +4,17 @@
 
 .hss-module {
 
+  .page-title {
+    .md-subhead {
+      margin-bottom: 0;
+    }
+  }
+
   md-grid-list {}
 
   md-grid-tile {
     figure > div {
-      border-right: 1px solid rgba(0,0,0,.1);
+      border-right: 1px solid $color-gray-lighter;
       background: $color-white;
       &.odd {
         background: #FAFAFA;
@@ -17,10 +23,9 @@
   }
 
   .hss-module-bottom {
-    margin-top: 1px;
     border-top: 1px solid $color-gray-lighter;
     > div {
-      padding: 50px;
+      padding: 25px 50px;
     }
   }
 

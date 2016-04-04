@@ -2,6 +2,17 @@
 @import '../variables';
 @import '../mixins';
 
+/* GENERAL
+   ============================= */
+
+ui-view > md-content {
+  background-color: $color-page-background;
+}
+
+.page-wrapper {
+  background-color: $color-white;
+}
+
 
 /* TYPOGRAPY
    ============================= */
@@ -9,7 +20,7 @@
 .page-title {
   color: $color-primary;
 
-  + .md-subhead {
+  .md-subhead {
     margin-top: 0;
     margin-left: 10%;
     max-width: 80%;
@@ -24,14 +35,39 @@
 /* UI ELEMENTS
    ============================= */
 
+.md-button {
+
+  &.wide {
+    padding: $button-padding-wide;
+  }
+
+  &.md-fab {
+    &.md-tiny {
+      padding: 0;
+      min-height: 0;
+      width: $button-fab-tiny-width;
+      height: $button-fab-tiny-height;
+      line-height: $button-fab-tiny-line-height;
+
+      .material-icons {
+        width: $button-fab-tiny-width;
+        height: $button-fab-tiny-height;
+        vertical-align: baseline;
+        font-size: 18px;
+        line-height: $button-fab-tiny-height;
+      }
+    }
+  }
+}
+
 md-backdrop {
   &.md-dialog-backdrop {
-    z-index: 200;
+    z-index: 1200;
   }
 }
 
 .md-dialog-container {
-  z-index:201;
+  z-index: 1201;
 }
 
 .md-fab-not-raised {
@@ -41,53 +77,6 @@ md-backdrop {
 // Progress Circular
 md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
   border-width: 16px !important;
-}
-
-// Select - small
-md-select.small {
-  font-size: $caption-font-size-base;
-}
-
-.md-select-menu-container.small {
-  md-option {
-    padding: 0 12px 0 26px;
-    height: 24px;
-
-    .md-text {
-      color: $text-secondary;
-      font-size: $caption-font-size-base;
-    }
-
-    &[selected="selected"] {
-      &::before {
-        position: absolute;
-        top: 6px;
-        left: 8px;
-        color: $text-primary;
-        content: "done";
-
-        @include md-icon($body-font-size-base);
-      }
-
-      .md-text {
-        color: $text-primary;
-      }
-    }
-  }
-}
-
-// Select - multiple
-md-select.multiple {}
-
-.md-select-menu-container.multiple {
-  span {
-    display: block;
-    padding: 10px 0 5px 10px;
-    color: $color-gray-light;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: $caption-font-size-base;
-  }
 }
 
 // Checkbox - small

@@ -8,12 +8,14 @@
                ng-multiple="vm.multiple"
     >
 
+        <span class="ssmenu-serch-input">
+          <input ng-if="vm.isOpen && vm.searchable"
+                 ng-keydown="vm.searchKey($event)"
+                 type="text"
+                 ng-model="vm.search.text"
+          />
+        </span>
 
-        <input ng-if="vm.isOpen && vm.searchable"
-               ng-keydown="vm.searchKey($event)"
-               type="text"
-               ng-model="vm.search.text"
-        />
         <md-option
                 ng-repeat="option in vm.options | filter:vm.search.text"
                 value="{{option}}">
@@ -21,4 +23,3 @@
         </md-option>
     </md-select>
 </md-input-container>
-

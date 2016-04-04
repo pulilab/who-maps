@@ -6,18 +6,16 @@
 
 	<div
 		ng-repeat="logo in vm.logos track by $index"
+    ng-class="{editing: vm.editMode}"
 		class="partner"
 		ng-if="vm.logos.length">
 
-		<img
-			class="logoimg"
-			ng-src="{{logo}}">
-
-
-    <md-button class="md-icon-button" aria-label="Remove logo">
-        <md-icon class="material-icons md-warn logo-remove" ng-if="vm.editMode"
-        ng-click="vm.delLogo(logo)">delete_forever</md-icon>
-    </md-button>
+		<figure>
+		    <img class="logoimg" ng-src="{{logo}}">
+        <md-button ng-if="vm.editMode" class="md-fab md-tiny md-warn small logo-remove" aria-label="Remove logo">
+            <md-icon class="material-icons" ng-click="vm.delLogo(logo)">close</md-icon>
+        </md-button>
+		</figure>
 	</div>
 
 	<div
@@ -29,7 +27,7 @@
 			ng-click="vm.addLogo()">
 
 			<label for="file-input">
-				<md-button class="md-black">Upload logo</md-button>
+				<md-button class="md-black wide">Upload logo</md-button>
 				<input type="file" id="file-input" onchange="fileChange()">
 			</label>
 		</div>

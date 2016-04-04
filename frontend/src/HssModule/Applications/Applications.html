@@ -50,15 +50,15 @@
 
             <div ng-if="tile.isSelect && tile.rowEnabled">
                 <div ng-if="!vm.editMode">
-                    <div ng-repeat="tax in tile.content">
-                        <div class="md-list-tax-text md-small">
+                    <span ng-repeat="tax in tile.content">
+                        <span class="md-tax-text md-small">
                             {{tax}}
-                        </div>
-                    </div>
+                        </span>
+                    </span>
                 </div>
                 <div ng-if="vm.editMode" >
                     <md-input-container >
-                        <md-select ng-model="tile.content" aria-label="taxonomy-option" multiple="true" placeholder="Select item(s)" md-container-class="small multiple" class="small multiple">
+                        <md-select ng-model="tile.content" aria-label="taxonomy-option" multiple="true" placeholder="Select item(s)" md-container-class="small" class="small">
                             <div ng-repeat="constraintClass in vm.selectedConstraints | filter:{active: true}" >
                                 <span>{{constraintClass.name}}</span>
                                 <md-option ng-repeat="option in constraintClass.taxonomy" value="{{option}}">
