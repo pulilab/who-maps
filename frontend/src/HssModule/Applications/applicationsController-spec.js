@@ -84,7 +84,7 @@ describe('applicationsController', () => {
     });
 
     it('should have a function that handle the constraints change event', () => {
-        const mockEvent = [ { name: 'Information' } ];
+        const mockEvent = [{ name: 'Information', active: true }];
         ac.constraintsUpdated(mockEvent);
         expect(ac.selectedConstraints.length).toBeGreaterThan(0);
     });

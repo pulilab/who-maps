@@ -15,11 +15,13 @@
                  ng-model="vm.search.text"
           />
         </span>
-
-        <md-option
-                ng-repeat="option in vm.options | filter:vm.search.text"
-                value="{{option}}">
-            {{option}}
-        </md-option>
+        <div ng-repeat="group in vm.options">
+            <span ng-if="vm.subHeader" class="option-group">{{group[vm.subHeader]}}</span>
+            <md-option
+                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
+                    value="{{option}}">
+                {{option}}
+            </md-option>
+        </div>
     </md-select>
 </md-input-container>

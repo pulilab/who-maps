@@ -36,10 +36,16 @@ class ApplicationsController {
     }
 
     constraintsUpdated(event) {
-        this.selectedConstraints = _.map(event, value => {
-            value.taxonomy = taxonomyLib[value.name].values;
-            return value;
-        });
+        this.selectedConstraints = _.chain(event)
+            .map(value => {
+                value.taxonomy = taxonomyLib[value.name].values;
+                return value;
+            })
+            .filter(item => {
+                return item.active;
+            })
+            .value();
+        console.log(this.selectedConstraints);
     }
 
     classGenerator(tile) {

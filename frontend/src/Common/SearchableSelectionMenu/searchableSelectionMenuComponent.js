@@ -11,6 +11,8 @@ const searchableSelectionMenuComponent = {
         ngModel: '=',
         ariaLabel: '@',
         options: '=',
+        subOptions: '@',
+        subHeader: '@',
         placeholder: '@',
         mdContainerClass: '@',
         replaceComma: '<',

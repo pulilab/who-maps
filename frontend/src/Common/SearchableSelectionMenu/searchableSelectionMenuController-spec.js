@@ -3,12 +3,15 @@ import SearchableSelectionMenuController from './SearchableSelectionMenuControll
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let sc = {};
+const $timeout = arg => {
+    arg();
+};
 let tmp = void 0;
 
 describe('searchableSelectionMenuController', () => {
 
     beforeEach(() => {
-        sc = SearchableSelectionMenuController.ssMenuFactory()();
+        sc = SearchableSelectionMenuController.ssMenuFactory()(null, $timeout);
         sc.element = {
             find: () => {
                 return [tmp];
