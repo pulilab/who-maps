@@ -36,6 +36,7 @@ class InterventionsController {
     classGenerator(tile) {
         const classArray = [tile.className];
         classArray.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
+        classArray.push(tile.introName);
         return classArray.join(' ');
     }
 
