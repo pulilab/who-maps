@@ -3,6 +3,7 @@ class HssModuleController {
     constructor(introJs) {
         this.EE = window.EE;
         this.introJsSource = introJs;
+        this.editMode = false;
 
         this.columnHasContent = [];
 
@@ -14,6 +15,12 @@ class HssModuleController {
 
         this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn.bind(this));
 
+        this.EE.on('hssEditMode', this.handleEditMode.bind(this));
+
+    }
+
+    handleEditMode(value) {
+        this.editMode = value;
     }
 
     reFresh(columnContentsArray) {

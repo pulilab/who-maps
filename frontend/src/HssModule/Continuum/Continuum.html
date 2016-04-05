@@ -1,8 +1,10 @@
 <md-grid-list
     md-cols="11"
     md-gutter="0px"
-    md-row-height="51px"
-    class="continuum-component">
+    md-row-height="{{vm.rowHeight}}px"
+    class="continuum-component"
+    ng-class="{'fixed-mode': vm.isFixed}"
+>
 
     <md-grid-tile
         md-colspan="2"
@@ -109,5 +111,5 @@
 
         <span class="continuum-title">{{tile.content}}</span>
     </md-grid-tile>
-
 </md-grid-list>
+<div class="continuum-fixed-helper" ng-style="{height: vm.helperHeight}"></div>

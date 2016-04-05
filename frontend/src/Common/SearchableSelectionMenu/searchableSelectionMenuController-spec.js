@@ -21,10 +21,6 @@ describe('searchableSelectionMenuController', () => {
         tmp.innerHTML = 'a,b,c,d';
     });
 
-    it('should have a class constructor function ', () => {
-        sc._classCallCheck(null, null);
-    });
-
     it('should have a function that stop events immediate propagation', () => {
         const eventSpy = jasmine.createSpy('eventSpy');
         const mockEvent = document.createEvent('Event');
