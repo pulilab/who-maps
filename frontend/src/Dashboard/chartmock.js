@@ -1,5 +1,6 @@
 const chartData = [
     {
+        x: 0,
         name: 'Version 1',
         date: '2015-12-12',
         axis1: 5,
@@ -10,6 +11,7 @@ const chartData = [
         axis6: 28
     },
     {
+        x: 1,
         name: 'Version 2',
         date: '2015-12-18',
         axis1: 16,
@@ -20,6 +22,7 @@ const chartData = [
         axis6: 40
     },
     {
+        x: 2,
         name: 'Version 3',
         date: '2016-01-04',
         axis1: 20,
@@ -30,6 +33,7 @@ const chartData = [
         axis6: 45
     },
     {
+        x: 3,
         name: 'Current',
         date: '2016-01-13',
         axis1: 20,
