@@ -1,13 +1,18 @@
+@import '../../variables';
+@import '../../mixins';
+
 badge {
-  background-color: darkred;
-  color: white;
-  border-radius: 1em;
   position: absolute;
-  right: 5px;
   top: 5px;
-  width: 1em;
-  line-height: 1em;
-  padding: 0;
-  font-size: 1em;
-  height: 1em;
+  right: 3px;
+  min-width: 1.25em;
+  height: 1.25em;
+  border-radius: 1.25em;
+  background-color: $color-red;
+  font-size: 12px;
+  line-height: 1.25em;
+
+  > span {
+    color: $color-white !important;
+  }
 }
