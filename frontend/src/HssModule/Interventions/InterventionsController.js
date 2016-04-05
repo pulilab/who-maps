@@ -9,7 +9,7 @@ class InterventionsController {
             vm.EE = window.EE;
             vm.editMode = false;
             vm.interventionsRowSpan = {
-                size: 4
+                size: 5
             };
             this.resizeRow = this.resizeRow.bind(this);
             this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
@@ -52,7 +52,7 @@ class InterventionsController {
                     content: null,
                     className: 'intervention',
                     colSpan: 1,
-                    rowSpan: 4,
+                    rowSpan: 5,
                     columnId: value,
                     activated: _activated,
                     selectValues: interventionsLib[value],

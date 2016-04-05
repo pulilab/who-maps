@@ -1,7 +1,9 @@
 <md-grid-list
   md-cols="11"
   md-gutter="0px"
-  md-row-height="51px">
+  md-row-height="51px"
+  md-on-layout="vm.layoutDone()"
+>
 
     <md-grid-tile
       md-colspan="9"
@@ -13,7 +15,7 @@
 
     <md-grid-tile md-colspan="2" md-rowspan="1" class="empty"> </md-grid-tile>
 
-    <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.applicationRow" ng-if="!tile.disabled">
+    <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.applicationRow" ng-if="!tile.disabled" ng-hide="!vm.layoutReady && !tile.isMain">
         <div class="tile" ng-class="tile.classGenerator(tile)">
 
             <div ng-if="tile.isHeader">

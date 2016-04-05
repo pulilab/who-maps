@@ -35,7 +35,7 @@ const confirmMock = {
     cancel: () => {
         return confirmMock;
     }
-}
+};
 
 const hssBackup = _.cloneDeep(hss);
 
@@ -66,6 +66,13 @@ describe('applicationsController', () => {
         expect(ac.handleEditMode).toBeDefined();
         ac.handleEditMode(true);
         expect(ac.editMode).toBeTruthy();
+
+    });
+
+    it('should have a function that fire when the grid tile layout are done', () => {
+        expect(ac.layoutReady).toBeFalsy();
+        ac.layoutDone();
+        expect(ac.layoutReady).toBeTruthy();
 
     });
 

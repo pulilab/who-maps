@@ -1,11 +1,9 @@
 import _template from './Hint.html';
-
+import HintController from './HintController';
 
 const hintComponent = {
     template: _template,
-    controller: () => {
-        require('./Hint.scss');
-    },
+    controller: HintController.hintControllerFactory(),
     controllerAs: 'vm',
     name: 'hint',
     transclude: {

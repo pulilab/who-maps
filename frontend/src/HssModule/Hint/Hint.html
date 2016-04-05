@@ -1,7 +1,11 @@
 <md-grid-list
         md-cols="11"
         md-gutter="0px"
-        md-row-height="40px">
+        md-row-height="40px"
+        md-on-layout="vm.layoutDone()"
+        ng-if="vm.editMode"
+        ng-show="vm.layoutReady"
+>
     <md-grid-tile
             md-rowspan="1"
             md-colspan="9"

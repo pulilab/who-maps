@@ -6,6 +6,7 @@ class ApplicationsController {
     constructor($timeout, $mdDialog) {
         const vm = this;
         this.rowObject = {};
+        this.layoutReady = false;
         $timeout(() => {
             vm.EE = window.EE;
             this.dialog = $mdDialog;
@@ -24,6 +25,10 @@ class ApplicationsController {
     handleEditMode(value) {
         this.editMode = value;
         this.processRows();
+    }
+
+    layoutDone() {
+        this.layoutReady = true;
     }
 
     handleColumnActivation(event) {
@@ -264,6 +269,7 @@ class ApplicationsController {
         if (!tile.subApplications || !this.editMode) {
             return;
         }
+        this.layoutReady = false;
         tile.subAppOpen = !tile.subAppOpen;
         _.forEach(this.rowObject['father_' + tile.applicationId], value => {
             _.forEach(value, item => {
