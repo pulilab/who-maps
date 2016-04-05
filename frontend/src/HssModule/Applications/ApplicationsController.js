@@ -45,7 +45,6 @@ class ApplicationsController {
                 return item.active;
             })
             .value();
-        console.log(this.selectedConstraints);
     }
 
     classGenerator(tile) {

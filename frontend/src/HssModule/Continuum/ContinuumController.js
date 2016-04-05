@@ -1,14 +1,19 @@
 import _ from 'lodash';
+import angular from 'angular';
 import { hss } from '../hssMockData';
 
 class ContinuumController {
 
-    constructor($timeout) {
+    constructor($timeout, $element) {
         const vm = this;
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
+            vm.isFixed = false;
+            vm.rowHeight = 51;
+            vm.helperRealHeight = (vm.rowHeight * 3) + 'px';
             vm.timeout = $timeout;
+            vm.element = $element;
             vm.firstRow = this.firstRowGenerator();
             vm.motherRow = this.motherRowGenerator();
             vm.childRow = this.childRowGenerator();
@@ -18,6 +23,17 @@ class ContinuumController {
 
             vm.exportPdf = this.exportPdf;
             vm.mapsProgressPercentage = 68; // Placeholder!!
+            angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
+        });
+    }
+
+    scrollEventHandler() {
+        const vm = this;
+        vm.timeout(() => {
+            if (angular.element(vm.element)[0]) {
+                vm.isFixed = document.body.scrollTop >= angular.element(vm.element)[0].offsetTop;
+                vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
+            }
         });
     }
 
@@ -134,8 +150,8 @@ class ContinuumController {
             }
 
             else if (tile.columnId === 4 &&
-                     this.motherRow[tile.columnId].activated &&
-                     this.childRow[tile.columnId].activated) {
+                this.motherRow[tile.columnId].activated &&
+                this.childRow[tile.columnId].activated) {
 
                 tile.activated = false;
             }
@@ -212,11 +228,11 @@ class ContinuumController {
 
     static continuumFactory() {
         require('./Continuum.scss');
-        function continuum($timeout) {
-            return new ContinuumController($timeout);
+        function continuum($timeout, $element) {
+            return new ContinuumController($timeout, $element);
         }
 
-        continuum.$inject = ['$timeout'];
+        continuum.$inject = ['$timeout', '$element'];
 
         return continuum;
     }

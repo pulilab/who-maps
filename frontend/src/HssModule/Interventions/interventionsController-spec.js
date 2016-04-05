@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import InterventionsController from './InterventionsController';
 import { EE } from '../../Common/';
 
@@ -72,11 +73,21 @@ describe('interventionsController', () => {
 
     });
 
+    it('should have a function that calculate the interventions rows', () => {
+        const model = [1, 2, 3, 4];
+        spyOn(ic, 'resizeRow');
+        ic.calculateInterventionHeight(model);
+        expect(ic.resizeRow).toHaveBeenCalledWith(2);
+        ic.calculateInterventionHeight({});
+        expect(ic.resizeRow).toHaveBeenCalledTimes(1);
+    });
+
     it('should have a function that resize all the rows', () => {
         ic.resizeRow(9);
+        ic.resizeRow(null);
         expect(ic.interventionsRowSpan.size).toBe(9);
         _.forEach(ic.interventionRow, item => {
             expect(item.rowSpan).toBe(9);
-        })
+        });
     });
 });

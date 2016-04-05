@@ -8,8 +8,26 @@
 
     <div md-whiteframe="2" class="page-wrapper">
         <continuum tiles="7" ></continuum>
+
+        <hint show-long="true" show-short="true" ng-if="vm.editMode">
+            <long>You can click on the continuum areas to activate or deactivate a section. Please note that this will affect the Applications part too.</long>
+            <short>Add/remove items</short>
+        </hint>
         <interventions tiles="7" ></interventions>
+
+        <hint show-long="true" show-short="true" ng-if="vm.editMode">
+            <long>Click on the dropdown to select or deselect interventions of the dropdown list. You can select multiple items.</long>
+            <short>Add/remove items</short>
+        </hint>
         <applications tiles="7"></applications>
+
+        <hint show-tall="true" ng-if="vm.editMode">
+            <tall>
+                Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+                Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+                Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+            </tall>
+        </hint>
         <div flex layout="row" class="hss-module-bottom">
             <div flex="33">
                 <projectscale></projectscale>

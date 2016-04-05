@@ -2,6 +2,9 @@
   "name": "who",
   "version": "0.0.1",
   "main": "index.js",
+  "babel": {
+      "presets": ["es2015"]
+  },
   "scripts": {
     "test": "karma start",
     "serve": "webpack-dev-server --progress --colors --hot --inline",

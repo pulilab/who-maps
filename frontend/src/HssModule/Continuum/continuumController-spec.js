@@ -16,6 +16,17 @@ describe('continuumController', () => {
         cc.tiles = 7;
     });
 
+    it('should have a function that handle the scroll', () => {
+        
+        spyOn(ContinuumController.prototype, 'scrollEventHandler');
+        cc = new ContinuumController.continuumFactory()($timeout);
+        const event = document.createEvent('Event');
+        event.initEvent('scroll', true, true);
+        document.dispatchEvent(event);
+        expect(cc.scrollEventHandler).toHaveBeenCalled();
+
+    });
+
     it('should have a function that emits an event if editMode is changed', () => {
         cc.editMode = true;
         const spy = jasmine.createSpy();
