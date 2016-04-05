@@ -1,6 +1,6 @@
 import HssModuleController from './HssModuleController';
 
-/* global define, it, describe, expect */
+/* global define, it, describe, expect, spyOn */
 let cc = {};
 
 describe('HssModuleController', () => {
@@ -12,6 +12,11 @@ describe('HssModuleController', () => {
     it('has a constructor', () => {
         cc.constructor({});
         expect(Array.isArray(cc.columnHasContent)).toBe(true);
+    });
+
+    it('has a function that handle the editMode change', () => {
+        cc.handleEditMode(true);
+        expect(cc.editMode).toBeTruthy();
     });
 
     it('has a function which refreshes the array containing info about column contents', () => {
