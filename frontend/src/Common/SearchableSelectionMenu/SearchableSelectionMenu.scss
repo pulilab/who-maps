@@ -33,6 +33,16 @@ ssmenu.small {
   font-size: $caption-font-size-base;
 }
 
+md-select.large,
+ssmenu.large {
+  .md-text {
+    font-size: $headline-font-size-base;
+  }
+  .md-select-icon {
+    font-size: $caption-font-size-base;
+  }
+}
+
 .md-select-menu-container.small {
   md-option {
     padding: 0 12px 0 26px;
@@ -48,6 +58,25 @@ ssmenu.small {
         left: 8px;
 
         @include md-icon($body-font-size-base);
+      }
+    }
+  }
+}
+
+.md-select-menu-container.large {
+  md-option {
+    padding: 0 24px 0 48px;
+
+    .md-text {
+      font-size: $headline-font-size-base;
+    }
+
+    &[selected="selected"] {
+      &::before {
+        top: 55%;
+        left: 14px;
+
+        @include md-icon($headline-font-size-base);
       }
     }
   }
