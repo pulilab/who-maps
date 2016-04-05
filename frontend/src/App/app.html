@@ -1,28 +1,28 @@
 <md-content>
     <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
-            <h2>
+            <h2 class="app-title">
                 <span>MAPS Toolkit</span>
             </h2>
             <md-button class="md-icon-button" aria-label="Apps"  ui-sref="settings">
-                <md-icon class="material-icons md-light md-48">apps</md-icon>
+                <md-icon class="material-icons md-light">apps</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Public" >
-                <md-icon class="material-icons md-light md-48">public</md-icon>
+                <md-icon class="material-icons md-light">public</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Help" >
-                <md-icon class="material-icons md-light md-48">help_outline</md-icon>
+                <md-icon class="material-icons md-light">help_outline</md-icon>
             </md-button>
             <span flex ></span>
-            <md-button ui-sref="info" ui-sref-active="active">What is MAPS Toolkit?</md-button>
+            <md-button ui-sref="info" ui-sref-active="active" class="md-small">What is MAPS Toolkit?</md-button>
             <md-button class="md-icon-button" aria-label="Search" >
-                <md-icon class="material-icons md-light md-48">search</md-icon>
+                <md-icon class="material-icons md-light">search</md-icon>
             </md-button>
 
 
             <md-menu md-position-mode="target-right target">
                 <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" >
-                    <md-icon md-menu-origin class="material-icons md-light md-48">person_outline</md-icon>
+                    <md-icon md-menu-origin class="material-icons md-light">person</md-icon>
                 </md-button>
 
                 <md-menu-content width="4">
@@ -32,20 +32,20 @@
                         </span>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button >
-                            <md-icon class="material-icons md-48" md-menu-align-target>verified_user</md-icon>
+                        <md-button>
+                            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
                             Role: {{vm.user.role}}
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ui-sref="edit-profile">
-                            <md-icon class="material-icons md-48">account_circle</md-icon>
+                            <md-icon class="material-icons">account_circle</md-icon>
                             Edit my Profile
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ng-click="vm.logout()">
-                            <md-icon class="material-icons md-48">exit_to_app</md-icon>
+                            <md-icon class="material-icons">exit_to_app</md-icon>
                             Logout
                         </md-button>
                     </md-menu-item>
@@ -53,10 +53,10 @@
             </md-menu>
 
 
-            <md-menu  md-position-mode="target-right target">
+            <md-menu md-position-mode="target-right target">
 
                 <md-button class="md-icon-button" aria-label="Notification" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                    <md-icon md-menu-origin class="material-icons md-light md-48">mail_outline</md-icon>
+                    <md-icon md-menu-origin class="material-icons md-light has-message">email</md-icon>
                     <badge counter="vm.notifications.length"></badge>
                 </md-button>
                 <md-menu-content width="6">
@@ -71,7 +71,7 @@
             <md-menu md-position-mode="target-right target">
 
                 <md-button class="md-icon-button" aria-label="Plus" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                    <md-icon md-menu-origin class="material-icons md-light md-48">add</md-icon>
+                    <md-icon md-menu-origin class="material-icons md-light">add</md-icon>
                 </md-button>
 
                 <md-menu-content width="4">
@@ -79,20 +79,20 @@
                         <span>More Actions</span>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button >
-                            <md-icon class="material-icons md-48"  md-menu-align-target>person_add</md-icon>
+                        <md-button>
+                            <md-icon class="material-icons"  md-menu-align-target>person_add</md-icon>
                             Assign owners/users
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button >
-                            <md-icon class="material-icons md-48">lock_outline</md-icon>
+                        <md-button>
+                            <md-icon class="material-icons">lock_outline</md-icon>
                             Publicity settings
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button >
-                            <md-icon class="material-icons md-48" >publish</md-icon>
+                        <md-button>
+                            <md-icon class="material-icons">publish</md-icon>
                             Export pdf/csv
                         </md-button>
                     </md-menu-item>
@@ -103,49 +103,52 @@
     </md-toolbar>
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
-            <h3>
-                <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" ></ssmenu>
-            </h3>
+            <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" md-container-class="large" class="large project-selector"></ssmenu>
             <span flex></span>
             <md-button class="" aria-label="Settings"  ui-sref="settings">
-                <md-icon class="material-icons md-light md-48">settings</md-icon>
+                <md-icon class="material-icons md-light">settings</md-icon>
                 Settings
             </md-button>
-            <md-button class="" aria-label="Share" >
-                <md-icon class="material-icons md-light md-48">share</md-icon>
+            <md-button class="" aria-label="Share">
+                <md-icon class="material-icons md-light">share</md-icon>
                 Share Link
             </md-button>
-            <md-button class="" aria-label="More" >
-                <md-icon class="material-icons md-light md-48">more_vert</md-icon>
+            <md-button class="" aria-label="More">
+                <md-icon class="material-icons md-light">more_vert</md-icon>
                 More Actions
             </md-button>
         </div>
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
-            <md-button ui-sref="hssModule" ui-sref-active="active">Visualize Project</md-button>
-            <md-button ui-sref="maps" ui-sref-active="active">Improve Project</md-button>
-            <md-button ui-sref="dashboard" ui-sref-active="active">Update Score</md-button>
+            <span class="project-menu">
+                <md-button ui-sref="hssModule" ui-sref-active="active">Visualize Project</md-button>
+                <md-button ui-sref="maps" ui-sref-active="active">Improve Project</md-button>
+                <md-button ui-sref="dashboard" ui-sref-active="active">Update Score</md-button>
+            </span>
 
             <span flex></span>
 
             <span layout="row" layout-align="center start" class="project-info">
-                <span >
+                <span>
+                    Version:
                     <b>
-                        Version {{vm.currentProject.version.id}}
+                        {{vm.currentProject.version.id}}
                     </b>
-                    {{vm.currentProject.version.date}}
+                    ({{vm.currentProject.version.date}})
                 </span>
                 <span>
                     Organization:
-                    {{vm.currentProject.organization}}
+                    <b>{{vm.currentProject.organization}}</b>
                 </span>
-                <md-button ng-href="mailto:{{vm.currentProject.contact.email}}">
-                    <md-icon class="material-icons md-light md-48">
-                        mail_outline
-                    </md-icon>
-                    {{vm.currentProject.contact.name}}
-                </md-button>
-
+                <span>
+                    Contact person:
+                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small">
+                        <md-icon class="material-icons md-light">
+                            mail_outline
+                        </md-icon>
+                        {{vm.currentProject.contact.name}}
+                    </md-button>
+                </span>
             </span>
         </div>
     </md-toolbar>
