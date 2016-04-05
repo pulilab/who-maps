@@ -11,7 +11,8 @@ class IntroJsController {
 
     parseOptions() {
         const result = {
-            steps: []
+            steps: [],
+            exitOnOverlayClick: false
         };
         if (!(this.sourceString instanceof Object)) {
             console.error(introText + 'invalid object');
@@ -26,7 +27,8 @@ class IntroJsController {
             }
 
             result.steps = _.chain(this.sourceString.steps)
-                .map((value, key) => {
+                .cloneDeep()
+                .forEach((value, key) => {
                     value.toDelete = false;
                     if (!value.hasOwnProperty('intro')) {
                         console.error(introText + 'the step number ' + key + ' is missing the required field INTRO');
@@ -56,7 +58,10 @@ class IntroJsController {
     }
 
     element(name) {
-        return document.querySelectorAll(name);
+        if (name.tagName === void 0) {
+            return document.querySelectorAll(name);
+        }
+        return name;
     }
 
     start() {

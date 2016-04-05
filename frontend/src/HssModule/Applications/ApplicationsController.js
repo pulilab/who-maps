@@ -56,6 +56,7 @@ class ApplicationsController {
         const classArray = [tile.className];
         classArray.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
         classArray.push(tile.isMain ? 'app-main' : 'app-sub');
+        classArray.push(tile.introName);
         return classArray.join(' ');
     }
 
@@ -67,7 +68,6 @@ class ApplicationsController {
         classArray.push(tile.status ? tile.status : 'no-bubble');
         classArray.push(tile.activated ? 'activated' : 'not-activated');
         classArray.push(tile.subAppOpen ? 'app-open' : 'app-closed');
-        classArray.push(tile.introName);
         return classArray.join(' ');
     }
 
@@ -204,6 +204,7 @@ class ApplicationsController {
             isTax: true,
             rowIndex: index,
             rowEnabled: false,
+            introName: 'taxonomy_app_' + index,
             classGenerator: this.classGenerator.bind(this)
         }];
     }
@@ -279,7 +280,7 @@ class ApplicationsController {
     }
 
     appClickHandler(tile) {
-        if (tile.bubbleDrawn || !this.editMode) {
+        if (tile.bubbleDrawn || !this.editMode || !tile.activated) {
             return;
         }
         if (this.tileClickCounter === 0) {
@@ -352,6 +353,7 @@ class ApplicationsController {
         let applicationStyle;
         const rowColumns = this.findSameRowCandidate(tile);
         if (rowColumns.length === 0) {
+            this.startTile.className = 'app';
             this.startTile = void 0;
             return;
         }
@@ -403,7 +405,7 @@ class ApplicationsController {
             })
             .value();
         _.forEach(toAdd, (value, key) => {
-            this.applicationRow.splice((index + key), 0, value);
+            this.applicationRow.splice((index + key + 1), 0, value);
         });
         _.map(this.rowObject['father_' + bubble.fatherId]['rowIndex_' + bubble.rowIndex], value => {
             if (value.isHeader) {

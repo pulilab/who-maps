@@ -17,7 +17,7 @@ describe('continuumController', () => {
     });
 
     it('should have a function that handle the scroll', () => {
-        
+
         spyOn(ContinuumController.prototype, 'scrollEventHandler');
         cc = new ContinuumController.continuumFactory()($timeout);
         const event = document.createEvent('Event');
@@ -100,7 +100,7 @@ describe('continuumController', () => {
 
         };
         const classString = cc.classGenerator(tileMock);
-        expect(classString).toContain('child odd activated zindex-100 empty');
+        expect(classString).toContain('child odd activated zindex-100  empty');
     });
 
     describe('has a function for activating columns', () => {

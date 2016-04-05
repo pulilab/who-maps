@@ -1,51 +1,54 @@
 {
   "steps": [
     {
-      "intro": "HSS Framework short tutorial"
+      "intro": "HSS tutorial"
     },
     {
-      "intro": "to switch between edit mode and view mode do not use it for now",
-      "element": ".intro_edit_mode"
+      "intro": "The switch between edit mode and view mode click it now",
+      "element": ".hss-controls"
     },
     {
-      "intro": "Activate main continuum element by clicking here, do it now!",
-      "element": ".mother_middle_1"
+      "intro": "Mother continuum tile, click to activate - deactivate a green tile means an active state",
+      "element": ".cell-mother"
     },
     {
-      "intro": "Select this one too for the sake of tutorial",
-      "element": ".mother_middle_2"
+      "intro": "Child continuum tile, click to activate - deactivate a blu tile means an active state",
+      "element": ".child_middle_4"
     },
     {
-      "intro": "Activate sub continuum element by clicking here, this element can not be activated because his mother column is not",
-      "element": ".child_middle_5"
+      "intro": "On an active column is possible to select one or more interventions",
+      "element": ".interventions_middle_0"
     },
     {
-      "intro": "Once a column is activate select interventions from the select menu here",
-      "element": ".interventions_middle_1"
+      "intro": "Select one or more constraints from here, this will rule what kind of constraints is possible to select in the applicaiton row",
+      "element": ".constraints"
     },
     {
-      "intro": "Select one or more constraints from here",
-      "element": ".intro_constraints"
-    },
-    {
-      "intro": "To create an editing bubble click on an activated application cell",
+      "intro": "A cell with a red dot means that the related column is not active, and cannot be interacted with",
       "element": ".applications_middle_1"
     },
     {
-      "intro": "And then click to another application cell",
-      "element": ".applications_middle_2"
+      "intro": "A cell with a green dot means that the related column is active and can be used to create a bubble, click one single time this cell",
+      "element": ".applications_middle_3"
     },
     {
-      "intro": "Is now possible to edit the newly created bubble",
-      "element": ".applications_middle_1"
+      "intro": "To create a bubble a second click, on the same cell or on a new cell, is needed the bubble will span between all the contiguous cell between the first cell selected and the second one, click here to generate a four cell bubble",
+      "element": ".applications_middle_6"
     },
     {
-      "intro": "Once a bubble is created the row get activated and it is possible to select constraints",
-      "element": ".taxonomy_column_0"
+      "intro": "Is now possible to type text inside the newly created bubble, let's do it now: click and type",
+      "element": ".applications_middle_3"
+    },
+    {
+      "intro": "Once at least one bubble is created the row get activated and it is possible to select constraints",
+      "element": ".taxonomy_app_0"
     },
     {
       "intro": "The application is now active, to show the subapp click on the application name",
       "element": ".applications_header_0"
+    },
+    {
+      "intro": "Congratulations! Tutorial complete!"
     }
 
   ]
