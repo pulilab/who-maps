@@ -17,7 +17,6 @@ describe('AppModuleController', () => {
     });
 
     it('should have a function to perform logout', () => {
-
         expect(ac.logout).toBeDefined();
 
     });
