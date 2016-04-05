@@ -68,19 +68,40 @@
                 </md-menu-content>
             </md-menu>
 
-            <md-menu md-position-mode="target-right target">
+            <md-button class="md-icon-button" aria-label="Plus" >
+                <md-icon class="material-icons md-light">add</md-icon>
+            </md-button>
 
-                <md-button class="md-icon-button" aria-label="Plus" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                    <md-icon md-menu-origin class="material-icons md-light">add</md-icon>
+
+
+        </div>
+    </md-toolbar>
+    <md-toolbar class="md-medium-tall">
+        <div class="md-toolbar-tools">
+            <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" md-container-class="large" class="large project-selector"></ssmenu>
+            <span flex></span>
+            <md-button class="" aria-label="Settings"  ui-sref="settings">
+                <md-icon class="material-icons md-light">settings</md-icon>
+                Settings
+            </md-button>
+            <md-button class="" aria-label="Share">
+                <md-icon class="material-icons md-light">share</md-icon>
+                Share Link
+            </md-button>
+
+            <md-menu md-position-mode="target-right target">
+                <md-button md-menu-origin  class="" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                    <md-icon class="material-icons md-light">more_vert</md-icon>
+                    More Actions
                 </md-button>
 
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <span>More Actions</span>
+                        <span md-menu-align-target>More Actions</span>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button>
-                            <md-icon class="material-icons"  md-menu-align-target>person_add</md-icon>
+                            <md-icon class="material-icons"  >person_add</md-icon>
                             Assign owners/users
                         </md-button>
                     </md-menu-item>
@@ -99,24 +120,6 @@
                 </md-menu-content>
             </md-menu>
 
-        </div>
-    </md-toolbar>
-    <md-toolbar class="md-medium-tall">
-        <div class="md-toolbar-tools">
-            <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" md-container-class="large" class="large project-selector"></ssmenu>
-            <span flex></span>
-            <md-button class="" aria-label="Settings"  ui-sref="settings">
-                <md-icon class="material-icons md-light">settings</md-icon>
-                Settings
-            </md-button>
-            <md-button class="" aria-label="Share">
-                <md-icon class="material-icons md-light">share</md-icon>
-                Share Link
-            </md-button>
-            <md-button class="" aria-label="More">
-                <md-icon class="material-icons md-light">more_vert</md-icon>
-                More Actions
-            </md-button>
         </div>
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
