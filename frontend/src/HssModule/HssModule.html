@@ -1,0 +1,40 @@
+<div class="md-padding hss-module" ng-cloak>
+    <div class="page-title">
+      <h1 class="md-display-1 text-center">My digital strategy to improve RNMNCH outcomes</h1>
+      <h6 class="md-subhead text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eros lacus, posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.</h6>
+    </div>
+
+    <introjs source-string="vm.introJsSource" class="start-hss-intro"></introjs>
+
+    <div md-whiteframe="2" class="page-wrapper">
+        <continuum tiles="7" hss="vm.structure" ></continuum>
+
+        <hint show-long="true" show-short="true" >
+            <long>You can click on the continuum areas to activate or deactivate a section. Please note that this will affect the Applications part too.</long>
+            <short>Add/remove items</short>
+        </hint>
+        <interventions tiles="7" ></interventions>
+
+        <hint show-long="true" show-short="true" >
+            <long>Click on the dropdown to select or deselect interventions of the dropdown list. You can select multiple items.</long>
+            <short>Add/remove items</short>
+        </hint>
+        <applications tiles="7"></applications>
+
+        <hint show-tall="true">
+            <tall>
+                Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+                Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+                Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+            </tall>
+        </hint>
+        <div flex layout="row" class="hss-module-bottom">
+            <div flex="33">
+                <projectscale></projectscale>
+            </div>
+            <div layout-wrap flex="66" layout="row">
+                <projectpartners></projectpartners>
+            </div>
+        </div>
+    </div>
+</div>
