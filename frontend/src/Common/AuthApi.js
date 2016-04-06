@@ -36,6 +36,16 @@ class AuthApi {
 
     post(endpoint, data) {
         const request = _.cloneDeep(this.request);
+        request.method = 'POST';
+        request.body = JSON.stringify(data);
+        return fetch(this.apiUrl + endpoint, request)
+            .then((response) => {
+                return response;
+            });
+    }
+
+    postFormData(endpoint, data) {
+        const request = _.cloneDeep(this.request);
         const body = new FormData();
         let performRequest = true;
         _.forEach(data, item => {
@@ -64,9 +74,9 @@ class AuthApi {
             });
     }
 
-    postSingle(endpoint, name, value) {
+    postSingleFormData(endpoint, name, value) {
         const item = [{ name, value }];
-        return this.post(endpoint, item);
+        return this.postFormData(endpoint, item);
     }
 
     objectConverter(dataObject) {
@@ -84,6 +94,7 @@ class AuthApi {
     generateHeaders() {
         const headers = new Headers();
         headers.append('Authorization', 'Token ' + this.token);
+        headers.append('content-type', 'application/json');
         return headers;
     }
 

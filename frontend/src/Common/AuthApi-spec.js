@@ -1,4 +1,5 @@
 import AuthApi from './AuthApi';
+import _ from 'lodash';
 
 /* global define, it, describe, beforeEach, expect, xit, spyOn, Promise */
 
@@ -28,21 +29,32 @@ describe('AuthApi class', () => {
 
     });
 
-    it('should have a function that perform authenticated post request', () =>{
+    it('should have a function that perform authenticated post request with json', () => {
+        aa.post('test', {});
+        expect(window.fetch).toHaveBeenCalled();
+    });
+
+    it('should have a function that perform authenticated post request with form data', () =>{
         const mockData = [{}];
-        aa.post('test', mockData);
+        aa.postFormData('test', mockData);
 
         mockData[0].name = 'keyValue';
-        aa.post('test', mockData);
+        aa.postFormData('test', mockData);
 
         mockData[0].value = 'valueValue';
-        aa.post('test', mockData);
+        aa.postFormData('test', mockData);
         expect(window.fetch).toHaveBeenCalledTimes(1);
     });
 
     it('should have a convenient utility method that perform a post with a single payload data', () => {
-        aa.postSingle('test', 'key', 'value');
+        aa.postSingleFormData('test', 'key', 'value');
         expect(window.fetch).toHaveBeenCalled();
+    });
+
+    it('should have a function that convert an object in an array of key - value', () => {
+        const mockObj = { 'one': 1 };
+        const result = aa.objectConverter(mockObj);
+        expect(_.isEqual(result, [{ name: 'one', value: 1 }])).toBeTruthy();
     });
 
     it('should have a function that retrieve a token from the session storage', () => {

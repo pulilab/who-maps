@@ -1,4 +1,6 @@
 import HssModuleService from './HssModuleService';
+import 'es6-promise';
+/* global Promise */
 
 class HssModuleController {
 
@@ -6,8 +8,10 @@ class HssModuleController {
         this.EE = window.EE;
         this.scope = $scope;
         this.introJsSource = introJs;
+        this.dataReady = false;
         this.editMode = false;
         this.structure = {};
+        this.data = {};
 
         this.columnHasContent = [];
 
@@ -22,16 +26,17 @@ class HssModuleController {
         this.EE.on('hssEditMode', this.handleEditMode.bind(this));
 
         this.hs = new HssModuleService();
-
-        this.hs.getStructure().then(this.handleServerData.bind(this));
+        Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 
     }
 
-    handleServerData(data) {
-        console.log(data);
-        this.structure = data;
+    handleServerData(values) {
+        this.structure = values[0];
+        this.data = values[1];
         this.scope.$evalAsync();
+        this.dataReady = true;
     }
+
 
     handleEditMode(value) {
         this.editMode = value;
