@@ -6,9 +6,14 @@ import 'es6-promise';
 
 class AuthApi {
 
-    constructor() {
+    constructor(module) {
         this.token = this.retrieveToken();
-        this.baseUrl = '/api/';
+
+        this.apiUrl = '/api/';
+
+        if (module) {
+            this.apiUrl += module + '/';
+        }
 
         this.request = {
             headers: this.generateHeaders.bind(this)(),
@@ -20,7 +25,7 @@ class AuthApi {
     get(endpoint) {
         const request = _.cloneDeep(this.request);
         request.method = 'GET';
-        return fetch(this.baseUrl + endpoint, request)
+        return fetch(this.apiUrl + endpoint, request)
             .then((response) => {
                 return response.json();
             })
@@ -53,18 +58,23 @@ class AuthApi {
 
         request.method = 'POST';
         request.body = body;
-        return fetch(this.baseUrl + endpoint, request)
+        return fetch(this.apiUrl + endpoint, request)
             .then((response) => {
                 return response;
             });
     }
 
-    postSingle(endpoint, keyString, data) {
-        const item = [{
-            name: keyString,
-            value: data
-        }];
+    postSingle(endpoint, name, value) {
+        const item = [{ name, value }];
         return this.post(endpoint, item);
+    }
+
+    objectConverter(dataObject) {
+        const data = [];
+        _.forEach(dataObject, (value, name) => {
+            data.push({ name, value });
+        });
+        return data;
     }
 
     retrieveToken() {
