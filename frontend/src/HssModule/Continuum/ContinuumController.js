@@ -1,11 +1,14 @@
 import _ from 'lodash';
 import angular from 'angular';
 import { hss } from '../hssMockData';
+import HssModuleService from '../HssModuleService';
 
 class ContinuumController {
 
     constructor($timeout, $element) {
         const vm = this;
+        this.hs = new HssModuleService();
+
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
@@ -20,7 +23,7 @@ class ContinuumController {
             vm.motherRow.forEach(tile => {
                 vm.checkColumnActivation(tile);
             });
-
+            console.log(vm.hss);
             vm.exportPdf = this.exportPdf;
             vm.mapsProgressPercentage = 68; // Placeholder!!
             angular.element(document).on('scroll', this.scrollEventHandler.bind(this));

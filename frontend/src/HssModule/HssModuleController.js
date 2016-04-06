@@ -1,9 +1,13 @@
+import HssModuleService from './HssModuleService';
+
 class HssModuleController {
 
-    constructor(introJs) {
+    constructor($scope, introJs) {
         this.EE = window.EE;
+        this.scope = $scope;
         this.introJsSource = introJs;
         this.editMode = false;
+        this.structure = {};
 
         this.columnHasContent = [];
 
@@ -17,6 +21,16 @@ class HssModuleController {
 
         this.EE.on('hssEditMode', this.handleEditMode.bind(this));
 
+        this.hs = new HssModuleService();
+
+        this.hs.getStructure().then(this.handleServerData.bind(this));
+
+    }
+
+    handleServerData(data) {
+        console.log(data);
+        this.structure = data;
+        this.scope.$evalAsync();
     }
 
     handleEditMode(value) {
@@ -46,12 +60,12 @@ class HssModuleController {
     }
 
     static hssControllerFactory() {
-        function hssController() {
+        function hssController($scope) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController(introJs);
+            return new HssModuleController($scope, introJs);
         }
 
-        hssController.$inject = [];
+        hssController.$inject = ['$scope'];
 
         return hssController;
     }

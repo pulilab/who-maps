@@ -7,7 +7,8 @@ const continuumComponent = {
     template: _template,
     controllerAs: 'vm',
     bindings: {
-        tiles: '<'
+        tiles: '<',
+        hss: '<'
     },
     name: 'continuum'
 };
