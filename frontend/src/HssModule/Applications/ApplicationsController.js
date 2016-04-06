@@ -434,7 +434,7 @@ class ApplicationsController {
 
     searchForFilledColumns() {
 
-        const containArr = [false, false, false, false, false, false, false];
+        const containArr = _.fill(new Array(7), false);
 
         const notEmpties = this.applicationRow.filter(el => {
             return el.bubbleDrawn;
