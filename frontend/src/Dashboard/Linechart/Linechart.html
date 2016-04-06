@@ -1,2 +1,16 @@
-<svg id="visualization" width="1000" height="500">
-</svg>
+<md-chips ng-model="vm.labels">
+
+    <md-chip-template>
+
+        <i class="material-icons" ng-class="'labelicon'+($index + 1)">brightness_1</i>
+        {{$chip}}
+
+    </md-chip-template>
+
+</md-chips>
+
+<div id="linechartcontainer">
+
+    <svg id="visualization"></svg>
+
+</div>

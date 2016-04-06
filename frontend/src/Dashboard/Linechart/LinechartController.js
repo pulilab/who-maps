@@ -2,22 +2,40 @@
 
 class LinechartController {
 
-    constructor() {
-        require('./Linechart.scss');
-        require('d3');
+    constructor($timeout) {
         const vm = this;
         // vm.data <= binding from outer scope, holds the data
-        if (vm.data.length > 2) {
-            vm.drawAxes();
-        }
-        else {
-            console.warn('Should show a barchart');
-        }
+
+        vm.labels = [
+            'Groundwork',
+            'Partnerships',
+            'Financial health',
+            'Technology & architecture',
+            'Operations',
+            'Monitoring & evaluation'
+        ];
+
+        $timeout(() => {
+            if (vm.data.length > 2) {
+                vm.drawAxes();
+            }
+            else {
+                console.warn('Should show something else!!!');
+            }
+        });
+
     }
 
     drawAxes() {
 
+        const vm = this;
+
         const data = this.data;
+
+        const outer = document.getElementById('linechartcontainer');
+
+        const outerWidth = outer.offsetWidth;
+        const outerHeight = outer.offsetHeight;
 
         // Decorate data with indices
         if (!data.every(el => el.hasOwnProperty('x'))) {
@@ -35,32 +53,28 @@ class LinechartController {
             a6: '#5D4037'
         };
 
-        const axes = [
-            'Groundwork',
-            'Partnerships',
-            'Financial health',
-            'Technology & architecture',
-            'Operations',
-            'Monitoring & evaluation'
-        ];
+        const labels = this.labels;
 
         // Should recalculate on first open || resize
         const margin = {
-            top: 30,
-            right: 30,
-            bottom: 30,
-            left: 30
+            top: 35,
+            right: 35,
+            bottom: 35,
+            left: 35
         };
-        const width = 800 - margin.left - margin.right;
-        const height = 400 - margin.top - margin.bottom;
+        const width = outerWidth - margin.left - margin.right;
+        const height = outerHeight - margin.top - margin.bottom;
 
         const element = d3.select('#visualization');
+
+        element
+            .attr('width', outerWidth)
+            .attr('height', outerHeight);
 
         const tooltip = element.select(function d3GetParent() { return this.parentNode; })
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0);
-
 
         const xScale = d3.scale.linear()
             .range([margin.left, width - margin.right]) // the area
@@ -68,15 +82,7 @@ class LinechartController {
 
         const yScale = d3.scale.linear()
             .range([height - margin.top, margin.bottom])
-            .domain([
-                0,
-                this.data.reduce((ret, el) => {
-                    for (let j = 1; j <= 6; j += 1) {
-                        ret = Math.max(ret, el['axis' + j]);
-                    }
-                    return ret;
-                }, 0) // this is the highest score
-            ]);
+            .domain([0, 1]);
 
         const xAxis = d3.svg.axis()
             .scale(xScale)
@@ -85,7 +91,8 @@ class LinechartController {
 
         const yAxis = d3.svg.axis()
             .scale(yScale)
-            .orient('left');
+            .orient('left')
+            .tickFormat(d3.format('.0%'));
 
         // Appending the X axis
         element.append('svg:g')
@@ -141,7 +148,7 @@ class LinechartController {
                             .style('opacity', 0.9);
 
                         const divString = [
-                            axes[i - 1], // Axis name
+                            labels[i - 1], // Axis name
                             '<br>',
                             el['axis' + i] + ' points',
                             '<br>',
@@ -161,17 +168,35 @@ class LinechartController {
                             .style('opacity', 0);
 
                     });
-
             }
         });
+
+        function resizedw() {
+            console.log('window was resized');
+            // reset the svg
+            d3.selectAll('svg > *').remove();
+            d3.select('.tooltip').remove();
+            vm.drawAxes();
+        }
+
+        let doit;
+        window.onresize = () => {
+            clearTimeout(doit);
+            doit = setTimeout(resizedw, 50);
+        };
 
     }
 
     static linechartFactory() {
-        function linechart() {
-            return new LinechartController();
+        require('./Linechart.scss');
+        require('d3');
+
+        function linechart($timeout) {
+            return new LinechartController($timeout);
         }
-        linechart.$inject = [];
+
+        linechart.$inject = ['$timeout'];
+
         return linechart;
     }
 

@@ -1,4 +1,14 @@
+@import '../../variables';
+
 linechart {
+
+    .border {
+        border: 1px solid blue;
+    }
+
+    #linechartcontainer {
+        min-height: 350px;
+    }
 
     .axis path {
         fill: none;
@@ -22,4 +32,25 @@ linechart {
         border-radius: 8px;
         pointer-events: none;
     }
+
+    .labelicon1 {
+        color: $color-axis1;
+    }
+    .labelicon2 {
+        color: $color-axis2;
+    }
+    .labelicon3 {
+        color: $color-axis3;
+    }
+    .labelicon4 {
+        color: $color-axis4;
+    }
+    .labelicon5 {
+        color: $color-axis5;
+    }
+    .labelicon6 {
+        color: $color-axis6;
+    }
+
+
 }
