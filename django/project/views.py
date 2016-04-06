@@ -95,7 +95,6 @@ class ProjectViewSet(TokenAuthMixin, ModelViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    parser_classes = (MultiPartParser, FormParser)
 
     def _prepare_serializer(self, request):
         def pop_or_empty(key):
