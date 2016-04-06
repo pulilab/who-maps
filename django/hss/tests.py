@@ -375,7 +375,5 @@ class HSSTests(APITestCase):
     def test_get_hss_structure(self):
         url = reverse("hss-structure")
         response = self.test_user_client.get(url, format="json")
-
-        print(response.json())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["continuum"][0]["id"], 0)
