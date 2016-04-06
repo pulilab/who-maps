@@ -44,7 +44,7 @@ describe('AuthApi class', () => {
         aa.postSingle('test', 'key', 'value');
         expect(window.fetch).toHaveBeenCalled();
     });
-    
+
     it('should have a function that retrieve a token from the session storage', () => {
         sessionStorage.clear();
         expect(aa.retrieveToken()).toBeNull();
@@ -56,7 +56,7 @@ describe('AuthApi class', () => {
     it('should have a function that return an Headers object with the Authentication token', () => {
         sessionStorage.setItem('token', 'something');
         const headers = aa.generateHeaders();
-        expect(headers.get('HTTP_AUTHORIZATION')).toBe('something');
+        expect(headers.get('Authorization')).toBe('Token something');
     });
 
 });

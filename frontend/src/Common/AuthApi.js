@@ -83,7 +83,7 @@ class AuthApi {
 
     generateHeaders() {
         const headers = new Headers();
-        headers.append('HTTP_AUTHORIZATION', this.token);
+        headers.append('Authorization', 'Token ' + this.token);
         return headers;
     }
 
