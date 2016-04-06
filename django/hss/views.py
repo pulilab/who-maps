@@ -78,7 +78,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
             hss = HSS.objects.get_object_or_none(project=project_id)
             if not hss:
                 return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
-            hss.data["continuum"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
+            hss.data["continuum"][serializer.validated_data["column_id"]].update(**serializer.validated_data)
             hss.save()
             return Response(serializer.data)
         else:
