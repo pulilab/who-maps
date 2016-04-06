@@ -13,8 +13,8 @@ class BubbleSerializer(serializers.Serializer):
 class ContinuumSerializer(serializers.Serializer):
 
     column_id = serializers.IntegerField()
-    mother = serializers.BooleanField()
-    child = serializers.BooleanField()
+    mother = serializers.BooleanField(required=False)
+    child = serializers.BooleanField(required=False)
 
 
 class ConstraintSerializer(serializers.Serializer):
