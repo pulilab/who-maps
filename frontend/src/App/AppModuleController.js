@@ -30,8 +30,7 @@ class AppModuleController {
     }
 
     logout() {
-        console.log('SCADUSH');
-        window.location.href = 'https://youtu.be/rFhWkLKONO0?t=49';
+        console.log('logout stub');
     }
 
     static appControllerFactory() {
