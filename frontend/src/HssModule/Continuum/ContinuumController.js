@@ -23,7 +23,6 @@ class ContinuumController {
             vm.motherRow.forEach(tile => {
                 vm.checkColumnActivation(tile);
             });
-            console.log(vm.hss);
             vm.exportPdf = this.exportPdf;
             vm.mapsProgressPercentage = 68; // Placeholder!!
             angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
@@ -65,13 +64,13 @@ class ContinuumController {
             .map(value => {
                 return {
                     type: 'mother',
-                    content: hss[value].mother.title,
-                    colSpan: hss[value].mother.span,
+                    content: self.structure[value].mother.title,
+                    colSpan: self.structure[value].mother.span,
                     rowSpan: 1,
                     invisible: _.isEmpty(hss[value].mother),
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
-                    activated: hss[value].mother.activated,
+                    activated: self.data[value].mother,
                     introName: 'mother_middle_' + value,
                     classGenerator: this.classGenerator
                 };
@@ -89,13 +88,13 @@ class ContinuumController {
             .map(value => {
                 return {
                     type: 'child',
-                    content: hss[value].child.title,
+                    content: self.structure[value].child.title,
                     className: 'child',
                     colSpan: 1,
                     rowSpan: 1,
                     columnId: value,
-                    activated: hss[value].child.activated,
-                    empty: !hss[value].child.title,
+                    activated: self.data[value].child,
+                    empty: !self.structure[value].child.title,
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     introName: 'child_middle_' + value,
                     invisible: false,
@@ -129,7 +128,7 @@ class ContinuumController {
         // ACTIVATING
         else if (!tile.activated) {
             this.EE.once('hssGuysActivateColumn', () => {
-                tile.activated = true;
+                this.changeTileStatus(tile, true);
             });
             this.EE.emit('hssPleaseActivateColumn', {
                 columnId: tile.columnId,
@@ -148,7 +147,7 @@ class ContinuumController {
 
             if (tile.columnId < 4) {
                 this.EE.once('hssGuysActivateColumn', obj => {
-                    tile.activated = obj.activated;
+                    this.changeTileStatus(tile, obj.activated);
                 });
                 this.EE.emit('hssHasColumnContent', tile.columnId);
             }
@@ -156,20 +155,19 @@ class ContinuumController {
             else if (tile.columnId === 4 &&
                 this.motherRow[tile.columnId].activated &&
                 this.childRow[tile.columnId].activated) {
-
-                tile.activated = false;
+                this.changeTileStatus(tile, false);
             }
 
             else if (tile.columnId === 4) {
                 this.EE.once('hssGuysActivateColumn', obj => {
-                    tile.activated = obj.activated;
+                    this.changeTileStatus(tile, obj.activated);
                 });
                 this.EE.emit('hssHasColumnContent', tile.columnId);
             }
 
             else if (tile.type === 'mother') {
                 if (this.childRow[5].activated && this.childRow[6].activated) {
-                    tile.activated = false;
+                    this.changeTileStatus(tile, false);
                 }
                 this.EE.once('hssHasContentLastTwo', obj => {
 
@@ -192,7 +190,7 @@ class ContinuumController {
 
             else {
                 if (this.motherRow[5].activated) {
-                    tile.activated = false;
+                    this.changeTileStatus(tile, false);
                 }
                 else {
                     this.EE.once('hssGuysActivateColumn', obj => {
@@ -202,8 +200,12 @@ class ContinuumController {
                 }
             }
         }
-
         this.checkColumnActivation(tile);
+    }
+
+    changeTileStatus(tile, newStatus) {
+        tile.activated = newStatus;
+        this.hs.postContinuum(tile);
     }
 
     // First row activation handling for ng-class bindings (missing childs/double)

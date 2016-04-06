@@ -1,4 +1,5 @@
 import ContinuumController from './ContinuumController';
+import { hss } from '../hssMockData';
 import { EE } from '../../Common/';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn, xit */
@@ -14,6 +15,8 @@ describe('continuumController', () => {
         EE.initialize();
         cc = ContinuumController.continuumFactory()($timeout);
         cc.tiles = 7;
+        cc.structure = hss;
+        cc.data = hss;
     });
 
     it('should have a function that handle the scroll', () => {
