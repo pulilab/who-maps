@@ -1,0 +1,41 @@
+<div flex="100">
+	<h4>Project Partners</h4>
+</div>
+
+<div class="partnerscontainer">
+
+	<div
+		ng-repeat="logo in vm.logos track by $index"
+    ng-class="{editing: vm.editMode}"
+		class="partner"
+		ng-if="vm.logos.length">
+
+		<figure>
+		    <img class="logoimg" ng-src="{{logo}}">
+        <md-button ng-if="vm.editMode" class="md-fab md-tiny md-warn small logo-remove" aria-label="Remove logo">
+            <md-icon class="material-icons" ng-click="vm.delLogo(logo)">close</md-icon>
+        </md-button>
+		</figure>
+	</div>
+
+	<div
+		class="add-partner"
+		ng-hide="!vm.editMode">
+
+		<div
+			class="file-upload"
+			ng-click="vm.addLogo()">
+
+			<label for="file-input">
+				<md-button class="md-black wide">Upload logo</md-button>
+				<input type="file" id="file-input" onchange="fileChange()">
+			</label>
+		</div>
+
+		<span class="file-upload-info md-small">
+			File format: jpeg, gif, png<br>
+			Max.file size: 2MB
+		</span>
+
+	</div>
+</div>

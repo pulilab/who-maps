@@ -1,0 +1,6 @@
+{
+  "name": "ProjectPartners",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./projectPartnersComponent.js"
+}

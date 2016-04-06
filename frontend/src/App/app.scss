@@ -1,1 +1,265 @@
 @import '../../node_modules/angular-material/angular-material';
+@import '../variables';
+@import '../mixins';
+
+/* GENERAL
+   ============================= */
+
+ui-view > md-content {
+  background-color: $color-page-background;
+}
+
+.page-wrapper {
+  background-color: $color-white;
+}
+
+
+/* TYPOGRAPY
+   ============================= */
+
+.page-title {
+  color: $color-primary;
+
+  .md-subhead {
+    margin-top: 0;
+    margin-left: 10%;
+    max-width: 80%;
+    color: $color-gray;
+  }
+}
+
+.md-small {
+  font-size: $caption-font-size-base;
+}
+
+/* UI ELEMENTS
+   ============================= */
+
+.md-button {
+
+  &.wide {
+    padding: $button-padding-wide;
+  }
+
+  &.md-fab {
+    &.md-tiny {
+      padding: 0;
+      min-height: 0;
+      width: $button-fab-tiny-width;
+      height: $button-fab-tiny-height;
+      line-height: $button-fab-tiny-line-height;
+
+      .material-icons {
+        width: $button-fab-tiny-width;
+        height: $button-fab-tiny-height;
+        vertical-align: baseline;
+        font-size: 18px;
+        line-height: $button-fab-tiny-height;
+      }
+    }
+  }
+}
+
+md-backdrop {
+  &.md-dialog-backdrop {
+    z-index: 1200;
+  }
+}
+
+.md-dialog-container {
+  z-index: 1201;
+}
+
+.md-fab-not-raised {
+  box-shadow: none !important;
+}
+
+// Progress Circular
+md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
+  border-width: 16px !important;
+}
+
+// Checkbox - small
+$checkbox-size-small: 16px;
+
+md-checkbox.small {
+  margin-bottom: 5px;
+  font-size: $caption-font-size-base;
+
+  .md-container,
+  .md-icon {
+    width: $checkbox-size-small;
+    height: $checkbox-size-small;
+  }
+  &.md-checked .md-icon:after {
+    top: $checkbox-size-small / 7;
+    left: $checkbox-size-small / 3;
+    width: $checkbox-size-small / 3;
+    height: $checkbox-size-small * 2 / 3;
+  }
+  .md-label {
+    margin-left: 24px;
+  }
+}
+
+
+/* CUSTOM COLORS
+   ============================= */
+
+.md-gray {
+
+  // Progress Circular
+  .md-left .md-half-circle {
+    border-top-color: $color-gray-light !important;
+    border-left-color: $color-gray-light !important;
+  }
+  .md-right .md-half-circle {
+    border-top-color: $color-gray-light !important;
+    border-right-color: $color-gray-light !important;
+  }
+}
+
+.md-green {
+
+  // Switch
+  &.md-checked .md-bar {
+    background-color: rgba($color-green, 0.49) !important;
+  }
+  &.md-checked .md-thumb {
+    background-color: $color-green !important;
+  }
+  &.md-checked .md-thumb::before {
+    background-color: rgba($color-green, 0.26) !important;
+  }
+  &.md-checked .md-ink-ripple,
+  &.md-checked .md-ripple-container {
+    color: $color-green !important;
+  }
+}
+
+.md-black {
+
+  // Checkbox
+  &.md-checked {
+    .md-icon {
+      border-color: $text-primary !important;
+      background-color: $text-primary !important;
+    }
+    .md-ink-ripple {
+      color: $text-primary !important;
+    }
+  }
+
+  // FAB
+  &.md-fab,
+  &.md-fab:not([disabled]):hover {
+    background-color: $text-primary;
+  }
+
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    background-color: $text-primary;
+    color: $color-white;
+  }
+}
+
+
+/* TOP NAVIGATION BAR
+   ============================= */
+
+.main-toolbar {
+  min-height: 48px;
+
+  .md-toolbar-tools {
+    max-height: 48px;
+    height: 48px;
+    background-color: #1A237E;
+    font-size: $body-font-size-base;
+  }
+
+  .app-title {
+    display: inline-block;
+    margin-right: 20px;
+    color: $color-primary-muted;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: $body-font-size-base;
+  }
+
+  .md-menu {
+    .has-message {
+      color: $color-white !important;
+    }
+  }
+}
+
+.md-medium-tall {
+    color: $color-primary-muted;
+
+  .md-toolbar-tools {
+    background-color: $color-primary;
+
+    .md-button {
+      margin: 0 0 0 10px;
+    }
+  }
+
+  .project-selector {
+
+    md-input-container {
+      margin: 0 !important;
+      padding: 0 !important;
+
+      md-select {
+        .md-select-value {
+          padding-left: 0;
+          border: none;
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  .project-menu {
+    .md-button {
+      margin: 0 20px 0 0;
+
+      &:first-child {
+        margin-left: -6px;
+      }
+    }
+  }
+
+  .project-info {
+    font-size: $caption-font-size-base;
+
+    > span {
+      display: inline-block;
+      float: left;
+      margin-left: 25px;
+      min-height: 36px;
+      line-height: 36px;
+
+    }
+
+    .md-button {
+      float: right;
+    }
+
+    .material-icons {
+      position: relative;
+      top: 3px;
+      font-size: 16px;
+    }
+  }
+}
+
+.main-toolbar,
+.md-medium-tall {
+  .md-button .md-light,
+  .md-button .md-icon,
+  .md-button span {
+    color: $color-primary-muted;
+  }
+}

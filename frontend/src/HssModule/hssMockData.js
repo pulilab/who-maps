@@ -4,14 +4,97 @@
 
 export const interventionsLib = {
 
+    // Data-fragments with rowheader-like approach
     'Community': ['Birth notification', 'Routine immunizations'],
 
     '1st level': ['Postnatal care for mother and child'],
 
     'Referral': [],
 
-    'Key supplies & commodities': []
+    'Key supplies & commodities': [],
 
+    // All the real ones from the 13. page of the .pdf pr. column
+    '0': [
+        'Safe sex',
+        'Family planning',
+        'Birth spacing',
+        'Infertility',
+        'Sexual and domestic violence',
+        'HIV/AIDS',
+        'Generalized epidemics',
+        'STIs, except HIV/AIDs',
+        'Cancer',
+        'Key supplies and commodities'
+    ],
+    '1': [
+        'Safe sex',
+        'Family planning',
+        'Birth spacing',
+        'Infertility',
+        'Sexual and domestic violence',
+        'HIV/AIDS',
+        'Generalized epidemics',
+        'STIs, except HIV/AIDs',
+        'Cancer',
+        'Key supplies and commodities'
+    ],
+    '2': [
+        'Pregnancy registration',
+        'Antenatal care',
+        'Nutrition',
+        'Safe sex',
+        'HIV/AIDS',
+        'Smoking/Alcohol use',
+        'Malaria',
+        'Birth planning',
+        'Domestic violence',
+        'Pregnancy complications',
+        'Immunizations',
+        'Key supplies and commodities'
+    ],
+    '3': [
+        'Transportation',
+        'Skilled attendance at birth',
+        'Labor and delivery care',
+        'Immediate care of newborn',
+        'Immediate postpartum care',
+        'Obstetric complications',
+        'HIV/AIDS',
+        'PMTCT',
+        'Key supplies and commodities'
+    ],
+    '4': [
+        'Postpartum care',
+        'Exclusive Breastfeeding',
+        'Vital registration',
+        'Family planning',
+        'Malaria',
+        'Depression',
+        'Postnatal care',
+        'HIV/AIDs',
+        'PMTCT',
+        'Newborn illnesses',
+        'Low birth weight/pre term care',
+        'Key supplies and commodities'
+    ],
+    '5': [
+        'Exclusive breastfeeding',
+        'Childhood illnesses',
+        'Malaria',
+        'Immunizations',
+        'Growth monitoring and Nutrition',
+        'PMTCT',
+        'Micronutrient supplementation',
+        'Key supplies and commodities'
+    ],
+    '6': [
+        'Childhood illnesses',
+        'Malaria',
+        'Growth monitoring and Nutrition',
+        'PMTCT',
+        'Micronutrient supplementation',
+        'Key supplies and commodities'
+    ]
 };
 
 export const applicationsLib = [
@@ -109,52 +192,73 @@ export const applicationsLib = [
 ];
 
 export const taxonomyLib = {
-    'Information': [
-        'Lack of population enumeration',
-        'Delayed reporting of events',
-        'Quality / unreliability of data',
-        'Communication roadblock',
-        'Access to information or data'
-    ],
-    'Availability': [
-        'Supply of commodities',
-        'Supply of services',
-        'Supply of equipment',
-        'Diversity of treatment options'
-    ],
-    'Quality': [
-        'Quality of care',
-        'Health worker competence',
-        'Quality of commodity',
-        'Health worker motivation',
-        'Continuity of care',
-        'Supportive supervision'
-    ],
-    'Acceptability': [
-        'Alignment with local norms',
-        'Addressing individual beliefs and practices',
-        'Stigma'
-    ],
-    'Utilization': [
-        'Demand for services',
-        'Geographic inaccessibility',
-        'Low adherence to treatments',
-        'Loss to follow up'
-    ],
-    'Efficiency': [
-        'Workflow management',
-        'Effective resource allocation',
-        'Unnecessary referrals / transportation',
-        'Planning and coordination',
-        'Timeliness of care'
-    ],
-    'Cost': [
-        'Expenses related to commodity production',
-        'Expenses related to commodity supply',
-        'Expenses related to commodity disbursement',
-        'Expenses related to service delivery',
-        'Client-side expenses'
-    ]
+    'Information': {
+        icon: 'info',
+        values: [
+            'Lack of population enumeration',
+            'Delayed reporting of events',
+            'Quality / unreliability of data',
+            'Communication roadblock',
+            'Access to information or data'
+        ]
+    },
+    'Availability': {
+        icon: 'check',
+        values: [
+            'Supply of commodities',
+            'Supply of services',
+            'Supply of equipment',
+            'Diversity of treatment options'
+        ]
+    },
+    'Quality': {
+        icon: 'star',
+        values: [
+            'Quality of care',
+            'Health worker competence',
+            'Quality of commodity',
+            'Health worker motivation',
+            'Continuity of care',
+            'Supportive supervision'
+        ]
+    },
+    'Acceptability': {
+        icon: 'accessibility',
+        values: [
+            'Alignment with local norms',
+            'Addressing individual beliefs and practices',
+            'Stigma'
+        ]
+    },
+    'Utilization': {
+        icon: 'pan_tool',
+        values: [
+            'Demand for services',
+            'Geographic inaccessibility',
+            'Low adherence to treatments',
+            'Loss to follow up'
+        ]
+    },
+    'Efficiency': {
+        icon: 'trending_up',
+        values: [
+            'Workflow management',
+            'Effective resource allocation',
+            'Unnecessary referrals / transportation',
+            'Planning and coordination',
+            'Timeliness of care'
+        ]
+    },
+    'Cost': {
+        icon: 'monetization_on',
+        values: [
+            'Expenses related to commodity production',
+            'Expenses related to commodity supply',
+            'Expenses related to commodity disbursement',
+            'Expenses related to service delivery',
+            'Client-side expenses'
+        ]
+    }
 };
 
 // Bindable things
@@ -166,7 +270,7 @@ export const hss = [
         'mother': {
             'title': 'Adolenscence',
             'span': 1,
-            'activated': false
+            'activated': true
         },
         'child': {
             'title': null,
@@ -331,3 +435,13 @@ export const taxonomy = {
         { 'Efficiency': 4 }
     ]
 };
+
+export const projectScale = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+    ' Donec eros lacus,  posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.';
+
+export const partnerLogoUrls = [
+    'http://placehold.it/350x150',
+    'http://placehold.it/350x350',
+    'http://placehold.it/170x100',
+    'http://placehold.it/500x500'
+];

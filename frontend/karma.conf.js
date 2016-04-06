@@ -4,7 +4,7 @@ module.exports = function(config) {
         files: [
             { pattern: 'test-context.js', watched: false }
         ],
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'phantomjs-shim'],
         preprocessors: {
             'test-context.js': ['webpack', 'sourcemap']
         },
@@ -20,19 +20,24 @@ module.exports = function(config) {
             module: {
                 loaders: [
                     {
-                        test: /\.js$/,
-                        exclude: /node_modules/,
-                        loader: 'babel',
-                        query: {
-                            presets: ['es2015']
-                        }
+                        test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
+                        loaders: ['null']
+                    },
+                    {
+                        test: /\.json/,
+                        loader: 'json'
                     }
                 ],
-                postLoaders: [
+                preLoaders: [
+                    {
+                        test: /-spec\.js$/,
+                        exclude: /node_modules/,
+                        loader: 'babel'
+                    },
                     {
                         test: /^((?!-spec).)*.js$/,
                         exclude: /(node_modules|bower_components)/,
-                        loader: 'istanbul-instrumenter'
+                        loaders: ['babel-istanbul']
                     }
                 ]
             }

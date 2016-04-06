@@ -1,0 +1,56 @@
+<md-grid-list
+        md-cols="11"
+        md-gutter="0px"
+        md-row-height="40px"
+        md-on-layout="vm.layoutDone()"
+        ng-if="vm.editMode"
+        ng-show="vm.layoutReady"
+>
+    <md-grid-tile
+            md-rowspan="1"
+            md-colspan="9"
+            ng-if="vm.showLong"
+    >
+        <div class="hint-container" layout="row" layout-align="start center">
+            <md-icon flex="none" class="material-icons">arrow_upward</md-icon>
+            <div flex >
+                <strong>
+                    Hint:
+                </strong>
+                <ng-transclude ng-transclude-slot="longTile"></ng-transclude>
+            </div>
+        </div>
+    </md-grid-tile>
+
+    <md-grid-tile
+            md-rowspan="1"
+            md-colspan="2"
+            ng-if="vm.showShort"
+    >
+
+        <div class="hint-container" layout="row" layout-align="start start">
+            <md-icon flex="none" class="material-icons">arrow_downward</md-icon>
+            <div flex >
+                <strong>Hint:</strong>
+                <ng-transclude ng-transclude-slot="shortTile"></ng-transclude>
+            </div>
+        </div>
+    </md-grid-tile>
+
+    <md-grid-tile
+            md-rowspan="2"
+            md-colspan="9"
+            ng-if="vm.showTall"
+    >
+        <div class="hint-container tall" layout="row" layout-align="start start" flex-auto>
+            <md-icon flex="none" class="material-icons">arrow_upward</md-icon>
+            <div flex >
+                <strong >
+                    Hint:
+                </strong>
+                <ng-transclude ng-transclude-slot="tallTile"></ng-transclude>
+            </div>
+        </div>
+    </md-grid-tile>
+
+</md-grid-list>

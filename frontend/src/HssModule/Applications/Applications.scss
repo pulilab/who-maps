@@ -1,0 +1,393 @@
+@import '../../variables';
+@import '../../mixins';
+
+applications {
+
+  div {
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+
+  .header {
+    z-index: 30;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid $color-gray-lighter;
+    background-color: #EEEEEE !important;
+
+    h2 {
+      z-index: 10;
+      padding-left: 40px;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: #EEEEEE url('./images/asset-bg-apps.svg') no-repeat -10px 4px;
+      content: "";
+      opacity: .2;
+    }
+  }
+
+  .application_1 .bubble-shape,
+  .application_1 .app-number,
+  .tile.application_1.sub .app-number::before {
+    background: #26C6DA;
+  }
+  .application_1 .white-number {
+    color: #26C6DA;
+  }
+  .application_2 .bubble-shape,
+  .application_2 .app-number,
+  .tile.application_2.sub .app-number::before {
+    background: #039BE5;
+  }
+  .application_2 .white-number {
+    color: #039BE5;
+  }
+  .application_3 .bubble-shape,
+  .application_3 .app-number,
+  .tile.application_3.sub .app-number::before {
+    background: #9575CD;
+  }
+  .application_3 .white-number {
+    color: #9575CD;
+  }
+  .application_4 .bubble-shape,
+  .application_4 .app-number,
+  .tile.application_4.sub .app-number::before {
+    background: #673AB7;
+  }
+  .application_4 .white-number {
+    color: #673AB7;
+  }
+  .application_5 .bubble-shape,
+  .application_5 .app-number,
+  .tile.application_5.sub .app-number::before {
+    background-color: #F06292;
+  }
+  .application_5 .white-number {
+    color: #F06292;
+  }
+  .application_6 .bubble-shape,
+  .application_6 .app-number,
+  .tile.application_6.sub .app-number::before {
+    background: #F44336;
+  }
+  .application_6 .white-number {
+    color: #F44336;
+  }
+  .application_7 .bubble-shape,
+  .application_7 .app-number,
+  .tile.application_7.sub .app-number::before {
+    background: #F9A825;
+  }
+  .application_7 .white-number {
+    color: #F9A825;
+  }
+  .application_8 .bubble-shape,
+  .application_8 .app-number,
+  .tile.application_8.sub .app-number::before {
+    background: #F57C00;
+  }
+  .application_8 .white-number {
+    color: #F57C00;
+  }
+  .application_9 .bubble-shape,
+  .application_9 .app-number,
+  .tile.application_9.sub .app-number::before {
+    background: #9E9D24;
+  }
+  .application_9 .white-number {
+    color: #9E9D24;
+  }
+  .application_10 .bubble-shape,
+  .application_10 .app-number,
+  .tile.application_10.sub .app-number::before {
+    background: #43A047;
+  }
+  .application_10 .white-number {
+    color: #43A047;
+  }
+
+  .tile {
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #EEEEEE;
+
+    &.app-header,
+    &.app-tax {
+      border-right: none !important;
+      background-color: #fff !important;
+    }
+
+    &.app-open {
+      md-icon {
+        &:before {
+          content: "expand_less";
+        }
+      }
+    }
+
+    &.app-sub {
+      border-top: none !important;
+
+      .app-number {
+        &::before {
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          display: inline-block;
+          width: 1px;
+          height: 21px;
+          background-color: #BDBDBD;
+          content: "";
+        }
+      }
+    }
+
+    &.app {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+
+      &.activated {
+        cursor: pointer;
+
+        &:hover {
+          .bubble {
+            opacity: .8;
+            transform: scale(1.25);
+            &::after {
+              opacity: 1;
+            }
+          }
+        }
+      }
+
+      &.not-activated {
+        cursor: not-allowed;
+      }
+    }
+
+    &.appselected.no-bubble {
+      background: $color-green;
+      cursor: pointer;
+
+      .bubble {
+        &.bubble-allowed {
+          background-color: $color-green;
+          opacity: .8;
+          &::after {
+            content: "done";
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  .app-number {
+    position: relative;
+    float: left;
+    margin: 10px 0 0 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    background-color: #BDBDBD;
+    color: $color-white;
+    text-align: center;
+    font-weight: 500;
+    font-size: $caption-font-size-base;
+    line-height: 30px;
+  }
+
+  .white-number {
+    position: relative;
+    margin: 8px 0 0 9px;
+    background: $color-white !important;
+
+    &::before {
+      display: none !important;
+    }
+  }
+
+  .app-button {
+    float: left;
+    width: calc( 100% - 42px );
+  }
+
+  .md-button-override {
+    display: block;
+    margin: 0 0 0 5px;
+    padding-right: 30px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent !important;
+    text-align: left;
+    text-transform: none;
+    white-space: normal;
+    font-size: 12px;
+    line-height: 16px;
+
+    md-icon {
+      position: absolute;
+      top: 58%;
+      right: 14px;
+      transform: translateY(-50%);
+      font-size: 18px;
+
+      &:before {
+        content: "expand_more";
+      }
+    }
+  }
+
+  md-input-container {
+    margin: 0;
+    width: 100%;
+
+    input.md-input {
+      margin: -2px 0 0;
+      padding: 0;
+      border: none !important;
+      color: $color-white !important;
+      font-size: $caption-font-size-base;
+      transform: translateY(-50%);
+
+      @include input-placeholder-color($color-white);
+    }
+
+    md-select {
+      margin: 0 15px;
+      padding: 0;
+      width: calc(100% - 35px);
+
+      md-select-value {
+        span {
+          display: block;
+          width: calc(100% - 30px);
+        }
+      }
+    }
+  }
+
+  .bubble {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    opacity: .2;
+    transition: $swift-ease-out;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    &.bubble-allowed {
+      background-color: $color-green;
+
+      &::after {
+        float: left;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        color: $color-white;
+        content: "add";
+        vertical-align: middle;
+        text-align: center;
+        opacity: 0;
+        transition: $swift-ease-out;
+        transform: translate3d(0,0,0);
+
+        @include md-icon(23px);
+      }
+    }
+    &.bubble-notallowed {
+      background-color: $color-red;
+    }
+  }
+
+  .bubble-shape {
+    position: absolute;
+    top: 1px;
+    left: -11px;
+    z-index: 20;
+    overflow: hidden;
+    width: calc( 100% + 20px );
+    height: calc( 100% - 5px );
+    border: 1px solid $color-white;
+    border-radius: 35px;
+
+    md-input-container,
+    .app-text {
+      position: absolute;
+      top: 50%;
+      left: 45px;
+      width: calc( 100% - 60px );
+    }
+  }
+
+  .app-text {
+    // Pure multiline text truncation for Webkit browsers
+    // TODO: need solution for other browsers
+    // Note: text will be chopped off after two lines without displaying ellipsis
+    display: -webkit-box;
+    overflow: hidden;
+    max-height: 36px;
+    width: 100%;
+    height: auto;
+    color: $color-white !important;
+    font-size: $caption-font-size-base;
+    line-height: 16px;
+    transform: translateY(-50%);
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .app-delete {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    z-index: 200;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 4px;
+    width: 24px;
+    height: 24px;
+    outline: none;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+      > span {
+        position: absolute;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 16px;
+        background-color: $text-primary;
+        color: $color-white;
+        text-align: center;
+        font-size: 1.1rem;
+        line-height: 16px;
+        transition: $swift-ease-out;
+      }
+
+      &:hover > span {
+        transform: scale(1.25);
+      }
+  }
+
+  .md-tax-text {
+    display: block;
+    margin: 5px 20px 1px;
+    width: calc( 100% - 40px );
+    line-height: 16px;
+
+    @include text-truncate();
+  }
+}
