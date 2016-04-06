@@ -129,7 +129,7 @@ applications {
     &.app-open {
       md-icon {
         &:before {
-          content: "arrow_drop_up";
+          content: "expand_less";
         }
       }
     }
@@ -236,12 +236,13 @@ applications {
 
     md-icon {
       position: absolute;
-      top: 50%;
-      right: 15px;
+      top: 58%;
+      right: 14px;
       transform: translateY(-50%);
+      font-size: 18px;
 
       &:before {
-        content: "arrow_drop_down";
+        content: "expand_more";
       }
     }
   }
