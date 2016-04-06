@@ -1,14 +1,5 @@
 
 interventions = {
-
-    'Community': ['Birth notification', 'Routine immunizations'],
-
-    '1st level': ['Postnatal care for mother and child'],
-
-    'Referral': [],
-
-    'Key supplies & commodities': [],
-
     0: [
         'Safe sex',
         'Family planning',
