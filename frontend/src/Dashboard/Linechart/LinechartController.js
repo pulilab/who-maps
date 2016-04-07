@@ -4,7 +4,7 @@ class LinechartController {
 
     constructor($timeout) {
         const vm = this;
-        // vm.data <= binding from outer scope, holds the data
+        // vm.data <= binding from outer scope, holds actual data
 
         vm.labels = [
             'Groundwork',
@@ -58,9 +58,9 @@ class LinechartController {
         // Should recalculate on first open || resize
         const margin = {
             top: 35,
-            right: 35,
-            bottom: 35,
-            left: 35
+            right: -15,
+            bottom: 30,
+            left: 60
         };
         const width = outerWidth - margin.left - margin.right;
         const height = outerHeight - margin.top - margin.bottom;
@@ -78,7 +78,7 @@ class LinechartController {
 
         const xScale = d3.scale.linear()
             .range([margin.left, width - margin.right]) // the area
-            .domain([1, data.length]); // min and max values
+            .domain([0.8, data.length + 0.2]); // min and max values
 
         const yScale = d3.scale.linear()
             .range([height - margin.top, margin.bottom])
@@ -96,15 +96,29 @@ class LinechartController {
 
         // Appending the X axis
         element.append('svg:g')
-            .attr('class', 'axis')
+            .attr('class', 'axis x-axis')
             .attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
             .call(xAxis);
 
         // Appending the Y axis
         element.append('svg:g')
-            .attr('class', 'axis')
+            .attr('class', 'axis y-axis')
             .attr('transform', 'translate(' + (margin.left) + ',0)')
             .call(yAxis);
+
+        // Appending horizontal ruler lines
+        for (let i = 0; i <= 10; i += 1) {
+            element.append('svg:line')
+                .attr('class', 'linechart-ruler')
+                .attr('x1', margin.left)
+                .attr('y1', yScale(i / 10))
+                .attr('x2', width - margin.right)
+                .attr('y2', yScale(i / 10))
+                .attr('stroke', '#9D9D9D')
+                .attr('stroke-width', '0.4')
+                .attr('fill', 'none');
+        }
+
 
         // LINES
         for (let i = 1; i <= 6; i += 1) {
@@ -115,19 +129,20 @@ class LinechartController {
 
             // Full lines
             element.append('svg:path')
-                .attr('class', 'line-axis' + i)
+                .attr('class', 'line-axis line-axis' + i)
                 .attr('d', line(data.slice(0, -1)))
                 .attr('stroke', color['a' + i])
-                .attr('stroke-width', 4)
+                .attr('stroke-width', 3)
                 .attr('fill', 'none');
 
             // Dashed lines
             element.append('svg:path')
-                .attr('class', 'line-axis' + i)
+                .attr('class', 'line-axis line-axis' + i)
                 .attr('d', line(data.slice(-2)))
                 .attr('stroke', color['a' + i])
-                .attr('stroke-width', 4)
-                .attr('stroke-dasharray', '12, 12')
+                .attr('stroke-linecap', 'round')
+                .attr('stroke-width', 3)
+                .attr('stroke-dasharray', '2, 7')
                 .attr('fill', 'none');
         }
 
@@ -136,7 +151,7 @@ class LinechartController {
             for (let i = 1; i <= 6; i += 1) {
 
                 element.append('circle')
-                    .attr('class', 'dot-axis' + i)
+                    .attr('class', 'dot-axis dot-axis' + i)
                     .attr('r', 5)
                     .attr('cx', xScale(el.x))
                     .attr('cy', yScale(el['axis' + i]))
@@ -155,6 +170,7 @@ class LinechartController {
                             el.name, // 'Version x'
                             '<br>',
                             el.date.split('-').join('. ') + '.'
+                            // What about points covering each other?
                         ];
 
                         tooltip.html(divString.join(''))
@@ -171,9 +187,19 @@ class LinechartController {
             }
         });
 
+        // Label events to trigger classes, that opaques lines via css
+        [1, 2, 3, 4, 5, 6].forEach(i => {
+            d3.select('.labelhov' + i)
+                .on('mouseover', () => {
+                    element.classed('activelabel' + i, true);
+                })
+                .on('mouseout', () => {
+                    element.classed('activelabel' + i, false);
+                });
+        });
+
+        // Redraw on window resize (may be optimized to only redraw if the width changed)
         function resizedw() {
-            console.log('window was resized');
-            // reset the svg
             d3.selectAll('svg > *').remove();
             d3.select('.tooltip').remove();
             vm.drawAxes();

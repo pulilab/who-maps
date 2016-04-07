@@ -1,13 +1,51 @@
-<md-chips ng-model="vm.labels">
+<h3>placeholder</h3>
 
-    <md-chip-template>
+<div layout="row" class="linechart-labels">
 
-        <i class="material-icons" ng-class="'labelicon'+($index + 1)">brightness_1</i>
-        {{$chip}}
+    <div flex="15" flex-offset="5" layout="column">
+        <div flex>
+            ____ closed
+        </div>
+        <div flex>
+            …… in progress
+        </div>
+    </div>
 
-    </md-chip-template>
+    <div flex="25" layout="column">
+        <div class="labelhov1">
+            <i class="material-icons labelicon1">fiber_manual_record</i>
+            Groundwork
+        </div>
+        <div class="labelhov2">
+            <i class="material-icons labelicon2">fiber_manual_record</i>
+            Partnership
+        </div>
+    </div>
 
-</md-chips>
+    <div flex="25" layout="column">
+        <div class="labelhov3">
+            <i class="material-icons labelicon3">fiber_manual_record</i>
+            Financial health
+        </div>
+        <div class="labelhov4">
+            <i class="material-icons labelicon4">fiber_manual_record</i>
+            Technology & Architecture
+        </div>
+    </div>
+
+    <div flex="25" layout="column">
+        <div class="labelhov5">
+            <i class="material-icons labelicon5">fiber_manual_record</i>
+            Operations
+        </div>
+        <div class="labelhov6">
+            <i class="material-icons labelicon6">fiber_manual_record</i>
+            Monitoring & Evaluation
+        </div>
+    </div>
+
+</div>
+
 
 <div id="linechartcontainer">
 
