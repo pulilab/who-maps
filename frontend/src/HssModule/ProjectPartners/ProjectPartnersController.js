@@ -37,7 +37,6 @@ class ProjectPartnersController {
     // It gets out to the global, because Angular doesn't let binding to the file,
     // so ng-change isn't working
     fileChange() {
-
         const fileElement = document.getElementById('file-input');
         const fileObj = fileElement ? fileElement.files[0] : null;
 

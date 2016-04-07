@@ -13,13 +13,13 @@
             <long>You can click on the continuum areas to activate or deactivate a section. Please note that this will affect the Applications part too.</long>
             <short>Add/remove items</short>
         </hint>
-        <interventions tiles="7" ></interventions>
+        <interventions tiles="7" structure="vm.structure" data="vm.data" ></interventions>
 
         <hint show-long="true" show-short="true" >
             <long>Click on the dropdown to select or deselect interventions of the dropdown list. You can select multiple items.</long>
             <short>Add/remove items</short>
         </hint>
-        <applications tiles="7"></applications>
+        <applications tiles="7" structure="vm.structure" data="vm.data"></applications>
 
         <hint show-tall="true">
             <tall>
@@ -30,7 +30,7 @@
         </hint>
         <div flex layout="row" class="hss-module-bottom">
             <div flex="33">
-                <projectscale></projectscale>
+                <projectscale data="vm.data"></projectscale>
             </div>
             <div layout-wrap flex="66" layout="row">
                 <projectpartners></projectpartners>
