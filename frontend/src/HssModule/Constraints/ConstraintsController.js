@@ -1,13 +1,18 @@
-import { taxonomyLib } from '../hssMockData';
 import _ from 'lodash';
+import HssModuleService from '../HssModuleService';
 class ConstraintsController {
 
-    constructor() {
+    constructor($timeout) {
         const vm = this;
         vm.EE = window.EE;
         vm.editMode = false;
+        this.hs = new HssModuleService();
         vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-        this.constraints = this.constraintsToggleGenerator();
+        $timeout(() => {
+            this.constraints = this.constraintsToggleGenerator();
+            this.checkSizeAndFireCallback();
+        });
+
     }
 
     handleEditMode(value) {
@@ -23,30 +28,32 @@ class ConstraintsController {
     }
 
     constraintsToggleGenerator() {
-        return _.chain(taxonomyLib)
+        return _.chain(this.structure.taxonomies)
             .keys()
-            .map(value => {
+            .map((value, key) => {
+                const _active = this.data.constraints[key] && this.data.constraints[key].active;
                 return {
                     name: value,
-                    icon: taxonomyLib[value].icon,
-                    active: false
+                    icon: this.structure.taxonomies[value].icon,
+                    active: _active
                 };
             })
             .value();
     }
 
-    constraintChanged() {
+    constraintChanged(data) {
+        this.hs.postConstraints([data]);
         this.EE.emit('hssConstraintsSelected', _.cloneDeep(this.constraints));
     }
 
 
     static constraintsFactory() {
         require('./Constraints.scss');
-        function constraints() {
-            return new ConstraintsController();
+        function constraints($timeout) {
+            return new ConstraintsController($timeout);
         }
 
-        constraints.$inject = [];
+        constraints.$inject = ['$timeout'];
 
         return constraints;
     }

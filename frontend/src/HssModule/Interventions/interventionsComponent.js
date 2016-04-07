@@ -7,7 +7,9 @@ const interventionsComponent = {
     template: _template,
     controllerAs: 'vm',
     bindings: {
-        tiles: '<'
+        tiles: '<',
+        structure: '<',
+        data: '<'
     },
     name: 'interventions'
 };

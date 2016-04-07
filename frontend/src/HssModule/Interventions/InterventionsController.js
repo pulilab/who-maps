@@ -1,10 +1,11 @@
 import _ from 'lodash';
-import { hss, interventionsLib } from '../hssMockData';
+import HssModuleService from '../HssModuleService';
 
 class InterventionsController {
 
     constructor($timeout) {
         const vm = this;
+        this.hs = new HssModuleService();
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
@@ -15,7 +16,7 @@ class InterventionsController {
             this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
             this.interventionRow = this.middleColumnGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-            vm.EE.on('hssColumnActiveState', this.handleColumnActivation.bind(this));
+            vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
         });
     }
 
@@ -45,20 +46,21 @@ class InterventionsController {
         return _.chain(this.tiles)
             .range()
             .map((value) => {
-                let _activated = hss[value].mother.activated;
-                if (hss[value].child) {
-                    _activated = _activated || hss[value].child.activated;
+                let _activated = this.data.continuum[value].mother;
+                if (this.data.continuum[value].child) {
+                    _activated = _activated || this.data.continuum[value].child;
                 }
                 return {
-                    content: null,
+                    content: this.data.interventions[value].interventions,
                     className: 'intervention',
                     colSpan: 1,
                     rowSpan: 5,
                     columnId: value,
                     activated: _activated,
-                    selectValues: interventionsLib[value],
+                    selectValues: this.structure.interventions[value],
                     introName: 'interventions_middle_' + value,
-                    classGenerator: self.classGenerator
+                    classGenerator: self.classGenerator,
+                    saveInterventions: self.saveInterventions.bind(this, value)
                 };
             })
             .value();
@@ -78,7 +80,7 @@ class InterventionsController {
     }
 
     calculateInterventionHeight(newValue) {
-        if (!newValue.length) {
+        if (!newValue || !newValue.length) {
             return;
         }
         this.resizeRow(newValue.length * 0.5);
@@ -93,6 +95,12 @@ class InterventionsController {
         _.forEach(this.interventionRow, item => {
             item.rowSpan = rowSpan;
         });
+    }
+
+    saveInterventions(columnId, value) {
+        console.log(columnId, value);
+        this.hs.postInterventions(columnId, value);
+        this.calculateInterventionHeight(value);
     }
 
     static interventionsFactory() {

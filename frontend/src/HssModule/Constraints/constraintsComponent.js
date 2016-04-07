@@ -8,7 +8,9 @@ const constraintsComponent = {
     controllerAs: 'vm',
     name: 'constraints',
     bindings: {
-        resizeCallback: '='
+        resizeCallback: '=',
+        structure: '<',
+        data: '<'
     }
 };
 
