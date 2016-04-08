@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from core.views import TokenAuthMixin
+from core.views import TokenAuthMixin, get_object_or_400
 from .hss_data import interventions, applications, taxonomies, continuum
 from .models import HSS
 from . import serializers
@@ -38,9 +38,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = HSS.objects.get_object_or_none(project=project_id)
-            if not hss:
-                return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
+            hss = get_object_or_400(HSS, "No such project.", project=project_id)
             # Check each bubble in the update request, insert if not exists,
             # update if exists.
             for bubble_update in serializer.validated_data:
@@ -75,9 +73,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = HSS.objects.get_object_or_none(project=project_id)
-            if not hss:
-                return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
+            hss = get_object_or_400(HSS, "No such project.", project=project_id)
             hss.data["continuum"][serializer.validated_data["column_id"]].update(**serializer.validated_data)
             hss.save()
             return Response(serializer.data)
@@ -96,9 +92,7 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = HSS.objects.get_object_or_none(project=project_id)
-            if not hss:
-                return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
+            hss = get_object_or_400(HSS, "No such project.", project=project_id)
             # Check each constraint in the update request, insert if not exists,
             # update if exists.
             for constraint_update in serializer.validated_data:
@@ -130,9 +124,7 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = HSS.objects.get_object_or_none(project=project_id)
-            if not hss:
-                return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
+            hss = get_object_or_400(HSS, "No such project.", project=project_id)
             # Update the column with the intervention.
             hss.data["interventions"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
             hss.save()
@@ -167,9 +159,7 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = HSS.objects.get_object_or_none(project=project_id)
-            if not hss:
-                return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
+            hss = get_object_or_400(HSS, "No such project.", project=project_id)
             tax_update = dict(serializer.validated_data)
             # Check the constraint in the update request, insert if not exists,
             # update if exists.
@@ -204,9 +194,7 @@ def hss_data(request, project_id):
     Returns:
         json: All the HSS data for the given project in JSON.
     """
-    hss = HSS.objects.get_object_or_none(project=project_id)
-    if not hss:
-        return Response({"details": "No such project."}, status=status.HTTP_400_BAD_REQUEST)
+    hss = get_object_or_400(HSS, "No such project.", project=project_id)
     return Response(hss.data)
 
 

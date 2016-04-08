@@ -1,5 +1,6 @@
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import APIException
 
 
 class TokenAuthMixin(object):
@@ -9,3 +10,31 @@ class TokenAuthMixin(object):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+
+class Http400(APIException):
+    """
+    Represents 400 error to be raised inside APIs for immediate error response.
+    """
+    status_code = 400
+    detail = {"details": "No such object."}
+
+    def __init__(self, detail=None):
+        if detail:
+            self.detail = {"details": detail}
+
+
+def get_object_or_400(cls, error_message="No such object.", **kwargs):
+    """
+    Gets an object, raises Http400 with custom message if no such object.
+
+    Args:
+        cls: type of entity
+        error_message: to be used in the error response if no such object
+        kwargs: filter parameters for object query
+    """
+    obj = cls.objects.get_object_or_none(**kwargs)
+    if obj:
+        return obj
+    else:
+        raise Http400(error_message)
