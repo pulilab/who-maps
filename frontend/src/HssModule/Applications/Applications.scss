@@ -155,7 +155,7 @@ applications {
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
 
-      &.activated {
+      &.activated.edit-mode {
         cursor: pointer;
 
         &:hover {
@@ -169,7 +169,7 @@ applications {
         }
       }
 
-      &.not-activated {
+      &.not-activated.edit-mode {
         cursor: not-allowed;
       }
     }
