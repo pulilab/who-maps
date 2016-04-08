@@ -137,12 +137,14 @@ applications = [
         'id': 6,
         'name': 'Provider work planning and scheduling',
         'subApplications': {
+            1: 'Provider work planning and scheduling',
         }
     },
     {
         'id': 7,
         'name': 'Provider training and education',
         'subApplications': {
+            1: 'Provider training and education',
         }
     },
     {
