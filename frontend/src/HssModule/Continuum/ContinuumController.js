@@ -7,10 +7,11 @@ class ContinuumController {
 
     constructor($timeout, $element) {
         const vm = this;
+        this.EE = window.EE;
         this.hs = new HssModuleService();
+        this.gridLoading = false;
 
         $timeout(() => {
-            vm.EE = window.EE;
             vm.editMode = false;
             vm.isFixed = false;
             vm.rowHeight = 51;
@@ -29,11 +30,16 @@ class ContinuumController {
         });
     }
 
+    layoutDone() {
+        this.EE.emit('hssInnerLayoutDone', 'continuum');
+    }
+
     scrollEventHandler() {
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
-                vm.isFixed = document.body.scrollTop >= angular.element(vm.element)[0].offsetTop;
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
                 vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
             }
         });

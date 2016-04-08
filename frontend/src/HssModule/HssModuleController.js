@@ -9,6 +9,7 @@ class HssModuleController {
         this.scope = $scope;
         this.introJsSource = introJs;
         this.dataReady = false;
+        this.gridLoading = 5;
         this.editMode = false;
         this.structure = {};
         this.data = {};
@@ -25,9 +26,15 @@ class HssModuleController {
 
         this.EE.on('hssEditMode', this.handleEditMode.bind(this));
 
+        this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent.bind(this));
+
         this.hs = new HssModuleService();
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 
+    }
+
+    handleLayoutEvent() {
+        this.gridLoading -= 1;
     }
 
     handleServerData(values) {

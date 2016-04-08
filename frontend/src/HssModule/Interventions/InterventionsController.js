@@ -5,9 +5,11 @@ class InterventionsController {
 
     constructor($timeout) {
         const vm = this;
+        this.EE = window.EE;
         this.hs = new HssModuleService();
+        this.gridLoading = false;
         $timeout(() => {
-            vm.EE = window.EE;
+
             vm.editMode = false;
             vm.interventionsRowSpan = {
                 size: 5
@@ -24,6 +26,11 @@ class InterventionsController {
         this.editMode = value;
         this.checkSelected();
     }
+
+    layoutDone() {
+        this.EE.emit('hssInnerLayoutDone', 'interventions');
+    }
+
 
     handleColumnActivation(event) {
         _.map(this.interventionRow, (value) => {

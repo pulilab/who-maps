@@ -88,6 +88,7 @@ class AuthApi {
     }
 
     retrieveToken() {
+        window.sessionStorage.setItem('token', 'eed9e9eee38f95b70897031327f7c9db8231aaad');
         return window.sessionStorage.getItem('token');
     }
 

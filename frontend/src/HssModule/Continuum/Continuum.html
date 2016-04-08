@@ -4,6 +4,7 @@
     md-row-height="{{vm.rowHeight}}px"
     class="continuum-component"
     ng-class="{'fixed-mode': vm.isFixed}"
+    md-on-layout="vm.layoutDone()"
 >
 
     <md-grid-tile

@@ -5,12 +5,12 @@ class ApplicationsController {
 
     constructor($timeout, $mdDialog) {
         const vm = this;
+        this.EE = window.EE;
         this.rowObject = {};
-        this.layoutReady = false;
+        this.gridLoading = false;
         this.hs = new HssModuleService();
         this.timeout = $timeout;
         $timeout(() => {
-            vm.EE = window.EE;
             this.dialog = $mdDialog;
             vm.editMode = false;
             this.startTile = {};
@@ -30,8 +30,9 @@ class ApplicationsController {
     }
 
     layoutDone() {
-        this.layoutReady = true;
+        this.EE.emit('hssInnerLayoutDone', 'application');
     }
+
 
     handleColumnActivation(event) {
         _.map(this.applicationRow, (value) => {
@@ -77,6 +78,7 @@ class ApplicationsController {
         classArray.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
         classArray.push(tile.isMain ? 'app-main' : 'app-sub');
         classArray.push(tile.introName);
+        classArray.push(this.editMode ? 'edit-mode' : 'view-mode');
         return classArray.join(' ');
     }
 
@@ -283,7 +285,6 @@ class ApplicationsController {
                     _.forEach(row, item => {
                         item.disabled = !isEnabled;
                         item.rowEnabled = isEnabled;
-                        console.log(item.rowEnabled);
                     });
 
                 });

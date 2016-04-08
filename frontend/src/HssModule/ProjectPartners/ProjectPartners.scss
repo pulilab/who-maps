@@ -59,7 +59,7 @@ projectpartners {
         float: left;
 
         label {
-          button {
+          .md-button {
             margin: 0 20px 0 0;
           }
 
@@ -71,6 +71,7 @@ projectpartners {
 
       .file-upload-info {
         display: inline-block;
+        line-height:18px;
         color: $color-gray-light;
       }
     }

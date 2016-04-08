@@ -4,16 +4,6 @@
 
 export const interventionsLib = {
 
-    // Data-fragments with rowheader-like approach
-    'Community': ['Birth notification', 'Routine immunizations'],
-
-    '1st level': ['Postnatal care for mother and child'],
-
-    'Referral': [],
-
-    'Key supplies & commodities': [],
-
-    // All the real ones from the 13. page of the .pdf pr. column
     '0': [
         'Safe sex',
         'Family planning',

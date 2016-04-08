@@ -6,7 +6,10 @@
 
     <introjs source-string="vm.introJsSource" class="start-hss-intro"></introjs>
 
-    <div md-whiteframe="2" class="page-wrapper" ng-if="vm.dataReady" ng-show="vm.dataReady">
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.gridLoading">
+        <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+    </div>
+    <div md-whiteframe="2" class="page-wrapper" ng-if="vm.dataReady" ng-hide="vm.gridLoading">
         <continuum tiles="7" structure="vm.structure.continuum" data="vm.data.continuum" ></continuum>
 
         <hint show-long="true" show-short="true" >
