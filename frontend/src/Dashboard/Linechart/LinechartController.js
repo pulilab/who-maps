@@ -5,15 +5,7 @@ class LinechartController {
     constructor($timeout) {
         const vm = this;
         // vm.data <= binding from outer scope, holds actual data
-
-        vm.labels = [
-            'Groundwork',
-            'Partnerships',
-            'Financial health',
-            'Technology & architecture',
-            'Operations',
-            'Monitoring & evaluation'
-        ];
+        // vm.showdotted <= binding, decides to show unsaved ones
 
         $timeout(() => {
             if (vm.data.length > 2) {
@@ -53,8 +45,6 @@ class LinechartController {
             a6: '#5D4037'
         };
 
-        const labels = this.labels;
-
         // Should recalculate on first open || resize
         const margin = {
             top: 35,
@@ -78,7 +68,7 @@ class LinechartController {
 
         const xScale = d3.scale.linear()
             .range([margin.left, width - margin.right]) // the area
-            .domain([0.8, data.length + 0.2]); // min and max values
+            .domain([0.8, (vm.showdotted ? data.length : data.length - 1) + 0.2]); // min and max values
 
         const yScale = d3.scale.linear()
             .range([height - margin.top, margin.bottom])
@@ -136,18 +126,22 @@ class LinechartController {
                 .attr('fill', 'none');
 
             // Dashed lines
-            element.append('svg:path')
-                .attr('class', 'line-axis line-axis' + i)
-                .attr('d', line(data.slice(-2)))
-                .attr('stroke', color['a' + i])
-                .attr('stroke-linecap', 'round')
-                .attr('stroke-width', 3)
-                .attr('stroke-dasharray', '2, 7')
-                .attr('fill', 'none');
+            if (vm.showdotted) {
+                element.append('svg:path')
+                    .attr('class', 'line-axis line-axis' + i)
+                    .attr('d', line(data.slice(-2)))
+                    .attr('stroke', color['a' + i])
+                    .attr('stroke-linecap', 'round')
+                    .attr('stroke-width', 3)
+                    .attr('stroke-dasharray', '2, 7')
+                    .attr('fill', 'none');
+            }
         }
 
         // DOTS
-        data.forEach(el => {
+        const dotData = vm.showdotted ? vm.data : vm.data.slice(0, -1);
+
+        dotData.forEach(el => {
             for (let i = 1; i <= 6; i += 1) {
 
                 element.append('circle')
@@ -160,16 +154,12 @@ class LinechartController {
 
                         tooltip.transition()
                             .duration(200)
-                            .style('opacity', 0.9);
+                            .style('opacity', 1);
 
                         const divString = [
-                            labels[i - 1], // Axis name
+                            'Score: ' + Math.round(el['axis' + i] * 100) + '%',
                             '<br>',
-                            el['axis' + i] + ' points',
-                            '<br>',
-                            el.name, // 'Version x'
-                            '<br>',
-                            el.date.split('-').join('. ') + '.'
+                            'Date: ' + el.date
                             // What about points covering each other?
                         ];
 
