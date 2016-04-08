@@ -35,6 +35,9 @@ class HssModuleController {
 
     handleLayoutEvent() {
         this.gridLoading -= 1;
+        if (this.gridLoading < 0) {
+            this.gridLoading = 0;
+        }
     }
 
     handleServerData(values) {
