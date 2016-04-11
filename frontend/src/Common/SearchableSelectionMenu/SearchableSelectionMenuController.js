@@ -9,7 +9,7 @@ class SearchableSelectionMenuController {
         vm.timeout = $timeout;
         this.search = {};
         this.isOpen = false;
-        this.$onInit = this.initialization;
+        this.timeout = this.initialization.bind(this);
     }
 
     initialization() {

@@ -14,7 +14,7 @@ class HssModuleService extends AuthApi {
     }
 
     getData() {
-        return this.get('3/hss/data/');
+        return this.get('4/hss/data/');
     }
 
 
@@ -27,23 +27,23 @@ class HssModuleService extends AuthApi {
                 };
                 body[data.type] = data.activated;
 
-                return this.post('3/hss/continuum/', body);
+                return this.post('4/hss/continuum/', body);
             })
             .value();
     }
 
     postInterventions(columnId, interventions) {
-        return this.post('3/hss/interventions/', { 'column_id': columnId, interventions });
+        return this.post('4/hss/interventions/', { 'column_id': columnId, interventions });
     }
     postBubbles(data) {
-        return this.post('3/hss/bubbles/', data);
+        return this.post('4/hss/bubbles/', data);
     }
     postConstraints(data) {
-        return this.post('3/hss/constraints/', data);
+        return this.post('4/hss/constraints/', data);
     }
     postTaxonomy(appId, subAppId, content) {
         if (content.length > 0) {
-            return this.post('3/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
+            return this.post('4/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
         }
         return Promise.resolve({});
     }
