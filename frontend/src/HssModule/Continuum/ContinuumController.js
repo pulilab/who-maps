@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import angular from 'angular';
-import { hss } from '../hssMockData';
 import HssModuleService from '../HssModuleService';
 
 class ContinuumController {
@@ -10,7 +9,7 @@ class ContinuumController {
         this.EE = window.EE;
         this.hs = new HssModuleService();
         this.gridLoading = false;
-
+        this.classGenerator = this.classGenerator.bind(this);
         $timeout(() => {
             vm.editMode = false;
             vm.isFixed = false;
@@ -28,6 +27,7 @@ class ContinuumController {
             vm.mapsProgressPercentage = 68; // Placeholder!!
             angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
         });
+
     }
 
     layoutDone() {
@@ -73,7 +73,7 @@ class ContinuumController {
                     content: self.structure[value].mother.title,
                     colSpan: self.structure[value].mother.span,
                     rowSpan: 1,
-                    invisible: _.isEmpty(hss[value].mother),
+                    invisible: _.isEmpty(self.structure[value].mother),
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
                     activated: self.data[value].mother,
@@ -118,8 +118,8 @@ class ContinuumController {
         classes.push('zindex-' + (100 - (tile.columnId * 10)));
         classes.push(tile.introName);
 
-        if (tile.type === 'child') {
-            classes.push(hss[tile.columnId].child.title ? 'filled' : 'empty');
+        if (tile.type === 'child' && this.structure) {
+            classes.push(this.structure[tile.columnId].child.title ? 'filled' : 'empty');
         }
 
         return classes.join(' ');

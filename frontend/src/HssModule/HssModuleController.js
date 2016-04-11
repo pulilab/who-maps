@@ -7,9 +7,8 @@ class HssModuleController {
     constructor($scope, introJs) {
         this.EE = window.EE;
         this.scope = $scope;
-        this.introJsSource = introJs;
         this.dataReady = false;
-        this.gridLoading = 5;
+        this.gridLoading = 3;
         this.editMode = false;
         this.structure = {};
         this.data = {};
@@ -29,6 +28,13 @@ class HssModuleController {
         this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent.bind(this));
 
         this.hs = new HssModuleService();
+
+
+        this.$onInit = () => {
+            this.introJsSource = introJs;
+        };
+
+
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 
     }

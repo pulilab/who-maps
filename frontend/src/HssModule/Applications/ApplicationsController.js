@@ -6,22 +6,23 @@ class ApplicationsController {
     constructor($timeout, $mdDialog) {
         const vm = this;
         this.EE = window.EE;
+        this.hs = new HssModuleService();
         this.rowObject = {};
         this.gridLoading = false;
-        this.hs = new HssModuleService();
+        this.layoutReady = false;
+        vm.dialog = $mdDialog;
+        vm.editMode = false;
+        vm.startTile = {};
+        vm.tileClickCounter = 0;
         this.timeout = $timeout;
-        $timeout(() => {
-            this.dialog = $mdDialog;
-            vm.editMode = false;
-            this.startTile = {};
-            this.tileClickCounter = 0;
-            this.selectedConstraints = this.constraintsGenerator();
-            this.applicationRow = this.applicationRowGenerator();
+        this.$onInit = () => {
+            vm.selectedConstraints = this.constraintsGenerator();
+            vm.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
             vm.EE.on('hssConstraintsSelected', this.constraintsUpdated.bind(this));
             this.searchForFilledColumns();
-        });
+        };
     }
 
     handleEditMode(value) {
@@ -30,6 +31,7 @@ class ApplicationsController {
     }
 
     layoutDone() {
+        this.layoutReady = true;
         this.EE.emit('hssInnerLayoutDone', 'application');
     }
 
@@ -462,7 +464,7 @@ class ApplicationsController {
         _.map(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex], value => {
             if (value.isHeader) {
                 applicationStyle = value.applicationStyle;
-                value.rowBubbles.push(tile.columnId);
+                value.rowBubbles.push(this.startTile.columnId);
             }
             value.rowEnabled = true;
             return value;
@@ -496,7 +498,10 @@ class ApplicationsController {
         });
 
         this.timeout(() => {
-            document.getElementById('appBubble_' + this.labelGenerator(tile)).focus();
+            const input = document.getElementById('appBubble_' + this.labelGenerator(tile));
+            if (input) {
+                input.focus();
+            }
         });
 
         this.searchForFilledColumns();
