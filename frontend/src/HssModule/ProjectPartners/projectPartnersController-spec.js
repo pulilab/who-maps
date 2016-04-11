@@ -1,7 +1,7 @@
 import ProjectPartnersController from './ProjectPartnersController';
 import { EE } from '../../Common/';
 
-/* global define, it, describe, expect, beforeEach, jasmine, spyOn */
+/* global define, it, describe, expect, beforeEach, jasmine, spyOn, xit */
 
 let cc = {};
 const $timeout = arg => {
@@ -41,7 +41,7 @@ describe('HSS project partner controller', () => {
     });
 
 
-    it('calls upload on filechange', () => {
+    xit('calls upload on filechange', () => {
         document.getElementById = () => {
             return {
                 files: [1]
