@@ -2,16 +2,16 @@ import _ from 'lodash';
 import HssModuleService from '../HssModuleService';
 class ConstraintsController {
 
-    constructor($timeout) {
+    constructor() {
         const vm = this;
         vm.EE = window.EE;
         vm.editMode = false;
         this.hs = new HssModuleService();
         vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-        $timeout(() => {
+        this.$onInit = () => {
             this.constraints = this.constraintsToggleGenerator();
             this.checkSizeAndFireCallback();
-        });
+        };
 
     }
 
@@ -49,11 +49,11 @@ class ConstraintsController {
 
     static constraintsFactory() {
         require('./Constraints.scss');
-        function constraints($timeout) {
-            return new ConstraintsController($timeout);
+        function constraints() {
+            return new ConstraintsController();
         }
 
-        constraints.$inject = ['$timeout'];
+        constraints.$inject = [];
 
         return constraints;
     }

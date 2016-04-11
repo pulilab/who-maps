@@ -1,6 +1,6 @@
 import ApplicationsController from './ApplicationsController';
 import _ from 'lodash';
-import { hss, applicationsLib } from '../hssMockData';
+import { continuumStructure, continuumData, applicationsLib, taxonomyLib } from '../hssMockData';
 import { EE } from '../../Common/';
 import 'es6-promise';
 
@@ -11,7 +11,7 @@ let ac = {};
 const $timeout = arg => {
     arg();
 };
-const $dialog =  {
+const $dialog = {
     confirm: () => {
     },
 
@@ -37,7 +37,7 @@ const confirmMock = {
     }
 };
 
-const hssBackup = _.cloneDeep(hss);
+const hssBackup = _.cloneDeep(continuumData);
 
 function testObjectProperty(properties, collection) {
     properties.forEach(prop => {
@@ -54,11 +54,20 @@ describe('applicationsController', () => {
         EE.initialize();
         ac = ApplicationsController.applicationsFactory()($timeout, $dialog);
         ac.tiles = 7;
-        ac.applicationRow = ac.applicationRowGenerator();
+        ac.structure = {
+            taxonomies: taxonomyLib,
+            continuum: continuumStructure,
+            applications: applicationsLib
+        };
+        ac.data = {
+            continuum: continuumData,
+            constraints: taxonomyLib
+        };
+        ac.$onInit();
     });
 
     afterEach(() => {
-        _.merge(hss, hssBackup);
+        _.merge(continuumData, hssBackup);
     });
 
     it('should have a function that change the edit mode', () => {
@@ -108,18 +117,18 @@ describe('applicationsController', () => {
     it('should have a function that returns an application specific string of class ', () => {
         const firstColumn = ac.applicationRow[1];
         const classString = ac.applicationClassGenerator(firstColumn);
-        expect(classString).toContain('app odd app-main applications_middle_0 application_disabled no-bubble activated app-closed');
+        expect(classString).toContain('app odd app-main applications_middle_0 view-mode application_disabled no-bubble activated app-closed');
     });
 
     it('should have a function that return the activated state of the column if the mother or child continuum are activated', () => {
 
-        hss[1].mother.activated = true;
+        ac.data.continuum[1].mother = true;
         expect(ac.applicationActivated(1)).toBeTruthy();
 
-        hss[1].mother.activated = false;
+        ac.data.continuum[1].mother = false;
         expect(ac.applicationActivated(1)).toBeFalsy();
 
-        hss[1].child.activated = true;
+        ac.data.continuum[1].child = true;
         expect(ac.applicationActivated(1)).toBeTruthy();
 
     });
@@ -144,11 +153,21 @@ describe('applicationsController', () => {
         firstColumn.isMain = false;
         const subApp = _.values(applicationsLib[1].subApplications);
         const classString = ac.subApplicationClassGenerator(subApp, firstColumn);
-        expect(classString).toContain('app odd app-sub applications_middle_0 application_disabled no-bubble activated app-closed sub');
+        expect(classString).toContain('app odd app-sub applications_middle_0 view-mode application_disabled no-bubble activated app-closed sub');
     });
 
     it('should have a function that returns a string label for sub applications', () => {
-        expect(ac.appLabelGenerator(1, 0)).toBe('1a');
+        const tile = {
+            rowIndex: 1,
+            isMain: false,
+            applicationId: 1
+        };
+        expect(ac.labelGenerator(tile)).toBe('1b');
+
+        tile.isMain = true;
+
+        expect(ac.labelGenerator(tile)).toBe(1);
+
     });
 
     it('should have a function that returns an array of sub application header tile', () => {
@@ -289,15 +308,13 @@ describe('applicationsController', () => {
         const mockEvent = {
             which: 14
         };
-        const tile = {
-            insertMode: true
-        };
-        ac.inputHandler(tile, mockEvent);
-        expect(tile.insertMode).toBeTruthy();
+        spyOn(ac, 'saveBubbles');
+        ac.inputHandler({}, mockEvent);
+        expect(ac.saveBubbles).not.toHaveBeenCalled();
 
         mockEvent.which = 13;
-        ac.inputHandler(tile, mockEvent);
-        expect(tile.insertMode).toBeFalsy();
+        ac.inputHandler({}, mockEvent);
+        expect(ac.saveBubbles).toHaveBeenCalled();
     });
 
     it('should have a function that find proper tiles candidate to create a bubble', () => {
@@ -374,11 +391,10 @@ describe('applicationsController', () => {
     });
 
     it('should have a function that perform a bubble deletion', () => {
-        ac.startTile = ac.applicationRow[5];
-        ac.tileBalloonEndHandler(ac.applicationRow[7]);
         const tile = ac.applicationRow[5];
+        ac.startTile = tile;
+        ac.tileBalloonEndHandler(ac.applicationRow[7]);
         expect(tile.bubbleDrawn).toBeTruthy();
-
         ac.deleteBubble(tile);
         expect(tile.bubbleDrawn).toBeFalsy();
         expect(ac.applicationRow[6].colSpan).toBe(1);
@@ -395,5 +411,11 @@ describe('applicationsController', () => {
         spyOn(window.EE, 'emit');
         ac.searchForFilledColumns();
         expect(window.EE.emit).toHaveBeenCalled();
+    });
+
+    it('should have a function to save the taxonomy', () => {
+        spyOn(ac.hs, 'postTaxonomy');
+        ac.saveTaxonomy();
+        expect(ac.hs.postTaxonomy).toHaveBeenCalled();
     });
 });
