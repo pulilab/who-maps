@@ -6,7 +6,8 @@ const projectScaleComponent = {
     template: _template,
     controllerAs: 'vm',
     bindings: {
-        tiles: '<'
+        tiles: '<',
+        data: '<'
     },
     name: 'projectscale'
 };

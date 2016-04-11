@@ -2,7 +2,9 @@
     md-cols="11"
     md-gutter="0px"
     md-row-height="51px"
-    class="interventions-component">
+    class="interventions-component"
+    md-on-layout="vm.layoutDone()"
+>
 
     <md-grid-tile
         md-colspan="9"
@@ -16,7 +18,7 @@
         md-colspan="2"
         md-rowspan="{{vm.interventionsRowSpan.size + 1}}"
         class="constraints">
-        <constraints resize-callback="vm.resizeRow"></constraints>
+        <constraints structure="vm.structure" data="vm.data" resize-callback="vm.resizeRow"></constraints>
     </md-grid-tile>
 
     <md-grid-tile
@@ -51,7 +53,7 @@
                     replace-comma="true"
                     searchable="true"
                     class="small multiline"
-                    on-close-callback="vm.calculateInterventionHeight">
+                    on-close-callback="tile.saveInterventions">
                 </ssmenu>
             </div>
         </div>

@@ -1,51 +1,51 @@
 import { AuthApi } from '../Common/';
+import _ from 'lodash';
 
+/* global Promise */
 
 class HssModuleService extends AuthApi {
 
     constructor() {
-        super('projects/1/hss');
+        super('projects/');
     }
 
     getStructure() {
-        return this.get('data');
+        return this.get('hss/structure/');
     }
 
-    getContinumData() {
-        return this.get('continuum');
+    getData() {
+        return this.get('4/hss/data/');
     }
 
-    getInterventionsData() {
-        return this.get('interventions');
-    }
-
-    getBubblesData() {
-        return this.get('bubble');
-    }
-
-    getConstraintsData() {
-        return this.get('constraints');
-    }
-
-    getTaxonomyData() {
-        return this.get('taxonomies');
-    }
 
     postContinuum(data) {
-        return this.post('continuum', this.objectConverter(data));
+        _.chain(data.colSpan)
+            .range()
+            .forEach(item => {
+                const body = {
+                    'column_id': (data.columnId + item)
+                };
+                body[data.type] = data.activated;
+
+                return this.post('4/hss/continuum/', body);
+            })
+            .value();
     }
 
-    postInterventions(data) {
-        return this.post('interventions', this.objectConverter(data));
+    postInterventions(columnId, interventions) {
+        return this.post('4/hss/interventions/', { 'column_id': columnId, interventions });
     }
     postBubbles(data) {
-        return this.post('bubbles', this.objectConverter(data));
+        return this.post('4/hss/bubbles/', data);
     }
     postConstraints(data) {
-        return this.post('constraints', this.objectConverter(data));
+        return this.post('4/hss/constraints/', data);
     }
-    postTaxonomy(data) {
-        return this.post('taxonomy', this.objectConverter(data));
+    postTaxonomy(appId, subAppId, content) {
+        if (content.length > 0) {
+            return this.post('4/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
+        }
+        return Promise.resolve({});
     }
 
 }

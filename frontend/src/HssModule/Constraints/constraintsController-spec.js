@@ -1,4 +1,5 @@
 import ConstraintsController from './ConstraintsController';
+import { taxonomyLib, constraintsData } from '../hssMockData';
 import { EE } from '../../Common/';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn */
@@ -13,6 +14,12 @@ describe('constraintsController', () => {
     beforeEach(() => {
         EE.initialize();
         cc = ConstraintsController.constraintsFactory()($timeout);
+        cc.structure = {
+            taxonomies: taxonomyLib
+        };
+        cc.data = {
+            constraints: constraintsData
+        };
     });
 
     it('should have a function that change the edit mode', () => {

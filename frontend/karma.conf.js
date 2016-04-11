@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function (config){
     config.set({
         browsers: ['PhantomJS'],
         files: [
@@ -10,9 +10,17 @@ module.exports = function(config) {
         },
         coverageReporter: {
             reporters: [
-                { type: 'html', subdir: 'html' },
-                { type: 'text' }
-            ]
+                { type: 'lcov', subdir: '.' },
+                { type: 'text-summary' }
+            ],
+            check: {
+                each: {
+                    statements: 50,
+                    branches: 50,
+                    functions: 50,
+                    lines: 50
+                }
+            }
         },
         reporters: ['progress', 'coverage'],
         webpack: {

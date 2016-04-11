@@ -1,25 +1,28 @@
 import _ from 'lodash';
-import { hss, applicationsLib, taxonomyLib } from '../hssMockData';
+import HssModuleService from '../HssModuleService';
 
 class ApplicationsController {
 
     constructor($timeout, $mdDialog) {
         const vm = this;
+        this.EE = window.EE;
+        this.hs = new HssModuleService();
         this.rowObject = {};
+        this.gridLoading = false;
         this.layoutReady = false;
-        $timeout(() => {
-            vm.EE = window.EE;
-            this.dialog = $mdDialog;
-            vm.editMode = false;
-            this.startTile = {};
-            this.tileClickCounter = 0;
-            this.selectedConstraints = [];
-            this.applicationRow = this.applicationRowGenerator();
+        vm.dialog = $mdDialog;
+        vm.editMode = false;
+        vm.startTile = {};
+        vm.tileClickCounter = 0;
+        this.timeout = $timeout;
+        this.$onInit = () => {
+            vm.selectedConstraints = this.constraintsGenerator();
+            vm.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
             vm.EE.on('hssConstraintsSelected', this.constraintsUpdated.bind(this));
             this.searchForFilledColumns();
-        });
+        };
     }
 
     handleEditMode(value) {
@@ -29,7 +32,9 @@ class ApplicationsController {
 
     layoutDone() {
         this.layoutReady = true;
+        this.EE.emit('hssInnerLayoutDone', 'application');
     }
+
 
     handleColumnActivation(event) {
         _.map(this.applicationRow, (value) => {
@@ -40,10 +45,28 @@ class ApplicationsController {
         });
     }
 
+    constraintsGenerator() {
+        return _.chain(this.structure.taxonomies)
+            .keys()
+            .map((value, key) => {
+                const _active = this.data.constraints[key] && this.data.constraints[key].active;
+                return {
+                    name: value,
+                    icon: this.structure.taxonomies[value].icon,
+                    active: _active,
+                    taxonomy: this.structure.taxonomies[value].values
+                };
+            })
+            .filter(item => {
+                return item.active;
+            })
+            .value();
+    }
+
     constraintsUpdated(event) {
         this.selectedConstraints = _.chain(event)
             .map(value => {
-                value.taxonomy = taxonomyLib[value.name].values;
+                value.taxonomy = this.structure.taxonomies[value.name].values;
                 return value;
             })
             .filter(item => {
@@ -57,6 +80,7 @@ class ApplicationsController {
         classArray.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
         classArray.push(tile.isMain ? 'app-main' : 'app-sub');
         classArray.push(tile.introName);
+        classArray.push(this.editMode ? 'edit-mode' : 'view-mode');
         return classArray.join(' ');
     }
 
@@ -72,31 +96,31 @@ class ApplicationsController {
     }
 
     applicationActivated(value) {
-        let _activated = hss[value].mother.activated;
-        if (hss[value].child) {
-            _activated = _activated || hss[value].child.activated;
+        let _activated = this.data.continuum[value].mother;
+        if (this.data.continuum[value].child) {
+            _activated = _activated || this.data.continuum[value].child;
         }
         return _activated;
     }
 
     applicationHeaderGenerator(index) {
-        const subApp = _.values(applicationsLib[index].subApplications);
         return [{
-            content: applicationsLib[index].name,
+            content: this.structure.applications[index].name,
             className: 'app-header',
-            colSpan: 2,
+            colSpan: 9,
             rowSpan: 1,
             columnId: 'header',
             rowIndex: index,
-            subApplications: subApp,
-            applicationId: applicationsLib[index].id,
+            subApplications: _.values(this.structure.applications[index].subApplications),
+            applicationId: this.structure.applications[index].id,
             isHeader: true,
             isMain: true,
             rowBubbles: [],
+            invisible: false,
             classGenerator: this.applicationClassGenerator.bind(this),
             clickHandler: this.toggleSubApp.bind(this),
             introName: 'applications_header_' + index,
-            applicationStyle: 'application_' + applicationsLib[index].id,
+            applicationStyle: 'application_' + this.structure.applications[index].id,
             fatherId: 0
         }];
     }
@@ -118,7 +142,7 @@ class ApplicationsController {
                     subAppOpen: false,
                     isMain: true,
                     rowEnabled: false,
-                    applicationId: applicationsLib[index].id,
+                    applicationId: this.structure.applications[index].id,
                     activated: this.applicationActivated(value),
                     introName: 'applications_middle_' + value,
                     classGenerator: this.applicationClassGenerator.bind(this),
@@ -135,9 +159,12 @@ class ApplicationsController {
         return classArray.join(' ');
     }
 
-    appLabelGenerator(id, index) {
+    labelGenerator(tile) {
+        if (tile.isMain) {
+            return tile.applicationId;
+        }
         const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-        return '' + id + alphabet[index];
+        return '' + tile.applicationId + alphabet[tile.rowIndex];
     }
 
     subApplicationHeaderGenerator(subApp, index, id) {
@@ -153,12 +180,13 @@ class ApplicationsController {
             columnId: 'header',
             rowIndex: index,
             fatherId: id,
-            applicationId: this.appLabelGenerator(id, index),
+            applicationId: id,
             disabled: true,
+            invisible: false,
             rowBubbles: [],
             classGenerator: this.subApplicationClassGenerator.bind(this, subApp),
             clickHandler: void 0,
-            applicationStyle: 'application_' + applicationsLib[id - 1].id
+            applicationStyle: 'application_' + this.structure.applications[id - 1].id
         }];
     }
 
@@ -177,7 +205,7 @@ class ApplicationsController {
                     isInput: true,
                     insertMode: false,
                     invisible: false,
-                    applicationId: this.appLabelGenerator(id, index),
+                    applicationId: id,
                     activated: this.applicationActivated(value),
                     fatherId: id,
                     disabled: true,
@@ -189,7 +217,7 @@ class ApplicationsController {
             .value();
     }
 
-    taxonomyColumnGenerator(index, id, isSubApp) {
+    taxonomyColumnGenerator(index, id, isSubApp, _isEmpty) {
         return [{
             content: '',
             className: 'app-tax',
@@ -202,37 +230,46 @@ class ApplicationsController {
             isMain: !isSubApp,
             disabled: isSubApp,
             isTax: true,
+            isEmpty: _isEmpty,
             rowIndex: index,
             rowEnabled: false,
+            invisible: false,
             introName: 'taxonomy_app_' + index,
-            classGenerator: this.classGenerator.bind(this)
+            classGenerator: this.classGenerator.bind(this),
+            saveTaxonomy: this.saveTaxonomy.bind(this, id, index)
         }];
+    }
+
+    saveTaxonomy(appId, subAppId, value) {
+        this.hs.postTaxonomy(appId, subAppId, value);
     }
 
     subApplicationRows(index) {
         let cols = [];
-        const subApp = _.values(applicationsLib[index].subApplications);
-        const appId = applicationsLib[index].id;
+        const subApp = _.values(this.structure.applications[index].subApplications);
+        const appId = this.structure.applications[index].id;
 
         for (let i = 0; i < subApp.length; i += 1) {
             cols = cols.concat(this.subApplicationHeaderGenerator(subApp, i, appId));
             cols = cols.concat(this.subAppMiddleColumnDecorator(subApp, i, appId));
-            cols = cols.concat(this.taxonomyColumnGenerator(i, appId, true));
+            cols = cols.concat(this.taxonomyColumnGenerator(i, appId, true, false));
         }
         return cols;
     }
 
 
     applicationRowGenerator() {
-        const appNumber = applicationsLib.length;
+        const appNumber = this.structure.applications.length;
         let cols = [];
         for (let i = 0; i < appNumber; i += 1) {
             cols = cols.concat(this.applicationHeaderGenerator(i));
-            cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
-            cols = cols.concat(this.taxonomyColumnGenerator(i, 0));
+            // cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
+            cols = cols.concat(this.taxonomyColumnGenerator(i, 0, false, true));
             cols = cols.concat(this.subApplicationRows(i));
         }
         this.createRowStructure(cols);
+        cols = this.processData(cols);
+        this.processRows();
         return cols;
     }
 
@@ -250,10 +287,56 @@ class ApplicationsController {
                     });
                     _.forEach(row, item => {
                         item.disabled = !isEnabled;
+                        item.rowEnabled = isEnabled;
                     });
+
                 });
             })
             .value();
+    }
+
+    processData(cols) {
+        _.forEach(this.data.applications, data => {
+            let fatherId = data.subapp_id;
+            let rowIndex = data.app_id - 1;
+
+            if (data.subapp_id !== 0) {
+                fatherId = data.app_id;
+                rowIndex = data.subapp_id - 1;
+            }
+
+            const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex]['columnId_' + data.column_id];
+
+            if (tile) {
+                tile.content = data.content;
+                tile.colSpan = data.colspan;
+                if (data.content.length > 0) {
+                    tile.bubbleDrawn = true;
+                    tile.rowEnabled = true;
+                    tile.status = this.enableRow(tile);
+                }
+                if (data.colspan === 0) {
+                    tile.invisible = true;
+                }
+            }
+        });
+
+        _.forEach(this.data.taxonomies, tax => {
+            let fatherId = tax.subapp_id;
+            let rowIndex = tax.app_id;
+
+            if (tax.subapp_id !== 0) {
+                fatherId = tax.app_id;
+                rowIndex = tax.subapp_id;
+            }
+            const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex].columnId_tax;
+            if (tile) {
+                tile.content = tax.content;
+                tile.disabled = false;
+            }
+        });
+        return _.filter(cols, { invisible: false });
+
     }
 
     createRowStructure(rows) {
@@ -263,7 +346,6 @@ class ApplicationsController {
                 'father_' + item.fatherId + '.rowIndex_' + item.rowIndex + '.columnId_' + item.columnId,
                 item);
         });
-        this.processRows();
     }
 
     toggleSubApp(tile) {
@@ -295,9 +377,43 @@ class ApplicationsController {
 
     inputHandler(tile, event) {
         if (event.which === 13) {
-            tile.insertMode = false;
+            this.saveBubbles(tile);
         }
     }
+
+    changeHandler(tile) {
+        this.saveBubbles(tile);
+    }
+
+    blurHandler(tile) {
+        this.timeout(() =>{
+            if (tile.content.length === 0) {
+                this.deleteBubble(tile);
+            }
+        });
+    }
+
+    saveBubbles(tile) {
+        const tiles = _.chain(tile.colSpan)
+            .range()
+            .map((item, key) => {
+                item = {
+                    'app_id': tile.applicationId,
+                    'subapp_id': tile.isMain ? 0 : (tile.rowIndex + 1),
+                    'column_id': tile.columnId + item,
+                    'colspan': 0,
+                    'content': ''
+                };
+                if (key === 0) {
+                    item.colspan = tile.colSpan;
+                    item.content = tile.content;
+                }
+                return item;
+            })
+            .value();
+        this.hs.postBubbles(tiles);
+    }
+
 
     findSameRowCandidate(tile) {
         if (tile.rowIndex !== this.startTile.rowIndex
@@ -349,8 +465,20 @@ class ApplicationsController {
         tile.className += 'selected';
     }
 
+    enableRow(tile) {
+        let applicationStyle = '';
+        _.map(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex], value => {
+            if (value.isHeader) {
+                applicationStyle = value.applicationStyle;
+                value.rowBubbles.push(this.startTile.columnId);
+            }
+            value.rowEnabled = true;
+            return value;
+        });
+        return applicationStyle;
+    }
+
     tileBalloonEndHandler(tile) {
-        let applicationStyle;
         const rowColumns = this.findSameRowCandidate(tile);
         if (rowColumns.length === 0) {
             this.startTile.className = 'app';
@@ -358,15 +486,8 @@ class ApplicationsController {
             return;
         }
 
-        _.map(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex], value => {
-            if (value.isHeader) {
-                applicationStyle = value.applicationStyle;
-                value.rowBubbles.push(rowColumns[0].columnId);
-            }
-            value.rowEnabled = true;
-            return value;
-        });
 
+        const applicationStyle = this.enableRow(tile);
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;
@@ -380,6 +501,13 @@ class ApplicationsController {
 
         this.applicationRow = _.filter(this.applicationRow, (value) => {
             return !value.invisible || !value.isInput;
+        });
+
+        this.timeout(() => {
+            const input = document.getElementById('appBubble_' + this.labelGenerator(tile));
+            if (input) {
+                input.focus();
+            }
         });
 
         this.searchForFilledColumns();
@@ -399,14 +527,25 @@ class ApplicationsController {
                 item.status = '';
                 item.invisible = false;
                 item.className = _.replace(item.className, 'selected', '');
-                if (tileIndex !== 0) {
-                    toAdd.push(item);
-                }
+                toAdd.push(item);
             })
             .value();
         _.forEach(toAdd, (value, key) => {
-            this.applicationRow.splice((index + key + 1), 0, value);
+            if (key !== 0) {
+                this.applicationRow.splice((index + key), 0, value);
+            }
         });
+        const toSave = _.map(toAdd, tile => {
+            return {
+                'app_id': tile.applicationId,
+                'subapp_id': tile.isMain ? 0 : (tile.rowIndex + 1),
+                'column_id': tile.columnId,
+                'colspan': 1,
+                'content': ''
+            };
+        });
+        this.hs.postBubbles(toSave);
+
         _.map(this.rowObject['father_' + bubble.fatherId]['rowIndex_' + bubble.rowIndex], value => {
             if (value.isHeader) {
                 _.remove(value.rowBubbles, n => {

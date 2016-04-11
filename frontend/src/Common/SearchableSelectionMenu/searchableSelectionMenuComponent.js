@@ -19,7 +19,8 @@ const searchableSelectionMenuComponent = {
         searchable: '<',
         multiple: '<',
         onCloseCallback: '=',
-        onOpenCallback: '='
+        onOpenCallback: '=',
+        limit: '<'
 
     }
 };

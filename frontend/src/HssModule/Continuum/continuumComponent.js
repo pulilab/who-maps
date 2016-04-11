@@ -8,7 +8,8 @@ const continuumComponent = {
     controllerAs: 'vm',
     bindings: {
         tiles: '<',
-        hss: '<'
+        structure: '<',
+        data: '<'
     },
     name: 'continuum'
 };

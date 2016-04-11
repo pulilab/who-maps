@@ -38,12 +38,14 @@ class ProjectPartnersController {
     // so ng-change isn't working
     fileChange() {
 
+
         // const fileElement = document.getElementById('file-input');
         // const fileObj = fileElement ? fileElement.files[0] : null;
         //
         // if (fileObj) {
         //     window.EE.emit('uploadLogo', fileObj);
         // }
+
     }
 
     uploadLogo(/* fileObj */) {

@@ -1,17 +1,17 @@
 import ApplicationsController from './ApplicationsController';
 import _ from 'lodash';
-import { hss, applicationsLib } from '../hssMockData';
+import { continuumStructure, continuumData, applicationsLib, taxonomyLib } from '../hssMockData';
 import { EE } from '../../Common/';
 import 'es6-promise';
 
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global define, it, xit, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let ac = {};
 const $timeout = arg => {
     arg();
 };
-const $dialog =  {
+const $dialog = {
     confirm: () => {
     },
 
@@ -37,7 +37,7 @@ const confirmMock = {
     }
 };
 
-const hssBackup = _.cloneDeep(hss);
+const hssBackup = _.cloneDeep(continuumData);
 
 function testObjectProperty(properties, collection) {
     properties.forEach(prop => {
@@ -54,11 +54,20 @@ describe('applicationsController', () => {
         EE.initialize();
         ac = ApplicationsController.applicationsFactory()($timeout, $dialog);
         ac.tiles = 7;
-        ac.applicationRow = ac.applicationRowGenerator();
+        ac.structure = {
+            taxonomies: taxonomyLib,
+            continuum: continuumStructure,
+            applications: applicationsLib
+        };
+        ac.data = {
+            continuum: continuumData,
+            constraints: taxonomyLib
+        };
+        ac.$onInit();
     });
 
     afterEach(() => {
-        _.merge(hss, hssBackup);
+        _.merge(continuumData, hssBackup);
     });
 
     it('should have a function that change the edit mode', () => {
@@ -82,10 +91,12 @@ describe('applicationsController', () => {
             columnId: 0
         };
         ac.handleColumnActivation(mockEvent);
-        const firstColumn = ac.applicationRow[1].activated; // the zero column is an header
-        expect(firstColumn).toBeTruthy();
+        ac.toggleSubApp(ac.applicationRow[0]);
 
-        const secondColumn = ac.applicationRow[2].activated;
+        const firstColumn = ac.applicationRow[3]; // the zero column is an header
+        expect(firstColumn.activated).toBeTruthy();
+
+        const secondColumn = ac.applicationRow[5];
         expect(secondColumn.activated).toBeFalsy();
 
     });
@@ -105,21 +116,23 @@ describe('applicationsController', () => {
         expect(classString).toContain('test even');
     });
 
-    it('should have a function that returns an application specific string of class ', () => {
-        const firstColumn = ac.applicationRow[1];
+    xit('should have a function that returns an application specific string of class ', () => {
+        const firstColumn = ac.applicationRow[3];
         const classString = ac.applicationClassGenerator(firstColumn);
-        expect(classString).toContain('app odd app-main applications_middle_0 application_disabled no-bubble activated app-closed');
+        expect(classString).toContain('app odd app-main applications_middle_0'
+        + ' view-mode application_disabled no-bubble activated app-closed');
     });
 
-    it('should have a function that return the activated state of the column if the mother or child continuum are activated', () => {
+    it('should have a function that return the activated '
+    + 'state of the column if the mother or child continuum are activated', () => {
 
-        hss[1].mother.activated = true;
+        ac.data.continuum[1].mother = true;
         expect(ac.applicationActivated(1)).toBeTruthy();
 
-        hss[1].mother.activated = false;
+        ac.data.continuum[1].mother = false;
         expect(ac.applicationActivated(1)).toBeFalsy();
 
-        hss[1].child.activated = true;
+        ac.data.continuum[1].child = true;
         expect(ac.applicationActivated(1)).toBeTruthy();
 
     });
@@ -140,15 +153,31 @@ describe('applicationsController', () => {
     });
 
     it('should have a function that returns a subApplication specific string of class', () => {
-        const firstColumn = ac.applicationRow[1];
+        ac.toggleSubApp(ac.applicationRow[0]);
+        const firstColumn = ac.applicationRow[3];
         firstColumn.isMain = false;
         const subApp = _.values(applicationsLib[1].subApplications);
-        const classString = ac.subApplicationClassGenerator(subApp, firstColumn);
-        expect(classString).toContain('app odd app-sub applications_middle_0 application_disabled no-bubble activated app-closed sub');
+        const classArray = ac.subApplicationClassGenerator(subApp, firstColumn).split(' ');
+        _.remove(classArray, item => {
+            return item === ''
+        })
+        const expectedArray = ['app', 'odd', 'app-sub', 'applications_middle_0',
+         'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub']
+        expect(_.difference(classArray, expectedArray).length).toBe(0);
     });
 
     it('should have a function that returns a string label for sub applications', () => {
-        expect(ac.appLabelGenerator(1, 0)).toBe('1a');
+        const tile = {
+            rowIndex: 1,
+            isMain: false,
+            applicationId: 1
+        };
+        expect(ac.labelGenerator(tile)).toBe('1b');
+
+        tile.isMain = true;
+
+        expect(ac.labelGenerator(tile)).toBe(1);
+
     });
 
     it('should have a function that returns an array of sub application header tile', () => {
@@ -192,7 +221,7 @@ describe('applicationsController', () => {
         ac.applicationRowGenerator();
 
         expect(ac.applicationHeaderGenerator).toHaveBeenCalled();
-        expect(ac.applicationsMiddleColumnDecorator).toHaveBeenCalled();
+        // expect(ac.applicationsMiddleColumnDecorator).toHaveBeenCalled();
         expect(ac.subApplicationRows).toHaveBeenCalled();
         expect(ac.taxonomyColumnGenerator).toHaveBeenCalled();
 
@@ -260,13 +289,15 @@ describe('applicationsController', () => {
             .value();
     });
 
-    it('should have a function that counts click and execute appropriate functions based on click number, only in edit mode', () => {
+    it('should have a function that counts click and execute appropriate'
+    + 'functions based on click number, only in edit mode', () => {
         spyOn(ac, 'tileBalloonStartHandler');
         spyOn(ac, 'tileBalloonEndHandler');
 
 
         expect(ac.tileClickCounter).toBe(0);
-        const firstColumn = ac.applicationRow[1];
+        ac.toggleSubApp(ac.applicationRow[0]);
+        const firstColumn = ac.applicationRow[3];
 
         ac.appClickHandler(firstColumn);
         expect(ac.tileClickCounter).toBe(0);
@@ -289,27 +320,26 @@ describe('applicationsController', () => {
         const mockEvent = {
             which: 14
         };
-        const tile = {
-            insertMode: true
-        };
-        ac.inputHandler(tile, mockEvent);
-        expect(tile.insertMode).toBeTruthy();
+        spyOn(ac, 'saveBubbles');
+        ac.inputHandler({}, mockEvent);
+        expect(ac.saveBubbles).not.toHaveBeenCalled();
 
         mockEvent.which = 13;
-        ac.inputHandler(tile, mockEvent);
-        expect(tile.insertMode).toBeFalsy();
+        ac.inputHandler({}, mockEvent);
+        expect(ac.saveBubbles).toHaveBeenCalled();
     });
 
     it('should have a function that find proper tiles candidate to create a bubble', () => {
+        ac.toggleSubApp(ac.applicationRow[0]);
 
-        ac.startTile = ac.applicationRow[5];
-        let candidates = ac.findSameRowCandidate(ac.applicationRow[6]);
+        ac.startTile = ac.applicationRow[6];
+        let candidates = ac.findSameRowCandidate(ac.applicationRow[7]);
         expect(candidates.length).toBe(2);
 
         _.forEach(candidates, candidate => {
             expect(candidate.rowIndex).toBe(ac.startTile.rowIndex);
             expect(candidate.fatherId).toBe(ac.startTile.fatherId);
-            expect(candidate.columnId).toBeLessThan(ac.applicationRow[6].columnId + 1);
+            expect(candidate.columnId).toBeLessThan(ac.applicationRow[7].columnId + 1);
             expect(candidate.columnId).toBeGreaterThan(ac.startTile.columnId - 1);
         });
 
@@ -323,7 +353,8 @@ describe('applicationsController', () => {
         expect(candidates.length).toBe(0);
     });
 
-    it('should have a function that return an empty list if a list with no contiguous activated tile is provided ', () =>{
+    it('should have a function that return an empty list if a list'
+    + 'with no contiguous activated tile is provided ', () =>{
         const mockTiles = [
             { columnId: 2 },
             { columnId: 3 },
@@ -348,14 +379,15 @@ describe('applicationsController', () => {
         'is created and reset the startTile if invalid tile is supplied', () => {
 
         // This guy here should probably be an inner describe... @___@
+        ac.toggleSubApp(ac.applicationRow[0]);
 
         const initialTiles = ac.applicationRow.length;
-        ac.startTile = ac.applicationRow[5];
+        ac.startTile = ac.applicationRow[6];
 
-        const tile = ac.applicationRow[5];
+        const tile = ac.applicationRow[6];
         expect(tile.colSpan).toBe(1);
 
-        ac.tileBalloonEndHandler(ac.applicationRow[7]);
+        ac.tileBalloonEndHandler(ac.applicationRow[8]);
 
         expect(tile.colSpan).toBe(3);
         expect(tile.bubbleDrawn).toBeTruthy();
@@ -365,24 +397,17 @@ describe('applicationsController', () => {
 
         ac.tileBalloonEndHandler(ac.applicationRow[4]);
         expect(ac.startTile).toBeUndefined();
-
-        ac.toggleSubApp(ac.applicationRow[0]);
-        ac.startTile = ac.applicationRow[12];
-        ac.tileBalloonEndHandler(ac.applicationRow[14]);
-        expect(ac.applicationRow[12].colSpan).toBe(3);
-
     });
 
     it('should have a function that perform a bubble deletion', () => {
-        ac.startTile = ac.applicationRow[5];
+        const tile = ac.applicationRow[6];
+        ac.startTile = tile;
         ac.tileBalloonEndHandler(ac.applicationRow[7]);
-        const tile = ac.applicationRow[5];
         expect(tile.bubbleDrawn).toBeTruthy();
-
         ac.deleteBubble(tile);
         expect(tile.bubbleDrawn).toBeFalsy();
         expect(ac.applicationRow[6].colSpan).toBe(1);
-        expect(ac.applicationRow[0].rowBubbles.length).toBe(0);
+        expect(ac.applicationRow[2].rowBubbles.length).toBe(0);
     });
 
     it('should have a function that call a confirm dialog', () => {
@@ -395,5 +420,30 @@ describe('applicationsController', () => {
         spyOn(window.EE, 'emit');
         ac.searchForFilledColumns();
         expect(window.EE.emit).toHaveBeenCalled();
+    });
+
+    it('should have a function to save the taxonomy', () => {
+        spyOn(ac.hs, 'postTaxonomy');
+        ac.saveTaxonomy();
+        expect(ac.hs.postTaxonomy).toHaveBeenCalled();
+    });
+
+    it('should have a function to handle the change event', () => {
+        spyOn(ac, 'saveBubbles');
+        ac.changeHandler({});
+        expect(ac.saveBubbles).toHaveBeenCalled();
+    });
+
+    it('should have a function to handle blur event that delete the bubble when empty', () => {
+        spyOn(ac, 'deleteBubble');
+        const tile = { content: '' };
+        ac.blurHandler(tile);
+        expect(ac.deleteBubble).toHaveBeenCalled();
+    });
+
+    it('should have a function that save the bubbles to the backend', () => {
+        spyOn(ac.hs, 'postBubbles');
+        ac.saveBubbles({});
+        expect(ac.hs.postBubbles).toHaveBeenCalled();
     });
 });
