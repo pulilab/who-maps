@@ -1,1 +1,22 @@
 @import '../../variables';
+
+#countrymapcontainer {
+    min-height: 350px;
+}
+
+.d3country {
+    fill: #BDBDBD;
+    stroke: white;
+    shape-rendering: crispEdges;
+}
+
+.d3district {
+	fill: none;
+	stroke: white;
+	stroke-width: 2px;
+	shape-rendering: crispEdges;
+}
+
+.d3district .hovered {
+	fill: blue;
+}
