@@ -117,10 +117,12 @@ describe('applicationsController', () => {
     it('should have a function that returns an application specific string of class ', () => {
         const firstColumn = ac.applicationRow[1];
         const classString = ac.applicationClassGenerator(firstColumn);
-        expect(classString).toContain('app odd app-main applications_middle_0 view-mode application_disabled no-bubble activated app-closed');
+        expect(classString).toContain('app odd app-main applications_middle_0'
+        + ' view-mode application_disabled no-bubble activated app-closed');
     });
 
-    it('should have a function that return the activated state of the column if the mother or child continuum are activated', () => {
+    it('should have a function that return the activated '
+    + 'state of the column if the mother or child continuum are activated', () => {
 
         ac.data.continuum[1].mother = true;
         expect(ac.applicationActivated(1)).toBeTruthy();
@@ -153,7 +155,8 @@ describe('applicationsController', () => {
         firstColumn.isMain = false;
         const subApp = _.values(applicationsLib[1].subApplications);
         const classString = ac.subApplicationClassGenerator(subApp, firstColumn);
-        expect(classString).toContain('app odd app-sub applications_middle_0 view-mode application_disabled no-bubble activated app-closed sub');
+        expect(classString).toContain('app odd app-sub applications_middle_0'
+        + ' view-mode application_disabled no-bubble activated app-closed sub');
     });
 
     it('should have a function that returns a string label for sub applications', () => {
@@ -279,7 +282,8 @@ describe('applicationsController', () => {
             .value();
     });
 
-    it('should have a function that counts click and execute appropriate functions based on click number, only in edit mode', () => {
+    it('should have a function that counts click and execute appropriate'
+    + 'functions based on click number, only in edit mode', () => {
         spyOn(ac, 'tileBalloonStartHandler');
         spyOn(ac, 'tileBalloonEndHandler');
 
@@ -340,7 +344,8 @@ describe('applicationsController', () => {
         expect(candidates.length).toBe(0);
     });
 
-    it('should have a function that return an empty list if a list with no contiguous activated tile is provided ', () =>{
+    it('should have a function that return an empty list if a list'
+    + 'with no contiguous activated tile is provided ', () =>{
         const mockTiles = [
             { columnId: 2 },
             { columnId: 3 },
@@ -417,5 +422,24 @@ describe('applicationsController', () => {
         spyOn(ac.hs, 'postTaxonomy');
         ac.saveTaxonomy();
         expect(ac.hs.postTaxonomy).toHaveBeenCalled();
+    });
+
+    it('should have a function to handle the change event', () => {
+        spyOn(ac, 'saveBubbles');
+        ac.changeHandler({});
+        expect(ac.saveBubbles).toHaveBeenCalled();
+    });
+
+    it('should have a function to handle blur event that delete the bubble when empty', () => {
+        spyOn(ac, 'deleteBubble');
+        const tile = { content: '' };
+        ac.blurHandler(tile);
+        expect(ac.deleteBubble).toHaveBeenCalled();
+    });
+
+    it('should have a function that save the bubbles to the backend', () => {
+        spyOn(ac.hs, 'postBubbles');
+        ac.saveBubbles({});
+        expect(ac.hs.postBubbles).toHaveBeenCalled();
     });
 });
