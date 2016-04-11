@@ -1,0 +1,28 @@
+<md-input-container ng-class="vm.mdContainerClass">
+    <md-select ng-model="vm.ngModel"
+               aria-label="vm.ariaLabel"
+               placeholder="{{vm.placeholder}}"
+               md-on-close="vm.selectClose()"
+               md-on-open="vm.selectOpen()"
+               md-container-class="{{vm.mdContainerClass}}"
+               ng-multiple="vm.multiple"
+    >
+
+        <span ng-if="vm.searchable" class="ssmenu-search-input">
+            <input ng-if="vm.isOpen"
+                   ng-keydown="vm.searchKey($event)"
+                   type="text"
+                   ng-model="vm.search.text"
+                   placeholder="Search"
+            />
+        </span>
+        <div ng-repeat="group in vm.options">
+            <span ng-if="vm.subHeader" class="option-group-title">{{group[vm.subHeader]}}</span>
+            <md-option
+                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
+                    value="{{option}}">
+                {{option}}
+            </md-option>
+        </div>
+    </md-select>
+</md-input-container>

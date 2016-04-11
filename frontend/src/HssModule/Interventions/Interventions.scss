@@ -1,0 +1,54 @@
+@import '../../variables';
+@import '../../mixins';
+
+interventions {
+
+  .header {
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid $color-gray-lighter;
+    background-color: #EEEEEE !important;
+
+    h2 {
+      z-index: 10;
+      padding-left: 40px;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: #EEEEEE url('./images/asset-bg-who.svg') no-repeat -10px -9px;
+      content: "";
+      opacity: .2;
+    }
+  }
+
+  .intervention {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+
+    md-list-item {
+      padding: 5px;
+      min-height: auto;
+    }
+
+    md-input-container {
+      margin: 5px;
+      padding: 0;
+      width: calc(100% - 10px);
+
+      md-select-value {
+        span {
+          display: block;
+          width: calc(100% - 15px);
+        }
+      }
+    }
+
+  }
+}

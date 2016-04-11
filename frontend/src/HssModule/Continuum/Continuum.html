@@ -1,0 +1,104 @@
+<md-grid-list
+    md-cols="11"
+    md-gutter="0px"
+    md-row-height="{{vm.rowHeight}}px"
+    class="continuum-component"
+    ng-class="{'fixed-mode': vm.isFixed}"
+>
+
+    <md-grid-tile
+        md-colspan="2"
+        md-rowspan="1"
+        class="cell-empty">
+    </md-grid-tile>
+
+
+    <md-grid-tile
+        ng-repeat="tile in vm.firstRow"
+        ng-class="vm.classGenerator(tile)"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-icons">
+        <img ng-src="{{tile.icon}}">
+    </md-grid-tile>
+
+    <md-grid-tile
+        md-colspan="2"
+        md-rowspan="3"
+        class="hss-controls">
+        <div>
+            <div class="hss-control">
+                <span>
+                  <md-switch
+                      class="md-green hss-edit"
+                      ng-model="vm.editMode"
+                      aria-label="EditMode"
+                      ng-change="vm.editModeChange()">
+                  </md-switch>
+                </span>
+                <span class="md-body-2">Edit Mode: {{vm.editMode ? 'On' : 'Off'}}</span>
+            </div>
+
+            <div class="hss-control">
+                <span>
+                  <md-progress-circular
+                      class="md-gray hss-progress"
+                      md-mode="determinate"
+                      md-diameter="20"
+                      value="{{vm.mapsProgressPercentage}}">
+                  </md-progress-circular>
+                </span>
+                <span class="md-body-1">Progress: {{vm.mapsProgressPercentage}}%</span>
+            </div>
+        </div>
+
+        <span class="to-be-continued mother end"></span>
+        <span class="to-be-continued child end"></span>
+    </md-grid-tile>
+
+    <md-grid-tile
+        md-colspan="2"
+        md-rowspan="1"
+        class="row-title-mother"
+        layout="row">
+
+        <span flex="20" class="continuum-icon">
+            <img src="./images/icon-mother.svg" />
+        </span>
+        <span flex="80" class="md-body-2 continuum-row-title text-uppercase">Mother</span>
+        <span class="to-be-continued mother"></span>
+    </md-grid-tile>
+
+    <md-grid-tile
+        ng-repeat="tile in vm.motherRow"
+        ng-class="[{'clickable': vm.editMode}, tile.classGenerator(tile)]"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-mother"
+        ng-click="tile.clickHandler(tile)">
+
+        <span class="continuum-title">{{tile.content}}</span>
+    </md-grid-tile>
+
+    <md-grid-tile
+        md-colspan="2"
+        md-rowspan="1"
+        class="row-title-child"
+        layout="row">
+
+        <span flex="20" class="continuum-icon"><img src="./images/icon-child.svg" /></span>
+        <span flex="80" class="md-body-2 continuum-row-title text-uppercase">Child</span>
+    </md-grid-tile>
+
+    <md-grid-tile
+        ng-repeat="tile in vm.childRow"
+        ng-class="[tile.classGenerator(tile), {'clickable': vm.editMode && !tile.empty}]"
+        md-colspan="{{tile.colSpan}}"
+        md-rowspan="{{tile.rowSpan}}"
+        class="cell-child"
+        ng-click="tile.clickHandler(tile)">
+
+        <span class="continuum-title">{{tile.content}}</span>
+    </md-grid-tile>
+</md-grid-list>
+<div class="continuum-fixed-helper" ng-style="{height: vm.helperHeight}"></div>

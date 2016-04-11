@@ -1,0 +1,18 @@
+<div class="constraints-component" layout="column" layout-wrap layout-align="start start" flex>
+    <h4>Health system constraints</h4>
+    <div ng-repeat="constraint in vm.constraints">
+        <div flex="100" ng-if="vm.editMode">
+            <md-checkbox ng-model="constraint.active" class="md-black small" ng-change="vm.constraintChanged(constraint)">
+                {{ constraint.name }}
+            </md-checkbox>
+        </div>
+        <div flex="100" ng-if="!vm.editMode && constraint.active">
+            <md-button md-no-ink class="md-fab md-fab-not-raised md-mini md-black" ng-disabled="!constraint.active" >
+                <md-icon class="material-icons">
+                    {{ constraint.icon }}
+                </md-icon>
+            </md-button>
+            <span class="md-body-2">{{constraint.name}}</span>
+        </div>
+    </div>
+</div>

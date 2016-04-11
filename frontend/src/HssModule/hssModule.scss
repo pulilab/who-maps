@@ -1,0 +1,32 @@
+@import '../../node_modules/intro.js/introjs.css';
+@import '../variables';
+@import '../mixins';
+
+.hss-module {
+
+  .page-title {
+    .md-subhead {
+      margin-bottom: 0;
+    }
+  }
+
+  md-grid-list {}
+
+  md-grid-tile {
+    figure > div {
+      border-right: 1px solid $color-gray-lighter;
+      background: $color-white;
+      &.odd {
+        background: #FAFAFA;
+      }
+    }
+  }
+
+  .hss-module-bottom {
+    border-top: 1px solid $color-gray-lighter;
+    > div {
+      padding: 25px 50px;
+    }
+  }
+
+}

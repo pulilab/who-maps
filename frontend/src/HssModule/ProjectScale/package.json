@@ -1,0 +1,6 @@
+{
+  "name": "ProjectScale",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./projectScaleComponent.js"
+}
