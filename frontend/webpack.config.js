@@ -36,10 +36,7 @@ module.exports = {
             {
                 test: /\.js/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel',
-                query: {
-                    presets: ['es2015']
-                }
+                loader: 'babel'
             },
             {
                 test: /\.scss/,
@@ -62,8 +59,11 @@ module.exports = {
     devServer: {
         proxy: {
             '/api/*': {
-                target: 'http://192.168.99.100/api/',
-                secure: false
+                target: 'http://192.168.99.100/',
+                secure: false,
+                rewrite: req => {
+                    req.url = req.url.replace(/^\/api/, '');
+                }
             }
         }
     },

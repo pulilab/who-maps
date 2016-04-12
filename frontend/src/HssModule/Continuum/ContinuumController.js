@@ -1,23 +1,47 @@
 import _ from 'lodash';
-import { hss } from '../hssMockData';
+import angular from 'angular';
+import HssModuleService from '../HssModuleService';
 
 class ContinuumController {
 
-    constructor($timeout) {
+    constructor($timeout, $element) {
         const vm = this;
+        this.EE = window.EE;
+        this.hs = new HssModuleService();
+        this.gridLoading = false;
+        this.classGenerator = this.classGenerator.bind(this);
         $timeout(() => {
-            vm.EE = window.EE;
             vm.editMode = false;
+            vm.isFixed = false;
+            vm.rowHeight = 51;
+            vm.helperRealHeight = (vm.rowHeight * 3) + 'px';
             vm.timeout = $timeout;
+            vm.element = $element;
             vm.firstRow = this.firstRowGenerator();
             vm.motherRow = this.motherRowGenerator();
             vm.childRow = this.childRowGenerator();
             vm.motherRow.forEach(tile => {
                 vm.checkColumnActivation(tile);
             });
-
             vm.exportPdf = this.exportPdf;
             vm.mapsProgressPercentage = 68; // Placeholder!!
+            angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
+        });
+
+    }
+
+    layoutDone() {
+        this.EE.emit('hssInnerLayoutDone', 'continuum');
+    }
+
+    scrollEventHandler() {
+        const vm = this;
+        vm.timeout(() => {
+            if (angular.element(vm.element)[0]) {
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
+                vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
+            }
         });
     }
 
@@ -46,13 +70,13 @@ class ContinuumController {
             .map(value => {
                 return {
                     type: 'mother',
-                    content: hss[value].mother.title,
-                    colSpan: hss[value].mother.span,
+                    content: self.structure[value].mother.title,
+                    colSpan: self.structure[value].mother.span,
                     rowSpan: 1,
-                    invisible: _.isEmpty(hss[value].mother),
+                    invisible: _.isEmpty(self.structure[value].mother),
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
-                    activated: hss[value].mother.activated,
+                    activated: self.data[value].mother,
                     introName: 'mother_middle_' + value,
                     classGenerator: this.classGenerator
                 };
@@ -70,13 +94,13 @@ class ContinuumController {
             .map(value => {
                 return {
                     type: 'child',
-                    content: hss[value].child.title,
+                    content: self.structure[value].child.title,
                     className: 'child',
                     colSpan: 1,
                     rowSpan: 1,
                     columnId: value,
-                    activated: hss[value].child.activated,
-                    empty: !hss[value].child.title,
+                    activated: self.data[value].child,
+                    empty: !self.structure[value].child.title,
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     introName: 'child_middle_' + value,
                     invisible: false,
@@ -92,9 +116,10 @@ class ContinuumController {
         classes.push((tile.columnId + 1) % 2 === 0 ? 'even' : 'odd');
         classes.push(tile.activated ? 'activated' : 'deactivated');
         classes.push('zindex-' + (100 - (tile.columnId * 10)));
+        classes.push(tile.introName);
 
-        if (tile.type === 'child') {
-            classes.push(hss[tile.columnId].child.title ? 'filled' : 'empty');
+        if (tile.type === 'child' && this.structure) {
+            classes.push(this.structure[tile.columnId].child.title ? 'filled' : 'empty');
         }
 
         return classes.join(' ');
@@ -109,7 +134,7 @@ class ContinuumController {
         // ACTIVATING
         else if (!tile.activated) {
             this.EE.once('hssGuysActivateColumn', () => {
-                tile.activated = true;
+                this.changeTileStatus(tile, true);
             });
             this.EE.emit('hssPleaseActivateColumn', {
                 columnId: tile.columnId,
@@ -128,28 +153,27 @@ class ContinuumController {
 
             if (tile.columnId < 4) {
                 this.EE.once('hssGuysActivateColumn', obj => {
-                    tile.activated = obj.activated;
+                    this.changeTileStatus(tile, obj.activated);
                 });
                 this.EE.emit('hssHasColumnContent', tile.columnId);
             }
 
             else if (tile.columnId === 4 &&
-                     this.motherRow[tile.columnId].activated &&
-                     this.childRow[tile.columnId].activated) {
-
-                tile.activated = false;
+                this.motherRow[tile.columnId].activated &&
+                this.childRow[tile.columnId].activated) {
+                this.changeTileStatus(tile, false);
             }
 
             else if (tile.columnId === 4) {
                 this.EE.once('hssGuysActivateColumn', obj => {
-                    tile.activated = obj.activated;
+                    this.changeTileStatus(tile, obj.activated);
                 });
                 this.EE.emit('hssHasColumnContent', tile.columnId);
             }
 
             else if (tile.type === 'mother') {
                 if (this.childRow[5].activated && this.childRow[6].activated) {
-                    tile.activated = false;
+                    this.changeTileStatus(tile, false);
                 }
                 this.EE.once('hssHasContentLastTwo', obj => {
 
@@ -172,7 +196,7 @@ class ContinuumController {
 
             else {
                 if (this.motherRow[5].activated) {
-                    tile.activated = false;
+                    this.changeTileStatus(tile, false);
                 }
                 else {
                     this.EE.once('hssGuysActivateColumn', obj => {
@@ -182,8 +206,12 @@ class ContinuumController {
                 }
             }
         }
-
         this.checkColumnActivation(tile);
+    }
+
+    changeTileStatus(tile, newStatus) {
+        tile.activated = newStatus;
+        this.hs.postContinuum(tile);
     }
 
     // First row activation handling for ng-class bindings (missing childs/double)
@@ -212,11 +240,11 @@ class ContinuumController {
 
     static continuumFactory() {
         require('./Continuum.scss');
-        function continuum($timeout) {
-            return new ContinuumController($timeout);
+        function continuum($timeout, $element) {
+            return new ContinuumController($timeout, $element);
         }
 
-        continuum.$inject = ['$timeout'];
+        continuum.$inject = ['$timeout', '$element'];
 
         return continuum;
     }

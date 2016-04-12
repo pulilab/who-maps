@@ -16,17 +16,37 @@ projectpartners {
 
 		.partner {
       float: left;
-      margin: 0 20px 20px 0;
+      margin: 5px 25px 20px 0;
       text-align: center;
+
+      figure {
+        position: relative;
+        display: inline-block;
+        margin: 0;
+      }
 
 			.logoimg {
         display: block;
+        box-sizing: border-box;
 				width: auto;
         height: 80px;
 			}
 
-      md-icon {
-        outline: none;
+      .logo-remove {
+        position: absolute;
+        top: -17px;
+        right: -17px;
+        md-icon {
+          outline: none;
+          color: $color-white;
+        }
+      }
+
+      &.editing {
+        .logoimg {
+          padding: 5px;
+          border: 1px solid $color-gray-lighter;
+        }
       }
 		}
 
@@ -39,7 +59,7 @@ projectpartners {
         float: left;
 
         label {
-          button {
+          .md-button {
             margin: 0 20px 0 0;
           }
 
@@ -51,6 +71,7 @@ projectpartners {
 
       .file-upload-info {
         display: inline-block;
+        line-height:18px;
         color: $color-gray-light;
       }
     }

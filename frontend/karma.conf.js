@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function (config){
     config.set({
         browsers: ['PhantomJS'],
         files: [
@@ -10,23 +10,23 @@ module.exports = function(config) {
         },
         coverageReporter: {
             reporters: [
-                { type: 'html', subdir: 'html' },
-                { type: 'text' }
-            ]
+                { type: 'lcov', subdir: '.' },
+                { type: 'text-summary' }
+            ],
+            check: {
+                each: {
+                    statements: 50,
+                    branches: 50,
+                    functions: 50,
+                    lines: 50
+                }
+            }
         },
         reporters: ['progress', 'coverage'],
         webpack: {
             devtool: 'inline-source-map',
             module: {
                 loaders: [
-                    {
-                        test: /\.js$/,
-                        exclude: /node_modules/,
-                        loader: 'babel',
-                        query: {
-                            presets: ['es2015']
-                        }
-                    },
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
                         loaders: ['null']
@@ -36,11 +36,16 @@ module.exports = function(config) {
                         loader: 'json'
                     }
                 ],
-                postLoaders: [
+                preLoaders: [
+                    {
+                        test: /-spec\.js$/,
+                        exclude: /node_modules/,
+                        loader: 'babel'
+                    },
                     {
                         test: /^((?!-spec).)*.js$/,
                         exclude: /(node_modules|bower_components)/,
-                        loader: 'istanbul-instrumenter'
+                        loaders: ['babel-istanbul']
                     }
                 ]
             }

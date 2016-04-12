@@ -1,50 +1,105 @@
 @import '../../variables';
 @import '../../mixins';
 
-.continuum-component {
+continuum {
 
-  md-grid-tile {
+  .continuum-fixed-helper {
+    position: relative;
+    width: 100%;
+    display: block;
+    height: 0px;
+  }
 
-    &.cell-icons {
-      img {
-        margin-left: 10px;
-        transition: $swift-ease-in-out;
-      }
-    }
+  .fixed-mode {
+    position: fixed;
+    top:0;
+    width: calc(100% - #{$layout-gutter-width * 2});
+    height: 150px;
+    z-index: 200;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  }
 
-    &.cell-mother,
-    &.cell-child {
-      background-color: $color-gray-lighter !important;
-      color: $text-disabled;
-      text-align: center;
-      font-size: $caption-font-size-base;
-      font-weight: 500;
-      text-transform: uppercase;
-      cursor: default;
-      outline: none;
-      @include not-selectable();
+  .continuum-component {
 
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 100%;
-        width: 11px;
-        height: 50px;
-        background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
-      }
 
-      &.empty {
-        background: $color-white !important;
+    md-grid-tile {
 
-        &:after {
-          display: none;
+      &.cell-icons {
+        img {
+          margin-left: 10px;
+          transition: $swift-ease-in-out;
         }
       }
 
-      // first items in a row
-      &.zindex-100,
-      &.zindex-60 {
+      &.cell-mother,
+      &.cell-child {
+        background-color: $color-gray-lighter !important;
+        color: $text-disabled;
+        text-align: center;
+        font-size: $caption-font-size-base;
+        font-weight: 500;
+        text-transform: uppercase;
+        cursor: default;
+        outline: none;
+        @include not-selectable();
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 11px;
+          height: 50px;
+          background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
+        }
+
+        &.empty {
+          background: $color-white !important;
+
+          &:after {
+            display: none;
+          }
+        }
+
+        // first items in a row
+        &.zindex-100,
+        &.zindex-60 {
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 50px;
+            background: transparent url("./images/continuum-first-in-a-row.svg") 100% 100% no-repeat;
+          }
+        }
+
+        .continuum-title {
+          padding: 0 5px 0 15px;
+        }
+      }
+
+      &.cell-mother,
+      &.row-title-mother {
+        border-bottom: 1px solid $color-gray-lighter;
+      }
+
+      &.hss-controls,
+      &.cell-child,
+      &.row-title-child {
+        border-bottom: 1px solid $color-gray;
+      }
+
+      &.row-title-mother,
+      &.row-title-child {
+        .continuum-icon {
+          text-align: center;
+          img {
+            padding: 0 5px 0 15px;
+          }
+        }
         &::before {
           content: "";
           position: absolute;
@@ -52,187 +107,153 @@
           left: 0;
           width: 10px;
           height: 50px;
-          background: transparent url("./images/continuum-first-in-a-row.svg") 100% 100% no-repeat;
         }
       }
 
-      .continuum-title {
-        padding: 0 5px 0 15px;
+      &.row-title-mother {
+        &::before {
+          background: transparent url("./images/continuum-triangle-mother.svg") 100% 100% no-repeat;
+        }
+        .continuum-row-title {
+          color: $color-green;
+        }
+      }
+
+      &.row-title-child {
+        &::before {
+          background: transparent url("./images/continuum-triangle-child.svg") 100% 100% no-repeat;
+        }
+        .continuum-row-title {
+          position: relative;
+          color: $color-blue;
+        }
+      }
+
+      &.hss-controls {
+
+        figure > div {
+          border: 0;
+        }
+
+        .hss-control {
+          display: block;
+          width: 100%;
+
+          .hss-edit,
+          .hss-progress {
+            display: inline-block !important;
+            margin: 0;
+          }
+
+          .hss-progress {
+            background-color: $color-gray-lightest;
+            border-radius: 20px;
+          }
+
+          span:nth-of-type(1) {
+            display: inline-block;
+            width: 50px;
+          }
+
+          span:nth-of-type(2) {
+            float: left;
+            display: inline-block;
+            width: 105px;
+            padding: 0 10px;
+            text-align: right;
+          }
+        }
+      }
+
+    }
+
+    .activated {
+      &.mother {
+        background: $color-green !important;
+        color: $color-white;
+
+        &::after {
+          background-image: url("./images/continuum-mother-end.svg");
+        }
+      }
+
+      &.child {
+        background: $color-blue !important;
+        color: $color-white;
+
+        &::after {
+          background-image: url("./images/continuum-child-end.svg");
+        }
       }
     }
 
-    &.cell-mother,
-    &.row-title-mother {
-      border-bottom: 1px solid $color-gray-lighter;
-    }
-
-    &.hss-controls,
-    &.cell-child,
-    &.row-title-child {
-      border-bottom: 1px solid $color-gray;
-    }
-
-    &.row-title-mother,
-    &.row-title-child {
-      .continuum-icon {
-        text-align: center;
+    .deactivated {
+      &.cell-icons {
         img {
-          padding: 0 5px 0 15px;
-        }
-      }
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 10px;
-        height: 50px;
-      }
-    }
-
-    &.row-title-mother {
-      &::before {
-        background: transparent url("./images/continuum-triangle-mother.svg") 100% 100% no-repeat;
-      }
-      .continuum-row-title {
-        color: $color-green;
-      }
-    }
-
-    &.row-title-child {
-      &::before {
-        background: transparent url("./images/continuum-triangle-child.svg") 100% 100% no-repeat;
-      }
-      .continuum-row-title {
-        position: relative;
-        color: $color-blue;
-      }
-    }
-
-    &.hss-controls {
-
-      figure > div {
-        border: 0;
-      }
-
-      .hss-control {
-        display: block;
-        width: 100%;
-
-        .hss-edit,
-        .hss-progress {
-          display: inline-block !important;
-          margin: 0;
-        }
-
-        .hss-progress {
-          background-color: $color-gray-lightest;
-          border-radius: 20px;
-        }
-
-        span:nth-of-type(1) {
-          display: inline-block;
-          width: 50px;
-        }
-
-        span:nth-of-type(2) {
-          float: left;
-          display: inline-block;
-          width: 105px;
-          padding: 0 10px;
-          text-align: right;
+          opacity: .35;
         }
       }
     }
 
-  }
-
-  .activated {
-    &.mother {
-      background: $color-green !important;
-      color: $color-white;
-
-      &::after {
-        background-image: url("./images/continuum-mother-end.svg");
-      }
-    }
-
-    &.child {
-      background: $color-blue !important;
-      color: $color-white;
-
-      &::after {
-        background-image: url("./images/continuum-child-end.svg");
-      }
-    }
-  }
-
-  .deactivated {
-    &.cell-icons {
-      img {
-        opacity: .35;
-      }
-    }
-  }
-
-  .to-be-continued {
-    &.mother,
-    &.child {
-      &::before,
-      &::after {
-        z-index: 200;
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 18px;
-        height: 50px;
-        background: transparent 100% 100% no-repeat;
-      }
-      &::before {
-        right: -9px;
-        opacity: .5;
-      }
-      &::after {
-        right: 0;
-        opacity: .2;
-      }
-
-      &.end {
+    .to-be-continued {
+      &.mother,
+      &.child {
         &::before,
         &::after {
-          top: 51px;
-          right: auto;
+          z-index: 200;
+          content: "";
+          position: absolute;
+          top: 0;
+          width: 18px;
+          height: 50px;
+          background: transparent 100% 100% no-repeat;
         }
         &::before {
-          left: 1px;
+          right: -9px;
+          opacity: .5;
         }
         &::after {
-          left: 10px;
+          right: 0;
+          opacity: .2;
+        }
+
+        &.end {
+          &::before,
+          &::after {
+            top: 51px;
+            right: auto;
+          }
+          &::before {
+            left: 1px;
+          }
+          &::after {
+            left: 10px;
+          }
         }
       }
-    }
 
-    &.mother {
-      &::before,
-      &::after {
-        background-image: url("./images/continuum-arrow-mother.svg");
-      }
-
-    }
-
-    &.child {
-      &::before,
-      &::after {
-        background-image: url("./images/continuum-arrow-child.svg");
-      }
-
-      &.end {
+      &.mother {
         &::before,
         &::after {
-          top: 102px;
+          background-image: url("./images/continuum-arrow-mother.svg");
+        }
+
+      }
+
+      &.child {
+        &::before,
+        &::after {
+          background-image: url("./images/continuum-arrow-child.svg");
+        }
+
+        &.end {
+          &::before,
+          &::after {
+            top: 102px;
+          }
         }
       }
     }
-  }
 
+  }
 }

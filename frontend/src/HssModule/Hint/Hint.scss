@@ -1,0 +1,41 @@
+hint {
+  span,
+  strong,
+  div{
+    font-size: 14px;
+    color: #795548;
+    line-height: 40px;
+  }
+
+  .material-icons {
+    margin-left: 15px;
+    margin-right: 5px;
+    height:100%;
+    line-height:40px;
+    color: #795548;
+  }
+
+  .tall {
+    padding-top:10px;
+
+    .material-icons,
+    strong,
+    div {
+      line-height: 20px;
+    }
+  }
+
+  strong {
+    margin-right:0.2em;
+  }
+
+  md-grid-tile {
+    figure  div.hint-container {
+      border: 0;
+      background: #FFF9C4;
+      width:100%;
+      height:100%;
+    }
+  }
+
+}

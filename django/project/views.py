@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from core.views import TokenAuthMixin
+from hss.models import HSS
+from hss.hss_data import hss_default
 from .serializers import ProjectSerializer
 from .models import Project, Strategy, Technology, Pipeline, Application
 from .models import Report, Publication
@@ -67,11 +69,32 @@ def get_report(request, pk):
             return HttpResponse("No such item.", status=400)
 
 
+def create_project_files(request, pk):
+    """
+    Enables to upload files for publications and reports.
+
+    Args:
+        pk: id of the project the artifacts belong to.
+    """
+    if request.method == "POST":
+        if pk:
+            project = Project.objects.get_object_or_none(pk=pk)
+            if not project:
+                return HttpResponse("No such project.", status=400)
+            else:
+                # Get and store binary files for publications and reports.
+                for key, value in request.FILES.items():
+                    if "publication" in key:
+                        Publication.objects.create(project_id=project.id, filename=value.name, file=value.read())
+                    elif "report" in key:
+                        Report.objects.create(project_id=project.id, filename=value.name, file=value.read())
+                return HttpResponse()
+
+
 class ProjectViewSet(TokenAuthMixin, ModelViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    parser_classes = (MultiPartParser, FormParser)
 
     def _prepare_serializer(self, request):
         def pop_or_empty(key):
@@ -90,58 +113,45 @@ class ProjectViewSet(TokenAuthMixin, ModelViewSet):
                 return []
 
         # Get "other" fields from the POST data.
-        specific_strategies = pop_or_empty("strategy_other")
-        specific_technologies = pop_or_empty("technology_other")
-        specific_pipelines = pop_or_empty("pipeline_other")
+        strategy_other = pop_or_empty("strategy_other")
+        technology_other = pop_or_empty("technology_other")
+        pipeline_other = pop_or_empty("pipeline_other")
 
-        # Get publications and reports.
-        publications = pop_or_empty("publications")
-        reports = pop_or_empty("reports")
+        # Get new publications and reports.
+        publications_new = pop_or_empty("publications_new")
+        reports_new = pop_or_empty("reports_new")
+
+        # Get deleted publications and reports.
+        publications_deleted = pop_or_empty("publications_deleted")
+        reports_deleted = pop_or_empty("reports_deleted")
 
         if self.serializer.is_valid():
             # Create the "other" fields in the database,
             # and put back their ID to the original POST data.
-            for name in specific_strategies:
+            for name in strategy_other:
                 item = Strategy.objects.create(name=name, project_specific=True)
                 self.serializer.validated_data["strategy"].append(item.id)
 
-            for name in specific_technologies:
+            for name in technology_other:
                 item = Technology.objects.create(name=name, project_specific=True)
                 self.serializer.validated_data["technology"].append(item.id)
 
-            for name in specific_pipelines:
+            for name in pipeline_other:
                 item = Pipeline.objects.create(name=name, project_specific=True)
                 self.serializer.validated_data["pipeline"].append(item.id)
 
             project = self.serializer.save()
 
-            # QuerySet replaces the extra strings JSONs to single quotes
-            # which are not valid JSON, so it needs to be converted back.
-            publications = [json.loads(x.replace("\'", "\"")) for x in publications]
-            reports = [json.loads(x.replace("\'", "\"")) for x in reports]
+            # Store new publications and reports.
+            for item in publications_new:
+                Publication.objects.create(project_id=project.id, url=item)
 
-            # Delete removed publications and reports
-            updated_publications_ids = [x.get("id") for x in publications if x.get("id", None)]
-            Publication.objects.filter(project_id=project.id).exclude(id__in=updated_publications_ids).delete()
+            for item in reports_new:
+                Report.objects.create(project_id=project.id, url=item)
 
-            new_reports_ids = [x.get("id") for x in reports if x.get("id", None)]
-            Report.objects.filter(project_id=project.id).exclude(id__in=new_reports_ids).delete()
-
-            # Store publications and reports.
-            for item in publications:
-                if not item.get("id", None):
-                    Publication.objects.create(project_id=project.id, url=item.get("url"))
-
-            for item in reports:
-                if not item.get("id", None):
-                    Report.objects.create(project_id=project.id, url=item.get("url"))
-
-            # Get and store binary files for publications and reports.
-            for key, value in request.FILES.items():
-                if "publication" in key:
-                    Publication.objects.create(project_id=project.id, filename=value.name, file=value.read())
-                elif "report" in key:
-                    Report.objects.create(project_id=project.id, filename=value.name, file=value.read())
+            # Delete removed publications and reports.
+            Publication.objects.filter(project_id=project.id, id__in=publications_deleted).delete()
+            Report.objects.filter(project_id=project.id, id__in=reports_deleted).delete()
 
             return True
         else:
@@ -166,6 +176,8 @@ class ProjectViewSet(TokenAuthMixin, ModelViewSet):
         """
         self.serializer = self.get_serializer(data=request.data)
         if self._prepare_serializer(request):
+            # Add default HSS structure for the new project.
+            HSS.objects.create(project_id=self.serializer.data.get("id"), data=hss_default)
             return Response(self.serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)

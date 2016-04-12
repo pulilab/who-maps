@@ -1,5 +1,3 @@
-// import _ from 'lodash';
-import { projectScale } from '../hssMockData';
 
 class ProjectScaleController {
 
@@ -8,10 +6,10 @@ class ProjectScaleController {
         $timeout(() => {
             vm.EE = window.EE;
             vm.editMode = false;
-            vm.string = projectScale;
+            vm.string = vm.data.project_scale;
+
             vm.EE.on('hssEditMode', bool => {
                 vm.editMode = bool;
-                // console.log(bool);
             });
         });
     }

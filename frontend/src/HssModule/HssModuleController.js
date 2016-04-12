@@ -1,8 +1,17 @@
+import HssModuleService from './HssModuleService';
+import 'es6-promise';
+/* global Promise */
+
 class HssModuleController {
 
-    constructor(introJs) {
+    constructor($scope, introJs) {
         this.EE = window.EE;
-        this.introJsSource = introJs;
+        this.scope = $scope;
+        this.dataReady = false;
+        this.gridLoading = 3;
+        this.editMode = false;
+        this.structure = {};
+        this.data = {};
 
         this.columnHasContent = [];
 
@@ -14,6 +23,39 @@ class HssModuleController {
 
         this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn.bind(this));
 
+        this.EE.on('hssEditMode', this.handleEditMode.bind(this));
+
+        this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent.bind(this));
+
+        this.hs = new HssModuleService();
+
+
+        this.$onInit = () => {
+            this.introJsSource = introJs;
+        };
+
+
+        Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
+
+    }
+
+    handleLayoutEvent() {
+        this.gridLoading -= 1;
+        if (this.gridLoading < 0) {
+            this.gridLoading = 0;
+        }
+    }
+
+    handleServerData(values) {
+        this.structure = values[0];
+        this.data = values[1];
+        this.scope.$evalAsync();
+        this.dataReady = true;
+    }
+
+
+    handleEditMode(value) {
+        this.editMode = value;
     }
 
     reFresh(columnContentsArray) {
@@ -39,12 +81,12 @@ class HssModuleController {
     }
 
     static hssControllerFactory() {
-        function hssController() {
+        function hssController($scope) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController(introJs);
+            return new HssModuleController($scope, introJs);
         }
 
-        hssController.$inject = [];
+        hssController.$inject = ['$scope'];
 
         return hssController;
     }

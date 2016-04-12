@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import InterventionsController from './InterventionsController';
 import { EE } from '../../Common/';
+import { continuumData, interventionsLib } from '../hssMockData';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn */
 
@@ -14,7 +16,14 @@ describe('interventionsController', () => {
         EE.initialize();
         ic = InterventionsController.interventionsFactory()($timeout);
         ic.tiles = 7;
-        ic.interventionRow = ic.middleColumnGenerator();
+        ic.data = {
+            continuum: continuumData,
+            interventions: interventionsLib
+        };
+        ic.structure = {
+            interventions: interventionsLib
+        };
+        ic.$onInit();
     });
 
     it('should have a function that change the edit mode', () => {
@@ -25,17 +34,31 @@ describe('interventionsController', () => {
 
     });
 
+    it('should have a function that emit the layout-done event', () => {
+        spyOn(window.EE, 'emit');
+        ic.layoutDone();
+        expect(window.EE.emit).toHaveBeenCalled();
+    });
+
+    it('should have an onInit function that handle the angular binding', () => {
+        ic.interventionRow = void 0;
+        expect(ic.interventionRow).not.toBeDefined();
+        ic.$onInit();
+        expect(ic.interventionRow).toBeDefined();
+    });
+
     it('should have a function that change the activated status of a specific column', () => {
 
         expect(ic.handleColumnActivation).toBeDefined();
         const mockEvent = {
-            columnId: 0,
+            columnId: 1,
             activated: true
         };
 
         ic.handleColumnActivation(mockEvent);
 
         const firstTile = ic.interventionRow[mockEvent.columnId];
+
         expect(firstTile.activated).toBeTruthy();
 
         const secondTile = ic.interventionRow[mockEvent.columnId + 1];
@@ -72,11 +95,27 @@ describe('interventionsController', () => {
 
     });
 
+    it('should have a function that calculate the interventions rows', () => {
+        const model = [1, 2, 3, 4];
+        spyOn(ic, 'resizeRow');
+        ic.calculateInterventionHeight(model);
+        expect(ic.resizeRow).toHaveBeenCalledWith(2);
+        ic.calculateInterventionHeight({});
+        expect(ic.resizeRow).toHaveBeenCalledTimes(1);
+    });
+
     it('should have a function that resize all the rows', () => {
         ic.resizeRow(9);
+        ic.resizeRow(null);
         expect(ic.interventionsRowSpan.size).toBe(9);
         _.forEach(ic.interventionRow, item => {
             expect(item.rowSpan).toBe(9);
-        })
+        });
+    });
+
+    it('should have a function that save the interventions', () => {
+        spyOn(ic, 'calculateInterventionHeight');
+        ic.saveInterventions(null, null);
+        expect(ic.calculateInterventionHeight).toHaveBeenCalled();
     });
 });

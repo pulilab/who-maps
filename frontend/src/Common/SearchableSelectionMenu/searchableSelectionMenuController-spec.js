@@ -3,12 +3,15 @@ import SearchableSelectionMenuController from './SearchableSelectionMenuControll
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let sc = {};
+const $timeout = arg => {
+    arg();
+};
 let tmp = void 0;
 
-describe('introJsController', () => {
+describe('searchableSelectionMenuController', () => {
 
     beforeEach(() => {
-        sc = SearchableSelectionMenuController.ssMenuFactory()();
+        sc = SearchableSelectionMenuController.ssMenuFactory()(null, $timeout);
         sc.element = {
             find: () => {
                 return [tmp];
@@ -34,6 +37,13 @@ describe('introJsController', () => {
         expect(sc.isOpen).toBeTruthy();
     });
 
+    it('should call the onOpenCallback when the select get open', () => {
+        const spy = jasmine.createSpy('onOpen');
+        sc.onOpenCallback = spy;
+        sc.selectOpen();
+        expect(sc.onOpenCallback).toHaveBeenCalled();
+    });
+
     it('should have a function that set the open flag to false and call the fix comma function', () => {
         spyOn(sc, 'fixComma');
         sc.isOpen = true;
@@ -42,13 +52,20 @@ describe('introJsController', () => {
         expect(sc.fixComma).toHaveBeenCalled();
     });
 
-    it('should have a function that remove commas from a underlying span when replaceComma is trud', () => {
+    it('should call the onOpenCallback when the select get close', () => {
+        const spy = jasmine.createSpy('onclose');
+        sc.onCloseCallback = spy;
+        sc.selectClose();
+        expect(sc.onCloseCallback).toHaveBeenCalled();
+    });
+
+    it('should have a function that remove commas from a underlying span when replaceComma is true', () => {
         sc.replaceComma = true;
         sc.fixComma();
         expect(tmp.innerHTML).not.toContain(',');
     });
 
-    it('should have a function that remove commas from a underlying span when replaceComma is trud', () => {
+    it('should have a function that remove commas from a underlying span only when replaceComma is true', () => {
         sc.replaceComma = false;
         sc.fixComma();
         expect(tmp.innerHTML).toContain(',');

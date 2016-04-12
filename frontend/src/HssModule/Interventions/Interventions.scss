@@ -6,6 +6,7 @@ interventions {
   .header {
     width: 100%;
     height: 100%;
+    border-bottom: 1px solid $color-gray-lighter;
     background-color: #EEEEEE !important;
 
     h2 {
@@ -27,6 +28,7 @@ interventions {
   }
 
   .intervention {
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
 

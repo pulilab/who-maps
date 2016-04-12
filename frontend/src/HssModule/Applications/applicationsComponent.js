@@ -7,9 +7,12 @@ const applicationsComponent = {
     template: _template,
     controllerAs: 'vm',
     bindings: {
-        tiles: '<'
+        tiles: '<',
+        structure: '<',
+        data: '<'
     },
     name: 'applications'
+
 };
 
 export default applicationsComponent;

@@ -1,11 +1,13 @@
 <md-grid-list
-  md-cols="11"
-  md-gutter="0px"
-  md-row-height="51px">
+        md-cols="11"
+        md-gutter="0px"
+        md-row-height="51px"
+        md-on-layout="vm.layoutDone()"
+>
 
     <md-grid-tile
-      md-colspan="9"
-      md-rowspan="1" >
+            md-colspan="9"
+            md-rowspan="1" >
         <div class="header" layout="row" layout-align="start center">
             <h2 class="md-title text-uppercase">Common <span class="text-lowercase">m</span>HEALTH &amp; ICT Applications</h2>
         </div>
@@ -13,11 +15,11 @@
 
     <md-grid-tile md-colspan="2" md-rowspan="1" class="empty"> </md-grid-tile>
 
-    <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.applicationRow" ng-if="!tile.disabled">
+    <md-grid-tile md-colspan="{{tile.colSpan}}" md-rowspan="{{tile.rowSpan}}" ng-repeat="tile in vm.applicationRow" ng-if="!tile.disabled" ng-hide="!vm.layoutReady && !tile.isMain">
         <div class="tile" ng-class="tile.classGenerator(tile)">
 
             <div ng-if="tile.isHeader">
-                <div class="app-number">{{tile.applicationId}}</div>
+                <div class="app-number">{{vm.labelGenerator(tile)}}</div>
                 <div class="app-button">
                     <md-button md-no-ink class="md-button-override"  ng-click="tile.clickHandler(tile)">
                         <span>{{tile.content}}</span>
@@ -28,16 +30,23 @@
 
             <div ng-if="tile.isInput" ng-click="tile.clickHandler(tile)" >
 
-                <div ng-if="vm.editMode && tile.bubbleDrawn && tile.activated" class="bubble-shape">
-                    <div class="app-number white-number">{{tile.applicationId}}</div>
+                <div ng-if="vm.editMode && tile.bubbleDrawn && tile.activated"   class="bubble-shape">
+                    <div class="app-number white-number">{{vm.labelGenerator(tile)}}</div>
                     <md-input-container md-no-float class="" >
-                        <input aria-label="tile content" placeholder="Add text here" ng-model="tile.content" ng-keydown="vm.inputHandler(tile, $event)">
+                        <input aria-label="tile content" placeholder="Add text here"
+                               id="appBubble_{{vm.labelGenerator(tile)}}"
+                               ng-model="tile.content"
+                               ng-change="vm.changeHandler(tile)"
+                               ng-blur="vm.blurHandler(tile)"
+                               ng-model-options="{updateOn: 'blur'}"
+                               ng-keydown="vm.inputHandler(tile, $event)"
+                        />
                     </md-input-container>
                     <span class="app-delete" ng-click="vm.confirmDeleteBubble(tile)"><span>&times;</span></span>
                 </div>
 
                 <div ng-if="!vm.editMode && tile.content && tile.activated" class="bubble-shape">
-                    <div class="app-number white-number">{{tile.applicationId}}</div>
+                    <div class="app-number white-number">{{vm.labelGenerator(tile)}}</div>
                     <div class="app-text" >{{tile.content}}</div>
                 </div>
 
@@ -50,23 +59,31 @@
 
             <div ng-if="tile.isSelect && tile.rowEnabled">
                 <div ng-if="!vm.editMode">
-                    <div ng-repeat="tax in tile.content">
-                        <div class="md-list-tax-text md-small">
+                    <span ng-repeat="tax in tile.content">
+                        <span class="md-tax-text md-small">
                             {{tax}}
-                        </div>
-                    </div>
+                        </span>
+                    </span>
                 </div>
-                <div ng-if="vm.editMode" >
-                    <md-input-container >
-                        <md-select ng-model="tile.content" aria-label="taxonomy-option" multiple="true" placeholder="Select item(s)" md-container-class="small multiple" class="small multiple">
-                            <div ng-repeat="constraintClass in vm.selectedConstraints | filter:{active: true}" >
-                                <span>{{constraintClass.name}}</span>
-                                <md-option ng-repeat="option in constraintClass.taxonomy" value="{{option}}">
-                                    {{option}}
-                                </md-option>
-                            </div>
-                        </md-select>
-                    </md-input-container>
+                <div ng-if="vm.editMode && !tile.isEmpty" >
+
+                    <ssmenu
+                            ng-if="vm.editMode"
+                            ng-model="tile.content"
+                            sub-options="taxonomy"
+                            options="vm.selectedConstraints"
+                            aria-label="taxonomy-option"
+                            multiple="true"
+                            sub-header="name"
+                            class="small"
+                            data-placeholder="Select item(s)"
+                            md-container-class="small"
+                            replace-comma="true"
+                            searchable="false"
+                            limit="2"
+                            on-close-callback="tile.saveTaxonomy">
+                        class="small">
+                    </ssmenu>
                 </div>
             </div>
 

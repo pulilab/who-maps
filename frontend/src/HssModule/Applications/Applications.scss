@@ -10,8 +10,10 @@ applications {
   }
 
   .header {
+    z-index: 30;
     width: 100%;
     height: 100%;
+    border-bottom: 1px solid $color-gray-lighter;
     background-color: #EEEEEE !important;
 
     h2 {
@@ -116,17 +118,35 @@ applications {
   .tile {
     width: 100%;
     height: 100%;
-    border-top: 1px solid $color-gray-lighter;
+    border-top: 1px solid #EEEEEE;
 
     &.app-header,
     &.app-tax {
+      border-right: none !important;
       background-color: #fff !important;
     }
 
     &.app-open {
       md-icon {
         &:before {
-          content: "arrow_drop_up";
+          content: "expand_less";
+        }
+      }
+    }
+
+    &.app-sub {
+      border-top: none !important;
+
+      .app-number {
+        &::before {
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          display: inline-block;
+          width: 1px;
+          height: 21px;
+          background-color: #BDBDBD;
+          content: "";
         }
       }
     }
@@ -135,7 +155,7 @@ applications {
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
 
-      &.activated {
+      &.activated.edit-mode {
         cursor: pointer;
 
         &:hover {
@@ -149,7 +169,7 @@ applications {
         }
       }
 
-      &.not-activated {
+      &.not-activated.edit-mode {
         cursor: not-allowed;
       }
     }
@@ -166,23 +186,6 @@ applications {
             content: "done";
             opacity: 1;
           }
-        }
-      }
-    }
-
-    &.sub {
-      border-top: none !important;
-
-      .app-number {
-        &::before {
-          position: absolute;
-          bottom: 100%;
-          left: 50%;
-          display: inline-block;
-          width: 1px;
-          height: 21px;
-          background-color: #BDBDBD;
-          content: "";
         }
       }
     }
@@ -233,12 +236,13 @@ applications {
 
     md-icon {
       position: absolute;
-      top: 50%;
-      right: 15px;
+      top: 58%;
+      right: 14px;
       transform: translateY(-50%);
+      font-size: 18px;
 
       &:before {
-        content: "arrow_drop_down";
+        content: "expand_more";
       }
     }
   }
@@ -287,6 +291,7 @@ applications {
       background-color: $color-green;
 
       &::after {
+        float: left;
         display: inline-block;
         width: 100%;
         height: 100%;
@@ -298,7 +303,7 @@ applications {
         transition: $swift-ease-out;
         transform: translate3d(0,0,0);
 
-        @include md-icon(21px);
+        @include md-icon(23px);
       }
     }
     &.bubble-notallowed {
@@ -308,7 +313,7 @@ applications {
 
   .bubble-shape {
     position: absolute;
-    top: 2px;
+    top: 1px;
     left: -11px;
     z-index: 20;
     overflow: hidden;
@@ -333,7 +338,6 @@ applications {
     display: -webkit-box;
     overflow: hidden;
     max-height: 36px;
-    //
     width: 100%;
     height: auto;
     color: $color-white !important;
@@ -355,6 +359,7 @@ applications {
     padding: 4px;
     width: 24px;
     height: 24px;
+    outline: none;
     cursor: pointer;
     transform: translateY(-50%);
 
@@ -377,10 +382,11 @@ applications {
       }
   }
 
-  .md-list-tax-text {
+  .md-tax-text {
     display: block;
-    margin: 8px 20px 0;
+    margin: 5px 20px 1px;
     width: calc( 100% - 40px );
+    line-height: 16px;
 
     @include text-truncate();
   }

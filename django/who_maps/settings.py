@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'project',
+    'hss',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

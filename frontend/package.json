@@ -2,6 +2,11 @@
   "name": "who",
   "version": "0.0.1",
   "main": "index.js",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "scripts": {
     "test": "karma start",
     "serve": "webpack-dev-server --progress --colors --hot --inline",
@@ -42,6 +47,7 @@
     "karma-phantomjs-shim": "^1.2.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "loader-utils": "^0.2.14",
     "node-sass": "^3.4.2",
     "null-loader": "^0.1.1",
     "protractor": "^3.1.1",

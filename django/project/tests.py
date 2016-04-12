@@ -80,11 +80,16 @@ class ProjectTests(TestCase):
         # Create Project with other, publications and reports.
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project2")
-        data.update(publications=[{"url": "http://test.com"},{"url": "http://test.com"}])
-        data.update(reports=[{"url": "http://test.com"},{"url": "http://test.com"}])
+        data.update(publications_new=[{"url": "http://test.com"},{"url": "http://test.com"}])
+        data.update(reports_new=[{"url": "http://test.com"},{"url": "http://test.com"}])
         data.update(strategy_other=["other_strat1", "other_strat2"])
         data.update(technology_other=["other_tech1", "other_tech2"])
         data.update(pipeline_other=["other_pipe1", "other_pipe2"])
+        response = self.test_user_client.post(url, data)
+        self.pub_rep_other_project_id = response.json().get("id")
+
+        url = reverse("create-project-files", kwargs={"pk": self.pub_rep_other_project_id})
+        data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".pdf")
         file2 = tempfile.NamedTemporaryFile(suffix=".pdf")
         file3 = tempfile.NamedTemporaryFile(suffix=".pdf")
@@ -94,7 +99,6 @@ class ProjectTests(TestCase):
         data.update(pub_files)
         data.update(report_files)
         response = self.test_user_client.post(url, data, format="multipart")
-        self.pub_rep_other_project_id = response.json().get("id")
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-list")
@@ -137,8 +141,12 @@ class ProjectTests(TestCase):
         url = reverse("project-list")
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project4")
-        data.update(publications=[{"url": "http://test.com"},{"url": "http://test.com"}])
-        data.update(reports=[{"url": "http://test.com"},{"url": "http://test.com"}])
+        data.update(publications_new=["http://test.com", "http://test.com"])
+        data.update(reports_new=["http://test.com", "http://test.com"])
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        url = reverse("create-project-files", kwargs={"pk": response.json().get("id")})
+        data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".pdf")
         file2 = tempfile.NamedTemporaryFile(suffix=".pdf")
         file3 = tempfile.NamedTemporaryFile(suffix=".pdf")
@@ -148,7 +156,7 @@ class ProjectTests(TestCase):
         data.update(pub_files)
         data.update(report_files)
         response = self.test_user_client.post(url, data, format="multipart")
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
 
     def test_retrieve_project_with_pub_rep_data(self):
         url = reverse("project-detail", kwargs={"pk": self.pub_rep_other_project_id})
@@ -162,8 +170,10 @@ class ProjectTests(TestCase):
         response = self.test_user_client.get(url)
         data = response.json()
         url = reverse("project-detail", kwargs={"pk": data.get("id")})
-        data["publications"].pop()
-        data["reports"].pop()
+        pub_to_delete = [data["publications"].pop().get("id")]
+        data.update(publications_deleted=pub_to_delete)
+        rep_to_delete = [data["reports"].pop().get("id")]
+        data.update(reports_deleted=rep_to_delete)
         response = self.test_user_client.put(
                                 url,
                                 data=encode_multipart(BOUNDARY, data),
