@@ -2,12 +2,20 @@
 
 	<linechart
 		flex
-		data="vm.linechartMockData"
+		data="vm.linechartMockData.data"
+		labels="vm.linechartMockData.labels"
 		showdotted="true"
 	></linechart>
 
-	<countrymap flex>
-	</countrymap>
+	<linechart
+		flex
+		data="vm.linechartMockData2"
+		labels="vm.linechartMockData2.labels"
+		showdotted="false"
+		datachooser="true"
+	></linechart>
+
+<!-- 	<countrymap flex>
+	</countrymap> -->
 
 </div>
-

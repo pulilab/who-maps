@@ -4,8 +4,31 @@ linechart {
 
     margin-bottom: -65px;
 
-    #linechartcontainer {
-        min-height: 350px;
+    .linechart-labels {
+        color: #757575;
+        font-size: 12px;
+        cursor: default;
+
+        ul {
+            list-style-type: none;
+            padding-left: 15px;
+            display: flex;
+            flex-flow: column wrap;
+            height: 35px;
+
+            li {
+                flex-basis: 50%;
+                display: block;
+            }
+        }
+
+        md-input-container, .axischooser {
+            margin: 0;
+        }
+    }
+
+    .linechartcontainer {
+        height: 350px;
     }
 
     .material-icons {
@@ -28,10 +51,6 @@ linechart {
         display: none;
     }
 
-    .linechart-labels {
-        color: #757575;
-        font-size: 12px;
-    }
 
     circle {
         stroke-width: 1px;

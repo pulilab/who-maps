@@ -1,54 +1,36 @@
 <h3>linechart component</h3>
 
-<div layout="row" class="linechart-labels">
+<div class="linechart-labels" layout="row">
 
-    <div flex="15" flex-offset="5" layout="column">
-        <div flex>
-            ____ closed
-        </div>
-        <div flex>
-            …… in progress
-        </div>
-    </div>
+    <ul flex>
 
-    <div flex="25" layout="column">
-        <div class="labelhov1">
-            <i class="material-icons labelicon1">fiber_manual_record</i>
-            Groundwork
-        </div>
-        <div class="labelhov2">
-            <i class="material-icons labelicon2">fiber_manual_record</i>
-            Partnership
-        </div>
-    </div>
+        <li>____ closed</li>
+        <li>…… in progress</li>
 
-    <div flex="25" layout="column">
-        <div class="labelhov3">
-            <i class="material-icons labelicon3">fiber_manual_record</i>
-            Financial health
-        </div>
-        <div class="labelhov4">
-            <i class="material-icons labelicon4">fiber_manual_record</i>
-            Technology & Architecture
-        </div>
-    </div>
+        <li ng-repeat="label in vm.chosenLabels track by $index" class="text-truncate labelhov" ng-class="'labelhov' + ($index + 1)">
+            <i class="material-icons" ng-class="'labelicon' + ($index + 1)">fiber_manual_record</i> {{label}}
+        </li>
 
-    <div flex="25" layout="column">
-        <div class="labelhov5">
-            <i class="material-icons labelicon5">fiber_manual_record</i>
-            Operations
-        </div>
-        <div class="labelhov6">
-            <i class="material-icons labelicon6">fiber_manual_record</i>
-            Monitoring & Evaluation
-        </div>
-    </div>
+    </ul>
 
-</div>
+    <md-input-container
+        ng-if="vm.datachooser">
 
+        <label>Axis to show: </label>
 
-<div id="linechartcontainer">
+        <md-select
+            aria-label="select axis to view in the chart"
+            flex="33"
+            class="axischooser"
+            ng-model="vm.activeAxis"
+            ng-change="vm.axisChange(vm.activeAxis)">
 
-    <svg id="visualization"></svg>
+            <md-option ng-repeat="label in vm.labels">
+                {{label}}
+            </md-option>
+
+        </md-select>
+
+    </md-input-container>
 
 </div>
