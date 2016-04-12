@@ -1,4 +1,4 @@
-import { Storage, Protected } from '../Common/';
+import { Protected } from '../Common/';
 
 class AppModuleController extends Protected {
 
@@ -26,11 +26,14 @@ class AppModuleController extends Protected {
         };
 
         this.notifications = [1, 2, 3];
-        this.scope.$watch(() => {
-            return this.state.current.name;
-        }, value => {
-            this.showCompleteNavigation(value, this.isLogin);
-        });
+        this.$onInit = () => {
+            this.scope.$watch(() => {
+                return this.state.current.name;
+            }, value => {
+                this.showCompleteNavigation(value, this.isLogin);
+            });
+        };
+
 
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
@@ -45,7 +48,7 @@ class AppModuleController extends Protected {
     }
 
     handleUnauthorized() {
-        this.state.go('landing');
+        this.state.go('login');
     }
 
     showCompleteNavigation(state, isLogin) {

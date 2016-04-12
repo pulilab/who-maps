@@ -1,6 +1,8 @@
 // General imports
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
+import ngMessages from 'angular-messages';
+import 'angular-password';
 import angularMd from 'angular-material';
 import { EE } from '../Common/';
 
@@ -52,7 +54,7 @@ function config($stateProvider, $urlRouterProvider) {
             }
         });
 
-    $urlRouterProvider.otherwise('/app');
+    $urlRouterProvider.otherwise('/app/landing');
 }
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
@@ -61,6 +63,8 @@ angular.module(moduleName,
     [
         uiRoute,
         angularMd,
+        ngMessages,
+        'ngPassword',
         Components,
         hssModule,
         cms,

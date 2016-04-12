@@ -12,16 +12,28 @@ continuum {
 
   .fixed-mode {
     position: fixed;
-    top:0;
+    top: 0;
+    left: $layout-gutter-width;
     width: calc(100% - #{$layout-gutter-width * 2});
     height: 150px;
     z-index: 200;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    animation: show_continuum 400ms ease-out 1;
+  }
+
+  @keyframes show_continuum {
+    0% {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .continuum-component {
-
 
     md-grid-tile {
 
