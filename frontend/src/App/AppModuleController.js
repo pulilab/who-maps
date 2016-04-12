@@ -26,13 +26,13 @@ class AppModuleController extends Protected {
         };
 
         this.notifications = [1, 2, 3];
-        this.$onInit = () => {
-            this.scope.$watch(() => {
-                return this.state.current.name;
-            }, value => {
-                this.showCompleteNavigation(value, this.isLogin);
-            });
-        };
+
+        this.scope.$watch(() => {
+            return this.state.current.name;
+        }, value => {
+            this.showCompleteNavigation(value, this.isLogin);
+        });
+
 
 
         this.EE.on('login', this.handleLoginEvent.bind(this));

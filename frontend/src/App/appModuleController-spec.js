@@ -10,11 +10,14 @@ const state = {
     go: () => {}
 };
 
+const scope = {
+    $watch: () => {}
+}
+
 describe('AppModuleController', () => {
 
     beforeEach(() => {
-        ac = AppModuleController.appControllerFactory()();
-        ac.state = state;
+        ac = AppModuleController.appControllerFactory()(state, scope);
     });
 
     it('should have a function to open a modal menu', () => {
