@@ -12,7 +12,7 @@ const state = {
 
 const scope = {
     $watch: () => {}
-}
+};
 
 describe('AppModuleController', () => {
 

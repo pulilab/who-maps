@@ -10,8 +10,8 @@ import SearchableSelectionMenu from './SearchableSelectionMenu/searchableSelecti
 import projectComponent from './ProjectComponent/projectComponent';
 import searchbarComponent from './Searchbar/searchbar';
 import BadgeComponent from './Badge/badgeComponent';
-import LoginComponent from './Login/LoginComponent';
-import SignupComponent from './Signup/SignupComponent';
+import LoginComponent from './Login/loginComponent';
+import SignupComponent from './Signup/signupComponent';
 
 const moduleName = 'Components';
 
