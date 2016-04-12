@@ -5,7 +5,9 @@ class Protected {
         this.EE = window.EE;
         this.storage = new Storage();
         this.isLogin = this.retrieveLoginStatus();
-        this.user = this.storage.get('user');
+
+        this.retrieveUser = this.retrieveUser.bind(this);
+        this.retrieveUser();
         this.checkLoginStatus();
         this.EE.on('login', this.handleLoginEvent.bind(this));
     }
@@ -14,6 +16,10 @@ class Protected {
         if (!this.isLogin) {
             this.EE.emit('unauthorized');
         }
+    }
+
+    retrieveUser() {
+        this.user = this.storage.get('user');
     }
 
     systemLogin() {
@@ -32,6 +38,7 @@ class Protected {
     handleLoginEvent() {
         this.isLogin = true;
         this.storage.set('login', true);
+        this.retrieveUser();
     }
 
     retrieveLoginStatus() {

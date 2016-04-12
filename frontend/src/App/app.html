@@ -4,13 +4,13 @@
             <md-button ui-sref="landing" arai-label="Maps toolkit" class="app-title">
                 <span>MAPS Toolkit</span>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Apps"  ui-sref="settings" ng-if="vm.showFullNavigation">
+            <md-button class="md-icon-button" aria-label="Apps"  ui-sref="hss" ng-if="vm.isLogin">
                 <md-icon class="material-icons md-light">apps</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.showFullNavigation" >
+            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin" >
                 <md-icon class="material-icons md-light">public</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.showFullNavigation" >
+            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.isLogin" >
                 <md-icon class="material-icons md-light">help_outline</md-icon>
             </md-button>
             <span flex ></span>
