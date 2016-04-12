@@ -10,18 +10,16 @@ class LinechartController {
         // vm.labels <= binding, array of labels for datasets
         // vm.showdotted <= binding, decides to show unsaved ones
         this.$onInit = () => {
-            // console.log('datachooser', vm.datachooser);
-            // console.log('data', vm.data);
+
             if (vm.datachooser) {
                 vm.activeAxis = vm.data.labels[0];
                 vm.chosenData = vm.data[vm.activeAxis].data;
-                // console.log('chosendata', vm.chosenData);
                 vm.chosenLabels = vm.data[vm.activeAxis].labels;
-                // console.log('chosenlabels', vm.chosenLabels);
             }
             else {
                 vm.chosenLabels = vm.labels;
             }
+
             vm.start();
         };
 
@@ -33,15 +31,15 @@ class LinechartController {
             this.draw();
         }
         else {
-            console.warn('Should show something else!!!');
+            this.showPlaceholder = true;
         }
     }
 
-    draw(reDraw) {
+    draw(redraw) {
 
         const vm = this;
 
-        if (reDraw) {
+        if (redraw) {
             d3.select(vm.el[0]).select('.linechartcontainer').remove();
         }
 
@@ -56,16 +54,10 @@ class LinechartController {
         const outerHeight = outer[0][0].offsetHeight;
 
         // Decorate data with indices
-        if (!data.every(el => el.hasOwnProperty('x'))) {
-            data.forEach((el, i) => {
-                el.x = i + 1;
-            });
-        }
+        data.forEach((el, i) => {
+            el.x = i + 1;
+        });
 
-        const color = [
-            '#6A1B9A', '#D84315', '#0097A7',
-            '#FBC02D', '#558B2F', '#5D4037'
-        ];
 
         // Should recalculate on first open || resize
         const margin = {
@@ -132,10 +124,7 @@ class LinechartController {
                 .attr('x1', margin.left)
                 .attr('y1', yScale(i / 10))
                 .attr('x2', width - margin.right)
-                .attr('y2', yScale(i / 10))
-                .attr('stroke', '#9D9D9D')
-                .attr('stroke-width', '0.4')
-                .attr('fill', 'none');
+                .attr('y2', yScale(i / 10));
         }
 
 
@@ -149,21 +138,13 @@ class LinechartController {
             // Full lines
             element.append('svg:path')
                 .attr('class', 'line-axis line-axis' + i)
-                .attr('d', line(data.slice(0, -1)))
-                .attr('stroke', color[i - 1])
-                .attr('stroke-width', 3)
-                .attr('fill', 'none');
+                .attr('d', line(data.slice(0, -1)));
 
             // Dashed lines
             if (vm.showdotted) {
                 element.append('svg:path')
-                    .attr('class', 'line-axis line-axis' + i)
-                    .attr('d', line(data.slice(-2)))
-                    .attr('stroke', color[i - 1])
-                    .attr('stroke-linecap', 'round')
-                    .attr('stroke-width', 3)
-                    .attr('stroke-dasharray', '2, 7')
-                    .attr('fill', 'none');
+                    .attr('class', 'line-axis line-axis-dashed line-axis' + i)
+                    .attr('d', line(data.slice(-2)));
             }
         }
 
@@ -178,7 +159,6 @@ class LinechartController {
                     .attr('r', 5)
                     .attr('cx', xScale(el.x))
                     .attr('cy', yScale(el['axis' + i]))
-                    .attr('fill', color[i - 1])
                     .on('mouseover', () => {
 
                         tooltip.transition()
@@ -206,12 +186,14 @@ class LinechartController {
         });
 
         // Label events to trigger classes, that opaques lines via css
+        // timeout is sometimes needed, because the labels arent in the DOM yet after redraw
         if (d3.select(vm.el[0]).select('.labelhov' + labels.length).empty()) {
             vm.timeout(labelHoverFn, 250);
         }
         else {
             labelHoverFn();
         }
+
         function labelHoverFn() {
 
             for (let i = 1; i <= labels.length; i += 1) {
@@ -234,9 +216,12 @@ class LinechartController {
 
     // Ng-options change
     axisChange(newAxis) {
+
         this.chosenData = this.data[newAxis].data;
         this.chosenLabels = this.data[newAxis].labels;
+
         this.draw(true);
+
     }
 
     static linechartFactory() {
