@@ -22,5 +22,4 @@ angular.module(moduleName, [])
 export { EE };
 export { AuthApi };
 export { SessionStorage };
-
 export { moduleName as Components };

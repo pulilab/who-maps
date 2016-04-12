@@ -1,9 +1,9 @@
 <md-content>
     <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
-            <h2 class="app-title">
+            <md-button ui-sref="landing" arai-label="Maps toolkit" class="app-title">
                 <span>MAPS Toolkit</span>
-            </h2>
+            </md-button>
             <md-button class="md-icon-button" aria-label="Apps"  ui-sref="settings">
                 <md-icon class="material-icons md-light">apps</md-icon>
             </md-button>
@@ -78,7 +78,13 @@
     </md-toolbar>
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
-            <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" md-container-class="large" class="large project-selector"></ssmenu>
+            <ssmenu
+                aria-label="Project Choser"
+                options="vm.user.projects"
+                ng-model="vm.currentProject.name"
+                md-container-class="large"
+                class="large project-selector">
+            </ssmenu>
             <span flex></span>
             <md-button class="" aria-label="Settings"  ui-sref="settings">
                 <md-icon class="material-icons md-light">settings</md-icon>
