@@ -1,21 +1,52 @@
+import SignupService from './SignupService';
 
-class SignupModuleController {
+class SignupController {
 
     constructor() {
-
+        this.ss = new SignupService();
+        this.processRegistrationResult = this.processRegistrationResult.bind(this);
+        this.register = {
+            // email: 'a',
+            // password1: 'a',
+            // password2: 'b'
+        };
+        this.style = {
+            height: this.calculateHeight()
+        };
     }
 
+    calculateHeight() {
+        const contentHeight = window.innerHeight - 48;
+        return contentHeight + 'px';
+    }
+
+    signup(signupForm) {
+        if (signupForm.$valid) {
+            this.ss.signup(this.register)
+            .then(result => {
+                this.processRegistrationResult(result);
+            });
+        }
+    }
+
+    processRegistrationResult(result) {
+        if (result.success) {
+            console.log('success', result.data);
+        }
+        else {
+            console.log('fail', result.data);
+        }
+
+    }
 
     static signupFactory() {
         require('./Signup.scss');
-        function signupController() {
-            return new SignupModuleController();
+        function signup() {
+            return new SignupController();
         }
-
-        signupController.$inject = [];
-
-        return signupController;
+        signup.$inject = [];
+        return signup;
     }
 }
 
-export default SignupModuleController;
+export default SignupController;

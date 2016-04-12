@@ -24,6 +24,7 @@ class Protected {
 
     systemLogin() {
         this.isLogin = true;
+        this.retrieveUser();
         this.storage.set('login', true);
     }
 
