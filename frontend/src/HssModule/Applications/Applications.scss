@@ -15,6 +15,7 @@ applications {
     height: 100%;
     border-bottom: 1px solid $color-gray-lighter;
     background-color: #EEEEEE !important;
+    transform: translateY(1px);
 
     h2 {
       z-index: 10;
@@ -116,9 +117,20 @@ applications {
   }
 
   .tile {
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     border-top: 1px solid #EEEEEE;
+
+    &.app-main {
+      border-top: 1px solid #EEEEEE;
+      background: linear-gradient(to bottom, #FFFFFF 0%, #EEEEEE 100%) !important;
+
+      .md-button-override {
+        font-weight: 500;
+        font-size: 14px;
+      }
+    }
 
     &.app-header,
     &.app-tax {
@@ -135,7 +147,7 @@ applications {
     }
 
     &.app-sub {
-      border-top: none !important;
+      // border-top: none !important;
 
       .app-number {
         &::before {
@@ -143,10 +155,11 @@ applications {
           bottom: 100%;
           left: 50%;
           display: inline-block;
-          width: 1px;
+          width: 2px;
           height: 21px;
           background-color: #BDBDBD;
           content: "";
+          transform: translateX(-1px);
         }
       }
     }
@@ -231,6 +244,7 @@ applications {
     text-align: left;
     text-transform: none;
     white-space: normal;
+    font-weight: 400;
     font-size: 12px;
     line-height: 16px;
 
@@ -238,8 +252,8 @@ applications {
       position: absolute;
       top: 58%;
       right: 14px;
-      transform: translateY(-50%);
       font-size: 18px;
+      transform: translateY(-50%);
 
       &:before {
         content: "expand_more";
@@ -291,8 +305,8 @@ applications {
       background-color: $color-green;
 
       &::after {
-        float: left;
         display: inline-block;
+        float: left;
         width: 100%;
         height: 100%;
         color: $color-white;
