@@ -1,12 +1,16 @@
+import { Storage, Protected } from '../Common/';
 
-class AppModuleController {
+class AppModuleController extends Protected {
 
-    constructor() {
-        this.user = {
-            username: 'John Snow',
-            role: 'Admin',
-            projects: ['Project 1', 'Project 2']
-        };
+    constructor($state, $scope) {
+        super();
+        this.EE = window.EE;
+        this.state = $state;
+        this.scope = $scope;
+        this.showFullNavigation = false;
+        if (this.user) {
+            this.user.projects = ['Project 1', 'Project 2'];
+        }
 
         this.currentProject = {
             name: 'Project 1',
@@ -22,6 +26,31 @@ class AppModuleController {
         };
 
         this.notifications = [1, 2, 3];
+        this.scope.$watch(() => {
+            return this.state.current.name;
+        }, value => {
+            this.showCompleteNavigation(value, this.isLogin);
+        });
+
+        this.EE.on('login', this.handleLoginEvent.bind(this));
+        this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
+    }
+
+    handleLoginEvent(forced) {
+        if (forced) {
+            console.log('some forced action');
+        }
+        this.systemLogin();
+        this.state.go('hss');
+    }
+
+    handleUnauthorized() {
+        this.state.go('landing');
+    }
+
+    showCompleteNavigation(state, isLogin) {
+        const isLanding = state === 'landing';
+        this.showFullNavigation = !isLanding && isLogin;
     }
 
 
@@ -30,16 +59,17 @@ class AppModuleController {
     }
 
     logout() {
-        console.log('logout stub');
+        this.systemLogout();
+        this.showCompleteNavigation(null, false);
     }
 
     static appControllerFactory() {
 
-        function appController() {
-            return new AppModuleController();
+        function appController($state, $scope) {
+            return new AppModuleController($state, $scope);
         }
 
-        appController.$inject = [];
+        appController.$inject = ['$state', '$scope'];
 
         return appController;
     }

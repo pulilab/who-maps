@@ -1,10 +1,12 @@
 import HssModuleService from './HssModuleService';
+import { Protected } from '../Common/';
 import 'es6-promise';
 /* global Promise */
 
-class HssModuleController {
+class HssModuleController extends Protected {
 
     constructor($scope, introJs) {
+        super();
         this.EE = window.EE;
         this.scope = $scope;
         this.dataReady = false;

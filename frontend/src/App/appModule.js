@@ -9,7 +9,7 @@ EE.initialize();
 import AppController from './AppModuleController';
 import './app.scss';
 
-import appTemplate from './app.html';
+import _appTemplate from './app.html';
 
 import hssModule from '../HssModule/';
 import cms from '../Cms/';
@@ -27,9 +27,29 @@ function config($stateProvider, $urlRouterProvider) {
         .state(moduleName,
         {
             url: '/app',
-            template: appTemplate,
+            template: _appTemplate,
             controller: moduleName + '.appController',
             controllerAs: 'vm'
+        })
+        .state('login',
+        {
+            url: '/login',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<login></login>'
+                }
+            }
+        })
+        .state('signup',
+        {
+            url: '/signup',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<signup></signup>'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/app');
