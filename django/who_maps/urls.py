@@ -22,5 +22,6 @@ urlpatterns = [
     url(r"^", include("user.urls")),
     url(r"^", include("project.urls")),
     url(r"^", include("hss.urls")),
+    url(r"^", include("toolkit.urls")),
     url(r"^$", TemplateView.as_view(template_name="base.html"), name="mainpage"),
 ]

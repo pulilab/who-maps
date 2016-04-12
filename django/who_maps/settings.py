@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'user',
     'project',
     'hss',
+    'toolkit',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
