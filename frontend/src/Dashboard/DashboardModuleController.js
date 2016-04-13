@@ -8,20 +8,28 @@ class DashboardModuleController {
         vm.linechartMockData = chartData;
         vm.linechartMockData2 = chartData2;
 
-        function resizedw() {
+        vm.resizedw = () => {
             window.EE.emit('dashResized');
-        }
+        };
 
         let doit;
-        window.onresize = () => {
+        vm.resizefn = () => {
+
             clearTimeout(doit);
-            doit = setTimeout(resizedw, 50);
+            doit = setTimeout(vm.resizedw, 50);
         };
+        window.onresize = vm.resizefn;
     }
 
-    static printAndReturnSome() {
-        console.log('some');
-        return 'some';
+    static dashboardControllerFactory() {
+        function dashController() {
+
+            return new DashboardModuleController();
+        }
+
+        dashController.$inject = [];
+
+        return dashController;
     }
 }
 
