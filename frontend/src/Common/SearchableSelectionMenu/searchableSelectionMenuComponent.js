@@ -8,7 +8,7 @@ const searchableSelectionMenuComponent = {
     controllerAs: 'vm',
     name: 'ssmenu',
     bindings: {
-        ngModel: '=',
+        ngModel: '<',
         ariaLabel: '@',
         options: '<',
         subOptions: '@',
@@ -19,7 +19,9 @@ const searchableSelectionMenuComponent = {
         searchable: '<',
         multiple: '<',
         onCloseCallback: '=',
-        onOpenCallback: '='
+        onOpenCallback: '=',
+        limit: '<',
+        optionLabel: '@'
 
     }
 };

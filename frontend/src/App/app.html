@@ -1,26 +1,35 @@
 <md-content>
     <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
-            <h2 class="app-title">
+            <md-button ui-sref="landing" arai-label="Maps toolkit" class="app-title">
                 <span>MAPS Toolkit</span>
-            </h2>
-            <md-button class="md-icon-button" aria-label="Apps"  ui-sref="settings">
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Apps"  ui-sref="hss" ng-if="vm.isLogin">
                 <md-icon class="material-icons md-light">apps</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Public" >
+            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin" >
                 <md-icon class="material-icons md-light">public</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Help" >
+            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.isLogin" >
                 <md-icon class="material-icons md-light">help_outline</md-icon>
             </md-button>
             <span flex ></span>
-            <md-button ui-sref="info" ui-sref-active="active" class="md-small">What is MAPS Toolkit?</md-button>
-            <md-button class="md-icon-button" aria-label="Search" >
+            <md-button ui-sref="info" ui-sref-active="active" class="md-small" ng-if="vm.showFullNavigation">
+                What is MAPS Toolkit?
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation">
                 <md-icon class="material-icons md-light">search</md-icon>
             </md-button>
 
+            <md-button class="md-small" ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin">
+                Login
+            </md-button>
 
-            <md-menu md-position-mode="target-right target">
+            <md-button class="md-small" ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin">
+                Sign Up
+            </md-button>
+
+            <md-menu md-position-mode="target-right target" ng-if="vm.isLogin">
                 <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" >
                     <md-icon md-menu-origin class="material-icons md-light">person</md-icon>
                 </md-button>
@@ -53,7 +62,7 @@
             </md-menu>
 
 
-            <md-menu md-position-mode="target-right target">
+            <md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation">
 
                 <md-button class="md-icon-button" aria-label="Notification" ng-click="vm.openMenu($mdOpenMenu, $event)">
                     <md-icon md-menu-origin class="material-icons md-light has-message">email</md-icon>
@@ -68,7 +77,7 @@
                 </md-menu-content>
             </md-menu>
 
-            <md-button class="md-icon-button" aria-label="Plus" >
+            <md-button class="md-icon-button" aria-label="Plus" ng-if="vm.showFullNavigation">
                 <md-icon class="material-icons md-light">add</md-icon>
             </md-button>
 
@@ -76,9 +85,17 @@
 
         </div>
     </md-toolbar>
-    <md-toolbar class="md-medium-tall">
+    <md-toolbar class="md-medium-tall" ng-if="vm.showFullNavigation">
         <div class="md-toolbar-tools">
-            <ssmenu aria-label="Project Choser" options="vm.user.projects" ng-model="vm.currentProject.name" md-container-class="large" class="large project-selector"></ssmenu>
+            <ssmenu
+                aria-label="Project Choser"
+                options="vm.user.projects"
+                option-label = "name"
+                ng-model="vm.currentProject.name"
+                md-container-class="large"
+                class="large project-selector"
+                on-close-callback="vm.updateProject">
+            </ssmenu>
             <span flex></span>
             <md-button class="" aria-label="Settings"  ui-sref="settings">
                 <md-icon class="material-icons md-light">settings</md-icon>
@@ -124,7 +141,7 @@
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <span class="project-menu">
-                <md-button ui-sref="hssModule" ui-sref-active="active">Visualize Project</md-button>
+                <md-button ui-sref="hss" ui-sref-active="active">Visualize Project</md-button>
                 <md-button ui-sref="maps" ui-sref-active="active">Improve Project</md-button>
                 <md-button ui-sref="dashboard" ui-sref-active="active">Update Score</md-button>
             </span>
@@ -135,21 +152,21 @@
                 <span>
                     Version:
                     <b>
-                        {{vm.currentProject.version.id}}
+                        {{vm.currentProjectMock.version.id}}
                     </b>
-                    ({{vm.currentProject.version.date}})
+                    ({{vm.currentProjectMock.version.date}})
                 </span>
                 <span>
                     Organization:
-                    <b>{{vm.currentProject.organization}}</b>
+                    <b>{{vm.currentProject.organisation}}</b>
                 </span>
                 <span>
                     Contact person:
-                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small">
+                    <md-button ng-href="mailto:{{vm.currentProjectMock.contact.email}}" class="md-small">
                         <md-icon class="material-icons md-light">
                             mail_outline
                         </md-icon>
-                        {{vm.currentProject.contact.name}}
+                        {{vm.currentProjectMock.contact.name}}
                     </md-button>
                 </span>
             </span>

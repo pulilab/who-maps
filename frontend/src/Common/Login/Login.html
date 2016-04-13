@@ -1,0 +1,26 @@
+<div layout="column" layout-align="start center" ng-style="vm.style" >
+    <div>
+        <h2>Login</h2>
+    </div>
+
+    <div md-whiteframe>
+        <md-content layout="column" layout-padding>
+             <md-input-container>
+                 <label>Email address</label>
+                 <input ng-model="vm.user.username" type=text />
+             </md-input-container>
+             <md-input-container>
+                 <label>Password</label>
+                 <input ng-model="vm.user.password" type="password"/>
+             </md-input-container>
+            <div layout="row">
+                <md-button>
+                    Forgot password?
+                </md-button>
+                <md-button class="md-raised md-primary" ng-click="vm.login()">
+                    Login
+                </md-button>
+            </div>
+        </md-content>
+    </div>
+</div>

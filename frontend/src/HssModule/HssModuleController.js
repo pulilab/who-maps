@@ -1,15 +1,16 @@
 import HssModuleService from './HssModuleService';
+import { Protected } from '../Common/';
 import 'es6-promise';
 /* global Promise */
 
-class HssModuleController {
+class HssModuleController extends Protected {
 
-    constructor($scope, introJs) {
+    constructor($scope, $state, introJs) {
+        super();
         this.EE = window.EE;
         this.scope = $scope;
-        this.introJsSource = introJs;
         this.dataReady = false;
-        this.gridLoading = 5;
+        this.gridLoading = 3;
         this.editMode = false;
         this.structure = {};
         this.data = {};
@@ -28,7 +29,13 @@ class HssModuleController {
 
         this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent.bind(this));
 
-        this.hs = new HssModuleService();
+        this.projectId = $state.params.appName;
+        this.hs = new HssModuleService(this.projectId);
+
+        this.$onInit = () => {
+            this.introJsSource = introJs;
+        };
+
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 
     }
@@ -75,12 +82,12 @@ class HssModuleController {
     }
 
     static hssControllerFactory() {
-        function hssController($scope) {
+        function hssController($scope, $state) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController($scope, introJs);
+            return new HssModuleController($scope, $state, introJs);
         }
 
-        hssController.$inject = ['$scope'];
+        hssController.$inject = ['$scope', '$state'];
 
         return hssController;
     }

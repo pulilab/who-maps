@@ -1,32 +1,32 @@
 import _ from 'lodash';
 import angular from 'angular';
-import { hss } from '../hssMockData';
-import HssModuleService from '../HssModuleService';
 
 class ContinuumController {
 
     constructor($timeout, $element) {
-        const vm = this;
         this.EE = window.EE;
-        this.hs = new HssModuleService();
         this.gridLoading = false;
+        this.editMode = false;
+        this.isFixed = false;
+        this.rowHeight = 51;
+        this.helperRealHeight = (this.rowHeight * 3) + 'px';
+        this.mapsProgressPercentage = 68; // Placeholder!!
+        this.timeout = $timeout;
+        this.element = $element;
+        this.classGenerator = this.classGenerator.bind(this);
+        angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
+        this.$onInit = this.init.bind(this);
 
-        $timeout(() => {
-            vm.editMode = false;
-            vm.isFixed = false;
-            vm.rowHeight = 51;
-            vm.helperRealHeight = (vm.rowHeight * 3) + 'px';
-            vm.timeout = $timeout;
-            vm.element = $element;
-            vm.firstRow = this.firstRowGenerator();
-            vm.motherRow = this.motherRowGenerator();
-            vm.childRow = this.childRowGenerator();
-            vm.motherRow.forEach(tile => {
-                vm.checkColumnActivation(tile);
-            });
-            vm.exportPdf = this.exportPdf;
-            vm.mapsProgressPercentage = 68; // Placeholder!!
-            angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
+    }
+
+    init() {
+        const vm = this;
+        vm.hs = this.service;
+        vm.firstRow = this.firstRowGenerator();
+        vm.motherRow = this.motherRowGenerator();
+        vm.childRow = this.childRowGenerator();
+        vm.motherRow.forEach(tile => {
+            vm.checkColumnActivation(tile);
         });
     }
 
@@ -73,7 +73,7 @@ class ContinuumController {
                     content: self.structure[value].mother.title,
                     colSpan: self.structure[value].mother.span,
                     rowSpan: 1,
-                    invisible: _.isEmpty(hss[value].mother),
+                    invisible: _.isEmpty(self.structure[value].mother),
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
                     activated: self.data[value].mother,
@@ -118,8 +118,8 @@ class ContinuumController {
         classes.push('zindex-' + (100 - (tile.columnId * 10)));
         classes.push(tile.introName);
 
-        if (tile.type === 'child') {
-            classes.push(hss[tile.columnId].child.title ? 'filled' : 'empty');
+        if (tile.type === 'child' && this.structure) {
+            classes.push(this.structure[tile.columnId].child.title ? 'filled' : 'empty');
         }
 
         return classes.join(' ');

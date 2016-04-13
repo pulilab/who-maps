@@ -1,22 +1,45 @@
 import HssModuleController from './HssModuleController';
-
-/* global define, it, describe, expect, spyOn */
+import _ from 'lodash';
+/* global define, it, describe, expect, spyOn, beforeEach */
 let cc = {};
+const $scope = {
+    $evalAsync: () => {}
+};
+
+const $state = {
+    params: {}
+}
 
 describe('HssModuleController', () => {
-    it('can be instatiated, and is defined', () => {
-        cc = HssModuleController.hssControllerFactory()({});
-        expect(cc).toBeDefined();
-    });
 
-    it('has a constructor', () => {
-        cc.constructor({});
-        expect(Array.isArray(cc.columnHasContent)).toBe(true);
+    beforeEach(() => {
+        cc = HssModuleController.hssControllerFactory()($scope, $state);
+        expect(cc).toBeDefined();
+        cc.$onInit();
     });
 
     it('has a function that handle the editMode change', () => {
         cc.handleEditMode(true);
         expect(cc.editMode).toBeTruthy();
+    });
+
+    it('has a function that handle the layout-done event', () => {
+        expect(cc.gridLoading).toBe(3);
+        _.forEach(_.range(cc.gridLoading), () => {
+            cc.handleLayoutEvent();
+        });
+        expect(cc.gridLoading).toBe(0);
+        cc.handleLayoutEvent();
+        expect(cc.gridLoading).toBe(0);
+    });
+
+    it('has a function that handle the backend data and structure', () => {
+        const mockValues = [1, 2];
+        expect(cc.dataReady).toBeFalsy();
+        cc.handleServerData(mockValues);
+        expect(cc.dataReady).toBeTruthy();
+        expect(cc.structure).toBe(1);
+        expect(cc.data).toBe(2);
     });
 
     it('has a function which refreshes the array containing info about column contents', () => {

@@ -6,17 +6,21 @@ let sc = {};
 const $timeout = arg => {
     arg();
 };
+const $scope = {
+    $watch: () => {}
+};
+
+const $element = {
+    find: () => {
+        return [tmp];
+    }
+};
 let tmp = void 0;
 
 describe('searchableSelectionMenuController', () => {
 
     beforeEach(() => {
-        sc = SearchableSelectionMenuController.ssMenuFactory()(null, $timeout);
-        sc.element = {
-            find: () => {
-                return [tmp];
-            }
-        };
+        sc = SearchableSelectionMenuController.ssMenuFactory()($element, $timeout, $scope);
         tmp = document.createElement('span');
         tmp.innerHTML = 'a,b,c,d';
     });

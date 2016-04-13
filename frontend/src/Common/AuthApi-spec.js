@@ -69,6 +69,7 @@ describe('AuthApi class', () => {
         sessionStorage.setItem('token', 'something');
         const headers = aa.generateHeaders();
         expect(headers.get('Authorization')).toBe('Token something');
+        expect(headers.get('content-type')).toBe('application/json');
     });
 
 });

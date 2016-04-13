@@ -14,7 +14,7 @@ import Hint from './Hint/hintComponent';
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
 
-const moduleName = 'hssModule';
+const moduleName = 'hss';
 
 function config($stateProvider) {
     $stateProvider

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import HssModuleService from '../HssModuleService';
 
 class ApplicationsController {
 
@@ -8,20 +7,21 @@ class ApplicationsController {
         this.EE = window.EE;
         this.rowObject = {};
         this.gridLoading = false;
-        this.hs = new HssModuleService();
+        this.layoutReady = false;
+        vm.dialog = $mdDialog;
+        vm.editMode = false;
+        vm.startTile = {};
+        vm.tileClickCounter = 0;
         this.timeout = $timeout;
-        $timeout(() => {
-            this.dialog = $mdDialog;
-            vm.editMode = false;
-            this.startTile = {};
-            this.tileClickCounter = 0;
-            this.selectedConstraints = this.constraintsGenerator();
-            this.applicationRow = this.applicationRowGenerator();
+        this.$onInit = () => {
+            vm.hs = vm.service;
+            vm.selectedConstraints = this.constraintsGenerator();
+            vm.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
             vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
             vm.EE.on('hssConstraintsSelected', this.constraintsUpdated.bind(this));
             this.searchForFilledColumns();
-        });
+        };
     }
 
     handleEditMode(value) {
@@ -30,6 +30,7 @@ class ApplicationsController {
     }
 
     layoutDone() {
+        this.layoutReady = true;
         this.EE.emit('hssInnerLayoutDone', 'application');
     }
 
@@ -105,7 +106,7 @@ class ApplicationsController {
         return [{
             content: this.structure.applications[index].name,
             className: 'app-header',
-            colSpan: 2,
+            colSpan: 9,
             rowSpan: 1,
             columnId: 'header',
             rowIndex: index,
@@ -215,7 +216,7 @@ class ApplicationsController {
             .value();
     }
 
-    taxonomyColumnGenerator(index, id, isSubApp) {
+    taxonomyColumnGenerator(index, id, isSubApp, _isEmpty) {
         return [{
             content: '',
             className: 'app-tax',
@@ -228,6 +229,7 @@ class ApplicationsController {
             isMain: !isSubApp,
             disabled: isSubApp,
             isTax: true,
+            isEmpty: _isEmpty,
             rowIndex: index,
             rowEnabled: false,
             invisible: false,
@@ -249,7 +251,7 @@ class ApplicationsController {
         for (let i = 0; i < subApp.length; i += 1) {
             cols = cols.concat(this.subApplicationHeaderGenerator(subApp, i, appId));
             cols = cols.concat(this.subAppMiddleColumnDecorator(subApp, i, appId));
-            cols = cols.concat(this.taxonomyColumnGenerator(i, appId, true));
+            cols = cols.concat(this.taxonomyColumnGenerator(i, appId, true, false));
         }
         return cols;
     }
@@ -260,8 +262,8 @@ class ApplicationsController {
         let cols = [];
         for (let i = 0; i < appNumber; i += 1) {
             cols = cols.concat(this.applicationHeaderGenerator(i));
-            cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
-            cols = cols.concat(this.taxonomyColumnGenerator(i, 0));
+            // cols = cols.concat(this.applicationsMiddleColumnDecorator(i));
+            cols = cols.concat(this.taxonomyColumnGenerator(i, 0, false, true));
             cols = cols.concat(this.subApplicationRows(i));
         }
         this.createRowStructure(cols);
@@ -304,15 +306,17 @@ class ApplicationsController {
 
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex]['columnId_' + data.column_id];
 
-            tile.content = data.content;
-            tile.colSpan = data.colspan;
-            if (data.content.length > 0) {
-                tile.bubbleDrawn = true;
-                tile.rowEnabled = true;
-                tile.status = this.enableRow(tile);
-            }
-            if (data.colspan === 0) {
-                tile.invisible = true;
+            if (tile) {
+                tile.content = data.content;
+                tile.colSpan = data.colspan;
+                if (data.content.length > 0) {
+                    tile.bubbleDrawn = true;
+                    tile.rowEnabled = true;
+                    tile.status = this.enableRow(tile);
+                }
+                if (data.colspan === 0) {
+                    tile.invisible = true;
+                }
             }
         });
 
@@ -325,10 +329,13 @@ class ApplicationsController {
                 rowIndex = tax.subapp_id;
             }
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex].columnId_tax;
-            tile.content = tax.content;
-            tile.disabled = false;
+            if (tile) {
+                tile.content = tax.content;
+                tile.disabled = false;
+            }
         });
         return _.filter(cols, { invisible: false });
+
     }
 
     createRowStructure(rows) {
@@ -462,7 +469,7 @@ class ApplicationsController {
         _.map(this.rowObject['father_' + tile.fatherId]['rowIndex_' + tile.rowIndex], value => {
             if (value.isHeader) {
                 applicationStyle = value.applicationStyle;
-                value.rowBubbles.push(tile.columnId);
+                value.rowBubbles.push(this.startTile.columnId);
             }
             value.rowEnabled = true;
             return value;
@@ -496,7 +503,10 @@ class ApplicationsController {
         });
 
         this.timeout(() => {
-            document.getElementById('appBubble_' + this.labelGenerator(tile)).focus();
+            const input = document.getElementById('appBubble_' + this.labelGenerator(tile));
+            if (input) {
+                input.focus();
+            }
         });
 
         this.searchForFilledColumns();

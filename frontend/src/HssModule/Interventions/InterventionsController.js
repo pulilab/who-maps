@@ -1,25 +1,24 @@
 import _ from 'lodash';
-import HssModuleService from '../HssModuleService';
 
 class InterventionsController {
 
-    constructor($timeout) {
+    constructor() {
         const vm = this;
         this.EE = window.EE;
-        this.hs = new HssModuleService();
+        vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
+        vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
+        vm.editMode = false;
+        vm.interventionsRowSpan = {
+            size: 5
+        };
         this.gridLoading = false;
-        $timeout(() => {
+        this.resizeRow = this.resizeRow.bind(this);
+        this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
 
-            vm.editMode = false;
-            vm.interventionsRowSpan = {
-                size: 5
-            };
-            this.resizeRow = this.resizeRow.bind(this);
-            this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
-            this.interventionRow = this.middleColumnGenerator();
-            vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-            vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
-        });
+        this.$onInit = () => {
+            vm.hs = vm.service;
+            vm.interventionRow = this.middleColumnGenerator();
+        };
     }
 
     handleEditMode(value) {
@@ -105,18 +104,17 @@ class InterventionsController {
     }
 
     saveInterventions(columnId, value) {
-        console.log(columnId, value);
         this.hs.postInterventions(columnId, value);
         this.calculateInterventionHeight(value);
     }
 
     static interventionsFactory() {
         require('./Interventions.scss');
-        function interventions($timeout) {
-            return new InterventionsController($timeout);
+        function interventions() {
+            return new InterventionsController();
         }
 
-        interventions.$inject = ['$timeout'];
+        interventions.$inject = [];
 
         return interventions;
     }
