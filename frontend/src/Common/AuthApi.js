@@ -20,9 +20,15 @@ class AuthApi {
             cache: 'default',
             mode: 'cors'
         };
+
+        this.preGet = false;
+        this.prePost = false;
     }
 
     get(endpoint) {
+        if (this.preGet) {
+            this.preGet();
+        }
         const request = _.cloneDeep(this.request);
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
@@ -35,6 +41,9 @@ class AuthApi {
     }
 
     post(endpoint, data) {
+        if (this.prePost) {
+            this.prePost();
+        }
         const request = _.cloneDeep(this.request);
         request.method = 'POST';
         request.body = JSON.stringify(data);

@@ -90,9 +90,11 @@
             <ssmenu
                 aria-label="Project Choser"
                 options="vm.user.projects"
+                option-label = "name"
                 ng-model="vm.currentProject.name"
                 md-container-class="large"
-                class="large project-selector">
+                class="large project-selector"
+                on-close-callback="vm.updateProject">
             </ssmenu>
             <span flex></span>
             <md-button class="" aria-label="Settings"  ui-sref="settings">
@@ -139,7 +141,7 @@
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <span class="project-menu">
-                <md-button ui-sref="hssModule" ui-sref-active="active">Visualize Project</md-button>
+                <md-button ui-sref="hss" ui-sref-active="active">Visualize Project</md-button>
                 <md-button ui-sref="maps" ui-sref-active="active">Improve Project</md-button>
                 <md-button ui-sref="dashboard" ui-sref-active="active">Update Score</md-button>
             </span>
@@ -150,21 +152,21 @@
                 <span>
                     Version:
                     <b>
-                        {{vm.currentProject.version.id}}
+                        {{vm.currentProjectMock.version.id}}
                     </b>
-                    ({{vm.currentProject.version.date}})
+                    ({{vm.currentProjectMock.version.date}})
                 </span>
                 <span>
                     Organization:
-                    <b>{{vm.currentProject.organization}}</b>
+                    <b>{{vm.currentProject.organisation}}</b>
                 </span>
                 <span>
                     Contact person:
-                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small">
+                    <md-button ng-href="mailto:{{vm.currentProjectMock.contact.email}}" class="md-small">
                         <md-icon class="material-icons md-light">
                             mail_outline
                         </md-icon>
-                        {{vm.currentProject.contact.name}}
+                        {{vm.currentProjectMock.contact.name}}
                     </md-button>
                 </span>
             </span>

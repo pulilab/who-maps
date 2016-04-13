@@ -9,7 +9,8 @@ const interventionsComponent = {
     bindings: {
         tiles: '<',
         structure: '<',
-        data: '<'
+        data: '<',
+        service: '<'
     },
     name: 'interventions'
 };

@@ -18,7 +18,11 @@
         md-colspan="2"
         md-rowspan="{{vm.interventionsRowSpan.size + 1}}"
         class="constraints">
-        <constraints structure="vm.structure" data="vm.data" resize-callback="vm.resizeRow"></constraints>
+        <constraints
+            structure="vm.structure"
+            data="vm.data"
+            service="vm.service"
+            resize-callback="vm.resizeRow"></constraints>
     </md-grid-tile>
 
     <md-grid-tile

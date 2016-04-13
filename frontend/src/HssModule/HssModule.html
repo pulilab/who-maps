@@ -10,19 +10,31 @@
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
     <div md-whiteframe="2" class="page-wrapper" ng-if="vm.dataReady" ng-hide="vm.gridLoading">
-        <continuum tiles="7" structure="vm.structure.continuum" data="vm.data.continuum" ></continuum>
+        <continuum
+            tiles="7"
+            structure="vm.structure.continuum"
+            data="vm.data.continuum"
+            service = "vm.hs" ></continuum>
 
         <hint show-long="true" show-short="true" >
             <long>You can click on the continuum areas to activate or deactivate a section. Please note that this will affect the Applications part too.</long>
             <short>Add/remove items</short>
         </hint>
-        <interventions tiles="7" structure="vm.structure" data="vm.data" ></interventions>
+        <interventions
+            tiles="7"
+            structure="vm.structure"
+            data="vm.data"
+            service = "vm.hs" ></interventions>
 
         <hint show-long="true" show-short="true" >
             <long>Click on the dropdown to select or deselect interventions of the dropdown list. You can select multiple items.</long>
             <short>Add/remove items</short>
         </hint>
-        <applications tiles="7" structure="vm.structure" data="vm.data"></applications>
+        <applications
+            tiles="7"
+            structure="vm.structure"
+            data="vm.data"
+            service = "vm.hs" ></applications>
 
         <hint show-tall="true">
             <tall>

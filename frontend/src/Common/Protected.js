@@ -30,9 +30,7 @@ class Protected {
 
     systemLogout() {
         this.isLogin = false;
-        this.storage.remove('login');
-        this.storage.remove('token');
-        this.storage.remove('user');
+        this.storage.clear();
         this.checkLoginStatus();
     }
 

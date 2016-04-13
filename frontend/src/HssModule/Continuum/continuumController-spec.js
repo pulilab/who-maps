@@ -17,6 +17,10 @@ describe('continuumController', () => {
         cc.tiles = 7;
         cc.structure = continuumStructure;
         cc.data = continuumData;
+        cc.service = {
+            postContinuum: () => {}
+        };
+        cc.$onInit();
     });
 
     it('should have a function that handle the scroll', () => {
