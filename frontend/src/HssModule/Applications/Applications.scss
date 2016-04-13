@@ -131,10 +131,15 @@ applications {
       }
     }
 
-    &.app-header,
+    &.app-header {
+      border-right: 1px solid $color-gray-lighter;
+      background-color: #FFFFFF !important;
+    }
+
     &.app-tax {
       border-right: none !important;
       background-color: #fff !important;
+      background-image: none !important;
     }
 
     &.app-open {
