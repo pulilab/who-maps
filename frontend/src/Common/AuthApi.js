@@ -2,14 +2,14 @@ import _ from 'lodash';
 import 'whatwg-fetch';
 import 'es6-promise';
 
-/* global Promise */
+/* global Promise, API */
 
 class AuthApi {
 
     constructor(module) {
         this.token = this.retrieveToken();
 
-        this.apiUrl = '/api/';
+        this.apiUrl = API;
 
         if (module) {
             this.apiUrl += module + '/';

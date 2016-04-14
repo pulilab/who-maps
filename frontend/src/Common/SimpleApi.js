@@ -2,12 +2,12 @@ import _ from 'lodash';
 import 'whatwg-fetch';
 import 'es6-promise';
 
-/* global Promise */
+/* global Promise, API */
 
 class SimpleApi {
 
     constructor(module) {
-        this.apiUrl = '/api/';
+        this.apiUrl = API;
         if (module) {
             this.apiUrl += module + '/';
         }

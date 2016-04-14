@@ -6,7 +6,7 @@ import _ from 'lodash';
 class HssModuleService extends AuthApi {
 
     constructor(_projectId) {
-        super('projects/');
+        super('projects');
         this.projectId = _projectId;
     }
 
