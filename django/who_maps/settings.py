@@ -173,8 +173,8 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 # Mailgun settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.mailgun.org"
-EMAIL_HOST_USER = "postmaster@sandbox303416e0bcf6455f8a95ec08fd0b7cf8.mailgun.org"
-EMAIL_HOST_PASSWORD = "5c9cd07aad4610f094a0713c2233c2f4"
+EMAIL_HOST_USER = "postmaster@sandbox7214fa112fb648dbb3f26da95e7b0078.mailgun.org"
+EMAIL_HOST_PASSWORD = "64acf09843409f8c653a77be49f10e50"
 EMAIL_PORT = 587
 
 # Logging
