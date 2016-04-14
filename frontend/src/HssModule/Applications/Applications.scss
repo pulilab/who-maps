@@ -123,7 +123,6 @@ applications {
     border-top: 1px solid #EEEEEE;
 
     &.app-main {
-      border-top: 1px solid #EEEEEE;
       background: linear-gradient(to bottom, #FFFFFF 0%, #EEEEEE 100%) !important;
 
       .md-button-override {
@@ -132,10 +131,15 @@ applications {
       }
     }
 
-    &.app-header,
+    &.app-header {
+      border-right: 1px solid $color-gray-lighter;
+      background-color: #FFFFFF !important;
+    }
+
     &.app-tax {
       border-right: none !important;
       background-color: #fff !important;
+      background-image: none !important;
     }
 
     &.app-open {
@@ -250,9 +254,9 @@ applications {
 
     md-icon {
       position: absolute;
-      top: 58%;
+      top: 55%;
       right: 14px;
-      font-size: 18px;
+      font-size: 24px;
       transform: translateY(-50%);
 
       &:before {
@@ -327,7 +331,7 @@ applications {
 
   .bubble-shape {
     position: absolute;
-    top: 1px;
+    top: 2px;
     left: -11px;
     z-index: 20;
     overflow: hidden;
