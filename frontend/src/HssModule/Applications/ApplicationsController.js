@@ -313,6 +313,9 @@ class ApplicationsController {
                     tile.bubbleDrawn = true;
                     tile.rowEnabled = true;
                     tile.status = this.enableRow(tile);
+                    const fatherTile = this.rowObject.father_0['rowIndex_' + (tile.fatherId - 1)].columnId_header;
+                    fatherTile.rowEnabled = true;
+                    fatherTile.status = this.enableRow(tile);
                 }
                 if (data.colspan === 0) {
                     tile.invisible = true;
