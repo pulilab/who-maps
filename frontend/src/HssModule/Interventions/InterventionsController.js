@@ -1,12 +1,10 @@
 import _ from 'lodash';
-import HssModuleService from '../HssModuleService';
 
 class InterventionsController {
 
     constructor() {
         const vm = this;
         this.EE = window.EE;
-        this.hs = new HssModuleService();
         vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
         vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
         vm.editMode = false;
@@ -18,7 +16,8 @@ class InterventionsController {
         this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
 
         this.$onInit = () => {
-            this.interventionRow = this.middleColumnGenerator();
+            vm.hs = vm.service;
+            vm.interventionRow = this.middleColumnGenerator();
         };
     }
 

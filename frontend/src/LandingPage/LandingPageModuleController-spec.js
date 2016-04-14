@@ -3,8 +3,10 @@ import { default as LandingPageModuleController } from './LandingPageModuleContr
 /* global define, it, describe, expect */
 
 describe('LandingPageModuleController', () => {
-    it('should have a function that return -some-', () => {
-        const result = LandingPageModuleController.printAndReturnSome();
-        expect(result).toBe('some');
+
+    it('should have a constructor, fetching the basic data of trending projects', () => {
+        const cc = new LandingPageModuleController();
+        expect(cc.trendingProjects.length).toBe(3);
     });
+
 });

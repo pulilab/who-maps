@@ -1,4 +1,5 @@
-module.exports = function (config){
+const webpack = require('webpack');
+module.exports = function(config) {
     config.set({
         browsers: ['PhantomJS'],
         files: [
@@ -48,7 +49,12 @@ module.exports = function (config){
                         loaders: ['babel-istanbul']
                     }
                 ]
-            }
+            },
+            plugins: [
+                new webpack.DefinePlugin({
+                    API: '"/api/"'
+                })
+            ]
         },
         webpackServer: {
             noInfo: true

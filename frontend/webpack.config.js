@@ -3,16 +3,25 @@ const webpack = require('webpack');
 const production = process.argv.indexOf('--dist') > -1;
 const siteBuild = process.argv.indexOf('--site-build') > -1;
 
-const distPlugins = [
-    new webpack.optimize.UglifyJsPlugin(
-        {
-            compress: {
-                warnings: false
-            }
-        }
-    )];
 
-const devPlugins = [];
+const basePlugins = [
+    new webpack.DefinePlugin({
+        API: production ? '"/api/"' : '"/api/"'
+    })
+];
+
+const distPlugins = [
+    // new webpack.optimize.UglifyJsPlugin(
+    //     {
+    //         compress: {
+    //             warnings: false
+    //         }
+    //     }
+    // )
+    new webpack.optimize.DedupePlugin()
+].concat(basePlugins);
+const devPlugins = [].concat(basePlugins);
+
 
 const devPreLoaders = [
     {

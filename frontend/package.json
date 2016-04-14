@@ -11,7 +11,7 @@
     "test": "karma start",
     "serve": "webpack-dev-server --progress --colors --hot --inline",
     "site-build": "webpack-dev-server --progress --colors --hot --inline --site-build",
-    "dist": "webpack --dist",
+    "dist": "webpack --dist --progress --profile && rm -rf ../nginx/site/html/public/ && mv ../nginx/site/app/public/ ../nginx/site/html/ ",
     "e2e-init": "node_modules/protractor/bin/webdriver-manager update",
     "e2e-server": "node_modules/protractor/bin/webdriver-manager start",
     "e2e": "node_modules/protractor/bin/protractor e2e/conf.js"
@@ -62,6 +62,7 @@
     "angular-aria": "^1.5.0",
     "angular-material": "^1.0.6",
     "angular-messages": "^1.5.0",
+    "angular-password": "^1.0.1",
     "angular-ui-router": "^0.2.18",
     "d3": "^3.5.16",
     "es6-promise": "^3.1.2",

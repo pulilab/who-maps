@@ -1,0 +1,43 @@
+projectcomp {
+
+    .logoimg {
+        height: 120px;
+        weight: auto;
+    }
+
+    .projectbody {
+
+        background-color: lightblue;
+        padding: 0.3em 0.5em;
+        border-radius: 5px;
+
+        .floatleft {
+            float: left;
+        }
+
+        .floatright {
+            float: right;
+        }
+
+        .followers {
+            text-align: right;
+        }
+
+        .followers .up {
+            color: green;
+        }
+
+        .followers .down {
+            color: red;
+        }
+
+        .followers .flat {
+            color: orange;
+        }
+
+        .floatleft .bold, .floatright .bold {
+            font-weight: bold;
+        }
+    }
+
+}

@@ -6,11 +6,16 @@
    ============================= */
 
 ui-view > md-content {
+  min-width: $page-min-width !important;
   background-color: $color-page-background;
 }
 
 .page-wrapper {
   background-color: $color-white;
+}
+
+.layout-padding-xl > * {
+  padding: $layout-gutter-width * 2;
 }
 
 
@@ -117,6 +122,12 @@ md-checkbox.small {
     border-top-color: $color-gray-light !important;
     border-right-color: $color-gray-light !important;
   }
+
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    color: $color-gray-light !important;
+  }
 }
 
 .md-green {
@@ -181,10 +192,20 @@ md-checkbox.small {
   .app-title {
     display: inline-block;
     margin-right: 20px;
-    color: $color-primary-muted;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: $body-font-size-base;
+    // color: $color-primary-muted;
+    // text-transform: uppercase;
+    // font-weight: 500;
+    // font-size: $body-font-size-base;
+    line-height: 48px;
+
+    > span {
+      display: inline-block;
+      width: 155px;
+      height: 100%;
+      background: red url("./images/dha-logo.svg") left center no-repeat;
+
+      @include text-hide();
+    }
   }
 
   .md-menu {
@@ -195,7 +216,7 @@ md-checkbox.small {
 }
 
 .md-medium-tall {
-    color: $color-primary-muted;
+    // color: $color-primary-muted;
 
   .md-toolbar-tools {
     background-color: $color-primary;
@@ -260,6 +281,17 @@ md-checkbox.small {
   .md-button .md-light,
   .md-button .md-icon,
   .md-button span {
-    color: $color-primary-muted;
+    // color: $color-primary-muted;
   }
+}
+
+/* FOOTER - DISCLAIMER
+   ============================= */
+
+footer.disclaimer {
+  padding: 36px;
+  color: $color-gray-light;
+  text-align: center;
+  font-size: 10px;
+  line-height: 14px;
 }
