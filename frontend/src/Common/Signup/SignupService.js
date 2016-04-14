@@ -5,7 +5,7 @@ import Storage from '../Storage';
 
 class SignupService extends SimpleApi {
     constructor() {
-        super('rest-auth/');
+        super('rest-auth');
         this.storage = new Storage();
     }
 
