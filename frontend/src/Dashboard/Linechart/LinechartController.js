@@ -3,13 +3,18 @@
 class LinechartController {
 
     constructor($element, $timeout) {
+
         const vm = this;
+
+        // BINDINGS
+        // vm.data <= holds data
+        // vm.labels <= array of labels for datasets
+        // vm.showdotted <= decides to show unsaved (last) ones
+        // vm.datachooser <= datastructure toggle, and allows showing ng-options on the view
+
         vm.el = $element;
         vm.timeout = $timeout;
-        // vm.data <= binding from outer scope, holds actual data
-        // vm.labels <= binding, array of labels for datasets
-        // vm.showdotted <= binding, decides to show unsaved ones
-        this.$onInit = () => {
+        vm.$onInit = () => {
 
             if (vm.datachooser) {
                 vm.activeAxis = vm.data.labels[0];
@@ -27,11 +32,13 @@ class LinechartController {
 
     start() {
 
-        if (this.datachooser || this.data.length > 2) {
-            this.draw();
+        const vm = this;
+
+        if (vm.datachooser || vm.data.length > 2) {
+            vm.draw(true);
         }
         else {
-            this.showPlaceholder = true;
+            vm.showPlaceholder = true;
         }
     }
 
@@ -69,7 +76,6 @@ class LinechartController {
         const width = outerWidth - margin.left - margin.right;
         const height = outerHeight - margin.top - margin.bottom;
 
-        // const element = d3.select('#visualization');
         const element = outer
             .append('svg')
             .attr('class', 'visualization');
@@ -209,18 +215,22 @@ class LinechartController {
         }
 
         // Redraw on window size change
-        window.EE.once('dashResized', () => {
-            vm.draw(true);
-        });
+        window.EE.once('dashResized', vm.reDraw);
+    }
+
+    reDraw() {
+        this.draw(true);
     }
 
     // Ng-options change
     axisChange(newAxis) {
 
-        this.chosenData = this.data[newAxis].data;
-        this.chosenLabels = this.data[newAxis].labels;
+        const vm = this;
 
-        this.draw(true);
+        vm.chosenData = vm.data[newAxis].data;
+        vm.chosenLabels = vm.data[newAxis].labels;
+
+        vm.reDraw(true);
 
     }
 
