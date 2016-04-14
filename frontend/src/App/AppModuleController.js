@@ -9,6 +9,7 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.currentPage = void 0;
         this.as = new AppModuleService();
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
@@ -30,6 +31,7 @@ class AppModuleController extends Protected {
         this.scope.$watch(() => {
             return this.state.current.name;
         }, value => {
+            this.currentPage = value;
             this.showCompleteNavigation(value, this.isLogin);
         });
 
