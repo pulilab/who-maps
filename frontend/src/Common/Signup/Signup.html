@@ -1,63 +1,64 @@
 <div layout="column" layout-align="start center" ng-style="vm.style" >
-    <div>
-        <h2>Sign up</h2>
-    </div>
+  <div class="page-title">
+    <h1 class="md-display-1 text-center">Sign up</h1>
+    <!-- <h6>Subtitle if needed</h6> -->
+  </div>
 
-    <div md-whiteframe>
-        <md-content layout="column" layout-padding>
+    <div md-whiteframe="2" class="layout-padding-xl">
+        <md-content layout="column">
             <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate>
                 <div layout="column" class="role-form">
-                    <h3>1. Select your role</h3>
+                    <h4>1. Select your role</h4>
                     <md-radio-group ng-model="vm.register.role">
-                        <md-radio-button value="1" ng-selected="true" >
+                        <md-radio-button value="1" ng-selected="true" class="md-primary">
                           Digital Project Implementer/Owner
                         </md-radio-button>
-                        <md-radio-button value="2">
+                        <md-radio-button value="2" class="md-primary">
                           Donor
                         </md-radio-button>
-                        <md-radio-button value="3">
+                        <md-radio-button value="3" class="md-primary">
                           Government
                         </md-radio-button>
                     </md-radio-group>
-                    <p >
-                        Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor
-                        incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum.
+                    <p>
+                        <small>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum.</small>
                     </p>
                 </div>
                 <div layout="column" class="main-form">
-                    <h3>2. Fill out the form below</h3>
-                     <md-input-container class="md-block">
-                         <label>Email address</label>
-                         <input ng-model="vm.register.email" required name="email" type="email" />
-                         <div ng-messages="signupForm.email.$error">
-                             <div ng-message="required">This is required.</div>
-                             <div ng-message="email">This field must be a valid email.</div>
-                         </div>
-                     </md-input-container>
-                     <md-input-container>
-                         <label>Password</label>
-                         <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6"/>
-                         <div ng-messages="signupForm.password1.$error" >
-                             <div ng-message="required">This is required.</div>
-                             <div ng-message="minlength">This need to be at least 6 chars</div>
-                         </div>
-                     </md-input-container>
-                     <md-input-container>
-                         <label>Password (Again)</label>
-                         <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" />
-                         <div ng-messages="signupForm.password2.$error">
-                             <div ng-message="required">This is required.</div>
-                             <div ng-message="passwordMatch">Your passwords do not match.</div>
-                         </div>
-                     </md-input-container>
-                    <div layout="row">
-                        <div layout="column" flex>
-                            Already signed up?
-                            <a ui-sref="login">
-                                Login here
-                            </a>
+                    <h4>2. Fill out the form below</h4>
+                    <md-input-container class="md-block">
+                       <label>Email address</label>
+                       <input ng-model="vm.register.email" required name="email" type="email" />
+                       <div ng-messages="signupForm.email.$error">
+                           <div ng-message="required">This is required.</div>
+                           <div ng-message="email">This field must be a valid email.</div>
+                       </div>
+                    </md-input-container>
+                    <md-input-container>
+                       <label>Password</label>
+                       <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6"/>
+                       <div ng-messages="signupForm.password1.$error" >
+                           <div ng-message="required">This is required.</div>
+                           <div ng-message="minlength">This need to be at least 6 chars</div>
+                       </div>
+                    </md-input-container>
+                    <md-input-container>
+                       <label>Password (Again)</label>
+                       <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" />
+                       <div ng-messages="signupForm.password2.$error">
+                           <div ng-message="required">This is required.</div>
+                           <div ng-message="passwordMatch">Your passwords do not match.</div>
+                       </div>
+                    </md-input-container>
+                    <div layout="row" layout-align="start">
+                        <div flex="auto" class="login-back">
+                            <small>Already signed up?
+                                <a ui-sref="login">
+                                    Login here
+                                </a>
+                            </small>
                         </div>
-                        <div flex layout="row" layout-align="end">
+                        <div flex="grow">
                             <md-button class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
                                 Sign up
                             </md-button>
@@ -67,4 +68,7 @@
             </form>
         </md-content>
     </div>
+    <footer class="disclaimer">
+      <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+    </footer>
 </div>

@@ -1,8 +1,8 @@
 <md-content>
     <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
-            <md-button ui-sref="landing" arai-label="Maps toolkit" class="app-title">
-                <span>MAPS Toolkit</span>
+            <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title">
+                <span>Digital Health Atlas</span>
             </md-button>
             <md-button class="md-icon-button" aria-label="Apps"  ui-sref="hss" ng-if="vm.isLogin">
                 <md-icon class="material-icons md-light">apps</md-icon>
@@ -21,11 +21,11 @@
                 <md-icon class="material-icons md-light">search</md-icon>
             </md-button>
 
-            <md-button class="md-small" ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin">
+            <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin">
                 Login
             </md-button>
 
-            <md-button class="md-small" ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin">
+            <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin">
                 Sign Up
             </md-button>
 
