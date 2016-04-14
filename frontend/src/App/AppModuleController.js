@@ -26,6 +26,7 @@ class AppModuleController extends Protected {
         if (this.isLogin) {
             this.fillUserData();
         }
+
         this.notifications = [1, 2, 3];
 
         this.scope.$watch(() => {

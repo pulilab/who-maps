@@ -7,19 +7,13 @@ import 'es6-promise';
 class AuthApi {
 
     constructor(module) {
-        this.token = this.retrieveToken();
+        this.retrieveToken();
 
         this.apiUrl = API;
 
         if (module) {
             this.apiUrl += module + '/';
         }
-
-        this.request = {
-            headers: this.generateHeaders.bind(this)(),
-            cache: 'default',
-            mode: 'cors'
-        };
 
         this.preGet = false;
         this.prePost = false;
@@ -29,7 +23,8 @@ class AuthApi {
         if (this.preGet) {
             this.preGet();
         }
-        const request = _.cloneDeep(this.request);
+        this.retrieveToken();
+        const request = this.generateRequest();
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
             .then((response) => {
@@ -44,7 +39,8 @@ class AuthApi {
         if (this.prePost) {
             this.prePost();
         }
-        const request = _.cloneDeep(this.request);
+        this.retrieveToken();
+        const request = this.generateRequest();
         request.method = 'POST';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
@@ -54,7 +50,8 @@ class AuthApi {
     }
 
     postFormData(endpoint, data) {
-        const request = _.cloneDeep(this.request);
+        this.retrieveToken();
+        const request = this.generateRequest();
         const body = new FormData();
         let performRequest = true;
         _.forEach(data, item => {
@@ -96,8 +93,18 @@ class AuthApi {
         return data;
     }
 
-    retrieveToken() {
-        return window.sessionStorage.getItem('token');
+    retrieveToken(update) {
+        if (update || !this.token) {
+            this.token = window.sessionStorage.getItem('token');
+        }
+    }
+
+    generateRequest() {
+        return {
+            headers: this.generateHeaders.bind(this)(),
+            cache: 'default',
+            mode: 'cors'
+        };
     }
 
     generateHeaders() {
