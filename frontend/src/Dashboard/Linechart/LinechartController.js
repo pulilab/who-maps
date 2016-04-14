@@ -215,11 +215,12 @@ class LinechartController {
         }
 
         // Redraw on window size change
-        window.EE.once('dashResized', vm.reDraw);
+        window.EE.once('dashResized', vm.reDraw.bind(vm));
     }
 
     reDraw() {
-        this.draw(true);
+        const vm = this;
+        vm.draw(true);
     }
 
     // Ng-options change
@@ -230,7 +231,7 @@ class LinechartController {
         vm.chosenData = vm.data[newAxis].data;
         vm.chosenLabels = vm.data[newAxis].labels;
 
-        vm.reDraw(true);
+        vm.reDraw();
 
     }
 

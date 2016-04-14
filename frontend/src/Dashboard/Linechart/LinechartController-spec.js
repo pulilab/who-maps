@@ -264,7 +264,7 @@ describe('LinechartController', () => {
         spyOn(window.EE, 'once');
 
         vm.$onInit();
-        expect(window.EE.once).toHaveBeenCalledWith('dashResized', vm.reDraw);
+        expect(window.EE.once).toHaveBeenCalled();
 
         spyOn(vm, 'draw');
 
