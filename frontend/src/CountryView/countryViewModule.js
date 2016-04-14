@@ -2,7 +2,7 @@ import angular from 'angular';
 import CountryViewModuleController from './CountryViewModuleController';
 import sampleComponent from './SampleComponent/sampleComponent';
 
-import _template from './countryViewModule.html';
+import _template from './CountryViewModule.html';
 import uiRoute from 'angular-ui-router';
 
 const moduleName = 'countryViewModule';
