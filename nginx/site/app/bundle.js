@@ -65459,7 +65459,7 @@
 
 	        this.retrieveToken();
 
-	        this.apiUrl = ("/");
+	        this.apiUrl = ("/api/");
 
 	        if (module) {
 	            this.apiUrl += module + '/';
@@ -82167,7 +82167,7 @@
 	    function SimpleApi(module) {
 	        _classCallCheck(this, SimpleApi);
 
-	        this.apiUrl = ("/");
+	        this.apiUrl = ("/api/");
 	        if (module) {
 	            this.apiUrl += module + '/';
 	        }
@@ -85380,7 +85380,7 @@
 /* 63 */
 /***/ function(module, exports) {
 
-	module.exports = "<div layout=\"column\" layout-align=\"start center\" ng-style=\"vm.style\" >\n  <div class=\"page-title\">\n    <h1 class=\"md-display-1 text-center\">Sign up</h1>\n    <!-- <h6>Subtitle if needed</h6> -->\n  </div>\n\n    <div md-whiteframe=\"2\" class=\"layout-padding-xl\">\n        <md-content layout=\"column\">\n            <form name=\"signupForm\" ng-submit=\"vm.signup(signupForm)\" novalidate>\n                <div layout=\"column\" class=\"role-form\">\n                        <h4>1. Select your role</h4>\n                    <md-radio-group ng-model=\"vm.register.role\">\n                        <md-radio-button value=\"1\" ng-selected=\"true\" class=\"md-primary\">\n                          Digital Project Implementer/Owner\n                        </md-radio-button>\n                        <md-radio-button value=\"2\" class=\"md-primary\">\n                          Donor\n                        </md-radio-button>\n                        <md-radio-button value=\"3\" class=\"md-primary\">\n                          Government\n                        </md-radio-button>\n                    </md-radio-group>\n                    <p>\n                        <small>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum.</small>\n                    </p>\n                </div>\n                <div layout=\"column\" class=\"main-form\">\n                    <h4>2. Fill out the form below</h3>\n                     <md-input-container class=\"md-block\">\n                         <label>Email address</label>\n                         <input ng-model=\"vm.register.email\" required name=\"email\" type=\"email\" ng-change=\"vm.handleCustomError(signupForm, 'email')\" />\n                         <div ng-messages=\"signupForm.email.$error\">\n                             <div ng-message=\"required\">This is required.</div>\n                             <div ng-message=\"email\">This field must be a valid email.</div>\n                             <div ng-message=\"custom\" ng-repeat=\"error in signupForm.email.customError\">{{error}} </div>\n                         </div>\n                     </md-input-container>\n                     <md-input-container>\n                         <label>Password</label>\n                         <input ng-model=\"vm.register.password1\" type=\"password\" name=\"password1\" required ng-minlength=\"6\" ng-change=\"vm.handleCustomError(signupForm, 'password1')\"/>\n                         <div ng-messages=\"signupForm.password1.$error\" >\n                             <div ng-message=\"required\">This is required.</div>\n                             <div ng-message=\"minlength\">This need to be at least 6 chars</div>\n                             <div ng-message=\"custom\" ng-repeat=\"error in signupForm.email.customError\">{{error}} </div>\n                         </div>\n                     </md-input-container>\n                     <md-input-container>\n                         <label>Password (Again)</label>\n                         <input ng-model=\"vm.register.password2\" type=\"password\" name=\"password2\" required  match-password=\"password1\" ng-change=\"vm.handleCustomError(signupForm, 'password2')\" />\n                         <div ng-messages=\"signupForm.password2.$error\">\n                             <div ng-message=\"required\">This is required.</div>\n                             <div ng-message=\"passwordMatch\">Your passwords do not match.</div>\n                             <div ng-message=\"custom\" ng-repeat=\"error in signupForm.email.customError\">{{error}} </div>\n                         </div>\n                     </md-input-container>\n                     <div layout=\"row\" layout-align=\"start\">\n                         <div flex=\"auto\" class=\"login-back\">\n                             <small>Already signed up?\n                                 <a ui-sref=\"login\">\n                                     Login here\n                                 </a>\n                             </small>\n                        </div>\n                        <div flex=\"grow\">\n                            <md-button class=\"md-raised md-primary\" type=\"submit\" ng-disabled=\"signupForm.$invalid\">\n                                Sign up\n                            </md-button>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </md-content>\n    </div>\n    <footer class=\"disclaimer\">\n      <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.\n    </footer>\n</div>\n";
+	module.exports = "<div layout=\"column\" layout-align=\"start center\" ng-style=\"vm.style\" >\n  <div class=\"page-title\">\n    <h1 class=\"md-display-1 text-center\">Sign up</h1>\n    <!-- <h6>Subtitle if needed</h6> -->\n  </div>\n\n    <div md-whiteframe=\"2\" class=\"layout-padding-xl\">\n        <md-content layout=\"column\">\n            <form name=\"signupForm\" ng-submit=\"vm.signup(signupForm)\" novalidate ng-hide=\"vm.registered\">\n                <div layout=\"column\" class=\"role-form\">\n                        <h4>1. Select your role</h4>\n                    <md-radio-group ng-model=\"vm.register.role\">\n                        <md-radio-button value=\"1\" ng-selected=\"true\" class=\"md-primary\">\n                          Digital Project Implementer/Owner\n                        </md-radio-button>\n                        <md-radio-button value=\"2\" class=\"md-primary\">\n                          Donor\n                        </md-radio-button>\n                        <md-radio-button value=\"3\" class=\"md-primary\">\n                          Government\n                        </md-radio-button>\n                    </md-radio-group>\n                    <p>\n                        <small>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum.</small>\n                    </p>\n                </div>\n                <div layout=\"column\" class=\"main-form\">\n                    <h4>2. Fill out the form below</h3>\n                     <md-input-container class=\"md-block\">\n                         <label>Email address</label>\n                         <input ng-model=\"vm.register.email\" required name=\"email\" type=\"email\" ng-change=\"vm.handleCustomError(signupForm, 'email')\" />\n                         <div ng-messages=\"signupForm.email.$error\">\n                             <div ng-message=\"required\">This is required.</div>\n                             <div ng-message=\"email\">This field must be a valid email.</div>\n                             <div ng-message=\"custom\" ng-repeat=\"error in signupForm.email.customError\">{{error}} </div>\n                         </div>\n                     </md-input-container>\n                     <md-input-container>\n                         <label>Password</label>\n                         <input ng-model=\"vm.register.password1\" type=\"password\" name=\"password1\" required ng-minlength=\"6\" ng-change=\"vm.handleCustomError(signupForm, 'password1')\"/>\n                         <div ng-messages=\"signupForm.password1.$error\" >\n                             <div ng-message=\"required\">This is required.</div>\n                             <div ng-message=\"minlength\">This need to be at least 6 chars</div>\n                             <div ng-message=\"custom\" ng-repeat=\"error in signupForm.email.customError\">{{error}} </div>\n                         </div>\n                     </md-input-container>\n                     <md-input-container>\n                         <label>Password (Again)</label>\n                         <input ng-model=\"vm.register.password2\" type=\"password\" name=\"password2\" required  match-password=\"password1\" ng-change=\"vm.handleCustomError(signupForm, 'password2')\" />\n                         <div ng-messages=\"signupForm.password2.$error\">\n                             <div ng-message=\"required\">This is required.</div>\n                             <div ng-message=\"passwordMatch\">Your passwords do not match.</div>\n                             <div ng-message=\"custom\" ng-repeat=\"error in signupForm.email.customError\">{{error}} </div>\n                         </div>\n                     </md-input-container>\n                     <div layout=\"row\" layout-align=\"start\">\n                         <div flex=\"auto\" class=\"login-back\">\n                             <small>Already signed up?\n                                 <a ui-sref=\"login\">\n                                     Login here\n                                 </a>\n                             </small>\n                        </div>\n                        <div flex=\"grow\" layout=\"column\" layout-align=\"center end\">\n                            <md-button ng-hide=\"vm.inProgress\" class=\"md-raised md-primary\" type=\"submit\" ng-disabled=\"signupForm.$invalid\">\n                                Sign up\n                            </md-button>\n\n                             <md-progress-circular ng-show=\"vm.inProgress\" md-mode=\"indeterminate\"></md-progress-circular>\n                        </div>\n                    </div>\n                </div>\n            </form>\n            <div ng-show=\"vm.registered\">\n                <h4>Congratulations</h4>\n                <p class=\"text-center\">\n                    Your registration is successful, you will receive an email with the instructions to activate your account\n                    [Proper text needed]\n                </p>\n            </div>\n\n        </md-content>\n    </div>\n    <footer class=\"disclaimer\">\n      <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.\n    </footer>\n</div>\n";
 
 /***/ },
 /* 64 */
@@ -85412,11 +85412,13 @@
 
 	        this.ss = new _SignupService2.default();
 	        this.scope = $scope;
+	        this.inProgress = false;
+	        this.registered = false;
 	        this.processRegistrationResult = this.processRegistrationResult.bind(this);
 	        this.register = {
-	            email: 'c@c.com',
-	            password1: '123456',
-	            password2: '123456',
+	            // email: 'c@c.com',
+	            // password1: '123456',
+	            // password2: '123456',
 	            role: 1
 	        };
 	        this.style = {
@@ -85436,6 +85438,7 @@
 	            var _this = this;
 
 	            if (signupForm.$valid) {
+	                this.inProgress = true;
 	                this.ss.signup(this.register).then(function (result) {
 	                    _this.processRegistrationResult(result, signupForm);
 	                });
@@ -85444,15 +85447,17 @@
 	    }, {
 	        key: 'processRegistrationResult',
 	        value: function processRegistrationResult(result, signupForm) {
+	            this.inProgress = false;
 	            if (result.success) {
 	                console.log('success', result.data);
+	                this.registered = true;
 	            } else {
 	                _lodash2.default.forEach(result.data, function (item, key) {
 	                    signupForm[key].customError = item;
 	                    signupForm[key].$setValidity('custom', false);
 	                });
-	                this.scope.$evalAsync();
 	            }
+	            this.scope.$evalAsync();
 	        }
 	    }, {
 	        key: 'handleCustomError',
@@ -85527,8 +85532,9 @@
 	                status = answer.status;
 	                return answer.json();
 	            }).then(function (json) {
+	                console.log(status);
 	                return {
-	                    success: status === 200,
+	                    success: status < 400,
 	                    data: json
 	                };
 	            });
@@ -88802,9 +88808,9 @@
 
 	var _sampleComponent2 = _interopRequireDefault(_sampleComponent);
 
-	var _countryViewModule = __webpack_require__(150);
+	var _CountryViewModule = __webpack_require__(150);
 
-	var _countryViewModule2 = _interopRequireDefault(_countryViewModule);
+	var _CountryViewModule2 = _interopRequireDefault(_CountryViewModule);
 
 	var _angularUiRouter = __webpack_require__(4);
 
@@ -88820,7 +88826,7 @@
 	        parent: 'app',
 	        views: {
 	            main: {
-	                template: _countryViewModule2.default,
+	                template: _CountryViewModule2.default,
 	                controller: moduleName + '.' + moduleName + 'Controller',
 	                controllerAs: 'vm'
 	            }

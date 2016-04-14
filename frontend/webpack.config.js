@@ -6,7 +6,7 @@ const siteBuild = process.argv.indexOf('--site-build') > -1;
 
 const basePlugins = [
     new webpack.DefinePlugin({
-        API: production ? '"/"' : '"/api/"'
+        API: production ? '"/api/"' : '"/api/"'
     })
 ];
 
