@@ -6,7 +6,7 @@
 
     <div md-whiteframe="2" class="layout-padding-xl">
         <md-content layout="column">
-            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate>
+            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
                 <div layout="column" class="role-form">
                         <h4>1. Select your role</h4>
                     <md-radio-group ng-model="vm.register.role">
@@ -61,14 +61,24 @@
                                  </a>
                              </small>
                         </div>
-                        <div flex="grow">
-                            <md-button class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
+                        <div flex="grow" layout="column" layout-align="center end">
+                            <md-button ng-hide="vm.inProgress" class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
                                 Sign up
                             </md-button>
+
+                             <md-progress-circular ng-show="vm.inProgress" md-mode="indeterminate"></md-progress-circular>
                         </div>
                     </div>
                 </div>
             </form>
+            <div ng-show="vm.registered">
+                <h4>Congratulations</h4>
+                <p class="text-center">
+                    Your registration is successful, you will receive an email with the instructions to activate your account
+                    [Proper text needed]
+                </p>
+            </div>
+
         </md-content>
     </div>
     <footer class="disclaimer">
