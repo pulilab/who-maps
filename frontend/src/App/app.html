@@ -1,37 +1,37 @@
 <md-content>
     <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
-            <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title">
+            <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
                 <span>Digital Health Atlas</span>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Apps"  ui-sref="hss" ng-if="vm.isLogin">
-                <md-icon class="material-icons md-light">apps</md-icon>
+            <md-button class="md-icon-button" aria-label="Apps" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
+                <md-icon class="material-icons ">apps</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin" >
-                <md-icon class="material-icons md-light">public</md-icon>
+            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin"  md-no-ink>
+                <md-icon class="material-icons ">public</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.isLogin" >
-                <md-icon class="material-icons md-light">help_outline</md-icon>
+            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.isLogin"  md-no-ink>
+                <md-icon class="material-icons ">help_outline</md-icon>
             </md-button>
             <span flex ></span>
-            <md-button ui-sref="info" ui-sref-active="active" class="md-small" ng-if="vm.showFullNavigation">
-                What is MAPS Toolkit?
+            <md-button ui-sref="info" ui-sref-active="active" class="md-small" ng-if="vm.showFullNavigation" md-no-ink>
+                What is DHA?
             </md-button>
-            <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation">
-                <md-icon class="material-icons md-light">search</md-icon>
+            <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation" md-no-ink>
+                <md-icon class="material-icons">search</md-icon>
             </md-button>
 
-            <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin">
+            <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" md-no-ink>
                 Login
             </md-button>
 
-            <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin">
+            <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" md-no-ink>
                 Sign Up
             </md-button>
 
             <md-menu md-position-mode="target-right target" ng-if="vm.isLogin">
-                <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" >
-                    <md-icon md-menu-origin class="material-icons md-light">person</md-icon>
+                <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                    <md-icon md-menu-origin class="material-icons ">person</md-icon>
                 </md-button>
 
                 <md-menu-content width="4">
@@ -64,8 +64,8 @@
 
             <md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation">
 
-                <md-button class="md-icon-button" aria-label="Notification" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                    <md-icon md-menu-origin class="material-icons md-light has-message">email</md-icon>
+                <md-button class="md-icon-button" aria-label="Notification" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                    <md-icon md-menu-origin class="material-icons has-message">email</md-icon>
                     <badge counter="vm.notifications.length"></badge>
                 </md-button>
                 <md-menu-content width="6">
@@ -77,8 +77,8 @@
                 </md-menu-content>
             </md-menu>
 
-            <md-button class="md-icon-button" aria-label="Plus" ng-if="vm.showFullNavigation">
-                <md-icon class="material-icons md-light">add</md-icon>
+            <md-button class="md-icon-button" aria-label="Plus" ng-if="vm.showFullNavigation" md-no-ink>
+                <md-icon class="material-icons ">add</md-icon>
             </md-button>
 
 
@@ -94,59 +94,60 @@
                 md-container-class="large"
                 class="large project-selector">
             </ssmenu>
-            <span flex></span>
-            <md-button class="" aria-label="Settings"  ui-sref="settings">
-                <md-icon class="material-icons md-light">settings</md-icon>
-                Settings
-            </md-button>
-            <md-button class="" aria-label="Share">
-                <md-icon class="material-icons md-light">share</md-icon>
-                Share Link
-            </md-button>
+            <div flex></div>
+            <div class="project-submenu" layout="row">
+              <md-button class="md-small" aria-label="Settings" ui-sref="settings" md-no-ink>
+                  <md-icon class="material-icons ">settings</md-icon>
+                  Settings
+              </md-button>
+              <md-button class="md-small" aria-label="Share" md-no-ink>
+                  <md-icon class="material-icons ">share</md-icon>
+                  Share Link
+              </md-button>
 
-            <md-menu md-position-mode="target-right target">
-                <md-button md-menu-origin  class="" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                    <md-icon class="material-icons md-light">more_vert</md-icon>
-                    More Actions
-                </md-button>
+              <md-menu md-position-mode="target-right target">
+                  <md-button md-menu-origin  class="md-small" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                      <md-icon class="material-icons ">more_vert</md-icon>
+                      More Actions
+                  </md-button>
 
-                <md-menu-content width="4">
-                    <md-menu-item>
-                        <span md-menu-align-target>More Actions</span>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button>
-                            <md-icon class="material-icons"  >person_add</md-icon>
-                            Assign owners/users
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button>
-                            <md-icon class="material-icons">lock_outline</md-icon>
-                            Publicity settings
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button>
-                            <md-icon class="material-icons">publish</md-icon>
-                            Export pdf/csv
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-
+                  <md-menu-content width="4">
+                      <md-menu-item>
+                          <span md-menu-align-target>More Actions</span>
+                      </md-menu-item>
+                      <md-menu-item>
+                          <md-button>
+                              <md-icon class="material-icons">person_add</md-icon>
+                              Assign owners/users
+                          </md-button>
+                      </md-menu-item>
+                      <md-menu-item>
+                          <md-button>
+                              <md-icon class="material-icons">lock_outline</md-icon>
+                              Publicity settings
+                          </md-button>
+                      </md-menu-item>
+                      <md-menu-item>
+                          <md-button>
+                              <md-icon class="material-icons">publish</md-icon>
+                              Export pdf/csv
+                          </md-button>
+                      </md-menu-item>
+                  </md-menu-content>
+              </md-menu>
+            </div>
         </div>
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
-            <span class="project-menu">
-                <md-button ui-sref="hssModule" ui-sref-active="active">Visualize Project</md-button>
-                <md-button ui-sref="maps" ui-sref-active="active">Improve Project</md-button>
-                <md-button ui-sref="dashboard" ui-sref-active="active">Update Score</md-button>
-            </span>
+            <div class="project-mainmenu">
+                <md-button ui-sref="hssModule" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
+                <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Improve Project</md-button>
+                <md-button ui-sref="dashboard" ui-sref-active="active" md-no-ink>Update Score</md-button>
+            </div>
 
-            <span flex></span>
+            <div flex></div>
 
-            <span layout="row" layout-align="center start" class="project-info">
+            <div class="project-info" layout="row">
                 <span>
                     Version:
                     <b>
@@ -160,14 +161,14 @@
                 </span>
                 <span>
                     Contact person:
-                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small">
-                        <md-icon class="material-icons md-light">
+                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small" md-no-ink>
+                        <md-icon class="material-icons ">
                             mail_outline
                         </md-icon>
                         {{vm.currentProject.contact.name}}
                     </md-button>
                 </span>
-            </span>
+            </div>
         </div>
     </md-toolbar>
     <ui-view name="main"></ui-view>
