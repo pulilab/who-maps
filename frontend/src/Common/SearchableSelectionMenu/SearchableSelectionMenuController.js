@@ -4,31 +4,36 @@ import angular from 'angular';
 class SearchableSelectionMenuController {
 
     constructor($element, $timeout, $scope) {
-        const vm = this;
-        vm.element = $element;
-        vm.timeout = $timeout;
-        vm.scope = $scope;
+        this.element = $element;
+        this.timeout = $timeout;
+        this.scope = $scope;
         this.fileds = [];
         this.search = {};
         this.isOpen = false;
         this.$onInit = this.initialization.bind(this);
+
+    }
+
+    initialization() {
+        this.watchers();
+        this.prepareOptionsArray();
+        this.timeout(this.fixComma.bind(this));
+    }
+
+    watchers() {
+        const self = this;
         this.scope.$watch(() => {
             return this.options;
         }, value => {
             if (value) {
-                vm.prepareOptionsArray();
+                self.prepareOptionsArray();
             }
         });
         this.scope.$watch(() => {
             return this.ngModel;
         }, (value) => {
-            vm.checkLimit(value);
+            self.checkLimit(value);
         });
-    }
-
-    initialization() {
-        this.prepareOptionsArray();
-        this.timeout(this.fixComma.bind(this));
     }
 
     checkLimit() {
