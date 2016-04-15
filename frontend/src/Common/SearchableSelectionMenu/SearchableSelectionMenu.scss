@@ -100,13 +100,29 @@ ssmenu.multiline {
 }
 
 .md-select-menu-container {
-  .option-group-title {
+  .option-group-title,
+  .selection-limit {
     display: block;
     padding: 10px 0 5px 10px;
     color: $color-gray-light;
     text-transform: uppercase;
     font-weight: 500;
     font-size: $caption-font-size-base;
+  }
+
+  .selection-limit {
+    padding-bottom: 0;
+    color: $color-gray;
+    text-transform: none;
+
+    &::before {
+      float: left;
+      margin-right: 3px;
+      color: $color-gray-light;
+      content: "warning";
+
+      @include md-icon(16px);
+    }
   }
 
   .ssmenu-search-input {
