@@ -69,10 +69,7 @@ module.exports = {
         proxy: {
             '/api/*': {
                 target: 'http://192.168.99.100/',
-                secure: false,
-                rewrite: req => {
-                    req.url = req.url.replace(/^\/api/, '');
-                }
+                secure: false
             }
         }
     },
