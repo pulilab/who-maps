@@ -63,6 +63,10 @@ describe('applicationsController', () => {
             continuum: continuumData,
             constraints: taxonomyLib
         };
+        ac.service = {
+            postBubbles: () => {},
+            postTaxonomy: () => {}
+        };
         ac.$onInit();
     });
 

@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import { Protected } from '../Common/';
+import AppModuleService from './AppModuleService';
 
 class AppModuleController extends Protected {
 
@@ -7,33 +9,32 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.currentPage = void 0;
+        this.as = new AppModuleService();
         this.showFullNavigation = false;
-        if (this.user) {
-            this.user.projects = ['Project 1', 'Project 2'];
-        }
-
-        this.currentProject = {
-            name: 'Project 1',
+        this.updateProject = this.updateProject.bind(this);
+        this.currentProjectMock = {
             version: {
                 id: '3',
                 date: '12 Feb, 2016'
             },
-            organization: 'IRD: Pakistan',
             contact: {
                 name: 'Jane M Doe',
                 email: 'po@kungFu.panda'
             }
         };
+        if (this.isLogin) {
+            this.fillUserData();
+        }
 
         this.notifications = [1, 2, 3];
 
         this.scope.$watch(() => {
             return this.state.current.name;
         }, value => {
+            this.currentPage = value;
             this.showCompleteNavigation(value, this.isLogin);
         });
-
-
 
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
@@ -44,7 +45,30 @@ class AppModuleController extends Protected {
             console.log('some forced action');
         }
         this.systemLogin();
+        this.fillUserData();
         this.state.go('hss');
+    }
+
+    updateProject(name) {
+        const id = _.filter(this.user.projects, { name })[0].id;
+        this.state.go(this.state.current.name, { 'appName': id });
+    }
+
+    fillUserData() {
+        this.as.getProjects()
+        .then(projects => {
+            this.user.projects = projects;
+            if (this.state.params.appName.length === 0) {
+                this.state.go(this.state.current.name, { 'appName': this.user.projects[0].id });
+            }
+            _.forEach(this.user.projects, item => {
+                if (item.id === parseInt(this.state.params.appName, 10)) {
+                    this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
+                }
+            });
+
+            this.scope.$evalAsync();
+        });
     }
 
     handleUnauthorized() {

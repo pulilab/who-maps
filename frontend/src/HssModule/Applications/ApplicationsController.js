@@ -1,12 +1,10 @@
 import _ from 'lodash';
-import HssModuleService from '../HssModuleService';
 
 class ApplicationsController {
 
     constructor($timeout, $mdDialog) {
         const vm = this;
         this.EE = window.EE;
-        this.hs = new HssModuleService();
         this.rowObject = {};
         this.gridLoading = false;
         this.layoutReady = false;
@@ -16,6 +14,7 @@ class ApplicationsController {
         vm.tileClickCounter = 0;
         this.timeout = $timeout;
         this.$onInit = () => {
+            vm.hs = vm.service;
             vm.selectedConstraints = this.constraintsGenerator();
             vm.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
@@ -314,6 +313,9 @@ class ApplicationsController {
                     tile.bubbleDrawn = true;
                     tile.rowEnabled = true;
                     tile.status = this.enableRow(tile);
+                    const fatherTile = this.rowObject.father_0['rowIndex_' + (tile.fatherId - 1)].columnId_header;
+                    fatherTile.rowEnabled = true;
+                    fatherTile.status = this.enableRow(tile);
                 }
                 if (data.colspan === 0) {
                     tile.invisible = true;

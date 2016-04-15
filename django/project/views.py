@@ -12,6 +12,8 @@ from core.views import TokenAuthMixin
 from user.models import UserProfile
 from hss.models import HSS
 from hss.hss_data import hss_default
+from toolkit.models import Toolkit
+from toolkit.toolkit_data import toolkit_default
 from .serializers import ProjectSerializer
 from .models import Project, Strategy, Technology, Pipeline, Application
 from .models import Report, Publication
@@ -190,6 +192,8 @@ class ProjectViewSet(TokenAuthMixin, ModelViewSet):
         if self._prepare_serializer(request):
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=self.serializer.data.get("id"), data=hss_default)
+            # Add default Toolkit structure for the new project.
+            Toolkit.objects.create(project_id=self.serializer.data.get("id"), data=toolkit_default)
             return Response(self.serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)

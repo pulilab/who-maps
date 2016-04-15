@@ -10,7 +10,8 @@ const constraintsComponent = {
     bindings: {
         resizeCallback: '=',
         structure: '<',
-        data: '<'
+        data: '<',
+        service: '<'
     }
 };
 

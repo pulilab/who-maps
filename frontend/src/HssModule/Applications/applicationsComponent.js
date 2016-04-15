@@ -9,7 +9,8 @@ const applicationsComponent = {
     bindings: {
         tiles: '<',
         structure: '<',
-        data: '<'
+        data: '<',
+        service: '<'
     },
     name: 'applications'
 
