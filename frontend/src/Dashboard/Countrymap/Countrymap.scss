@@ -2,21 +2,18 @@
 
 #countrymapcontainer {
     min-height: 350px;
+    min-width: 350px;
+
+	.d3district {
+		fill: white;
+		stroke: darkgrey;
+		stroke-width: 2px;
+		shape-rendering: crispEdges;
+	    pointer-events: all;
+
+		&:hover {
+			fill: darkslategrey;
+		}
+	}
 }
 
-.d3country {
-    fill: #BDBDBD;
-    stroke: white;
-    shape-rendering: crispEdges;
-}
-
-.d3district {
-	fill: none;
-	stroke: white;
-	stroke-width: 2px;
-	shape-rendering: crispEdges;
-}
-
-.d3district .hovered {
-	fill: blue;
-}

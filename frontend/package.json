@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "babel": {
-      "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
   },
   "scripts": {
     "test": "karma start",
@@ -63,6 +65,7 @@
     "d3": "^3.5.16",
     "es6-promise": "^3.1.2",
     "eventemitter3": "^1.1.1",
+    "geojson-rewind": "^0.1.0",
     "intro.js": "https://github.com/lordfuoco/intro.js",
     "lodash": "^4.6.1",
     "whatwg-fetch": "^0.11.0"
