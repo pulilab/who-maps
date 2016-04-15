@@ -25,6 +25,12 @@ describe('searchableSelectionMenuController', () => {
         tmp.innerHTML = 'a,b,c,d';
     });
 
+    it('should have a function that initialize the comoponent', () => {
+        spyOn(sc, 'initialization');
+        sc.$onInit();
+        expect(sc.initialization).toHaveBeenCalled();
+    });
+
     it('should have a function that stop events immediate propagation', () => {
         const eventSpy = jasmine.createSpy('eventSpy');
         const mockEvent = document.createEvent('Event');

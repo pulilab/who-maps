@@ -19,11 +19,26 @@ class SearchableSelectionMenuController {
                 vm.prepareOptionsArray();
             }
         });
+        this.scope.$watch(() => {
+            return this.ngModel;
+        }, (value) => {
+            vm.checkLimit(value);
+        });
     }
 
     initialization() {
         this.prepareOptionsArray();
         this.timeout(this.fixComma.bind(this));
+    }
+
+    checkLimit() {
+        const self = this;
+        if (this.limit && this.ngModel.length > this.limit) {
+            this.timeout(() => {
+                self.ngModel.pop();
+            });
+
+        }
     }
 
     prepareOptionsArray() {
