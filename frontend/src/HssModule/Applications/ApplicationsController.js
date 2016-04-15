@@ -247,6 +247,7 @@ class ApplicationsController {
     }
 
     saveTaxonomy(appId, subAppId, value) {
+        this.rowObject['father_' + appId]['rowIndex_' + subAppId].columnId_tax.content = value;
         this.hs.postTaxonomy(appId, subAppId, value);
     }
 
@@ -303,12 +304,11 @@ class ApplicationsController {
 
     processData(cols) {
         _.forEach(this.data.applications, data => {
-            let fatherId = data.subapp_id;
-            let rowIndex = data.app_id - 1;
+            const fatherId = data.app_id;
+            const rowIndex = data.subapp_id - 1;
 
-            if (data.subapp_id !== 0) {
-                fatherId = data.app_id;
-                rowIndex = data.subapp_id - 1;
+            if (rowIndex < 0) {
+                return;
             }
 
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex]['columnId_' + data.column_id];
@@ -331,12 +331,10 @@ class ApplicationsController {
         });
 
         _.forEach(this.data.taxonomies, tax => {
-            let fatherId = tax.subapp_id;
-            let rowIndex = tax.app_id;
-
-            if (tax.subapp_id !== 0) {
-                fatherId = tax.app_id;
-                rowIndex = tax.subapp_id;
+            const rowIndex = tax.subapp_id;
+            const fatherId = tax.app_id;
+            if (rowIndex < 0) {
+                return;
             }
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex].columnId_tax;
             if (tile) {

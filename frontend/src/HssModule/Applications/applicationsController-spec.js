@@ -439,7 +439,7 @@ describe('applicationsController', () => {
 
     it('should have a function to save the taxonomy', () => {
         spyOn(ac.hs, 'postTaxonomy');
-        ac.saveTaxonomy();
+        ac.saveTaxonomy(0, 0);
         expect(ac.hs.postTaxonomy).toHaveBeenCalled();
     });
 
