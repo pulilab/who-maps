@@ -55,11 +55,11 @@ describe('AuthApi class', () => {
 
     it('should have a function that retrieve a token from the session storage', () => {
         sessionStorage.clear();
-        aa.retrieveToken(true)
+        aa.retrieveToken(true);
         expect(aa.token).toBeNull();
 
         sessionStorage.setItem('token', 'something');
-        aa.retrieveToken()
+        aa.retrieveToken();
         expect(aa.token).toBe('something');
     });
 
