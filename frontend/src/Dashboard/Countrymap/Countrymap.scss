@@ -1,17 +1,57 @@
 @import '../../variables';
 
-#countrymapcontainer {
+.relative {
+
+	position: relative;
+
+
+	// Just for mock data
+	code {
+		background-color: lightblue;
+	}
+
+	.countrychart-tooltip {
+
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		color: #212121;
+		font-size: 12px;
+		line-height: 16px;
+		//no-line-break
+		white-space: nowrap;
+
+		.countrychart-tooltip-header {
+
+			background-color: #EEEEEE;
+			padding: 10px;
+		}
+
+		.countrychart-tooltip-main {
+
+			border-top: 1px solid #BDBDBD;
+			background-color: white;
+			padding: 10px;
+			opacity: 0.8;
+		}
+	}
+}
+
+
+.countrymapcontainer {
+
     min-height: 350px;
     min-width: 350px;
 
 	.d3district {
-		fill: white;
-		stroke: darkgrey;
+
+		fill: #BDBDBD;
+		stroke: white;
 		stroke-width: 2px;
-		shape-rendering: crispEdges;
 	    pointer-events: all;
 
 		&:hover {
+
 			fill: darkslategrey;
 		}
 	}

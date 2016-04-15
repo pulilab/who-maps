@@ -1,9 +1,6 @@
 /* global d3 */
 
-// import mockGeoJsonCountry from   './mock/pakistan/admin_level_2.geojson';
 // import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
-
-// import mockGeoJsonCountry from   './mock/sierra-leone/admin_level_2.geojson';
 import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 
 class CountrymapController {
@@ -20,15 +17,19 @@ class CountrymapController {
 
     drawMap() {
 
+        const vm = this;
+
         // Actual data fetch here!!
         const rewind = require('geojson-rewind');
         // const distrData = mockGeoJsonDistricts;
         const distrData = rewind(mockGeoJsonDistricts);
 
-        const outer = document.getElementById('countrymapcontainer');
+        const outer = d3.select(vm.el[0])
+            .append('div')
+            .attr('class', 'countrymapcontainer');
 
-        const outerWidth = outer.offsetWidth;
-        const outerHeight = outer.offsetHeight;
+        const outerWidth = outer[0][0].offsetWidth;
+        const outerHeight = outer[0][0].offsetHeight;
 
         const margin = {
             top: 0,
@@ -39,7 +40,7 @@ class CountrymapController {
         const width = outerWidth - margin.left - margin.right;
         const height = outerHeight - margin.top - margin.bottom;
 
-        const element = d3.select('#countrymap');
+        const element = outer.append('svg').attr('class', 'countrymap');
 
         element
             .attr('width', outerWidth)
@@ -92,11 +93,27 @@ class CountrymapController {
             .append('g');
 
         districts.append('path')
-            .attr('fill', 'white')
-            .attr('fill-rule', 'nonzero')
             .attr('d', d3.geo.path().projection(projection))
             .attr('transform', transform)
-            .attr('class', 'd3district');
+            .attr('class', 'd3district')
+            .on('mouseover', () => {
+                console.log('Hovered: wtf');
+            });
+
+
+        // for (let i = 0; i <= distrData.features.length; i += 1) {
+        //     element.selectAll('g')
+        //         .data(distrData.features.filter((el, j) => j === i))
+        //         .enter()
+        //         .append('g')
+        //         .append('path')
+        //         .attr('d', d3.geo.path().projection(projection))
+        //         .attr('transform', transform)
+        //         .attr('class', 'd3district')
+        //         .on('mouseover', () => {
+        //             console.log('Hovered: ' + district.name);
+        //         });
+        // }
     }
 
     static countrymapFactory() {
