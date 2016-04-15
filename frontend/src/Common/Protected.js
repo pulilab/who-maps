@@ -5,11 +5,10 @@ class Protected {
         this.EE = window.EE;
         this.storage = new Storage();
         this.isLogin = this.retrieveLoginStatus();
-
         this.retrieveUser = this.retrieveUser.bind(this);
         this.retrieveUser();
         this.checkLoginStatus();
-        this.EE.on('login', this.handleLoginEvent.bind(this));
+        // this.EE.on('login', this.handleLoginEvent.bind(this));
     }
 
     checkLoginStatus() {
@@ -23,23 +22,19 @@ class Protected {
     }
 
     systemLogin() {
-        this.isLogin = true;
         this.retrieveUser();
         this.storage.set('login', true);
+        this.isLogin = true;
     }
 
     systemLogout() {
         this.isLogin = false;
-        this.storage.remove('login');
-        this.storage.remove('token');
-        this.storage.remove('user');
+        this.storage.clear();
         this.checkLoginStatus();
     }
 
     handleLoginEvent() {
-        this.isLogin = true;
-        this.storage.set('login', true);
-        this.retrieveUser();
+        this.systemLogin();
     }
 
     retrieveLoginStatus() {

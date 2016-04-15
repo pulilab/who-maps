@@ -5,7 +5,7 @@ import 'es6-promise';
 
 class HssModuleController extends Protected {
 
-    constructor($scope, introJs) {
+    constructor($scope, $state, introJs) {
         super();
         this.EE = window.EE;
         this.scope = $scope;
@@ -29,13 +29,10 @@ class HssModuleController extends Protected {
 
         this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent.bind(this));
 
-        this.hs = new HssModuleService();
+        this.projectId = $state.params.appName;
+        this.hs = new HssModuleService(this.projectId);
 
-
-        this.$onInit = () => {
-            this.introJsSource = introJs;
-        };
-
+        this.introJsSource = introJs;
 
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 
@@ -83,12 +80,12 @@ class HssModuleController extends Protected {
     }
 
     static hssControllerFactory() {
-        function hssController($scope) {
+        function hssController($scope, $state) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController($scope, introJs);
+            return new HssModuleController($scope, $state, introJs);
         }
 
-        hssController.$inject = ['$scope'];
+        hssController.$inject = ['$scope', '$state'];
 
         return hssController;
     }

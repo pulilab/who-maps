@@ -6,6 +6,7 @@
             </md-button>
             <md-button class="md-icon-button" aria-label="Apps" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
                 <md-icon class="material-icons ">apps</md-icon>
+
             </md-button>
             <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin"  md-no-ink>
                 <md-icon class="material-icons ">public</md-icon>
@@ -21,11 +22,12 @@
                 <md-icon class="material-icons">search</md-icon>
             </md-button>
 
-            <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" md-no-ink>
+            <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink >
                 Login
             </md-button>
 
-            <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" md-no-ink>
+            <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'signup'" md-no-ink >
+
                 Sign Up
             </md-button>
 
@@ -90,9 +92,11 @@
             <ssmenu
                 aria-label="Project Choser"
                 options="vm.user.projects"
+                option-label = "name"
                 ng-model="vm.currentProject.name"
                 md-container-class="large"
-                class="large project-selector">
+                class="large project-selector"
+                on-close-callback="vm.updateProject">
             </ssmenu>
             <div flex></div>
             <div class="project-submenu" layout="row">
@@ -140,7 +144,7 @@
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <div class="project-mainmenu">
-                <md-button ui-sref="hssModule" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
+                <md-button ui-sref="hss" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
                 <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Improve Project</md-button>
                 <md-button ui-sref="dashboard" ui-sref-active="active" md-no-ink>Update Score</md-button>
             </div>
@@ -151,21 +155,26 @@
                 <span>
                     Version:
                     <b>
-                        {{vm.currentProject.version.id}}
+                        {{vm.currentProjectMock.version.id}}
                     </b>
-                    ({{vm.currentProject.version.date}})
+                    ({{vm.currentProjectMock.version.date}})
                 </span>
                 <span>
                     Organization:
-                    <b>{{vm.currentProject.organization}}</b>
+                    <b>{{vm.currentProject.organisation}}</b>
                 </span>
                 <span>
                     Contact person:
+<<<<<<< HEAD
                     <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small" md-no-ink>
                         <md-icon class="material-icons ">
+=======
+                    <md-button ng-href="mailto:{{vm.currentProjectMock.contact.email}}" class="md-small">
+                        <md-icon class="material-icons md-light">
+>>>>>>> master
                             mail_outline
                         </md-icon>
-                        {{vm.currentProject.contact.name}}
+                        {{vm.currentProjectMock.contact.name}}
                     </md-button>
                 </span>
             </div>

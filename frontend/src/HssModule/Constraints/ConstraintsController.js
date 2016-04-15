@@ -1,14 +1,14 @@
 import _ from 'lodash';
-import HssModuleService from '../HssModuleService';
+
 class ConstraintsController {
 
     constructor() {
         const vm = this;
         vm.EE = window.EE;
         vm.editMode = false;
-        this.hs = new HssModuleService();
         vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
         this.$onInit = () => {
+            vm.hs = vm.service;
             this.constraints = this.constraintsToggleGenerator();
             this.checkSizeAndFireCallback();
         };

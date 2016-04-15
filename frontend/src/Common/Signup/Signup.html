@@ -6,9 +6,9 @@
 
     <div md-whiteframe="2" class="layout-padding-xl">
         <md-content layout="column">
-            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate>
+            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
                 <div layout="column" class="role-form">
-                    <h4>1. Select your role</h4>
+                        <h4>1. Select your role</h4>
                     <md-radio-group ng-model="vm.register.role">
                         <md-radio-button value="1" ng-selected="true" class="md-primary">
                           Digital Project Implementer/Owner
@@ -25,47 +25,60 @@
                     </p>
                 </div>
                 <div layout="column" class="main-form">
-                    <h4>2. Fill out the form below</h4>
-                    <md-input-container class="md-block">
-                       <label>Email address</label>
-                       <input ng-model="vm.register.email" required name="email" type="email" />
-                       <div ng-messages="signupForm.email.$error">
-                           <div ng-message="required">This is required.</div>
-                           <div ng-message="email">This field must be a valid email.</div>
-                       </div>
-                    </md-input-container>
-                    <md-input-container>
-                       <label>Password</label>
-                       <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6"/>
-                       <div ng-messages="signupForm.password1.$error" >
-                           <div ng-message="required">This is required.</div>
-                           <div ng-message="minlength">This need to be at least 6 chars</div>
-                       </div>
-                    </md-input-container>
-                    <md-input-container>
-                       <label>Password (Again)</label>
-                       <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" />
-                       <div ng-messages="signupForm.password2.$error">
-                           <div ng-message="required">This is required.</div>
-                           <div ng-message="passwordMatch">Your passwords do not match.</div>
-                       </div>
-                    </md-input-container>
-                    <div layout="row" layout-align="start">
-                        <div flex="auto" class="login-back">
-                            <small>Already signed up?
-                                <a ui-sref="login">
-                                    Login here
-                                </a>
-                            </small>
+                    <h4>2. Fill out the form below</h3>
+                     <md-input-container class="md-block">
+                         <label>Email address</label>
+                         <input ng-model="vm.register.email" required name="email" type="email" ng-change="vm.handleCustomError(signupForm, 'email')" />
+                         <div ng-messages="signupForm.email.$error">
+                             <div ng-message="required">This is required.</div>
+                             <div ng-message="email">This field must be a valid email.</div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                         </div>
+                     </md-input-container>
+                     <md-input-container>
+                         <label>Password</label>
+                         <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6" ng-change="vm.handleCustomError(signupForm, 'password1')"/>
+                         <div ng-messages="signupForm.password1.$error" >
+                             <div ng-message="required">This is required.</div>
+                             <div ng-message="minlength">This need to be at least 6 chars</div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                         </div>
+                     </md-input-container>
+                     <md-input-container>
+                         <label>Password (Again)</label>
+                         <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" ng-change="vm.handleCustomError(signupForm, 'password2')" />
+                         <div ng-messages="signupForm.password2.$error">
+                             <div ng-message="required">This is required.</div>
+                             <div ng-message="passwordMatch">Your passwords do not match.</div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                         </div>
+                     </md-input-container>
+                     <div layout="row" layout-align="start">
+                         <div flex="auto" class="login-back">
+                             <small>Already signed up?
+                                 <a ui-sref="login">
+                                     Login here
+                                 </a>
+                             </small>
                         </div>
-                        <div flex="grow">
-                            <md-button class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
+                        <div flex="grow" layout="column" layout-align="center end">
+                            <md-button ng-hide="vm.inProgress" class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
                                 Sign up
                             </md-button>
+
+                             <md-progress-circular ng-show="vm.inProgress" md-mode="indeterminate"></md-progress-circular>
                         </div>
                     </div>
                 </div>
             </form>
+            <div ng-show="vm.registered">
+                <h4>Congratulations</h4>
+                <p class="text-center">
+                    Your registration is successful, you will receive an email with the instructions to activate your account
+                    [Proper text needed]
+                </p>
+            </div>
+
         </md-content>
     </div>
     <footer class="disclaimer">

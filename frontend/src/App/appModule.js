@@ -28,7 +28,7 @@ function config($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/app',
+            url: '/app/:appName',
             template: _appTemplate,
             controller: moduleName + '.appController',
             controllerAs: 'vm'
@@ -54,7 +54,7 @@ function config($stateProvider, $urlRouterProvider) {
             }
         });
 
-    $urlRouterProvider.otherwise('/app/landing');
+    $urlRouterProvider.otherwise('/app//landing');
 }
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
