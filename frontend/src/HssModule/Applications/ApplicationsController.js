@@ -27,11 +27,18 @@ class ApplicationsController {
     handleEditMode(value) {
         this.editMode = value;
         this.processRows();
+        this.openAllSubApp();
     }
 
     layoutDone() {
         this.layoutReady = true;
         this.EE.emit('hssInnerLayoutDone', 'application');
+    }
+
+    openAllSubApp() {
+        _.forEach(this.rowObject.father_0, mainRow => {
+            this.toggleSubApp(mainRow.columnId_header, true);
+        });
     }
 
 
@@ -350,12 +357,12 @@ class ApplicationsController {
         });
     }
 
-    toggleSubApp(tile) {
+    toggleSubApp(tile, forceOpening) {
         if (!tile.subApplications || !this.editMode) {
             return;
         }
         this.layoutReady = false;
-        tile.subAppOpen = !tile.subAppOpen;
+        tile.subAppOpen = !tile.subAppOpen || forceOpening;
         _.forEach(this.rowObject['father_' + tile.applicationId], value => {
             _.forEach(value, item => {
                 item.disabled = !tile.subAppOpen;
@@ -488,13 +495,15 @@ class ApplicationsController {
             return;
         }
 
-
         const applicationStyle = this.enableRow(tile);
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;
                 value.bubbleDrawn = true;
                 value.status = applicationStyle;
+                const fatherTile = this.rowObject.father_0['rowIndex_' + (value.fatherId - 1)].columnId_header;
+                fatherTile.rowEnabled = true;
+                fatherTile.status = this.enableRow(tile);
             }
             else {
                 value.invisible = true;
@@ -557,7 +566,22 @@ class ApplicationsController {
             value.rowEnabled = false;
             return value;
         });
+        this.checkIfMainIsEnabled(bubble);
         this.searchForFilledColumns();
+    }
+
+    checkIfMainIsEnabled(bubble) {
+        let isMainEnabled = false;
+        _.forEach(this.rowObject['father_' + bubble.fatherId], row => {
+            _.forEach(row, column => {
+                isMainEnabled = isMainEnabled || column.bubbleDrawn;
+            });
+        });
+        if (!isMainEnabled) {
+            const fatherTile = this.rowObject.father_0['rowIndex_' + (bubble.fatherId - 1)].columnId_header;
+            fatherTile.rowEnabled = true;
+            fatherTile.status = '';
+        }
     }
 
     confirmDeleteBubble(bubble) {
