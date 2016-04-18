@@ -1,13 +1,43 @@
 /* global d3 */
 
-// import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
+import perfMockMap from './perfMockMap';
+
+// SIERRA LEONE
+import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
 import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
+
+
+// import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
+// import mockGeoJsonDistricts from './mock/sirya/admin_level_5.geojson';
+
+
+// HUNGARY
+// import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
+// import mockGeoJsonDistricts from './mock/hungary/admin_level_5.geojson';
 
 class CountrymapController {
 
-    constructor($element) {
+    constructor($element, $scope) {
         const vm = this;
+        // BINDINGS
+        // data / data to show, district names has to match with countryLvl2's
+        // country / country name as string
+        // countryLvl1 / .geojson level 1 with borders, flag destination, and name
+        // countryLvl2 / .geojson level 2 with districts
+
         vm.el = $element;
+        vm.scope = $scope;
+
+        vm.mockGeoJsonCountry = mockGeoJsonCountry;
+        vm.activeDistrict = {
+            name: '',
+            data: [
+                { placeholder1: 0 },
+                { placeholder2: 1 },
+                { placeholder3: 2 }
+            ]
+        };
+        // vm.watch = $scope.$watch;
 
         vm.$onInit = () => {
             console.log('BINDINGS: \nvm.data: ' + vm.data + '\nvm.country: ' + vm.country);
@@ -87,44 +117,55 @@ class CountrymapController {
         const transform = 'translate(' + (width / 2) + ',' + (-borders.ycenter) + ')';
 
         // Appending the districts
-        const districts = element.selectAll('g')
-            .data(distrData.features)
-            .enter()
-            .append('g');
+        // const districts = element.selectAll('g')
+        //     .data(distrData.features)
+        //     .enter()
+        //     .append('g');
 
-        districts.append('path')
-            .attr('d', d3.geo.path().projection(projection))
-            .attr('transform', transform)
-            .attr('class', 'd3district')
-            .on('mouseover', () => {
-                console.log('Hovered: wtf');
-            });
+        // districts.append('path')
+        //     .attr('d', d3.geo.path().projection(projection))
+        //     .attr('transform', transform)
+        //     .attr('class', 'd3district')
+        //     .on('mouseover', () => {
+        //         console.log('Hovered: wtf');
+        //     });
 
-
-        // for (let i = 0; i <= distrData.features.length; i += 1) {
-        //     element.selectAll('g')
-        //         .data(distrData.features.filter((el, j) => j === i))
-        //         .enter()
-        //         .append('g')
-        //         .append('path')
-        //         .attr('d', d3.geo.path().projection(projection))
-        //         .attr('transform', transform)
-        //         .attr('class', 'd3district')
-        //         .on('mouseover', () => {
-        //             console.log('Hovered: ' + district.name);
-        //         });
-        // }
+        // Appending the districts
+        for (let i = 0; i < distrData.features.length; i += 1) {
+            element
+                .append('path')
+                .datum({
+                    type: distrData.type,
+                    geocoding: distrData.geocoding,
+                    features: [distrData.features[i]]
+                })
+                .attr('d', d3.geo.path().projection(projection))
+                .attr('transform', transform)
+                .attr('class', 'd3district')
+                .on('mouseover', () => {
+                    vm.scope.$evalAsync();
+                    vm.activeDistrict = {
+                        name: distrData.features[i].name,
+                        data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name]
+                    };
+                })
+                .on('mouseout', () => {
+                    vm.scope.$evalAsync();
+                    vm.activeDistrict.name = '';
+                });
+        }
     }
 
     static countrymapFactory() {
         require('./Countrymap.scss');
         require('d3');
+        require('flag-icon-css/sass/flag-icon-base.scss');
 
-        function countrymap($element) {
-            return new CountrymapController($element);
+        function countrymap($element, $scope) {
+            return new CountrymapController($element, $scope);
         }
 
-        countrymap.$inject = ['$element'];
+        countrymap.$inject = ['$element', '$scope'];
 
         return countrymap;
     }

@@ -4,7 +4,6 @@
 
 	position: relative;
 
-
 	// Just for mock data
 	code {
 		background-color: lightblue;
@@ -20,11 +19,18 @@
 		line-height: 16px;
 		//no-line-break
 		white-space: nowrap;
+		min-width: 160px;
 
 		.countrychart-tooltip-header {
 
 			background-color: #EEEEEE;
 			padding: 10px;
+
+			.tooltip-flag {
+				height: 16px;
+				width: auto;
+				float: right;
+			}
 		}
 
 		.countrychart-tooltip-main {
