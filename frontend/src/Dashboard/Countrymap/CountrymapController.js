@@ -5,15 +5,20 @@ import _ from 'lodash';
 import perfMockMap from './perfMockMap';
 
 // SIERRA LEONE
-// import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
-// import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
+import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
+import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 
+// PAKISTAN
+// import mockGeoJsonCountry from './mock/pakistan/admin_level_2.geojson';
 // import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
-// import mockGeoJsonDistricts from './mock/sirya/admin_level_5.geojson';
+
+// SYRIA
+// import mockGeoJsonCountry from './mock/syria/admin_level_2.geojson';
+// import mockGeoJsonDistricts from './mock/syria/admin_level_4.geojson';
 
 // HUNGARY
-import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
-import mockGeoJsonDistricts from './mock/hungary/admin_level_5.geojson';
+// import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
+// import mockGeoJsonDistricts from './mock/hungary/admin_level_5.geojson';
 
 class CountrymapController {
 
@@ -68,7 +73,7 @@ class CountrymapController {
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
-        // Will fetch rewinded data from the backend
+        // Will fetch already rewinded data from the backend
         const rewind = require('geojson-rewind');
         const distrData = rewind(mockGeoJsonDistricts);
 
@@ -104,20 +109,22 @@ class CountrymapController {
             });
             return ret;
         }, {
-            xmin: 90,
-            xmax: -90,
+            xmin: 180,
+            xmax: -180,
             ymin: 180,
             ymax: -180
         });
         bounds.xcenter = (bounds.xmin + bounds.xmax) / 2;
         bounds.ycenter = (bounds.ymin + bounds.ymax) / 2;
-        // console.warn('calculated BOUNDS: ' + bounds.xcenter + ' @ ' + bounds.ycenter);
+        bounds.xdiff = bounds.xmax - bounds.xmin;
+        bounds.ydiff = bounds.ymax - bounds.ymin;
 
-        // TODO: Scale the scale!!!
+        const scale = 22000 / Math.max(bounds.xdiff, bounds.ydiff);
+
+        // Projection function
         const projection = d3.geo.mercator()
             .center([bounds.ycenter, bounds.xcenter])
-            // .scale(scale * 30)
-            // .scale(7000)
+            .scale(scale)
             .translate([230, 230]);
 
 
@@ -155,7 +162,6 @@ class CountrymapController {
         //         .attr('width', outer[0][0].offsetWidth - margin.left - margin.right)
         //         .attr('height', outer[0][0].offsetHeight - margin.top - margin.bottom);
         // });
-        console.warn('DRAWN');
     }
 
     static countrymapFactory() {
