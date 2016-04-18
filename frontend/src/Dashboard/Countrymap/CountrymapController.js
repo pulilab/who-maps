@@ -8,10 +8,8 @@ import perfMockMap from './perfMockMap';
 import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
 import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 
-
 // import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
 // import mockGeoJsonDistricts from './mock/sirya/admin_level_5.geojson';
-
 
 // HUNGARY
 // import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
@@ -20,11 +18,11 @@ import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 class CountrymapController {
 
     constructor($element, $scope) {
+
         const vm = this;
         // BINDINGS
         // data / data to show, district names has to match with countryLvl2's
         // country / country name as string
-        // countryLvl1 / .geojson level 1 with borders, flag destination, and name
         // countryLvl2 / .geojson level 2 with districts
 
         vm.el = $element;
@@ -40,7 +38,6 @@ class CountrymapController {
             ]
         };
 
-        // vm.lastData = perfMockMap.data.slice(-1)[0];
         vm.boundNrs = _.reduce(perfMockMap.data.slice(-1)[0], (ret, value) => {
 
             if (typeof value !== 'object') {
@@ -61,12 +58,15 @@ class CountrymapController {
         vm.$onInit = () => {
             console.log('BINDINGS: \nvm.data: ' + vm.data + '\nvm.country: ' + vm.country);
             vm.drawMap();
+            window.EE.on('dashResized', vm.drawMap.bind(vm));
         };
     }
 
     drawMap() {
 
         const vm = this;
+
+        d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
         // Actual data fetch here!!
         const rewind = require('geojson-rewind');
@@ -134,20 +134,6 @@ class CountrymapController {
 
         // Repair x&y here!!
         const transform = 'translate(' + (width / 2) + ',' + (-borders.ycenter) + ')';
-
-        // Appending the districts
-        // const districts = element.selectAll('g')
-        //     .data(distrData.features)
-        //     .enter()
-        //     .append('g');
-
-        // districts.append('path')
-        //     .attr('d', d3.geo.path().projection(projection))
-        //     .attr('transform', transform)
-        //     .attr('class', 'd3district')
-        //     .on('mouseover', () => {
-        //         console.log('Hovered: wtf');
-        //     });
 
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
