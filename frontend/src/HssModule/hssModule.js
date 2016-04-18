@@ -2,21 +2,32 @@ import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import ngMaterial from 'angular-material';
 
-import HssModuleController from './HssModuleController';
-import Continuum from './Continuum/';
-import Interventions from './Interventions/';
-import Constraints from './Constraints/';
-import Applications from './Applications/';
-import ProjectScale from './ProjectScale/';
-import ProjectPartners from './ProjectPartners';
-import Hint from './Hint/hintComponent';
+/* global define, Promise */
+
 
 import hssTemplate from './HssModule.html';
 import './hssModule.scss';
 
 const moduleName = 'hss';
 
-function config($stateProvider) {
+const lazyLoader = (provider, element, type) => {
+    const prom = new Promise((resolve) => {
+        require([], require => {
+            const ctrl = require('./' + element);
+            if (type === 'component') {
+                provider.component(ctrl.default.name, ctrl.default);
+            }
+            if (type === 'controller') {
+                provider.register(element, ctrl.default.hssControllerFactory());
+            }
+            resolve();
+        });
+    });
+    return prom;
+};
+
+
+function config($stateProvider, $controllerProvider, $compileProvider) {
     $stateProvider
         .state(moduleName, {
             url: '/hss',
@@ -24,29 +35,49 @@ function config($stateProvider) {
             views: {
                 main: {
                     template: hssTemplate,
-                    controller: moduleName + '.hssModuleController',
-                    controllerAs: 'vm'
+                    controllerProvider: () => 'HssModuleController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        'ctrl': () => {
+                            return lazyLoader($controllerProvider, 'HssModuleController', 'controller');
+                        },
+                        'continuum': () => {
+                            return lazyLoader($compileProvider, 'Continuum/continuumComponent', 'component');
+                        },
+                        'interventions': () => {
+                            return lazyLoader($compileProvider, 'Interventions/interventionsComponent', 'component');
+                        },
+                        'constraints': () => {
+                            return lazyLoader($compileProvider, 'Constraints/constraintsComponent', 'component');
+                        },
+                        'applications': () => {
+                            return lazyLoader($compileProvider, 'Applications/applicationsComponent', 'component');
+                        },
+                        'projectScale': () => {
+                            return lazyLoader($compileProvider, 'ProjectScale/projectScaleComponent', 'component');
+                        },
+                        'projectPartners': () => {
+                            return lazyLoader($compileProvider, 'ProjectPartners/projectPartnersComponent', 'component');
+                        },
+                        'hint': () => {
+                            return lazyLoader($compileProvider, 'Hint/hintComponent', 'component');
+                        }
+                    }
+
                 }
             }
         });
 
 }
 
-config.$inject = ['$stateProvider'];
+config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
 
 angular.module(moduleName,
     [
         uiRoute,
         ngMaterial
     ])
-    .controller(moduleName + '.hssModuleController', HssModuleController.hssControllerFactory())
-    .component(Continuum.name, Continuum)
-    .component(Interventions.name, Interventions)
-    .component(Constraints.name, Constraints)
-    .component(Applications.name, Applications)
-    .component(ProjectScale.name, ProjectScale)
-    .component(ProjectPartners.name, ProjectPartners)
-    .component(Hint.name, Hint)
     .config(config);
+
 
 export default moduleName;

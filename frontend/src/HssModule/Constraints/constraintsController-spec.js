@@ -22,7 +22,7 @@ describe('constraintsController', () => {
         };
         cc.service = {
             postConstraints: () => {}
-        }
+        };
         cc.$onInit();
     });
 
@@ -57,6 +57,6 @@ describe('constraintsController', () => {
         cc.resizeCallback = cb;
         cc.checkSizeAndFireCallback();
         expect(cb).toHaveBeenCalled();
-    })
+    });
 
 });

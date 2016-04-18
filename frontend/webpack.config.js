@@ -51,7 +51,7 @@ const devPreLoaders = [
 
 module.exports = {
     entry: {
-        app: './src',
+        app: './src/index.js',
         vendor: [
             'angular', 'lodash',
             'eventemitter3', 'angular-material',
