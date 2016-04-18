@@ -20,76 +20,76 @@ const perfMockMap = {
     'data': [
         {
             date: '2015-12-12',
-            'Bo District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
-            },
-            'Kono District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
-            },
+            // 'Bo District': {
+            //     'Clients': 11,
+            //     'Health workers': 11,
+            //     'Facilities': 1
+            // },
+            // 'Kono District': {
+            //     'Clients': 22,
+            //     'Health workers': 22,
+            //     'Facilities': 2
+            // },
             'Tonkolili District': {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
+                'Clients': 33,
+                'Health workers': 33,
+                'Facilities': 3
             },
-            'Moyamba District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
-            },
+            // 'Moyamba District': {
+            //     'Clients': 44,
+            //     'Health workers': 44,
+            //     'Facilities': 4
+            // },
             'Bonthe District': {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
+                'Clients': 55,
+                'Health workers': 55,
+                'Facilities': 5
             },
-            'Port Loko District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
-            },
-            'Western Area Rural': {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
-            },
+            // 'Port Loko District': {
+            //     'Clients': 66,
+            //     'Health workers': 66,
+            //     'Facilities': 6
+            // },
+            // 'Western Area Rural': {
+            //     'Clients': 77,
+            //     'Health workers': 77,
+            //     'Facilities': 7
+            // },
             'Bombali District': {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
+                'Clients': 88,
+                'Health workers': 88,
+                'Facilities': 8
             },
-            'Western Area Urban': {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
-            },
+            // 'Western Area Urban': {
+            //     'Clients': 99,
+            //     'Health workers': 99,
+            //     'Facilities': 9
+            // },
             'Kambia District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
+                'Clients': 100,
+                'Health workers': 100,
+                'Facilities': 10
             },
-            'Kailahun District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
-            },
-            'Pujehun District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
-            },
+            // 'Kailahun District': {
+            //     'Clients': 101,
+            //     'Health workers': 101,
+            //     'Facilities': 11
+            // },
+            // 'Pujehun District': {
+            //     'Clients': 102,
+            //     'Health workers': 102,
+            //     'Facilities': 12
+            // },
             'Kenema District': {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
-            },
-            'Koinadugu District': {
-                'Clients': 156,
-                'Health workers': 13,
-                'Facilities': 2
+                'Clients': 103,
+                'Health workers': 103,
+                'Facilities': 13
             }
+            // 'Koinadugu District': {
+            //     'Clients': 104,
+            //     'Health workers': 104,
+            //     'Facilities': 14
+            // }
         }
     ]
 };

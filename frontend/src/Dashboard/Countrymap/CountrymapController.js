@@ -132,6 +132,9 @@ class CountrymapController {
 
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
+
+            const gotData = typeof perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name] === 'object';
+
             element
                 .append('path')
                 .datum({
@@ -142,12 +145,13 @@ class CountrymapController {
                 .attr('d', d3.geo.path().projection(projection))
                 .attr('transform', transform)
                 .attr('class', 'd3district')
+                .classed('d3district-data', gotData)
                 .on('mouseover', () => {
-                    vm.scope.$evalAsync();
-                    vm.activeDistrict = {
-                        name: distrData.features[i].name,
-                        data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name]
-                    };
+                        vm.scope.$evalAsync();
+                        vm.activeDistrict = {
+                            name: distrData.features[i].name,
+                            data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name]
+                        };
                 })
                 .on('mouseout', () => {
                     vm.scope.$evalAsync();
@@ -159,7 +163,6 @@ class CountrymapController {
     static countrymapFactory() {
         require('./Countrymap.scss');
         require('d3');
-        require('flag-icon-css/sass/flag-icon-base.scss');
 
         function countrymap($element, $scope) {
             return new CountrymapController($element, $scope);
