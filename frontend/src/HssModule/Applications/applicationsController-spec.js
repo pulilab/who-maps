@@ -293,6 +293,17 @@ describe('applicationsController', () => {
             .value();
     });
 
+    it('should have a function that enable all the sub applicaiton when entering edit mode', () => {
+        expect(ac.applicationRow[3].disabled).toBeTruthy();
+        ac.openAllSubApp();
+        expect(ac.applicationRow[3].disabled).toBeTruthy();
+        ac.editMode = true;
+        ac.openAllSubApp();
+        _.forEach(ac.applicationRow, tile => {
+            expect(tile.disabled).toBeFalsy();
+        });
+    })
+
     it('should have a function that counts click and execute appropriate'
     + 'functions based on click number, only in edit mode', () => {
         spyOn(ac, 'tileBalloonStartHandler');
@@ -428,7 +439,7 @@ describe('applicationsController', () => {
 
     it('should have a function to save the taxonomy', () => {
         spyOn(ac.hs, 'postTaxonomy');
-        ac.saveTaxonomy();
+        ac.saveTaxonomy(0, 0);
         expect(ac.hs.postTaxonomy).toHaveBeenCalled();
     });
 

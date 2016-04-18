@@ -27,11 +27,18 @@ class ApplicationsController {
     handleEditMode(value) {
         this.editMode = value;
         this.processRows();
+        this.openAllSubApp();
     }
 
     layoutDone() {
         this.layoutReady = true;
         this.EE.emit('hssInnerLayoutDone', 'application');
+    }
+
+    openAllSubApp() {
+        _.forEach(this.rowObject.father_0, mainRow => {
+            this.toggleSubApp(mainRow.columnId_header, true);
+        });
     }
 
 
@@ -240,6 +247,7 @@ class ApplicationsController {
     }
 
     saveTaxonomy(appId, subAppId, value) {
+        this.rowObject['father_' + appId]['rowIndex_' + subAppId].columnId_tax.content = value;
         this.hs.postTaxonomy(appId, subAppId, value);
     }
 
@@ -296,12 +304,11 @@ class ApplicationsController {
 
     processData(cols) {
         _.forEach(this.data.applications, data => {
-            let fatherId = data.subapp_id;
-            let rowIndex = data.app_id - 1;
+            const fatherId = data.app_id;
+            const rowIndex = data.subapp_id - 1;
 
-            if (data.subapp_id !== 0) {
-                fatherId = data.app_id;
-                rowIndex = data.subapp_id - 1;
+            if (rowIndex < 0) {
+                return;
             }
 
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex]['columnId_' + data.column_id];
@@ -324,12 +331,10 @@ class ApplicationsController {
         });
 
         _.forEach(this.data.taxonomies, tax => {
-            let fatherId = tax.subapp_id;
-            let rowIndex = tax.app_id;
-
-            if (tax.subapp_id !== 0) {
-                fatherId = tax.app_id;
-                rowIndex = tax.subapp_id;
+            const rowIndex = tax.subapp_id;
+            const fatherId = tax.app_id;
+            if (rowIndex < 0) {
+                return;
             }
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex].columnId_tax;
             if (tile) {
@@ -350,12 +355,12 @@ class ApplicationsController {
         });
     }
 
-    toggleSubApp(tile) {
+    toggleSubApp(tile, forceOpening) {
         if (!tile.subApplications || !this.editMode) {
             return;
         }
         this.layoutReady = false;
-        tile.subAppOpen = !tile.subAppOpen;
+        tile.subAppOpen = !tile.subAppOpen || forceOpening;
         _.forEach(this.rowObject['father_' + tile.applicationId], value => {
             _.forEach(value, item => {
                 item.disabled = !tile.subAppOpen;
@@ -488,13 +493,15 @@ class ApplicationsController {
             return;
         }
 
-
         const applicationStyle = this.enableRow(tile);
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;
                 value.bubbleDrawn = true;
                 value.status = applicationStyle;
+                const fatherTile = this.rowObject.father_0['rowIndex_' + (value.fatherId - 1)].columnId_header;
+                fatherTile.rowEnabled = true;
+                fatherTile.status = this.enableRow(tile);
             }
             else {
                 value.invisible = true;
@@ -557,7 +564,22 @@ class ApplicationsController {
             value.rowEnabled = false;
             return value;
         });
+        this.checkIfMainIsEnabled(bubble);
         this.searchForFilledColumns();
+    }
+
+    checkIfMainIsEnabled(bubble) {
+        let isMainEnabled = false;
+        _.forEach(this.rowObject['father_' + bubble.fatherId], row => {
+            _.forEach(row, column => {
+                isMainEnabled = isMainEnabled || column.bubbleDrawn;
+            });
+        });
+        if (!isMainEnabled) {
+            const fatherTile = this.rowObject.father_0['rowIndex_' + (bubble.fatherId - 1)].columnId_header;
+            fatherTile.rowEnabled = true;
+            fatherTile.status = '';
+        }
     }
 
     confirmDeleteBubble(bubble) {

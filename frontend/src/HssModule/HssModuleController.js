@@ -32,9 +32,7 @@ class HssModuleController extends Protected {
         this.projectId = $state.params.appName;
         this.hs = new HssModuleService(this.projectId);
 
-        this.$onInit = () => {
-            this.introJsSource = introJs;
-        };
+        this.introJsSource = introJs;
 
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 

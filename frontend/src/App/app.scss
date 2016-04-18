@@ -46,6 +46,13 @@ ui-view > md-content {
     padding: $button-padding-wide;
   }
 
+  &.md-small {
+    .material-icons {
+      margin-top: 6px;
+      font-size: 16px;
+    }
+  }
+
   &.md-fab {
     &.md-tiny {
       padding: 0;
@@ -187,47 +194,39 @@ md-checkbox.small {
     height: 48px;
     background-color: #1A237E;
     font-size: $body-font-size-base;
+
+    .md-button {
+      margin-left: 10px;
+    }
   }
 
   .app-title {
     display: inline-block;
-    margin-right: 20px;
-    // color: $color-primary-muted;
-    // text-transform: uppercase;
-    // font-weight: 500;
-    // font-size: $body-font-size-base;
-    line-height: 48px;
+    margin: 0 10px 0 0 !important;
+    padding: 4px 0;
+    min-height: 28px;
+    height: 28px;
 
     > span {
       display: inline-block;
-      width: 155px;
-      height: 100%;
+      min-width: 155px;
+      height: 24px;
       background: red url("./images/dha-logo.svg") left center no-repeat;
+      text-indent: -999em;
 
       @include text-hide();
-    }
-  }
-
-  .md-menu {
-    .has-message {
-      color: $color-white !important;
     }
   }
 }
 
 .md-medium-tall {
-    // color: $color-primary-muted;
+    color: $color-primary-muted !important;
 
   .md-toolbar-tools {
     background-color: $color-primary;
-
-    .md-button {
-      margin: 0 0 0 10px;
-    }
   }
 
   .project-selector {
-
     md-input-container {
       margin: 0 !important;
       padding: 0 !important;
@@ -242,23 +241,32 @@ md-checkbox.small {
     }
   }
 
-  .project-menu {
-    .md-button {
-      margin: 0 20px 0 0;
+  .project-submenu {
+    padding-top: 8px;
 
-      &:first-child {
-        margin-left: -6px;
-      }
+    .md-button {
+      margin-left: 20px;
+    }
+  }
+
+  .project-mainmenu {
+    padding-bottom: 8px;
+
+    .md-button {
+      position: relative;
+      margin-right: 20px;
+      overflow: visible;
     }
   }
 
   .project-info {
+    padding-bottom: 8px;
     font-size: $caption-font-size-base;
 
     > span {
       display: inline-block;
       float: left;
-      margin-left: 25px;
+      margin-left: 20px;
       min-height: 36px;
       line-height: 36px;
 
@@ -266,22 +274,57 @@ md-checkbox.small {
 
     .md-button {
       float: right;
-    }
-
-    .material-icons {
-      position: relative;
-      top: 3px;
-      font-size: 16px;
+      margin: 0 0 0 5px;
     }
   }
 }
 
 .main-toolbar,
 .md-medium-tall {
-  .md-button .md-light,
-  .md-button .md-icon,
-  .md-button span {
-    // color: $color-primary-muted;
+  .md-button {
+    min-width: auto;
+    margin: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    background-color: transparent !important;
+    border-radius: 0;
+
+    .material-icons,
+    > span {
+      width: auto;
+      color: $color-primary-muted !important;
+      transition: $swift-ease-out;
+    }
+
+    &:hover {
+      .material-icons,
+      > span {
+        color: $color-white !important;
+      }
+    }
+
+    &.active {
+      > span {
+        position: relative;
+        color: $color-white !important;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: $color-accent;
+      }
+    }
+  }
+
+  .md-menu {
+    .has-message {
+      color: $color-white !important;
+    }
   }
 }
 
