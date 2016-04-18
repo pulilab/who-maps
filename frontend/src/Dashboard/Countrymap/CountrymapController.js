@@ -5,15 +5,15 @@ import _ from 'lodash';
 import perfMockMap from './perfMockMap';
 
 // SIERRA LEONE
-import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
-import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
+// import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
+// import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 
 // import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
 // import mockGeoJsonDistricts from './mock/sirya/admin_level_5.geojson';
 
 // HUNGARY
-// import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
-// import mockGeoJsonDistricts from './mock/hungary/admin_level_5.geojson';
+import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
+import mockGeoJsonDistricts from './mock/hungary/admin_level_5.geojson';
 
 class CountrymapController {
 
@@ -38,6 +38,7 @@ class CountrymapController {
             ]
         };
 
+        // Aggregates the values of districts to show them all
         vm.boundNrs = _.reduce(perfMockMap.data.slice(-1)[0], (ret, value) => {
 
             if (typeof value !== 'object') {
@@ -56,9 +57,8 @@ class CountrymapController {
         });
 
         vm.$onInit = () => {
-            console.log('BINDINGS: \nvm.data: ' + vm.data + '\nvm.country: ' + vm.country);
             vm.drawMap();
-            window.EE.on('dashResized', vm.drawMap.bind(vm));
+            // window.EE.on('dashResized', vm.drawMap.bind(vm));
         };
     }
 
@@ -68,72 +68,58 @@ class CountrymapController {
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
-        // Actual data fetch here!!
+        // Will fetch rewinded data from the backend
         const rewind = require('geojson-rewind');
-        // const distrData = mockGeoJsonDistricts;
         const distrData = rewind(mockGeoJsonDistricts);
 
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
 
-        const outerWidth = outer[0][0].offsetWidth;
-        const outerHeight = outer[0][0].offsetHeight;
+        // const outerWidth = outer[0][0].offsetWidth;
+        // const outerHeight = outer[0][0].offsetHeight;
 
-        const margin = {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        };
-        const width = outerWidth - margin.left - margin.right;
-        const height = outerHeight - margin.top - margin.bottom;
+        // const margin = {
+        //     top: 0,
+        //     right: 0,
+        //     bottom: 0,
+        //     left: 0
+        // };
+        // const width = outerWidth - margin.left - margin.right;
+        // const height = outerHeight - margin.top - margin.bottom;
 
-        const element = outer.append('svg').attr('class', 'countrymap');
+        const element = outer.append('svg')
+            .attr('class', 'countrymap')
+            .attr('width', 460)
+            .attr('height', 460);
 
-        element
-            .attr('width', outerWidth)
-            .attr('height', outerHeight);
-
-        // const tooltip = element.select(function d3GetParent() { return this.parentNode; })
-        //     .append('div')
-        //     .attr('class', 'cmtooltip')
-        //     .style('opacity', 0);
-
-
-        // This is a bit heavy to do on the frontend
-        const borders = distrData.features.reduce((ret, region) => {
+        // This may be a bit heavy to do on the frontend...
+        // TODO: Perf: for cycles instead
+        const bounds = distrData.features.reduce((ret, region) => {
             region.geometry.coordinates[0][0].forEach(points => {
-                ret.xmin = Math.min(ret.xmin, points[0]);
-                ret.xmax = Math.max(ret.xmax, points[0]);
-                ret.ymin = Math.min(ret.ymin, points[1]);
-                ret.ymax = Math.max(ret.ymax, points[1]);
+                ret.xmin = ret.xmin > points[1] ? points[1] : ret.xmin;
+                ret.xmax = ret.xmax < points[1] ? points[1] : ret.xmax;
+                ret.ymin = ret.ymin > points[0] ? points[0] : ret.ymin;
+                ret.ymax = ret.ymax < points[0] ? points[0] : ret.ymax;
             });
             return ret;
         }, {
-            xmin: Infinity,
-            xmax: 0,
-            ymin: Infinity,
-            ymax: 0
+            xmin: 90,
+            xmax: -90,
+            ymin: 180,
+            ymax: -180
         });
-        borders.xcenter = (borders.xmin + borders.xmax) / 2;
-        borders.ycenter = (borders.ymin + borders.ymax) / 2;
+        bounds.xcenter = (bounds.xmin + bounds.xmax) / 2;
+        bounds.ycenter = (bounds.ymin + bounds.ymax) / 2;
+        // console.warn('calculated BOUNDS: ' + bounds.xcenter + ' @ ' + bounds.ycenter);
 
-
-        const scale = Math.max(
-            width / (borders.xmax - borders.xmin),
-            height / (borders.ymax - borders.ymin)
-        );
-        console.log(scale);
-
-        // Repair scale here!!
+        // TODO: Scale the scale!!!
         const projection = d3.geo.mercator()
-            .center([borders.xcenter, borders.ycenter])
+            .center([bounds.ycenter, bounds.xcenter])
             // .scale(scale * 30)
-            .scale(5000);
+            // .scale(7000)
+            .translate([230, 230]);
 
-        // Repair x&y here!!
-        const transform = 'translate(' + (width / 2) + ',' + (-borders.ycenter) + ')';
 
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
@@ -149,7 +135,6 @@ class CountrymapController {
                     features: [distrData.features[i]]
                 })
                 .attr('d', d3.geo.path().projection(projection))
-                .attr('transform', transform)
                 .attr('class', 'd3district')
                 .classed('d3district-data', gotData)
                 .on('mouseover', () => {
@@ -164,6 +149,13 @@ class CountrymapController {
                     vm.activeDistrict.name = '';
                 });
         }
+
+        // window.EE.on('dashResized', () => {
+        //     element
+        //         .attr('width', outer[0][0].offsetWidth - margin.left - margin.right)
+        //         .attr('height', outer[0][0].offsetHeight - margin.top - margin.bottom);
+        // });
+        console.warn('DRAWN');
     }
 
     static countrymapFactory() {
