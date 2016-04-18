@@ -1,5 +1,7 @@
 /* global d3 */
 
+import _ from 'lodash';
+
 import perfMockMap from './perfMockMap';
 
 // SIERRA LEONE
@@ -37,7 +39,24 @@ class CountrymapController {
                 { placeholder3: 2 }
             ]
         };
-        // vm.watch = $scope.$watch;
+
+        // vm.lastData = perfMockMap.data.slice(-1)[0];
+        vm.boundNrs = _.reduce(perfMockMap.data.slice(-1)[0], (ret, value) => {
+
+            if (typeof value !== 'object') {
+                return ret;
+            }
+
+            ret.Clients += value.Clients;
+            ret['Health workers'] += value['Health workers'];
+            ret.Facilities += value.Facilities;
+
+            return ret;
+        }, {
+            'Clients': 0,
+            'Health workers': 0,
+            'Facilities': 0
+        });
 
         vm.$onInit = () => {
             console.log('BINDINGS: \nvm.data: ' + vm.data + '\nvm.country: ' + vm.country);
@@ -133,7 +152,8 @@ class CountrymapController {
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
 
-            const gotData = typeof perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name] === 'object';
+            const gotData = typeof perfMockMap
+                .data[perfMockMap.data.length - 1][distrData.features[i].name] === 'object';
 
             element
                 .append('path')
@@ -147,11 +167,11 @@ class CountrymapController {
                 .attr('class', 'd3district')
                 .classed('d3district-data', gotData)
                 .on('mouseover', () => {
-                        vm.scope.$evalAsync();
-                        vm.activeDistrict = {
-                            name: distrData.features[i].name,
-                            data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name]
-                        };
+                    vm.scope.$evalAsync();
+                    vm.activeDistrict = {
+                        name: distrData.features[i].name,
+                        data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name]
+                    };
                 })
                 .on('mouseout', () => {
                     vm.scope.$evalAsync();
