@@ -87,33 +87,34 @@ class CountrymapController {
             .attr('height', 460);
 
         // This may be a bit heavy to do on the frontend...
-        // TODO: Perf: for cycles instead
-        const bounds = distrData.features.reduce((ret, region) => {
-            region.geometry.coordinates[0][0].forEach(points => {
-                ret.xmin = ret.xmin > points[1] ? points[1] : ret.xmin;
-                ret.xmax = ret.xmax < points[1] ? points[1] : ret.xmax;
-                ret.ymin = ret.ymin > points[0] ? points[0] : ret.ymin;
-                ret.ymax = ret.ymax < points[0] ? points[0] : ret.ymax;
-            });
-            return ret;
-        }, {
+        const bounds = {
             xmin: 180,
             xmax: -180,
             ymin: 180,
             ymax: -180
-        });
-        bounds.xcenter = (bounds.xmin + bounds.xmax) / 2;
-        bounds.ycenter = (bounds.ymin + bounds.ymax) / 2;
+        };
+
+        for (let i = 0; i < distrData.features.length; i += 1) {
+
+            const points = distrData.features[i].geometry.coordinates[0][0];
+            const l = points.length;
+
+            for (let j = 0; j < l; j += 1) {
+                bounds.xmin = bounds.xmin > points[j][1] ? points[j][1] : bounds.xmin;
+                bounds.xmax = bounds.xmax < points[j][1] ? points[j][1] : bounds.xmax;
+                bounds.ymin = bounds.ymin > points[j][0] ? points[j][0] : bounds.ymin;
+                bounds.ymax = bounds.ymax < points[j][0] ? points[j][0] : bounds.ymax;
+            }
+        }
+
         bounds.xdiff = bounds.xmax - bounds.xmin;
         bounds.ydiff = bounds.ymax - bounds.ymin;
 
         const scale = 20000 / Math.max(bounds.xdiff, bounds.ydiff);
 
-        // Projection function
         const projection = d3.geo.mercator()
-            .center([bounds.ycenter, bounds.xcenter])
-            .scale(scale)
-            .translate([230, 230]);
+            // could use static value, but then the strokes wouldnt have the same width
+            .scale(scale);
 
 
         // Appending the districts
@@ -156,7 +157,7 @@ class CountrymapController {
             maxZoom: 10,
             contain: false,
             center: true,
-            refreshRate: 'auto',
+            refreshRate: 'auto'
         };
 
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
