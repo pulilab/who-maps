@@ -68,6 +68,7 @@
     "geojson-rewind": "^0.1.0",
     "intro.js": "https://github.com/lordfuoco/intro.js",
     "lodash": "^4.6.1",
+    "svg-pan-zoom": "^3.2.6",
     "whatwg-fetch": "^0.11.0"
   }
 }

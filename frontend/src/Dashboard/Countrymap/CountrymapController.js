@@ -62,8 +62,8 @@ class CountrymapController {
         });
 
         vm.$onInit = () => {
+            vm.svgPanZoom = require('svg-pan-zoom');
             vm.drawMap();
-            // window.EE.on('dashResized', vm.drawMap.bind(vm));
         };
     }
 
@@ -80,18 +80,6 @@ class CountrymapController {
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
-
-        // const outerWidth = outer[0][0].offsetWidth;
-        // const outerHeight = outer[0][0].offsetHeight;
-
-        // const margin = {
-        //     top: 0,
-        //     right: 0,
-        //     bottom: 0,
-        //     left: 0
-        // };
-        // const width = outerWidth - margin.left - margin.right;
-        // const height = outerHeight - margin.top - margin.bottom;
 
         const element = outer.append('svg')
             .attr('class', 'countrymap')
@@ -119,7 +107,7 @@ class CountrymapController {
         bounds.xdiff = bounds.xmax - bounds.xmin;
         bounds.ydiff = bounds.ymax - bounds.ymin;
 
-        const scale = 22000 / Math.max(bounds.xdiff, bounds.ydiff);
+        const scale = 20000 / Math.max(bounds.xdiff, bounds.ydiff);
 
         // Projection function
         const projection = d3.geo.mercator()
@@ -157,11 +145,21 @@ class CountrymapController {
                 });
         }
 
-        // window.EE.on('dashResized', () => {
-        //     element
-        //         .attr('width', outer[0][0].offsetWidth - margin.left - margin.right)
-        //         .attr('height', outer[0][0].offsetHeight - margin.top - margin.bottom);
-        // });
+        const zoomOptions = {
+            panEnabled: true,
+            controlIconsEnabled: true,
+            zoomEnabled: true,
+            mouseWheelZoomEnabled: true,
+            preventMouseEventsDefault: true,
+            zoomScaleSensitivity: 0.2,
+            minZoom: 0.5,
+            maxZoom: 10,
+            contain: false,
+            center: true,
+            refreshRate: 'auto',
+        };
+
+        vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
     }
 
     static countrymapFactory() {
