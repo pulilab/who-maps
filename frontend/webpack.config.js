@@ -66,6 +66,11 @@ module.exports = {
         filename: 'build.[chunkhash].js',
         chunkFilename: '[chunkhash].js'
     },
+    resolve: {
+            alias: {
+                Common: 'src/Common/'
+            }
+    },
     module: {
         preLoaders: siteBuild ? [] : devPreLoaders,
 

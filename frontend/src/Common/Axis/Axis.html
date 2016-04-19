@@ -1,0 +1,20 @@
+<div md-whiteframe="2" layout="row">
+    <div flex="10">
+        <img ng-src="{{vm.axisPicture}}"
+    </div>
+    <div flex="20" class="axis" layout="column">
+        <div class="md-block">
+            <span>{{vm.axisName}}</span>
+        </div>
+        <div class="scores" layout="row">
+            <div flex="50">
+                P
+                <span ng-class="{{vm.axisPercentage}}"></span>
+            </div>
+            <div flex="50">
+                S
+                <span ng-class="{{vm.axisScore}}"></span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,7 @@ import angular from 'angular';
 
 import _template from './MapsToolkitModule.html';
 import uiRoute from 'angular-ui-router';
+import { Components } from '../Common/';
 
 const moduleName = 'maps';
 
@@ -46,7 +47,12 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
 
 config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
 
-angular.module(moduleName, [uiRoute])
+angular.module(moduleName,
+    [
+        uiRoute,
+        Components
+    ]
+)
     .config(config);
 
 export default moduleName;
