@@ -18,7 +18,7 @@ describe('axisController', () => {
     });
     it('should have a function that emit a domain change event', () => {
         spyOn(window.EE, 'emit');
-        ac.changeDomain({ index:0 });
+        ac.changeDomain({ index: 0 });
         expect(window.EE.emit).toHaveBeenCalled();
     });
 
