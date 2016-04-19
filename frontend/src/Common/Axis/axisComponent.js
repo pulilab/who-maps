@@ -6,7 +6,10 @@ const axisComponent = {
     controller: AxisController.axisFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'axis'
+    name: 'axis',
+    bindings: {
+        axisData: '<'
+    }
 };
 
 export default axisComponent;
