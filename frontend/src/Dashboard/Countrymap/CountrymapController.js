@@ -2,8 +2,7 @@
 
 import _ from 'lodash';
 import topojson from 'topojson';
-
-console.log(topojson);
+import svgPanZoom from 'svg-pan-zoom';
 
 import perfMockMap from './perfMockMap';
 
@@ -11,21 +10,7 @@ import perfMockMap from './perfMockMap';
 import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
 // import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 import topoSource from './mock/sierra-leone/topoTest.json';
-
 const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
-console.log(mockGeoJsonDistricts);
-
-// PAKISTAN
-// import mockGeoJsonCountry from './mock/pakistan/admin_level_2.geojson';
-// import mockGeoJsonDistricts from './mock/pakistan/admin_level_4.geojson';
-
-// SYRIA
-// import mockGeoJsonCountry from './mock/syria/admin_level_2.geojson';
-// import mockGeoJsonDistricts from './mock/syria/admin_level_4.geojson';
-
-// HUNGARY
-// import mockGeoJsonCountry from './mock/hungary/admin_level_2.geojson';
-// import mockGeoJsonDistricts from './mock/hungary/admin_level_5.geojson';
 
 class CountrymapController {
 
@@ -33,13 +18,14 @@ class CountrymapController {
 
         const vm = this;
         // BINDINGS
-        // data / data to show, district names has to match with countryLvl2's
+        // data / data to show, district names has to match with countryLvl4-8's
         // country / country name as string
         // countryLvl2 / .geojson level 2 with districts
 
         vm.el = $element;
         vm.scope = $scope;
 
+        // now ONLY because it contains map URL, and country name...
         vm.mockGeoJsonCountry = mockGeoJsonCountry;
         vm.activeDistrict = {
             name: '',
@@ -69,7 +55,7 @@ class CountrymapController {
         });
 
         vm.$onInit = () => {
-            vm.svgPanZoom = require('svg-pan-zoom');
+            vm.svgPanZoom = svgPanZoom;
             vm.drawMap();
         };
     }
@@ -80,10 +66,11 @@ class CountrymapController {
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
-        // Will fetch already rewinded data from the backend
+        // If any map comes with mixed winding order, do:
         // const rewind = require('geojson-rewind');
         // const distrData = rewind(mockGeoJsonDistricts);
         const distrData = mockGeoJsonDistricts;
+
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
@@ -93,7 +80,6 @@ class CountrymapController {
             .attr('width', 460)
             .attr('height', 460);
 
-        // This may be a bit heavy to do on the frontend...
         const bounds = {
             xmin: 180,
             xmax: -180,
@@ -120,7 +106,6 @@ class CountrymapController {
         const scale = 20000 / Math.max(bounds.xdiff, bounds.ydiff);
 
         const projection = d3.geo.mercator()
-            // could use static value, but then the strokes wouldnt have the same width
             .scale(scale);
 
 
