@@ -8,7 +8,7 @@ const $scope = {
 
 const $state = {
     params: {}
-}
+};
 
 describe('HssModuleController', () => {
 

@@ -17,11 +17,13 @@ class SignupService extends SimpleApi {
             return answer.json();
         })
         .then(json => {
-            console.log(status);
             return {
                 success: status < 400,
                 data: json
             };
+        })
+        .catch(error => {
+            console.warn('Error in signup: ', error);
         });
     }
 }

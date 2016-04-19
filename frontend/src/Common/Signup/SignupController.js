@@ -30,7 +30,9 @@ class SignupController {
             this.inProgress = true;
             this.ss.signup(this.register)
             .then(result => {
-                this.processRegistrationResult(result, signupForm);
+                if (result) {
+                    this.processRegistrationResult(result, signupForm);
+                }
             });
         }
     }
