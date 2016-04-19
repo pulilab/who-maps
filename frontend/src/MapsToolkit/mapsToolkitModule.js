@@ -1,13 +1,29 @@
 import angular from 'angular';
-import MapsToolkitModuleController from './MapsToolkitModuleController';
-import sampleComponent from './SampleComponent/sampleComponent';
+
+/* global define  Promise */
 
 import _template from './MapsToolkitModule.html';
 import uiRoute from 'angular-ui-router';
 
-const moduleName = 'mapsToolkitModule';
+const moduleName = 'maps';
 
-function config($stateProvider) {
+const lazyLoader = (provider, element, type) => {
+    const prom = new Promise((resolve) => {
+        require([], require => {
+            const ctrl = require('./' + element);
+            if (type === 'component') {
+                provider.component(ctrl.default.name, ctrl.default);
+            }
+            if (type === 'controller') {
+                provider.register(element, ctrl.default.mapsControllerFactory());
+            }
+            resolve();
+        });
+    });
+    return prom;
+};
+
+function config($stateProvider, $controllerProvider, $compileProvider) {
     $stateProvider
         .state(moduleName,
         {
@@ -16,18 +32,21 @@ function config($stateProvider) {
             views: {
                 main: {
                     template: _template,
-                    controller: moduleName + '.' + moduleName + 'Controller',
-                    controllerAs: 'vm'
+                    controllerProvider: () => 'MapsToolkitModuleController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        'ctrl': () => {
+                            return lazyLoader($controllerProvider, 'MapsToolkitModuleController', 'controller');
+                        }
+                    }
                 }
             }
         });
 }
 
-config.$inject = ['$stateProvider'];
+config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .controller(moduleName + '.' + moduleName + 'Controller', MapsToolkitModuleController)
-    .component('sampleComponent', sampleComponent)
     .config(config);
 
 export default moduleName;
