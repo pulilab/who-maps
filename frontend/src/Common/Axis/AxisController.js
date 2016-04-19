@@ -14,7 +14,6 @@ class AxisController {
             this.axisData = require('./axisMockData').default;
         }
         this.EE = window.EE;
-        console.log(this.axisData);
         this.axisName = this.axisData.axis.split('.')[1];
         const axisName = this.axisData.axis.split('.')[0].replace(' ', '').toLowerCase();
         this.axisClass = axisName;
@@ -36,7 +35,6 @@ class AxisController {
     }
 
     changeDomain(domain) {
-        console.log(domain.index)
         this.EE.emit('mapsDomainChange', domain.index);
     }
 
