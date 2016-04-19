@@ -1,12 +1,19 @@
 /* global d3 */
 
 import _ from 'lodash';
+import topojson from 'topojson';
+
+console.log(topojson);
 
 import perfMockMap from './perfMockMap';
 
 // SIERRA LEONE
 import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
-import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
+// import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
+import topoSource from './mock/sierra-leone/topoTest.json';
+
+const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
+console.log(mockGeoJsonDistricts);
 
 // PAKISTAN
 // import mockGeoJsonCountry from './mock/pakistan/admin_level_2.geojson';
@@ -74,9 +81,9 @@ class CountrymapController {
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
         // Will fetch already rewinded data from the backend
-        const rewind = require('geojson-rewind');
-        const distrData = rewind(mockGeoJsonDistricts);
-
+        // const rewind = require('geojson-rewind');
+        // const distrData = rewind(mockGeoJsonDistricts);
+        const distrData = mockGeoJsonDistricts;
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
@@ -121,7 +128,7 @@ class CountrymapController {
         for (let i = 0; i < distrData.features.length; i += 1) {
 
             const gotData = typeof perfMockMap
-                .data[perfMockMap.data.length - 1][distrData.features[i].name] === 'object';
+                .data[perfMockMap.data.length - 1][distrData.features[i].properties.name] === 'object';
 
             element
                 .append('path')
@@ -136,8 +143,8 @@ class CountrymapController {
                 .on('mouseover', () => {
                     vm.scope.$evalAsync();
                     vm.activeDistrict = {
-                        name: distrData.features[i].name,
-                        data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].name]
+                        name: distrData.features[i].properties.name,
+                        data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].properties.name]
                     };
                 })
                 .on('mouseout', () => {

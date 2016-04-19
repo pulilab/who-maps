@@ -2,5 +2,8 @@
   "name": "DashboardModule",
   "version": "0.0.0",
   "private": true,
-  "main": "./dashboardModule.js"
+  "main": "./dashboardModule.js",
+  "dependencies": {
+    "topojson": "^1.6.24"
+  }
 }
