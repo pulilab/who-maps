@@ -3,7 +3,8 @@ import DashboardModuleController from './DashboardModuleController';
 import linechart from './Linechart/linechart';
 import countrymap from './CountryMap/countrymap';
 
-import _template from './DashboardModule.html';
+import _template from './Dashboard.html';
+import './Dashboard.scss';
 import uiRoute from 'angular-ui-router';
 
 const moduleName = 'dashboardModule';

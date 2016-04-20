@@ -1,0 +1,42 @@
+#dashcontainer {
+
+    margin: 0 auto 0 auto;
+    padding: 20px 30px 0 30px;
+    max-width: 1440px;
+
+    .dashrow {
+
+        &.dashrow-upper {
+            height: 496px;
+        }
+
+        &.dashrow-lower {
+            height: 543px;
+        }
+
+        .dashsection {
+
+            &.dashsection-left {
+                margin-right: 20px;
+            }
+
+            &#dashsection-stats {
+                width: 100px;
+            }
+        }
+
+        .dash-cardholder {
+
+            .dash-subhead {
+                text-align: center;
+                margin: 16px 0;
+            }
+
+            md-card {
+                // Here come sthe stuff!!
+                margin: 0 0 0 0;
+
+            }
+        }
+    }
+}
