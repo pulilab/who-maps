@@ -1,4 +1,4 @@
-<md-content class="md-padding maps-toolkit" layout="column">
+<div class="md-padding maps-toolkit" layout="column">
     <h1>MAPS Toolkit module loaded!</h1>
 
     <div layout="row" md-whiteframe class="axis-row">
@@ -17,10 +17,49 @@
 
     <br/>
 
-    <div layout="row" class="domain-questions" md-whiteframe class="domain-block">
-        <h4>{{vm.domain.domain}}</h4>
+    <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
+        <h4>{{vm.domain.domain}} ({{vm.domain.domain_max}} points)</h4>
+        <p>
+            {{vm.domainStructure.sub_text}}
+        </p>
+        <md-content layout="column" class="md-block" >
+        <section ng-repeat="question in vm.domainStructure.questions" >
+            <md-subheader >
+                <div layout="row" flex="100">
+
+                <div flex="65">
+                    {{question.id}}.{{question.text}} ({{vm.domain.questions[$index].question_max}} Points)
+                </div>
+                <div flex="10">
+                    No
+                </div>
+                <div flex="10">
+                    Yes
+                </div>
+                <div flex="15">
+                    Points Earned
+                </div>
+            </div>
+            </md-subheader>
+
+            <div layout="row" flex="100" ng-repeat="answer in question.answerTemplate track by $index">
+                <div flex="65" ng-bind-html="answer">
+
+                </div>
+                <div flex="10">
+
+                </div>
+                <div flex="10">
+
+                </div>
+                <div flex="15">
+                    {{vm.domain.questions[$parent.$index].answers[$index]}}
+                </div>
+            </div>
+        </section>
+        </md-content>
     </div>
 
 
 
-</md-content>
+</div>

@@ -1,5 +1,5 @@
 import angular from 'angular';
-
+import ngSanitize from 'angular-sanitize';
 /* global define  Promise, $compileProvider */
 
 import _template from './MapsToolkitModule.html';
@@ -50,6 +50,7 @@ config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
 angular.module(moduleName,
     [
         uiRoute,
+        ngSanitize,
         Components
     ]
 )
