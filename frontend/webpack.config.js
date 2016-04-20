@@ -1,18 +1,44 @@
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanPlugin = require('clean-webpack-plugin');
+
 // Determine if is a production build based on environment variable
 const production = process.argv.indexOf('--dist') > -1;
 const siteBuild = process.argv.indexOf('--site-build') > -1;
 
+const PATH = {
+    build: 'builds'
+};
+
+
+const basePlugins = [
+    new webpack.DefinePlugin({
+        API: production ? '"/api/"' : '"/api/"'
+    }),
+    new webpack.optimize.CommonsChunkPlugin(
+        'vendor', 'vendor.js', Infinity
+    ),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
+    new HtmlWebpackPlugin({
+        template: 'index.ejs',
+        title: 'Digital Healt Atlas',
+        inject: false
+    }),
+    new CleanPlugin(PATH.build)
+];
+
 const distPlugins = [
     new webpack.optimize.UglifyJsPlugin(
         {
-            compress: {
-                warnings: false
-            }
+            sourceMap: false
         }
-    )];
+    ),
+    new ExtractTextPlugin('[name].[chunkhash].css'),
+    new webpack.optimize.DedupePlugin()
+].concat(basePlugins);
+const devPlugins = [].concat(basePlugins);
 
-const devPlugins = [];
 
 const devPreLoaders = [
     {
@@ -24,10 +50,26 @@ const devPreLoaders = [
 
 
 module.exports = {
-    entry: './src',
+    entry: {
+        app: './src/index.js',
+        vendor: [
+            'angular', 'lodash',
+            'eventemitter3', 'angular-material',
+            'angular-messages', 'angular-password',
+            'angular-aria', 'angular-ui-router',
+            'd3', 'es6-promise',
+            'whatwg-fetch', 'intro.js'
+        ]
+    },
     output: {
-        path: production ? '../nginx/site/app/' : 'builds',
-        filename: 'bundle.js'
+        path: PATH.build,
+        filename: 'build.[chunkhash].js',
+        chunkFilename: '[chunkhash].js'
+    },
+    resolve: {
+            alias: {
+                Common: 'src/Common/'
+            }
     },
     module: {
         preLoaders: siteBuild ? [] : devPreLoaders,
@@ -40,18 +82,19 @@ module.exports = {
             },
             {
                 test: /\.scss/,
-                loaders: ['style', 'css', 'sass']
+                // loaders: ['style', 'css', 'sass']
+                loader: production ? ExtractTextPlugin.extract('style', 'css!sass') : 'style!css!sass'
             },
             {
                 test: /\.html/,
-                loader: 'html'
+                loader: 'html?minimize=false'
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 loader: 'file?name=public/fonts/[name].[ext]'
             },
             {
-                test: /\.(json|geojson)$/,
+                test: /\.json/,
                 loader: 'json'
             }
         ]
@@ -60,10 +103,7 @@ module.exports = {
         proxy: {
             '/api/*': {
                 target: 'http://192.168.99.100/',
-                secure: false,
-                rewrite: req => {
-                    req.url = req.url.replace(/^\/api/, '');
-                }
+                secure: false
             }
         }
     },

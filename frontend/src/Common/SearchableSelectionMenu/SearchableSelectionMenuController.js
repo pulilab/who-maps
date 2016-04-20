@@ -3,26 +3,58 @@ import angular from 'angular';
 
 class SearchableSelectionMenuController {
 
-    constructor($element, $timeout) {
-        const vm = this;
-        vm.element = $element;
-        vm.timeout = $timeout;
+    constructor($element, $timeout, $scope) {
+        this.element = $element;
+        this.timeout = $timeout;
+        this.scope = $scope;
+        this.fileds = [];
         this.search = {};
         this.isOpen = false;
-        vm.timeout(this.initialization.bind(this));
+        this.$onInit = this.initialization.bind(this);
+
     }
 
     initialization() {
+        this.watchers();
         this.prepareOptionsArray();
         this.timeout(this.fixComma.bind(this));
     }
 
+    watchers() {
+        const self = this;
+        this.scope.$watch(() => {
+            return this.options;
+        }, value => {
+            if (value) {
+                self.prepareOptionsArray();
+            }
+        });
+        this.scope.$watch(() => {
+            return this.ngModel;
+        }, (value) => {
+            self.checkLimit(value);
+        });
+    }
+
+    checkLimit() {
+        const self = this;
+        if (this.limit && this.ngModel.length > this.limit) {
+            this.timeout(() => {
+                self.ngModel.pop();
+            });
+
+        }
+    }
+
     prepareOptionsArray() {
         const temp = _.cloneDeep(this.options);
-        if (this.subOptions === void 0) {
+        if (this.subOptions === void 0 || this.subOptions === 0) {
             this.subOptions = 0;
-            this.options = [{}];
-            this.options[0][this.subOptions] = _.cloneDeep(temp);
+            this.fields = [{}];
+            this.fields[0][this.subOptions] = _.cloneDeep(temp);
+        }
+        else {
+            this.fields = temp;
         }
     }
 
@@ -59,11 +91,11 @@ class SearchableSelectionMenuController {
 
     static ssMenuFactory() {
         require('./SearchableSelectionMenu.scss');
-        function ssMenu($element, $timeout) {
-            return new SearchableSelectionMenuController($element, $timeout);
+        function ssMenu($element, $timeout, $scope) {
+            return new SearchableSelectionMenuController($element, $timeout, $scope);
         }
 
-        ssMenu.$inject = ['$element', '$timeout'];
+        ssMenu.$inject = ['$element', '$timeout', '$scope'];
 
         return ssMenu;
     }

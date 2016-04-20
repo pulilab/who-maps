@@ -3,6 +3,7 @@
         md-gutter="0px"
         md-row-height="51px"
         md-on-layout="vm.layoutDone()"
+        class="applications-component"
 >
 
     <md-grid-tile
@@ -65,7 +66,7 @@
                         </span>
                     </span>
                 </div>
-                <div ng-if="vm.editMode" >
+                <div ng-if="vm.editMode && !tile.isEmpty" >
 
                     <ssmenu
                             ng-if="vm.editMode"
@@ -80,6 +81,7 @@
                             md-container-class="small"
                             replace-comma="true"
                             searchable="false"
+                            limit="2"
                             on-close-callback="tile.saveTaxonomy">
                         class="small">
                     </ssmenu>

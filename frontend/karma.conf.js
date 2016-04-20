@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 module.exports = function(config) {
     config.set({
         browsers: ['PhantomJS'],
@@ -10,9 +11,17 @@ module.exports = function(config) {
         },
         coverageReporter: {
             reporters: [
-                { type: 'html', subdir: 'html' },
-                { type: 'text' }
-            ]
+                { type: 'lcov', subdir: '.' },
+                { type: 'text-summary' }
+            ],
+            check: {
+                each: {
+                    statements: 50,
+                    branches: 30,
+                    functions: 50,
+                    lines: 50
+                }
+            }
         },
         reporters: ['progress', 'coverage'],
         webpack: {
@@ -40,7 +49,12 @@ module.exports = function(config) {
                         loaders: ['babel-istanbul']
                     }
                 ]
-            }
+            },
+            plugins: [
+                new webpack.DefinePlugin({
+                    API: '"/api/"'
+                })
+            ]
         },
         webpackServer: {
             noInfo: true

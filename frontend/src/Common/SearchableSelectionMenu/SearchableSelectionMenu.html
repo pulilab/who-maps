@@ -16,12 +16,21 @@
                    placeholder="Search"
             />
         </span>
-        <div ng-repeat="group in vm.options">
+        <span class="selection-limit" ng-if="vm.limit">Maximun allowed values: {{vm.limit}}</span>
+        <div ng-repeat="group in vm.fields">
             <span ng-if="vm.subHeader" class="option-group-title">{{group[vm.subHeader]}}</span>
             <md-option
+                    ng-if="!vm.optionLabel"
                     ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
                     value="{{option}}">
                 {{option}}
+
+            </md-option>
+            <md-option
+                    ng-if="vm.optionLabel"
+                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
+                    value="{{option[vm.optionLabel]}}">
+                {{option[vm.optionLabel]}}
             </md-option>
         </div>
     </md-select>

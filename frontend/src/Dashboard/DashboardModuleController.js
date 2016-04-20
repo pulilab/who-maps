@@ -6,12 +6,13 @@ class DashboardModuleController {
 
     constructor() {
         const vm = this;
+        vm.EE = window.EE;
         vm.linechartMockData = chartData;
         vm.linechartMockData2 = chartData2;
         vm.perfMockMap = perfMockMap;
 
         vm.resizedw = () => {
-            window.EE.emit('dashResized');
+            this.EE.emit('dashResized');
         };
 
         let doit;
@@ -20,7 +21,7 @@ class DashboardModuleController {
             clearTimeout(doit);
             doit = setTimeout(vm.resizedw, 50);
         };
-        window.onresize = vm.resizefn;
+        this.onresize = vm.resizefn;
     }
 
     static dashboardControllerFactory() {

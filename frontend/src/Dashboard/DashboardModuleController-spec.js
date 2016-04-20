@@ -2,14 +2,12 @@ import { default as DashboardModuleController } from './DashboardModuleControlle
 
 /* global define, it, describe, expect, spyOn, beforeEach */
 let vm = {};
+window.setTimeout = (fn) => { fn(); };
 
 describe('DashboardModuleController', () => {
 
     beforeEach(() => {
         vm = DashboardModuleController.dashboardControllerFactory()();
-        window.setTimeout = (fn) => { fn(); };
-        window.EE = {};
-        window.EE.emit = (a) => a;
     });
 
     it('is defined', () => {

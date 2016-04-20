@@ -1,6 +1,8 @@
 // General imports
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
+import ngMessages from 'angular-messages';
+import 'angular-password';
 import angularMd from 'angular-material';
 import { EE } from '../Common/';
 
@@ -9,7 +11,7 @@ EE.initialize();
 import AppController from './AppModuleController';
 import './app.scss';
 
-import appTemplate from './app.html';
+import _appTemplate from './app.html';
 
 import hssModule from '../HssModule/';
 import cms from '../Cms/';
@@ -26,13 +28,33 @@ function config($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/app',
-            template: appTemplate,
+            url: '/app/:appName',
+            template: _appTemplate,
             controller: moduleName + '.appController',
             controllerAs: 'vm'
+        })
+        .state('login',
+        {
+            url: '/login',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<login></login>'
+                }
+            }
+        })
+        .state('signup',
+        {
+            url: '/signup',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<signup></signup>'
+                }
+            }
         });
 
-    $urlRouterProvider.otherwise('/app');
+    $urlRouterProvider.otherwise('/app//landing');
 }
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
@@ -41,6 +63,8 @@ angular.module(moduleName,
     [
         uiRoute,
         angularMd,
+        ngMessages,
+        'ngPassword',
         Components,
         hssModule,
         cms,

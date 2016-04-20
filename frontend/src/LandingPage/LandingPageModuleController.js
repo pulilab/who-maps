@@ -1,10 +1,11 @@
+import { trendingProjects } from './landingMock';
 
 class LandingPageModuleController {
 
-    static printAndReturnSome() {
-        console.log('some');
-        return 'some';
+    constructor() {
+        this.trendingProjects = trendingProjects;
     }
+
 }
 
 export default LandingPageModuleController;
