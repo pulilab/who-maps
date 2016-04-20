@@ -1,0 +1,12 @@
+@import '../variables';
+@import '../mixins';
+
+.maps-toolkit {
+
+    .axis-row {
+        background-color: $color-white;
+    }
+    .domain-questions {
+        background-color: $color-white;
+    }
+}
