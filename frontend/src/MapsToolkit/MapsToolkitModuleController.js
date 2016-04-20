@@ -1,9 +1,14 @@
 
 class MapsToolkitModuleController {
 
-    static printAndReturnSome() {
-        console.log('some');
-        return 'some';
+    static mapsControllerFactory() {
+        function mapsController($scope, $state) {
+            return new MapsToolkitModuleController($scope, $state);
+        }
+
+        mapsController.$inject = ['$scope', '$state'];
+
+        return mapsController;
     }
 }
 

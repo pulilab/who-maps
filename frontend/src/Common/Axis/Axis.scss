@@ -1,0 +1,70 @@
+@import '../../variables';
+@import '../../mixins';
+
+axis {
+    height: 50px;
+    display: block;
+    background-color: $color-white;
+    overflow: hidden;
+
+    .axis1 {
+        background-color: $color-axis1;
+    }
+
+    .axis2 {
+        background-color: $color-axis2;
+    }
+    .axis3 {
+        background-color: $color-axis3;
+    }
+    .axis4 {
+        background-color: $color-axis4;
+    }
+    .axis5 {
+        background-color: $color-axis5;
+    }
+    .axis6 {
+        background-color: $color-axis6;
+    }
+
+    .picture {
+        width: 50px;
+        height:50px;
+    }
+
+
+    .label {
+        font-family: Roboto-Medium;
+        font-size: 14px;
+        letter-spacing: -0.13px;
+        line-height: 32px;
+    }
+
+    .scores {
+        height: 20px;
+
+        .line {
+            height: 5px;
+            background-color: $color-gray-light;
+            border-radius: 100px;
+
+            div {
+                height:5px;
+                border-radius: 100px;
+            }
+
+            .red {
+                width: 20%;
+                background-color: $color-red;
+            }
+            .yellow {
+                width: 60%;
+                background-color: $color-accent;
+            }
+            .green {
+                width: 100%;
+                background-color: $color-green;
+            }
+        }
+    }
+}
