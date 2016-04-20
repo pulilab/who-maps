@@ -1,0 +1,64 @@
+@import '../../variables';
+
+.relative {
+
+	position: relative;
+
+	.countrychart-tooltip {
+
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		color: #212121;
+		font-size: 12px;
+		line-height: 16px;
+		white-space: nowrap;
+		min-width: 160px;
+
+		.countrychart-tooltip-header {
+
+			background-color: #EEEEEE;
+			padding: 10px;
+
+			.tooltip-flag {
+
+				height: 16px;
+				width: auto;
+				float: right;
+			}
+		}
+
+		.countrychart-tooltip-main {
+
+			border-top: 1px solid #BDBDBD;
+			background-color: white;
+			padding: 10px;
+			opacity: 0.8;
+		}
+	}
+}
+
+
+.countrymapcontainer {
+
+    height: 460px;
+    width: 460px;
+
+	.d3district {
+
+		fill: #BDBDBD;
+		stroke: white;
+		stroke-width: 2px;
+	    pointer-events: all;
+	    cursor: default;
+
+		&.d3district-data {
+
+			fill: #9E9E9E;
+
+			&:hover {
+				fill: #808080;
+			}
+		}
+	}
+}

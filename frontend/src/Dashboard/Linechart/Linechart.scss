@@ -1,0 +1,225 @@
+@import '../../variables';
+
+linechart {
+
+    margin-bottom: -65px;
+
+    .linechart-labels {
+
+        color: #757575;
+        font-size: 12px;
+        cursor: default;
+
+        ul {
+
+            list-style-type: none;
+            padding-left: 15px;
+            display: flex;
+            flex-flow: column wrap;
+            height: 35px;
+
+            li {
+
+                flex-basis: 50%;
+                display: block;
+
+                .material-icons {
+
+                    font-size: 12px;
+
+                    &.labelicon1 {
+                        color: $color-axis1;
+                    }
+                    &.labelicon2 {
+                        color: $color-axis2;
+                    }
+                    &.labelicon3 {
+                        color: $color-axis3;
+                    }
+                    &.labelicon4 {
+                        color: $color-axis4;
+                    }
+                    &.labelicon5 {
+                        color: $color-axis5;
+                    }
+                    &.labelicon6 {
+                        color: $color-axis6;
+                    }
+                }
+            }
+        }
+
+        md-input-container, .axischooser {
+
+            margin: 0;
+        }
+    }
+
+    .linechartcontainer {
+
+        height: 350px;
+        min-width: 500px;
+
+        .visualization {
+
+            &.activelabel1 {
+                .line-axis, .dot-axis {
+                    opacity: 0.2;
+                }
+                .line-axis1, .dot-axis1 {
+                    opacity: 1;
+                }
+            }
+            &.activelabel2 {
+                .line-axis, .dot-axis {
+                    opacity: 0.2;
+                }
+                .line-axis2, .dot-axis2 {
+                    opacity: 1;
+                }
+            }
+            &.activelabel3 {
+                .line-axis, .dot-axis {
+                    opacity: 0.2;
+                }
+                .line-axis3, .dot-axis3 {
+                    opacity: 1;
+                }
+            }
+            &.activelabel4 {
+                .line-axis, .dot-axis {
+                    opacity: 0.2;
+                }
+                .line-axis4, .dot-axis4 {
+                    opacity: 1;
+                }
+            }
+            &.activelabel5 {
+                .line-axis, .dot-axis {
+                    opacity: 0.2;
+                }
+                .line-axis5, .dot-axis5 {
+                    opacity: 1;
+                }
+            }
+            &.activelabel6 {
+                .line-axis, .dot-axis {
+                    opacity: 0.2;
+                }
+                .line-axis6, .dot-axis6 {
+                    opacity: 1;
+                }
+            }
+
+            .axis {
+
+                path {
+                    fill: none;
+                    stroke: #777;
+                    shape-rendering: crispEdges;
+                }
+
+                text {
+                    font-family: Roboto, 'Helvetica Neue', sans-serif;
+                    fill: #9D9D9D;
+                    font-size: 12px;
+                }
+
+                .domain {
+                    display: none;
+                }
+            }
+
+            .linechart-ruler {
+
+                stroke: #9D9D9D;
+                stroke-width: 0.4px;
+                fill: none;
+            }
+
+            .line-axis {
+
+                opacity: 1;
+                transition: opacity 0.2s ease-in;
+                cursor: default;
+                stroke-width: 3px;
+                fill: none;
+
+                &.line-axis1 {
+                    stroke: $color-axis1;
+                }
+                &.line-axis2 {
+                    stroke: $color-axis2;
+                }
+                &.line-axis3 {
+                    stroke: $color-axis3;
+                }
+                &.line-axis4 {
+                    stroke: $color-axis4;
+                }
+                &.line-axis5 {
+                    stroke: $color-axis5;
+                }
+                &.line-axis6 {
+                    stroke: $color-axis6;
+                }
+
+                &.line-axis-dashed {
+                    stroke-linecap: round;
+                    stroke-dasharray: 2 7;
+                }
+            }
+
+            .dot-axis {
+
+                stroke-width: 1px;
+                stroke: white;
+                opacity: 1;
+                transition: opacity 0.2s ease-in;
+                cursor: default;
+
+                &:hover {
+                    stroke-width: 3px;
+                    r: 6px;
+                    // TODO: Add shadow to hovered dot...
+                }
+
+                &.dot-axis1 {
+                    fill: $color-axis1;
+                }
+                &.dot-axis2 {
+                    fill: $color-axis2;
+                }
+                &.dot-axis3 {
+                    fill: $color-axis3;
+                }
+                &.dot-axis4 {
+                    fill: $color-axis4;
+                }
+                &.dot-axis5 {
+                    fill: $color-axis5;
+                }
+                &.dot-axis6 {
+                    fill: $color-axis6;
+                }
+            }
+        }
+    }
+
+    .tooltip {
+
+        position: absolute;
+        font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+        font-weight: 500;
+        font-size: 10px;
+        padding: 4px;
+
+        z-index: 100;
+        overflow: hidden;
+
+        pointer-events: none;
+        border-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.541176);
+        color: #FFF;
+    }
+}

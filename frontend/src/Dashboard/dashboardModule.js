@@ -1,6 +1,7 @@
 import angular from 'angular';
 import DashboardModuleController from './DashboardModuleController';
-import sampleComponent from './SampleComponent/sampleComponent';
+import linechart from './Linechart/linechart';
+import countrymap from './CountryMap/countrymap';
 
 import _template from './DashboardModule.html';
 import uiRoute from 'angular-ui-router';
@@ -27,7 +28,8 @@ config.$inject = ['$stateProvider'];
 
 angular.module(moduleName, [uiRoute])
     .controller(moduleName + '.' + moduleName + 'Controller', DashboardModuleController)
-    .component('sampleComponent', sampleComponent)
+    .component('linechart', linechart)
+    .component('countrymap', countrymap)
     .config(config);
 
 export default moduleName;
