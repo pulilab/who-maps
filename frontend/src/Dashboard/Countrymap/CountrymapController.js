@@ -3,11 +3,10 @@
 import _ from 'lodash';
 import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
-
-import perfMockMap from './perfMockMap';
+import d3 from 'd3';
 
 // SIERRA LEONE
-import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
+// import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
 // import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 import topoSource from './mock/sierra-leone/topoTest.json';
 const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
@@ -19,42 +18,30 @@ class CountrymapController {
         const vm = this;
         // BINDINGS
         // data / data to show, district names has to match with countryLvl4-8's
-        // country / country name as string
-        // countryLvl2 / .geojson level 2 with districts
-
         vm.el = $element;
         vm.scope = $scope;
+        // vm.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
 
-        // now ONLY because it contains map URL, and country name...
-        vm.mockGeoJsonCountry = mockGeoJsonCountry;
-        vm.activeDistrict = {
-            name: '',
-            data: [
-                { placeholder1: 0 },
-                { placeholder2: 1 },
-                { placeholder3: 2 }
-            ]
-        };
-
-        // Aggregates the values of districts to show them all
-        vm.boundNrs = _.reduce(perfMockMap.data.slice(-1)[0], (ret, value) => {
-
-            if (typeof value !== 'object') {
-                return ret;
-            }
-
-            ret.Clients += value.Clients;
-            ret['Health workers'] += value['Health workers'];
-            ret.Facilities += value.Facilities;
-
-            return ret;
-        }, {
-            'Clients': 0,
-            'Health workers': 0,
-            'Facilities': 0
-        });
 
         vm.$onInit = () => {
+
+            // Aggregates the values of districts to show them all
+            vm.boundNrs = _.reduce(vm.data.data.slice(-1)[0], (ret, value) => {
+
+                if (typeof value !== 'object') {
+                    return ret;
+                }
+                ret.Clients += value.clients;
+                ret['Health workers'] += value.workers;
+                ret.Facilities += value.facilities;
+
+                return ret;
+            }, {
+                'Clients': 0,
+                'Health workers': 0,
+                'Facilities': 0
+            });
+
             vm.svgPanZoom = svgPanZoom;
             vm.drawMap();
         };
@@ -112,8 +99,8 @@ class CountrymapController {
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
 
-            const gotData = typeof perfMockMap
-                .data[perfMockMap.data.length - 1][distrData.features[i].properties.name] === 'object';
+            const gotData = typeof vm.data
+                .data[vm.data.data.length - 1][distrData.features[i].properties.name] === 'object';
 
             element
                 .append('path')
@@ -129,7 +116,7 @@ class CountrymapController {
                     vm.scope.$evalAsync();
                     vm.activeDistrict = {
                         name: distrData.features[i].properties.name,
-                        data: perfMockMap.data[perfMockMap.data.length - 1][distrData.features[i].properties.name]
+                        data: vm.data.data[vm.data.data.length - 1][distrData.features[i].properties.name]
                     };
                 })
                 .on('mouseout', () => {
@@ -140,7 +127,7 @@ class CountrymapController {
 
         const zoomOptions = {
             panEnabled: true,
-            controlIconsEnabled: true,
+            controlIconsEnabled: false, // <= change this to toggle controls
             zoomEnabled: true,
             mouseWheelZoomEnabled: true,
             preventMouseEventsDefault: true,
@@ -157,7 +144,6 @@ class CountrymapController {
 
     static countrymapFactory() {
         require('./Countrymap.scss');
-        require('d3');
 
         function countrymap($element, $scope) {
             return new CountrymapController($element, $scope);

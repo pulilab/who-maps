@@ -1,5 +1,6 @@
 import chartData from './chartmock.js';
 import chartData2 from './chartmock2.js';
+import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
 class DashboardModuleController {
 
@@ -7,6 +8,7 @@ class DashboardModuleController {
         const vm = this;
         vm.linechartMockData = chartData;
         vm.linechartMockData2 = chartData2;
+        vm.perfMockMap = perfMockMap;
 
         vm.resizedw = () => {
             window.EE.emit('dashResized');

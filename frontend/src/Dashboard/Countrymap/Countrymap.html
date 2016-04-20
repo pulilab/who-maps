@@ -3,8 +3,8 @@
 	<div class="countrychart-tooltip md-whiteframe-1dp">
 
 		<div class="countrychart-tooltip-header">
-			{{vm.mockGeoJsonCountry.features[0].properties['name:en']}}
-			<img class ="tooltip-flag" ng-src="{{vm.mockGeoJsonCountry.features[0].properties.flag}}">
+			{{vm.data.country.name}}
+			<img class ="tooltip-flag" ng-src="{{vm.data.country.flagUrl}}">
 		</div>
 
 		<div class="countrychart-tooltip-main" layout="column">

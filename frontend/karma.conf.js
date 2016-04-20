@@ -24,7 +24,7 @@ module.exports = function(config) {
                         loaders: ['null']
                     },
                     {
-                        test: /\.json/,
+                        test: /\.(json|geojson)/,
                         loader: 'json'
                     }
                 ],
