@@ -1,10 +1,26 @@
-<md-content class="md-padding">
+<md-content class="md-padding maps-toolkit" layout="column">
     <h1>MAPS Toolkit module loaded!</h1>
 
-    <div layout="row">
+    <div layout="row" md-whiteframe class="axis-row">
             <axis flex="70"></axis>
-            <div flex="30">
+            <div flex="30" layout="row" layout-align="end center">
+                <md-button>
+                    <md-icon>toc</md-icon>
+                    Thematic overview
+                </md-button>
+                <md-button>
+                    <md-icon>pause</md-icon>
+                    Pause test
+                </md-button>
             </div>
     </div>
+
+    <br/>
+
+    <div layout="row" class="domain-questions" md-whiteframe class="domain-block">
+        <h4>{{vm.domain.domain}}</h4>
+    </div>
+
+
 
 </md-content>

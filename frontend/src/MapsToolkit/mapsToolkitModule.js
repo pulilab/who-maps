@@ -28,7 +28,7 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/maps',
+            url: '/maps/:axisId/:domainId',
             parent: 'app',
             views: {
                 main: {
