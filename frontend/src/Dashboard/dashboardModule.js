@@ -1,7 +1,7 @@
 import angular from 'angular';
 import DashboardModuleController from './DashboardModuleController';
 import linechart from './Linechart/linechart';
-import countrymap from './Countrymap/countrymap';
+import countrymap from './CountryMap/countrymap';
 
 import _template from './DashboardModule.html';
 import uiRoute from 'angular-ui-router';
