@@ -1,5 +1,5 @@
 import _template from './Countrymap.html';
-import CountrymapController from './CountrymapController';
+import CountrymapController from './CountryMapController';
 
 const coutrymap = {
     controller: CountrymapController.countrymapFactory(),
