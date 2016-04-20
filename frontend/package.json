@@ -76,6 +76,8 @@
     "eventemitter3": "^1.1.1",
     "intro.js": "https://github.com/lordfuoco/intro.js",
     "lodash": "^4.6.1",
+    "svg-pan-zoom": "^3.2.6",
+    "topojson": "^1.6.24",
     "whatwg-fetch": "^0.11.0"
   }
 }

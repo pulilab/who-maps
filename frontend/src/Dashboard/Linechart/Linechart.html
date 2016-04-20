@@ -1,0 +1,50 @@
+<!-- <h3>linechart component</h3> -->
+
+<div class="linechart-labels" layout="row" ng-if="!vm.showPlaceholder">
+
+    <ul flex>
+
+        <li>____ closed</li>
+        <li>…… in progress</li>
+
+        <li
+            ng-repeat="label in vm.chosenLabels track by $index"
+            ng-class="'labelhov' + ($index + 1)"
+            class="text-truncate labelhov">
+
+            <i class="material-icons" ng-class="'labelicon' + ($index + 1)">fiber_manual_record</i> {{label}}
+
+        </li>
+
+    </ul>
+
+    <md-input-container
+        ng-if="vm.datachooser">
+
+        <label>Axis to show: </label>
+
+        <md-select
+            aria-label="select axis to view in the chart"
+            flex="33"
+            class="axischooser"
+            ng-model="vm.activeAxis"
+            ng-change="vm.axisChange(vm.activeAxis)">
+
+            <md-option
+                ng-repeat="label in vm.labels">
+
+                {{label}}
+
+            </md-option>
+
+        </md-select>
+
+    </md-input-container>
+
+</div>
+
+<div ng-if="vm.showPlaceholder">
+
+    <h2>placeholder for insufficient data!</h2>
+
+</div>

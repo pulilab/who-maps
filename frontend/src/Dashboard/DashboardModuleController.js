@@ -1,9 +1,38 @@
+import chartData from './chartmock.js';
+import chartData2 from './chartmock2.js';
+import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
 class DashboardModuleController {
 
-    static printAndReturnSome() {
-        console.log('some');
-        return 'some';
+    constructor() {
+        const vm = this;
+        vm.EE = window.EE;
+        vm.linechartMockData = chartData;
+        vm.linechartMockData2 = chartData2;
+        vm.perfMockMap = perfMockMap;
+
+        vm.resizedw = () => {
+            this.EE.emit('dashResized');
+        };
+
+        let doit;
+        vm.resizefn = () => {
+
+            clearTimeout(doit);
+            doit = setTimeout(vm.resizedw, 50);
+        };
+        this.onresize = vm.resizefn;
+    }
+
+    static dashboardControllerFactory() {
+        function dashController() {
+
+            return new DashboardModuleController();
+        }
+
+        dashController.$inject = [];
+
+        return dashController;
     }
 }
 

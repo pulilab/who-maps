@@ -1,2 +1,24 @@
-<h1>Dashboard module loaded</h1>
-<sample-component></sample-component>
+<div layout="row">
+
+	<countrymap
+		flex
+		data="vm.perfMockMap">
+	</countrymap>
+
+	<linechart
+		flex="50"
+		data="vm.linechartMockData.data"
+		labels="vm.linechartMockData.labels"
+		showdotted="true">
+	</linechart>
+
+<!-- 	<linechart
+		flex
+		data="vm.linechartMockData2"
+		labels="vm.linechartMockData2.labels"
+		showdotted="false"
+		datachooser="true"
+	></linechart> -->
+
+
+</div>
