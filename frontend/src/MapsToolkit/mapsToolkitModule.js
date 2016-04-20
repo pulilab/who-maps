@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-/* global define  Promise */
+/* global define  Promise, $compileProvider */
 
 import _template from './MapsToolkitModule.html';
 import uiRoute from 'angular-ui-router';
