@@ -5,9 +5,6 @@ import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
 
-// SIERRA LEONE
-// import mockGeoJsonCountry from './mock/sierra-leone/admin_level_2.geojson';
-// import mockGeoJsonDistricts from './mock/sierra-leone/admin_level_5.geojson';
 import topoSource from './mock/sierra-leone/topoTest.json';
 const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
 
@@ -16,8 +13,10 @@ class CountrymapController {
     constructor($element, $scope) {
 
         const vm = this;
-        // BINDINGS
-        // data / data to show, district names has to match with countryLvl4-8's
+
+        // BINDING
+        // vm. data / data to show, district names has to match with countryLvl4-8's
+
         vm.el = $element;
         vm.scope = $scope;
         // vm.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
@@ -47,6 +46,11 @@ class CountrymapController {
         };
     }
 
+    makeGeoFromTopo(topo) {
+
+        return topojson.feature(topo, topoSource.objects.admin_level_5);
+    }
+
     drawMap() {
 
         const vm = this;
@@ -67,30 +71,8 @@ class CountrymapController {
             .attr('width', 460)
             .attr('height', 460);
 
-        const bounds = {
-            xmin: 180,
-            xmax: -180,
-            ymin: 180,
-            ymax: -180
-        };
 
-        for (let i = 0; i < distrData.features.length; i += 1) {
-
-            const points = distrData.features[i].geometry.coordinates[0][0];
-            const l = points.length;
-
-            for (let j = 0; j < l; j += 1) {
-                bounds.xmin = bounds.xmin > points[j][1] ? points[j][1] : bounds.xmin;
-                bounds.xmax = bounds.xmax < points[j][1] ? points[j][1] : bounds.xmax;
-                bounds.ymin = bounds.ymin > points[j][0] ? points[j][0] : bounds.ymin;
-                bounds.ymax = bounds.ymax < points[j][0] ? points[j][0] : bounds.ymax;
-            }
-        }
-
-        bounds.xdiff = bounds.xmax - bounds.xmin;
-        bounds.ydiff = bounds.ymax - bounds.ymin;
-
-        const scale = 20000 / Math.max(bounds.xdiff, bounds.ydiff);
+        const scale = vm.calculateScale(distrData);
 
         const projection = d3.geo.mercator()
             .scale(scale);
@@ -140,6 +122,36 @@ class CountrymapController {
         };
 
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
+    }
+
+    calculateScale(distrData) {
+
+        const bounds = {
+            xmin: 180,
+            xmax: -180,
+            ymin: 180,
+            ymax: -180
+        };
+
+        for (let i = 0; i < distrData.features.length; i += 1) {
+
+            const points = distrData.features[i].geometry.coordinates[0][0];
+            const l = points.length;
+
+            for (let j = 0; j < l; j += 1) {
+                bounds.xmin = bounds.xmin > points[j][1] ? points[j][1] : bounds.xmin;
+                bounds.xmax = bounds.xmax < points[j][1] ? points[j][1] : bounds.xmax;
+                bounds.ymin = bounds.ymin > points[j][0] ? points[j][0] : bounds.ymin;
+                bounds.ymax = bounds.ymax < points[j][0] ? points[j][0] : bounds.ymax;
+            }
+        }
+
+        bounds.xdiff = bounds.xmax - bounds.xmin;
+        bounds.ydiff = bounds.ymax - bounds.ymin;
+
+        const scale = 20000 / Math.max(bounds.xdiff, bounds.ydiff);
+
+        return scale;
     }
 
     static countrymapFactory() {
