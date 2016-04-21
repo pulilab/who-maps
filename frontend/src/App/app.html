@@ -1,4 +1,4 @@
-<md-content>
+
     <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools">
             <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
@@ -86,7 +86,8 @@
 
         </div>
     </md-toolbar>
-    <md-toolbar class="md-medium-tall" ng-if="vm.showFullNavigation">
+<md-content layout="column" flex layout-fill>
+    <md-toolbar class="md-medium-tall" ng-if="vm.showFullNavigation" flex layout="column">
         <div class="md-toolbar-tools">
             <ssmenu
                 aria-label="Project Choser"
@@ -176,5 +177,5 @@
             </div>
         </div>
     </md-toolbar>
-    <ui-view name="main"></ui-view>
+    <ui-view name="main" flex layout-padding ></ui-view>
 </md-content>

@@ -14,6 +14,13 @@ class MapsToolkitService extends AuthApi {
             return data;
         });
     }
+
+    saveAnswer(answer) {
+        return this.post(this.projectId + '/toolkit/score/', answer)
+        .then(data => {
+            console.log(data);
+        })
+    }
 }
 
 

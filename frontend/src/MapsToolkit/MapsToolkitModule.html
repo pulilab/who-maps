@@ -1,8 +1,10 @@
-<div class="md-padding maps-toolkit" layout="column">
-    <h1>MAPS Toolkit module loaded!</h1>
+<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+</div>
 
-    <div layout="row" md-whiteframe class="axis-row">
-            <axis flex="70"></axis>
+<div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
+    <div layout="row" flex="100" md-whiteframe class="axis-row">
+            <axis flex="70" axis-data="vm.axis"></axis>
             <div flex="30" layout="row" layout-align="end center">
                 <md-button>
                     <md-icon>toc</md-icon>
@@ -15,51 +17,50 @@
             </div>
     </div>
 
-    <br/>
-
     <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
-        <h4>{{vm.domain.domain}} ({{vm.domain.domain_max}} points)</h4>
-        <p>
-            {{vm.domainStructure.sub_text}}
-        </p>
-        <md-content layout="column" class="md-block" >
-        <section ng-repeat="question in vm.domainStructure.questions" >
-            <md-subheader >
-                <div layout="row" flex="100">
 
-                <div flex="65">
-                    {{question.id}}.{{question.text}} ({{vm.domain.questions[$index].question_max}} Points)
-                </div>
-                <div flex="10">
-                    No
-                </div>
-                <div flex="10">
-                    Yes
-                </div>
-                <div flex="15">
-                    Points Earned
-                </div>
-            </div>
-            </md-subheader>
+        <div layout="column" layout-fill >
+            <h4>{{vm.domain.domain}} ({{vm.domain.domain_max}} points)</h4>
+            <p>
+                {{vm.domainStructure.sub_text}}
+            </p>
+            <section ng-repeat="question in vm.domainStructure.questions" >
+                <md-subheader >
+                    <div layout="row" flex="100" class="question-header">
+                        <div flex="{{vm.calculateMainBoxSize(question)}}" layout="column" layout-align="center start">
+                            {{question.id}}.{{question.text}} ({{vm.domain.questions[$index].question_max}} Points)
+                        </div>
+                        <div flex="10" layout="column" layout-align="end center" ng-repeat="choice in question.choices">
+                            {{choice.label}}
+                        </div>
+                        <div flex="10" layout="column" layout-align="end center">
+                            Points Earned
+                        </div>
+                    </div>
+                </md-subheader>
 
-            <div layout="row" flex="100" ng-repeat="answer in question.answerTemplate track by $index">
-                <div flex="65" ng-bind-html="answer">
-
+                <div layout="row" class="answer" flex="100" ng-repeat="answer in question.answerTemplate track by $index">
+                    <div flex="{{vm.calculateMainBoxSize(question)}}" class="first-box">
+                        <div ng-bind-html="answer" class="answer-wrapper"></div>
+                    </div>
+                    <div flex="10" class="box" layout="column" layout-align="center center" ng-repeat="choice in question.choices">
+                        <md-checkbox
+                            class="md-primary"
+                            ng-checked="vm.checkChecked($parent.$parent.$index, $parent.$index, choice.points )"
+                            aria-label="{{choice.label}}"
+                            ng-click="vm.setAnswer($parent.$parent.$index, $parent.$index, choice.points)"
+                        ></md-checkbox>
+                    </div>
+                    <div flex="10" class="fourth-box" layout="column" layout-align="center center">
+                        <span>{{vm.domain.questions[$parent.$index].answers[$index]}} points</span>
+                    </div>
                 </div>
-                <div flex="10">
-
-                </div>
-                <div flex="10">
-
-                </div>
-                <div flex="15">
-                    {{vm.domain.questions[$parent.$index].answers[$index]}}
-                </div>
-            </div>
-        </section>
-        </md-content>
+            </section>
+        </div>
     </div>
-
-
-
+    <footer layout="row" flex layout-align="start start">
+        <div flex ng-repeat="axis in vm.rawData">
+            {{axis.axis}}
+        </div>
+    </footer>
 </div>
