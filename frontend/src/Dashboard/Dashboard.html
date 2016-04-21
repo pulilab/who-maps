@@ -1,111 +1,165 @@
 
 <div id="dashcontainer">
 
-	<div layout="row" class="dashrow dashrow-upper">
+    <div layout="row" class="dashrow dashrow-upper">
 
-		<div flex class="dashsection dashsection-left" layout="row">
+        <div flex class="dashsection dashsection-left" layout="row">
 
-			<div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
+            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
 
-				<div class="dash-subhead">STATISTICS</div>
+                <div class="dash-subhead">STATISTICS</div>
+                <div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
 
-				<div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
+                    <md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
 
-					<md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
-
-				        <!-- TODO: ng-if trendicons, bind nr.
-				        <md-icon class="material-icons dash-trendicon dash-trendicon-up">trending_up</md-icon>
-				        <md-icon class="material-icons dash-trendicon">trending_flat</md-icon> -->
-				        <md-icon class="material-icons dash-trendicon dash-trendicon-up" ng-show="!viewersnrHovered">trending_up</md-icon>
-						<span class="dash-stat-nr" ng-show="!viewersnrHovered">1509</span>
-						<span class="dash-stat-label" ng-show="!viewersnrHovered">Viewers</span>
+                        <!-- TODO: ng-if trendicons, bind nr.
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-up">trending_up</md-icon>
+                        <md-icon class="material-icons dash-trendicon">trending_flat</md-icon> -->
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-up" ng-show="!viewersnrHovered">trending_up</md-icon>
+                        <span class="dash-stat-nr" ng-show="!viewersnrHovered">1509</span>
+                        <span class="dash-stat-label" ng-show="!viewersnrHovered">Viewers</span>
 
 
-						<md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
-						<span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates an increase or decline since the previous month.</span>
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
+                        <span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates an increase or decline since the previous month.</span>
 
-					</md-card>
+                    </md-card>
 
-					<md-card class="dash-stat-card">
+                    <md-card class="dash-stat-card">
 
-				        <!-- TODO: ng-if trendicons, bind nr -->
-				        <md-icon class="material-icons dash-trendicon dash-trendicon-down">trending_down</md-icon>
-						<span class="dash-stat-nr">87</span>
-						<span class="dash-stat-label">Followers</span>
-					</md-card>
+                        <!-- TODO: ng-if trendicons, bind nr -->
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-down">trending_down</md-icon>
+                        <span class="dash-stat-nr">87</span>
+                        <span class="dash-stat-label">Followers</span>
+                    </md-card>
 
-					<md-card class="dash-stat-card">
+                    <md-card class="dash-stat-card">
 
-						<!-- TODO: bind nr -->
-				        <md-icon class="material-icons dash-trendicon">supervisor_account</md-icon>
-						<span class="dash-stat-nr">3</span>
-						<span class="dash-stat-label">Donors</span>
-					</md-card>
+                        <!-- TODO: bind nr -->
+                        <md-icon class="material-icons dash-trendicon">supervisor_account</md-icon>
+                        <span class="dash-stat-nr">3</span>
+                        <span class="dash-stat-label">Donors</span>
+                    </md-card>
 
-				</div>
-			</div>
+                </div>
+            </div>
 
-			<div flex class="dashsection dash-cardholder" layout="column">
-				<div class="dash-subhead">PROJECT DETAILS</div>
-				<md-card flex>
-					Some content in the card
-				</md-card>
-			</div>
+            <div flex class="dashsection dash-cardholder" layout="column">
 
-		</div>
+                <div class="dash-subhead">PROJECT DETAILS</div>
+                <md-card flex>
 
-		<div flex="40" class="dashsection dash-cardholder" layout="column">
-			<div class="dash-subhead">PROJECT PERFORMANCE</div>
-			<md-card flex>
-				Some content in the card
-			</md-card>
-		</div>
 
-	</div>
+                    <md-tabs md-border-bottom md-center-tabs="true">
 
-	<div layout="row" class="dashrow dashrow-lower">
+                        <md-tab label="overview">
+                            <md-content>
+                                groundwork
+                                <br>
+                                partnership
+                                <br>
+                                financial health
+                                <br>
+                                technology & architecture
+                                <br>
+                                operations
+                                <br>
+                                monitoring & evaluation
+                                <br>
+                                bottom tooltip
+                            </md-content>
+                        </md-tab>
 
-		<div flex class="dashsection dashsection-left dash-cardholder" layout="column">
-			<div class="dash-subhead">IMPROVE PROJECT</div>
-			<md-card flex>
-				Some content in the card
-			</md-card>
-		</div>
+                        <md-tab label="axis">
+                            <md-content>
+                                AXIS content
+                                <br>
+                                linechart
+                            </md-content>
+                        </md-tab>
 
-		<div flex="40" class="dashsection dash-cardholder" layout="column">
-			<div class="dash-subhead">COMMUNITY WALL</div>
-			<md-card flex>
-				Some content in the card
-			</md-card>
-		</div>
+                        <md-tab label="domains">
+                            <md-content>
+                                DOMAINS content
+                                <br>
+                                domain linechart
+                            </md-content>
+                        </md-tab>
 
-	</div>
+                        <md-tab label="technology">
+                            <md-content>
+                                TECHNOLOGY content
+                                <br>
+                                tech stuff
+                            </md-content>
+                        </md-tab>
+
+                        <md-tab label="resources">
+                            <md-content>
+                                RESOURCES content
+                                <br>
+                                resources and stuff
+                            </md-content>
+                        </md-tab>
+
+                    </md-tabs>
+
+                </md-card>
+            </div>
+
+        </div>
+
+        <div flex="40" class="dashsection dash-cardholder" layout="column">
+            <div class="dash-subhead">PROJECT PERFORMANCE</div>
+            <md-card flex>
+                Some content in the card
+            </md-card>
+        </div>
+
+    </div>
+
+    <div layout="row" class="dashrow dashrow-lower">
+
+        <div flex class="dashsection dashsection-left dash-cardholder" layout="column">
+            <div class="dash-subhead">IMPROVE PROJECT</div>
+            <md-card flex>
+                Some content in the card
+            </md-card>
+        </div>
+
+        <div flex="40" class="dashsection dash-cardholder" layout="column">
+            <div class="dash-subhead">COMMUNITY WALL</div>
+            <md-card flex>
+                Some content in the card
+            </md-card>
+        </div>
+
+    </div>
 
 </div>
-
 
 <!-- Older ones -->
 <!-- <div layout="row">
 
-	<countrymap
-		flex
-		data="vm.perfMockMap">
-	</countrymap>
+    <countrymap
+        flex
+        data="vm.perfMockMap">
+    </countrymap>
 
-	<linechart
-		flex="50"
-		data="vm.linechartMockData.data"
-		labels="vm.linechartMockData.labels"
-		showdotted="true">
-	</linechart>
+    <linechart
+        flex="50"
+        data="vm.linechartMockData.data"
+        labels="vm.linechartMockData.labels"
+        showdotted="true">
+    </linechart>
 
-	<linechart
-		flex
-		data="vm.linechartMockData2"
-		labels="vm.linechartMockData2.labels"
-		showdotted="false"
-		datachooser="true"
-	></linechart>
+    <linechart
+        flex
+        data="vm.linechartMockData2"
+        labels="vm.linechartMockData2.labels"
+        showdotted="false"
+        datachooser="true"
+    ></linechart>
 
 
 </div>
