@@ -6,10 +6,43 @@
 		<div flex class="dashsection dashsection-left" layout="row">
 
 			<div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
+
 				<div class="dash-subhead">STATISTICS</div>
-				<md-card flex>
-					Some content in the card
-				</md-card>
+
+				<div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
+
+					<md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
+
+				        <!-- TODO: ng-if trendicons, bind nr.
+				        <md-icon class="material-icons dash-trendicon dash-trendicon-up">trending_up</md-icon>
+				        <md-icon class="material-icons dash-trendicon">trending_flat</md-icon> -->
+				        <md-icon class="material-icons dash-trendicon dash-trendicon-up" ng-show="!viewersnrHovered">trending_up</md-icon>
+						<span class="dash-stat-nr" ng-show="!viewersnrHovered">1509</span>
+						<span class="dash-stat-label" ng-show="!viewersnrHovered">Viewers</span>
+
+
+						<md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
+						<span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates an increase or decline since the previous month.</span>
+
+					</md-card>
+
+					<md-card class="dash-stat-card">
+
+				        <!-- TODO: ng-if trendicons, bind nr -->
+				        <md-icon class="material-icons dash-trendicon dash-trendicon-down">trending_down</md-icon>
+						<span class="dash-stat-nr">87</span>
+						<span class="dash-stat-label">Followers</span>
+					</md-card>
+
+					<md-card class="dash-stat-card">
+
+						<!-- TODO: bind nr -->
+				        <md-icon class="material-icons dash-trendicon">supervisor_account</md-icon>
+						<span class="dash-stat-nr">3</span>
+						<span class="dash-stat-label">Donors</span>
+					</md-card>
+
+				</div>
 			</div>
 
 			<div flex class="dashsection dash-cardholder" layout="column">

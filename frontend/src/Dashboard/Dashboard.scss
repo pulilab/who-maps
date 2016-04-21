@@ -7,7 +7,7 @@
     .dashrow {
 
         &.dashrow-upper {
-            height: 496px;
+            height: 500px;
         }
 
         &.dashrow-lower {
@@ -29,7 +29,56 @@
 
             .dash-subhead {
                 text-align: center;
-                margin: 16px 0;
+                margin: 15px 0;
+                font-size: 14px;
+            }
+
+            .dash-stat-column {
+
+                justify-content: space-between;
+                cursor: default;
+
+                .dash-stat-card {
+                    height: 138px;
+                    text-align: center;
+
+                    .dash-trendicon {
+
+                        font-size: 32px;
+                        height: 32px;
+                        width: 32px;
+                        margin: 15px auto 5px auto;
+
+                        &.dash-trendicon-up {
+                            color: #7CB342;
+                        }
+
+                        &.dash-trendicon-down {
+                            color: #F44336;
+                        }
+
+                        &.dash-trendicon-bulb {
+                            color: #CD9924;
+                        }
+                    }
+
+                    .dash-stat-nr {
+                        font-size: 32px;
+                    }
+
+                    .dash-stat-label {
+                        margin-top: 15px;
+                        font-size: 12px;
+                    }
+
+                    .dash-stat-tooltip {
+                        font-size: 10px;
+                        text-align: left;
+                        padding: 0 10px;
+                        color: #757575;
+                        letter-spacing: -0.18;
+                    }
+                }
             }
 
             md-card {
