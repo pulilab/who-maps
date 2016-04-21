@@ -10,6 +10,15 @@
                 <div class="dash-subhead">STATISTICS</div>
                 <div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
 
+                    <md-card class="dash-stat-card">
+
+                        <!-- TODO: bind version nr. -->
+                        <span class="dash-stat-nr dash-stat-nr-version">3.</span>
+                        <span class="dash-stat-label">version</span>
+                        <!-- TODO: bind snapshotting fn. -->
+                        <md-button class="snapshot-button" ng-click="">+ snapshot</md-button>
+                    </md-card>
+
                     <md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
 
                         <!-- TODO: ng-if trendicons, bind nr.
@@ -21,7 +30,7 @@
 
 
                         <md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
-                        <span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates an increase or decline since the previous month.</span>
+                        <span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates change since the last month.</span>
 
                     </md-card>
 
@@ -50,56 +59,83 @@
                 <md-card flex>
 
 
-                    <md-tabs md-border-bottom md-center-tabs="true">
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
                         <md-tab label="overview">
-                            <md-content>
-                                groundwork
-                                <br>
-                                partnership
-                                <br>
-                                financial health
-                                <br>
-                                technology & architecture
-                                <br>
-                                operations
-                                <br>
-                                monitoring & evaluation
-                                <br>
-                                bottom tooltip
-                            </md-content>
+                            <div class="dash-cardcontent" layout="column">
+                                <!-- TODO: binde axes -->
+                                <axis flex></axis>
+                                <axis flex></axis>
+                                <axis flex></axis>
+                                <axis flex></axis>
+                                <axis flex></axis>
+                                <axis flex></axis>
+                                <div layout="row" class="dash-overview-tooltips">
+                                    <div class="dash-overview-tooltip">
+                                        <img src="../Common/Axis/images/flag-started.svg" />
+                                        <span>Already started</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <img src="../Common/Axis/images/flag-notstarted.svg" />
+                                        <span>Not started yet</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <span>P - Progress</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <span>S - Score</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
+                                        <span>0-49%</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <md-icon class="material-icons dash-overw-toolkit-ball2">fiber_manual_record</md-icon>
+                                        <span>50-99%</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <md-icon class="material-icons dash-overw-toolkit-ball3">fiber_manual_record</md-icon>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+                            </div>
                         </md-tab>
 
                         <md-tab label="axis">
-                            <md-content>
-                                AXIS content
-                                <br>
-                                linechart
-                            </md-content>
+                            <div>
+                                <linechart
+                                    data="vm.linechartMockData.data"
+                                    labels="vm.linechartMockData.labels"
+                                    showdotted="true">
+                                </linechart>
+                            </div>
                         </md-tab>
 
                         <md-tab label="domains">
-                            <md-content>
-                                DOMAINS content
-                                <br>
-                                domain linechart
-                            </md-content>
+                            <div>
+                                <linechart
+                                    data="vm.linechartMockData2"
+                                    labels="vm.linechartMockData2.labels"
+                                    showdotted="false"
+                                    datachooser="true"
+                                ></linechart>
+                            </div>
                         </md-tab>
 
                         <md-tab label="technology">
-                            <md-content>
+                            <div>
                                 TECHNOLOGY content
                                 <br>
                                 tech stuff
-                            </md-content>
+                            </div>
                         </md-tab>
 
                         <md-tab label="resources">
-                            <md-content>
+                            <div>
                                 RESOURCES content
                                 <br>
                                 resources and stuff
-                            </md-content>
+                            </div>
                         </md-tab>
 
                     </md-tabs>
@@ -145,22 +181,6 @@
         flex
         data="vm.perfMockMap">
     </countrymap>
-
-    <linechart
-        flex="50"
-        data="vm.linechartMockData.data"
-        labels="vm.linechartMockData.labels"
-        showdotted="true">
-    </linechart>
-
-    <linechart
-        flex
-        data="vm.linechartMockData2"
-        labels="vm.linechartMockData2.labels"
-        showdotted="false"
-        datachooser="true"
-    ></linechart>
-
 
 </div>
 -->
