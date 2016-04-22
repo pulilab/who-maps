@@ -199,6 +199,72 @@
                     background-color: $color-gray-lightest;
                 }
             }
+
+            .dash-tech {
+
+                .upper {
+                    padding: 0px 25px;
+                    height: 180px;
+                    background-color: $color-gray-lightest;
+
+                    div {
+                        &:not(:last-child) {
+                            border-bottom: 1px solid $color-gray-lighter;
+                        }
+
+                        md-icon {
+                            font-size: 18px;
+                            width: 18px;
+                            height: 18px;
+                            color: $text-primary;
+                        }
+                        span {
+                            font-size: 14px;
+                            color: $text-primary;
+                            font-weight: 500;
+                            padding-left: 5px;
+                            margin-top: auto;
+                            margin-bottom: auto;
+                        }
+
+                        md-chips {
+                            padding-top: 10px;
+
+                            md-chips-wrap {
+                                box-shadow: none;
+
+                                md-chip {
+                                    height: 24px;
+
+                                    .md-chip-content {
+                                        line-height: 22px;
+
+                                        span {
+                                            font-size: 11px;
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .lower {
+                    padding: 20px 25px;
+
+                    span {
+                        display: block;
+                        font-weight: 500;
+                    }
+
+                    a {
+                        display: block;
+                        color: $color-primary;
+                        margin-bottom: 17px;
+                    }
+                }
+            }
         }
     }
 }

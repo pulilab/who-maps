@@ -59,7 +59,7 @@
                 <md-card flex>
 
 
-                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" md-selected="3">
 
                         <md-tab label="overview">
                             <div class="dash-cardcontent" layout="column">
@@ -125,10 +125,44 @@
                         </md-tab>
 
                         <md-tab label="technology">
-                            <div>
-                                @icon Technology platforms<br>
-                                @icon License<br>
-                                @icon Digital tools<br>
+                            <!-- TODO: bindings! -->
+                            <div class="dash-tech">
+                                <div
+                                    class="upper"
+                                    layout="column">
+
+                                    <!-- ; licenses=['APACHE', 'MIT'] tools=['SMS', 'ELECTRONIC FORMS'] -->
+
+                                    <div flex layout="row" ng-init="platforms=['MOTECH']">
+                                        <md-icon class="material-icons">device_hub</md-icon>
+                                        <span flex>Technology platforms</span>
+                                        <md-chips flex="66" readonly="true" ng-model="platforms"></md-chips>
+                                    </div>
+
+                                    <div flex layout="row" ng-init="licenses=['APACHE', 'MIT']">
+                                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                                        <span flex>License</span>
+                                        <md-chips flex="66" readonly="true" ng-model="licenses"></md-chips>
+                                    </div>
+
+                                    <div flex layout="row" ng-init="tools=['SMS', 'ELECTRONIC FORMS']">
+                                        <md-icon class="material-icons">speaker_phone</md-icon>
+                                        <span flex>Digital tools</span>
+                                        <md-chips flex="66" readonly="true" ng-model="tools"></md-chips>
+                                    </div>
+                                </div>
+
+                                <div class="lower">
+
+                                    <span>Code documentations & download:</span>
+                                    <a>http://github.com/project/repo/asfsdfasduifasuidfuiasdf8i4358345</a>
+
+                                    <span>Download applications:</span>
+                                    <a>http://google.playtore/app/app43563463456/45646</a>
+
+                                    <span>Link to wiki page:</span>
+                                    <a>http://linktowiki/wiki/wiki.html</a>
+                                </div>
                             </div>
                         </md-tab>
 
