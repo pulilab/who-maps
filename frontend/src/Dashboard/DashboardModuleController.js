@@ -12,6 +12,7 @@ class DashboardModuleController {
         vm.perfMockMap = perfMockMap;
 
         vm.resizedw = () => {
+            console.log('dash EMITS RESIZE');
             this.EE.emit('dashResized');
         };
 
@@ -21,7 +22,7 @@ class DashboardModuleController {
             clearTimeout(doit);
             doit = setTimeout(vm.resizedw, 50);
         };
-        this.onresize = vm.resizefn;
+        window.onresize = vm.resizefn;
     }
 
     static dashboardControllerFactory() {

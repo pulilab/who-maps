@@ -2,8 +2,9 @@
 
     <ul flex>
 
-        <li>____ closed</li>
-        <li>…… in progress</li>
+        <!-- TODO: ng-if the dashed tooltip -->
+        <li ng-if="vm.showdotted">___ closed</li>
+        <li ng-if="vm.showdotted">…… in progress</li>
 
         <li
             ng-repeat="label in vm.chosenLabels track by $index"
@@ -16,33 +17,27 @@
 
     </ul>
 
-    <md-input-container
-        ng-if="vm.datachooser">
+    <div ng-if="vm.datachooser">
+        <md-input-container>
 
-        <label>Axis to show: </label>
+            <label>Axis to show: </label>
 
-        <md-select
-            aria-label="select axis to view in the chart"
-            flex="33"
-            class="axischooser"
-            ng-model="vm.activeAxis"
-            ng-change="vm.axisChange(vm.activeAxis)">
+            <md-select
+                aria-label="select axis to view in the chart"
+                class="axischooser"
+                ng-model="vm.activeAxis"
+                ng-change="vm.axisChange(vm.activeAxis)">
 
-            <md-option
-                ng-repeat="label in vm.labels">
+                <md-option
+                    ng-repeat="label in vm.labels">
 
-                {{label}}
+                    {{label}}
 
-            </md-option>
+                </md-option>
 
-        </md-select>
+            </md-select>
 
-    </md-input-container>
-
-</div>
-
-<div ng-if="vm.showPlaceholder">
-
-    <h2>placeholder for insufficient data!</h2>
+        </md-input-container>
+    </div>
 
 </div>
