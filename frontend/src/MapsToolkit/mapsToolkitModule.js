@@ -38,6 +38,9 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     resolve: {
                         'ctrl': () => {
                             return lazyLoader($controllerProvider, 'MapsToolkitModuleController', 'controller');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }

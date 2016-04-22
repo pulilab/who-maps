@@ -19,15 +19,17 @@
 
     <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
 
-        <div layout="column" layout-fill >
-            <h4>{{vm.domain.domain}} ({{vm.domain.domain_max}} points)</h4>
-            <p>
-                {{vm.domainStructure.sub_text}}
-            </p>
+        <div layout="column" layout-fill  >
+            <div class="domain-header">
+                <h4>{{vm.domain.domain}} ({{vm.domain.domain_max}} points)</h4>
+                <p>
+                    {{vm.domainStructure.sub_text}}
+                </p>
+            </div>
             <section ng-repeat="question in vm.domainStructure.questions" >
                 <md-subheader >
                     <div layout="row" flex="100" class="question-header">
-                        <div flex="{{vm.calculateMainBoxSize(question)}}" layout="column" layout-align="center start">
+                        <div flex="{{vm.calculateMainBoxSize(question)}}" layout="column" class="question-text" layout-align="center start">
                             {{question.id}}.{{question.text}} ({{vm.domain.questions[$index].question_max}} Points)
                         </div>
                         <div flex="10" layout="column" layout-align="end center" ng-repeat="choice in question.choices">
@@ -58,9 +60,5 @@
             </section>
         </div>
     </div>
-    <footer layout="row" flex layout-align="start start">
-        <div flex ng-repeat="axis in vm.rawData">
-            {{axis.axis}}
-        </div>
-    </footer>
+    <axis-footer axes="vm.rawData"></axis-footer>
 </div>

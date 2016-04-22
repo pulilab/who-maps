@@ -10,7 +10,6 @@ class MapsToolkitService extends AuthApi {
     getProjectData() {
         return this.get(this.projectId + '/toolkit/data/')
         .then(data => {
-            console.log(data);
             return data;
         });
     }
@@ -19,7 +18,7 @@ class MapsToolkitService extends AuthApi {
         return this.post(this.projectId + '/toolkit/score/', answer)
         .then(data => {
             console.log(data);
-        })
+        });
     }
 }
 

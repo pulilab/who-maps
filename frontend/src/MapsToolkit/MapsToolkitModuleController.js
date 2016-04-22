@@ -6,6 +6,7 @@ class MapsToolkitModuleController {
     constructor($scope, $state, structure) {
         this.state = $state;
         this.scope = $scope;
+        this.EE = window.EE;
         this.dataLoaded = false;
         this.structure = _.cloneDeep(structure);
         this.projectId = this.state.params.appName;
@@ -20,9 +21,17 @@ class MapsToolkitModuleController {
             .then(this.processAxesData.bind(this));
         }
 
+        this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
+        this.EE.on('mapsDomainChange', this.handkeChangeDomain.bind(this));
 
 
+    }
 
+    handleChangeAxis(id) {
+        this.state.go(this.state.current.name, { 'axisId': id });
+    }
+    handkeChangeDomain(id) {
+        this.state.go(this.state.current.name, { 'domainId': id });
     }
 
     processAxesData(data) {
@@ -30,10 +39,19 @@ class MapsToolkitModuleController {
         this.rawData = _.cloneDeep(data);
         this.axis = data[this.axisId];
         this.domainStructure = this.structure[this.axisId][this.domainId];
+
+        // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const templates = {};
+        const templateRequire = require.context('./Resource/template/', true, /\.html$/);
+        templateRequire.keys().forEach((item) => {
+            const key = item.split('.')[1].replace('/', '');
+            templates[key] = templateRequire(item);
+        });
+
+
         _.forEach(this.domainStructure.questions, question => {
             question.answerTemplate = _.map(question.answerTemplate, answerTemplate => {
-                const templatePath = './Resource/template/' + answerTemplate + '.html';
-                answerTemplate = require(templatePath);
+                answerTemplate = templates[answerTemplate];
                 return answerTemplate;
             });
         });
@@ -42,7 +60,6 @@ class MapsToolkitModuleController {
         _.map(this.domain.questions, (question, questionKey) => {
             question.index = questionKey;
         });
-        console.log(this.rawData);
         this.scope.$evalAsync();
     }
 

@@ -2,9 +2,20 @@
 @import '../mixins';
 
 .question-header {
+    height: 63px;
+    padding-bottom: 10px;
     background: #EEEEEE;
-    height:70px;
-    padding-bottom: 5px;
+    box-shadow: 0px 1px 0px 0px #BDBDBD;
+    color: $color-black;
+    font-size:12px;
+    text-transform: uppercase;
+    .question-text {
+        padding-top:23px;
+        padding-bottom:13px;
+        padding-left:60px;
+        font-size:20px;
+        text-transform: none;
+    }
 }
 
 .md-subheader .md-subheader-inner {
@@ -12,6 +23,29 @@
 }
 
 .maps-toolkit {
+
+    .domain-header {
+        padding-left:60px;
+        padding-top:40px;
+        color:$color-black;
+
+        h4 {
+            font-size:32px;
+            font-weight: normal;
+            padding-bottom:24px;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+        }
+        p {
+            font-size:14px;
+            font-style:italic;
+            padding-bottom:40px;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+        }
+
+    }
+
 
 
     .axis-row {
@@ -35,13 +69,6 @@
         margin-bottom:0;
     }
 
-    .question-header {
-        height: 70px;
-        padding-bottom: 5px;
-        background: #EEEEEE;
-        box-shadow: 0px 1px 0px 0px #BDBDBD;
-    }
-
     .answer {
         border-bottom: 1px solid #BDBDBD;
 
@@ -49,16 +76,21 @@
         .first-box,
         .box {
             border-right: 1px solid $color-gray-lighter;
-            padding: 10px;
         }
     }
 
-    footer {
-        height:35px;
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        background: $color-gray-lighter;
+    .answer-wrapper {
+        font-family: Roboto-Regular;
+        font-size: 14px;
+        color: $text-primary ;
+        line-height: 20px;
+        padding-top: 24px;
+        padding-bottom:24px;
+        padding-left: 60px;
+        padding-right: 100px;
+
+        li {
+            margin-left:20px;
+        }
     }
 }
