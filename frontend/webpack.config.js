@@ -22,7 +22,7 @@ const basePlugins = [
     new webpack.optimize.OccurrenceOrderPlugin(true),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
-        title: 'Digital Healt Atlas',
+        title: 'Digital Health Atlas',
         inject: false
     }),
     new CleanPlugin(PATH.build)
