@@ -86,6 +86,65 @@
                     "answerTemplate": ["2-3-1","2-3-2","2-3-3","2-3-4"]
                 }
             ]
+        },
+        {
+            "id": 3,
+            "sub_text": "The assessment of general and context-specific evidence supporting the innovation, in order to identify whether there is a need for additional evaluation activities prior to scaling up further",
+            "questions": [
+                {
+                    "id": "3-1a",
+                    "text": "Have the overall goals for scaling up been articulated?",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 2
+                        }
+                    ],
+                    "answerTemplate": ["3-1a-1", "3-1a-2", "3-1a-3", "3-1a-4"]
+                },
+                {
+                    "id": "3-2",
+                    "text": "Have the overall goals for scaling up been articulated?",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performend",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 1
+                        }
+                    ],
+                    "answerTemplate": ["3-2-1", "3-2-2", "3-2-3", "3-2-4", "3-2-5", "3-2-6"]
+                },
+                {
+                    "id": "3-1b",
+                    "text": "Have the overall goals for scaling up been articulated?",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 2
+                        }
+                    ],
+                    "answerTemplate": ["3-1b-1", "3-1b-2"]
+                }
+            ]
         }
     ],
     [
@@ -95,7 +154,7 @@
             "questions": [
                 {
                     "id": "4-1a",
-                    "text": "Do I SERIUSLY need to type this ?????????? ",
+                    "text": "Question text placeholder ",
                     "choices": [
                         {
                             "label": "No",
@@ -115,6 +174,1040 @@
                         }
                     ],
                     "answerTemplate": ["4-1a-1", "4-1a-2", "4-1a-3"]
+                },
+                {
+                    "id": "4-1b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Identified",
+                            "points": 1
+                        },
+                        {
+                            "label": "Informal Partnerships",
+                            "points": 2
+                        },
+                        {
+                            "label": "Formal partner with agreement",
+                            "points": 3
+                        },
+                        {
+                            "label": "N/A",
+                            "points": -1
+                        }
+                    ],
+                    "answerTemplate": ["4-1b-1", "4-1b-2", "4-1b-3", "4-1b-4", "4-1b-5", "4-1b-6", "4-1b-7", "4-1b-8", "4-1b-9"]
+                },
+                {
+                    "id": "4-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["4-2-1", "4-2-2", "4-2-3", "4-2-4"]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "5-1a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["5-1a-1", "5-1a-2", "5-1a-3"]
+                },
+                {
+                    "id": "5-1b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 2
+                        }
+                    ],
+                    "answerTemplate": ["5-1b-1", "5-1b-2", "5-1b-3", "5-1b-4", "5-1b-5"]
+                },
+                {
+                    "id": "5-1c",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 2
+                        }
+                    ],
+                    "answerTemplate": ["5-1c-1", "5-1c-2", "5-1c-3", "5-1c-4", "5-1c-5"]
+                },
+                {
+                    "id": "5-2a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["5-2a-1", "5-2a-2", "5-2a-3", "5-2a-4"]
+                },
+                {
+                    "id": "5-2b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["5-2b-1", "5-2b-2", "5-2b-3"]
+                }
+
+            ]
+        }
+    ],
+    [
+        {
+            "id": 6,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "6-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["6-1-1", "6-1-2", "6-1-3", "6-1-4", "6-1-5", "6-1-6"]
+                },
+                {
+                    "id": "6-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["6-2-1", "6-2-2"]
+                },
+                {
+                    "id": "6-3",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["6-3-1", "6-3-2", "6-3-3"]
+                },
+                {
+                    "id": "6-4",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["6-4-1", "6-4-2", "6-4-3", "6-4-4"]
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "7-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["7-1-1", "7-1-2", "7-1-3", "7-1-4"]
+                },
+                {
+                    "id": "7-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["7-2-1", "7-2-2", "7-2-3", "7-2-4"]
+                },
+                {
+                    "id": "7-3",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["7-3-1", "7-3-2", "7-3-3", "7-3-4"]
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "id": 8,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "8-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 1
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["8-1-1", "8-1-2", "8-1-3"]
+                },
+                {
+                    "id": "8-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 1
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["8-2-1", "8-2-2", "8-2-3", "8-2-4", "8-2-5", "8-2-6"]
+                },
+                {
+                    "id": "8-3a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 1
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["8-3a-1", "8-3a-2", "8-3a-3", "8-3a-4"]
+                },
+                {
+                    "id": "8-3b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 1
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["8-3b-1", "8-3b-2"]
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "9-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["9-1-1", "9-1-2", "9-1-3"]
+                },
+                {
+                    "id": "9-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Interoperability Demostrated",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["9-2-1", "9-2-2", "9-2-3"]
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "10-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["10-1-1", "10-1-2", "10-1-3", "10-1-4"]
+                },
+                {
+                    "id": "10-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["10-2-1", "10-2-2", "10-2-3"]
+                },
+                {
+                    "id": "10-3",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["10-3-1", "10-3-2"]
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "id": 11,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "11-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["11-1-1", "11-1-2", "11-1-3", "11-1-4", "11-1-5", "11-1-6", "11-1-7"]
+                },
+                {
+                    "id": "11-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["11-2-1", "11-2-2", "11-2-3", "11-2-4"]
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "12-1a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        },
+                        {
+                            "label": "N/A",
+                            "points": -1
+                        }
+                    ],
+                    "answerTemplate": ["12-1a-1", "12-1a-2", "12-1a-3", "12-1a-4", "12-1a-5"],
+                    "forbiddenChoices": {
+                        "12-1a-1": -1,
+                        "12-1a-2": -1
+                    }
+                },
+                {
+                    "id": "12-1b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["12-1b-1", "12-1b-2", "12-1b-3", "12-1b-4"]
+                },
+                {
+                    "id": "12-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["12-2-1", "12-2-2", "12-2-3"]
+                },
+                {
+                    "id": "12-3",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["12-3-1", "12-3-2", "12-3-3"]
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "13-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["13-1-1", "13-1-2", "13-1-3"]
+                },
+                {
+                    "id": "13-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["13-2-1", "13-2-2"]
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "14-1",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["14-1-1", "14-1-2", "14-1-3"]
+                },
+                {
+                    "id": "14-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["14-2-1", "14-2-2", "14-2-3"]
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "id": 15,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "15-1a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 2
+                        }
+                    ],
+                    "answerTemplate": ["15-1a-1", "15-1a-2"]
+                },
+                {
+                    "id": "15-1b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["15-1b-1", "15-1b-2", "15-1b-3"]
+                },
+                {
+                    "id": "15-2",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["15-2-1", "15-2-2", "15-2-3", "15-2-4"]
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "questions": [
+                {
+                    "id": "16-1a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "points": 2
+                        }
+                    ],
+                    "answerTemplate": ["16-1a-1", "16-1a-2", "16-1a-3"]
+                },
+                {
+                    "id": "16-1b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["16-1b-1", "16-1b-2", "16-1b-3"]
+                },
+                {
+                    "id": "16-1c",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["16-1c-1", "16-1c-2"]
+                },
+                {
+                    "id": "16-2a",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["16-2a-1", "16-2a-2", "16-2a-3", "16-2a-4"]
+                },
+                {
+                    "id": "16-2b",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["16-2b-1", "16-2b-2", "16-2b-3", "16-2b-4"]
+                },
+                {
+                    "id": "16-2c",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["16-2c-1", "16-2c-2", "16-2c-3", "16-2c-4", "16-2c-5"]
+                },
+                {
+                    "id": "16-3",
+                    "text": "Question text placeholder ",
+                    "choices": [
+                        {
+                            "label": "No",
+                            "points": 0
+                        },
+                        {
+                            "label": "In progress",
+                            "points": 1
+                        },
+                        {
+                            "label": "Performed",
+                            "points": 2
+                        },
+                        {
+                            "label": "Documented",
+                            "points": 3
+                        }
+                    ],
+                    "answerTemplate": ["16-3-1", "16-3-2"]
                 }
             ]
         }

@@ -28,7 +28,7 @@ class MapsToolkitModuleController {
     }
 
     handleChangeAxis(id) {
-        this.state.go(this.state.current.name, { 'axisId': id });
+        this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });
     }
     handkeChangeDomain(id) {
         this.state.go(this.state.current.name, { 'domainId': id });
