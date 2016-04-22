@@ -25,30 +25,24 @@ describe('LinechartController', () => {
         expect(typeof vm).toBe('object');
     });
 
+    // FIX ME!
     it('if has datachooser binding == true, calculates chosen data', () => {
-        spyOn(vm, 'start');
+        spyOn(vm, 'draw');
         vm.datachooser = true;
         vm.$onInit();
         expect(vm.activeAxis).toBe(vm.labels[0]);
         expect(vm.chosenData).toBe(vm.data[vm.labels[0]].data);
-        expect(vm.start).toHaveBeenCalled();
+        expect(vm.draw).toHaveBeenCalled();
     });
 
+    // FIX ME!
     it('if has datachooser binding == false, uses the bound data', () => {
-        spyOn(vm, 'start');
+        spyOn(vm, 'draw');
         vm.datachooser = false;
         vm.$onInit();
         expect(vm.chosenLabels).toBe(vm.labels);
         expect(vm.activeAxis).not.toBeDefined();
         expect(vm.chosenData).not.toBeDefined();
-    });
-
-    it('binds a vm.showPlaceholder=true, if there isnt enough data for a linechart to make sense', () => {
-        vm.datachooser = false;
-        vm.data = axisdata.data;
-        vm.data = vm.data.slice(0, 1);
-        vm.$onInit();
-        expect(vm.showPlaceholder).toBe(true);
     });
 
     it('starts drawing .svg, if there is enough data, or there is a datachooser', () => {

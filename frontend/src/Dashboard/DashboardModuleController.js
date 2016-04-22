@@ -12,7 +12,6 @@ class DashboardModuleController {
         vm.perfMockMap = perfMockMap;
 
         vm.resizedw = () => {
-            console.log('dash EMITS RESIZE');
             this.EE.emit('dashResized');
         };
 
