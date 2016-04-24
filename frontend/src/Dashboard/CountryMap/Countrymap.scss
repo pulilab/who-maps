@@ -34,6 +34,22 @@
 			background-color: white;
 			padding: 10px;
 			opacity: 0.8;
+
+			.activename {
+				color: $color-primary;
+			}
+		}
+	}
+
+	.zoomhandlers {
+
+		position: absolute;
+		left: 15px;
+		top: 350px;
+
+		md-icon {
+			color: $color-gray-light;
+			cursor: default;
 		}
 	}
 }
@@ -41,23 +57,25 @@
 
 .countrymapcontainer {
 
-    height: 460px;
-    width: 460px;
+    background-color: $color-gray-lightest;
+    overflow: hidden;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
 
 	.d3district {
 
 		fill: #BDBDBD;
 		stroke: white;
-		stroke-width: 2px;
+		stroke-width: 3px;
 	    pointer-events: all;
 	    cursor: default;
 
 		&.d3district-data {
 
-			fill: #9E9E9E;
+			fill: $color-gray-light;
 
 			&:hover {
-				fill: #808080;
+				fill: $color-primary;
 			}
 		}
 	}

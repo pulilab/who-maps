@@ -1,4 +1,4 @@
-import { default as MapsToolkitModuleController } from './MapsToolkitModuleController';
+// import { default as MapsToolkitModuleController } from './MapsToolkitModuleController';
 
 /* global define, it, describe, expect */
 

@@ -24,7 +24,7 @@ const lazyLoader = (provider, element, type) => {
     return prom;
 };
 
-function config($stateProvider, $controllerProvider, $compileProvider) {
+function config($stateProvider, $controllerProvider) {
     $stateProvider
         .state(moduleName,
         {

@@ -58,8 +58,7 @@
                 <div class="dash-subhead">PROJECT DETAILS</div>
                 <md-card flex>
 
-
-                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" md-selected="3">
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
                         <md-tab label="overview">
                             <div class="dash-cardcontent" layout="column">
@@ -184,7 +183,22 @@
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
             <md-card flex>
-                Some content in the card
+
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" md-selected="0">
+
+                        <md-tab label="geographical view">
+                            <countrymap
+                                flex
+                                data="vm.perfMockMap">
+                            </countrymap>
+                        </md-tab>
+
+                        <md-tab label="historical view">
+                            Linechart here
+                        </md-tab>
+
+                    </md-tabs>
+
             </md-card>
         </div>
 
