@@ -1,7 +1,7 @@
 import angular from 'angular';
 import DashboardModuleController from './DashboardModuleController';
 import linechart from './Linechart/linechart';
-import countrymap from './CountryMap/countrymap';
+import countrymap from './Countrymap/countrymap';
 
 import _template from './Dashboard.html';
 import './Dashboard.scss';
