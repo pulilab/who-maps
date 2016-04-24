@@ -93,4 +93,24 @@
             margin-left:20px;
         }
     }
+
+    .domain-scoore {
+        height: 76px;
+        font-size:20px;
+        padding-right:60px;
+        padding-left:60px;
+        background: #FFF9C4;
+        margin-bottom:40px;
+    }
+
+    .domain-button {
+        margin-bottom:47px;
+        padding-right:60px;
+        padding-left:60px;
+
+        .md-button {
+            padding-left:20px;
+            padding-right:20px;
+        }
+    }
 }

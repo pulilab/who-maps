@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import MapsToolkitService from './MapsToolkitService';
 
-class MapsToolkitModuleController {
+class MapsToolkitModuleController  {
 
     constructor($scope, $state, structure) {
         this.state = $state;
         this.scope = $scope;
         this.EE = window.EE;
         this.dataLoaded = false;
+        this.score = 0;
         this.structure = _.cloneDeep(structure);
         this.projectId = this.state.params.appName;
         this.domainId = this.state.params.domainId;
@@ -22,7 +23,7 @@ class MapsToolkitModuleController {
         }
 
         this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
-        this.EE.on('mapsDomainChange', this.handkeChangeDomain.bind(this));
+        this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
 
 
     }
@@ -30,12 +31,11 @@ class MapsToolkitModuleController {
     handleChangeAxis(id) {
         this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });
     }
-    handkeChangeDomain(id) {
+    handleChangeDomain(id) {
         this.state.go(this.state.current.name, { 'domainId': id });
     }
 
     processAxesData(data) {
-        this.dataLoaded = true;
         this.rawData = _.cloneDeep(data);
         this.axis = data[this.axisId];
         this.domainStructure = this.structure[this.axisId][this.domainId];
@@ -59,8 +59,14 @@ class MapsToolkitModuleController {
         this.domain = data[this.axisId].domains[this.domainId];
         _.map(this.domain.questions, (question, questionKey) => {
             question.index = questionKey;
+            this.score += _.sumBy(question.answers, item => {
+                item = item === -1 ? 0 : item;
+                return item;
+            });
         });
+        this.dataLoaded = true;
         this.scope.$evalAsync();
+
     }
 
     calculateMainBoxSize(question) {
@@ -85,9 +91,34 @@ class MapsToolkitModuleController {
             answer: answerId,
             value: points
         };
+        this.score +=  points - this.domain.questions[questionId].answers[answerId];
         this.domain.questions[questionId].answers[answerId] = points;
+        this.scope.$evalAsync();
         this.ms.saveAnswer(answer);
     }
+
+    backButtonDisabled() {
+        return parseInt(this.domainId, 10) === 0;
+    }
+
+    forwardButtonDisabled() {
+        return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1;
+    }
+
+    goToNextDomain() {
+        const next = parseInt(this.domainId, 10) + 1;
+        if (next < this.rawData[this.axisId].domains.length) {
+            this.handleChangeDomain(next);
+        }
+    }
+
+    goToPrevDomain() {
+        const prev = parseInt(this.domainId, 10) - 1;
+        if (prev >= 0) {
+            this.handleChangeDomain(prev);
+        }
+    }
+
 
     static mapsControllerFactory() {
         function mapsController($scope, $state) {

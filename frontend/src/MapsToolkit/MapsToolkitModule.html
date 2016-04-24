@@ -54,10 +54,34 @@
                         ></md-checkbox>
                     </div>
                     <div flex="10" class="fourth-box" layout="column" layout-align="center center">
-                        <span>{{vm.domain.questions[$parent.$index].answers[$index]}} points</span>
+                        <span ng-show="vm.domain.questions[$parent.$index].answers[$index] !== undefined" >{{vm.domain.questions[$parent.$index].answers[$index]}} points</span>
+
                     </div>
                 </div>
             </section>
+        </div>
+        <div class="domain-scoore" flex="100" layout-fill  layout="row" layout-align="center start">
+            <span flex layout-fill layout="column"  layout-align="center start"> Total point earned (out of a possible {{vm.domain.domain_max}}) </span>
+            <span flex layout="column" layout-fill layout-align="center end">{{vm.score}}</span>
+        </div>
+
+        <div class="domain-button" layout="row" layout-fill >
+            <div flex="50" layout="column" layout-align="center start">
+                <md-button class="md-raised md-primary"
+                    ng-disabled="vm.backButtonDisabled()"
+                    ng-click="vm.goToPrevDomain()">
+                    <md-icon>arrow_back</md-icon>
+                    Go to prev domain
+                </md-button>
+            </div>
+            <div flex="50" layout="column" layout-align="center end">
+                <md-button class="md-raised md-primary"
+                    ng-disabled="vm.forwardButtonDisabled()"
+                    ng-click="vm.goToNextDomain()">
+                    Go to next domain
+                    <md-icon>arrow_forward</md-icon>
+                </md-button>
+            </div>
         </div>
     </div>
     <axis-footer axes="vm.rawData"></axis-footer>

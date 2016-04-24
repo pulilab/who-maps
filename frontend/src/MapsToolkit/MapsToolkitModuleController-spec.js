@@ -1,7 +1,13 @@
-import { default as MapsToolkitModuleController } from './MapsToolkitModuleController';
+import MapsToolkitModuleController from './MapsToolkitModuleController';
 
-/* global define, it, describe, expect */
+/* global define, it, describe, expect, beforeEach */
+let mc = {};
 
 describe('MapsToolkitModuleController', () => {
+
+    beforeEach(() => {
+        mc = new MapsToolkitModuleController();
+        console.log(mc);
+    });
 
 });

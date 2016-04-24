@@ -9,13 +9,17 @@ import hssTemplate from './HssModule.html';
 import './hssModule.scss';
 
 const moduleName = 'hss';
+const components = {};
 
 const lazyLoader = (provider, element, type) => {
     const prom = new Promise((resolve) => {
         require([], require => {
             const ctrl = require('./' + element);
             if (type === 'component') {
-                provider.component(ctrl.default.name, ctrl.default);
+                if (!components[element]) {
+                    components[element] = true;
+                    provider.component(ctrl.default.name, ctrl.default);
+                }
             }
             if (type === 'controller') {
                 provider.register(element, ctrl.default.hssControllerFactory());
