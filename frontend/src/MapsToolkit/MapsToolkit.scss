@@ -2,7 +2,7 @@
 @import '../mixins';
 
 .question-header {
-    height: 63px;
+    height: 73px;
     padding-bottom: 10px;
     background: #EEEEEE;
     box-shadow: 0px 1px 0px 0px #BDBDBD;
@@ -15,6 +15,7 @@
         padding-left:60px;
         font-size:20px;
         text-transform: none;
+        line-height: 24px;
     }
 }
 
@@ -97,6 +98,7 @@
     .domain-scoore {
         height: 76px;
         font-size:20px;
+        font-weight: 500;
         padding-right:60px;
         padding-left:60px;
         background: #FFF9C4;

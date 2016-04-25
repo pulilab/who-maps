@@ -21,7 +21,7 @@
                 },
                 {
                     "id": "1-2",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": "Has the endgame for scaling up and sustaining the mHealth product been determined?",
                     "choices": [
                         {
                             "label": "No",
@@ -42,7 +42,7 @@
             "questions": [
                 {
                     "id": "2-1",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": "Has the policy environment in the local setting(s), where scaling up will take place, been assessed?",
                     "choices": [
                         {
                             "label": "No",
@@ -57,7 +57,7 @@
                 },
                 {
                     "id": "2-2",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": "Has the technical environment in the local setting(s), where scaling up will take place, been assessed?",
                     "choices": [
                         {
                             "label": "No",
@@ -72,7 +72,7 @@
                 },
                 {
                     "id": "2-3",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": "Has the mHealth landscape in the local setting(s), where scaling up will take place, been assessed? ",
                     "choices": [
                         {
                             "label": "No",
@@ -93,7 +93,7 @@
             "questions": [
                 {
                     "id": "3-1a",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": "Has sufficient evidence been gathered or previously produced in support of the mHealth product?",
                     "choices": [
                         {
                             "label": "No",
@@ -108,7 +108,7 @@
                 },
                 {
                     "id": "3-1b",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": " Have the key components of the product’s strategy (or health purpose) been validated?",
                     "choices": [
                         {
                             "label": "No",
@@ -123,7 +123,7 @@
                 },
                 {
                     "id": "3-2",
-                    "text": "Have the overall goals for scaling up been articulated?",
+                    "text": "Has the product’s appropriateness in the local setting(s) been demonstrated?",
                     "choices": [
                         {
                             "label": "No",
@@ -154,7 +154,7 @@
             "questions": [
                 {
                     "id": "4-1a",
-                    "text": "Question text placeholder ",
+                    "text": "Have the types of collaboration that will be necessary during the scaling-up process been determined?",
                     "choices": [
                         {
                             "label": "No",
@@ -177,7 +177,7 @@
                 },
                 {
                     "id": "4-1b",
-                    "text": "Question text placeholder ",
+                    "text": "Have relationships been developed with partners/vendors that fulfil the following needs, as appropriate?",
                     "choices": [
                         {
                             "label": "No",
@@ -204,7 +204,7 @@
                 },
                 {
                     "id": "4-2",
-                    "text": "Question text placeholder ",
+                    "text": "Has the value of the mHealth product been communicated to partners?",
                     "choices": [
                         {
                             "label": "No",
@@ -229,11 +229,11 @@
         },
         {
             "id": 5,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The establishment of mechanisms will help to sustain partnerships as new challenges emerge during scaling up",
             "questions": [
                 {
                     "id": "5-1a",
-                    "text": "Question text placeholder ",
+                    "text": "Have specific champions been fostered and developed among core partners, as needed?",
                     "choices": [
                         {
                             "label": "No",
@@ -256,7 +256,7 @@
                 },
                 {
                     "id": "5-1b",
-                    "text": "Question text placeholder ",
+                    "text": "For one of the champions identified in SAQ 5-1a, does he/she have the capacity necessary to advocate for the mHealth product?",
                     "choices": [
                         {
                             "label": "No",
@@ -271,7 +271,7 @@
                 },
                 {
                     "id": "5-1c",
-                    "text": "Question text placeholder ",
+                    "text": "For a second champion identified in the previous question, does he/she have the capacity necessary to advocate for the mHealth product?",
                     "choices": [
                         {
                             "label": "No",
@@ -286,7 +286,7 @@
                 },
                 {
                     "id": "5-2a",
-                    "text": "Question text placeholder ",
+                    "text": "Have mechanisms for inclusive planning been established with partners?",
                     "choices": [
                         {
                             "label": "No",
@@ -309,7 +309,7 @@
                 },
                 {
                     "id": "5-2b",
-                    "text": "Question text placeholder ",
+                    "text": "Has a common understanding of the key components of the scaling-up process been established with core partners?",
                     "choices": [
                         {
                             "label": "No",
@@ -337,7 +337,7 @@
     [
         {
             "id": 6,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The understanding, assessment and projection of costs that will be associated with scaling up the mHealth product",
             "questions": [
                 {
                     "id": "6-1",
