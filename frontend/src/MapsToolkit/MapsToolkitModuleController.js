@@ -14,17 +14,19 @@ class MapsToolkitModuleController  {
         this.domainId = this.state.params.domainId;
         this.axisId = this.state.params.axisId;
         this.ms = new MapsToolkitService(this.projectId);
-        if (!this.domainId || !this.axisId) {
-            this.state.go('maps', { domainId: 0, axisId: this.axisId ? this.axisId : 0 });
-        }
-        else {
-            this.ms.getProjectData()
-            .then(this.processAxesData.bind(this));
-        }
+        this.loadData();
 
         this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
         this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
 
+
+    }
+
+    loadData() {
+        if (_.isNaN(parseInt(this.domainId, 10)) || _.isNaN(parseInt(this.axisId, 10))) {
+            this.state.go('maps', { domainId: 0, axisId: this.axisId ? this.axisId : 0 });
+        }
+        this.ms.getProjectData().then(this.processAxesData.bind(this));
 
     }
 
@@ -35,11 +37,7 @@ class MapsToolkitModuleController  {
         this.state.go(this.state.current.name, { 'domainId': id });
     }
 
-    processAxesData(data) {
-        this.rawData = _.cloneDeep(data);
-        this.axis = data[this.axisId];
-        this.domainStructure = this.structure[this.axisId][this.domainId];
-
+    importHtmlTempaltes() {
         // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
         const templates = {};
         const templateRequire = require.context('./Resource/template/', true, /\.html$/);
@@ -47,8 +45,15 @@ class MapsToolkitModuleController  {
             const key = item.split('.')[1].replace('/', '');
             templates[key] = templateRequire(item);
         });
+        return templates;
+    }
 
+    processAxesData(data) {
+        this.rawData = _.cloneDeep(data);
+        this.axis = data[this.axisId];
+        this.domainStructure = this.structure[this.axisId][this.domainId];
 
+        const templates = this.importHtmlTempaltes();
         _.forEach(this.domainStructure.questions, question => {
             question.answerTemplate = _.map(question.answerTemplate, answerTemplate => {
                 answerTemplate = templates[answerTemplate];
@@ -70,10 +75,9 @@ class MapsToolkitModuleController  {
     }
 
     calculateMainBoxSize(question) {
-        if (question.choices) {
+        if (question && question.choices) {
             return 90 - 10 * question.choices.length;
         }
-
         return 40;
     }
 
