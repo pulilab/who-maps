@@ -11,9 +11,9 @@
 
 <div layout="column" flex="100" layout-fill layout-padding>
     <div ng-repeat="domain in vm.data">
-        <h4>{{domain[0].domain}}</h4>
-        <div ng-repeat="question in domain[0].questions">
-            <span>{{question.question_sum}}/{{question.question_max}}</span>
+        <h4>{{domain.domain}}</h4>
+        <div ng-repeat="question in domain.questions">
+            <span>{{ question.text }} {{question.question_sum}}/{{question.question_max}}</span>
         </div>
     </div>
 </div>
