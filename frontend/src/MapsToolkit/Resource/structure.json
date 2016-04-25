@@ -17,22 +17,7 @@
                             "points": 2
                         }
                     ],
-                    "answerTemplate": ["1-1-1", "1-1-2", "1-1-3"]
-                },
-                {
-                    "id": "1-2",
-                    "text": "Has the endgame for scaling up and sustaining the mHealth product been determined?",
-                    "choices": [
-                        {
-                            "label": "No",
-                            "points": 0
-                        },
-                        {
-                            "label": "Yes",
-                            "points": 2
-                        }
-                    ],
-                    "answerTemplate": ["1-2-1"]
+                    "answerTemplate": ["1-1-3"]
                 }
             ]
         },

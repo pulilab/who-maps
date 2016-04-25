@@ -21,6 +21,7 @@ const axis1 =
             }
         ],
         'axis_score': 8.333333333333334,
+        'axis_completion': 0,
         'axis': 'AXIS 1. GROUNDWORK',
         'id': 0
     };

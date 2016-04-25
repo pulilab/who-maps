@@ -50,6 +50,21 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     }
                 }
             }
+        })
+        .state('scorecard',
+        {
+            url: '/scorecard/:axisId',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<scorecard></scorecard>',
+                    resolve: {
+                        'scorecard': () => {
+                            return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                        }
+                    }
+                }
+            }
         });
 }
 

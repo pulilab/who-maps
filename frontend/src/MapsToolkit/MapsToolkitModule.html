@@ -8,7 +8,7 @@
             <div flex="30" layout="row" layout-align="end center">
                 <md-button>
                     <md-icon>toc</md-icon>
-                    Thematic overview
+                    Overview
                 </md-button>
                 <md-button>
                     <md-icon>pause</md-icon>
@@ -54,7 +54,7 @@
                         ></md-checkbox>
                     </div>
                     <div flex="10" class="fourth-box" layout="column" layout-align="center center">
-                        <span ng-show="vm.domain.questions[$parent.$index].answers[$index] !== undefined" >{{vm.domain.questions[$parent.$index].answers[$index]}} points</span>
+                        <span ng-show="vm.domain.questions[$parent.$index].answers[$index] !== null" >{{vm.domain.questions[$parent.$index].answers[$index]}} points</span>
 
                     </div>
                 </div>
