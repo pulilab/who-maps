@@ -21,6 +21,7 @@ class Toolkit(ExtendedModel):
             - Domain score sum
             - Domain percentage
             - Axis score
+            - Axis completion
 
         Args:
             axis: index of axis
@@ -36,12 +37,12 @@ class Toolkit(ExtendedModel):
         self.data[axis]["domains"][domain]["questions"][question]["answers"][answer] = value
 
         # Filter out -1 values from answers since those stand for not applicable.
-        is_positive = lambda x: x >= 0
+        is_applicable = lambda x: x == None or x >= 0
         answers = self.data[axis]["domains"][domain]["questions"][question]["answers"]
-        applicable_answers = list(filter(is_positive, answers))
+        applicable_answers = list(filter(is_applicable, answers))
 
         # Update the question score sum (sum of answers).
-        self.data[axis]["domains"][domain]["questions"][question]["question_sum"] = sum(applicable_answers)
+        self.data[axis]["domains"][domain]["questions"][question]["question_sum"] = sum(filter(None, applicable_answers))
 
         # Update the domain score sum (sum of question sums).
         questions = self.data[axis]["domains"][domain]["questions"]
@@ -62,5 +63,20 @@ class Toolkit(ExtendedModel):
         # Update the axis score (average of domain percentages).
         axis_score = mean([x["domain_percentage"] for x in self.data[axis]["domains"]])
         self.data[axis]["axis_score"] = axis_score
+
+        # Update the axis completion percentage.
+        all_axis_anwers = [answer
+            for domains in self.data[axis]["domains"]
+            for questions in domains["questions"]
+            for answer in questions["answers"]
+        ]
+        answered_axis_answers = [answer
+            for domains in self.data[axis]["domains"]
+            for questions in domains["questions"]
+            for answer in questions["answers"]
+            if answer != None
+        ]
+        axis_completion = (len(answered_axis_answers) / len(all_axis_anwers)) * 100
+        self.data[axis]["axis_completion"] = axis_completion
 
         self.save()
