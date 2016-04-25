@@ -62,7 +62,7 @@
 
                         <md-tab label="overview">
                             <div class="dash-cardcontent" layout="column">
-                                <!-- TODO: binde axes -->
+                                <!-- TODO: bind axes -->
                                 <axis flex></axis>
                                 <axis flex></axis>
                                 <axis flex></axis>
@@ -165,11 +165,9 @@
                             </div>
                         </md-tab>
 
-                        <md-tab label="resources">
+                        <md-tab label="resources" ng-disabled="true">
                             <div>
                                 RESOURCES content
-                                <br>
-                                resources and stuff
                             </div>
                         </md-tab>
 
@@ -184,7 +182,7 @@
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
             <md-card flex>
 
-                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" md-selected="0">
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
                         <md-tab label="geographical view">
                             <countrymap
@@ -208,8 +206,73 @@
 
         <div flex class="dashsection dashsection-left dash-cardholder" layout="column">
             <div class="dash-subhead">IMPROVE PROJECT</div>
-            <md-card flex>
-                Some content in the card
+            <md-card flex class="dash-lessons-tips">
+
+
+                <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
+
+
+                    <md-tab label="lessons & tips">
+                        <!-- TODO: chose, and bind random domain -->
+                        <div class="svg-box" ng-class="'axis2'" layout="row">
+                            <div flex="33" flex-offset="66">
+                                <img class="book-keeper" src="./Img/book.svg">
+                            </div>
+                        </div>
+                        <div class="quarters" layout="column">
+
+                            <div class="firstquarter" flex="30">
+
+                                <md-icon class="material-icons">info</md-icon>
+
+                                <div class="score-yell bold">You've scored {33%} in {Scientific Basis} domain!</div>
+
+                                <div class="score-tip">Here you can find some tips and lessons to improve your result. For more info visit {Planning & Guidance} section.</div>
+                            </div>
+
+                            <md-card flex="20">
+                                <img class="tip-capture" src="http://placehold.it/60x60">
+                                <div class="bold lesson-header">Use the existing evidence base to bolster interventions</div>
+                                <div class="lesson-short">Project teams should remember that mHealth is a catalytic tool and not often a health…</div>
+                                <div class="comments">
+                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({17})
+                                </div>
+                            </md-card>
+
+                            <md-card flex="20">
+                                <img class="tip-capture" src="http://placehold.it/60x60">
+                                <div class="bold lesson-header">Conduct formative work to understand your context</div>
+                                <div class="lesson-short">Formative research is critical for local validation and contextualization of mHealth…</div>
+                                <div class="comments">
+                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({6})
+                                </div>
+                            </md-card>
+
+                            <md-card flex="20">
+                                <img class="tip-capture" src="http://placehold.it/60x60">
+                                <div class="bold lesson-header">Lorem ipsum dolor sit amet, consectetur adipisici elit</div>
+                                <div class="lesson-short">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore…</div>
+                                <div class="comments">
+                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({0})
+                                </div>
+                            </md-card>
+
+                        </div>
+                    </md-tab>
+
+                    <md-tab label="experiences" ng-disabled="true">
+                        Experiences content
+                    </md-tab>
+
+                    <md-tab label="resources" ng-disabled="true">
+                        Resources content
+                    </md-tab>
+
+                </md-tabs>
+
+
+
+
             </md-card>
         </div>
 
