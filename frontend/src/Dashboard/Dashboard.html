@@ -63,12 +63,8 @@
                         <md-tab label="overview">
                             <div class="dash-cardcontent" layout="column">
                                 <!-- TODO: bind axes -->
-                                <axis flex></axis>
-                                <axis flex></axis>
-                                <axis flex></axis>
-                                <axis flex></axis>
-                                <axis flex></axis>
-                                <axis flex></axis>
+                                <!-- <div>{{vm.mockAxis}}</div> -->
+                                <axis flex ng-repeat="axis in vm.mockAxis" axis-data="axis"></axis>
                                 <div layout="row" class="dash-overview-tooltips">
                                     <div class="dash-overview-tooltip">
                                         <img src="../Common/Axis/images/flag-started.svg" />

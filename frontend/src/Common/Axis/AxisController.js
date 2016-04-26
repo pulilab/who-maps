@@ -29,7 +29,7 @@ class AxisController {
     parseDomainData() {
         _.forEach(this.domains, (domain, index) => {
             domain.scorePercentage = (domain.domain_sum * 100) / domain.domain_max;
-            domain.name = domain.domain.split(':')[1];
+            domain.name = domain.domain.split(':')[1].toLowerCase();
             domain.index = index;
         });
     }
