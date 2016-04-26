@@ -52,6 +52,7 @@ axis {
 
             height: 50px;
             position: relative;
+            outline: none;
 
             &.gotdata {
 
@@ -121,6 +122,7 @@ axis {
         letter-spacing: -0.13px;
         padding-right: 5px;
         padding-left: 15px;
+        cursor: default;
 
         .cap {
             text-transform: capitalize;
