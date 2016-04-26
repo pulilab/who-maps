@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import MapsToolkitModuleController from './MapsToolkitModuleController';
 
 /* global define, it, describe, expect, beforeEach, spyOn, Promise */
@@ -21,15 +22,20 @@ const $scope = {
 
 const mockData = require('./Resource/mockData.json');
 
+const mockInvariantData = () => {
+    return _.cloneDeep(mockData);
+};
+
 describe('MapsToolkitModuleController', () => {
 
     beforeEach(() => {
+
         $state.params.axisId = 0;
         $state.params.domainId = 0;
         spyOn(MapsToolkitModuleController.prototype, 'handleChangeAxis').and.callThrough();
         spyOn(MapsToolkitModuleController.prototype, 'handleChangeDomain').and.callThrough();
         mc = new MapsToolkitModuleController.mapsControllerFactory()($scope, $state);
-        mc.processAxesData(mockData);
+        mc.processAxesData(mockInvariantData());
 
 
     });
@@ -58,7 +64,7 @@ describe('MapsToolkitModuleController', () => {
 
     it('should have a function that prepare the axis data', () => {
         spyOn(mc, 'importHtmlTempaltes').and.callThrough();
-        mc.processAxesData(mockData);
+        mc.processAxesData(mockInvariantData());
         expect(mc.rawData).toBeDefined();
         expect(mc.domainStructure).toBeDefined();
         expect(mc.importHtmlTempaltes).toHaveBeenCalled();
@@ -85,12 +91,12 @@ describe('MapsToolkitModuleController', () => {
     });
 
     it('should have a function that save the answer selected', () => {
-        expect(mc.score).toBe(8);
+        expect(mc.score).toBe(2);
         spyOn(mc.ms, 'saveAnswer');
         mc.setAnswer(0, 0, 0);
-        expect(mc.score).toBe(6);
+        expect(mc.score).toBe(0);
         expect(mc.ms.saveAnswer).toHaveBeenCalled();
-        expect(mc.domain.questions[0].answers[0]).toBe(0);
+        expect(mc.data.questions[0].answers[0].value).toBe(0);
     });
 
     it('should have a function that  disable the backbutton', () => {

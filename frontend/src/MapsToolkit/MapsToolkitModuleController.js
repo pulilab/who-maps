@@ -54,19 +54,15 @@ class MapsToolkitModuleController  {
         this.domainStructure = this.structure[this.axisId][this.domainId];
 
         const templates = this.importHtmlTempaltes();
-        _.forEach(this.domainStructure.questions, question => {
-            question.answerTemplate = _.map(question.answerTemplate, answerTemplate => {
-                answerTemplate = templates[answerTemplate];
-                return answerTemplate;
-            });
-        });
 
         this.domain = data[this.axisId].domains[this.domainId];
-        _.map(this.domain.questions, (question, questionKey) => {
+        this.data = _.merge(this.domain, this.domainStructure);
+        _.forEach(this.data.questions, (question, questionKey) => {
             question.index = questionKey;
-            this.score += _.sumBy(question.answers, item => {
-                item = item === -1 ? 0 : item;
-                return item;
+            question.answers = _.map(question.answers, (value, index) => {
+                const template = templates[question.answerTemplate[index]];
+                this.score += value === -1 ? 0 : value;
+                return { index, value, template };
             });
         });
         this.dataLoaded = true;
@@ -83,8 +79,9 @@ class MapsToolkitModuleController  {
 
 
     checkChecked(questionId, answerId, points) {
-        const answer = this.domain.questions[questionId].answers[answerId];
-        return answer === points;
+        const answer = this.data.questions[questionId].answers[answerId];
+        console.log(answer);
+        return answer.value === points;
     }
 
     setAnswer(questionId, answerId, points) {
@@ -95,8 +92,8 @@ class MapsToolkitModuleController  {
             answer: answerId,
             value: points
         };
-        this.score +=  points - this.domain.questions[questionId].answers[answerId];
-        this.domain.questions[questionId].answers[answerId] = points;
+        this.score +=  points - this.data.questions[questionId].answers[answerId].value;
+        this.data.questions[questionId].answers[answerId].value = points;
         this.scope.$evalAsync();
         this.ms.saveAnswer(answer);
     }
