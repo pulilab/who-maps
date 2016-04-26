@@ -48,7 +48,6 @@ describe('ScorecardController', () => {
     it('should have a function that processes the data', () => {
         const mock = mockInvariantData();
         sc.handleProjectData(mock);
-        expect(sc.axis).toBeDefined();
         expect(sc.axesSize).toBe(mock.length);
         expect(sc.data).toBeDefined();
         expect(sc.dataLoaded).toBe(true);

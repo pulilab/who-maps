@@ -5,7 +5,10 @@ const scorecardComponent = {
     controller: ScorecardController.scorecardFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'scorecard'
+    name: 'scorecard',
+    bindings: {
+        summary: '@'
+    }
 };
 
 export default scorecardComponent;

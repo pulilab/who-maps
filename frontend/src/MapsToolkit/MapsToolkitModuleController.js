@@ -38,7 +38,7 @@ class MapsToolkitModuleController  {
         this.state.go(this.state.current.name, { 'domainId': id });
     }
 
-    importHtmlTempaltes() {
+    importHtmlTemplates() {
         // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
         const templates = {};
         const templateRequire = require.context('./Resource/template/', true, /\.html$/);
@@ -52,9 +52,9 @@ class MapsToolkitModuleController  {
     processAxesData(data) {
         this.rawData = _.cloneDeep(data);
         this.axis = data[this.axisId];
-        this.domainStructure = this.structure[this.axisId][this.domainId];
+        this.domainStructure = this.structure[this.axisId].domains[this.domainId];
 
-        const templates = this.importHtmlTempaltes();
+        const templates = this.importHtmlTemplates();
 
         this.domain = data[this.axisId].domains[this.domainId];
         this.data = _.merge(this.domain, this.domainStructure);

@@ -65,6 +65,21 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     }
                 }
             }
+        })
+        .state('summary',
+        {
+            url: '/summary',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<scorecard summary="true"></scorecard>',
+                    resolve: {
+                        'scorecard': () => {
+                            return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                        }
+                    }
+                }
+            }
         });
 }
 

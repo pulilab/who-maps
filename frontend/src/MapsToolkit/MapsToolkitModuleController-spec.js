@@ -57,17 +57,17 @@ describe('MapsToolkitModuleController', () => {
     });
 
     it('should have a function that import all the html templates in a dictionary', () => {
-        const t = mc.importHtmlTempaltes();
+        const t = mc.importHtmlTemplates();
         expect(t).toBeDefined();
         expect(t['1-1-3']).toBeDefined();
     });
 
     it('should have a function that prepare the axis data', () => {
-        spyOn(mc, 'importHtmlTempaltes').and.callThrough();
+        spyOn(mc, 'importHtmlTemplates').and.callThrough();
         mc.processAxesData(mockInvariantData());
         expect(mc.rawData).toBeDefined();
         expect(mc.domainStructure).toBeDefined();
-        expect(mc.importHtmlTempaltes).toHaveBeenCalled();
+        expect(mc.importHtmlTemplates).toHaveBeenCalled();
         expect(mc.domain).toBeDefined();
         expect(mc.dataLoaded).toBe(true);
     });

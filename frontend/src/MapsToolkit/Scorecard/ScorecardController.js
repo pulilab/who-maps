@@ -11,6 +11,17 @@ class ScorecardController {
         this.handleProjectData = this.handleProjectData.bind(this);
     }
 
+    importIconTemplates() {
+        // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const templates = {};
+        const templateRequire = require.context('./images/', true, /\.svg$/);
+        templateRequire.keys().forEach((item) => {
+            const key = item.split('.')[1].replace('/', '');
+            templates[key] = templateRequire(item);
+        });
+        return templates;
+    }
+
     initialization() {
         this.dataLoaded = false;
         this.projectId = this.state.params.appName;
@@ -20,17 +31,25 @@ class ScorecardController {
     }
 
     handleProjectData(data) {
-        this.axis = data[this.axisId];
         this.axesSize = data.length;
-        this.axisStructure = this.structure[this.axisId];
-        this.axisName = this.axis.axis.split('.')[1];
-        const axisName = this.axis.axis.split('.')[0].replace(' ', '').toLowerCase();
-        this.axisClass = axisName;
-        this.axisPicture = require('./images/icon-' + axisName + '.svg');
+        this.data = _.merge(data, this.structure);
+        this.createAxisData();
 
-        this.data = _.merge(this.axis.domains, this.axisStructure);
+        if (!this.summary) {
+            this.data = this.data[this.axisId];
+        }
+
         this.dataLoaded = true;
         this.scope.$evalAsync();
+    }
+
+    createAxisData() {
+        const images = this.importIconTemplates();
+        _.forEach(this.data, axis => {
+            axis.axisName = axis.axis.split('.')[1];
+            axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
+            axis.axisPicture = images['icon-' + axis.axisClass]
+        })
     }
 
     updateScore(domain) {
