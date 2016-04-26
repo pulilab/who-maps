@@ -96,10 +96,12 @@
 </div>
 
 <div ng-if="vm.dataLoaded && vm.summary">
-    <div layout="column" layout-align="start center" >
-    <h4>Summary scorecard</h4>
-    <p>After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to this sheet. This will allow you to compare your progress across the six axes, and to identify the domains that require greater attention and efforts.</p>
-</div>
+    <div layout="column" layout-align="start center">
+        <h4>Summary scorecard</h4>
+        <p>After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to
+            this sheet. This will allow you to compare your progress across the six axes, and to identify the domains
+            that require greater attention and efforts.</p>
+    </div>
     <div class="wrapper"  layout="column" layout-fill md-whiteframe >
     <div layout="column" flex="100" layout-fill class="inner-wrapper">
         <div ng-repeat="axis in vm.data" layout="column" class="">

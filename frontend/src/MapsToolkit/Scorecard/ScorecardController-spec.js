@@ -76,5 +76,23 @@ describe('ScorecardController', () => {
         expect(r).toBe(true);
     });
 
+    it('should not filter data when its in summary mode', () => {
+        sc.summary = true;
+        sc.handleProjectData(mockInvariantData());
+        let summaryData = sc.data;
+        sc.summary = false;
+        sc.handleProjectData(mockInvariantData());
+        expect(sc.data).not.toBe(summaryData);
+        expect(sc.data.domains).toBeDefined();
+        expect(summaryData.domains).not.toBeDefined();
+        expect(summaryData[0].domains).toBeDefined();
+    });
+
+    it('should have a function that injects axis data', () => {
+        sc.handleProjectData(mockInvariantData());
+        expect(sc.data.axisName).toBeDefined();
+        expect(sc.data.axisClass).toBeDefined();
+        expect(sc.data.axisPicture).toBeDefined();
+    })
 
 });
