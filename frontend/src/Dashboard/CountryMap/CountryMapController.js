@@ -125,6 +125,8 @@ class CountrymapController {
         };
 
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
+
+        vm.svgZoom.zoomOut();
     }
 
     calculateScale(distrData) {

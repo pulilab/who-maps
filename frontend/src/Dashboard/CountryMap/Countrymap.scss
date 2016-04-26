@@ -1,4 +1,4 @@
-@import '../../variables';
+	@import '../../variables';
 
 .relative {
 
@@ -49,7 +49,8 @@
 
 		md-icon {
 			color: $color-gray-light;
-			cursor: default;
+			cursor: pointer;
+			outline: none;
 		}
 	}
 }
@@ -72,7 +73,7 @@
 
 		&.d3district-data {
 
-			fill: $color-gray-light;
+			fill: #99A2E1;
 
 			&:hover {
 				fill: $color-primary;
