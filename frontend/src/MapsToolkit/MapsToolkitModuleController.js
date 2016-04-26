@@ -80,7 +80,6 @@ class MapsToolkitModuleController  {
 
     checkChecked(questionId, answerId, points) {
         const answer = this.data.questions[questionId].answers[answerId];
-        console.log(answer);
         return answer.value === points;
     }
 
