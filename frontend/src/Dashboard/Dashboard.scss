@@ -39,13 +39,16 @@
 
             .dash-stat-column {
 
-                justify-content: space-between;
+                // justify-content: space-between; TO =>
+                justify-content: flex-start;
+
                 cursor: default;
 
                 .dash-stat-card {
 
                     height: 100px;
                     text-align: center;
+                    margin-bottom: 20px; // Remove if got all 4!
 
                     .dash-trendicon {
 
