@@ -25,6 +25,7 @@ class MapsToolkitModuleController  {
     loadData() {
         if (_.isNaN(parseInt(this.domainId, 10)) || _.isNaN(parseInt(this.axisId, 10))) {
             this.state.go('maps', { domainId: 0, axisId: this.axisId ? this.axisId : 0 });
+            return;
         }
         this.ms.getProjectData().then(this.processAxesData.bind(this));
 

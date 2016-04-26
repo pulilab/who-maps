@@ -6,11 +6,15 @@
     <div layout="row" flex="100" md-whiteframe class="axis-row">
             <axis flex="70" axis-data="vm.axis"></axis>
             <div flex="30" layout="row" layout-align="end center">
-                <md-button>
+                <md-button class="md-primary" ui-sref="scorecard({axisId: vm.axisId})">
+                    <md-icon>insert_chart</md-icon>
+                    Scorecard
+                </md-button>
+                <md-button class="md-primary">
                     <md-icon>toc</md-icon>
                     Overview
                 </md-button>
-                <md-button>
+                <md-button class="md-primary">
                     <md-icon>pause</md-icon>
                     Pause test
                 </md-button>

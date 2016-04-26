@@ -21,6 +21,7 @@ class ScorecardController {
 
     handleProjectData(data) {
         this.axis = data[this.axisId];
+        this.axesSize = data.length;
         this.axisStructure = this.structure[this.axisId];
         this.axisName = this.axis.axis.split('.')[1];
         const axisName = this.axis.axis.split('.')[0].replace(' ', '').toLowerCase();
@@ -28,8 +29,23 @@ class ScorecardController {
         this.axisPicture = require('./images/icon-' + axisName + '.svg');
 
         this.data = _.merge(this.axis.domains, this.axisStructure);
-
         this.dataLoaded = true;
+        this.scope.$evalAsync();
+    }
+
+    updateScore(domain) {
+        const domainId = domain.id - 1;
+        const axisId = this.axisId;
+        this.state.go('maps', { axisId, domainId });
+    }
+
+    goToNextAxis() {
+        const axisId = parseInt(this.axisId, 10) + 1;
+        this.state.go('maps', { axisId });
+    }
+
+    disableGoToNextAxis() {
+        return this.axisId + 1 >= this.axesSize;
     }
 
     static scorecardFactory() {

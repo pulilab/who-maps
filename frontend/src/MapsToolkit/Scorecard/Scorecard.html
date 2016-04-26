@@ -2,19 +2,96 @@
     <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
 </div>
 
-<div  layout="column" layout-fill ng-if="vm.dataLoaded" >
-<div layout="row">
-    <img ng-src="{{vm.axisPicture}}" />
-    <span> {{vm.axis.axis}}</span>
-    <span>Scorecard</span>
-</div>
+<div class="wrapper"  layout="column" layout-fill ng-if="vm.dataLoaded" md-whiteframe >
+    <div layout="row" class="axis-header" ng-class="vm.axisClass">
+        <div layout="row" flex="auto" layout-align="start center">
+            <img ng-src="{{vm.axisPicture}}" />
+            <span> {{vm.axis.axis}}</span>
+        </div>
+        <div layout="row" flex="auto" layout-align="end center">
+                <span>Scorecard</span>
+        </div>
 
-<div layout="column" flex="100" layout-fill layout-padding>
-    <div ng-repeat="domain in vm.data">
-        <h4>{{domain.domain}}</h4>
-        <div ng-repeat="question in domain.questions">
-            <span>{{ question.text }} {{question.question_sum}}/{{question.question_max}}</span>
+    </div>
+
+    <div layout="column" flex="100" layout-fill class="inner-wrapper">
+        <div ng-repeat="domain in vm.data" layout="column" class="domain">
+            <div layout="row" class="domain-header">
+                    <div layout="row" flex="auto" layout-align="start center">
+                        <h4>{{domain.domain}} ({{domain.domain_max}} points)</h4>
+                    </div>
+                    <div layout="row" flex="auto" layout-align="end center">
+                        <md-button class="md-primary" ng-click="vm.updateScore(domain)">
+                            <md-icon>playlist_add_check</md-icon>
+                            Update score
+                        </md-button>
+                        <md-button class="md-primary">
+                            <md-icon>help</md-icon>
+                            Show help
+                        </md-button>
+                    </div>
+            </div>
+
+            <div ng-repeat="question in domain.questions" layout="row" class="question">
+                <div flex="auto" layout="row" layout-align="start center">
+                    <strong>SAQ {{question.id}}</strong>
+                    <span> {{ question.text }} </span>
+                </div>
+                <div flex="auto" layout="row" layout-align="end center">
+                    <strong>{{question.question_sum}}</strong> / {{question.question_max}} points
+                </div>
+
+
+            </div>
+
+            <div class="domain-total" layout="row">
+                <span flex="auto" layout="column" layout-align="center start">
+                    <strong>Domain {{domian.id}} total</strong>
+                </span>
+                <span flex="auto" layout="row" layout-align="end center">
+                    <strong>{{domain.domain_sum}} </strong> / {{domain.domain_max}} points
+                </span>
+            </div>
+            <div class="domain-percentage" layout="row" layout-align="start center">
+                <span flex="auto">
+                    <strong>Domain {{domian.id}} percentage </strong> (Domain total divided by {{domain.domain_max}}, then multiplied by 100)
+                </span>
+                <span flex="auto" layout="column" layout-align="center end">
+                    <strong>{{domain.domain_percentage | number : 0}}%</strong>
+                </span>
+            </div>
         </div>
     </div>
-</div>
+
+    <div layout="row" class="axis-header" ng-class="vm.axisClass">
+        <div layout="row" flex="auto" layout-align="start center">
+            <img ng-src="{{vm.axisPicture}}" />
+            <span> {{vm.axis.axis}} score</span>
+        </div>
+        <div layout="row" flex="auto" layout-align="end center">
+                <span>{{vm.axis.axis_score | number : 0}}%</span>
+        </div>
+
+    </div>
+
+    <div layout="row" class="axis-buttons">
+        <div layout="row" flex="auto" layout-align="start">
+            <md-button class="md-primary" ui-sref="maps({axisId: {{vm.axisId}}})">
+                <md-icon>
+                    replay
+                </md-icon>
+                Start axis again
+            </md-button>
+        </div>
+        <div layout="row" flex="auto" layout-align="end">
+            <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-disabled="vm.disableGoToNextAxis()">
+                Go to next axis
+                <md-icon>
+                    arrow_forward
+                </md-icon>
+            </md-button>
+        </div>
+
+    </div
+
 </div>
