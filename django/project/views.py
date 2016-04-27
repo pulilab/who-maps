@@ -14,7 +14,7 @@ from hss.models import HSS
 from hss.hss_data import hss_default
 from toolkit.models import Toolkit
 from toolkit.toolkit_data import toolkit_default
-from .serializers import ProjectSerializer
+from .serializers import ProjectListRetrieveSerializer, ProjectCreateUpdateSerializer
 from .models import Project, Strategy, Technology, Pipeline, Application
 from .models import Report, Publication
 
@@ -95,9 +95,14 @@ def create_project_files(request, pk):
 
 
 class ProjectViewSet(TokenAuthMixin, ModelViewSet):
-
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectListRetrieveSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return ProjectListRetrieveSerializer
+        if self.action == "create" or self.action == "update":
+            return ProjectCreateUpdateSerializer
 
     def get_queryset(self):
         """
@@ -110,90 +115,31 @@ class ProjectViewSet(TokenAuthMixin, ModelViewSet):
         user_profile = UserProfile.objects.get(user_id=user_id)
         return Project.objects.filter(organisation=user_profile.organisation)
 
-    def _prepare_serializer(self, request):
-        def pop_or_empty(key):
-            """
-            Boilerplate code for handling KeyError in case of dict.pop().
-
-            Args:
-                key (string): The key we need to pop.
-
-            Returns:
-                list: empty list on KeyError, otherwise the result of pop()
-            """
-            try:
-                return self.serializer.initial_data.pop(key)
-            except KeyError:
-                return []
-
-        # Get "other" fields from the POST data.
-        strategy_other = pop_or_empty("strategy_other")
-        technology_other = pop_or_empty("technology_other")
-        pipeline_other = pop_or_empty("pipeline_other")
-
-        # Get new publications and reports.
-        publications_new = pop_or_empty("publications_new")
-        reports_new = pop_or_empty("reports_new")
-
-        # Get deleted publications and reports.
-        publications_deleted = pop_or_empty("publications_deleted")
-        reports_deleted = pop_or_empty("reports_deleted")
-
-        if self.serializer.is_valid():
-            # Create the "other" fields in the database,
-            # and put back their ID to the original POST data.
-            for name in strategy_other:
-                item = Strategy.objects.create(name=name, project_specific=True)
-                self.serializer.validated_data["strategy"].append(item.id)
-
-            for name in technology_other:
-                item = Technology.objects.create(name=name, project_specific=True)
-                self.serializer.validated_data["technology"].append(item.id)
-
-            for name in pipeline_other:
-                item = Pipeline.objects.create(name=name, project_specific=True)
-                self.serializer.validated_data["pipeline"].append(item.id)
-
-            project = self.serializer.save()
-
-            # Store new publications and reports.
-            for item in publications_new:
-                Publication.objects.create(project_id=project.id, url=item)
-
-            for item in reports_new:
-                Report.objects.create(project_id=project.id, url=item)
-
-            # Delete removed publications and reports.
-            Publication.objects.filter(project_id=project.id, id__in=publications_deleted).delete()
-            Report.objects.filter(project_id=project.id, id__in=reports_deleted).delete()
-
-            return True
-        else:
-            return False
-
     def update(self, request, *args, **kwargs):
         """
         Overridden update() method so that it can handle "other" fields,
         and publications, reports as well.
         """
-        instance = self.get_object()
-        self.serializer = self.get_serializer(instance, data=request.data)
-        if self._prepare_serializer(request):
-            return Response(self.serializer.data)
+        serializer = self.get_serializer(self.get_object(), data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         else:
-            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request):
         """
         Overridden create() method so that it can handle "other" fields,
         and publications, reports as well.
         """
-        self.serializer = self.get_serializer(data=request.data)
-        if self._prepare_serializer(request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            print(serializer.validated_data.get("coverage_update", "none"))
+            serializer.save()
             # Add default HSS structure for the new project.
-            HSS.objects.create(project_id=self.serializer.data.get("id"), data=hss_default)
+            HSS.objects.create(project_id=serializer.data.get("id"), data=hss_default)
             # Add default Toolkit structure for the new project.
-            Toolkit.objects.create(project_id=self.serializer.data.get("id"), data=toolkit_default)
-            return Response(self.serializer.data, status=status.HTTP_201_CREATED)
+            Toolkit.objects.create(project_id=serializer.data.get("id"), data=toolkit_default)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

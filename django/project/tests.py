@@ -9,7 +9,7 @@ from django.test.client import MULTIPART_CONTENT, BOUNDARY, encode_multipart
 from allauth.account.models import EmailConfirmation
 
 from .models import Strategy, Technology, Application, Pipeline, Publication
-from .models import Report
+from .models import Report, Coverage
 
 class ProjectTests(TestCase):
 
@@ -64,9 +64,6 @@ class ProjectTests(TestCase):
             "strategy": [strat1.id, strat2.id],
             "technology": [tech1.id, tech2.id],
             "application": [app1.id, app2.id],
-            "clients": 10,
-            "health_workers": 80,
-            "facilities": 5,
             "started": datetime.utcnow(),
             "donors": "Donor1, Donor2",
             "pipeline": [pipeline1.id, pipeline2.id],
@@ -77,14 +74,20 @@ class ProjectTests(TestCase):
         response = self.test_user_client.post(url, self.project_data)
         self.project_id = response.json().get("id")
 
-        # Create Project with other, publications and reports.
+        # Create Project with other, publications, reports, coverage.
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project2")
-        data.update(publications_new=[{"url": "http://test.com"},{"url": "http://test.com"}])
-        data.update(reports_new=[{"url": "http://test.com"},{"url": "http://test.com"}])
+        data.update(publications_new=["http://test.com", "http://test.com"])
+        data.update(reports_new=["http://test.com", "http://test.com"])
         data.update(strategy_other=["other_strat1", "other_strat2"])
         data.update(technology_other=["other_tech1", "other_tech2"])
         data.update(pipeline_other=["other_pipe1", "other_pipe2"])
+        data.update(coverage_update=[{
+            "district": "Some district",
+            "clients": 3,
+            "health_workers": 20,
+            "facilities": 2
+        }])
         response = self.test_user_client.post(url, data)
         self.pub_rep_other_project_id = response.json().get("id")
 
@@ -112,9 +115,6 @@ class ProjectTests(TestCase):
         data = copy.deepcopy(self.project_data)
         data.update(name="")
         data.update(organisation="")
-        data.update(clients="foo")
-        data.update(health_workers="foo")
-        data.update(facilities="foo")
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 400)
 
@@ -179,8 +179,12 @@ class ProjectTests(TestCase):
                                 data=encode_multipart(BOUNDARY, data),
                                 content_type=MULTIPART_CONTENT)
         self.assertEqual(response.status_code, 200)
+        url = reverse("project-detail", kwargs={"pk": self.pub_rep_other_project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json().get("reports")), 3)
         self.assertEqual(len(response.json().get("publications")), 3)
+        self.assertEqual(len(response.json().get("coverage")), 1)
 
     def test_retrieve_reports_and_publications(self):
         url = reverse("project-detail", kwargs={"pk": self.pub_rep_other_project_id})

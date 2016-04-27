@@ -30,14 +30,20 @@ class Project(ExtendedModel):
     strategy = models.ManyToManyField(Strategy, blank=True)
     technology = models.ManyToManyField(Technology, blank=True)
     application = models.ManyToManyField(Application, blank=True)
-    clients = models.PositiveIntegerField()
-    health_workers = models.PositiveIntegerField()
-    facilities = models.PositiveIntegerField()
     started = models.DateTimeField()
     donors = models.TextField()
     pipeline = models.ManyToManyField(Pipeline, blank=True)
     goals_to_scale = models.TextField()
     anticipated_time = models.TextField()
+
+
+class Coverage(ExtendedModel):
+    project = models.ForeignKey(Project, related_name="coverage")
+    district = models.CharField(max_length=255)
+    clients = models.PositiveIntegerField()
+    health_workers = models.PositiveIntegerField()
+    facilities = models.PositiveIntegerField()
+    version = models.PositiveIntegerField(blank=True)
 
 
 class Report(ExtendedModel):
