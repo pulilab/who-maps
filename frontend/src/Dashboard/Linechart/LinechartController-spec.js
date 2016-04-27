@@ -1,6 +1,6 @@
 import LinechartController from './LinechartController';
-import { default as axisdata } from '../chartmock.js';
-import { default as axisdata2 } from '../chartmock2.js';
+import { default as axisdata } from '../Mocks/chartmock.js';
+import { default as axisdata2 } from '../Mocks/chartmock2.js';
 require('d3');
 require('angular');
 

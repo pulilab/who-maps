@@ -276,8 +276,48 @@
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">COMMUNITY WALL</div>
-            <md-card flex>
-                Some content in the card
+            <md-card class="dash-community" flex layout="column" ng-init="vm.pi=[0,0,0]">
+
+                <div flex class="project-cont">
+                    <div layout="row" class="header">
+                        <span flex="grow">PROJECTS LIKE ME</span>
+                        <!-- TODO: ng-class, ng-click -->
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === 0" ng-click="vm.prewProject(0)">chevron_left</md-icon>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === vm.commProjects[0].length - 1" ng-click="vm.nextProject(0)">chevron_right</md-icon>
+                    </div>
+                    <projectcomp
+                        ng-model="vm.commProjects[0][vm.pi[0]]"
+                        has-link="false"
+                        has-logo="false">
+                    </projectcomp>
+                </div>
+
+                <div flex class="project-cont">
+                    <div layout="row" class="header">
+                        <span flex="grow">PROJECTS I'M FOLLOWING</span>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === 0" ng-click="vm.prewProject(1)">chevron_left</md-icon>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === vm.commProjects[1].length - 1" ng-click="vm.nextProject(1)">chevron_right</md-icon>
+                    </div>
+                    <projectcomp
+                        ng-model="vm.commProjects[1][vm.pi[1]]"
+                        has-link="false"
+                        has-logo="false">
+                    </projectcomp>
+                </div>
+
+                <div flex class="project-cont">
+                    <div layout="row" class="header">
+                        <span flex="grow">PROJECTS I'VE FOUNDED</span>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === 0" ng-click="vm.prewProject(2)">chevron_left</md-icon>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === vm.commProjects[2].length - 1" ng-click="vm.nextProject(2)">chevron_right</md-icon>
+                    </div>
+                    <projectcomp
+                        ng-model="vm.commProjects[1][vm.pi[2]]"
+                        has-link="false"
+                        has-logo="false">
+                    </projectcomp>
+                </div>
+
             </md-card>
         </div>
 

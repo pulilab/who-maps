@@ -94,19 +94,19 @@ describe('CountryMapController', () => {
 
         it('makes the svg pannable and zoomable with svgPanZoom', () => {
             vm.$onInit();
-            spyOn(vm, 'svgPanZoom');
+            spyOn(vm, 'svgPanZoom').and.callThrough();
             vm.drawMap();
             expect(vm.svgPanZoom).toHaveBeenCalled();
         });
     });
 
-    it('has a method .makeGeoFromTopo(), that uses the topojson lib to make a geojson out from the data provided by the backend', () => {
+    it('has a method .makeGeoFromTopo(), that uses the topojson lib to make a geojson out of the data', () => {
         vm.$onInit();
         const ret = vm.makeGeoFromTopo(mockMap);
         expect(typeof ret).toBe('object');
     });
 
-    it('has a method .calculateScale(), that calculates & returns the boundaries and a scalefactor from the data', () => {
+    it('has .calculateScale() method, that calcs & returns the boundaries & a scale from the data', () => {
         const mockMap2 = vm.makeGeoFromTopo(mockMap);
         const ret = vm.calculateScale(mockMap2);
         expect(typeof ret).toBe('number');
