@@ -2,37 +2,37 @@
 
 	<div class="countrychart-tooltip md-whiteframe-1dp">
 
-		<div class="countrychart-tooltip-header">
+		<div class="countrychart-tooltip-header bold">
 			{{vm.data.country.name}}
 			<img class ="tooltip-flag" ng-src="{{vm.data.country.flagUrl}}">
 		</div>
 
 		<div class="countrychart-tooltip-main" layout="column">
 
-			<div flex>
+			<div flex class="bold">
 				Total numbers:
 			</div>
 
 			<div flex layout="row">
 				<div flex="85">Clients:<br></div>
-				<div flex>{{vm.boundNrs.Clients}}</div>
+				<div flex class="bold">{{vm.boundNrs.Clients}}</div>
 			</div>
 
 			<div flex layout="row">
 				<div flex="85">Health workers:<br></div>
-				<div flex>{{vm.boundNrs['Health workers']}}</div>
+				<div flex class="bold">{{vm.boundNrs['Health workers']}}</div>
 			</div>
 
 			<div flex layout="row">
 				<div flex="85">Facilities:</div>
-				<div flex>{{vm.boundNrs.Facilities}}</div>
+				<div flex class="bold">{{vm.boundNrs.Facilities}}</div>
 			</div>
 
 		</div>
 
 		<div class="countrychart-tooltip-main" ng-if="vm.activeDistrict.name">
 
-			<div flex>
+			<div flex class="activename bold">
 				{{vm.activeDistrict.name}}
 			</div>
 
@@ -44,12 +44,18 @@
 				ng-repeat="(key, datum) in vm.activeDistrict.data">
 
 				<div flex="85">{{key}}</div>
-				<div>{{datum}}</div>
+				<div class="bold">{{datum}}</div>
 			</div>
 
 
 		</div>
+	</div>
 
+
+	<div class="zoomhandlers">
+		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+		<br>
+		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
 	</div>
 
 </div>

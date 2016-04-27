@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import MapsToolkitModuleController from './MapsToolkitModuleController';
 
+
 /* global define, it, describe, expect, beforeEach, spyOn, Promise */
 let mc = {};
 

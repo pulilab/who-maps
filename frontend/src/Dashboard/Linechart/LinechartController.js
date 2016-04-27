@@ -25,30 +25,16 @@ class LinechartController {
                 vm.chosenLabels = vm.labels;
             }
 
-            vm.start();
+            vm.draw();
         };
 
     }
 
-    start() {
+    draw() {
 
         const vm = this;
 
-        if (vm.datachooser || vm.data.length > 2) {
-            vm.draw(true);
-        }
-        else {
-            vm.showPlaceholder = true;
-        }
-    }
-
-    draw(redraw) {
-
-        const vm = this;
-
-        if (redraw) {
-            d3.select(vm.el[0]).select('.linechartcontainer').remove();
-        }
+        d3.select(vm.el[0]).select('.linechartcontainer').remove();
 
         const data = vm.datachooser ? vm.chosenData : vm.data;
         const labels = vm.datachooser ? vm.chosenLabels : vm.labels;
@@ -68,10 +54,10 @@ class LinechartController {
 
         // Should recalculate on first open || resize
         const margin = {
-            top: 35,
-            right: -15,
-            bottom: 30,
-            left: 60
+            top: 0,
+            right: 0,
+            bottom: 40,
+            left: 45
         };
         const width = outerWidth - margin.left - margin.right;
         const height = outerHeight - margin.top - margin.bottom;
@@ -99,12 +85,12 @@ class LinechartController {
 
         const xAxis = d3.svg.axis()
             .scale(xScale)
-            .orient('bottom')
             .ticks(data.length - 1)
             .tickFormat(d => {
                 const canShowDate = (width - margin.left - margin.right) / ((data.length - 1) * 80) >= 1.2;
                 return canShowDate ? d + '. ' + data[d - 1].date : d;
-            });
+            })
+            .orient('bottom');
 
         const yAxis = d3.svg.axis()
             .scale(yScale)
@@ -178,8 +164,9 @@ class LinechartController {
                         ];
 
                         tooltip.html(divString.join(''))
-                            .style('left', (d3.event.pageX) + 'px')
-                            .style('top', (d3.event.pageY - 28) + 'px');
+                            .style('left', (d3.event.pageX - 190) + 'px')
+                            .style('top', (d3.event.pageY - height - 40) + 'px');
+
                     })
                     .on('mouseout', () => {
 

@@ -66,10 +66,13 @@ class CountrymapController {
             .append('div')
             .attr('class', 'countrymapcontainer');
 
+        const outerWidth = outer[0][0].offsetWidth;
+        // const outerHeight = outer[0][0].offsetHeight;
+
         const element = outer.append('svg')
             .attr('class', 'countrymap')
-            .attr('width', 460)
-            .attr('height', 460);
+            .attr('width', outerWidth)
+            .attr('height', 409);
 
 
         const scale = vm.calculateScale(distrData);
@@ -122,6 +125,8 @@ class CountrymapController {
         };
 
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
+
+        vm.svgZoom.zoomOut();
     }
 
     calculateScale(distrData) {

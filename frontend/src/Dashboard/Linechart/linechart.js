@@ -10,7 +10,8 @@ const linechart = {
         labels: '=',
         showdotted: '=',
         datachooser: '='
-    }
+    },
+    name: 'linechart'
 };
 
 export default linechart;

@@ -3,12 +3,17 @@
 linechart {
 
     margin-bottom: -65px;
+    position: relative;
 
     .linechart-labels {
 
-        color: #757575;
+        color: $color-gray;
+        background-color: $color-gray-lightest;
         font-size: 12px;
         cursor: default;
+        height: 60px;
+        padding-left: 20px;
+        padding-right: 5px;
 
         ul {
 
@@ -26,6 +31,7 @@ linechart {
                 .material-icons {
 
                     font-size: 12px;
+                    transform: translate(0, 2px);
 
                     &.labelicon1 {
                         color: $color-axis1;
@@ -49,9 +55,27 @@ linechart {
             }
         }
 
-        md-input-container, .axischooser {
+        div {
 
-            margin: 0;
+            border-left: 1px solid #E0E0E0;
+
+            md-input-container, .axischooser {
+
+                margin: 0;
+            }
+
+            md-input-container {
+
+                min-width: 175px;
+                margin-top: 15px;
+
+
+                label {
+                    &:select, &:focus {
+                        color: $color-primary;
+                    }
+                }
+            }
         }
     }
 
@@ -127,6 +151,10 @@ linechart {
 
                 .domain {
                     display: none;
+                }
+
+                &.x-axis text {
+                    transform: translate(0, 40px);
                 }
             }
 
@@ -209,13 +237,12 @@ linechart {
     .tooltip {
 
         position: absolute;
-        font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+        min-width: 80px;
+        padding: 4px;
         font-weight: 500;
         font-size: 10px;
-        padding: 4px;
 
         z-index: 100;
-        overflow: hidden;
 
         pointer-events: none;
         border-radius: 4px;

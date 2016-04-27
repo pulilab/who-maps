@@ -79,7 +79,7 @@ describe('ScorecardController', () => {
     it('should not filter data when its in summary mode', () => {
         sc.summary = true;
         sc.handleProjectData(mockInvariantData());
-        let summaryData = sc.data;
+        const summaryData = sc.data;
         sc.summary = false;
         sc.handleProjectData(mockInvariantData());
         expect(sc.data).not.toBe(summaryData);
@@ -93,6 +93,6 @@ describe('ScorecardController', () => {
         expect(sc.data.axisName).toBeDefined();
         expect(sc.data.axisClass).toBeDefined();
         expect(sc.data.axisPicture).toBeDefined();
-    })
+    });
 
 });
