@@ -55,6 +55,11 @@
         margin-bottom:10px;
         height:50px;
         max-height:50px;
+
+        md-card {
+            margin:0;
+            box-shadow:none;
+        }
     }
     .domain-questions {
         background-color: $color-white;

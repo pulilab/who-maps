@@ -6,9 +6,10 @@ import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController {
 
-    constructor($scope) {
+    constructor($scope, $state) {
         const vm = this;
         vm.scope = $scope;
+        vm.state = $state;
         vm.EE = window.EE;
         vm.linechartMockData = chartData;
         vm.linechartMockData2 = chartData2;
@@ -27,7 +28,13 @@ class DashboardModuleController {
             doit = setTimeout(vm.resizedw, 50);
         };
         window.onresize = vm.resizefn;
+        // this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
     }
+
+    // handleChangeDomain(id) {
+    // to-do: whire this when the actual data is retrieved.
+    //     this.state.go('maps', { 'domainId': id });
+    // }
 
     prewProject(projectIndex) {
         const vm = this;
@@ -46,12 +53,12 @@ class DashboardModuleController {
     }
 
     static dashboardControllerFactory() {
-        function dashController() {
+        function dashController($scope, $state) {
 
-            return new DashboardModuleController();
+            return new DashboardModuleController($scope, $state);
         }
 
-        dashController.$inject = ['$scope'];
+        dashController.$inject = ['$scope', '$state'];
 
         return dashController;
     }
