@@ -28,7 +28,7 @@ class AxisController {
 
     parseDomainData() {
         _.forEach(this.domains, (domain, index) => {
-            domain.name = domain.domain.split(':')[1];
+            domain.name = domain.domain.split(':')[1].toLowerCase();
             domain.index = index;
         });
     }
