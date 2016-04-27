@@ -8,12 +8,11 @@ class Protected {
         this.retrieveUser = this.retrieveUser.bind(this);
         this.retrieveUser();
         this.checkLoginStatus();
-        // this.EE.on('login', this.handleLoginEvent.bind(this));
     }
 
     checkLoginStatus() {
         if (!this.isLogin) {
-            this.EE.emit('unauthorized');
+            this.EE.emit('logout');
         }
     }
 

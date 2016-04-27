@@ -1,0 +1,62 @@
+@import '../../variables';
+@import '../../mixins';
+
+$footer-height: 33px;
+
+axis-footer {
+    height: $footer-height;
+    position:fixed;
+    z-index:200;
+    bottom:0;
+    left:0;
+    right:0;
+
+    .number {
+        display:none;
+    }
+
+
+    .axis {
+        border-right:1px solid $color-white;
+        height: $footer-height;
+        background: $color-gray-light;
+        position:relative;
+        color:$color-white;
+        font-size: 12px;
+        line-height:13px;
+        cursor:pointer;
+
+        &.active {
+            height: $footer-height + 20;
+            top: - 20px;
+            cursor:default;
+
+            .number {
+                display:flex;
+            }
+
+            &.axis_1 {
+                background: $color-axis1;
+            }
+            &.axis_2 {
+                background: $color-axis2;
+            }
+            &.axis_3 {
+                background: $color-axis3;
+            }
+            &.axis_4 {
+                background: $color-axis4;
+            }
+            &.axis_5 {
+                background: $color-axis5;
+            }
+            &.axis_6 {
+                background: $color-axis6;
+            }
+
+
+        }
+    }
+
+
+}

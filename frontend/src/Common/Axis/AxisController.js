@@ -19,7 +19,7 @@ class AxisController {
         this.axisClass = axisName;
         this.axisPicture = require('./images/icon-' + axisName + '.svg');
         this.axisScorePercentage = this.axisData.axis_score;
-        this.axisCompletition = this.axisCompletitionCalculator();
+        this.axisCompletition = this.axisData.axis_completion;
         this.axisScoreClass = this.advanceClassGenerator(this.axisScorePercentage);
         this.axisCompletitionClass = this.advanceClassGenerator(this.axisCompletition);
         this.domains = this.axisData.domains;
@@ -28,7 +28,6 @@ class AxisController {
 
     parseDomainData() {
         _.forEach(this.domains, (domain, index) => {
-            domain.scorePercentage = (domain.domain_sum * 100) / domain.domain_max;
             domain.name = domain.domain.split(':')[1];
             domain.index = index;
         });
@@ -38,14 +37,6 @@ class AxisController {
         this.EE.emit('mapsDomainChange', domain.index);
     }
 
-
-    axisCompletitionCalculator() {
-        let completition = 0;
-        _.forEach(this.axisData.domains, domain => {
-            completition += domain.domain_percentage;
-        });
-        return completition / this.axisData.domains.length;
-    }
 
     advanceClassGenerator(value) {
         if (value < 50) {

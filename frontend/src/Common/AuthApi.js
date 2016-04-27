@@ -8,7 +8,7 @@ class AuthApi {
 
     constructor(module) {
         this.retrieveToken();
-
+        this.EE = window.EE;
         this.apiUrl = API;
 
         if (module) {
@@ -28,6 +28,9 @@ class AuthApi {
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
             .then((response) => {
+                if (response.status === 401) {
+                    this.EE.emit('unauthorized');
+                }
                 return response.json();
             })
             .then((json) =>{
