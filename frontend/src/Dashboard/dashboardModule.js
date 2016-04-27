@@ -1,7 +1,6 @@
 import angular from 'angular';
-import DashboardModuleController from './DashboardModuleController';
-import linechart from './Linechart/linechart';
-import countrymap from './Countrymap/countrymap';
+
+/* global Promise */
 
 import _template from './Dashboard.html';
 import './Dashboard.scss';
@@ -9,7 +8,27 @@ import uiRoute from 'angular-ui-router';
 
 const moduleName = 'dashboard';
 
-function config($stateProvider) {
+const components = {};
+const lazyLoader = (provider, element, type) => {
+    const prom = new Promise((resolve) => {
+        require([], require => {
+            const ctrl = require('./' + element);
+            if (type === 'component') {
+                if (!components[element]) {
+                    components[element] = true;
+                    provider.component(ctrl.default.name, ctrl.default);
+                }
+            }
+            if (type === 'controller') {
+                provider.register(element, ctrl.default.dashboardControllerFactory());
+            }
+            resolve();
+        });
+    });
+    return prom;
+};
+
+function config($stateProvider, $controllerProvider, $compileProvider) {
     $stateProvider
         .state(moduleName,
         {
@@ -18,19 +37,27 @@ function config($stateProvider) {
             views: {
                 main: {
                     template: _template,
-                    controller: moduleName + '.' + moduleName + 'Controller',
-                    controllerAs: 'vm'
+                    controllerProvider: () => 'DashboardModuleController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        'ctrl': () => {
+                            return lazyLoader($controllerProvider, 'DashboardModuleController', 'controller');
+                        },
+                        'linechart': () => {
+                            return lazyLoader($compileProvider, 'Linechart/linechart.js', 'component');
+                        },
+                        'countrymap': () => {
+                            return lazyLoader($compileProvider, 'Countrymap/countrymap.js', 'component');
+                        }
+                    }
                 }
             }
         });
 }
 
-config.$inject = ['$stateProvider'];
+config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .controller(moduleName + '.' + moduleName + 'Controller', DashboardModuleController)
-    .component('linechart', linechart)
-    .component('countrymap', countrymap)
     .config(config);
 
 export default moduleName;

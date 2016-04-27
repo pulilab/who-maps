@@ -94,7 +94,7 @@ module.exports = {
                 loader: 'file?name=public/fonts/[name].[ext]'
             },
             {
-                test: /\.json/,
+                test: /\.json|geojson/,
                 loader: 'json'
             }
         ]
