@@ -48,8 +48,8 @@ class ScorecardController {
         _.forEach(this.data, axis => {
             axis.axisName = axis.axis.split('.')[1];
             axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
-            axis.axisPicture = images['icon-' + axis.axisClass]
-        })
+            axis.axisPicture = images['icon-' + axis.axisClass];
+        });
     }
 
     updateScore(domain) {

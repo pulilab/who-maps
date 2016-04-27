@@ -7,7 +7,7 @@ import _template from './Dashboard.html';
 import './Dashboard.scss';
 import uiRoute from 'angular-ui-router';
 
-const moduleName = 'dashboardModule';
+const moduleName = 'dashboard';
 
 function config($stateProvider) {
     $stateProvider

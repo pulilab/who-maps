@@ -47,7 +47,7 @@ class AppModuleController extends Protected {
         }
         this.systemLogin();
         this.fillUserData();
-        this.state.go('hss');
+        this.state.go('dashboard');
     }
 
     updateProject(name) {
