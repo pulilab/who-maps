@@ -3,15 +3,17 @@ import tempfile
 from datetime import datetime
 
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.test.client import MULTIPART_CONTENT, BOUNDARY, encode_multipart
 from allauth.account.models import EmailConfirmation
+from rest_framework.test import APIClient
+from rest_framework.test import APITestCase
 
 from .models import Strategy, Technology, Application, Pipeline, Publication
 from .models import Report, Coverage
 
-class ProjectTests(TestCase):
+
+class ProjectTests(APITestCase):
 
     def setUp(self):
         # Create a test user with profile.
@@ -37,7 +39,7 @@ class ProjectTests(TestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
-        self.test_user_client = Client(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
         # Create profile.
         url = reverse("userprofile-list")
@@ -87,8 +89,13 @@ class ProjectTests(TestCase):
             "clients": 3,
             "health_workers": 20,
             "facilities": 2
+        },{
+            "district": "Other district",
+            "clients": 333,
+            "health_workers": 20,
+            "facilities": 2
         }])
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.post(url, data, format="json")
         self.pub_rep_other_project_id = response.json().get("id")
 
         url = reverse("create-project-files", kwargs={"pk": self.pub_rep_other_project_id})
@@ -143,6 +150,17 @@ class ProjectTests(TestCase):
         data.update(name="Test Project4")
         data.update(publications_new=["http://test.com", "http://test.com"])
         data.update(reports_new=["http://test.com", "http://test.com"])
+        data.update(coverage_update=[{
+            "district": "Some district",
+            "clients": 3,
+            "health_workers": 20,
+            "facilities": 2
+        },{
+            "district": "Other district",
+            "clients": 333,
+            "health_workers": 20,
+            "facilities": 2
+        }])
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
         url = reverse("create-project-files", kwargs={"pk": response.json().get("id")})
@@ -164,6 +182,7 @@ class ProjectTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json().get("reports")), 4)
         self.assertEqual(len(response.json().get("publications")), 4)
+        self.assertEqual(len(response.json().get("coverage")), 2)
 
     def test_update_project_with_pub_rep(self):
         url = reverse("project-detail", kwargs={"pk": self.pub_rep_other_project_id})
@@ -174,10 +193,8 @@ class ProjectTests(TestCase):
         data.update(publications_deleted=pub_to_delete)
         rep_to_delete = [data["reports"].pop().get("id")]
         data.update(reports_deleted=rep_to_delete)
-        response = self.test_user_client.put(
-                                url,
-                                data=encode_multipart(BOUNDARY, data),
-                                content_type=MULTIPART_CONTENT)
+        data.update(coverage_deleted=["Some district"])
+        response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         url = reverse("project-detail", kwargs={"pk": self.pub_rep_other_project_id})
         response = self.test_user_client.get(url)

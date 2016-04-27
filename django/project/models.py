@@ -43,7 +43,7 @@ class Coverage(ExtendedModel):
     clients = models.PositiveIntegerField()
     health_workers = models.PositiveIntegerField()
     facilities = models.PositiveIntegerField()
-    version = models.PositiveIntegerField(blank=True)
+    version = models.IntegerField(blank=True, null=True)
 
 
 class Report(ExtendedModel):

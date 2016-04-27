@@ -134,7 +134,6 @@ class ProjectViewSet(TokenAuthMixin, ModelViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            print(serializer.validated_data.get("coverage_update", "none"))
             serializer.save()
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=serializer.data.get("id"), data=hss_default)

@@ -4,11 +4,11 @@ from .models import Project, Strategy, Technology, Pipeline, Application
 from .models import Report, Publication, Coverage
 
 
-class CoverageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Coverage
-        fields = ("id", "district", "clients", "health_workers", "facilities",)
+class CoverageSerializer(serializers.Serializer):
+    district = serializers.CharField()
+    clients = serializers.IntegerField()
+    health_workers = serializers.IntegerField()
+    facilities = serializers.IntegerField()
 
 
 class ProjectListRetrieveSerializer(serializers.ModelSerializer):
@@ -42,7 +42,6 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
     publications_new = serializers.ListField(required=False)
     reports_new = serializers.ListField(required=False)
     coverage_update = CoverageSerializer(many=True, required=False)
-    #coverage_update = serializers.ListField(CoverageSerializer(), required=False)
     publications_deleted = serializers.ListField(required=False)
     reports_deleted = serializers.ListField(required=False)
     coverage_deleted =  serializers.ListField(required=False)
@@ -107,7 +106,7 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
         # Create or update coverage.
         for item in self.extra_fields["coverage_update"]:
             item.update(project_id=project_id)
-            coverage, created = Country.objects.update_or_create(**item)
+            coverage, created = Coverage.objects.update_or_create(**item)
 
     def delete_related_data(self, project_id):
         """
@@ -115,7 +114,7 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
         """
         Publication.objects.filter(project_id=project_id, id__in=self.extra_fields["publications_deleted"]).delete()
         Report.objects.filter(project_id=project_id, id__in=self.extra_fields["reports_deleted"]).delete()
-        Coverage.objects.filter(project_id=project_id, id__in=self.extra_fields["coverage_deleted"]).delete()
+        Coverage.objects.filter(project_id=project_id, district__in=self.extra_fields["coverage_deleted"]).delete()
 
     def _pop_or_empty(self, key):
         """
@@ -134,6 +133,29 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
+        fields = (
+            "id",
+            "strategy_other",
+            "pipeline_other",
+            "technology_other",
+            "publications_new",
+            "reports_new",
+            "coverage_update",
+            "publications_deleted",
+            "reports_deleted",
+            "date",
+            "name",
+            "organisation",
+            "strategy",
+            "technology",
+            "coverage_deleted",
+            "application",
+            "started",
+            "donors",
+            "pipeline",
+            "goals_to_scale",
+            "anticipated_time",
+        )
 
 
 class ReportSerializer(serializers.ModelSerializer):
