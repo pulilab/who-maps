@@ -400,7 +400,7 @@
             "questions": [
                 {
                     "id": "6-1",
-                    "text": "Question text placeholder ",
+                    "text": "Is there a solid understanding of the costs, from a programme perspective, to execute the project at its current scale?",
                     "choices": [
                         {
                             "label": "No",
@@ -430,7 +430,7 @@
                 },
                 {
                     "id": "6-2",
-                    "text": "Question text placeholder ",
+                    "text": "Is there a solid understanding of the cost (if any) to the end-user or programme beneficiaries?",
                     "choices": [
                         {
                             "label": "No",
@@ -456,7 +456,7 @@
                 },
                 {
                     "id": "6-3",
-                    "text": "Question text placeholder ",
+                    "text": " Is there a solid understanding of the cost (if any) to the health system? ",
                     "choices": [
                         {
                             "label": "No",
@@ -483,7 +483,7 @@
                 },
                 {
                     "id": "6-4",
-                    "text": "Question text placeholder ",
+                    "text": "Have the potential economic costs for scaling up the mHealth project been forecasted?",
                     "choices": [
                         {
                             "label": "No",
@@ -513,11 +513,11 @@
         },
         {
             "id": 7,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The analysis of the value proposition for each stakeholder and the identification of revenue streams capable of sustaining project activities",
             "questions": [
                 {
                     "id": "7-1",
-                    "text": "Question text placeholder ",
+                    "text": "Has the value that the mHealth product delivers to stakeholders, as compared to existing alternatives, been demonstrated?",
                     "choices": [
                         {
                             "label": "No",
@@ -545,7 +545,7 @@
                 },
                 {
                     "id": "7-2",
-                    "text": "Question text placeholder ",
+                    "text": "Has a comprehensive and logical business plan been developed to guide project operations and resource mobilization?",
                     "choices": [
                         {
                             "label": "No",
@@ -573,7 +573,7 @@
                 },
                 {
                     "id": "7-3",
-                    "text": "Question text placeholder ",
+                    "text": "Have strategic choices been made regarding partners who offer sustainable funding for scaling up?",
                     "choices": [
                         {
                             "label": "No",
@@ -605,11 +605,11 @@
     {"domains": [
         {
             "id": 8,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "Efforts to ensure that a number of elements of the mHealth technology and system are appropriate to data needs throughout all stages of the scaling-up process, including access, transmission, storage and security",
             "questions": [
                 {
                     "id": "8-1",
-                    "text": "Question text placeholder ",
+                    "text": "Does the application have features that aim to improve data accessibility and quality?",
                     "choices": [
                         {
                             "label": "No",
@@ -632,7 +632,7 @@
                 },
                 {
                     "id": "8-2",
-                    "text": "Question text placeholder ",
+                    "text": "Is the data centre (server and connectivity) appropriate for supporting increases in data flow, processing and storage during scaling up?",
                     "choices": [
                         {
                             "label": "No",
@@ -658,7 +658,7 @@
                 },
                 {
                     "id": "8-3a",
-                    "text": "Question text placeholder ",
+                    "text": "Does the system include provisions for minimizing risk and maximizing data security?",
                     "choices": [
                         {
                             "label": "No",
@@ -682,7 +682,7 @@
                 },
                 {
                     "id": "8-3b",
-                    "text": "Question text placeholder ",
+                    "text": "Do components of the system adhere to relevant government standards and policies for data security and privacy?",
                     "choices": [
                         {
                             "label": "No",
@@ -706,11 +706,11 @@
         },
         {
             "id": 9,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The technology’s ability to work with other information systems and services within and across organizations",
             "questions": [
                 {
                     "id": "9-1",
-                    "text": "Question text placeholder ",
+                    "text": "Have you taken steps to facilitate interoperability with relevant information systems and applications/software?",
                     "choices": [
                         {
                             "label": "No",
@@ -737,7 +737,7 @@
                 },
                 {
                     "id": "9-2",
-                    "text": "Question text placeholder ",
+                    "text": "Have you achieved interoperability with information systems based on adherence to relevant data standards?",
                     "choices": [
                         {
                             "label": "No",
@@ -766,11 +766,11 @@
         },
         {
             "id": 10,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The extent to which various components of the product are able to accommodate improvements and changes as needs shift throughout the scaling-up process",
             "questions": [
                 {
                     "id": "10-1",
-                    "text": "Question text placeholder ",
+                    "text": "Can the technology be adapted to meet emerging needs during scaling up?",
                     "choices": [
                         {
                             "label": "No",
@@ -798,7 +798,7 @@
                 },
                 {
                     "id": "10-2",
-                    "text": "Question text placeholder ",
+                    "text": "Can the product’s content be adapted for new user groups and/or settings during scaling up?",
                     "choices": [
                         {
                             "label": "No",
@@ -825,7 +825,7 @@
                 },
                 {
                     "id": "10-3",
-                    "text": "Question text placeholder ",
+                    "text": "Have you taken steps to facilitate the transferability of the product with different kinds of hardware/systems?",
                     "choices": [
                         {
                             "label": "No",
@@ -855,11 +855,11 @@
     {"domains": [
         {
             "id": 11,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "Considerations surrounding the restructuring and expansion of human resources, including project team members (staff and health workers) and leadership positions",
             "questions": [
                 {
                     "id": "11-1",
-                    "text": "Question text placeholder ",
+                    "text": "Are appropriate mechanisms in place to allow the project to adapt to changing human resource needs?",
                     "choices": [
                         {
                             "label": "No",
@@ -890,7 +890,7 @@
                 },
                 {
                     "id": "11-2",
-                    "text": "Question text placeholder ",
+                    "text": "Have the key leadership positions required to guide scaling up and support operations been filled?",
                     "choices": [
                         {
                             "label": "No",
@@ -920,11 +920,11 @@
         },
         {
             "id": 12,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The availability of appropriate training activities to ensure that users have the necessary skills and capacity required to support scaling up, and the presence of reliable assistance and supervisory structures to address emerging issues while scaling up",
             "questions": [
                 {
                     "id": "12-1a",
-                    "text": "Question text placeholder ",
+                    "text": "Have training programmes for end-users and secondary users of the product been developed?",
                     "choices": [
                         {
                             "label": "No",
@@ -961,7 +961,7 @@
                 },
                 {
                     "id": "12-1b",
-                    "text": "Question text placeholder ",
+                    "text": "Are the tools developed for end-users and secondary users appropriate?",
                     "choices": [
                         {
                             "label": "No",
@@ -989,7 +989,7 @@
                 },
                 {
                     "id": "12-2",
-                    "text": "Question text placeholder ",
+                    "text": "Has a structure been established for providing ongoing supervision for end-users during and after their adoption of the product?",
                     "choices": [
                         {
                             "label": "No",
@@ -1016,7 +1016,7 @@
                 },
                 {
                     "id": "12-3",
-                    "text": "Question text placeholder ",
+                    "text": "Have efforts been made to ensure that adequate user and technical support systems are in place? ",
                     "choices": [
                         {
                             "label": "No",
@@ -1045,11 +1045,11 @@
         },
         {
             "id": 13,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "Efforts to orient key stakeholder groups and raise awareness in targeted communities in order to promote wider acceptance of the mHealth product and its scaling up",
             "questions": [
                 {
                     "id": "13-1",
-                    "text": "Question text placeholder ",
+                    "text": "Have procedures and strategies for orienting key stakeholders to the mHealth product been developed?",
                     "choices": [
                         {
                             "label": "No",
@@ -1076,7 +1076,7 @@
                 },
                 {
                     "id": "13-2",
-                    "text": "Question text placeholder ",
+                    "text": "Has community mobilization been undertaken with the communities that will be served by scaling up the mHealth product?",
                     "choices": [
                         {
                             "label": "No",
@@ -1104,11 +1104,11 @@
         },
         {
             "id": 14,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "Considerations and guidelines surrounding operational procedures to maintain the continuity of use of the product in light of technical and programmatic obstacles",
             "questions": [
                 {
                     "id": "14-1",
-                    "text": "Question text placeholder ",
+                    "text": "Have procedures been developed for addressing technical constraints (such as those identified in Factor 2-2)?",
                     "choices": [
                         {
                             "label": "No",
@@ -1135,7 +1135,7 @@
                 },
                 {
                     "id": "14-2",
-                    "text": "Question text placeholder ",
+                    "text": "Have procedures been developed for retaining mobile devices in a health worker setting?",
                     "choices": [
                         {
                             "label": "No",
@@ -1166,11 +1166,11 @@
     {"domains": [
         {
             "id": 15,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "The routine monitoring of implementation fidelity and use of the product, and the use of these data for the purposes of continuous improvement",
             "questions": [
                 {
                     "id": "15-1a",
-                    "text": "Question text placeholder ",
+                    "text": "Have appropriate resources been allocated to support ongoing monitoring of implementation throughout all stages of scaling up?",
                     "choices": [
                         {
                             "label": "No",
@@ -1188,7 +1188,7 @@
                 },
                 {
                     "id": "15-1b",
-                    "text": "Question text placeholder ",
+                    "text": "Have processes and tools been developed for monitoring implementation and programme fidelity?",
                     "choices": [
                         {
                             "label": "No",
@@ -1215,7 +1215,7 @@
                 },
                 {
                     "id": "15-2",
-                    "text": "Question text placeholder ",
+                    "text": "Have processes and tools been developed to allow for data analysis and optimization of implementation?",
                     "choices": [
                         {
                             "label": "No",
@@ -1245,11 +1245,11 @@
         },
         {
             "id": 16,
-            "sub_text": "The development of partnerships with external groups that contribute the skill sets, expertise, services and/or other essential components needed for scaling up",
+            "sub_text": "Process in place to assess the product’s effects in relation to the health system, health services and/or individuals’ health status, using rigorous and systematic research methods",
             "questions": [
                 {
                     "id": "16-1a",
-                    "text": "Question text placeholder ",
+                    "text": "Have appropriate resources been allocated to support evaluation research?",
                     "choices": [
                         {
                             "label": "No",
@@ -1268,7 +1268,7 @@
                 },
                 {
                     "id": "16-1b",
-                    "text": "Question text placeholder ",
+                    "text": "Has the foundation been laid for conducting relevant evaluation research using appropriate methods?",
                     "choices": [
                         {
                             "label": "No",
@@ -1295,7 +1295,7 @@
                 },
                 {
                     "id": "16-1c",
-                    "text": "Question text placeholder ",
+                    "text": "Are data streams available for supporting evaluation research activities?",
                     "choices": [
                         {
                             "label": "No",
@@ -1321,7 +1321,7 @@
                 },
                 {
                     "id": "16-2a",
-                    "text": "Question text placeholder ",
+                    "text": "Have the types of evidence that will be demonstrated at various levels of the health sector, and by key stakeholders, been articulated?",
                     "choices": [
                         {
                             "label": "No",
@@ -1349,7 +1349,7 @@
                 },
                 {
                     "id": "16-2b",
-                    "text": "Question text placeholder ",
+                    "text": "For each of the outcomes specified in 16-2a, have the key components of the evaluation process been defined?",
                     "choices": [
                         {
                             "label": "No",
@@ -1377,7 +1377,7 @@
                 },
                 {
                     "id": "16-2c",
-                    "text": "Question text placeholder ",
+                    "text": "Has data collection been carried out to support the following evidence claims?",
                     "choices": [
                         {
                             "label": "No",
@@ -1406,7 +1406,7 @@
                 },
                 {
                     "id": "16-3",
-                    "text": "Question text placeholder ",
+                    "text": "Have the means of dissemination of evaluation results been defined?",
                     "choices": [
                         {
                             "label": "No",
