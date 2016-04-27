@@ -1,0 +1,736 @@
+[
+  {
+    "axis": "AXIS 1. GROUNDWORK",
+    "axis_completion": 54.166666666666664,
+    "domains": [
+      {
+        "domain_percentage": 100,
+        "domain_max": 2,
+        "domain_sum": 2,
+        "questions": [
+          {
+            "question": "1-1",
+            "question_max": 2,
+            "answers": [
+              2
+            ],
+            "question_sum": 2
+          }
+        ],
+        "domain": "DOMAIN 1: PARAMETERS OF SCALE"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 22,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "2-1",
+            "question_max": 6,
+            "answers": [
+              0,
+              0,
+              0
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "2-2",
+            "question_max": 8,
+            "answers": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "2-3",
+            "question_max": 8,
+            "answers": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 2: CONTEXTUAL ENVIRONMENT"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 30,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "3-1a",
+            "question_max": 8,
+            "answers": [
+              0,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "3-1b",
+            "question_max": 4,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "3-2",
+            "question_max": 18,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 3: SCIENTIFIC BASIS"
+      }
+    ],
+    "axis_score": 33.333333333333336
+  },
+  {
+    "axis": "AXIS 2. PARTNERSHIPS",
+    "axis_completion": 0,
+    "domains": [
+      {
+        "domain_percentage": 0,
+        "domain_max": 48,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "4-1a",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "4-1b",
+            "question_max": 27,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "4-2",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 4: STRATEGIC ENGAGEMENT"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 50,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "5-1a",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "5-1b",
+            "question_max": 10,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "5-1c",
+            "question_max": 10,
+            "answers": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "5-2a",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "5-2b",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 5: PARTNERSHIP SUSTAINABILITY"
+      }
+    ],
+    "axis_score": 0
+  },
+  {
+    "axis": "AXIS 3. FINANCIAL HEALTH",
+    "axis_completion": 0,
+    "domains": [
+      {
+        "domain_percentage": 0,
+        "domain_max": 45,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "6-1",
+            "question_max": 18,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "6-2",
+            "question_max": 6,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "6-3",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "6-4",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 6: FINANCIAL MANAGEMENT"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 36,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "7-1",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "7-2",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "7-3",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "5-2a",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "5-2b",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 7: FINANCIAL MODEL"
+      }
+    ],
+    "axis_score": 0
+  },
+  {
+    "axis": "AXIS 4. TECHNOLOGY & ARCHITECTURE",
+    "axis_completion": 0,
+    "domains": [
+      {
+        "domain_percentage": 0,
+        "domain_max": 43,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "8-1",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "8-2",
+            "question_max": 18,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "8-3a",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "8-3b",
+            "question_max": 6,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 8: DATA"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 18,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "9-1",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "9-2",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 9: INTEROPERABILITY"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 30,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "10-1",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "10-2",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "10-3",
+            "question_max": 6,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 10: ADAPTABILITY"
+      }
+    ],
+    "axis_score": 0
+  },
+  {
+    "axis": "AXIS 5. OPERATIONS",
+    "axis_completion": 0,
+    "domains": [
+      {
+        "domain_percentage": 0,
+        "domain_max": 33,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "11-1",
+            "question_max": 21,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "11-2",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 11: PERSONNEL"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 45,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "12-1a",
+            "question_max": 15,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "12-1b",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "12-2",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "12-3",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 12: TRAINING AND SUPPORT"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 15,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "13-1",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "13-2",
+            "question_max": 6,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 13: OUTREACH AND SENSITIZATION"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 18,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "14-1",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "14-2",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 14: CONTINGENCY PLANNING"
+      }
+    ],
+    "axis_score": 0
+  },
+  {
+    "axis": "AXIS 6. MONITORING & EVALUATION",
+    "axis_completion": 0,
+    "domains": [
+      {
+        "domain_percentage": 0,
+        "domain_max": 25,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "15-1a",
+            "question_max": 4,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "15-1b",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "15-2",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 15: PROCESS MONITORING"
+      },
+      {
+        "domain_percentage": 0,
+        "domain_max": 66,
+        "domain_sum": 0,
+        "questions": [
+          {
+            "question": "16-1a",
+            "question_max": 6,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "16-1b",
+            "question_max": 9,
+            "answers": [
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "16-1c",
+            "question_max": 6,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "16-2a",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "16-2b",
+            "question_max": 12,
+            "answers": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "16-2c",
+            "question_max": 15,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "question_sum": 0
+          },
+          {
+            "question": "16-3",
+            "question_max": 6,
+            "answers": [
+              null,
+              null
+            ],
+            "question_sum": 0
+          }
+        ],
+        "domain": "DOMAIN 16: EVALUATION RESEARCH"
+      }
+    ],
+    "axis_score": 0
+  }
+]
