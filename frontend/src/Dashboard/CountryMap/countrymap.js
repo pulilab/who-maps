@@ -8,7 +8,8 @@ const coutrymap = {
     bindings: {
         country: '=',
         data: '='
-    }
+    },
+    name: 'countrymap'
 };
 
 export default coutrymap;

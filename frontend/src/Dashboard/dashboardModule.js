@@ -47,7 +47,7 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                             return lazyLoader($compileProvider, 'Linechart/linechart.js', 'component');
                         },
                         'countrymap': () => {
-                            return lazyLoader($compileProvider, 'Countrymap/countrymap.js', 'component');
+                            return lazyLoader($compileProvider, 'CountryMap/countrymap.js', 'component');
                         }
                     }
                 }
