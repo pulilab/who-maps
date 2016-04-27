@@ -22,11 +22,6 @@ describe('axisController', () => {
         expect(window.EE.emit).toHaveBeenCalled();
     });
 
-    // it('should have a function that calculate the axis completition', () => {
-    //     const c = ac.axisCompletitionCalculator();
-    //     expect(c).toBeDefined();
-    // })
-
     it('should have a fuonction that initialize the system', () => {
         spyOn(axisController.prototype, 'initialization');
         ac = axisController.axisFactory()();
