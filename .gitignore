@@ -17,3 +17,4 @@ npm-debug.log
 *htmlcov/
 *html/public/
 bundle.js
+nginx/html/
