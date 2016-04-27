@@ -39,8 +39,8 @@
 
             .dash-stat-column {
 
-                // justify-content: space-between; TO =>
-                justify-content: flex-start;
+                justify-content: space-between; // TO =>
+                // justify-content: flex-start;
 
                 cursor: default;
 
@@ -48,7 +48,7 @@
 
                     height: 100px;
                     text-align: center;
-                    margin-bottom: 20px; // Remove if got all 4!
+                    // margin-bottom: 20px; // Remove if got all 4!
 
                     .dash-trendicon {
 
@@ -418,7 +418,6 @@
 
                 .project-cont {
 
-                    // border: 1px solid gray;
                     overflow: hidden;
                     margin: 0;
 
