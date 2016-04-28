@@ -56,7 +56,7 @@ class ContinuumController {
         vm.showEditModeSpinner = true;
         this.timeout(()=> {
             this.EE.emit('hssEditMode', vm.editMode);
-        })
+        });
     }
 
     firstRowGenerator() {
