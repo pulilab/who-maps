@@ -180,7 +180,7 @@ EMAIL_PORT = 587
 
 # Geodata settings
 MAPZEN_S3_URL = "https://s3.amazonaws.com/osm-polygons.mapzen.com/"
-GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'temp/')
+GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')
 SELECTED_FILE_LIST = [
     "sierra-leone_geojson.tgz",
     "kenya_geojson.tgz",
