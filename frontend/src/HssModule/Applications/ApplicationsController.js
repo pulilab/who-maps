@@ -393,9 +393,20 @@ class ApplicationsController {
     }
 
     blurHandler(tile) {
-        this.timeout(() =>{
+        this.timeout(() => {
             if (tile.content.length === 0) {
-                this.deleteBubble(tile);
+                const vm = this;
+                const confirm = this.dialog.confirm()
+                    .title('Warning')
+                    .textContent('Empty bubble is not allowed, are you sure you want to delete?')
+                    .ariaLabel('Bubble Delete')
+                    .ok('Yes')
+                    .cancel('No');
+                this.dialog.show(confirm).then(() => {
+                    vm.deleteBubble(tile);
+                }, () => {
+                    this.focusBubble(tile);
+                });
             }
         });
     }
@@ -512,14 +523,18 @@ class ApplicationsController {
             return !value.invisible || !value.isInput;
         });
 
+        this.focusBubble(tile);
+
+        this.searchForFilledColumns();
+    }
+
+    focusBubble(tile) {
         this.timeout(() => {
             const input = document.getElementById('appBubble_' + this.labelGenerator(tile));
             if (input) {
                 input.focus();
             }
         });
-
-        this.searchForFilledColumns();
     }
 
     deleteBubble(bubble) {
