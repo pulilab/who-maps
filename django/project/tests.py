@@ -2,7 +2,6 @@ import copy
 import tempfile
 from datetime import datetime
 
-from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.test.client import MULTIPART_CONTENT, BOUNDARY, encode_multipart
 from allauth.account.models import EmailConfirmation
@@ -214,8 +213,8 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_retrieve_project_detail_template(self):
-        url = reverse("template-project-detail")
+    def test_retrieve_project_srtucture(self):
+        url = reverse("get-project-structure")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Strategy1")
@@ -223,8 +222,8 @@ class ProjectTests(APITestCase):
         self.assertContains(response, "Pipeline1")
         self.assertContains(response, "Application1")
 
-    def test_retrieve_project_detail_template_id(self):
-        url = reverse("template-project-detail-id", kwargs={"project_id": self.pub_rep_other_project_id})
+    def test_retrieve_project_structure_id(self):
+        url = reverse("get-project-structure-id", kwargs={"project_id": self.pub_rep_other_project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Strategy1")
@@ -235,7 +234,7 @@ class ProjectTests(APITestCase):
         self.assertContains(response, "other_pipe1")
         self.assertContains(response, "Application1")
 
-    def test_retrieve_project_detail_template_wrong_id(self):
-        url = reverse("template-project-detail-id", kwargs={"project_id": 999})
+    def test_retrieve_project_structure_wrong_id(self):
+        url = reverse("get-project-structure-id", kwargs={"project_id": 999})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 400)

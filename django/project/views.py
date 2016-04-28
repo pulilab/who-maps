@@ -1,51 +1,56 @@
 import json
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
 from django.db.models import Q
 
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from core.views import TokenAuthMixin
+from core.views import TokenAuthMixin, get_object_or_400
 from user.models import UserProfile
 from hss.models import HSS
 from hss.hss_data import hss_default
 from toolkit.models import Toolkit
 from toolkit.toolkit_data import toolkit_default
+from country.models import Country
 from .serializers import ProjectListRetrieveSerializer, ProjectCreateUpdateSerializer
 from .models import Project, Strategy, Technology, Pipeline, Application
 from .models import Report, Publication
 
 
-def template_project_detail(request, project_id=None):
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def get_project_structure(request, project_id=None):
     """
-    View for providing temaplte HTML for create/edit project. Fills out form
-    options that is stored in the database.
+    View for providing form data for create/edit project.
     """
     if project_id:
-        project = Project.objects.get_object_or_none(pk=project_id)
-        if not project:
-            return HttpResponse("No such project.", status=400)
-        else:
-            strategy_options = Strategy.objects.filter(Q(project_specific=False) | Q(id__in=project.strategy.all()))
-            technology_options = Technology.objects.filter(Q(project_specific=False) | Q(id__in=project.technology.all()))
-            pipeline_options = Pipeline.objects.filter(Q(project_specific=False) | Q(id__in=project.pipeline.all()))
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        strategy_options = Strategy.objects.filter(Q(project_specific=False) | Q(id__in=project.strategy.all()))
+        technology_options = Technology.objects.filter(Q(project_specific=False) | Q(id__in=project.technology.all()))
+        pipeline_options = Pipeline.objects.filter(Q(project_specific=False) | Q(id__in=project.pipeline.all()))
     else:
         strategy_options = Strategy.objects.filter(Q(project_specific=False))
         technology_options = Technology.objects.filter(Q(project_specific=False))
         pipeline_options = Pipeline.objects.filter(Q(project_specific=False))
 
     application_options = Application.objects.all()
+    countries = Country.objects.all()
 
     data = {
-        "strategy_options": strategy_options,
-        "technology_options": technology_options,
-        "pipeline_options": pipeline_options,
-        "application_options": application_options
+        "strategy_options": [dict(name=x.name, id=x.id) for x in strategy_options],
+        "technology_options": [dict(name=x.name, id=x.id) for x in technology_options],
+        "pipeline_options": [dict(name=x.name, id=x.id) for x in pipeline_options],
+        "application_options": [dict(name=x.name, id=x.id) for x in application_options],
+        "countries": [dict(name=x.name, id=x.id) for x in countries]
     }
-    return render(request, "project/project-detail.html", {"data": data})
+    return Response(data)
 
 
 def get_publication(request, pk):
