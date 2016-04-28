@@ -222,3 +222,27 @@ class UserProfileTests(TestCase):
             "country": "test_country"}
         response = client.post(url, data)
         self.assertEqual(response.status_code, 201)
+
+    def test_create_duplicate_profile(self):
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user1@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        url = reverse("userprofile-list")
+        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        data = {
+            "name": "Test Name",
+            "organisation": "test_org",
+            "country": "test_country"}
+        response = client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        # shouldn't create duplicate profile
+        data = {
+            "name": "Test Name2",
+            "organisation": "test_org2",
+            "country": "test_country2"}
+        response = client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+

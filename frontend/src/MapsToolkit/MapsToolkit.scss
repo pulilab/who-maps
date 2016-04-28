@@ -1,0 +1,123 @@
+@import '../variables';
+@import '../mixins';
+
+.question-header {
+    height: 73px;
+    padding-bottom: 10px;
+    background: #EEEEEE;
+    box-shadow: 0px 1px 0px 0px #BDBDBD;
+    color: $color-black;
+    font-size:12px;
+    text-transform: uppercase;
+    .question-text {
+        padding-top:23px;
+        padding-bottom:13px;
+        padding-left:60px;
+        font-size:20px;
+        text-transform: none;
+        line-height: 24px;
+    }
+}
+
+.md-subheader .md-subheader-inner {
+    padding:0;
+}
+
+.maps-toolkit {
+
+    .domain-header {
+        padding-left:60px;
+        padding-top:40px;
+        color:$color-black;
+
+        h4 {
+            font-size:32px;
+            font-weight: normal;
+            padding-bottom:24px;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+        }
+        p {
+            font-size:14px;
+            font-style:italic;
+            padding-bottom:40px;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+        }
+
+    }
+
+
+
+    .axis-row {
+        background-color: $color-white;
+        margin-top:10px;
+        margin-bottom:10px;
+        height:50px;
+        max-height:50px;
+
+        md-card {
+            margin:0;
+            box-shadow:none;
+        }
+    }
+    .domain-questions {
+        background-color: $color-white;
+        margin-bottom:40px;
+    }
+
+    md-content {
+        width:100%;
+    }
+
+    md-checkbox {
+        width: 20px;
+        margin-bottom:0;
+    }
+
+    .answer {
+        border-bottom: 1px solid #BDBDBD;
+
+
+        .first-box,
+        .box {
+            border-right: 1px solid $color-gray-lighter;
+        }
+    }
+
+    .answer-wrapper {
+        font-family: Roboto-Regular;
+        font-size: 14px;
+        color: $text-primary ;
+        line-height: 20px;
+        padding-top: 24px;
+        padding-bottom:24px;
+        padding-left: 60px;
+        padding-right: 100px;
+
+        li {
+            margin-left:20px;
+        }
+    }
+
+    .domain-scoore {
+        height: 76px;
+        font-size:20px;
+        font-weight: 500;
+        padding-right:60px;
+        padding-left:60px;
+        background: #FFF9C4;
+        margin-bottom:40px;
+    }
+
+    .domain-button {
+        margin-bottom:47px;
+        padding-right:60px;
+        padding-left:60px;
+
+        .md-button {
+            padding-left:20px;
+            padding-right:20px;
+        }
+    }
+}

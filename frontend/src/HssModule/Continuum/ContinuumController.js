@@ -14,7 +14,8 @@ class ContinuumController {
         this.timeout = $timeout;
         this.element = $element;
         this.classGenerator = this.classGenerator.bind(this);
-        angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
+        this.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
+        this.mdContent.on('scroll', this.scrollEventHandler.bind(this));
         this.$onInit = this.init.bind(this);
 
     }
@@ -38,7 +39,7 @@ class ContinuumController {
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
-                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollTop = this.mdContent[0].scrollTop;
                 vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
                 vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
             }

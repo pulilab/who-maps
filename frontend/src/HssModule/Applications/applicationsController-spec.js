@@ -163,10 +163,10 @@ describe('applicationsController', () => {
         const subApp = _.values(applicationsLib[1].subApplications);
         const classArray = ac.subApplicationClassGenerator(subApp, firstColumn).split(' ');
         _.remove(classArray, item => {
-            return item === ''
-        })
+            return item === '';
+        });
         const expectedArray = ['app', 'odd', 'app-sub', 'applications_middle_0',
-         'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub']
+         'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub'];
         expect(_.difference(classArray, expectedArray).length).toBe(0);
     });
 
@@ -302,7 +302,7 @@ describe('applicationsController', () => {
         _.forEach(ac.applicationRow, tile => {
             expect(tile.disabled).toBeFalsy();
         });
-    })
+    });
 
     it('should have a function that counts click and execute appropriate'
     + 'functions based on click number, only in edit mode', () => {

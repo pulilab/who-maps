@@ -38,6 +38,7 @@ class AppModuleController extends Protected {
 
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
+        this.EE.on('logout', this.handleLogout.bind(this));
     }
 
     handleLoginEvent(forced) {
@@ -46,7 +47,7 @@ class AppModuleController extends Protected {
         }
         this.systemLogin();
         this.fillUserData();
-        this.state.go('hss');
+        this.state.go('dashboard');
     }
 
     updateProject(name) {
@@ -72,7 +73,11 @@ class AppModuleController extends Protected {
     }
 
     handleUnauthorized() {
-        this.state.go('login');
+        this.logout();
+    }
+
+    handleLogout() {
+        this.state.go('login', { projectId: null });
     }
 
     showCompleteNavigation(state, isLogin) {

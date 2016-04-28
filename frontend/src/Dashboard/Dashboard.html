@@ -1,0 +1,328 @@
+
+<div id="dashcontainer">
+
+    <div layout="row" class="dashrow dashrow-upper">
+
+        <div flex class="dashsection dashsection-left" layout="row">
+
+            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
+
+                <div class="dash-subhead">STATISTICS</div>
+                <div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
+
+                    <md-card class="dash-stat-card">
+
+                        <!-- TODO: bind version nr. -->
+                        <span class="dash-stat-nr dash-stat-nr-version">3.</span>
+                        <span class="dash-stat-label">version</span>
+                        <!-- TODO: bind snapshotting fn. -->
+                        <md-button class="snapshot-button" ng-click="">+ snapshot</md-button>
+                    </md-card>
+
+                    <!-- DECOMMENT IF FEATURES ARE READY... -->
+                    <!-- <md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
+
+                            <-- TODO: ng-if trendicons, bind nr.
+                            <md-icon class="material-icons dash-trendicon dash-trendicon-up">trending_up</md-icon>
+                            <md-icon class="material-icons dash-trendicon">trending_flat</md-icon> ->
+
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-up" ng-show="!viewersnrHovered">trending_up</md-icon>
+                        <span class="dash-stat-nr" ng-show="!viewersnrHovered">1509</span>
+                        <span class="dash-stat-label" ng-show="!viewersnrHovered">Viewers</span>
+
+
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
+                        <span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates change since the last month.</span>
+
+                    </md-card>
+
+                    <md-card class="dash-stat-card">
+
+                        <-- TODO: ng-if trendicons, bind nr ->
+                        <md-icon class="material-icons dash-trendicon dash-trendicon-down">trending_down</md-icon>
+                        <span class="dash-stat-nr">87</span>
+                        <span class="dash-stat-label">Followers</span>
+                    </md-card> -->
+
+                    <md-card class="dash-stat-card">
+
+                        <!-- TODO: bind nr -->
+                        <md-icon class="material-icons dash-trendicon">supervisor_account</md-icon>
+                        <span class="dash-stat-nr">3</span>
+                        <span class="dash-stat-label">Donors</span>
+                    </md-card>
+
+                </div>
+            </div>
+
+            <div flex class="dashsection dash-cardholder" layout="column">
+
+                <div class="dash-subhead">PROJECT DETAILS</div>
+                <md-card flex>
+
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
+
+                        <md-tab label="overview">
+                            <div class="dash-cardcontent" layout="column">
+                                <!-- TODO: bind axes -->
+                                <!-- <div>{{vm.mockAxis}}</div> -->
+                                <axis flex ng-repeat="axis in vm.mockAxis" axis-data="axis"></axis>
+                                <div layout="row" class="dash-overview-tooltips">
+                                    <div class="dash-overview-tooltip">
+                                        <img src="../Common/Axis/images/flag-started.svg" />
+                                        <span>Already started</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <img src="../Common/Axis/images/flag-notstarted.svg" />
+                                        <span>Not started yet</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <span>P - Progress</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <span>S - Score</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
+                                        <span>0-49%</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <md-icon class="material-icons dash-overw-toolkit-ball2">fiber_manual_record</md-icon>
+                                        <span>50-99%</span>
+                                    </div>
+                                    <div class="dash-overview-tooltip">
+                                        <md-icon class="material-icons dash-overw-toolkit-ball3">fiber_manual_record</md-icon>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-tab>
+
+                        <md-tab label="axis">
+                            <div>
+                                <!-- TODO: bindings -->
+                                <linechart
+                                    data="vm.linechartMockData.data"
+                                    labels="vm.linechartMockData.labels"
+                                    showdotted="true">
+                                </linechart>
+                            </div>
+                        </md-tab>
+
+                        <md-tab label="domains">
+                            <div>
+                                <!-- TODO: bindings -->
+                                <linechart
+                                    data="vm.linechartMockData2"
+                                    labels="vm.linechartMockData2.labels"
+                                    showdotted="false"
+                                    datachooser="true"
+                                ></linechart>
+                            </div>
+                        </md-tab>
+
+                        <md-tab label="technology">
+                            <!-- TODO: bindings! -->
+                            <div class="dash-tech">
+                                <div
+                                    class="upper"
+                                    layout="column">
+
+                                    <div flex layout="row" ng-init="platforms=['MOTECH']">
+                                        <md-icon class="material-icons">device_hub</md-icon>
+                                        <span flex>Technology platforms</span>
+                                        <md-chips flex="66" readonly="true" ng-model="platforms"></md-chips>
+                                    </div>
+
+                                    <div flex layout="row" ng-init="licenses=['APACHE', 'MIT']">
+                                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                                        <span flex>License</span>
+                                        <md-chips flex="66" readonly="true" ng-model="licenses"></md-chips>
+                                    </div>
+
+                                    <div flex layout="row" ng-init="tools=['SMS', 'ELECTRONIC FORMS']">
+                                        <md-icon class="material-icons">speaker_phone</md-icon>
+                                        <span flex>Digital tools</span>
+                                        <md-chips flex="66" readonly="true" ng-model="tools"></md-chips>
+                                    </div>
+                                </div>
+
+                                <div class="lower">
+
+                                    <span>Code documentations & download:</span>
+                                    <a>http://github.com/project/repo/asfsdfasduifasuidfuiasdf8i4358345</a>
+
+                                    <span>Download applications:</span>
+                                    <a>http://google.playtore/app/app43563463456/45646</a>
+
+                                    <span>Link to wiki page:</span>
+                                    <a>http://linktowiki/wiki/wiki.html</a>
+                                </div>
+                            </div>
+                        </md-tab>
+
+                        <md-tab label="resources" ng-disabled="true">
+                            <div>
+                                RESOURCES content
+                            </div>
+                        </md-tab>
+
+                    </md-tabs>
+
+                </md-card>
+            </div>
+
+        </div>
+
+        <div flex="40" class="dashsection dash-cardholder" layout="column">
+            <div class="dash-subhead">PROJECT PERFORMANCE</div>
+            <md-card flex>
+
+                    <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
+
+                        <md-tab label="geographical view">
+                            <countrymap
+                                flex
+                                data="vm.perfMockMap">
+                            </countrymap>
+                        </md-tab>
+
+                        <md-tab label="historical view">
+                            Linechart here
+                        </md-tab>
+
+                    </md-tabs>
+
+            </md-card>
+        </div>
+
+    </div>
+
+    <div layout="row" class="dashrow dashrow-lower">
+
+        <div flex class="dashsection dashsection-left dash-cardholder" layout="column">
+            <div class="dash-subhead">IMPROVE PROJECT</div>
+            <md-card flex class="dash-lessons-tips">
+
+
+                <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
+
+
+                    <md-tab label="lessons & tips">
+                        <!-- TODO: chose, and bind random domain -->
+                        <div class="svg-box" ng-class="'axis2'" layout="row">
+                            <div flex="33" flex-offset="66">
+                                <img class="book-keeper" src="./Img/book.svg">
+                            </div>
+                        </div>
+                        <div class="quarters" layout="column">
+
+                            <div class="firstquarter" flex="30">
+
+                                <md-icon class="material-icons">info</md-icon>
+
+                                <div class="score-yell bold">You've scored {33%} in {Scientific Basis} domain!</div>
+
+                                <div class="score-tip">Here you can find some tips and lessons to improve your result. For more info visit {Planning & Guidance} section.</div>
+                            </div>
+
+                            <md-card flex="20">
+                                <img class="tip-capture" src="http://placehold.it/60x60">
+                                <div class="bold lesson-header">Use the existing evidence base to bolster interventions</div>
+                                <div class="lesson-short">Project teams should remember that mHealth is a catalytic tool and not often a health…</div>
+                                <div class="comments">
+                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({17})
+                                </div>
+                            </md-card>
+
+                            <md-card flex="20">
+                                <img class="tip-capture" src="http://placehold.it/60x60">
+                                <div class="bold lesson-header">Conduct formative work to understand your context</div>
+                                <div class="lesson-short">Formative research is critical for local validation and contextualization of mHealth…</div>
+                                <div class="comments">
+                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({6})
+                                </div>
+                            </md-card>
+
+                            <md-card flex="20">
+                                <img class="tip-capture" src="http://placehold.it/60x60">
+                                <div class="bold lesson-header">Lorem ipsum dolor sit amet, consectetur adipisici elit</div>
+                                <div class="lesson-short">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore…</div>
+                                <div class="comments">
+                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({0})
+                                </div>
+                            </md-card>
+
+                        </div>
+                    </md-tab>
+
+                    <md-tab label="experiences" ng-disabled="true">
+                        Experiences content
+                    </md-tab>
+
+                    <md-tab label="resources" ng-disabled="true">
+                        Resources content
+                    </md-tab>
+
+                </md-tabs>
+
+
+
+
+            </md-card>
+        </div>
+
+        <div flex="40" class="dashsection dash-cardholder" layout="column">
+            <div class="dash-subhead">COMMUNITY WALL</div>
+            <md-card class="dash-community" flex layout="column" ng-init="vm.pi=[0,0,0]">
+
+                <div flex class="project-cont">
+                    <div layout="row" class="header">
+                        <span flex="grow">PROJECTS LIKE ME</span>
+                        <!-- TODO: ng-class, ng-click -->
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === 0" ng-click="vm.prewProject(0)">chevron_left</md-icon>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === vm.commProjects[0].length - 1" ng-click="vm.nextProject(0)">chevron_right</md-icon>
+                    </div>
+                    <projectcomp
+                        ng-model="vm.commProjects[0][vm.pi[0]]"
+                        has-link="false"
+                        has-logo="false">
+                    </projectcomp>
+                </div>
+
+                <div flex class="project-cont">
+                    <div layout="row" class="header">
+                        <span flex="grow">PROJECTS I'M FOLLOWING</span>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === 0" ng-click="vm.prewProject(1)">chevron_left</md-icon>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === vm.commProjects[1].length - 1" ng-click="vm.nextProject(1)">chevron_right</md-icon>
+                    </div>
+                    <projectcomp
+                        ng-model="vm.commProjects[1][vm.pi[1]]"
+                        has-link="false"
+                        has-logo="false">
+                    </projectcomp>
+                </div>
+
+                <div flex class="project-cont">
+                    <div layout="row" class="header">
+                        <span flex="grow">PROJECTS I'VE FOUNDED</span>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === 0" ng-click="vm.prewProject(2)">chevron_left</md-icon>
+                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === vm.commProjects[2].length - 1" ng-click="vm.nextProject(2)">chevron_right</md-icon>
+                    </div>
+                    <projectcomp
+                        ng-model="vm.commProjects[1][vm.pi[2]]"
+                        has-link="false"
+                        has-logo="false">
+                    </projectcomp>
+                </div>
+
+            </md-card>
+        </div>
+
+    </div>
+
+    <div class="disclaimer">
+        <span>Disclaimer:</span> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+    </div>
+
+</div>

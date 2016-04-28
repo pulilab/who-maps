@@ -77,4 +77,5 @@ angular.module(moduleName,
     .controller(moduleName + '.appController', AppController.appControllerFactory())
     .config(config);
 
+
 export default moduleName;

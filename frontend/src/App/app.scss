@@ -18,6 +18,10 @@ ui-view > md-content {
   padding: $layout-gutter-width * 2;
 }
 
+.main-wrapper {
+    position:relative;
+}
+
 
 /* TYPOGRAPY
    ============================= */
@@ -114,6 +118,11 @@ md-checkbox.small {
   }
 }
 
+
+.md-subheader-wrapper.ng-scope.md-sticky-clone {
+    margin-left: 0px !important;
+    width: calc(100% - 32px) !important;
+}
 
 /* CUSTOM COLORS
    ============================= */

@@ -1,2 +1,92 @@
-<h1>MAPS Toolkit module loaded!</h1>
-<sample-component></sample-component>
+<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+</div>
+
+<div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
+    <div layout="row" flex="100" md-whiteframe class="axis-row">
+            <axis flex="70" axis-data="vm.axis"></axis>
+            <div flex="30" layout="row" layout-align="end center">
+                <md-button class="md-primary" ui-sref="scorecard({axisId: vm.axisId})">
+                    <md-icon>insert_chart</md-icon>
+                    Scorecard
+                </md-button>
+                <md-button class="md-primary">
+                    <md-icon>toc</md-icon>
+                    Overview
+                </md-button>
+                <md-button class="md-primary">
+                    <md-icon>pause</md-icon>
+                    Pause test
+                </md-button>
+            </div>
+    </div>
+
+    <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
+
+        <div layout="column" layout-fill  >
+            <div class="domain-header">
+                <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
+                <p>
+                    {{vm.data.sub_text}}
+                </p>
+            </div>
+            <section ng-repeat="question in vm.data.questions" >
+                <md-subheader >
+                    <div layout="row" flex="100" class="question-header">
+                        <div flex="{{vm.calculateMainBoxSize(question)}}" layout="column" class="question-text" layout-align="center start">
+                            {{question.id}}.{{question.text}} ({{question.question_max}} Points)
+                        </div>
+                        <div flex="10" layout="column" layout-align="end center" ng-repeat="choice in question.choices">
+                            {{choice.label}}
+                        </div>
+                        <div flex="10" layout="column" layout-align="end center">
+                            Points Earned
+                        </div>
+                    </div>
+                </md-subheader>
+
+                <div layout="row" class="answer" flex="100" ng-repeat="answer in question.answers track by $index">
+                    <div flex="{{vm.calculateMainBoxSize(question)}}" class="first-box">
+                        <div ng-bind-html="answer.template" class="answer-wrapper"></div>
+                    </div>
+                    <div flex="10" class="box" layout="column" layout-align="center center" ng-repeat="choice in question.choices">
+                        <md-checkbox
+                            class="md-primary"
+                            ng-checked="vm.checkChecked(question.index, answer.index, choice.points )"
+                            aria-label="{{choice.label}}"
+                            ng-click="vm.setAnswer(question.index, answer.index, choice.points)"
+                        ></md-checkbox>
+                    </div>
+                    <div flex="10" class="fourth-box" layout="column" layout-align="center center">
+                        <span ng-show="answer.value !== null" >{{answer.value}} points</span>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="domain-scoore" flex="100" layout-fill  layout="row" layout-align="center start">
+            <span flex layout-fill layout="column"  layout-align="center start"> Total point earned (out of a possible {{vm.domain.domain_max}}) </span>
+            <span flex layout="column" layout-fill layout-align="center end">{{vm.score}}</span>
+        </div>
+
+        <div class="domain-button" layout="row" layout-fill >
+            <div flex="50" layout="column" layout-align="center start">
+                <md-button class="md-raised md-primary"
+                    ng-disabled="vm.backButtonDisabled()"
+                    ng-click="vm.goToPrevDomain()">
+                    <md-icon>arrow_back</md-icon>
+                    Go to prev domain
+                </md-button>
+            </div>
+            <div flex="50" layout="column" layout-align="center end">
+                <md-button class="md-raised md-primary"
+                    ng-disabled="vm.forwardButtonDisabled()"
+                    ng-click="vm.goToNextDomain()">
+                    Go to next domain
+                    <md-icon>arrow_forward</md-icon>
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <axis-footer axes="vm.rawData"></axis-footer>
+</div>
