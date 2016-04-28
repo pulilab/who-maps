@@ -29,13 +29,15 @@ const basePlugins = [
 ];
 
 const distPlugins = [
+    new ExtractTextPlugin('[name].[chunkhash].css', {
+        allChunks: true
+    }),
+    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin(
         {
             sourceMap: false
         }
-    ),
-    new ExtractTextPlugin('[name].[chunkhash].css'),
-    new webpack.optimize.DedupePlugin()
+    )
 ].concat(basePlugins);
 const devPlugins = [].concat(basePlugins);
 
@@ -67,23 +69,23 @@ module.exports = {
         chunkFilename: '[chunkhash].js'
     },
     resolve: {
-            alias: {
-                Common: 'src/Common/'
-            }
+        alias: {
+            Common: 'src/Common/'
+        }
     },
     module: {
         preLoaders: siteBuild ? [] : devPreLoaders,
 
         loaders: [
             {
-                test: /\.js/,
+                test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel'
             },
             {
-                test: /\.scss/,
+                test: /\.scss$/,
                 // loaders: ['style', 'css', 'sass']
-                loader: production ? ExtractTextPlugin.extract('style', 'css!sass') : 'style!css!sass'
+                loader: production ? ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader') : 'style!css!sass'
             },
             {
                 test: /\.html/,
