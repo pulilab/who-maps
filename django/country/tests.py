@@ -66,3 +66,4 @@ class CountryTests(APITestCase):
         url = reverse("get-districts", kwargs={"country_id": self.country_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertIn("Some District", response.json())

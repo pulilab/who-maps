@@ -4,11 +4,11 @@ from .models import Project, Strategy, Technology, Pipeline, Application
 from .models import Report, Publication, Coverage
 
 
-class CoverageSerializer(serializers.Serializer):
-    district = serializers.CharField()
-    clients = serializers.IntegerField()
-    health_workers = serializers.IntegerField()
-    facilities = serializers.IntegerField()
+class CoverageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Coverage
+        read_only_fields = ("project",)
 
 
 class ProjectListRetrieveSerializer(serializers.ModelSerializer):
@@ -133,29 +133,6 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = (
-            "id",
-            "strategy_other",
-            "pipeline_other",
-            "technology_other",
-            "publications_new",
-            "reports_new",
-            "coverage_update",
-            "publications_deleted",
-            "reports_deleted",
-            "date",
-            "name",
-            "organisation",
-            "strategy",
-            "technology",
-            "coverage_deleted",
-            "application",
-            "started",
-            "donors",
-            "pipeline",
-            "goals_to_scale",
-            "anticipated_time",
-        )
 
 
 class ReportSerializer(serializers.ModelSerializer):
