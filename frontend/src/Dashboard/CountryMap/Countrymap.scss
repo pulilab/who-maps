@@ -63,21 +63,27 @@
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 
-	.d3district {
+    .countrymap {
 
-		fill: #BDBDBD;
-		stroke: white;
-		stroke-width: 3px;
-	    pointer-events: all;
-	    cursor: default;
+	    shape-rendering: optimizeSpeed;
 
-		&.d3district-data {
+		.d3district {
 
-			fill: #99A2E1;
+			fill: #D7D9E2;
+			stroke: #9B9DA8;
+			stroke-width: 2px;
+		    pointer-events: all;
+		    cursor: default;
 
-			&:hover {
-				fill: $color-primary;
+			&.d3district-data {
+
+				fill: #C8CAD5;
+				transition: $swift-ease-out;
+
+				&:hover {
+					fill: $color-primary;
+				}
 			}
 		}
-	}
+    }
 }
