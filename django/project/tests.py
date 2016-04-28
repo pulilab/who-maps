@@ -8,6 +8,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
+from country.models import Country
 from .models import Strategy, Technology, Application, Pipeline, Publication
 from .models import Report, Coverage
 
@@ -57,10 +58,12 @@ class ProjectTests(APITestCase):
         app2 = Application.objects.create(name="Application2")
         pipeline1 = Pipeline.objects.create(project_specific=False, name="Pipeline1")
         pipeline2 = Pipeline.objects.create(project_specific=False, name="Pipeline2")
+        country1 = Country.objects.create(name="country1")
 
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
+            "country": country1.id,
             "organisation": "test_org",  # same as for the test user.
             "strategy": [strat1.id, strat2.id],
             "technology": [tech1.id, tech2.id],
