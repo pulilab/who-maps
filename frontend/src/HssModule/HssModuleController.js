@@ -5,8 +5,9 @@ import 'es6-promise';
 
 class HssModuleController extends Protected {
 
-    constructor($scope, $state, introJs) {
+    constructor($scope, $state, $animate, introJs) {
         super();
+        $animate.enabled(false);
         this.EE = window.EE;
         this.scope = $scope;
         this.dataReady = false;
@@ -39,10 +40,13 @@ class HssModuleController extends Protected {
     }
 
     handleLayoutEvent() {
-        this.gridLoading -= 1;
-        if (this.gridLoading < 0) {
-            this.gridLoading = 0;
+        let counter = this.gridLoading;
+        counter -= 1;
+        if (counter < 0) {
+            counter = 0;
+            this.EE.emit('editModeDone');
         }
+        this.gridLoading = counter;
     }
 
     handleServerData(values) {
@@ -80,12 +84,12 @@ class HssModuleController extends Protected {
     }
 
     static hssControllerFactory() {
-        function hssController($scope, $state) {
+        function hssController($scope, $state, $animate) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController($scope, $state, introJs);
+            return new HssModuleController($scope, $state, $animate, introJs);
         }
 
-        hssController.$inject = ['$scope', '$state'];
+        hssController.$inject = ['$scope', '$state', '$animate'];
 
         return hssController;
     }

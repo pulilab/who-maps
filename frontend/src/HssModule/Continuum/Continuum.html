@@ -29,13 +29,19 @@
         class="hss-controls">
         <div>
             <div class="hss-control">
-                <span>
+                <span  ng-if="!vm.showEditModeSpinner">
                   <md-switch
                       class="md-green hss-edit"
                       ng-model="vm.editMode"
                       aria-label="EditMode"
                       ng-change="vm.editModeChange()">
                   </md-switch>
+                </span>
+                <span ng-if="vm.showEditModeSpinner">
+                    <md-progress-circular
+                      md-mode="indeterminate"
+                      md-diameter="25">
+                      </md-progress-circular>
                 </span>
                 <span class="md-body-2">Edit Mode: {{vm.editMode ? 'On' : 'Off'}}</span>
             </div>

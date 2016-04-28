@@ -22,7 +22,9 @@ class ContinuumController {
 
     init() {
         const vm = this;
+        vm.EE.on('editModeDone', vm.editModeChangeDone.bind(vm));
         vm.hs = this.service;
+        vm.showEditModeSpinner = false;
         vm.firstRow = this.firstRowGenerator();
         vm.motherRow = this.motherRowGenerator();
         vm.childRow = this.childRowGenerator();
@@ -35,6 +37,10 @@ class ContinuumController {
         this.EE.emit('hssInnerLayoutDone', 'continuum');
     }
 
+    editModeChangeDone() {
+        console.log('done asshole');
+        this.showEditModeSpinner = false;
+    }
     scrollEventHandler() {
         const vm = this;
         vm.timeout(() => {
@@ -48,6 +54,7 @@ class ContinuumController {
 
     editModeChange() {
         const vm = this;
+        vm.showEditModeSpinner = true;
         this.EE.emit('hssEditMode', vm.editMode);
     }
 
