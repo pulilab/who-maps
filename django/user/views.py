@@ -21,10 +21,13 @@ class UserProfileViewSet(TokenAuthMixin, ModelViewSet):
         # On list requests, retrieve only the current user's profile.
         return UserProfile.objects.filter(user=self.request.user.id)
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         """
         Creates a new UserProfile object for the current User.
         """
+        if hasattr(request.user, 'userprofile'):
+            return Response(status=status.HTTP_200_OK)
+
         serializer = self.get_serializer(data=request.data)
         # Add the current user's ID to the data.
         serializer.initial_data.update({"user": request.user.id})
