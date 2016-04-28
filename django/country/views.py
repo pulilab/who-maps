@@ -42,12 +42,12 @@ def get_districts(request, country_id):
     """
     country = get_object_or_400(Country, "No such country.", id=country_id)
     districts = []
-    for item in country.geodata["admin_level_5"]["features"]:
+    for item in country.geodata["admin_level_5"]["objects"]["admin_level_5"]["geometries"]:
         if "properties" in item.keys():
             if "admin_level" in item["properties"].keys():
                 name = item["properties"].get("name:en", None) or item["properties"].get("name")
                 districts.append(name)
-    return Response(districts)
+    return Response(set(districts))
 
 
 class CountryListAPIView(TokenAuthMixin, generics.ListAPIView):

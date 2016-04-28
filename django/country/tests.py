@@ -36,16 +36,21 @@ class CountryTests(APITestCase):
 
         geodata = {
             "admin_level_5": {
-                "features": [
-                    {
-                        "properties": {
-                            "admin_level": "5",
-                            "name": "Some District"
-                        }
+                "objects": {
+                    "admin_level_5": {
+                        "geometries": [
+                            {
+                                "properties": {
+                                    "name": "Some District",
+                                    "admin_level": "5"
+                                }
+                            }
+                        ]
                     }
-                ]
+                }
             }
         }
+
         country, _ = Country.objects.get_or_create(name="name1", geodata=geodata)
         country.save()
         self.country_id = country.id
