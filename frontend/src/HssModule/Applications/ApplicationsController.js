@@ -41,7 +41,6 @@ class ApplicationsController {
         });
     }
 
-
     handleColumnActivation(event) {
         _.map(this.applicationRow, (value) => {
             if (value.columnId === event.columnId) {
@@ -289,12 +288,13 @@ class ApplicationsController {
                 }
                 _.forEach(this.rowObject['father_' + value], row => {
                     let isEnabled = false;
-                    _.forEach(row, item => {
-                        isEnabled = (item.isInput && item.content.length > 0) || isEnabled;
+                    _.forEach(row, tile => {
+                        isEnabled = (tile.isInput && tile.content.length > 0) || isEnabled;
                     });
-                    _.forEach(row, item => {
-                        item.disabled = !isEnabled;
-                        item.rowEnabled = isEnabled;
+                    _.forEach(row, tile => {
+                        tile.disabled = !isEnabled;
+                        tile.rowEnabled = isEnabled;
+                        tile.className = _.replace(tile.className, 'selected', '');
                     });
 
                 });

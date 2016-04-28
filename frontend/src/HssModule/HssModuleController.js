@@ -56,7 +56,6 @@ class HssModuleController extends Protected {
         this.dataReady = true;
     }
 
-
     handleEditMode(value) {
         this.editMode = value;
     }
