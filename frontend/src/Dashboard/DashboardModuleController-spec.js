@@ -2,12 +2,20 @@ import { default as DashboardModuleController } from './DashboardModuleControlle
 
 /* global define, it, describe, expect, spyOn, beforeEach */
 let vm = {};
+const state = {
+    params: {
+        appName: '1'
+    }
+};
+
 window.setTimeout = (fn) => { fn(); };
 
 describe('DashboardModuleController', () => {
 
     beforeEach(() => {
-        vm = DashboardModuleController.dashboardControllerFactory()();
+        spyOn(window.EE, 'on').and.callThrough();
+        vm = DashboardModuleController.dashboardControllerFactory()({}, state);
+
     });
 
     it('is defined', () => {
@@ -45,6 +53,25 @@ describe('DashboardModuleController', () => {
         vm.nextProject(2);
 
         expect(vm.pi).toEqual([2, 1, 4]);
+    });
+
+    it('fetches vm.projectData from API', () => {
+        expect(vm.service.getProjectData).toBeDefined();
+
+        spyOn(vm.service, 'getProjectData').and.callThrough();
+        vm.fetchProjectData();
+
+        expect(vm.service.getProjectData).toHaveBeenCalled();
+    });
+
+    it('hadles axis components domain change event with redirecting to correct maps toolkit page', () => {
+        expect(vm.EE.on).toHaveBeenCalled();
+
+        vm.state.go = a => a;
+        spyOn(vm.state, 'go');
+
+        vm.handleChangeDomain(1);
+        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'domainId': 1 });
     });
 
 });
