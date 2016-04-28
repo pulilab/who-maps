@@ -3,7 +3,7 @@ import { AuthApi } from '../Common/';
 class DashboardService extends AuthApi {
 
     constructor(_projectId) {
-        super('/projects/');
+        super('projects');
         this.projectId = _projectId;
     }
 
