@@ -38,7 +38,6 @@ class ContinuumController {
     }
 
     editModeChangeDone() {
-        console.log('done asshole');
         this.showEditModeSpinner = false;
     }
     scrollEventHandler() {
@@ -55,7 +54,9 @@ class ContinuumController {
     editModeChange() {
         const vm = this;
         vm.showEditModeSpinner = true;
-        this.EE.emit('hssEditMode', vm.editMode);
+        this.timeout(()=> {
+            this.EE.emit('hssEditMode', vm.editMode);
+        })
     }
 
     firstRowGenerator() {

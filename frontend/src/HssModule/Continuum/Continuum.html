@@ -26,11 +26,11 @@
     <md-grid-tile
         md-colspan="2"
         md-rowspan="3"
-        class="hss-controls">
+        class="hss-controls" ng-cloak>
         <div>
             <div class="hss-control">
-                <span  ng-if="!vm.showEditModeSpinner">
-                  <md-switch
+                <span ng-if="!vm.showEditModeSpinner">
+                  <md-switch md-no-ink
                       class="md-green hss-edit"
                       ng-model="vm.editMode"
                       aria-label="EditMode"
