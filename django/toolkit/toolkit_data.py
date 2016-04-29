@@ -203,19 +203,7 @@ toolkit_default = [
                         "question_max": 12,
                         "question_sum": 0,
                         "answers": [None,None,None,None]
-                    },
-                    {
-                        "question": "5-2a",
-                        "question_max": 12,
-                        "question_sum": 0,
-                        "answers": [None,None,None,None]
-                    },
-                    {
-                        "question": "5-2b",
-                        "question_max": 9,
-                        "question_sum": 0,
-                        "answers": [None,None,None]
-                    },
+                    }
                 ]
             }
         ]
