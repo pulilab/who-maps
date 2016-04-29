@@ -1,12 +1,12 @@
-/* global d3 */
+/* global d3, DEV */
 
 import _ from 'lodash';
 import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
 
-import topoSource from './mock/sierra-leone/topoTest.json';
-const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
+// import topoSource from './mock/sierra-leone/topoTest.json';
+// const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
 
 class CountrymapController {
 
@@ -15,10 +15,14 @@ class CountrymapController {
         const vm = this;
 
         // BINDING
-        // vm. data / data to show, district names has to match with countryLvl4-8's
+        // vm.data / data to show, district names has to match with countryLvl4-8's
+        // vm.json // {lvl2: xx, lvlx: xxx} format
 
         vm.el = $element;
         vm.scope = $scope;
+        vm.EE = window.EE;
+        vm.tooltipOver = false;
+        vm.preventMouseOut = false;
         // vm.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
 
 
@@ -42,25 +46,39 @@ class CountrymapController {
             });
 
             vm.svgPanZoom = svgPanZoom;
-            vm.drawMap();
+            // vm.drawMap();
+            vm.EE.once('topoArrived', vm.drawMap.bind(vm));
         };
     }
 
-    makeGeoFromTopo(topo) {
+    makeGeoFromTopo(topo, level) {
+        // return topojson.feature(topo, topoSource.objects.admin_level_5);
+        return topojson.feature(topo, topo.objects[level]);
 
-        return topojson.feature(topo, topoSource.objects.admin_level_5);
     }
 
-    drawMap() {
+    drawMap(topoJSON) {
 
         const vm = this;
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
+        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag;
+
+        vm.countryName = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
+        if (DEV) {
+            console.log(topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties);
+        }
         // If any map comes with mixed winding order, do:
         // const rewind = require('geojson-rewind');
         // const distrData = rewind(mockGeoJsonDistricts);
-        const distrData = mockGeoJsonDistricts;
+
+        // const distrData = mockGeoJsonDistricts;
+        let level = _.keys(topoJSON);
+        level = level.length === 1 ? 'admin_level_2' : level.filter(a => a !== 'admin_level_2')[0];
+        const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
+
 
         const outer = d3.select(vm.el[0])
             .append('div')
@@ -98,15 +116,12 @@ class CountrymapController {
                 .attr('class', 'd3district')
                 .classed('d3district-data', gotData)
                 .on('mouseover', () => {
-                    vm.scope.$evalAsync();
                     vm.activeDistrict = {
                         name: distrData.features[i].properties.name,
                         data: vm.data.data[vm.data.data.length - 1][distrData.features[i].properties.name]
                     };
-                })
-                .on('mouseout', () => {
                     vm.scope.$evalAsync();
-                    vm.activeDistrict.name = '';
+
                 });
         }
 

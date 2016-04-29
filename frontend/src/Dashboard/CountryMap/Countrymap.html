@@ -3,8 +3,8 @@
 	<div class="countrychart-tooltip md-whiteframe-1dp">
 
 		<div class="countrychart-tooltip-header bold">
-			{{vm.data.country.name}}
-			<img class ="tooltip-flag" ng-src="{{vm.data.country.flagUrl}}">
+			{{vm.countryName}}
+			<img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
 		</div>
 
 		<div class="countrychart-tooltip-main" layout="column">
@@ -30,7 +30,7 @@
 
 		</div>
 
-		<div class="countrychart-tooltip-main" ng-if="vm.activeDistrict.name">
+		<div class="countrychart-tooltip-main" ng-show="vm.activeDistrict.name" >
 
 			<div flex class="activename bold">
 				{{vm.activeDistrict.name}}

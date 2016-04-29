@@ -7,7 +7,8 @@ const coutrymap = {
     template: _template,
     bindings: {
         country: '=',
-        data: '='
+        data: '=',
+        json: '='
     },
     name: 'countrymap'
 };

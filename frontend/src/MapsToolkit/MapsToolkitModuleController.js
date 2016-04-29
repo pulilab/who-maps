@@ -37,8 +37,8 @@ class MapsToolkitModuleController  {
     handleChangeAxis(id) {
         this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });
     }
-    handleChangeDomain(id) {
-        this.state.go(this.state.current.name, { 'domainId': id });
+    handleChangeDomain(axisId, domainId) {
+        this.state.go(this.state.current.name, { axisId, domainId });
     }
 
     importHtmlTemplates() {
@@ -64,7 +64,10 @@ class MapsToolkitModuleController  {
         _.forEach(this.data.questions, (question, questionKey) => {
             question.index = questionKey;
             question.answers = _.map(question.answers, (value, index) => {
-                const template = templates[question.answerTemplate[index]];
+                let template = null;
+                if (question.answerTemplate && question.answerTemplate[index]) {
+                    template = templates[question.answerTemplate[index]];
+                }
                 this.score += value === -1 ? 0 : value;
                 return { index, value, template };
             });
@@ -101,26 +104,42 @@ class MapsToolkitModuleController  {
         this.ms.saveAnswer(answer);
     }
 
-    backButtonDisabled() {
-        return parseInt(this.domainId, 10) === 0;
+    printAnswer(answer) {
+        if (answer !== null && answer.value === -1) {
+            return 0;
+        }
+        return answer.value;
     }
 
-    forwardButtonDisabled() {
-        return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1;
+    backButtonDisabled() {
+        return parseInt(this.domainId, 10) === 0
+            && parseInt(this.axisId, 10) === 0;
+    }
+
+    isLastAxisLastDomain() {
+        return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1
+            && parseInt(this.axisId, 10) >= this.rawData.length - 1;
     }
 
     goToNextDomain() {
-        const next = parseInt(this.domainId, 10) + 1;
-        if (next < this.rawData[this.axisId].domains.length) {
-            this.handleChangeDomain(next);
+        let nextDomain = parseInt(this.domainId, 10) + 1;
+        let nextAxis = parseInt(this.axisId, 10);
+        if (nextDomain >= this.rawData[this.axisId].domains.length) {
+            nextAxis += 1;
+            nextDomain = 0;
         }
+        this.handleChangeDomain(nextAxis, nextDomain);
     }
 
     goToPrevDomain() {
-        const prev = parseInt(this.domainId, 10) - 1;
-        if (prev >= 0) {
-            this.handleChangeDomain(prev);
+        let prevDomain = parseInt(this.domainId, 10) - 1;
+        let prevAxis = parseInt(this.axisId, 10);
+        if (prevDomain <= 0) {
+            prevAxis -= 1;
+            prevDomain = this.rawData[prevAxis].domains.length - 1;
         }
+
+        this.handleChangeDomain(prevAxis, prevDomain);
     }
 
 

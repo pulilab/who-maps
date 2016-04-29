@@ -18,9 +18,6 @@ class MapsToolkitService extends AuthApi {
         return this.post(this.projectId + '/toolkit/score/', answer)
         .then(data => {
             return data.json();
-        })
-        .then(json => {
-            console.log(json);
         });
     }
 }

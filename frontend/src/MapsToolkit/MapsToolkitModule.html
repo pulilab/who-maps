@@ -4,17 +4,17 @@
 
 <div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
     <div layout="row" flex="100" md-whiteframe class="axis-row">
-            <axis flex="70" axis-data="vm.axis"></axis>
+            <axis flex="70" axis-data="vm.axis" axis-id="vm.axisId"></axis>
             <div flex="30" layout="row" layout-align="end center">
                 <md-button class="md-primary" ui-sref="scorecard({axisId: vm.axisId})">
                     <md-icon>insert_chart</md-icon>
                     Scorecard
                 </md-button>
-                <md-button class="md-primary">
+                <md-button class="md-primary" ng-disabled="true">
                     <md-icon>toc</md-icon>
                     Overview
                 </md-button>
-                <md-button class="md-primary">
+                <md-button class="md-primary" ng-disabled="true">
                     <md-icon>pause</md-icon>
                     Pause test
                 </md-button>
@@ -58,7 +58,7 @@
                         ></md-checkbox>
                     </div>
                     <div flex="10" class="fourth-box" layout="column" layout-align="center center">
-                        <span ng-show="answer.value !== null" >{{answer.value}} points</span>
+                        <span ng-show="answer.value !== null" > {{vm.printAnswer(answer)}} points</span>
 
                     </div>
                 </div>
@@ -78,12 +78,16 @@
                     Go to prev domain
                 </md-button>
             </div>
-            <div flex="50" layout="column" layout-align="center end">
+            <div flex="50" layout="row" layout-align="end center">
                 <md-button class="md-raised md-primary"
-                    ng-disabled="vm.forwardButtonDisabled()"
+                    ng-hide="vm.isLastAxisLastDomain()"
                     ng-click="vm.goToNextDomain()">
                     Go to next domain
                     <md-icon>arrow_forward</md-icon>
+                </md-button>
+                <md-button class="md-primary md-raised" ng-show="vm.isLastAxisLastDomain()" ui-sref="summary">
+                    Go to scorecard
+                    <md-icon>insert_chart</md-icon>
                 </md-button>
             </div>
         </div>

@@ -39,8 +39,8 @@
 
             .dash-stat-column {
 
-                // justify-content: space-between; TO =>
-                justify-content: flex-start;
+                justify-content: space-between; // TO =>
+                // justify-content: flex-start;
 
                 cursor: default;
 
@@ -48,7 +48,7 @@
 
                     height: 100px;
                     text-align: center;
-                    margin-bottom: 20px; // Remove if got all 4!
+                    // margin-bottom: 20px; // Remove if got all 4!
 
                     .dash-trendicon {
 
@@ -278,6 +278,8 @@
             }
 
             .dash-lessons-tips {
+                opacity:0.5;
+                pointer-events: none;
 
                 background-color: $color-gray-lightest;
 
@@ -412,13 +414,13 @@
             }
 
             .dash-community {
-
+                opacity: 0.5;
                 padding: 20px 10px;
                 background-color: $color-gray-lightest;
+                pointer-events: none;
 
                 .project-cont {
 
-                    // border: 1px solid gray;
                     overflow: hidden;
                     margin: 0;
 
