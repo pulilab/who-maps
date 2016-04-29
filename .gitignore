@@ -18,3 +18,4 @@ npm-debug.log
 *html/public/
 bundle.js
 nginx/site/html/
+django/temp
