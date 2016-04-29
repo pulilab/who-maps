@@ -66,14 +66,13 @@ class DashboardModuleController {
                 ret[el.name] = el.id;
                 return ret;
             }, {});
-
             this.fetchCountryMap();
         });
     }
 
     fetchCountryMap() {
         // TODO: fetch the correct map!
-        const countryId = 5;
+        const countryId = this.countryIds['sierra-leone'];
 
         this.mapService.getCountryTopo(countryId).then(data => {
             // console.log(data); // log the json
