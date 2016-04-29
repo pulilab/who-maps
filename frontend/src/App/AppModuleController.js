@@ -60,7 +60,8 @@ class AppModuleController extends Protected {
         .then(projects => {
             this.user.projects = projects;
             if (this.state.params.appName.length === 0) {
-                this.state.go(this.state.current.name, { 'appName': this.user.projects[0].id });
+                const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
+                this.state.go(state, { 'appName': this.user.projects[0].id });
             }
             _.forEach(this.user.projects, item => {
                 if (item.id === parseInt(this.state.params.appName, 10)) {

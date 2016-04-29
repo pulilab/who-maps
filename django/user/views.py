@@ -25,6 +25,7 @@ class UserProfileViewSet(TokenAuthMixin, ModelViewSet):
         """
         Creates a new UserProfile object for the current User.
         """
+        # If user already has a profile, don't do anything
         if hasattr(request.user, 'userprofile'):
             return Response(status=status.HTTP_200_OK)
 
@@ -33,7 +34,7 @@ class UserProfileViewSet(TokenAuthMixin, ModelViewSet):
         serializer.initial_data.update({"user": request.user.id})
         if serializer.is_valid():
             # Save the entity.
-            user = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

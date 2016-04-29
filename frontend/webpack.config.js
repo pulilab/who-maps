@@ -14,7 +14,8 @@ const PATH = {
 
 const basePlugins = [
     new webpack.DefinePlugin({
-        API: production ? '"/api/"' : '"/api/"'
+        API: production ? '"/api/"' : '"/api/"',
+        DEV: !production
     }),
     new webpack.optimize.CommonsChunkPlugin(
         'vendor', 'vendor.js', Infinity
@@ -85,7 +86,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 // loaders: ['style', 'css', 'sass']
-                loader: production ? ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader') : 'style!css!sass'
+                loader: production ? ExtractTextPlugin.extract('style', 'css!sass') : 'style!css!sass'
             },
             {
                 test: /\.html/,
@@ -99,7 +100,10 @@ module.exports = {
                 test: /\.json|geojson/,
                 loader: 'json'
             }
-        ]
+        ],
+        sassLoader: {
+            outputStyle: 'compressed'
+        }
     },
     devServer: {
         proxy: {
