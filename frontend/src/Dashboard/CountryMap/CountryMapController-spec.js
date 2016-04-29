@@ -78,9 +78,6 @@ describe('CountryMapController', () => {
             expect(typeof vm.activeDistrict.data).toBe('object');
             expect(vm.scope.$evalAsync).toHaveBeenCalled();
 
-            d3.select('.d3district-data').on('mouseout')();
-            expect(vm.activeDistrict.name).toBe('');
-            expect(vm.scope.$evalAsync).toHaveBeenCalled();
         });
 
         it('makes the svg pannable and zoomable with svgPanZoom', () => {
