@@ -278,6 +278,8 @@
             }
 
             .dash-lessons-tips {
+                opacity:0.5;
+                pointer-events: none;
 
                 background-color: $color-gray-lightest;
 
@@ -412,9 +414,10 @@
             }
 
             .dash-community {
-
+                opacity: 0.5;
                 padding: 20px 10px;
                 background-color: $color-gray-lightest;
+                pointer-events: none;
 
                 .project-cont {
 

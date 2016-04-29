@@ -21,6 +21,8 @@ class CountrymapController {
         vm.el = $element;
         vm.scope = $scope;
         vm.EE = window.EE;
+        vm.tooltipOver = false;
+        vm.preventMouseOut = false;
         // vm.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
 
 
@@ -114,15 +116,12 @@ class CountrymapController {
                 .attr('class', 'd3district')
                 .classed('d3district-data', gotData)
                 .on('mouseover', () => {
-                    vm.scope.$evalAsync();
                     vm.activeDistrict = {
                         name: distrData.features[i].properties.name,
                         data: vm.data.data[vm.data.data.length - 1][distrData.features[i].properties.name]
                     };
-                })
-                .on('mouseout', () => {
                     vm.scope.$evalAsync();
-                    vm.activeDistrict.name = '';
+
                 });
         }
 
