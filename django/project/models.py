@@ -1,6 +1,7 @@
 from django.db import models
 
 from core.models import ExtendedModel
+from country.models import Country
 
 
 class Strategy(ExtendedModel):
@@ -26,6 +27,7 @@ class Pipeline(ExtendedModel):
 class Project(ExtendedModel):
     date = models.DateTimeField()
     name = models.CharField(max_length=255, unique=True)
+    country = models.ForeignKey(Country, null=True)
     organisation = models.CharField(max_length=100)
     strategy = models.ManyToManyField(Strategy, blank=True)
     technology = models.ManyToManyField(Technology, blank=True)
