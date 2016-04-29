@@ -13,6 +13,10 @@ class AxisController {
         if (!this.axisData) {
             this.axisData = require('./axisMockData').default;
         }
+        if (this.axisId === null || this.axisId === void 0) {
+            this.axisId = 0;
+        }
+
         this.EE = window.EE;
         this.axisName = this.axisData.axis.split('.')[1];
         const axisName = this.axisData.axis.split('.')[0].replace(' ', '').toLowerCase();
@@ -34,7 +38,12 @@ class AxisController {
     }
 
     changeDomain(domain) {
-        this.EE.emit('mapsDomainChange', domain.index);
+        this.EE.emit('mapsDomainChange', this.axisId, domain.index);
+    }
+
+    goToAxis() {
+        const axisId = this.axisId;
+        this.EE.emit('mapsAxisChange', axisId);
     }
 
 

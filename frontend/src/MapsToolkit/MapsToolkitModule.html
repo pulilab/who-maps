@@ -4,7 +4,7 @@
 
 <div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
     <div layout="row" flex="100" md-whiteframe class="axis-row">
-            <axis flex="70" axis-data="vm.axis"></axis>
+            <axis flex="70" axis-data="vm.axis" axis-id="vm.axisId"></axis>
             <div flex="30" layout="row" layout-align="end center">
                 <md-button class="md-primary" ui-sref="scorecard({axisId: vm.axisId})">
                     <md-icon>insert_chart</md-icon>

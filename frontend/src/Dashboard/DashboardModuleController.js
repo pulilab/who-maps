@@ -41,6 +41,7 @@ class DashboardModuleController {
         };
         window.onresize = vm.resizefn;
         this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
+        this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
     }
 
     fetchProjectData() {
@@ -72,7 +73,6 @@ class DashboardModuleController {
     }
 
     fetchCountryMap() {
-
         // TODO: fetch the correct map!
         const countryId = 5;
 
@@ -84,8 +84,13 @@ class DashboardModuleController {
         });
     }
 
-    handleChangeDomain(id) {
-        this.state.go('maps', { 'domainId': id });
+    handleChangeDomain(axisId, domainId) {
+        this.state.go('maps', { axisId, domainId });
+    }
+
+    handleChangeAxis(id) {
+        console.log(id);
+        this.state.go('maps', { 'axisId': id, 'domainId': 0 });
     }
 
     prewProject(projectIndex) {

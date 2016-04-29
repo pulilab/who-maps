@@ -8,7 +8,8 @@ const axisComponent = {
     controllerAs: 'vm',
     name: 'axis',
     bindings: {
-        axisData: '<'
+        axisData: '<',
+        axisId: '<'
     }
 };
 

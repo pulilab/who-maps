@@ -64,7 +64,7 @@
                         <md-tab label="overview">
                             <div class="dash-cardcontent" layout="column">
 
-                                <axis flex ng-repeat="axis in vm.axisData" axis-data="axis"></axis>
+                                <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
 
                                 <div layout="row" class="dash-overview-tooltips">
                                     <div class="dash-overview-tooltip">

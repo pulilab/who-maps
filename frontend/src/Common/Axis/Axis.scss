@@ -35,6 +35,8 @@ axis {
             height: 50px;
             position: relative;
             background-color: $color-white;
+            outline: none;
+            cursor: pointer;
 
 
             ::after {
@@ -131,7 +133,7 @@ axis {
         cursor: pointer;
 
         &.axis-label {
-            cursor: default;
+            cursor: pointer;
         }
 
         .cap {
