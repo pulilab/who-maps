@@ -45,16 +45,20 @@ class ScorecardController {
 
     createAxisData() {
         const images = this.importIconTemplates();
-        _.forEach(this.data, axis => {
+        _.forEach(this.data, (axis, key) => {
+            axis.id = key;
             axis.axisName = axis.axis.split('.')[1];
             axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
             axis.axisPicture = images['icon-' + axis.axisClass];
+            _.forEach(axis.domains, (domain, index) => {
+                domain.index = index;
+            });
         });
     }
 
-    updateScore(domain) {
-        const domainId = domain.id - 1;
-        const axisId = this.axisId;
+    updateScore(domain, axis) {
+        const domainId = domain.index;
+        const axisId = axis ? axis.id : this.axisId;
         this.state.go('maps', { axisId, domainId });
     }
 
