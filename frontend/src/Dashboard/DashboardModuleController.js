@@ -47,7 +47,6 @@ class DashboardModuleController {
     fetchProjectData() {
 
         this.service.getProjectData().then(data => {
-            // console.log('PROJECTDATA: ', data);
             this.projectData = data;
         });
     }
@@ -89,7 +88,6 @@ class DashboardModuleController {
     }
 
     handleChangeAxis(id) {
-        console.log(id);
         this.state.go('maps', { 'axisId': id, 'domainId': 0 });
     }
 

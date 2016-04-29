@@ -1,11 +1,12 @@
 import { default as DashboardModuleController } from './DashboardModuleController';
 
-/* global define, it, describe, expect, spyOn, beforeEach */
+/* global define, it, describe, expect, spyOn, beforeEach, jasmine */
 let vm = {};
 const state = {
     params: {
         appName: '1'
-    }
+    },
+    go: jasmine.createSpy('go')
 };
 
 window.setTimeout = (fn) => { fn(); };
@@ -64,14 +65,16 @@ describe('DashboardModuleController', () => {
         expect(vm.service.getProjectData).toHaveBeenCalled();
     });
 
-    it('hadles axis components domain change event with redirecting to correct maps toolkit page', () => {
+    it('handles axis components domain change event with redirecting to correct maps toolkit page', () => {
         expect(vm.EE.on).toHaveBeenCalled();
-
-        vm.state.go = a => a;
-        spyOn(vm.state, 'go');
 
         vm.handleChangeDomain(1);
         expect(vm.state.go).toHaveBeenCalledWith('maps', { 'domainId': 1 });
+    });
+
+    it('should have a function that handle a change axis event', () => {
+        vm.handleChangeAxis(1);
+        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 0 });
     });
 
 });
