@@ -56,7 +56,7 @@ describe('ScorecardController', () => {
 
     it('should have a function that leads to the maps toolkit on the proper domain', () => {
         const d = {
-            id: 1
+            index: 0
         };
         sc.updateScore(d);
         expect(sc.state.go).toHaveBeenCalledWith('maps', { axisId: 0, domainId: 0 });
