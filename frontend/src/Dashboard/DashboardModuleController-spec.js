@@ -1,13 +1,22 @@
 import { default as DashboardModuleController } from './DashboardModuleController';
 
-/* global define, it, describe, expect, spyOn, beforeEach */
+/* global define, it, describe, expect, spyOn, beforeEach, jasmine */
 let vm = {};
+const state = {
+    params: {
+        appName: '1'
+    },
+    go: jasmine.createSpy('go')
+};
+
 window.setTimeout = (fn) => { fn(); };
 
 describe('DashboardModuleController', () => {
 
     beforeEach(() => {
-        vm = DashboardModuleController.dashboardControllerFactory()();
+        spyOn(window.EE, 'on').and.callThrough();
+        vm = DashboardModuleController.dashboardControllerFactory()({}, state);
+
     });
 
     it('is defined', () => {
@@ -45,6 +54,27 @@ describe('DashboardModuleController', () => {
         vm.nextProject(2);
 
         expect(vm.pi).toEqual([2, 1, 4]);
+    });
+
+    it('fetches vm.projectData from API', () => {
+        expect(vm.service.getProjectData).toBeDefined();
+
+        spyOn(vm.service, 'getProjectData').and.callThrough();
+        vm.fetchProjectData();
+
+        expect(vm.service.getProjectData).toHaveBeenCalled();
+    });
+
+    it('handles axis components domain change event with redirecting to correct maps toolkit page', () => {
+        expect(vm.EE.on).toHaveBeenCalled();
+
+        vm.handleChangeDomain(1, 1);
+        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 1 });
+    });
+
+    it('should have a function that handle a change axis event', () => {
+        vm.handleChangeAxis(1);
+        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 0 });
     });
 
 });

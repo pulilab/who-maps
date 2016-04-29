@@ -8,8 +8,9 @@ const projectComponent = {
     name: 'projectcomp',
     bindings: {
         ngModel: '=',
-        hasLink: '=',
-        hasLogo: '='
+        showDetails: '=',
+        showLogo: '=',
+        ownProject: '='
     }
 };
 

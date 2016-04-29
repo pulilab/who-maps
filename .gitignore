@@ -19,3 +19,5 @@ npm-debug.log
 bundle.js
 nginx/site/html/
 django/temp
+nginx/html/
+diff.txt
