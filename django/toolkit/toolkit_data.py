@@ -126,7 +126,7 @@ toolkit_default = [
                         "question": "5-1c",
                         "question_max": 10,
                         "question_sum": 0,
-                        "answers": [0,0,0,0,0]
+                        "answers": [None,None,None,None,None]
                     },
                     {
                         "question": "5-2a",
