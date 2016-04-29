@@ -2,6 +2,7 @@
 
     <div class="project-container" layout="row">
 
+        <!-- TODO: Logo, if nothing, use default background -->
         <div class="project-logo" ng-if="vm.showLogo">
             LOGO
         </div>
@@ -14,7 +15,10 @@
                     <span flex class="org-country">{{vm.ngModel.organization}} | {{vm.ngModel.orgCountry}}</span>
                 </div>
                 <div ng-if="vm.showDetails" class="donors">
-                    Donors#
+                    <span class="nr">
+                        {{vm.ngModel.donors}}
+                    </span>
+                    <span class="static">Donors</span>
                 </div>
                 <div class="followers">
                     <span class="nr">
@@ -26,20 +30,15 @@
             </div>
 
             <div ng-if="vm.showDetails" class="lower" layout="row">
-                Lower
+                <div flex class="description">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ipsum dolores illum quae consequatur praesentium reprehenderit recusandae numquam velit pariatur quis, fuga excepturi repellendus obcaecati distinctio inventore iure necessitatibus natus.
+                </div>
+                <!-- TODO: should be a link -->
+                <div class="more" ng-if="!vm.ownProject">
+                    <a ng-href="{{vm.ngModel.projectUrl}}">{{vm.ownProject ? 'GO TO DASHBOARD' : 'SHOW MORE'}}</a>
+                </div>
             </div>
         </div>
     </div>
-
-
-<!-- <div class="projectbody">
-
-        <div
-            ng-if="vm.hasLink"
-            class="floatright">
-            <a ng-href="{{vm.ngModel.projectUrl}}">link/<br>ui-sref</a>
-        </div>
-
-    </div> -->
 
 </md-card>
