@@ -1,4 +1,4 @@
-/* global d3 */
+/* global d3, DEV */
 
 import _ from 'lodash';
 import topojson from 'topojson';
@@ -50,7 +50,6 @@ class CountrymapController {
     }
 
     makeGeoFromTopo(topo, level) {
-
         // return topojson.feature(topo, topoSource.objects.admin_level_5);
         return topojson.feature(topo, topo.objects[level]);
 
@@ -66,9 +65,9 @@ class CountrymapController {
 
         vm.countryName = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
-
-        console.log(topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties);
-
+        if (DEV) {
+            console.log(topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties);
+        }
         // If any map comes with mixed winding order, do:
         // const rewind = require('geojson-rewind');
         // const distrData = rewind(mockGeoJsonDistricts);
