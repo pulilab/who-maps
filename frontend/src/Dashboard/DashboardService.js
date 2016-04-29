@@ -7,11 +7,16 @@ class DashboardService extends AuthApi {
         this.projectId = _projectId;
     }
 
-    getProjectData() {
+    getAxisData() {
         return this.get(this.projectId + '/toolkit/data/')
-        .then(data => {
-            return data;
-        });
+            .then(data => data);
+    }
+
+    getProjectData() {
+        return this.get('')
+            .then(data => {
+                return data;
+            });
     }
 }
 

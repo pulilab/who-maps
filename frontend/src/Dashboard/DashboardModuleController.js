@@ -1,9 +1,11 @@
+import DashboardService from './DashboardService.js';
+import DashboardMapService from './DashboardMapService.js';
+
 import chartData from './Mocks/chartmock.js';
 import chartData2 from './Mocks/chartmock2.js';
 import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
 // To-do: working on this thing!
-import DashboardService from './DashboardService.js';
 import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController {
@@ -16,6 +18,10 @@ class DashboardModuleController {
 
         vm.service = new DashboardService(this.state.params.appName);
         vm.fetchProjectData();
+        vm.fetchAxisData();
+
+        vm.mapService = new DashboardMapService();
+        vm.fetchCountries();
 
         // Mocks
         vm.linechartMockData = chartData;
@@ -38,8 +44,43 @@ class DashboardModuleController {
     }
 
     fetchProjectData() {
+
         this.service.getProjectData().then(data => {
+            // console.log('PROJECTDATA: ', data);
             this.projectData = data;
+        });
+    }
+
+    fetchAxisData() {
+
+        this.service.getAxisData().then(data => {
+            this.axisData = data;
+        });
+    }
+
+    fetchCountries() {
+
+        this.mapService.getCountries().then(data => {
+
+            this.countryIds = data.reduce((ret, el) => {
+                ret[el.name] = el.id;
+                return ret;
+            }, {});
+
+            this.fetchCountryMap();
+        });
+    }
+
+    fetchCountryMap() {
+
+        // TODO: fetch the correct map!
+        const countryId = 5;
+
+        this.mapService.getCountryTopo(countryId).then(data => {
+            // console.log(data); // log the json
+            // this.mapTopo = data;
+            const data2 = data;
+            this.EE.emit('topoArrived', data2);
         });
     }
 
