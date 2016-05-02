@@ -1,0 +1,77 @@
+@import '../../variables';
+@import '../../mixins';
+
+$coverage-height:60px;
+$strategies-height:60px;
+
+new-project {
+
+  .wrapper {
+    background: $color-white;
+  }
+
+  h4 {
+    height: 55px;
+    background: #EEEEEE;
+    line-height: 55px;
+    padding-left:20px;
+    border-bottom: 2px solid $color-gray-light;
+  }
+
+  .main-form {
+    padding-bottom:50px;
+    margin-bottom:50px;
+    border-bottom: 1px solid $color-gray;
+
+    > md-input-container {
+      width: 60%;
+    }
+
+    > p {
+      width: 60%;
+    }
+
+    .other {
+      width: 40%;
+    }
+
+    section {
+      margin-bottom:70px;
+    }
+  }
+
+  .coverage {
+
+    height:$coverage-height;
+
+    > span {
+      line-height: $coverage-height + 10px;
+      height: $coverage-height;
+      margin-right:5px;
+      margin-left: 5px;
+      color: $color-gray;
+    }
+
+    > .md-button {
+      margin-top:20px;
+    }
+
+    ssmenu {
+      height:$coverage-height;
+    }
+
+  }
+
+  .strategies {
+    height:$strategies-height;
+    
+    > span {
+      line-height: $strategies-height + 10px;
+      height: $strategies-height;
+      margin-right:5px;
+      margin-left: 5px;
+      color: $color-gray;
+    }
+  }
+
+}

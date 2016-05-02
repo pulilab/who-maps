@@ -21,7 +21,8 @@ const searchableSelectionMenuComponent = {
         onCloseCallback: '=',
         onOpenCallback: '=',
         limit: '<',
-        optionLabel: '@'
+        optionLabel: '@',
+        hint: '@'
 
     }
 };

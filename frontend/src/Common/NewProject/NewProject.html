@@ -1,0 +1,275 @@
+<div layout="column" layout-align="start center" >
+    <div class="page-title">
+        <h1 class="md-display-1 text-center">Add new project sheet</h1>
+        <h6>Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
+    </div>
+
+    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column">
+        <form name="newProjectForm" ng-submit="vm.newProject(newProjectForm)" novalidate>
+            <div layout="column" class="main-form">
+                <h4>1. Project details</h4>
+                <md-input-container >
+                    <label>Name of the project</label>
+                    <input ng-model="vm.project.projectName" required name="projectName" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'projectName')" />
+                    <div ng-messages="newProjectForm.projectName.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in newProjectForm.projectName.customError">{{error}} </div>
+                    </div>
+                </md-input-container>
+                <md-input-container >
+                    <label>Name of the organization</label>
+                    <input ng-model="vm.project.organizationName" required name="organizationName" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'organizationName')" />
+                    <div ng-messages="newProjectForm.organizationName.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in newProjectForm.organizationName.customError">{{error}} </div>
+                    </div>
+                </md-input-container>
+
+                <ssmenu
+                        placeholder="Select strategies from list"
+                        hint="What is your mHealth project strategy to address the health need?"
+                ></ssmenu>
+
+                <ssmenu
+                        placeholder="Select project’s country from list"
+                ></ssmenu>
+
+                <p>What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</p>
+
+                <section md-layout="row" layout-wrap>
+                    <h6 flex="100">Technology Platforms:</h6>
+                    <md-checkbox
+                            flex="30"
+                            aria-label=""
+                            class="">
+                    </md-checkbox>
+                    <div layout="row" class="other" layout-align="start center">
+                        <md-input-container flex>
+                            <label>Other</label>
+                            <input type="text" />
+                        </md-input-container>
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+                </section>
+
+                <section md-layout="row">
+                    <h6 flex="100">License:</h6>
+                    <md-checkbox
+                            flex="30"
+                            aria-label=""
+                            class="">
+                    </md-checkbox>
+                    <div layout="row" class="other" layout-align="start center">
+                        <md-input-container flex>
+                            <label>Other</label>
+                            <input type="text" />
+                        </md-input-container>
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+                </section>
+
+                <section md-layout="row">
+                    <h6 flex="100">Digital tools:</h6>
+                    <md-checkbox
+                            flex="30"
+                            aria-label=""
+                            class="">
+                    </md-checkbox>
+                    <div layout="row" class="other" layout-align="start center">
+                        <md-input-container flex>
+                            <label>Other</label>
+                            <input type="text" />
+                        </md-input-container>
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+                </section>
+
+
+                <section layout="column">
+                    <p>How are you applying these technology strategies or communication channels? (Check all that apply)</p>
+                    <md-checkbox
+                            flex="100"
+                            aria-label=""
+                            class=""
+                    ></md-checkbox>
+
+                </section>
+
+                <section>
+                    <p>What is the current coverage of your project? (e.g. numbers of health workers, clinics and/or client beneficiaries reached)</p>
+
+                    <div layout="row" layout-align="start start" class="coverage">
+                        <md-input-container >
+                            <input placeholder="# Number" type="number" />
+                        </md-input-container>
+                        <span >of</span>
+
+                        <ssmenu
+                                placeholder="Select type"
+                                ariaLabel="coverageType"
+                        ></ssmenu>
+                        <span>or</span>
+                        <md-input-container  >
+                            <input placeholder="Specify 'Other'" type="text" />
+                        </md-input-container>
+                        <span>and</span>
+                        <ssmenu
+
+                                placeholder="Select district"
+                                ariaLabel="coverageDistrict"
+                        ></ssmenu>
+                        <md-button  class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+
+                </section>
+
+                <section>
+                    <div>
+                        <md-datepicker ng-model="vm.date" md-placeholder="Start date"></md-datepicker>
+                        <span class="hint">When was this project started? </span>
+                    </div>
+                    <div layout="row" class="strategies">
+                        <ssmenu
+                                placeholder="Select strategies from the list"
+                                hint="Is this project part of an accelerator or innovation pipeline?"
+                        ></ssmenu>
+                        <span>or</span>
+                        <md-input-container>
+                            <input type="text" placeholder="Specify other"/>
+                        </md-input-container>
+                    </div>
+
+                    <p>Who are the donors for this specific project? (List all that apply)</p>
+                    <div layout="row" class="other" layout-align="start center">
+                        <md-input-container flex>
+                            <label>Donor's name</label>
+                            <input type="text" />
+                        </md-input-container>
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+
+                </section>
+
+                <section>
+                    <p>What reports and publications do you have for the project?</p>
+
+                    <h6>Add project report(s):</h6>
+                    <div layout="row" layout-align="start center">
+                        <md-icon>link</md-icon>
+                        <md-input-container flex>
+                            <label>Add link to a webpage</label>
+                            <input type="text" />
+                        </md-input-container>
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+                    <div layout="row" layout-align="start center">
+                        <span>
+                            <md-icon flex>insert_drive_file</md-icon>
+                            Upload file:
+                        </span>
+                        <div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>
+                        <span> Maximum file size: 10MB </span>
+
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+
+
+                    <h6>Add publication(s) / journal article(s):</h6>
+                    <div layout="row" layout-align="start center">
+                        <md-icon>link</md-icon>
+                        <md-input-container flex>
+                            <label>Add link to a webpage</label>
+                            <input type="text" />
+                        </md-input-container>
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+                    <div layout="row" layout-align="start center">
+                        <span>
+                            <md-icon flex>insert_drive_file</md-icon>
+                            Upload file:
+                        </span>
+                        <div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>
+                        <span> Maximum file size: 10MB </span>
+
+                        <md-button layout="column" class="md-icon-button">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </div>
+
+
+                </section>
+
+                <h4>2. Vision for scale</h4>
+
+                <div layout="column">
+                    <md-input-container>
+                        <input type="text" placeholder="Your goals"/>
+                    </md-input-container>
+                    <span class="hint">What are your goals for scaling up (e.g. number of health facilities, districts, target users)?</span>
+                </div>
+
+                <div layout="column">
+                    <md-input-container>
+                        <input type="text" placeholder="Your timeframe"/>
+                    </md-input-container>
+                    <span class="hint">What is your anticipated time frame to meet these goals?</span>
+                </div>
+
+
+                <h4>3. Pre-assessment</h4>
+
+                <p>
+                    The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).
+                </p>
+
+                <h6>Please complete this section before moving to rest of the document.</h6>
+
+                <div class="axis-assessment" layout="row" layout-align="start center" >
+                    <div flex="65">
+                        <p>
+                        1) On a scale of 1-10 with 10 being the highest, please rate yourself on
+                        </p>
+                        <md-radio-group ng-model="vm.data.group1" layout="row" >
+                            <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]"  value="{{ value }}" class="md-primary">{{ value }}</md-radio-button>
+                        </md-radio-group>
+                    </div>
+                    <div flex="35" class="axis-description">
+                        <img ng-src="" >
+                        <p></p>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div layout="row">
+                <div flex="50" layout="row" layout-align="start center">
+                    <md-button class="md-gray md-raised">Cancell process</md-button>
+                </div>
+                <div flex="50" layout="row" layout-align="end center">
+                    <md-button type="submit" class="md-primary md-raised">Add new project</md-button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <footer class="disclaimer">
+        <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+    </footer>
+</div>
