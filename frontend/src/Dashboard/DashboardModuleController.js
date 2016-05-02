@@ -45,7 +45,7 @@ class DashboardModuleController {
 
     fetchProjectData() {
 
-        this.service.getProjectData().then(data => {
+        this.service.getProjectData(this.state.params.appName).then(data => {
             this.projectData = data;
         });
     }

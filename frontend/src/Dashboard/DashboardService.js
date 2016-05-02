@@ -12,9 +12,11 @@ class DashboardService extends AuthApi {
             .then(data => data);
     }
 
-    getProjectData() {
+    getProjectData(projectId) {
         return this.get('')
-            .then(data => data);
+            .then(data => {
+                return data.filter(el => el.id === +projectId)[0];
+            });
     }
 }
 

@@ -46,6 +46,10 @@
                     <md-card class="dash-stat-card">
 
                         <!-- TODO: ng-if trendicons, bind nr -->
+                        <md-tooltip md-direction="top">
+                            This feature is not available in this version of the software.
+                        </md-tooltip>
+
                         <md-icon class="material-icons dash-trendicon dash-trendicon-down">trending_down</md-icon>
                         <span class="dash-stat-nr">87</span>
                         <span class="dash-stat-label">Followers</span>
@@ -53,9 +57,8 @@
 
                     <md-card class="dash-stat-card">
 
-                        <!-- TODO: bind nr -->
                         <md-icon class="material-icons dash-trendicon">supervisor_account</md-icon>
-                        <span class="dash-stat-nr">3</span>
+                        <span class="dash-stat-nr">{{vm.projectData.donors.split(', ').length}}</span>
                         <span class="dash-stat-label">Donors</span>
                     </md-card>
 
@@ -135,22 +138,22 @@
                                     class="upper"
                                     layout="column">
 
-                                    <div flex layout="row" ng-init="platforms=['MOTECH']">
+                                    <div flex layout="row">
                                         <md-icon class="material-icons">device_hub</md-icon>
                                         <span flex>Technology platforms</span>
-                                        <md-chips flex="66" readonly="true" ng-model="platforms"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.technology_platforms"></md-chips>
                                     </div>
 
-                                    <div flex layout="row" ng-init="licenses=['APACHE', 'MIT']">
+                                    <div flex layout="row">
                                         <md-icon class="material-icons">playlist_add_check</md-icon>
                                         <span flex>License</span>
-                                        <md-chips flex="66" readonly="true" ng-model="licenses"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licences"></md-chips>
                                     </div>
 
-                                    <div flex layout="row" ng-init="tools=['SMS', 'ELECTRONIC FORMS']">
+                                    <div flex layout="row">
                                         <md-icon class="material-icons">speaker_phone</md-icon>
                                         <span flex>Digital tools</span>
-                                        <md-chips flex="66" readonly="true" ng-model="tools"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
                                     </div>
                                 </div>
 
