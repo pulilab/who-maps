@@ -73,9 +73,8 @@ class DashboardModuleController {
         const countryId = this.countryIds['sierra-leone'];
 
         this.mapService.getCountryTopo(countryId).then(data => {
-            // console.log(data); // log the json
-            const data2 = data;
-            this.EE.emit('topoArrived', data2);
+
+            this.EE.emit('topoArrived', data);
         });
     }
 
