@@ -1,7 +1,41 @@
-<md-dialog aria-label="Thematic overview (help) dialog">
-    <md-dialog-content>
-    	<h4>Should show help for:</h4>
-        <p>AXIS: {{vm.axis}}</p>
-        <p>DOMAIN: {{vm.domain}}</p>
+<md-dialog flex-offset="15" flex="85" aria-label="Thematic overview (help) dialog">
+    <md-dialog-content layout="row">
+    	<div class="left">
+    		<span class="head">Thematic overview</span>
+    		<span class="subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam eligendi culpa, quidem voluptates. Quidem magni recusandae vel id autem dolorum. Pariatur explicabo dicta, expedita perspiciatis voluptate optio minima architecto temporibus.</span>
+
+	        TODO: Closing arrow (fix positioned...)
+	        TODO: Wire in all starting points
+	        TODO: Use icons & colors
+<!-- 	        <p>AXIS: {{vm.axis}}</p>
+	        <p>DOMAIN: {{vm.domain}}</p> -->
+
+
+	        <!-- {{vm.data}} -->
+	        <div class="axes" ng-repeat="axis in vm.data track by $index">
+	        	<!-- {{vm.data[0].name}} -->
+	        	<div class="axis" layout="row">
+	        		<img src="" class="pic">
+	        		<div class="titles">
+	        			{{$index > 1 ? 'AXIS' + ($index - 1) : ''}}.<br>
+	        			{{axis.name}}
+	        		</div>
+	        	</div>
+	        	<div class="domain" ng-repeat="domain in axis.domains">
+	        		DOMAIN {{domain.id}}: {{domain.name}}
+	        	</div>
+	        </div>
+    	</div>
+		<div class="right" layout="column" flex md-whiteframe="24">
+			<div class="right-header" ng-class="'axis'+(+vm.axis + 1)">
+				<div class="right-title">
+					<md-icon class="md-icons">{{vm.data[vm.index + 2].logopath}}</md-icon>
+					?icon? AXIS {{+vm.axis + 1}}. - {{vm.data[vm.index + 3].domains[vm.domain].name}}
+				</div>
+			</div>
+			<div class="right-content">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui sed aut, voluptatibus adipisci quisquam quidem vel animi. Similique quam, debitis ipsa ratione illo eos aut dicta dolorem perspiciatis quaerat officia.
+			</div>
+		</div>
     </md-dialog-content>
 </md-dialog>

@@ -1,4 +1,98 @@
+@import '../../variables';
+
 md-dialog {
 	md-dialog-content {
+		height: 100vh;
+
+		.left {
+			background-color: #EEEEEE;
+			width: 300px;
+
+			.head {
+				display: block;
+				color: $text-primary;
+				font-weight: 500;
+				font-size: 18px;
+				margin: 20px;
+			}
+
+			.subhead {
+				display: block;
+				color: $text-secondary;
+				margin: 20px;
+				font-size: 12px;
+			}
+
+			.axes {
+
+				border-top: 1px solid $color-gray;
+
+				.axis {
+					height: 50px;
+					border-bottom: 1px solid $color-gray;
+
+					.pic {
+						display: inline;
+						height: 30px;
+						width: 30px;
+						margin: 10px 5px 10px 20px;
+					}
+
+					.titles {
+						margin: 11px 5px 10px 0;
+						font-size: 12px;
+						font-weight: 500;
+						text-transform: uppercase;
+						color: $text-secondary;
+					}
+				}
+
+				.domain {
+					height: 30px;
+					line-height: 30px;
+					// border-bottom: 1px solid $color-gray;
+					font-size: 12px;
+					padding-left: 55px;
+					color: $text-secondary;
+				}
+			}
+		}
+
+		.right {
+
+			.right-header {
+
+				.right-title {
+					color: white;
+					font-size: 32px;
+					padding: 29px 60px;
+
+				}
+				height: 100px;
+
+				&.axis1 {
+					background-color: $color-axis1;
+				}
+				&.axis2 {
+					background-color: $color-axis2;
+				}
+				&.axis3 {
+					background-color: $color-axis3;
+				}
+				&.axis4 {
+					background-color: $color-axis4;
+				}
+				&.axis5 {
+					background-color: $color-axis5;
+				}
+				&.axis6 {
+					background-color: $color-axis6;
+				}
+			}
+
+			.right-content {
+
+			}
+		}
 	}
 }

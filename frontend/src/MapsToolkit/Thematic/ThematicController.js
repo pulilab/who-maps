@@ -1,5 +1,6 @@
 import angular from 'angular';
 const template_ = require('./modal-skeleton.html');
+import mock from './mockStructure.js';
 
 class ThematicController {
     constructor($mdDialog) {
@@ -8,11 +9,11 @@ class ThematicController {
         // this.domain
         this.EE = window.EE;
         this.modal = $mdDialog;
+        this.data = mock;
 
     }
 
     showModal() {
-        console.log('should show modal for' + this.axis + '/' + this.domain);
 
         this.modal.show({
             parent: angular.element(document.body),
@@ -21,9 +22,11 @@ class ThematicController {
             bindToController: true,
             clickOutsideToClose: true,
             controller: () => null,
+            fullScreen: true,
             locals: {
                 'axis': this.axis,
-                'domain': this.domain
+                'domain': this.domain,
+                'data': this.data
             }
         });
     }
