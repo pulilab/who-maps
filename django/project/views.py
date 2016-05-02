@@ -1,7 +1,6 @@
 import json
 
 from django.http import HttpResponse, Http404
-from django.db.models import Max
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
