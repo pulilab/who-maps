@@ -10,6 +10,7 @@ from project.models import Project
 
 class Toolkit(ExtendedModel):
     project = models.ForeignKey(Project)
+    version = models.IntegerField(blank=True, null=True)
     data = JSONField()
 
     def update_score(self, axis, domain, question, answer, value):
