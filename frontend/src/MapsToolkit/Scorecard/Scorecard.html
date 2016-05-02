@@ -15,7 +15,7 @@
     </div>
 
     <div layout="column" flex="100" layout-fill class="inner-wrapper">
-        <div ng-repeat="domain in vm.data.domains" layout="column" class="domain">
+        <div ng-repeat="domain in vm.data.domains track by $index" layout="column" class="domain">
             <div layout="row" class="domain-header">
                     <div layout="row" flex="auto" layout-align="start center">
                         <h4>{{domain.domain}} ({{domain.domain_max}} points)</h4>
@@ -25,10 +25,9 @@
                             <md-icon>playlist_add_check</md-icon>
                             Update score
                         </md-button>
-                        <md-button class="md-primary">
-                            <md-icon>help</md-icon>
-                            Show help
-                        </md-button>
+                        <!-- "show help" button and the modal on click -->
+                        <thematic axis='vm.state.params.axisId' domain='$index'>
+                        </thematic>
                     </div>
             </div>
 
