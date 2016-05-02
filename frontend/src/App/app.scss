@@ -22,6 +22,13 @@ ui-view > md-content {
     position:relative;
 }
 
+md-tooltip {
+  md-background {
+    // background-color: yellow;
+    opacity: 0 !important;
+  }
+}
+
 
 /* TYPOGRAPY
    ============================= */
