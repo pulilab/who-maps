@@ -10,17 +10,22 @@ import commProjects from './Mocks/commProjects.js';
 class DashboardModuleController {
 
     constructor($scope, $state) {
+
         const vm = this;
+
+        // Bindings
         vm.scope = $scope;
         vm.state = $state;
         vm.EE = window.EE;
 
         vm.service = new DashboardService(this.state.params.appName);
-        vm.fetchProjectData();
-        vm.fetchAxisData();
-
         vm.mapService = new DashboardMapService();
-        vm.fetchCountries();
+
+        // vm.projectData
+        // vm.axisData
+
+
+        vm.fetchProjectData();
 
         // Mocks
         vm.linechartMockData = chartData;
@@ -28,10 +33,10 @@ class DashboardModuleController {
         vm.perfMockMap = perfMockMap;
         vm.commProjects = commProjects;
 
+        // Letting components know about browser window resize
         vm.resizedw = () => {
             this.EE.emit('dashResized');
         };
-
         let doit;
         vm.resizefn = () => {
 
@@ -39,14 +44,21 @@ class DashboardModuleController {
             doit = setTimeout(vm.resizedw, 50);
         };
         window.onresize = vm.resizefn;
+
+        // Routers for the axis components
         this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
         this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
     }
 
     fetchProjectData() {
 
+        this.fetchAxisData();
+
         this.service.getProjectData(this.state.params.appName).then(data => {
+
             this.projectData = data;
+
+            this.fetchCountryMap(data.country);
         });
     }
 
@@ -57,20 +69,7 @@ class DashboardModuleController {
         });
     }
 
-    fetchCountries() {
-
-        this.mapService.getCountries().then(data => {
-
-            this.countryIds = data.reduce((ret, el) => {
-                ret[el.name] = el.id;
-                return ret;
-            }, {});
-            this.fetchCountryMap();
-        });
-    }
-
-    fetchCountryMap() {
-        const countryId = this.countryIds['sierra-leone'];
+    fetchCountryMap(countryId) {
 
         this.mapService.getCountryTopo(countryId).then(data => {
 
@@ -79,10 +78,12 @@ class DashboardModuleController {
     }
 
     handleChangeDomain(axisId, domainId) {
+
         this.state.go('maps', { axisId, domainId });
     }
 
     handleChangeAxis(id) {
+
         this.state.go('maps', { 'axisId': id, 'domainId': 0 });
     }
 
