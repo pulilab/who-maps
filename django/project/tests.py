@@ -159,3 +159,39 @@ class ProjectTests(APITestCase):
         url = reverse("file-detail", kwargs={"pk": data[0]["id"]})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    def test_make_version(self):
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        self.assertEqual(response.status_code, 201)
+
+    def test_make_version_wrong_id(self):
+        url = reverse("make-version", kwargs={"project_id": 999})
+        response = self.test_user_client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_coverage_versions(self):
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+    def test_get_toolkit_versions(self):
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+    def test_version_numbers_increasing(self):
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url)
+        url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[1]["version"], 2)

@@ -1,6 +1,7 @@
 import json
-from django.http import HttpResponse, Http404
 
+from django.http import HttpResponse, Http404
+from django.db.models import Max
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -13,11 +14,11 @@ from core.views import TokenAuthMixin, get_object_or_400
 from user.models import UserProfile
 from hss.models import HSS
 from hss.hss_data import hss_default
-from toolkit.models import Toolkit
+from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 from .serializers import ProjectSerializer
-from .models import Project, File
+from .models import Project, File, CoverageVersion
 from .project_data import project_structure
 
 
@@ -122,3 +123,67 @@ def file_detail(request, pk):
         file = get_object_or_400(File, "No such file.", id=pk)
         file.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def make_version(request, project_id):
+    """
+    Makes versions out of Toolkit and coverage data for the project.
+
+    Args:
+        project_id: id of the project.
+    """
+    # Make a new version from current coverage.
+    try:
+        last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version")[0]
+    except Exception as e:
+        new_version = 1
+    else:
+        new_version = last_cov_ver.version + 1
+    current_cov = get_object_or_400(Project, "No such project.", id=project_id).data["coverage"]
+    new_cov_ver = CoverageVersion(
+                        project_id=project_id,
+                        version=new_version,
+                        data=current_cov)
+    new_cov_ver.save()
+
+    # Make a new version from current toolkit.
+    try:
+        last_toolkit_ver = ToolkitVersion.objects.filter(project_id=project_id).order_by("-version")[0]
+    except Exception as e:
+        new_version = 1
+    else:
+        new_version = last_toolkit_ver.version + 1
+    current_toolkit = get_object_or_400(Toolkit, "No such Toolkit", project_id=project_id).data
+    new_toolkit_ver = ToolkitVersion(
+                        project_id=project_id,
+                        version=new_version,
+                        data=current_toolkit)
+    new_toolkit_ver.save()
+    return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def get_coverage_versions(request, project_id):
+    """
+    Retrieves all coverage versions for the given project_id.
+    """
+    coverage_versions = CoverageVersion.objects.filter(project_id=project_id) \
+                            .order_by("version").values("version", "data", "modified")
+    return Response(coverage_versions)
+
+
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def get_toolkit_versions(request, project_id):
+    """
+    Retrieves all toolkit versions for the given project_id.
+    """
+    toolkit_versions = ToolkitVersion.objects.filter(project_id=project_id) \
+                            .order_by("version").values("version", "data", "modified")
+    return Response(toolkit_versions)
