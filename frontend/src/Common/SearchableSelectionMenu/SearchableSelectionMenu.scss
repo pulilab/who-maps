@@ -4,6 +4,11 @@
 .md-select-menu-container {
   md-option {
     padding: 0 20px 0 36px;
+    transition: $swift-ease-out;
+
+    &:not([disabled]):hover {
+      background-color: rgba(158,158,158,0.2);
+    }
 
     .md-text {
       color: $text-secondary;
@@ -36,7 +41,8 @@ ssmenu.small {
 md-select.large,
 ssmenu.large {
   .md-text {
-    font-size: $headline-font-size-base;
+    font-size: $title-font-size-base;
+    font-weight: 500;
   }
   .md-select-icon {
     font-size: $caption-font-size-base;
@@ -65,16 +71,17 @@ ssmenu.large {
 
 .md-select-menu-container.large {
   md-option {
-    padding: 0 24px 0 48px;
+    padding: 0 20px 0 40px;
 
     .md-text {
-      font-size: $headline-font-size-base;
+      font-size: $title-font-size-base;
+      font-weight: 500;
     }
 
     &[selected="selected"] {
       &::before {
         top: 55%;
-        left: 14px;
+        left: 10px;
 
         @include md-icon($headline-font-size-base);
       }
@@ -93,7 +100,6 @@ ssmenu.multiline {
     }
     .md-select-icon {
       margin-bottom: 4px;
-
       align-self: flex-end;
     }
   }
@@ -106,8 +112,13 @@ ssmenu.multiline {
     color: $color-gray-light;
     text-transform: uppercase;
     font-weight: 500;
+  }
+
+  &.small .option-group-title {
     font-size: $caption-font-size-base;
   }
+
+  &.large .option-group-title {}
 
   .ssmenu-search-input {
     position: relative;

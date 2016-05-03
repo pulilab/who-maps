@@ -4,22 +4,21 @@
             <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
                 <span>Digital Health Atlas</span>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Apps" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
-                <md-icon class="material-icons ">apps</md-icon>
-
+            <md-button  aria-label="Go to Dashboard" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
+                <md-icon class="material-icons ">dashboard</md-icon>
+                Dashboard
             </md-button>
-            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin"  md-no-ink>
-                <md-icon class="material-icons ">public</md-icon>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.isLogin"  md-no-ink>
-                <md-icon class="material-icons ">help_outline</md-icon>
+            <md-button aria-label="Country Level View" ng-if="vm.isLogin"  md-no-ink>
+                <md-icon class="material-icons">public</md-icon>
+                Country View
             </md-button>
             <span flex ></span>
-            <md-button ui-sref="info" ui-sref-active="active" class="md-small" ng-if="vm.showFullNavigation" md-no-ink>
-                What is DHA?
-            </md-button>
+
             <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation" md-no-ink>
                 <md-icon class="material-icons">search</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
+                <md-icon class="material-icons">help_outline</md-icon>
             </md-button>
 
             <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink >
@@ -27,7 +26,6 @@
             </md-button>
 
             <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'signup'" md-no-ink >
-
                 Sign Up
             </md-button>
 
@@ -37,32 +35,26 @@
                 </md-button>
 
                 <md-menu-content width="4">
-                    <md-menu-item>
-                        <span>
-                            {{vm.user.username}}
-                        </span>
-                    </md-menu-item>
+                    <span class="menu-group-title">
+                        {{vm.user.username}}
+                    </span>
                     <md-menu-item>
                         <md-button>
-                            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-                            Role: {{vm.user.role}}
+                            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.user.role}}
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ui-sref="edit-profile">
-                            <md-icon class="material-icons">account_circle</md-icon>
-                            Edit my Profile
+                            <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ng-click="vm.logout()">
-                            <md-icon class="material-icons">exit_to_app</md-icon>
-                            Logout
+                            <md-icon class="material-icons">exit_to_app</md-icon>Logout
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-
 
             <md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation">
 
@@ -79,46 +71,41 @@
                 </md-menu-content>
             </md-menu>
 
-            <md-button class="md-icon-button" aria-label="Plus" ng-if="vm.showFullNavigation" md-no-ink>
-                <md-icon class="material-icons ">add</md-icon>
+            <span class="menu-separator"></span>
+
+            <md-button class="add-new-project" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
+                <md-icon class="material-icons">add</md-icon>
+                New project
             </md-button>
-
-
-
         </div>
     </md-toolbar>
     <md-toolbar class="md-medium-tall" ng-if="vm.showFullNavigation">
         <div class="md-toolbar-tools">
-            <ssmenu
-                aria-label="Project Choser"
-                options="vm.user.projects"
-                option-label = "name"
-                ng-model="vm.currentProject.name"
-                md-container-class="large"
-                class="large project-selector"
-                on-close-callback="vm.updateProject">
-            </ssmenu>
+          <div class="project-mainmenu">
+            <md-button ui-sref="dashboard" ui-sref-active="active" md-no-ink>Dashboard</md-button>
+              <md-button ui-sref="hss" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
+              <md-button ui-sref="settings" ui-sref-active="active" md-no-ink>Edit Project</md-button>
+              <md-button ui-sref="#" ui-sref-active="active" md-no-ink>Improve Project</md-button>
+              <md-button ui-sref="" ui-sref-active="active" md-no-ink>Update Score</md-button>
+              <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Summary Score</md-button>
+          </div>
             <div flex></div>
             <div class="project-submenu" layout="row">
-              <md-button class="md-small" aria-label="Settings" ui-sref="settings" md-no-ink>
-                  <md-icon class="material-icons ">settings</md-icon>
-                  Settings
-              </md-button>
-              <md-button class="md-small" aria-label="Share" md-no-ink>
-                  <md-icon class="material-icons ">share</md-icon>
-                  Share Link
+              <md-button aria-label="Share" class="md-icon-button" md-no-ink>
+                  <md-icon class="material-icons">share</md-icon>
+                  <!-- Share Link -->
               </md-button>
 
               <md-menu md-position-mode="target-right target">
-                  <md-button md-menu-origin  class="md-small" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                      <md-icon class="material-icons ">more_vert</md-icon>
-                      More Actions
+                  <md-button md-menu-origin  class="md-icon-button" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                      <md-icon class="material-icons">more_vert</md-icon>
+                      <!-- More Actions -->
                   </md-button>
 
                   <md-menu-content width="4">
-                      <md-menu-item>
-                          <span md-menu-align-target>More Actions</span>
-                      </md-menu-item>
+                    <span class="menu-group-title">
+                        More Actions
+                    </span>
                       <md-menu-item>
                           <md-button>
                               <md-icon class="material-icons">person_add</md-icon>
@@ -143,33 +130,34 @@
         </div>
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
-            <div class="project-mainmenu">
-                <md-button ui-sref="hss" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
-                <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Improve Project</md-button>
-                <md-button ui-sref="dashboard" ui-sref-active="active" md-no-ink>Update Score</md-button>
-            </div>
+            <ssmenu
+                aria-label="Project Choser"
+                options="vm.user.projects"
+                option-label = "name"
+                ng-model="vm.currentProject.name"
+                md-container-class="large"
+                class="large project-selector"
+                on-close-callback="vm.updateProject">
+            </ssmenu>
 
             <div flex></div>
 
             <div class="project-info" layout="row">
                 <span>
                     Version:
-                    <b>
-                        {{vm.currentProjectMock.version.id}}
-                    </b>
+                    {{vm.currentProjectMock.version.id}}
                     ({{vm.currentProjectMock.version.date}})
                 </span>
                 <span>
                     Organization:
-                    <b>{{vm.currentProject.organisation}}</b>
+                    {{vm.currentProject.organisation}}
                 </span>
                 <span>
                     Contact person:
-                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}" class="md-small" md-no-ink>
-                        <md-icon class="material-icons ">
-
-                            mail_outline
-                        </md-icon>
+                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>
+                        <!-- <md-icon class="material-icons">
+                            send
+                        </md-icon> -->
                         {{vm.currentProjectMock.contact.name}}
                     </md-button>
                 </span>
