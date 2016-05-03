@@ -137,7 +137,8 @@ def make_version(request, project_id):
     # Make a new version from current coverage.
     try:
         last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version")[0]
-    except Exception as e:
+    except IndexError:
+        # No versions yet.
         new_version = 1
     else:
         new_version = last_cov_ver.version + 1
@@ -151,7 +152,8 @@ def make_version(request, project_id):
     # Make a new version from current toolkit.
     try:
         last_toolkit_ver = ToolkitVersion.objects.filter(project_id=project_id).order_by("-version")[0]
-    except Exception as e:
+    except IndexError:
+        # No versions yet.
         new_version = 1
     else:
         new_version = last_toolkit_ver.version + 1
