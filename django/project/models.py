@@ -11,7 +11,7 @@ class Project(ExtendedModel):
 
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project)
-    version = models.IntegerField(blank=True, null=True)
+    version = models.IntegerField()
     data = JSONField()
 
 
