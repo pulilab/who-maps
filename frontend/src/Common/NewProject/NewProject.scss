@@ -6,6 +6,10 @@ $strategies-height:60px;
 
 new-project {
 
+  .red md-icon {
+    color: $color-red;
+  }
+
   .wrapper {
     background: $color-white;
   }

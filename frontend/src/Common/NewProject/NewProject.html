@@ -4,33 +4,42 @@
         <h6>Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
     </div>
 
-    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column">
-        <form name="newProjectForm" ng-submit="vm.newProject(newProjectForm)" novalidate>
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+        <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+    </div>
+
+    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
+        <form name="newProjectForm" ng-submit="vm.save(newProjectForm)" novalidate>
             <div layout="column" class="main-form">
                 <h4>1. Project details</h4>
                 <md-input-container >
                     <label>Name of the project</label>
-                    <input ng-model="vm.project.projectName" required name="projectName" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'projectName')" />
-                    <div ng-messages="newProjectForm.projectName.$error">
+                    <input ng-model="vm.project.name" required name="name" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'name')" />
+                    <div ng-messages="newProjectForm.name.$error">
                         <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in newProjectForm.projectName.customError">{{error}} </div>
+                        <div ng-message="custom" ng-repeat="error in newProjectForm.name.customError">{{error}} </div>
                     </div>
                 </md-input-container>
                 <md-input-container >
                     <label>Name of the organization</label>
-                    <input ng-model="vm.project.organizationName" required name="organizationName" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'organizationName')" />
-                    <div ng-messages="newProjectForm.organizationName.$error">
+                    <input ng-model="vm.project.organisation" required name="organisation" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'organisation')" />
+                    <div ng-messages="newProjectForm.organisation.$error">
                         <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in newProjectForm.organizationName.customError">{{error}} </div>
+                        <div ng-message="custom" ng-repeat="error in newProjectForm.organisation.customError">{{error}} </div>
                     </div>
                 </md-input-container>
 
                 <ssmenu
+                        ngModel="vm.project.strategy"
                         placeholder="Select strategies from list"
                         hint="What is your mHealth project strategy to address the health need?"
                 ></ssmenu>
 
                 <ssmenu
+                        on-close-callback="vm.countryCloseCallback"
+                        option-label="name"
+                        options="vm.structure.countries"
+                        ng-model="vm.project.countryName"
                         placeholder="Select project’s country from list"
                 ></ssmenu>
 
@@ -39,16 +48,23 @@
                 <section md-layout="row" layout-wrap>
                     <h6 flex="100">Technology Platforms:</h6>
                     <md-checkbox
+                            ng-repeat="t in vm.structure.technology_platforms"
+                            ng-checked="vm.technologyPlatformChecked(t)"
+                            ng-click="vm.technologyPlatformChange(t)"
                             flex="30"
-                            aria-label=""
+                            aria-label="{{ t }}"
                             class="">
+                        {{ t }}
                     </md-checkbox>
-                    <div layout="row" class="other" layout-align="start center">
+                    <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">
                         <md-input-container flex>
                             <label>Other</label>
-                            <input type="text" />
+                            <input type="text" ng-model="c.value" />
                         </md-input-container>
-                        <md-button layout="column" class="md-icon-button">
+                        <md-button ng-hide="$last" ng-click="vm.rmTechnologyPlatform(c)" layout="column" class="md-icon-button red">
+                            <md-icon>delete_forever</md-icon>
+                        </md-button>
+                        <md-button ng-show="$last" ng-click="vm.addTechnologyPlatform()" layout="column" class="md-icon-button">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -57,16 +73,23 @@
                 <section md-layout="row">
                     <h6 flex="100">License:</h6>
                     <md-checkbox
+                            ng-repeat="l in vm.structure.licenses"
+                            ng-checked="vm.licenseChecked(l)"
+                            ng-click="vm.licenseChange(l)"
                             flex="30"
-                            aria-label=""
+                            aria-label="{{ l }}"
                             class="">
+                        {{ l }}
                     </md-checkbox>
-                    <div layout="row" class="other" layout-align="start center">
+                    <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.licenses.custom">
                         <md-input-container flex>
                             <label>Other</label>
-                            <input type="text" />
+                            <input type="text" ng-model="c.value" />
                         </md-input-container>
-                        <md-button layout="column" class="md-icon-button">
+                        <md-button ng-hide="$last" ng-click="vm.rmLicense(c)" layout="column" class="md-icon-button red">
+                            <md-icon>delete_forever</md-icon>
+                        </md-button>
+                        <md-button ng-show="$last" layout="column" ng-click="vm.addLicense()" class="md-icon-button">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -75,16 +98,23 @@
                 <section md-layout="row">
                     <h6 flex="100">Digital tools:</h6>
                     <md-checkbox
+                            ng-repeat="d in vm.structure.digital_tools"
+                            ng-checked="vm.digitalToolChecked(d)"
+                            ng-click="vm.digitalToolChange(d)"
                             flex="30"
-                            aria-label=""
+                            aria-label="{{ d }}"
                             class="">
+                        {{ d }}
                     </md-checkbox>
-                    <div layout="row" class="other" layout-align="start center">
+                    <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.digital_tools.custom">
                         <md-input-container flex>
                             <label>Other</label>
-                            <input type="text" />
+                            <input type="text" ng-model="c.value" />
                         </md-input-container>
-                        <md-button layout="column" class="md-icon-button">
+                        <md-button ng-hide="$last" ng-click="vm.rmDigitalTool(c)" layout="column" class="md-icon-button red">
+                            <md-icon>delete_forever</md-icon>
+                        </md-button>
+                        <md-button ng-show="$last" layout="column" ng-click="vm.addDigitalTool()" class="md-icon-button">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -94,37 +124,44 @@
                 <section layout="column">
                     <p>How are you applying these technology strategies or communication channels? (Check all that apply)</p>
                     <md-checkbox
+                            ng-repeat="a in vm.structure.applications"
+                            ng-checked="vm.applicationChecked(a)"
+                            ng-click="vm.applicationChange(a)"
                             flex="100"
-                            aria-label=""
-                            class=""
-                    ></md-checkbox>
+                            aria-label="{{ a }}"
+                            class="">
+                        {{ a }}
+                    </md-checkbox>
 
                 </section>
 
                 <section>
                     <p>What is the current coverage of your project? (e.g. numbers of health workers, clinics and/or client beneficiaries reached)</p>
 
-                    <div layout="row" layout-align="start start" class="coverage">
+                    <div layout="row" layout-align="start start" class="coverage" ng-repeat="cover in vm.project.coverage" ng-init="vm.repeatBind(cover)">
                         <md-input-container >
-                            <input placeholder="# Number" type="number" />
+                            <input placeholder="# Number" type="number" ng-model="cover.number" />
                         </md-input-container>
                         <span >of</span>
 
                         <ssmenu
+                                ng-model="cover.typeChosen"
                                 placeholder="Select type"
                                 ariaLabel="coverageType"
                         ></ssmenu>
                         <span>or</span>
                         <md-input-container  >
-                            <input placeholder="Specify 'Other'" type="text" />
+                            <input placeholder="Specify 'Other'" type="text" ng-model="cover.other" />
                         </md-input-container>
                         <span>and</span>
                         <ssmenu
-
+                                on-close-callback="cover.callBack"
+                                ng-model="cover.districtChosen"
+                                options="vm.districtList"
                                 placeholder="Select district"
                                 ariaLabel="coverageDistrict"
                         ></ssmenu>
-                        <md-button  class="md-icon-button">
+                        <md-button  class="md-icon-button" ng-click="vm.addCoverageItem()">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -132,28 +169,38 @@
                 </section>
 
                 <section>
+
                     <div>
-                        <md-datepicker ng-model="vm.date" md-placeholder="Start date"></md-datepicker>
+                        <md-datepicker ng-model="vm.project.started" md-placeholder="Start date"></md-datepicker>
                         <span class="hint">When was this project started? </span>
                     </div>
+
+
                     <div layout="row" class="strategies">
                         <ssmenu
+                                ng-model="vm.pipelines.standard"
                                 placeholder="Select strategies from the list"
                                 hint="Is this project part of an accelerator or innovation pipeline?"
                         ></ssmenu>
                         <span>or</span>
                         <md-input-container>
-                            <input type="text" placeholder="Specify other"/>
+                            <input type="text" placeholder="Specify other" ng-model="vm.project.pipelines.custom"/>
                         </md-input-container>
                     </div>
 
+
+
+
                     <p>Who are the donors for this specific project? (List all that apply)</p>
-                    <div layout="row" class="other" layout-align="start center">
+                    <div layout="row" class="other" layout-align="start center" ng-repeat="d in vm.project.donors">
                         <md-input-container flex>
                             <label>Donor's name</label>
-                            <input type="text" />
+                            <input type="text" ng-model="d.value" />
                         </md-input-container>
-                        <md-button layout="column" class="md-icon-button">
+                        <md-button ng-hide="$last" ng-click="vm.rmDonor(d)" layout="column" class="md-icon-button red">
+                            <md-icon>delete_forever</md-icon>
+                        </md-button>
+                        <md-button ng-show="$last" layout="column" ng-click="vm.addDonor()" class="md-icon-button">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -164,13 +211,16 @@
                     <p>What reports and publications do you have for the project?</p>
 
                     <h6>Add project report(s):</h6>
-                    <div layout="row" layout-align="start center">
+                    <div layout="row" layout-align="start center" ng-repeat="r in vm.project.reports">
                         <md-icon>link</md-icon>
                         <md-input-container flex>
                             <label>Add link to a webpage</label>
-                            <input type="text" />
+                            <input type="text" ng-model="r.value" />
                         </md-input-container>
-                        <md-button layout="column" class="md-icon-button">
+                        <md-button ng-hide="$last" ng-click="vm.rmReportLink(r)" layout="column" class="md-icon-button red">
+                            <md-icon>delete_forever</md-icon>
+                        </md-button>
+                        <md-button ng-show="$last" layout="column" ng-click="vm.addReportLink()" class="md-icon-button">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -189,13 +239,16 @@
 
 
                     <h6>Add publication(s) / journal article(s):</h6>
-                    <div layout="row" layout-align="start center">
+                    <div layout="row" layout-align="start center" ng-repeat="p in vm.project.publications">
                         <md-icon>link</md-icon>
                         <md-input-container flex>
                             <label>Add link to a webpage</label>
-                            <input type="text" />
+                            <input type="text" ng-model="p.value" />
                         </md-input-container>
-                        <md-button layout="column" class="md-icon-button">
+                        <md-button ng-hide="$last" ng-click="vm.rmPublicationLink(p)" layout="column" class="md-icon-button red">
+                            <md-icon>delete_forever</md-icon>
+                        </md-button>
+                        <md-button ng-show="$last" layout="column" ng-click="vm.addPublicationLink()" class="md-icon-button">
                             <md-icon>add</md-icon>
                         </md-button>
                     </div>
@@ -219,14 +272,14 @@
 
                 <div layout="column">
                     <md-input-container>
-                        <input type="text" placeholder="Your goals"/>
+                        <input type="text" placeholder="Your goals" ng-model="vm.project.goals_to_scale"/>
                     </md-input-container>
                     <span class="hint">What are your goals for scaling up (e.g. number of health facilities, districts, target users)?</span>
                 </div>
 
                 <div layout="column">
                     <md-input-container>
-                        <input type="text" placeholder="Your timeframe"/>
+                        <input type="text" placeholder="Your timeframe" ng-model="vm.project.anticipated_time"/>
                     </md-input-container>
                     <span class="hint">What is your anticipated time frame to meet these goals?</span>
                 </div>
@@ -240,27 +293,28 @@
 
                 <h6>Please complete this section before moving to rest of the document.</h6>
 
-                <div class="axis-assessment" layout="row" layout-align="start center" >
-                    <div flex="65">
-                        <p>
-                        1) On a scale of 1-10 with 10 being the highest, please rate yourself on
-                        </p>
-                        <md-radio-group ng-model="vm.data.group1" layout="row" >
-                            <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]"  value="{{ value }}" class="md-primary">{{ value }}</md-radio-button>
-                        </md-radio-group>
+                <div class="axis-assessment" layout="column"  >
+                    <div layout="row" layout-align="start center" ng-repeat="a in vm.project.pre_assessment track by $index">
+                        <div flex="65" >
+                            <p>
+                                1) On a scale of 1-10 with 10 being the highest, please rate yourself on
+                            </p>
+                            <md-radio-group ng-model="a.value"  layout="row" >
+                                <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]"  ng-value="value" class="md-primary">{{ value }}</md-radio-button>
+                            </md-radio-group>
+                        </div>
+                        <div flex="35" class="axis-description">
+                            <img ng-src="" >
+                            <p></p>
+                        </div>
                     </div>
-                    <div flex="35" class="axis-description">
-                        <img ng-src="" >
-                        <p></p>
-                    </div>
-
 
                 </div>
 
             </div>
             <div layout="row">
                 <div flex="50" layout="row" layout-align="start center">
-                    <md-button class="md-gray md-raised">Cancell process</md-button>
+                    <md-button class="md-gray md-raised" ui-sref="dashboard">Cancel process</md-button>
                 </div>
                 <div flex="50" layout="row" layout-align="end center">
                     <md-button type="submit" class="md-primary md-raised">Add new project</md-button>

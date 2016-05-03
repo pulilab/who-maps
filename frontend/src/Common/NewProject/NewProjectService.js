@@ -4,10 +4,19 @@ import AuthApi from '../AuthApi';
 
 class NewProjectService extends AuthApi {
     constructor() {
-        super('rest-auth');
+        super('');
     }
 
     newProject(data) {
+        console.log(data);
+    }
+
+    projectStructure() {
+        return this.get('projects/structure/')
+    }
+
+    countryDistrict(id){
+        return this.get('countries/' + id + '/districts');
     }
 }
 
