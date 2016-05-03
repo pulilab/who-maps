@@ -4,14 +4,15 @@
             <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
                 <span>Digital Health Atlas</span>
             </md-button>
-            <md-button  aria-label="Go to Dashboard" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
+            <md-button aria-label="Go to Dashboard" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
                 <md-icon class="material-icons ">dashboard</md-icon>
                 Dashboard
             </md-button>
-            <md-button aria-label="Country Level View" ng-if="vm.isLogin"  md-no-ink>
+            <md-button aria-label="Country Level View" ng-if="vm.isLogin" md-no-ink>
                 <md-icon class="material-icons">public</md-icon>
                 Country View
             </md-button>
+
             <span flex ></span>
 
             <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation" md-no-ink>
@@ -71,11 +72,11 @@
                 </md-menu-content>
             </md-menu>
 
-            <span class="menu-separator"></span>
+            <!-- <span class="menu-separator"></span> -->
 
             <md-button class="add-new-project" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
                 <md-icon class="material-icons">add</md-icon>
-                Add New Project
+                New Project
             </md-button>
         </div>
     </md-toolbar>

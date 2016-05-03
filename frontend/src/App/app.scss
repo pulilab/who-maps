@@ -209,7 +209,8 @@ md-menu-content {
     font-size: $body-font-size-base;
 
     .md-button {
-      margin-left: 15px;
+      margin-left: 25px;
+
       .material-icons {
         transform: translateY(-1px);
       }
@@ -217,7 +218,7 @@ md-menu-content {
 
     .add-new-project {
       position: relative;
-      margin: 0;
+      margin-right: 0;
     }
 
     .menu-separator {
