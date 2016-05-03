@@ -75,7 +75,7 @@
 
             <md-button class="add-new-project" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
                 <md-icon class="material-icons">add</md-icon>
-                New project
+                Add New Project
             </md-button>
         </div>
     </md-toolbar>
@@ -91,15 +91,15 @@
           </div>
             <div flex></div>
             <div class="project-submenu" layout="row">
-              <md-button aria-label="Share" class="md-icon-button" md-no-ink>
+              <md-button aria-label="Share" md-no-ink>
                   <md-icon class="material-icons">share</md-icon>
-                  <!-- Share Link -->
+                  Share
               </md-button>
 
               <md-menu md-position-mode="target-right target">
-                  <md-button md-menu-origin  class="md-icon-button" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                  <md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
                       <md-icon class="material-icons">more_vert</md-icon>
-                      <!-- More Actions -->
+                      More
                   </md-button>
 
                   <md-menu-content width="4">
