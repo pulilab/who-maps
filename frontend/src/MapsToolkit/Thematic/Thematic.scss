@@ -1,7 +1,19 @@
 @import '../../variables';
 
+.back-icon {
+
+	color: white;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	font-size: 48px;
+	pointer-events: none;
+}
+
 md-dialog {
+
 	md-dialog-content {
+
 		height: 100vh;
 
 		.left {
