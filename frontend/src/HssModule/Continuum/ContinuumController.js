@@ -1,44 +1,50 @@
 import _ from 'lodash';
 import angular from 'angular';
-import HssModuleService from '../HssModuleService';
 
 class ContinuumController {
 
     constructor($timeout, $element) {
-        const vm = this;
         this.EE = window.EE;
-        this.hs = new HssModuleService();
         this.gridLoading = false;
+        this.editMode = false;
+        this.isFixed = false;
+        this.rowHeight = 51;
+        this.helperRealHeight = (this.rowHeight * 3) + 'px';
+        this.mapsProgressPercentage = 68; // Placeholder!!
+        this.timeout = $timeout;
+        this.element = $element;
         this.classGenerator = this.classGenerator.bind(this);
-        $timeout(() => {
-            vm.editMode = false;
-            vm.isFixed = false;
-            vm.rowHeight = 51;
-            vm.helperRealHeight = (vm.rowHeight * 3) + 'px';
-            vm.timeout = $timeout;
-            vm.element = $element;
-            vm.firstRow = this.firstRowGenerator();
-            vm.motherRow = this.motherRowGenerator();
-            vm.childRow = this.childRowGenerator();
-            vm.motherRow.forEach(tile => {
-                vm.checkColumnActivation(tile);
-            });
-            vm.exportPdf = this.exportPdf;
-            vm.mapsProgressPercentage = 68; // Placeholder!!
-            angular.element(document).on('scroll', this.scrollEventHandler.bind(this));
-        });
+        this.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
+        this.mdContent.on('scroll', this.scrollEventHandler.bind(this));
+        this.$onInit = this.init.bind(this);
 
+    }
+
+    init() {
+        const vm = this;
+        vm.EE.on('editModeDone', vm.editModeChangeDone.bind(vm));
+        vm.hs = this.service;
+        vm.showEditModeSpinner = false;
+        vm.firstRow = this.firstRowGenerator();
+        vm.motherRow = this.motherRowGenerator();
+        vm.childRow = this.childRowGenerator();
+        vm.motherRow.forEach(tile => {
+            vm.checkColumnActivation(tile);
+        });
     }
 
     layoutDone() {
         this.EE.emit('hssInnerLayoutDone', 'continuum');
     }
 
+    editModeChangeDone() {
+        this.showEditModeSpinner = false;
+    }
     scrollEventHandler() {
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
-                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollTop = this.mdContent[0].scrollTop;
                 vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
                 vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
             }
@@ -47,7 +53,10 @@ class ContinuumController {
 
     editModeChange() {
         const vm = this;
-        this.EE.emit('hssEditMode', vm.editMode);
+        vm.showEditModeSpinner = true;
+        this.timeout(()=> {
+            this.EE.emit('hssEditMode', vm.editMode);
+        });
     }
 
     firstRowGenerator() {

@@ -15,6 +15,20 @@
   @include text-truncate();
 }
 
+.bold {
+  font-weight: 500;
+}
+
+.unselectable {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
 // CSS image replacement
 @mixin text-hide() {
   border: 0;
@@ -28,11 +42,13 @@
   @include text-hide();
 }
 
-.text-justify        { text-align: justify !important; }
 .text-nowrap         { white-space: nowrap !important; }
 .text-truncate       { @include text-truncate; }
 
 .text-center         { text-align: center; }
+.text-left           { text-align: left !important; }
+.text-right          { text-align: right !important; }
+.text-justify        { text-align: justify !important; }
 
 .text-lowercase      { text-transform: lowercase !important; }
 .text-uppercase      { text-transform: uppercase !important; }

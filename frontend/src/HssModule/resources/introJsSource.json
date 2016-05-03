@@ -1,54 +1,26 @@
 {
   "steps": [
     {
-      "intro": "HSS tutorial"
+      "intro": "HSS introduction"
     },
     {
-      "intro": "The switch between edit mode and view mode click it now",
-      "element": ".hss-controls"
+      "intro": "Continuum header, activte deactivate columns",
+      "element": ".continuum-component"
     },
     {
-      "intro": "Mother continuum tile, click to activate - deactivate a green tile means an active state",
-      "element": ".cell-mother"
+      "intro": "Interventions row, choose appropriate interventions for every continuum column",
+      "element": ".interventions-component"
     },
     {
-      "intro": "Child continuum tile, click to activate - deactivate a blu tile means an active state",
-      "element": ".child_middle_4"
+      "intro": "Constraints column, this will be reflected in which application constraints its possible to chose",
+      "element": ".constraints-component"
     },
     {
-      "intro": "On an active column is possible to select one or more interventions",
-      "element": ".interventions_middle_0"
+      "intro": "Applications rows, create your bubbles and insert your text here",
+      "element": ".applications-component"
     },
     {
-      "intro": "Select one or more constraints from here, this will rule what kind of constraints is possible to select in the applicaiton row",
-      "element": ".constraints"
-    },
-    {
-      "intro": "A cell with a red dot means that the related column is not active, and cannot be interacted with",
-      "element": ".applications_middle_1"
-    },
-    {
-      "intro": "A cell with a green dot means that the related column is active and can be used to create a bubble, click one single time this cell",
-      "element": ".applications_middle_3"
-    },
-    {
-      "intro": "To create a bubble a second click, on the same cell or on a new cell, is needed the bubble will span between all the contiguous cell between the first cell selected and the second one, click here to generate a four cell bubble",
-      "element": ".applications_middle_6"
-    },
-    {
-      "intro": "Is now possible to type text inside the newly created bubble, let's do it now: click and type",
-      "element": ".applications_middle_3"
-    },
-    {
-      "intro": "Once at least one bubble is created the row get activated and it is possible to select constraints",
-      "element": ".taxonomy_app_0"
-    },
-    {
-      "intro": "The application is now active, to show the subapp click on the application name",
-      "element": ".applications_header_0"
-    },
-    {
-      "intro": "Congratulations! Tutorial complete!"
+      "intro": "Congratulations! Introduction complete!"
     }
 
   ]

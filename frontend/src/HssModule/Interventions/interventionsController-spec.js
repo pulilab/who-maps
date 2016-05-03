@@ -23,6 +23,9 @@ describe('interventionsController', () => {
         ic.structure = {
             interventions: interventionsLib
         };
+        ic.service = {
+            postInterventions: () => {}
+        };
         ic.$onInit();
     });
 

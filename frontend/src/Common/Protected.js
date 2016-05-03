@@ -1,0 +1,46 @@
+import Storage from './Storage';
+
+class Protected {
+    constructor() {
+        this.EE = window.EE;
+        this.storage = new Storage();
+        this.isLogin = this.retrieveLoginStatus();
+        this.retrieveUser = this.retrieveUser.bind(this);
+        this.retrieveUser();
+        this.checkLoginStatus();
+    }
+
+    checkLoginStatus() {
+        if (!this.isLogin) {
+            this.EE.emit('logout');
+        }
+    }
+
+    retrieveUser() {
+        this.user = this.storage.get('user');
+    }
+
+    systemLogin() {
+        this.retrieveUser();
+        this.storage.set('login', true);
+        this.isLogin = true;
+    }
+
+    systemLogout() {
+        this.isLogin = false;
+        this.storage.clear();
+        this.checkLoginStatus();
+    }
+
+    handleLoginEvent() {
+        this.systemLogin();
+    }
+
+    retrieveLoginStatus() {
+        return this.storage.get('login');
+    }
+
+}
+
+
+export default Protected;

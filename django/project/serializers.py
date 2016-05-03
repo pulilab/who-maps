@@ -1,35 +1,23 @@
 from rest_framework import serializers
 
-from .models import Project, Report, Publication
 
+class ProjectSerializer(serializers.Serializer):
 
-class ProjectSerializer(serializers.ModelSerializer):
-    reports = serializers.SerializerMethodField()
-    publications = serializers.SerializerMethodField()
-
-    def get_reports(self, obj):
-        reports = Report.objects.filter(project_id=obj.id)
-        serialized = ReportSerializer(instance=reports, many=True)
-        return serialized.data
-
-    def get_publications(self, obj):
-        publications = Publication.objects.filter(project_id=obj.id)
-        serialized = PublicationSerializer(instance=publications, many=True)
-        return serialized.data
-
-    class Meta:
-        model = Project
-
-
-class ReportSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Report
-        fields = ("id", "url", "filename",)
-
-
-class PublicationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Publication
-        fields = ("id", "url", "filename",)
+    date = serializers.CharField()
+    name = serializers.CharField()
+    organisation = serializers.CharField()  # Should be text instead of ID - no Orgs in MVP
+    strategy = serializers.ListField(required=False)   # Can hold 'other' fields
+    country = serializers.IntegerField(required=False)
+    technology_platforms = serializers.ListField(required=False)  # Can hold 'other' fields
+    licenses = serializers.ListField(required=False)  # Can hold 'other' fields
+    digital_tools = serializers.ListField(required=False)  # Can hold 'other' fields
+    application = serializers.ListField(required=False)
+    coverage = serializers.ListField(required=False)
+    started = serializers.CharField(required=False)
+    donors = serializers.ListField(required=False)  # Should be text instead of ID - no Donors in MVP
+    reports = serializers.ListField(required=False)
+    publications = serializers.ListField(required=False)
+    pipeline = serializers.ListField(required=False)  # Can hold 'other' fields
+    goals_to_scale = serializers.CharField(required=False)
+    anticipated_time = serializers.CharField(required=False)
+    pre_assessment = serializers.ListField(required=False)

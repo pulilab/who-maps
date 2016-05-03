@@ -1,6 +1,8 @@
 from fabric.api import local, settings, abort, run, cd, env, lcd
 
-### ENVIRONMENTS ###
+# ENVIRONMENTS #
+
+
 def dev():
     """Configure dev"""
     env.hosts = ['IP']
@@ -9,6 +11,7 @@ def dev():
     env.branch = "master"
 
     env.project_root = '/home/' # TODO: fix this
+
 
 def staging():
     """Configure staging"""
@@ -20,7 +23,8 @@ def staging():
     env.project_root = '/home/'
 
 
-### COMMANDS ###
+# COMMANDS #
+
 
 def deploy():
     """Updates the server and restarts the apps"""
@@ -36,15 +40,25 @@ def deploy():
 
     tear_down()
 
+
 def tear_down():
     if 'tear_down' in env:
         env.tear_down()
 
+
 def test(app=""):
     local("docker exec -it whomaps_django_1 py.test {} --cov".format(app))
 
+
 def migrate():
     local("docker exec -it whomaps_django_1 python manage.py migrate")
+
+
+def import_geodata():
+    local("python manage.py fetch_geodata --selected")
+    local("python manage.py topojson")
+    local("docker exec -it whomaps_django_1 python manage.py import_geodata")
+
 
 def _run_with_failure(command, question):
     """Utility script to run a command with a confirmation to exit on failure

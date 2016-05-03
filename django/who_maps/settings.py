@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'user',
     'project',
     'hss',
+    'toolkit',
+    'country',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -172,9 +174,25 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 # Mailgun settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.mailgun.org"
-EMAIL_HOST_USER = "postmaster@sandbox303416e0bcf6455f8a95ec08fd0b7cf8.mailgun.org"
-EMAIL_HOST_PASSWORD = "5c9cd07aad4610f094a0713c2233c2f4"
+EMAIL_HOST_USER = "postmaster@sandbox7214fa112fb648dbb3f26da95e7b0078.mailgun.org"
+EMAIL_HOST_PASSWORD = "64acf09843409f8c653a77be49f10e50"
 EMAIL_PORT = 587
+
+# Geodata settings
+MAPZEN_S3_URL = "https://s3.amazonaws.com/osm-polygons.mapzen.com/"
+GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')
+SELECTED_FILE_LIST = [
+    "sierra-leone_geojson.tgz",
+    "kenya_geojson.tgz",
+    "philippines_geojson.tgz",
+    "bangladesh_geojson.tgz",
+    "india_geojson.tgz"
+]
+ADMIN_LEVELS_TO_IMPORT = [
+    "admin_level_2.geojson",
+    "admin_level_4.geojson",
+    "admin_level_5.geojson"
+]
 
 # Logging
 LOGGING = {

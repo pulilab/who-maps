@@ -1,0 +1,45 @@
+<md-card layout="column" layout-align="center">
+
+    <div class="project-container" layout="row">
+
+        <div class="project-logo" ng-if="vm.showLogo">
+            LOGO
+        </div>
+
+        <div class="text-container" layout="column">
+
+            <div class="upper" layout="row">
+                <div class="basic" flex="flex-grow" layout="column">
+                    <span flex class="name bold">{{vm.ngModel.name}}</span>
+                    <span flex class="org-country">{{vm.ngModel.organization}} | {{vm.ngModel.orgCountry}}</span>
+                </div>
+                <div ng-if="vm.showDetails" class="donors">
+                    Donors#
+                </div>
+                <div class="followers">
+                    <span class="nr">
+                        {{vm.ngModel.followersNr}}
+                        <md-icon class="md-icons" ng-class="vm.ngModel.followersTrend">trending_{{vm.ngModel.followersTrend}}</md-icon>
+                    </span>
+                    <span class="static">Followers</span>
+                </div>
+            </div>
+
+            <div ng-if="vm.showDetails" class="lower" layout="row">
+                Lower
+            </div>
+        </div>
+    </div>
+
+
+<!-- <div class="projectbody">
+
+        <div
+            ng-if="vm.hasLink"
+            class="floatright">
+            <a ng-href="{{vm.ngModel.projectUrl}}">link/<br>ui-sref</a>
+        </div>
+
+    </div> -->
+
+</md-card>

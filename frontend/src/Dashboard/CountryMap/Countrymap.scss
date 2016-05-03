@@ -1,0 +1,93 @@
+	@import '../../variables';
+
+.relative {
+
+	position: relative;
+
+	.countrychart-tooltip {
+
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		color: $text-primary;
+		font-size: 12px;
+		line-height: 16px;
+		white-space: nowrap;
+		min-width: 160px;
+
+		.countrychart-tooltip-header {
+
+			background-color: $color-gray-lighter;
+			padding: 10px;
+
+			.tooltip-flag {
+
+				height: 16px;
+				width: auto;
+				float: right;
+			}
+		}
+
+		.countrychart-tooltip-main {
+
+			border-top: 1px solid #BDBDBD;
+			background-color: white;
+			padding: 10px;
+			opacity: 0.8;
+
+			.activename {
+				color: $color-primary;
+			}
+		}
+	}
+
+	.zoomhandlers {
+
+		position: absolute;
+		left: 15px;
+		top: 350px;
+
+		md-icon {
+			color: $color-gray-light;
+			cursor: pointer;
+			outline: none;
+		}
+	}
+}
+
+
+.countrymapcontainer {
+
+    background-color: $color-gray-lightest;
+    overflow: hidden;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+
+    .countrymap {
+
+	    shape-rendering: optimizeSpeed;
+
+		.d3district {
+
+			fill: #D7D9E2;
+			stroke: #9B9DA8;
+			stroke-width: 2px;
+		    pointer-events: all;
+		    cursor: default;
+
+			&.d3district-data {
+
+				fill: #C8CAD5;
+				transition: $swift-ease-out;
+
+				&:hover {
+					fill: $color-primary;
+				}
+			}
+
+			&:hover {
+				fill: #A1A4EF;
+			}
+		}
+    }
+}

@@ -1,0 +1,153 @@
+@import '../../variables';
+@import '../../mixins';
+
+scorecard {
+
+    margin-top:20px;
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+    display:block;
+
+    .axis1 {
+        background-color: $color-axis1;
+    }
+
+    .axis2 {
+        background-color: $color-axis2;
+    }
+    .axis3 {
+        background-color: $color-axis3;
+    }
+    .axis4 {
+        background-color: $color-axis4;
+    }
+    .axis5 {
+        background-color: $color-axis5;
+    }
+    .axis6 {
+        background-color: $color-axis6;
+    }
+
+
+    .wrapper {
+        background: $color-white;
+    }
+
+    .inner-wrapper {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .axis-header {
+        height:75px;
+        color: $color-white;
+        font-size:32px;
+        padding-left: 60px;
+        padding-right: 60px;
+        margin-bottom: 40px;
+
+        img {
+            margin-right:15px;
+            width:45px;
+            height: 25px;
+        }
+    }
+
+    .domain {
+        margin-bottom:40px;
+    }
+
+    .domain-header {
+        background-color: #EEEEEE;
+        padding-left: 20px;
+        padding-right: 15px;
+        height:55px;
+        border-bottom: 1px solid $color-gray-light;;
+    }
+
+    .question {
+        border-bottom: 1px solid #E0E0E0;
+        font-size: 14px;
+        color: #212121;
+        height:50px;
+        padding-left: 50px;
+        padding-right: 20px;
+
+        strong {
+            margin-right:0.3em;
+        }
+    }
+
+    .domain-total {
+        height:50px;
+        font-size: 14px;
+        background: #FAFAFA;
+        border-bottom: 1px solid #E0E0E0;
+        padding-left: 50px;
+        padding-right: 20px;
+
+        strong {
+            margin-right:0.3em;
+        }
+    }
+
+    .domain-percentage {
+        height:50px;
+        font-size: 14px;
+        background: #FFF9C4;
+        border-bottom: 1px solid #E0E0E0;
+        padding-left: 50px;
+        padding-right: 20px;
+    }
+
+    .axis-buttons {
+        padding-left:50px;
+        padding-right:50px;
+        margin-bottom:55px;
+    }
+
+    .axes-scorecard {
+
+        .inner-wrapper {
+            padding-top: 40px;
+        }
+
+        .axis-header {
+            font-size:20px;
+            color:$color-white;
+            padding-left: 11px;
+            padding-right:20px;
+            margin-bottom:0;
+            height:55px;
+        }
+
+        .domain {
+            margin-bottom:0;
+            border-bottom:1px solid $color-gray-lighter;
+            font-size:16px;
+            font-weight:500;
+            height:50px;
+            padding-right:20px;
+
+            .md-button {
+                color: $color-gray-light;
+                height:15px;
+                width:auto;    
+            }
+
+            h4 {
+                font-weight:500;
+            }
+
+            .percentage {
+                text-align: right;
+            }
+        }
+
+
+        .scorecard-buttons {
+            padding:60px;
+        }
+
+    }
+}

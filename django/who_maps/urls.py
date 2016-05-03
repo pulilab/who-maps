@@ -19,8 +19,9 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
-    url(r"^", include("user.urls")),
-    url(r"^", include("project.urls")),
-    url(r"^", include("hss.urls")),
-    url(r"^$", TemplateView.as_view(template_name="base.html"), name="mainpage"),
+    url(r"^api/", include("user.urls")),
+    url(r"^api/", include("project.urls")),
+    url(r"^api/", include("hss.urls")),
+    url(r"^api/", include("toolkit.urls")),
+    url(r"^api/", include("country.urls")),
 ]

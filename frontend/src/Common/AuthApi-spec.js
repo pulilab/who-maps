@@ -19,10 +19,6 @@ describe('AuthApi class', () => {
         spyOn(window, 'fetch').and.returnValue(Promise.resolve(res));
     });
 
-    it('should have a common property that represent and authenticated request', () => {
-        expect(aa.request).toBeDefined();
-    });
-
     it('should have a function that perform authenticated get request', () =>{
         aa.get('test');
         expect(window.fetch).toHaveBeenCalled();
@@ -59,16 +55,19 @@ describe('AuthApi class', () => {
 
     it('should have a function that retrieve a token from the session storage', () => {
         sessionStorage.clear();
-        expect(aa.retrieveToken()).toBeNull();
+        aa.retrieveToken(true);
+        expect(aa.token).toBeNull();
 
         sessionStorage.setItem('token', 'something');
-        expect(aa.retrieveToken()).toBe('something');
+        aa.retrieveToken();
+        expect(aa.token).toBe('something');
     });
 
     it('should have a function that return an Headers object with the Authentication token', () => {
         sessionStorage.setItem('token', 'something');
         const headers = aa.generateHeaders();
         expect(headers.get('Authorization')).toBe('Token something');
+        expect(headers.get('content-type')).toBe('application/json');
     });
 
 });

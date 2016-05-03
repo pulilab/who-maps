@@ -1,28 +1,24 @@
 import HssModuleController from './HssModuleController';
 import _ from 'lodash';
-/* global define, it, describe, expect, spyOn */
+/* global define, it, describe, expect, spyOn, beforeEach */
 let cc = {};
-const scope = {
+const $scope = {
     $evalAsync: () => {}
+};
+
+const $state = {
+    params: {}
+};
+
+const $animate = {
+    enabled: () => {}
 };
 
 describe('HssModuleController', () => {
 
     beforeEach(() => {
-        cc = HssModuleController.hssControllerFactory()(scope);
-        cc.scope = scope;
+        cc = HssModuleController.hssControllerFactory()($scope, $state, $animate);
         expect(cc).toBeDefined();
-        cc.$onInit();
-    });
-
-    it('can be instatiated, and is defined', () => {
-        cc = HssModuleController.hssControllerFactory()(scope);
-        expect(cc).toBeDefined();
-    });
-
-    it('has a constructor', () => {
-        cc.constructor({});
-        expect(Array.isArray(cc.columnHasContent)).toBe(true);
     });
 
     it('has a function that handle the editMode change', () => {

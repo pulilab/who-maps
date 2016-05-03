@@ -5,8 +5,9 @@ import _ from 'lodash';
 
 class HssModuleService extends AuthApi {
 
-    constructor() {
-        super('projects/');
+    constructor(_projectId) {
+        super('projects');
+        this.projectId = _projectId;
     }
 
     getStructure() {
@@ -14,7 +15,7 @@ class HssModuleService extends AuthApi {
     }
 
     getData() {
-        return this.get('4/hss/data/');
+        return this.get(this.projectId + '/hss/data/');
     }
 
 
@@ -27,23 +28,23 @@ class HssModuleService extends AuthApi {
                 };
                 body[data.type] = data.activated;
 
-                return this.post('4/hss/continuum/', body);
+                return this.post(this.projectId + '/hss/continuum/', body);
             })
             .value();
     }
 
     postInterventions(columnId, interventions) {
-        return this.post('4/hss/interventions/', { 'column_id': columnId, interventions });
+        return this.post(this.projectId + '/hss/interventions/', { 'column_id': columnId, interventions });
     }
     postBubbles(data) {
-        return this.post('4/hss/bubbles/', data);
+        return this.post(this.projectId + '/hss/bubbles/', data);
     }
     postConstraints(data) {
-        return this.post('4/hss/constraints/', data);
+        return this.post(this.projectId + '/hss/constraints/', data);
     }
     postTaxonomy(appId, subAppId, content) {
         if (content.length > 0) {
-            return this.post('4/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
+            return this.post(this.projectId + '/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
         }
         return Promise.resolve({});
     }

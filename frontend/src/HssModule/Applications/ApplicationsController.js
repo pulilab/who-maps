@@ -1,12 +1,10 @@
 import _ from 'lodash';
-import HssModuleService from '../HssModuleService';
 
 class ApplicationsController {
 
     constructor($timeout, $mdDialog) {
         const vm = this;
         this.EE = window.EE;
-        this.hs = new HssModuleService();
         this.rowObject = {};
         this.gridLoading = false;
         this.layoutReady = false;
@@ -16,6 +14,7 @@ class ApplicationsController {
         vm.tileClickCounter = 0;
         this.timeout = $timeout;
         this.$onInit = () => {
+            vm.hs = vm.service;
             vm.selectedConstraints = this.constraintsGenerator();
             vm.applicationRow = this.applicationRowGenerator();
             vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
@@ -28,6 +27,7 @@ class ApplicationsController {
     handleEditMode(value) {
         this.editMode = value;
         this.processRows();
+        this.openAllSubApp();
     }
 
     layoutDone() {
@@ -35,6 +35,11 @@ class ApplicationsController {
         this.EE.emit('hssInnerLayoutDone', 'application');
     }
 
+    openAllSubApp() {
+        _.forEach(this.rowObject.father_0, mainRow => {
+            this.toggleSubApp(mainRow.columnId_header, true);
+        });
+    }
 
     handleColumnActivation(event) {
         _.map(this.applicationRow, (value) => {
@@ -241,6 +246,7 @@ class ApplicationsController {
     }
 
     saveTaxonomy(appId, subAppId, value) {
+        this.rowObject['father_' + appId]['rowIndex_' + subAppId].columnId_tax.content = value;
         this.hs.postTaxonomy(appId, subAppId, value);
     }
 
@@ -282,12 +288,13 @@ class ApplicationsController {
                 }
                 _.forEach(this.rowObject['father_' + value], row => {
                     let isEnabled = false;
-                    _.forEach(row, item => {
-                        isEnabled = (item.isInput && item.content.length > 0) || isEnabled;
+                    _.forEach(row, tile => {
+                        isEnabled = (tile.isInput && tile.content.length > 0) || isEnabled;
                     });
-                    _.forEach(row, item => {
-                        item.disabled = !isEnabled;
-                        item.rowEnabled = isEnabled;
+                    _.forEach(row, tile => {
+                        tile.disabled = !isEnabled;
+                        tile.rowEnabled = isEnabled;
+                        tile.className = _.replace(tile.className, 'selected', '');
                     });
 
                 });
@@ -297,12 +304,11 @@ class ApplicationsController {
 
     processData(cols) {
         _.forEach(this.data.applications, data => {
-            let fatherId = data.subapp_id;
-            let rowIndex = data.app_id - 1;
+            const fatherId = data.app_id;
+            const rowIndex = data.subapp_id - 1;
 
-            if (data.subapp_id !== 0) {
-                fatherId = data.app_id;
-                rowIndex = data.subapp_id - 1;
+            if (rowIndex < 0) {
+                return;
             }
 
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex]['columnId_' + data.column_id];
@@ -314,6 +320,9 @@ class ApplicationsController {
                     tile.bubbleDrawn = true;
                     tile.rowEnabled = true;
                     tile.status = this.enableRow(tile);
+                    const fatherTile = this.rowObject.father_0['rowIndex_' + (tile.fatherId - 1)].columnId_header;
+                    fatherTile.rowEnabled = true;
+                    fatherTile.status = this.enableRow(tile);
                 }
                 if (data.colspan === 0) {
                     tile.invisible = true;
@@ -322,12 +331,10 @@ class ApplicationsController {
         });
 
         _.forEach(this.data.taxonomies, tax => {
-            let fatherId = tax.subapp_id;
-            let rowIndex = tax.app_id;
-
-            if (tax.subapp_id !== 0) {
-                fatherId = tax.app_id;
-                rowIndex = tax.subapp_id;
+            const rowIndex = tax.subapp_id;
+            const fatherId = tax.app_id;
+            if (rowIndex < 0) {
+                return;
             }
             const tile = this.rowObject['father_' + fatherId]['rowIndex_' + rowIndex].columnId_tax;
             if (tile) {
@@ -348,12 +355,12 @@ class ApplicationsController {
         });
     }
 
-    toggleSubApp(tile) {
+    toggleSubApp(tile, forceOpening) {
         if (!tile.subApplications || !this.editMode) {
             return;
         }
         this.layoutReady = false;
-        tile.subAppOpen = !tile.subAppOpen;
+        tile.subAppOpen = !tile.subAppOpen || forceOpening;
         _.forEach(this.rowObject['father_' + tile.applicationId], value => {
             _.forEach(value, item => {
                 item.disabled = !tile.subAppOpen;
@@ -386,9 +393,20 @@ class ApplicationsController {
     }
 
     blurHandler(tile) {
-        this.timeout(() =>{
+        this.timeout(() => {
             if (tile.content.length === 0) {
-                this.deleteBubble(tile);
+                const vm = this;
+                const confirm = this.dialog.confirm()
+                    .title('Warning')
+                    .textContent('Empty bubble is not allowed, are you sure you want to delete?')
+                    .ariaLabel('Bubble Delete')
+                    .ok('Yes')
+                    .cancel('No');
+                this.dialog.show(confirm).then(() => {
+                    vm.deleteBubble(tile);
+                }, () => {
+                    this.focusBubble(tile);
+                });
             }
         });
     }
@@ -486,13 +504,15 @@ class ApplicationsController {
             return;
         }
 
-
         const applicationStyle = this.enableRow(tile);
         rowColumns.forEach((value, key)=> {
             if (key === 0) {
                 value.colSpan = rowColumns.length;
                 value.bubbleDrawn = true;
                 value.status = applicationStyle;
+                const fatherTile = this.rowObject.father_0['rowIndex_' + (value.fatherId - 1)].columnId_header;
+                fatherTile.rowEnabled = true;
+                fatherTile.status = this.enableRow(tile);
             }
             else {
                 value.invisible = true;
@@ -503,14 +523,18 @@ class ApplicationsController {
             return !value.invisible || !value.isInput;
         });
 
+        this.focusBubble(tile);
+
+        this.searchForFilledColumns();
+    }
+
+    focusBubble(tile) {
         this.timeout(() => {
             const input = document.getElementById('appBubble_' + this.labelGenerator(tile));
             if (input) {
                 input.focus();
             }
         });
-
-        this.searchForFilledColumns();
     }
 
     deleteBubble(bubble) {
@@ -555,7 +579,22 @@ class ApplicationsController {
             value.rowEnabled = false;
             return value;
         });
+        this.checkIfMainIsEnabled(bubble);
         this.searchForFilledColumns();
+    }
+
+    checkIfMainIsEnabled(bubble) {
+        let isMainEnabled = false;
+        _.forEach(this.rowObject['father_' + bubble.fatherId], row => {
+            _.forEach(row, column => {
+                isMainEnabled = isMainEnabled || column.bubbleDrawn;
+            });
+        });
+        if (!isMainEnabled) {
+            const fatherTile = this.rowObject.father_0['rowIndex_' + (bubble.fatherId - 1)].columnId_header;
+            fatherTile.rowEnabled = true;
+            fatherTile.status = '';
+        }
     }
 
     confirmDeleteBubble(bubble) {

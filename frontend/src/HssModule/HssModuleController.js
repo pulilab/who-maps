@@ -1,10 +1,13 @@
 import HssModuleService from './HssModuleService';
+import { Protected } from '../Common/';
 import 'es6-promise';
 /* global Promise */
 
-class HssModuleController {
+class HssModuleController extends Protected {
 
-    constructor($scope, introJs) {
+    constructor($scope, $state, $animate, introJs) {
+        super();
+        $animate.enabled(false);
         this.EE = window.EE;
         this.scope = $scope;
         this.dataReady = false;
@@ -27,23 +30,23 @@ class HssModuleController {
 
         this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent.bind(this));
 
-        this.hs = new HssModuleService();
+        this.projectId = $state.params.appName;
+        this.hs = new HssModuleService(this.projectId);
 
-
-        this.$onInit = () => {
-            this.introJsSource = introJs;
-        };
-
+        this.introJsSource = introJs;
 
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
 
     }
 
     handleLayoutEvent() {
-        this.gridLoading -= 1;
-        if (this.gridLoading < 0) {
-            this.gridLoading = 0;
+        let counter = this.gridLoading;
+        counter -= 1;
+        if (counter < 0) {
+            counter = 0;
+            this.EE.emit('editModeDone');
         }
+        this.gridLoading = counter;
     }
 
     handleServerData(values) {
@@ -52,7 +55,6 @@ class HssModuleController {
         this.scope.$evalAsync();
         this.dataReady = true;
     }
-
 
     handleEditMode(value) {
         this.editMode = value;
@@ -81,12 +83,12 @@ class HssModuleController {
     }
 
     static hssControllerFactory() {
-        function hssController($scope) {
+        function hssController($scope, $state, $animate) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController($scope, introJs);
+            return new HssModuleController($scope, $state, $animate, introJs);
         }
 
-        hssController.$inject = ['$scope'];
+        hssController.$inject = ['$scope', '$state', '$animate'];
 
         return hssController;
     }

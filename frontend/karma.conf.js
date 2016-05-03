@@ -1,4 +1,5 @@
-module.exports = function (config){
+const webpack = require('webpack');
+module.exports = function(config) {
     config.set({
         browsers: ['PhantomJS'],
         files: [
@@ -16,7 +17,7 @@ module.exports = function (config){
             check: {
                 each: {
                     statements: 50,
-                    branches: 50,
+                    branches: 30,
                     functions: 50,
                     lines: 50
                 }
@@ -32,7 +33,7 @@ module.exports = function (config){
                         loaders: ['null']
                     },
                     {
-                        test: /\.json/,
+                        test: /\.(json|geojson)/,
                         loader: 'json'
                     }
                 ],
@@ -48,7 +49,13 @@ module.exports = function (config){
                         loaders: ['babel-istanbul']
                     }
                 ]
-            }
+            },
+            plugins: [
+                new webpack.DefinePlugin({
+                    API: '"/api/"',
+                    DEV: false
+                })
+            ]
         },
         webpackServer: {
             noInfo: true

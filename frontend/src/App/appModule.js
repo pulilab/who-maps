@@ -1,6 +1,10 @@
+/* global define DEV */
+
 // General imports
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
+import ngMessages from 'angular-messages';
+import 'angular-password';
 import angularMd from 'angular-material';
 import { EE } from '../Common/';
 
@@ -9,7 +13,7 @@ EE.initialize();
 import AppController from './AppModuleController';
 import './app.scss';
 
-import appTemplate from './app.html';
+import _appTemplate from './app.html';
 
 import hssModule from '../HssModule/';
 import cms from '../Cms/';
@@ -21,19 +25,50 @@ import { Components } from '../Common/';
 
 
 const moduleName = 'app';
-
-function config($stateProvider, $urlRouterProvider) {
+const config = ($stateProvider, $urlRouterProvider) => {
     $stateProvider
         .state(moduleName,
         {
-            url: '/app',
-            template: appTemplate,
+            url: '/app/:appName',
+            template: _appTemplate,
             controller: moduleName + '.appController',
             controllerAs: 'vm'
+        })
+        .state('login',
+        {
+            url: '/login',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<login></login>'
+                }
+            }
+        })
+        .state('signup',
+        {
+            url: '/signup',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<signup></signup>'
+                }
+            }
         });
 
-    $urlRouterProvider.otherwise('/app');
-}
+    $urlRouterProvider.otherwise('/app//landing');
+};
+
+function logUiRouteEvents(...args) { console.log(`Ui route state change ${this} :`, args); }
+
+const run = ($rootScope) => {
+    if (DEV) {
+        $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
+        $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
+    }
+};
+
+run.$inject = ['$rootScope'];
+
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
@@ -41,6 +76,8 @@ angular.module(moduleName,
     [
         uiRoute,
         angularMd,
+        ngMessages,
+        'ngPassword',
         Components,
         hssModule,
         cms,
@@ -51,6 +88,8 @@ angular.module(moduleName,
     ]
 )
     .controller(moduleName + '.appController', AppController.appControllerFactory())
-    .config(config);
+    .config(config)
+    .run(run);
+
 
 export default moduleName;

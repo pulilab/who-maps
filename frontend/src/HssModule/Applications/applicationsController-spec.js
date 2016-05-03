@@ -63,6 +63,10 @@ describe('applicationsController', () => {
             continuum: continuumData,
             constraints: taxonomyLib
         };
+        ac.service = {
+            postBubbles: () => {},
+            postTaxonomy: () => {}
+        };
         ac.$onInit();
     });
 
@@ -159,10 +163,10 @@ describe('applicationsController', () => {
         const subApp = _.values(applicationsLib[1].subApplications);
         const classArray = ac.subApplicationClassGenerator(subApp, firstColumn).split(' ');
         _.remove(classArray, item => {
-            return item === ''
-        })
+            return item === '';
+        });
         const expectedArray = ['app', 'odd', 'app-sub', 'applications_middle_0',
-         'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub']
+         'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub'];
         expect(_.difference(classArray, expectedArray).length).toBe(0);
     });
 
@@ -287,6 +291,17 @@ describe('applicationsController', () => {
                 expect(value.disabled).toBeFalsy();
             })
             .value();
+    });
+
+    it('should have a function that enable all the sub applicaiton when entering edit mode', () => {
+        expect(ac.applicationRow[3].disabled).toBeTruthy();
+        ac.openAllSubApp();
+        expect(ac.applicationRow[3].disabled).toBeTruthy();
+        ac.editMode = true;
+        ac.openAllSubApp();
+        _.forEach(ac.applicationRow, tile => {
+            expect(tile.disabled).toBeFalsy();
+        });
     });
 
     it('should have a function that counts click and execute appropriate'
@@ -424,7 +439,7 @@ describe('applicationsController', () => {
 
     it('should have a function to save the taxonomy', () => {
         spyOn(ac.hs, 'postTaxonomy');
-        ac.saveTaxonomy();
+        ac.saveTaxonomy(0, 0);
         expect(ac.hs.postTaxonomy).toHaveBeenCalled();
     });
 
@@ -436,6 +451,7 @@ describe('applicationsController', () => {
 
     it('should have a function to handle blur event that delete the bubble when empty', () => {
         spyOn(ac, 'deleteBubble');
+        spyOn(ac.dialog, 'confirm').and.returnValue(confirmMock);
         const tile = { content: '' };
         ac.blurHandler(tile);
         expect(ac.deleteBubble).toHaveBeenCalled();

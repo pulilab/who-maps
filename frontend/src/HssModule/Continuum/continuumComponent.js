@@ -9,7 +9,8 @@ const continuumComponent = {
     bindings: {
         tiles: '<',
         structure: '<',
-        data: '<'
+        data: '<',
+        service: '<'
     },
     name: 'continuum'
 };

@@ -1,2 +1,75 @@
-<h1>Landingpage module loaded!</h1>
-<sample-component></sample-component>
+<md-card layout="column" layout-align="center center" layout-margin layout-padding>
+
+    <h1>Welcome to MAPS Toolkit!</h1>
+
+    <h3 class="center">Introduction text Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem nam aliquid, quia quam, architecto expedita, et suscipit unde minus distinctio rem ab. Atque quos quasi, tempore ab ullam distinctio dicta!</h3>
+
+    <md-button class="md-raised md-primary">Learn more</md-button>
+
+    <h3>Looking for a project?</h3>
+
+    <searchbar></searchbar>
+
+</md-card>
+
+<div>
+
+    <div layout="row" layout-align="center center">
+
+        <h2>Trending projects</h2>
+
+    </div>
+
+    <div layout="row" layout-padding layout-margin>
+
+        <projectcomp
+            flex="33"
+            ng-model="vm.trendingProjects[0]"
+            has-link=false
+            has-logo=true>
+        </projectcomp>
+
+        <projectcomp
+            flex="33"
+            ng-model="vm.trendingProjects[1]"
+            has-link=false
+            has-logo=true>
+        </projectcomp>
+
+        <projectcomp
+            flex="33"
+            ng-model="vm.trendingProjects[2]"
+            has-link=false
+            has-logo=true>
+        </projectcomp>
+
+    </div>
+
+</div>
+
+<div layout="row" layout-align="center center">
+    <h2>About MAPS Toolkit</h2>
+</div>
+
+<div layout="row" layout-padding layout-margin>
+
+    <div flex="33" layout="column" layout-align="center center">
+        <h3>WHAT IS THE PURPOSE OF THE TOOLKIT</h3>
+        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos nihil iste, amet. A doloribus voluptate quidem tempora, consequuntur quis nesciunt, possimus ipsam esse velit harum impedit fugiat doloremque, dolore nostrum!</p>
+        <a href="">Read more...</a>
+    </div>
+
+
+    <div flex="33" layout="column" layout-align="center center">
+        <h3>WHAT ARE THE AXES OF SCALE?</h3>
+        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos nihil iste, amet. A doloribus voluptate quidem tempora, consequuntur quis nesciunt, possimus ipsam esse velit harum impedit fugiat doloremque, dolore nostrum!</p>
+        <a href="">Read more...</a>
+    </div>
+
+    <div flex="33" layout="column" layout-align="center center">
+        <h3>HOW WAS MAPS DEVELOPED?</h3>
+        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos nihil iste, amet. A doloribus voluptate quidem tempora, consequuntur quis nesciunt, possimus ipsam esse velit harum impedit fugiat doloremque, dolore nostrum!</p>
+        <a href=""><b>TODO:</b> These links lead nowhere</a>
+    </div>
+
+</div>

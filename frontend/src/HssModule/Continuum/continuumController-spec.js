@@ -1,3 +1,4 @@
+import angular from 'angular';
 import ContinuumController from './ContinuumController';
 import { continuumStructure, continuumData } from '../hssMockData';
 import { EE } from '../../Common/';
@@ -17,15 +18,20 @@ describe('continuumController', () => {
         cc.tiles = 7;
         cc.structure = continuumStructure;
         cc.data = continuumData;
+        cc.service = {
+            postContinuum: () => {}
+        };
+        cc.$onInit();
     });
 
     it('should have a function that handle the scroll', () => {
-
+        angular.element(document.body).append('<md-content></md-content>');
         spyOn(ContinuumController.prototype, 'scrollEventHandler');
         cc = new ContinuumController.continuumFactory()($timeout);
+        const element = document.getElementsByTagName('md-content').item(0);
         const event = document.createEvent('Event');
         event.initEvent('scroll', true, true);
-        document.dispatchEvent(event);
+        element.dispatchEvent(event);
         expect(cc.scrollEventHandler).toHaveBeenCalled();
 
     });

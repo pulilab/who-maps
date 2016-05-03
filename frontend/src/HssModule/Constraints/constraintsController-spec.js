@@ -20,6 +20,10 @@ describe('constraintsController', () => {
         cc.data = {
             constraints: constraintsData
         };
+        cc.service = {
+            postConstraints: () => {}
+        };
+        cc.$onInit();
     });
 
     it('should have a function that change the edit mode', () => {
@@ -53,6 +57,6 @@ describe('constraintsController', () => {
         cc.resizeCallback = cb;
         cc.checkSizeAndFireCallback();
         expect(cb).toHaveBeenCalled();
-    })
+    });
 
 });
