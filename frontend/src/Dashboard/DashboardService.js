@@ -14,9 +14,7 @@ class DashboardService extends AuthApi {
 
     getProjectData() {
         return this.get('')
-            .then(data => {
-                return data;
-            });
+            .then(data => data);
     }
 }
 

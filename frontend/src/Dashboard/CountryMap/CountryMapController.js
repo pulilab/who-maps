@@ -68,7 +68,7 @@ class CountrymapController {
         vm.countryName = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
         if (DEV) {
-            console.log(topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties);
+            // console.log(topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties);
         }
         // If any map comes with mixed winding order, do:
         // const rewind = require('geojson-rewind');

@@ -22,12 +22,23 @@ ui-view > md-content {
     position:relative;
 }
 
+md-tooltip {
+  md-background {
+    // background-color: yellow;
+    opacity: 0 !important;
+  }
+}
+
 
 /* TYPOGRAPY
    ============================= */
 
 .page-title {
   color: $color-primary;
+
+  .md-display-1 {
+    font-size: 40px;
+  }
 
   .md-subhead {
     margin-top: 0;
