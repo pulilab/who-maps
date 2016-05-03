@@ -3,6 +3,25 @@
 </div>
 
 <div class="wrapper"  layout="column" layout-fill ng-if="vm.dataLoaded && !vm.summary" md-whiteframe >
+    <div layout="row" class="axis-buttons top">
+        <div layout="row" flex="auto" layout-align="start">
+            <md-button class="md-primary" ui-sref="maps({axisId: {{vm.axisId}}})">
+                <md-icon>
+                    replay
+                </md-icon>
+                Start axis again
+            </md-button>
+        </div>
+        <div layout="row" flex="auto" layout-align="end">
+            <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-disabled="vm.disableGoToNextAxis()">
+                Go to next axis
+                <md-icon>
+                    arrow_forward
+                </md-icon>
+            </md-button>
+        </div>
+    </div>
+
     <div layout="row" class="axis-header" ng-class="vm.data.axisClass">
         <div layout="row" flex="auto" layout-align="start center">
             <img ng-src="{{vm.data.axisPicture}}" />
@@ -71,7 +90,6 @@
         <div layout="row" flex="auto" layout-align="end center">
                 <span>{{vm.data.axis_score | number : 0}}%</span>
         </div>
-
     </div>
 
     <div layout="row" class="axis-buttons">
@@ -95,7 +113,6 @@
                 <md-icon>insert_chart</md-icon>
             </md-button>
         </div>
-
     </div>
 </div>
 <axis-footer ng-if="vm.dataLoaded && !vm.summary" axes="vm.rawData"></axis-footer>
@@ -145,8 +162,6 @@
         </div>
     </div>
 
-
-
     <div layout="row" class="scorecard-buttons">
         <div layout="row" flex="auto" layout-align="start">
             <md-button class="md-primary" ui-sref="dashboard">
@@ -164,7 +179,6 @@
                 </md-icon>
             </md-button>
         </div>
-
     </div>
 
 </div>
