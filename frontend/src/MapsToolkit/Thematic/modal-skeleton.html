@@ -1,6 +1,9 @@
 <md-icon class="md-icons back-icon">arrow_back</md-icon>
 
-<md-dialog flex-offset="15" flex="85" aria-label="Thematic overview (help) dialog">
+<md-dialog
+	flex-offset="15"
+	flex="85"
+	aria-label="Thematic overview (help) dialog">
 
     <md-dialog-content layout="row">
 
@@ -9,29 +12,39 @@
     		<span class="head">Thematic overview</span>
     		<span class="subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam eligendi culpa, quidem voluptates. Quidem magni recusandae vel id autem dolorum. Pariatur explicabo dicta, expedita perspiciatis voluptate optio minima architecto temporibus.</span>
 
-	        TODO: Controller
 	        TODO: left/opening/closing, activating
 	        TODO: changing contents, links inside
+	        TODO: about & interaction title / icon
+	        TODO: scrollable left/right sides
+	        TODO: html bindings
 
 
-	        <div class="axes" ng-repeat="axis in vm.data track by $index">
+	        <div class="axes" ng-repeat="(axisId, axis) in vm.data track by $index">
 
-	        	<div class="axis" layout="row">
+	        	<div class="axis" layout="row" ng-click="vm.changeSpot(+axisId - 2, 0)">
 
-	        		<div class="iconcontainer" layout="column" layout-align="center center" ng-class="(+vm.axis + 2) == $index ? 'active-axis' + (+vm.axis + 1) : ''">
+	        		<div
+	        			class="iconcontainer"
+	        			layout="column"
+	        			layout-align="center center"
+	        			ng-class="(+vm.axis + 2) == $index ? 'active-axis' + (+vm.axis + 1) : ''">
+
 		        		<img ng-src="{{vm.icons[$index]}}">
+
 	        		</div>
 	        		<div class="titles" layout="column">
+
 	        			<span ng-if="$index > 1" flex>
 	        				{{'AXIS ' + ($index - 1) + '.'}}<br>
 	        			</span>
 	        			<span flex>{{axis.name}}</span>
+
 	        		</div>
 
 	        	</div>
 
-	        	<div class="domain" ng-repeat="domain in axis.domains">
-	        		DOMAIN {{domain.id}}: {{domain.name}}
+	        	<div class="domain" ng-repeat="(domainId, domain) in axis.domains" ng-click="vm.changeSpot(+axisId - 2, +domainId)">
+	        		<span>DOMAIN {{domain.id}}: {{domain.name}}</span>
 	        	</div>
 	        </div>
     	</div>
@@ -48,7 +61,11 @@
 			</div>
 
 			<div class="right-content">
-				This should be some content about axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}
+				This should be some content about axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}<br>
+				MOCK: {{vm.mock}}<br>
+				AXIS: {{vm.axis}}<br>
+				DOMAIN: {{vm.domain}}<br>
+				DATA: {{vm.data}}<br>
 			</div>
 
 		</div>

@@ -42,6 +42,7 @@ md-dialog {
 				.axis {
 
 					height: 50px;
+					outline: none;
 
 					.iconcontainer {
 
@@ -51,6 +52,7 @@ md-dialog {
 						margin: 10px 5px 10px 20px;
 						background-color: gray;
 						padding: 5px 5px;
+
 
 						&.active-axis1 {
 							background-color: $color-axis1;
@@ -79,6 +81,7 @@ md-dialog {
 
 
 					.titles {
+
 						margin: 11px 5px 10px 0;
 						font-size: 12px;
 						font-weight: 500;
@@ -88,12 +91,17 @@ md-dialog {
 				}
 
 				.domain {
+
 					height: 30px;
 					line-height: 30px;
-					// border-bottom: 1px solid $color-gray;
 					font-size: 12px;
 					padding-left: 55px;
 					color: $text-secondary;
+					outline: none;
+
+					&.active {
+						color: $text-primary;
+					}
 				}
 			}
 		}
@@ -108,8 +116,15 @@ md-dialog {
 					padding: 29px 60px;
 
 				}
+
 				height: 100px;
 
+				&.axis-1 {
+					background-color: $color-gray;
+				}
+				&.axis0 {
+					background-color: $color-gray;
+				}
 				&.axis1 {
 					background-color: $color-axis1;
 				}
