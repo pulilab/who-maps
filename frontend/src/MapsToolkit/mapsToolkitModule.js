@@ -61,6 +61,9 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     resolve: {
                         'scorecard': () => {
                             return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }
@@ -76,6 +79,9 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     resolve: {
                         'scorecard': () => {
                             return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }
