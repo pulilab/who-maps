@@ -72,8 +72,6 @@
                 </md-menu-content>
             </md-menu>
 
-            <!-- <span class="menu-separator"></span> -->
-
             <md-button class="add-new-project" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
                 <md-icon class="material-icons">add</md-icon>
                 New Project
@@ -149,12 +147,14 @@
                     {{vm.currentProjectMock.version.id}}
                     ({{vm.currentProjectMock.version.date}})
                 </span>
+                <span class="menu-separator"></span>
                 <span>
                     Organization:
                     {{vm.currentProject.organisation}}
                 </span>
+                <span class="menu-separator"></span>
                 <span>
-                    Contact person:
+                    Contact:
                     <md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>
                         <!-- <md-icon class="material-icons">
                             send
