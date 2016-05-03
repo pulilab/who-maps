@@ -118,11 +118,6 @@ class MapsToolkitModuleController  {
         return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1
     }
 
-    isLastAxisLastDomain() {
-        return this.isLastDomainInAxis()
-            && parseInt(this.axisId, 10) >= this.rawData.length - 1;
-    }
-
     goToNextDomain() {
         let nextDomain = parseInt(this.domainId, 10) + 1;
         let nextAxis = parseInt(this.axisId, 10);
