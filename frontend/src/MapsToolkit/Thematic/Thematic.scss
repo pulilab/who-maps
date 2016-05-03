@@ -25,18 +25,46 @@ md-dialog {
 
 			.axes {
 
-				border-top: 1px solid $color-gray;
+				border-top: 1px solid $color-gray-light;
 
 				.axis {
-					height: 50px;
-					border-bottom: 1px solid $color-gray;
 
-					.pic {
+					height: 50px;
+
+					.iconcontainer {
+
 						display: inline;
 						height: 30px;
 						width: 30px;
 						margin: 10px 5px 10px 20px;
+						background-color: gray;
+						padding: 5px 5px;
+
+						&.active-axis1 {
+							background-color: $color-axis1;
+						}
+						&.active-axis2 {
+							background-color: $color-axis2;
+						}
+						&.active-axis3 {
+							background-color: $color-axis3;
+						}
+						&.active-axis4 {
+							background-color: $color-axis4;
+						}
+						&.active-axis5 {
+							background-color: $color-axis5;
+						}
+						&.active-axis6 {
+							background-color: $color-axis6;
+						}
+
+						img {
+							width: 20px;
+							height: 20px;
+						}
 					}
+
 
 					.titles {
 						margin: 11px 5px 10px 0;

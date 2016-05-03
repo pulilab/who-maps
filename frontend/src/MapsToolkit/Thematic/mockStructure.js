@@ -2,15 +2,12 @@ const mockStructure = [
 
     {
         name: 'About',
-        logoPath: '',
         domains: []
     }, {
         name: 'Introduction',
-        logoPath: '',
         domains: []
     }, {
         name: 'Groundwork',
-        logoPath: '',
         domains: [
             {
                 id: 1,
@@ -29,7 +26,6 @@ const mockStructure = [
     },
     {
         name: 'Partnerships',
-        logoPath: '',
         domains: [
             {
                 id: 4,
@@ -44,7 +40,6 @@ const mockStructure = [
     },
     {
         name: 'Financial health',
-        logoPath: '',
         domains: [
             {
                 id: 6,
@@ -59,7 +54,6 @@ const mockStructure = [
     },
     {
         name: 'Technology & architecture',
-        logoPath: '',
         domains: [
             {
                 id: 8,
@@ -78,7 +72,6 @@ const mockStructure = [
     },
     {
         name: 'Operations',
-        logoPath: '',
         domains: [
             {
                 id: 11,
@@ -101,7 +94,6 @@ const mockStructure = [
     },
     {
         name: 'Monitoring & evaluation',
-        logoPath: '',
         domains: [
             {
                 id: 15,

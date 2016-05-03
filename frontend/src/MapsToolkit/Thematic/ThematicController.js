@@ -10,6 +10,8 @@ class ThematicController {
         this.EE = window.EE;
         this.modal = $mdDialog;
         this.data = mock;
+        this.icons = this.data.map((el, i) => require('./images/icon-axis' + (i - 1) + '.svg'));
+        // console.log(this.icons);
 
     }
 
@@ -26,7 +28,9 @@ class ThematicController {
             locals: {
                 'axis': this.axis,
                 'domain': this.domain,
-                'data': this.data
+                'data': this.data,
+                'text': this.text,
+                'icons': this.icons
             }
         });
     }
