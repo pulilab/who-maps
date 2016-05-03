@@ -26,7 +26,11 @@
                             Update score
                         </md-button>
                         <!-- "show help" button and the modal on click -->
-                        <thematic axis='vm.state.params.axisId' domain='$index'>
+                        <thematic
+                            axis="vm.state.params.axisId"
+                            buttonclass="'md-primary'"
+                            domain="$index"
+                            buttontext="'Show help'">
                         </thematic>
                     </div>
             </div>
@@ -103,7 +107,7 @@
     </div>
     <div class="wrapper"  layout="column" layout-fill md-whiteframe >
     <div layout="column" flex="100" layout-fill class="inner-wrapper">
-        <div ng-repeat="axis in vm.data" layout="column" class="axis">
+        <div ng-repeat="(axIndex, axis) in vm.data" layout="column" class="axis">
             <div layout="row" class="axis-header" ng-class="axis.axisClass">
                 <div layout="row" flex="auto" layout-align="start center">
                     <img ng-src="{{ axis.axisPicture }}"/>
@@ -114,7 +118,7 @@
                 </div>
 
             </div>
-            <div layout="row" ng-repeat="domain in axis.domains" class="domain">
+            <div layout="row" ng-repeat="(domIndex, domain) in axis.domains" class="domain">
                     <div layout="row" flex="65" layout-align="start center">
                         <h4>{{domain.domain}} ({{domain.domain_max}} points)</h4>
                     </div>
@@ -124,10 +128,12 @@
                                 <md-icon>playlist_add_check</md-icon>
                                 Update score
                             </md-button>
-                            <md-button>
-                                <md-icon>help</md-icon>
-                                Show help
-                            </md-button>
+                            <!-- "'show help'" button and the modal on click -->
+                            <thematic
+                                axis="axIndex"
+                                domain="domIndex"
+                                buttontext="'Show help'">
+                            </thematic>
                         </div>
                         <div layout="row" layout-align="end center" flex="20">
                             <span class="percentage">

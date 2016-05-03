@@ -8,7 +8,9 @@ const thematicComponent = {
     name: 'thematic',
     bindings: {
         'axis': '=',
-        'domain': '='
+        'domain': '=',
+        'buttonclass': '=',
+        'buttontext': '='
     }
 };
 

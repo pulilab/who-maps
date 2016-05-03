@@ -9,9 +9,8 @@
     		<span class="head">Thematic overview</span>
     		<span class="subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam eligendi culpa, quidem voluptates. Quidem magni recusandae vel id autem dolorum. Pariatur explicabo dicta, expedita perspiciatis voluptate optio minima architecto temporibus.</span>
 
-	        TODO: Closing arrow (fix positioned...)
-	        TODO: Controller, opening/closing, activating
-	        TODO: Wire in all starting points
+	        TODO: Controller
+	        TODO: left/opening/closing, activating
 	        TODO: changing contents, links inside
 
 
@@ -43,13 +42,13 @@
 				<div class="right-title">
 
 					<img ng-src="{{vm.icons[+vm.axis + 2]}}">
-					AXIS {{+vm.axis + 1}}. - {{vm.data[vm.index + 2].domains[vm.domain].name}}
+					AXIS {{+vm.axis + 1}}. - {{vm.data[+vm.axis + 2].domains[+vm.domain].name}}
 
 				</div>
 			</div>
 
 			<div class="right-content">
-				This should be some content about axis{{+vm.axis + 1}}, domain: {{vm.domain + 1}}
+				This should be some content about axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}
 			</div>
 
 		</div>
