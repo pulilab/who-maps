@@ -18,8 +18,6 @@ class MapsToolkitModuleController  {
 
         this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
         this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
-
-
     }
 
     loadData() {
@@ -116,8 +114,12 @@ class MapsToolkitModuleController  {
             && parseInt(this.axisId, 10) === 0;
     }
 
-    isLastAxisLastDomain() {
+    isLastDomainInAxis(){
         return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1
+    }
+
+    isLastAxisLastDomain() {
+        return this.isLastDomainInAxis()
             && parseInt(this.axisId, 10) >= this.rawData.length - 1;
     }
 

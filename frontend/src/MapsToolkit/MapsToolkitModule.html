@@ -80,13 +80,13 @@
             </div>
             <div flex="50" layout="row" layout-align="end center">
                 <md-button class="md-raised md-primary"
-                    ng-hide="vm.isLastAxisLastDomain()"
+                    ng-hide="vm.isLastAxisLastDomain() || vm.isLastDomainInAxis()"
                     ng-click="vm.goToNextDomain()">
                     Go to next domain
                     <md-icon>arrow_forward</md-icon>
                 </md-button>
-                <md-button class="md-primary md-raised" ng-show="vm.isLastAxisLastDomain()" ui-sref="summary">
-                    Go to scorecard
+                <md-button class="md-primary md-raised" ng-show="vm.isLastDomainInAxis()" ui-sref="scorecard({axisId: vm.axisId})">
+                    Show scorecard
                     <md-icon>insert_chart</md-icon>
                 </md-button>
             </div>
