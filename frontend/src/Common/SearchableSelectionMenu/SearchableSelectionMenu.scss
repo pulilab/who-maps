@@ -26,6 +26,10 @@
       }
     }
   }
+
+  md-select-menu {
+    overflow-y: visible;
+  }
 }
 
 md-select.small,
@@ -103,7 +107,7 @@ ssmenu.multiline {
   .option-group-title,
   .selection-limit {
     display: block;
-    padding: 10px 0 5px 10px;
+    padding: 5px 0 5px 10px;
     color: $color-gray-light;
     text-transform: uppercase;
     font-weight: 500;
@@ -111,14 +115,18 @@ ssmenu.multiline {
   }
 
   .selection-limit {
-    padding-bottom: 0;
-    color: $color-gray;
+    color: $color-white;
     text-transform: none;
+    position: fixed;
+    background: white;
+    width: 98%;
+    background: $color-red;
+    top: -25px;
 
     &::before {
       float: left;
       margin-right: 3px;
-      color: $color-gray-light;
+      color: $color-white;
       content: "warning";
 
       @include md-icon(16px);
