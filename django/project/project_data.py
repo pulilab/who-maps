@@ -50,8 +50,12 @@ project_structure = {
             "Voice"
         ],
         "licenses": [
-            "license 1",
-            "license 2"
+            "Public domain",
+            "Non protective free and open source software (e.g. Apache)",
+            "Protective free and open source software",
+            "Freemium",
+            "Proprietary",
+            "Other (to be justified)"
         ],
         "digital_tools": [
             "digi tool 1",
