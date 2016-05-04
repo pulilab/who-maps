@@ -94,11 +94,11 @@ def _create_db():
 
 
 def _backup_db():
-    run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ../dump.sql')
+    run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
 
 
 def _restore_db():
-    run('cat ../dump.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+    run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
     # run('cat ../dump.json | docker exec -i whomaps_django_1 python manage.py loaddata_stdin')
 
 
