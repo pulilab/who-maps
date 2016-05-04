@@ -1,3 +1,4 @@
+import _ from 'lodash';
 
 class SkeletonController {
 
@@ -5,9 +6,9 @@ class SkeletonController {
 
         const parent = $scope.$parent.vm;
 
-        this.axis = parent.axis;
-        this.domain = parent.domain;
-        this.data = parent.data;
+        this.axis = +parent.axis;
+        this.domain = +parent.domain;
+        this.data = _.cloneDeep(parent.data);
         this.text = parent.text;
         this.icons = parent.icons;
 
@@ -16,11 +17,9 @@ class SkeletonController {
         this.templates = this.importHtmlTemplates();
 
         this.data = this.data.map((axis, aInd) => {
-            axis.expand = aInd - 2 === this.axis;
+            axis.expand = (aInd - 2) === this.axis;
             return axis;
         });
-
-        // $scope.$watch(() => this.templates);
     }
 
     importHtmlTemplates() {
@@ -35,10 +34,10 @@ class SkeletonController {
 
     changeSpot(axisId, domainId) {
         domainId = domainId || 0;
-        this.domainActivationSetter(+this.axis, +this.domain, false);
+        this.domainActivationSetter(this.axis, this.domain, false);
         this.axis = axisId;
         this.domain = domainId;
-        this.domainActivationSetter(+this.axis, +this.domain, true);
+        this.domainActivationSetter(this.axis, this.domain, true);
     }
 
     domainActivationSetter(axisId, domainId, state) {
