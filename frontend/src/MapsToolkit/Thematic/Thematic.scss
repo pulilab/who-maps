@@ -37,7 +37,11 @@ md-dialog {
 
 			.axes {
 
-				border-top: 1px solid $color-gray-light;
+				border-bottom: 1px solid $color-gray-light;
+
+				&:first-of-type {
+					border-top: 1px solid $color-gray-light;
+				}
 
 				.axis {
 
@@ -53,7 +57,12 @@ md-dialog {
 						background-color: gray;
 						padding: 5px 5px;
 
-
+						&.active-axis-1 {
+							background-color: $text-primary;
+						}
+						&.active-axis0 {
+							background-color: $text-primary;
+						}
 						&.active-axis1 {
 							background-color: $color-axis1;
 						}
@@ -98,6 +107,10 @@ md-dialog {
 						top: 15px;
 						right: 15px;
 						z-index: 200;
+
+						md-icon {
+							outline: none;
+						}
 					}
 				}
 
@@ -130,13 +143,18 @@ md-dialog {
 					color: white;
 					font-size: 32px;
 					padding: 29px 60px;
+
+					img {
+						height: 24px;
+						width: auto;
+					}
 				}
 
 				&.axis-1 {
-					background-color: $color-gray;
+					background-color: $text-primary;
 				}
 				&.axis0 {
-					background-color: $color-gray;
+					background-color: $text-primary;
 				}
 				&.axis1 {
 					background-color: $color-axis1;

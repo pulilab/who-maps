@@ -7,16 +7,12 @@
 
     <md-dialog-content layout="row">
 
-    	<div class="left">
+    	<md-content class="left">
 
     		<span class="head">Thematic overview</span>
     		<span class="subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam eligendi culpa, quidem voluptates. Quidem magni recusandae vel id autem dolorum. Pariatur explicabo dicta, expedita perspiciatis voluptate optio minima architecto temporibus.</span>
 
-	        TODO: changing contents, links inside
-	        TODO: about & interaction title / icon
-	        TODO: scrollable left/right sides
-	        TODO: html bindings
-
+	        <code><u>TODO:</u> changing contents, links inside</code>
 
 	        <div class="axes" ng-repeat="(axisId, axis) in vm.data track by $index">
 
@@ -65,7 +61,7 @@
 
 	        	</div>
 	        </div>
-    	</div>
+    	</md-content>
 
 		<div class="right" layout="column" flex md-whiteframe="24">
 
@@ -83,11 +79,11 @@
 				</div>
 			</div>
 
-			<div class="right-content">
+			<md-content class="right-content">
 				This should be some content about <code>axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}</code><br>
 				AXIS: {{vm.axis}}<br>
 				DOMAIN: {{vm.domain}}<br>
-			</div>
+			</md-content>
 
 		</div>
 

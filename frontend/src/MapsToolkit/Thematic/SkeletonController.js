@@ -14,7 +14,7 @@ class SkeletonController {
         this.domainActivationSetter(+this.axis, +this.domain, true);
 
         this.data = this.data.map((axis, aInd) => {
-            axis.expand = aInd === this.axis;
+            axis.expand = aInd - 2 === this.axis;
             return axis;
         });
 
