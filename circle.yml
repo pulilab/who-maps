@@ -31,6 +31,12 @@ test:
     # - docker exec -it whomaps_django_1 python manage.py migrate
     # - docker exec -it whomaps_django_1 python manage.py test
 
+deployment:
+  dev:
+    branch: fab-deploy
+    commands:
+      - cd django && fab dev deploy
+
 general:
   branches:
     ignore:
