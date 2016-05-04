@@ -12,7 +12,6 @@
     		<span class="head">Thematic overview</span>
     		<span class="subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam eligendi culpa, quidem voluptates. Quidem magni recusandae vel id autem dolorum. Pariatur explicabo dicta, expedita perspiciatis voluptate optio minima architecto temporibus.</span>
 
-	        TODO: left/opening/closing, activating
 	        TODO: changing contents, links inside
 	        TODO: about & interaction title / icon
 	        TODO: scrollable left/right sides
@@ -21,7 +20,7 @@
 
 	        <div class="axes" ng-repeat="(axisId, axis) in vm.data track by $index">
 
-	        	<div class="axis" layout="row" ng-click="vm.changeSpot(+axisId - 2, 0)">
+	        	<div class="axis" layout="row">
 
 					<div flex layout="row">
 		        		<div
@@ -34,7 +33,10 @@
 
 		        		</div>
 
-		        		<div class="titles" layout="column">
+		        		<div
+		        			class="titles"
+		        			layout="column"
+		        			ng-class="(+vm.axis + 2) == $index ? 'active' : ''">
 
 		        			<span ng-if="$index > 1" flex>
 		        				{{'AXIS ' + ($index - 1) + '.'}}<br>
@@ -45,18 +47,21 @@
 					</div>
 
 	        		<div class="expander">
-	        			<md-icon>expand_more</md-icon>
+	        			<md-icon ng-if="!axis.expand" ng-click="axis.expand=true">expand_more</md-icon>
+	        			<md-icon ng-if="axis.expand" ng-click="axis.expand=false">expand_less</md-icon>
 	        		</div>
 
 	        	</div>
 
 	        	<div
 	        		class="domain"
+	        		ng-hide="!axis.expand"
 	        		ng-repeat="(domainId, domain) in axis.domains"
 	        		ng-click="vm.changeSpot(+axisId - 2, +domainId)"
 	        		ng-class="{'active-domain': domain.active}">
 
-	        		<span>DOMAIN {{domain.id}}: {{domain.name}}</span>
+	        		<span ng-if="axisId > 1">DOMAIN {{domain.id}}: {{domain.name}}</span>
+	        		<span ng-if="axisId < 2">{{domain.name}}</span>
 
 	        	</div>
 	        </div>
@@ -68,7 +73,12 @@
 				<div class="right-title">
 
 					<img ng-src="{{vm.icons[+vm.axis + 2]}}">
-					AXIS {{+vm.axis + 1}}. - {{vm.data[+vm.axis + 2].domains[+vm.domain].name}}
+
+					<span ng-if="vm.axis > -1">AXIS {{+vm.axis + 1}}. - {{vm.data[+vm.axis + 2].domains[+vm.domain].name}}
+					</span>
+
+					<span ng-if="vm.axis < 0">{{vm.data[+vm.axis + 2].domains[+vm.domain].name}}</span>
+
 
 				</div>
 			</div>

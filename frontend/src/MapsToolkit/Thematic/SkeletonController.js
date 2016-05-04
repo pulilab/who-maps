@@ -1,10 +1,7 @@
-// import angular from 'angular';
 
 class SkeletonController {
 
     constructor($scope) {
-
-        // console.log('SkeletonController loaded!!');
 
         const parent = $scope.$parent.vm;
 
@@ -15,6 +12,11 @@ class SkeletonController {
         this.icons = parent.icons;
 
         this.domainActivationSetter(+this.axis, +this.domain, true);
+
+        this.data = this.data.map((axis, aInd) => {
+            axis.expand = aInd === this.axis;
+            return axis;
+        });
 
     }
 

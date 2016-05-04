@@ -2,10 +2,32 @@ const mockStructure = [
 
     {
         name: 'About',
-        domains: []
+        domains: [
+            {
+                name: 'About #1',
+                templateUrl: ''
+            }, {
+                name: 'About #2',
+                templateUrl: ''
+            }, {
+                name: 'About #3',
+                templateUrl: ''
+            }
+        ]
     }, {
         name: 'Introduction',
-        domains: []
+        domains: [
+            {
+                name: 'Introduction #1',
+                templateUrl: ''
+            }, {
+                name: 'Introduction #2',
+                templateUrl: ''
+            }, {
+                name: 'Introduction #3',
+                templateUrl: ''
+            }
+        ]
     }, {
         name: 'Groundwork',
         domains: [
