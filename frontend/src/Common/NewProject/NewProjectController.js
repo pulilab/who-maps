@@ -20,9 +20,21 @@ class NewProjectController extends ProjectDefinition {
         this.log = this.log.bind(this);
     }
 
+    importIconTemplates() {
+        // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const templates = {};
+        const templateRequire = require.context('./Resources/images/', true, /\.svg$/);
+        templateRequire.keys().forEach((item) => {
+            const key = item.split('.')[1].replace('/', '');
+            templates[key] = templateRequire(item);
+        });
+        return templates;
+    }
+
     processAxisStructure(structure) {
+        const icons = this.importIconTemplates();
         _.forEach(structure, element => {
-            element.img = require(element.image);
+            element.img = icons[element.image];
         });
         return structure;
     }
@@ -30,17 +42,18 @@ class NewProjectController extends ProjectDefinition {
     handleDataLoad(data) {
         this.dataLoaded = true;
         this.structure = data;
-        this.structure['strategies'] = ['a', 'b', 'c', 'd'];
         this.structure.coverageTypes = ['clients', 'health_workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
     countryCloseCallback(name) {
         const countries = _.filter(this.structure.countries, { name });
-        this.project.countryName = name;
-        this.project.country = countries[0].id;
-        this.ns.countryDistrict(this.project.country)
-            .then(this.handleDistrictData.bind(this));
+        if (countries.length === 1) {
+            this.project.countryName = name;
+            this.project.country = countries[0].id;
+            this.ns.countryDistrict(this.project.country)
+                .then(this.handleDistrictData.bind(this));
+        }
     }
 
     handleDistrictData(data) {
@@ -71,7 +84,6 @@ class NewProjectController extends ProjectDefinition {
         this.mergeCustomAndDefault(processedForm);
         this.createCoverageArray(processedForm);
         processedForm.date = new Date().toJSON();
-        console.log(processedForm);
         this.ns.newProject(processedForm);
     }
 
