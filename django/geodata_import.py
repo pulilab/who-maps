@@ -42,8 +42,10 @@ def fetch_geodata():
 def topojson():
     print("-- Transforming geodata files with Topojson...")
     for folder in os.listdir(geodata_config.GEOJSON_TEMP_DIR):
+        print("==== " + folder)
         os.chdir(os.path.join(geodata_config.GEOJSON_TEMP_DIR, folder))
         for filename in geodata_config.ADMIN_LEVELS_TO_IMPORT:
+            print("-- " + filename)
             os.system("topojson -p -o {} {}".format("topojson_"+filename, filename))
         print("{} transformed.".format(filename))
 

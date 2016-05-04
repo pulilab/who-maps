@@ -11,7 +11,6 @@ class SearchableSelectionMenuController {
         this.search = {};
         this.isOpen = false;
         this.$onInit = this.initialization.bind(this);
-
     }
 
     initialization() {
