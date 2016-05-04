@@ -9,4 +9,8 @@ SELECTED_FILE_LIST = [
     "bangladesh_geojson.tgz",
     "india_geojson.tgz"
 ]
-ADMIN_LEVELS_TO_IMPORT = ["admin_level_2.geojson", "admin_level_5.geojson"]
+ADMIN_LEVELS_TO_IMPORT = [
+    "admin_level_2.geojson",
+    "admin_level_4.geojson",
+    "admin_level_5.geojson"
+]

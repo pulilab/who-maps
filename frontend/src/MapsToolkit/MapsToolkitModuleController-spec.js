@@ -109,16 +109,6 @@ describe('MapsToolkitModuleController', () => {
         expect(res).toBe(false);
     });
 
-    it('should have a function that disable the forward button', () => {
-        mc.domainId = 1;
-        mc.axisId = 5;
-        let res = mc.isLastAxisLastDomain();
-        expect(res).toBe(true);
-        mc.domainId = 0;
-        res = mc.isLastAxisLastDomain();
-        expect(res).toBe(false);
-    });
-
     it('should have a function that move to the next domain', () => {
         mc.domainId = 0;
         mc.axisId = 5;

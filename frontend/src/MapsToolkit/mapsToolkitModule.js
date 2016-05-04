@@ -46,6 +46,9 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                         },
                         'axisFooter': () => {
                             return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
+                        },
+                        'thematic': () => {
+                            return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
                         }
                     }
                 }
@@ -61,6 +64,12 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     resolve: {
                         'scorecard': () => {
                             return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                        },
+                        'thematic': () => {
+                            return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }
@@ -76,6 +85,12 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     resolve: {
                         'scorecard': () => {
                             return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                        },
+                        'thematic': () => {
+                            return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }

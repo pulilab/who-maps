@@ -1,0 +1,194 @@
+@import '../../variables';
+
+.back-icon {
+
+	color: white;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	font-size: 48px;
+	pointer-events: none;
+}
+
+md-dialog {
+
+	md-dialog-content {
+
+		height: 100vh;
+
+		.left {
+			background-color: #EEEEEE;
+			width: 300px;
+
+			.head {
+				display: block;
+				color: $text-primary;
+				font-weight: 500;
+				font-size: 18px;
+				margin: 20px;
+			}
+
+			.subhead {
+				display: block;
+				color: $text-secondary;
+				margin: 20px;
+				font-size: 12px;
+			}
+
+			.axes {
+
+				border-bottom: 1px solid $color-gray-light;
+
+				&:first-of-type {
+					border-top: 1px solid $color-gray-light;
+				}
+
+				.axis {
+
+					height: 50px;
+					outline: none;
+
+					.iconcontainer {
+
+						display: inline;
+						height: 30px;
+						width: 30px;
+						margin: 10px 5px 10px 20px;
+						background-color: gray;
+						padding: 5px 5px;
+
+						&.active-axis-1 {
+							background-color: $text-primary;
+						}
+						&.active-axis0 {
+							background-color: $text-primary;
+						}
+						&.active-axis1 {
+							background-color: $color-axis1;
+						}
+						&.active-axis2 {
+							background-color: $color-axis2;
+						}
+						&.active-axis3 {
+							background-color: $color-axis3;
+						}
+						&.active-axis4 {
+							background-color: $color-axis4;
+						}
+						&.active-axis5 {
+							background-color: $color-axis5;
+						}
+						&.active-axis6 {
+							background-color: $color-axis6;
+						}
+
+						img {
+							width: 20px;
+							height: 20px;
+						}
+					}
+
+
+					.titles {
+
+						margin: 11px 5px 10px 0;
+						font-size: 12px;
+						font-weight: 500;
+						text-transform: uppercase;
+						color: $text-secondary;
+
+						&.active {
+							color: $text-primary;
+						}
+					}
+
+					.expander {
+						position: relative;
+						top: 15px;
+						right: 15px;
+						z-index: 200;
+
+						md-icon {
+							outline: none;
+							cursor: pointer;
+						}
+					}
+				}
+
+				.domain {
+
+					display: block;
+					height: 30px;
+					line-height: 30px;
+					font-size: 12px;
+					padding-left: 55px;
+					color: $text-secondary;
+					outline: none;
+					cursor: pointer;
+
+					&.active-domain {
+						color: $text-primary;
+					}
+				}
+			}
+		}
+
+		.right {
+
+			.right-header {
+
+				height: 100px;
+
+				.right-title {
+
+					color: white;
+					font-size: 32px;
+					padding: 29px 60px;
+
+					img {
+						height: 24px;
+						width: auto;
+					}
+				}
+
+				&.axis-1 {
+					background-color: $text-primary;
+				}
+				&.axis0 {
+					background-color: $text-primary;
+				}
+				&.axis1 {
+					background-color: $color-axis1;
+				}
+				&.axis2 {
+					background-color: $color-axis2;
+				}
+				&.axis3 {
+					background-color: $color-axis3;
+				}
+				&.axis4 {
+					background-color: $color-axis4;
+				}
+				&.axis5 {
+					background-color: $color-axis5;
+				}
+				&.axis6 {
+					background-color: $color-axis6;
+				}
+			}
+
+			.right-content {
+
+				.axis-html {
+					// Style of the half-dynamic, upper part
+
+				}
+
+				.content-html {
+					// Style of the fully dynamic, lower part
+
+				}
+			}
+		}
+	}
+}
