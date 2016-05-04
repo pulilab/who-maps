@@ -33,7 +33,7 @@ test:
 
 deployment:
   dev:
-    branch: fab-deploy
+    branch: master
     commands:
       - cd django && fab dev deploy
 
