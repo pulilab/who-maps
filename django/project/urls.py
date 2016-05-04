@@ -1,16 +1,12 @@
 from django.conf.urls import url, include
-from rest_framework.routers import DefaultRouter
 
-import project.views as views
+from . import views
 
-router = DefaultRouter()
-router.register(r'projects', views.ProjectViewSet)
 
 urlpatterns = [
-    url(r"^", include(router.urls)),
-    url(r"^templates/project/detail/$", view=views.template_project_detail, name="template-project-detail"),
-    url(r"^templates/project/detail/(?P<project_id>\d+)/$", view=views.template_project_detail, name="template-project-detail-id"),
-    url(r"^publications/(?P<pk>\d+)/$", view=views.get_publication, name="get-publication"),
-    url(r"^reports/(?P<pk>\d+)/$", view=views.get_report, name="get-report"),
-    url(r"^projects/(?P<pk>\d+)/files/$", view=views.create_project_files, name="create-project-files"),
+    url(r"^projects/$", view=views.project_list, name="project-list"),
+    url(r"^projects/(?P<pk>\d+)/$", view=views.project_detail, name="project-detail"),
+    url(r"^projects/structure/$", view=views.get_project_structure, name="get-project-structure"),
+    url(r"^projects/(?P<project_id>\d+)/files/$", view=views.file_list, name="file-list"),
+    url(r"^files/(?P<pk>\d+)/$", view=views.file_detail, name="file-detail"),
 ]

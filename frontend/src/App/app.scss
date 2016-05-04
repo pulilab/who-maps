@@ -18,12 +18,27 @@ ui-view > md-content {
   padding: $layout-gutter-width * 2;
 }
 
+.main-wrapper {
+    position:relative;
+}
+
+md-tooltip {
+  md-background {
+    // background-color: yellow;
+    opacity: 0 !important;
+  }
+}
+
 
 /* TYPOGRAPY
    ============================= */
 
 .page-title {
   color: $color-primary;
+
+  .md-display-1 {
+    font-size: 40px;
+  }
 
   .md-subhead {
     margin-top: 0;
@@ -127,6 +142,11 @@ md-menu-content {
   }
 }
 
+
+.md-subheader-wrapper.ng-scope.md-sticky-clone {
+    margin-left: 0px !important;
+    width: calc(100% - 32px) !important;
+}
 
 /* CUSTOM COLORS
    ============================= */

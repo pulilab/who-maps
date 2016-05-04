@@ -38,6 +38,7 @@ class AppModuleController extends Protected {
 
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
+        this.EE.on('logout', this.handleLogout.bind(this));
     }
 
     handleLoginEvent(forced) {
@@ -46,7 +47,7 @@ class AppModuleController extends Protected {
         }
         this.systemLogin();
         this.fillUserData();
-        this.state.go('hss');
+        this.state.go('dashboard');
     }
 
     updateProject(name) {
@@ -59,7 +60,8 @@ class AppModuleController extends Protected {
         .then(projects => {
             this.user.projects = projects;
             if (this.state.params.appName.length === 0) {
-                this.state.go(this.state.current.name, { 'appName': this.user.projects[0].id });
+                const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
+                this.state.go(state, { 'appName': this.user.projects[0].id });
             }
             _.forEach(this.user.projects, item => {
                 if (item.id === parseInt(this.state.params.appName, 10)) {
@@ -72,7 +74,11 @@ class AppModuleController extends Protected {
     }
 
     handleUnauthorized() {
-        this.state.go('login');
+        this.logout();
+    }
+
+    handleLogout() {
+        this.state.go('login', { projectId: null });
     }
 
     showCompleteNavigation(state, isLogin) {

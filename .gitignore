@@ -17,3 +17,7 @@ npm-debug.log
 *htmlcov/
 *html/public/
 bundle.js
+nginx/site/html/
+django/temp
+nginx/html/
+diff.txt

@@ -1,199 +1,124 @@
 import json
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
-from django.db.models import Q
 
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from core.views import TokenAuthMixin
+from core.views import TokenAuthMixin, get_object_or_400
 from user.models import UserProfile
 from hss.models import HSS
 from hss.hss_data import hss_default
 from toolkit.models import Toolkit
 from toolkit.toolkit_data import toolkit_default
+from country.models import Country
 from .serializers import ProjectSerializer
-from .models import Project, Strategy, Technology, Pipeline, Application
-from .models import Report, Publication
+from .models import Project, File
+from .project_data import project_structure
 
 
-def template_project_detail(request, project_id=None):
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def get_project_structure(request):
     """
-    View for providing temaplte HTML for create/edit project. Fills out form
-    options that is stored in the database.
+    View for providing form data for create/edit project.
     """
-    if project_id:
-        project = Project.objects.get_object_or_none(pk=project_id)
-        if not project:
-            return HttpResponse("No such project.", status=400)
-        else:
-            strategy_options = Strategy.objects.filter(Q(project_specific=False) | Q(id__in=project.strategy.all()))
-            technology_options = Technology.objects.filter(Q(project_specific=False) | Q(id__in=project.technology.all()))
-            pipeline_options = Pipeline.objects.filter(Q(project_specific=False) | Q(id__in=project.pipeline.all()))
-    else:
-        strategy_options = Strategy.objects.filter(Q(project_specific=False))
-        technology_options = Technology.objects.filter(Q(project_specific=False))
-        pipeline_options = Pipeline.objects.filter(Q(project_specific=False))
-
-    application_options = Application.objects.all()
-
-    data = {
-        "strategy_options": strategy_options,
-        "technology_options": technology_options,
-        "pipeline_options": pipeline_options,
-        "application_options": application_options
-    }
-    return render(request, "project/project-detail.html", {"data": data})
+    countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
+    project_structure.update(countries=countries)
+    return Response(project_structure)
 
 
-def get_publication(request, pk):
+@api_view(['POST','GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def project_list(request):
     """
-    View for retrieving publication file.
-    """
-    if request.method == 'GET':
-        publication = Publication.objects.get_object_or_none(id=pk)
-        if publication:
-            return HttpResponse(content=publication.file, content_type="application/pdf")
-        else:
-            return HttpResponse("No such item.", status=400)
-
-
-def get_report(request, pk):
-    """
-    View for retrieving publication file.
-    """
-    if request.method == 'GET':
-        report = Report.objects.get_object_or_none(id=pk)
-        if report:
-            return HttpResponse(content=report.file, content_type="application/pdf")
-        else:
-            return HttpResponse("No such item.", status=400)
-
-
-def create_project_files(request, pk):
-    """
-    Enables to upload files for publications and reports.
-
-    Args:
-        pk: id of the project the artifacts belong to.
+    Project list/create endpoint.
     """
     if request.method == "POST":
-        if pk:
-            project = Project.objects.get_object_or_none(pk=pk)
-            if not project:
-                return HttpResponse("No such project.", status=400)
-            else:
-                # Get and store binary files for publications and reports.
-                for key, value in request.FILES.items():
-                    if "publication" in key:
-                        Publication.objects.create(project_id=project.id, filename=value.name, file=value.read())
-                    elif "report" in key:
-                        Report.objects.create(project_id=project.id, filename=value.name, file=value.read())
-                return HttpResponse()
-
-
-class ProjectViewSet(TokenAuthMixin, ModelViewSet):
-
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-
-    def get_queryset(self):
-        """
-        Returns the queryset filtered by User.
-
-        Returns:
-            QuerysSet
-        """
-        user_id = self.request.user.id
-        user_profile = UserProfile.objects.get(user_id=user_id)
-        return Project.objects.filter(organisation=user_profile.organisation)
-
-    def _prepare_serializer(self, request):
-        def pop_or_empty(key):
-            """
-            Boilerplate code for handling KeyError in case of dict.pop().
-
-            Args:
-                key (string): The key we need to pop.
-
-            Returns:
-                list: empty list on KeyError, otherwise the result of pop()
-            """
-            try:
-                return self.serializer.initial_data.pop(key)
-            except KeyError:
-                return []
-
-        # Get "other" fields from the POST data.
-        strategy_other = pop_or_empty("strategy_other")
-        technology_other = pop_or_empty("technology_other")
-        pipeline_other = pop_or_empty("pipeline_other")
-
-        # Get new publications and reports.
-        publications_new = pop_or_empty("publications_new")
-        reports_new = pop_or_empty("reports_new")
-
-        # Get deleted publications and reports.
-        publications_deleted = pop_or_empty("publications_deleted")
-        reports_deleted = pop_or_empty("reports_deleted")
-
-        if self.serializer.is_valid():
-            # Create the "other" fields in the database,
-            # and put back their ID to the original POST data.
-            for name in strategy_other:
-                item = Strategy.objects.create(name=name, project_specific=True)
-                self.serializer.validated_data["strategy"].append(item.id)
-
-            for name in technology_other:
-                item = Technology.objects.create(name=name, project_specific=True)
-                self.serializer.validated_data["technology"].append(item.id)
-
-            for name in pipeline_other:
-                item = Pipeline.objects.create(name=name, project_specific=True)
-                self.serializer.validated_data["pipeline"].append(item.id)
-
-            project = self.serializer.save()
-
-            # Store new publications and reports.
-            for item in publications_new:
-                Publication.objects.create(project_id=project.id, url=item)
-
-            for item in reports_new:
-                Report.objects.create(project_id=project.id, url=item)
-
-            # Delete removed publications and reports.
-            Publication.objects.filter(project_id=project.id, id__in=publications_deleted).delete()
-            Report.objects.filter(project_id=project.id, id__in=reports_deleted).delete()
-
-            return True
-        else:
-            return False
-
-    def update(self, request, *args, **kwargs):
-        """
-        Overridden update() method so that it can handle "other" fields,
-        and publications, reports as well.
-        """
-        instance = self.get_object()
-        self.serializer = self.get_serializer(instance, data=request.data)
-        if self._prepare_serializer(request):
-            return Response(self.serializer.data)
-        else:
-            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def create(self, request):
-        """
-        Overridden create() method so that it can handle "other" fields,
-        and publications, reports as well.
-        """
-        self.serializer = self.get_serializer(data=request.data)
-        if self._prepare_serializer(request):
+        serializer = ProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            project = Project.objects.create(name=serializer.data["name"], data=serializer.data)
+            project.save()
             # Add default HSS structure for the new project.
-            HSS.objects.create(project_id=self.serializer.data.get("id"), data=hss_default)
+            HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.
-            Toolkit.objects.create(project_id=self.serializer.data.get("id"), data=toolkit_default)
-            return Response(self.serializer.data, status=status.HTTP_201_CREATED)
+            Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+            data = dict(serializer.data)
+            data.update(id=project.id)
+            return Response(data, status=status.HTTP_201_CREATED)
         else:
-            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "GET":
+        user_profile = UserProfile.objects.get(user_id=request.user.id)
+        projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
+        return Response(projects)
+
+
+@api_view(['POST','GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def project_detail(request, pk):
+    """
+    Project retrieve/update endpoint.
+    """
+    if request.method == "POST":
+        serializer = ProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            project = get_object_or_400(Project, "No such project", id=pk)
+            project.data = serializer.data
+            project.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "GET":
+        project = get_object_or_400(Project, "No such project", id=pk)
+        data = project.data
+        data.update(id=project.id)
+        return Response(project.data)
+
+
+@api_view(['GET', 'POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def file_list(request, project_id):
+    """
+    Enables to upload/list files for publications and reports.
+
+    Args:
+        project_id: id of the project the artifacts belong to.
+    """
+    if request.method == "POST":
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        # Get and store binary files for publications and reports.
+        for key, value in request.FILES.items():
+            if "publication" in key:
+                file_type = "publication"
+            elif "report" in key:
+                file_type = "report"
+            File.objects.create(project_id=project.id, type=file_type, filename=value.name, data=value.read())
+        return HttpResponse()
+    if request.method == "GET":
+        files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
+        return Response(files)
+
+
+@api_view(['GET', 'DELETE'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def file_detail(request, pk):
+    """
+    View for retrieving file.
+    """
+    if request.method == "GET":
+        file = get_object_or_400(File, "No such file.", id=pk)
+        return HttpResponse(content=file.data, content_type="application/pdf")
+    if request.method == "DELETE":
+        file = get_object_or_400(File, "No such file.", id=pk)
+        file.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,3 +1,5 @@
+/* global define DEV */
+
 // General imports
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
@@ -23,8 +25,7 @@ import { Components } from '../Common/';
 
 
 const moduleName = 'app';
-
-function config($stateProvider, $urlRouterProvider) {
+const config = ($stateProvider, $urlRouterProvider) => {
     $stateProvider
         .state(moduleName,
         {
@@ -55,7 +56,19 @@ function config($stateProvider, $urlRouterProvider) {
         });
 
     $urlRouterProvider.otherwise('/app//landing');
-}
+};
+
+function logUiRouteEvents(...args) { console.log(`Ui route state change ${this} :`, args); }
+
+const run = ($rootScope) => {
+    if (DEV) {
+        $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
+        $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
+    }
+};
+
+run.$inject = ['$rootScope'];
+
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
@@ -75,6 +88,8 @@ angular.module(moduleName,
     ]
 )
     .controller(moduleName + '.appController', AppController.appControllerFactory())
-    .config(config);
+    .config(config)
+    .run(run);
+
 
 export default moduleName;

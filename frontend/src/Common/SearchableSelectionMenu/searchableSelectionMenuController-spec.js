@@ -7,23 +7,64 @@ const $timeout = arg => {
     arg();
 };
 const $scope = {
-    $watch: () => {}
+    $watch: (preFun, fun) => {
+        preFun();
+        fun(true);
+    }
 };
 
+let tmp = void 0;
 const $element = {
     find: () => {
         return [tmp];
     }
 };
-let tmp = void 0;
 
 describe('searchableSelectionMenuController', () => {
 
     beforeEach(() => {
+        spyOn(SearchableSelectionMenuController.prototype, 'initialization').and.callThrough();
+        spyOn(SearchableSelectionMenuController.prototype, 'fixComma').and.callThrough();
         sc = SearchableSelectionMenuController.ssMenuFactory()($element, $timeout, $scope);
         tmp = document.createElement('span');
         tmp.innerHTML = 'a,b,c,d';
     });
+
+    it('should have a function that initialize the comoponent', () => {
+        spyOn(sc, 'prepareOptionsArray');
+        spyOn(sc, 'watchers');
+        sc.$onInit();
+        expect(sc.initialization).toHaveBeenCalled();
+        expect(sc.prepareOptionsArray).toHaveBeenCalled();
+        expect(sc.fixComma).toHaveBeenCalled();
+        expect(sc.watchers).toHaveBeenCalled();
+    });
+
+    it('should have a function that if the limit is set stop the content selection to the limit value', () => {
+        sc.ngModel = [1, 2];
+        sc.checkLimit();
+        expect(sc.ngModel.length).toBe(2);
+        sc.limit = 1;
+        sc.checkLimit();
+        expect(sc.ngModel.length).toBe(1);
+    });
+
+    it('should have a function that set some scope watchers', () => {
+        spyOn(sc, 'prepareOptionsArray');
+        spyOn(sc, 'checkLimit');
+        sc.watchers();
+        expect(sc.prepareOptionsArray).toHaveBeenCalled();
+        expect(sc.checkLimit).toHaveBeenCalled();
+    })
+
+    it('should have a function that prepare the options array according to the input values', () => {
+        sc.options = [1, 2];
+        sc.prepareOptionsArray();
+        expect(sc.fields[0][0][0]).toBe(1);
+        sc.subOptions = ['sub'];
+        sc.prepareOptionsArray();
+        expect(sc.fields[0]).toBe(1)
+    })
 
     it('should have a function that stop events immediate propagation', () => {
         const eventSpy = jasmine.createSpy('eventSpy');
@@ -49,7 +90,6 @@ describe('searchableSelectionMenuController', () => {
     });
 
     it('should have a function that set the open flag to false and call the fix comma function', () => {
-        spyOn(sc, 'fixComma');
         sc.isOpen = true;
         sc.selectClose();
         expect(sc.isOpen).toBeFalsy();

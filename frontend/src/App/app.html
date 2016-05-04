@@ -8,7 +8,7 @@
                 <md-icon class="material-icons">public</md-icon>
                 Country View
             </md-button>
-            <md-button aria-label="Go to Dashboard" class="view-selector" ui-sref="hss" ng-if="vm.isLogin" md-no-ink>
+            <md-button aria-label="Go to Dashboard" class="view-selector" ui-sref="dashboard" ng-if="vm.isLogin" md-no-ink>
                 <md-icon class="material-icons ">dashboard</md-icon>
                 Dashboard
             </md-button>
@@ -57,6 +57,7 @@
                 </md-menu-content>
             </md-menu>
 
+
             <md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation">
 
                 <md-button class="md-icon-button" aria-label="Notification" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
@@ -76,6 +77,9 @@
                 <md-icon class="material-icons">add</md-icon>
                 New Project
             </md-button>
+
+
+
         </div>
     </md-toolbar>
     <md-toolbar class="md-medium-tall" ng-if="vm.showFullNavigation">
@@ -83,10 +87,10 @@
           <div class="project-mainmenu">
             <md-button ui-sref="dashboard" ui-sref-active="active" md-no-ink>Dashboard</md-button>
               <md-button ui-sref="hss" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
-              <md-button ui-sref="settings" ui-sref-active="active" md-no-ink>Edit Project</md-button>
-              <md-button ui-sref="#" ui-sref-active="active" md-no-ink>Improve Project</md-button>
-              <md-button ui-sref="" ui-sref-active="active" md-no-ink>Update Score</md-button>
-              <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Summary Score</md-button>
+              <md-button ui-sref="edit-project" ui-sref-active="active" md-no-ink>Edit Project</md-button>
+              <md-button ui-sref="#" ng-if="false" ui-sref-active="active" md-no-ink>Improve Project</md-button>
+              <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Update Score</md-button>
+              <md-button ui-sref="summary" ui-sref-active="active" md-no-ink>Summary Score</md-button>
           </div>
             <div flex></div>
             <div class="project-submenu" layout="row">

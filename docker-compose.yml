@@ -17,6 +17,7 @@ nginx:
   volumes:
     - ./nginx/site:/usr/share/nginx/html:ro
     - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
   links:
     - django:django
 

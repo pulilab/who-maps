@@ -12,6 +12,7 @@ import searchbarComponent from './Searchbar/searchbar';
 import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
 import SignupComponent from './Signup/signupComponent';
+import AxisComponent from './Axis/axisComponent';
 
 const moduleName = 'Components';
 
@@ -22,7 +23,8 @@ angular.module(moduleName, [])
     .component(projectComponent.name, projectComponent)
     .component(searchbarComponent.name, searchbarComponent)
     .component(LoginComponent.name, LoginComponent)
-    .component(SignupComponent.name, SignupComponent);
+    .component(SignupComponent.name, SignupComponent)
+    .component(AxisComponent.name, AxisComponent);
 
 
 export { EE };

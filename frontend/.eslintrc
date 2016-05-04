@@ -91,7 +91,7 @@
     "no-labels": 1,
     "no-lone-blocks": 1,
     "no-loop-func": 1,
-    "no-multi-spaces": 1,
+    "no-multi-spaces": 0,
     "no-multi-str": 1,
     "no-native-reassign": 1,
     "no-new-func": 1,
@@ -204,7 +204,7 @@
     "babel/object-shorthand": [1, "always"],
     // "babel/generator-star": 1, // deprecated
     "babel/generator-star-spacing": [1, "after"],
-    "babel/new-cap": 1,
+    "babel/new-cap": 0,
     "babel/object-curly-spacing": [1, "always"]
     // "babel/space-in-brackets": 1, // deprecated
 
