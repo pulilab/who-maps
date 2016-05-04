@@ -36,6 +36,10 @@ md-tooltip {
 .page-title {
   color: $color-primary;
 
+  .md-display-1 {
+    font-size: 40px;
+  }
+
   .md-subhead {
     margin-top: 0;
     margin-left: 10%;
@@ -122,6 +126,19 @@ md-checkbox.small {
   }
   .md-label {
     margin-left: 24px;
+  }
+}
+
+// Md-menu
+
+md-menu-content {
+  .menu-group-title {
+    display: block;
+    padding: 10px 15px;
+    color: $color-gray-light;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: $caption-font-size-base;
   }
 }
 
@@ -212,20 +229,33 @@ md-checkbox.small {
     font-size: $body-font-size-base;
 
     .md-button {
-      margin-left: 10px;
+      margin-left: 12px;
+
+      &.view-selector {
+        margin-right: 12px;
+      }
+
+      .material-icons {
+        transform: translateY(-1px);
+      }
+    }
+
+    .add-new-project {
+      margin-left: 24px;
+      margin-right: 12px;
     }
   }
 
   .app-title {
     display: inline-block;
-    margin: 0 10px 0 0 !important;
+    margin: 0 24px 0 0 !important;
     padding: 4px 0;
     min-height: 28px;
     height: 28px;
 
     > span {
       display: inline-block;
-      min-width: 155px;
+      min-width: 165px;
       height: 24px;
       background: red url("./images/dha-logo.svg") left center no-repeat;
       text-indent: -999em;
@@ -236,74 +266,108 @@ md-checkbox.small {
 }
 
 .md-medium-tall {
-    color: $color-primary-muted !important;
 
   .md-toolbar-tools {
     background-color: $color-primary;
   }
 
+  .md-toolbar-tools-bottom {
+    background-color: $color-white;
+    box-shadow: 0 1px 0 #BDBDBD;
+  }
+
   .project-selector {
     md-input-container {
-      margin: 0 !important;
+      margin: 0 0 0 12px !important;
       padding: 0 !important;
 
       md-select {
+        transform: translateY(-4px);
+
         .md-select-value {
           padding-left: 0;
           border: none;
-          color: $color-white;
+          color: $text-primary;
+        }
+
+        .md-select-icon {
+          margin: 0;
         }
       }
     }
   }
 
   .project-submenu {
-    padding-top: 8px;
-
     .md-button {
-      margin-left: 20px;
+      margin: 0 12px;
     }
   }
 
   .project-mainmenu {
-    padding-bottom: 8px;
-
     .md-button {
       position: relative;
-      margin-right: 20px;
       overflow: visible;
+      margin-right: 10px;
+      padding: 0 12px !important;
+      line-height: 48px;
+
+      &.active {
+        background-color: #fff !important;
+
+        > span {
+          color: $color-primary !important;
+        }
+      }
     }
   }
 
   .project-info {
-    padding-bottom: 8px;
-    font-size: $caption-font-size-base;
+    color: $color-gray;
+    font-size: $body-font-size-base;
 
     > span {
       display: inline-block;
       float: left;
-      margin-left: 20px;
       min-height: 36px;
       line-height: 36px;
 
+      &.menu-separator {
+        margin: 10px 12px 10px 12px;
+        width: 1px;
+        min-height: 16px;
+        height: 16px;
+        line-height: 16px;
+        background-color: #BDBDBD;
+      }
     }
 
     .md-button {
       float: right;
-      margin: 0 0 0 5px;
+      margin: 0 12px 0 5px;
+
+      .material-icons,
+      > span {
+        color: $color-gray !important;
+      }
+
+      &:hover {
+        .material-icons,
+        > span {
+          color: $text-primary !important;
+        }
+      }
     }
   }
 }
 
-.main-toolbar,
-.md-medium-tall {
+.md-toolbar-tools {
   .md-button {
-    min-width: auto;
     margin: 0;
-    padding-left: 0 !important;
     padding-right: 0 !important;
-    background-color: transparent !important;
+    padding-left: 0 !important;
+    min-width: auto;
     border-radius: 0;
+    background-color: transparent !important;
 
     .material-icons,
     > span {
@@ -316,23 +380,6 @@ md-checkbox.small {
       .material-icons,
       > span {
         color: $color-white !important;
-      }
-    }
-
-    &.active {
-      > span {
-        position: relative;
-        color: $color-white !important;
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background-color: $color-accent;
       }
     }
   }

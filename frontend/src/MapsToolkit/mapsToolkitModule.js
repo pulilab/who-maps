@@ -67,6 +67,9 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                         },
                         'thematic': () => {
                             return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }
@@ -85,6 +88,9 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                         },
                         'thematic': () => {
                             return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                        },
+                        'axisFooter': () => {
+                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
                         }
                     }
                 }

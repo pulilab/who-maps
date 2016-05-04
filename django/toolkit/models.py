@@ -80,3 +80,9 @@ class Toolkit(ExtendedModel):
         self.data[axis]["axis_completion"] = axis_completion
 
         self.save()
+
+
+class ToolkitVersion(ExtendedModel):
+    project = models.ForeignKey(Project)
+    version = models.IntegerField()
+    data = JSONField()
