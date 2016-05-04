@@ -1,42 +1,67 @@
 from fabric.api import local, settings, abort, run, cd, env, lcd
+from fabric.contrib.console import confirm
+import time
 
 # ENVIRONMENTS #
 
 
 def dev():
     """Configure dev"""
-    env.hosts = ['IP']
+    env.hosts = ['whomaps@dev.whomaps.pulilab.com']
     env.name = 'dev'
-    env.port = 21215
+    env.port = 22
     env.branch = "master"
-
-    env.project_root = '/home/' # TODO: fix this
+    env.project_root = '/home/whomaps/who-maps'
+    env.backend_root = 'django'
+    env.frontend_root = 'frontend'
 
 
 def staging():
     """Configure staging"""
-    env.hosts = ['test.whomaps.pulilab.com']
+    env.hosts = ['whomaps@test.whomaps.pulilab.com']
     env.name = 'staging'
-    env.port = 21215
-    env.branch = "staging"
-
-    env.project_root = '/home/'
+    env.port = 22
+    env.branch = "master"
+    env.project_root = '/home/whomaps/who-maps'
+    env.backend_root = 'django'
+    env.frontend_root = 'frontend'
 
 
 # COMMANDS #
 
-
 def deploy():
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
-        _run_with_failure('git checkout %s' % env.branch, 'Git checkout failed.')
-        _run_with_failure('git pull origin %s' % env.branch, 'Git pull failed.')
+        # get new stuff from git
+        run('git checkout %s' % env.branch)
+        run('git pull origin %s' % env.branch)
 
-        # TODO:
-        # - npm install
-        # - npm run dist
-        # - compose build
-        # - compose up -d
+        # handle backend
+        with cd(env.backend_root):
+            # backup DB
+            _backup_db()
+            # build
+            run('docker-compose build', 'Docker build failed.')
+
+            # drop & create DB
+            time.sleep(1)
+            _drop_db()
+            time.sleep(1)
+            _create_db()
+            # restore DB
+            time.sleep(1)
+            _restore_db()
+            # migrate DB
+            time.sleep(1)
+            _migrate_db()
+
+            # restart
+            run('docker-compose restart', 'Docker restart failed.')
+
+        # handle frontend
+        with cd(env.frontend_root):
+            run('npm install')
+            run('npm run dist')
 
     tear_down()
 
@@ -60,14 +85,22 @@ def import_geodata():
     local("docker exec -it whomaps_django_1 python manage.py import_geodata")
 
 
-def _run_with_failure(command, question):
-    """Utility script to run a command with a confirmation to exit on failure
+def _drop_db():
+    run('docker exec -it whomaps_postgres_1 dropdb -U postgres postgres')
 
-    :param command: the command to run
-    :param question: the user friendly notice what failed
-    """
-    with settings(warn_only=True):
-        result = run(command)
-    if result.failed and (not env.interactive or not confirm("%s Continue anyway?" % question)):
-        abort('Aborting on your request because of error in command %s' % command)
-        tear_down()
+
+def _create_db():
+    run('docker exec -it whomaps_postgres_1 createdb -U postgres postgres')
+
+
+def _backup_db():
+    run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ../dump.sql')
+
+
+def _restore_db():
+    run('cat ../dump.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+    # run('cat ../dump.json | docker exec -i whomaps_django_1 python manage.py loaddata_stdin')
+
+
+def _migrate_db():
+    run('docker exec -it whomaps_django_1 python manage.py migrate')
