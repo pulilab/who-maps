@@ -30,7 +30,10 @@
                 </md-input-container>
 
                 <ssmenu
-                        ngModel="vm.project.strategy"
+                        options="vm.structure.strategies"
+                        on-close-callback="vm.setStrategy"
+                        multiple="true"
+                        ng-model="vm.project.strategy"
                         placeholder="Select strategies from list"
                         hint="What is your mHealth project strategy to address the health need?"
                 ></ssmenu>
@@ -45,97 +48,97 @@
 
                 <div ng-class="{disabled: vm.disableDetails()}">
 
-                    <p>What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</p>
+                    <!--<p>What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</p>-->
 
-                    <section md-layout="row" layout-wrap>
-                        <h6 flex="100">Technology Platforms:</h6>
-                        <md-checkbox
-                                ng-repeat="t in vm.structure.technology_platforms"
-                                ng-checked="vm.technologyPlatformChecked(t)"
-                                ng-click="vm.technologyPlatformChange(t)"
-                                flex="30"
-                                aria-label="{{ t }}"
-                                class="">
-                            {{ t }}
-                        </md-checkbox>
-                        <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">
-                            <md-input-container flex>
-                                <label>Other</label>
-                                <input type="text" ng-model="c.value" />
-                            </md-input-container>
-                            <md-button ng-hide="$last" ng-click="vm.rmTechnologyPlatform(c)" layout="column" class="md-icon-button red">
-                                <md-icon>delete_forever</md-icon>
-                            </md-button>
-                            <md-button ng-show="$last" ng-click="vm.addTechnologyPlatform()" layout="column" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
-                    </section>
+                    <!--<section md-layout="row" layout-wrap>-->
+                        <!--<h6 flex="100">Technology Platforms:</h6>-->
+                        <!--<md-checkbox-->
+                                <!--ng-repeat="t in vm.structure.technology_platforms"-->
+                                <!--ng-checked="vm.technologyPlatformChecked(t)"-->
+                                <!--ng-click="vm.technologyPlatformChange(t)"-->
+                                <!--flex="30"-->
+                                <!--aria-label="{{ t }}"-->
+                                <!--class="">-->
+                            <!--{{ t }}-->
+                        <!--</md-checkbox>-->
+                        <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">-->
+                            <!--<md-input-container flex>-->
+                                <!--<label>Other</label>-->
+                                <!--<input type="text" ng-model="c.value" />-->
+                            <!--</md-input-container>-->
+                            <!--<md-button ng-hide="$last" ng-click="vm.rmTechnologyPlatform(c)" layout="column" class="md-icon-button red">-->
+                                <!--<md-icon>delete_forever</md-icon>-->
+                            <!--</md-button>-->
+                            <!--<md-button ng-show="$last" ng-click="vm.addTechnologyPlatform()" layout="column" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
+                    <!--</section>-->
 
-                    <section md-layout="row">
-                        <h6 flex="100">License:</h6>
-                        <md-checkbox
-                                ng-repeat="l in vm.structure.licenses"
-                                ng-checked="vm.licenseChecked(l)"
-                                ng-click="vm.licenseChange(l)"
-                                flex="30"
-                                aria-label="{{ l }}"
-                                class="">
-                            {{ l }}
-                        </md-checkbox>
-                        <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.licenses.custom">
-                            <md-input-container flex>
-                                <label>Other</label>
-                                <input type="text" ng-model="c.value" />
-                            </md-input-container>
-                            <md-button ng-hide="$last" ng-click="vm.rmLicense(c)" layout="column" class="md-icon-button red">
-                                <md-icon>delete_forever</md-icon>
-                            </md-button>
-                            <md-button ng-show="$last" layout="column" ng-click="vm.addLicense()" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
-                    </section>
+                    <!--<section md-layout="row">-->
+                        <!--<h6 flex="100">License:</h6>-->
+                        <!--<md-checkbox-->
+                                <!--ng-repeat="l in vm.structure.licenses"-->
+                                <!--ng-checked="vm.licenseChecked(l)"-->
+                                <!--ng-click="vm.licenseChange(l)"-->
+                                <!--flex="30"-->
+                                <!--aria-label="{{ l }}"-->
+                                <!--class="">-->
+                            <!--{{ l }}-->
+                        <!--</md-checkbox>-->
+                        <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.licenses.custom">-->
+                            <!--<md-input-container flex>-->
+                                <!--<label>Other</label>-->
+                                <!--<input type="text" ng-model="c.value" />-->
+                            <!--</md-input-container>-->
+                            <!--<md-button ng-hide="$last" ng-click="vm.rmLicense(c)" layout="column" class="md-icon-button red">-->
+                                <!--<md-icon>delete_forever</md-icon>-->
+                            <!--</md-button>-->
+                            <!--<md-button ng-show="$last" layout="column" ng-click="vm.addLicense()" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
+                    <!--</section>-->
 
-                    <section md-layout="row">
-                        <h6 flex="100">Digital tools:</h6>
-                        <md-checkbox
-                                ng-repeat="d in vm.structure.digital_tools"
-                                ng-checked="vm.digitalToolChecked(d)"
-                                ng-click="vm.digitalToolChange(d)"
-                                flex="30"
-                                aria-label="{{ d }}"
-                                class="">
-                            {{ d }}
-                        </md-checkbox>
-                        <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.digital_tools.custom">
-                            <md-input-container flex>
-                                <label>Other</label>
-                                <input type="text" ng-model="c.value" />
-                            </md-input-container>
-                            <md-button ng-hide="$last" ng-click="vm.rmDigitalTool(c)" layout="column" class="md-icon-button red">
-                                <md-icon>delete_forever</md-icon>
-                            </md-button>
-                            <md-button ng-show="$last" layout="column" ng-click="vm.addDigitalTool()" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
-                    </section>
+                    <!--<section md-layout="row">-->
+                        <!--<h6 flex="100">Digital tools:</h6>-->
+                        <!--<md-checkbox-->
+                                <!--ng-repeat="d in vm.structure.digital_tools"-->
+                                <!--ng-checked="vm.digitalToolChecked(d)"-->
+                                <!--ng-click="vm.digitalToolChange(d)"-->
+                                <!--flex="30"-->
+                                <!--aria-label="{{ d }}"-->
+                                <!--class="">-->
+                            <!--{{ d }}-->
+                        <!--</md-checkbox>-->
+                        <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.digital_tools.custom">-->
+                            <!--<md-input-container flex>-->
+                                <!--<label>Other</label>-->
+                                <!--<input type="text" ng-model="c.value" />-->
+                            <!--</md-input-container>-->
+                            <!--<md-button ng-hide="$last" ng-click="vm.rmDigitalTool(c)" layout="column" class="md-icon-button red">-->
+                                <!--<md-icon>delete_forever</md-icon>-->
+                            <!--</md-button>-->
+                            <!--<md-button ng-show="$last" layout="column" ng-click="vm.addDigitalTool()" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
+                    <!--</section>-->
 
 
-                    <section layout="column">
-                        <p>How are you applying these technology strategies or communication channels? (Check all that apply)</p>
-                        <md-checkbox
-                                ng-repeat="a in vm.structure.applications"
-                                ng-checked="vm.applicationChecked(a)"
-                                ng-click="vm.applicationChange(a)"
-                                flex="100"
-                                aria-label="{{ a }}"
-                                class="">
-                            {{ a }}
-                        </md-checkbox>
+                    <!--<section layout="column">-->
+                        <!--<p>How are you applying these technology strategies or communication channels? (Check all that apply)</p>-->
+                        <!--<md-checkbox-->
+                                <!--ng-repeat="a in vm.structure.applications"-->
+                                <!--ng-checked="vm.applicationChecked(a)"-->
+                                <!--ng-click="vm.applicationChange(a)"-->
+                                <!--flex="100"-->
+                                <!--aria-label="{{ a }}"-->
+                                <!--class="">-->
+                            <!--{{ a }}-->
+                        <!--</md-checkbox>-->
 
-                    </section>
+                    <!--</section>-->
 
                     <section>
                         <p>What is the current coverage of your project? (e.g. numbers of health workers, clinics and/or client beneficiaries reached)</p>
@@ -147,6 +150,8 @@
                             <span >of</span>
 
                             <ssmenu
+                                    on-close-callback="cover.typeCallback"
+                                    options="vm.structure.coverageTypes"
                                     ng-model="cover.typeChosen"
                                     placeholder="Select type"
                                     ariaLabel="coverageType"
@@ -157,7 +162,7 @@
                             </md-input-container>
                             <span>and</span>
                             <ssmenu
-                                    on-close-callback="cover.callBack"
+                                    on-close-callback="cover.districtCallback"
                                     ng-model="cover.districtChosen"
                                     options="vm.districtList"
                                     placeholder="Select district"
@@ -209,66 +214,66 @@
 
                     </section>
 
-                    <section>
-                        <p>What reports and publications do you have for the project?</p>
+                    <!--<section>-->
+                        <!--<p>What reports and publications do you have for the project?</p>-->
 
-                        <h6>Add project report(s):</h6>
-                        <div layout="row" layout-align="start center" ng-repeat="r in vm.project.reports">
-                            <md-icon>link</md-icon>
-                            <md-input-container flex>
-                                <label>Add link to a webpage</label>
-                                <input type="text" ng-model="r.value" />
-                            </md-input-container>
-                            <md-button ng-hide="$last" ng-click="vm.rmReportLink(r)" layout="column" class="md-icon-button red">
-                                <md-icon>delete_forever</md-icon>
-                            </md-button>
-                            <md-button ng-show="$last" layout="column" ng-click="vm.addReportLink()" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
-                        <div layout="row" layout-align="start center">
-                        <span>
-                            <md-icon flex>insert_drive_file</md-icon>
-                            Upload file:
-                        </span>
-                            <div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>
-                            <span> Maximum file size: 10MB </span>
+                        <!--<h6>Add project report(s):</h6>-->
+                        <!--<div layout="row" layout-align="start center" ng-repeat="r in vm.project.reports">-->
+                            <!--<md-icon>link</md-icon>-->
+                            <!--<md-input-container flex>-->
+                                <!--<label>Add link to a webpage</label>-->
+                                <!--<input type="text" ng-model="r.value" />-->
+                            <!--</md-input-container>-->
+                            <!--<md-button ng-hide="$last" ng-click="vm.rmReportLink(r)" layout="column" class="md-icon-button red">-->
+                                <!--<md-icon>delete_forever</md-icon>-->
+                            <!--</md-button>-->
+                            <!--<md-button ng-show="$last" layout="column" ng-click="vm.addReportLink()" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
+                        <!--<div layout="row" layout-align="start center">-->
+                        <!--<span>-->
+                            <!--<md-icon flex>insert_drive_file</md-icon>-->
+                            <!--Upload file:-->
+                        <!--</span>-->
+                            <!--<div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>-->
+                            <!--<span> Maximum file size: 10MB </span>-->
 
-                            <md-button layout="column" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
-
-
-                        <h6>Add publication(s) / journal article(s):</h6>
-                        <div layout="row" layout-align="start center" ng-repeat="p in vm.project.publications">
-                            <md-icon>link</md-icon>
-                            <md-input-container flex>
-                                <label>Add link to a webpage</label>
-                                <input type="text" ng-model="p.value" />
-                            </md-input-container>
-                            <md-button ng-hide="$last" ng-click="vm.rmPublicationLink(p)" layout="column" class="md-icon-button red">
-                                <md-icon>delete_forever</md-icon>
-                            </md-button>
-                            <md-button ng-show="$last" layout="column" ng-click="vm.addPublicationLink()" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
-                        <div layout="row" layout-align="start center">
-                        <span>
-                            <md-icon flex>insert_drive_file</md-icon>
-                            Upload file:
-                        </span>
-                            <div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>
-                            <span> Maximum file size: 10MB </span>
-
-                            <md-button layout="column" class="md-icon-button">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
+                            <!--<md-button layout="column" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
 
 
-                    </section>
+                        <!--<h6>Add publication(s) / journal article(s):</h6>-->
+                        <!--<div layout="row" layout-align="start center" ng-repeat="p in vm.project.publications">-->
+                            <!--<md-icon>link</md-icon>-->
+                            <!--<md-input-container flex>-->
+                                <!--<label>Add link to a webpage</label>-->
+                                <!--<input type="text" ng-model="p.value" />-->
+                            <!--</md-input-container>-->
+                            <!--<md-button ng-hide="$last" ng-click="vm.rmPublicationLink(p)" layout="column" class="md-icon-button red">-->
+                                <!--<md-icon>delete_forever</md-icon>-->
+                            <!--</md-button>-->
+                            <!--<md-button ng-show="$last" layout="column" ng-click="vm.addPublicationLink()" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
+                        <!--<div layout="row" layout-align="start center">-->
+                        <!--<span>-->
+                            <!--<md-icon flex>insert_drive_file</md-icon>-->
+                            <!--Upload file:-->
+                        <!--</span>-->
+                            <!--<div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>-->
+                            <!--<span> Maximum file size: 10MB </span>-->
+
+                            <!--<md-button layout="column" class="md-icon-button">-->
+                                <!--<md-icon>add</md-icon>-->
+                            <!--</md-button>-->
+                        <!--</div>-->
+
+
+                    <!--</section>-->
 
                     <h4>2. Vision for scale</h4>
 

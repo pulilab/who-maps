@@ -9,13 +9,18 @@ class NewProjectService extends AuthApi {
 
     newProject(data) {
         console.log(data);
+        this.post('projects/', data)
+            .then(response => {
+                console.log(response);
+                this.EE.emit('refreshProjects');
+            });
     }
 
     projectStructure() {
-        return this.get('projects/structure/')
+        return this.get('projects/structure/');
     }
 
-    countryDistrict(id){
+    countryDistrict(id) {
         return this.get('countries/' + id + '/districts');
     }
 }

@@ -1,169 +1,23 @@
 import _ from 'lodash';
 import NewProjectService from './NewProjectService';
+import ProjectDefinition from '../ProjectDefinition';
 
-class NewProjectController {
+/* global DEV */
+
+class NewProjectController extends ProjectDefinition {
 
     constructor($scope) {
+        super();
         this.ns = new NewProjectService();
-        this.project = {
-            name: 'test',
-            organisation: 'test',
-            country: 1,
-            countryName:'bangladesh',
-            coverage: [{}],
-            'technology_platforms': {
-                standard: [],
-                custom: [{}]
-            },
-            licenses: {
-                standard: [],
-                custom: [{}]
-            },
-            'digital_tools': {
-                standard: [],
-                custom: [{}]
-            },
-            'pre_assessment': Array(10),
-            donors: [{}],
-            application: [],
-            reports: [{}],
-            publications: [{}],
-            pipelines: {
-                standard: [],
-                custom: void 0
-            }
-
-        };
         this.districtList = [];
         this.scope = $scope;
         this.dataLoaded = false;
         this.ns.projectStructure().then(this.handleDataLoad.bind(this));
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
         this.districtCloseCallback = this.districtCloseCallback.bind(this);
+        this.setStrategy = this.setStrategy.bind(this);
+        this.log = this.log.bind(this);
     }
-
-    addTechnologyPlatform() {
-        this.project.technology_platforms.custom.push({});
-    }
-    rmTechnologyPlatform(t) {
-        _.remove(this.project.technology_platforms.custom, item => {
-            return item.$$hashKey === t.$$hashKey;
-        });
-    }
-
-    technologyPlatformChange(t) {
-        if (this.technologyPlatformChecked(t)) {
-            _.remove(this.project.technology_platforms.standard, item => {
-                return item === t;
-            });
-        }
-        else {
-            this.project.technology_platforms.standard.push(t);
-        }
-    }
-
-    technologyPlatformChecked(t) {
-        return this.project.technology_platforms.standard.indexOf(t) > -1;
-    }
-
-
-    licenseChange(t) {
-        if (this.licenseChecked(t)) {
-            _.remove(this.project.licenses.standard, item => {
-                return item === t;
-            });
-        }
-        else {
-            this.project.licenses.standard.push(t);
-        }
-    }
-
-    licenseChecked(t) {
-        return this.project.licenses.standard.indexOf(t) > -1;
-    }
-
-    digitalToolChange(t) {
-        if (this.digitalToolChecked(t)) {
-            _.remove(this.project.digital_tools.standard, item => {
-                return item === t;
-            });
-        }
-        else {
-            this.project.digital_tools.standard.push(t);
-        }
-    }
-
-    digitalToolChecked(t) {
-        return this.project.digital_tools.standard.indexOf(t) > -1;
-    }
-
-    applicationChange(t) {
-        if (this.applicationChecked(t)) {
-            _.remove(this.project.application, item => {
-                return item === t;
-            });
-        }
-        else {
-            this.project.application.push(t);
-        }
-    }
-
-    applicationChecked(t) {
-        return this.project.application.indexOf(t) > -1;
-    }
-
-    addLicense() {
-        this.project.licenses.custom.push({});
-    }
-
-    rmLicense(l) {
-        _.remove(this.project.licenses.custom, item => {
-            return item.$$hashKey === l.$$hashKey;
-        });
-    }
-
-    addDigitalTool() {
-        this.project.digital_tools.custom.push({});
-    }
-
-    rmDigitalTool(d) {
-        _.remove(this.project.digital_tools.custom, item => {
-            return item.$$hashKey === d.$$hashKey;
-        });
-    }
-
-
-    addReportLink() {
-        this.project.reports.push({});
-    }
-
-    rmReportLink(l) {
-        _.remove(this.project.reports, item => {
-            return item.$$hashKey === l.$$hashKey;
-        });
-    }
-
-
-    addPublicationLink() {
-        this.project.publications.push({});
-    }
-
-    rmPublicationLink(l) {
-        _.remove(this.project.publications, item => {
-            return item.$$hashKey === l.$$hashKey;
-        });
-    }
-
-    addDonor() {
-        this.project.donors.push({});
-    }
-
-    rmDonor(l) {
-        _.remove(this.project.donors, item => {
-            return item.$$hashKey === l.$$hashKey;
-        });
-    }
-
 
     handleDataLoad(data) {
         this.dataLoaded = true;
@@ -172,12 +26,13 @@ class NewProjectController {
         this.structure['licenses'] = ['a', 'b', 'c', 'd'];
         this.structure['digital_tools'] = ['a', 'b', 'c', 'd'];
         this.structure['applications'] = ['a', 'b', 'c', 'd'];
-
+        this.structure['strategies'] = ['a', 'b', 'c', 'd'];
+        this.structure.coverageTypes = ['clients', 'health_workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
     countryCloseCallback(name) {
-        const countries = _.filter(this.structure.countries, { name: name });
+        const countries = _.filter(this.structure.countries, { name });
         this.project.countryName = name;
         this.project.country = countries[0].id;
         this.ns.countryDistrict(this.project.country)
@@ -190,12 +45,20 @@ class NewProjectController {
     }
 
     repeatBind(item) {
-        item.callBack = this.districtCloseCallback.bind(this, item);
+        item.districtCallback = this.districtCloseCallback.bind(this, item);
+        item.typeCallback = this.typeCloseCallback.bind(this, item);
+    }
+
+    typeCloseCallback(coverage, type) {
+        coverage.typeChosen = type;
     }
 
     districtCloseCallback(coverage, district) {
         coverage.district = district;
-        console.log(this.project);
+    }
+
+    setStrategy(strategy) {
+        this.project.strategy = strategy;
     }
 
     addCoverageItem() {
@@ -203,10 +66,12 @@ class NewProjectController {
     }
 
     save() {
-        let processedForm = _.cloneDeep(this.project);
+        const processedForm = _.cloneDeep(this.project);
         this.mergeCustomAndDefault(processedForm);
-        this.createCoverageArray(processedForm)
+        this.createCoverageArray(processedForm);
+        processedForm.date = new Date().toJSON();
         console.log(processedForm);
+        this.ns.newProject(processedForm);
     }
 
     flattenCustom(obj) {
@@ -233,6 +98,13 @@ class NewProjectController {
         collection.pipelines = this.concatCustom(collection.pipelines);
     }
 
+    log(data) {
+        if (DEV) {
+            console.log(data);
+            console.log(this.project);
+        }
+    }
+
     createCoverageArray(collection) {
         const coverage = {};
         _.forEach(collection.coverage, item => {
@@ -241,7 +113,7 @@ class NewProjectController {
                 type = item.other;
             }
             else {
-                type = item.type;
+                type = item.typeChosen;
             }
             if (!coverage[item.district]) {
                 coverage[item.district] = {};
@@ -254,11 +126,6 @@ class NewProjectController {
         _.forEach(coverage, item => {
             collection.coverage.push(item);
         });
-    }
-
-
-    disableDetails() {
-        return _.isNil(this.project.name) || _.isNil(this.project.organisation) || _.isNil(this.project.country);
     }
 
     handleCustomError(newProjectForm, key) {
