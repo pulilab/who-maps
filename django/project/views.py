@@ -2,12 +2,12 @@ import json
 
 from django.http import HttpResponse, Http404
 from rest_framework import status
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import MultiPartParser, FormParser
 
 from core.views import TokenAuthMixin, get_object_or_400
 from user.models import UserProfile
@@ -17,7 +17,7 @@ from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 from .serializers import ProjectSerializer
-from .models import Project, File, CoverageVersion
+from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
 
@@ -186,3 +186,35 @@ def get_toolkit_versions(request, project_id):
     toolkit_versions = ToolkitVersion.objects.filter(project_id=project_id) \
                             .order_by("version").values("version", "data", "modified")
     return Response(toolkit_versions)
+
+
+class PartnerLogoListAPIView(TokenAuthMixin, ListCreateAPIView):
+
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of partnerlogo ids for a given project.
+        """
+        project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
+        partnerlogos = PartnerLogo.objects.filter(project_id=project.id).values("id")
+        return Response(partnerlogos)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Creates partnerlogos from the uploaded files.
+        """
+        project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
+        # Get and store binary files for partnerlogos.
+        for key, value in request.FILES.items():
+            PartnerLogo.objects.create(project_id=project.id, data=value.read())
+        return Response()
+
+
+class PartnerLogoDetailAPIView(TokenAuthMixin, RetrieveUpdateDestroyAPIView):
+    queryset = PartnerLogo.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves binary file for logo image.
+        """
+        logo = get_object_or_400(PartnerLogo, "No such logo.", id=kwargs["pk"])
+        return HttpResponse(content=logo.data, content_type="image/png")

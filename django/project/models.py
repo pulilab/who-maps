@@ -20,3 +20,8 @@ class File(ExtendedModel):
     type = models.CharField(max_length=255)
     filename = models.CharField(max_length=255)
     data = models.BinaryField()
+
+
+class PartnerLogo(ExtendedModel):
+    project = models.ForeignKey(Project)
+    data = models.BinaryField()

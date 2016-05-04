@@ -11,5 +11,7 @@ urlpatterns = [
     url(r"^projects/(?P<project_id>\d+)/version/$", view=views.make_version, name="make-version"),
     url(r"^projects/(?P<project_id>\d+)/coverage/versions/$", view=views.get_coverage_versions, name="get-coverage-versions"),
     url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$", view=views.get_toolkit_versions, name="get-toolkit-versions"),
+    url(r"^projects/(?P<project_id>\d+)/partnerlogos/$", view=views.PartnerLogoListAPIView.as_view(), name="partnerlogo-list"),
+    url(r"^partnerlogos/(?P<pk>\d+)/$", view=views.PartnerLogoDetailAPIView.as_view(), name="partnerlogo-detail"),
     url(r"^files/(?P<pk>\d+)/$", view=views.file_detail, name="file-detail"),
 ]
