@@ -88,18 +88,26 @@ md-dialog {
 						text-transform: uppercase;
 						color: $text-secondary;
 					}
+
+					.expander {
+						position: relative;
+						top: 15px;
+						right: 15px;
+					}
 				}
 
 				.domain {
 
+					display: block;
 					height: 30px;
 					line-height: 30px;
 					font-size: 12px;
 					padding-left: 55px;
 					color: $text-secondary;
 					outline: none;
+					cursor: pointer;
 
-					&.active {
+					&.active-domain {
 						color: $text-primary;
 					}
 				}

@@ -14,11 +14,20 @@ class SkeletonController {
         this.text = parent.text;
         this.icons = parent.icons;
 
+        this.domainActivationSetter(+this.axis, +this.domain, true);
+
     }
 
     changeSpot(axisId, domainId) {
+        domainId = domainId || 0;
+        this.domainActivationSetter(+this.axis, +this.domain, false);
         this.axis = axisId;
         this.domain = domainId;
+        this.domainActivationSetter(+this.axis, +this.domain, true);
+    }
+
+    domainActivationSetter(axisId, domainId, state) {
+        this.data[axisId + 2].domains[domainId].active = state;
     }
 
     static skeletonFactory() {

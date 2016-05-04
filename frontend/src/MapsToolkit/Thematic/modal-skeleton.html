@@ -23,28 +23,41 @@
 
 	        	<div class="axis" layout="row" ng-click="vm.changeSpot(+axisId - 2, 0)">
 
-	        		<div
-	        			class="iconcontainer"
-	        			layout="column"
-	        			layout-align="center center"
-	        			ng-class="(+vm.axis + 2) == $index ? 'active-axis' + (+vm.axis + 1) : ''">
+					<div flex layout="row">
+		        		<div
+		        			class="iconcontainer"
+		        			layout="column"
+		        			layout-align="center center"
+		        			ng-class="(+vm.axis + 2) == $index ? 'active-axis' + (+vm.axis + 1) : ''">
 
-		        		<img ng-src="{{vm.icons[$index]}}">
+			        		<img ng-src="{{vm.icons[$index]}}">
 
-	        		</div>
-	        		<div class="titles" layout="column">
+		        		</div>
 
-	        			<span ng-if="$index > 1" flex>
-	        				{{'AXIS ' + ($index - 1) + '.'}}<br>
-	        			</span>
-	        			<span flex>{{axis.name}}</span>
+		        		<div class="titles" layout="column">
 
+		        			<span ng-if="$index > 1" flex>
+		        				{{'AXIS ' + ($index - 1) + '.'}}<br>
+		        			</span>
+		        			<span flex>{{axis.name}}</span>
+
+		        		</div>
+					</div>
+
+	        		<div class="expander">
+	        			<md-icon>expand_more</md-icon>
 	        		</div>
 
 	        	</div>
 
-	        	<div class="domain" ng-repeat="(domainId, domain) in axis.domains" ng-click="vm.changeSpot(+axisId - 2, +domainId)">
+	        	<div
+	        		class="domain"
+	        		ng-repeat="(domainId, domain) in axis.domains"
+	        		ng-click="vm.changeSpot(+axisId - 2, +domainId)"
+	        		ng-class="{'active-domain': domain.active}">
+
 	        		<span>DOMAIN {{domain.id}}: {{domain.name}}</span>
+
 	        	</div>
 	        </div>
     	</div>
@@ -61,11 +74,9 @@
 			</div>
 
 			<div class="right-content">
-				This should be some content about axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}<br>
-				MOCK: {{vm.mock}}<br>
+				This should be some content about <code>axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}</code><br>
 				AXIS: {{vm.axis}}<br>
 				DOMAIN: {{vm.domain}}<br>
-				DATA: {{vm.data}}<br>
 			</div>
 
 		</div>
