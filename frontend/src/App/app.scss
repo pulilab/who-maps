@@ -222,10 +222,14 @@ md-menu-content {
 .main-toolbar {
   min-height: 48px;
 
+  &.toolbar-global {
+    padding-right: 12px;
+    background-color: #1A237E;
+  }
+
   .md-toolbar-tools {
     max-height: 48px;
     height: 48px;
-    background-color: #1A237E;
     font-size: $body-font-size-base;
 
     .md-button {
@@ -242,7 +246,7 @@ md-menu-content {
 
     .add-new-project {
       margin-left: 24px;
-      margin-right: 12px;
+      margin-right: 0;
     }
   }
 
