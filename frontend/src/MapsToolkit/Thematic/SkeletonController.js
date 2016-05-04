@@ -13,11 +13,24 @@ class SkeletonController {
 
         this.domainActivationSetter(+this.axis, +this.domain, true);
 
+        this.templates = this.importHtmlTemplates();
+
         this.data = this.data.map((axis, aInd) => {
             axis.expand = aInd - 2 === this.axis;
             return axis;
         });
 
+        // $scope.$watch(() => this.templates);
+    }
+
+    importHtmlTemplates() {
+        // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const templates = {};
+        const templateRequire = require.context('./static/', true, /\.html$/);
+        templateRequire.keys().forEach((item) => {
+            templates[item.slice(2)] = templateRequire(item);
+        });
+        return templates;
     }
 
     changeSpot(axisId, domainId) {

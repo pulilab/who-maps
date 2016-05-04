@@ -110,6 +110,7 @@ md-dialog {
 
 						md-icon {
 							outline: none;
+							cursor: pointer;
 						}
 					}
 				}
@@ -178,6 +179,15 @@ md-dialog {
 
 			.right-content {
 
+				.axis-html {
+					// Style of the half-dynamic, upper part
+
+				}
+
+				.content-html {
+					// Style of the fully dynamic, lower part
+
+				}
 			}
 		}
 	}

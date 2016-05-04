@@ -4,28 +4,22 @@ const mockStructure = [
         name: 'About',
         domains: [
             {
-                name: 'About #1',
-                templateUrl: ''
+                name: 'About #1'
             }, {
-                name: 'About #2',
-                templateUrl: ''
+                name: 'About #2'
             }, {
-                name: 'About #3',
-                templateUrl: ''
+                name: 'About #3'
             }
         ]
     }, {
         name: 'Introduction',
         domains: [
             {
-                name: 'Introduction #1',
-                templateUrl: ''
+                name: 'Introduction #1'
             }, {
-                name: 'Introduction #2',
-                templateUrl: ''
+                name: 'Introduction #2'
             }, {
-                name: 'Introduction #3',
-                templateUrl: ''
+                name: 'Introduction #3'
             }
         ]
     }, {
@@ -33,16 +27,13 @@ const mockStructure = [
         domains: [
             {
                 id: 1,
-                name: 'Parameters of scale',
-                templateUrl: ''
+                name: 'Parameters of scale'
             }, {
                 id: 2,
-                name: 'Contextual environment',
-                templateUrl: ''
+                name: 'Contextual environment'
             }, {
                 id: 3,
-                name: 'Scientific basis',
-                templateUrl: ''
+                name: 'Scientific basis'
             }
         ]
     },
@@ -51,12 +42,10 @@ const mockStructure = [
         domains: [
             {
                 id: 4,
-                name: 'Strategic engagement',
-                templateUrl: ''
+                name: 'Strategic engagement'
             }, {
                 id: 5,
-                name: 'Partnership sustainability',
-                templateUrl: ''
+                name: 'Partnership sustainability'
             }
         ]
     },
@@ -65,12 +54,10 @@ const mockStructure = [
         domains: [
             {
                 id: 6,
-                name: 'Financial management',
-                templateUrl: ''
+                name: 'Financial management'
             }, {
                 id: 7,
-                name: 'Financial sustainability',
-                templateUrl: ''
+                name: 'Financial sustainability'
             }
         ]
     },
@@ -79,16 +66,13 @@ const mockStructure = [
         domains: [
             {
                 id: 8,
-                name: 'Data',
-                templateUrl: ''
+                name: 'Data'
             }, {
                 id: 9,
-                name: 'Interoperability',
-                templateUrl: ''
+                name: 'Interoperability'
             }, {
                 id: 10,
-                name: 'Adaptability',
-                templateUrl: ''
+                name: 'Adaptability'
             }
         ]
     },
@@ -97,20 +81,16 @@ const mockStructure = [
         domains: [
             {
                 id: 11,
-                name: 'Personnel',
-                templateUrl: ''
+                name: 'Personnel'
             }, {
                 id: 12,
-                name: 'Training and support',
-                templateUrl: ''
+                name: 'Training and support'
             }, {
                 id: 13,
-                name: 'Outreach and sensitization',
-                templateUrl: ''
+                name: 'Outreach and sensitization'
             }, {
                 id: 14,
-                name: 'Contingency planning',
-                templateUrl: ''
+                name: 'Contingency planning'
             }
         ]
     },
@@ -119,12 +99,10 @@ const mockStructure = [
         domains: [
             {
                 id: 15,
-                name: 'Process monitoring',
-                templateUrl: ''
+                name: 'Process monitoring'
             }, {
                 id: 16,
-                name: 'Evaluation research',
-                templateUrl: ''
+                name: 'Evaluation research'
             }
         ]
     }

@@ -12,8 +12,6 @@
     		<span class="head">Thematic overview</span>
     		<span class="subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam eligendi culpa, quidem voluptates. Quidem magni recusandae vel id autem dolorum. Pariatur explicabo dicta, expedita perspiciatis voluptate optio minima architecto temporibus.</span>
 
-	        <code><u>TODO:</u> changing contents, links inside</code>
-
 	        <div class="axes" ng-repeat="(axisId, axis) in vm.data track by $index">
 
 	        	<div class="axis" layout="row">
@@ -75,14 +73,16 @@
 
 					<span ng-if="vm.axis < 0">{{vm.data[+vm.axis + 2].domains[+vm.domain].name}}</span>
 
-
 				</div>
 			</div>
 
-			<md-content class="right-content">
-				This should be some content about <code>axis{{+vm.axis + 1}}, domain: {{+vm.domain + 1}}</code><br>
-				AXIS: {{vm.axis}}<br>
-				DOMAIN: {{vm.domain}}<br>
+			<md-content
+				class="right-content"
+				layout-padding>
+
+				<div class="axis-html" ng-bind-html="vm.templates[(vm.axis + 1) + '.html']"></div>
+				<div class="content-html" ng-bind-html="vm.templates[(vm.axis + 1) + '-' + vm.domain + '.html']"></div>
+
 			</md-content>
 
 		</div>
