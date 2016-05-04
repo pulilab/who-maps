@@ -6,11 +6,12 @@ import ProjectDefinition from '../ProjectDefinition';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope) {
+    constructor($scope, structure) {
         super();
         this.ns = new NewProjectService();
         this.districtList = [];
         this.scope = $scope;
+        this.axisStructure = this.processAxisStructure(structure);
         this.dataLoaded = false;
         this.ns.projectStructure().then(this.handleDataLoad.bind(this));
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
@@ -19,13 +20,16 @@ class NewProjectController extends ProjectDefinition {
         this.log = this.log.bind(this);
     }
 
+    processAxisStructure(structure) {
+        _.forEach(structure, element => {
+            element.img = require(element.image);
+        });
+        return structure;
+    }
+
     handleDataLoad(data) {
         this.dataLoaded = true;
         this.structure = data;
-        this.structure['technology_platforms'] = ['a', 'b', 'c', 'd'];
-        this.structure['licenses'] = ['a', 'b', 'c', 'd'];
-        this.structure['digital_tools'] = ['a', 'b', 'c', 'd'];
-        this.structure['applications'] = ['a', 'b', 'c', 'd'];
         this.structure['strategies'] = ['a', 'b', 'c', 'd'];
         this.structure.coverageTypes = ['clients', 'health_workers', 'facilities'];
         this.scope.$evalAsync();
@@ -61,9 +65,6 @@ class NewProjectController extends ProjectDefinition {
         this.project.strategy = strategy;
     }
 
-    addCoverageItem() {
-        this.project.coverage.push({});
-    }
 
     save() {
         const processedForm = _.cloneDeep(this.project);
@@ -137,8 +138,10 @@ class NewProjectController extends ProjectDefinition {
 
     static newProjectFactory() {
         require('./NewProject.scss');
+        const structure = require('./Resources/structure.json');
+
         function newProject($scope) {
-            return new NewProjectController($scope);
+            return new NewProjectController($scope, structure);
         }
         newProject.$inject = ['$scope'];
         return newProject;

@@ -4,10 +4,10 @@ class ProjectDefinition {
 
     constructor() {
         this.project = {
-            name: 'test',
-            organisation: 'test_org',
+            name: null,
+            organisation: null,
             country: 1,
-            countryName: 'bangladesh',
+            countryName: null,
             coverage: [{}],
             'technology_platforms': {
                 standard: [],
@@ -21,7 +21,7 @@ class ProjectDefinition {
                 standard: [],
                 custom: [{}]
             },
-            'pre_assessment': Array(10),
+            'pre_assessment': Array(6),
             donors: [{}],
             application: [],
             reports: [{}],
@@ -154,6 +154,16 @@ class ProjectDefinition {
     rmDonor(l) {
         _.remove(this.project.donors, item => {
             return item.$$hashKey === l.$$hashKey;
+        });
+    }
+
+    addCoverageItem() {
+        this.project.coverage.push({});
+    }
+
+    rmCoverage(c) {
+        _.remove(this.project.coverage, item => {
+            return item.$$hashKey === c.$$hashKey;
         });
     }
 

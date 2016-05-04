@@ -1,0 +1,32 @@
+[
+  {
+    "description" : "1) On a scale of 1-10 with 10 being the highest, please rate yourself on how well you have conducted the groundwork for scaling up your project?",
+    "image": "./Resources/images/icon-axis1.svg",
+    "text": "The initial steps of specifying the key components of the project’s approach to scaling up, assessing relevant contextual influences, and taking stock of the scientific basis for the product"
+  },
+  {
+    "description" : "2) On a scale of 1-10 with 10 being the highest, please rate yourself on how well you have fostered partnerships for scaling up your project?",
+    "image": "./Resources/images/icon-axis2.svg",
+    "text": "Collaborations with external groups to support the process of scaling up, including strategies for identifying, developing and sustaining fruitful partnerships "
+  },
+  {
+    "description" : "3) On a scale of 1-10 with 10 being the highest, please rate yourself on how well you have achieved financial health for scaling up your project?",
+    "image": "./Resources/images/icon-axis3.svg",
+    "text": "The projection of scale-up costs, and the development of a financial plan for securing and managing funds over the long term "
+  },
+  {
+    "description" : "4) On a scale of 1-10 with 10 being the highest, please rate yourself on how robust the technology and architecture is for scaling up your project?",
+    "image": "./Resources/images/icon-axis4.svg",
+    "text": "Steps taken to optimize the mHealth product for scaling up based on its anticipated user base, purpose, integration with information systems and compatibility with other components of the information systems architecture "
+  },
+  {
+    "description" : "5) On a scale of 1-10 with 10 being the highest, please rate yourself on the operations (e.g. training, organizational capacity, community mobilization) for scaling up your project?",
+    "image": "./Resources/images/icon-axis5.svg",
+    "text": "Organizational and programmatic measures for supporting the implementation, use and maintenance of the product throughout the scaling-up process "
+  },
+  {
+    "description" : "6) On a scale of 1-10 with 10 being the highest, please rate yourself on your monitoring and evaluation for scaling up your project?",
+    "image": "./Resources/images/icon-axis6.svg",
+    "text": "Decisions and activities that enable active process monitoring and in-depth outcome evaluation, based on project and stakeholder need"
+  }
+]
