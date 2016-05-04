@@ -6,6 +6,10 @@ class NewProjectController {
     constructor($scope) {
         this.ns = new NewProjectService();
         this.project = {
+            name: 'test',
+            organisation: 'test',
+            country: 1,
+            countryName:'bangladesh',
             coverage: [{}],
             'technology_platforms': {
                 standard: [],
@@ -162,7 +166,6 @@ class NewProjectController {
 
 
     handleDataLoad(data) {
-        console.log(data);
         this.dataLoaded = true;
         this.structure = data;
         this.structure['technology_platforms'] = ['a', 'b', 'c', 'd'];
@@ -175,6 +178,7 @@ class NewProjectController {
 
     countryCloseCallback(name) {
         const countries = _.filter(this.structure.countries, { name: name });
+        this.project.countryName = name;
         this.project.country = countries[0].id;
         this.ns.countryDistrict(this.project.country)
             .then(this.handleDistrictData.bind(this));
@@ -201,8 +205,7 @@ class NewProjectController {
     save() {
         let processedForm = _.cloneDeep(this.project);
         this.mergeCustomAndDefault(processedForm);
-        this.createCoverageArray(processedForm);
-
+        this.createCoverageArray(processedForm)
         console.log(processedForm);
     }
 
@@ -247,7 +250,15 @@ class NewProjectController {
             coverage[item.district].district = item.district;
         });
 
-        console.log(coverage);
+        collection.coverage = [];
+        _.forEach(coverage, item => {
+            collection.coverage.push(item);
+        });
+    }
+
+
+    disableDetails() {
+        return _.isNil(this.project.name) || _.isNil(this.project.organisation) || _.isNil(this.project.country);
     }
 
     handleCustomError(newProjectForm, key) {

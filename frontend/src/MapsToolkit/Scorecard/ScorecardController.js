@@ -33,6 +33,7 @@ class ScorecardController {
     handleProjectData(data) {
         this.axesSize = data.length;
         this.data = _.merge(data, this.structure);
+        this.rawData = _.cloneDeep(data);
         this.createAxisData();
 
         if (!this.summary) {
@@ -67,8 +68,8 @@ class ScorecardController {
         this.state.go('maps', { axisId });
     }
 
-    disableGoToNextAxis() {
-        return this.axisId + 1 >= this.axesSize;
+    isLastAxis() {
+        return parseInt(this.axisId, 10) + 1 >= this.axesSize;
     }
 
     static scorecardFactory() {

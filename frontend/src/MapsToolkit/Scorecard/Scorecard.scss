@@ -28,9 +28,9 @@ scorecard {
         background-color: $color-axis6;
     }
 
-
     .wrapper {
         background: $color-white;
+        margin-bottom: 40px;
     }
 
     .inner-wrapper {
@@ -104,6 +104,11 @@ scorecard {
         padding-left:50px;
         padding-right:50px;
         margin-bottom:55px;
+
+        &.top {
+            margin-bottom:30px;
+            margin-top:30px;
+        }
     }
 
     .axes-scorecard {

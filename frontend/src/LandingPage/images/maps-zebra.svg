@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1220px" height="10px" viewBox="0 0 1220 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>maps-zebra</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Landing-page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01---Landing-page" transform="translate(-30.000000, -1582.000000)">
+            <g id="Welcome" transform="translate(30.000000, 201.000000)">
+                <g id="maps-zebra" transform="translate(0.000000, 1381.000000)">
+                    <rect id="Card" fill="#6A1B9A" x="0" y="0.0354777231" width="203.492312" height="9.93734639"></rect>
+                    <rect id="Card" fill="#D84315" x="203.174355" y="0.0355249494" width="203.492312" height="9.93734639"></rect>
+                    <rect id="Card" fill="#0097A7" x="406.34871" y="0.0355249494" width="203.492312" height="9.93734639"></rect>
+                    <rect id="Card" fill="#FAA906" x="609.523065" y="0.0355249494" width="203.492312" height="9.93734639"></rect>
+                    <rect id="Card" fill="#558B2F" x="812.69742" y="0.0355249494" width="203.492312" height="9.93734639"></rect>
+                    <rect id="Card" fill="#5D4037" x="1015.87177" y="0.0355249494" width="204" height="9.93734639"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

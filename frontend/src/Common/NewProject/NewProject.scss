@@ -6,6 +6,14 @@ $strategies-height:60px;
 
 new-project {
 
+  display:block;
+  padding:16px;
+
+  .disabled {
+    opacity:0.5;
+    pointer-events: none;
+  }
+
   .red md-icon {
     color: $color-red;
   }
