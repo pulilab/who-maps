@@ -49,7 +49,7 @@ class ProjectTests(APITestCase):
 
         project_data = {
             "date": datetime.utcnow(),
-            "name": "Test Project1",
+            "name": "phrase1 phrase2",
             "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
@@ -74,18 +74,41 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.post(url, project_data)
 
         project_data2 = copy.deepcopy(project_data)
-        project_data2.update(name="Test Project2")
-        project_data2.update(technology_platforms=["tech3", "tech4"])
+        project_data2.update(name="phrase3 phrase5")
+        project_data2.update(technology_platforms=["phrase2", "phrase1"])
         response = self.test_user_client.post(url, project_data2)
 
-    def test_view(self):
+    def test_search_two_fields(self):
         url = reverse("search-project")
         data = {
-            "query": "Test Project1",
+            "query": "phrase2",
             "project_name": True,
+            "technology_platform": True
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+
+    def test_search_one_field(self):
+        url = reverse("search-project")
+        data = {
+            "query": "phrase1",
+            "project_name": True,
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+    def test_search_not_found(self):
+        url = reverse("search-project")
+        data = {
+            "query": "nonexistent",
+            "project_name": True,
+            "technology_platform": True,
+            "location": True,
+            "health_topic": True,
             "organisation": True
         }
         response = self.test_user_client.post(url, data)
-        print(response.json())
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(len(response.json()), 0)
