@@ -193,6 +193,8 @@
                         <div layout="column" class="strategies" >
                             <div layout="row" >
                                 <ssmenu
+                                        on-close-callback="vm.pipelinesCallback"
+                                        options="vm.structure.pipelines"
                                         ng-model="vm.pipelines.standard"
                                         placeholder="Select strategies from the list"
                                         hint="Is this project part of an accelerator or innovation pipeline?"
