@@ -57,10 +57,6 @@ project_structure = {
             "Proprietary",
             "Other (to be justified)"
         ],
-        "digital_tools": [
-            "digi tool 1",
-            "digi tool 2"
-        ],
         "applications": [
             "Client education and behavior change communication",
             "Sensors point-of-care diagnostics",
@@ -98,7 +94,6 @@ project_data = {
     "country": 0,
     "technology_platforms": [],  # Can hold 'other' fields
     "licenses": [],  # Can hold 'other' fields
-    "digital_tools": [],  # Can hold 'other' fields
     "application": [],
     "coverage": [],
     "started": "",

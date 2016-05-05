@@ -10,7 +10,6 @@ class ProjectSerializer(serializers.Serializer):
     country = serializers.IntegerField(required=False)
     technology_platforms = serializers.ListField(required=False)  # Can hold 'other' fields
     licenses = serializers.ListField(required=False)  # Can hold 'other' fields
-    digital_tools = serializers.ListField(required=False)  # Can hold 'other' fields
     application = serializers.ListField(required=False)
     coverage = serializers.ListField(required=False)
     started = serializers.CharField(required=False)
