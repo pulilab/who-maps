@@ -114,8 +114,8 @@ class MapsToolkitModuleController  {
             && parseInt(this.axisId, 10) === 0;
     }
 
-    isLastDomainInAxis(){
-        return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1
+    isLastDomainInAxis() {
+        return parseInt(this.domainId, 10) >= this.rawData[this.axisId].domains.length - 1;
     }
 
     goToNextDomain() {

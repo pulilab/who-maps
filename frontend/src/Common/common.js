@@ -1,4 +1,6 @@
 import angular from 'angular';
+import ngFileUpload from 'ng-file-upload';
+
 
 import EE from './EE';
 import AuthApi from './AuthApi';
@@ -8,23 +10,29 @@ import Protected from './Protected';
 import IntroJs from './IntroJs/introJsComponent';
 import SearchableSelectionMenu from './SearchableSelectionMenu/searchableSelectionMenuComponent';
 import projectComponent from './ProjectComponent/projectComponent';
-import searchbarComponent from './Searchbar/searchbar';
+import searchBarComponent from './Searchbar/searchbar';
 import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
+import NewProjectComponent from './NewProject/newProjectComponent';
 
 const moduleName = 'Components';
 
-angular.module(moduleName, [])
+angular.module(moduleName,
+    [
+        ngFileUpload
+    ]
+)
     .component(IntroJs.name, IntroJs)
     .component(SearchableSelectionMenu.name, SearchableSelectionMenu)
     .component(BadgeComponent.name, BadgeComponent)
     .component(projectComponent.name, projectComponent)
-    .component(searchbarComponent.name, searchbarComponent)
+    .component(searchBarComponent.name, searchBarComponent)
     .component(LoginComponent.name, LoginComponent)
     .component(SignupComponent.name, SignupComponent)
-    .component(AxisComponent.name, AxisComponent);
+    .component(AxisComponent.name, AxisComponent)
+    .component(NewProjectComponent.name, NewProjectComponent);
 
 
 export { EE };

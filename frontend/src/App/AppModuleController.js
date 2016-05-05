@@ -39,6 +39,7 @@ class AppModuleController extends Protected {
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
+        this.EE.on('refreshProjects', this.fillUserData.bind(this, true));
     }
 
     handleLoginEvent(forced) {
@@ -55,7 +56,7 @@ class AppModuleController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData() {
+    fillUserData(forceJump) {
         this.as.getProjects()
         .then(projects => {
             this.user.projects = projects;
@@ -68,6 +69,10 @@ class AppModuleController extends Protected {
                     this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
                 }
             });
+
+            if (forceJump) {
+                this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
+            }
 
             this.scope.$evalAsync();
         });

@@ -30,19 +30,26 @@
         padding-top:40px;
         color:$color-black;
 
-        h4 {
-            font-size:32px;
-            font-weight: normal;
-            padding-bottom:24px;
-            -webkit-margin-before: 0;
-            -webkit-margin-after: 0;
+        .left {
+
+            h4 {
+                font-size:32px;
+                font-weight: normal;
+                padding-bottom:24px;
+                -webkit-margin-before: 0;
+                -webkit-margin-after: 0;
+            }
+            p {
+                font-size:14px;
+                font-style:italic;
+                padding-bottom:40px;
+                -webkit-margin-before: 0;
+                -webkit-margin-after: 0;
+            }
         }
-        p {
-            font-size:14px;
-            font-style:italic;
-            padding-bottom:40px;
-            -webkit-margin-before: 0;
-            -webkit-margin-after: 0;
+
+        thematic {
+            margin-right: 40px;
         }
 
     }
