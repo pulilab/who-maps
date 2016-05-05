@@ -34,14 +34,21 @@ def get_project_structure(request):
     return Response(project_structure)
 
 
-@api_view(['POST','GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def project_list(request):
-    """
-    Project list/create endpoint.
-    """
-    if request.method == "POST":
+
+class ProjectViewSet(TokenAuthMixin, ViewSet):
+
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects.
+        """
+        user_profile = UserProfile.objects.get(user_id=request.user.id)
+        projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
+        return Response(projects)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Creates a project.
+        """
         serializer = ProjectSerializer(data=request.data)
         if serializer.is_valid():
             try:
@@ -59,33 +66,28 @@ def project_list(request):
             return Response(data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == "GET":
-        user_profile = UserProfile.objects.get(user_id=request.user.id)
-        projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
-        return Response(projects)
 
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves a project.
+        """
+        project = get_object_or_400(Project, "No such project", id=kwargs["pk"])
+        data = project.data
+        data.update(id=project.id)
+        return Response(project.data)
 
-@api_view(['POST','GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def project_detail(request, pk):
-    """
-    Project retrieve/update endpoint.
-    """
-    if request.method == "POST":
+    def update(self, request, *args, **kwargs):
+        """
+        Updates a project.
+        """
         serializer = ProjectSerializer(data=request.data)
         if serializer.is_valid():
-            project = get_object_or_400(Project, "No such project", id=pk)
+            project = get_object_or_400(Project, "No such project", id=kwargs["pk"])
             project.data = serializer.data
             project.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == "GET":
-        project = get_object_or_400(Project, "No such project", id=pk)
-        data = project.data
-        data.update(id=project.id)
-        return Response(project.data)
 
 
 @api_view(['GET', 'POST'])
