@@ -12,11 +12,22 @@ class DashboardService extends AuthApi {
             .then(data => data);
     }
 
-    getProjectData() {
-        return this.get('')
+    getProjectData(projectId) {
+        return this.get(projectId)
             .then(data => data);
     }
-}
 
+    snapShot(projectId) {
+        return this.post(projectId + '/version/');
+    }
+
+    getToolkitVersions(projectId) {
+        return this.get(projectId + '/toolkit/versions/')
+            .then(data => {
+                console.log(data);
+                return data;
+            });
+    }
+}
 
 export default DashboardService;

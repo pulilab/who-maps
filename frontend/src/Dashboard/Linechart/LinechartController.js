@@ -16,6 +16,9 @@ class LinechartController {
         vm.timeout = $timeout;
         vm.$onInit = () => {
 
+            // this.EE.on('axis chart data', (data) => {
+
+            // });
             if (vm.datachooser) {
                 vm.activeAxis = vm.data.labels[0];
                 vm.chosenData = vm.data[vm.activeAxis].data;
@@ -26,6 +29,7 @@ class LinechartController {
             }
 
             vm.draw();
+
         };
 
     }

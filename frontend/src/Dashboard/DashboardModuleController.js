@@ -15,6 +15,9 @@ class DashboardModuleController {
         vm.state = $state;
         vm.EE = window.EE;
 
+        this.projectId = $state.params.appName;
+        vm.currentVersion = 0;
+
         vm.service = new DashboardService(this.state.params.appName);
         vm.fetchProjectData();
         vm.fetchAxisData();
@@ -24,6 +27,8 @@ class DashboardModuleController {
 
         // Mocks
         vm.linechartMockData = chartData;
+        // vm.linechartMockData = vm.fetchToolkitVersions();
+        vm.fetchToolkitVersions();
         vm.linechartMockData2 = chartData2;
         vm.perfMockMap = perfMockMap;
         vm.commProjects = commProjects;
@@ -39,14 +44,21 @@ class DashboardModuleController {
             doit = setTimeout(vm.resizedw, 50);
         };
         window.onresize = vm.resizefn;
-        this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
-        this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
+        vm.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
+        vm.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
     }
 
     fetchProjectData() {
 
-        this.service.getProjectData().then(data => {
+        this.service.getProjectData(this.projectId).then(data => {
             this.projectData = data;
+            // console.log('ProjectData', data);
+        });
+    }
+
+    snapShot() {
+        this.service.snapShot(this.projectId).then(() => {
+            this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
         });
     }
 
@@ -54,6 +66,108 @@ class DashboardModuleController {
 
         this.service.getAxisData().then(data => {
             this.axisData = data;
+            console.log('Axisdata', data);
+        });
+    }
+
+    fetchToolkitVersions() {
+
+        const vm = this;
+
+        vm.service.getToolkitVersions(vm.projectId).then(data => {
+
+            vm.currentVersion = data.length;
+
+
+            const axisData = {
+                labels: [
+                    'Groundwork',
+                    'Partnership',
+                    'Financial health',
+                    'Technology & Architecture',
+                    'Operations',
+                    'Monitoring & Evaulation'
+                ],
+                data: []
+            };
+
+            axisData.data = data.map(version => {
+                return {
+                    date: version.modified,
+                    axis1: version.data[0].axis_score / 100,
+                    axis2: version.data[1].axis_score / 100,
+                    axis3: version.data[2].axis_score / 100,
+                    axis4: version.data[3].axis_score / 100,
+                    axis5: version.data[4].axis_score / 100,
+                    axis6: version.data[5].axis_score / 100
+                };
+            });
+
+            vm.EE.emit('axis chart data', axisData);
+
+
+            // const domainData = {
+            //     'labels': [
+            //         'Groundwork',
+            //         'Partnerships',
+            //         'Financial health',
+            //         'Technology & Architecture',
+            //         'Operations',
+            //         'Monitoring & evaluation'
+            //     ],
+            //     'Groundwork': {
+            //         labels: [
+            //             'Parameters of scale',
+            //             'Contextual environment',
+            //             'Scientific basis'
+            //         ],
+            //         data: []
+            //     },
+            //     'Partnerships': {
+            //         labels: [
+            //             'Strategic engagement',
+            //             'Partnership sustainability'
+            //         ],
+            //         data: []
+            //     },
+            //     'Financial health': {
+            //         labels: [
+            //             'Financial management',
+            //             'Financial model'
+            //         ],
+            //         data: []
+            //     },
+            //     'Technology & Architecture': {
+            //         labels: [
+            //             'Data',
+            //             'Interoperabilty',
+            //             'Adaptability'
+            //         ],
+            //         data: []
+            //     },
+            //     'Operations': {
+            //         labels: [
+            //             'Personell',
+            //             'Training & support',
+            //             'Outreach & sanitization',
+            //             'Contingency planning'
+            //         ],
+            //         data: []
+            //     },
+            //     'Monitoring & evaluation': {
+            //         labels: [
+            //             'Process monitoring',
+            //             'Evaluation reach'
+            //         ],
+            //         data: []
+            //     }
+            // };
+
+            // domainData.labels.forEach((axis, axInd) => {
+            //     Data is there fetch it correctly mofo!
+            //     console.log(axInd, axis);
+            // });
+
         });
     }
 
