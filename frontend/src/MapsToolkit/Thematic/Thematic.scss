@@ -14,9 +14,10 @@ md-dialog {
 
 	md-dialog-content {
 
-		height: 100vh;
 
 		.left {
+
+			min-height: 100vh;
 			background-color: #EEEEEE;
 			width: 300px;
 
