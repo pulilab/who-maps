@@ -16,6 +16,9 @@ import LoginComponent from './Login/loginComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
 import NewProjectComponent from './NewProject/newProjectComponent';
+import viewersComponent from './Viewers/viewersComponent';
+import followersComponent from './Followers/followersComponent';
+import donorsComponent from './Donors/donorsComponent';
 
 const moduleName = 'Components';
 
@@ -32,7 +35,10 @@ angular.module(moduleName,
     .component(LoginComponent.name, LoginComponent)
     .component(SignupComponent.name, SignupComponent)
     .component(AxisComponent.name, AxisComponent)
-    .component(NewProjectComponent.name, NewProjectComponent);
+    .component(NewProjectComponent.name, NewProjectComponent)
+    .component(viewersComponent.name, viewersComponent)
+    .component(followersComponent.name, followersComponent)
+    .component(donorsComponent.name, donorsComponent);
 
 
 export { EE };
