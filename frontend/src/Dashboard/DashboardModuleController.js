@@ -66,7 +66,7 @@ class DashboardModuleController {
 
         this.service.getAxisData().then(data => {
             this.axisData = data;
-            console.log('Axisdata', data);
+            // console.log('Axisdata', data);
         });
     }
 

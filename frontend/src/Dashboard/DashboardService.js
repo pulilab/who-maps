@@ -24,7 +24,7 @@ class DashboardService extends AuthApi {
     getToolkitVersions(projectId) {
         return this.get(projectId + '/toolkit/versions/')
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 return data;
             });
     }
