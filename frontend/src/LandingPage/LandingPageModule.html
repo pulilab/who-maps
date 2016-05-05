@@ -33,11 +33,12 @@
             </div>
         </div>
 
-        <md-card class="content-main md-card md-whiteframe-24dp" id="scroll-to-head" flex=55>
+        <!-- Not logged in -->
+        <md-card class="content-main logged-out md-card md-whiteframe-24dp" flex=55>
             <h2 class="md-display-3">Sign up</h2>
             <h5 class="md-headline">Whether you are an implementer, government, or financial investor, sign up below.</h5>
 
-            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
+            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered" id="scroll-to-head">
                 <div layout="column" class="role-form" ng-init="hideMainForm = false" ng-class="{'hidden' : hideMainForm}">
                     <h4>1. Select your role</h4>
                     <md-radio-group ng-model="vm.register.role">
@@ -101,7 +102,84 @@
                      </div>
                 </div>
             </form>
+        <!-- / -->
+
+        <!-- Logged in -->
+        <!--
+        <md-card class="content-main logged-in md-card md-whiteframe-24dp" flex=55>
+            <h2 class="md-display-3">My Projects</h2>
+
+            <div class="my-project">
+                <h5 class="project-title md-headline">Project name (Country)</h5>
+                <div class="project-links md-block">
+                  <md-button aria-label="Dashboard" class="md-primary" md-no-ink>
+                      <md-icon class="material-icons">apps</md-icon>
+                      Dashboard
+                  </md-button>
+                    <md-button aria-label="Update Scores" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                        Update
+                    </md-button>
+                    <md-button aria-label="Summary Score" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">insert_chart</md-icon>
+                        Summary
+                    </md-button>
+                </div>
+                <div class="project-stats md-block">
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
+                </div>
+            </div>
+
+            <div class="my-project">
+                <h5 class="project-title md-headline">Project name (Country)</h5>
+                <div class="project-links md-block">
+                  <md-button aria-label="Dashboard" class="md-primary" md-no-ink>
+                      <md-icon class="material-icons">apps</md-icon>
+                      Dashboard
+                  </md-button>
+                    <md-button aria-label="Update Scores" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                        Update
+                    </md-button>
+                    <md-button aria-label="Summary Score" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">insert_chart</md-icon>
+                        Summary
+                    </md-button>
+                </div>
+                <div class="project-stats md-block">
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
+                </div>
+            </div>
+
+            <div class="my-project">
+                <h5 class="project-title md-headline">Project name (Country)</h5>
+                <div class="project-links md-block">
+                  <md-button aria-label="Dashboard" class="md-primary" md-no-ink>
+                      <md-icon class="material-icons">apps</md-icon>
+                      Dashboard
+                  </md-button>
+                    <md-button aria-label="Update Scores" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                        Update
+                    </md-button>
+                    <md-button aria-label="Summary Score" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">insert_chart</md-icon>
+                        Summary
+                    </md-button>
+                </div>
+                <div class="project-stats md-block">
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
+                </div>
+            </div>
         </md-card>
+        -->
+        <!-- / -->
     </div>
 
     <!-- Add it later...

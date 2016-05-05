@@ -195,8 +195,45 @@
           border-top: none;
         }
       }
+
+      .my-project {
+        margin: 50px 0 0;
+        padding-bottom: 50px;
+        border-bottom: 1px solid $color-gray-lighter;
+
+        &:last-of-type {
+          border: 0;
+        }
+
+        .project-title {
+          margin: 8px;
+        }
+
+        .project-stats {
+          @include clearfix();
+        }
+
+        viewers,
+        followers,
+        donors {
+          float: left;
+
+          .dash-stat-card {
+            width: 100px;
+            height: 105px;
+            margin: 20px 20px 0 8px;
+          }
+        }
+
+        .project-links {
+          md-button {
+            margin: 0 20px 0 0;
+          }
+        }
+      }
     }
   }
+
 
   .trending {
     margin: 0 30px;
