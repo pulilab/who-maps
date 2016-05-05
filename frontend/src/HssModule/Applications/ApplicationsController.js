@@ -383,9 +383,12 @@ class ApplicationsController {
     }
 
     inputHandler(tile, event) {
-        if (event.which === 13) {
-            this.saveBubbles(tile);
-        }
+        console.log(event);
+        this.timeout(() => {
+            if (event.which === 13) {
+                this.focusBubble(tile, true);
+            }
+        });
     }
 
     changeHandler(tile) {
@@ -528,11 +531,16 @@ class ApplicationsController {
         this.searchForFilledColumns();
     }
 
-    focusBubble(tile) {
+    focusBubble(tile, unfocus) {
         this.timeout(() => {
             const input = document.getElementById('appBubble_' + this.labelGenerator(tile));
             if (input) {
-                input.focus();
+                if (unfocus) {
+                    input.blur();
+                }
+                else {
+                    input.focus();
+                }
             }
         });
     }
