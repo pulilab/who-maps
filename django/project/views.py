@@ -205,7 +205,7 @@ class PartnerLogoListAPIView(TokenAuthMixin, ListCreateAPIView):
         project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
         # Get and store binary files for partnerlogos.
         for key, value in request.FILES.items():
-            PartnerLogo.objects.create(project_id=project.id, data=value.read())
+            PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value.read())
         return Response()
 
 
@@ -217,4 +217,4 @@ class PartnerLogoDetailAPIView(TokenAuthMixin, RetrieveUpdateDestroyAPIView):
         Retrieves binary file for logo image.
         """
         logo = get_object_or_400(PartnerLogo, "No such logo.", id=kwargs["pk"])
-        return HttpResponse(content=logo.data, content_type="image/png")
+        return HttpResponse(content=logo.data, content_type=logo.type)
