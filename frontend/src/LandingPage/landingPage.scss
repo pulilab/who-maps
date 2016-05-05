@@ -97,15 +97,95 @@
       background-color: $color-white;
 
       h2 {
-        color: $color-primary;
         margin-bottom: 0;
+        color: $color-primary;
+      }
+
+      h4 {
+        margin-bottom: 50px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid $color-gray-lighter;
+        color: $color-gray-light;
+        text-transform: uppercase;
+      }
+
+      .hidden {
+        overflow: hidden;
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .form-actions {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        padding-top: 30px;
+        border-top: 1px solid $color-gray-lighter;
+
+        .md-button {
+          margin: 0;
+          min-width: 150px;
+        }
+      }
+
+      .role-form {
+
+        .img-role {
+          // float: left;
+          position: absolute;
+          top: -15px;
+          left: -120px;
+          margin: 0 10px 0 5px;
+          width: 48px;
+          transition: $swift-ease-out;
+        }
+
+        p {
+          margin: 0 20px 40px 100px;
+          transition: $swift-ease-out;
+        }
+
+        md-radio-button {
+          margin: 0 0 20px;
+          padding: 0 20px 0 100px;
+
+          .md-container {
+            margin-top: 2px;
+            margin-left: 100px;
+          }
+        }
+
+        md-radio-button:not(.md-checked) {
+          .md-label,
+          + p {
+            color: $text-disabled;
+          }
+          .img-role {
+            opacity: .4;
+          }
+        }
+
+        md-radio-button.md-checked {
+          .md-label,
+          + p {
+            color: $text-primary;
+          }
+          .img-role {
+            opacity: 1;
+          }
+        }
+      }
+
+      .main-form {
+        .form-actions {
+          margin-top: 0;
+          border-top: none;
+        }
       }
     }
   }
 
   .trending {
     margin: 0 30px;
-    min-height: 500px;
-    background-color: black;
   }
 }
