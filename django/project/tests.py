@@ -110,6 +110,11 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 200)
 
+    def test_create_new_project_unique_name(self):
+        url = reverse("project-list")
+        response = self.test_user_client.post(url, self.project_data)
+        self.assertEqual(response.status_code, 400)
+
     def test_create_new_project_bad_data(self):
         url = reverse("project-list")
         data = copy.deepcopy(self.project_data)
