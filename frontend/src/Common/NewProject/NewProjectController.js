@@ -9,8 +9,10 @@ class NewProjectController extends ProjectDefinition {
     constructor($scope, structure) {
         super();
         this.ns = new NewProjectService();
+        this.EE = window.EE;
         this.districtList = [];
         this.scope = $scope;
+        this.sentForm = false;
         this.axisStructure = this.processAxisStructure(structure);
         this.dataLoaded = false;
         this.ns.projectStructure().then(this.handleDataLoad.bind(this));
@@ -47,6 +49,7 @@ class NewProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
+
     countryCloseCallback(name) {
         const countries = _.filter(this.structure.countries, { name });
         if (countries.length === 1) {
@@ -55,6 +58,7 @@ class NewProjectController extends ProjectDefinition {
             this.ns.countryDistrict(this.project.country)
                 .then(this.handleDistrictData.bind(this));
         }
+        this.handleCustomError('country');
     }
 
     handleDistrictData(data) {
@@ -62,7 +66,7 @@ class NewProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
-    repeatBind(item) {
+    repeatBind(item, form) {
         item.districtCallback = this.districtCloseCallback.bind(this, item);
         item.typeCallback = this.typeCloseCallback.bind(this, item);
     }
@@ -84,13 +88,31 @@ class NewProjectController extends ProjectDefinition {
         this.project.strategy = strategy;
     }
 
+    checkErrors(field) {
+        return !_.isEmpty(this.newProjectForm[field].$error);
+    }
 
     save() {
-        const processedForm = _.cloneDeep(this.project);
-        this.mergeCustomAndDefault(processedForm);
-        this.createCoverageArray(processedForm);
-        processedForm.date = new Date().toJSON();
-        this.ns.newProject(processedForm);
+        this.sentForm = true;
+        if (this.newProjectForm.$valid) {
+            const processedForm = _.cloneDeep(this.project);
+            this.mergeCustomAndDefault(processedForm);
+            this.createCoverageArray(processedForm);
+            processedForm.date = new Date().toJSON();
+            this.ns.newProject(processedForm)
+                .then(response => {
+                    if (response && response.success) {
+                        this.EE.emit('refreshProjects');
+                    }
+                    else {
+                        _.forEach(response.data, (item, key) => {
+                            this.newProjectForm[key].customError = item;
+                            this.newProjectForm[key].$setValidity('custom', false);
+                        });
+                    }
+
+                });
+        }
     }
 
     flattenCustom(obj) {
@@ -131,7 +153,7 @@ class NewProjectController extends ProjectDefinition {
             if (item.other) {
                 type = item.other;
             }
-            else {
+            else if (item.typeChosen) {
                 type = item.typeChosen.replace(' ', '_');
             }
             if (!coverage[item.district]) {
@@ -147,9 +169,9 @@ class NewProjectController extends ProjectDefinition {
         });
     }
 
-    handleCustomError(newProjectForm, key) {
-        newProjectForm[key].$setValidity('custom', true);
-        newProjectForm[key].customError = [];
+    handleCustomError(key) {
+        this.newProjectForm[key].$setValidity('custom', true);
+        this.newProjectForm[key].customError = [];
 
     }
 
