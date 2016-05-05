@@ -48,13 +48,15 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.post(url, data)
 
         country = Country.objects.create(name="country1")
+        country.save()
+        self.country_id = country.id
 
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
             "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
-            "country": country.id,
+            "country": self.country_id,
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -131,6 +133,12 @@ class ProjectTests(APITestCase):
     def test_retrieve_project_list(self):
         url = reverse("project-list")
         response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0].get("name"), "Test Project1")
+
+    def test_retrieve_project_list_by_country(self):
+        url = reverse("project-list")
+        response = self.test_user_client.get(url+"?country={}".format(self.country_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
 
