@@ -2,7 +2,7 @@ import json
 
 from django.http import HttpResponse, Http404
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes
@@ -188,7 +188,7 @@ def get_toolkit_versions(request, project_id):
     return Response(toolkit_versions)
 
 
-class PartnerLogoListAPIView(TokenAuthMixin, ListCreateAPIView):
+class PartnerLogoViewSet(TokenAuthMixin, ViewSet):
 
     def list(self, request, *args, **kwargs):
         """
@@ -208,13 +208,13 @@ class PartnerLogoListAPIView(TokenAuthMixin, ListCreateAPIView):
             PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value.read())
         return Response()
 
-
-class PartnerLogoDetailAPIView(TokenAuthMixin, RetrieveUpdateDestroyAPIView):
-    queryset = PartnerLogo.objects.all()
-
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieves binary file for logo image.
         """
         logo = get_object_or_400(PartnerLogo, "No such logo.", id=kwargs["pk"])
         return HttpResponse(content=logo.data, content_type=logo.type)
+
+    def destroy(self, request, pk=None):
+        get_object_or_400(PartnerLogo, "No such logo.", id=pk).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
