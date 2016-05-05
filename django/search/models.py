@@ -9,7 +9,10 @@ from django.dispatch import receiver
 from core.models import ExtendedModel
 from project.models import Project
 from hss.models import HSS
+from hss.hss_data import interventions
+from hss.views import InterventionView
 from country.models import Country
+from .signals import intervention_save
 
 
 class ProjectSearch(ExtendedModel):
@@ -50,13 +53,18 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
     project_search.location = Country.objects.get(id=instance.data["country"]).name
     project_search.project_name = instance.data["name"]
-    project_search.technology_platform = " ".join([x for x in instance.data["technology_platforms"]])
+    project_search.technology_platform = ", ".join([x for x in instance.data["technology_platforms"]])
     project_search.organisation = instance.data["organisation"]
     project_search.save()
 
 
-@receiver(post_save, sender=HSS)
+@receiver(intervention_save, sender=InterventionView)
 def update_with_hss_data(sender, instance, **kwargs):
-    project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.project_id)
-    intervention_ids = [x for x in instance.data["interventions"]]
-    project_search.health_topic = None
+    intervention_labels = []
+    for col_index, col in enumerate(instance.data["interventions"]):
+        for value in col["interventions"]:
+            intervention_labels.append(interventions.get(col_index)[value])
+    if intervention_labels:
+        project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.project_id)
+        project_search.health_topic = ", ".join(intervention_labels)
+        project_search.save()

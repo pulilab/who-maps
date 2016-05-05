@@ -71,11 +71,19 @@ class ProjectTests(APITestCase):
         }
         url = reverse("project-list")
         response = self.test_user_client.post(url, project_data)
+        self.project_id = response.json().get("id")
 
         project_data2 = copy.deepcopy(project_data)
         project_data2.update(name="phrase3 phrase5")
         project_data2.update(technology_platforms=["phrase2", "phrase1"])
         response = self.test_user_client.post(url, project_data2)
+
+        url = reverse("hss-interventions", kwargs={"project_id": self.project_id})
+        data = {
+                "column_id": 0,
+                "interventions": [1,2],
+            }
+        response = self.test_user_client.post(url, data, format="json")
 
     def test_search_two_fields(self):
         url = reverse("search-project")
@@ -93,6 +101,16 @@ class ProjectTests(APITestCase):
         data = {
             "query": "phrase1",
             "project_name": True,
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+    def test_search_health_topic(self):
+        url = reverse("search-project")
+        data = {
+            "query": "Family planning",
+            "health_topic": True,
         }
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 200)
