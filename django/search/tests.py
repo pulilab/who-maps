@@ -55,7 +55,6 @@ class ProjectTests(APITestCase):
             "country": country.id,
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "digital_tools": ["tools1", "tools2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},

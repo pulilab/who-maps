@@ -8,6 +8,7 @@ from django.dispatch import receiver
 
 from core.models import ExtendedModel
 from project.models import Project
+from hss.models import HSS
 from country.models import Country
 
 
@@ -22,6 +23,7 @@ class ProjectSearch(ExtendedModel):
     @classmethod
     def search(cls, **kwargs):
         """
+        Search based on search term in given fields.
         """
         q_objects = []
 
@@ -41,14 +43,20 @@ class ProjectSearch(ExtendedModel):
 
 
 @receiver(post_save, sender=Project)
-def update_project_search(sender, instance, **kwargs):
+def update_with_project_data(sender, instance, **kwargs):
     """
     Updates relevant ProjectSearch data on every Project model save.
     """
     project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
     project_search.location = Country.objects.get(id=instance.data["country"]).name
     project_search.project_name = instance.data["name"]
-    project_search.health_topic = ""  # What's this?
     project_search.technology_platform = " ".join([x for x in instance.data["technology_platforms"]])
     project_search.organisation = instance.data["organisation"]
     project_search.save()
+
+
+@receiver(post_save, sender=HSS)
+def update_with_hss_data(sender, instance, **kwargs):
+    project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.project_id)
+    intervention_ids = [x for x in instance.data["interventions"]]
+    project_search.health_topic = None
