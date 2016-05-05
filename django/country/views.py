@@ -41,13 +41,18 @@ def get_districts(request, country_id):
         json: districts for the given country in JSON.
     """
     country = get_object_or_400(Country, "No such country.", id=country_id)
-    districts = []
-    for item in country.geodata["admin_level_5"]["objects"]["admin_level_5"]["geometries"]:
-        if "properties" in item.keys():
-            if "admin_level" in item["properties"].keys():
-                name = item["properties"].get("name:en", None) or item["properties"].get("name")
-                districts.append(name)
-    return Response(set(districts))
+    admin_level_5 = country.geodata.get("admin_level_5", None)
+    if admin_level_5:
+        districts = []
+        for item in admin_level_5["objects"]["admin_level_5"]["geometries"]:
+            if "properties" in item.keys():
+                if "admin_level" in item["properties"].keys():
+                    name = item["properties"].get("name:en", None) or item["properties"].get("name")
+                    districts.append(name)
+        return Response(set(districts))
+    else:
+        # No admin_level_5 for the given country.
+        return Response(list())
 
 
 class CountryListAPIView(TokenAuthMixin, generics.ListAPIView):
