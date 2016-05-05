@@ -4,17 +4,12 @@
 .landing-wrapper {
 
   h2 {
-    color: $color-white;
     font-size: rem(6.000);
-  }
-
-  h5 {
-    color: $color-white;
   }
 
   .bg-hero {
     min-height: 800px;
-    background: red url("./images/bg-welcome-1.jpg") 0 -10px;
+    background: $color-primary url("./images/bg-welcome-3.jpg") 0 -10px;
     background-size: cover;
 
     // TODO
@@ -33,6 +28,10 @@
     .search-project {
       padding-right: 50px;
     }
+
+    h2, h5 {
+      color: $color-white;
+    }
   }
 
   .content-wrapper {
@@ -49,7 +48,9 @@
 
       @include clearfix();
 
-      h2 {}
+      h2, h5 {
+        color: $color-white;
+      }
 
       .dha-feature {
         float: left;
@@ -92,7 +93,13 @@
       margin-right: 0;
       margin-bottom: 80px;
       margin-left: 0;
+      padding: 40px 120px;
       background-color: $color-white;
+
+      h2 {
+        color: $color-primary;
+        margin-bottom: 0;
+      }
     }
   }
 

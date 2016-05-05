@@ -8,7 +8,7 @@
             Country View
         </md-button>
         <md-button aria-label="Go to Dashboard" class="view-selector" ui-sref="dashboard" ng-if="vm.isLogin" md-no-ink>
-            <md-icon class="material-icons ">dashboard</md-icon>
+            <md-icon class="material-icons ">apps</md-icon>
             Dashboard
         </md-button>
 
@@ -21,11 +21,11 @@
             <md-icon class="material-icons">help_outline</md-icon>
         </md-button>
 
-        <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink >
+        <md-button class="landing-link" ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink>
             Login
         </md-button>
 
-        <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'signup'" md-no-ink >
+        <md-button class="landing-link" ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'signup'" md-no-ink >
             Sign Up
         </md-button>
 

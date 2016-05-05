@@ -38,11 +38,11 @@ md-tooltip {
 
   .md-display-1 {
     font-size: 40px;
+    margin: 40px 0;
   }
 
   .md-subhead {
-    margin-top: 0;
-    margin-left: 10%;
+    margin: -10px auto 40px;
     max-width: 80%;
     color: $color-gray;
   }
@@ -237,6 +237,10 @@ md-menu-content {
 
       &.view-selector {
         margin-right: 12px;
+      }
+
+      &.landing-link {
+        margin-left: 24px;
       }
 
       .material-icons {
