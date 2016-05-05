@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div flex layout=row class="content-wrapper">
+    <div flex layout="row" class="content-wrapper">
         <div class="what-is-aside" flex=40>
             <h2 class="md-display-3">What's DHA?</h2>
             <div class="md-block dha-feature" layout="row" layout-align="start start">
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <md-card class="content-main md-card md-whiteframe-24dp" flex=55>
+        <md-card class="content-main md-card md-whiteframe-24dp" id="scroll-to-head" flex=55>
             <h2 class="md-display-3">Sign up</h2>
             <h5 class="md-headline">Whether you are an implementer, government, or financial investor, sign up below.</h5>
 
@@ -59,7 +59,7 @@
                     </md-radio-group>
 
                     <div class="form-actions" layout=row layout-align=end>
-                        <md-button class="md-raised md-primary" type="submit" ng-click="hideMainForm = true">
+                        <md-button class="md-raised md-primary" type="submit" ng-click="hideMainForm = true; vm.scrollTo('scroll-to-head')">
                             Go to next step
                         </md-button>
                     </div>
