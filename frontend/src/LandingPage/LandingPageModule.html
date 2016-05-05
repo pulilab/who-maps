@@ -38,7 +38,7 @@
             <h5 class="md-headline">Whether you are an implementer, government, or financial investor, sign up below.</h5>
 
             <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
-                <div layout="column" class="role-form hidden">
+                <div layout="column" class="role-form" ng-init="hideMainForm = false" ng-class="{'hidden' : hideMainForm}">
                     <h4>1. Select your role</h4>
                     <md-radio-group ng-model="vm.register.role">
                         <md-radio-button value="1" ng-selected="true" class="md-primary">
@@ -46,7 +46,7 @@
                           I'm an <b>Implementer</b>
                         </md-radio-button>
                         <p>How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation. </p>
-                        <md-radio-button value="2" class="md-primary md-checked">
+                        <md-radio-button value="2" class="md-primary">
                           <img src="./images/icon-role-investor.svg" alt="" class="img-role">
                           I'm a <b>Financial Investor</b>
                         </md-radio-button>
@@ -59,13 +59,12 @@
                     </md-radio-group>
 
                     <div class="form-actions" layout=row layout-align=end>
-                        <md-button ng-hide="vm.inProgress" class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
+                        <md-button class="md-raised md-primary" type="submit" ng-click="hideMainForm = true">
                             Go to next step
                         </md-button>
-                         <md-progress-circular ng-show="vm.inProgress" md-mode="indeterminate"></md-progress-circular>
                     </div>
                 </div>
-                <div layout="column" class="main-form">
+                <div layout="column" class="main-form" ng-class="{'hidden' : !hideMainForm}">
                     <h4>2. Fill out the form below</h3>
                      <md-input-container class="md-block">
                          <label>Email address</label>
