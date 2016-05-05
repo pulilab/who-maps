@@ -12,9 +12,6 @@ class LandingPageModuleController {
 
         this.$location.hash(idString);
         this.$anchorScroll();
-        console.warn(idString);
-        console.log(this.$anchorScroll);
-        console.log(this.$location);
     }
 
     static landingControllerFactory() {
