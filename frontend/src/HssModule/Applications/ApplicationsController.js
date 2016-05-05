@@ -383,7 +383,6 @@ class ApplicationsController {
     }
 
     inputHandler(tile, event) {
-        console.log(event);
         this.timeout(() => {
             if (event.which === 13) {
                 this.focusBubble(tile, true);
