@@ -1,6 +1,7 @@
 import json
 
 from django.http import HttpResponse, Http404
+from django.db.utils import IntegrityError
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -43,8 +44,12 @@ def project_list(request):
     if request.method == "POST":
         serializer = ProjectSerializer(data=request.data)
         if serializer.is_valid():
-            project = Project.objects.create(name=serializer.data["name"], data=serializer.data)
-            project.save()
+            try:
+                project = Project.objects.create(name=serializer.data["name"], data=serializer.data)
+            except IntegrityError:
+                return Response({"details": "A project with this name already exists."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                project.save()
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.
