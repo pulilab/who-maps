@@ -13,6 +13,7 @@ describe('HSS project partner controller', () => {
     beforeEach(() => {
         EE.initialize();
         cc = ProjectPartnersController.projectPartnersFactory()({}, $timeout, {});
+        cc.$onInit();
     });
 
 
