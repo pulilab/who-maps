@@ -9,12 +9,18 @@ class DashboardService extends AuthApi {
 
     getAxisData() {
         return this.get(this.projectId + '/toolkit/data/')
-            .then(data => data);
+            .then(data => {
+                // console.debug(data);
+                return data;
+            });
     }
 
     getProjectData(projectId) {
         return this.get(projectId)
-            .then(data => data);
+            .then(data => {
+                // console.debug('PROJECT data:', data);
+                return data;
+            });
     }
 
     snapShot(projectId) {
@@ -24,7 +30,15 @@ class DashboardService extends AuthApi {
     getToolkitVersions(projectId) {
         return this.get(projectId + '/toolkit/versions/')
             .then(data => {
-                // console.log(data);
+                // console.debug('RAW toolkit versions:', data);
+                return data;
+            });
+    }
+
+    getCoverageVersions(projectId) {
+        return this.get(projectId + '/coverage/versions/')
+            .then(data => {
+                // console.debug('RAW coverage versions:', data);
                 return data;
             });
     }
