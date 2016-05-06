@@ -4,6 +4,11 @@
 .md-select-menu-container {
   md-option {
     padding: 0 20px 0 36px;
+    transition: $swift-ease-out;
+
+    &:not([disabled]):hover {
+      background-color: rgba(158,158,158,0.2);
+    }
 
     .md-text {
       color: $text-secondary;
@@ -26,7 +31,13 @@
       }
     }
   }
+
+  md-select-menu {
+    overflow-y: visible;
+  }
 }
+
+
 
 md-select.small,
 ssmenu.small {
@@ -36,7 +47,8 @@ ssmenu.small {
 md-select.large,
 ssmenu.large {
   .md-text {
-    font-size: $headline-font-size-base;
+    font-weight: 500;
+    font-size: $title-font-size-base;
   }
   .md-select-icon {
     font-size: $caption-font-size-base;
@@ -65,16 +77,17 @@ ssmenu.large {
 
 .md-select-menu-container.large {
   md-option {
-    padding: 0 24px 0 48px;
+    padding: 0 20px 0 40px;
 
     .md-text {
-      font-size: $headline-font-size-base;
+      font-weight: 500;
+      font-size: $title-font-size-base;
     }
 
     &[selected="selected"] {
       &::before {
         top: 55%;
-        left: 14px;
+        left: 10px;
 
         @include md-icon($headline-font-size-base);
       }
@@ -103,22 +116,32 @@ ssmenu.multiline {
   .option-group-title,
   .selection-limit {
     display: block;
-    padding: 10px 0 5px 10px;
+    padding: 5px 0 5px 10px;
     color: $color-gray-light;
     text-transform: uppercase;
     font-weight: 500;
+  }
+
+  &.small .option-group-title {
     font-size: $caption-font-size-base;
   }
 
   .selection-limit {
-    padding-bottom: 0;
-    color: $color-gray;
+    position: fixed;
+    left: -1px;
+    top: -25px;
+    width: calc(100% - 8px);
+    background: white;
+    background: $color-red;
+    color: $color-white;
+    font-size: $caption-font-size-base;
     text-transform: none;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
 
     &::before {
       float: left;
-      margin-right: 3px;
-      color: $color-gray-light;
+      margin-right: 5px;
+      color: $color-white;
       content: "warning";
 
       @include md-icon(16px);
@@ -158,4 +181,15 @@ ssmenu.multiline {
       background-color: $color-gray-lightest;
     }
   }
+}
+
+
+ssmenu {
+
+  .hint {
+    font-size: 12px;
+    padding-top:5px;
+    color: $color-gray;
+  }
+
 }

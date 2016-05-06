@@ -1,194 +1,173 @@
+<md-toolbar class="main-toolbar toolbar-global">
+    <div class="md-toolbar-tools">
+        <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
+            <span>Digital Health Atlas</span>
+        </md-button>
+        <md-button aria-label="Country Level View" class="view-selector" ng-if="vm.isLogin" md-no-ink>
+            <md-icon class="material-icons">public</md-icon>
+            Country View
+        </md-button>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ui-sref="dashboard" ng-if="vm.isLogin" md-no-ink>
+            <md-icon class="material-icons ">apps</md-icon>
+            Dashboard
+        </md-button>
 
-    <md-toolbar class="main-toolbar">
+        <span flex ></span>
+
+        <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation" md-no-ink>
+            <md-icon class="material-icons">search</md-icon>
+        </md-button>
+        <md-button class="md-icon-button" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
+            <md-icon class="material-icons">help_outline</md-icon>
+        </md-button>
+
+        <md-button class="landing-link" ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink>
+            Login
+        </md-button>
+
+        <md-button class="landing-link" ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'signup'" md-no-ink >
+            Sign Up
+        </md-button>
+
+        <md-menu md-position-mode="target-right target" ng-if="vm.isLogin">
+            <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                <md-icon md-menu-origin class="material-icons ">person</md-icon>
+            </md-button>
+
+            <md-menu-content width="4">
+                    <span class="menu-group-title">
+                        {{vm.user.username}}
+                    </span>
+                <md-menu-item>
+                    <md-button>
+                        <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.user.role}}
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ui-sref="edit-profile">
+                        <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="vm.logout()">
+                        <md-icon class="material-icons">exit_to_app</md-icon>Logout
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+
+
+        <!--<md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation " >-->
+
+            <!--<md-button class="md-icon-button" aria-label="Notification"  ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
+                <!--<md-icon md-menu-origin class="material-icons has-message">email</md-icon>-->
+                <!--<badge counter="vm.notifications.length"></badge>-->
+            <!--</md-button>-->
+            <!--<md-menu-content width="6">-->
+                <!--<md-menu-item ng-repeat="notification in vm.notifications">-->
+                    <!--<p>-->
+                        <!--Pabst pop-up jean shorts portland gastropub everyday carry.-->
+                    <!--</p>-->
+                <!--</md-menu-item>-->
+            <!--</md-menu-content>-->
+        <!--</md-menu>-->
+
+        <md-button class="add-new-project" ui-sref="newProject" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
+            <md-icon class="material-icons">add</md-icon>
+            New Project
+        </md-button>
+
+
+
+    </div>
+</md-toolbar>
+<md-content>
+    <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation">
         <div class="md-toolbar-tools">
-            <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
-                <span>Digital Health Atlas</span>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Apps" ui-sref="dashboard" ng-if="vm.isLogin" md-no-ink>
-                <md-icon class="material-icons ">apps</md-icon>
-
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Public" ng-if="vm.isLogin"  md-no-ink>
-                <md-icon class="material-icons ">public</md-icon>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Help" ng-if="vm.isLogin"  md-no-ink>
-                <md-icon class="material-icons ">help_outline</md-icon>
-            </md-button>
-            <span flex ></span>
-            <md-button ui-sref="info" ui-sref-active="active" class="md-small" ng-if="vm.showFullNavigation" md-no-ink>
-                What is DHA?
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation" md-no-ink>
-                <md-icon class="material-icons">search</md-icon>
-            </md-button>
-
-            <md-button ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" md-no-ink ng-hide="vm.currentPage === 'login'">
-                Login
-            </md-button>
-
-            <md-button ui-sref-active="active" ui-sref="signup" aria-label="Singup" ng-if="!vm.isLogin" md-no-ink ng-hide="vm.currentPage === 'signup'" >
-                Sign Up
-            </md-button>
-
-            <md-menu md-position-mode="target-right target" ng-if="vm.isLogin">
-                <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                    <md-icon md-menu-origin class="material-icons ">person</md-icon>
-                </md-button>
-
-                <md-menu-content width="4">
-                    <md-menu-item>
-                        <span>
-                            {{vm.user.username}}
-                        </span>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button>
-                            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-                            Role: {{vm.user.role}}
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ui-sref="edit-profile">
-                            <md-icon class="material-icons">account_circle</md-icon>
-                            Edit my Profile
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="vm.logout()">
-                            <md-icon class="material-icons">exit_to_app</md-icon>
-                            Logout
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-
-
-            <md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation">
-
-                <md-button class="md-icon-button" aria-label="Notification" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                    <md-icon md-menu-origin class="material-icons has-message">email</md-icon>
-                    <badge counter="vm.notifications.length"></badge>
-                </md-button>
-                <md-menu-content width="6">
-                    <md-menu-item ng-repeat="notification in vm.notifications">
-                        <p>
-                            Pabst pop-up jean shorts portland gastropub everyday carry.
-                        </p>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-
-            <md-button class="md-icon-button" aria-label="Plus" ng-if="vm.showFullNavigation" md-no-ink>
-                <md-icon class="material-icons ">add</md-icon>
-            </md-button>
-
-
-
-        </div>
-    </md-toolbar>
-<md-content layout="column" flex layout-fill>
-    <md-toolbar class="md-medium-tall" ng-if="vm.showFullNavigation" flex layout="column">
-        <div class="md-toolbar-tools">
-            <ssmenu
-                aria-label="Project Choser"
-                options="vm.user.projects"
-                option-label = "name"
-                ng-model="vm.currentProject.name"
-                md-container-class="large"
-                class="large project-selector"
-                on-close-callback="vm.updateProject">
-            </ssmenu>
+            <div class="project-mainmenu">
+                <md-button ui-sref="dashboard" ui-sref-active="active" md-no-ink>Dashboard</md-button>
+                <md-button ui-sref="hss" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
+                <md-button ui-sref="edit-project" ui-sref-active="active" md-no-ink>Edit Project</md-button>
+                <md-button ui-sref="#" ng-if="false" ui-sref-active="active" md-no-ink>Improve Project</md-button>
+                <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>Update Score</md-button>
+                <md-button ui-sref="summary" ui-sref-active="active" md-no-ink>Summary Score</md-button>
+            </div>
             <div flex></div>
             <div class="project-submenu" layout="row">
-              <md-button class="md-small" aria-label="Settings" ui-sref="settings" md-no-ink>
-                  <md-icon class="material-icons ">settings</md-icon>
-                  Settings
-              </md-button>
-              <md-button class="md-small" aria-label="Share" md-no-ink>
-                  <md-icon class="material-icons ">share</md-icon>
-                  Share Link
-              </md-button>
+                <!--<md-button aria-label="Share" md-no-ink >-->
+                    <!--<md-icon class="material-icons">share</md-icon>-->
+                    <!--Share-->
+                <!--</md-button>-->
 
-              <md-menu md-position-mode="target-right target">
-                  <md-button md-menu-origin  class="md-small" aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                      <md-icon class="material-icons ">more_vert</md-icon>
-                      More Actions
-                  </md-button>
+                <!--<md-menu md-position-mode="target-right target">-->
+                    <!--<md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
+                        <!--<md-icon class="material-icons">more_vert</md-icon>-->
+                        <!--More-->
+                    <!--</md-button>-->
 
-                  <md-menu-content width="4">
-                      <md-menu-item>
-                          <span md-menu-align-target>More Actions</span>
-                      </md-menu-item>
-                      <md-menu-item>
-                          <md-button>
-                              <md-icon class="material-icons">person_add</md-icon>
-                              Assign owners/users
-                          </md-button>
-                      </md-menu-item>
-                      <md-menu-item>
-                          <md-button>
-                              <md-icon class="material-icons">lock_outline</md-icon>
-                              Publicity settings
-                          </md-button>
-                      </md-menu-item>
-                      <md-menu-item>
-                          <md-button>
-                              <md-icon class="material-icons">publish</md-icon>
-                              Export pdf/csv
-                          </md-button>
-                      </md-menu-item>
-                  </md-menu-content>
-              </md-menu>
+                    <!--<md-menu-content width="4">-->
+                    <!--<span class="menu-group-title">-->
+                        <!--More Actions-->
+                    <!--</span>-->
+                        <!--<md-menu-item>-->
+                            <!--<md-button>-->
+                                <!--<md-icon class="material-icons">person_add</md-icon>-->
+                                <!--Assign owners/users-->
+                            <!--</md-button>-->
+                        <!--</md-menu-item>-->
+                        <!--<md-menu-item>-->
+                            <!--<md-button>-->
+                                <!--<md-icon class="material-icons">lock_outline</md-icon>-->
+                                <!--Publicity settings-->
+                            <!--</md-button>-->
+                        <!--</md-menu-item>-->
+                        <!--<md-menu-item>-->
+                            <!--<md-button>-->
+                                <!--<md-icon class="material-icons">publish</md-icon>-->
+                                <!--Export pdf/csv-->
+                            <!--</md-button>-->
+                        <!--</md-menu-item>-->
+                    <!--</md-menu-content>-->
+                <!--</md-menu>-->
             </div>
         </div>
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
-
-            <div class="project-mainmenu">
-                <md-button ui-sref="hss" ui-sref-active="active" md-no-ink class="active">
-                  <md-tooltip md-direction="top">CREATE VISUAL FRAMEWORK</md-tooltip>
-                  Visualize Project
-                </md-button>
-                <md-button ui-sref-active="active" md-no-ink>
-                  <md-tooltip md-direction="top">TIPS AND RESOURCES</md-tooltip>
-                  Improve Project
-                </md-button>
-                <md-button ui-sref="maps" ui-sref-active="active" md-no-ink>
-                  <md-tooltip md-direction="top">GO TO MAPS TOOLKIT</md-tooltip>
-                  Update Score
-                </md-button>
-                <md-button ui-sref="summary" ui-sref-active="active" md-no-ink>
-                  <md-tooltip md-direction="top">SHOW SCORE SUMMARY</md-tooltip>
-                  Scorecard
-                </md-button>
-            </div>
-
+            <ssmenu
+                    aria-label="Project Choser"
+                    options="vm.user.projects"
+                    option-label = "name"
+                    ng-model="vm.currentProject.name"
+                    md-container-class="large"
+                    class="large project-selector"
+                    on-close-callback="vm.updateProject">
+            </ssmenu>
 
             <div flex></div>
 
             <div class="project-info" layout="row">
                 <span>
                     Version:
-                    <b>
-                        {{vm.currentProjectMock.version.id}}
-                    </b>
+                    {{vm.currentProjectMock.version.id}}
                     ({{vm.currentProjectMock.version.date}})
                 </span>
+                <span class="menu-separator"></span>
                 <span>
                     Organization:
-                    <b>{{vm.currentProject.organisation}}</b>
+                    {{vm.currentProject.organisation}}
                 </span>
+                <span class="menu-separator"></span>
                 <span>
-                    Contact person:
-                    <md-button ng-href="mailto:{{vm.currentProjectMock.contact.email}}" class="md-small" md-no-ink>
-                        <md-icon class="material-icons ">
-                            mail_outline
-                        </md-icon>
+                    Contact:
+                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>
+                        <!-- <md-icon class="material-icons">
+                            send
+                        </md-icon> -->
                         {{vm.currentProjectMock.contact.name}}
                     </md-button>
                 </span>
             </div>
         </div>
     </md-toolbar>
-    <ui-view name="main" flex layout-padding ></ui-view>
+    <ui-view name="main"></ui-view>
 </md-content>

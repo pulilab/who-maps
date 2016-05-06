@@ -69,10 +69,10 @@ describe('ScorecardController', () => {
 
     it('should have a function that disable go to next axis if is the last one', () => {
         sc.handleProjectData(mockInvariantData());
-        let r = sc.disableGoToNextAxis();
+        let r = sc.isLastAxis();
         expect(r).toBe(false);
         sc.axisId = sc.axesSize;
-        r = sc.disableGoToNextAxis();
+        r = sc.isLastAxis();
         expect(r).toBe(true);
     });
 

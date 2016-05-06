@@ -24,11 +24,19 @@
     <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
 
         <div layout="column" layout-fill  >
-            <div class="domain-header">
-                <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
-                <p>
-                    {{vm.data.sub_text}}
-                </p>
+            <div class="domain-header" layout="row">
+                <div class="left" flex>
+                    <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
+                    <p>
+                        {{vm.data.sub_text}}
+                    </p>
+                </div>
+                <thematic
+                    axis="vm.state.params.axisId"
+                    domain="vm.state.params.domainId"
+                    buttonclass="'md-primary'"
+                    buttontext="'View instructions'">
+                </thematic>
             </div>
             <section ng-repeat="question in vm.data.questions" >
                 <md-subheader >
@@ -80,13 +88,13 @@
             </div>
             <div flex="50" layout="row" layout-align="end center">
                 <md-button class="md-raised md-primary"
-                    ng-hide="vm.isLastAxisLastDomain()"
+                    ng-hide="vm.isLastDomainInAxis()"
                     ng-click="vm.goToNextDomain()">
                     Go to next domain
                     <md-icon>arrow_forward</md-icon>
                 </md-button>
-                <md-button class="md-primary md-raised" ng-show="vm.isLastAxisLastDomain()" ui-sref="summary">
-                    Go to scorecard
+                <md-button class="md-primary md-raised" ng-show="vm.isLastDomainInAxis()" ui-sref="scorecard({axisId: vm.axisId})">
+                    Show scorecard
                     <md-icon>insert_chart</md-icon>
                 </md-button>
             </div>

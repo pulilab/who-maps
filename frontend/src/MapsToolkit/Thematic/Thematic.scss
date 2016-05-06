@@ -1,0 +1,322 @@
+@import '../../variables';
+@import '../../mixins';
+
+.back-icon {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	color: $color-white;
+	font-size: 48px;
+	cursor: pointer;
+  pointer-events: none;
+}
+
+md-dialog {
+
+	md-dialog-content {
+		height: 100vh;
+
+		.left {
+			width: 300px;
+			background-color: #EEEEEE;
+      box-shadow: inset -8px 0 24px rgb(213,213,213);
+
+			.headline {
+				display: block;
+				padding: 20px;
+        border-bottom: 1px solid #BDBDBD;
+
+        h6 {
+          margin: 0;
+          font-weight: 500;
+          font-size: $title-font-size-base;
+        }
+        p {
+          margin-bottom: 0;
+          color: $text-secondary;
+          font-size: $caption-font-size-base;
+        }
+			}
+
+			.axes {
+				border-bottom: 1px solid #D5D5D5;
+
+				&:first-of-type {
+					border-top: 1px solid #D5D5D5;
+				}
+
+				.axis {
+          position: relative;
+					height: 50px;
+					outline: none;
+
+					.iconcontainer {
+						display: inline;
+						margin: 10px 5px 10px 20px;
+						padding: 5px 5px;
+						width: 30px;
+						height: 30px;
+						background-color: $color-gray-light;
+
+						&.active-axis-1 {
+							background-color: $text-primary;
+						}
+						&.active-axis0 {
+							background-color: $text-primary;
+						}
+						&.active-axis1 {
+							background-color: $color-axis1;
+						}
+						&.active-axis2 {
+							background-color: $color-axis2;
+						}
+						&.active-axis3 {
+							background-color: $color-axis3;
+						}
+						&.active-axis4 {
+							background-color: $color-axis4;
+						}
+						&.active-axis5 {
+							background-color: $color-axis5;
+						}
+						&.active-axis6 {
+							background-color: $color-axis6;
+						}
+
+						img {
+							width: 20px;
+							height: 20px;
+						}
+					}
+
+
+					.titles {
+						margin: 10px 10px 12px 5px;
+						color: $text-secondary;
+						text-transform: uppercase;
+						font-weight: 500;
+						font-size: 12px;
+
+						&.active {
+							color: $text-primary;
+
+              + .expander md-icon {
+                color: $text-primary;
+              }
+						}
+					}
+
+					.expander {
+						position: absolute;
+						top: 10px;
+						right: 15px;
+						z-index: 200;
+
+						md-icon {
+							outline: none;
+              color: $text-disabled;
+              text-align: center;
+              font-size: 20px;
+              line-height: 24px;
+							cursor: pointer;
+              transition: $swift-ease-out;
+
+              &:hover {
+                color: $text-primary;
+              }
+						}
+					}
+				}
+
+				.domain {
+					display: block;
+          margin-bottom: 10px;
+					padding-left: 60px;
+					outline: none;
+					color: $text-secondary;
+					font-size: 12px;
+					cursor: pointer;
+
+					&.active-domain {
+						color: $text-primary;
+					}
+				}
+			}
+		}
+
+		.right {
+
+			.right-header {
+        display: block;
+				height: 100px;
+
+				.right-title {
+					padding: 0 65px;
+          height: 100%;
+					color: $color-white;
+					font-size: 32px;
+          line-height: 100px;
+
+          @include text-truncate();
+
+					img {
+            position: relative;
+            top: 2px;
+            margin-right: 10px;
+						width: auto;
+						height: 28px;
+					}
+				}
+
+				&.axis-1 {
+					background-color: $text-primary;
+				}
+				&.axis0 {
+					background-color: $text-primary;
+				}
+				&.axis1 {
+					background-color: $color-axis1;
+				}
+				&.axis2 {
+					background-color: $color-axis2;
+				}
+				&.axis3 {
+					background-color: $color-axis3;
+				}
+				&.axis4 {
+					background-color: $color-axis4;
+				}
+				&.axis5 {
+					background-color: $color-axis5;
+				}
+				&.axis6 {
+					background-color: $color-axis6;
+				}
+			}
+
+			.right-content {
+        padding: 20px 60px;
+
+
+				.axis-html {
+					// Style of the half-dynamic, upper part
+          margin-bottom: 20px;
+
+          p.lead {
+            font-weight: 500;
+            font-size: $title-font-size-base;
+          }
+
+          .graph {
+            img {
+              float: right;
+              margin: 0 0 25px 50px;
+            }
+          }
+				}
+
+				.content-html {
+					// Style of the fully dynamic, lower part
+          margin-bottom: 50px;
+
+          // Table
+          table {
+            margin: 20px 0 40px;
+            width: 100%;
+            text-align: left;
+            font-size: $body-font-size-base;
+            border-bottom: 1px solid lighten($color-primary-muted, 8%);
+
+            thead {
+              th {
+                padding: 4px 24px 4px 8px;
+                background-color: $color-primary;
+                color: $color-white;
+                text-transform: uppercase;
+                white-space: nowrap;
+              }
+            }
+
+            td {
+              padding: 8px 24px 8px 8px;
+              vertical-align: top;
+              border-left: 1px solid lighten($color-primary-muted, 8%);
+
+              &:first-child {
+                border: none;
+              }
+            }
+
+            tr:nth-of-type(even) {
+              td {
+                background-color: lighten($color-primary-muted, 13%);
+              }
+            }
+          }
+
+          // Lists
+          ol, ul {
+            display: block;
+            margin: 20px 0;
+            font-size: $body-font-size-base;
+
+            li {
+              margin-bottom: 10px;
+            }
+          }
+
+          // Blockquotes
+          blockquote {
+            float: right;
+            margin: 0 0 25px 50px;
+            padding: 40px 24px 20px;
+            width: 240px;
+            border-radius: 12px;
+            background: #ECEFF1 url("./images/quote.svg") right top no-repeat;
+
+            h6 {
+              width: 80%;
+              margin: 0;
+              color: #BC8518;
+              text-transform: uppercase;
+              font-size: $subhead-font-size-base;
+            }
+
+            p {
+              font-style: italic;
+              font-size: $body-font-size-base;
+            }
+          }
+
+          // Titles
+          .title-domain {
+            display: block;
+            margin: 20px 0 40px;
+            width: 100%;
+
+            img {
+              float: left;
+              width: 40px;
+              height: auto;
+            }
+            h3 {
+              display: inline-block;
+              margin: 0;
+              padding-left: 15px;
+              font-size: $title-font-size-base;
+              line-height: 40px;
+            }
+          }
+
+          .title-table {
+            margin: 30px 0 0;
+            font-weight: 500;
+            color: $text-secondary;
+            font-size: $body-font-size-base;
+          }
+
+				}
+			}
+		}
+	}
+}

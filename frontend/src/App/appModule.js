@@ -27,14 +27,14 @@ import { Components } from '../Common/';
 const moduleName = 'app';
 const config = ($stateProvider, $urlRouterProvider) => {
     $stateProvider
-        .state(moduleName,
+    .state(moduleName,
         {
             url: '/app/:appName',
             template: _appTemplate,
             controller: moduleName + '.appController',
             controllerAs: 'vm'
         })
-        .state('login',
+    .state('login',
         {
             url: '/login',
             parent: 'app',
@@ -44,13 +44,23 @@ const config = ($stateProvider, $urlRouterProvider) => {
                 }
             }
         })
-        .state('signup',
+    .state('signup',
         {
             url: '/signup',
             parent: 'app',
             views: {
                 main: {
                     template: '<signup></signup>'
+                }
+            }
+        })
+    .state('newProject',
+        {
+            url: '/new-project',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<new-project></new-project>'
                 }
             }
         });
@@ -86,7 +96,7 @@ angular.module(moduleName,
         landingPage,
         mapsToolkit
     ]
-)
+    )
     .controller(moduleName + '.appController', AppController.appControllerFactory())
     .config(config)
     .run(run);
