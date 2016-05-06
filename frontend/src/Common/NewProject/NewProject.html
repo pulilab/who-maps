@@ -1,8 +1,13 @@
 <div layout="column" layout-align="start center" >
-    <div class="page-title">
+    <div class="page-title" ng-hide="vm.editMode">
         <h1 class="md-display-1 text-center">Add new project sheet</h1>
         <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
     </div>
+
+    <div class="page-title" ng-show="vm.editMode">
+        <h1 class="md-display-1 text-center">Edit Project Info</h1>
+    </div>
+
 
     <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
@@ -344,10 +349,12 @@
             </div>
             <div layout="row">
                 <div flex="50" layout="row" layout-align="start center">
-                    <md-button class="md-gray md-raised" ui-sref="dashboard">Cancel process</md-button>
+                    <md-button class="md-gray md-raised" ng-if="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
+                    <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
                 </div>
                 <div flex="50" layout="row" layout-align="end center">
-                    <md-button type="submit" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
                 </div>
             </div>
         </form>
