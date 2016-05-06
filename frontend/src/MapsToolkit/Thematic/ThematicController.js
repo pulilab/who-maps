@@ -11,8 +11,20 @@ class ThematicController {
         this.modal = $mdDialog;
         this.data = mock;
         this.scope = $scope;
+        this.images = this.importIconTemplates();
         this.icons = this.data.map((el, i) => require('./images/icon-axis' + (i - 1) + '.svg'));
 
+    }
+
+    importIconTemplates() {
+        // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const templates = {};
+        const templateRequire = require.context('./images/', true, /\.svg$/);
+        templateRequire.keys().forEach((item) => {
+            const key = item.split('.')[1].replace('/', '');
+            templates[key] = templateRequire(item);
+        });
+        return templates;
     }
 
     showModal() {

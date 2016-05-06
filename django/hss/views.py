@@ -6,6 +6,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from core.views import TokenAuthMixin, get_object_or_400
+from search.signals import intervention_save
 from .hss_data import interventions, applications, taxonomies, continuum
 from .models import HSS
 from . import serializers
@@ -128,6 +129,7 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
             # Update the column with the intervention.
             hss.data["interventions"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
             hss.save()
+            intervention_save.send(sender=InterventionView, instance=hss)
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country
-
+from .models import PartnerLogo
 
 class ProjectTests(APITestCase):
 
@@ -48,13 +48,15 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.post(url, data)
 
         country = Country.objects.create(name="country1")
+        country.save()
+        self.country_id = country.id
 
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
             "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
-            "country": country.id,
+            "country": self.country_id,
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -106,8 +108,13 @@ class ProjectTests(APITestCase):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project5")
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 200)
+
+    def test_create_new_project_unique_name(self):
+        url = reverse("project-list")
+        response = self.test_user_client.post(url, self.project_data)
+        self.assertEqual(response.status_code, 400)
 
     def test_create_new_project_bad_data(self):
         url = reverse("project-list")
@@ -126,6 +133,12 @@ class ProjectTests(APITestCase):
     def test_retrieve_project_list(self):
         url = reverse("project-list")
         response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0].get("name"), "Test Project1")
+
+    def test_retrieve_project_list_by_country(self):
+        url = reverse("project-list")
+        response = self.test_user_client.get(url+"?country={}".format(self.country_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
 
@@ -194,3 +207,76 @@ class ProjectTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[1]["version"], 2)
+
+    def test_upload_partnerlogo(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+
+    def test_upload_partnerlogo_wrong_project(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": 999})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 400)
+
+    def test_retrieve_partnerlogo(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        logo = PartnerLogo.objects.all().first()
+        url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_retrieve_partnerlogo_wrong_id(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        url = reverse("partnerlogo-detail", kwargs={"pk": 999})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_retrieve_partnerlogos_list(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+
+    def test_delete_partnerlogo(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        logo = PartnerLogo.objects.all().first()
+        url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
+        response = self.test_user_client.delete(url)
+        self.assertEqual(response.status_code, 204)
