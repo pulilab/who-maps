@@ -1,0 +1,236 @@
+@import '../../variables';
+@import '../../mixins';
+
+$coverage-height:60px;
+$strategies-height:60px;
+
+new-project {
+
+  .axis1 {
+    background-color: $color-axis1;
+  }
+  .axis2 {
+    background-color: $color-axis2;
+  }
+  .axis3 {
+    background-color: $color-axis3;
+  }
+  .axis4 {
+    background-color: $color-axis4;
+  }
+  .axis5 {
+    background-color: $color-axis5;
+  }
+  .axis6 {
+    background-color: $color-axis6;
+  }
+
+  display:block;
+  padding:16px;
+
+  .disabled {
+    opacity:0.5;
+    pointer-events: none;
+  }
+
+  .red md-icon {
+    color: $color-red;
+  }
+
+  .wrapper {
+    background: $color-white;
+  }
+
+  h4 {
+    height: 55px;
+    background: #EEEEEE;
+    line-height: 55px;
+    padding-left:20px;
+    border-bottom: 1px solid $color-gray-light;
+  }
+
+  .main-form {
+    padding-bottom:50px;
+    margin-bottom:50px;
+    border-bottom: 1px solid $color-gray;
+
+    > md-input-container {
+      width: 700px;
+    }
+
+    .strategies {
+      height:70px;
+
+      md-input-container {
+        width: 400px;
+      }
+
+      .separator {
+        padding-left: 20px;
+        padding-right: 20px;
+        height:70px;
+        line-height: 70px;
+        color: $color-gray;
+      }
+
+      margin-bottom: 40px;
+    }
+
+    .countries {
+      width: 400px;
+
+      md-input-container {
+        width:320px;
+      }
+    }
+
+    > p {
+      width: 60%;
+    }
+
+    .other {
+      width: 40%;
+    }
+
+    section {
+      margin-bottom:70px;
+    }
+  }
+
+  .coverage {
+
+    height:$coverage-height;
+
+    > span {
+      line-height: $coverage-height + 10px;
+      height: $coverage-height;
+      margin-right:5px;
+      margin-left: 5px;
+      color: $color-gray;
+    }
+
+    > .md-button {
+      margin-top:20px;
+    }
+
+    ssmenu {
+      height:$coverage-height;
+    }
+
+  }
+
+  .strategies {
+    height:$strategies-height;
+
+    > span {
+      line-height: $strategies-height + 10px;
+      height: $strategies-height;
+      margin-right:5px;
+      margin-left: 5px;
+      color: $color-gray;
+    }
+  }
+
+  .assessment {
+    height: 155px;
+    border-bottom: 1px solid $color-gray-light;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    p {
+      margin: 0 0 20px;
+      font-size:16px;
+      padding-right: 10px;
+    }
+  }
+
+  .axis-description {
+    height: 100%;
+    img {
+      width: 55px;
+      height: 55px;
+      float: left;
+      margin-right: 10px;
+      margin-top:40px;
+    }
+
+    p {
+      float:left;
+      width: 285px;
+      margin: 38px 0 0;
+      font-size:12px;
+    }
+  }
+
+
+  .hint {
+    font-size: 12px;
+    padding-top:5px;
+    color: $color-gray;
+  }
+
+  .coverage-section {
+
+    margin-bottom: 60px;
+
+    p {
+      width:560px;
+    }
+
+    .coverage {
+
+      .number {
+        width: 80px;
+      }
+      .separator {
+        padding-left:20px;
+        padding-right:20px;
+      }
+
+      .type {
+        width:200px;
+
+        md-input-container {
+          width: 100%;
+        }
+      }
+
+      .other {
+        width:200px;
+      }
+
+      .district {
+        width:200px;
+
+        md-input-container {
+          width: 100%;
+        }
+      }
+    }
+
+  }
+
+
+  .start-date {
+
+    margin-bottom: 40px;
+
+    md-datepicker {
+      width: 445px;
+
+      .md-datepicker-input-container {
+        width: 400px;
+        height: 30px;
+        margin-left: 0;
+      }
+
+      .md-datepicker-button {
+        float: right;
+      }
+    }
+
+  }
+
+}

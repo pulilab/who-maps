@@ -12,44 +12,24 @@
                     <md-card class="dash-stat-card">
 
                         <!-- TODO: bind version nr. -->
-                        <span class="dash-stat-nr dash-stat-nr-version">3.</span>
-                        <span class="dash-stat-label">version</span>
+                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">3.</span>
+                        <span ng-if="!versionHovered" class="dash-stat-label">version</span>
+
+                        <span ng-if="versionHovered" class="dash-stat-tooltip dash-stat-tooltip-version">Push the button below to save your current stats as a new version</span>
+
                         <!-- TODO: bind snapshotting fn. -->
-                        <md-button class="snapshot-button" ng-click="">+ snapshot</md-button>
-                    </md-card>
-
-
-                    <md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
-
-                        <!-- TODO: ng-if trendicons, bind nr. -->
-
-                        <!-- <md-icon class="material-icons dash-trendicon dash-trendicon-up">trending_up</md-icon>
-                        <md-icon class="material-icons dash-trendicon">trending_flat</md-icon> -->
-                        <md-icon class="material-icons dash-trendicon dash-trendicon-up" ng-show="!viewersnrHovered">trending_up</md-icon>
-                        <span class="dash-stat-nr" ng-show="!viewersnrHovered">1509</span>
-                        <span class="dash-stat-label" ng-show="!viewersnrHovered">Viewers</span>
-
-
-                        <md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
-                        <span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates change since the last month.</span>
+                        <md-button
+                            class="snapshot-button"
+                            ng-click=""
+                            ng-mouseover="versionHovered = true"
+                            ng-mouseout="versionHovered = false">+ snapshot</md-button>
 
                     </md-card>
 
-                    <md-card class="dash-stat-card">
-
-                        <!-- TODO: ng-if trendicons, bind nr -->
-                        <md-icon class="material-icons dash-trendicon dash-trendicon-down">trending_down</md-icon>
-                        <span class="dash-stat-nr">87</span>
-                        <span class="dash-stat-label">Followers</span>
-                    </md-card>
-
-                    <md-card class="dash-stat-card">
-
-                        <!-- TODO: bind nr -->
-                        <md-icon class="material-icons dash-trendicon">supervisor_account</md-icon>
-                        <span class="dash-stat-nr">3</span>
-                        <span class="dash-stat-label">Donors</span>
-                    </md-card>
+                    <!-- TODO: bindings -->
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
 
                 </div>
             </div>
@@ -203,6 +183,9 @@
             <div class="dash-subhead">IMPROVE PROJECT</div>
             <md-card flex class="dash-lessons-tips">
 
+                <md-tooltip md-direction="top">
+                    The "Improve project" feature is not available in this version of the software.
+                </md-tooltip>
 
                 <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
@@ -274,6 +257,10 @@
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">COMMUNITY WALL</div>
             <md-card class="dash-community" flex layout="column" ng-init="vm.pi=[0,0,0]">
+
+                <md-tooltip md-direction="top">
+                    The "Community wall" feature is not available in this version of the software.
+                </md-tooltip>
 
                 <div flex class="project-cont">
                     <div layout="row" class="header">

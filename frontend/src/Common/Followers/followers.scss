@@ -1,0 +1,50 @@
+@import "../../variables.scss";
+
+.dash-stat-card {
+
+    height: 100px;
+    text-align: center;
+
+    .dash-trendicon {
+
+        font-size: 32px;
+        height: 32px;
+        width: 32px;
+        margin: 5px auto 5px auto;
+
+        &.dash-trendicon-up {
+            color: $color-green;
+        }
+
+        &.dash-trendicon-down {
+            color: $color-red;
+        }
+
+        &.dash-trendicon-bulb {
+            color: $color-accent;
+            margin: 3px auto 3px auto;
+        }
+    }
+
+    .dash-stat-nr {
+
+        font-size: 24px;
+
+        &.dash-stat-nr-version {
+            margin-top: 8px;
+        }
+    }
+
+    .dash-stat-label {
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    .dash-stat-tooltip {
+        font-size: 10px;
+        text-align: left;
+        padding: 0 10px;
+        color: $text-secondary;
+        letter-spacing: -0.18;
+    }
+}

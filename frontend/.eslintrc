@@ -136,7 +136,7 @@
     /* Stylistic Issues */
     "array-bracket-spacing": [1, "never"],
     "brace-style": [1, "stroustrup", { "allowSingleLine": true }],
-    "camelcase": [1, { "properties": "always" }],
+    "camelcase": [0, { "properties": "always" }],
     "comma-spacing": [1, { "before": false, "after": true }],
     "comma-style": [1, "last"],
     "computed-property-spacing": 0,

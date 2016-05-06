@@ -5,7 +5,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from project.models import Strategy, Technology, Application, Pipeline, Publication
+from country.models import Country
 from .models import HSS
 
 
@@ -35,7 +35,7 @@ class HSSTests(APITestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
-        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
         # Create profile.
         url = reverse("userprofile-list")
@@ -45,32 +45,31 @@ class HSSTests(APITestCase):
             "country": "test_country"}
         response = self.test_user_client.post(url, data)
 
-        # Creating basic data.
-        strat1 = Strategy.objects.create(project_specific=False, name="Strategy1")
-        strat2 = Strategy.objects.create(project_specific=False, name="Strategy2")
-        tech1 = Technology.objects.create(project_specific=False, name="Technology1")
-        tech2 = Technology.objects.create(project_specific=False, name="Technology2")
-        app1 = Application.objects.create(name="Application1")
-        app2 = Application.objects.create(name="Application2")
-        pipeline1 = Pipeline.objects.create(project_specific=False, name="Pipeline1")
-        pipeline2 = Pipeline.objects.create(project_specific=False, name="Pipeline2")
+        country = Country.objects.create(name="country1")
 
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
-            "organisation": "test_org",  # same as for the test user.
-            "strategy": [strat1.id, strat2.id],
-            "technology": [tech1.id, tech2.id],
-            "application": [app1.id, app2.id],
-            "clients": 10,
-            "health_workers": 80,
-            "facilities": 5,
+            "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
+            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
+            "country": country.id,
+            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
+            "application": ["app1", "app2"],
+            "coverage": [
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
             "started": datetime.utcnow(),
-            "donors": "Donor1, Donor2",
-            "pipeline": [pipeline1.id, pipeline2.id],
-            "goals_to_scale": "Some goal.",
-            "anticipated_time": "3 years."
+            "donors": ["donor1", "donor2"],  # Should be text instead of ID - no Donors in MVP
+            "reports": ["http://foo.com", "http://bar.com"],
+            "publications": ["http://foo.com", "http://bar.com"],
+            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
+            "goals_to_scale": "scale",
+            "anticipated_time": "time",
+            "pre_assessment": [1,0,3,0,4,0],
         }
+
         url = reverse("project-list")
         response = self.test_user_client.post(url, self.project_data)
         self.project_id = response.json().get("id")

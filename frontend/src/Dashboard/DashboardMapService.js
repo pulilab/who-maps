@@ -13,7 +13,7 @@ class DashboardMapService extends AuthApi {
     }
 
     getCountryTopo(countryId) {
-        return this.get('/' + countryId + '/geodata/')
+        return this.get(countryId + '/geodata/')
             .then(data => data);
     }
 }

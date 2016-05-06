@@ -3,6 +3,25 @@
 </div>
 
 <div class="wrapper"  layout="column" layout-fill ng-if="vm.dataLoaded && !vm.summary" md-whiteframe >
+    <div layout="row" class="axis-buttons top">
+        <div layout="row" flex="auto" layout-align="start">
+            <md-button class="md-primary" ui-sref="maps({axisId: {{vm.axisId}}})">
+                <md-icon>
+                    replay
+                </md-icon>
+                Start axis again
+            </md-button>
+        </div>
+        <div layout="row" flex="auto" layout-align="end">
+            <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-disabled="vm.disableGoToNextAxis()">
+                Go to next axis
+                <md-icon>
+                    arrow_forward
+                </md-icon>
+            </md-button>
+        </div>
+    </div>
+
     <div layout="row" class="axis-header" ng-class="vm.data.axisClass">
         <div layout="row" flex="auto" layout-align="start center">
             <img ng-src="{{vm.data.axisPicture}}" />
@@ -15,7 +34,7 @@
     </div>
 
     <div layout="column" flex="100" layout-fill class="inner-wrapper">
-        <div ng-repeat="domain in vm.data.domains" layout="column" class="domain">
+        <div ng-repeat="domain in vm.data.domains track by $index" layout="column" class="domain">
             <div layout="row" class="domain-header">
                     <div layout="row" flex="auto" layout-align="start center">
                         <h4>{{domain.domain}} ({{domain.domain_max}} points)</h4>
@@ -25,10 +44,13 @@
                             <md-icon>playlist_add_check</md-icon>
                             Update score
                         </md-button>
-                        <md-button class="md-primary">
-                            <md-icon>help</md-icon>
-                            Show help
-                        </md-button>
+                        <!-- "show help" button and the modal on click -->
+                        <thematic
+                            axis="vm.state.params.axisId"
+                            buttonclass="'md-primary'"
+                            domain="$index"
+                            buttontext="'Show help'">
+                        </thematic>
                     </div>
             </div>
 
@@ -71,7 +93,6 @@
         <div layout="row" flex="auto" layout-align="end center">
                 <span>{{vm.data.axis_score | number : 0}}%</span>
         </div>
-
     </div>
 
     <div layout="row" class="axis-buttons">
@@ -84,27 +105,31 @@
             </md-button>
         </div>
         <div layout="row" flex="auto" layout-align="end">
-            <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-disabled="vm.disableGoToNextAxis()">
+            <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-hide="vm.isLastAxis()">
                 Go to next axis
                 <md-icon>
                     arrow_forward
                 </md-icon>
             </md-button>
+            <md-button class="md-primary md-raised" ng-show="vm.isLastAxis()" ui-sref="summary">
+                Show summary score
+                <md-icon>insert_chart</md-icon>
+            </md-button>
         </div>
-
     </div>
 </div>
+<axis-footer ng-if="vm.dataLoaded && !vm.summary" axes="vm.rawData"></axis-footer>
 
 <div ng-if="vm.dataLoaded && vm.summary" class="axes-scorecard">
     <div class="page-title">
-        <h1 class="md-display-1 text-center">Summary scorecard</h4>
+        <h1 class="md-display-1 text-center">Summary scorecard</h1>
         <h6  class="md-subhead text-center">After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to
             this sheet. This will allow you to compare your progress across the six axes, and to identify the domains
-            that require greater attention and efforts.</p>
+            that require greater attention and efforts.</h6>
     </div>
     <div class="wrapper"  layout="column" layout-fill md-whiteframe >
     <div layout="column" flex="100" layout-fill class="inner-wrapper">
-        <div ng-repeat="axis in vm.data" layout="column" class="axis">
+        <div ng-repeat="(axIndex, axis) in vm.data" layout="column" class="axis">
             <div layout="row" class="axis-header" ng-class="axis.axisClass">
                 <div layout="row" flex="auto" layout-align="start center">
                     <img ng-src="{{ axis.axisPicture }}"/>
@@ -115,20 +140,22 @@
                 </div>
 
             </div>
-            <div layout="row" ng-repeat="domain in axis.domains" class="domain">
+            <div layout="row" ng-repeat="(domIndex, domain) in axis.domains" class="domain">
                     <div layout="row" flex="65" layout-align="start center">
                         <h4>{{domain.domain}} ({{domain.domain_max}} points)</h4>
                     </div>
                     <div layout="row" flex="35" layout-align="end center">
                         <div layout="row" layout-align="end center" flex="auto">
-                            <md-button ng-click="vm.updateScore(domain)">
+                            <md-button ng-click="vm.updateScore(domain, axis)">
                                 <md-icon>playlist_add_check</md-icon>
                                 Update score
                             </md-button>
-                            <md-button>
-                                <md-icon>help</md-icon>
-                                Show help
-                            </md-button>
+                            <!-- "'show help'" button and the modal on click -->
+                            <thematic
+                                axis="axIndex"
+                                domain="domIndex"
+                                buttontext="'Show help'">
+                            </thematic>
                         </div>
                         <div layout="row" layout-align="end center" flex="20">
                             <span class="percentage">
@@ -139,8 +166,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div layout="row" class="scorecard-buttons">
         <div layout="row" flex="auto" layout-align="start">
@@ -159,7 +184,6 @@
                 </md-icon>
             </md-button>
         </div>
-
     </div>
 
 </div>

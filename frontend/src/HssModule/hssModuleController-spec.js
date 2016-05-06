@@ -10,10 +10,14 @@ const $state = {
     params: {}
 };
 
+const $animate = {
+    enabled: () => {}
+};
+
 describe('HssModuleController', () => {
 
     beforeEach(() => {
-        cc = HssModuleController.hssControllerFactory()($scope, $state);
+        cc = HssModuleController.hssControllerFactory()($scope, $state, $animate);
         expect(cc).toBeDefined();
     });
 

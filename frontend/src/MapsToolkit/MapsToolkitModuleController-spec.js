@@ -109,30 +109,18 @@ describe('MapsToolkitModuleController', () => {
         expect(res).toBe(false);
     });
 
-    it('should have a function that disable the forward button', () => {
-        mc.domainId = 2;
-        let res = mc.forwardButtonDisabled();
-        expect(res).toBe(true);
-        mc.domainId = 1;
-        res = mc.forwardButtonDisabled();
-        expect(res).toBe(false);
-    });
-
     it('should have a function that move to the next domain', () => {
         mc.domainId = 0;
+        mc.axisId = 5;
         mc.goToNextDomain();
         expect(mc.handleChangeDomain).toHaveBeenCalled();
-        mc.domainId = 2;
-        mc.goToNextDomain();
-        expect(mc.handleChangeDomain).toHaveBeenCalledTimes(1);
     });
 
     it('should have a function that move to the prev domain', () => {
         mc.domainId = 1;
+        mc.axisId = 1;
         mc.goToPrevDomain();
         expect(mc.handleChangeDomain).toHaveBeenCalled();
         mc.domainId = 0;
-        mc.goToPrevDomain();
-        expect(mc.handleChangeDomain).toHaveBeenCalledTimes(1);
     });
 });

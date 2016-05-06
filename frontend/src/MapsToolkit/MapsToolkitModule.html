@@ -10,11 +10,11 @@
                     <md-icon>insert_chart</md-icon>
                     Scorecard
                 </md-button>
-                <md-button class="md-primary">
+                <md-button class="md-primary" ng-disabled="true">
                     <md-icon>toc</md-icon>
                     Overview
                 </md-button>
-                <md-button class="md-primary">
+                <md-button class="md-primary" ng-disabled="true">
                     <md-icon>pause</md-icon>
                     Pause test
                 </md-button>
@@ -24,11 +24,19 @@
     <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
 
         <div layout="column" layout-fill  >
-            <div class="domain-header">
-                <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
-                <p>
-                    {{vm.data.sub_text}}
-                </p>
+            <div class="domain-header" layout="row">
+                <div class="left" flex>
+                    <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
+                    <p>
+                        {{vm.data.sub_text}}
+                    </p>
+                </div>
+                <thematic
+                    axis="vm.state.params.axisId"
+                    domain="vm.state.params.domainId"
+                    buttonclass="'md-primary'"
+                    buttontext="'View instructions'">
+                </thematic>
             </div>
             <section ng-repeat="question in vm.data.questions" >
                 <md-subheader >
@@ -58,7 +66,7 @@
                         ></md-checkbox>
                     </div>
                     <div flex="10" class="fourth-box" layout="column" layout-align="center center">
-                        <span ng-show="answer.value !== null" >{{answer.value}} points</span>
+                        <span ng-show="answer.value !== null" > {{vm.printAnswer(answer)}} points</span>
 
                     </div>
                 </div>
@@ -78,12 +86,16 @@
                     Go to prev domain
                 </md-button>
             </div>
-            <div flex="50" layout="column" layout-align="center end">
+            <div flex="50" layout="row" layout-align="end center">
                 <md-button class="md-raised md-primary"
-                    ng-disabled="vm.forwardButtonDisabled()"
+                    ng-hide="vm.isLastDomainInAxis()"
                     ng-click="vm.goToNextDomain()">
                     Go to next domain
                     <md-icon>arrow_forward</md-icon>
+                </md-button>
+                <md-button class="md-primary md-raised" ng-show="vm.isLastDomainInAxis()" ui-sref="scorecard({axisId: vm.axisId})">
+                    Show scorecard
+                    <md-icon>insert_chart</md-icon>
                 </md-button>
             </div>
         </div>

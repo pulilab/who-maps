@@ -335,13 +335,13 @@ describe('applicationsController', () => {
         const mockEvent = {
             which: 14
         };
-        spyOn(ac, 'saveBubbles');
+        spyOn(ac, 'focusBubble');
         ac.inputHandler({}, mockEvent);
-        expect(ac.saveBubbles).not.toHaveBeenCalled();
+        expect(ac.focusBubble).not.toHaveBeenCalled();
 
         mockEvent.which = 13;
         ac.inputHandler({}, mockEvent);
-        expect(ac.saveBubbles).toHaveBeenCalled();
+        expect(ac.focusBubble).toHaveBeenCalled();
     });
 
     it('should have a function that find proper tiles candidate to create a bubble', () => {
@@ -451,6 +451,7 @@ describe('applicationsController', () => {
 
     it('should have a function to handle blur event that delete the bubble when empty', () => {
         spyOn(ac, 'deleteBubble');
+        spyOn(ac.dialog, 'confirm').and.returnValue(confirmMock);
         const tile = { content: '' };
         ac.blurHandler(tile);
         expect(ac.deleteBubble).toHaveBeenCalled();

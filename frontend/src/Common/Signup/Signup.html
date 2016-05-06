@@ -1,31 +1,34 @@
-<div layout="column" layout-align="start center" ng-style="vm.style" >
+<div layout="column" layout-align="start center" ng-style="vm.style">
   <div class="page-title">
     <h1 class="md-display-1 text-center">Sign up</h1>
     <!-- <h6>Subtitle if needed</h6> -->
   </div>
 
-    <div md-whiteframe="2" class="layout-padding-xl">
+    <div md-whiteframe="2">
         <md-content layout="column">
             <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
                 <div layout="column" class="role-form">
-                        <h4>1. Select your role</h4>
+                    <h4>1. Select your role</h4>
                     <md-radio-group ng-model="vm.register.role">
                         <md-radio-button value="1" ng-selected="true" class="md-primary">
-                          Digital Project Implementer/Owner
+                          <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
+                          Implementer
                         </md-radio-button>
+                        <p class="md-small">How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation. </p>
                         <md-radio-button value="2" class="md-primary">
-                          Donor
+                          <img src="./images/icon-role-investor.svg" alt="" class="img-role">
+                          Financial Investor
                         </md-radio-button>
+                        <p class="md-small">What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio. </p>
                         <md-radio-button value="3" class="md-primary">
+                          <img src="./images/icon-role-government.svg" alt="" class="img-role">
                           Government
                         </md-radio-button>
+                        <p class="md-small">Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country. </p>
                     </md-radio-group>
-                    <p>
-                        <small>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum.</small>
-                    </p>
                 </div>
                 <div layout="column" class="main-form">
-                    <h4>2. Fill out the form below</h3>
+                    <h4>2. Fill out the form below</h4>
                      <md-input-container class="md-block">
                          <label>Email address</label>
                          <input ng-model="vm.register.email" required name="email" type="email" ng-change="vm.handleCustomError(signupForm, 'email')" />

@@ -68,8 +68,8 @@ describe('DashboardModuleController', () => {
     it('handles axis components domain change event with redirecting to correct maps toolkit page', () => {
         expect(vm.EE.on).toHaveBeenCalled();
 
-        vm.handleChangeDomain(1);
-        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'domainId': 1 });
+        vm.handleChangeDomain(1, 1);
+        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 1 });
     });
 
     it('should have a function that handle a change axis event', () => {

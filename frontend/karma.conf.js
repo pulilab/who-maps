@@ -52,7 +52,8 @@ module.exports = function(config) {
             },
             plugins: [
                 new webpack.DefinePlugin({
-                    API: '"/api/"'
+                    API: '"/api/"',
+                    DEV: false
                 })
             ]
         },

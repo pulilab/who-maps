@@ -2,47 +2,57 @@
 @import '../mixins';
 
 .question-header {
-    height: 73px;
     padding-bottom: 10px;
+    height: 73px;
     background: #EEEEEE;
     box-shadow: 0px 1px 0px 0px #BDBDBD;
     color: $color-black;
-    font-size:12px;
     text-transform: uppercase;
+    font-size: 12px;
+
     .question-text {
         padding-top:23px;
         padding-bottom:13px;
         padding-left:60px;
-        font-size:20px;
         text-transform: none;
+        font-size:20px;
         line-height: 24px;
     }
 }
 
 .md-subheader .md-subheader-inner {
-    padding:0;
+    padding: 0;
 }
 
 .maps-toolkit {
 
     .domain-header {
-        padding-left:60px;
         padding-top:40px;
-        color:$color-black;
+        padding-left:60px;
+        color:$text-primary;
 
-        h4 {
-            font-size:32px;
-            font-weight: normal;
-            padding-bottom:24px;
-            -webkit-margin-before: 0;
-            -webkit-margin-after: 0;
+        .left {
+
+            h4 {
+                padding-bottom:24px;
+                font-weight: normal;
+                font-size:32px;
+
+                -webkit-margin-before: 0;
+                -webkit-margin-after: 0;
+            }
+            p {
+                padding-bottom:40px;
+                font-style:italic;
+                font-size:14px;
+
+                -webkit-margin-before: 0;
+                -webkit-margin-after: 0;
+            }
         }
-        p {
-            font-size:14px;
-            font-style:italic;
-            padding-bottom:40px;
-            -webkit-margin-before: 0;
-            -webkit-margin-after: 0;
+
+        thematic {
+            margin-right: 40px;
         }
 
     }
@@ -50,11 +60,11 @@
 
 
     .axis-row {
-        background-color: $color-white;
         margin-top:10px;
         margin-bottom:10px;
-        height:50px;
         max-height:50px;
+        height:50px;
+        background-color: $color-white;
 
         md-card {
             margin:0;
@@ -62,8 +72,8 @@
         }
     }
     .domain-questions {
-        background-color: $color-white;
         margin-bottom:40px;
+        background-color: $color-white;
     }
 
     md-content {
@@ -71,8 +81,8 @@
     }
 
     md-checkbox {
-        width: 20px;
         margin-bottom:0;
+        width: 20px;
     }
 
     .answer {
@@ -86,14 +96,13 @@
     }
 
     .answer-wrapper {
-        font-family: Roboto-Regular;
-        font-size: 14px;
-        color: $text-primary ;
-        line-height: 20px;
         padding-top: 24px;
+        padding-right: 100px;
         padding-bottom:24px;
         padding-left: 60px;
-        padding-right: 100px;
+        color: $text-primary ;
+        font-size: 14px;
+        line-height: 20px;
 
         li {
             margin-left:20px;
@@ -101,13 +110,13 @@
     }
 
     .domain-scoore {
-        height: 76px;
-        font-size:20px;
-        font-weight: 500;
+        margin-bottom:40px;
         padding-right:60px;
         padding-left:60px;
+        height: 76px;
         background: #FFF9C4;
-        margin-bottom:40px;
+        font-weight: 500;
+        font-size:20px;
     }
 
     .domain-button {
@@ -116,8 +125,8 @@
         padding-left:60px;
 
         .md-button {
-            padding-left:20px;
             padding-right:20px;
+            padding-left:20px;
         }
     }
 }

@@ -39,6 +39,7 @@ class AppModuleController extends Protected {
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
+        this.EE.on('refreshProjects', this.fillUserData.bind(this, true));
     }
 
     handleLoginEvent(forced) {
@@ -55,18 +56,23 @@ class AppModuleController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData() {
+    fillUserData(forceJump) {
         this.as.getProjects()
         .then(projects => {
             this.user.projects = projects;
             if (this.state.params.appName.length === 0) {
-                this.state.go(this.state.current.name, { 'appName': this.user.projects[0].id });
+                const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
+                this.state.go(state, { 'appName': this.user.projects[0].id });
             }
             _.forEach(this.user.projects, item => {
                 if (item.id === parseInt(this.state.params.appName, 10)) {
                     this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
                 }
             });
+
+            if (forceJump) {
+                this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
+            }
 
             this.scope.$evalAsync();
         });

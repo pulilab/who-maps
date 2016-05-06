@@ -56,7 +56,7 @@ describe('ScorecardController', () => {
 
     it('should have a function that leads to the maps toolkit on the proper domain', () => {
         const d = {
-            id: 1
+            index: 0
         };
         sc.updateScore(d);
         expect(sc.state.go).toHaveBeenCalledWith('maps', { axisId: 0, domainId: 0 });
@@ -69,10 +69,10 @@ describe('ScorecardController', () => {
 
     it('should have a function that disable go to next axis if is the last one', () => {
         sc.handleProjectData(mockInvariantData());
-        let r = sc.disableGoToNextAxis();
+        let r = sc.isLastAxis();
         expect(r).toBe(false);
         sc.axisId = sc.axesSize;
-        r = sc.disableGoToNextAxis();
+        r = sc.isLastAxis();
         expect(r).toBe(true);
     });
 

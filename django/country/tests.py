@@ -36,19 +36,32 @@ class CountryTests(APITestCase):
 
         geodata = {
             "admin_level_5": {
-                "features": [
-                    {
-                        "properties": {
-                            "admin_level": "5",
-                            "name": "Some District"
-                        }
+                "objects": {
+                    "admin_level_5": {
+                        "geometries": [
+                            {
+                                "properties": {
+                                    "name": "Some District",
+                                    "admin_level": "5"
+                                }
+                            }
+                        ]
                     }
-                ]
+                }
             }
         }
+
         country, _ = Country.objects.get_or_create(name="name1", geodata=geodata)
         country.save()
         self.country_id = country.id
+
+        geodata_no_districts = {
+            "admin_level_2": {
+            }
+        }
+        country, _ = Country.objects.get_or_create(name="name2", geodata=geodata_no_districts)
+        country.save()
+        self.no_districts_country_id = country.id
 
     def test_get_geodata(self):
         url = reverse("get-geodata", kwargs={"country_id": self.country_id})
@@ -66,3 +79,10 @@ class CountryTests(APITestCase):
         url = reverse("get-districts", kwargs={"country_id": self.country_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertIn("Some District", response.json())
+
+    def test_get_districts_no_districts(self):
+        url = reverse("get-districts", kwargs={"country_id": self.no_districts_country_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [])
