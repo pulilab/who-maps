@@ -12,7 +12,7 @@
                     <md-card class="dash-stat-card">
 
                         <!-- TODO: bind version nr. -->
-                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">3.</span>
+                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
                         <span ng-if="!versionHovered" class="dash-stat-label">version</span>
 
                         <span ng-if="versionHovered" class="dash-stat-tooltip dash-stat-tooltip-version">Push the button below to save your current stats as a new version</span>
@@ -20,7 +20,7 @@
                         <!-- TODO: bind snapshotting fn. -->
                         <md-button
                             class="snapshot-button"
-                            ng-click=""
+                            ng-click="vm.snapShot()"
                             ng-mouseover="versionHovered = true"
                             ng-mouseout="versionHovered = false">+ snapshot</md-button>
 
@@ -30,7 +30,7 @@
                     <!-- TODO: bindings -->
                     <viewers trend="'up'" number="1509"></viewers>
                     <followers trend="'down'" number="87"></followers>
-                    <donors number="3"></donors>
+                    <donors number="vm.projectData.donors.length"></donors>
 
                 </div>
             </div>
@@ -80,10 +80,7 @@
 
                         <md-tab label="axis">
                             <div>
-                                <!-- TODO: bindings -->
                                 <linechart
-                                    data="vm.linechartMockData.data"
-                                    labels="vm.linechartMockData.labels"
                                     showdotted="true">
                                 </linechart>
                             </div>
@@ -91,17 +88,14 @@
 
                         <md-tab label="domains">
                             <div>
-                                <!-- TODO: bindings -->
                                 <linechart
-                                    data="vm.linechartMockData2"
-                                    labels="vm.linechartMockData2.labels"
                                     showdotted="false"
                                     datachooser="true"
                                 ></linechart>
                             </div>
                         </md-tab>
 
-                        <md-tab label="technology">
+                        <md-tab label="technology" ng-disabled="true">
                             <!-- TODO: bindings! -->
                             <div class="dash-tech">
                                 <div
@@ -271,6 +265,7 @@
                         <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === vm.commProjects[0].length - 1" ng-click="vm.nextProject(0)">chevron_right</md-icon>
                     </div>
                     <projectcomp
+                        show-details="true"
                         ng-model="vm.commProjects[0][vm.pi[0]]">
                     </projectcomp>
                 </div>
@@ -282,6 +277,7 @@
                         <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === vm.commProjects[1].length - 1" ng-click="vm.nextProject(1)">chevron_right</md-icon>
                     </div>
                     <projectcomp
+                        show-details="true"
                         ng-model="vm.commProjects[1][vm.pi[1]]">
                     </projectcomp>
                 </div>
@@ -293,6 +289,7 @@
                         <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === vm.commProjects[2].length - 1" ng-click="vm.nextProject(2)">chevron_right</md-icon>
                     </div>
                     <projectcomp
+                        show-details="true"
                         ng-model="vm.commProjects[1][vm.pi[2]]">
                     </projectcomp>
                 </div>

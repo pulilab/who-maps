@@ -43,6 +43,10 @@
 
                 cursor: default;
 
+                viewers, followers {
+                    opacity:0.5;
+                }
+
                 .dash-stat-tooltip-version {
 
                     padding-top: 11px;

@@ -1,8 +1,6 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
 
-import chartData from './Mocks/chartmock.js';
-import chartData2 from './Mocks/chartmock2.js';
 import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
 import commProjects from './Mocks/commProjects.js';
@@ -18,6 +16,9 @@ class DashboardModuleController {
         vm.state = $state;
         vm.EE = window.EE;
 
+        this.projectId = $state.params.appName;
+        vm.currentVersion = 0;
+
         vm.service = new DashboardService(this.state.params.appName);
         vm.mapService = new DashboardMapService();
 
@@ -27,9 +28,9 @@ class DashboardModuleController {
 
         vm.fetchProjectData();
 
+        vm.fetchToolkitVersions();
+
         // Mocks
-        vm.linechartMockData = chartData;
-        vm.linechartMockData2 = chartData2;
         vm.perfMockMap = perfMockMap;
         vm.commProjects = commProjects;
 
@@ -46,19 +47,22 @@ class DashboardModuleController {
         window.onresize = vm.resizefn;
 
         // Routers for the axis components
-        this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
-        this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
+        vm.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
+        vm.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
+
     }
 
     fetchProjectData() {
 
-        this.fetchAxisData();
-
-        this.service.getProjectData(this.state.params.appName).then(data => {
-
+        this.service.getProjectData(this.projectId).then(data => {
             this.projectData = data;
+            // console.log('ProjectData', data);
+        });
+    }
 
-            this.fetchCountryMap(data.country);
+    snapShot() {
+        this.service.snapShot(this.projectId).then(() => {
+            this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
         });
     }
 
@@ -66,6 +70,112 @@ class DashboardModuleController {
 
         this.service.getAxisData().then(data => {
             this.axisData = data;
+            // console.log('Axisdata', data);
+        });
+    }
+
+    fetchToolkitVersions() {
+
+        const vm = this;
+
+        vm.service.getToolkitVersions(vm.projectId).then(data => {
+
+            vm.currentVersion = data.length;
+
+            const axisData = {
+                labels: [
+                    'Groundwork',
+                    'Partnership',
+                    'Financial health',
+                    'Technology & Architecture',
+                    'Operations',
+                    'Monitoring & Evaulation'
+                ],
+                data: []
+            };
+            axisData.data = data.map(version => {
+                return {
+                    date: version.modified,
+                    axis1: version.data[0].axis_score / 100,
+                    axis2: version.data[1].axis_score / 100,
+                    axis3: version.data[2].axis_score / 100,
+                    axis4: version.data[3].axis_score / 100,
+                    axis5: version.data[4].axis_score / 100,
+                    axis6: version.data[5].axis_score / 100
+                };
+            });
+            vm.EE.emit('axis chart data', axisData);
+
+
+            const domainData = {
+                'labels': [
+                    'Groundwork',
+                    'Partnerships',
+                    'Financial health',
+                    'Technology & Architecture',
+                    'Operations',
+                    'Monitoring & evaluation'
+                ],
+                'Groundwork': {
+                    labels: [
+                        'Parameters of scale',
+                        'Contextual environment',
+                        'Scientific basis'
+                    ],
+                    data: []
+                },
+                'Partnerships': {
+                    labels: [
+                        'Strategic engagement',
+                        'Partnership sustainability'
+                    ],
+                    data: []
+                },
+                'Financial health': {
+                    labels: [
+                        'Financial management',
+                        'Financial model'
+                    ],
+                    data: []
+                },
+                'Technology & Architecture': {
+                    labels: [
+                        'Data',
+                        'Interoperabilty',
+                        'Adaptability'
+                    ],
+                    data: []
+                },
+                'Operations': {
+                    labels: [
+                        'Personell',
+                        'Training & support',
+                        'Outreach & sanitization',
+                        'Contingency planning'
+                    ],
+                    data: []
+                },
+                'Monitoring & evaluation': {
+                    labels: [
+                        'Process monitoring',
+                        'Evaluation reach'
+                    ],
+                    data: []
+                }
+            };
+
+            domainData.labels.forEach((axis, axInd) => {
+                domainData[axis].data = data.map(version => {
+                    const ret = {};
+                    ret.date = version.modified;
+                    version.data[axInd].domains.forEach((domain, domainInd) => {
+                        ret['axis' + (domainInd + 1)] = domain.domain_percentage / 100;
+                    });
+                    return ret;
+                });
+            });
+            vm.EE.emit('domain chart data', domainData);
+
         });
     }
 
