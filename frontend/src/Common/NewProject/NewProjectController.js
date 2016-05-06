@@ -6,21 +6,39 @@ import ProjectDefinition from '../ProjectDefinition';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, structure) {
+    constructor($scope, $state, structure) {
         super();
         this.ns = new NewProjectService();
         this.EE = window.EE;
-        this.districtList = [];
         this.scope = $scope;
-        this.sentForm = false;
+        this.state = $state;
         this.axisStructure = this.processAxisStructure(structure);
-        this.dataLoaded = false;
-        this.ns.projectStructure().then(this.handleDataLoad.bind(this));
+        this.$onInit = this.initialization.bind(this);
+        this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
+        this.bindFunctions();
+    }
+
+    bindFunctions() {
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
         this.districtCloseCallback = this.districtCloseCallback.bind(this);
         this.setStrategy = this.setStrategy.bind(this);
         this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
+    }
+
+    initialization() {
+        this.districtList = [];
+        this.dataLoaded = false;
+        this.sentForm = false;
+        this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
+        if (this.editMode) {
+            this.projectId = this.state.params.appName;
+            this.ns.projectData(this.projectId)
+                .then(answer => {
+                    _.merge(this.project, answer);
+                    console.log(this.project);
+                });
+        }
     }
 
     importIconTemplates() {
@@ -42,7 +60,7 @@ class NewProjectController extends ProjectDefinition {
         return structure;
     }
 
-    handleDataLoad(data) {
+    handleStructureLoad(data) {
         this.dataLoaded = true;
         this.structure = data;
         this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
@@ -180,10 +198,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
 
-        function newProject($scope) {
-            return new NewProjectController($scope, structure);
+        function newProject($scope, $state) {
+            return new NewProjectController($scope, $state, structure);
         }
-        newProject.$inject = ['$scope'];
+        newProject.$inject = ['$scope', '$state'];
         return newProject;
     }
 }

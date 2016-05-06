@@ -26,6 +26,10 @@ class NewProjectService extends AuthApi {
         return this.get('projects/structure/');
     }
 
+    projectData(id) {
+        return this.get(`projects/${id}`);
+    }
+
     countryDistrict(id) {
         return this.get('countries/' + id + '/districts');
     }

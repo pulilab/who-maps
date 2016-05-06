@@ -35,7 +35,7 @@ describe('NewProjectController', () => {
 
     it('should have a function that handle the server data loading', () => {
 
-        sc.handleDataLoad(mockData);
+        sc.handleStructureLoad(mockData);
         expect(sc.dataLoaded).toBeTruthy();
         expect(sc.structure.coverageTypes.length).toBe(3);
         expect(sc.scope.$evalAsync).toHaveBeenCalled();
@@ -44,7 +44,7 @@ describe('NewProjectController', () => {
 
     it('should have a function that handles the country ssmenu callback', () => {
         spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve());
-        sc.handleDataLoad(mockData);
+        sc.handleStructureLoad(mockData);
         sc.countryCloseCallback('asd');
         expect(sc.project.countryName).toBe('asd');
         expect(sc.ns.countryDistrict).toHaveBeenCalled();

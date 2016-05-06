@@ -14,7 +14,7 @@
                 <h4>1. Project details</h4>
                 <md-input-container >
                     <label>Name of the project</label>
-                    <input ng-model="vm.project.name" required name="name" md-maxlength="100" type="text" ng-change="vm.handleCustomError('name')" />
+                    <input ng-model="vm.project.name" ng-disabled="vm.editMode" required name="name" md-maxlength="100" type="text" ng-change="vm.handleCustomError('name')" />
                     <div ng-messages="vm.newProjectForm.name.$error">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
