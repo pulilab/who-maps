@@ -97,7 +97,7 @@ md-dialog {
 						font-weight: 500;
 						font-size: 12px;
 
-						&.active {
+            &.active {
 							color: $text-primary;
 
               + .expander md-icon {
@@ -135,8 +135,10 @@ md-dialog {
 					color: $text-secondary;
 					font-size: 12px;
 					cursor: pointer;
+          transition: $swift-ease-out;
 
-					&.active-domain {
+          &:hover,
+          &.active-domain {
 						color: $text-primary;
 					}
 				}
@@ -196,17 +198,20 @@ md-dialog {
 			.right-content {
         padding: 30px 70px;
 
-
 				.axis-html {
 					// Style of the half-dynamic, upper part
+          @include clearfix();
 
           p.lead {
+            margin-bottom: 30px;
             font-weight: 500;
             font-size: $title-font-size-base;
           }
 
           .graph {
             img {
+              width: 50%;
+              max-width: 500px;
               float: right;
               margin: 10px 0 25px 50px;
             }
@@ -215,7 +220,7 @@ md-dialog {
 
 				.content-html {
 					// Style of the fully dynamic, lower part
-          margin-bottom: 50px;
+          margin: 20px 0 50px;
 
           // Table
           table {
