@@ -1,10 +1,5 @@
 const perfMockMap = {
 
-    'country': {
-        name: 'Sierra Leone',
-        flagUrl: 'http://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Sierra_Leone.svg'
-    },
-
     'labels': [
         'Bo District',
         'Kono District',
