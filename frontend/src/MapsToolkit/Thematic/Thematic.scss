@@ -196,7 +196,7 @@ md-dialog {
 			}
 
 			.right-content {
-        padding: 30px 70px;
+        padding: 30px 120px 30px 70px;
 
 				.axis-html {
 					// Style of the half-dynamic, upper part
@@ -213,7 +213,7 @@ md-dialog {
               width: 50%;
               max-width: 500px;
               float: right;
-              margin: 10px 0 25px 50px;
+              margin: 10px -25px 25px 50px;
             }
           }
 				}
@@ -289,12 +289,31 @@ md-dialog {
               font-style: italic;
               font-size: $body-font-size-base;
             }
+
+            &.full-block {
+              float: none;
+              width: 100%;
+              display: block;
+              margin: 40px 0;
+              -webkit-column-count: 3;
+              -moz-column-count: 3;
+              column-count: 3;
+              -webkit-column-gap: 20px;
+              -moz-column-gap: 20px;
+              column-gap: 20px;
+
+              > div {
+                -webkit-column-break-inside: avoid;
+                page-break-inside: avoid;
+                break-inside: avoid;
+              }
+            }
           }
 
           // Titles
           .title-domain {
             display: block;
-            margin: 20px 0 40px;
+            margin: 20px 0 30px;
             width: 100%;
 
             img {
