@@ -1,27 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="33px" height="19px" viewBox="0 0 33 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
-    <title>icon-axis1</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Flex---2---Project-Details" transform="translate(-20.000000, -105.000000)" fill="#FEFEFE">
-            <g id="Overview">
-                <g transform="translate(10.000000, 87.000000)">
-                    <g id="icon-axis1" transform="translate(10.000000, 18.000000)">
-                        <polygon id="Fill-3" points="13.267 4.258 20.643 4.258 20.643 0.57 13.267 0.57"></polygon>
-                        <polygon id="Fill-4" points="4.968 13.478 12.344 13.478 12.344 9.79 4.968 9.79"></polygon>
-                        <polygon id="Fill-5" points="13.267 13.478 20.643 13.478 20.643 9.79 13.267 9.79"></polygon>
-                        <polygon id="Fill-6" points="21.565 13.478 28.942 13.478 28.942 9.79 21.565 9.79"></polygon>
-                        <polygon id="Fill-7" points="9.072 8.868 16.448 8.868 16.448 5.18 9.072 5.18"></polygon>
-                        <polygon id="Fill-8" points="17.37 8.868 24.746 8.868 24.746 5.18 17.37 5.18"></polygon>
-                        <polygon id="Fill-9" points="0.773 18.049 8.149 18.049 8.149 14.36 0.773 14.36"></polygon>
-                        <polygon id="Fill-10" points="9.071 18.049 16.447 18.049 16.447 14.36 9.071 14.36"></polygon>
-                        <polygon id="Fill-11" points="17.37 18.049 24.747 18.049 24.747 14.36 17.37 14.36"></polygon>
-                        <polygon id="Fill-12" points="24.668 18.049 32.044 18.049 32.044 14.36 24.668 14.36"></polygon>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="19px" viewBox="0 0 33 19" enable-background="new 0 0 33 19" xml:space="preserve">
+<title>icon-axis1</title>
+<desc>Created with Sketch.</desc>
+<g id="Symbols">
+	<g id="Flex---2---Project-Details" transform="translate(-20.000000, -105.000000)">
+		<g id="Overview">
+			<g transform="translate(10.000000, 87.000000)">
+				<g id="icon-axis1" transform="translate(10.000000, 18.000000)">
+					<polygon id="Fill-3" fill="#FFFFFF" points="12.949,4.609 20.137,4.609 20.137,1.015 12.949,1.015 					"/>
+					<polygon id="Fill-4" fill="#FFFFFF" points="4.861,13.596 12.049,13.596 12.049,10 4.861,10 					"/>
+					<polygon id="Fill-5" fill="#FFFFFF" points="12.949,13.596 20.137,13.596 20.137,10 12.949,10 					"/>
+					<polygon id="Fill-6" fill="#FFFFFF" points="21.035,13.596 28.225,13.596 28.225,10 21.035,10 					"/>
+					<polygon id="Fill-7" fill="#FFFFFF" points="8.86,9.102 16.049,9.102 16.049,5.508 8.86,5.508 					"/>
+					<polygon id="Fill-8" fill="#FFFFFF" points="16.947,9.102 24.135,9.102 24.135,5.508 16.947,5.508 					"/>
+					<polygon id="Fill-9" fill="#FFFFFF" points="0.773,18.049 7.961,18.049 7.961,14.453 0.773,14.453 					"/>
+					<polygon id="Fill-10" fill="#FFFFFF" points="8.859,18.049 16.047,18.049 16.047,14.453 8.859,14.453 					"/>
+					<polygon id="Fill-11" fill="#FFFFFF" points="16.947,18.049 24.137,18.049 24.137,14.453 16.947,14.453 					"/>
+					<polygon id="Fill-12" fill="#FFFFFF" points="25.033,18.049 32.223,18.049 32.223,14.453 25.033,14.453 					"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</g>
 </svg>

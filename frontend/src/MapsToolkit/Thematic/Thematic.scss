@@ -1,11 +1,11 @@
 @import '../../variables';
+@import '../../mixins';
 
 .back-icon {
-
-	color: white;
 	position: fixed;
 	top: 20px;
 	left: 20px;
+	color: $color-white;
 	font-size: 48px;
 	pointer-events: none;
 }
@@ -13,49 +13,46 @@
 md-dialog {
 
 	md-dialog-content {
-
 		height: 100vh;
 
 		.left {
-			background-color: #EEEEEE;
 			width: 300px;
+			background-color: #EEEEEE;
+      box-shadow: inset -8px 0 24px rgb(213,213,213);
 
 			.head {
 				display: block;
+				margin: 20px;
 				color: $text-primary;
 				font-weight: 500;
 				font-size: 18px;
-				margin: 20px;
 			}
 
 			.subhead {
 				display: block;
-				color: $text-secondary;
 				margin: 20px;
+				color: $text-secondary;
 				font-size: 12px;
 			}
 
 			.axes {
-
-				border-bottom: 1px solid $color-gray-light;
+				border-bottom: 1px solid #D5D5D5;
 
 				&:first-of-type {
-					border-top: 1px solid $color-gray-light;
+					border-top: 1px solid #D5D5D5;
 				}
 
 				.axis {
-
 					height: 50px;
 					outline: none;
 
 					.iconcontainer {
-
 						display: inline;
-						height: 30px;
-						width: 30px;
 						margin: 10px 5px 10px 20px;
-						background-color: gray;
 						padding: 5px 5px;
+						width: 30px;
+						height: 30px;
+						background-color: gray;
 
 						&.active-axis-1 {
 							background-color: $text-primary;
@@ -90,12 +87,11 @@ md-dialog {
 
 
 					.titles {
-
-						margin: 11px 5px 10px 0;
-						font-size: 12px;
-						font-weight: 500;
-						text-transform: uppercase;
+						margin: 10px 10px 12px 5px;
 						color: $text-secondary;
+						text-transform: uppercase;
+						font-weight: 500;
+						font-size: 12px;
 
 						&.active {
 							color: $text-primary;
@@ -116,14 +112,12 @@ md-dialog {
 				}
 
 				.domain {
-
 					display: block;
-					height: 30px;
-					line-height: 30px;
-					font-size: 12px;
-					padding-left: 55px;
-					color: $text-secondary;
+					padding-left: 60px;
+          margin-bottom: 10px;
 					outline: none;
+					color: $text-secondary;
+					font-size: 12px;
 					cursor: pointer;
 
 					&.active-domain {
@@ -136,18 +130,16 @@ md-dialog {
 		.right {
 
 			.right-header {
-
 				height: 100px;
 
 				.right-title {
-
+					padding: 29px 60px;
 					color: white;
 					font-size: 32px;
-					padding: 29px 60px;
 
 					img {
-						height: 24px;
 						width: auto;
+						height: 24px;
 					}
 				}
 
