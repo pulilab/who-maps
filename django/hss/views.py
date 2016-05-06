@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -66,6 +67,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
 class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.ContinuumSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Continuum.
@@ -74,7 +76,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, project=project_id)
             hss.data["continuum"][serializer.validated_data["column_id"]].update(**serializer.validated_data)
             hss.save()
             return Response(serializer.data)
