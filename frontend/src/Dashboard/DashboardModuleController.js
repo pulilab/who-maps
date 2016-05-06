@@ -1,8 +1,6 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
 
-import chartData from './Mocks/chartmock.js';
-import chartData2 from './Mocks/chartmock2.js';
 import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
 import commProjects from './Mocks/commProjects.js';
@@ -25,11 +23,9 @@ class DashboardModuleController {
         vm.mapService = new DashboardMapService();
         vm.fetchCountries();
 
-        // Mocks
-        vm.linechartMockData = chartData;
-        // vm.linechartMockData = vm.fetchToolkitVersions();
         vm.fetchToolkitVersions();
-        vm.linechartMockData2 = chartData2;
+
+        // Mocks
         vm.perfMockMap = perfMockMap;
         vm.commProjects = commProjects;
 
