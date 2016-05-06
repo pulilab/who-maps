@@ -12,24 +12,33 @@ class LinechartController {
         // vm.showdotted <= decides to show unsaved (last) ones
         // vm.datachooser <= datastructure toggle, and allows showing ng-options on the view
 
+        vm.EE = window.EE;
         vm.el = $element;
         vm.timeout = $timeout;
         vm.$onInit = () => {
 
-            // this.EE.on('axis chart data', (data) => {
+            if (!vm.datachooser) {
 
-            // });
-            if (vm.datachooser) {
-                vm.activeAxis = vm.data.labels[0];
-                vm.chosenData = vm.data[vm.activeAxis].data;
-                vm.chosenLabels = vm.data[vm.activeAxis].labels;
+                vm.EE.on('axis chart data', (data) => {
+                    // console.debug('got data for chart AXES', data);
+                    vm.data = data.data;
+                    vm.labels = data.labels;
+                    vm.chosenLabels = vm.labels;
+                    vm.draw();
+                });
             }
             else {
-                vm.chosenLabels = vm.labels;
+
+                vm.EE.on('domain chart data', (data) => {
+                    // console.debug('got data for chart DOMAINS', data);
+                    vm.data = data;
+                    vm.labels = vm.data.labels;
+                    vm.activeAxis = vm.data.labels[0];
+                    vm.chosenData = vm.data[vm.activeAxis].data;
+                    vm.chosenLabels = vm.data[vm.activeAxis].labels;
+                    vm.draw();
+                });
             }
-
-            vm.draw();
-
         };
 
     }
@@ -54,7 +63,6 @@ class LinechartController {
         data.forEach((el, i) => {
             el.x = i + 1;
         });
-
 
         // Should recalculate on first open || resize
         const margin = {

@@ -6,8 +6,7 @@ const linechart = {
     controllerAs: 'vm',
     template: _template,
     bindings: {
-        data: '=',
-        labels: '=',
+        // labels: '=',
         showdotted: '=',
         datachooser: '='
     },

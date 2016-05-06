@@ -78,7 +78,6 @@ class DashboardModuleController {
 
             vm.currentVersion = data.length;
 
-
             const axisData = {
                 labels: [
                     'Groundwork',
@@ -90,7 +89,6 @@ class DashboardModuleController {
                 ],
                 data: []
             };
-
             axisData.data = data.map(version => {
                 return {
                     date: version.modified,
@@ -102,71 +100,77 @@ class DashboardModuleController {
                     axis6: version.data[5].axis_score / 100
                 };
             });
-
             vm.EE.emit('axis chart data', axisData);
 
 
-            // const domainData = {
-            //     'labels': [
-            //         'Groundwork',
-            //         'Partnerships',
-            //         'Financial health',
-            //         'Technology & Architecture',
-            //         'Operations',
-            //         'Monitoring & evaluation'
-            //     ],
-            //     'Groundwork': {
-            //         labels: [
-            //             'Parameters of scale',
-            //             'Contextual environment',
-            //             'Scientific basis'
-            //         ],
-            //         data: []
-            //     },
-            //     'Partnerships': {
-            //         labels: [
-            //             'Strategic engagement',
-            //             'Partnership sustainability'
-            //         ],
-            //         data: []
-            //     },
-            //     'Financial health': {
-            //         labels: [
-            //             'Financial management',
-            //             'Financial model'
-            //         ],
-            //         data: []
-            //     },
-            //     'Technology & Architecture': {
-            //         labels: [
-            //             'Data',
-            //             'Interoperabilty',
-            //             'Adaptability'
-            //         ],
-            //         data: []
-            //     },
-            //     'Operations': {
-            //         labels: [
-            //             'Personell',
-            //             'Training & support',
-            //             'Outreach & sanitization',
-            //             'Contingency planning'
-            //         ],
-            //         data: []
-            //     },
-            //     'Monitoring & evaluation': {
-            //         labels: [
-            //             'Process monitoring',
-            //             'Evaluation reach'
-            //         ],
-            //         data: []
-            //     }
-            // };
+            const domainData = {
+                'labels': [
+                    'Groundwork',
+                    'Partnerships',
+                    'Financial health',
+                    'Technology & Architecture',
+                    'Operations',
+                    'Monitoring & evaluation'
+                ],
+                'Groundwork': {
+                    labels: [
+                        'Parameters of scale',
+                        'Contextual environment',
+                        'Scientific basis'
+                    ],
+                    data: []
+                },
+                'Partnerships': {
+                    labels: [
+                        'Strategic engagement',
+                        'Partnership sustainability'
+                    ],
+                    data: []
+                },
+                'Financial health': {
+                    labels: [
+                        'Financial management',
+                        'Financial model'
+                    ],
+                    data: []
+                },
+                'Technology & Architecture': {
+                    labels: [
+                        'Data',
+                        'Interoperabilty',
+                        'Adaptability'
+                    ],
+                    data: []
+                },
+                'Operations': {
+                    labels: [
+                        'Personell',
+                        'Training & support',
+                        'Outreach & sanitization',
+                        'Contingency planning'
+                    ],
+                    data: []
+                },
+                'Monitoring & evaluation': {
+                    labels: [
+                        'Process monitoring',
+                        'Evaluation reach'
+                    ],
+                    data: []
+                }
+            };
 
-            // domainData.labels.forEach((axis, axInd) => {
-            //     Data is there fetch it correctly mofo!
-            //     console.log(axInd, axis);
-            // });
+            domainData.labels.forEach((axis, axInd) => {
+                domainData[axis].data = data.map(version => {
+                    const ret = {};
+                    ret.date = version.modified;
+                    version.data[axInd].domains.forEach((domain, domainInd) => {
+                        ret['axis' + (domainInd + 1)] = domain.domain_percentage / 100;
+                    });
+                    return ret;
+                });
+            });
+            vm.EE.emit('domain chart data', domainData);
 
         });
     }

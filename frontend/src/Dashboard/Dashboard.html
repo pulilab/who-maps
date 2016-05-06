@@ -79,10 +79,7 @@
 
                         <md-tab label="axis">
                             <div>
-                                <!-- TODO: bindings -->
                                 <linechart
-                                    data="vm.linechartMockData.data"
-                                    labels="vm.linechartMockData.labels"
                                     showdotted="true">
                                 </linechart>
                             </div>
@@ -90,17 +87,14 @@
 
                         <md-tab label="domains">
                             <div>
-                                <!-- TODO: bindings -->
                                 <linechart
-                                    data="vm.linechartMockData2"
-                                    labels="vm.linechartMockData2.labels"
                                     showdotted="false"
                                     datachooser="true"
                                 ></linechart>
                             </div>
                         </md-tab>
 
-                        <md-tab label="technology">
+                        <md-tab label="technology" ng-disabled="true">
                             <!-- TODO: bindings! -->
                             <div class="dash-tech">
                                 <div
