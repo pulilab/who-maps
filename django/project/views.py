@@ -44,12 +44,8 @@ def project_list(request):
     if request.method == "POST":
         serializer = ProjectSerializer(data=request.data)
         if serializer.is_valid():
-            try:
-                project = Project.objects.create(name=serializer.data["name"], data=serializer.data)
-            except IntegrityError:
-                return Response({"details": "A project with this name already exists."}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                project.save()
+            project = Project.objects.create(name=serializer.data["name"], data=serializer.data)
+            project.save()
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.

@@ -1,10 +1,14 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+
+from .models import Project
 
 
 class ProjectSerializer(serializers.Serializer):
 
     date = serializers.CharField()
-    name = serializers.CharField()
+    name = serializers.CharField(max_length=255,
+                        validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField()  # Should be text instead of ID - no Orgs in MVP
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
