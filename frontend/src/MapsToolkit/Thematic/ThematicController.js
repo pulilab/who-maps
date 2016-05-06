@@ -24,13 +24,7 @@ class ThematicController {
             const key = item.split('.')[1].replace('/', '');
             templates[key] = templateRequire(item);
         });
-        console.log(templates);
         return templates;
-    }
-
-    image(key) {
-      console.log(key)
-      return this.images[key];
     }
 
     showModal() {
