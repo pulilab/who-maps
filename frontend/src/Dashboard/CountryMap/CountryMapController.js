@@ -67,16 +67,21 @@ class CountrymapController {
 
         vm.countryName = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
-        if (DEV) {
-            // console.log(topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties);
-        }
         // If any map comes with mixed winding order, do:
         // const rewind = require('geojson-rewind');
         // const distrData = rewind(mockGeoJsonDistricts);
 
-        // const distrData = mockGeoJsonDistricts;
-        let level = _.keys(topoJSON);
-        level = level.length === 1 ? 'admin_level_2' : level.filter(a => a !== 'admin_level_2')[0];
+        const levelLib = {
+            'Sierra Leone': 'admin_level_5',
+            'India': 'admin_level_5',
+            'Kenya': 'admin_level_4',
+            'Philippines': 'admin_level_4',
+            'Bangladesh': 'admin-level_5'
+        };
+
+        const level = levelLib[vm.countryName];
+        console.debug(vm.countryName);
+
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
 
