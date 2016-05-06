@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'hss',
     'toolkit',
     'country',
+    'search',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
