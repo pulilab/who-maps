@@ -24,7 +24,7 @@ class ProjectDefinition extends Protected {
                 standard: [],
                 custom: [{}]
             },
-            'pre_assessment': Array(6),
+            'pre_assessment': [{}, {}, {}, {}, {}, {}],
             donors: [{}],
             application: [],
             reports: [{}],

@@ -21,13 +21,28 @@ class NewProjectService extends AuthApi {
                 };
             });
     }
+    
+    updateProject(data, id) {
+        let status = void 0;
+        return this.put(`projects/${id}/`, data)
+            .then(answer => {
+                status = answer.status;
+                return answer.json();
+            })
+            .then(json => {
+                return {
+                    success: status < 400,
+                    data: json
+                };
+            });
+    }
 
     projectStructure() {
         return this.get('projects/structure/');
     }
 
     projectData(id) {
-        return this.get(`projects/${id}`);
+        return this.get(`projects/${id}/`);
     }
 
     countryDistrict(id) {

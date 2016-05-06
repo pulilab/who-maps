@@ -1,6 +1,7 @@
-import _ from 'lodash';
-import NewProjectService from './NewProjectService';
-import ProjectDefinition from '../ProjectDefinition';
+import _ from "lodash";
+import moment from "moment";
+import NewProjectService from "./NewProjectService";
+import ProjectDefinition from "../ProjectDefinition";
 
 /* global DEV */
 
@@ -14,7 +15,6 @@ class NewProjectController extends ProjectDefinition {
         this.state = $state;
         this.axisStructure = this.processAxisStructure(structure);
         this.$onInit = this.initialization.bind(this);
-        this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
         this.bindFunctions();
     }
 
@@ -30,14 +30,17 @@ class NewProjectController extends ProjectDefinition {
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
-        this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
         if (this.editMode) {
+
             this.projectId = this.state.params.appName;
-            this.ns.projectData(this.projectId)
-                .then(answer => {
-                    _.merge(this.project, answer);
-                    console.log(this.project);
+            Promise.all([this.ns.projectStructure(), this.ns.projectData(this.projectId)])
+                .then(data => {
+                    this.handleStructureLoad(data[0]);
+                    this.handleDataLoad(data[1]);
                 });
+        }
+        else {
+            this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
         }
     }
 
@@ -67,6 +70,51 @@ class NewProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
+    handleDataLoad(data) {
+        _.merge(this.project, data);
+        this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        this.project.countryName = _.filter(this.structure.countries, { id: this.project.country  })[0].name;
+        this.ns.countryDistrict(this.project.country)
+            .then(district => {
+                this.districtList = district;
+                this.unfoldCoverage();
+                this.assignDefaultCustom();
+                console.log(this.project)
+                this.scope.$evalAsync();
+            });
+
+    }
+
+    assignDefaultCustom() {
+        this.project.donors = _.map(this.project.donors, value => {
+            return { value };
+        });
+
+        this.project.pre_assessment = _.map(this.project.pre_assessment, value => {
+            return { value };
+        });
+    }
+
+    unfoldCoverage() {
+        const keys = _.cloneDeep(this.structure.coverageTypes);
+        keys[1] = keys[1].replace('_', '');
+        const newCoverage = [];
+        _.forEach(this.project.coverage, coverage => {
+            _.forEach(coverage, (props, key) => {
+                if (keys.indexOf(key) > -1 ) {
+                    newCoverage.push({
+                        district: coverage.district,
+                        districtChosen: coverage.district,
+                        typeChosen: key,
+                        number: props
+                    });
+                }
+            });
+        });
+        this.project.coverage = newCoverage;
+    }
+
 
     countryCloseCallback(name) {
         const countries = _.filter(this.structure.countries, { name });
@@ -84,7 +132,7 @@ class NewProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
-    repeatBind(item, form) {
+    repeatBind(item) {
         item.districtCallback = this.districtCloseCallback.bind(this, item);
         item.typeCallback = this.typeCloseCallback.bind(this, item);
     }
@@ -110,31 +158,64 @@ class NewProjectController extends ProjectDefinition {
         return !_.isEmpty(this.newProjectForm[field].$error);
     }
 
+
     save() {
         this.sentForm = true;
         if (this.newProjectForm.$valid) {
             const processedForm = _.cloneDeep(this.project);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
-            processedForm.date = new Date().toJSON();
-            this.ns.newProject(processedForm)
-                .then(response => {
-                    if (response && response.success) {
-                        this.EE.emit('refreshProjects');
-                    }
-                    else {
-                        _.forEach(response.data, (item, key) => {
-                            this.newProjectForm[key].customError = item;
-                            this.newProjectForm[key].$setValidity('custom', false);
-                        });
-                    }
-
-                });
+            if (!this.editMode) {
+                this.saveForm(processedForm);
+            }
+            else {
+                this.updateForm(processedForm);
+            }
         }
+    }
+
+    updateForm(processedForm) {
+        this.ns.updateProject(processedForm, this.projectId)
+            .then(response => {
+                if (response && response.success) {
+                    this.EE.emit('refreshProjects');
+                }
+                else {
+                    this.handleResponse(response);
+                }
+            });
+    }
+
+    saveForm(processedForm) {
+        processedForm.date = new Date().toJSON();
+        this.ns.newProject(processedForm)
+            .then(response => {
+                if (response && response.success) {
+                    this.EE.emit('refreshProjects');
+                }
+                else {
+                    this.handleResponse(response);
+                }
+
+            });
+    }
+
+    handleResponse(response) {
+        _.forEach(response.data, (item, key) => {
+            this.newProjectForm[key].customError = item;
+            this.newProjectForm[key].$setValidity('custom', false);
+        });
     }
 
     flattenCustom(obj) {
         return _.map(obj.custom, item => {
+            item = item.value;
+            return item;
+        });
+    }
+
+    unfoldObjects(obj) {
+        return _.map(obj, item => {
             item = item.value;
             return item;
         });
@@ -155,6 +236,8 @@ class NewProjectController extends ProjectDefinition {
         collection.digital_tools = this.concatCustom(collection.digital_tools);
 
         collection.pipelines = this.concatCustom(collection.pipelines);
+        collection.donors = this.unfoldObjects(collection.donors);
+        collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
     }
 
     log(data) {

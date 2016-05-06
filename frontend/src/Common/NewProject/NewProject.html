@@ -9,7 +9,7 @@
     </div>
 
     <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="vm.newProjectForm" ng-submit="vm.save()"  novalidate>
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)"  novalidate>
             <div layout="column" class="main-form">
                 <h4>1. Project details</h4>
                 <md-input-container >
@@ -43,6 +43,7 @@
                 ></ssmenu>
                 <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
+                            ng-disabled="vm.editMode"
                             ng-required="vm.sentForm"
                             name="country"
                             on-close-callback="vm.countryCloseCallback"
@@ -293,52 +294,53 @@
 
                     <!--</section>-->
 
-                    <h4>2. Vision for scale</h4>
+                    <section >
+                        <h4>2. Vision for scale</h4>
 
-                    <div layout="column">
-                        <md-input-container>
-                            <input type="text" placeholder="Your goals" ng-model="vm.project.goals_to_scale"/>
-                            <span class="hint">What are your goals for scaling up (e.g. number of health facilities, districts, target users)?</span>
-                        </md-input-container>
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Your goals" ng-model="vm.project.goals_to_scale"/>
+                                <span class="hint">What are your goals for scaling up (e.g. number of health facilities, districts, target users)?</span>
+                            </md-input-container>
 
-                    </div>
-
-                    <div layout="column">
-                        <md-input-container>
-                            <input type="text" placeholder="Your timeframe" ng-model="vm.project.anticipated_time"/>
-                            <span class="hint">What is your anticipated time frame to meet these goals?</span>
-                        </md-input-container>
-
-                    </div>
-
-
-                    <h4>3. Pre-assessment</h4>
-
-                    <p>
-                        The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).
-                    </p>
-
-                    <h6>Please complete this section before moving to rest of the document.</h6>
-
-                    <div class="axis-assessment" layout="column"  >
-                        <div layout="row" layout-align="start center" class="assessment" ng-repeat="a in vm.project.pre_assessment track by $index">
-                            <div flex="65" >
-                                <p>
-                                    {{vm.axisStructure[$index].description}}
-                                </p>
-                                <md-radio-group ng-model="a.value"  layout="row" >
-                                    <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]"  ng-value="value" class="md-primary">{{ value }}</md-radio-button>
-                                </md-radio-group>
-                            </div>
-                            <div flex="35" class="axis-description">
-                                <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}" >
-                                <p>{{vm.axisStructure[$index].text}}</p>
-                            </div>
                         </div>
 
-                    </div>
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Your timeframe" ng-model="vm.project.anticipated_time"/>
+                                <span class="hint">What is your anticipated time frame to meet these goals?</span>
+                            </md-input-container>
+
+                        </div>
+                    </section>
+
+                    <section ng-if="!vm.editMode">
+                        <h4>3. Pre-assessment</h4>
+
+                        <p>
+                            The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).
+                        </p>
+
+                        <div class="axis-assessment" layout="column"  >
+                            <div layout="row" layout-align="start center" class="assessment" ng-repeat="a in vm.project.pre_assessment track by $index">
+                                <div flex="65" >
+                                    <p>
+                                        {{vm.axisStructure[$index].description}}
+                                    </p>
+                                    <md-radio-group ng-model="a.value" layout="row" ng-required="true" >
+                                        <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]" ng-value="value" class="md-primary">{{ value }}</md-radio-button>
+                                    </md-radio-group>
+                                </div>
+                                <div flex="35" class="axis-description">
+                                    <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}" >
+                                    <p>{{vm.axisStructure[$index].text}}</p>
+                                </div>
+                            </div>
+
+                        </div>
 
                 </div>
+                </section>
             </div>
             <div layout="row">
                 <div flex="50" layout="row" layout-align="start center">

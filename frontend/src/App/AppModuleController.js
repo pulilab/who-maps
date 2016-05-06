@@ -46,7 +46,6 @@ class AppModuleController extends Protected {
 
     doDigest() {
         this.scope.$evalAsync();
-        console.log(this.userProfile)
     }
 
     handleLoginEvent(forced) {
@@ -63,26 +62,26 @@ class AppModuleController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-     fillUserData(forceJump) {
+    fillUserData(forceJump) {
         this.as.getProjects()
-        .then(projects => {
-            this.user.projects = projects;
-            if (this.state.params.appName.length === 0) {
-                const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
-                this.state.go(state, { 'appName': this.user.projects[0].id });
-            }
-            _.forEach(this.user.projects, item => {
-                if (item.id === parseInt(this.state.params.appName, 10)) {
-                    this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
+            .then(projects => {
+                this.user.projects = projects;
+                if (this.state.params.appName.length === 0) {
+                    const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
+                    this.state.go(state, { 'appName': this.user.projects[0].id });
                 }
+                _.forEach(this.user.projects, item => {
+                    if (item.id === parseInt(this.state.params.appName, 10)) {
+                        this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
+                    }
+                });
+
+                if (forceJump) {
+                    this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
+                }
+
+                this.scope.$evalAsync();
             });
-
-            if (forceJump) {
-                this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
-            }
-
-            this.scope.$evalAsync();
-        });
     }
 
     handleUnauthorized() {
