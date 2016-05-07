@@ -3,12 +3,16 @@ from django.db import models
 
 class GetObjectOrNoneManager(models.Manager):
 
-    def get_object_or_none(self, **kwargs):
+    def get_object_or_none(self, select_for_update=False, **kwargs):
         """
         Hides Exception handling boilerplate when querying for single objects.
+        Locks object (if selected for update) if exists else None
         """
         try:
-            return self.get(**kwargs)
+            if select_for_update:
+                return self.select_for_update().get(**kwargs)
+            else:
+                return self.get(**kwargs)
         except self.model.DoesNotExist:
             return None
 

@@ -24,16 +24,17 @@ class Http400(APIException):
             self.detail = {"details": detail}
 
 
-def get_object_or_400(cls, error_message="No such object.", **kwargs):
+def get_object_or_400(cls, error_message="No such object.", select_for_update=False, **kwargs):
     """
     Gets an object, raises Http400 with custom message if no such object.
 
     Args:
         cls: type of entity
+        select_for_update: locks object for update
         error_message: to be used in the error response if no such object
         kwargs: filter parameters for object query
     """
-    obj = cls.objects.get_object_or_none(**kwargs)
+    obj = cls.objects.get_object_or_none(select_for_update, **kwargs)
     if obj:
         return obj
     else:
