@@ -73,7 +73,6 @@ class AppModuleController extends Protected {
             if (forceJump) {
                 this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
             }
-
             this.scope.$evalAsync();
         });
     }
