@@ -46,7 +46,7 @@ def deploy():
             run('docker-compose up -d')
 
             # drop & create DB
-            time.sleep(1)
+            time.sleep(5)
             _drop_db()
             time.sleep(1)
             _create_db()
