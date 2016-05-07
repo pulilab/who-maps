@@ -17,7 +17,7 @@ from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer, ProjectModelSerializer
 from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
@@ -53,19 +53,26 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         Creates a project.
         """
-        serializer = ProjectSerializer(data=request.data)
-        if serializer.is_valid():
-            project = Project.objects.create(name=serializer.data["name"], data=serializer.data)
+        data_serializer = ProjectSerializer(data=request.data)
+        model_serializer = ProjectModelSerializer(data={"name": data_serializer.initial_data["name"]})
+        model_valid = model_serializer.is_valid()
+        data_valid = data_serializer.is_valid()
+        if model_valid and data_valid:
+            project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
             project.save()
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
-            data = dict(serializer.data)
+            data = dict(data_serializer.data)
             data.update(id=project.id)
             return Response(data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            errors = {
+                "model": model_serializer.errors,
+                "json": data_serializer.errors
+            }
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -81,15 +88,22 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         Updates a project.
         """
-        serializer = ProjectSerializer(data=request.data)
-        if serializer.is_valid():
-            project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
-            project.data = serializer.data
+        data_serializer = ProjectSerializer(data=request.data)
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        model_serializer = ProjectModelSerializer(instance=project, data={"name": data_serializer.initial_data["name"]})
+        model_valid = model_serializer.is_valid()
+        data_valid = data_serializer.is_valid()
+        if model_valid and data_valid:
+            project.name = data_serializer.validated_data["name"]
+            project.data = data_serializer.validated_data
             project.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(data_serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            errors = {
+                "model": model_serializer.errors,
+                "json": data_serializer.errors
+            }
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))
@@ -198,29 +212,31 @@ def get_toolkit_versions(request, project_id):
 
 class PartnerLogoViewSet(TokenAuthMixin, ViewSet):
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request, project_id):
         """
         Retrieves list of partnerlogo ids for a given project.
         """
-        project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
+        project = get_object_or_400(Project, "No such project.", id=project_id)
         partnerlogos = PartnerLogo.objects.filter(project_id=project.id).values("id")
         return Response(partnerlogos)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Creates partnerlogos from the uploaded files.
         """
-        project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        logos = []
         # Get and store binary files for partnerlogos.
         for key, value in request.FILES.items():
-            PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value.read())
-        return Response()
+            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value.read())
+            logos.append(logo.id)
+        return Response(logos)
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, pk):
         """
         Retrieves binary file for logo image.
         """
-        logo = get_object_or_400(PartnerLogo, "No such logo.", id=kwargs["pk"])
+        logo = get_object_or_400(PartnerLogo, "No such logo.", id=pk)
         return HttpResponse(content=logo.data, content_type=logo.type)
 
     def destroy(self, request, pk=None):

@@ -107,9 +107,10 @@ class ProjectTests(APITestCase):
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name="Test Project5")
+        data.update(goals_to_scale="updated")
         response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["goals_to_scale"], "updated")
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-list")
@@ -280,3 +281,15 @@ class ProjectTests(APITestCase):
         url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    def test_upload_partnerlogo_should_return_id(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), list)
+        self.assertEqual(len(response.json()), 2)
