@@ -37,10 +37,11 @@ def deploy():
 
         # handle backend
         with cd(env.backend_root):
+            run('docker-compose restart')
             # backup DB
             _backup_db()
             # build
-            run('docker-compose build', 'Docker build failed.')
+            run('docker-compose build')
 
             # drop & create DB
             time.sleep(1)
@@ -55,7 +56,7 @@ def deploy():
             _migrate_db()
 
             # restart
-            run('docker-compose restart', 'Docker restart failed.')
+            run('docker-compose restart')
 
         # handle frontend
         with cd(env.frontend_root):

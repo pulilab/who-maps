@@ -38,11 +38,11 @@ md-tooltip {
 
   .md-display-1 {
     font-size: 40px;
+    margin: 40px 0;
   }
 
   .md-subhead {
-    margin-top: 0;
-    margin-left: 10%;
+    margin: -10px auto 40px;
     max-width: 80%;
     color: $color-gray;
   }
@@ -222,10 +222,14 @@ md-menu-content {
 .main-toolbar {
   min-height: 48px;
 
+  &.toolbar-global {
+    padding-right: 12px;
+    background-color: #1A237E;
+  }
+
   .md-toolbar-tools {
     max-height: 48px;
     height: 48px;
-    background-color: #1A237E;
     font-size: $body-font-size-base;
 
     .md-button {
@@ -235,6 +239,11 @@ md-menu-content {
         margin-right: 12px;
       }
 
+      &.landing-link {
+        margin-left: 24px;
+        margin-right: 0;
+      }
+
       .material-icons {
         transform: translateY(-1px);
       }
@@ -242,7 +251,7 @@ md-menu-content {
 
     .add-new-project {
       margin-left: 24px;
-      margin-right: 12px;
+      margin-right: 0;
     }
   }
 

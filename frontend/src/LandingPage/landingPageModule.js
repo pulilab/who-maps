@@ -1,13 +1,36 @@
 import angular from 'angular';
 import LandingPageModuleController from './LandingPageModuleController';
 
+/* global define Promise, $compileProvider */
+
 import _template from './LandingPageModule.html';
 import uiRoute from 'angular-ui-router';
-import './landingPage.scss';
 
 const moduleName = 'landing';
 
-function config($stateProvider) {
+const components = {};
+
+const lazyLoader = (provider, element, type) => {
+    const prom = new Promise((resolve) => {
+        require([], require => {
+            const ctrl = require('./' + element);
+            if (type === 'component') {
+                if (!components[element]) {
+                    components[element] = true;
+                    provider.component(ctrl.default.name, ctrl.default);
+                }
+            }
+            if (type === 'controller') {
+                provider.register(element, ctrl.default.landingControllerFactory());
+            }
+            resolve();
+        });
+    });
+    return prom;
+};
+
+
+function config($stateProvider, $controllerProvider) {
     $stateProvider
         .state(moduleName,
         {
@@ -16,14 +39,21 @@ function config($stateProvider) {
             views: {
                 main: {
                     template: _template,
-                    controller: moduleName + '.' + moduleName + 'Controller',
-                    controllerAs: 'vm'
+                    // controller: moduleName + '.' + moduleName + 'Controller',
+                    controllerAs: 'vm',
+                    controllerProvider: () => 'LandingPageModuleController',
+                    resolve: {
+                        'ctrl': () => {
+                            return lazyLoader($controllerProvider, 'LandingPageModuleController', 'controller');
+                        }
+                    }
                 }
             }
         });
 }
 
-config.$inject = ['$stateProvider'];
+config.$inject = ['$stateProvider', '$controllerProvider'];
+
 
 angular.module(moduleName, [uiRoute])
     .controller(moduleName + '.' + moduleName + 'Controller', LandingPageModuleController)

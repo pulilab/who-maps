@@ -1,3 +1,243 @@
-.center {
-	text-align: center;
+@import '../variables';
+@import '../mixins';
+
+.landing-wrapper {
+
+  h2 {
+    font-size: rem(6.000);
+  }
+
+  .bg-hero {
+    min-height: 800px;
+    background: $color-primary url("./images/bg-welcome-3.jpg") 0 -10px;
+    background-size: cover;
+
+    // TODO
+    &.logged-in {
+      background-image: url("./images/bg-welcome-2.jpg");
+    }
+  }
+
+  .welcome {
+    margin: 0 30px;
+    padding: 30px 50px 80px;
+    width: calc( 45% - 100px );
+    background-color: rgba(219,126,3,.87);
+
+    .welcome-text,
+    .search-project {
+      padding-right: 50px;
+    }
+
+    h2, h5 {
+      color: $color-white;
+    }
+  }
+
+  .content-wrapper {
+    position: relative;
+    margin: 0 30px;
+    background-color: $color-primary;
+
+    &::after {
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 20px;
+      background: url("./images/maps-zebra.svg") 0 0 no-repeat;
+      background-size: 100% 100%;
+      content: "";
+    }
+
+    .what-is-aside {
+      margin-top: -50px;
+      margin-bottom: 80px;
+      padding: 50px;
+      min-height: 500px;
+      background: url("./images/bg-whatis.jpg") 0 0 no-repeat;
+      background-size: 100% auto;
+
+      @include clearfix();
+
+      h2, h5 {
+        color: $color-white;
+      }
+
+      .dha-feature {
+        float: left;
+        margin: 10px 0 20px;
+
+        .img-wrapper {
+          position: relative;
+
+          &::before {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            z-index: 1;
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            background-color: $color-axis4;
+            content: "";
+          }
+
+          img {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            margin: 5px;
+            width: 102px;
+            height: auto;
+          }
+        }
+        p {
+          margin: 0 0 25px 30px;
+          color: $color-white;
+        }
+      }
+    }
+
+    .content-main {
+      z-index: 100;
+      margin-top: -225px;
+      margin-right: 0;
+      margin-bottom: 80px;
+      margin-left: 0;
+      padding: 40px 120px;
+      background-color: $color-white;
+
+      h2 {
+        margin-bottom: 0;
+        color: $color-primary;
+      }
+
+      h4 {
+        margin-bottom: 50px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid $color-gray-lighter;
+        color: $color-gray-light;
+        text-transform: uppercase;
+        font-size: $title-font-size-base;
+      }
+
+      .hidden {
+        overflow: hidden;
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .form-actions {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        padding-top: 30px;
+        border-top: 1px solid $color-gray-lighter;
+
+        .md-button {
+          margin: 0;
+          min-width: 150px;
+        }
+      }
+
+      .role-form {
+
+        .img-role {
+          // float: left;
+          position: absolute;
+          top: -15px;
+          left: -120px;
+          margin: 0 10px 0 5px;
+          width: 48px;
+          transition: $swift-ease-out;
+        }
+
+        p {
+          margin: 0 20px 40px 100px;
+          transition: $swift-ease-out;
+        }
+
+        md-radio-button {
+          margin: 0 0 20px;
+          padding: 0 20px 0 100px;
+          font-size: $title-font-size-base;
+
+          .md-container {
+            margin-top: 2px;
+            margin-left: 100px;
+          }
+        }
+
+        md-radio-button:not(.md-checked) {
+          .md-label,
+          + p {
+            color: $text-disabled;
+          }
+          .img-role {
+            opacity: .4;
+          }
+        }
+
+        md-radio-button.md-checked {
+          .md-label,
+          + p {
+            color: $text-primary;
+          }
+          .img-role {
+            opacity: 1;
+          }
+        }
+      }
+
+      .main-form {
+        .form-actions {
+          margin-top: 0;
+          border-top: none;
+        }
+      }
+
+      .my-project {
+        margin: 50px 0 0;
+        padding-bottom: 50px;
+        border-bottom: 1px solid $color-gray-lighter;
+
+        &:last-of-type {
+          border: 0;
+        }
+
+        .project-title {
+          margin: 8px;
+        }
+
+        .project-stats {
+          @include clearfix();
+        }
+
+        viewers,
+        followers,
+        donors {
+          float: left;
+
+          .dash-stat-card {
+            margin: 20px 20px 0 8px;
+            width: 100px;
+            height: 105px;
+          }
+        }
+
+        .project-links {
+          md-button {
+            margin: 0 20px 0 0;
+          }
+        }
+      }
+    }
+  }
+
+
+  .trending {
+    margin: 0 30px;
+  }
 }

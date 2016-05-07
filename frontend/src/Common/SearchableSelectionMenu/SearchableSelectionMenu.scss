@@ -47,8 +47,8 @@ ssmenu.small {
 md-select.large,
 ssmenu.large {
   .md-text {
-    font-size: $title-font-size-base;
     font-weight: 500;
+    font-size: $title-font-size-base;
   }
   .md-select-icon {
     font-size: $caption-font-size-base;
@@ -80,8 +80,8 @@ ssmenu.large {
     padding: 0 20px 0 40px;
 
     .md-text {
-      font-size: $title-font-size-base;
       font-weight: 500;
+      font-size: $title-font-size-base;
     }
 
     &[selected="selected"] {
@@ -127,18 +127,20 @@ ssmenu.multiline {
   }
 
   .selection-limit {
-    padding-bottom: 0;
-    color: $color-white;
-    text-transform: none;
     position: fixed;
-    background: white;
-    width: 98%;
-    background: $color-red;
+    left: -1px;
     top: -25px;
+    width: calc(100% - 8px);
+    background: white;
+    background: $color-red;
+    color: $color-white;
+    font-size: $caption-font-size-base;
+    text-transform: none;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
 
     &::before {
       float: left;
-      margin-right: 3px;
+      margin-right: 5px;
       color: $color-white;
       content: "warning";
 

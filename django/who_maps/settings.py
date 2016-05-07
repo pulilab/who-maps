@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'hss',
     'toolkit',
     'country',
+    'search',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -174,8 +175,8 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 # Mailgun settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.mailgun.org"
-EMAIL_HOST_USER = "postmaster@sandbox7214fa112fb648dbb3f26da95e7b0078.mailgun.org"
-EMAIL_HOST_PASSWORD = "64acf09843409f8c653a77be49f10e50"
+EMAIL_HOST_USER = "postmaster@whomaps.pulilab.com"
+EMAIL_HOST_PASSWORD = "5ede15430fbf90989648a0fe12e379cc"
 EMAIL_PORT = 587
 
 # Geodata settings

@@ -2,10 +2,10 @@ import _ from 'lodash';
 
 class SkeletonController {
 
-    constructor($scope) {
-
+    constructor($scope, $interpolate) {
+        this.scope = $scope;
         const parent = $scope.$parent.vm;
-
+        this.interpolate = $interpolate;
         this.axis = +parent.axis;
         this.domain = +parent.domain;
         this.data = _.cloneDeep(parent.data);
@@ -27,7 +27,7 @@ class SkeletonController {
         const templates = {};
         const templateRequire = require.context('./static/', true, /\.html$/);
         templateRequire.keys().forEach((item) => {
-            templates[item.slice(2)] = templateRequire(item);
+            templates[item.slice(2)] = this.interpolate(templateRequire(item))(this.scope);
         });
         return templates;
     }
@@ -45,10 +45,10 @@ class SkeletonController {
     }
 
     static skeletonFactory() {
-        const skeleton = ($scope) => {
-            return new SkeletonController($scope);
+        const skeleton = ($scope, $interpolate) => {
+            return new SkeletonController($scope, $interpolate);
         };
-        skeleton.$inject = ['$scope'];
+        skeleton.$inject = ['$scope', '$interpolate'];
         return skeleton;
     }
 }

@@ -17,6 +17,7 @@ class NewProjectController extends ProjectDefinition {
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
         this.districtCloseCallback = this.districtCloseCallback.bind(this);
         this.setStrategy = this.setStrategy.bind(this);
+        this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
     }
 
@@ -42,7 +43,7 @@ class NewProjectController extends ProjectDefinition {
     handleDataLoad(data) {
         this.dataLoaded = true;
         this.structure = data;
-        this.structure.coverageTypes = ['clients', 'health_workers', 'facilities'];
+        this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
@@ -72,6 +73,11 @@ class NewProjectController extends ProjectDefinition {
 
     districtCloseCallback(coverage, district) {
         coverage.district = district;
+    }
+
+    pipelinesCallback(data) {
+        this.project.pipelines.standard = [];
+        this.project.pipelines.standard.push(data);
     }
 
     setStrategy(strategy) {
@@ -126,7 +132,7 @@ class NewProjectController extends ProjectDefinition {
                 type = item.other;
             }
             else {
-                type = item.typeChosen;
+                type = item.typeChosen.replace(' ', '_');
             }
             if (!coverage[item.district]) {
                 coverage[item.district] = {};

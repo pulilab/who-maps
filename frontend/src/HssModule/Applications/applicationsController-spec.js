@@ -335,13 +335,13 @@ describe('applicationsController', () => {
         const mockEvent = {
             which: 14
         };
-        spyOn(ac, 'saveBubbles');
+        spyOn(ac, 'focusBubble');
         ac.inputHandler({}, mockEvent);
-        expect(ac.saveBubbles).not.toHaveBeenCalled();
+        expect(ac.focusBubble).not.toHaveBeenCalled();
 
         mockEvent.which = 13;
         ac.inputHandler({}, mockEvent);
-        expect(ac.saveBubbles).toHaveBeenCalled();
+        expect(ac.focusBubble).toHaveBeenCalled();
     });
 
     it('should have a function that find proper tiles candidate to create a bubble', () => {

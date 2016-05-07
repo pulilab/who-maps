@@ -1,0 +1,12 @@
+
+<md-card class="dash-stat-card" ng-mouseover="viewersnrHovered = true" ng-mouseout="viewersnrHovered = false">
+
+    <md-icon class="material-icons dash-trendicon dash-trendicon-up" ng-show="!viewersnrHovered">trending_{{vm.trend}}</md-icon>
+    <span class="dash-stat-nr" ng-show="!viewersnrHovered">{{vm.number}}</span>
+    <span class="dash-stat-label" ng-show="!viewersnrHovered">Viewers</span>
+
+
+    <md-icon class="material-icons dash-trendicon dash-trendicon-bulb" ng-show="viewersnrHovered">lightbulb_outline</md-icon>
+    <span class="dash-stat-tooltip" ng-show="viewersnrHovered">Number of unique views ever; arrow indicates change since the last month.</span>
+
+</md-card>
