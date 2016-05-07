@@ -50,7 +50,7 @@ class ProjectPartnersController {
         this.projectId = this.state.params.appName;
         this.pps.uploadLogo(data, this.projectId)
             .then(response => {
-                _.concat(this.logos, response);
+                this.logos = _.concat(this.logos, response);
                 this.scope.$evalAsync();
             });
     }
