@@ -28,35 +28,37 @@
         md-rowspan="3"
         class="hss-controls" ng-cloak>
         <div>
-            <div class="hss-control">
-                <span ng-if="!vm.showEditModeSpinner">
-                  <md-switch md-no-ink
-                      class="md-green hss-edit"
-                      ng-model="vm.editMode"
+            <div >
+                <span ng-if="!vm.showEditModeSpinner" class="edit-mode-button">
+                  <md-button md-no-ink
+                      class="md-primary md-raised"
                       aria-label="EditMode"
-                      ng-change="vm.editModeChange()">
-                  </md-switch>
+                      ng-click="vm.editModeChange()">
+                      <span ng-show="vm.editMode">Save Data</span>
+                      <span ng-hide="vm.editMode">Edit Data</span>
+                      <md-icon ng-show="vm.editMode">check_circle</md-icon>
+                      <md-icon ng-hide="vm.editMode">mode_edit</md-icon>
+                  </md-button>
                 </span>
                 <span ng-if="vm.showEditModeSpinner">
                     <md-progress-circular
                       md-mode="indeterminate"
-                      md-diameter="25">
+                      md-diameter="70">
                       </md-progress-circular>
                 </span>
-                <span class="md-body-2">Edit Mode: {{vm.editMode ? 'On' : 'Off'}}</span>
             </div>
 
-            <div class="hss-control">
-                <span>
-                  <md-progress-circular
-                      class="md-gray hss-progress"
-                      md-mode="determinate"
-                      md-diameter="20"
-                      value="{{vm.mapsProgressPercentage}}">
-                  </md-progress-circular>
-                </span>
-                <span class="md-body-1">Progress: {{vm.mapsProgressPercentage}}%</span>
-            </div>
+            <!--<div class="hss-control">-->
+                <!--<span>-->
+                  <!--<md-progress-circular-->
+                      <!--class="md-gray hss-progress"-->
+                      <!--md-mode="determinate"-->
+                      <!--md-diameter="20"-->
+                      <!--value="{{vm.mapsProgressPercentage}}">-->
+                  <!--</md-progress-circular>-->
+                <!--</span>-->
+                <!--<span class="md-body-1">Progress: {{vm.mapsProgressPercentage}}%</span>-->
+            <!--</div>-->
         </div>
 
         <span class="to-be-continued mother end"></span>
