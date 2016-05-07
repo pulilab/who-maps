@@ -42,6 +42,8 @@ def deploy():
             _backup_db()
             # build
             run('docker-compose build')
+            run('docker-compose down')
+            run('docker-compose up -d')
 
             # drop & create DB
             time.sleep(1)
