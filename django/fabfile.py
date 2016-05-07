@@ -58,9 +58,6 @@ def deploy():
             time.sleep(1)
             _migrate_db()
 
-            # restart
-            run('docker-compose restart')
-
         # handle frontend
         with cd(env.frontend_root):
             run('npm install')
