@@ -11,7 +11,7 @@
             ng-if="vm.logos.length">
 
         <figure>
-            <img class="logoimg" ng-src="{{logo.data}}">
+            <img class="logoimg" ng-src="media/{{logo.data}}">
             <md-button ng-if="vm.editMode" class="md-fab md-tiny md-warn small logo-remove" aria-label="Remove logo">
                 <md-icon class="material-icons" ng-click="vm.delLogo(logo)">close</md-icon>
             </md-button>

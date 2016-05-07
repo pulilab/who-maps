@@ -33,7 +33,7 @@ class ProjectPartnersController {
     delLogo(logo) {
         if (this.editMode) {
             this.pps.deleteLogo(logo.id)
-                .then(result => {
+                .then(() => {
                     this.logos = _.filter(this.logos, item => {
                         return item.id !== logo.id;
                     });
