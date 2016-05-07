@@ -1,75 +1,192 @@
-<md-card layout="column" layout-align="center center" layout-margin layout-padding>
+<div class="landing-wrapper" layout=column>
+    <div class="bg-hero" layout=row layout-align="start end">
+        <div class="welcome">
+            <div class="welcome-text">
+                <h2 class="md-display-3">Welcome!</h2>
+                <h5 class="md-headline">This Digital Health Atlas aims to strengthen the value and impact of digital health investments, improve coordination, and facilitate institutionalization and scale.</h5>
+            </div>
 
-    <h1>Welcome to MAPS Toolkit!</h1>
-
-    <h3 class="center">Introduction text Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem nam aliquid, quia quam, architecto expedita, et suscipit unde minus distinctio rem ab. Atque quos quasi, tempore ab ullam distinctio dicta!</h3>
-
-    <md-button class="md-raised md-primary">Learn more</md-button>
-
-    <h3>Looking for a project?</h3>
-
-    <searchbar></searchbar>
-
-</md-card>
-
-<div>
-
-    <div layout="row" layout-align="center center">
-
-        <h2>Trending projects</h2>
-
+            <searchbar></searchbar>
+        </div>
     </div>
 
-    <div layout="row" layout-padding layout-margin>
+    <div flex layout="row" class="content-wrapper">
+        <div class="what-is-aside" flex=40>
+            <h2 class="md-display-3">What's DHA?</h2>
+            <div class="md-block dha-feature" layout="row" layout-align="start start">
+                <div class="img-wrapper">
+                    <img src="./images/screenshot-1.png" alt="" class="md-whiteframe-14dp">
+                </div>
+                <p>Digital Health Atlas offers technologists, implementers, financial investors, and governments a platform of tools and guidance to improve the use of digital innovations for health. Leverages the WHO mHealth Assessment and Planning for Scale (MAPS) Toolkit.</p>
+            </div>
+            <div class="md-block dha-feature" layout="row" layout-align="start start">
+                <div class="img-wrapper">
+                    <img src="./images/screenshot-2.png" alt="" class="md-whiteframe-14dp">
+                </div>
+                <p>Using metrics from the WHO mHealth Assessment and Planning for Scale (MAPS) Toolkit, the DHA allows implementers to assess the maturity of digital health projects, gain personalized guidance, and benefit from implementation experiences and other resources. </p>
+            </div>
+            <div class="md-block dha-feature" layout="row" layout-align="start start">
+                <div class="img-wrapper">
+                    <img src="./images/screenshot-3.png" alt="" class="md-whiteframe-14dp">
+                </div>
+                <p>This interactive website also helps to curate the range of digital health implementations around the world. This will enable a global community of implementers, governments, and financial investors to map, monitor, and foster the growth of digital health innovations investments. </p>
+            </div>
+        </div>
 
-        <projectcomp
-            flex="33"
-            ng-model="vm.trendingProjects[0]"
-            has-link=false
-            has-logo=true>
-        </projectcomp>
+        <!-- Not logged in -->
+        <md-card class="content-main logged-out md-card md-whiteframe-24dp" flex=55>
+            <h2 class="md-display-3">Sign up</h2>
+            <h5 class="md-headline">Whether you are an implementer, government, or financial investor, sign up below.</h5>
 
-        <projectcomp
-            flex="33"
-            ng-model="vm.trendingProjects[1]"
-            has-link=false
-            has-logo=true>
-        </projectcomp>
+            <form name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered" id="scroll-to-head">
+                <div layout="column" class="role-form" ng-init="hideMainForm = false" ng-class="{'hidden' : hideMainForm}">
+                    <h4>1. Select your role</h4>
+                    <md-radio-group ng-model="vm.register.role">
+                        <md-radio-button value="1" ng-selected="true" class="md-primary">
+                          <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
+                          I'm an <b>Implementer</b>
+                        </md-radio-button>
+                        <p>How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation. </p>
+                        <md-radio-button value="2" class="md-primary">
+                          <img src="./images/icon-role-investor.svg" alt="" class="img-role">
+                          I'm a <b>Financial Investor</b>
+                        </md-radio-button>
+                        <p>What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio. </p>
+                        <md-radio-button value="3" class="md-primary">
+                          <img src="./images/icon-role-government.svg" alt="" class="img-role">
+                          I work within <b>Government</b>
+                        </md-radio-button>
+                        <p>Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country. </p>
+                    </md-radio-group>
 
-        <projectcomp
-            flex="33"
-            ng-model="vm.trendingProjects[2]"
-            has-link=false
-            has-logo=true>
-        </projectcomp>
+                    <div class="form-actions" layout=row layout-align=end>
+                        <md-button class="md-raised md-primary" type="submit" ng-click="hideMainForm = true; vm.scrollTo('scroll-to-head')">
+                            Go to next step
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="column" class="main-form" ng-class="{'hidden' : !hideMainForm}">
+                    <h4>2. Fill out the form below</h3>
+                     <md-input-container class="md-block">
+                         <label>Email address</label>
+                         <input ng-model="vm.register.email" required name="email" type="email" ng-change="vm.handleCustomError(signupForm, 'email')" />
+                         <div ng-messages="signupForm.email.$error">
+                             <div ng-message="required">This is required.</div>
+                             <div ng-message="email">This field must be a valid email.</div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                         </div>
+                     </md-input-container>
+                     <md-input-container>
+                         <label>Password</label>
+                         <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6" ng-change="vm.handleCustomError(signupForm, 'password1')"/>
+                         <div ng-messages="signupForm.password1.$error" >
+                             <div ng-message="required">This is required.</div>
+                             <div ng-message="minlength">This need to be at least 6 chars</div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                         </div>
+                     </md-input-container>
+                     <md-input-container>
+                         <label>Password (Again)</label>
+                         <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" ng-change="vm.handleCustomError(signupForm, 'password2')" />
+                         <div ng-messages="signupForm.password2.$error">
+                             <div ng-message="required">This is required.</div>
+                             <div ng-message="passwordMatch">Your passwords do not match.</div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                         </div>
+                     </md-input-container>
+                     <div class="form-actions" layout=row layout-align=end>
+                         <md-button ng-hide="vm.inProgress" class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
+                             Sign up now
+                         </md-button>
+                          <md-progress-circular ng-show="vm.inProgress" md-mode="indeterminate"></md-progress-circular>
+                     </div>
+                </div>
+            </form>
+        <!-- / -->
 
+        <!-- Logged in -->
+        <!--
+        <md-card class="content-main logged-in md-card md-whiteframe-24dp" flex=55>
+            <h2 class="md-display-3">My Projects</h2>
+
+            <div class="my-project">
+                <h5 class="project-title md-headline">Project name (Country)</h5>
+                <div class="project-links md-block">
+                  <md-button aria-label="Dashboard" class="md-primary" md-no-ink>
+                      <md-icon class="material-icons">apps</md-icon>
+                      Dashboard
+                  </md-button>
+                    <md-button aria-label="Update Scores" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                        Update
+                    </md-button>
+                    <md-button aria-label="Summary Score" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">insert_chart</md-icon>
+                        Summary
+                    </md-button>
+                </div>
+                <div class="project-stats md-block">
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
+                </div>
+            </div>
+
+            <div class="my-project">
+                <h5 class="project-title md-headline">Project name (Country)</h5>
+                <div class="project-links md-block">
+                  <md-button aria-label="Dashboard" class="md-primary" md-no-ink>
+                      <md-icon class="material-icons">apps</md-icon>
+                      Dashboard
+                  </md-button>
+                    <md-button aria-label="Update Scores" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                        Update
+                    </md-button>
+                    <md-button aria-label="Summary Score" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">insert_chart</md-icon>
+                        Summary
+                    </md-button>
+                </div>
+                <div class="project-stats md-block">
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
+                </div>
+            </div>
+
+            <div class="my-project">
+                <h5 class="project-title md-headline">Project name (Country)</h5>
+                <div class="project-links md-block">
+                  <md-button aria-label="Dashboard" class="md-primary" md-no-ink>
+                      <md-icon class="material-icons">apps</md-icon>
+                      Dashboard
+                  </md-button>
+                    <md-button aria-label="Update Scores" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">playlist_add_check</md-icon>
+                        Update
+                    </md-button>
+                    <md-button aria-label="Summary Score" class="md-primary" md-no-ink>
+                        <md-icon class="material-icons">insert_chart</md-icon>
+                        Summary
+                    </md-button>
+                </div>
+                <div class="project-stats md-block">
+                    <viewers trend="'up'" number="1509"></viewers>
+                    <followers trend="'down'" number="87"></followers>
+                    <donors number="3"></donors>
+                </div>
+            </div>
+        </md-card>
+        -->
+        <!-- / -->
     </div>
 
+    <!-- Add it later...
+    <div class="trending" flex></div>
+    -->
 </div>
 
-<div layout="row" layout-align="center center">
-    <h2>About MAPS Toolkit</h2>
-</div>
-
-<div layout="row" layout-padding layout-margin>
-
-    <div flex="33" layout="column" layout-align="center center">
-        <h3>WHAT IS THE PURPOSE OF THE TOOLKIT</h3>
-        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos nihil iste, amet. A doloribus voluptate quidem tempora, consequuntur quis nesciunt, possimus ipsam esse velit harum impedit fugiat doloremque, dolore nostrum!</p>
-        <a href="">Read more...</a>
-    </div>
-
-
-    <div flex="33" layout="column" layout-align="center center">
-        <h3>WHAT ARE THE AXES OF SCALE?</h3>
-        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos nihil iste, amet. A doloribus voluptate quidem tempora, consequuntur quis nesciunt, possimus ipsam esse velit harum impedit fugiat doloremque, dolore nostrum!</p>
-        <a href="">Read more...</a>
-    </div>
-
-    <div flex="33" layout="column" layout-align="center center">
-        <h3>HOW WAS MAPS DEVELOPED?</h3>
-        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos nihil iste, amet. A doloribus voluptate quidem tempora, consequuntur quis nesciunt, possimus ipsam esse velit harum impedit fugiat doloremque, dolore nostrum!</p>
-        <a href=""><b>TODO:</b> These links lead nowhere</a>
-    </div>
-
-</div>
+<footer class="disclaimer">
+    <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+</footer>

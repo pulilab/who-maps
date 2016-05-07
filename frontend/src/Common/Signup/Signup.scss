@@ -2,20 +2,17 @@
 @import '../../mixins';
 
 signup {
+
   md-content {
     min-width: 400px;
     max-width: 400px;
   }
 
   h4 {
+    margin-bottom: 36px;
+    color: $color-gray-light;
     text-align: center;
     text-transform: uppercase;
-    color: $color-gray-light;
-    margin-bottom: 36px;
-  }
-
-  small {
-    color: $color-gray-light;
   }
 
   .layout-row {
@@ -34,14 +31,50 @@ signup {
     }
   }
 
-  .role-form {}
+  .role-form {
+    padding: 20px 40px;
+
+    .img-role {
+      float: left;
+      margin: 0 10px 0 5px;
+      width: 24px;
+      transition: $swift-ease-out;
+    }
+
+    p.md-small {
+      margin: 0 0 30px;
+      transition: $swift-ease-out;
+    }
+
+    md-radio-button:not(.md-checked) {
+      .md-label,
+      + p.md-small {
+        color: $text-disabled;
+      }
+      .img-role {
+        opacity: .4;
+      }
+    }
+
+    md-radio-button.md-checked {
+      .md-label,
+      + p.md-small {
+        color: $text-primary;
+      }
+      .img-role {
+        opacity: 1;
+      }
+    }
+  }
 
   .main-form {
     margin-top: 18px;
+    padding: 20px 40px;
+    background-color: $color-gray-lightest;
   }
 
   .disclaimer {
-    max-width: 640px;
     margin-bottom: 50px;
+    max-width: 640px;
   }
 }
