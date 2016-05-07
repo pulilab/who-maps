@@ -32,6 +32,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
                 and bubble1["subapp_id"] == bubble2["subapp_id"] \
                 and bubble1["column_id"] == bubble2["column_id"]
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Bubbles.
@@ -40,7 +41,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each bubble in the update request, insert if not exists,
             # update if exists.
             for bubble_update in serializer.validated_data:
@@ -87,6 +88,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
 class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.ConstraintSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Constraints.
@@ -95,7 +97,7 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each constraint in the update request, insert if not exists,
             # update if exists.
             for constraint_update in serializer.validated_data:
@@ -119,6 +121,7 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
 class InterventionView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.InterventionSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Interventions.
@@ -127,7 +130,7 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Update the column with the intervention.
             hss.data["interventions"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
             hss.save()
@@ -155,6 +158,7 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
         return tax1["app_id"] == tax2["app_id"] \
                 and tax1["subapp_id"] == tax2["subapp_id"]
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Taxonomies.
@@ -163,7 +167,7 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             tax_update = dict(serializer.validated_data)
             # Check the constraint in the update request, insert if not exists,
             # update if exists.
