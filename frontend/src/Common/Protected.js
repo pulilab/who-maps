@@ -1,8 +1,11 @@
 import Storage from './Storage';
+import AuthApi from './AuthApi';
 
-class Protected {
+class Protected extends AuthApi {
     constructor() {
+        super('userprofiles');
         this.EE = window.EE;
+        this.userProfile = false;
         this.storage = new Storage();
         this.isLogin = this.retrieveLoginStatus();
         this.retrieveUser = this.retrieveUser.bind(this);
@@ -17,7 +20,15 @@ class Protected {
     }
 
     retrieveUser() {
-        this.user = this.storage.get('user');
+        const vm = this;
+        vm.user = vm.storage.get('user');
+        if (!vm.userProfile) {
+            vm.get('').then(user => {
+                vm.userProfile = user[0];
+                vm.EE.emit('userProfileFetched');
+                vm.EE.emit('doDigest');
+            });
+        }
     }
 
     systemLogin() {

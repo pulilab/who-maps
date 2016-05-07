@@ -1,8 +1,11 @@
 import _ from 'lodash';
+import Protected from './Protected';
 
-class ProjectDefinition {
+class ProjectDefinition extends Protected {
 
     constructor() {
+        super();
+        this.EE.on('userProfileFetched', this.updateProjectData.bind(this));
         this.project = {
             name: null,
             organisation: null,
@@ -21,7 +24,7 @@ class ProjectDefinition {
                 standard: [],
                 custom: [{}]
             },
-            'pre_assessment': Array(6),
+            'pre_assessment': [{}, {}, {}, {}, {}, {}],
             donors: [{}],
             application: [],
             reports: [{}],
@@ -32,8 +35,14 @@ class ProjectDefinition {
             }
 
         };
+
+
     }
 
+    updateProjectData() {
+        this.project.organisation = this.userProfile.organisation;
+
+    }
 
     addTechnologyPlatform() {
         this.project.technology_platforms.custom.push({});

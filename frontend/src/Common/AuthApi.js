@@ -17,6 +17,7 @@ class AuthApi {
 
         this.preGet = false;
         this.prePost = false;
+        this.prePut = false;
         this.preDelete = false;
     }
 
@@ -81,6 +82,20 @@ class AuthApi {
         this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'POST';
+        request.body = JSON.stringify(data);
+        return fetch(this.apiUrl + endpoint, request)
+            .then((response) => {
+                return response;
+            });
+    }
+
+    put(endpoint, data) {
+        if (this.prePut) {
+            this.prePut();
+        }
+        this.retrieveToken();
+        const request = this.generateRequest();
+        request.method = 'PUT';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
             .then((response) => {

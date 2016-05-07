@@ -12,7 +12,7 @@ const $state = {
 };
 
 const $scope = {
-    $evalAsynch : jasmine.createSpy('evalasync')
+    $evalAsynch: jasmine.createSpy('evalasync')
 };
 
 describe('HSS project partner controller', () => {
@@ -50,8 +50,4 @@ describe('HSS project partner controller', () => {
         expect(cc.logos[0]).not.toBe(logo);
         expect(cc.pps.deleteLogo).toHaveBeenCalledTimes(1);
     });
-
-
-
-
 });
