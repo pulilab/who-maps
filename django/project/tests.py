@@ -107,9 +107,10 @@ class ProjectTests(APITestCase):
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name="Test Project5")
+        data.update(goals_to_scale="updated")
         response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["goals_to_scale"], "updated")
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-list")
