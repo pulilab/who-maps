@@ -212,29 +212,31 @@ def get_toolkit_versions(request, project_id):
 
 class PartnerLogoViewSet(TokenAuthMixin, ViewSet):
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request, project_id):
         """
         Retrieves list of partnerlogo ids for a given project.
         """
-        project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
+        project = get_object_or_400(Project, "No such project.", id=project_id)
         partnerlogos = PartnerLogo.objects.filter(project_id=project.id).values("id")
         return Response(partnerlogos)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Creates partnerlogos from the uploaded files.
         """
-        project = get_object_or_400(Project, "No such project.", id=kwargs["project_id"])
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        logos = []
         # Get and store binary files for partnerlogos.
         for key, value in request.FILES.items():
-            PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value.read())
-        return Response()
+            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value.read())
+            logos.append(logo.id)
+        return Response(logos)
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, pk):
         """
         Retrieves binary file for logo image.
         """
-        logo = get_object_or_400(PartnerLogo, "No such logo.", id=kwargs["pk"])
+        logo = get_object_or_400(PartnerLogo, "No such logo.", id=pk)
         return HttpResponse(content=logo.data, content_type=logo.type)
 
     def destroy(self, request, pk=None):

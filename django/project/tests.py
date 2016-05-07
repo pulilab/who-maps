@@ -281,3 +281,15 @@ class ProjectTests(APITestCase):
         url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    def test_upload_partnerlogo_should_return_id(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), list)
+        self.assertEqual(len(response.json()), 2)
