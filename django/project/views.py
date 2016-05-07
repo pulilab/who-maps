@@ -85,13 +85,19 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         model_serializer = ProjectModelSerializer(instance=project, data={"name": data_serializer.initial_data["name"]})
-        if model_serializer.is_valid() and data_serializer.is_valid():
+        model_valid = model_serializer.is_valid()
+        data_valid = data_serializer.is_valid()
+        if model_valid and data_valid:
             project.name = data_serializer.validated_data["name"]
             project.data = data_serializer.validated_data
             project.save()
             return Response(data_serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(model_serializer.errors or data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            errors = {
+                "model": model_serializer.errors,
+                "json": data_serializer.errors
+            }
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))
