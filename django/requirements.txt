@@ -12,3 +12,6 @@ fabric3==1.10.2.post3
 pytest-django==2.9.1
 pytest-cov==2.2.1
 djangorestframework-expiring-authtoken==0.1.3
+Pillow
+ipdb
+https://github.com/waveaccounting/dj-inmemorystorage/archive/master.zip
