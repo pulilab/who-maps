@@ -1,18 +1,26 @@
 import ProjectPartnersController from './ProjectPartnersController';
 import { EE } from '../../Common/';
 
-/* global define, it, describe, expect, beforeEach, jasmine, spyOn, xit */
+/* global define, it, describe, expect, beforeEach, jasmine, spyOn, xit, Promise */
 
 let cc = {};
-const $timeout = arg => {
-    arg();
+
+const $state = {
+    params: {
+        appName: 1
+    }
+};
+
+const $scope = {
+    $evalAsynch : jasmine.createSpy('evalasync')
 };
 
 describe('HSS project partner controller', () => {
 
     beforeEach(() => {
         EE.initialize();
-        cc = ProjectPartnersController.projectPartnersFactory()({}, $timeout, {});
+        cc = ProjectPartnersController.projectPartnersFactory()($scope, $state, {});
+        cc.$onInit();
     });
 
 
@@ -29,7 +37,9 @@ describe('HSS project partner controller', () => {
 
 
     it('has a method for deleting logos', () => {
-        const logo = '' + cc.logos[0];
+        spyOn(cc.pps, 'deleteLogo').and.returnValue(Promise.resolve());
+        cc.logos = [{ id: 1 }];
+        const logo = cc.logos[0];
 
         cc.editMode = false;
         cc.delLogo(logo);
@@ -38,20 +48,10 @@ describe('HSS project partner controller', () => {
         cc.editMode = true;
         cc.delLogo(logo);
         expect(cc.logos[0]).not.toBe(logo);
+        expect(cc.pps.deleteLogo).toHaveBeenCalledTimes(1);
     });
 
 
-    xit('calls upload on filechange', () => {
-        document.getElementById = () => {
-            return {
-                files: [1]
-            };
-        };
-        spyOn(cc, 'uploadLogo');
-
-        cc.fileChange();
-        expect(cc.uploadLogo).toHaveBeenCalledWith(1);
-    });
 
 
 });

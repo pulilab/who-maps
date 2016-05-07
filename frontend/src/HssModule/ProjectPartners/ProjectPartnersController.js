@@ -1,67 +1,67 @@
-import { partnerLogoUrls } from '../hssMockData';
+import _ from 'lodash';
+import ProjectPartnerService from './ProjectPartnersService';
 
 class ProjectPartnersController {
 
-    constructor($scope, $timeout) {
+    constructor($scope, $state, Upload) {
 
         const vm = this;
+        vm.scope = $scope;
+        vm.state = $state;
+        vm.pps = new ProjectPartnerService(Upload);
+        vm.$onInit = vm.initialization;
+    }
 
-        $timeout(() => {
-            vm.scope = $scope;
-            vm.EE = window.EE;
-            // vm.file = document.getElementById('file-input');
-            // window.fileChange = vm.fileChange;
-
-            vm.EE.on('hssEditMode', bool => {
-                vm.editMode = bool;
-            });
-
-            // vm.EE.on('uploadLogo', file => {
-            //     vm.uploadLogo(file);
-            // });
-
-            vm.editMode = false;
-            vm.logos = partnerLogoUrls;
+    initialization() {
+        this.EE = window.EE;
+        this.EE.on('hssEditMode', bool => {
+            this.editMode = bool;
         });
+        this.logos = [];
+        this.projectId = this.state.params.appName;
+        this.pps.getLogoList(this.projectId)
+            .then(this.getLogoUrl.bind(this));
+
+        this.editMode = false;
+    }
+
+    getLogoUrl(logos) {
+        this.logos = logos;
+        this.scope.$evalAsync();
     }
 
     delLogo(logo) {
-
         if (this.editMode) {
-            this.logos = this.logos.filter(l => l !== logo);
+            this.pps.deleteLogo(logo.id)
+                .then(() => {
+                    this.logos = _.filter(this.logos, item => {
+                        return item.id !== logo.id;
+                    });
+                    this.scope.$evalAsync();
+                });
+
         }
 
-        // backend update...
-    }
-
-    // It gets out to the global, because Angular doesn't let binding to the file,
-    // so ng-change isn't working
-    fileChange() {
-
-
-        // const fileElement = document.getElementById('file-input');
-        // const fileObj = fileElement ? fileElement.files[0] : null;
-        //
-        // if (fileObj) {
-        //     window.EE.emit('uploadLogo', fileObj);
-        // }
 
     }
 
-    uploadLogo(/* fileObj */) {
 
-        // upload to API...
-
-        // refresh view/img sources from API...
+    uploadLogo(data) {
+        this.projectId = this.state.params.appName;
+        this.pps.uploadLogo(data, this.projectId)
+            .then(response => {
+                this.logos = _.concat(this.logos, response);
+                this.scope.$evalAsync();
+            });
     }
 
     static projectPartnersFactory() {
         require('./ProjectPartners.scss');
-        function project($scope, $timeout) {
-            return new ProjectPartnersController($scope, $timeout);
+        function project($scope, $state, Upload) {
+            return new ProjectPartnersController($scope, $state, Upload);
         }
 
-        project.$inject = ['$scope', '$timeout'];
+        project.$inject = ['$scope', '$state', 'Upload'];
 
         return project;
     }
