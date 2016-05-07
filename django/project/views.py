@@ -1,5 +1,6 @@
 import json
 
+from django.db import transaction
 from django.http import HttpResponse, Http404
 from rest_framework import status
 from rest_framework.viewsets import ViewSet
@@ -76,12 +77,13 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         data.update(id=project.id)
         return Response(project.data)
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
         Updates a project.
         """
         data_serializer = ProjectSerializer(data=request.data)
-        project = get_object_or_400(Project, "No such project", id=kwargs["pk"])
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         model_serializer = ProjectModelSerializer(instance=project, data={"name": data_serializer.initial_data["name"]})
         if model_serializer.is_valid() and data_serializer.is_valid():
             project.name = data_serializer.validated_data["name"]
