@@ -55,7 +55,9 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         data_serializer = ProjectSerializer(data=request.data)
         model_serializer = ProjectModelSerializer(data={"name": data_serializer.initial_data["name"]})
-        if model_serializer.is_valid() and data_serializer.is_valid():
+        model_valid = model_serializer.is_valid()
+        data_valid = data_serializer.is_valid()
+        if model_valid and data_valid:
             project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
             project.save()
             # Add default HSS structure for the new project.
@@ -66,7 +68,11 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
             data.update(id=project.id)
             return Response(data, status=status.HTTP_201_CREATED)
         else:
-            return Response(model_serializer.errors or data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            errors = {
+                "model": model_serializer.errors,
+                "json": data_serializer.errors
+            }
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, *args, **kwargs):
         """
