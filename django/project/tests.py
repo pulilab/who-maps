@@ -109,7 +109,6 @@ class ProjectTests(APITestCase):
         data = copy.deepcopy(self.project_data)
         data.update(goals_to_scale="updated")
         response = self.test_user_client.put(url, data)
-        print(response.json())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["goals_to_scale"], "updated")
 
