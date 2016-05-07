@@ -71,7 +71,9 @@ class NewProjectController extends ProjectDefinition {
     }
 
     handleDataLoad(data) {
+        this.createCoverageKeys(data);
         _.merge(this.project, data);
+
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.countryName = _.filter(this.structure.countries, { id: this.project.country  })[0].name;
@@ -80,10 +82,24 @@ class NewProjectController extends ProjectDefinition {
                 this.districtList = district;
                 this.unfoldCoverage();
                 this.assignDefaultCustom();
-                console.log(this.project)
                 this.scope.$evalAsync();
             });
 
+    }
+
+    createCoverageKeys(data) {
+        this.coverageKeys = _.chain(data.coverage)
+            .map(item => {
+                return _.keys(item);
+            })
+            .flatten()
+            .filter(item => {
+                return item !== 'district';
+            })
+            .map(item => {
+                return item.replace('_', ' ');
+            })
+            .value();
     }
 
     assignDefaultCustom() {
@@ -98,15 +114,23 @@ class NewProjectController extends ProjectDefinition {
 
     unfoldCoverage() {
         const keys = _.cloneDeep(this.structure.coverageTypes);
-        keys[1] = keys[1].replace('_', '');
+        keys[1] = keys[1].replace(' ', '_');
         const newCoverage = [];
         _.forEach(this.project.coverage, coverage => {
             _.forEach(coverage, (props, key) => {
-                if (keys.indexOf(key) > -1 ) {
+                if (keys.indexOf(key) > -1) {
                     newCoverage.push({
                         district: coverage.district,
                         districtChosen: coverage.district,
-                        typeChosen: key,
+                        typeChosen: key.replace('_', ' '),
+                        number: props
+                    });
+                }
+                else if (this.coverageKeys.indexOf(key) > -1) {
+                    newCoverage.push({
+                        district: coverage.district,
+                        districtChosen: coverage.district,
+                        other: key,
                         number: props
                     });
                 }
@@ -208,21 +232,26 @@ class NewProjectController extends ProjectDefinition {
     }
 
     flattenCustom(obj) {
-        return _.map(obj.custom, item => {
-            item = item.value;
-            return item;
-        });
+        return this.unfoldObjects(obj.custom);
     }
 
     unfoldObjects(obj) {
-        return _.map(obj, item => {
-            item = item.value;
-            return item;
-        });
+        return _.chain(obj)
+            .map(item => {
+                item = item.value;
+                return item;
+            })
+            .filter(item => {
+                return !_.isNil(item);
+            })
+            .value();
     }
 
     concatCustom(obj) {
-        return _.concat(obj.custom, obj.standard);
+        const cat = _.concat(obj.custom, obj.standard);
+        return _.filter(cat, item => {
+            return !_.isNil(item) && !_.isEmpty(item);
+        });
     }
 
     mergeCustomAndDefault(collection) {
