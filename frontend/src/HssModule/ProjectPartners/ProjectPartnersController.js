@@ -1,4 +1,4 @@
-import { partnerLogoUrls } from '../hssMockData';
+import _ from 'lodash';
 import ProjectPartnerService from './ProjectPartnersService';
 
 class ProjectPartnersController {
@@ -17,24 +17,42 @@ class ProjectPartnersController {
         this.EE.on('hssEditMode', bool => {
             this.editMode = bool;
         });
+        this.logos = [];
+        this.projectId = this.state.params.appName;
+        this.pps.getLogoList(this.projectId)
+            .then(this.getLogoUrl.bind(this));
 
         this.editMode = false;
-        this.logos = partnerLogoUrls;
+    }
+
+    getLogoUrl(logos) {
+        this.logos = logos;
+        this.scope.$evalAsync();
     }
 
     delLogo(logo) {
-
         if (this.editMode) {
-            this.logos = this.logos.filter(l => l !== logo);
+            this.pps.deleteLogo(logo.id)
+                .then(result => {
+                    this.logos = _.filter(this.logos, item => {
+                        return item.id !== logo.id;
+                    });
+                    this.scope.$evalAsync();
+                });
+
         }
 
-        // backend update...
+
     }
 
 
     uploadLogo(data) {
-        const projectId = this.state.params.appName;
-        this.pps.uploadLogo(data, projectId);
+        this.projectId = this.state.params.appName;
+        this.pps.uploadLogo(data, this.projectId)
+            .then(response => {
+                _.concat(this.logos, response);
+                this.scope.$evalAsync();
+            });
     }
 
     static projectPartnersFactory() {

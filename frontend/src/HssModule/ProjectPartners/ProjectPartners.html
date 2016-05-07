@@ -1,35 +1,35 @@
 <div flex="100">
-	<h4>Project Partners</h4>
+    <h4>Project Partners</h4>
 </div>
 
 <div class="partnerscontainer">
 
-	<div
-		ng-repeat="logo in vm.logos track by $index"
-    ng-class="{editing: vm.editMode}"
-		class="partner"
-		ng-if="vm.logos.length">
+    <div
+            ng-repeat="logo in vm.logos | limitTo:8"
+            ng-class="{editing: vm.editMode}"
+            class="partner"
+            ng-if="vm.logos.length">
 
-		<figure>
-		    <img class="logoimg" ng-src="{{logo}}">
-        <md-button ng-if="vm.editMode" class="md-fab md-tiny md-warn small logo-remove" aria-label="Remove logo">
-            <md-icon class="material-icons" ng-click="vm.delLogo(logo)">close</md-icon>
-        </md-button>
-		</figure>
-	</div>
+        <figure>
+            <img class="logoimg" ng-src="{{logo.dataUrl}}">
+            <md-button ng-if="vm.editMode" class="md-fab md-tiny md-warn small logo-remove" aria-label="Remove logo">
+                <md-icon class="material-icons" ng-click="vm.delLogo(logo)">close</md-icon>
+            </md-button>
+        </figure>
+    </div>
 
-	<div
-		class="add-partner"
-		ng-hide="!vm.editMode">
+    <div
+            class="add-partner"
+            ng-hide="!vm.editMode">
 
-		<div class="file-upload" ngf-select="vm.uploadLogo($file)">
-			<span class="md-button md-black md-raised wide">Upload logo</span>
-		</div>
+        <div class="file-upload" ngf-select="vm.uploadLogo($file)">
+            <span class="md-button md-black md-raised wide">Upload logo</span>
+        </div>
 
 		<span class="file-upload-info md-small">
 			File format: jpeg, gif, png<br>
 			Max.file size: 2MB
 		</span>
 
-	</div>
+    </div>
 </div>
