@@ -53,6 +53,7 @@ class ContinuumController {
 
     editModeChange() {
         const vm = this;
+        vm.editMode = !vm.editMode;
         vm.showEditModeSpinner = true;
         this.timeout(()=> {
             this.EE.emit('hssEditMode', vm.editMode);

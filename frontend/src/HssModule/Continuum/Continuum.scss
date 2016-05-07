@@ -35,6 +35,16 @@ continuum {
 
   .continuum-component {
 
+    .edit-mode-button {
+      position:absolute;
+      right: 25px;
+      top: 30px;
+
+      .md-button {
+        width:120px;
+      }
+    }
+
     md-grid-tile {
 
       &.cell-icons {
