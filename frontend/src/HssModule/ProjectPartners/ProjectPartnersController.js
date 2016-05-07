@@ -3,10 +3,11 @@ import ProjectPartnerService from './ProjectPartnersService';
 
 class ProjectPartnersController {
 
-    constructor($scope, Upload) {
+    constructor($scope, $state, Upload) {
 
         const vm = this;
         vm.scope = $scope;
+        vm.state = $state;
         vm.pps = new ProjectPartnerService(Upload);
         vm.$onInit = vm.initialization;
     }
@@ -32,16 +33,17 @@ class ProjectPartnersController {
 
 
     uploadLogo(data) {
-        this.pps.uploadLogo(data);
+        const projectId = this.state.params.appName;
+        this.pps.uploadLogo(data, projectId);
     }
 
     static projectPartnersFactory() {
         require('./ProjectPartners.scss');
-        function project($scope, Upload) {
-            return new ProjectPartnersController($scope, Upload);
+        function project($scope, $state, Upload) {
+            return new ProjectPartnersController($scope, $state, Upload);
         }
 
-        project.$inject = ['$scope', 'Upload'];
+        project.$inject = ['$scope', '$state', 'Upload'];
 
         return project;
     }

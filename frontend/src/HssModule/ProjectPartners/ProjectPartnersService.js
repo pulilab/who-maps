@@ -7,11 +7,11 @@ class ProjectPartnersService extends AuthApi {
         this.upload = upload;
     }
 
-    uploadLogo(logo) {
+    uploadLogo(logo, projectId) {
         this.retrieveToken(true);
         const Authorization = 'Token ' + this.token;
         return this.upload.upload({
-            url: 'something',
+            url: `projects/${projectId}/partnerlogos/`,
             headers: { Authorization },
             data: { file: logo }
         });
