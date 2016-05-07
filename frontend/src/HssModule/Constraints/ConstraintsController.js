@@ -30,7 +30,7 @@ class ConstraintsController {
     constraintsToggleGenerator() {
         return _.chain(this.structure.taxonomies)
             .keys()
-            .map((value, key) => {
+            .map((value) => {
                 return {
                     name: value,
                     icon: this.structure.taxonomies[value].icon,

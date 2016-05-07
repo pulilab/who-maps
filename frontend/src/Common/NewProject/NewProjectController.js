@@ -1,9 +1,9 @@
-import _ from "lodash";
-import moment from "moment";
-import NewProjectService from "./NewProjectService";
-import ProjectDefinition from "../ProjectDefinition";
+import _ from 'lodash';
+import moment from 'moment';
+import NewProjectService from './NewProjectService';
+import ProjectDefinition from '../ProjectDefinition';
 
-/* global DEV */
+/* global DEV, Promise */
 
 class NewProjectController extends ProjectDefinition {
 
@@ -76,7 +76,11 @@ class NewProjectController extends ProjectDefinition {
 
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        this.project.countryName = _.filter(this.structure.countries, { id: this.project.country  })[0].name;
+        const country = _.filter(this.structure.countries, { id: this.project.country  });
+        if (country[0] && country[0].name) {
+            this.project.countryName = country[0].name;
+        }
+
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;

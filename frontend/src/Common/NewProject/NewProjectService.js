@@ -21,7 +21,7 @@ class NewProjectService extends AuthApi {
                 };
             });
     }
-    
+
     updateProject(data, id) {
         let status = void 0;
         return this.put(`projects/${id}/`, data)

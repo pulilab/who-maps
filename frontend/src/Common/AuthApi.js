@@ -18,6 +18,7 @@ class AuthApi {
         this.preGet = false;
         this.prePost = false;
         this.prePut = false;
+        this.preDelete = false;
     }
 
     get(endpoint) {
@@ -36,6 +37,41 @@ class AuthApi {
             })
             .then((json) =>{
                 return json;
+            });
+    }
+
+    getBlob(endpoint) {
+        if (this.preGet) {
+            this.preGet();
+        }
+        this.retrieveToken();
+        const request = this.generateRequest();
+        request.method = 'GET';
+        return fetch(this.apiUrl + endpoint, request)
+            .then((response) => {
+                if (response.status === 401) {
+                    this.EE.emit('unauthorized');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                return blob;
+            });
+    }
+
+    del(endpoint) {
+        if (this.preDelete) {
+            this.preDelete();
+        }
+        this.retrieveToken();
+        const request = this.generateRequest();
+        request.method = 'DELETE';
+        return fetch(this.apiUrl + endpoint, request)
+            .then((response) => {
+                if (response.status === 401) {
+                    this.EE.emit('unauthorized');
+                }
+                return response;
             });
     }
 

@@ -15,11 +15,17 @@ const mockData = {
         name: 'asd'
     }]
 };
+
+const $state = {
+    params: {
+
+    }
+};
 describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = NewProjectController.newProjectFactory()($scope);
+        sc = NewProjectController.newProjectFactory()($scope, $state);
         sc.newProjectForm = {
             $valid: true
         };
@@ -84,8 +90,38 @@ describe('NewProjectController', () => {
         expect(sc.createCoverageArray).toBeDefined();
     });
 
+    it('should have a function that handle the initialization when is in editMode', () => {
+        spyOn(sc.ns, 'projectStructure').and.returnValue(Promise.resolve());
+        spyOn(sc.ns, 'projectData').and.returnValue(Promise.resolve());
+        spyOn(sc, 'handleDataLoad');
+        spyOn(sc, 'handleStructureLoad');
+        sc.editMode = true;
+        sc.initialization();
+        expect(sc.ns.projectData).toHaveBeenCalled();
+        expect(sc.ns.projectStructure).toHaveBeenCalled();
+        expect(sc.handleDataLoad).toHaveBeenCalled();
+        expect(sc.handleStructureLoad).toHaveBeenCalled();
+    });
+
+    it('should have a function that handle the structure loaded from the server', () => {
+        sc.handleStructureLoad(mockData);
+        expect(sc.dataLoaded).toBe(true);
+        expect(sc.structure).toBe(mockData);
+        expect(sc.scope.$evalAsync).toHaveBeenCalled();
+    });
+
     it('should have a function that handle the data loaded from the server', () => {
-        spyOn(sc.ns, '')
-    })
+        spyOn(sc, 'createCoverageKeys');
+        spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve());
+        spyOn(sc, 'unfoldCoverage');
+        spyOn(sc, 'assignDefaultCustom');
+
+        sc.handleStructureLoad(mockData);
+        sc.handleDataLoad();
+        expect(sc.createCoverageKeys).toHaveBeenCalled();
+        expect(sc.unfoldCoverage).toHaveBeenCalled();
+        expect(sc.assignDefaultCustom).toHaveBeenCalled();
+
+    });
 
 });

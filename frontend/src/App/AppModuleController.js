@@ -72,7 +72,7 @@ class AppModuleController extends Protected {
                 }
                 _.forEach(this.user.projects, item => {
                     if (item.id === parseInt(this.state.params.appName, 10)) {
-                        this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
+                        this.currentProject = item;
                     }
                 });
 

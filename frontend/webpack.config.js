@@ -117,6 +117,10 @@ module.exports = {
             '/api/*': {
                 target: 'http://192.168.99.100/',
                 secure: false
+            },
+            '/media/*': {
+                target: 'http://192.168.99.100/',
+                secure: false
             }
         }
     },
