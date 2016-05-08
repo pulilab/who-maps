@@ -1,7 +1,7 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
 
-import perfMockMap from './CountryMap/mock/perfMockMap.js';
+// import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
 import commProjects from './Mocks/commProjects.js';
 
@@ -22,16 +22,52 @@ class DashboardModuleController {
         vm.service = new DashboardService(this.state.params.appName);
         vm.mapService = new DashboardMapService();
 
-        // vm.projectData
-        // vm.axisData
-
+        // Uncomment below to see current countries and id-s
+        // vm.mapService.getCountries();
 
         vm.fetchProjectData();
+        vm.fetchAxisData();
+
+        vm.service.getCoverageVersions(this.projectId).then(data => {
+
+            const ret = {};
+            ret.labels = data.reduce((toRet, version) => {
+                version.data.forEach(el => {
+                    if (toRet.indexOf(el.district) < 0) {
+                        toRet = toRet.concat(el.district);
+                    }
+                });
+                return toRet;
+            }, []);
+            // console.debug('LABELS', ret.labels);
+
+            const lastVersion = data[(data.length - 1)];
+            // console.debug('LAST VERSION', lastVersion);
+
+            ret.data = { date: lastVersion.modified };
+            lastVersion.data.forEach(distObj => {
+                ret.data[distObj.district] = {
+                    clients: distObj.clients,
+                    facilities: distObj.facilities,
+                    workers: distObj.health_workers
+                    // Every other keys, maybe _, on the component too!!!
+                };
+            });
+            // console.debug('FINAL PARSED COVERAGE: ', ret);
+
+            vm.EE.emit('mapdataArrived', ret);
+
+            vm.perfMockMap = ret;
+        });
+
+        // Should serialize this somehow
+        vm.fetchCountryMap(5);
 
         vm.fetchToolkitVersions();
 
         // Mocks
-        vm.perfMockMap = perfMockMap;
+        // vm.perfMockMap = perfMockMap;
+        // vm.perfMockmap =
         vm.commProjects = commProjects;
 
         // Letting components know about browser window resize
@@ -175,14 +211,28 @@ class DashboardModuleController {
                 });
             });
             vm.EE.emit('domain chart data', domainData);
-
         });
     }
 
-    fetchCountryMap(countryId) {
+    // fetchCountries() {
 
-        this.mapService.getCountryTopo(countryId).then(data => {
+    //     this.mapService.getCountries().then(data => {
 
+    //         this.countryIds = data.reduce((ret, el) => {
+    //             ret[el.name] = el.id;
+    //             return ret;
+    //         }, {});
+
+    //         this.fetchCountryMap();
+    //     });
+    // }
+
+    fetchCountryMap(id) {
+
+        // console.debug('TRYING TO FETCH COUNTRYMAP for ID:', id);
+        this.mapService.getCountryTopo(id).then(data => {
+
+            // console.debug('RAW topo arrived from API, will send over EE', data);
             this.EE.emit('topoArrived', data);
         });
     }

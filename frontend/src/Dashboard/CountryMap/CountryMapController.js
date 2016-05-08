@@ -12,49 +12,69 @@ class CountrymapController {
 
     constructor($element, $scope) {
 
-        const vm = this;
-
-        // BINDING
-        // vm.data / data to show, district names has to match with countryLvl4-8's
-        // vm.json // {lvl2: xx, lvlx: xxx} format
-
-        vm.el = $element;
-        vm.scope = $scope;
-        vm.EE = window.EE;
-        vm.tooltipOver = false;
-        vm.preventMouseOut = false;
-        // vm.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
+        this.el = $element;
+        this.scope = $scope;
+        this.EE = window.EE;
+        this.tooltipOver = false;
+        this.preventMouseOut = false;
+        // this.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
 
 
-        vm.$onInit = () => {
+        this.$onInit = () => {
 
-            // Aggregates the values of districts to show them all
-            vm.boundNrs = _.reduce(vm.data.data.slice(-1)[0], (ret, value) => {
-
-                if (typeof value !== 'object') {
-                    return ret;
-                }
-                ret.Clients += value.clients;
-                ret['Health workers'] += value.workers;
-                ret.Facilities += value.facilities;
-
-                return ret;
-            }, {
-                'Clients': 0,
-                'Health workers': 0,
-                'Facilities': 0
-            });
-
-            vm.svgPanZoom = svgPanZoom;
-            // vm.drawMap();
-            vm.EE.once('topoArrived', vm.drawMap.bind(vm));
+            this.svgPanZoom = svgPanZoom;
+            this.EE.on('topoArrived', this.mapArrived.bind(this));
+            this.EE.on('mapdataArrived', this.dataArrived.bind(this));
         };
+    }
+
+    dataArrived(data) {
+        // Aggregates the values of districts to show them all
+        // SHOULD handle misc. values too!!!!
+        const vm = this;
+        vm.data = data;
+        // console.debug('DATA to slice:', vm.data);
+        vm.boundNrs = _.reduce(vm.data.data[0], (ret, value) => {
+
+            if (typeof value !== 'object') {
+                return ret;
+            }
+            ret.Clients += value.clients;
+            ret['Health workers'] += value.workers;
+            ret.Facilities += value.facilities;
+
+            return ret;
+        }, {
+            'Clients': 0,
+            'Health workers': 0,
+            'Facilities': 0
+        });
+
+        if (vm.map) {
+            // console.debug('data arrived, map was here, starts drawing', data);
+            vm.drawMap(vm.map);
+        }
+        else {
+            // console.debug('data arrived, waiting for map', data);
+        }
+    }
+
+    mapArrived(data, level) {
+        const vm = this;
+        vm.map = data;
+        vm.level = level;
+        if (vm.data) {
+            // console.debug('map arrived, data was here, so it starts drawing');
+            vm.drawMap(data);
+        }
+        else {
+            // console.debug('map arrived, waiting for data');
+        }
     }
 
     makeGeoFromTopo(topo, level) {
         // return topojson.feature(topo, topoSource.objects.admin_level_5);
         return topojson.feature(topo, topo.objects[level]);
-
     }
 
     drawMap(topoJSON) {
@@ -76,11 +96,11 @@ class CountrymapController {
             'India': 'admin_level_5',
             'Kenya': 'admin_level_4',
             'Philippines': 'admin_level_4',
-            'Bangladesh': 'admin-level_5'
+            'Border India - Bangladesh': 'admin_level_5'
         };
 
         const level = levelLib[vm.countryName];
-        console.debug(vm.countryName);
+        // console.debug('recovered country name & admin_level:', vm.countryName, level);
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
@@ -107,8 +127,9 @@ class CountrymapController {
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
 
-            const gotData = typeof vm.data
-                .data[vm.data.data.length - 1][distrData.features[i].properties.name] === 'object';
+            // const gotData = typeof
+            //    vm.data.data[vm.data.data.length - 1][distrData.features[i].properties.name] === 'object';
+            const gotData = typeof vm.data.data[distrData.features[i].properties.name] === 'object';
 
             element
                 .append('path')
@@ -123,7 +144,7 @@ class CountrymapController {
                 .on('mouseover', () => {
                     vm.activeDistrict = {
                         name: distrData.features[i].properties.name,
-                        data: vm.data.data[vm.data.data.length - 1][distrData.features[i].properties.name]
+                        data: vm.data.data[distrData.features[i].properties.name]
                     };
                     vm.scope.$evalAsync();
 
@@ -132,7 +153,7 @@ class CountrymapController {
 
         const zoomOptions = {
             panEnabled: true,
-            controlIconsEnabled: false, // <= change this to toggle controls
+            controlIconsEnabled: false,
             zoomEnabled: true,
             mouseWheelZoomEnabled: true,
             preventMouseEventsDefault: true,
