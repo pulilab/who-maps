@@ -7,7 +7,8 @@ const linechart = {
     template: _template,
     bindings: {
         showdotted: '=',
-        datachooser: '='
+        datachooser: '=',
+        notpercentage: '='
     },
     name: 'linechart'
 };

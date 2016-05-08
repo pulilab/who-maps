@@ -30,6 +30,7 @@
                     <!-- TODO: bindings -->
                     <viewers trend="'up'" number="1509"></viewers>
                     <followers trend="'down'" number="87"></followers>
+
                     <donors number="vm.projectData.donors.length"></donors>
 
                 </div>
@@ -161,8 +162,14 @@
                             </countrymap>
                         </md-tab>
 
-                        <md-tab ng-disabled="true" label="historical view">
-                            Linechart here
+                        <md-tab label="historical view">
+
+                            <linechart
+                                showdotted="true"
+                                datachooser="false"
+                                notpercentage="true"
+                            ></linechart>
+
                         </md-tab>
 
                     </md-tabs>

@@ -21,46 +21,12 @@ class DashboardModuleController {
         vm.service = new DashboardService(this.state.params.appName);
         vm.mapService = new DashboardMapService();
 
-        vm.fetchProjectData();
         vm.fetchAxisData();
 
-        // Use this later, when the last versions data will be needed (privacy)
-        // vm.service.getCoverageVersions(this.projectId).then(data => {
-
-        //     const ret = {};
-        //     ret.labels = data.reduce((toRet, version) => {
-        //         version.data.forEach(el => {
-        //             if (toRet.indexOf(el.district) < 0) {
-        //                 toRet = toRet.concat(el.district);
-        //             }
-        //         });
-        //         return toRet;
-        //     }, []);
-        //     // console.debug('LABELS', ret.labels);
-
-        //     const lastVersion = data[(data.length - 1)];
-        //     // console.debug('LAST VERSION', lastVersion);
-
-        //     ret.data = { date: lastVersion.modified };
-        //     lastVersion.data.forEach(distObj => {
-
-        //         ret.data[distObj.district] = {};
-
-        //         _.forOwn(distObj, (val, key) => {
-        //             // console.debug(key, val);
-        //             if (key === 'district') { return; }
-
-        //             const formattedKey = key.replace('_', ' ');
-
-        //             ret.data[distObj.district][formattedKey] = val;
-        //         });
-
-        //     });
-        //     // console.debug('FINAL PARSED COVERAGE: ', ret);
-
-        //     vm.EE.emit('mapdataArrived', ret);
-        //     vm.perfMockMap = ret;
-        // });
+        vm.fetchProjectData();
+        // vm.fetchCountryMap();
+        // vm.parseMapData();
+        // vm.fetchCoverageVersions();
 
         vm.fetchToolkitData();
         // vm.fetchToolkitVersions();
@@ -79,7 +45,7 @@ class DashboardModuleController {
         };
         window.onresize = vm.resizefn;
 
-        // Routers for the axis components
+        // Routers for the axis components (deregistering?)
         vm.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
         vm.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
 
@@ -92,6 +58,7 @@ class DashboardModuleController {
             this.projectData = data;
             this.fetchCountryMap(data.country);
             this.parseMapData(data.coverage);
+            this.fetchCoverageVersions();
         });
     }
 
@@ -105,6 +72,7 @@ class DashboardModuleController {
                 ret.labels.push(el.district);
             }
         });
+
         // console.debug('Labels', ret.labels);
 
         coverage.forEach(distObj => {
@@ -291,6 +259,51 @@ class DashboardModuleController {
 
             // console.debug('RAW topo arrived from API, will send over EE', data);
             this.EE.emit('topoArrived', data);
+        });
+    }
+
+    fetchCoverageVersions() {
+
+        this.service.getCoverageVersions(this.projectId).then(data => {
+
+            data.push({ data: this.projectData.coverage });
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = ('0' + (today.getMonth() + 1)).slice(-2);
+            const day = ('0' + today.getDate()).slice(-2);
+
+            const todayString = [year, month, day].join('-');
+
+            const historyChartData = data.reduce((ret, versionObj, vInd) => {
+
+                ret.data[vInd] = {};
+                ret.data[vInd].date = versionObj.modified ? versionObj.modified.split('T')[0] : todayString;
+
+                versionObj.data.forEach(distrObj => {
+
+                    _.forOwn(distrObj, (val, key) => {
+
+                        if (key !== 'district') {
+
+                            const newKey = key.replace('_', ' ');
+
+                            if (ret.labels.indexOf(newKey) < 0) { ret.labels.push(newKey); }
+
+                            const name = 'axis' + (ret.labels.indexOf(newKey) + 1);
+
+                            ret.data[vInd][name] = (ret.data[vInd][name] || 0) + val;
+
+                        }
+
+                    });
+                });
+
+                return ret;
+            }, { labels: [], data: [] });
+
+            this.EE.emit('coverage chart data', historyChartData);
+
         });
     }
 
