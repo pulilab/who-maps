@@ -48,7 +48,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
                     "app_id": bubble_update["app_id"],
                     "subapp_id": bubble_update["subapp_id"],
                     "column_id": bubble_update["column_id"]}]
-                bubble_exists = HSS.objects.get_object_or_none(data__applications__contains=filter_data)
+                bubble_exists = HSS.objects.get_object_or_none(project_id=project_id, data__applications__contains=filter_data)
                 if bubble_exists:
                     # Search for the given bubble, and update.
                     for i, bubble in enumerate(hss.data["applications"]):
@@ -99,7 +99,7 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
             for constraint_update in serializer.validated_data:
                 constraint_update = dict(constraint_update)
                 filter_data = [{"name": constraint_update["name"]}]
-                constraint_exists = HSS.objects.get_object_or_none(data__constraints__contains=filter_data)
+                constraint_exists = HSS.objects.get_object_or_none(project_id=project_id, data__constraints__contains=filter_data)
                 if constraint_exists:
                     # Search for the given constraint, and update.
                     for i, constraint in enumerate(hss.data["constraints"]):
@@ -168,7 +168,7 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
             filter_data = [{
                 "app_id": tax_update["app_id"],
                 "subapp_id": tax_update["subapp_id"]}]
-            tax_exists = HSS.objects.get_object_or_none(data__taxonomies__contains=filter_data)
+            tax_exists = HSS.objects.get_object_or_none(project_id=project_id, data__taxonomies__contains=filter_data)
             if tax_exists:
                 # Search for the given taxonomy, and update.
                 for i, tax in enumerate(hss.data["taxonomies"]):
