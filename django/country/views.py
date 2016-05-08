@@ -52,7 +52,6 @@ def get_districts(request, country_id):
                 if "admin_level" in item["properties"].keys():
                     name = item["properties"].get("name:en", None) or item["properties"].get("name")
                     districts.append(name)
-                    print(name)
         return Response(set(districts))
     else:
         # No admin_level for the given country.
