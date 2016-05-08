@@ -23,14 +23,22 @@ class CountrymapController {
         this.$onInit = () => {
 
             this.svgPanZoom = svgPanZoom;
-            this.EE.on('topoArrived', this.mapArrived.bind(this));
-            this.EE.on('mapdataArrived', this.dataArrived.bind(this));
+            this.EE.once('topoArrived', this.mapArrived.bind(this));
+            this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+        };
+
+        this.$onDestroy = () => {
+
+            this.svgZoom.destroy();
+            this.data = false;
+            this.map = false;
+            console.warn('CTRL destroyed');
         };
     }
 
     dataArrived(data) {
         // Aggregates the values of districts to show them all
-        // SHOULD handle misc. values too!!!!
+
         const vm = this;
         vm.data = data;
         // console.debug('DATA to slice:', vm.data);
