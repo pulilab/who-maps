@@ -60,9 +60,6 @@ class DashboardModuleController {
             vm.perfMockMap = ret;
         });
 
-        // Should serialize this somehow
-        vm.fetchCountryMap(5);
-
         vm.fetchToolkitVersions();
 
         // Mocks
@@ -91,8 +88,9 @@ class DashboardModuleController {
     fetchProjectData() {
 
         this.service.getProjectData(this.projectId).then(data => {
+            // console.debug('ProjectData', data);
             this.projectData = data;
-            // console.log('ProjectData', data);
+            this.fetchCountryMap(data.country);
         });
     }
 
