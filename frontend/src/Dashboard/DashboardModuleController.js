@@ -161,7 +161,7 @@ class DashboardModuleController {
             };
             axisData.data = data.map(version => {
                 return {
-                    date: version.modified,
+                    date: version.modified.split('T')[0],
                     axis1: version.data[0].axis_score / 100,
                     axis2: version.data[1].axis_score / 100,
                     axis3: version.data[2].axis_score / 100,
@@ -233,7 +233,7 @@ class DashboardModuleController {
             domainData.labels.forEach((axis, axInd) => {
                 domainData[axis].data = data.map(version => {
                     const ret = {};
-                    ret.date = version.modified;
+                    ret.date = version.modified.split('T')[0];
                     version.data[axInd].domains.forEach((domain, domainInd) => {
                         ret['axis' + (domainInd + 1)] = domain.domain_percentage / 100;
                     });
