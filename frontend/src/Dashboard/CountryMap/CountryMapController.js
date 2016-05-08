@@ -32,7 +32,6 @@ class CountrymapController {
             this.svgZoom.destroy();
             this.data = false;
             this.map = false;
-            console.warn('CTRL destroyed');
         };
     }
 
@@ -64,6 +63,7 @@ class CountrymapController {
     }
 
     mapArrived(data, level) {
+
         const vm = this;
         vm.map = data;
         vm.level = level;
@@ -90,11 +90,9 @@ class CountrymapController {
 
         vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag;
 
-        vm.countryName = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
+        vm.countryName =
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
-        // If any map comes with mixed winding order, do:
-        // const rewind = require('geojson-rewind');
-        // const distrData = rewind(mockGeoJsonDistricts);
 
         const levelLib = {
             'Sierra Leone': 'admin_level_5',
@@ -105,7 +103,6 @@ class CountrymapController {
         };
 
         const level = levelLib[vm.countryName];
-        // console.debug('recovered country name & admin_level:', vm.countryName, level);
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
@@ -122,8 +119,13 @@ class CountrymapController {
             .attr('width', outerWidth)
             .attr('height', 409);
 
+        // console.debug('FROM TOPO:', topoJSON.admin_level_2.transform.scale);
 
-        const scale = vm.calculateScale(distrData);
+        const scale = Math.max.apply(null, topoJSON.admin_level_2.transform.scale.map(nr => {
+            return 1 / nr;
+        })) * 3;
+
+        // console.log('SCALE', scale);
 
         const projection = d3.geo.mercator()
             .scale(scale);
@@ -132,8 +134,6 @@ class CountrymapController {
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
 
-            // const gotData = typeof
-            //    vm.data.data[vm.data.data.length - 1][distrData.features[i].properties.name] === 'object';
             const gotData = typeof vm.data.data[distrData.features[i].properties.name] === 'object';
 
             element
@@ -173,36 +173,6 @@ class CountrymapController {
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
 
         vm.svgZoom.zoomOut();
-    }
-
-    calculateScale(distrData) {
-
-        const bounds = {
-            xmin: 180,
-            xmax: -180,
-            ymin: 180,
-            ymax: -180
-        };
-
-        for (let i = 0; i < distrData.features.length; i += 1) {
-
-            const points = distrData.features[i].geometry.coordinates[0][0];
-            const l = points.length;
-
-            for (let j = 0; j < l; j += 1) {
-                bounds.xmin = bounds.xmin > points[j][1] ? points[j][1] : bounds.xmin;
-                bounds.xmax = bounds.xmax < points[j][1] ? points[j][1] : bounds.xmax;
-                bounds.ymin = bounds.ymin > points[j][0] ? points[j][0] : bounds.ymin;
-                bounds.ymax = bounds.ymax < points[j][0] ? points[j][0] : bounds.ymax;
-            }
-        }
-
-        bounds.xdiff = bounds.xmax - bounds.xmin;
-        bounds.ydiff = bounds.ymax - bounds.ymin;
-
-        const scale = 20000 / Math.max(bounds.xdiff, bounds.ydiff);
-
-        return scale;
     }
 
     static countrymapFactory() {
