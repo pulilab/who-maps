@@ -2,7 +2,7 @@ import SkeletonController from './SkeletonController.js';
 import mock from './mockStructure.js';
 import _ from 'lodash';
 
-/* global define, it, describe, jasmine, expect, beforeEach, spyOn, Promise */
+/* global define, it, describe, expect, beforeEach, spyOn, Promise, jasmine */
 
 const $scopeMock = {
     $parent: {

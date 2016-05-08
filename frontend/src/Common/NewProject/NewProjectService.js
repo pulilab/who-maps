@@ -8,16 +8,41 @@ class NewProjectService extends AuthApi {
     }
 
     newProject(data) {
-        console.log(data);
-        this.post('projects/', data)
-            .then(response => {
-                console.log(response);
-                this.EE.emit('refreshProjects');
+        let status = void 0;
+        return this.post('projects/', data)
+            .then(answer => {
+                status = answer.status;
+                return answer.json();
+            })
+            .then(json => {
+                return {
+                    success: status < 400,
+                    data: json
+                };
+            });
+    }
+
+    updateProject(data, id) {
+        let status = void 0;
+        return this.put(`projects/${id}/`, data)
+            .then(answer => {
+                status = answer.status;
+                return answer.json();
+            })
+            .then(json => {
+                return {
+                    success: status < 400,
+                    data: json
+                };
             });
     }
 
     projectStructure() {
         return this.get('projects/structure/');
+    }
+
+    projectData(id) {
+        return this.get(`projects/${id}/`);
     }
 
     countryDistrict(id) {

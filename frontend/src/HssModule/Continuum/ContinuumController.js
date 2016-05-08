@@ -53,6 +53,7 @@ class ContinuumController {
 
     editModeChange() {
         const vm = this;
+        vm.editMode = !vm.editMode;
         vm.showEditModeSpinner = true;
         this.timeout(()=> {
             this.EE.emit('hssEditMode', vm.editMode);
@@ -191,6 +192,7 @@ class ContinuumController {
 
                     if (!needed) {
                         tile.activated = false;
+                        this.changeTileStatus(tile, false);
                         if (!obj.six && this.childRow[6].activated === false) {
                             this.EE.emit('hssHasColumnContent', 6);
                         }
@@ -209,7 +211,7 @@ class ContinuumController {
                 }
                 else {
                     this.EE.once('hssGuysActivateColumn', obj => {
-                        tile.activated = obj.activated;
+                        this.changeTileStatus(tile, obj.activated);
                     });
                     this.EE.emit('hssHasColumnContent', tile.columnId);
                 }

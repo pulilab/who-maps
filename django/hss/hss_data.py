@@ -400,13 +400,5 @@ hss_default = {
     'taxonomies': [
     ],
     'constraints': [
-    ],
-    'project_scale': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-        Donec eros lacus,  posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.',
-    'partner_logos': [
-        'http://placehold.it/350x150',
-        'http://placehold.it/350x350',
-        'http://placehold.it/170x100',
-        'http://placehold.it/500x500'
     ]
 }

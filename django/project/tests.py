@@ -2,6 +2,7 @@ import copy
 import tempfile
 from datetime import datetime
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.test.client import MULTIPART_CONTENT, BOUNDARY, encode_multipart
 from allauth.account.models import EmailConfirmation
@@ -107,9 +108,10 @@ class ProjectTests(APITestCase):
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name="Test Project5")
+        data.update(goals_to_scale="updated")
         response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["goals_to_scale"], "updated")
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-list")
@@ -228,33 +230,6 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.post(url, data, format="multipart")
         self.assertEqual(response.status_code, 400)
 
-    def test_retrieve_partnerlogo(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
-        data = {}
-        file1 = tempfile.NamedTemporaryFile(suffix=".png")
-        file2 = tempfile.NamedTemporaryFile(suffix=".png")
-        logo_files = {"logo1": file1, "logo2": file2}
-        data.update(logo_files)
-        response = self.test_user_client.post(url, data, format="multipart")
-        self.assertEqual(response.status_code, 200)
-        logo = PartnerLogo.objects.all().first()
-        url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_retrieve_partnerlogo_wrong_id(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
-        data = {}
-        file1 = tempfile.NamedTemporaryFile(suffix=".png")
-        file2 = tempfile.NamedTemporaryFile(suffix=".png")
-        logo_files = {"logo1": file1, "logo2": file2}
-        data.update(logo_files)
-        response = self.test_user_client.post(url, data, format="multipart")
-        self.assertEqual(response.status_code, 200)
-        url = reverse("partnerlogo-detail", kwargs={"pk": 999})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 400)
-
     def test_retrieve_partnerlogos_list(self):
         url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
         data = {}
@@ -280,3 +255,31 @@ class ProjectTests(APITestCase):
         url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    def test_upload_partnerlogo_returns_list_of_ids_urls(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        file1 = tempfile.NamedTemporaryFile(suffix=".png")
+        file2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": file1, "logo2": file2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), list)
+        self.assertEqual(len(response.json()), 2)
+        self.assertIn("data", response.data[0])
+        self.assertIn("id", response.data[0])
+
+    def test_list_partnerlogos_returns_list_with_urls(self):
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        data = {}
+        image1 = tempfile.NamedTemporaryFile(suffix=".png")
+        image2 = tempfile.NamedTemporaryFile(suffix=".png")
+        logo_files = {"logo1": image1, "logo2": image2}
+        data.update(logo_files)
+        response = self.test_user_client.post(url, data, format="multipart")
+        response = self.test_user_client.get(url)
+        self.assertIsInstance(response.json(), list)
+        self.assertEqual(len(response.json()), 2)
+        self.assertIn("data", response.data[0])
+        self.assertIn("id", response.data[0])

@@ -5,9 +5,6 @@ const projectPartnersComponent = {
     controller: ProjectPartnersController.projectPartnersFactory(),
     template: _template,
     controllerAs: 'vm',
-    bindings: {
-        tiles: '<'
-    },
     name: 'projectpartners'
 };
 
