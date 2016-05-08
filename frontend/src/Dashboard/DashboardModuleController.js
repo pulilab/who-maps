@@ -62,7 +62,8 @@ class DashboardModuleController {
         //     vm.perfMockMap = ret;
         // });
 
-        vm.fetchToolkitVersions();
+        vm.fetchToolkitData();
+        // vm.fetchToolkitVersions();
 
         vm.commProjects = commProjects;
 
@@ -140,6 +141,14 @@ class DashboardModuleController {
         });
     }
 
+    fetchToolkitData() {
+        this.service.getToolkitData(this.projectId).then(data => {
+            // console.debug('RAW Toolkit data', data);
+            this.rawToolkitData = data;
+        });
+        this.fetchToolkitVersions();
+    }
+
     fetchToolkitVersions() {
 
         const vm = this;
@@ -159,6 +168,7 @@ class DashboardModuleController {
                 ],
                 data: []
             };
+            // Data from versions
             axisData.data = data.map(version => {
                 return {
                     date: version.modified.split('T')[0],
@@ -170,6 +180,26 @@ class DashboardModuleController {
                     axis6: version.data[5].axis_score / 100
                 };
             });
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = ('0' + (today.getMonth() + 1)).slice(-2);
+            const day = ('0' + today.getDate()).slice(-2);
+
+            const todayString = [year, month, day].join('-');
+
+            // Current data (from tooltip)
+            const lastAxisData = {
+                axis1: vm.rawToolkitData[0].axis_score / 100,
+                axis2: vm.rawToolkitData[1].axis_score / 100,
+                axis3: vm.rawToolkitData[2].axis_score / 100,
+                axis4: vm.rawToolkitData[3].axis_score / 100,
+                axis5: vm.rawToolkitData[4].axis_score / 100,
+                axis6: vm.rawToolkitData[5].axis_score / 100,
+                date: todayString
+            };
+
+            axisData.data.push(lastAxisData);
             vm.EE.emit('axis chart data', axisData);
 
 
@@ -239,6 +269,16 @@ class DashboardModuleController {
                     });
                     return ret;
                 });
+
+
+                const current = { date: todayString };
+                vm.rawToolkitData[axInd].domains.forEach((dom, ii) => {
+                    current['axis' + (ii + 1)] = dom.domain_percentage / 100;
+                });
+                domainData[axis].data.push(current);
+
+                // console.debug(axInd + 1 + 'th axiss domaindata:', domainData[axis].data);
+
             });
             vm.EE.emit('domain chart data', domainData);
         });
