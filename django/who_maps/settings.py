@@ -200,6 +200,14 @@ ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_5.geojson"
 ]
 
+LEVELS_FOR_DISTRICTS = {
+    "sierra-leone": "admin_level_5",
+    "india": "admin_level_5",
+    "kenya": "admin_level_4",
+    "philippines": "admin_level_4",
+    "bangladesh": "admin_level_5"
+}
+
 # Logging
 LOGGING = {
     'version': 1,
