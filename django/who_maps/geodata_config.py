@@ -11,6 +11,7 @@ SELECTED_FILE_LIST = [
 ]
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
+    "admin_level_3.geojson",
     "admin_level_4.geojson",
     "admin_level_5.geojson"
 ]
