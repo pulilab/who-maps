@@ -98,8 +98,8 @@ class CountrymapController {
             'Sierra Leone': 'admin_level_5',
             'India': 'admin_level_5',
             'Kenya': 'admin_level_4',
-            'Philippines': 'admin_level_4',
-            'Border India - Bangladesh': 'admin_level_5'
+            'Philippines': 'admin_level_3',
+            'Border India - Bangladesh': 'admin_level_4'
         };
 
         const level = levelLib[vm.countryName];
@@ -123,7 +123,7 @@ class CountrymapController {
 
         const scale = Math.max.apply(null, topoJSON.admin_level_2.transform.scale.map(nr => {
             return 1 / nr;
-        })) * 3;
+        })) * 10;
 
         // console.log('SCALE', scale);
 
