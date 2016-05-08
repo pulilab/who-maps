@@ -1,24 +1,47 @@
 import _ from 'lodash';
+import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
 
-/* global DEV */
+/* global DEV, Promise */
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, structure) {
+    constructor($scope, $state, structure) {
         super();
         this.ns = new NewProjectService();
-        this.districtList = [];
+        this.EE = window.EE;
         this.scope = $scope;
+        this.state = $state;
         this.axisStructure = this.processAxisStructure(structure);
-        this.dataLoaded = false;
-        this.ns.projectStructure().then(this.handleDataLoad.bind(this));
+        this.$onInit = this.initialization.bind(this);
+        this.bindFunctions();
+    }
+
+    bindFunctions() {
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
         this.districtCloseCallback = this.districtCloseCallback.bind(this);
         this.setStrategy = this.setStrategy.bind(this);
         this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
+    }
+
+    initialization() {
+        this.districtList = [];
+        this.dataLoaded = false;
+        this.sentForm = false;
+        if (this.editMode) {
+
+            this.projectId = this.state.params.appName;
+            Promise.all([this.ns.projectStructure(), this.ns.projectData(this.projectId)])
+                .then(data => {
+                    this.handleStructureLoad(data[0]);
+                    this.handleDataLoad(data[1]);
+                });
+        }
+        else {
+            this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
+        }
     }
 
     importIconTemplates() {
@@ -40,12 +63,86 @@ class NewProjectController extends ProjectDefinition {
         return structure;
     }
 
-    handleDataLoad(data) {
+    handleStructureLoad(data) {
         this.dataLoaded = true;
         this.structure = data;
         this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
         this.scope.$evalAsync();
     }
+
+    handleDataLoad(data) {
+        this.createCoverageKeys(data);
+        _.merge(this.project, data);
+
+        this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        const country = _.filter(this.structure.countries, { id: this.project.country  });
+        if (country[0] && country[0].name) {
+            this.project.countryName = country[0].name;
+        }
+
+        this.ns.countryDistrict(this.project.country)
+            .then(district => {
+                this.districtList = district;
+                this.unfoldCoverage();
+                this.assignDefaultCustom();
+                this.scope.$evalAsync();
+            });
+
+    }
+
+    createCoverageKeys(data) {
+        this.coverageKeys = _.chain(data.coverage)
+            .map(item => {
+                return _.keys(item);
+            })
+            .flatten()
+            .filter(item => {
+                return item !== 'district';
+            })
+            .map(item => {
+                return item.replace('_', ' ');
+            })
+            .value();
+    }
+
+    assignDefaultCustom() {
+        this.project.donors = _.map(this.project.donors, value => {
+            return { value };
+        });
+
+        this.project.pre_assessment = _.map(this.project.pre_assessment, value => {
+            return { value };
+        });
+    }
+
+    unfoldCoverage() {
+        const keys = _.cloneDeep(this.structure.coverageTypes);
+        keys[1] = keys[1].replace(' ', '_');
+        const newCoverage = [];
+        _.forEach(this.project.coverage, coverage => {
+            _.forEach(coverage, (props, key) => {
+                if (keys.indexOf(key) > -1) {
+                    newCoverage.push({
+                        district: coverage.district,
+                        districtChosen: coverage.district,
+                        typeChosen: key.replace('_', ' '),
+                        number: props
+                    });
+                }
+                else if (this.coverageKeys.indexOf(key) > -1) {
+                    newCoverage.push({
+                        district: coverage.district,
+                        districtChosen: coverage.district,
+                        other: key,
+                        number: props
+                    });
+                }
+            });
+        });
+        this.project.coverage = newCoverage;
+    }
+
 
     countryCloseCallback(name) {
         const countries = _.filter(this.structure.countries, { name });
@@ -55,6 +152,7 @@ class NewProjectController extends ProjectDefinition {
             this.ns.countryDistrict(this.project.country)
                 .then(this.handleDistrictData.bind(this));
         }
+        this.handleCustomError('country');
     }
 
     handleDistrictData(data) {
@@ -84,24 +182,80 @@ class NewProjectController extends ProjectDefinition {
         this.project.strategy = strategy;
     }
 
-
-    save() {
-        const processedForm = _.cloneDeep(this.project);
-        this.mergeCustomAndDefault(processedForm);
-        this.createCoverageArray(processedForm);
-        processedForm.date = new Date().toJSON();
-        this.ns.newProject(processedForm);
+    checkErrors(field) {
+        return !_.isEmpty(this.newProjectForm[field].$error);
     }
 
-    flattenCustom(obj) {
-        return _.map(obj.custom, item => {
-            item = item.value;
-            return item;
+
+    save() {
+        this.sentForm = true;
+        if (this.newProjectForm.$valid) {
+            const processedForm = _.cloneDeep(this.project);
+            this.mergeCustomAndDefault(processedForm);
+            this.createCoverageArray(processedForm);
+            if (!this.editMode) {
+                this.saveForm(processedForm);
+            }
+            else {
+                this.updateForm(processedForm);
+            }
+        }
+    }
+
+    updateForm(processedForm) {
+        this.ns.updateProject(processedForm, this.projectId)
+            .then(response => {
+                if (response && response.success) {
+                    this.EE.emit('refreshProjects');
+                }
+                else {
+                    this.handleResponse(response);
+                }
+            });
+    }
+
+    saveForm(processedForm) {
+        processedForm.date = new Date().toJSON();
+        this.ns.newProject(processedForm)
+            .then(response => {
+                if (response && response.success) {
+                    this.EE.emit('refreshProjects');
+                }
+                else {
+                    this.handleResponse(response);
+                }
+
+            });
+    }
+
+    handleResponse(response) {
+        _.forEach(response.data, (item, key) => {
+            this.newProjectForm[key].customError = item;
+            this.newProjectForm[key].$setValidity('custom', false);
         });
     }
 
+    flattenCustom(obj) {
+        return this.unfoldObjects(obj.custom);
+    }
+
+    unfoldObjects(obj) {
+        return _.chain(obj)
+            .map(item => {
+                item = item.value;
+                return item;
+            })
+            .filter(item => {
+                return !_.isNil(item);
+            })
+            .value();
+    }
+
     concatCustom(obj) {
-        return _.concat(obj.custom, obj.standard);
+        const cat = _.concat(obj.custom, obj.standard);
+        return _.filter(cat, item => {
+            return !_.isNil(item) && !_.isEmpty(item);
+        });
     }
 
     mergeCustomAndDefault(collection) {
@@ -115,6 +269,8 @@ class NewProjectController extends ProjectDefinition {
         collection.digital_tools = this.concatCustom(collection.digital_tools);
 
         collection.pipelines = this.concatCustom(collection.pipelines);
+        collection.donors = this.unfoldObjects(collection.donors);
+        collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
     }
 
     log(data) {
@@ -131,7 +287,7 @@ class NewProjectController extends ProjectDefinition {
             if (item.other) {
                 type = item.other;
             }
-            else {
+            else if (item.typeChosen) {
                 type = item.typeChosen.replace(' ', '_');
             }
             if (!coverage[item.district]) {
@@ -147,9 +303,9 @@ class NewProjectController extends ProjectDefinition {
         });
     }
 
-    handleCustomError(newProjectForm, key) {
-        newProjectForm[key].$setValidity('custom', true);
-        newProjectForm[key].customError = [];
+    handleCustomError(key) {
+        this.newProjectForm[key].$setValidity('custom', true);
+        this.newProjectForm[key].customError = [];
 
     }
 
@@ -158,10 +314,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
 
-        function newProject($scope) {
-            return new NewProjectController($scope, structure);
+        function newProject($scope, $state) {
+            return new NewProjectController($scope, $state, structure);
         }
-        newProject.$inject = ['$scope'];
+        newProject.$inject = ['$scope', '$state'];
         return newProject;
     }
 }

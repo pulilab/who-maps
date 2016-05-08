@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -41,17 +43,18 @@ def get_districts(request, country_id):
         json: districts for the given country in JSON.
     """
     country = get_object_or_400(Country, "No such country.", id=country_id)
-    admin_level_5 = country.geodata.get("admin_level_5", None)
-    if admin_level_5:
+    admin_level_name = settings.LEVELS_FOR_DISTRICTS.get(country.name, "")
+    admin_level = country.geodata.get(admin_level_name, None)
+    if admin_level:
         districts = []
-        for item in admin_level_5["objects"]["admin_level_5"]["geometries"]:
+        for item in admin_level["objects"][admin_level_name]["geometries"]:
             if "properties" in item.keys():
                 if "admin_level" in item["properties"].keys():
                     name = item["properties"].get("name:en", None) or item["properties"].get("name")
                     districts.append(name)
         return Response(set(districts))
     else:
-        # No admin_level_5 for the given country.
+        # No admin_level for the given country.
         return Response(list())
 
 

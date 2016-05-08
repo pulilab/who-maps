@@ -2,9 +2,10 @@ import HssModuleService from '../HssModuleService';
 
 class ProjectScaleController {
 
-    constructor($scope) {
+    constructor($scope, $state) {
         const vm = this;
         vm.scope = $scope;
+        vm.state = $state;
         vm.$onInit = vm.initialization.bind(vm);
     }
 
@@ -14,12 +15,13 @@ class ProjectScaleController {
         vm.editMode = false;
         vm.hms = new HssModuleService(this.projectId);
 
-        vm.hms.getDetail().then(data => {
-            console.log(data);
-            this.string = data.goals_to_scale;
-            this.scope.$evalAsync();
-        }
-        );
+        vm.hms.getDetail()
+            .then(data => {
+                this.projectData = data;
+                this.string = data.goals_to_scale;
+                this.scope.$evalAsync();
+                }
+            );
 
 
         vm.EE.on('hssEditMode', bool => {
@@ -27,10 +29,16 @@ class ProjectScaleController {
         });
     }
 
+    updateProjectScale(data) {
+        const projectId = this.state.params.appName;
+        this.projectData.goals_to_scale = data;
+        this.hms.updateDetail(this.projectData, projectId);
+    }
+
     static projectScaleFactory() {
         require('./ProjectScale.scss');
-        function project($scope) {
-            return new ProjectScaleController($scope);
+        function project($scope, $state) {
+            return new ProjectScaleController($scope, $state);
         }
 
         project.$inject = ['$scope', '$state'];

@@ -40,6 +40,12 @@ class AppModuleController extends Protected {
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
         this.EE.on('refreshProjects', this.fillUserData.bind(this, true));
+        this.EE.on('doDigest', this.doDigest.bind(this));
+    }
+
+
+    doDigest() {
+        this.scope.$evalAsync();
     }
 
     handleLoginEvent(forced) {
@@ -73,6 +79,7 @@ class AppModuleController extends Protected {
             if (forceJump) {
                 this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
             }
+
             this.scope.$evalAsync();
         });
     }

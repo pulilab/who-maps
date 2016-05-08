@@ -22,6 +22,21 @@ class HssModuleService extends AuthApi {
         return this.get(this.projectId + '/hss/data/');
     }
 
+    updateDetail(data, id) {
+        let status = void 0;
+        return this.put(`${id}/`, data)
+            .then(answer => {
+                status = answer.status;
+                return answer.json();
+            })
+            .then(json => {
+                return {
+                    success: status < 400,
+                    data: json
+                };
+            });
+    }
+
 
     postContinuum(data) {
         _.chain(data.colSpan)
