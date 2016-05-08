@@ -34,21 +34,17 @@ class CountrymapController {
         const vm = this;
         vm.data = data;
         // console.debug('DATA to slice:', vm.data);
-        vm.boundNrs = _.reduce(vm.data.data[0], (ret, value) => {
 
-            if (typeof value !== 'object') {
-                return ret;
-            }
-            ret.Clients += value.clients;
-            ret['Health workers'] += value.workers;
-            ret.Facilities += value.facilities;
+        vm.boundNrs = _.reduce(vm.data.data, (ret, value, key) => {
+
+            if (key === 'date') { return ret; }
+
+            _.forOwn(value, (val, k) => {
+                ret[k] = (ret[k] || 0) + val;
+            });
 
             return ret;
-        }, {
-            'Clients': 0,
-            'Health workers': 0,
-            'Facilities': 0
-        });
+        }, {});
 
         if (vm.map) {
             // console.debug('data arrived, map was here, starts drawing', data);
@@ -80,6 +76,7 @@ class CountrymapController {
     drawMap(topoJSON) {
 
         const vm = this;
+        // console.warn('Draw FN run!');
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 

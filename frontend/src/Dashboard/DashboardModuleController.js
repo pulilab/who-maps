@@ -1,5 +1,6 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
+import _ from 'lodash';
 
 // import perfMockMap from './CountryMap/mock/perfMockMap.js';
 
@@ -46,17 +47,22 @@ class DashboardModuleController {
 
             ret.data = { date: lastVersion.modified };
             lastVersion.data.forEach(distObj => {
-                ret.data[distObj.district] = {
-                    clients: distObj.clients,
-                    facilities: distObj.facilities,
-                    workers: distObj.health_workers
-                    // Every other keys, maybe _, on the component too!!!
-                };
+
+                ret.data[distObj.district] = {};
+
+                _.forOwn(distObj, (val, key) => {
+                    // console.debug(key, val);
+                    if (key === 'district') { return; }
+
+                    const formattedKey = key.replace('_', ' ');
+
+                    ret.data[distObj.district][formattedKey] = val;
+                });
+
             });
             // console.debug('FINAL PARSED COVERAGE: ', ret);
 
             vm.EE.emit('mapdataArrived', ret);
-
             vm.perfMockMap = ret;
         });
 

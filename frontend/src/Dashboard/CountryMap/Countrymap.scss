@@ -39,6 +39,10 @@
 				color: $color-primary;
 			}
 		}
+
+		.cap {
+			text-transform: capitalize;
+		}
 	}
 
 	.zoomhandlers {
