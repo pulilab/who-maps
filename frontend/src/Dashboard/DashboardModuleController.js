@@ -2,8 +2,6 @@ import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
 import _ from 'lodash';
 
-// import perfMockMap from './CountryMap/mock/perfMockMap.js';
-
 import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController {
@@ -23,54 +21,49 @@ class DashboardModuleController {
         vm.service = new DashboardService(this.state.params.appName);
         vm.mapService = new DashboardMapService();
 
-        // Uncomment below to see current countries and id-s
-        // vm.mapService.getCountries();
-
         vm.fetchProjectData();
         vm.fetchAxisData();
 
-        vm.service.getCoverageVersions(this.projectId).then(data => {
+        // Use this later, when the last versions data will be needed (privacy)
+        // vm.service.getCoverageVersions(this.projectId).then(data => {
 
-            const ret = {};
-            ret.labels = data.reduce((toRet, version) => {
-                version.data.forEach(el => {
-                    if (toRet.indexOf(el.district) < 0) {
-                        toRet = toRet.concat(el.district);
-                    }
-                });
-                return toRet;
-            }, []);
-            // console.debug('LABELS', ret.labels);
+        //     const ret = {};
+        //     ret.labels = data.reduce((toRet, version) => {
+        //         version.data.forEach(el => {
+        //             if (toRet.indexOf(el.district) < 0) {
+        //                 toRet = toRet.concat(el.district);
+        //             }
+        //         });
+        //         return toRet;
+        //     }, []);
+        //     // console.debug('LABELS', ret.labels);
 
-            const lastVersion = data[(data.length - 1)];
-            // console.debug('LAST VERSION', lastVersion);
+        //     const lastVersion = data[(data.length - 1)];
+        //     // console.debug('LAST VERSION', lastVersion);
 
-            ret.data = { date: lastVersion.modified };
-            lastVersion.data.forEach(distObj => {
+        //     ret.data = { date: lastVersion.modified };
+        //     lastVersion.data.forEach(distObj => {
 
-                ret.data[distObj.district] = {};
+        //         ret.data[distObj.district] = {};
 
-                _.forOwn(distObj, (val, key) => {
-                    // console.debug(key, val);
-                    if (key === 'district') { return; }
+        //         _.forOwn(distObj, (val, key) => {
+        //             // console.debug(key, val);
+        //             if (key === 'district') { return; }
 
-                    const formattedKey = key.replace('_', ' ');
+        //             const formattedKey = key.replace('_', ' ');
 
-                    ret.data[distObj.district][formattedKey] = val;
-                });
+        //             ret.data[distObj.district][formattedKey] = val;
+        //         });
 
-            });
-            // console.debug('FINAL PARSED COVERAGE: ', ret);
+        //     });
+        //     // console.debug('FINAL PARSED COVERAGE: ', ret);
 
-            vm.EE.emit('mapdataArrived', ret);
-            vm.perfMockMap = ret;
-        });
+        //     vm.EE.emit('mapdataArrived', ret);
+        //     vm.perfMockMap = ret;
+        // });
 
         vm.fetchToolkitVersions();
 
-        // Mocks
-        // vm.perfMockMap = perfMockMap;
-        // vm.perfMockmap =
         vm.commProjects = commProjects;
 
         // Letting components know about browser window resize
@@ -97,7 +90,40 @@ class DashboardModuleController {
             // console.debug('ProjectData', data);
             this.projectData = data;
             this.fetchCountryMap(data.country);
+            this.parseMapData(data.coverage);
         });
+    }
+
+    parseMapData(coverage) {
+        // console.debug(coverage);
+
+        const ret = { labels: [], data: {} };
+
+        coverage.forEach(el => {
+            if (ret.labels.indexOf(el.district) < 0) {
+                ret.labels.push(el.district);
+            }
+        });
+        // console.debug('Labels', ret.labels);
+
+        coverage.forEach(distObj => {
+
+            ret.data[distObj.district] = {};
+
+            _.forOwn(distObj, (val, key) => {
+                // console.debug(key, val);
+                if (key === 'district') { return; }
+
+                const formattedKey = key.replace('_', ' ');
+
+                ret.data[distObj.district][formattedKey] = val;
+            });
+
+        });
+        // console.debug('FINAL PARSED COVERAGE: ', ret);
+
+        this.EE.emit('mapdataArrived', ret);
+        this.perfMockMap = ret;
     }
 
     snapShot() {
@@ -110,7 +136,7 @@ class DashboardModuleController {
 
         this.service.getAxisData().then(data => {
             this.axisData = data;
-            // console.log('Axisdata', data);
+            // console.debug('Axisdata', data);
         });
     }
 
@@ -217,19 +243,6 @@ class DashboardModuleController {
             vm.EE.emit('domain chart data', domainData);
         });
     }
-
-    // fetchCountries() {
-
-    //     this.mapService.getCountries().then(data => {
-
-    //         this.countryIds = data.reduce((ret, el) => {
-    //             ret[el.name] = el.id;
-    //             return ret;
-    //         }, {});
-
-    //         this.fetchCountryMap();
-    //     });
-    // }
 
     fetchCountryMap(id) {
 
