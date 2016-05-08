@@ -104,6 +104,8 @@ class CountrymapController {
 
         const level = levelLib[vm.countryName];
 
+        if (vm.countryName === 'Border India - Bangladesh') { vm.countryName = 'Bangladesh'; }
+
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
 
@@ -134,7 +136,10 @@ class CountrymapController {
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
 
-            const gotData = typeof vm.data.data[distrData.features[i].properties.name] === 'object';
+            const distrName = distrData.features[i].properties['name:en'] ||
+                distrData.features[i].properties.name;
+
+            const gotData = typeof vm.data.data[distrName] === 'object';
 
             element
                 .append('path')
@@ -147,9 +152,10 @@ class CountrymapController {
                 .attr('class', 'd3district')
                 .classed('d3district-data', gotData)
                 .on('mouseover', () => {
+
                     vm.activeDistrict = {
-                        name: distrData.features[i].properties.name,
-                        data: vm.data.data[distrData.features[i].properties.name]
+                        name: distrName,
+                        data: vm.data.data[distrName]
                     };
                     vm.scope.$evalAsync();
 
