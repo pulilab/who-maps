@@ -185,6 +185,7 @@ class NewProjectController extends ProjectDefinition {
 
     save() {
         this.sentForm = true;
+        console.log(this.newProjectForm)
         if (this.newProjectForm.$valid) {
             const processedForm = _.cloneDeep(this.project);
             this.mergeCustomAndDefault(processedForm);

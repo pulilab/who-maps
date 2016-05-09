@@ -35,12 +35,24 @@ class AppModuleController extends Protected {
             this.showCompleteNavigation(value, this.isLogin);
         });
 
+        this.lastProjectEvent = void 0;
+
+
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
-        this.EE.on('projectListUpdated', this.fillUserData.bind(this, true));
-        this.EE.on('refreshProjects', this.goToDashboard.bind(this));
+        this.EE.on('projectListUpdated', this.fillUserData.bind(this));
+        this.EE.on('refreshProjects', this.refreshProjectsHandler.bind(this));
         this.EE.on('doDigest', this.doDigest.bind(this));
+    }
+
+    refreshProjectsHandler() {
+        if (this.lastProjectEvent === 'projectListUpdated') {
+            this.goToDashboard();
+        }
+        else {
+            this.lastProjectEvent = 'refreshProjects';
+        }
     }
 
 
@@ -75,6 +87,14 @@ class AppModuleController extends Protected {
         });
 
         this.scope.$evalAsync();
+
+        if (this.lastProjectEvent === 'refreshProjects') {
+            this.goToDashboard();
+        }
+        else {
+            this.lastProjectEvent = 'projectListUpdated';
+        }
+
     }
 
     goToDashboard() {

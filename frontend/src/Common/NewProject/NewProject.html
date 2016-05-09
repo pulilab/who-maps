@@ -332,9 +332,13 @@
                                     <p>
                                         {{vm.axisStructure[$index].description}}
                                     </p>
-                                    <md-radio-group ng-model="a.value" layout="row" ng-required="true" >
+                                    <md-radio-group ng-model="a.value" name="assesment_{{$index}}" layout="row" ng-required="true" >
                                         <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]" ng-value="value" class="md-primary">{{ value }}</md-radio-button>
                                     </md-radio-group>
+                                    <div ng-messages="vm.newProjectForm['assesment_' + $index].$error">
+                                        <div ng-message="required">This is required.</div>
+                                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm['assesment_' + $index].customError">{{error}} </div>
+                                    </div>
                                 </div>
                                 <div flex="35" class="axis-description">
                                     <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}" >
