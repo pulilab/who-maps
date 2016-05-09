@@ -21,13 +21,21 @@ const $state = {
 
     }
 };
+
+
 describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
         sc = NewProjectController.newProjectFactory()($scope, $state);
         sc.newProjectForm = {
-            $valid: true
+            $valid: true,
+            $setValidity: jasmine.createSpy('$setValidity')
+        };
+        sc.commonService = {
+            projectStructure: mockData,
+            populateProjectStructure: jasmine.createSpy('pps'),
+            getProjectData: jasmine.createSpy('gpd')
         };
     });
 
@@ -44,7 +52,7 @@ describe('NewProjectController', () => {
 
     it('should have a function that handle the server data loading', () => {
 
-        sc.handleStructureLoad(mockData);
+        sc.handleStructureLoad();
         expect(sc.dataLoaded).toBeTruthy();
         expect(sc.structure.coverageTypes.length).toBe(3);
         expect(sc.scope.$evalAsync).toHaveBeenCalled();
@@ -54,7 +62,7 @@ describe('NewProjectController', () => {
     it('should have a function that handles the country ssmenu callback', () => {
         spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve());
         spyOn(sc, 'handleCustomError');
-        sc.handleStructureLoad(mockData);
+        sc.handleStructureLoad();
         sc.countryCloseCallback('asd');
         expect(sc.project.countryName).toBe('asd');
         expect(sc.ns.countryDistrict).toHaveBeenCalled();
@@ -91,14 +99,10 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that handle the initialization when is in editMode', () => {
-        spyOn(sc.ns, 'populateProjectStructure').and.returnValue(Promise.resolve());
-        spyOn(sc.ns, 'projectData').and.returnValue(Promise.resolve());
         spyOn(sc, 'handleDataLoad');
         spyOn(sc, 'handleStructureLoad');
         sc.editMode = true;
         sc.initialization();
-        expect(sc.ns.projectData).toHaveBeenCalled();
-        expect(sc.ns.populateProjectStructure).toHaveBeenCalled();
         expect(sc.handleDataLoad).toHaveBeenCalled();
         expect(sc.handleStructureLoad).toHaveBeenCalled();
     });
@@ -122,6 +126,16 @@ describe('NewProjectController', () => {
         expect(sc.unfoldCoverage).toHaveBeenCalled();
         expect(sc.assignDefaultCustom).toHaveBeenCalled();
 
+    });
+
+    it('should have a function that handles custom errors', () => {
+        sc.newProjectForm = {
+            asd: {
+                $setValidity: jasmine.createSpy('innerSet')
+            }
+        };
+        sc.handleCustomError('asd');
+        expect(sc.newProjectForm.asd.$setValidity).toHaveBeenCalled();
     });
 
 });

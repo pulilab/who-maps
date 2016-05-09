@@ -28,6 +28,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     initialization() {
+        this.commonService = CommonService;
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
@@ -59,24 +60,19 @@ class NewProjectController extends ProjectDefinition {
 
     handleStructureLoad() {
         this.dataLoaded = true;
-        this.structure = CommonService.projectStructure;
+        this.structure = this.commonService.projectStructure;
         this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
     handleDataLoad() {
-        const data = CommonService.getProjectData(this.projectId);
+        const data = this.commonService.getProjectData(this.projectId);
         this.createCoverageKeys(data);
         _.merge(this.project, data);
 
-        this.userProjects = CommonService.projectList;
+        this.userProjects = this.commonService.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        const country = _.filter(this.structure.countries, { id: this.project.country  });
-        if (country[0] && country[0].name) {
-            this.project.countryName = country[0].name;
-        }
-
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;
@@ -85,6 +81,10 @@ class NewProjectController extends ProjectDefinition {
                 this.scope.$evalAsync();
             });
 
+    }
+
+    isCurrentProject(projectId) {
+        return parseInt(projectId, 10) === parseInt(this.projectId, 10);
     }
 
     createCoverageKeys(data) {
@@ -185,7 +185,6 @@ class NewProjectController extends ProjectDefinition {
 
     save() {
         this.sentForm = true;
-        console.log(this.newProjectForm)
         if (this.newProjectForm.$valid) {
             const processedForm = _.cloneDeep(this.project);
             this.mergeCustomAndDefault(processedForm);
@@ -303,7 +302,6 @@ class NewProjectController extends ProjectDefinition {
     handleCustomError(key) {
         this.newProjectForm[key].$setValidity('custom', true);
         this.newProjectForm[key].customError = [];
-
     }
 
 

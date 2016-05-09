@@ -32,8 +32,16 @@ class CommonServices extends Protected {
         this.loadingCounter -= 1;
         if (this.loadingCounter === 0) {
             this.loadingCounter = 2;
+            this.mergeOperations();
             this.promiseResolve();
         }
+    }
+
+    mergeOperations() {
+        _.forEach(this.projectList, project => {
+            const country = _.find(this.projectStructure.countries, { id: project.country });
+            project.countryName = country.name;
+        });
     }
 
     populateProjectList() {
@@ -65,7 +73,6 @@ class CommonServices extends Protected {
     getProjectDetail(project) {
         project.detailPromise = this.get(`projects/${project.id}/`);
         project.detailPromise.then(data => {
-            console.log(data);
             _.merge(project, data);
         });
     }

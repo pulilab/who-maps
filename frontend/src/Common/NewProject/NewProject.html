@@ -368,7 +368,14 @@
     </div>
     <section md-whiteframe="2" layout-fill class="my-projects" ng-if="vm.editMode">
         <h5> My projects ({{vm.userProjects.length}})</h5>
-        <projectcomp ng-repeat="p in vm.userProjects" ng-model="p"></projectcomp>
+        <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                     current-project="vm.isCurrentProject(p.id)"
+                     own-project="true"
+                     show-details="true"
+                     show-logo="true"
+                     ng-model="p">
+
+        </projectcomp>
 
     </section>
     <footer class="disclaimer">
