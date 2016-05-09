@@ -1,15 +1,14 @@
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
-from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from mock import patch
-
+from rest_framework.test import APIClient
+from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
 
-class UserTests(TestCase):
+class UserTests(APITestCase):
 
     def setUp(self):
         # Create a test user.
@@ -20,7 +19,7 @@ class UserTests(TestCase):
             "password2": "123456"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("key")
-        self.test_user_client = Client(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
@@ -109,7 +108,7 @@ class UserTests(TestCase):
         self.assertEqual(response.json().get("detail"), "Token has expired")
 
 
-class UserProfileTests(TestCase):
+class UserProfileTests(APITestCase):
 
     def setUp(self):
         # Create a test user without profile.
@@ -152,7 +151,7 @@ class UserProfileTests(TestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
         # Create profile.
         url = reverse("userprofile-list")
@@ -160,7 +159,7 @@ class UserProfileTests(TestCase):
             "name": "Test Name",
             "organisation": "test_org",
             "country": "test_country"}
-        response = client.post(url, data)
+        response = self.client.post(url, data)
 
     def test_retrieve_nonexistent_user_profile_on_login(self):
         url = reverse("api_token_auth")
@@ -180,7 +179,7 @@ class UserProfileTests(TestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual([], response.json())
@@ -203,7 +202,7 @@ class UserProfileTests(TestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual([], response.json())
@@ -215,7 +214,7 @@ class UserProfileTests(TestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
             "organisation": "test_org",
@@ -230,7 +229,7 @@ class UserProfileTests(TestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         url = reverse("userprofile-list")
-        client = Client(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")))
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
             "organisation": "test_org",
@@ -245,4 +244,3 @@ class UserProfileTests(TestCase):
             "country": "test_country2"}
         response = client.post(url, data)
         self.assertEqual(response.status_code, 200)
-
