@@ -79,6 +79,33 @@ describe('DashboardModuleController', () => {
         expect(vm.EE.emit).toHaveBeenCalledWith('topoArrived', 'adat');
     });
 
+    it('parseMapData fn. parses coverage data, emits EE with it', () => {
+        const mock = [
+            {
+                'district': 'Pujehun District',
+                'clients': 100,
+                'health_workers': 10,
+                'facilities': 1
+            }, {
+                'district': 'Bonthe District',
+                'clients': 100,
+                'health_workers': 20,
+                'facilities': 1
+            }, {
+                'district': 'Moyamba District',
+                'Superdoc': 1
+            }
+        ];
+        spyOn(vm.EE, 'emit');
+        vm.parseMapData(mock);
+        expect(vm.EE.emit).toHaveBeenCalled();
+
+        expect(vm.perfMockMap.labels.length).toBe(3);
+        vm.perfMockMap.labels.forEach((key) => {
+            expect(typeof vm.perfMockMap.data[key]).toBe('object');
+        });
+    });
+
     it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
         vm.projectId = 1;
         vm.service.snapShot = () => {

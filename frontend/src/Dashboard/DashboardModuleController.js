@@ -59,7 +59,7 @@ class DashboardModuleController {
     }
 
     parseMapData(coverage) {
-        // console.debug(coverage);
+        // console.debug('COVERAGE from API', coverage);
 
         const ret = { labels: [], data: {} };
 
