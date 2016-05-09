@@ -6,7 +6,7 @@ class IntroJsController {
 
     constructor() {
         const vm = this;
-        vm.introJs = intro.introJs("#main-view");
+        vm.introJs = intro.introJs('#main-view');
     }
 
     parseOptions() {

@@ -20,9 +20,7 @@ class ProjectScaleController {
                 this.projectData = data;
                 this.string = data.goals_to_scale;
                 this.scope.$evalAsync();
-                }
-            );
-
+            });
 
         vm.EE.on('hssEditMode', bool => {
             vm.editMode = bool;
