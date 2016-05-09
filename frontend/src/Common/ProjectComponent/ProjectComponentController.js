@@ -1,13 +1,13 @@
 class ProjectComponentController {
 
     constructor() {
-
         this.$onInit = this.initialization.bind(this);
-        // const vm = this;
-        // console.warn('Projectcomponent LOADED!');
     }
 
     initialization() {
+        if (!this.ngModel) {
+            this.ngModel = {};
+        }
         if (!this.ngModel.followersNr) {
             this.ngModel.followersNr = 0;
         }
