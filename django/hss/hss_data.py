@@ -86,7 +86,7 @@ interventions = {
 applications = [
     {
         'id': 1,
-        'name': 'Client education and bahevior change communication',
+        'name': 'Client education and behaviour change communication',
         'subApplications': {
             1: 'Health and Education of promotion',
             2: 'Hotlines and information services',
@@ -253,7 +253,7 @@ continuum = [
     {
         'id': 0,
         'mother': {
-            'title': 'Adolenscence',
+            'title': 'Adolescence',
             'span': 1,
         },
         'child': {
