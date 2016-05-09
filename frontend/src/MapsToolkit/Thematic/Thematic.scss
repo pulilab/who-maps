@@ -222,6 +222,58 @@ md-dialog {
 					// Style of the fully dynamic, lower part
           margin: 20px 0 50px;
 
+          h2 {
+            font-weight: 500;
+            font-size: $headline-font-size-base;
+          }
+
+          h4 {
+            color: #BC8518;
+            text-transform: uppercase;
+          }
+
+          dl {
+            dt {
+              font-weight: 700;
+            }
+            dd {
+              margin: 0 0 20px 0;
+            }
+          }
+
+          img,
+          .image-wrapper {
+            &.float-right {
+              float: right;
+              margin: 10px -25px 25px 50px;
+            }
+            &.float-left {
+              float: left;
+              margin: 10px 50px 25px -25px;
+            }
+            &.center-block {
+              margin: 30px auto 10px;
+              width: 100%;
+
+              > img {
+                max-width: 1000px;
+                width: 100%;
+                height: auto;
+              }
+            }
+          }
+
+          .image-wrapper {
+            small {
+              display: block;
+              padding: 20px 0;
+              color: $text-secondary;
+              text-align: center;
+              font-weight: 700;
+              font-size: $caption-font-size-base;
+            }
+          }
+
           // Table
           table {
             margin: 20px 0 40px;
@@ -235,8 +287,13 @@ md-dialog {
                 padding: 4px 24px 4px 8px;
                 background-color: $color-primary;
                 color: $color-white;
+                vertical-align: top;
                 text-transform: uppercase;
                 white-space: nowrap;
+
+                > span {
+                  white-space: normal;
+                }
               }
             }
 
@@ -271,8 +328,8 @@ md-dialog {
           // Blockquotes
           blockquote {
             float: right;
-            margin: 0 0 25px 50px;
-            padding: 40px 24px 20px;
+            margin: 10px 0 25px 50px;
+            padding: 30px 24px 20px;
             width: 240px;
             border-radius: 12px;
             background: #ECEFF1 url("./images/quote.svg") right top no-repeat;
@@ -288,6 +345,16 @@ md-dialog {
             p {
               font-style: italic;
               font-size: $body-font-size-base;
+            }
+
+            small {
+              display: inline-block;
+              color: $text-secondary;
+            }
+
+            &.float-left {
+              float: left;
+              margin: 10px 50px 25px 0;
             }
 
             &.full-block {
