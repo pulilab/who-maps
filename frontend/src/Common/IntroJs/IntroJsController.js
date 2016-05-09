@@ -6,7 +6,7 @@ class IntroJsController {
 
     constructor() {
         const vm = this;
-        vm.introJs = intro.introJs();
+        vm.introJs = intro.introJs("#main-view");
     }
 
     parseOptions() {
@@ -19,8 +19,6 @@ class IntroJsController {
             result.steps = [];
         }
         else {
-
-
             if (!this.sourceString.hasOwnProperty('steps')) {
                 console.error(introText + 'supplied json is missing the required field STEPS');
                 result.steps = [];
@@ -66,7 +64,11 @@ class IntroJsController {
 
     start() {
         this.introJs.setOptions(this.parseOptions());
+        this.introJs.onafterchange(targetElement => {
+            targetElement.scrollIntoView(true);
+        });
         this.introJs.start();
+
     }
 
 

@@ -154,20 +154,20 @@
                 <span class="menu-separator"></span>
                 <span>
                     Organization:
-                    {{vm.currentProject.organisation}}
+                    {{vm.userProfile.organisation}}
                 </span>
-                <span class="menu-separator"></span>
+                <!--span class="menu-separator"></span>
                 <span>
                     Contact:
                     <md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>
-                        <!-- <md-icon class="material-icons">
+                        <md-icon class="material-icons">
                             send
-                        </md-icon> -->
+                        </md-icon>
                         {{vm.currentProjectMock.contact.name}}
                     </md-button>
-                </span>
+                </span-->
             </div>
         </div>
     </md-toolbar>
-    <ui-view name="main"></ui-view>
+    <ui-view name="main" id="main-view" layout-fill></ui-view>
 </md-content>

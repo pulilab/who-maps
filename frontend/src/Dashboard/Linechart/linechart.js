@@ -6,10 +6,9 @@ const linechart = {
     controllerAs: 'vm',
     template: _template,
     bindings: {
-        data: '=',
-        labels: '=',
         showdotted: '=',
-        datachooser: '='
+        datachooser: '=',
+        notpercentage: '='
     },
     name: 'linechart'
 };

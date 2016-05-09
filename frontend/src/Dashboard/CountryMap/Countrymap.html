@@ -13,19 +13,10 @@
 				Total numbers:
 			</div>
 
-			<div flex layout="row">
-				<div flex="85">Clients:<br></div>
-				<div flex class="bold">{{vm.boundNrs.Clients}}</div>
-			</div>
 
-			<div flex layout="row">
-				<div flex="85">Health workers:<br></div>
-				<div flex class="bold">{{vm.boundNrs['Health workers']}}</div>
-			</div>
-
-			<div flex layout="row">
-				<div flex="85">Facilities:</div>
-				<div flex class="bold">{{vm.boundNrs.Facilities}}</div>
+			<div flex layout="row" ng-repeat="(key, numb) in vm.boundNrs">
+				<div class="cap" flex="85">{{key}}:<br></div>
+				<div flex class="bold">{{numb}}</div>
 			</div>
 
 		</div>
@@ -43,7 +34,7 @@
 				layout="row"
 				ng-repeat="(key, datum) in vm.activeDistrict.data">
 
-				<div flex="85">{{key}}</div>
+				<div flex="85" class="cap">{{key}}</div>
 				<div class="bold">{{datum}}</div>
 			</div>
 

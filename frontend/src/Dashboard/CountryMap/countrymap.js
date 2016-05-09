@@ -5,11 +5,6 @@ const coutrymap = {
     controller: CountrymapController.countrymapFactory(),
     controllerAs: 'vm',
     template: _template,
-    bindings: {
-        country: '=',
-        data: '=',
-        json: '='
-    },
     name: 'countrymap'
 };
 

@@ -217,7 +217,7 @@ class PartnerLogoViewSet(TokenAuthMixin, ViewSet):
         Retrieves list of partnerlogo ids for a given project.
         """
         project = get_object_or_400(Project, "No such project.", id=project_id)
-        return Response(PartnerLogo.objects.filter(project_id=project.id).values("id", "data"))
+        return Response([{"data": p.data.url, "id": p.id} for p in PartnerLogo.objects.filter(project_id=project.id)])
 
     def create(self, request, project_id):
         """

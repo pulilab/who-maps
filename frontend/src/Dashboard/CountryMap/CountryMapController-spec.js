@@ -17,7 +17,6 @@ describe('CountryMapController', () => {
 
     beforeEach(() => {
         vm = CountryMapController.countrymapFactory()(el, scopeMock);
-        vm.data = perfMockMap;
         vm.$onInit();
     });
 
@@ -26,47 +25,106 @@ describe('CountryMapController', () => {
         expect(typeof vm).toBe('object');
     });
 
-    describe('$onInit fn', () => {
-
-        it('calculates aggregated client, worker, and facility nr\'s', () => {
-            vm.$onInit();
-            expect(vm.boundNrs.Clients + vm.boundNrs['Health workers'] + vm.boundNrs.Facilities).toBeGreaterThan(0);
-        });
+    describe('$onInit fn.', () => {
 
         it('binds svgPanZoom lib to the scope', () => {
-            vm.$onInit();
             expect(vm.svgPanZoom).toBeDefined();
+        });
+
+        xit('sets Eventhandlers for data arriving', () => {});
+    });
+
+    describe('$onDestroy fn.', () => {
+
+        it('destroys svgpanzoom instance, and empties out .data and .map bindables', () => {
+            vm.svgZoom = { destroy: a => a };
+            spyOn(vm.svgZoom, 'destroy');
+            vm.$onDestroy();
+
+            expect(vm.map).toBe(false);
+            expect(vm.data).toBe(false);
+            expect(vm.svgZoom.destroy).toHaveBeenCalled();
+        });
+    });
+
+    describe('dataArrived eventhandler fn.', () => {
+
+        it('fills out vm.boundNrs', () => {
+            vm.dataArrived(perfMockMap);
+            console.warn(vm.boundNrs);
+
+            expect(typeof vm.boundNrs).toBe('object');
+            expect(vm.boundNrs.clients).toBe(12);
+            expect(vm.boundNrs.workers).toBe(7);
+            expect(vm.boundNrs.facilities).toBe(7);
+        });
+
+        it('saves data got to scope.data', () => {
+            vm.dataArrived('data');
+            expect(vm.data).toBe('data');
+        });
+
+        it('if map has arrived, calls drawMap with it', () => {
+            spyOn(vm, 'drawMap');
+            vm.dataArrived('data');
+            expect(vm.drawMap).not.toHaveBeenCalled();
+
+            vm.map = 'mapData';
+            vm.dataArrived('mapData');
+            expect(vm.drawMap).toHaveBeenCalledWith('mapData');
+        });
+    });
+
+    describe('mapArrived eventhandler fn.', () => {
+
+        it('saves the data into vm.map', () => {
+            vm.mapArrived('mapData');
+            expect(vm.map).toBe('mapData');
+        });
+
+        it('if data already arrived calls vm.drawMap', () => {
+
+            spyOn(vm, 'drawMap');
+            vm.mapArrived('mapData');
+            expect(vm.drawMap).not.toHaveBeenCalled();
+
+            vm.data = 'already here';
+            vm.mapArrived('mapData');
+            expect(vm.drawMap).toHaveBeenCalledWith('mapData');
         });
     });
 
     describe('draw fn.', () => {
 
+        beforeEach(() => {
+            vm.data = perfMockMap;
+            vm.map = mockMap;
+            vm.drawMap(mockMap);
+        });
+
         it('appends a div.countrymapcontroller to the angular $element', () => {
+
             expect(d3.select('.countrymapcontainer').length).toBe(1);
         });
 
         it('appends an svg.countrymap to the div.countrymapcontroller', () => {
+
             expect(d3.select('.countymap')[0].length).toBe(1);
         });
 
-        it('calls the vm.calculateScale() method', () => {
-            spyOn(vm, 'calculateScale');
-            vm.drawMap(mockMap);
-            expect(vm.calculateScale).toHaveBeenCalled();
-        });
+        xit('uses topoJSON\'s scale parameters as scale', () => {});
 
         it('appends the right number of svg paths(.d3district) to .countrymap', () => {
-            // 14 is sierra leones districts count
+            // 14 is sierra leones districts count (mock data)
             expect(d3.selectAll('.d3district')[0].length).toBe(14);
         });
 
         it('gives .d3district-data class to the districts that has data', () => {
-            // 4 is the nr of districts with data in the mockdata
-            expect(d3.selectAll('.d3district-data')[0].length).toBe(4);
+            // 3 is the nr of districts with data in the mockdata
+            expect(d3.selectAll('.d3district-data')[0].length).toBe(3);
         });
 
         it('changes vm.activedistrict bindable objects content on .d3district mouseover & mouseout', () => {
-            vm.drawMap(mockMap);
             spyOn(vm.scope, '$evalAsync');
             // Triggering the event for the first found element
             d3.select('.d3district').on('mouseover')();
@@ -77,7 +135,6 @@ describe('CountryMapController', () => {
             expect(vm.activeDistrict.data).toBeDefined();
             expect(typeof vm.activeDistrict.data).toBe('object');
             expect(vm.scope.$evalAsync).toHaveBeenCalled();
-
         });
 
         it('makes the svg pannable and zoomable with svgPanZoom', () => {
@@ -91,12 +148,5 @@ describe('CountryMapController', () => {
 
         const ret = vm.makeGeoFromTopo(mockMap.admin_level_5, 'admin_level_5');
         expect(typeof ret).toBe('object');
-    });
-
-    xit('has .calculateScale() method, that calcs & returns the boundaries & a scale from the data', () => {
-        const mockMap2 = vm.makeGeoFromTopo(mockMap);
-        const ret = vm.calculateScale(mockMap2);
-        expect(typeof ret).toBe('number');
-        expect(ret).toBeGreaterThan(0);
     });
 });
