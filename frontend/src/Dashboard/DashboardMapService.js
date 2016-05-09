@@ -9,7 +9,10 @@ class DashboardMapService extends AuthApi {
 
     getCountries() {
         return this.get('')
-            .then(data => data);
+            .then(data => {
+                // console.debug('COUNTRIES:', data);
+                return data;
+            });
     }
 
     getCountryTopo(countryId) {

@@ -1,4 +1,5 @@
 /* global d3 */
+import _ from 'lodash';
 
 class LinechartController {
 
@@ -11,23 +12,51 @@ class LinechartController {
         // vm.labels <= array of labels for datasets
         // vm.showdotted <= decides to show unsaved (last) ones
         // vm.datachooser <= datastructure toggle, and allows showing ng-options on the view
+        // vm.notpercentage <= signs that data isnt given in percentages
 
+        vm.EE = window.EE;
         vm.el = $element;
         vm.timeout = $timeout;
         vm.$onInit = () => {
 
-            if (vm.datachooser) {
-                vm.activeAxis = vm.data.labels[0];
-                vm.chosenData = vm.data[vm.activeAxis].data;
-                vm.chosenLabels = vm.data[vm.activeAxis].labels;
+            if (!vm.datachooser) {
+
+                vm.EE.once(vm.notpercentage ? 'coverage chart data' : 'axis chart data', data => {
+
+                    if (vm.notpercentage) {
+                        // console.debug('chartmock 3', JSON.stringify(data));
+                        vm.maxValue = data.data.reduce((ret, version) => {
+                            _.forOwn(version, (val, key) => {
+
+                                if (key !== 'date' || key !== 'x') {
+                                    ret = val > ret ? val : ret;
+                                }
+
+                            });
+                            return ret;
+                        }, 0);
+                    }
+
+                    vm.data = data.data;
+                    vm.labels = data.labels;
+                    vm.chosenLabels = vm.labels;
+                    vm.draw();
+                });
+
             }
             else {
-                vm.chosenLabels = vm.labels;
+
+                vm.EE.once('domain chart data', (data) => {
+                    // console.debug('got data for chart DOMAINS', data);
+                    vm.data = data;
+                    vm.labels = vm.data.labels;
+                    vm.activeAxis = vm.data.labels[0];
+                    vm.chosenData = vm.data[vm.activeAxis].data;
+                    vm.chosenLabels = vm.data[vm.activeAxis].labels;
+                    vm.draw();
+                });
             }
-
-            vm.draw();
         };
-
     }
 
     draw() {
@@ -50,7 +79,6 @@ class LinechartController {
         data.forEach((el, i) => {
             el.x = i + 1;
         });
-
 
         // Should recalculate on first open || resize
         const margin = {
@@ -79,9 +107,15 @@ class LinechartController {
             .range([margin.left, width - margin.right]) // the area
             .domain([0.8, (vm.showdotted ? data.length : data.length - 1) + 0.2]); // min and max values
 
-        const yScale = d3.scale.linear()
+        const percScale = d3.scale.linear()
             .range([height - margin.top, margin.bottom])
             .domain([0, 1]);
+
+        const simpleScale = d3.scale.linear()
+            .range([height - margin.top, margin.bottom])
+            .domain([0, vm.maxValue]);
+
+        const yScale = vm.notpercentage ? simpleScale : percScale;
 
         const xAxis = d3.svg.axis()
             .scale(xScale)
@@ -94,8 +128,11 @@ class LinechartController {
 
         const yAxis = d3.svg.axis()
             .scale(yScale)
-            .orient('left')
-            .tickFormat(d3.format('.0%'));
+            .orient('left');
+
+        if (!vm.notpercentage) {
+            yAxis.tickFormat(d3.format('.0%'));
+        }
 
         // Appending the X axis
         element.append('svg:g')
@@ -114,9 +151,9 @@ class LinechartController {
             element.append('svg:line')
                 .attr('class', 'linechart-ruler')
                 .attr('x1', margin.left)
-                .attr('y1', yScale(i / 10))
+                .attr('y1', percScale(i / 10))
                 .attr('x2', width - margin.right)
-                .attr('y2', yScale(i / 10));
+                .attr('y2', percScale(i / 10));
         }
 
 
@@ -125,7 +162,7 @@ class LinechartController {
 
             const line = d3.svg.line()
                 .x(d => xScale(d.x))
-                .y(d => yScale(d['axis' + i]));
+                .y(d => yScale(d['axis' + i] || 0));
 
             // Full lines
             element.append('svg:path')
@@ -150,7 +187,7 @@ class LinechartController {
                     .attr('class', 'dot-axis dot-axis' + i)
                     .attr('r', 5)
                     .attr('cx', xScale(el.x))
-                    .attr('cy', yScale(el['axis' + i]))
+                    .attr('cy', yScale(el['axis' + i] || 0))
                     .on('mouseover', () => {
 
                         tooltip.transition()
@@ -219,7 +256,6 @@ class LinechartController {
         vm.chosenLabels = vm.data[newAxis].labels;
 
         vm.reDraw();
-
     }
 
     static linechartFactory() {

@@ -12,7 +12,7 @@
                     <md-card class="dash-stat-card">
 
                         <!-- TODO: bind version nr. -->
-                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">3.</span>
+                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
                         <span ng-if="!versionHovered" class="dash-stat-label">version</span>
 
                         <span ng-if="versionHovered" class="dash-stat-tooltip dash-stat-tooltip-version">Push the button below to save your current stats as a new version</span>
@@ -20,16 +20,18 @@
                         <!-- TODO: bind snapshotting fn. -->
                         <md-button
                             class="snapshot-button"
-                            ng-click=""
+                            ng-click="vm.snapShot()"
                             ng-mouseover="versionHovered = true"
                             ng-mouseout="versionHovered = false">+ snapshot</md-button>
 
                     </md-card>
 
+
                     <!-- TODO: bindings -->
                     <viewers trend="'up'" number="1509"></viewers>
                     <followers trend="'down'" number="87"></followers>
-                    <donors number="3"></donors>
+
+                    <donors number="vm.projectData.donors.length"></donors>
 
                 </div>
             </div>
@@ -79,10 +81,7 @@
 
                         <md-tab label="axis">
                             <div>
-                                <!-- TODO: bindings -->
                                 <linechart
-                                    data="vm.linechartMockData.data"
-                                    labels="vm.linechartMockData.labels"
                                     showdotted="true">
                                 </linechart>
                             </div>
@@ -90,39 +89,36 @@
 
                         <md-tab label="domains">
                             <div>
-                                <!-- TODO: bindings -->
                                 <linechart
-                                    data="vm.linechartMockData2"
-                                    labels="vm.linechartMockData2.labels"
-                                    showdotted="false"
+                                    showdotted="true"
                                     datachooser="true"
                                 ></linechart>
                             </div>
                         </md-tab>
 
-                        <md-tab label="technology">
+                        <md-tab label="technology" ng-disabled="true">
                             <!-- TODO: bindings! -->
                             <div class="dash-tech">
                                 <div
                                     class="upper"
                                     layout="column">
 
-                                    <div flex layout="row" ng-init="platforms=['MOTECH']">
+                                    <div flex layout="row">
                                         <md-icon class="material-icons">device_hub</md-icon>
                                         <span flex>Technology platforms</span>
-                                        <md-chips flex="66" readonly="true" ng-model="platforms"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.technology_platforms"></md-chips>
                                     </div>
 
-                                    <div flex layout="row" ng-init="licenses=['APACHE', 'MIT']">
+                                    <div flex layout="row">
                                         <md-icon class="material-icons">playlist_add_check</md-icon>
                                         <span flex>License</span>
-                                        <md-chips flex="66" readonly="true" ng-model="licenses"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licences"></md-chips>
                                     </div>
 
-                                    <div flex layout="row" ng-init="tools=['SMS', 'ELECTRONIC FORMS']">
+                                    <div flex layout="row">
                                         <md-icon class="material-icons">speaker_phone</md-icon>
                                         <span flex>Digital tools</span>
-                                        <md-chips flex="66" readonly="true" ng-model="tools"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
                                     </div>
                                 </div>
 
@@ -166,8 +162,14 @@
                             </countrymap>
                         </md-tab>
 
-                        <md-tab ng-disabled="true" label="historical view">
-                            Linechart here
+                        <md-tab label="historical view">
+
+                            <linechart
+                                showdotted="true"
+                                datachooser="false"
+                                notpercentage="true"
+                            ></linechart>
+
                         </md-tab>
 
                     </md-tabs>
@@ -270,6 +272,7 @@
                         <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === vm.commProjects[0].length - 1" ng-click="vm.nextProject(0)">chevron_right</md-icon>
                     </div>
                     <projectcomp
+                        show-details="true"
                         ng-model="vm.commProjects[0][vm.pi[0]]">
                     </projectcomp>
                 </div>
@@ -281,6 +284,7 @@
                         <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === vm.commProjects[1].length - 1" ng-click="vm.nextProject(1)">chevron_right</md-icon>
                     </div>
                     <projectcomp
+                        show-details="true"
                         ng-model="vm.commProjects[1][vm.pi[1]]">
                     </projectcomp>
                 </div>
@@ -292,6 +296,7 @@
                         <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === vm.commProjects[2].length - 1" ng-click="vm.nextProject(2)">chevron_right</md-icon>
                     </div>
                     <projectcomp
+                        show-details="true"
                         ng-model="vm.commProjects[1][vm.pi[2]]">
                     </projectcomp>
                 </div>

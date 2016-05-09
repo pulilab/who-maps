@@ -32,7 +32,7 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/dashboard',
+            url: '/:axisId/dashboard',
             parent: 'app',
             views: {
                 main: {

@@ -28,6 +28,10 @@ linechart {
                 flex-basis: 50%;
                 height: 100%;
 
+                &.labelhov {
+                    text-transform: capitalize;
+                }
+
                 .material-icons {
 
                     font-size: 12px;
