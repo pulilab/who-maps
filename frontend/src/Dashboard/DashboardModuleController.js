@@ -23,7 +23,7 @@ class DashboardModuleController {
 
         vm.fetchAxisData();
 
-        vm.fetchProjectData();
+        this.service.getProjectData(this.projectId).then(vm.fetchProjectData.bind(this));
         // vm.fetchCountryMap();
         // vm.parseMapData();
         // vm.fetchCoverageVersions();
@@ -48,18 +48,14 @@ class DashboardModuleController {
         // Routers for the axis components (deregistering?)
         vm.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
         vm.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
-
     }
 
-    fetchProjectData() {
-
-        this.service.getProjectData(this.projectId).then(data => {
-            // console.debug('ProjectData', data);
-            this.projectData = data;
-            this.fetchCountryMap(data.country);
-            this.parseMapData(data.coverage);
-            this.fetchCoverageVersions();
-        });
+    fetchProjectData(data) {
+        // console.debug('ProjectData', data);
+        this.projectData = data;
+        this.fetchCountryMap(data.country);
+        this.parseMapData(data.coverage);
+        this.fetchCoverageVersions();
     }
 
     parseMapData(coverage) {

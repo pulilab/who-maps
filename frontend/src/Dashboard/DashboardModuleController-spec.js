@@ -16,7 +16,6 @@ describe('DashboardModuleController', () => {
     beforeEach(() => {
         spyOn(window.EE, 'on').and.callThrough();
         vm = DashboardModuleController.dashboardControllerFactory()({}, state);
-
     });
 
     it('is defined', () => {
@@ -28,6 +27,66 @@ describe('DashboardModuleController', () => {
         spyOn(window.EE, 'emit');
         vm.resizefn();
         expect(window.EE.emit).toHaveBeenCalledWith('dashResized');
+    });
+
+    it('\'s .fetchProjectData method starts fetching other needed data', () => {
+
+        // vm.projectId = 1;
+        spyOn(vm, 'fetchCountryMap');
+        spyOn(vm, 'parseMapData');
+        spyOn(vm, 'fetchCoverageVersions');
+
+        const mock = { country: 1, coverage: 2 };
+        vm.fetchProjectData(mock);
+
+        expect(vm.projectData).toBe(mock);
+        expect(vm.fetchCountryMap).toHaveBeenCalledWith(mock.country);
+        expect(vm.parseMapData).toHaveBeenCalledWith(mock.coverage);
+        expect(vm.fetchCoverageVersions).toHaveBeenCalled();
+    });
+
+    it('\'s .fetchCountryMap method fetches from the right endpoint', () => {
+        vm.service.getAxisData = () => {
+            return { then: (fn) => { fn('adat'); } };
+        };
+        spyOn(vm.service, 'getAxisData').and.callThrough();
+        vm.fetchAxisData();
+        expect(vm.service.getAxisData).toHaveBeenCalled();
+        expect(vm.axisData).toBe('adat');
+    });
+
+    it('\'s .fetchToolkitData method fetches from the right endpoint, calls .fetchToolkitVersions', () => {
+        vm.service.getToolkitData = () => {
+            return { then: (fn) => { fn('adat'); } };
+        };
+        spyOn(vm.service, 'getToolkitData').and.callThrough();
+        spyOn(vm, 'fetchToolkitVersions');
+
+        vm.fetchToolkitData();
+        expect(vm.service.getToolkitData).toHaveBeenCalled();
+        expect(vm.fetchToolkitVersions).toHaveBeenCalled();
+    });
+
+    it('\'s .fetchCountryMap fn. calls the service with the id given, then emits', () => {
+        vm.mapService.getCountryTopo = () => {
+            return { then: (fn) => { fn('adat'); } };
+        };
+        spyOn(vm.EE, 'emit');
+        spyOn(vm.mapService, 'getCountryTopo').and.callThrough();
+        vm.fetchCountryMap('aaa');
+
+        expect(vm.mapService.getCountryTopo).toHaveBeenCalled();
+        expect(vm.EE.emit).toHaveBeenCalledWith('topoArrived', 'adat');
+    });
+
+    it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
+        vm.projectId = 1;
+        vm.service.snapShot = () => {
+            return { then: fn => { fn(); } };
+        };
+        spyOn(vm.service, 'snapShot').and.callThrough();
+        vm.snapShot();
+        expect(vm.service.snapShot).toHaveBeenCalledWith(1);
     });
 
     it('has .prewProject() method, which handles decreasing active project binding indices in community wall', () => {
@@ -54,15 +113,6 @@ describe('DashboardModuleController', () => {
         vm.nextProject(2);
 
         expect(vm.pi).toEqual([2, 1, 4]);
-    });
-
-    it('fetches vm.projectData from API', () => {
-        expect(vm.service.getProjectData).toBeDefined();
-
-        spyOn(vm.service, 'getProjectData').and.callThrough();
-        vm.fetchProjectData();
-
-        expect(vm.service.getProjectData).toHaveBeenCalled();
     });
 
     it('handles axis components domain change event with redirecting to correct maps toolkit page', () => {
