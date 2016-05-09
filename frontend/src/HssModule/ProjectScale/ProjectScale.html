@@ -6,6 +6,8 @@
 
 <md-input-container ng-if="vm.editMode" class="md-block">
 
-  <textarea aria-label="Edit Project Scale" ng-model="vm.string" md-maxlength="210" rows="4" md-select-on-focus></textarea>
+  <textarea aria-label="Edit Project Scale" ng-model="vm.string"
+            ng-model-options="{updateOn: 'blur'}"
+            ng-change="vm.updateProjectScale(vm.string)" md-maxlength="210" rows="4" md-select-on-focus></textarea>
 
 </md-input-container>
