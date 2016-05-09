@@ -31,13 +31,10 @@ class NewProjectController extends ProjectDefinition {
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
+        this.handleStructureLoad();
         if (this.editMode) {
             this.projectId = this.state.params.appName;
-            this.handleStructureLoad();
             this.handleDataLoad();
-        }
-        else {
-            this.ns.populateProjectStructure().then(this.handleStructureLoad.bind(this));
         }
     }
 
