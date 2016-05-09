@@ -6,13 +6,15 @@ class IntroJsController {
 
     constructor() {
         const vm = this;
-        vm.introJs = intro.introJs();
+        vm.introJs = intro.introJs("#main-view");
+        this.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
     }
 
     parseOptions() {
         const result = {
             steps: [],
-            exitOnOverlayClick: false
+            exitOnOverlayClick: false,
+            scrollToElement: true
         };
         if (!(this.sourceString instanceof Object)) {
             console.error(introText + 'invalid object');
@@ -66,7 +68,11 @@ class IntroJsController {
 
     start() {
         this.introJs.setOptions(this.parseOptions());
+        this.introJs.onafterchange(targetElement => {
+            targetElement.scrollIntoView(true);
+        });
         this.introJs.start();
+
     }
 
 
