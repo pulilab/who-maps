@@ -196,6 +196,7 @@ SELECTED_FILE_LIST = [
 ]
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
+    "admin_level_3.geojson",
     "admin_level_4.geojson",
     "admin_level_5.geojson"
 ]
@@ -204,8 +205,8 @@ LEVELS_FOR_DISTRICTS = {
     "sierra-leone": "admin_level_5",
     "india": "admin_level_5",
     "kenya": "admin_level_4",
-    "philippines": "admin_level_4",
-    "bangladesh": "admin_level_5"
+    "philippines": "admin_level_3",
+    "bangladesh": "admin_level_4"
 }
 
 # Logging
