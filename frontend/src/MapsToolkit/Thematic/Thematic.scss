@@ -133,14 +133,35 @@ md-dialog {
 					padding-left: 60px;
 					outline: none;
 					color: $text-secondary;
-					font-size: 12px;
+					font-size: $caption-font-size-base;
 					cursor: pointer;
           transition: $swift-ease-out;
+
+          &::before {
+            position: absolute;
+            top: -2px;
+            left: 55px;
+            content: '› ';
+            font-weight: 700;
+            font-size: $body-font-size-base;
+            opacity: 0;
+            transition: $swift-ease-out;
+          }
 
           &:hover,
           &.active-domain {
 						color: $text-primary;
 					}
+
+          &.active-domain {
+            position: relative;
+            padding-left: 70px;
+
+            &::before {
+              left: 60px;
+              opacity: 1;
+            }
+          }
 				}
 			}
 		}
