@@ -163,12 +163,14 @@ new-project {
 
   .axis-description {
     height: 100%;
+
     img {
       width: 55px;
       height: 55px;
       float: left;
       margin-right: 10px;
       margin-top:40px;
+      padding:5px;
     }
 
     p {
