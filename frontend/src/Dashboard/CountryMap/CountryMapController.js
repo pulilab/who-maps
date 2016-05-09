@@ -40,7 +40,7 @@ class CountrymapController {
 
         const vm = this;
         vm.data = data;
-        // console.debug('DATA to slice:', vm.data);
+        // console.debug('DATA to populate map with:', vm.data);
 
         vm.boundNrs = _.reduce(vm.data.data, (ret, value, key) => {
 
@@ -53,6 +53,8 @@ class CountrymapController {
             return ret;
         }, {});
 
+        // console.debug('BOUNDNRS', vm.boundNrs);
+
         if (vm.map) {
             // console.debug('data arrived, map was here, starts drawing', data);
             vm.drawMap(vm.map);
@@ -62,11 +64,10 @@ class CountrymapController {
         }
     }
 
-    mapArrived(data, level) {
+    mapArrived(data) {
 
         const vm = this;
         vm.map = data;
-        vm.level = level;
         if (vm.data) {
             // console.debug('map arrived, data was here, so it starts drawing');
             vm.drawMap(data);
