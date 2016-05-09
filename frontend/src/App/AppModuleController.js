@@ -93,7 +93,7 @@ class AppModuleController extends Protected {
     }
 
     showCompleteNavigation(state, isLogin) {
-        const isLanding = state === 'landing';
+        const isLanding = state === 'landing' || state === "newProject";
         this.showFullNavigation = !isLanding && isLogin;
     }
 
