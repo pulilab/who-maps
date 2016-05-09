@@ -3,6 +3,12 @@ import ngFileUpload from 'ng-file-upload';
 
 
 import EE from './EE';
+
+if (! window.EE) {
+    EE.initialize();
+}
+
+
 import AuthApi from './AuthApi';
 import SimpleApi from './SimpleApi';
 import Storage from './Storage';
@@ -19,6 +25,7 @@ import NewProjectComponent from './NewProject/newProjectComponent';
 import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
+import CommonService from './CommonServices';
 
 const moduleName = 'Components';
 
@@ -46,4 +53,5 @@ export { AuthApi };
 export { Storage };
 export { SimpleApi };
 export { Protected };
+export { CommonService };
 export { moduleName as Components };

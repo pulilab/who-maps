@@ -3,8 +3,8 @@
     <div class="project-container" layout="row">
 
         <!-- TODO: Logo, if nothing, use default background -->
-        <div class="project-logo" ng-if="vm.showLogo">
-            LOGO
+        <div class="project-logo" layout="column" layout-align="center center" ng-if="vm.showLogo">
+            <md-icon>language</md-icon>
         </div>
 
         <div class="text-container" layout="column">
@@ -12,11 +12,11 @@
             <div class="upper" layout="row">
                 <div class="basic" flex="flex-grow" layout="column">
                     <span flex class="name bold">{{vm.ngModel.name}}</span>
-                    <span flex class="org-country">{{vm.ngModel.organization}} | {{vm.ngModel.orgCountry}}</span>
+                    <span flex class="org-country">{{vm.ngModel.organisation}} | {{vm.ngModel.countryName}}</span>
                 </div>
                 <div ng-if="vm.showDetails" class="donors">
                     <span class="nr">
-                        {{vm.ngModel.donors}}
+                        {{vm.ngModel.donors.length}}
                     </span>
                     <span class="static">Donors</span>
                 </div>
@@ -31,12 +31,14 @@
 
             <div ng-if="vm.showDetails" class="lower" layout="row">
                 <div flex class="description">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ipsum dolores illum quae consequatur praesentium reprehenderit recusandae numquam velit pariatur quis, fuga excepturi repellendus obcaecati distinctio inventore iure necessitatibus natus.
+                    {{vm.ngModel.goals_to_scale}}
                 </div>
-                <!-- TODO: should be a link -->
-                <div class="more" ng-if="!vm.ownProject">
-                    <a ng-href="{{vm.ngModel.projectUrl}}">{{vm.ownProject ? 'GO TO DASHBOARD' : 'SHOW MORE'}}</a>
-                </div>
+
+                <md-button class="more" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
+
+                <md-button class="md-gray" ng-if="vm.ownProject" ui-sref="dashboard({appName: vm.ngModel.id})">Go to dashboard</md-button>
+
+                <md-button class="md-primary" ng-if="vm.ownProject" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project Info</md-button>
             </div>
         </div>
     </div>

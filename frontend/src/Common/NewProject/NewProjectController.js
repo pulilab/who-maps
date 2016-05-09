@@ -2,6 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
+import CommonService  from '../CommonServices';
 
 /* global DEV, Promise */
 
@@ -27,20 +28,14 @@ class NewProjectController extends ProjectDefinition {
     }
 
     initialization() {
+        this.commonService = CommonService;
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
+        this.handleStructureLoad();
         if (this.editMode) {
-
             this.projectId = this.state.params.appName;
-            Promise.all([this.ns.projectStructure(), this.ns.projectData(this.projectId)])
-                .then(data => {
-                    this.handleStructureLoad(data[0]);
-                    this.handleDataLoad(data[1]);
-                });
-        }
-        else {
-            this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
+            this.handleDataLoad();
         }
     }
 
@@ -63,24 +58,21 @@ class NewProjectController extends ProjectDefinition {
         return structure;
     }
 
-    handleStructureLoad(data) {
+    handleStructureLoad() {
         this.dataLoaded = true;
-        this.structure = data;
+        this.structure = this.commonService.projectStructure;
         this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
-    handleDataLoad(data) {
+    handleDataLoad() {
+        const data = this.commonService.getProjectData(this.projectId);
         this.createCoverageKeys(data);
         _.merge(this.project, data);
 
+        this.userProjects = this.commonService.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        const country = _.filter(this.structure.countries, { id: this.project.country  });
-        if (country[0] && country[0].name) {
-            this.project.countryName = country[0].name;
-        }
-
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;
@@ -89,6 +81,10 @@ class NewProjectController extends ProjectDefinition {
                 this.scope.$evalAsync();
             });
 
+    }
+
+    isCurrentProject(projectId) {
+        return parseInt(projectId, 10) === parseInt(this.projectId, 10);
     }
 
     createCoverageKeys(data) {
@@ -306,7 +302,6 @@ class NewProjectController extends ProjectDefinition {
     handleCustomError(key) {
         this.newProjectForm[key].$setValidity('custom', true);
         this.newProjectForm[key].customError = [];
-
     }
 
 

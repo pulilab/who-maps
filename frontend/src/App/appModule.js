@@ -6,12 +6,6 @@ import uiRoute from 'angular-ui-router';
 import ngMessages from 'angular-messages';
 import 'angular-password';
 import angularMd from 'angular-material';
-import { EE } from '../Common/';
-
-EE.initialize();
-
-import AppController from './AppModuleController';
-import './app.scss';
 
 import _appTemplate from './app.html';
 
@@ -22,6 +16,11 @@ import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
 import { Components } from '../Common/';
+import { CommonService } from '../Common';
+
+
+import AppController from './AppModuleController';
+import './app.scss';
 
 
 const moduleName = 'app';
@@ -32,7 +31,12 @@ const config = ($stateProvider, $urlRouterProvider) => {
             url: '/app/:appName',
             template: _appTemplate,
             controller: moduleName + '.appController',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            resolve: {
+                commonData: () => {
+                    return CommonService.loadedPromise;
+                }
+            }
         })
     .state('login',
         {

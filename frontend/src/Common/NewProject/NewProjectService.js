@@ -36,15 +36,6 @@ class NewProjectService extends AuthApi {
                 };
             });
     }
-
-    projectStructure() {
-        return this.get('projects/structure/');
-    }
-
-    projectData(id) {
-        return this.get(`projects/${id}/`);
-    }
-
     countryDistrict(id) {
         return this.get('countries/' + id + '/districts');
     }
