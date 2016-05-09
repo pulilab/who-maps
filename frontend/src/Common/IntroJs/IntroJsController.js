@@ -7,22 +7,18 @@ class IntroJsController {
     constructor() {
         const vm = this;
         vm.introJs = intro.introJs("#main-view");
-        this.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
     }
 
     parseOptions() {
         const result = {
             steps: [],
-            exitOnOverlayClick: false,
-            scrollToElement: true
+            exitOnOverlayClick: false
         };
         if (!(this.sourceString instanceof Object)) {
             console.error(introText + 'invalid object');
             result.steps = [];
         }
         else {
-
-
             if (!this.sourceString.hasOwnProperty('steps')) {
                 console.error(introText + 'supplied json is missing the required field STEPS');
                 result.steps = [];
