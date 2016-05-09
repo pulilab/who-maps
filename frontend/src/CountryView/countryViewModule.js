@@ -1,11 +1,11 @@
 import angular from 'angular';
 import CountryViewModuleController from './CountryViewModuleController';
-import sampleComponent from './SampleComponent/sampleComponent';
 
 import _template from './CountryViewModule.html';
+import './CountryView.scss';
 import uiRoute from 'angular-ui-router';
 
-const moduleName = 'countryViewModule';
+const moduleName = 'country';
 
 function config($stateProvider) {
     $stateProvider
@@ -27,7 +27,6 @@ config.$inject = ['$stateProvider'];
 
 angular.module(moduleName, [uiRoute])
     .controller(moduleName + '.' + moduleName + 'Controller', CountryViewModuleController)
-    .component('sampleComponent', sampleComponent)
     .config(config);
 
 export default moduleName;
