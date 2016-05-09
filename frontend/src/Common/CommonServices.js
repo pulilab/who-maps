@@ -4,6 +4,7 @@ import Protected from './Protected';
 /* global define, Promise, DEV */
 
 let commonServices = false;
+const loadingConst = 2;
 
 class CommonServices extends Protected {
 
@@ -11,15 +12,24 @@ class CommonServices extends Protected {
         super('');
         this.projectList = [];
         this.projectStructure = [];
-        this.populateProjectList();
-        this.populateProjectStructure();
-        this.eventRegistrations();
-
-        this.loadingCounter = 2;
+        this.loadingCounter = loadingConst;
         this.promiseResolve = void 0;
-        this.loadedPromise = new Promise((resolve) => {
+        this.promiseReject = void 0;
+        this.loadedPromise = new Promise((resolve, reject) => {
             this.promiseResolve = resolve;
+            this.promiseReject = reject;
         });
+
+        if (this.user) {
+            this.populateProjectList();
+            this.populateProjectStructure();
+            this.eventRegistrations();
+        }
+        else {
+            this.promiseResolve();
+        }
+
+
     }
 
     eventRegistrations() {
@@ -31,7 +41,7 @@ class CommonServices extends Protected {
     loadingProgress() {
         this.loadingCounter -= 1;
         if (this.loadingCounter === 0) {
-            this.loadingCounter = 2;
+            this.loadingCounter = loadingConst;
             this.mergeOperations();
             this.promiseResolve();
         }
@@ -57,6 +67,8 @@ class CommonServices extends Protected {
                 Promise.all(promiseArray)
                     .then(() => {
                         this.EE.emit('projectListUpdated');
+                    }, () => {
+                        this.promiseReject();
                     });
             });
 

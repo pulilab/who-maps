@@ -30,6 +30,7 @@ class Protected extends AuthApi {
         if (!vm.userProfile && vm.isLogin && vm.EE) {
             vm.get('userprofiles').then(user => {
                 vm.userProfile = user[0];
+                vm.userProfile.email = this.user.username;
                 vm.EE.emit('userProfileFetched');
                 vm.EE.emit('doDigest');
             });

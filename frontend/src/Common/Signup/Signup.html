@@ -44,7 +44,7 @@
                          <div ng-messages="signupForm.password1.$error" >
                              <div ng-message="required">This is required.</div>
                              <div ng-message="minlength">This need to be at least 6 chars</div>
-                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.password1.customError">{{error}} </div>
                          </div>
                      </md-input-container>
                      <md-input-container>
@@ -53,7 +53,7 @@
                          <div ng-messages="signupForm.password2.$error">
                              <div ng-message="required">This is required.</div>
                              <div ng-message="passwordMatch">Your passwords do not match.</div>
-                             <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
+                             <div ng-message="custom" ng-repeat="error in signupForm.password2.customError">{{error}} </div>
                          </div>
                      </md-input-container>
                      <div layout="row" layout-align="start">

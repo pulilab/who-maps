@@ -68,13 +68,23 @@ const config = ($stateProvider, $urlRouterProvider) => {
                 }
             }
         })
-        .state('editProject',
+    .state('editProject',
         {
             url: '/edit-project',
             parent: 'app',
             views: {
                 main: {
                     template: '<new-project edit-mode="true" ></new-project>'
+                }
+            }
+        })
+    .state('editProfile',
+        {
+            url: '/edit-profile',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<edit-profile ></edit-profile>'
                 }
             }
         });
