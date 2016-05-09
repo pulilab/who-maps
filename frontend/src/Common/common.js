@@ -26,6 +26,7 @@ import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
 import CommonService from './CommonServices';
+import EditProfileComponent from './EditProfile/editProfileComponent';
 
 const moduleName = 'Components';
 
@@ -45,7 +46,8 @@ angular.module(moduleName,
     .component(NewProjectComponent.name, NewProjectComponent)
     .component(viewersComponent.name, viewersComponent)
     .component(followersComponent.name, followersComponent)
-    .component(donorsComponent.name, donorsComponent);
+    .component(donorsComponent.name, donorsComponent)
+    .component(EditProfileComponent.name, EditProfileComponent);
 
 
 export { EE };
