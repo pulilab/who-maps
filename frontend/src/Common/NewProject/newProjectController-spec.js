@@ -91,14 +91,14 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that handle the initialization when is in editMode', () => {
-        spyOn(sc.ns, 'projectStructure').and.returnValue(Promise.resolve());
+        spyOn(sc.ns, 'populateProjectStructure').and.returnValue(Promise.resolve());
         spyOn(sc.ns, 'projectData').and.returnValue(Promise.resolve());
         spyOn(sc, 'handleDataLoad');
         spyOn(sc, 'handleStructureLoad');
         sc.editMode = true;
         sc.initialization();
         expect(sc.ns.projectData).toHaveBeenCalled();
-        expect(sc.ns.projectStructure).toHaveBeenCalled();
+        expect(sc.ns.populateProjectStructure).toHaveBeenCalled();
         expect(sc.handleDataLoad).toHaveBeenCalled();
         expect(sc.handleStructureLoad).toHaveBeenCalled();
     });

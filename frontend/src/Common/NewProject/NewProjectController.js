@@ -2,6 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
+import CommonService  from '../CommonServices';
 
 /* global DEV, Promise */
 
@@ -31,16 +32,12 @@ class NewProjectController extends ProjectDefinition {
         this.dataLoaded = false;
         this.sentForm = false;
         if (this.editMode) {
-
             this.projectId = this.state.params.appName;
-            Promise.all([this.ns.projectStructure(), this.ns.projectData(this.projectId)])
-                .then(data => {
-                    this.handleStructureLoad(data[0]);
-                    this.handleDataLoad(data[1]);
-                });
+            this.handleStructureLoad();
+            this.handleDataLoad();
         }
         else {
-            this.ns.projectStructure().then(this.handleStructureLoad.bind(this));
+            this.ns.populateProjectStructure().then(this.handleStructureLoad.bind(this));
         }
     }
 
@@ -63,17 +60,19 @@ class NewProjectController extends ProjectDefinition {
         return structure;
     }
 
-    handleStructureLoad(data) {
+    handleStructureLoad() {
         this.dataLoaded = true;
-        this.structure = data;
+        this.structure = CommonService.projectStructure;
         this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
-    handleDataLoad(data) {
+    handleDataLoad() {
+        const data = CommonService.getProjectData(this.projectId);
         this.createCoverageKeys(data);
         _.merge(this.project, data);
 
+        this.userProjects = CommonService.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         const country = _.filter(this.structure.countries, { id: this.project.country  });

@@ -1,9 +1,14 @@
 import Storage from './Storage';
 import AuthApi from './AuthApi';
+import EE from './EE';
+
+if (!window.EE) {
+    EE.initialize();
+}
 
 class Protected extends AuthApi {
     constructor() {
-        super('userprofiles');
+        super('');
         this.EE = window.EE;
         this.userProfile = false;
         this.storage = new Storage();
@@ -22,8 +27,8 @@ class Protected extends AuthApi {
     retrieveUser() {
         const vm = this;
         vm.user = vm.storage.get('user');
-        if (!vm.userProfile) {
-            vm.get('').then(user => {
+        if (!vm.userProfile && vm.isLogin && vm.EE) {
+            vm.get('userprofiles').then(user => {
                 vm.userProfile = user[0];
                 vm.EE.emit('userProfileFetched');
                 vm.EE.emit('doDigest');
