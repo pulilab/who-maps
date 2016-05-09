@@ -244,3 +244,17 @@ class UserProfileTests(APITestCase):
             "country": "test_country2"}
         response = client.post(url, data)
         self.assertEqual(response.status_code, 200)
+
+    def test_update_user_profile(self):
+        url = reverse("userprofile-list")
+        response = self.client.get(url)
+        data = response.json()[0]
+        url = reverse("userprofile-detail", kwargs={"pk": data["id"]})
+        data.update(country="updated country")
+        data.update(organisation="updated org")
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        url = reverse("userprofile-list")
+        response = self.client.get(url)
+        self.assertEqual(response.json()[0].get("country"), "updated country")
+        self.assertEqual(response.json()[0].get("organisation"), "updated org")
