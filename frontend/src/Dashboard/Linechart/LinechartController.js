@@ -24,6 +24,7 @@ class LinechartController {
                 vm.EE.once(vm.notpercentage ? 'coverage chart data' : 'axis chart data', data => {
 
                     if (vm.notpercentage) {
+                        // console.debug('chartmock 3', JSON.stringify(data));
                         vm.maxValue = data.data.reduce((ret, version) => {
                             _.forOwn(version, (val, key) => {
 
