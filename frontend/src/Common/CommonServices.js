@@ -12,7 +12,7 @@ class CommonServices extends Protected {
         super('');
         this.projectList = [];
         this.projectStructure = [];
-        this.loadingCounter = loadingConst;
+        this.loadingCounter = _.cloneDeep(loadingConst);
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -20,25 +20,28 @@ class CommonServices extends Protected {
             this.promiseReject = reject;
         });
 
+        this.eventRegistrations();
         if (this.user) {
-            this.populateProjectList();
-            this.populateProjectStructure();
-            this.eventRegistrations();
+            this.loadData();
         }
         else {
             this.promiseResolve();
         }
+    }
 
-
+    loadData() {
+        this.populateProjectList();
+        this.populateProjectStructure();
     }
 
     eventRegistrations() {
         this.EE.on('refreshProjects', this.populateProjectList.bind(this));
-        this.EE.on('projectListUpdated', this.loadingProgress.bind(this));
-        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this));
+        this.EE.on('projectListUpdated', this.loadingProgress.bind(this, "lol"));
+        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this, "omg"));
     }
 
-    loadingProgress() {
+    loadingProgress(str) {
+        console.log(str, this.loadingCounter);
         this.loadingCounter -= 1;
         if (this.loadingCounter === 0) {
             this.loadingCounter = loadingConst;
@@ -71,7 +74,6 @@ class CommonServices extends Protected {
                         this.promiseReject();
                     });
             });
-
     }
 
     populateProjectStructure() {
@@ -94,8 +96,8 @@ class CommonServices extends Protected {
         return _.find(this.projectList, { id });
     }
 
-    static commonServiceFactory() {
-        if (!commonServices)  {
+    static commonServiceFactory(reset) {
+        if (!commonServices || reset)  {
             commonServices = new CommonServices();
         }
         if (DEV) {
@@ -106,3 +108,4 @@ class CommonServices extends Protected {
 }
 
 export default CommonServices.commonServiceFactory();
+export { CommonServices as ResetService }

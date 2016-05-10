@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { Protected } from '../Common/';
-import { CommonService } from '../Common';
+import { Protected, CommonService, ResetService } from '../Common/';
 
 class AppModuleController extends Protected {
 
@@ -9,6 +8,7 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.cs = CommonService;
         this.currentPage = void 0;
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
@@ -65,8 +65,10 @@ class AppModuleController extends Protected {
             console.log('some forced action');
         }
         this.systemLogin();
+        this.cs = ResetService.commonServiceFactory(true);
+        this.state.go(this.state.current, {}, {reload: true});
         this.fillUserData();
-        this.state.go('dashboard');
+        this.goToDashboard();
     }
 
     updateProject(name) {
@@ -75,10 +77,10 @@ class AppModuleController extends Protected {
     }
 
     fillUserData() {
-        this.user.projects = CommonService.projectList;
+        this.user.projects = this.cs.projectList;
         if (this.state.params.appName.length === 0) {
             const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { 'appName': this.user.projects[0].id });
+            this.state.go(state, { 'appName': _.last(this.user.projects).id });
         }
         _.forEach(this.user.projects, item => {
             if (item.id === parseInt(this.state.params.appName, 10)) {
