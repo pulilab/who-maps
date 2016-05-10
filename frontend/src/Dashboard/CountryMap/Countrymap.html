@@ -1,6 +1,6 @@
 <div class="relative">
 
-	<div class="countrychart-tooltip md-whiteframe-1dp">
+	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="!vm.big">
 
 		<div class="countrychart-tooltip-header bold">
 			{{vm.countryName}}
@@ -42,8 +42,13 @@
 		</div>
 	</div>
 
+	<div class="zoomhandlers" ng-if="!vm.big">
+		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+		<br>
+		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+	</div>
 
-	<div class="zoomhandlers">
+	<div class="zoomhandlers2" ng-if="vm.big">
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
 		<br>
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>

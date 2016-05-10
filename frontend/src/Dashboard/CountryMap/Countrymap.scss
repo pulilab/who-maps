@@ -57,6 +57,21 @@
 			outline: none;
 		}
 	}
+
+	.zoomhandlers2 {
+
+		position: absolute;
+		right: 15px;
+		top: 540px;
+
+		md-icon {
+			color: $color-gray-light;
+			cursor: pointer;
+			outline: none;
+		}
+	}
+
+
 }
 
 
@@ -73,7 +88,7 @@
 
 		.d3district {
 
-			fill: #D7D9E2;
+			fill: #E5E5EE;
 			stroke: #9B9DA8;
 			stroke-width: 2px;
 		    pointer-events: all;

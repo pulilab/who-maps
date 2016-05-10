@@ -4,6 +4,7 @@ import _ from 'lodash';
 import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
+import clvMock from './mock/clvMock.js';
 
 // import topoSource from './mock/sierra-leone/topoTest.json';
 // const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
@@ -18,6 +19,8 @@ class CountrymapController {
         this.tooltipOver = false;
         this.preventMouseOut = false;
         // this.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
+        // this.big <= boolean binding indicating if tolltip should get used,
+        //             also: bigger size + zoomhandler positioning
 
 
         this.$onInit = () => {
@@ -29,7 +32,9 @@ class CountrymapController {
 
         this.$onDestroy = () => {
 
-            this.svgZoom.destroy();
+            if (this.hasOwnProperty('svgZoom')) {
+                this.svgZoom.destroy();
+            }
             this.data = false;
             this.map = false;
         };
@@ -68,8 +73,14 @@ class CountrymapController {
 
         const vm = this;
         vm.map = data;
+
         if (vm.data) {
             // console.debug('map arrived, data was here, so it starts drawing');
+            vm.drawMap(data);
+        }
+        else if (vm.big) {
+            // console.debug('map arrived, data was here, so it starts drawing');
+            vm.data = { data: clvMock };
             vm.drawMap(data);
         }
         else {
@@ -115,12 +126,11 @@ class CountrymapController {
             .attr('class', 'countrymapcontainer');
 
         const outerWidth = outer[0][0].offsetWidth;
-        // const outerHeight = outer[0][0].offsetHeight;
 
         const element = outer.append('svg')
             .attr('class', 'countrymap')
             .attr('width', outerWidth)
-            .attr('height', 409);
+            .attr('height', vm.big ? 600 : 409);
 
         // console.debug('FROM TOPO:', topoJSON.admin_level_2.transform.scale);
 
