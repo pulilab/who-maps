@@ -11,8 +11,6 @@ from .serializers import SearchSerializer
 
 
 @api_view(['POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def search_project(request):
     """
     View for providing search functionality for projects.
