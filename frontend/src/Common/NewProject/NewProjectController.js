@@ -179,7 +179,10 @@ class NewProjectController extends ProjectDefinition {
     }
 
     checkErrors(field) {
-        return !_.isEmpty(this.newProjectForm[field].$error);
+        if (this.newProjectForm && this.newProjectForm[field]) {
+            return !_.isEmpty(this.newProjectForm[field].$error);
+        }
+        return true;
     }
 
 
