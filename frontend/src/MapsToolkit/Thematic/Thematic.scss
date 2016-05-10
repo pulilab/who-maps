@@ -17,6 +17,7 @@ md-dialog {
     height: 100vh;
 
     .left {
+      padding-bottom: 50px;
       width: 300px;
       background-color: #EEEEEE;
       box-shadow: inset -8px 0 24px rgb(213,213,213);
@@ -105,6 +106,7 @@ md-dialog {
             font-weight: 500;
             font-size: 12px;
             cursor: pointer;
+            transition: color 200ms ease;
 
             &.active,
             &:hover {
