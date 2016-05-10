@@ -5,6 +5,9 @@ from . import views
 
 urlpatterns = [
     url(r"^projects/$", view=views.ProjectViewSet.as_view({'get': 'list', 'post': 'create'}), name="project-list"),
+    url(r"^projects/by-view/map/(?P<country_id>\d+)/$", view=views.ProjectViewSet.as_view({'get': 'by_district'}), name="project-by-district"),
+    url(r"^projects/by-view/list/(?P<country_id>\d+)/$", view=views.ProjectViewSet.as_view({'get': 'list_all'}), name="project-country-list"),
+    url(r"^projects/by-view/list/$", view=views.ProjectViewSet.as_view({'get': 'list_all'}), name="project-all-list"),
     url(r"^projects/(?P<pk>\d+)/$", view=views.ProjectViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="project-detail"),
     url(r"^projects/structure/$", view=views.get_project_structure, name="get-project-structure"),
     url(r"^projects/(?P<project_id>\d+)/files/$", view=views.file_list, name="file-list"),
