@@ -1,26 +1,26 @@
 {
   "steps": [
     {
-      "intro": "HSS introduction"
+      "intro": "How to visualize my project"
     },
     {
-      "intro": "Continuum header, activte deactivate columns",
+      "intro": "Click which part(s) of the RMNCH continuum your project falls under",
       "element": ".continuum-component"
     },
     {
-      "intro": "Interventions row, choose appropriate interventions for every continuum column",
+      "intro": "Select down for the appropriate health interventions. Choose all that apply.",
       "element": ".interventions-component"
     },
     {
-      "intro": "Constraints column, this will be reflected in which application constraints its possible to chose",
+      "intro": "Select which health system constraints are the focus of your project",
       "element": ".constraints-component"
     },
     {
-      "intro": "Applications rows, create your bubbles and insert your text here",
+      "intro": "Create a bubble and insert text on what your intervention does",
       "element": ".applications-component"
     },
     {
-      "intro": "Congratulations! Introduction complete!"
+      "intro": "Congratulations! Introduction completed"
     }
 
   ]

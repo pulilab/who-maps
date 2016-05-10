@@ -30,12 +30,11 @@ class ConstraintsController {
     constraintsToggleGenerator() {
         return _.chain(this.structure.taxonomies)
             .keys()
-            .map((value, key) => {
-                const _active = this.data.constraints[key] && this.data.constraints[key].active;
+            .map((value) => {
                 return {
                     name: value,
                     icon: this.structure.taxonomies[value].icon,
-                    active: _active
+                    active: _.some(this.data.constraints, { name: value, active: true })
                 };
             })
             .value();

@@ -1,35 +1,43 @@
 <div layout="column" layout-align="start center" >
-    <div class="page-title">
+    <div class="page-title" ng-hide="vm.editMode">
         <h1 class="md-display-1 text-center">Add new project sheet</h1>
         <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
     </div>
+
+    <div class="page-title" ng-show="vm.editMode">
+        <h1 class="md-display-1 text-center">Edit Project Info</h1>
+    </div>
+
 
     <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
 
     <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="newProjectForm" ng-submit="vm.save(newProjectForm)" novalidate>
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)"  novalidate>
             <div layout="column" class="main-form">
                 <h4>1. Project details</h4>
                 <md-input-container >
                     <label>Name of the project</label>
-                    <input ng-model="vm.project.name" required name="name" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'name')" />
-                    <div ng-messages="newProjectForm.name.$error">
+                    <input ng-model="vm.project.name" ng-disabled="vm.editMode" required name="name" md-maxlength="100" type="text" ng-change="vm.handleCustomError('name')" />
+                    <div ng-messages="vm.newProjectForm.name.$error">
                         <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in newProjectForm.name.customError">{{error}} </div>
+                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
                     </div>
                 </md-input-container>
                 <md-input-container >
                     <label>Name of the organization</label>
-                    <input ng-model="vm.project.organisation" required name="organisation" md-maxlength="100" type="text" ng-change="vm.handleCustomError(newProjectForm, 'organisation')" />
-                    <div ng-messages="newProjectForm.organisation.$error">
+                    <input ng-model="vm.project.organisation"
+                           ng-disabled="true" required name="organisation"
+                           md-maxlength="100" type="text" ng-change="vm.handleCustomError('organisation')" />
+                    <div ng-messages="vm.newProjectForm.organisation.$error">
                         <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in newProjectForm.organisation.customError">{{error}} </div>
+                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm.organisation.customError">{{error}} </div>
                     </div>
                 </md-input-container>
 
                 <ssmenu
+
                         class="strategies"
                         options="vm.structure.strategies"
                         on-close-callback="vm.setStrategy"
@@ -38,15 +46,21 @@
                         placeholder="Select strategies from list"
                         hint="What is your mHealth project strategy to address the health need?"
                 ></ssmenu>
-                <div  class="countries">
+                <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
-
+                            ng-disabled="vm.editMode"
+                            ng-required="vm.sentForm"
+                            name="country"
                             on-close-callback="vm.countryCloseCallback"
                             option-label="name"
                             options="vm.structure.countries"
                             ng-model="vm.project.countryName"
                             placeholder="Select project’s country from list"
                     ></ssmenu>
+                    <div ng-messages="vm.newProjectForm.country.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm.country.customError">{{error}} </div>
+                    </div>
                 </div>
 
                 <div ng-class="{disabled: vm.disableDetails()}">
@@ -285,64 +299,85 @@
 
                     <!--</section>-->
 
-                    <h4>2. Vision for scale</h4>
+                    <section >
+                        <h4>2. Vision for scale</h4>
 
-                    <div layout="column">
-                        <md-input-container>
-                            <input type="text" placeholder="Your goals" ng-model="vm.project.goals_to_scale"/>
-                            <span class="hint">What are your goals for scaling up (e.g. number of health facilities, districts, target users)?</span>
-                        </md-input-container>
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Your goals" ng-model="vm.project.goals_to_scale"/>
+                                <span class="hint">What are your goals for scaling up (e.g. number of health facilities, districts, target users)?</span>
+                            </md-input-container>
 
-                    </div>
-
-                    <div layout="column">
-                        <md-input-container>
-                            <input type="text" placeholder="Your timeframe" ng-model="vm.project.anticipated_time"/>
-                            <span class="hint">What is your anticipated time frame to meet these goals?</span>
-                        </md-input-container>
-
-                    </div>
-
-
-                    <h4>3. Pre-assessment</h4>
-
-                    <p>
-                        The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).
-                    </p>
-
-                    <h6>Please complete this section before moving to rest of the document.</h6>
-
-                    <div class="axis-assessment" layout="column"  >
-                        <div layout="row" layout-align="start center" class="assessment" ng-repeat="a in vm.project.pre_assessment track by $index">
-                            <div flex="65" >
-                                <p>
-                                    {{vm.axisStructure[$index].description}}
-                                </p>
-                                <md-radio-group ng-model="a.value"  layout="row" >
-                                    <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]"  ng-value="value" class="md-primary">{{ value }}</md-radio-button>
-                                </md-radio-group>
-                            </div>
-                            <div flex="35" class="axis-description">
-                                <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}" >
-                                <p>{{vm.axisStructure[$index].text}}</p>
-                            </div>
                         </div>
 
-                    </div>
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Your timeframe" ng-model="vm.project.anticipated_time"/>
+                                <span class="hint">What is your anticipated time frame to meet these goals?</span>
+                            </md-input-container>
+
+                        </div>
+                    </section>
+
+                    <section ng-if="!vm.editMode">
+                        <h4>3. Pre-assessment</h4>
+
+                        <p>
+                            The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).
+                        </p>
+
+                        <div class="axis-assessment" layout="column"  >
+                            <div layout="row" layout-align="start center" class="assessment" ng-repeat="a in vm.project.pre_assessment track by $index">
+                                <div flex="65" >
+                                    <p>
+                                        {{vm.axisStructure[$index].description}}
+                                    </p>
+                                    <md-radio-group ng-model="a.value" name="assesment_{{$index}}" layout="row" ng-required="true" >
+                                        <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]" ng-value="value" class="md-primary">{{ value }}</md-radio-button>
+                                    </md-radio-group>
+                                    <div ng-messages="vm.newProjectForm['assesment_' + $index].$error">
+                                        <div ng-message="required">This is required.</div>
+                                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm['assesment_' + $index].customError">{{error}} </div>
+                                    </div>
+                                </div>
+                                <div flex="35" class="axis-description">
+                                    <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}" >
+                                    <p>{{vm.axisStructure[$index].text}}</p>
+                                </div>
+                            </div>
+
+                        </div>
 
                 </div>
+                </section>
+
+
             </div>
             <div layout="row">
                 <div flex="50" layout="row" layout-align="start center">
-                    <md-button class="md-gray md-raised" ui-sref="dashboard">Cancel process</md-button>
+                    <md-button class="md-gray md-raised" ng-if="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
+                    <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
                 </div>
                 <div flex="50" layout="row" layout-align="end center">
-                    <md-button type="submit" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
                 </div>
             </div>
         </form>
 
     </div>
+    <section md-whiteframe="2" layout-fill class="my-projects" ng-if="vm.editMode">
+        <h5> My projects ({{vm.userProjects.length}})</h5>
+        <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                     current-project="vm.isCurrentProject(p.id)"
+                     own-project="true"
+                     show-details="true"
+                     show-logo="true"
+                     ng-model="p">
+
+        </projectcomp>
+
+    </section>
     <footer class="disclaimer">
         <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
     </footer>

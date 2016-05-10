@@ -4,17 +4,18 @@ import _ from 'lodash';
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let ic = {};
-const createDiv =  (className) => {
+const createDiv =  (className, id) => {
     const elemDiv = document.createElement('div');
     elemDiv.className = className;
+    elemDiv.id = id;
     return elemDiv
 };
-
 
 
 describe('introJsController', () => {
 
     beforeEach(() => {
+        document.body.appendChild(createDiv('main', 'main-view'));
         ic = IntroJsController.introJsFactory()();
     });
 

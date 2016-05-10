@@ -1,0 +1,118 @@
+<div layout="column" layout-align="start center" >
+
+    <div class="page-title" ng-show="vm.editMode">
+        <h1 class="md-display-1 text-center">Edit User profile</h1>
+    </div>
+
+
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+        <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+    </div>
+
+    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
+        <form name="vm.editProfileForm" ng-submit="vm.save($event)" novalidate>
+            <div layout="column" class="main-form" flex="'50">
+                <div class="profile-header" layout="row" layout-align="start center">
+                    <h4 flex="50">General Info</h4>
+                    <div  flex="50" layout="row" layout-align="end center">
+                        Last Update: {{vm.userProfile.modified}}
+                    </div>
+                </div>
+                <md-input-container >
+                    <label>My name</label>
+                    <input ng-model="vm.userProfile.name" required name="name"  type="text" ng-change="vm.handleCustomError('name')" />
+                    <div ng-messages="vm.editProfileForm.name.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.editProfileForm.name.customError">{{error}} </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container >
+                    <label>My email address</label>
+                    <input ng-model="vm.userProfile.email"
+                           ng-disabled="true" required name="email"
+                           type="email" ng-change="vm.handleCustomError('email')" />
+                    <div ng-messages="vm.editProfileForm.email.$error">
+                        <div ng-message="email">This must be a valid email</div>
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.editProfileForm.email.customError">{{error}} </div>
+                    </div>
+                </md-input-container>
+
+                <!--<md-input-container>-->
+                <!--<label>Password</label>-->
+                <!--<input ng-model="vm.userProfile.password1" type="password" name="password1"  ng-minlength="6" ng-change="vm.handleCustomError('password1')"/>-->
+                <!--<div ng-messages="editProfileForm.password1.$error" >-->
+                <!--<div ng-message="required">This is required.</div>-->
+                <!--<div ng-message="minlength">This need to be at least 6 chars</div>-->
+                <!--<div ng-message="custom" ng-repeat="error in vm.editProfileForm.password1.customError">{{error}} </div>-->
+                <!--</div>-->
+                <!--</md-input-container>-->
+
+                <!--<md-input-container>-->
+                <!--<label>Password (Again)</label>-->
+                <!--<input ng-model="vm.userProfile.password2"-->
+                <!--type="password"-->
+                <!--name="password2"-->
+                <!--match-password="password1"-->
+                <!--ng-change="vm.handleCustomError('password2')" />-->
+                <!--<div ng-messages="editProfileForm.password2.$error">-->
+                <!--<div ng-message="required">This is required.</div>-->
+                <!--<div ng-message="passwordMatch">Your passwords do not match.</div>-->
+                <!--<div ng-message="custom" ng-repeat="error in vm.editProfileForm.password2.customError">{{error}} </div>-->
+                <!--</div>-->
+                <!--</md-input-container>-->
+
+
+                <md-input-container >
+                    <label>Organization name</label>
+                    <input ng-model="vm.userProfile.organisation"
+                           required name="organisation"
+                           type="text" />
+                </md-input-container>
+
+                <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
+                    <ssmenu
+                            ng-disabled="vm.editMode"
+                            ng-required="vm.sentForm"
+                            name="country"
+                            on-close-callback="vm.countryCloseCallback"
+                            option-label="name"
+                            options="vm.structure.countries"
+                            ng-model="vm.userProfile.country"
+                            placeholder="Select country from list"
+                    ></ssmenu>
+                    <div ng-messages="vm.editProfileForm.country.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}} </div>
+                    </div>
+                </div>
+
+
+
+                <div layout="row">
+                    <div flex="50" layout="row" layout-align="start center">
+                        <md-button class="md-gray md-raised"  ui-sref="dashboard">Dismiss Changes</md-button>
+                    </div>
+                    <div flex="50" layout="row" layout-align="end center">
+                        <md-button type="submit" class="md-primary md-raised">Save Profile</md-button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <section md-whiteframe="2" layout-fill class="my-projects" >
+        <h5> My projects ({{vm.userProjects.length}})</h5>
+        <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                     own-project="true"
+                     show-details="true"
+                     show-logo="true"
+                     ng-model="p">
+
+        </projectcomp>
+
+    </section>
+    <footer class="disclaimer">
+        <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+    </footer>
+</div>

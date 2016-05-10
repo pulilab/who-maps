@@ -3,6 +3,12 @@ import ngFileUpload from 'ng-file-upload';
 
 
 import EE from './EE';
+
+if (! window.EE) {
+    EE.initialize();
+}
+
+
 import AuthApi from './AuthApi';
 import SimpleApi from './SimpleApi';
 import Storage from './Storage';
@@ -19,6 +25,8 @@ import NewProjectComponent from './NewProject/newProjectComponent';
 import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
+import CommonService from './CommonServices';
+import EditProfileComponent from './EditProfile/editProfileComponent';
 
 const moduleName = 'Components';
 
@@ -38,7 +46,8 @@ angular.module(moduleName,
     .component(NewProjectComponent.name, NewProjectComponent)
     .component(viewersComponent.name, viewersComponent)
     .component(followersComponent.name, followersComponent)
-    .component(donorsComponent.name, donorsComponent);
+    .component(donorsComponent.name, donorsComponent)
+    .component(EditProfileComponent.name, EditProfileComponent);
 
 
 export { EE };
@@ -46,4 +55,5 @@ export { AuthApi };
 export { Storage };
 export { SimpleApi };
 export { Protected };
+export { CommonService };
 export { moduleName as Components };

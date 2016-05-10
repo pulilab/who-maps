@@ -15,7 +15,7 @@ module.exports = function(config) {
                 { type: 'text-summary' }
             ],
             check: {
-                each: {
+                global: {
                     statements: 50,
                     branches: 30,
                     functions: 50,

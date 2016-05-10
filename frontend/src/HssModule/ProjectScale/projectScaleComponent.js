@@ -5,11 +5,10 @@ const projectScaleComponent = {
     controller: ProjectScaleController.projectScaleFactory(),
     template: _template,
     controllerAs: 'vm',
+    name: 'projectscale',
     bindings: {
-        tiles: '<',
-        data: '<'
-    },
-    name: 'projectscale'
+        projectId: '<'
+    }
 };
 
 export default projectScaleComponent;

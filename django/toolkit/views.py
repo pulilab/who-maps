@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -13,6 +14,7 @@ from . import serializers
 class ScoreView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.ScoreSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Scores.
@@ -21,7 +23,7 @@ class ScoreView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            toolkit = get_object_or_400(Toolkit, "No such project.", project=project_id)
+            toolkit = get_object_or_400(Toolkit, select_for_update=True, error_message="No such project.", project=project_id)
             try:
                 # Update the scores.
                 toolkit.update_score(**serializer.validated_data)

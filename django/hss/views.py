@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -31,6 +32,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
                 and bubble1["subapp_id"] == bubble2["subapp_id"] \
                 and bubble1["column_id"] == bubble2["column_id"]
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Bubbles.
@@ -39,7 +41,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each bubble in the update request, insert if not exists,
             # update if exists.
             for bubble_update in serializer.validated_data:
@@ -48,7 +50,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
                     "app_id": bubble_update["app_id"],
                     "subapp_id": bubble_update["subapp_id"],
                     "column_id": bubble_update["column_id"]}]
-                bubble_exists = HSS.objects.get_object_or_none(data__applications__contains=filter_data)
+                bubble_exists = HSS.objects.get_object_or_none(project_id=project_id, data__applications__contains=filter_data)
                 if bubble_exists:
                     # Search for the given bubble, and update.
                     for i, bubble in enumerate(hss.data["applications"]):
@@ -66,6 +68,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
 class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.ContinuumSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Continuum.
@@ -74,7 +77,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             hss.data["continuum"][serializer.validated_data["column_id"]].update(**serializer.validated_data)
             hss.save()
             return Response(serializer.data)
@@ -85,6 +88,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
 class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.ConstraintSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Constraints.
@@ -93,13 +97,13 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each constraint in the update request, insert if not exists,
             # update if exists.
             for constraint_update in serializer.validated_data:
                 constraint_update = dict(constraint_update)
                 filter_data = [{"name": constraint_update["name"]}]
-                constraint_exists = HSS.objects.get_object_or_none(data__constraints__contains=filter_data)
+                constraint_exists = HSS.objects.get_object_or_none(project_id=project_id, data__constraints__contains=filter_data)
                 if constraint_exists:
                     # Search for the given constraint, and update.
                     for i, constraint in enumerate(hss.data["constraints"]):
@@ -117,6 +121,7 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
 class InterventionView(TokenAuthMixin, generics.CreateAPIView):
     serializer_class = serializers.InterventionSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Interventions.
@@ -125,7 +130,7 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Update the column with the intervention.
             hss.data["interventions"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
             hss.save()
@@ -153,6 +158,7 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
         return tax1["app_id"] == tax2["app_id"] \
                 and tax1["subapp_id"] == tax2["subapp_id"]
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """
         Overrides create to insert and update Taxonomies.
@@ -161,14 +167,14 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
         if serializer.is_valid():
             # Check if there's a project for the ID.
             project_id = kwargs.get("project_id", None)
-            hss = get_object_or_400(HSS, "No such project.", project=project_id)
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             tax_update = dict(serializer.validated_data)
             # Check the constraint in the update request, insert if not exists,
             # update if exists.
             filter_data = [{
                 "app_id": tax_update["app_id"],
                 "subapp_id": tax_update["subapp_id"]}]
-            tax_exists = HSS.objects.get_object_or_none(data__taxonomies__contains=filter_data)
+            tax_exists = HSS.objects.get_object_or_none(project_id=project_id, data__taxonomies__contains=filter_data)
             if tax_exists:
                 # Search for the given taxonomy, and update.
                 for i, tax in enumerate(hss.data["taxonomies"]):

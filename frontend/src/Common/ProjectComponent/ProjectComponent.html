@@ -2,8 +2,9 @@
 
     <div class="project-container" layout="row">
 
-        <div class="project-logo" ng-if="vm.showLogo">
-            LOGO
+        <!-- TODO: Logo, if nothing, use default background -->
+        <div class="project-logo" layout="column" layout-align="center center" ng-if="vm.showLogo">
+            <md-icon>language</md-icon>
         </div>
 
         <div class="text-container" layout="column">
@@ -11,10 +12,13 @@
             <div class="upper" layout="row">
                 <div class="basic" flex="flex-grow" layout="column">
                     <span flex class="name bold">{{vm.ngModel.name}}</span>
-                    <span flex class="org-country">{{vm.ngModel.organization}} | {{vm.ngModel.orgCountry}}</span>
+                    <span flex class="org-country">{{vm.ngModel.organisation}} | {{vm.ngModel.countryName}}</span>
                 </div>
                 <div ng-if="vm.showDetails" class="donors">
-                    Donors#
+                    <span class="nr">
+                        {{vm.ngModel.donors.length}}
+                    </span>
+                    <span class="static">Donors</span>
                 </div>
                 <div class="followers">
                     <span class="nr">
@@ -26,20 +30,17 @@
             </div>
 
             <div ng-if="vm.showDetails" class="lower" layout="row">
-                Lower
+                <div flex class="description">
+                    {{vm.ngModel.goals_to_scale}}
+                </div>
+
+                <md-button class="more" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
+
+                <md-button class="md-gray" ng-if="vm.ownProject" ui-sref="dashboard({appName: vm.ngModel.id})">Go to dashboard</md-button>
+
+                <md-button class="md-primary" ng-if="vm.ownProject" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project Info</md-button>
             </div>
         </div>
     </div>
-
-
-<!-- <div class="projectbody">
-
-        <div
-            ng-if="vm.hasLink"
-            class="floatright">
-            <a ng-href="{{vm.ngModel.projectUrl}}">link/<br>ui-sref</a>
-        </div>
-
-    </div> -->
 
 </md-card>

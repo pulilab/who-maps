@@ -86,7 +86,7 @@ interventions = {
 applications = [
     {
         'id': 1,
-        'name': 'Client education and bahevior change communication',
+        'name': 'Client education and behaviour change communication',
         'subApplications': {
             1: 'Health and Education of promotion',
             2: 'Hotlines and information services',
@@ -253,7 +253,7 @@ continuum = [
     {
         'id': 0,
         'mother': {
-            'title': 'Adolenscence',
+            'title': 'Adolescence',
             'span': 1,
         },
         'child': {
@@ -400,13 +400,5 @@ hss_default = {
     'taxonomies': [
     ],
     'constraints': [
-    ],
-    'project_scale': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-        Donec eros lacus,  posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.',
-    'partner_logos': [
-        'http://placehold.it/350x150',
-        'http://placehold.it/350x350',
-        'http://placehold.it/170x100',
-        'http://placehold.it/500x500'
     ]
 }

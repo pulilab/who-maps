@@ -6,8 +6,8 @@ class LoginModuleController {
         this.ls = new LoginService();
         this.EE = window.EE;
         this.user = {
-            username: 'test_user1@gmail.com',
-            password: '123456'
+            username: '',
+            password: ''
         };
         this.style = {
             height: this.calculateHeight()

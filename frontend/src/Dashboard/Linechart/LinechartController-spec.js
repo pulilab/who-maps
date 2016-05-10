@@ -1,6 +1,7 @@
 import LinechartController from './LinechartController';
 import { default as axisdata } from '../Mocks/chartmock.js';
 import { default as axisdata2 } from '../Mocks/chartmock2.js';
+import { default as axisdata3 } from '../Mocks/chartmock3.js';
 require('d3');
 require('angular');
 
@@ -25,40 +26,68 @@ describe('LinechartController', () => {
         expect(typeof vm).toBe('object');
     });
 
-    // FIX ME!
-    it('if has datachooser binding == true, calculates chosen data', () => {
-        spyOn(vm, 'draw');
-        vm.datachooser = true;
-        vm.$onInit();
-        expect(vm.activeAxis).toBe(vm.labels[0]);
-        expect(vm.chosenData).toBe(vm.data[vm.labels[0]].data);
-        expect(vm.draw).toHaveBeenCalled();
-    });
+    describe('.$onInit() fn.', () => {
 
-    // FIX ME!
-    it('if has datachooser binding == false, uses the bound data', () => {
-        spyOn(vm, 'draw');
-        vm.datachooser = false;
-        vm.$onInit();
-        expect(vm.chosenLabels).toBe(vm.labels);
-        expect(vm.activeAxis).not.toBeDefined();
-        expect(vm.chosenData).not.toBeDefined();
-    });
+        it('if !datachooser && notpercentage sets values, calls .draw', () => {
+            vm.EE = {
+                once: (str, fn) => {
+                    fn(axisdata3);
+                }
+            };
+            spyOn(vm, 'draw');
+            vm.datachooser = false;
+            vm.notpercentage = true;
+            vm.$onInit();
 
-    it('starts drawing .svg, if there is enough data, or there is a datachooser', () => {
-        spyOn(vm, 'draw');
-        vm.datachooser = false;
-        vm.data = axisdata.data;
-        vm.$onInit();
-        expect(vm.showPlaceholder).not.toBeDefined();
-        expect(vm.draw).toHaveBeenCalled();
+            expect(vm.maxValue).toBe(200);
+            expect(vm.data).toBe(axisdata3.data);
+            expect(vm.labels).toBe(axisdata3.labels);
+            expect(vm.chosenLabels).toBe(axisdata3.labels);
+            expect(vm.draw).toHaveBeenCalled();
+        });
+
+        it('if !datachooser && !notpercentage', () => {
+            vm.EE = {
+                once: (str, fn) => {
+                    fn(axisdata);
+                }
+            };
+            spyOn(vm, 'draw');
+            vm.datachooser = false;
+            vm.notpercentage = false;
+            vm.$onInit();
+
+            expect(vm.data).toBe(axisdata.data);
+            expect(vm.labels).toBe(axisdata.labels);
+            expect(vm.chosenLabels).toBe(axisdata.labels);
+            expect(vm.draw).toHaveBeenCalled();
+        });
+
+        it('if datachooser', () => {
+            vm.EE = {
+                once: (str, fn) => {
+                    fn(axisdata2);
+                }
+            };
+            spyOn(vm, 'draw');
+            vm.datachooser = true;
+            vm.$onInit();
+
+            expect(vm.data).toBe(axisdata2);
+            expect(vm.labels).toBe(axisdata2.labels);
+            expect(vm.activeAxis).toBe(axisdata2.labels[0]);
+            expect(vm.chosenData).toBe(axisdata2[vm.activeAxis].data);
+            expect(vm.chosenLabels).toBe(axisdata2[vm.activeAxis].labels);
+
+            expect(vm.draw).toHaveBeenCalled();
+        });
     });
 
     describe('drawing function', () => {
 
         beforeEach(() => {
             window.EE = {};
-            window.EE.once = (eventName) => eventName;
+            window.EE.once = eventName => eventName;
             spyOn(window.EE, 'once');
         });
 
@@ -66,7 +95,15 @@ describe('LinechartController', () => {
 
             beforeEach(() => {
                 vm.datachooser = true;
-                vm.$onInit();
+                vm.showdotted = true;
+
+                vm.data = axisdata2;
+                vm.labels = axisdata2.labels;
+                vm.activeAxis = axisdata2.labels[0];
+                vm.chosenData = axisdata2[vm.activeAxis].data;
+                vm.chosenLabels = axisdata2[vm.activeAxis].labels;
+
+                vm.draw();
             });
 
 
@@ -143,9 +180,12 @@ describe('LinechartController', () => {
 
             beforeEach(() => {
                 vm.datachooser = false;
-                vm.data = axisdata.data;
                 vm.showdotted = false;
-                vm.$onInit();
+
+                vm.data = axisdata.data;
+                vm.labels = axisdata.labels;
+                vm.chosenLabels = axisdata.labels;
+                vm.draw();
             });
 
             it('appends an svg to the angular.element', () => {
@@ -233,10 +273,13 @@ describe('LinechartController', () => {
         d3.select(el[0]).append('div')
             .attr('class', 'labelhov2');
 
-        vm.datachooser = true;
-        vm.data = axisdata2;
-        vm.showdotted = true;
-        vm.$onInit();
+        vm.datachooser = false;
+        vm.showdotted = false;
+
+        vm.data = axisdata.data;
+        vm.labels = axisdata.labels;
+        vm.chosenLabels = axisdata.labels;
+        vm.draw();
 
         d3.select('.labelhov1').on('mouseover')();
         expect(d3.select('.activelabel1').empty()).toBe(false);

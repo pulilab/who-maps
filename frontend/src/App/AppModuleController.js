@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Protected } from '../Common/';
-import AppModuleService from './AppModuleService';
+import { CommonService } from '../Common';
 
 class AppModuleController extends Protected {
 
@@ -10,7 +10,6 @@ class AppModuleController extends Protected {
         this.state = $state;
         this.scope = $scope;
         this.currentPage = void 0;
-        this.as = new AppModuleService();
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.currentProjectMock = {
@@ -36,10 +35,29 @@ class AppModuleController extends Protected {
             this.showCompleteNavigation(value, this.isLogin);
         });
 
+        this.lastProjectEvent = void 0;
+
+
         this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
-        this.EE.on('refreshProjects', this.fillUserData.bind(this, true));
+        this.EE.on('projectListUpdated', this.fillUserData.bind(this));
+        this.EE.on('refreshProjects', this.refreshProjectsHandler.bind(this));
+        this.EE.on('doDigest', this.doDigest.bind(this));
+    }
+
+    refreshProjectsHandler() {
+        if (this.lastProjectEvent === 'projectListUpdated') {
+            this.goToDashboard();
+        }
+        else {
+            this.lastProjectEvent = 'refreshProjects';
+        }
+    }
+
+
+    doDigest() {
+        this.scope.$evalAsync();
     }
 
     handleLoginEvent(forced) {
@@ -56,26 +74,31 @@ class AppModuleController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData(forceJump) {
-        this.as.getProjects()
-        .then(projects => {
-            this.user.projects = projects;
-            if (this.state.params.appName.length === 0) {
-                const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
-                this.state.go(state, { 'appName': this.user.projects[0].id });
+    fillUserData() {
+        this.user.projects = CommonService.projectList;
+        if (this.state.params.appName.length === 0) {
+            const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
+            this.state.go(state, { 'appName': this.user.projects[0].id });
+        }
+        _.forEach(this.user.projects, item => {
+            if (item.id === parseInt(this.state.params.appName, 10)) {
+                this.currentProject = item;
             }
-            _.forEach(this.user.projects, item => {
-                if (item.id === parseInt(this.state.params.appName, 10)) {
-                    this.currentProject = item; // passing the exact same object to the ssmenu to avoid ng-model-options
-                }
-            });
-
-            if (forceJump) {
-                this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
-            }
-
-            this.scope.$evalAsync();
         });
+
+        this.scope.$evalAsync();
+
+        if (this.lastProjectEvent === 'refreshProjects') {
+            this.goToDashboard();
+        }
+        else {
+            this.lastProjectEvent = 'projectListUpdated';
+        }
+
+    }
+
+    goToDashboard() {
+        this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
     }
 
     handleUnauthorized() {
@@ -87,7 +110,7 @@ class AppModuleController extends Protected {
     }
 
     showCompleteNavigation(state, isLogin) {
-        const isLanding = state === 'landing';
+        const isLanding = state === 'landing' || state === 'newProject';
         this.showFullNavigation = !isLanding && isLogin;
     }
 

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -141,6 +143,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 SITE_ID = 1
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -191,9 +196,18 @@ SELECTED_FILE_LIST = [
 ]
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
+    "admin_level_3.geojson",
     "admin_level_4.geojson",
     "admin_level_5.geojson"
 ]
+
+LEVELS_FOR_DISTRICTS = {
+    "sierra-leone": "admin_level_5",
+    "india": "admin_level_5",
+    "kenya": "admin_level_4",
+    "philippines": "admin_level_3",
+    "bangladesh": "admin_level_4"
+}
 
 # Logging
 LOGGING = {
@@ -218,3 +232,7 @@ LOGGING = {
         },
     },
 }
+
+for arg in sys.argv:
+    if 'test' in arg:
+        DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
