@@ -1,6 +1,8 @@
 <footer layout="row" >
-    <div flex ng-repeat="axis in vm.axes" ng-click="vm.changeAxis(axis)" ng-class="vm.classGenerator(axis)" class="text-center axis" layout="column" layout-align="center center">
-        <span class="number">{{axis.axisId}}.</span>
-        <strong>{{axis.axisName}}</strong>
+    <div flex ng-repeat="axis in vm.axes" ng-click="vm.changeAxis(axis)" ng-class="vm.classGenerator(axis)" class="axis" layout="column" layout-align="center center">
+        <div>
+          <span class="number">{{axis.axisId}}.</span>
+          <strong>{{axis.axisName}}</strong>
+        </div>
     </div>
 </footer>
