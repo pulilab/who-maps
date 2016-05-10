@@ -1,6 +1,7 @@
 class ProjectComponentController {
 
-    constructor() {
+    constructor($state) {
+        this.state = $state;
         this.$onInit = this.initialization.bind(this);
     }
 
@@ -20,14 +21,23 @@ class ProjectComponentController {
             this.ngModel.countryName.replace('-', ' ');
         }
     }
+    showPointer() {
+        return !this.showDetails && this.ownProject;
+    }
+
+    cardClick() {
+        if (this.showPointer()) {
+            this.state.go('dashboard', { appName: this.ngModel.id });
+        }
+    }
 
     static projectComponentFactory() {
         require('./ProjectComponent.scss');
-        function projectCp($element) {
-            return new ProjectComponentController($element);
+        function projectCp($state) {
+            return new ProjectComponentController($state);
         }
 
-        projectCp.$inject = [];
+        projectCp.$inject = ['$state'];
 
         return projectCp;
     }

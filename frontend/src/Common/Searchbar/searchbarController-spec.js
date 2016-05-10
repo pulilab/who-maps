@@ -41,6 +41,7 @@ describe('Searchbar Components controller', () => {
         sb.search('yolo');
         expect(sb.ss.searchProject).not.toHaveBeenCalled();
         sb.filters[0].active = true;
+        sb.searchStr = 'swag';
         sb.search('swag');
         expect(sb.ss.searchProject).toHaveBeenCalledTimes(1);
     });

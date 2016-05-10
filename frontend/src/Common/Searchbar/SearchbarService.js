@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import AuthApi from '../AuthApi';
+import SimpleApi from '../SimpleApi';
 
 /* global Promise */
 
-class SearchbarService extends AuthApi {
+class SearchbarService extends SimpleApi {
     constructor() {
         super();
     }
