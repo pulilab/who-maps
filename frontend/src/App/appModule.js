@@ -6,12 +6,6 @@ import uiRoute from 'angular-ui-router';
 import ngMessages from 'angular-messages';
 import 'angular-password';
 import angularMd from 'angular-material';
-import { EE } from '../Common/';
-
-EE.initialize();
-
-import AppController from './AppModuleController';
-import './app.scss';
 
 import _appTemplate from './app.html';
 
@@ -21,31 +15,53 @@ import countryView from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
-import { Components } from '../Common/';
+import { Components, CommonService } from '../Common/';
+
+
+import AppController from './AppModuleController';
+import SystemController from './SystemController';
+import './app.scss';
 
 
 const moduleName = 'app';
 const config = ($stateProvider, $urlRouterProvider) => {
     $stateProvider
-    .state(moduleName,
-        {
+
+        .state('base', {
+            url: '',
+            template: _appTemplate,
+            controller: 'systemController',
+            controllerAs: 'vm',
+            abstract: true
+        })
+
+        .state(moduleName, {
             url: '/app/:appName',
             template: _appTemplate,
             controller: moduleName + '.appController',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            resolve: {
+                data: ['$q', ($q) => {
+                    const def = $q.defer();
+                    CommonService.loadedPromise
+                        .then(() => {
+                            def.resolve();
+                        });
+                    return def.promise;
+                }]
+            }
+
         })
-    .state('login',
-        {
+        .state('login', {
             url: '/login',
-            parent: 'app',
+            parent: 'base',
             views: {
                 main: {
                     template: '<login></login>'
                 }
             }
         })
-    .state('signup',
-        {
+        .state('signup', {
             url: '/signup',
             parent: 'app',
             views: {
@@ -54,8 +70,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
                 }
             }
         })
-    .state('newProject',
-        {
+        .state('newProject', {
             url: '/new-project',
             parent: 'app',
             views: {
@@ -64,8 +79,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
                 }
             }
         })
-        .state('editProject',
-        {
+        .state('editProject', {
             url: '/edit-project',
             parent: 'app',
             views: {
@@ -73,9 +87,18 @@ const config = ($stateProvider, $urlRouterProvider) => {
                     template: '<new-project edit-mode="true" ></new-project>'
                 }
             }
+        })
+        .state('editProfile', {
+            url: '/edit-profile',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<edit-profile ></edit-profile>'
+                }
+            }
         });
 
-    $urlRouterProvider.otherwise('/app//landing');
+    $urlRouterProvider.otherwise('/landing');
 };
 
 function logUiRouteEvents(...args) { console.log(`Ui route state change ${this} :`, args); }
@@ -108,6 +131,7 @@ angular.module(moduleName,
     ]
     )
     .controller(moduleName + '.appController', AppController.appControllerFactory())
+    .controller('systemController', SystemController.systemControllerFactory())
     .config(config)
     .run(run);
 

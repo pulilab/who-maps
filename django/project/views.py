@@ -1,3 +1,4 @@
+import functools
 import json
 
 from django.db import transaction
@@ -34,19 +35,95 @@ def get_project_structure(request):
     return Response(project_structure)
 
 
-
 class ProjectViewSet(TokenAuthMixin, ViewSet):
+
+    def by_district(self, request, country_id):
+        """
+        Retrieves list of projects by district
+        """
+
+        # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
+
+        projects = Project.objects.filter(data__country=int(country_id))
+
+        # get district names
+        district_names = set()
+
+        def district_name_finder(projects):
+            for project in projects:
+                for district in project.data.get('coverage'):
+                    district_names.add(district.get('district'))
+
+        district_name_finder(projects)
+
+        # build project list by districts
+        result_dict = {name: [] for name in district_names}
+
+        def filter_project_by_district_name(districts, projects):
+            for district_name in districts:
+                for project in projects:
+                    for district in project.data.get('coverage'):
+                        if district.get('district') == district_name:
+                            result_dict[district_name].append({
+                                "id": project.id,
+                                "name": project.name,
+                                "organisation": project.data.get('organisation')
+                            })
+
+        filter_project_by_district_name(district_names, projects)
+
+        return Response(result_dict)
+
+    def list_all(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects (optionally by country)
+        """
+        query_filters = []
+        result_list = []
+        projects = Project.objects.all()  # lazy QuerySet
+
+        if kwargs.get("country_id"):
+            projects.filter(data__country=int(kwargs.get("country_id")))
+
+        user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
+        if user_profile:
+            projects_own = list(projects.filter(data__organisation=user_profile.organisation))
+            projects_exclude_own = list(projects.exclude(data__organisation=user_profile.organisation))
+
+            functools.reduce(lambda acc, p: acc.append({
+                "id": p.id,
+                "name": p.name,
+                "organisation": p.data.get('organisation'),
+                "donors": p.data.get('donors'),
+                "own": True
+            }), projects_own, result_list)
+
+            functools.reduce(lambda acc, p: acc.append({
+                "id": p.id,
+                "name": p.name,
+                "organisation": p.data.get('organisation'),
+                "donors": p.data.get('donors'),
+                "own": False
+            }), projects_exclude_own, result_list)
+
+        else:
+            # TODO: this won't actually happen right now because of the TokenAuth Mixin, might be needed in the future
+            functools.reduce(lambda acc, p: acc.append({
+                "id": p.id,
+                "name": p.name,
+                "organisation": p.data.get('organisation'),
+                "donors": p.data.get('donors'),
+                "own": False
+            }), projects, result_list)
+
+        return Response(result_list)
 
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects.
         """
-        country_id = request.query_params.get("country", None)
-        if country_id:
-            projects = Project.objects.filter(data__country=int(country_id)).values("id", "name", "data")
-        else:
-            user_profile = UserProfile.objects.get(user_id=request.user.id)
-            projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
+        user_profile = UserProfile.objects.get(user_id=request.user.id)
+        projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
         return Response(projects)
 
     def create(self, request, *args, **kwargs):

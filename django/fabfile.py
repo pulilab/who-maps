@@ -57,6 +57,9 @@ def deploy():
             # migrate DB
             time.sleep(1)
             _migrate_db()
+            time.sleep(1)
+            _import_geodata()
+
 
         # handle frontend
         with cd(env.frontend_root):
@@ -104,3 +107,7 @@ def _restore_db():
 
 def _migrate_db():
     run('docker exec -it whomaps_django_1 python manage.py migrate')
+
+
+def _import_geodata():
+    run('python geodata_import.py')

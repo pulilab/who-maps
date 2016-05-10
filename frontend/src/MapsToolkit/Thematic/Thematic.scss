@@ -3,20 +3,27 @@
 
 .back-icon {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 10px;
+  left: 10px;
+  width: 60px;
+  height: 60px;
+  // background-color: $text-primary;
   color: $color-white;
+  text-align: center;
   font-size: 48px;
-  cursor: pointer;
+  line-height: 60px;
+  cursor: pointer !important;
   pointer-events: none;
+  text-shadow: 0 0 30px rgba(0,0,0,.5);
 }
 
 md-dialog {
 
   md-dialog-content {
+    height: 100vh;
 
     .left {
-      min-height: 100vh;
+      padding-bottom: 50px;
       width: 300px;
       background-color: #EEEEEE;
       box-shadow: inset -8px 0 24px rgb(213,213,213);
@@ -31,6 +38,7 @@ md-dialog {
           font-weight: 500;
           font-size: $title-font-size-base;
         }
+
         p {
           margin-bottom: 0;
           color: $text-secondary;
@@ -45,13 +53,24 @@ md-dialog {
           border-top: 1px solid #D5D5D5;
         }
 
+        &:nth-of-type(2),
+        &:nth-of-type(3) {
+          .axis .titles {
+            margin: 0 10px 0 5px;
+            padding: 16px 0 6px 55px;
+          }
+        }
+
         .axis {
-                position: relative;
+          position: relative;
           height: 50px;
           outline: none;
 
           .iconcontainer {
-            display: inline;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: inline-block;
             margin: 10px 5px 10px 20px;
             padding: 5px 5px;
             width: 30px;
@@ -89,18 +108,25 @@ md-dialog {
             }
           }
 
-
           .titles {
-            margin: 10px 10px 12px 5px;
+            z-index: 100;
+            margin: 0 10px 0 5px;
+            padding: 10px 0 12px 55px;
+            outline: none;
             color: $text-secondary;
             text-transform: uppercase;
             font-weight: 500;
             font-size: 12px;
+            cursor: pointer;
+            transition: color 200ms ease;
+            width: 100%;
 
-            &.active {
+
+            &.active,
+            &:hover {
               color: $text-primary;
 
-              + .expander md-icon {
+              .expander md-icon {
                 color: $text-primary;
               }
             }
@@ -108,9 +134,10 @@ md-dialog {
 
           .expander {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 12px;
+            right: 20px;
             z-index: 200;
+            cursor: pointer;
 
             md-icon {
               outline: none;
@@ -118,12 +145,6 @@ md-dialog {
               text-align: center;
               font-size: 20px;
               line-height: 24px;
-              cursor: pointer;
-              transition: $swift-ease-out;
-
-              &:hover {
-                color: $text-primary;
-              }
             }
           }
         }
@@ -134,11 +155,38 @@ md-dialog {
           padding-left: 60px;
           outline: none;
           color: $text-secondary;
-          font-size: 12px;
+          font-size: $caption-font-size-base;
           cursor: pointer;
+          transition: $swift-ease-out;
 
+          &:last-of-type {
+            margin-bottom: 20px;
+          }
+
+          &::before {
+            position: absolute;
+            top: -2px;
+            left: 55px;
+            content: '› ';
+            font-weight: 700;
+            font-size: $body-font-size-base;
+            opacity: 0;
+            transition: $swift-ease-out;
+          }
+
+          &:hover,
           &.active-domain {
             color: $text-primary;
+          }
+
+          &.active-domain {
+            position: relative;
+            padding-left: 70px;
+
+            &::before {
+              left: 60px;
+              opacity: 1;
+            }
           }
         }
       }
@@ -195,14 +243,33 @@ md-dialog {
       }
 
       .right-content {
-        padding: 20px 60px;
+        padding: 30px 120px 30px 70px;
 
+        &.axis1 b > em {
+          color: $color-axis1;
+        }
+        &.axis2 b > em {
+          color: $color-axis2;
+        }
+        &.axis3 b > em {
+          color: $color-axis3;
+        }
+        &.axis4 b > em {
+          color: $color-axis4;
+        }
+        &.axis5 b > em {
+          color: $color-axis5;
+        }
+        &.axis6 b > em {
+          color: $color-axis6;
+        }
 
         .axis-html {
           // Style of the half-dynamic, upper part
-          margin-bottom: 20px;
+          @include clearfix();
 
           p.lead {
+            margin-bottom: 30px;
             font-weight: 500;
             font-size: $title-font-size-base;
           }
@@ -210,37 +277,96 @@ md-dialog {
           .graph {
             img {
               float: right;
-              margin: 0 0 25px 50px;
+              margin: 10px -25px 25px 50px;
+              max-width: 500px;
+              width: 50%;
             }
           }
         }
 
         .content-html {
           // Style of the fully dynamic, lower part
-          margin-bottom: 50px;
+          margin: 20px 0 50px;
+
+          h2 {
+            font-weight: 500;
+            font-size: $headline-font-size-base;
+          }
+
+          h4 {
+            color: #BC8518;
+            text-transform: uppercase;
+          }
+
+          dl {
+            dt {
+              font-weight: 700;
+            }
+            dd {
+              margin: 0 0 20px 0;
+            }
+          }
+
+          img,
+          .image-wrapper {
+            &.float-right {
+              float: right;
+              margin: 10px -25px 25px 50px;
+            }
+            &.float-left {
+              float: left;
+              margin: 10px 50px 25px -25px;
+            }
+            &.center-block {
+              margin: 30px auto 10px;
+              width: 100%;
+
+              > img {
+                max-width: 1000px;
+                width: 100%;
+                height: auto;
+              }
+            }
+          }
+
+          .image-wrapper {
+            small {
+              display: block;
+              padding: 20px 0;
+              color: $text-secondary;
+              text-align: center;
+              font-weight: 700;
+              font-size: $caption-font-size-base;
+            }
+          }
 
           // Table
           table {
             margin: 20px 0 40px;
             width: 100%;
+            border-bottom: 1px solid lighten($color-primary-muted, 8%);
             text-align: left;
             font-size: $body-font-size-base;
-            border-bottom: 1px solid lighten($color-primary-muted, 8%);
 
             thead {
               th {
                 padding: 4px 24px 4px 8px;
                 background-color: $color-primary;
                 color: $color-white;
+                vertical-align: top;
                 text-transform: uppercase;
                 white-space: nowrap;
+
+                > span {
+                  white-space: normal;
+                }
               }
             }
 
             td {
               padding: 8px 24px 8px 8px;
-              vertical-align: top;
               border-left: 1px solid lighten($color-primary-muted, 8%);
+              vertical-align: top;
 
               &:first-child {
                 border: none;
@@ -268,15 +394,15 @@ md-dialog {
           // Blockquotes
           blockquote {
             float: right;
-            margin: 0 0 25px 50px;
-            padding: 40px 24px 20px;
+            margin: 10px 0 25px 50px;
+            padding: 30px 24px 20px;
             width: 240px;
             border-radius: 12px;
             background: #ECEFF1 url("./images/quote.svg") right top no-repeat;
 
             h6 {
-              width: 80%;
               margin: 0;
+              width: 80%;
               color: #BC8518;
               text-transform: uppercase;
               font-size: $subhead-font-size-base;
@@ -286,12 +412,42 @@ md-dialog {
               font-style: italic;
               font-size: $body-font-size-base;
             }
+
+            small {
+              display: inline-block;
+              color: $text-secondary;
+            }
+
+            &.float-left {
+              float: left;
+              margin: 10px 50px 25px 0;
+            }
+
+            &.full-block {
+              display: block;
+              float: none;
+              margin: 40px 0;
+              width: 100%;
+              -webkit-column-count: 3;
+              -moz-column-count: 3;
+              column-count: 3;
+              -webkit-column-gap: 20px;
+              -moz-column-gap: 20px;
+              column-gap: 20px;
+
+              > div {
+                break-inside: avoid;
+                page-break-inside: avoid;
+
+                -webkit-column-break-inside: avoid;
+              }
+            }
           }
 
           // Titles
           .title-domain {
             display: block;
-            margin: 20px 0 40px;
+            margin: 20px 0 30px;
             width: 100%;
 
             img {
@@ -303,15 +459,16 @@ md-dialog {
               display: inline-block;
               margin: 0;
               padding-left: 15px;
-              font-size: $title-font-size-base;
+              font-weight: 500;
+              font-size: $headline-font-size-base;
               line-height: 40px;
             }
           }
 
           .title-table {
             margin: 30px 0 0;
-            font-weight: 500;
             color: $text-secondary;
+            font-weight: 500;
             font-size: $body-font-size-base;
           }
 

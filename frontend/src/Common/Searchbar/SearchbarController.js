@@ -1,29 +1,90 @@
-import { trendingProjects } from '../../LandingPage/landingMock';
+import _ from 'lodash';
+import SearchbarService from './SearchbarService';
+import Storage from '../Storage';
 
 class SearchbarController {
 
-    constructor() {
+    constructor($state, $scope, filters) {
         const vm = this;
-        vm.filters = {
-            'Location': false,
-            'Project name': true,
-            'Health topic': false,
-            'Technology platform': false,
-            'Organization': false
-        };
-        vm.projects = trendingProjects;
-        vm.resultNr = 12;
+        vm.EE = window.EE;
+        vm.scope = $scope;
+        vm.state = $state;
+        vm.storage = new Storage();
+        vm.ss = new SearchbarService();
+        vm.$onInit = vm.initialisation.bind(vm);
+        vm.filters = filters;
+        vm.searchStr = '';
+        vm.resultNr = 0;
+        vm.projects = [];
+
+        vm.checkIfIsOwner = vm.checkIfIsOwner.bind(this);
+
+
+        vm.scope.$watch(() => {
+            return vm.searchStr;
+        }, tmpStr => {
+            vm.search(tmpStr);
+        });
+    }
+
+    initialisation() {
+        this.showSearch = false;
+        this.isLogin = this.storage.get('login');
+        if (this.isLogin) {
+            this.getUserData();
+        }
+    }
+
+    getUserData() {
+        const commonServices = require('../CommonServices').default;
+        this.userProjects = commonServices.projectList;
+    }
+
+    toggleSearch() {
+        this.showSearch = !this.showSearch;
+    }
+
+    checkIfIsOwner(project) {
+        const result = _.filter(this.userProjects, { id: project.id });
+        return result.length > 0;
+    }
+
+    search(tmpStr) {
+        const vm = this;
+        if (!tmpStr || tmpStr.length === 0) {
+            return false;
+        }
+        if (tmpStr === vm.searchStr) {
+            if (_.some(vm.filters, { value: true })) {
+                this.ss.searchProject(vm.searchStr, vm.filters).then(results => {
+                    vm.projects = results;
+                    vm.resultNr = _.min([results.length, 5]);
+                    vm.totalNr = results.length;
+                    vm.scope.$evalAsync();
+                });
+            }
+        }
+        return true;
+    }
+
+    close() {
+        this.showSearch = false;
+        this.searchStr = '';
+        this.projects = void 0;
+        this.totalNr = 0;
+        this.resultNr = 0;
     }
 
     static searchbarFactory() {
         require('./Searchbar.scss');
-        function searchbarCp() {
-            return new SearchbarController();
+        const filters = require('./Resource/filters.json');
+        function searchController($state, $scope) {
+            return new SearchbarController($state, $scope, filters);
         }
 
-        searchbarCp.$inject = [];
+        searchController.$inject = ['$state', '$scope'];
 
-        return searchbarCp;
+        return searchController;
     }
 
 }

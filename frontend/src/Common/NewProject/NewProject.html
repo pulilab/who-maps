@@ -332,9 +332,13 @@
                                     <p>
                                         {{vm.axisStructure[$index].description}}
                                     </p>
-                                    <md-radio-group ng-model="a.value" layout="row" ng-required="true" >
+                                    <md-radio-group ng-model="a.value" name="assesment_{{$index}}" layout="row" ng-required="true" >
                                         <md-radio-button ng-repeat="value in [1,2,3,4,5,6,7,8,9,10]" ng-value="value" class="md-primary">{{ value }}</md-radio-button>
                                     </md-radio-group>
+                                    <div ng-messages="vm.newProjectForm['assesment_' + $index].$error">
+                                        <div ng-message="required">This is required.</div>
+                                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm['assesment_' + $index].customError">{{error}} </div>
+                                    </div>
                                 </div>
                                 <div flex="35" class="axis-description">
                                     <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}" >
@@ -346,6 +350,8 @@
 
                 </div>
                 </section>
+
+
             </div>
             <div layout="row">
                 <div flex="50" layout="row" layout-align="start center">
@@ -360,6 +366,18 @@
         </form>
 
     </div>
+    <section md-whiteframe="2" layout-fill class="my-projects" ng-if="vm.editMode">
+        <h5> My projects ({{vm.userProjects.length}})</h5>
+        <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                     current-project="vm.isCurrentProject(p.id)"
+                     own-project="true"
+                     show-details="true"
+                     show-logo="true"
+                     ng-model="p">
+
+        </projectcomp>
+
+    </section>
     <footer class="disclaimer">
         <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
     </footer>

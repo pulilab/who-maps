@@ -214,6 +214,11 @@
         .project-stats {
           @include clearfix();
         }
+        viewers,
+        followers {
+          opacity: 0.5;
+        }
+
 
         viewers,
         followers,

@@ -32,14 +32,28 @@ const lazyLoader = (provider, element, type) => {
 
 function config($stateProvider, $controllerProvider) {
     $stateProvider
-        .state(moduleName,
-        {
+        .state(moduleName, {
+            url: '/landing',
+            parent: 'base',
+            views: {
+                main: {
+                    template: _template,
+                    controllerAs: 'vm',
+                    controllerProvider: () => 'LandingPageModuleController',
+                    resolve: {
+                        'ctrl': () => {
+                            return lazyLoader($controllerProvider, 'LandingPageModuleController', 'controller');
+                        }
+                    }
+                }
+            }
+        })
+        .state('landing-logged', {
             url: '/landing',
             parent: 'app',
             views: {
                 main: {
                     template: _template,
-                    // controller: moduleName + '.' + moduleName + 'Controller',
                     controllerAs: 'vm',
                     controllerProvider: () => 'LandingPageModuleController',
                     resolve: {
@@ -50,6 +64,7 @@ function config($stateProvider, $controllerProvider) {
                 }
             }
         });
+
 }
 
 config.$inject = ['$stateProvider', '$controllerProvider'];

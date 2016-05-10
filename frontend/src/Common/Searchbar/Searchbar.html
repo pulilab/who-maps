@@ -1,16 +1,20 @@
-<div class="search-project" ng-init="vm.showSearch = false" ng-class="{'active': vm.showSearch}">
+<md-button ng-if="vm.compactMode" ng-click="vm.toggleSearch()" class="md-icon-button" aria-label="Search" md-no-ink>
+    <md-icon class="material-icons">search</md-icon>
+</md-button>
+<div class="search-project" ng-hide="vm.compactMode && !vm.showSearch" ng-class="{'active': vm.showSearch, 'compact': vm.compactMode}">
     <md-input-container class="searchinput md-block">
         <md-icon>search</md-icon>
         <input
             type="text"
             ng-model="vm.searchStr"
+            ng-model-options="{debounce: 500}"
             ng-focus="vm.showSearch = true"
             aria-label="search input field"
-            placeholder="Type and search projects">
+            placeholder="Search projects">
     </md-input-container>
 
     <md-button
-        ng-click="vm.showSearch = false; vm.searchStr = ''"
+        ng-click="vm.close()"
         class="closebtn md-icon-button md-gray">
         <md-icon>close</md-icon>
     </md-button>
@@ -25,42 +29,27 @@
 
           <div>
               <div layout="row" layout-wrap flex>
-                  <div ng-repeat="(key, value) in vm.filters" flex="33">
-                      <md-checkbox class="md-primary small" ng-model="value">
-                          {{key}}
+                  <div ng-repeat="filter in vm.filters" flex="33">
+                      <md-checkbox class="md-primary small" ng-model="filter.value" ng-change="vm.search(vm.searchStr)">
+                          {{filter.displayName}}
                       </md-checkbox>
                   </div>
               </div>
           </div>
         </div>
 
-        <div class="md-block results">
-          <md-subheader
-              class="md-no-sticky"
-              ng-if="vm.searchStr">Results (3 from {{vm.resultNr}}):</md-subheader>
+        <div class="md-block results" ng-show="vm.projects">
+          <md-subheader class="md-no-sticky">Results ({{vm.resultNr}} out of {{vm.totalNr}}):</md-subheader>
 
           <projectcomp
-              ng-if="vm.searchStr"
-              ng-model="vm.projects[0]"
+              ng-repeat="project in vm.projects | limitTo: 5"
+              own-project="vm.checkIfIsOwner(project)"
+              ng-model="project"
               has-link=true
               has-logo=false>
           </projectcomp>
 
-          <projectcomp
-              ng-if="vm.searchStr"
-              ng-model="vm.projects[1]"
-              has-link=true
-              has-logo=false>
-          </projectcomp>
-
-          <projectcomp
-              ng-if="vm.searchStr"
-              ng-model="vm.projects[2]"
-              has-link=true
-              has-logo=false>
-          </projectcomp>
-
-          <a href="" class="see-all-results md-button md-primary center-block" ng-if="vm.searchStr">See all results...</a>
+          <!--a href="" class="see-all-results md-button md-primary center-block" ng-if="vm.searchStr">See all results...</a-->
         </div>
     </md-card>
 </div>

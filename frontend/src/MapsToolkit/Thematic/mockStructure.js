@@ -4,22 +4,26 @@ const mockStructure = [
         name: 'About',
         domains: [
             {
-                name: 'About #1'
+                name: 'Foreword'
             }, {
-                name: 'About #2'
+                name: 'Acknowledgements'
             }, {
-                name: 'About #3'
+                name: 'Executive summary'
+            }, {
+                name: 'Acronyms and abbreviations'
+            }, {
+                name: 'Key terminology'
             }
         ]
     }, {
         name: 'Introduction',
         domains: [
             {
-                name: 'Introduction #1'
+                name: 'Background: scaling up mHealth'
             }, {
-                name: 'Introduction #2'
+                name: 'The MAPS Toolkit'
             }, {
-                name: 'Introduction #3'
+                name: 'How to use MAPS'
             }
         ]
     }, {
