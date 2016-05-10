@@ -23,6 +23,10 @@ class CountryService extends AuthApi {
                 return data;
             });
     }
+
+    getDisctrictProjects(countryId) {
+        return this.get('by-view/map/' + countryId);
+    }
 }
 
 export default CountryService;

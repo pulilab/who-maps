@@ -4,7 +4,7 @@ import _ from 'lodash';
 import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
-import clvMock from './mock/clvMock.js';
+// import clvMock from './mock/clvMock.js';
 
 // import topoSource from './mock/sierra-leone/topoTest.json';
 // const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
@@ -44,7 +44,7 @@ class CountrymapController {
         // Aggregates the values of districts to show them all
 
         const vm = this;
-        vm.data = data;
+        vm.data = !vm.big ? data : { data };
         // console.debug('DATA to populate map with:', vm.data);
 
         vm.boundNrs = _.reduce(vm.data.data, (ret, value, key) => {
@@ -76,11 +76,6 @@ class CountrymapController {
 
         if (vm.data) {
             // console.debug('map arrived, data was here, so it starts drawing');
-            vm.drawMap(data);
-        }
-        else if (vm.big) {
-            // console.debug('map arrived, data was here, so it starts drawing');
-            vm.data = { data: clvMock };
             vm.drawMap(data);
         }
         else {

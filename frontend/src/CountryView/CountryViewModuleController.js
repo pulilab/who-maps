@@ -36,6 +36,15 @@ class CountryViewModuleController {
     changeMapTo(countryObj) {
         // console.log('chosen country:', countryObj);
         this.fetchCountryMap(countryObj.id);
+        this.fetchDistrictProjects(countryObj.id);
+    }
+
+    fetchDistrictProjects(countryId) {
+
+        this.service.getDisctrictProjects(countryId).then(data => {
+            // console.debug('getDistrictProjects:', data);
+            this.EE.emit('mapdataArrived', data);
+        });
     }
 
     fetchCountryMap(id) {
