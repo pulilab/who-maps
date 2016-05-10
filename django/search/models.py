@@ -46,6 +46,7 @@ class ProjectSearch(ExtendedModel):
 
         for ps in cls.objects.filter(filter_exp):
             results.append({
+                "id": ps.id,
                 "name": ps.project_name,
                 "organisation": ps.project.data.get('organisation'),
                 "countryName": Country.objects.get(id=ps.project.data.get('country')).name
