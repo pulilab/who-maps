@@ -14,9 +14,7 @@
 
         <span flex ></span>
 
-        <md-button class="md-icon-button" aria-label="Search" ng-if="vm.showFullNavigation" md-no-ink>
-            <md-icon class="material-icons">search</md-icon>
-        </md-button>
+        <searchbar compact-mode="true" ng-if="vm.showFullNavigation"></searchbar>
         <md-button class="md-icon-button" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
             <md-icon class="material-icons">help_outline</md-icon>
         </md-button>

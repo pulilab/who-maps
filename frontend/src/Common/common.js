@@ -16,7 +16,7 @@ import Protected from './Protected';
 import IntroJs from './IntroJs/introJsComponent';
 import SearchableSelectionMenu from './SearchableSelectionMenu/searchableSelectionMenuComponent';
 import projectComponent from './ProjectComponent/projectComponent';
-import searchBarComponent from './Searchbar/searchbar';
+import searchBarComponent from './Searchbar/searchbarComponent';
 import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
 import SignupComponent from './Signup/signupComponent';
