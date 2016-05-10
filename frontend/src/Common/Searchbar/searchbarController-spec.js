@@ -27,7 +27,6 @@ describe('Searchbar Components controller', () => {
     it('fetches basic information about search results', () => {
         expect(typeof sb.filters).toBe('object');
         expect(typeof sb.resultNr).toBe('number');
-        expect(Array.isArray(sb.projects)).toBe(true);
     });
 
     it('should have a function that toggle the showSearch', () => {
