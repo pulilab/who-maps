@@ -38,7 +38,6 @@ class SearchbarController {
     getUserData() {
         const commonServices = require('../CommonServices').default;
         this.userProjects = commonServices.projectList;
-        console.log(this.userProjects);
     }
 
     toggleSearch() {
