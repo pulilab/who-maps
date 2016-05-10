@@ -37,20 +37,10 @@ class Protected extends AuthApi {
         }
     }
 
-    systemLogin() {
-        this.retrieveUser();
-        this.storage.set('login', true);
-        this.isLogin = true;
-    }
-
     systemLogout() {
         this.isLogin = false;
         this.storage.clear();
         this.checkLoginStatus();
-    }
-
-    handleLoginEvent() {
-        this.systemLogin();
     }
 
     retrieveLoginStatus() {

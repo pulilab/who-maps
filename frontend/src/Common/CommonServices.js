@@ -4,7 +4,7 @@ import Protected from './Protected';
 /* global define, Promise, DEV */
 
 let commonServices = false;
-const loadingConst = 2;
+const loadingArray = ['list', 'structure'];
 
 class CommonServices extends Protected {
 
@@ -12,7 +12,7 @@ class CommonServices extends Protected {
         super('');
         this.projectList = [];
         this.projectStructure = [];
-        this.loadingCounter = _.cloneDeep(loadingConst);
+        this.loadingCheck = _.cloneDeep(loadingArray);
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -24,9 +24,6 @@ class CommonServices extends Protected {
         if (this.user) {
             this.loadData();
         }
-        else {
-            this.promiseResolve();
-        }
     }
 
     loadData() {
@@ -36,18 +33,24 @@ class CommonServices extends Protected {
 
     eventRegistrations() {
         this.EE.on('refreshProjects', this.populateProjectList.bind(this));
-        this.EE.on('projectListUpdated', this.loadingProgress.bind(this, "lol"));
-        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this, "omg"));
+        this.EE.on('projectListUpdated', this.loadingProgress.bind(this, 'list'));
+        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this, 'structure'));
     }
 
-    loadingProgress(str) {
-        console.log(str, this.loadingCounter);
-        this.loadingCounter -= 1;
-        if (this.loadingCounter === 0) {
-            this.loadingCounter = loadingConst;
+    loadingProgress(name) {
+        if (DEV) {
+            console.log(this.loadingCheck, name);
+        }
+        _.remove(this.loadingCheck, item => {
+            return item === name;
+        });
+        if (this.loadingCheck.length === 0) {
             this.mergeOperations();
             this.promiseResolve();
+            this.loadingCheck = _.cloneDeep(loadingArray);
         }
+
+
     }
 
     mergeOperations() {
@@ -108,4 +111,4 @@ class CommonServices extends Protected {
 }
 
 export default CommonServices.commonServiceFactory();
-export { CommonServices as ResetService }
+export { CommonServices as ResetService };

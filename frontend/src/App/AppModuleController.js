@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Protected, CommonService, ResetService } from '../Common/';
+import { Protected, CommonService } from '../Common/';
 
 class AppModuleController extends Protected {
 
@@ -22,7 +22,7 @@ class AppModuleController extends Protected {
                 email: 'po@kungFu.panda'
             }
         };
-        if (this.isLogin) {
+        if (this.user) {
             this.fillUserData();
         }
 
@@ -38,7 +38,6 @@ class AppModuleController extends Protected {
         this.lastProjectEvent = void 0;
 
 
-        this.EE.on('login', this.handleLoginEvent.bind(this));
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
         this.EE.on('projectListUpdated', this.fillUserData.bind(this));
@@ -60,16 +59,6 @@ class AppModuleController extends Protected {
         this.scope.$evalAsync();
     }
 
-    handleLoginEvent(forced) {
-        if (forced) {
-            console.log('some forced action');
-        }
-        this.systemLogin();
-        this.cs = ResetService.commonServiceFactory(true);
-        this.state.go(this.state.current, {}, {reload: true});
-        this.fillUserData();
-        this.goToDashboard();
-    }
 
     updateProject(name) {
         const id = _.filter(this.user.projects, { name })[0].id;
@@ -79,7 +68,7 @@ class AppModuleController extends Protected {
     fillUserData() {
         this.user.projects = this.cs.projectList;
         if (this.state.params.appName.length === 0) {
-            const state = this.state.current.name === 'login' ? 'dashboard' : this.state.current.name;
+            const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
             this.state.go(state, { 'appName': _.last(this.user.projects).id });
         }
         _.forEach(this.user.projects, item => {
@@ -90,12 +79,12 @@ class AppModuleController extends Protected {
 
         this.scope.$evalAsync();
 
-        if (this.lastProjectEvent === 'refreshProjects') {
-            this.goToDashboard();
-        }
-        else {
-            this.lastProjectEvent = 'projectListUpdated';
-        }
+        // if (this.lastProjectEvent === 'refreshProjects') {
+        //     this.goToDashboard();
+        // }
+        // else {
+        //     this.lastProjectEvent = 'projectListUpdated';
+        // }
 
     }
 
@@ -112,7 +101,7 @@ class AppModuleController extends Protected {
     }
 
     showCompleteNavigation(state, isLogin) {
-        const isLanding = state === 'landing' || state === 'newProject';
+        const isLanding = state === 'landing-logged' || state === 'newProject';
         this.showFullNavigation = !isLanding && isLogin;
     }
 
