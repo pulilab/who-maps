@@ -2,28 +2,28 @@
 @import '../../mixins';
 
 .back-icon {
-	position: fixed;
-	top: 20px;
-	left: 20px;
-	color: $color-white;
-	font-size: 48px;
-	cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: $color-white;
+  font-size: 48px;
+  cursor: pointer;
   pointer-events: none;
 }
 
 md-dialog {
 
-	md-dialog-content {
-		height: 100vh;
+  md-dialog-content {
+    height: 100vh;
 
-		.left {
-			width: 300px;
-			background-color: #EEEEEE;
+    .left {
+      width: 300px;
+      background-color: #EEEEEE;
       box-shadow: inset -8px 0 24px rgb(213,213,213);
 
-			.headline {
-				display: block;
-				padding: 20px;
+      .headline {
+        display: block;
+        padding: 20px;
         border-bottom: 1px solid #BDBDBD;
 
         h6 {
@@ -31,110 +31,117 @@ md-dialog {
           font-weight: 500;
           font-size: $title-font-size-base;
         }
+
         p {
           margin-bottom: 0;
           color: $text-secondary;
           font-size: $caption-font-size-base;
         }
-			}
+      }
 
-			.axes {
-				border-bottom: 1px solid #D5D5D5;
+      .axes {
+        border-bottom: 1px solid #D5D5D5;
 
-				&:first-of-type {
-					border-top: 1px solid #D5D5D5;
-				}
+        &:first-of-type {
+          border-top: 1px solid #D5D5D5;
+        }
 
-				.axis {
+        &:nth-of-type(2),
+        &:nth-of-type(3) {
+          .axis .titles {
+            margin: 16px 10px 6px 5px;
+          }
+        }
+
+        .axis {
           position: relative;
-					height: 50px;
-					outline: none;
+          height: 50px;
+          outline: none;
 
-					.iconcontainer {
-						display: inline;
-						margin: 10px 5px 10px 20px;
-						padding: 5px 5px;
-						width: 30px;
-						height: 30px;
-						background-color: $color-gray-light;
+          .iconcontainer {
+            display: inline;
+            margin: 10px 5px 10px 20px;
+            padding: 5px 5px;
+            width: 30px;
+            height: 30px;
+            background-color: $color-gray-light;
 
-						&.active-axis-1 {
-							background-color: $text-primary;
-						}
-						&.active-axis0 {
-							background-color: $text-primary;
-						}
-						&.active-axis1 {
-							background-color: $color-axis1;
-						}
-						&.active-axis2 {
-							background-color: $color-axis2;
-						}
-						&.active-axis3 {
-							background-color: $color-axis3;
-						}
-						&.active-axis4 {
-							background-color: $color-axis4;
-						}
-						&.active-axis5 {
-							background-color: $color-axis5;
-						}
-						&.active-axis6 {
-							background-color: $color-axis6;
-						}
+            &.active-axis-1 {
+              background-color: $text-primary;
+            }
+            &.active-axis0 {
+              background-color: $text-primary;
+            }
+            &.active-axis1 {
+              background-color: $color-axis1;
+            }
+            &.active-axis2 {
+              background-color: $color-axis2;
+            }
+            &.active-axis3 {
+              background-color: $color-axis3;
+            }
+            &.active-axis4 {
+              background-color: $color-axis4;
+            }
+            &.active-axis5 {
+              background-color: $color-axis5;
+            }
+            &.active-axis6 {
+              background-color: $color-axis6;
+            }
 
-						img {
-							width: 20px;
-							height: 20px;
-						}
-					}
+            img {
+              width: 20px;
+              height: 20px;
+            }
+          }
 
-
-					.titles {
-						margin: 10px 10px 12px 5px;
-						color: $text-secondary;
-						text-transform: uppercase;
-						font-weight: 500;
-						font-size: 12px;
+          .titles {
+            margin: 10px 10px 12px 5px;
+            color: $text-secondary;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 12px;
 
             &.active {
-							color: $text-primary;
+              color: $text-primary;
 
               + .expander md-icon {
                 color: $text-primary;
               }
-						}
-					}
+            }
+          }
 
-					.expander {
-						position: absolute;
-						top: 10px;
-						right: 20px;
-						z-index: 200;
+          .expander {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            z-index: 200;
 
-						md-icon {
-							outline: none;
+            md-icon {
+              outline: none;
               color: $text-disabled;
               text-align: center;
               font-size: 20px;
               line-height: 24px;
-							cursor: pointer;
+              cursor: pointer;
 
               &:hover {
                 color: $text-primary;
               }
-						}
-					}
-				}
+            }
+          }
+        }
 
-				.domain {
-					display: block;
+        .domain {
+          display: block;
           margin-bottom: 10px;
-					padding-left: 60px;
-					outline: none;
-					color: $text-secondary;
-					font-size: $caption-font-size-base;
-					cursor: pointer;
+          padding-left: 60px;
+          outline: none;
+          color: $text-secondary;
+          font-size: $caption-font-size-base;
+          cursor: pointer;
           transition: $swift-ease-out;
 
           &::before {
@@ -150,8 +157,8 @@ md-dialog {
 
           &:hover,
           &.active-domain {
-						color: $text-primary;
-					}
+            color: $text-primary;
+          }
 
           &.active-domain {
             position: relative;
@@ -162,65 +169,65 @@ md-dialog {
               opacity: 1;
             }
           }
-				}
-			}
-		}
+        }
+      }
+    }
 
-		.right {
+    .right {
 
-			.right-header {
+      .right-header {
         display: block;
-				height: 100px;
+        height: 100px;
 
-				.right-title {
-					padding: 0 65px;
+        .right-title {
+          padding: 0 65px;
           height: 100%;
-					color: $color-white;
-					font-size: 32px;
+          color: $color-white;
+          font-size: 32px;
           line-height: 100px;
 
           @include text-truncate();
 
-					img {
+          img {
             position: relative;
             top: 2px;
             margin-right: 10px;
-						width: auto;
-						height: 28px;
-					}
-				}
+            width: auto;
+            height: 28px;
+          }
+        }
 
-				&.axis-1 {
-					background-color: $text-primary;
-				}
-				&.axis0 {
-					background-color: $text-primary;
-				}
-				&.axis1 {
-					background-color: $color-axis1;
-				}
-				&.axis2 {
-					background-color: $color-axis2;
-				}
-				&.axis3 {
-					background-color: $color-axis3;
-				}
-				&.axis4 {
-					background-color: $color-axis4;
-				}
-				&.axis5 {
-					background-color: $color-axis5;
-				}
-				&.axis6 {
-					background-color: $color-axis6;
-				}
-			}
+        &.axis-1 {
+          background-color: $text-primary;
+        }
+        &.axis0 {
+          background-color: $text-primary;
+        }
+        &.axis1 {
+          background-color: $color-axis1;
+        }
+        &.axis2 {
+          background-color: $color-axis2;
+        }
+        &.axis3 {
+          background-color: $color-axis3;
+        }
+        &.axis4 {
+          background-color: $color-axis4;
+        }
+        &.axis5 {
+          background-color: $color-axis5;
+        }
+        &.axis6 {
+          background-color: $color-axis6;
+        }
+      }
 
-			.right-content {
+      .right-content {
         padding: 30px 120px 30px 70px;
 
-				.axis-html {
-					// Style of the half-dynamic, upper part
+        .axis-html {
+          // Style of the half-dynamic, upper part
           @include clearfix();
 
           p.lead {
@@ -237,10 +244,10 @@ md-dialog {
               width: 50%;
             }
           }
-				}
+        }
 
-				.content-html {
-					// Style of the fully dynamic, lower part
+        .content-html {
+          // Style of the fully dynamic, lower part
           margin: 20px 0 50px;
 
           h2 {
@@ -427,8 +434,8 @@ md-dialog {
             font-size: $body-font-size-base;
           }
 
-				}
-			}
-		}
-	}
+        }
+      }
+    }
+  }
 }
