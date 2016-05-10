@@ -1,4 +1,4 @@
-<md-card layout="row" >
+<md-card layout="row" ng-class="{'showCurrent': vm.showCurrent}">
 
     <!-- Colored Background & axis logo -->
     <div
@@ -59,7 +59,7 @@
             layout="column"
             ng-repeat="domain in vm.domains"
             ng-click="vm.changeDomain(domain)"
-            ng-class="{'gotdata': domain.domain_sum > 0, 'nodata': domain.domain_sum === 0}">
+            ng-class="{'gotdata': domain.domain_sum > 0, 'nodata': domain.domain_sum === 0, 'active': vm.setDomainActive(domain.index)}">
 
             <div class="vert-divider" layout="column">
 

@@ -27,7 +27,17 @@ class AxisController {
         this.axisScoreClass = this.advanceClassGenerator(this.axisScorePercentage);
         this.axisCompletitionClass = this.advanceClassGenerator(this.axisCompletition);
         this.domains = this.axisData.domains;
+        console.log(this.domains);
         this.parseDomainData();
+        console.log(this.domainId);
+
+    }
+
+    setDomainActive(id) {
+        if (this.domainId) {
+            return parseInt(this.domainId, 10) === id;
+        }
+        return false;
     }
 
     parseDomainData() {

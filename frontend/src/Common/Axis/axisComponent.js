@@ -9,7 +9,9 @@ const axisComponent = {
     name: 'axis',
     bindings: {
         axisData: '<',
-        axisId: '<'
+        axisId: '<',
+        showCurrent: '@',
+        domainId: '<'
     }
 };
 
