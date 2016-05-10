@@ -237,6 +237,25 @@ md-dialog {
       .right-content {
         padding: 30px 120px 30px 70px;
 
+        &.axis1 b > em {
+          color: $color-axis1;
+        }
+        &.axis2 b > em {
+          color: $color-axis2;
+        }
+        &.axis3 b > em {
+          color: $color-axis3;
+        }
+        &.axis4 b > em {
+          color: $color-axis4;
+        }
+        &.axis5 b > em {
+          color: $color-axis5;
+        }
+        &.axis6 b > em {
+          color: $color-axis6;
+        }
+
         .axis-html {
           // Style of the half-dynamic, upper part
           @include clearfix();
