@@ -1,0 +1,27 @@
+[
+  {
+    "name": "location",
+    "displayName": "Location",
+    "value": false
+  },
+  {
+    "name": "project_name",
+    "displayName": "Project name",
+    "value": true
+  },
+  {
+    "name": "health_topic",
+    "displayName": "Health topic",
+    "value": false
+  },
+  {
+    "name": "technology_platform",
+    "displayName": "Technology platform",
+    "value": false
+  },
+  {
+    "name": "organisation",
+    "displayName": "Organization",
+    "value": false
+  }
+]

@@ -5,12 +5,10 @@ const searchbarComponent = {
     controller: SearchbarController.searchbarFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'searchbar'
-    // bindings: {
-    //     ngModel: '=',
-    //     hasLink: '=',
-    //     hasLogo: '='
-    // }
+    name: 'searchbar',
+    bindings: {
+        compactMode: '@'
+    }
 };
 
 export default searchbarComponent;

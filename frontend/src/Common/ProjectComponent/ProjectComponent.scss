@@ -2,6 +2,14 @@
 
 projectcomp {
 
+  .showPointer {
+    cursor: pointer !important;
+
+    .upper {
+      cursor: pointer !important;
+    }
+  }
+
   md-card {
 
     overflow: hidden;

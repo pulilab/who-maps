@@ -224,6 +224,7 @@ md-menu-content {
 
 .main-toolbar {
   min-height: 48px;
+  z-index: auto;
 
   &.toolbar-global {
     padding-right: 12px;
@@ -274,6 +275,10 @@ md-menu-content {
 
       @include text-hide();
     }
+  }
+
+  searchbar {
+    padding-right: 0;
   }
 }
 

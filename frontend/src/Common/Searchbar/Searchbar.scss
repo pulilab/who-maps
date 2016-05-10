@@ -1,14 +1,12 @@
 @import '../../variables';
 @import '../../mixins';
 
-
 searchbar {
   position: relative;
   z-index: 200;
   display: block;
   padding: 30px 0;
   padding-right: 100px;
-  backface-visibility: hidden;
 
   .search-project {
     position: relative;
@@ -39,34 +37,33 @@ searchbar {
       font-size: $headline-font-size-base;
     }
 
-    .md-input[type="text"] {
+    .md-input {
       padding: 0px 44px 16px !important;
       height: 48px;
       border-color: $color-white;
       font-size: $headline-font-size-base;
     }
+  }
 
-    &.md-input-focused,
-    &.md-input-has-value {
-      label:not(.md-no-float) {
-        opacity: 0;
-        transform: none;
-      }
+  .active {
+    label:not(.md-no-float) {
+      opacity: 0;
+      transform: none;
+    }
 
-      .md-input {
-        border-color: $color-primary;
-        color: $text-primary;
-      }
+    .md-input[type="text"] {
+      border-color: $color-primary;
+      color: $color-primary;
+    }
 
-      md-icon {
-        color: $color-primary;
-      }
+    md-icon {
+      color: $color-primary;
     }
   }
 
-	.searchcard {
-		position: absolute;
-		top: -29px;
+  .searchcard {
+    position: absolute;
+    top: -29px;
     left: -30px;
     z-index: 210;
     padding: 70px 0 0;
@@ -75,7 +72,6 @@ searchbar {
     .md-block {
       padding: 22px;
 
-      &.filter {}
       &.results {
         border-top: 1px solid $color-gray-lighter;
         background-color: $color-gray-lightest;
@@ -101,7 +97,7 @@ searchbar {
     .see-all-results {
       margin: 20px 0 0;
     }
-	}
+  }
 
   .closebtn {
     position: absolute;
@@ -109,5 +105,21 @@ searchbar {
     right: 30px;
     z-index: 230;
     display: none;
+  }
+
+  .compact {
+    min-width: 500px;
+    max-width: 500px;
+    top: 22px;
+    position: fixed;
+    right: -20px;
+    padding-right: 20px;
+    padding-left: 0px;
+
+    .searchcard {
+
+      color: $text-primary
+    }
+
   }
 }
