@@ -110,4 +110,4 @@ def _migrate_db():
 
 
 def _import_geodata():
-    run('docker exec -it whomaps_django_1 python manage.py import_geodata')
+    run('python geodata_import.py')
