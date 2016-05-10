@@ -99,15 +99,18 @@ md-dialog {
 
           .titles {
             margin: 10px 10px 12px 5px;
+            outline: none;
             color: $text-secondary;
             text-transform: uppercase;
             font-weight: 500;
             font-size: 12px;
+            cursor: pointer;
 
-            &.active {
+            &.active,
+            &:hover {
               color: $text-primary;
 
-              + .expander md-icon {
+              .expander md-icon {
                 color: $text-primary;
               }
             }
@@ -118,6 +121,7 @@ md-dialog {
             top: 12px;
             right: 20px;
             z-index: 200;
+            cursor: pointer;
 
             md-icon {
               outline: none;
@@ -125,11 +129,6 @@ md-dialog {
               text-align: center;
               font-size: 20px;
               line-height: 24px;
-              cursor: pointer;
-
-              &:hover {
-                color: $text-primary;
-              }
             }
           }
         }
