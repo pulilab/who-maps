@@ -31,7 +31,8 @@ const config = ($stateProvider, $urlRouterProvider) => {
             url: '',
             template: _appTemplate,
             controller: 'systemController',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            abstract: true
         })
 
         .state(moduleName, {
@@ -40,9 +41,14 @@ const config = ($stateProvider, $urlRouterProvider) => {
             controller: moduleName + '.appController',
             controllerAs: 'vm',
             resolve: {
-                data: () => {
-                    return CommonService.loadedPromise;
-                }
+                data: ['$q', ($q) => {
+                    const def = $q.defer();
+                    CommonService.loadedPromise
+                        .then(() => {
+                            def.resolve();
+                        });
+                    return def;
+                }]
             }
 
         })
