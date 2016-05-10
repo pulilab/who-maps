@@ -33,7 +33,7 @@ describe('SkeletonController', () => {
         const test = vm.importHtmlTemplates();
 
         // Actual nr. can change, if static site counts change
-        expect(_.keys(test).length).toBe(31);
+        expect(_.keys(test).length).toBe(32);
 
     });
 
