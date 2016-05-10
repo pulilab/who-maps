@@ -5,6 +5,7 @@ class CountryViewModuleController {
 
     constructor() {
 
+        this.EE = window.EE;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
         this.getCountries();
@@ -29,6 +30,21 @@ class CountryViewModuleController {
         this.service.getProjects({ country: countryObj.id }).then(data => {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
+        });
+    }
+
+    changeMapTo(countryObj) {
+        // console.log('chosen country:', countryObj);
+        this.fetchCountryMap(countryObj.id);
+    }
+
+    fetchCountryMap(id) {
+
+        // console.debug('TRYING TO FETCH COUNTRYMAP for ID:', id);
+        this.mapService.getCountryTopo(id).then(data => {
+
+            // console.debug('RAW topo arrived from API, will send over EE', data);
+            this.EE.emit('topoArrived', data);
         });
     }
 

@@ -62,7 +62,43 @@
         }
     }
 
-    #map {}
+    #map {
+
+        .countrychoser {
+
+            height: 45px;
+            display: block;
+
+            md-input-container {
+
+                margin: 2px 15px 0 15px;
+
+                span {
+
+                    font-size: 14px;
+                    font-weight: 14px;
+                    color: $text-primary!important;
+
+                    .md-text {
+
+                        font-size: 14px;
+                        font-weight: 14px;
+                        color: $text-primary!important;
+                    }
+                }
+
+                label {
+
+                    &:select, &:focus {
+
+                        color: $color-primary;
+                    }
+                }
+            }
+        }
+
+
+    }
 
     #list {
 
@@ -148,8 +184,6 @@
             }
 
             .projectrow {
-
-                padding-bottom: 20px;
 
                 div {
 

@@ -3,13 +3,29 @@
 
 	<md-card class="rel">
         <div class="littleheader">COUNTRY LEVEL VIEW</div>
-        <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" md-selected="1">
+        <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
 
             <!-- COUNTRY VIEW -->
             <md-tab label="map view">
-                <div class="tab-wrap" id="map">Map view content</div>
-                <!-- <countrymap big="true"></countrymap> -->
+
+            	<div class="tab-wrap" id="map">
+
+					<md-card class="countrychoser">
+						<md-input-container>
+				        	<md-select
+				        		placeholder='Select a country'
+				        		ng-model="vm.selectedCountry"
+				        		ng-change="vm.changeMapTo(vm.selectedCountry);">
+
+			            		<md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
+
+					        </md-select>
+				      	</md-input-container>
+					</md-card>
+	                <countrymap big="true"></countrymap>
+            	</div>
+
             </md-tab>
 
 
@@ -40,7 +56,7 @@
 
 					<div class="projectcont" ng-hide="!vm.projectsData">
 
-						<div class="headerrow" layout="row" layout-padding>
+						<div class="headerrow" layout="row" layout-padding md-whiteframe="1">
 							<div flex="30">Project name</div>
 							<div flex="20">Country</div>
 							<div flex="25">Organisation name</div>
