@@ -15,7 +15,7 @@ class SearchbarController {
         vm.filters = filters;
         vm.searchStr = '';
         vm.resultNr = 0;
-        vm.projects = [];
+        vm.projects = void 0;
 
         vm.checkIfIsOwner = vm.checkIfIsOwner.bind(this);
 
