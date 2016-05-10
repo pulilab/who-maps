@@ -25,18 +25,25 @@ class CountrymapController {
 
         this.$onInit = () => {
 
+            // console.debug('MAPctrl initialized!');
             this.svgPanZoom = svgPanZoom;
-            this.EE.once('topoArrived', this.mapArrived.bind(this));
-            this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+            this.EE.once('topoArrived', this.mapArrived, this);
+            this.EE.once('mapdataArrived', this.dataArrived, this);
+
+            console.log(this.start);
+
+            this.EE.on('country Changed', this.mapChanged.bind(this));
         };
 
         this.$onDestroy = () => {
 
-            if (this.hasOwnProperty('svgZoom')) {
-                this.svgZoom.destroy();
-            }
+            // this.svgZoom.destroy();
+
             this.data = false;
             this.map = false;
+
+            // this.EE.removeListener('topoArrived', this.mapArrived);
+            // this.EE.removeListener('mapdataArrived', this.dataArrived);
         };
     }
 
@@ -69,13 +76,18 @@ class CountrymapController {
         }
     }
 
+    mapChanged() {
+        this.EE.once('topoArrived', this.mapArrived.bind(this));
+        this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+    }
+
     mapArrived(data) {
 
         const vm = this;
         vm.map = data;
 
         if (vm.data) {
-            // console.debug('map arrived, data was here, so it starts drawing');
+            console.debug('map arrived, data was here, so it starts drawing', data);
             vm.drawMap(data);
         }
         else {
@@ -93,6 +105,7 @@ class CountrymapController {
         const vm = this;
         // console.warn('Draw FN run!');
 
+        // d3.select(vm.el[0]).select('.countrymapcontainer').selectAll('*').remove();
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
         vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag;
@@ -115,7 +128,7 @@ class CountrymapController {
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
-
+        // console.log(vm.el[0]);
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');

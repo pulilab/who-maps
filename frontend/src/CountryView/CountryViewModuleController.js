@@ -35,6 +35,7 @@ class CountryViewModuleController {
 
     changeMapTo(countryObj) {
         // console.log('chosen country:', countryObj);
+        this.EE.emit('country Changed');
         this.fetchCountryMap(countryObj.id);
         this.fetchDistrictProjects(countryObj.id);
     }
