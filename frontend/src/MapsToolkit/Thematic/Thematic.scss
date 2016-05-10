@@ -144,6 +144,10 @@ md-dialog {
           cursor: pointer;
           transition: $swift-ease-out;
 
+          &:last-of-type {
+            margin-bottom: 20px;
+          }
+
           &::before {
             position: absolute;
             top: -2px;
