@@ -1,5 +1,6 @@
 <div class="relative">
 
+	<!-- for DASH -->
 	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="!vm.big">
 
 		<div class="countrychart-tooltip-header bold">
@@ -38,6 +39,31 @@
 				<div class="bold">{{datum}}</div>
 			</div>
 
+
+		</div>
+	</div>
+
+	<!-- for CLV -->
+	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="vm.big" ng-hide="!vm.map">
+
+		<div class="countrychart-tooltip-header bold">
+			{{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
+			<img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
+		</div>
+
+		<div class="countrychart-tooltip-main countrychart-tooltip-main-big" ng-show="vm.activeDistrict.name" >
+
+			<div
+				flex
+				layout="column"
+				layout-align="space-around start"
+				class="projectcont"
+				ng-repeat="project in vm.activeDistrict.data | limitTo:5">
+
+				<div class="projectname">{{project.name}}</div>
+				<div class="projectorg">{{project.org}}</div>
+
+			</div>
 
 		</div>
 	</div>

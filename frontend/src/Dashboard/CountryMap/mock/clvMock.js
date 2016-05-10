@@ -2,40 +2,77 @@ const clvMock = {
     'Pujehun District': [
         {
             id: 1,
-            name: 'Project 1',
-            org: 'someOrg',
-            donors: ['wtfDonor1', 'wtfDonor2']
+            name: 'Helen Keller International',
+            org: 'Routine nutrition monitor'
         }, {
             id: 2,
-            name: 'Project 1',
-            org: 'someOrg',
-            donors: ['wtfDonor1', 'wtfDonor2']
+            name: 'eHealth Africa',
+            org: 'SENSE contract tracing'
+        }, {
+            id: 3,
+            name: 'GOAL International',
+            org: 'SENSE contract tracing'
+        },
+        {
+            id: 1,
+            name: 'Helen Keller International',
+            org: 'Routine nutrition monitor'
+        }, {
+            id: 2,
+            name: 'eHealth Africa',
+            org: 'SENSE contract tracing'
+        }, {
+            id: 3,
+            name: 'GOAL International',
+            org: 'SENSE contract tracing'
+        },
+        {
+            id: 1,
+            name: 'Helen Keller International',
+            org: 'Routine nutrition monitor'
+        }, {
+            id: 2,
+            name: 'eHealth Africa',
+            org: 'SENSE contract tracing'
+        }, {
+            id: 3,
+            name: 'GOAL International',
+            org: 'SENSE contract tracing'
+        },
+        {
+            id: 1,
+            name: 'Helen Keller International',
+            org: 'Routine nutrition monitor'
+        }, {
+            id: 2,
+            name: 'eHealth Africa',
+            org: 'SENSE contract tracing'
+        }, {
+            id: 3,
+            name: 'GOAL International',
+            org: 'SENSE contract tracing'
         }
     ],
     'Bonthe District': [
         {
             id: 1,
             name: 'Project 1',
-            org: 'someOrg',
-            donors: []
+            org: 'someOrg'
         }, {
             id: 2,
-            name: 'Project 1',
-            org: 'someOrg',
-            donors: ['wtfDonor1', 'wtfDonor2']
+            name: 'Project 1 -bon',
+            org: 'someOrg'
         }
     ],
     'Moyamba District': [
         {
             id: 1,
             name: 'Project 1',
-            org: 'someOrg',
-            donors: ['wtfDonor1', 'wtfDonor2']
+            org: 'someOrg'
         }, {
             id: 2,
-            name: 'Project 3',
-            org: 'someOrg2',
-            donors: ['wtfDonor3', 'wtfDonor4', 'wtfDonor5']
+            name: 'Project 3 -mom',
+            org: 'someOrg2'
         }
     ]
 };

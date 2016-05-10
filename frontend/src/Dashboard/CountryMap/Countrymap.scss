@@ -25,6 +25,7 @@
 				height: 16px;
 				width: auto;
 				float: right;
+				margin-left: 10px;
 			}
 		}
 
@@ -35,8 +36,33 @@
 			padding: 10px;
 			opacity: 0.8;
 
+			&.countrychart-tooltip-main {
+
+				padding: 0 10px;
+			}
+
 			.activename {
+
 				color: $color-primary;
+			}
+
+			.projectcont {
+
+				height: 60px;
+				border-top: 1px solid #E0E0E0;
+
+				.projectname {
+
+					color: $color-primary;
+					font-size: 14px;
+					font-weight: 500;
+				}
+
+				.projectorg {
+
+					color: $text-secondary;
+					font-size: 14px;
+				}
 			}
 		}
 

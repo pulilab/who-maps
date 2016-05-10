@@ -64,10 +64,16 @@
 
     #map {
 
+        position: relative;
+        min-height: 85px;
+
         .countrychoser {
 
             height: 45px;
             display: block;
+            position: absolute;
+            top: 10px;
+            right: 20px;
 
             md-input-container {
 
