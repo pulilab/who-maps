@@ -3,41 +3,17 @@ import SearchbarService from './SearchbarService';
 
 class SearchbarController {
 
-    constructor($state, $scope) {
+    constructor($state, $scope, filters) {
         const vm = this;
         vm.EE = window.EE;
         vm.scope = $scope;
         vm.state = $state;
         vm.ss = new SearchbarService();
         vm.$onInit = vm.initialisation.bind(vm);
-        vm.filters = [
-            {
-                name: 'location',
-                displayName: 'Location',
-                value: false
-            },
-            {
-                name: 'project_name',
-                displayName: 'Project name',
-                value: true
-            },
-            {
-                name: 'health_topic',
-                displayName: 'Health topic',
-                value: false
-            },
-            {
-                name: 'technology_platform',
-                displayName: 'Technology platform',
-                value: false
-            },
-            {
-                name: 'organisation',
-                displayName: 'Organization',
-                value: false
-            }
-        ];
+        vm.filters = filters;
         vm.searchStr = '';
+        vm.resultNr = 0;
+        vm.projects = [];
 
         vm.scope.$watch(() => {
             return vm.searchStr;
@@ -47,7 +23,7 @@ class SearchbarController {
     }
 
     initialisation() {
-        this.showSearch = false
+        this.showSearch = false;
     }
 
     toggleSearch() {
@@ -60,7 +36,7 @@ class SearchbarController {
             return false;
         }
         if (tmpStr === vm.searchStr) {
-            if (_.some(vm.filters, {value: true})) {
+            if (_.some(vm.filters, { value: true })) {
                 this.ss.searchProject(vm.searchStr, vm.filters).then(results => {
                     vm.projects = results;
                     vm.resultNr = _.min([results.length, 5]);
@@ -82,8 +58,9 @@ class SearchbarController {
 
     static searchbarFactory() {
         require('./Searchbar.scss');
+        const filters = require('./Resource/filters.json');
         function searchController($state, $scope) {
-            return new SearchbarController($state, $scope);
+            return new SearchbarController($state, $scope, filters);
         }
 
         searchController.$inject = ['$state', '$scope'];
