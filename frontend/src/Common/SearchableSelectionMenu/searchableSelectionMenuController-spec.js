@@ -55,7 +55,7 @@ describe('searchableSelectionMenuController', () => {
         sc.watchers();
         expect(sc.prepareOptionsArray).toHaveBeenCalled();
         expect(sc.checkLimit).toHaveBeenCalled();
-    })
+    });
 
     it('should have a function that prepare the options array according to the input values', () => {
         sc.options = [1, 2];
@@ -63,8 +63,8 @@ describe('searchableSelectionMenuController', () => {
         expect(sc.fields[0][0][0]).toBe(1);
         sc.subOptions = ['sub'];
         sc.prepareOptionsArray();
-        expect(sc.fields[0]).toBe(1)
-    })
+        expect(sc.fields[0]).toBe(1);
+    });
 
     it('should have a function that stop events immediate propagation', () => {
         const eventSpy = jasmine.createSpy('eventSpy');

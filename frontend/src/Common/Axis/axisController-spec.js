@@ -13,7 +13,7 @@ describe('axisController', () => {
     });
 
     it('should have a function that parse the domain data', () => {
-        ac.parseDomainData()
+        ac.parseDomainData();
         expect(ac.domains[0].index).toBe(0);
     });
     it('should have a function that emit a domain change event', () => {
@@ -27,5 +27,5 @@ describe('axisController', () => {
         ac = axisController.axisFactory()();
         ac.$onInit();
         expect(ac.initialization).toHaveBeenCalled();
-    })
+    });
 });

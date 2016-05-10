@@ -1,5 +1,5 @@
 import IntroJsController from './IntroJsController';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
@@ -8,7 +8,7 @@ const createDiv =  (className, id) => {
     const elemDiv = document.createElement('div');
     elemDiv.className = className;
     elemDiv.id = id;
-    return elemDiv
+    return elemDiv;
 };
 
 

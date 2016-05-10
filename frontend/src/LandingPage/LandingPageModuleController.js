@@ -1,5 +1,5 @@
 import { trendingProjects } from './landingMock';
-import { Storage } from '../Common/'
+import { Storage } from '../Common/';
 
 class LandingPageModuleController {
 
