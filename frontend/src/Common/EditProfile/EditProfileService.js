@@ -9,7 +9,7 @@ class NewProjectService extends AuthApi {
 
     updateProfile(data) {
         let status = void 0;
-        return this.put('userprofiles/'+data.id+'/', data)
+        return this.put(`userprofiles/${data.id}/`, data)
             .then(answer => {
                 status = answer.status;
                 return answer.json();

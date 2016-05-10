@@ -43,11 +43,7 @@ class EditProfileController extends Protected {
     }
 
     countryCloseCallback(name) {
-        const countries = _.find(this.structure.countries, { name });
-        if (countries) {
-            this.userProfile.countryName = name;
-            this.userProfile.country = countries.id;
-        }
+        this.userProfile.country = name;
         this.handleCustomError('country');
     }
 

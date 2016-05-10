@@ -18,10 +18,10 @@ describe('EditProfileService', () => {
     });
 
     it('should have a function that post the registration ', () => {
-        spyOn(ss, 'post').and.returnValue(Promise.resolve(res));
+        spyOn(ss, 'put').and.returnValue(Promise.resolve(res));
         expect(ss.updateProfile).toBeDefined();
-        ss.updateProfile();
-        expect(ss.post).toHaveBeenCalled();
+        ss.updateProfile({});
+        expect(ss.put).toHaveBeenCalled();
     });
 
 });
