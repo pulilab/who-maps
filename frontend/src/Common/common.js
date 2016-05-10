@@ -26,6 +26,7 @@ import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
 import CommonService from './CommonServices';
+import { ResetService } from './CommonServices';
 import EditProfileComponent from './EditProfile/editProfileComponent';
 
 const moduleName = 'Components';
@@ -56,4 +57,5 @@ export { Storage };
 export { SimpleApi };
 export { Protected };
 export { CommonService };
+export { ResetService };
 export { moduleName as Components };
