@@ -33,6 +33,7 @@ class LoginModuleController {
 
     static loginFactory() {
         require('./Login.scss');
+
         function loginController() {
             return new LoginModuleController();
         }

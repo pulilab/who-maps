@@ -4,6 +4,7 @@ import Protected from './Protected';
 /* global define, Promise, DEV */
 
 let commonServices = false;
+const loadingArray = ['list', 'structure'];
 
 class CommonServices extends Protected {
 
@@ -11,30 +12,45 @@ class CommonServices extends Protected {
         super('');
         this.projectList = [];
         this.projectStructure = [];
+        this.loadingCheck = _.cloneDeep(loadingArray);
+        this.promiseResolve = void 0;
+        this.promiseReject = void 0;
+        this.loadedPromise = new Promise((resolve, reject) => {
+            this.promiseResolve = resolve;
+            this.promiseReject = reject;
+        });
+
+        this.eventRegistrations();
+        if (this.user) {
+            this.loadData();
+        }
+    }
+
+    loadData() {
         this.populateProjectList();
         this.populateProjectStructure();
-        this.eventRegistrations();
-
-        this.loadingCounter = 2;
-        this.promiseResolve = void 0;
-        this.loadedPromise = new Promise((resolve) => {
-            this.promiseResolve = resolve;
-        });
     }
 
     eventRegistrations() {
         this.EE.on('refreshProjects', this.populateProjectList.bind(this));
-        this.EE.on('projectListUpdated', this.loadingProgress.bind(this));
-        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this));
+        this.EE.on('projectListUpdated', this.loadingProgress.bind(this, 'list'));
+        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this, 'structure'));
     }
 
-    loadingProgress() {
-        this.loadingCounter -= 1;
-        if (this.loadingCounter === 0) {
-            this.loadingCounter = 2;
+    loadingProgress(name) {
+        if (DEV) {
+            console.log(this.loadingCheck, name);
+        }
+        _.remove(this.loadingCheck, item => {
+            return item === name;
+        });
+        if (this.loadingCheck.length === 0) {
             this.mergeOperations();
             this.promiseResolve();
+            this.loadingCheck = _.cloneDeep(loadingArray);
         }
+
+
     }
 
     mergeOperations() {
@@ -57,9 +73,10 @@ class CommonServices extends Protected {
                 Promise.all(promiseArray)
                     .then(() => {
                         this.EE.emit('projectListUpdated');
+                    }, () => {
+                        this.promiseReject();
                     });
             });
-
     }
 
     populateProjectStructure() {
@@ -82,8 +99,8 @@ class CommonServices extends Protected {
         return _.find(this.projectList, { id });
     }
 
-    static commonServiceFactory() {
-        if (!commonServices)  {
+    static commonServiceFactory(reset) {
+        if (!commonServices || reset)  {
             commonServices = new CommonServices();
         }
         if (DEV) {
@@ -94,3 +111,4 @@ class CommonServices extends Protected {
 }
 
 export default CommonServices.commonServiceFactory();
+export { CommonServices as ResetService };

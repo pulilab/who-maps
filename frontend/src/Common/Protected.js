@@ -30,26 +30,17 @@ class Protected extends AuthApi {
         if (!vm.userProfile && vm.isLogin && vm.EE) {
             vm.get('userprofiles').then(user => {
                 vm.userProfile = user[0];
+                vm.userProfile.email = this.user.username;
                 vm.EE.emit('userProfileFetched');
                 vm.EE.emit('doDigest');
             });
         }
     }
 
-    systemLogin() {
-        this.retrieveUser();
-        this.storage.set('login', true);
-        this.isLogin = true;
-    }
-
     systemLogout() {
         this.isLogin = false;
         this.storage.clear();
         this.checkLoginStatus();
-    }
-
-    handleLoginEvent() {
-        this.systemLogin();
     }
 
     retrieveLoginStatus() {

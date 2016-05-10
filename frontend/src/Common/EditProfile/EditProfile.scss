@@ -1,0 +1,75 @@
+@import '../../variables';
+@import '../../mixins';
+
+$coverage-height:60px;
+$strategies-height:60px;
+
+edit-profile {
+
+  .error {
+
+    .md-select-value {
+      border-color: rgb(221,44,0);
+    }
+
+    div [ng-message] {
+      position:relative;
+      top: -15px;
+      left: 5px;
+      font-size: 12px;
+      line-height: 14px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+      opacity: 1;
+      color: rgb(221,44,0);
+    }
+  }
+
+  display:block;
+  padding:16px;
+
+
+  .wrapper {
+    background: $color-white;
+  }
+
+  .profile-header {
+    height: 55px;
+    background: #EEEEEE;
+    line-height: 55px;
+    padding-left:20px;
+    padding-right:20px;
+    border-bottom: 1px solid $color-gray-light;
+
+    div {
+      font-size:14px;
+      color: $color-gray-light;
+    }
+  }
+
+  .hint {
+    font-size: 12px;
+    padding-top:5px;
+    color: $color-gray;
+  }
+
+
+  .my-projects {
+    border-top: 1px solid $color-gray-light;
+    background: $color-gray-lightest;
+    padding-left: 60px;
+    padding-right:60px;
+    padding-bottom:30px;
+
+    h5 {
+      font-size:20px;
+      font-weight: 500;
+    }
+
+    md-card {
+      margin:0;
+      margin-bottom: 30px;
+    }
+  }
+
+}

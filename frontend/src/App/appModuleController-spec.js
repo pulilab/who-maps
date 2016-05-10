@@ -13,6 +13,13 @@ const $state = {
     }
 };
 
+const mockData = {
+    countries: [{
+        id: 1,
+        name: 'asd'
+    }]
+};
+
 const $scope = {
     $watch: () => {}
 };
@@ -21,26 +28,21 @@ describe('AppModuleController', () => {
 
     beforeEach(() => {
         ac = AppModuleController.appControllerFactory()($state, $scope);
+        ac.cs = {
+            projectList: [],
+            projectStructure: mockData,
+            populateProjectStructure: jasmine.createSpy('pps'),
+            getProjectData: jasmine.createSpy('gpd')
+        };
     });
 
-    it('should have a function to handle the login event', () => {
-        spyOn(ac, 'systemLogin');
-        spyOn(ac, 'fillUserData');
-        spyOn(ac.state, 'go');
 
-        ac.handleLoginEvent(false);
-
-        expect(ac.systemLogin).toHaveBeenCalled();
-        expect(ac.fillUserData).toHaveBeenCalled();
-        expect(ac.state.go).toHaveBeenCalled();
-    });
-
-    it('should have a function that update the sleected project', () => {
+    it('should have a function that update the selected project', () => {
         spyOn(ac.state, 'go');
         ac.user = { projects: [{ name: 'asd', id: 1 }] };
         ac.updateProject('asd');
         expect(ac.state.go).toHaveBeenCalled();
-    })
+    });
 
     it('should have a function to open a modal menu', () => {
         const spy = jasmine.createSpy('menuOpener');

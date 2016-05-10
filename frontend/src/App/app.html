@@ -1,8 +1,14 @@
 <md-toolbar class="main-toolbar toolbar-global">
     <div class="md-toolbar-tools">
-        <md-button ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
+        <md-button ng-if="!vm.isLogin" ui-sref="landing" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
             <span>Digital Health Atlas</span>
         </md-button>
+
+
+        <md-button ng-if="vm.isLogin" ui-sref="landing-logged" arai-label="Digital Health Atlas" class="app-title" md-no-ink>
+            <span>Digital Health Atlas</span>
+        </md-button>
+
         <md-button aria-label="Country Level View" class="view-selector" ng-if="vm.isLogin" md-no-ink>
             <md-icon class="material-icons">public</md-icon>
             Country View
@@ -42,7 +48,7 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                    <md-button ui-sref="edit-profile">
+                    <md-button ui-sref="editProfile">
                         <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
                     </md-button>
                 </md-menu-item>
