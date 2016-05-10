@@ -38,7 +38,7 @@ axis-footer {
         line-height: 16px;
         cursor:pointer;
         transition: $swift-ease-out;
-        transform: translateY(22px);
+        transform: translateY(24px);
 
         &:last-of-type {
           border: 0;
@@ -50,7 +50,7 @@ axis-footer {
           width: 100%;
           text-align: center;
           transition: $swift-ease-out;
-          transform: translateY(-18px);
+          transform: translateY(-20px);
         }
 
         &.active {
@@ -60,7 +60,7 @@ axis-footer {
         &.active,
         &:hover {
           transform: translateY(0);
-          
+
             > div {
               transform: translateY(0);
             }
