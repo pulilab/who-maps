@@ -90,31 +90,31 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
             projects_own = list(projects.filter(data__organisation=user_profile.organisation))
             projects_exclude_own = list(projects.exclude(data__organisation=user_profile.organisation))
 
-            functools.reduce(lambda acc, p: acc.append({
+            result_list = functools.reduce(lambda acc, p: acc + [{
                 "id": p.id,
                 "name": p.name,
                 "organisation": p.data.get('organisation'),
                 "donors": p.data.get('donors'),
                 "own": True
-            }), projects_own, result_list)
+            }], projects_own, result_list)
 
-            functools.reduce(lambda acc, p: acc.append({
+            result_list = functools.reduce(lambda acc, p: acc + [{
                 "id": p.id,
                 "name": p.name,
                 "organisation": p.data.get('organisation'),
                 "donors": p.data.get('donors'),
                 "own": False
-            }), projects_exclude_own, result_list)
+            }], projects_exclude_own, result_list)
 
         else:
             # TODO: this won't actually happen right now because of the TokenAuth Mixin, might be needed in the future
-            functools.reduce(lambda acc, p: acc.append({
+            result_list = functools.reduce(lambda acc, p: acc + [{
                 "id": p.id,
                 "name": p.name,
                 "organisation": p.data.get('organisation'),
                 "donors": p.data.get('donors'),
                 "own": False
-            }), projects, result_list)
+            }], projects, result_list)
 
         return Response(result_list)
 

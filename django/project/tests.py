@@ -279,10 +279,36 @@ class ProjectTests(APITestCase):
         self.assertIn("id", response.data[0])
 
     def test_retrieve_project_list_by_country(self):
+        project_data = {
+            "date": datetime.utcnow(),
+            "name": "Test Project2",
+            "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
+            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
+            "country": self.country_id,
+            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
+            "application": ["app1", "app2"],
+            "coverage": [
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
+            "started": datetime.utcnow(),
+            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
+            "reports": ["http://foo.com", "http://bar.com"],
+            "publications": ["http://foo.com", "http://bar.com"],
+            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
+            "goals_to_scale": "scale",
+            "anticipated_time": "time",
+            "pre_assessment": [1,0,3,0,4,0],
+        }
+        url = reverse("project-list")
+        response = self.test_user_client.post(url, project_data, format="json")
+
         url = reverse("project-country-list", kwargs={"country_id": self.country_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
+        self.assertEqual(len(response.json()), 2)
 
     def test_retrieve_project_list_by_country_all(self):
         # add a new project that I don't own
