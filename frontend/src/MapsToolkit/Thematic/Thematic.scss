@@ -56,7 +56,8 @@ md-dialog {
         &:nth-of-type(2),
         &:nth-of-type(3) {
           .axis .titles {
-            margin: 16px 10px 6px 5px;
+            margin: 0 10px 0 5px;
+            padding: 16px 0 6px 55px;
           }
         }
 
@@ -66,7 +67,10 @@ md-dialog {
           outline: none;
 
           .iconcontainer {
-            display: inline;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: inline-block;
             margin: 10px 5px 10px 20px;
             padding: 5px 5px;
             width: 30px;
@@ -105,7 +109,9 @@ md-dialog {
           }
 
           .titles {
-            margin: 10px 10px 12px 5px;
+            z-index: 100;
+            margin: 0 10px 0 5px;
+            padding: 10px 0 12px 55px;
             outline: none;
             color: $text-secondary;
             text-transform: uppercase;
@@ -113,6 +119,8 @@ md-dialog {
             font-size: 12px;
             cursor: pointer;
             transition: color 200ms ease;
+            width: 100%;
+
 
             &.active,
             &:hover {
