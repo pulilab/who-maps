@@ -29,20 +29,28 @@ class ProjectSearch(ExtendedModel):
         Search based on search term in given fields.
         """
         q_objects = []
+        results = []
 
         if kwargs.get("location", None):
-            q_objects.append(Q(location__contains=kwargs["query"]))
+            q_objects.append(Q(location__icontains=kwargs["query"]))
         if kwargs.get("project_name", None):
-            q_objects.append(Q(project_name__contains=kwargs["query"]))
+            q_objects.append(Q(project_name__icontains=kwargs["query"]))
         if kwargs.get("health_topic", None):
-            q_objects.append(Q(health_topic__contains=kwargs["query"]))
+            q_objects.append(Q(health_topic__icontains=kwargs["query"]))
         if kwargs.get("technology_platform", None):
-            q_objects.append(Q(technology_platform__contains=kwargs["query"]))
+            q_objects.append(Q(technology_platform__icontains=kwargs["query"]))
         if kwargs.get("organisation", None):
-            q_objects.append(Q(organisation__contains=kwargs["query"]))
+            q_objects.append(Q(organisation__icontains=kwargs["query"]))
 
         filter_exp = functools.reduce(operator.or_, q_objects)
-        return cls.objects.filter(filter_exp).values("project", "project_name")
+
+        for ps in cls.objects.filter(filter_exp):
+            results.append({
+                "name": ps.project_name,
+                "organisation": ps.project.data.get('organisation'),
+                "countryName": Country.objects.get(id=ps.project.data.get('country')).name
+            })
+        return results
 
 
 @receiver(post_save, sender=Project)
