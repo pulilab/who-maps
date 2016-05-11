@@ -95,6 +95,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
                 "name": p.name,
                 "organisation": p.data.get('organisation'),
                 "donors": p.data.get('donors'),
+                "country": p.data.get('country'),
                 "own": True
             }], projects_own, result_list)
 
@@ -103,6 +104,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
                 "name": p.name,
                 "organisation": p.data.get('organisation'),
                 "donors": p.data.get('donors'),
+                "country": p.data.get('country'),
                 "own": False
             }], projects_exclude_own, result_list)
 
@@ -113,6 +115,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
                 "name": p.name,
                 "organisation": p.data.get('organisation'),
                 "donors": p.data.get('donors'),
+                "country": p.data.get('country'),
                 "own": False
             }], projects, result_list)
 

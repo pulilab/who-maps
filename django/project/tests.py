@@ -351,6 +351,7 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['country'], self.country_id)
 
     def test_retrieve_project_list_by_district_name(self):
         # add one new project to detect district name project duplications
