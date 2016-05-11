@@ -4,7 +4,7 @@
 axis {
 
     md-card {
-        background-color: $color-gray-lighter;
+        background-color: $color-white;
     }
 
     .axis1 {
@@ -77,6 +77,7 @@ axis {
             &.nodata {
 
                 color: $text-secondary;
+                background: $color-gray-lighter;
 
                 &:not(:nth-child(5))::after {
                     content: "";
@@ -177,5 +178,55 @@ axis {
                 }
             }
         }
+    }
+    .showCurrent {
+
+
+        .active {
+            background: $color-white !important;
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: -9px;
+                width: 9px;
+                height: 50px;
+                background: transparent url("./images/after-white.svg") 100% center no-repeat !important;
+                z-index: 200;
+            }
+        }
+
+        .domains.gotdata {
+
+            background-color: $color-gray-lighter;
+
+            &:not(:nth-child(5))::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: -9px;
+                width: 9px;
+                height: 50px;
+                background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+                z-index: 200;
+            }
+        }
+
+        .domains.nodata {
+
+            &:nth-child(5)::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: -9px;
+                width: 9px;
+                height: 50px;
+                background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+                z-index: 200;
+            }
+        }
+
+
     }
 }

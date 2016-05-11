@@ -83,7 +83,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         projects = Project.objects.all()  # lazy QuerySet
 
         if kwargs.get("country_id"):
-            projects.filter(data__country=int(kwargs.get("country_id")))
+            projects = projects.filter(data__country=int(kwargs.get("country_id")))
 
         user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
         if user_profile:
