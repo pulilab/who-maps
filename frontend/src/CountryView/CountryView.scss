@@ -28,6 +28,12 @@
         .tab-wrap {
 
             background-color: $color-gray-lightest;
+
+            &.emptyy {
+
+                background: url("./img/wmap.svg") center center no-repeat;
+                background-size: 80% auto;
+            }
         }
 
         md-tabs-wrapper {
@@ -188,6 +194,7 @@
                 :first-child {
 
                     color: $text-primary;
+                    cursor: pointer;
                 }
             }
 
