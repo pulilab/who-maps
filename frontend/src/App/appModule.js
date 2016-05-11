@@ -48,7 +48,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
                             def.resolve();
                         });
 
-                    return def;
+                    return def.promise;
                 }]
             }
 
