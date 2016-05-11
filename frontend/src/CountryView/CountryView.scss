@@ -65,7 +65,7 @@
     #map {
 
         position: relative;
-        min-height: 85px;
+        min-height: calc(100vh - 240px);
 
         .countrychoser {
 
@@ -107,6 +107,8 @@
     }
 
     #list {
+
+        min-height: calc(100vh - 240px);
 
         .projectcont {
 
