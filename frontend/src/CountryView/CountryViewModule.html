@@ -41,10 +41,10 @@
 							<md-input-container>
 					        	<md-select
 					        		placeholder='Select a country'
-					        		ng-model="vm.selectedCountry"
-					        		ng-change="vm.getProjects(vm.selectedCountry);">
+					        		ng-model="vm.selectedCountry2"
+					        		ng-change="vm.getProjects(vm.selectedCountry2);">
 
-				            		<md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
+				            		<md-option ng-repeat="country in vm.countries2 track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
 						        </md-select>
 					      	</md-input-container>

@@ -1,5 +1,6 @@
 import CountryMapService from './CountryMapService.js';
 import CountryService from './CountryService.js';
+import _ from 'lodash';
 
 class CountryViewModuleController {
 
@@ -22,6 +23,9 @@ class CountryViewModuleController {
                 this.countriesLib[country.id] = country.name;
             });
             // console.debug('COUNTRY LIB', this.countriesLib);
+            this.countries2 = _.cloneDeep(this.countries);
+            this.countries2.push({ id: 0, name: 'Show all countries' });
+            console.debug(this.countries2);
         });
     }
 
@@ -40,6 +44,7 @@ class CountryViewModuleController {
         this.fetchDistrictProjects(countryObj.id);
     }
 
+    // For map TAB
     fetchDistrictProjects(countryId) {
 
         this.service.getDisctrictProjects(countryId).then(data => {

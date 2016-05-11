@@ -31,6 +31,9 @@ class CountryService extends AuthApi {
         if (countryId) {
             string += '/' + countryId + '/';
         }
+        else {
+            string += '/';
+        }
         // console.warn(string);
 
         return this.get(string)
