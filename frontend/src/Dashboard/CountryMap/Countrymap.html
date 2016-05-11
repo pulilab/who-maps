@@ -68,13 +68,13 @@
 		</div>
 	</div>
 
-	<div class="zoomhandlers" ng-if="!vm.big">
+	<div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.map">
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
 		<br>
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
 	</div>
 
-	<div class="zoomhandlers2" ng-if="vm.big">
+	<div class="zoomhandlers2" ng-if="vm.big" ng-hide="!vm.map">
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
 		<br>
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>

@@ -35,7 +35,7 @@ class CountrymapController {
 
         this.$onDestroy = () => {
 
-            this.svgZoom.destroy();
+            // this.svgZoom.destroy();
 
             this.data = false;
             this.map = false;
@@ -85,7 +85,7 @@ class CountrymapController {
         vm.map = data;
 
         if (vm.data) {
-            console.debug('map arrived, data was here, so it starts drawing', data);
+            // console.debug('map arrived, data was here, so it starts drawing', data);
             vm.drawMap(data);
         }
         else {
@@ -132,11 +132,13 @@ class CountrymapController {
             .attr('class', 'countrymapcontainer');
 
         const outerWidth = outer[0][0].offsetWidth;
+        const outerHeight = d3.select('#map')[0][0].offsetHeight;
+        // console.warn('OUTER HEIGHT', outerHeight);
 
         const element = outer.append('svg')
             .attr('class', 'countrymap')
             .attr('width', outerWidth)
-            .attr('height', vm.big ? 600 : 409);
+            .attr('height', vm.big ? outerHeight : 409);
 
         // console.debug('FROM TOPO:', topoJSON.admin_level_2.transform.scale);
 
