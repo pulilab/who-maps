@@ -20,6 +20,7 @@ class SystemController {
         console.log(window.location.href);
         // this.state.go('app');
         window.location.href = window.location.href.replace('login', 'app/');
+        window.location.reload();
     }
 
 
