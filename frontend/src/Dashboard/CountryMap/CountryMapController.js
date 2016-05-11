@@ -30,8 +30,6 @@ class CountrymapController {
             this.EE.once('topoArrived', this.mapArrived, this);
             this.EE.once('mapdataArrived', this.dataArrived, this);
 
-            console.log(this.start);
-
             this.EE.on('country Changed', this.mapChanged.bind(this));
         };
 
