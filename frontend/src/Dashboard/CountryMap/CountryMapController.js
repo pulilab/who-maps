@@ -35,7 +35,7 @@ class CountrymapController {
 
         this.$onDestroy = () => {
 
-            // this.svgZoom.destroy();
+            this.svgZoom.destroy();
 
             this.data = false;
             this.map = false;
