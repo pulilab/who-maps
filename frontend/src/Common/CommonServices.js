@@ -33,8 +33,6 @@ class CommonServices extends Protected {
 
     eventRegistrations() {
         this.EE.on('refreshProjects', this.populateProjectList.bind(this));
-        this.EE.on('projectListUpdated', this.loadingProgress.bind(this, 'list'));
-        this.EE.on('projectStructureLoaded', this.loadingProgress.bind(this, 'structure'));
     }
 
     loadingProgress(name) {
@@ -47,6 +45,7 @@ class CommonServices extends Protected {
         if (this.loadingCheck.length === 0) {
             this.mergeOperations();
             this.promiseResolve();
+
             this.loadingCheck = _.cloneDeep(loadingArray);
         }
 
@@ -54,6 +53,9 @@ class CommonServices extends Protected {
     }
 
     mergeOperations() {
+        if (DEV) {
+            console.log('Project Structure loaded: ', this.projectStructure.countries);
+        }
         _.forEach(this.projectList, project => {
             const country = _.find(this.projectStructure.countries, { id: project.country });
             project.countryName = country.name;
@@ -72,7 +74,7 @@ class CommonServices extends Protected {
 
                 Promise.all(promiseArray)
                     .then(() => {
-                        this.EE.emit('projectListUpdated');
+                        this.loadingProgress('list');
                     }, () => {
                         this.promiseReject();
                     });
@@ -83,7 +85,9 @@ class CommonServices extends Protected {
         this.get('projects/structure/')
             .then(structure => {
                 this.projectStructure = structure;
-                this.EE.emit('projectStructureLoaded');
+                this.loadingProgress('structure');
+            }, () => {
+                this.promiseReject();
             });
     }
 
