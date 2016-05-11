@@ -22,17 +22,18 @@ class CountryViewModuleController {
             data.forEach(country => {
                 this.countriesLib[country.id] = country.name;
             });
+
             // console.debug('COUNTRY LIB', this.countriesLib);
             this.countries2 = _.cloneDeep(this.countries);
-            this.countries2.push({ id: 0, name: 'Show all countries' });
-            console.debug(this.countries2);
+            this.countries2.push({ id: false, name: 'Show all countries' });
+            // console.debug(this.countries2);
         });
     }
 
     getProjects(countryObj) {
         // console.debug('Selected:', countryObj);
         this.service.getProjects(countryObj.id).then(data => {
-            console.debug('PROJECTS in ' + countryObj.name, data);
+            // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
         });
     }

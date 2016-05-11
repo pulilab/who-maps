@@ -215,7 +215,12 @@
 
                 &:nth-child(even) {
 
-                    background-color: #EEEEEE;;
+                    background-color: #EEEEEE;
+                }
+
+                &.own {
+
+                    background-color: #FFF9C4;
                 }
             }
         }
