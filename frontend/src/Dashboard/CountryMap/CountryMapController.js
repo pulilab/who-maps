@@ -4,6 +4,7 @@ import _ from 'lodash';
 import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
+// import clvMock from './mock/clvMock.js';
 
 // import topoSource from './mock/sierra-leone/topoTest.json';
 // const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
@@ -18,20 +19,29 @@ class CountrymapController {
         this.tooltipOver = false;
         this.preventMouseOut = false;
         // this.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
+        // this.big <= boolean binding indicating if tolltip should get used,
+        //             also: bigger size + zoomhandler positioning
 
 
         this.$onInit = () => {
 
+            // console.debug('MAPctrl initialized!');
             this.svgPanZoom = svgPanZoom;
-            this.EE.once('topoArrived', this.mapArrived.bind(this));
-            this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+            this.EE.once('topoArrived', this.mapArrived, this);
+            this.EE.once('mapdataArrived', this.dataArrived, this);
+
+            this.EE.on('country Changed', this.mapChanged.bind(this));
         };
 
         this.$onDestroy = () => {
 
             this.svgZoom.destroy();
+
             this.data = false;
             this.map = false;
+
+            // this.EE.removeListener('topoArrived', this.mapArrived);
+            // this.EE.removeListener('mapdataArrived', this.dataArrived);
         };
     }
 
@@ -39,7 +49,7 @@ class CountrymapController {
         // Aggregates the values of districts to show them all
 
         const vm = this;
-        vm.data = data;
+        vm.data = !vm.big ? data : { data };
         // console.debug('DATA to populate map with:', vm.data);
 
         vm.boundNrs = _.reduce(vm.data.data, (ret, value, key) => {
@@ -64,12 +74,18 @@ class CountrymapController {
         }
     }
 
+    mapChanged() {
+        this.EE.once('topoArrived', this.mapArrived.bind(this));
+        this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+    }
+
     mapArrived(data) {
 
         const vm = this;
         vm.map = data;
+
         if (vm.data) {
-            // console.debug('map arrived, data was here, so it starts drawing');
+            console.debug('map arrived, data was here, so it starts drawing', data);
             vm.drawMap(data);
         }
         else {
@@ -87,6 +103,7 @@ class CountrymapController {
         const vm = this;
         // console.warn('Draw FN run!');
 
+        // d3.select(vm.el[0]).select('.countrymapcontainer').selectAll('*').remove();
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
         vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag;
@@ -109,18 +126,17 @@ class CountrymapController {
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
-
+        // console.log(vm.el[0]);
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
 
         const outerWidth = outer[0][0].offsetWidth;
-        // const outerHeight = outer[0][0].offsetHeight;
 
         const element = outer.append('svg')
             .attr('class', 'countrymap')
             .attr('width', outerWidth)
-            .attr('height', 409);
+            .attr('height', vm.big ? 600 : 409);
 
         // console.debug('FROM TOPO:', topoJSON.admin_level_2.transform.scale);
 

@@ -25,6 +25,7 @@
 				height: 16px;
 				width: auto;
 				float: right;
+				margin-left: 10px;
 			}
 		}
 
@@ -35,8 +36,33 @@
 			padding: 10px;
 			opacity: 0.8;
 
+			&.countrychart-tooltip-main {
+
+				padding: 0 10px;
+			}
+
 			.activename {
+
 				color: $color-primary;
+			}
+
+			.projectcont {
+
+				height: 60px;
+				border-top: 1px solid #E0E0E0;
+
+				.projectname {
+
+					color: $color-primary;
+					font-size: 14px;
+					font-weight: 500;
+				}
+
+				.projectorg {
+
+					color: $text-secondary;
+					font-size: 14px;
+				}
 			}
 		}
 
@@ -57,6 +83,21 @@
 			outline: none;
 		}
 	}
+
+	.zoomhandlers2 {
+
+		position: absolute;
+		right: 15px;
+		top: 540px;
+
+		md-icon {
+			color: $color-gray-light;
+			cursor: pointer;
+			outline: none;
+		}
+	}
+
+
 }
 
 
@@ -73,7 +114,7 @@
 
 		.d3district {
 
-			fill: #D7D9E2;
+			fill: #E5E5EE;
 			stroke: #9B9DA8;
 			stroke-width: 2px;
 		    pointer-events: all;

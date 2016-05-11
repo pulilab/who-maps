@@ -1,6 +1,6 @@
 import SearchbarController from './SearchbarController';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
+/* global Promise, define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let sb = {};
 

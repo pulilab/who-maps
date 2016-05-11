@@ -5,7 +5,10 @@ const coutrymap = {
     controller: CountrymapController.countrymapFactory(),
     controllerAs: 'vm',
     template: _template,
-    name: 'countrymap'
+    name: 'countrymap',
+    bindings: {
+        big: '='
+    }
 };
 
 export default coutrymap;
