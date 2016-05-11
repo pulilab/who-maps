@@ -65,7 +65,13 @@
 							<div flex="25">Donors</div>
 						</div>
 
-						<div class="projectrow" layout="row" layout-padding ng-repeat="project in vm.projectsData track by $index">
+						<div
+							class="projectrow"
+							layout="row"
+							layout-padding
+							ng-repeat="project in vm.projectsData track by $index"
+							ui-sref="dashboard({ appName: project.id })">
+
 							<div flex="30">
 								<md-icon ng-show="true">grade</md-icon>
 								{{project.name}}
