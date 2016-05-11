@@ -1,5 +1,5 @@
 import { AuthApi } from '../Common/';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 class CountryService extends AuthApi {
 
@@ -7,22 +7,40 @@ class CountryService extends AuthApi {
         super('projects');
     }
 
-    getProjects(queryObj) {
+    getAllProjects() {
+        this.get('by-view/list/');
+    }
 
-        const queryArr = [];
 
-        _.forOwn(queryObj, (val, key) => {
-            queryArr.push(key + '=' + val);
-        });
+    // Older
+    // getProjects(countryId) {
 
-        const queryString = '?' + queryArr.join('&');
+    //     const queryString = '?country=' + countryId;
 
-        return this.get(queryString)
+    //     return this.get(queryString)
+    //         .then(data => {
+    //             // console.debug('ENDPOINT:', queryString);
+    //             // console.debug('PROJECTS data:', data);
+    //             return data;
+    //         });
+    // }
+
+    getProjects(countryId) {
+
+        let string = 'by-view/list';
+        if (countryId) {
+            string += '/' + countryId + '/';
+        }
+        // console.warn(string);
+
+        return this.get(string)
             .then(data => {
-                // console.debug('PROJECTS data:', data);
+                // console.debug('ENDPOINT: ', string);
+                // console.debug('PROJECTS data per country #' + countryId + ':', data);
                 return data;
             });
     }
+
 
     getDisctrictProjects(countryId) {
         return this.get('by-view/map/' + countryId);

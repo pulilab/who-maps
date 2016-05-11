@@ -27,8 +27,8 @@ class CountryViewModuleController {
 
     getProjects(countryObj) {
         // console.debug('Selected:', countryObj);
-        this.service.getProjects({ country: countryObj.id }).then(data => {
-            // console.debug('PROJECTS in ' + countryObj.name, data);
+        this.service.getProjects(countryObj.id).then(data => {
+            console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
         });
     }
