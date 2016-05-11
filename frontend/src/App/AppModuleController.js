@@ -46,12 +46,7 @@ class AppModuleController extends Protected {
     }
 
     refreshProjectsHandler() {
-        if (this.lastProjectEvent === 'projectListUpdated') {
-            this.goToDashboard();
-        }
-        else {
-            this.lastProjectEvent = 'refreshProjects';
-        }
+        this.goToDashboard();
     }
 
 
@@ -78,13 +73,6 @@ class AppModuleController extends Protected {
         });
 
         this.scope.$evalAsync();
-
-        // if (this.lastProjectEvent === 'refreshProjects') {
-        //     this.goToDashboard();
-        // }
-        // else {
-        //     this.lastProjectEvent = 'projectListUpdated';
-        // }
 
     }
 
