@@ -58,7 +58,9 @@ class CommonServices extends Protected {
         }
         _.forEach(this.projectList, project => {
             const country = _.find(this.projectStructure.countries, { id: project.country });
-            project.countryName = country.name;
+            if (country) {
+                project.countryName = country.name;
+            }
         });
     }
 
