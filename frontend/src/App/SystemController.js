@@ -17,7 +17,9 @@ class SystemController {
     handleLogin() {
         this.storage.set('login', true);
         ResetService.commonServiceFactory(true);
-        this.state.go('app');
+        console.log(window.location.href);
+        // this.state.go('app');
+        window.location.href = window.location.href.replace('login', 'app/');
     }
 
 

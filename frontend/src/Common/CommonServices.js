@@ -45,7 +45,6 @@ class CommonServices extends Protected {
         if (this.loadingCheck.length === 0) {
             this.mergeOperations();
             this.promiseResolve();
-
             this.loadingCheck = _.cloneDeep(loadingArray);
         }
 
