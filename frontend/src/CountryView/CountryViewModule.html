@@ -71,11 +71,11 @@
 								{{project.name}}
 							</div>
 							<div flex="20">
-								{{vm.countriesLib[project.data.country]}}
+								{{vm.countriesLib[project.country]}}
 							</div>
-							<div flex="25">{{project.data.organisation}}</div>
+							<div flex="25">{{project.organisation}}</div>
 							<div flex="25">
-								<span ng-repeat="donor in project.data.donors">
+								<span ng-repeat="donor in project.donors">
 									{{(donor.value || donor) + ' '}}
 								</span>
 							</div>
