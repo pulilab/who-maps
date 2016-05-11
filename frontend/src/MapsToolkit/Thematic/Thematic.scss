@@ -10,11 +10,11 @@
   // background-color: $text-primary;
   color: $color-white;
   text-align: center;
+  text-shadow: 0 0 30px rgba(0,0,0,.5);
   font-size: 48px;
   line-height: 60px;
   cursor: pointer !important;
   pointer-events: none;
-  text-shadow: 0 0 30px rgba(0,0,0,.5);
 }
 
 md-dialog {
@@ -65,11 +65,13 @@ md-dialog {
           position: relative;
           height: 50px;
           outline: none;
+          cursor: pointer;
 
           .iconcontainer {
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 1;
             display: inline-block;
             margin: 10px 5px 10px 20px;
             padding: 5px 5px;
@@ -112,6 +114,7 @@ md-dialog {
             z-index: 100;
             margin: 0 10px 0 5px;
             padding: 10px 0 12px 55px;
+            width: 100%;
             outline: none;
             color: $text-secondary;
             text-transform: uppercase;
@@ -119,8 +122,6 @@ md-dialog {
             font-size: 12px;
             cursor: pointer;
             transition: color 200ms ease;
-            width: 100%;
-
 
             &.active,
             &:hover {
@@ -136,7 +137,7 @@ md-dialog {
             position: absolute;
             top: 12px;
             right: 20px;
-            z-index: 200;
+            z-index: 1;
             cursor: pointer;
 
             md-icon {
@@ -156,6 +157,7 @@ md-dialog {
           outline: none;
           color: $text-secondary;
           font-size: $caption-font-size-base;
+          cursor: pointer;
           cursor: pointer;
           transition: $swift-ease-out;
 

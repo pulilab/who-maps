@@ -4,7 +4,7 @@ import ProjectDefinition from './ProjectDefinition';
 
 let pd = {};
 const t = {
-    $$hasKey : 1
+    $$hasKey: 1
 };
 
 describe('ProjectDefinition class', () => {
@@ -21,7 +21,7 @@ describe('ProjectDefinition class', () => {
     it('should have a function that remove a tp', () => {
 
         pd.project.technology_platforms.custom[0] = t;
-        pd.rmTechnologyPlatform(t)
+        pd.rmTechnologyPlatform(t);
         expect(pd.project.technology_platforms.custom.length).toBe(0);
     });
 
@@ -46,7 +46,7 @@ describe('ProjectDefinition class', () => {
 
     it('should have a function that remove a donor', () => {
         pd.project.donors[0] = t;
-        pd.rmDonor(t)
+        pd.rmDonor(t);
         expect(pd.project.donors.length).toBe(0);
     });
 
@@ -57,7 +57,7 @@ describe('ProjectDefinition class', () => {
 
     it('should have a function that remove a coverageItem', () => {
         pd.project.coverage[0] = t;
-        pd.rmCoverage(t)
+        pd.rmCoverage(t);
         expect(pd.project.coverage.length).toBe(0);
     });
 

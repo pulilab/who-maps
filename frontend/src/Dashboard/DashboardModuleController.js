@@ -60,7 +60,6 @@ class DashboardModuleController {
 
     parseMapData(coverage) {
         // console.debug('COVERAGE from API', coverage);
-
         const ret = { labels: [], data: {} };
 
         coverage.forEach(el => {
@@ -68,7 +67,6 @@ class DashboardModuleController {
                 ret.labels.push(el.district);
             }
         });
-
         // console.debug('Labels', ret.labels);
 
         coverage.forEach(distObj => {

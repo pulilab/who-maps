@@ -22,7 +22,6 @@ class ProjectScaleController {
                 this.scope.$evalAsync();
             });
 
-
         vm.EE.on('hssEditMode', bool => {
             vm.editMode = bool;
         });
