@@ -15,7 +15,7 @@ import countryView from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
-import { Components, CommonService } from '../Common/';
+import { Components } from '../Common/';
 
 
 import AppController from './AppModuleController';
@@ -43,9 +43,12 @@ const config = ($stateProvider, $urlRouterProvider) => {
             resolve: {
                 data: ['$q', ($q) => {
                     const def = $q.defer();
-                    CommonService.loadedPromise
+                    const cs = require('../Common/CommonServices').default;
+                    console.log(cs.hash)
+                    cs.loadedPromise
                         .then(() => {
                             def.resolve();
+                            console.log('done');
                         });
 
                     return def.promise;

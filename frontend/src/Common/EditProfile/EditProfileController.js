@@ -23,15 +23,16 @@ class EditProfileController extends Protected {
     }
 
     initialization() {
-        this.commonService = CommonService;
+        this.cs = CommonService;
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleDataLoad();
     }
 
     handleDataLoad() {
-        this.userProjects = this.commonService.projectList;
-        this.structure = this.commonService.projectStructure;
+        this.userProjects = this.cs.projectList;
+        this.structure = this.cs.projectStructure;
+        this.userProfile = this.cs.userProfile;
         this.dataLoaded = true;
         this.scope.$watch(() => {
             return this.userProfile.modified;

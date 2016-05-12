@@ -2,7 +2,7 @@ import _ from 'lodash';
 import 'whatwg-fetch';
 import 'es6-promise';
 
-/* global Promise, API */
+/* global Promise, API, DEV */
 
 class AuthApi {
 

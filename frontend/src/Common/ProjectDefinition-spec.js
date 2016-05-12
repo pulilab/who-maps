@@ -7,10 +7,19 @@ const t = {
     $$hasKey: 1
 };
 
+const cs = {
+    projectStructure: {},
+    userProfile: {
+        organisation: 'asd'
+    },
+    populateProjectStructure: jasmine.createSpy('pps'),
+    getProjectData: jasmine.createSpy('gpd')
+};
+
 describe('ProjectDefinition class', () => {
 
     beforeEach(()=>{
-        pd = new ProjectDefinition();
+        pd = new ProjectDefinition(cs);
     });
 
     it('should have a function that add a tp', () => {
