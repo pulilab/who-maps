@@ -65,7 +65,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
         })
         .state('signup', {
             url: '/signup',
-            parent: 'app',
+            parent: 'base',
             views: {
                 main: {
                     template: '<signup></signup>'
