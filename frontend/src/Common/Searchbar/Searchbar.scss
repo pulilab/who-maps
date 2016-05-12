@@ -83,8 +83,7 @@ searchbar {
       text-transform: uppercase;
 
       .md-subheader-inner {
-        padding-bottom: 10px;
-        padding-left: 0;
+        padding: 0 0 10px;
         background-color: transparent;
       }
     }
@@ -105,6 +104,10 @@ searchbar {
     right: 30px;
     z-index: 230;
     display: none;
+
+    md-icon {
+      color: $color-gray-light;
+    }
   }
 
   .compact {
@@ -117,7 +120,6 @@ searchbar {
     padding-left: 0px;
 
     .searchcard {
-
       color: $text-primary
     }
 
