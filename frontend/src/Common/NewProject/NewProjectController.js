@@ -2,14 +2,13 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
-import CommonService  from '../CommonServices';
 
 /* global DEV, Promise */
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, structure) {
-        super();
+    constructor($scope, $state, CommonService, structure) {
+        super(CommonService);
         this.ns = new NewProjectService();
         this.EE = window.EE;
         this.scope = $scope;
@@ -28,7 +27,6 @@ class NewProjectController extends ProjectDefinition {
     }
 
     initialization() {
-        this.commonService = CommonService;
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
@@ -60,17 +58,17 @@ class NewProjectController extends ProjectDefinition {
 
     handleStructureLoad() {
         this.dataLoaded = true;
-        this.structure = this.commonService.projectStructure;
+        this.structure = this.cs.projectStructure;
         this.structure.coverageTypes = ['clients', 'health workers', 'facilities'];
         this.scope.$evalAsync();
     }
 
     handleDataLoad() {
-        const data = this.commonService.getProjectData(this.projectId);
+        const data = this.cs.getProjectData(this.projectId);
         this.createCoverageKeys(data);
         _.merge(this.project, data);
 
-        this.userProjects = this.commonService.projectList;
+        this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.ns.countryDistrict(this.project.country)
@@ -104,7 +102,11 @@ class NewProjectController extends ProjectDefinition {
 
     assignDefaultCustom() {
         this.project.donors = _.map(this.project.donors, value => {
-            return { value };
+            delete value.$$hashKey;
+            if (!_.isEmpty(value)) {
+                return { value };
+            }
+            return { 'value': '' };
         });
 
         this.project.pre_assessment = _.map(this.project.pre_assessment, value => {
@@ -136,7 +138,7 @@ class NewProjectController extends ProjectDefinition {
                 }
             });
         });
-        this.project.coverage = newCoverage;
+        this.project.coverage = newCoverage.length > 0 ? newCoverage : [{}];
     }
 
 
@@ -311,9 +313,9 @@ class NewProjectController extends ProjectDefinition {
     static newProjectFactory() {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
-
+        const CommonService =  require('../CommonServices').default;
         function newProject($scope, $state) {
-            return new NewProjectController($scope, $state, structure);
+            return new NewProjectController($scope, $state, CommonService, structure);
         }
         newProject.$inject = ['$scope', '$state'];
         return newProject;
