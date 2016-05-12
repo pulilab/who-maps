@@ -62,10 +62,7 @@ class HssModuleService extends AuthApi {
         return this.post(this.projectId + '/hss/constraints/', data);
     }
     postTaxonomy(appId, subAppId, content) {
-        if (content.length > 0) {
-            return this.post(this.projectId + '/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
-        }
-        return Promise.resolve({});
+        return this.post(this.projectId + '/hss/taxonomies/', { 'app_id': appId, 'subapp_id': subAppId, content });
     }
 
 }
