@@ -17,7 +17,6 @@ class CommonServices extends Protected {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
-        this.eventRegistrations();
         this.initialize();
     }
 
@@ -48,10 +47,6 @@ class CommonServices extends Protected {
         this.retrieveUser();
         this.populateProjectList();
         this.populateProjectStructure();
-    }
-
-    eventRegistrations() {
-        this.EE.on('refreshProjects', this.populateProjectList.bind(this));
     }
 
     loadingProgress(name) {
@@ -95,6 +90,7 @@ class CommonServices extends Protected {
         const promiseArray = [];
         this.get('projects/')
             .then((projects) => {
+                console.log('retrieved from server: ', projects);
                 this.projectList = projects;
                 _.forEach(projects, project => {
                     this.getProjectDetail(project);
