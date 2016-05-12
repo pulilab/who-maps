@@ -68,8 +68,6 @@ describe('HssModuleService class', () => {
         spyOn(hs, 'post');
         hs.postTaxonomy(null, null, 'asd');
         expect(hs.post).toHaveBeenCalled();
-        hs.postTaxonomy(null, null, []);
-        expect(hs.post).toHaveBeenCalledTimes(1);
     });
 
 });
