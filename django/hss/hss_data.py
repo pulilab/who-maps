@@ -10,7 +10,10 @@ interventions = {
         'Generalized epidemics',
         'STIs, except HIV/AIDs',
         'Cancer',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ],
     1: [
         'Safe sex',
@@ -22,7 +25,10 @@ interventions = {
         'Generalized epidemics',
         'STIs, except HIV/AIDs',
         'Cancer',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ],
     2: [
         'Pregnancy registration',
@@ -36,7 +42,10 @@ interventions = {
         'Domestic violence',
         'Pregnancy complications',
         'Immunizations',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ],
     3: [
         'Transportation',
@@ -47,7 +56,10 @@ interventions = {
         'Obstetric complications',
         'HIV/AIDS',
         'PMTCT',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ],
     4: [
         'Postpartum care',
@@ -61,7 +73,10 @@ interventions = {
         'PMTCT',
         'Newborn illnesses',
         'Low birth weight/pre term care',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ],
     5: [
         'Exclusive breastfeeding',
@@ -71,7 +86,11 @@ interventions = {
         'Growth monitoring and Nutrition',
         'PMTCT',
         'Micronutrient supplementation',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'HIV/AIDS',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ],
     6: [
         'Childhood illnesses',
@@ -79,7 +98,11 @@ interventions = {
         'Growth monitoring and Nutrition',
         'PMTCT',
         'Micronutrient supplementation',
-        'Key supplies and commodities'
+        'Key supplies and commodities',
+        'HIV/AIDS',
+        'Infection Prevention Control (IPC)',
+        'Surveillance',
+        'Contact tracing'
     ]
 }
 
