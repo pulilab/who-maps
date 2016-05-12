@@ -31,7 +31,7 @@ describe('EditProfileController', () => {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
         };
-        sc.commonService = {
+        sc.cs = {
             projectStructure: mockData,
             populateProjectStructure: jasmine.createSpy('pps'),
             getProjectData: jasmine.createSpy('gpd')

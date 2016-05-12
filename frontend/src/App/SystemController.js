@@ -1,4 +1,5 @@
-import { Storage, ResetService } from '../Common/';
+import _ from 'lodash';
+import { Storage, CommonService } from '../Common/';
 
 class SystemController {
 
@@ -16,11 +17,13 @@ class SystemController {
 
     handleLogin() {
         this.storage.set('login', true);
-        ResetService.commonServiceFactory(true);
-        console.log(window.location.href);
-        // this.state.go('app');
-        window.location.href = window.location.href.replace('login', 'app/');
-        window.location.reload();
+        const rs = CommonService.reset();
+        rs.loadedPromise.then(() => {
+            const appName = _.last(rs.projectList).id;
+            this.state.go('dashboard', { appName });
+        }, () => {
+            console.error('failed login');
+        });
     }
 
 
