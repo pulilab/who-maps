@@ -10,14 +10,13 @@
                     <md-icon>insert_chart</md-icon>
                     Scorecard
                 </md-button>
-                <md-button class="md-primary" ng-disabled="true">
-                    <md-icon>toc</md-icon>
-                    Overview
-                </md-button>
-                <md-button class="md-primary" ng-disabled="true">
-                    <md-icon>pause</md-icon>
-                    Pause test
-                </md-button>
+                <thematic
+                    axis="vm.state.params.axisId"
+                    domain="0"
+                    buttonclass="'md-primary'"
+                    buttonicon="'toc'"
+                    buttontext="'Overview'">
+                </thematic>
             </div>
     </div>
 

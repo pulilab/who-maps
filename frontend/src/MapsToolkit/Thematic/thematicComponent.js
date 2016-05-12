@@ -10,7 +10,8 @@ const thematicComponent = {
         'axis': '=',
         'domain': '=',
         'buttonclass': '=',
-        'buttontext': '='
+        'buttontext': '=',
+        'buttonicon': '='
     }
 };
 
