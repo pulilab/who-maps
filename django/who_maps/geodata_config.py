@@ -7,7 +7,12 @@ SELECTED_FILE_LIST = [
     "kenya_geojson.tgz",
     "philippines_geojson.tgz",
     "bangladesh_geojson.tgz",
-    "india_geojson.tgz"
+    "india_geojson.tgz",
+    "senegal_geojson.tgz",
+    "malawi_geojson.tgz",
+    "pakistan_geojson.tgz",
+    "indonesia_geojson.tgz",
+    "tunisia_geojson.tgz"
 ]
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",

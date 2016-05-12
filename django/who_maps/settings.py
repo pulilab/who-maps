@@ -192,7 +192,12 @@ SELECTED_FILE_LIST = [
     "kenya_geojson.tgz",
     "philippines_geojson.tgz",
     "bangladesh_geojson.tgz",
-    "india_geojson.tgz"
+    "india_geojson.tgz",
+    "senegal_geojson.tgz",
+    "malawi_geojson.tgz",
+    "pakistan_geojson.tgz",
+    "indonesia_geojson.tgz",
+    "tunisia_geojson.tgz"
 ]
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
@@ -206,7 +211,12 @@ LEVELS_FOR_DISTRICTS = {
     "india": "admin_level_5",
     "kenya": "admin_level_4",
     "philippines": "admin_level_3",
-    "bangladesh": "admin_level_4"
+    "bangladesh": "admin_level_4",
+    "senegal": "admin_level_5",
+    "malawi": "admin_level_4",
+    "pakistan": "admin_level_4",
+    "indonesia": "admin_level_5",
+    "tunisia": "admin_level_4"
 }
 
 # Logging
