@@ -60,11 +60,11 @@ class ConstraintsController {
     }
 
     getActiveConstraints() {
-        return _.uniq(_.flatten((_.map(this.data.taxonomies, (rowData) => {
+        return _.uniq(_.flatten(_.map(this.data.taxonomies, (rowData) => {
             return _.map(rowData.content, (taxonomy) => {
                 return this.getConstraintCategoryFromTaxonomy(taxonomy);
             });
-        }))));
+        })));
     }
 
     updateConstraintsData() {
