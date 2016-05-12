@@ -52,6 +52,7 @@ class DashboardModuleController {
 
     fetchProjectData(data) {
         // console.debug('ProjectData', data);
+        this.EE.emit('country Changed');
         this.projectData = data;
         this.fetchCountryMap(data.country);
         this.parseMapData(data.coverage);
