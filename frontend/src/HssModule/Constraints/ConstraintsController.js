@@ -11,6 +11,7 @@ class ConstraintsController {
             vm.hs = vm.service;
             this.constraints = this.constraintsToggleGenerator();
             this.checkSizeAndFireCallback();
+            vm.EE.on('hssTaxonomiesUpdated', this.constraintsUpdated.bind(this));
         };
 
     }
@@ -40,9 +41,37 @@ class ConstraintsController {
             .value();
     }
 
-    constraintChanged(data) {
-        this.hs.postConstraints([data]);
-        this.EE.emit('hssConstraintsSelected', _.cloneDeep(this.constraints));
+    constraintsUpdated() {
+        this.updateConstraintsData();
+        this.hs.postConstraints(this.constraints);
+    }
+
+    getConstraintCategoryFromTaxonomy(taxonomy) {
+        return _.compact(_.chain(this.structure.taxonomies)
+            .keys()
+            .map((value) => {
+                if (_.includes(this.structure.taxonomies[value].values, taxonomy)) {
+                    return value;
+                }
+                return void 0;
+            })
+            .value()
+        )[0];
+    }
+
+    getActiveConstraints() {
+        return _.uniq(_.flatten((_.map(this.data.taxonomies, (rowData) => {
+            return _.map(rowData.content, (taxonomy) => {
+                return this.getConstraintCategoryFromTaxonomy(taxonomy);
+            });
+        }))));
+    }
+
+    updateConstraintsData() {
+        const activeConstraints = this.getActiveConstraints();
+        _.forEach(this.constraints, (constraint) => {
+            constraint.active = _.includes(activeConstraints, constraint.name);
+        });
     }
 
 
