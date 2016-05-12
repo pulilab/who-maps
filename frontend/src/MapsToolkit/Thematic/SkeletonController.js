@@ -32,6 +32,12 @@ class SkeletonController {
         return templates;
     }
 
+    axisClick(axis, id) {
+        axis.expand = true;
+        console.debug(id, axis);
+        this.changeSpot(id - 2, 0);
+    }
+
     changeSpot(axisId, domainId) {
         domainId = domainId || 0;
         this.domainActivationSetter(this.axis, this.domain, false);
