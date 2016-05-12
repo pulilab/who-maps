@@ -94,7 +94,7 @@ describe('CountryMapController', () => {
         });
     });
 
-    describe('draw fn.', () => {
+    xdescribe('draw fn.', () => {
 
         beforeEach(() => {
             vm.data = perfMockMap;

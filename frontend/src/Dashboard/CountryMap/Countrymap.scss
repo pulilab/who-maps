@@ -1,8 +1,9 @@
-	@import '../../variables';
+@import '../../variables';
 
 .relative {
 
 	position: relative;
+	// height: calc(100vh - 240px);
 
 	.countrychart-tooltip {
 
@@ -88,9 +89,10 @@
 
 		position: absolute;
 		right: 15px;
-		top: 540px;
+		top: 300px;
 
 		md-icon {
+
 			color: $color-gray-light;
 			cursor: pointer;
 			outline: none;
