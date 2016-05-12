@@ -30,7 +30,7 @@ class CountrymapController {
             this.EE.once('topoArrived', this.mapArrived, this);
             this.EE.once('mapdataArrived', this.dataArrived, this);
 
-            this.EE.on('country Changed', this.mapChanged.bind(this));
+            this.EE.on('country Changed', this.mapChanged, this);
         };
 
         this.$onDestroy = () => {
@@ -75,8 +75,8 @@ class CountrymapController {
     }
 
     mapChanged() {
-        this.EE.once('topoArrived', this.mapArrived.bind(this));
-        this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+        this.EE.once('topoArrived', this.mapArrived, this);
+        this.EE.once('mapdataArrived', this.dataArrived, this);
     }
 
     mapArrived(data) {
