@@ -56,7 +56,6 @@ class AppModuleController extends Protected {
 
     fillUserData() {
         this.user.projects = this.cs.projectList;
-        console.log('projectlist:', this.user.projects);
         if (this.state.params.appName.length === 0) {
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
             this.state.go(state, { 'appName': _.last(this.user.projects).id });
