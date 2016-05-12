@@ -62,9 +62,6 @@ class ApplicationsController {
                     taxonomy: this.structure.taxonomies[value].values
                 };
             })
-            .filter(item => {
-                return item.active;
-            })
             .value();
     }
 
@@ -73,9 +70,6 @@ class ApplicationsController {
             .map(value => {
                 value.taxonomy = this.structure.taxonomies[value.name].values;
                 return value;
-            })
-            .filter(item => {
-                return item.active;
             })
             .value();
     }
@@ -247,7 +241,27 @@ class ApplicationsController {
 
     saveTaxonomy(appId, subAppId, value) {
         this.rowObject['father_' + appId]['rowIndex_' + subAppId].columnId_tax.content = value;
+
+        this.refreshTaxonomyData(appId, subAppId, value);
+
+        this.EE.emit('hssTaxonomiesUpdated');
         this.hs.postTaxonomy(appId, subAppId, value);
+    }
+
+    refreshTaxonomyData(appId, subAppId, value) {
+        _.forEach(this.data.taxonomies, (tax) => {
+            if (tax.app_id === appId && tax.subapp_id === subAppId) {
+                tax.content = value;
+            }
+        });
+        // add if doesn't exist yet
+        if (!_.some(this.data.taxonomies, { app_id: appId, subapp_id: subAppId })) {
+            this.data.taxonomies.push({
+                app_id: appId,
+                subapp_id: subAppId,
+                content: value
+            });
+        }
     }
 
     subApplicationRows(index) {
@@ -588,6 +602,9 @@ class ApplicationsController {
         });
         this.checkIfMainIsEnabled(bubble);
         this.searchForFilledColumns();
+
+        // delete all taxonomies
+        this.saveTaxonomy(bubble.fatherId, bubble.rowIndex, []);
     }
 
     checkIfMainIsEnabled(bubble) {
