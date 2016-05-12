@@ -44,11 +44,9 @@ const config = ($stateProvider, $urlRouterProvider) => {
                 data: ['$q', ($q) => {
                     const def = $q.defer();
                     const cs = require('../Common/CommonServices').default;
-                    console.log(cs.hash)
                     cs.loadedPromise
                         .then(() => {
                             def.resolve();
-                            console.log('done');
                         });
 
                     return def.promise;

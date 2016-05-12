@@ -1,6 +1,6 @@
 import ProjectDefinition from './ProjectDefinition';
 
-/* global define, it, describe, beforeEach, expect, xit, spyOn, Promise */
+/* global define, it, describe, beforeEach, expect, xit, spyOn, Promise, jasmine */
 
 let pd = {};
 const t = {
