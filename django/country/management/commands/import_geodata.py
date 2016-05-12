@@ -5,6 +5,7 @@ import json
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+from who_maps import geodata_config
 from country.models import Country
 
 class Command(BaseCommand):
@@ -14,7 +15,7 @@ class Command(BaseCommand):
         self.stdout.write("-- Importing geodata to the database...")
         for folder in os.listdir(settings.GEOJSON_TEMP_DIR):
             geodata = {}
-            for filename in settings.ADMIN_LEVELS_TO_IMPORT:
+            for filename in geodata_config.ADMIN_LEVELS_TO_IMPORT:
                 with open(os.path.join(settings.GEOJSON_TEMP_DIR, folder, "topojson_"+filename)) as f:
                     content = f.read()
                     json_content = json.loads(content)
