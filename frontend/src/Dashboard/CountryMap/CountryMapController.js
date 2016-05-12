@@ -96,7 +96,8 @@ class CountrymapController {
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
-        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag;
+        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag;
 
         vm.countryName =
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
