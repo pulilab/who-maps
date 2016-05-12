@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 class SkeletonController {
 
-    constructor($scope, $interpolate) {
+    constructor($scope, $interpolate, $anchorScroll) {
         this.scope = $scope;
         const parent = $scope.$parent.vm;
         this.interpolate = $interpolate;
@@ -11,6 +11,7 @@ class SkeletonController {
         this.data = _.cloneDeep(parent.data);
         this.text = parent.text;
         this.icons = parent.icons;
+        this.scroll = $anchorScroll;
 
         this.domainActivationSetter(+this.axis, +this.domain, true);
 
@@ -44,6 +45,8 @@ class SkeletonController {
         this.axis = axisId;
         this.domain = domainId;
         this.domainActivationSetter(this.axis, this.domain, true);
+
+        this.scroll('help-anchor');
     }
 
     domainActivationSetter(axisId, domainId, state) {
@@ -51,10 +54,10 @@ class SkeletonController {
     }
 
     static skeletonFactory() {
-        const skeleton = ($scope, $interpolate) => {
-            return new SkeletonController($scope, $interpolate);
+        const skeleton = ($scope, $interpolate, $anchorScroll) => {
+            return new SkeletonController($scope, $interpolate, $anchorScroll);
         };
-        skeleton.$inject = ['$scope', '$interpolate'];
+        skeleton.$inject = ['$scope', '$interpolate', '$anchorScroll'];
         return skeleton;
     }
 }
