@@ -1,17 +1,32 @@
 import _ from 'lodash';
 import Protected from './Protected';
 
-/* global define, Promise, DEV */
+/* global define, Promise, DEV, Symbol */
 
-let commonServices = false;
-const loadingArray = ['list', 'structure'];
+const singleton = Symbol();
+const singletonEnforcer = Symbol();
+
+
+const loadingArray = ['list', 'structure', 'user-profile'];
 
 class CommonServices extends Protected {
 
-    constructor() {
+    constructor(enforcer) {
         super('');
+        if (enforcer !== singletonEnforcer) {
+            const error = { error: 'Cannot construct singleton' };
+            throw error;
+        }
+        this.eventRegistrations();
+        this.initialize();
+    }
+
+    initialize() {
+        this.user = this.retrieveLoginStatus();
         this.projectList = [];
+        this.hash = Math.random().toString(36);
         this.projectStructure = [];
+        this.retrieveUser = this.retrieveUser.bind(this);
         this.loadingCheck = _.cloneDeep(loadingArray);
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
@@ -19,14 +34,18 @@ class CommonServices extends Protected {
             this.promiseResolve = resolve;
             this.promiseReject = reject;
         });
-
-        this.eventRegistrations();
         if (this.user) {
             this.loadData();
         }
     }
 
+    reset() {
+        this.initialize();
+        return this;
+    }
+
     loadData() {
+        this.retrieveUser();
         this.populateProjectList();
         this.populateProjectStructure();
     }
@@ -60,6 +79,15 @@ class CommonServices extends Protected {
             if (country) {
                 project.countryName = country.name;
             }
+        });
+    }
+
+    retrieveUser() {
+        const vm = this;
+        vm.get('userprofiles/').then(user => {
+            vm.userProfile = user[0];
+            vm.userProfile.email = this.user.username;
+            this.loadingProgress('user-profile');
         });
     }
 
@@ -104,16 +132,12 @@ class CommonServices extends Protected {
         return _.find(this.projectList, { id });
     }
 
-    static commonServiceFactory(reset) {
-        if (!commonServices || reset)  {
-            commonServices = new CommonServices();
+    static commonServiceFactory() {
+        if (!this[singleton]) {
+            this[singleton] = new CommonServices(singletonEnforcer);
         }
-        if (DEV) {
-            console.log(commonServices);
-        }
-        return commonServices;
+        return this[singleton];
     }
 }
 
 export default CommonServices.commonServiceFactory();
-export { CommonServices as ResetService };
