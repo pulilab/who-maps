@@ -102,7 +102,11 @@ class NewProjectController extends ProjectDefinition {
 
     assignDefaultCustom() {
         this.project.donors = _.map(this.project.donors, value => {
-            return { value };
+            delete value.$$hashKey;
+            if (!_.isEmpty(value)) {
+                return { value };
+            }
+            return { 'value': '' };
         });
 
         this.project.pre_assessment = _.map(this.project.pre_assessment, value => {
@@ -134,7 +138,7 @@ class NewProjectController extends ProjectDefinition {
                 }
             });
         });
-        this.project.coverage = newCoverage;
+        this.project.coverage = newCoverage.length > 0 ? newCoverage : [{}];
     }
 
 
