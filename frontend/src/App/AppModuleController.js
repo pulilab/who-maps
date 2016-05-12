@@ -9,6 +9,7 @@ class AppModuleController extends Protected {
         this.state = $state;
         this.scope = $scope;
         this.cs = CommonService;
+        this.userProfile = this.cs.userProfile;
         this.currentPage = void 0;
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
@@ -34,26 +35,18 @@ class AppModuleController extends Protected {
             this.currentPage = value;
             this.showCompleteNavigation(value, this.isLogin);
         });
-
-        this.lastProjectEvent = void 0;
-
-
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
         this.EE.on('projectListUpdated', this.fillUserData.bind(this));
         this.EE.on('refreshProjects', this.refreshProjectsHandler.bind(this));
-        this.EE.on('doDigest', this.doDigest.bind(this));
     }
 
     refreshProjectsHandler() {
-        this.goToDashboard();
+        this.cs.reset().loadedPromise.then(() => {
+            this.fillUserData();
+            this.goToDashboard();
+        });
     }
-
-
-    doDigest() {
-        this.scope.$evalAsync();
-    }
-
 
     updateProject(name) {
         const id = _.filter(this.user.projects, { name })[0].id;

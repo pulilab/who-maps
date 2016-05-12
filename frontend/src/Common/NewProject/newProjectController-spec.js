@@ -22,20 +22,25 @@ const $state = {
     }
 };
 
+const cs = {
+    projectStructure: mockData,
+    userProfile: {
+        organisation: 'asd'
+    },
+    populateProjectStructure: jasmine.createSpy('pps'),
+    getProjectData: jasmine.createSpy('gpd')
+};
+
+const structure = require('./Resources/structure.json');
 
 describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = NewProjectController.newProjectFactory()($scope, $state);
+        sc = new  NewProjectController($scope, $state, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
-        };
-        sc.commonService = {
-            projectStructure: mockData,
-            populateProjectStructure: jasmine.createSpy('pps'),
-            getProjectData: jasmine.createSpy('gpd')
         };
     });
 

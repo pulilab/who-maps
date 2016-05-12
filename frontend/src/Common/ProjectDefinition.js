@@ -3,12 +3,18 @@ import Protected from './Protected';
 
 class ProjectDefinition extends Protected {
 
-    constructor() {
+    constructor(CommonService) {
         super();
-        this.EE.on('userProfileFetched', this.updateProjectData.bind(this));
+        this.cs = CommonService;
+        this.userProfile = this.cs.userProfile;
+        this.initializeDefinition();
+
+    }
+
+    initializeDefinition() {
         this.project = {
             name: null,
-            organisation: null,
+            organisation: this.userProfile.organisation,
             country: null,
             countryName: null,
             coverage: [{}],
@@ -35,14 +41,8 @@ class ProjectDefinition extends Protected {
             }
 
         };
-
-
     }
 
-    updateProjectData() {
-        this.project.organisation = this.userProfile.organisation;
-
-    }
 
     addTechnologyPlatform() {
         this.project.technology_platforms.custom.push({});
