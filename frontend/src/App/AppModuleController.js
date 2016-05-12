@@ -46,7 +46,10 @@ class AppModuleController extends Protected {
     }
 
     refreshProjectsHandler() {
-        this.goToDashboard();
+        this.cs.reset().loadedPromise.then( () => {
+            this.fillUserData();
+            this.goToDashboard();
+        });
     }
 
     updateProject(name) {
