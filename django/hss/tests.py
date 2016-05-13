@@ -295,12 +295,12 @@ class HSSTests(APITestCase):
         url = reverse("hss-interventions", kwargs={"project_id": self.project_id})
         data = {
                 "column_id": 0,
-                "interventions": [1,2],
+                "interventions": ["int1","int2"],
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         hss = HSS.objects.get_object_or_none(project=self.project_id)
-        self.assertEqual(hss.data["interventions"][0]["interventions"], [1,2])
+        self.assertEqual(hss.data["interventions"][0]["interventions"], ["int1","int2"])
 
     def test_update_interventions_wrong_project_id(self):
         url = reverse("hss-interventions", kwargs={"project_id": 999})

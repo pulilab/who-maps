@@ -59,9 +59,10 @@ describe('CountryMapController', () => {
             expect(vm.boundNrs.facilities).toBe(7);
         });
 
-        it('saves data got to scope.data', () => {
+        it('saves data got to scope.data, notes it in vm.dataHere', () => {
             vm.dataArrived('data');
             expect(vm.data).toBe('data');
+            expect(vm.dataHere).toBe(true);
         });
 
         it('if map has arrived, calls drawMap with it', () => {
@@ -70,6 +71,7 @@ describe('CountryMapController', () => {
             expect(vm.drawMap).not.toHaveBeenCalled();
 
             vm.map = 'mapData';
+            vm.mapHere = true;
             vm.dataArrived('mapData');
             expect(vm.drawMap).toHaveBeenCalledWith('mapData');
         });
@@ -77,9 +79,10 @@ describe('CountryMapController', () => {
 
     describe('mapArrived eventhandler fn.', () => {
 
-        it('saves the data into vm.map', () => {
+        it('saves the data into vm.map, notes it in vm.mapHere', () => {
             vm.mapArrived('mapData');
             expect(vm.map).toBe('mapData');
+            expect(vm.mapHere).toBe(true);
         });
 
         it('if data already arrived calls vm.drawMap', () => {
@@ -89,6 +92,7 @@ describe('CountryMapController', () => {
             expect(vm.drawMap).not.toHaveBeenCalled();
 
             vm.data = 'already here';
+            vm.dataHere = true;
             vm.mapArrived('mapData');
             expect(vm.drawMap).toHaveBeenCalledWith('mapData');
         });

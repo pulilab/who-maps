@@ -38,6 +38,22 @@ class CommonServices extends Protected {
         }
     }
 
+    uglifyCountryName(name) {
+        let nameParts = name.replace(' ', '-').split('-');
+        nameParts = _.map(nameParts, item =>{
+            return _.lowerCase(item);
+        });
+        return nameParts.join('-');
+    }
+
+    prettifyCountryName(name) {
+        let nameParts = name.replace('-', ' ').split(' ');
+        nameParts = _.map(nameParts, item => {
+            return _.capitalize(item);
+        });
+        return nameParts.join(' ');
+    }
+
     reset() {
         this.initialize();
         return this;
@@ -72,8 +88,12 @@ class CommonServices extends Protected {
         _.forEach(this.projectList, project => {
             const country = _.find(this.projectStructure.countries, { id: project.country });
             if (country) {
-                project.countryName = country.name;
+                project.countryName = this.prettifyCountryName(country.name);
             }
+        });
+
+        _.forEach(this.projectStructure.countries, country => {
+            country.name = this.prettifyCountryName(country.name);
         });
     }
 

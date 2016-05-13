@@ -3,10 +3,16 @@ import shutil
 import logging
 import tarfile
 import json
-import urllib2
 from xml.dom import minidom
 
 from who_maps import geodata_config
+
+try:
+    # Python 2.7
+    from urllib2 import urlopen
+except ImportError:
+    # Python 3.x
+    from urllib.request import urlopen
 
 
 def fetch_geodata():
@@ -25,7 +31,7 @@ def fetch_geodata():
 
     # Getting the files one by one and saving to the temp folder.
     for filename in file_list:
-        response = urllib2.urlopen(geodata_config.MAPZEN_S3_URL+filename)
+        response = urlopen(geodata_config.MAPZEN_S3_URL+filename)
 
         with open(geodata_config.GEOJSON_TEMP_DIR + filename, "wb") as f:
             f.write(response.read())

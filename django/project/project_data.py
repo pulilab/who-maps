@@ -71,6 +71,7 @@ project_structure = {
             "Financial transactions and incentives"
         ],
         "pipelines": [
+            "Not part of an accelerator or innovation pipeline",
             "Ashoka",
             "Center for Health Market Innovations",
             "Duke Social Entrepeneurship Accelerator",

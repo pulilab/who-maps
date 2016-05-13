@@ -43,7 +43,7 @@
 
           <projectcomp
               ng-repeat="project in vm.projects | limitTo: 5"
-              own-project="vm.checkIfIsOwner(project)"
+              own-project="vm.isOwner(project)"
               ng-model="project"
               has-link=true
               has-logo=false>

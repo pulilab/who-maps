@@ -81,7 +81,7 @@ class ProjectTests(APITestCase):
         url = reverse("hss-interventions", kwargs={"project_id": self.project_id})
         data = {
                 "column_id": 0,
-                "interventions": [1,2],
+                "interventions": ["int1","int2"],
             }
         response = self.test_user_client.post(url, data, format="json")
 
@@ -109,7 +109,7 @@ class ProjectTests(APITestCase):
     def test_search_health_topic(self):
         url = reverse("search-project")
         data = {
-            "query": "Family planning",
+            "query": "int1",
             "health_topic": True,
         }
         response = self.test_user_client.post(url, data)
