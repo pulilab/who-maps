@@ -42,6 +42,7 @@ searchbar {
       height: 48px;
       border-color: $color-white;
       font-size: $headline-font-size-base;
+      border-width: 0 0 1px !important;
     }
   }
 
