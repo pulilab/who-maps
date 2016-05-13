@@ -105,7 +105,7 @@ class CountrymapController {
 
         const levelLib = {
             'Sierra Leone': 'admin_level_5',
-            'India': 'admin_level_5',
+            'India': 'admin_level_4',
             'Kenya': 'admin_level_4',
             'Philippines': 'admin_level_3',
             'Border India - Bangladesh': 'admin_level_4'
