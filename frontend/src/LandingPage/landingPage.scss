@@ -109,6 +109,11 @@
       padding: 40px 120px;
       background-color: $color-white;
 
+      &.logged-in {
+        background-color: $color-gray-lightest;
+        padding-bottom: 80px;
+      }
+
       h2 {
         margin-bottom: 0;
         color: $color-primary;
@@ -200,35 +205,50 @@
 
       .my-project {
         margin: 50px 0 0;
-        padding-bottom: 50px;
-        border-bottom: 1px solid $color-gray-lighter;
+        padding: 20px 0 0;
+        // border-bottom: 1px solid $color-gray-lighter;
 
         &:last-of-type {
           border: 0;
         }
 
         .project-title {
-          margin: 8px;
+          margin: 8px 8px 15px;
+          padding: 0 20px;
+        }
+
+        .project-links {
+          padding: 0 20px;
+          border-bottom: 1px solid $color-gray-lighter;
+
+          .md-button {
+            margin: 0 20px 15px 0;
+          }
         }
 
         .project-stats {
           @include clearfix();
         }
+
         viewers,
         followers {
-          opacity: 0.5;
+          md-card {
+            opacity: 0.5;
+          }
         }
 
 
         viewers,
         followers,
         donors {
-          float: left;
 
           .dash-stat-card {
-            margin: 20px 20px 0 8px;
-            width: 100px;
-            height: 105px;
+            margin: 0;
+            padding: 5px 15px 20px;
+            height: auto;
+            box-shadow: none;
+            border-radius: 0;
+            border-left: 1px solid $color-gray-lighter;
           }
         }
 
@@ -241,7 +261,7 @@
     }
   }
 
-
+  // TODO
   .trending {
     margin: 0 30px;
   }
