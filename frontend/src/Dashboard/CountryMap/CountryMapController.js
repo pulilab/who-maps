@@ -97,7 +97,8 @@ class CountrymapController {
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
         vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag;
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
 
         vm.countryName =
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
@@ -105,14 +106,21 @@ class CountrymapController {
 
         const levelLib = {
             'Sierra Leone': 'admin_level_5',
-            'India': 'admin_level_4',
+            'India': 'admin_level_4', // Precise enough map-data?
             'Kenya': 'admin_level_4',
-            'Philippines': 'admin_level_3',
-            'Border India - Bangladesh': 'admin_level_4'
+            'Philippines': 'admin_level_3', // Precise enough map-data?
+            'Border India - Bangladesh': 'admin_level_4',
+            'Indonesia': 'admin_level_4', // Precise enough map-data?
+            'Border Malawi - Mozambique': 'admin_level_4',
+            'The Gambia': 'admin_level_3',
+            'Tunisia': 'admin_level_4',
+            'Pakistan': 'admin_level_4'
         };
         const level = levelLib[vm.countryName];
 
         if (vm.countryName === 'Border India - Bangladesh') { vm.countryName = 'Bangladesh'; }
+        if (vm.countryName === 'Border Malawi - Mozambique') { vm.countryName = 'Malawi'; }
+        if (vm.countryName === 'The Gambia') { vm.countryName = 'Senegal'; }
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
