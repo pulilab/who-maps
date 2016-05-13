@@ -101,7 +101,11 @@ class CommonServices extends Protected {
         const vm = this;
         vm.get('userprofiles/').then(user => {
             vm.userProfile = user[0];
+            if (!this.userProfile) {
+                this.userProfile = {};
+            }
             vm.userProfile.email = this.user.username;
+
             this.loadingProgress('user-profile');
         });
     }
@@ -110,11 +114,12 @@ class CommonServices extends Protected {
         const promiseArray = [];
         this.get('projects/')
             .then((projects) => {
-                console.log('retrieved from server: ', projects);
                 this.projectList = projects;
                 _.forEach(projects, project => {
-                    this.getProjectDetail(project);
-                    promiseArray.push(project.detailPromise);
+                    if (project) {
+                        this.getProjectDetail(project);
+                        promiseArray.push(project.detailPromise);
+                    }
                 });
 
                 Promise.all(promiseArray)
