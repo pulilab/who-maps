@@ -1,5 +1,5 @@
 import ConstraintsController from './ConstraintsController';
-import { taxonomyLib, constraintsData } from '../hssMockData';
+import { taxonomyLib, constraintsData, taxonomiesData } from '../hssMockData';
 import { EE } from '../../Common/';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn */
@@ -18,7 +18,8 @@ describe('constraintsController', () => {
             taxonomies: taxonomyLib
         };
         cc.data = {
-            constraints: constraintsData
+            constraints: constraintsData,
+            taxonomies: taxonomiesData
         };
         cc.service = {
             postConstraints: () => {}
@@ -27,7 +28,6 @@ describe('constraintsController', () => {
     });
 
     it('should have a function that change the edit mode', () => {
-
         expect(cc.handleEditMode).toBeDefined();
         cc.handleEditMode(true);
         expect(cc.editMode).toBeTruthy();
@@ -44,19 +44,19 @@ describe('constraintsController', () => {
         });
     });
 
-    it('should have a function that emit the constraint object globally', () => {
-        spyOn(window.EE, 'emit');
-        cc.constraints = cc.constraintsToggleGenerator();
-        cc.constraintChanged();
-        expect(window.EE.emit)
-            .toHaveBeenCalledWith('hssConstraintsSelected', cc.constraints);
-    });
-
     it('should have a function that check the number of selected constraints and fire a callback if present', () => {
         const cb = jasmine.createSpy('callback');
         cc.resizeCallback = cb;
         cc.checkSizeAndFireCallback();
         expect(cb).toHaveBeenCalled();
+    });
+
+    it('should have a function that can get a constraint category from a taxonomy', () => {
+        expect(cc.getConstraintCategoryFromTaxonomy('Lack of population enumeration')).toEqual('Information');
+    });
+
+    it('should have a function that determines active constraints from current taxonomies', () => {
+        expect(cc.getActiveConstraints()).toEqual(['Availability', 'Quality']);
     });
 
 });

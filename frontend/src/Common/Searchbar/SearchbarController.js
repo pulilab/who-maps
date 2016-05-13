@@ -17,7 +17,7 @@ class SearchbarController {
         vm.resultNr = 0;
         vm.projects = void 0;
 
-        vm.checkIfIsOwner = vm.checkIfIsOwner.bind(this);
+        vm.isOwner = vm.isOwner.bind(this);
 
 
         vm.scope.$watch(() => {
@@ -44,9 +44,8 @@ class SearchbarController {
         this.showSearch = !this.showSearch;
     }
 
-    checkIfIsOwner(project) {
-        const result = _.filter(this.userProjects, { id: project.id });
-        return result.length > 0;
+    isOwner(project) {
+        return _.some(this.userProjects, { id: project.id });
     }
 
     search(tmpStr) {
