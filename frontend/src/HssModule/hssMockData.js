@@ -495,6 +495,11 @@ export const taxonomy = {
     ]
 };
 
+export const taxonomiesData = [
+    { app_id: 1, subapp_id: 1, content: ['Supply of commodities', 'Supply of services'] },
+    { app_id: 2, subapp_id: 1, content: ['Quality of care', 'Health worker competence'] }
+];
+
 export const projectScale = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
     ' Donec eros lacus,  posuere sed elit egestas, dapibus egestas nulla. Suspendisse non tellus tellus.';
 

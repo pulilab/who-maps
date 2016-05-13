@@ -61,7 +61,8 @@ describe('applicationsController', () => {
         };
         ac.data = {
             continuum: continuumData,
-            constraints: taxonomyLib
+            constraints: taxonomyLib,
+            taxonomies: []
         };
         ac.service = {
             postBubbles: () => {},
