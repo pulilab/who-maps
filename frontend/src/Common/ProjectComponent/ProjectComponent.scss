@@ -22,10 +22,12 @@ projectcomp {
         top: -6px;
         right: -19px;
         background-color: #CD9924;
+        // background-color: $color-gray-lightest;
         display: block;
         width: 55px;
         height: 25px;
-        box-shadow: inset 0 -1px 1px rgba(0,0,0,.1);
+        box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
+        // box-shadow: inset 0 -1px 0 rgba(0,0,0,.075);
         transform: rotate(40deg);
 
         md-icon {
@@ -34,6 +36,7 @@ projectcomp {
           left: 24px;
           font-size: 13px;
           color: $color-white;
+          // color: #CD9924;
           transform: rotate(-40deg);
         }
       }

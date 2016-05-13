@@ -13,7 +13,7 @@ searchbar {
     width: 100%;
 
     &.active {
-      .closebtn {
+      #closebtn {
         display: block;
       }
     }
@@ -99,7 +99,7 @@ searchbar {
     }
   }
 
-  .closebtn {
+  #closebtn {
     position: absolute;
     top: -5px;
     right: 30px;
@@ -114,14 +114,27 @@ searchbar {
   .compact {
     min-width: 500px;
     max-width: 500px;
-    top: 22px;
+    top: 0;
     position: fixed;
-    right: -20px;
-    padding-right: 20px;
+    right: 0;
+    padding-right: 0;
     padding-left: 0px;
 
+    #closebtn {
+      top: 15px;
+
+      .material-icons {
+        color: $color-gray-light !important;
+      }
+    }
+
+    .md-input {
+      width: 456px;
+    }
+
     .searchcard {
-      color: $text-primary
+      padding-top: 90px;
+      color: $text-primary;
     }
 
   }
