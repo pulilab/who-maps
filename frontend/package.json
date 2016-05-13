@@ -11,7 +11,9 @@
     "test": "karma start",
     "serve": "webpack-dev-server --progress --colors --hot --inline",
     "site-build": "webpack-dev-server --progress --colors --hot --inline --site-build",
-    "dist": "webpack --dist && rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.* && cp -R builds/* ../nginx/site/html/",
+    "dist": "webpack --dis",
+    "clean-server-folder": "rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.*",
+    "copy-to-server": "cp -R builds/* ../nginx/site/html/",
     "e2e-init": "node_modules/protractor/bin/webdriver-manager update",
     "e2e-server": "node_modules/protractor/bin/webdriver-manager start",
     "e2e": "node_modules/protractor/bin/protractor e2e/conf.js"
