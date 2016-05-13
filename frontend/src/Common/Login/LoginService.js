@@ -25,7 +25,7 @@ class LoginService extends SimpleApi {
             this.storage.set('token', json.token);
             return Promise.resolve(true);
         }
-        return Promise.reject('No auth token');
+        return Promise.reject(json);
     }
 
     storeUser(user) {
