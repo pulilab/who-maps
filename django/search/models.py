@@ -72,7 +72,7 @@ def update_with_hss_data(sender, instance, **kwargs):
     intervention_labels = []
     for col_index, col in enumerate(instance.data["interventions"]):
         for value in col["interventions"]:
-            intervention_labels.append(interventions.get(col_index)[value])
+            intervention_labels.append(value)
     if intervention_labels:
         project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.project_id)
         project_search.health_topic = ", ".join(intervention_labels)
