@@ -108,8 +108,9 @@ class DashboardModuleController {
         this.service.getToolkitData(this.projectId).then(data => {
             // console.debug('RAW Toolkit data', data);
             this.rawToolkitData = data;
+            this.fetchToolkitVersions();
         });
-        this.fetchToolkitVersions();
+
     }
 
     fetchToolkitVersions() {
