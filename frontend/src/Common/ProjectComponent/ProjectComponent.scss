@@ -12,8 +12,36 @@ projectcomp {
   }
 
   md-card {
+    position: relative;
     overflow: hidden;
     outline: none;
+
+    &.my-project {
+      .my-star {
+        position: absolute;
+        top: -6px;
+        right: -19px;
+        background-color: #CD9924;
+        display: block;
+        width: 55px;
+        height: 25px;
+        box-shadow: inset 0 -1px 1px rgba(0,0,0,.1);
+        transform: rotate(40deg);
+
+        md-icon {
+          position: absolute;
+          top: 4px;
+          left: 24px;
+          font-size: 13px;
+          color: $color-white;
+          transform: rotate(-40deg);
+        }
+      }
+    }
+
+    .my-star {
+      display: none;
+    }
 
     .project-container {
       height: auto;
