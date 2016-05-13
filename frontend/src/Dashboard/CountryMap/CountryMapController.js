@@ -17,6 +17,7 @@ class CountrymapController {
 
         this.$onInit = () => {
 
+            this.showPlaceholder = !this.big;
             this.svgPanZoom = svgPanZoom;
 
             this.EE.removeListener('country Changed');
@@ -65,6 +66,7 @@ class CountrymapController {
 
     mapChanged() {
 
+        this.showPlaceholder = true;
         this.EE.once('topoArrived', this.mapArrived, this);
         this.EE.once('mapdataArrived', this.dataArrived, this);
     }
@@ -92,7 +94,6 @@ class CountrymapController {
     drawMap(topoJSON) {
 
         const vm = this;
-
 
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
@@ -190,6 +191,7 @@ class CountrymapController {
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
         vm.svgZoom.zoomOut();
 
+        this.showPlaceholder = false;
         this.dataHere = false;
         this.mapHere = false;
     }
