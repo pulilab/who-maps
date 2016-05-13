@@ -48,7 +48,10 @@
 
                 <div ng-if="!vm.editMode && tile.content && tile.activated" class="bubble-shape">
                     <div class="app-number white-number">{{vm.labelGenerator(tile)}}</div>
-                    <div class="app-text" >{{tile.content}}</div>
+                    <div class="app-text">
+                        <md-tooltip>{{tile.content}}</md-tooltip>
+                        {{tile.content}}
+                    </div>
                 </div>
 
                 <div ng-if="vm.editMode && !tile.bubbleDrawn " layout="row" layout-align="center center">
