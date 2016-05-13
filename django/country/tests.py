@@ -68,11 +68,11 @@ class CountryTests(APITestCase):
             }
         }
 
-        country, _ = Country.objects.get_or_create(name="india", geodata=geodata)
+        country, _ = Country.objects.get_or_create(name="india", display_name="Disp Name1", geodata=geodata)
         country.save()
         self.country_id = country.id
 
-        country, _ = Country.objects.get_or_create(name="kenya", geodata=geodata2)
+        country, _ = Country.objects.get_or_create(name="kenya", display_name="Disp Name2", geodata=geodata2)
         country.save()
         self.country_id2 = country.id
 
@@ -87,6 +87,10 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("name", response.json()[0].keys())
+        self.assertEqual(response.json()[0]["name"], "india")
+        self.assertEqual(response.json()[1]["name"], "kenya")
+        self.assertEqual(response.json()[0]["display_name"], "Disp Name1")
+        self.assertEqual(response.json()[1]["display_name"], "Disp Name2")
 
     def test_get_districts_lvl5(self):
         url = reverse("get-districts", kwargs={"country_id": self.country_id})

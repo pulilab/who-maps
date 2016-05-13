@@ -19,7 +19,13 @@ class Command(BaseCommand):
                     content = f.read()
                     json_content = json.loads(content)
                     geodata[filename.strip(".geojson")] = json_content
+            display_name = geodata["admin_level_2"]["objects"]["admin_level_2"] \
+                                ["geometries"][0]["properties"].get("name:en", None)
+            if not display_name:
+                display_name = geodata["admin_level_2"]["objects"]["admin_level_2"] \
+                                    ["geometries"][0]["name"]
             country, created = Country.objects.get_or_create(name=folder)
+            country.display_name = display_name
             country.geodata = geodata
             country.save()
             self.stdout.write("{} imported.".format(country.name))
