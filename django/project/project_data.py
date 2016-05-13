@@ -81,7 +81,8 @@ project_structure = {
             "iHUB",
             "IWG mHealth Catalytic Grant Mechanism",
             "Saving Lives at Birth",
-            "USAID Developmenet Innovation Ventures"
+            "USAID Developmenet Innovation Ventures",
+            "Not part of an accelerator or innovation pipeline"
         ]
 }
 
