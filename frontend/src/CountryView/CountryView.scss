@@ -120,6 +120,10 @@
         .projectcont {
 
             margin: 0 20px;
+
+            .cap {
+                text-transform: capitalize!important;
+            }
         }
 
         .headercont {
@@ -247,5 +251,11 @@
             font-weight: 500;
             margin: 0;
         }
+    }
+}
+
+md-select-menu {
+    .md-text {
+        text-transform: capitalize!important;
     }
 }
