@@ -34,11 +34,12 @@ def deploy():
         # get new stuff from git
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
-
+        run('docker-compose restart')
+        time.sleep(5)
+        
         # handle backend
         with cd(env.backend_root):
-            run('docker-compose restart')
-            time.sleep(2)
+
             # backup DB
             _backup_db()
             # build
