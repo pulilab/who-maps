@@ -65,6 +65,8 @@ def deploy():
         with cd(env.frontend_root):
             run('npm install')
             run('npm run dist')
+            run('npm run clean-server-folder')
+            run('npm run copy-to-server')
 
     tear_down()
 

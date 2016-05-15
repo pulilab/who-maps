@@ -35,7 +35,6 @@ class EditProfileController extends Protected {
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
-        console.log(this.userProfile);
         if (!this.userProfile || !this.userProfile.email) {
             const user = this.storage.get('user');
             this.userProfile = {
@@ -74,7 +73,12 @@ class EditProfileController extends Protected {
                 if (result.success) {
                     const rs = this.cs.reset();
                     rs.loadedPromise.then(() => {
-                        this.state.go('dashboard');
+                        this.state.go('dashboard').then( () => {
+                            // success, do nothing
+                        }, () => {
+                            // error in state change, reload the window
+                            window.location.reload();
+                        });
                     });
                 }
                 else {

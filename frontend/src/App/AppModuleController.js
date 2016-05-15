@@ -92,7 +92,7 @@ class AppModuleController extends Protected {
     }
 
     handleLogout() {
-        this.state.go('login', { projectId: null });
+        this.state.go('login', { appName: null });
     }
 
     showCompleteNavigation(state, isLogin) {
