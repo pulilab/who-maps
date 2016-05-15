@@ -34,9 +34,10 @@ def deploy():
         # get new stuff from git
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
+        time.sleep(20)
         run('docker-compose restart')
         time.sleep(5)
-        
+
         # handle backend
         with cd(env.backend_root):
 
