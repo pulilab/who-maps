@@ -3,7 +3,7 @@ import { EE } from '../Common/';
 
 EE.initialize();
 
-/* global define, it, describe, beforeEach, expect, jasmine, spyOn */
+/* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let ac = {};
 const $state = {
@@ -32,7 +32,8 @@ describe('AppModuleController', () => {
             projectList: [],
             projectStructure: mockData,
             populateProjectStructure: jasmine.createSpy('pps'),
-            getProjectData: jasmine.createSpy('gpd')
+            getProjectData: jasmine.createSpy('gpd'),
+            reset: jasmine.createSpy('asd').and.returnValue({ loadedPromise: Promise.resolve() })
         };
     });
 
@@ -56,6 +57,7 @@ describe('AppModuleController', () => {
 
         ac.logout();
 
+        expect(ac.cs.reset).toHaveBeenCalled();
         expect(ac.systemLogout).toHaveBeenCalled();
         expect(ac.showCompleteNavigation).toHaveBeenCalled();
 

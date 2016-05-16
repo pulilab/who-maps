@@ -37,7 +37,7 @@ class AppModuleController extends Protected {
             this.checkUserProfile();
         });
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
-        this.EE.on('logout', this.handleLogout.bind(this));
+        this.EE.on('logout', this.handleLogoutEvent.bind(this));
         this.EE.on('projectListUpdated', this.fillUserData.bind(this));
         this.EE.on('refreshProjects', this.refreshProjectsHandler.bind(this));
     }
@@ -91,8 +91,9 @@ class AppModuleController extends Protected {
         this.logout();
     }
 
-    handleLogout() {
+    handleLogoutEvent() {
         this.state.go('login', { appName: null });
+
     }
 
     showCompleteNavigation(state, isLogin) {
@@ -106,8 +107,11 @@ class AppModuleController extends Protected {
     }
 
     logout() {
-        this.systemLogout();
-        this.showCompleteNavigation(null, false);
+        const rest = this.cs.reset();
+        rest.loadedPromise.then(() => {
+            this.systemLogout();
+            this.showCompleteNavigation(null, false);
+        });
     }
 
     static appControllerFactory() {
