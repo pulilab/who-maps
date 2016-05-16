@@ -73,7 +73,7 @@ class EditProfileController extends Protected {
                 if (result.success) {
                     const rs = this.cs.reset();
                     rs.loadedPromise.then(() => {
-                        this.state.go('dashboard').then( () => {
+                        this.state.go('dashboard').then(() => {
                             // success, do nothing
                         }, () => {
                             // error in state change, reload the window
