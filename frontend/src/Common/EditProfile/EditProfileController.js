@@ -71,12 +71,7 @@ class EditProfileController extends Protected {
                 this.es.updateProfile(this.userProfile) : this.es.createProfile(this.userProfile);
             request.then(result => {
                 if (result.success) {
-                    const rs = this.cs.reset();
-                    rs.loadedPromise.then(() => {
-                        this.state.go('dashboard').then(() => {
-                            window.location.reload();
-                        });
-                    });
+                    window.location.reload();
                 }
                 else {
                     this.handleResponse(result.data);
