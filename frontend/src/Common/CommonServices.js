@@ -25,7 +25,7 @@ class CommonServices extends Protected {
         this.projectList = [];
         this.hash = Math.random().toString(36);
         this.projectStructure = [];
-        this.retrieveUser = this.retrieveUser.bind(this);
+        this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = _.cloneDeep(loadingArray);
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
@@ -60,7 +60,7 @@ class CommonServices extends Protected {
     }
 
     loadData() {
-        this.retrieveUser();
+        this.retrieveUserProfile();
         this.populateProjectList();
         this.populateProjectStructure();
     }
@@ -97,11 +97,13 @@ class CommonServices extends Protected {
         });
     }
 
-    retrieveUser() {
+    retrieveUserProfile() {
         const vm = this;
         vm.get('userprofiles/').then(user => {
             vm.userProfile = user[0];
-            vm.userProfile.email = this.user.username;
+            if (this.userProfile) {
+                vm.userProfile.email = this.storage.get('user').username;
+            }
             this.loadingProgress('user-profile');
         });
     }
@@ -110,11 +112,12 @@ class CommonServices extends Protected {
         const promiseArray = [];
         this.get('projects/')
             .then((projects) => {
-                console.log('retrieved from server: ', projects);
                 this.projectList = projects;
                 _.forEach(projects, project => {
-                    this.getProjectDetail(project);
-                    promiseArray.push(project.detailPromise);
+                    if (project) {
+                        this.getProjectDetail(project);
+                        promiseArray.push(project.detailPromise);
+                    }
                 });
 
                 Promise.all(promiseArray)
@@ -123,6 +126,10 @@ class CommonServices extends Protected {
                     }, () => {
                         this.promiseReject();
                     });
+            }, () => {
+                // if the user has no user profile the loading should still go on!
+                console.warn('the user has no user profile');
+                this.loadingProgress('list');
             });
     }
 

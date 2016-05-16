@@ -245,7 +245,11 @@ md-dialog {
       }
 
       .right-content {
-        padding: 30px 120px 30px 70px;
+        padding: 0 120px 30px 70px;
+
+        #help-anchor {
+          height: 30px;
+        }
 
         &.axis1 b > em {
           color: $color-axis1;

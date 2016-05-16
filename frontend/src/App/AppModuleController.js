@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Protected, CommonService } from '../Common/';
+import { Protected } from '../Common/';
 
 class AppModuleController extends Protected {
 
@@ -8,7 +8,7 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
-        this.cs = CommonService;
+        this.cs = require('../Common/CommonServices').default;
         this.userProfile = this.cs.userProfile;
         this.currentPage = void 0;
         this.showFullNavigation = false;
@@ -34,11 +34,18 @@ class AppModuleController extends Protected {
         }, value => {
             this.currentPage = value;
             this.showCompleteNavigation(value, this.isLogin);
+            this.checkUserProfile();
         });
         this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
         this.EE.on('logout', this.handleLogout.bind(this));
         this.EE.on('projectListUpdated', this.fillUserData.bind(this));
         this.EE.on('refreshProjects', this.refreshProjectsHandler.bind(this));
+    }
+
+    checkUserProfile() {
+        if (!this.userProfile) {
+            this.state.go('editProfile');
+        }
     }
 
     refreshProjectsHandler() {
@@ -55,9 +62,16 @@ class AppModuleController extends Protected {
 
     fillUserData() {
         this.user.projects = this.cs.projectList;
-        if (this.state.params.appName.length === 0) {
+        const lastProject = _.last(this.user.projects);
+
+        if (!lastProject || !lastProject.id) {
+            this.state.go('country');
+        }
+
+        if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
+            const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { 'appName': _.last(this.user.projects).id });
+            this.state.go(state, { appName });
         }
         _.forEach(this.user.projects, item => {
             if (item.id === parseInt(this.state.params.appName, 10)) {
@@ -78,7 +92,7 @@ class AppModuleController extends Protected {
     }
 
     handleLogout() {
-        this.state.go('login', { projectId: null });
+        this.state.go('login', { appName: null });
     }
 
     showCompleteNavigation(state, isLogin) {

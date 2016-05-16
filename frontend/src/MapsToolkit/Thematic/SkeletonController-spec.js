@@ -16,12 +16,13 @@ const $scopeMock = {
     }
 };
 const $interpolate = jasmine.createSpy('interpolate').and.returnValue(() => {});
+const $anchorScroll =  a => a;
 let vm;
 
 describe('SkeletonController', () => {
 
     beforeEach(() => {
-        vm = new SkeletonController.skeletonFactory()($scopeMock, $interpolate);
+        vm = new SkeletonController.skeletonFactory()($scopeMock, $interpolate, $anchorScroll);
     });
 
     it('is defined', () => {

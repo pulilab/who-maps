@@ -18,6 +18,7 @@ class CountrymapController {
         this.$onInit = () => {
 
             this.showPlaceholder = !this.big;
+            this.cs = require('../../Common/CommonServices').default;
             this.svgPanZoom = svgPanZoom;
 
             this.EE.removeListener('country Changed');
@@ -72,7 +73,6 @@ class CountrymapController {
     }
 
     mapArrived(data) {
-
         const vm = this;
         vm.map = data;
         vm.mapHere = true;
@@ -87,23 +87,14 @@ class CountrymapController {
     }
 
     makeGeoFromTopo(topo, level) {
-
         return topojson.feature(topo, topo.objects[level]);
     }
 
-    drawMap(topoJSON) {
-
-        const vm = this;
-
-        d3.select(vm.el[0]).select('.countrymapcontainer').remove();
-
-        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
-
-        vm.countryName =
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
+    defaultLevels() {
+        const defaultLib = {};
+        _.forEach(this.cs.projectStructure.countries, country => {
+            defaultLib[country.name] = 'admin_level_5';
+        });
 
         const levelLib = {
             'Sierra Leone': 'admin_level_5',
@@ -117,11 +108,40 @@ class CountrymapController {
             'Tunisia': 'admin_level_4',
             'Pakistan': 'admin_level_4'
         };
-        const level = levelLib[vm.countryName];
 
-        if (vm.countryName === 'Border India - Bangladesh') { vm.countryName = 'Bangladesh'; }
-        if (vm.countryName === 'Border Malawi - Mozambique') { vm.countryName = 'Malawi'; }
-        if (vm.countryName === 'The Gambia') { vm.countryName = 'Senegal'; }
+        _.merge(defaultLib, levelLib);
+
+        return defaultLib;
+    }
+
+    replaceCountryName() {
+        const dictionary = {
+            'Border India - Bangladesh': 'Bangladesh',
+            'Border Malawi - Mozambique': 'Malawi',
+            'The Gambia': 'Senegal'
+        };
+        this.countryName = dictionary[this.countryName]
+            ? dictionary[this.countryName] : this.countryName;
+    }
+
+    drawMap(topoJSON) {
+        const vm = this;
+
+        d3.select(vm.el[0]).select('.countrymapcontainer').remove();
+
+        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
+
+        vm.countryName =
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
+
+        // with this the data can be not the 'correct' one for
+        // the country but a map is always displayed even for not configured countries
+        const levelLib = this.defaultLevels();
+        const level = levelLib[vm.countryName] ? levelLib[vm.countryName] : 'admin_level_5';
+        this.replaceCountryName();
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
@@ -137,9 +157,10 @@ class CountrymapController {
             .attr('width', width)
             .attr('height', height);
 
-        const scale = Math.max.apply(null, topoJSON.admin_level_2.transform.scale.map(nr => {
-            return 1 / nr;
-        })) * 10;
+        const scale = Math.max.apply(null,
+                topoJSON.admin_level_2.transform.scale.map(nr => {
+                    return 1 / nr;
+                })) * 10;
 
         const projection = d3.geo.mercator()
             .scale(scale);

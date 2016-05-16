@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import 'whatwg-fetch';
-import 'es6-promise';
+// import 'es6-promise';
 
 /* global Promise, API, DEV */
 

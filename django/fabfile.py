@@ -34,11 +34,13 @@ def deploy():
         # get new stuff from git
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
+        time.sleep(20)
+        run('docker-compose restart')
+        time.sleep(5)
 
         # handle backend
         with cd(env.backend_root):
-            run('docker-compose restart')
-            time.sleep(2)
+
             # backup DB
             _backup_db()
             # build
@@ -65,6 +67,8 @@ def deploy():
         with cd(env.frontend_root):
             run('npm install')
             run('npm run dist')
+            run('npm run clean-server-folder')
+            run('npm run copy-to-server')
 
     tear_down()
 
