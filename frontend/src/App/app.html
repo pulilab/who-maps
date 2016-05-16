@@ -90,12 +90,39 @@
     <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation" ng-show="vm.state.current.name !== 'country'">
         <div class="md-toolbar-tools">
             <div class="project-mainmenu">
-                <md-button ui-sref="dashboard" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>Dashboard</md-button>
-                <md-button ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">Visualize Project</md-button>
-                <md-button ui-sref="editProject" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>Edit Project</md-button>
-                <md-button ui-sref="#" ng-disabled="!vm.userProfile" ng-if="false" ui-sref-active="active" md-no-ink>Improve Project</md-button>
-                <md-button ui-sref="maps" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>Update Score</md-button>
-                <md-button ui-sref="summary" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>Summary Score</md-button>
+                <md-button ui-sref="dashboard" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    Dashboard
+                </md-button>
+                <md-button ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
+                    <md-tooltip md-autohide>
+                        CREATE VISUAL FRAMEWORK
+                    </md-tooltip>
+                    Visualize Project
+                </md-button>
+                <md-button ui-sref="editProject" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-tooltip md-autohide>
+                        EDIT PROJECT DETAILS
+                    </md-tooltip>
+                    Edit Project
+                </md-button>
+                <md-button ui-sref="#" ng-disabled="!vm.userProfile" ng-if="false" ui-sref-active="active" md-no-ink>
+                    <md-tooltip md-autohide>
+                        TIPS AND RESOURCES
+                    </md-tooltip>
+                    Improve Project
+                </md-button>
+                <md-button ui-sref="maps" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-tooltip md-autohide>
+                        GO TO MAPS TOOLKIT
+                    </md-tooltip>
+                    Update Score
+                </md-button>
+                <md-button ui-sref="summary" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-tooltip md-autohide>
+                        SHOW SCORE SUMMARY
+                    </md-tooltip>
+                    Summary Score
+                </md-button>
             </div>
             <div flex></div>
             <div class="project-submenu" layout="row">

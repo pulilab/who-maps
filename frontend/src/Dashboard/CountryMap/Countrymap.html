@@ -1,7 +1,7 @@
 <div class="relative">
 
 	<!-- for DASH -->
-	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="!vm.big">
+	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
 
 		<div class="countrychart-tooltip-header bold">
 			{{vm.countryName}}
@@ -13,7 +13,6 @@
 			<div flex class="bold">
 				Total numbers:
 			</div>
-
 
 			<div flex layout="row" ng-repeat="(key, numb) in vm.boundNrs">
 				<div class="cap" flex="85">{{key}}:<br></div>
@@ -28,8 +27,6 @@
 				{{vm.activeDistrict.name}}
 			</div>
 
-
-
 			<div
 				flex
 				layout="row"
@@ -38,7 +35,6 @@
 				<div flex="85" class="cap">{{key}}</div>
 				<div class="bold">{{datum}}</div>
 			</div>
-
 
 		</div>
 	</div>
@@ -79,5 +75,11 @@
 		<br>
 		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
 	</div>
+
+	<!-- Placeholder spinner -->
+    <div class="spinner" layout="row" layout-align="center center" ng-show="vm.showPlaceholder">
+        <span flex>Loading map</span>
+        <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+    </div>
 
 </div>

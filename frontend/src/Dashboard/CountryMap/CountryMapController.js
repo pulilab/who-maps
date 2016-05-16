@@ -16,6 +16,8 @@ class CountrymapController {
         this.preventMouseOut = false;
 
         this.$onInit = () => {
+
+            this.showPlaceholder = !this.big;
             this.cs = require('../../Common/CommonServices').default;
             this.svgPanZoom = svgPanZoom;
 
@@ -65,6 +67,7 @@ class CountrymapController {
 
     mapChanged() {
 
+        this.showPlaceholder = true;
         this.EE.once('topoArrived', this.mapArrived, this);
         this.EE.once('mapdataArrived', this.dataArrived, this);
     }
@@ -95,11 +98,15 @@ class CountrymapController {
 
         const levelLib = {
             'Sierra Leone': 'admin_level_5',
-            'India': 'admin_level_5',
+            'India': 'admin_level_4', // Precise enough map-data?
             'Kenya': 'admin_level_4',
-            'Philippines': 'admin_level_3',
+            'Philippines': 'admin_level_3', // Precise enough map-data?
             'Border India - Bangladesh': 'admin_level_4',
-            'Border Malawi - Mozambique': 'admin_level_4'
+            'Indonesia': 'admin_level_4', // Precise enough map-data?
+            'Border Malawi - Mozambique': 'admin_level_4',
+            'The Gambia': 'admin_level_3',
+            'Tunisia': 'admin_level_4',
+            'Pakistan': 'admin_level_4'
         };
 
         _.merge(defaultLib, levelLib);
@@ -110,7 +117,8 @@ class CountrymapController {
     replaceCountryName() {
         const dictionary = {
             'Border India - Bangladesh': 'Bangladesh',
-            'Border Malawi - Mozambique': 'Malawi'
+            'Border Malawi - Mozambique': 'Malawi',
+            'The Gambia': 'Senegal'
         };
         this.countryName = dictionary[this.countryName]
             ? dictionary[this.countryName] : this.countryName;
@@ -122,7 +130,8 @@ class CountrymapController {
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
         vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag;
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
 
         vm.countryName =
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
@@ -203,6 +212,7 @@ class CountrymapController {
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
         vm.svgZoom.zoomOut();
 
+        this.showPlaceholder = false;
         this.dataHere = false;
         this.mapHere = false;
     }
