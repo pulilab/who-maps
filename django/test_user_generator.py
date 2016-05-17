@@ -79,4 +79,5 @@ def generate_users():
         # Ugly log for copying account details from terminal
         print(username_pattern.format(x)+", 123456, "+project_pattern.format(x)+" ("+countries[(x%10)]+")")
 
-generate_users()
+if __name__ == "__main__":
+    generate_users()
