@@ -13,6 +13,9 @@ class Protected extends AuthApi {
         this.storage = new Storage();
         this.isLogin = this.retrieveLoginStatus();
         this.user = this.storage.get('user');
+        this.$onDestroy = () => {
+          console.log('On destroy function called');
+        };
         this.checkLoginStatus();
     }
 
