@@ -409,3 +409,12 @@ applications {
     @include text-truncate();
   }
 }
+
+md-tooltip .md-content {
+    height: auto;
+    max-width: 400px;
+    white-space: initial;
+    word-break: break-all;
+    line-height: 12px;
+    padding: 8px;
+}

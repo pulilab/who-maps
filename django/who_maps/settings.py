@@ -185,28 +185,19 @@ EMAIL_HOST_PASSWORD = "5ede15430fbf90989648a0fe12e379cc"
 EMAIL_PORT = 587
 
 # Geodata settings
-MAPZEN_S3_URL = "https://s3.amazonaws.com/osm-polygons.mapzen.com/"
 GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')
-SELECTED_FILE_LIST = [
-    "sierra-leone_geojson.tgz",
-    "kenya_geojson.tgz",
-    "philippines_geojson.tgz",
-    "bangladesh_geojson.tgz",
-    "india_geojson.tgz"
-]
-ADMIN_LEVELS_TO_IMPORT = [
-    "admin_level_2.geojson",
-    "admin_level_3.geojson",
-    "admin_level_4.geojson",
-    "admin_level_5.geojson"
-]
 
 LEVELS_FOR_DISTRICTS = {
     "sierra-leone": "admin_level_5",
-    "india": "admin_level_5",
+    "india": "admin_level_4",
     "kenya": "admin_level_4",
     "philippines": "admin_level_3",
-    "bangladesh": "admin_level_4"
+    "bangladesh": "admin_level_4",
+    "senegal": "admin_level_5",
+    "malawi": "admin_level_4",
+    "pakistan": "admin_level_4",
+    "indonesia": "admin_level_5",
+    "tunisia": "admin_level_4"
 }
 
 # Logging

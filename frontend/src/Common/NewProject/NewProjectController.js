@@ -67,7 +67,6 @@ class NewProjectController extends ProjectDefinition {
         const data = this.cs.getProjectData(this.projectId);
         this.createCoverageKeys(data);
         _.merge(this.project, data);
-
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();

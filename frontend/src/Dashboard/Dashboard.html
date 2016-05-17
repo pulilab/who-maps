@@ -153,26 +153,27 @@
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
             <md-card flex>
 
-                    <md-tabs md-border-bottom md-dynamic-height >
+                <md-tabs md-border-bottom md-dynamic-height class="perf-tab">
 
-                        <md-tab label="geographical view">
-                            <countrymap
-                                flex
-                                data="vm.perfMockMap">
-                            </countrymap>
-                        </md-tab>
+                    <md-tab label="geographical view">
+                        <countrymap
+                            flex
+                            big="false"
+                            data="vm.perfMockMap">
+                        </countrymap>
+                    </md-tab>
 
-                        <md-tab label="historical view">
+                    <md-tab label="historical view">
 
-                            <linechart
-                                showdotted="true"
-                                datachooser="false"
-                                notpercentage="true"
-                            ></linechart>
+                        <linechart
+                            showdotted="true"
+                            datachooser="false"
+                            notpercentage="true"
+                        ></linechart>
 
-                        </md-tab>
+                    </md-tab>
 
-                    </md-tabs>
+                </md-tabs>
 
             </md-card>
         </div>
@@ -249,9 +250,6 @@
                     </md-tab>
 
                 </md-tabs>
-
-
-
 
             </md-card>
         </div>

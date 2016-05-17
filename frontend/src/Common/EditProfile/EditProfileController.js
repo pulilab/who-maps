@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import EditProfileService from './EditProfileService';
 import Protected from '../Protected';
+import Storage from '../Storage';
 import CommonService  from '../CommonServices';
 
 /* global DEV, Promise */
@@ -14,6 +15,7 @@ class EditProfileController extends Protected {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.storage = new Storage();
         this.$onInit = this.initialization.bind(this);
         this.bindFunctions();
     }
@@ -33,11 +35,17 @@ class EditProfileController extends Protected {
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
+        if (!this.userProfile || !this.userProfile.email) {
+            const user = this.storage.get('user');
+            this.userProfile = {
+                email: user.username
+            };
+        }
         this.dataLoaded = true;
         this.scope.$watch(() => {
-            return this.userProfile.modified;
+            return this.userProfile;
         }, value => {
-            if (value) {
+            if (value && value.modified) {
                 this.userProfile.modified = this.userProfile.modified.split('T')[0];
             }
         });
@@ -49,22 +57,26 @@ class EditProfileController extends Protected {
     }
 
     checkErrors(field) {
-        return !_.isEmpty(this.editProfileForm[field].$error);
+        if (this.editProfileForm && this.editProfileForm[field]) {
+            return !_.isEmpty(this.editProfileForm[field].$error);
+        }
+        return false;
     }
 
 
     save() {
         this.sentForm = true;
         if (this.editProfileForm.$valid) {
-            this.es.updateProfile(this.userProfile)
-                .then(result => {
-                    if (result.success) {
-                        this.state.go('dashboard');
-                    }
-                    else {
-                        this.handleResponse(result.data);
-                    }
-                });
+            const request = this.userProfile.id ?
+                this.es.updateProfile(this.userProfile) : this.es.createProfile(this.userProfile);
+            request.then(result => {
+                if (result.success) {
+                    window.location.reload();
+                }
+                else {
+                    this.handleResponse(result.data);
+                }
+            });
         }
     }
 

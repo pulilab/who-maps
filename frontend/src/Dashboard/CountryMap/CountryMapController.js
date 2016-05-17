@@ -4,10 +4,6 @@ import _ from 'lodash';
 import topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
-// import clvMock from './mock/clvMock.js';
-
-// import topoSource from './mock/sierra-leone/topoTest.json';
-// const mockGeoJsonDistricts = topojson.feature(topoSource, topoSource.objects.admin_level_5);
 
 class CountrymapController {
 
@@ -18,30 +14,27 @@ class CountrymapController {
         this.EE = window.EE;
         this.tooltipOver = false;
         this.preventMouseOut = false;
-        // this.activeDistrict, contains data for the maps toolkits lower half (ng-if -ed)
-        // this.big <= boolean binding indicating if tolltip should get used,
-        //             also: bigger size + zoomhandler positioning
-
 
         this.$onInit = () => {
 
-            // console.debug('MAPctrl initialized!');
+            this.showPlaceholder = !this.big;
+            this.cs = require('../../Common/CommonServices').default;
             this.svgPanZoom = svgPanZoom;
-            this.EE.once('topoArrived', this.mapArrived, this);
-            this.EE.once('mapdataArrived', this.dataArrived, this);
 
-            this.EE.on('country Changed', this.mapChanged.bind(this));
+            this.EE.removeListener('country Changed');
+
+            if (this.big) {
+                this.EE.on('country Changed', this.mapChanged, this);
+            }
+            else {
+                this.EE.once('country Changed', this.mapChanged, this);
+            }
         };
 
         this.$onDestroy = () => {
-
             // this.svgZoom.destroy();
-
             this.data = false;
             this.map = false;
-
-            // this.EE.removeListener('topoArrived', this.mapArrived);
-            // this.EE.removeListener('mapdataArrived', this.dataArrived);
         };
     }
 
@@ -49,8 +42,8 @@ class CountrymapController {
         // Aggregates the values of districts to show them all
 
         const vm = this;
-        vm.data = !vm.big ? data : { data };
-        // console.debug('DATA to populate map with:', vm.data);
+        vm.data = vm.big ? { data } : data;
+        this.dataHere = true;
 
         vm.boundNrs = _.reduce(vm.data.data, (ret, value, key) => {
 
@@ -63,9 +56,7 @@ class CountrymapController {
             return ret;
         }, {});
 
-        // console.debug('BOUNDNRS', vm.boundNrs);
-
-        if (vm.map) {
+        if (vm.mapHere) {
             // console.debug('data arrived, map was here, starts drawing', data);
             vm.drawMap(vm.map);
         }
@@ -75,16 +66,18 @@ class CountrymapController {
     }
 
     mapChanged() {
-        this.EE.once('topoArrived', this.mapArrived.bind(this));
-        this.EE.once('mapdataArrived', this.dataArrived.bind(this));
+
+        this.showPlaceholder = true;
+        this.EE.once('topoArrived', this.mapArrived, this);
+        this.EE.once('mapdataArrived', this.dataArrived, this);
     }
 
     mapArrived(data) {
-
         const vm = this;
         vm.map = data;
+        vm.mapHere = true;
 
-        if (vm.data) {
+        if (vm.dataHere) {
             // console.debug('map arrived, data was here, so it starts drawing', data);
             vm.drawMap(data);
         }
@@ -94,63 +87,83 @@ class CountrymapController {
     }
 
     makeGeoFromTopo(topo, level) {
-        // return topojson.feature(topo, topoSource.objects.admin_level_5);
         return topojson.feature(topo, topo.objects[level]);
     }
 
+    defaultLevels() {
+        const defaultLib = {};
+        _.forEach(this.cs.projectStructure.countries, country => {
+            defaultLib[country.name] = 'admin_level_5';
+        });
+
+        const levelLib = {
+            'Sierra Leone': 'admin_level_5',
+            'India': 'admin_level_4', // Precise enough map-data?
+            'Kenya': 'admin_level_4',
+            'Philippines': 'admin_level_3', // Precise enough map-data?
+            'Border India - Bangladesh': 'admin_level_4',
+            'Indonesia': 'admin_level_4', // Precise enough map-data?
+            'Border Malawi - Mozambique': 'admin_level_4',
+            'The Gambia': 'admin_level_3',
+            'Tunisia': 'admin_level_4',
+            'Pakistan': 'admin_level_4'
+        };
+
+        _.merge(defaultLib, levelLib);
+
+        return defaultLib;
+    }
+
+    replaceCountryName() {
+        const dictionary = {
+            'Border India - Bangladesh': 'Bangladesh',
+            'Border Malawi - Mozambique': 'Malawi',
+            'The Gambia': 'Senegal'
+        };
+        this.countryName = dictionary[this.countryName]
+            ? dictionary[this.countryName] : this.countryName;
+    }
+
     drawMap(topoJSON) {
-
         const vm = this;
-        // console.warn('Draw FN run!');
 
-        // d3.select(vm.el[0]).select('.countrymapcontainer').selectAll('*').remove();
         d3.select(vm.el[0]).select('.countrymapcontainer').remove();
 
-        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag;
+        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
+            topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
 
         vm.countryName =
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
 
-        const levelLib = {
-            'Sierra Leone': 'admin_level_5',
-            'India': 'admin_level_5',
-            'Kenya': 'admin_level_4',
-            'Philippines': 'admin_level_3',
-            'Border India - Bangladesh': 'admin_level_4'
-        };
-
-        const level = levelLib[vm.countryName];
-
-        if (vm.countryName === 'Border India - Bangladesh') { vm.countryName = 'Bangladesh'; }
+        // with this the data can be not the 'correct' one for
+        // the country but a map is always displayed even for not configured countries
+        const levelLib = this.defaultLevels();
+        const level = levelLib[vm.countryName] ? levelLib[vm.countryName] : 'admin_level_5';
+        this.replaceCountryName();
 
         const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
 
-        // console.log(vm.el[0]);
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
 
-        const outerWidth = outer[0][0].offsetWidth;
-        const outerHeight = d3.select('#map')[0][0].offsetHeight;
-        // console.warn('OUTER HEIGHT', outerHeight);
+        const width = outer[0][0].offsetWidth;
+        const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
 
         const element = outer.append('svg')
             .attr('class', 'countrymap')
-            .attr('width', outerWidth)
-            .attr('height', vm.big ? outerHeight : 409);
+            .attr('width', width)
+            .attr('height', height);
 
-        // console.debug('FROM TOPO:', topoJSON.admin_level_2.transform.scale);
-
-        const scale = Math.max.apply(null, topoJSON.admin_level_2.transform.scale.map(nr => {
-            return 1 / nr;
-        })) * 10;
-
-        // console.log('SCALE', scale);
+        const scale = Math.max.apply(null,
+                topoJSON.admin_level_2.transform.scale.map(nr => {
+                    return 1 / nr;
+                })) * 10;
 
         const projection = d3.geo.mercator()
             .scale(scale);
-
 
         // Appending the districts
         for (let i = 0; i < distrData.features.length; i += 1) {
@@ -160,6 +173,7 @@ class CountrymapController {
 
             const gotData = typeof vm.data.data[distrName] === 'object';
 
+            // Appending path
             element
                 .append('path')
                 .datum({
@@ -196,8 +210,11 @@ class CountrymapController {
         };
 
         vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
-
         vm.svgZoom.zoomOut();
+
+        this.showPlaceholder = false;
+        this.dataHere = false;
+        this.mapHere = false;
     }
 
     static countrymapFactory() {

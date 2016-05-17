@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import 'whatwg-fetch';
-import 'es6-promise';
+// import 'es6-promise';
 
 /* global Promise, API, DEV */
 
@@ -10,6 +10,7 @@ class AuthApi {
         this.retrieveToken();
         this.EE = window.EE;
         this.apiUrl = API;
+        this.updateOnNextRequest = false;
 
         if (module) {
             this.apiUrl += module + '/';
@@ -19,6 +20,12 @@ class AuthApi {
         this.prePost = false;
         this.prePut = false;
         this.preDelete = false;
+        this.EE.on('logout', this.invalidate, this);
+    }
+
+    invalidate() {
+        this.token = void 0;
+        this.updateOnNextRequest = true;
     }
 
     get(endpoint) {
@@ -162,6 +169,10 @@ class AuthApi {
     }
 
     generateHeaders() {
+        if (this.updateOnNextRequest) {
+            this.retrieveToken(true);
+            this.updateOnNextRequest = false;
+        }
         const headers = new Headers();
         headers.append('Authorization', 'Token ' + this.token);
         headers.append('content-type', 'application/json');

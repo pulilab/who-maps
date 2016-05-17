@@ -10,6 +10,9 @@ describe('loginController', () => {
 
     beforeEach(() => {
         lc = loginController.loginFactory()();
+        lc.loginForm = {
+            $valid: {}
+        };
     });
 
     it('should have a function that return the content height of the page ', () => {

@@ -3,7 +3,6 @@
 .relative {
 
 	position: relative;
-	// height: calc(100vh - 240px);
 
 	.countrychart-tooltip {
 
@@ -99,6 +98,18 @@
 		}
 	}
 
+	.spinner {
+		position: relative;
+		width: 100%;
+		background-color: transparent;
+		min-height: 60px;
+
+		span {
+			color: $text-primary;
+			font-size: 14px;
+			text-align: right;
+		}
+	}
 
 }
 
@@ -118,7 +129,7 @@
 
 			fill: #E5E5EE;
 			stroke: #9B9DA8;
-			stroke-width: 2px;
+			stroke-width: 5px;
 		    pointer-events: all;
 		    cursor: default;
 

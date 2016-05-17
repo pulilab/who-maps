@@ -52,6 +52,7 @@ class DashboardModuleController {
 
     fetchProjectData(data) {
         // console.debug('ProjectData', data);
+        this.EE.emit('country Changed');
         this.projectData = data;
         this.fetchCountryMap(data.country);
         this.parseMapData(data.coverage);
@@ -107,8 +108,9 @@ class DashboardModuleController {
         this.service.getToolkitData(this.projectId).then(data => {
             // console.debug('RAW Toolkit data', data);
             this.rawToolkitData = data;
+            this.fetchToolkitVersions();
         });
-        this.fetchToolkitVersions();
+
     }
 
     fetchToolkitVersions() {

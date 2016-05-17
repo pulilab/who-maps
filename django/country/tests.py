@@ -68,7 +68,7 @@ class CountryTests(APITestCase):
             }
         }
 
-        country, _ = Country.objects.get_or_create(name="india", geodata=geodata)
+        country, _ = Country.objects.get_or_create(name="sierra-leone", geodata=geodata)
         country.save()
         self.country_id = country.id
 

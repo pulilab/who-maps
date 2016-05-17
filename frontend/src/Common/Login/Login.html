@@ -6,15 +6,29 @@
 
     <div md-whiteframe="2">
         <md-content layout="column">
-            <form layout="column" ng-submit="vm.login()">
+            <form layout="column" name="vm.loginForm" ng-submit="vm.login()" novalidate>
                 <md-input-container>
                     <label>Email address</label>
-                    <input ng-model="vm.user.username" type=text/>
+                    <input ng-required="true" name="username" ng-model="vm.user.username" type=text/>
+                    <div ng-messages="vm.loginForm.username.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="email">This field must be a valid email.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.loginForm.username.customError">{{error}} </div>
+                    </div>
                 </md-input-container>
                 <md-input-container>
                     <label>Password</label>
-                    <input ng-model="vm.user.password" type="password"/>
+                    <input ng-required="true" name="password" ng-model="vm.user.password" type="password"/>
+                    <div ng-messages="vm.loginForm.password.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.loginForm.password.customError">{{error}} </div>
+                    </div>
                 </md-input-container>
+                <p class="global-error" >
+                    <span ng-repeat="error in vm.loginForm.non_field_errors" > {{error}}</span>
+
+                </p>
+
                 <div layout="row" layout-align="start">
                     <div flex=auto>
                         <md-button class="md-gray md-small">
