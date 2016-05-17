@@ -67,7 +67,7 @@
                     <span class="cap">{{domain.name}}</span>
                 </div>
 
-                <div class="scores" layout="row" ng-if="domain.domain_sum > 0" flex="40">
+                <div class="scores" layout="row" ng-if="domain.domain_completion > 0" flex="40">
 
                     <div flex="50" layout="row" layout-align="start center">
 
@@ -75,7 +75,7 @@
 
                         <div class="line">
 
-                            <div ng-class="vm.advanceClassGenerator(domain.domain_percentage)"></div>
+                            <div ng-class="vm.advanceClassGenerator(domain.domain_completion)"></div>
 
                         </div>
 
