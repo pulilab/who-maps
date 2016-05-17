@@ -90,6 +90,13 @@ md-tooltip {
   }
 }
 
+
+// Placeholder color
+md-input-container label,
+.md-select-placeholder span {
+  color: rgba(0,0,0,.54);
+}
+
 md-backdrop {
   &.md-dialog-backdrop {
     z-index: 1200;
