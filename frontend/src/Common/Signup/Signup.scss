@@ -4,8 +4,8 @@
 signup {
 
   md-content {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 440px;
+    max-width: 440px;
   }
 
   h4 {
@@ -71,6 +71,21 @@ signup {
     margin-top: 18px;
     padding: 20px 40px;
     background-color: $color-gray-lightest;
+  }
+
+  .form-success {
+    padding: 40px;
+
+    h4 {
+      margin-bottom: 12px;
+    }
+
+    i.material-icons {
+      display: block;
+      color: $color-green;
+      text-align: center;
+      font-size: 48px;
+    }
   }
 
   .disclaimer {

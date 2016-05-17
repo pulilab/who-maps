@@ -24,9 +24,9 @@
                         <div ng-message="custom" ng-repeat="error in vm.loginForm.password.customError">{{error}} </div>
                     </div>
                 </md-input-container>
-                <p class="global-error" >
-                    <span ng-repeat="error in vm.loginForm.non_field_errors" > {{error}}</span>
 
+                <p class="global-error">
+                    <span ng-repeat="error in vm.loginForm.non_field_errors"> {{error}}</span>
                 </p>
 
                 <div layout="row" layout-align="start">

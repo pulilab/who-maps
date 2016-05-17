@@ -37,8 +37,8 @@ md-tooltip {
   color: $color-primary;
 
   .md-display-1 {
-    font-size: 40px;
     margin: 40px 0;
+    font-size: 40px;
   }
 
   .md-subhead {
@@ -155,6 +155,30 @@ md-menu-content {
     width: calc(100% - 32px) !important;
 }
 
+// Form global error
+
+p.global-error {
+  margin: 0;
+  color: $color-red;
+  font-size: $body-font-size-base;
+
+  span {
+    position: relative;
+    display: block;
+    margin: 0 0 10px;
+    padding-left: 24px;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      content: "error_outline";
+
+      @include md-icon(20px);
+    }
+  }
+}
+
 /* CUSTOM COLORS
    ============================= */
 
@@ -227,8 +251,8 @@ md-menu-content {
    ============================= */
 
 .main-toolbar {
-  min-height: 48px;
   z-index: auto;
+  min-height: 48px;
 
   &.toolbar-global {
     padding-right: 12px;
@@ -248,8 +272,8 @@ md-menu-content {
       }
 
       &.landing-link {
-        margin-left: 24px;
         margin-right: 0;
+        margin-left: 24px;
       }
 
       .material-icons {
@@ -299,9 +323,9 @@ md-menu-content {
 
   .project-selector {
     md-input-container {
-      max-width: 50vw;
       margin: 0 0 0 12px !important;
       padding: 0 !important;
+      max-width: 50vw;
 
       md-select {
         transform: translateY(-4px);
@@ -355,11 +379,11 @@ md-menu-content {
 
       &.menu-separator {
         margin: 10px 12px 10px 12px;
-        width: 1px;
         min-height: 16px;
+        width: 1px;
         height: 16px;
-        line-height: 16px;
         background-color: #BDBDBD;
+        line-height: 16px;
       }
     }
 
