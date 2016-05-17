@@ -175,20 +175,26 @@ new-project {
 
   .axis-description {
     height: 100%;
+    padding: 25px 0 25px 50px;
+    @include clearfix();
 
     img {
-      width: 55px;
-      height: 55px;
+      width: 35px;
+      height: 35px;
       float: left;
-      margin-right: 10px;
-      margin-top:40px;
-      padding:5px;
+      margin-top: 5px;
+      margin-right: 15px;
+      padding:10px;
+    }
+
+    h6 {
+      margin: 0;
     }
 
     p {
       float:left;
       width: 285px;
-      margin: 38px 0 0;
+      margin: 5px 0 0;
       font-size:12px;
     }
   }
