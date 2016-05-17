@@ -64,8 +64,21 @@ class Toolkit(ExtendedModel):
         axis_score = mean([x["domain_percentage"] for x in self.data[axis]["domains"]])
         self.data[axis]["axis_score"] = axis_score
 
+        # Update domain completion percentage
+        all_domain_answers = [answer
+            for questions in self.data[axis]["domains"][domain]["questions"]
+            for answer in questions["answers"]
+        ]
+        answered_domain_answers = [answer
+            for questions in self.data[axis]["domains"][domain]["questions"]
+            for answer in questions["answers"]
+            if answer != None
+        ]
+        domain_completion = (len(answered_domain_answers) / len(all_domain_answers)) * 100
+        self.data[axis]["domains"][domain]["domain_completion"] = domain_completion
+
         # Update the axis completion percentage.
-        all_axis_anwers = [answer
+        all_axis_answers = [answer
             for domains in self.data[axis]["domains"]
             for questions in domains["questions"]
             for answer in questions["answers"]
@@ -76,7 +89,7 @@ class Toolkit(ExtendedModel):
             for answer in questions["answers"]
             if answer != None
         ]
-        axis_completion = (len(answered_axis_answers) / len(all_axis_anwers)) * 100
+        axis_completion = (len(answered_axis_answers) / len(all_axis_answers)) * 100
         self.data[axis]["axis_completion"] = axis_completion
 
         self.save()
