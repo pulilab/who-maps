@@ -193,10 +193,10 @@ LEVELS_FOR_DISTRICTS = {
     "kenya": "admin_level_4",
     "philippines": "admin_level_3",
     "bangladesh": "admin_level_4",
-    "senegal": "admin_level_5",
+    "senegal": "admin_level_3",
     "malawi": "admin_level_4",
     "pakistan": "admin_level_4",
-    "indonesia": "admin_level_5",
+    "indonesia": "admin_level_4",
     "tunisia": "admin_level_4"
 }
 
