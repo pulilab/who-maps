@@ -150,6 +150,8 @@ applications {
       }
     }
 
+    // hover on bubble in view mode
+    // show all text
     &.view-mode {
       .bubble-shape {
         &:hover {
@@ -163,17 +165,17 @@ applications {
 
           .app-text {
             position: relative;
-            top: 0;
-            left: 30px;
             display: block;
+            top: 0;
             overflow-y: scroll;
-            padding: 15px 15px 20px;
+            padding: 10px 0 15px 0;
             min-height: 46px;
             max-height: 500px;
             height: auto;
             width: calc( 100% - 80px);
             vertical-align: middle;
             transform: none;
+            box-sizing: content-box;
 
             -webkit-line-clamp: auto;
           }
@@ -183,6 +185,7 @@ applications {
             top: -9px;
             left: -10px;
             border-radius: 1px;
+            transform: scale(1.35);
           }
         }
       }
@@ -404,6 +407,7 @@ applications {
     font-size: $caption-font-size-base;
     line-height: 16px;
     transform: translateY(-50%);
+    transition: padding $swift-ease-out-duration $swift-ease-out-timing-function;
 
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
