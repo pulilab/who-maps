@@ -12,7 +12,7 @@ class LandingPageModuleController {
 
         if (this.isLogin) {
             const commonService = require('../Common/CommonServices');
-            this.projectList = commonService.default.projectList;
+            this.projectList = commonService.projectList;
         }
 
     }

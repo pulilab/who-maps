@@ -1,4 +1,4 @@
-/* global define DEV */
+/* global define DEV, DEBUG */
 
 // General imports
 import angular from 'angular';
@@ -43,7 +43,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
             resolve: {
                 data: ['$q', ($q) => {
                     const def = $q.defer();
-                    const cs = require('../Common/CommonServices').default;
+                    const cs = require('../Common/CommonServices');
                     cs.loadedPromise
                         .then(() => {
                             def.resolve();
@@ -103,10 +103,10 @@ const config = ($stateProvider, $urlRouterProvider) => {
     $urlRouterProvider.otherwise('/landing');
 };
 
-function logUiRouteEvents(...args) { console.log(`Ui route state change ${this} :`, args); }
+function logUiRouteEvents(...args) { console.debug(`Ui route state change ${this} :`, args); }
 
 const run = ($rootScope) => {
-    if (DEV) {
+    if (DEBUG) {
         $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
         $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
     }

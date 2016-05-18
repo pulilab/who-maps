@@ -21,7 +21,7 @@ const lazyLoader = (provider, element, type) => {
                 }
             }
             if (type === 'controller') {
-                provider.register(element, ctrl.default.landingControllerFactory());
+                provider.register(element, ctrl.landingControllerFactory());
             }
             resolve();
         });

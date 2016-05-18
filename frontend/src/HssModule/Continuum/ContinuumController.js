@@ -5,24 +5,21 @@ class ContinuumController {
 
     constructor($timeout, $element) {
         this.EE = window.EE;
+        this.timeout = $timeout;
+        this.element = $element;
+        this.$onInit = this.onInit.bind(this);
+
+    }
+
+    onInit() {
+        const vm = this;
+        vm.bindEvents();
         this.gridLoading = false;
         this.editMode = false;
         this.isFixed = false;
         this.rowHeight = 51;
         this.helperRealHeight = (this.rowHeight * 3) + 'px';
-        this.mapsProgressPercentage = 68; // Placeholder!!
-        this.timeout = $timeout;
-        this.element = $element;
         this.classGenerator = this.classGenerator.bind(this);
-        this.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
-        this.mdContent.on('scroll', this.scrollEventHandler.bind(this));
-        this.$onInit = this.init.bind(this);
-
-    }
-
-    init() {
-        const vm = this;
-        vm.EE.on('editModeDone', vm.editModeChangeDone.bind(vm));
         vm.hs = this.service;
         vm.showEditModeSpinner = false;
         vm.firstRow = this.firstRowGenerator();
@@ -31,6 +28,25 @@ class ContinuumController {
         vm.motherRow.forEach(tile => {
             vm.checkColumnActivation(tile);
         });
+
+    }
+
+    onDestroy() {
+        const vm = this;
+        vm.onDestroy();
+        vm.removeEvents();
+    }
+
+    bindEvents() {
+        const vm = this;
+        vm.EE.on('editModeDone', vm.editModeChangeDone, vm);
+        vm.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
+        vm.mdContent.on('scroll', vm.scrollEventHandler.bind(vm));
+    }
+
+    removeEvents() {
+        const vm = this;
+        vm.EE.removeListener('editModeDone', vm.editModeChangeDone, vm);
     }
 
     layoutDone() {

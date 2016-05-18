@@ -6,6 +6,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 // Determine if is a production build based on environment variable
 const production = process.argv.indexOf('--dist') > -1;
 const siteBuild = process.argv.indexOf('--site-build') > -1;
+const debug = process.argv.indexOf('--debug') > -1;
 
 const PATH = {
     build: 'builds'
@@ -15,12 +16,12 @@ const PATH = {
 const basePlugins = [
     new webpack.DefinePlugin({
         API: production ? '"/api/"' : '"/api/"',
-        DEV: !production
+        DEV: !production,
+        DEBUG: debug
     }),
     new webpack.optimize.CommonsChunkPlugin(
         'vendor', 'vendor.js', Infinity
     ),
-    new webpack.optimize.OccurrenceOrderPlugin(true),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
         title: 'Digital Health Atlas',
@@ -33,7 +34,11 @@ const distPlugins = [
     new ExtractTextPlugin('[name].[chunkhash].css', {
         allChunks: true
     }),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.MinChunkSizePlugin({
+        minChunkSize: 51200 // ~50kb
+    }),
     new webpack.optimize.UglifyJsPlugin(
         {
             sourceMap: false
@@ -124,6 +129,7 @@ module.exports = {
             }
         }
     },
+    debug: !production,
     devtool: production || siteBuild ? false : 'eval-cheap-source-map',
     plugins: production ? distPlugins : devPlugins
 };

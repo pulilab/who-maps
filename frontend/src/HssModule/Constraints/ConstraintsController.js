@@ -1,19 +1,44 @@
 import _ from 'lodash';
+import { Protected } from '../../Common/';
 
-class ConstraintsController {
+class ConstraintsController extends Protected {
 
     constructor() {
+        super();
         const vm = this;
         vm.EE = window.EE;
         vm.editMode = false;
-        vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-        this.$onInit = () => {
-            vm.hs = vm.service;
-            this.constraints = this.constraintsToggleGenerator();
-            this.checkSizeAndFireCallback();
-            vm.EE.on('hssTaxonomiesUpdated', this.constraintsUpdated.bind(this));
-        };
+        vm.$onInit = vm.onInit.bind(vm);
+        vm.$onDestroy = vm.onDestroy.bind(vm);
 
+    }
+
+    onInit() {
+        const vm = this;
+        vm.defaultOnInit();
+        vm.bindEvents();
+        vm.hs = vm.service;
+        vm.constraints = vm.constraintsToggleGenerator();
+        vm.checkSizeAndFireCallback();
+    }
+
+
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.removeEvents();
+    }
+
+    bindEvents() {
+        const vm = this;
+        vm.EE.on('hssEditMode', this.handleEditMode, this);
+        vm.EE.on('hssTaxonomiesUpdated', this.constraintsUpdated, this);
+    }
+
+    removeEvents() {
+        const vm = this;
+        vm.EE.removeListener('hssEditMode', this.handleEditMode, this);
+        vm.EE.removeListener('hssTaxonomiesUpdated', this.constraintsUpdated, this);
     }
 
     handleEditMode(value) {

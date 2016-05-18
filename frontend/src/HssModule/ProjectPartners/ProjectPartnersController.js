@@ -1,28 +1,45 @@
 import _ from 'lodash';
+import { Protected } from '../../Common/';
 import ProjectPartnerService from './ProjectPartnersService';
 
-class ProjectPartnersController {
+class ProjectPartnersController extends Protected {
 
     constructor($scope, $state, Upload) {
-
+        super();
         const vm = this;
         vm.scope = $scope;
         vm.state = $state;
+        this.EE = window.EE;
         vm.pps = new ProjectPartnerService(Upload);
-        vm.$onInit = vm.initialization;
+        vm.$onInit = vm.onInit.bind(vm);
+        vm.$onDestroy = vm.onDestroy.bind(vm);
     }
 
-    initialization() {
-        this.EE = window.EE;
-        this.EE.on('hssEditMode', bool => {
-            this.editMode = bool;
-        });
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.removeEvents();
+    }
+
+    onInit() {
+        const vm = this;
+        vm.defaultOnInit();
+        this.editMode = false;
         this.logos = [];
         this.projectId = this.state.params.appName;
-        this.pps.getLogoList(this.projectId)
-            .then(this.getLogoUrl.bind(this));
+        this.pps.getLogoList(this.projectId).then(this.getLogoUrl.bind(this));
+    }
 
-        this.editMode = false;
+    bindEvents() {
+        this.EE.on('hssEditMode', this.handleEditMode, this);
+    }
+
+    removeEvents() {
+        this.EE.removeListener('hssEditMode', this.handleEditMode, this);
+    }
+
+    handleEditMode(bool) {
+        this.editMode = bool;
     }
 
     getLogoUrl(logos) {
