@@ -107,7 +107,7 @@
         <md-card ng-if="vm.isLogin" class="content-main logged-in md-card md-whiteframe-24dp" flex=55>
             <h2 class="md-display-3">My Projects</h2>
 
-            <div class="my-project" ng-repeat="project in vm.projectList">
+            <md-card class="my-project" ng-repeat="project in vm.projectList">
                 <h5 class="project-title md-headline">{{project.name}} ({{project.countryName}})</h5>
                 <div class="project-links md-block">
                   <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary" md-no-ink>
@@ -123,12 +123,12 @@
                         Summary
                     </md-button>
                 </div>
-                <div class="project-stats md-block">
-                    <viewers trend="'up'" number="1509"></viewers>
-                    <followers trend="'down'" number="87"></followers>
-                    <donors number="project.donors.length"></donors>
+                <div class="project-stats" layout="row">
+                    <viewers flex="33" trend="'up'" number="1509"></viewers>
+                    <followers flex="33" trend="'down'" number="87"></followers>
+                    <donors flex="33" number="project.donors.length"></donors>
                 </div>
-            </div>
+            </md-card>
 
         </md-card>
     </div>

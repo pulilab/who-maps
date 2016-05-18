@@ -10,6 +10,7 @@ toolkit_default = [
                 "domain_max": 2,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "1-1",
@@ -24,6 +25,7 @@ toolkit_default = [
                 "domain_max": 22,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "2-1",
@@ -50,6 +52,7 @@ toolkit_default = [
                 "domain_max": 30,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "3-1a",
@@ -83,6 +86,7 @@ toolkit_default = [
                 "domain_max": 48,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "4-1a",
@@ -109,6 +113,7 @@ toolkit_default = [
                 "domain_max": 50,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "5-1a",
@@ -154,6 +159,7 @@ toolkit_default = [
                 "domain_max": 45,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "6-1",
@@ -185,6 +191,7 @@ toolkit_default = [
                 "domain_max": 36,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "7-1",
@@ -218,6 +225,7 @@ toolkit_default = [
                 "domain_max": 43,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "8-1",
@@ -249,6 +257,7 @@ toolkit_default = [
                 "domain_max": 18,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "9-1",
@@ -269,6 +278,7 @@ toolkit_default = [
                 "domain_max": 30,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "10-1",
@@ -302,6 +312,7 @@ toolkit_default = [
                 "domain_max": 33,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "11-1",
@@ -322,6 +333,7 @@ toolkit_default = [
                 "domain_max": 45,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "12-1a",
@@ -354,6 +366,7 @@ toolkit_default = [
                 "domain_max": 15,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "13-1",
@@ -374,6 +387,7 @@ toolkit_default = [
                 "domain_max": 18,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "14-1",
@@ -401,6 +415,7 @@ toolkit_default = [
                 "domain_max": 25,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "15-1a",
@@ -427,6 +442,7 @@ toolkit_default = [
                 "domain_max": 66,
                 "domain_sum": 0,
                 "domain_percentage": 0,
+                "domain_completion": 0,
                 "questions": [
                     {
                         "question": "16-1a",
