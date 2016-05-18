@@ -19,6 +19,7 @@ describe('HssModuleController', () => {
     beforeEach(() => {
         cc = HssModuleController.hssControllerFactory()($scope, $state, $animate);
         expect(cc).toBeDefined();
+        cc.$onInit();
     });
 
     it('has a function that handle the editMode change', () => {

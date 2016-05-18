@@ -24,6 +24,7 @@ class ProjectPartnersController extends Protected {
     onInit() {
         const vm = this;
         vm.defaultOnInit();
+        vm.bindEvents();
         this.editMode = false;
         this.logos = [];
         this.projectId = this.state.params.appName;
