@@ -8,13 +8,21 @@ class LandingPageModuleController {
         this.trendingProjects = trendingProjects;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
-        this.isLogin = this.storage.get('login');
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
 
+    }
+
+    onInit() {
+        this.isLogin = this.storage.get('login');
         if (this.isLogin) {
             const commonService = require('../Common/CommonServices');
             this.projectList = commonService.projectList;
         }
+    }
 
+    onDestroy() {
+        this.isLogin = void 0;
     }
 
     scrollTo(idString) {

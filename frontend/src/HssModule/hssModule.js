@@ -2,7 +2,7 @@ import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import ngMaterial from 'angular-material';
 
-import { StaticUtilities } from '../StaticUtilities';
+import { StaticUtilities } from '../Utilities';
 /* global define, Promise */
 
 

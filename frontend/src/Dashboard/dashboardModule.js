@@ -1,6 +1,6 @@
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
-import { StaticUtilities } from '../StaticUtilities';
+import { StaticUtilities } from '../Utilities';
 /* global Promise */
 
 const moduleName = 'dashboard';

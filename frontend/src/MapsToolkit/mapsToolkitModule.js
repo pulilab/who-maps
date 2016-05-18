@@ -4,7 +4,7 @@ import ngSanitize from 'angular-sanitize';
 
 import uiRoute from 'angular-ui-router';
 import { Components } from '../Common/';
-import { StaticUtilities } from '../StaticUtilities';
+import { StaticUtilities } from '../Utilities';
 
 const su = new StaticUtilities('MapsToolkit');
 
