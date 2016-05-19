@@ -2,34 +2,15 @@ import angular from 'angular';
 import ngSanitize from 'angular-sanitize';
 /* global define  Promise, $compileProvider */
 
-import _template from './MapsToolkitModule.html';
 import uiRoute from 'angular-ui-router';
 import { Components } from '../Common/';
+import { StaticUtilities } from '../Utilities';
+
+const su = new StaticUtilities('MapsToolkit');
 
 const moduleName = 'maps';
 
-const components = {};
-
-const lazyLoader = (provider, element, type) => {
-    const prom = new Promise((resolve) => {
-        require([], require => {
-            const ctrl = require('./' + element);
-            if (type === 'component') {
-                if (!components[element]) {
-                    components[element] = true;
-                    provider.component(ctrl.default.name, ctrl.default);
-                }
-            }
-            if (type === 'controller') {
-                provider.register(element, ctrl.default.mapsControllerFactory());
-            }
-            resolve();
-        });
-    });
-    return prom;
-};
-
-function config($stateProvider, $controllerProvider, $compileProvider) {
+const config = ($stateProvider, $compileProvider) => {
     $stateProvider
         .state(moduleName,
         {
@@ -37,18 +18,16 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
             parent: 'app',
             views: {
                 main: {
-                    template: _template,
-                    controllerProvider: () => 'MapsToolkitModuleController',
-                    controllerAs: 'vm',
+                    template: '<maps-toolkit></maps-toolkit>',
                     resolve: {
-                        'ctrl': () => {
-                            return lazyLoader($controllerProvider, 'MapsToolkitModuleController', 'controller');
+                        'main': () => {
+                            return su.lazyLoader($compileProvider, 'mapsComponent');
                         },
                         'axisFooter': () => {
-                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
                         },
                         'thematic': () => {
-                            return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
                         }
                     }
                 }
@@ -63,13 +42,13 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     template: '<scorecard></scorecard>',
                     resolve: {
                         'scorecard': () => {
-                            return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
                         },
                         'thematic': () => {
-                            return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
                         },
                         'axisFooter': () => {
-                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
                         }
                     }
                 }
@@ -84,21 +63,21 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
                     template: '<scorecard summary="true"></scorecard>',
                     resolve: {
                         'scorecard': () => {
-                            return lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
                         },
                         'thematic': () => {
-                            return lazyLoader($compileProvider, 'Thematic/thematicComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
                         },
                         'axisFooter': () => {
-                            return lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js', 'component');
+                            return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
                         }
                     }
                 }
             }
         });
-}
+};
 
-config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
+config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName,
     [

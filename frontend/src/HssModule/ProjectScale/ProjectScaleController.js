@@ -1,30 +1,51 @@
+import {  Protected } from '../../Common/';
 import HssModuleService from '../HssModuleService';
 
-class ProjectScaleController {
+class ProjectScaleController extends Protected {
 
     constructor($scope, $state) {
+        super();
         const vm = this;
         vm.scope = $scope;
         vm.state = $state;
-        vm.$onInit = vm.initialization.bind(vm);
+        vm.EE = window.EE;
+        vm.$onInit = vm.onInit.bind(vm);
+        vm.$onDestroy = vm.onDestroy.bind(vm);
     }
 
-    initialization() {
+    onInit() {
         const vm = this;
-        vm.EE = window.EE;
+        vm.defaultOnInit();
+        vm.bindEvents();
         vm.editMode = false;
         vm.hms = new HssModuleService(this.projectId);
+        vm.hms.getDetail().then(this.handleData.bind(this));
 
-        vm.hms.getDetail()
-            .then(data => {
-                this.projectData = data;
-                this.string = data.goals_to_scale;
-                this.scope.$evalAsync();
-            });
+    }
 
-        vm.EE.on('hssEditMode', bool => {
-            vm.editMode = bool;
-        });
+    handleData(data) {
+        this.projectData = data;
+        this.string = data.goals_to_scale;
+        this.scope.$evalAsync();
+    }
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.removeEvents();
+    }
+
+    bindEvents() {
+        const vm = this;
+        vm.EE.on('hssEditMode', this.handleEditMode, this);
+    }
+
+    removeEvents() {
+        const vm = this;
+        vm.EE.removeListener('hssEditMode', this.handleEditMode, this);
+    }
+
+    handleEditMode(bool) {
+        this.editMode = bool;
     }
 
     updateProjectScale(data) {

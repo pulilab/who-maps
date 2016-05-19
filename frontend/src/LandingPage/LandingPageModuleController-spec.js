@@ -1,4 +1,4 @@
-import { default as LandingPageModuleController } from './LandingPageModuleController';
+import { default as LandingPageModuleController } from './LandingPageController';
 
 /* global define, it, describe, expect */
 

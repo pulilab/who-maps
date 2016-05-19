@@ -1,7 +1,7 @@
 <md-toolbar class="main-toolbar toolbar-global">
     <div class="md-toolbar-tools">
 
-        <md-button ng-if="!vm.isLogin" ng-disabled="!vm.userProfile" ui-sref="landing" aria-label="Digital Health Atlas" class="app-title" md-no-ink>
+        <md-button ng-if="!vm.isLogin" ng-disabled="!vm.userProfile && vm.isLogin" ui-sref="landing" aria-label="Digital Health Atlas" class="app-title" md-no-ink>
             <span>Digital Health Atlas</span>
         </md-button>
 

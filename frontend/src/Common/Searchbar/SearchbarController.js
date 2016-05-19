@@ -36,7 +36,7 @@ class SearchbarController {
     }
 
     getUserData() {
-        const commonServices = require('../CommonServices').default;
+        const commonServices = require('../CommonServices');
         this.userProjects = commonServices.projectList;
     }
 

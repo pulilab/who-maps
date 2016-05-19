@@ -1,27 +1,52 @@
 import _ from 'lodash';
+import { Protected } from '../../Common/';
 
-class ApplicationsController {
+class ApplicationsController extends Protected {
 
     constructor($timeout, $mdDialog) {
+        super();
         const vm = this;
-        this.EE = window.EE;
+        vm.EE = window.EE;
+        vm.timeout = $timeout;
+        vm.dialog = $mdDialog;
+        vm.$onInit = this.onInit.bind(this);
+        vm.$onDestroy = this.onDestroy.bind(this);
+    }
+
+    onInit() {
+        const vm = this;
+        vm.defaultOnInit();
         this.rowObject = {};
         this.gridLoading = false;
         this.layoutReady = false;
-        vm.dialog = $mdDialog;
         vm.editMode = false;
         vm.startTile = {};
         vm.tileClickCounter = 0;
-        this.timeout = $timeout;
-        this.$onInit = () => {
-            vm.hs = vm.service;
-            vm.selectedConstraints = this.constraintsGenerator();
-            vm.applicationRow = this.applicationRowGenerator();
-            vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-            vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
-            vm.EE.on('hssConstraintsSelected', this.constraintsUpdated.bind(this));
-            this.searchForFilledColumns();
-        };
+        vm.bindEvents();
+        vm.hs = vm.service;
+        vm.selectedConstraints = this.constraintsGenerator();
+        vm.applicationRow = this.applicationRowGenerator();
+        vm.searchForFilledColumns();
+    }
+
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.removeEvents();
+    }
+
+    bindEvents() {
+        const vm = this;
+        vm.EE.on('hssEditMode', this.handleEditMode, this);
+        vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation, this);
+        vm.EE.on('hssConstraintsSelected', this.constraintsUpdated, this);
+    }
+
+    removeEvents() {
+        const vm = this;
+        vm.EE.removeListener('hssEditMode', this.handleEditMode, this);
+        vm.EE.removeListener('hssGuysActivateColumn', this.handleColumnActivation, this);
+        vm.EE.removeListener('hssConstraintsSelected', this.constraintsUpdated, this);
     }
 
     handleEditMode(value) {

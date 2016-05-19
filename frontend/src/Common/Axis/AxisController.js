@@ -11,7 +11,7 @@ class AxisController {
 
     initialization() {
         if (!this.axisData) {
-            this.axisData = require('./axisMockData').default;
+            this.axisData = require('./axisMockData');
         }
         if (this.axisId === null || this.axisId === void 0) {
             this.axisId = 0;

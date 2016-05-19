@@ -30,7 +30,7 @@ const mockInvariantData = () => {
 describe('ScorecardController', () => {
 
     beforeEach(() => {
-        spyOn(ScorecardController.prototype, 'initialization').and.callThrough();
+        spyOn(ScorecardController.prototype, 'onInit').and.callThrough();
         sc = ScorecardController.scorecardFactory()($scope, $state);
         sc.$onInit();
     });
@@ -40,7 +40,7 @@ describe('ScorecardController', () => {
     });
 
     it('should have a function that initializes the component', () => {
-        expect(sc.initialization).toHaveBeenCalled();
+        expect(sc.onInit).toHaveBeenCalled();
         expect(sc.projectId).toBeDefined();
         expect(sc.axisId).toBeDefined();
     });

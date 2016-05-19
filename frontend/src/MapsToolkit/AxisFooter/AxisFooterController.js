@@ -1,15 +1,19 @@
 import _ from 'lodash';
+import { Protected } from '../../Common/';
 
-class AxisFooterController {
+class AxisFooterController extends Protected {
     constructor($scope, $state) {
+        super();
         this.scope = $scope;
         this.state = $state;
         this.EE = window.EE;
-        this.$onInit = this.initialization.bind(this);
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.changeAxis = this.changeAxis.bind(this);
     }
 
-    initialization() {
+    onInit() {
+        this.defaultOnInit();
         this.activeAxis = this.state.params.axisId;
         _.map(this.axes, (axis, index) => {
             axis.axisId = axis.axis.split('.')[0];
@@ -18,6 +22,9 @@ class AxisFooterController {
             axis.axisName = axis.axis.split('.')[1].replace(' ', '');
             return axis;
         });
+    }
+    onDestroy() {
+        this.defaultOnDestroy();
     }
 
     classGenerator(axis) {

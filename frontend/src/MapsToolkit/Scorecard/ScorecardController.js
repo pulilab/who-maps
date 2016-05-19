@@ -1,13 +1,16 @@
 import _ from 'lodash';
+import { Protected } from '../../Common/';
 import MapsToolkitService from '../MapsToolkitService';
 
-class ScorecardController {
+class ScorecardController extends Protected {
     constructor($scope, $state, structure) {
+        super();
         this.scope = $scope;
         this.state = $state;
         this.structure = structure;
         this.EE = window.EE;
-        this.$onInit = this.initialization.bind(this);
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.handleProjectData = this.handleProjectData.bind(this);
     }
 
@@ -22,7 +25,12 @@ class ScorecardController {
         return templates;
     }
 
-    initialization() {
+    onDestroy() {
+        this.defaultOnDestroy();
+    }
+
+    onInit() {
+        this.defaultOnInit();
         this.dataLoaded = false;
         this.projectId = this.state.params.appName;
         this.axisId = this.state.params.axisId;
