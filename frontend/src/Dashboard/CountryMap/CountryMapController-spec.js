@@ -17,41 +17,6 @@ const EEMock = {
 };
 let vm;
 
-
-xdescribe('CountryMapController', () => {
-
-    beforeEach(() => {
-        vm = CountryMapController.countrymapFactory()(el, scopeMock);
-        vm.$onInit();
-    });
-
-    xdescribe('draw fn.', () => {
-
-        it('appends the right number of svg paths(.d3district) to .countrymap', () => {
-            // 14 is sierra leones districts count (mock data)
-            expect(d3.selectAll('.d3district')[0].length).toBe(14);
-        });
-
-        it('gives .d3district-data class to the districts that has data', () => {
-            // 3 is the nr of districts with data in the mockdata
-            expect(d3.selectAll('.d3district-data')[0].length).toBe(3);
-        });
-
-        it('changes vm.activedistrict bindable objects content on .d3district mouseover & mouseout', () => {
-            spyOn(vm.scope, '$evalAsync');
-            // Triggering the event for the first found element
-            d3.select('.d3district').on('mouseover')();
-            expect(vm.activeDistrict.name.length).toBeGreaterThan(0);
-            expect(vm.scope.$evalAsync).toHaveBeenCalled();
-
-            d3.select('.d3district-data').on('mouseover')();
-            expect(vm.activeDistrict.data).toBeDefined();
-            expect(typeof vm.activeDistrict.data).toBe('object');
-            expect(vm.scope.$evalAsync).toHaveBeenCalled();
-        });
-    });
-});
-
 describe('CountryMapController', () => {
 
     beforeEach(() => {
