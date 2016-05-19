@@ -22,7 +22,7 @@ class CountrymapController {
     onInit() {
 
         this.showPlaceholder = !this.big;
-        this.cs = require('../../Common/CommonServices').default;
+        this.cs = require('../../Common/CommonServices');
         this.svgPanZoom = svgPanZoom;
 
         this.EE.removeListener('country Changed');

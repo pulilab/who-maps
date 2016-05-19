@@ -24,11 +24,11 @@ const lazyLoader = (provider, element, type) => {
             if (type === 'component') {
                 if (!components[element]) {
                     components[element] = true;
-                    provider.component(ctrl.default.name, ctrl.default);
+                    provider.component(ctrl.name, ctrl);
                 }
             }
             if (type === 'controller') {
-                provider.register(element, ctrl.default.countryControllerFactory());
+                provider.register(element, ctrl.countryControllerFactory());
             }
             resolve();
         });

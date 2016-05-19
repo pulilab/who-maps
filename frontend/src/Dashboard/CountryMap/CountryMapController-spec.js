@@ -388,8 +388,8 @@ describe('CountryMapController', () => {
                     'id': 10
                 }
             ];
-            vm.cs = { projectStructure: { countries: countriesMock } };
             vm.onInit();
+            vm.cs = { projectStructure: { countries: countriesMock } };
             vm.data = perfMockMap;
             spyOn(vm, 'svgPanZoom').and.returnValue({ zoomOut: a => a });
             vm.preDraw(mockMap);
