@@ -16,6 +16,7 @@ describe('DashboardModuleController', () => {
     beforeEach(() => {
         spyOn(window.EE, 'on').and.callThrough();
         vm = DashboardModuleController.dashboardControllerFactory()({}, state);
+        vm.$onInit();
     });
 
     it('is defined', () => {

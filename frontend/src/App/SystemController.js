@@ -8,7 +8,7 @@ class SystemController {
         this.state = $state;
         this.storage = new Storage();
         this.eventBindings();
-        this.cs = require('../Common/CommonServices').default;
+        this.cs = require('../Common/CommonServices');
     }
 
     eventBindings() {

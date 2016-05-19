@@ -1,48 +1,23 @@
 import angular from 'angular';
-import LandingPageModuleController from './LandingPageModuleController';
-
+import { StaticUtilities } from '../Utilities';
 /* global define Promise, $compileProvider */
 
-import _template from './LandingPageModule.html';
 import uiRoute from 'angular-ui-router';
 
 const moduleName = 'landing';
+const su = new StaticUtilities('LandingPage');
 
-const components = {};
-
-const lazyLoader = (provider, element, type) => {
-    const prom = new Promise((resolve) => {
-        require([], require => {
-            const ctrl = require('./' + element);
-            if (type === 'component') {
-                if (!components[element]) {
-                    components[element] = true;
-                    provider.component(ctrl.default.name, ctrl.default);
-                }
-            }
-            if (type === 'controller') {
-                provider.register(element, ctrl.default.landingControllerFactory());
-            }
-            resolve();
-        });
-    });
-    return prom;
-};
-
-
-function config($stateProvider, $controllerProvider) {
+function config($stateProvider, $compileProvider) {
     $stateProvider
         .state(moduleName, {
             url: '/landing',
             parent: 'base',
             views: {
                 main: {
-                    template: _template,
-                    controllerAs: 'vm',
-                    controllerProvider: () => 'LandingPageModuleController',
+                    template: '<landing-page></landing-page>',
                     resolve: {
-                        'ctrl': () => {
-                            return lazyLoader($controllerProvider, 'LandingPageModuleController', 'controller');
+                        'main': () => {
+                            return su.lazyLoader($compileProvider, 'landingPageComponent');
                         }
                     }
                 }
@@ -53,12 +28,10 @@ function config($stateProvider, $controllerProvider) {
             parent: 'app',
             views: {
                 main: {
-                    template: _template,
-                    controllerAs: 'vm',
-                    controllerProvider: () => 'LandingPageModuleController',
+                    template: '<landing-page></landing-page>',
                     resolve: {
-                        'ctrl': () => {
-                            return lazyLoader($controllerProvider, 'LandingPageModuleController', 'controller');
+                        'main': () => {
+                            return su.lazyLoader($compileProvider, 'landingPageComponent');
                         }
                     }
                 }
@@ -67,11 +40,9 @@ function config($stateProvider, $controllerProvider) {
 
 }
 
-config.$inject = ['$stateProvider', '$controllerProvider'];
+config.$inject = ['$stateProvider', '$compileProvider'];
 
 
-angular.module(moduleName, [uiRoute])
-    .controller(moduleName + '.' + moduleName + 'Controller', LandingPageModuleController)
-    .config(config);
+angular.module(moduleName, [uiRoute]).config(config);
 
 export default moduleName;

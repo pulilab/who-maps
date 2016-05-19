@@ -1,23 +1,48 @@
 import _ from 'lodash';
+import { Protected } from '../Common/';
 import MapsToolkitService from './MapsToolkitService';
 
-class MapsToolkitModuleController  {
+class MapsToolkitController extends Protected {
 
     constructor($scope, $state, structure) {
+        super();
         this.state = $state;
         this.scope = $scope;
-        this.EE = window.EE;
-        this.dataLoaded = false;
-        this.score = 0;
         this.structure = _.cloneDeep(structure);
-        this.projectId = this.state.params.appName;
-        this.domainId = this.state.params.domainId;
-        this.axisId = this.state.params.axisId;
-        this.ms = new MapsToolkitService(this.projectId);
-        this.loadData();
+        this.EE = window.EE;
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+    }
 
-        this.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
-        this.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
+    onInit() {
+        const vm = this;
+        vm.defaultOnInit();
+        vm.bindEvents();
+        vm.dataLoaded = false;
+        vm.score = 0;
+        vm.projectId = vm.state.params.appName;
+        vm.domainId = vm.state.params.domainId;
+        vm.axisId = vm.state.params.axisId;
+        vm.ms = new MapsToolkitService(vm.projectId);
+        vm.loadData();
+    }
+
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.removeEvents();
+    }
+
+    bindEvents() {
+        const vm = this;
+        vm.EE.on('mapsAxisChange', vm.handleChangeAxis, this);
+        vm.EE.on('mapsDomainChange', vm.handleChangeDomain, this);
+    }
+
+    removeEvents() {
+        const vm = this;
+        vm.EE.removeListener('mapsAxisChange', vm.handleChangeAxis, this);
+        vm.EE.removeListener('mapsDomainChange', vm.handleChangeDomain, this);
     }
 
     loadData() {
@@ -25,6 +50,8 @@ class MapsToolkitModuleController  {
             this.state.go('maps', {
                 domainId: this.domainId ? this.domainId : 0,
                 axisId: this.axisId ? this.axisId : 0
+            }, {
+                location: 'replace'
             });
             return;
         }
@@ -142,9 +169,8 @@ class MapsToolkitModuleController  {
 
     static mapsControllerFactory() {
         function mapsController($scope, $state) {
-            require('./MapsToolkit.scss');
             const structure = require('./Resource/structure.json');
-            return new MapsToolkitModuleController($scope, $state, structure);
+            return new MapsToolkitController($scope, $state, structure);
         }
 
         mapsController.$inject = ['$scope', '$state'];
@@ -153,4 +179,4 @@ class MapsToolkitModuleController  {
     }
 }
 
-export default MapsToolkitModuleController;
+export default MapsToolkitController;

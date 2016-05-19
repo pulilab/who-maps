@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Protected from './Protected';
 
-/* global define, Promise, DEV, Symbol */
+/* global define, Promise, DEV, Symbol, DEBUG */
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
@@ -66,8 +66,8 @@ class CommonServices extends Protected {
     }
 
     loadingProgress(name) {
-        if (DEV) {
-            console.log(this.loadingCheck, name);
+        if (DEBUG) {
+            console.debug(this.loadingCheck, name);
         }
         _.remove(this.loadingCheck, item => {
             return item === name;
@@ -82,9 +82,6 @@ class CommonServices extends Protected {
     }
 
     mergeOperations() {
-        if (DEV) {
-            console.log('Project Structure loaded: ', this.projectStructure.countries);
-        }
         _.forEach(this.projectList, project => {
             const country = _.find(this.projectStructure.countries, { id: project.country });
             if (country) {

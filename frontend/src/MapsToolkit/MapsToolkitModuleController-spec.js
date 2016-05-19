@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import MapsToolkitModuleController from './MapsToolkitModuleController';
+import MapsToolkitModuleController from './MapsToolkitController';
 
 
 /* global define, it, describe, expect, beforeEach, spyOn, Promise */
@@ -27,7 +27,7 @@ const mockInvariantData = () => {
     return _.cloneDeep(mockData);
 };
 
-describe('MapsToolkitModuleController', () => {
+describe('MapsToolkitController', () => {
 
     beforeEach(() => {
 
@@ -35,9 +35,9 @@ describe('MapsToolkitModuleController', () => {
         $state.params.domainId = 0;
         spyOn(MapsToolkitModuleController.prototype, 'handleChangeAxis').and.callThrough();
         spyOn(MapsToolkitModuleController.prototype, 'handleChangeDomain').and.callThrough();
-        mc = new MapsToolkitModuleController.mapsControllerFactory()($scope, $state);
+        mc = new MapsToolkitModuleController.mapsControllerFactory()($scope, $state, mockData);
+        mc.$onInit();
         mc.processAxesData(mockInvariantData());
-
 
     });
 

@@ -8,7 +8,8 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
-        this.cs = require('../Common/CommonServices').default;
+        this.cs = require('../Common/CommonServices');
+        this.$onInit();
         this.userProfile = this.cs.userProfile;
         this.currentPage = void 0;
         this.showFullNavigation = false;

@@ -18,7 +18,7 @@ class CountrymapController {
         this.$onInit = () => {
 
             this.showPlaceholder = !this.big;
-            this.cs = require('../../Common/CommonServices').default;
+            this.cs = require('../../Common/CommonServices');
             this.svgPanZoom = svgPanZoom;
 
             this.EE.removeListener('country Changed');
@@ -58,7 +58,7 @@ class CountrymapController {
 
         if (vm.mapHere) {
             // console.debug('data arrived, map was here, starts drawing', data);
-            vm.drawMap(vm.map);
+            vm.preDraw(vm.map);
         }
         else {
             // console.debug('data arrived, waiting for map', data);
@@ -79,7 +79,7 @@ class CountrymapController {
 
         if (vm.dataHere) {
             // console.debug('map arrived, data was here, so it starts drawing', data);
-            vm.drawMap(data);
+            vm.preDraw(data);
         }
         else {
             // console.debug('map arrived, waiting for data');
@@ -114,7 +114,7 @@ class CountrymapController {
         return defaultLib;
     }
 
-    replaceCountryName() {
+    formatCountryName() {
         const dictionary = {
             'Border India - Bangladesh': 'Bangladesh',
             'Border Malawi - Mozambique': 'Malawi',
@@ -124,76 +124,25 @@ class CountrymapController {
             ? dictionary[this.countryName] : this.countryName;
     }
 
-    drawMap(topoJSON) {
-        const vm = this;
+    getBindablesFromTopo(topoJSON) {
 
-        d3.select(vm.el[0]).select('.countrymapcontainer').remove();
-
-        vm.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
+        this.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
 
-        vm.countryName =
+        this.countryName =
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
             topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
+    }
 
-        // with this the data can be not the 'correct' one for
-        // the country but a map is always displayed even for not configured countries
-        const levelLib = this.defaultLevels();
-        const level = levelLib[vm.countryName] ? levelLib[vm.countryName] : 'admin_level_5';
-        this.replaceCountryName();
+    calculateScale(topoJSON) {
+        return Math.max.apply(null,
+        topoJSON.admin_level_2.transform.scale.map(nr => {
+            return 1 / nr;
+        })) * 10;
+    }
 
-        const distrData = vm.makeGeoFromTopo(topoJSON[level], level);
-
-        const outer = d3.select(vm.el[0])
-            .append('div')
-            .attr('class', 'countrymapcontainer');
-
-        const width = outer[0][0].offsetWidth;
-        const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
-
-        const element = outer.append('svg')
-            .attr('class', 'countrymap')
-            .attr('width', width)
-            .attr('height', height);
-
-        const scale = Math.max.apply(null,
-                topoJSON.admin_level_2.transform.scale.map(nr => {
-                    return 1 / nr;
-                })) * 10;
-
-        const projection = d3.geo.mercator()
-            .scale(scale);
-
-        // Appending the districts
-        for (let i = 0; i < distrData.features.length; i += 1) {
-
-            const distrName = distrData.features[i].properties['name:en'] ||
-                distrData.features[i].properties.name;
-
-            const gotData = typeof vm.data.data[distrName] === 'object';
-
-            // Appending path
-            element
-                .append('path')
-                .datum({
-                    type: distrData.type,
-                    geocoding: distrData.geocoding,
-                    features: [distrData.features[i]]
-                })
-                .attr('d', d3.geo.path().projection(projection))
-                .attr('class', 'd3district')
-                .classed('d3district-data', gotData)
-                .on('mouseover', () => {
-
-                    vm.activeDistrict = {
-                        name: distrName,
-                        data: vm.data.data[distrName]
-                    };
-                    vm.scope.$evalAsync();
-
-                });
-        }
+    makeSvgPannableAndZoomable() {
 
         const zoomOptions = {
             panEnabled: true,
@@ -209,12 +158,76 @@ class CountrymapController {
             refreshRate: 'auto'
         };
 
-        vm.svgZoom = vm.svgPanZoom('.countrymap', zoomOptions);
-        vm.svgZoom.zoomOut();
+        this.svgZoom = this.svgPanZoom('.countrymap', zoomOptions);
+        this.svgZoom.zoomOut();
+    }
+
+    preDraw(topoJSON) {
+
+        d3.select(this.el[0]).select('.countrymapcontainer').remove();
+
+        this.getBindablesFromTopo(topoJSON);
+
+        const levelLib = this.defaultLevels();
+        const level = levelLib[this.countryName] ? levelLib[this.countryName] : 'admin_level_5';
+
+        this.formatCountryName();
+
+        const distrData = this.makeGeoFromTopo(topoJSON[level], level);
+
+        const outer = d3.select(this.el[0])
+            .append('div')
+            .attr('class', 'countrymapcontainer');
+
+        const width = outer[0][0].offsetWidth;
+        const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
+
+        const element = outer.append('svg')
+            .attr('class', 'countrymap')
+            .attr('width', width)
+            .attr('height', height);
+
+        this.drawDistricts(element, distrData, topoJSON);
+
+        this.makeSvgPannableAndZoomable();
 
         this.showPlaceholder = false;
         this.dataHere = false;
         this.mapHere = false;
+    }
+
+    drawDistricts(element, distrData, topoJSON) {
+
+        const projection = d3.geo.mercator()
+            .scale(this.calculateScale(topoJSON));
+
+        for (let i = 0; i < distrData.features.length; i += 1) {
+
+            const distrName = distrData.features[i].properties['name:en'] ||
+                distrData.features[i].properties.name;
+
+            const gotData = typeof this.data.data[distrName] === 'object';
+
+            element
+                .append('path')
+                .datum({
+                    type: distrData.type,
+                    geocoding: distrData.geocoding,
+                    features: [distrData.features[i]]
+                })
+                .attr('d', d3.geo.path().projection(projection))
+                .attr('class', 'd3district')
+                .classed('d3district-data', gotData)
+                .on('mouseover', () => {
+
+                    this.activeDistrict = {
+                        name: distrName,
+                        data: this.data.data[distrName]
+                    };
+                    this.scope.$evalAsync();
+
+                });
+        }
     }
 
     static countrymapFactory() {

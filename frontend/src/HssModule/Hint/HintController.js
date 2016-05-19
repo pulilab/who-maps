@@ -2,10 +2,28 @@ class HintController {
 
     constructor() {
         this.EE = window.EE;
+
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+
+    }
+
+    onInit() {
         this.editMode = false;
         this.layoutReady = false;
-        this.EE.on('hssEditMode', this.handleEditMode.bind(this));
+        this.bindEvents();
+    }
 
+    bindEvents() {
+        this.EE.on('hssEditMode', this.handleEditMode, this);
+    }
+
+    removeEvents() {
+        this.EE.removeListener('hssEditMode', this.handleEditMode, this);
+    }
+
+    onDestroy() {
+        this.removeEvents();
     }
 
     handleEditMode(value) {

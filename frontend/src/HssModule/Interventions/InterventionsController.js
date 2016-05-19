@@ -1,12 +1,19 @@
 import _ from 'lodash';
+import { Protected } from '../../Common/';
 
-class InterventionsController {
+class InterventionsController extends Protected {
 
     constructor() {
+        super();
         const vm = this;
-        this.EE = window.EE;
-        vm.EE.on('hssEditMode', this.handleEditMode.bind(this));
-        vm.EE.on('hssGuysActivateColumn', this.handleColumnActivation.bind(this));
+        vm.EE = window.EE;
+        vm.$onInit = vm.onInit.bind(vm);
+        vm.$onDestroy = vm.onDestroy.bind(vm);
+    }
+
+    onInit() {
+        const vm = this;
+        vm.defaultOnInit();
         vm.editMode = false;
         vm.interventionsRowSpan = {
             size: 5
@@ -14,11 +21,27 @@ class InterventionsController {
         this.gridLoading = false;
         this.resizeRow = this.resizeRow.bind(this);
         this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
+        vm.hs = vm.service;
+        vm.interventionRow = this.middleColumnGenerator();
+        vm.bindEvents();
+    }
 
-        this.$onInit = () => {
-            vm.hs = vm.service;
-            vm.interventionRow = this.middleColumnGenerator();
-        };
+    bindEvents() {
+        const vm = this;
+        vm.EE.on('hssEditMode', vm.handleEditMode, vm);
+        vm.EE.on('hssGuysActivateColumn', vm.handleColumnActivation, vm);
+    }
+
+    removeEvents() {
+        const vm = this;
+        vm.EE.removeListener('hssEditMode', vm.handleEditMode, vm);
+        vm.EE.removeListener('hssGuysActivateColumn', vm.handleColumnActivation, vm);
+    }
+
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.removeEvents();
     }
 
     handleEditMode(value) {

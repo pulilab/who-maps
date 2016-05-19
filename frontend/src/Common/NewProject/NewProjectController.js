@@ -3,7 +3,7 @@ import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
 
-/* global DEV, Promise */
+/* global DEV, DEBUG, Promise */
 
 class NewProjectController extends ProjectDefinition {
 
@@ -274,7 +274,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     log(data) {
-        if (DEV) {
+        if (DEBUG) {
             console.log(data);
             console.log(this.project);
         }
@@ -312,7 +312,7 @@ class NewProjectController extends ProjectDefinition {
     static newProjectFactory() {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
-        const CommonService =  require('../CommonServices').default;
+        const CommonService =  require('../CommonServices');
         function newProject($scope, $state) {
             return new NewProjectController($scope, $state, CommonService, structure);
         }

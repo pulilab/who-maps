@@ -1,53 +1,67 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
 import _ from 'lodash';
+import { Protected } from '../Common/';
 
 import commProjects from './Mocks/commProjects.js';
 
-class DashboardModuleController {
+class DashboardModuleController extends Protected {
 
     constructor($scope, $state) {
-
+        super();
         const vm = this;
-
-        // Bindings
         vm.scope = $scope;
         vm.state = $state;
         vm.EE = window.EE;
+        vm.$onInit = vm.onInit.bind(vm);
+        vm.$onDestroy = vm.onDestroy.bind(vm);
 
-        this.projectId = $state.params.appName;
+    }
+
+    onInit() {
+        const vm = this;
+        vm.defaultOnInit();
+        vm.projectId = vm.state.params.appName;
         vm.currentVersion = 0;
-
-        vm.service = new DashboardService(this.state.params.appName);
+        vm.service = new DashboardService(vm.projectId);
         vm.mapService = new DashboardMapService();
 
         vm.fetchAxisData();
 
         this.service.getProjectData(this.projectId).then(vm.fetchProjectData.bind(this));
-        // vm.fetchCountryMap();
-        // vm.parseMapData();
-        // vm.fetchCoverageVersions();
-
         vm.fetchToolkitData();
-        // vm.fetchToolkitVersions();
 
         vm.commProjects = commProjects;
+        vm.resizeEvent();
+        vm.eventBinding();
+    }
 
-        // Letting components know about browser window resize
-        vm.resizedw = () => {
-            this.EE.emit('dashResized');
-        };
+    onDestroy() {
+        const vm = this;
+        vm.defaultOnDestroy();
+        vm.eventRemoving();
+    }
+
+    resizeEvent() {
+        const vm = this;
         let doit;
         vm.resizefn = () => {
-
             clearTimeout(doit);
             doit = setTimeout(vm.resizedw, 50);
         };
         window.onresize = vm.resizefn;
+        vm.resizedw = () => {
+            this.EE.emit('dashResized');
+        };
+    }
 
-        // Routers for the axis components (deregistering?)
-        vm.EE.on('mapsDomainChange', this.handleChangeDomain.bind(this));
-        vm.EE.on('mapsAxisChange', this.handleChangeAxis.bind(this));
+    eventBinding() {
+        this.EE.on('mapsDomainChange', this.handleChangeDomain, this);
+        this.EE.on('mapsAxisChange', this.handleChangeAxis, this);
+    }
+    eventRemoving() {
+        this.EE.removeListener('mapsDomainChange', this.handleChangeDomain, this);
+        this.EE.removeListener('mapsAxisChange', this.handleChangeAxis, this);
     }
 
     fetchProjectData(data) {

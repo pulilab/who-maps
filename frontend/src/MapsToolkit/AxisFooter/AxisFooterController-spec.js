@@ -23,14 +23,14 @@ const $scope = {
 describe('AxisFooterController', () => {
 
     beforeEach(() => {
-        spyOn(AxisFooterController.prototype, 'initialization').and.callThrough();
+        spyOn(AxisFooterController.prototype, 'onInit').and.callThrough();
         afc = new AxisFooterController.axisFooterFactory()($scope, $state);
         afc.axes = require('../Resource/mockData.json');
     });
 
     it('should have an initialization function that get fired through $onInit', () => {
         afc.$onInit();
-        expect(afc.initialization).toHaveBeenCalled();
+        expect(afc.onInit).toHaveBeenCalled();
         expect(afc.activeAxis).toBe(0);
         const p = afc.axes[0];
         expect(p.axisId).toBeDefined();

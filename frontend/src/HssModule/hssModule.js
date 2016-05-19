@@ -2,69 +2,48 @@ import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import ngMaterial from 'angular-material';
 
+import { StaticUtilities } from '../Utilities';
 /* global define, Promise */
 
 
-import hssTemplate from './HssModule.html';
 import './hssModule.scss';
 
 const moduleName = 'hss';
-const components = {};
 
-const lazyLoader = (provider, element, type) => {
-    const prom = new Promise((resolve) => {
-        require([], require => {
-            const ctrl = require('./' + element);
-            if (type === 'component') {
-                if (!components[element]) {
-                    components[element] = true;
-                    provider.component(ctrl.default.name, ctrl.default);
-                }
-            }
-            if (type === 'controller') {
-                provider.register(element, ctrl.default.hssControllerFactory());
-            }
-            resolve();
-        });
-    });
-    return prom;
-};
+const su = new StaticUtilities('HssModule');
 
-
-function config($stateProvider, $controllerProvider, $compileProvider) {
+function config($stateProvider, $compileProvider) {
     $stateProvider
         .state(moduleName, {
             url: '/hss',
             parent: 'app',
             views: {
                 main: {
-                    template: hssTemplate,
-                    controllerProvider: () => 'HssModuleController',
-                    controllerAs: 'vm',
+                    template: '<hss-module></hss-module>',
                     resolve: {
                         'ctrl': () => {
-                            return lazyLoader($controllerProvider, 'HssModuleController', 'controller');
+                            return su.lazyLoader($compileProvider, 'hssModuleComponent');
                         },
                         'continuum': () => {
-                            return lazyLoader($compileProvider, 'Continuum/continuumComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'Continuum/continuumComponent');
                         },
                         'interventions': () => {
-                            return lazyLoader($compileProvider, 'Interventions/interventionsComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'Interventions/interventionsComponent');
                         },
                         'constraints': () => {
-                            return lazyLoader($compileProvider, 'Constraints/constraintsComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'Constraints/constraintsComponent');
                         },
                         'applications': () => {
-                            return lazyLoader($compileProvider, 'Applications/applicationsComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'Applications/applicationsComponent');
                         },
                         'projectScale': () => {
-                            return lazyLoader($compileProvider, 'ProjectScale/projectScaleComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'ProjectScale/projectScaleComponent');
                         },
                         'projectPartners': () => {
-                            return lazyLoader($compileProvider, 'ProjectPartners/projectPartnersComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'ProjectPartners/projectPartnersComponent');
                         },
                         'hint': () => {
-                            return lazyLoader($compileProvider, 'Hint/hintComponent', 'component');
+                            return su.lazyLoader($compileProvider, 'Hint/hintComponent');
                         }
                     }
 
@@ -74,7 +53,7 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
 
 }
 
-config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
+config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName,
     [
