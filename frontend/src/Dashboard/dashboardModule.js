@@ -22,9 +22,6 @@ function config($stateProvider, $compileProvider) {
                         },
                         'linechart': () => {
                             return su.lazyLoader($compileProvider, 'Linechart/linechart');
-                        },
-                        'countrymap': () => {
-                            return su.lazyLoader($compileProvider, 'CountryMap/countrymap');
                         }
                     }
                 }
