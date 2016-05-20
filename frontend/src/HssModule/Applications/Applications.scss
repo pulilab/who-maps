@@ -150,6 +150,47 @@ applications {
       }
     }
 
+    // hover on bubble in view mode
+    // show all text
+    &.view-mode {
+      .bubble-shape {
+        &:hover {
+          z-index: 1000;
+          min-width: 230px;
+          height: auto;
+          // border: 0;
+          border-radius: 2px;
+          box-shadow: $whiteframe-shadow-20dp;
+          transform: scale3d(1.1,1.1,1.1);
+
+          .app-text {
+            position: relative;
+            display: block;
+            top: 0;
+            overflow-y: scroll;
+            padding: 10px 0 15px 0;
+            min-height: 46px;
+            max-height: 500px;
+            height: auto;
+            width: calc( 100% - 80px);
+            vertical-align: middle;
+            transform: none;
+            box-sizing: content-box;
+
+            -webkit-line-clamp: auto;
+          }
+
+          .app-number {
+            position: absolute;
+            top: -9px;
+            left: -10px;
+            border-radius: 1px;
+            transform: scale(1.35);
+          }
+        }
+      }
+    }
+
     &.app-sub {
       // border-top: none !important;
 
@@ -221,6 +262,7 @@ applications {
     font-weight: 500;
     font-size: $caption-font-size-base;
     line-height: 30px;
+    transition: $swift-ease-out;
   }
 
   .white-number {
@@ -334,11 +376,13 @@ applications {
     top: 2px;
     left: -11px;
     z-index: 20;
-    overflow: hidden;
+    // overflow: hidden;
     width: calc( 100% + 20px );
     height: calc( 100% - 5px );
     border: 1px solid $color-white;
     border-radius: 35px;
+    transform: scale3d(1,1,1);
+    transition: $swift-ease-out;
 
     md-input-container,
     .app-text {
@@ -353,6 +397,7 @@ applications {
     // Pure multiline text truncation for Webkit browsers
     // TODO: need solution for other browsers
     // Note: text will be chopped off after two lines without displaying ellipsis
+    position: relative;
     display: -webkit-box;
     overflow: hidden;
     max-height: 36px;
@@ -362,9 +407,24 @@ applications {
     font-size: $caption-font-size-base;
     line-height: 16px;
     transform: translateY(-50%);
+    transition: padding $swift-ease-out-duration $swift-ease-out-timing-function;
 
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+
+  .bubble-tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    overflow: auto;
+    max-width: 400px;
+    border-radius: 35px;
+    background-color: inherit;
+    box-shadow: 0 0 20px black !important;
+    color: $color-white;
+    opacity: .7;
   }
 
   .app-delete {
@@ -408,13 +468,4 @@ applications {
 
     @include text-truncate();
   }
-}
-
-md-tooltip .md-content {
-    height: auto;
-    max-width: 400px;
-    white-space: initial;
-    word-break: break-all;
-    line-height: 12px;
-    padding: 8px;
 }
