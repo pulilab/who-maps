@@ -110,6 +110,15 @@ const run = ($rootScope) => {
         $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
         $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
     }
+
+    const checkXHR = (event) => {
+        $rootScope.progress = event.detail.progression;
+        $rootScope.showLoading = $rootScope.progress !== 100;
+        $rootScope.$evalAsync();
+    };
+
+    window.addEventListener('xhrmonitor', checkXHR.bind(this));
+
 };
 
 run.$inject = ['$rootScope'];
