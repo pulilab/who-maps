@@ -26,6 +26,7 @@ import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
 import EditProfileComponent from './EditProfile/editProfileComponent';
+import countrymap from './CountryMap/countrymap.js';
 
 const moduleName = 'Components';
 
@@ -46,7 +47,8 @@ angular.module(moduleName,
     .component(viewersComponent.name, viewersComponent)
     .component(followersComponent.name, followersComponent)
     .component(donorsComponent.name, donorsComponent)
-    .component(EditProfileComponent.name, EditProfileComponent);
+    .component(EditProfileComponent.name, EditProfileComponent)
+    .component(countrymap.name, countrymap);
 
 
 export { EE };

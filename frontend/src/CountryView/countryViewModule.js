@@ -1,58 +1,23 @@
 /* global Promise */
-
 import angular from 'angular';
-
-import _template from './CountryViewModule.html';
-import './CountryView.scss';
 import uiRoute from 'angular-ui-router';
+import { StaticUtilities } from '../Utilities';
 
 const moduleName = 'country';
+const su = new StaticUtilities('CountryView');
 
-const components = {};
-const lazyLoader = (provider, element, type) => {
-    const prom = new Promise((resolve) => {
-        require([], require => {
-
-            let ctrl;
-            if (type === 'controller') {
-                ctrl = require('./' + element);
-            }
-            if (type === 'component') {
-                ctrl = require('../' + element);
-            }
-
-            if (type === 'component') {
-                if (!components[element]) {
-                    components[element] = true;
-                    provider.component(ctrl.default.name, ctrl.default);
-                }
-            }
-            if (type === 'controller') {
-                provider.register(element, ctrl.default.countryControllerFactory());
-            }
-            resolve();
-        });
-    });
-    return prom;
-};
-
-function config($stateProvider, $controllerProvider, $compileProvider) {
+function config($stateProvider, $compileProvider) {
     $stateProvider
         .state(moduleName,
         {
-            url: '/countryView',
+            url: '/country',
             parent: 'app',
             views: {
                 main: {
-                    template: _template,
-                    controllerProvider: () => 'CountryViewModuleController',
-                    controllerAs: 'vm',
+                    template: '<country-view></country-view>',
                     resolve: {
-                        'ctrl': () => {
-                            return lazyLoader($controllerProvider, 'CountryViewModuleController', 'controller');
-                        },
-                        'countrymap': () => {
-                            return lazyLoader($compileProvider, 'Dashboard/CountryMap/countrymap.js', 'component');
+                        'country': () => {
+                            return su.lazyLoader($compileProvider, 'countryViewComponent');
                         }
                     }
                 }
@@ -60,7 +25,7 @@ function config($stateProvider, $controllerProvider, $compileProvider) {
         });
 }
 
-config.$inject = ['$stateProvider', '$controllerProvider', '$compileProvider'];
+config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName, [uiRoute])
     .config(config);
