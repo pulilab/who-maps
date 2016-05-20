@@ -158,9 +158,9 @@ applications {
           z-index: 1000;
           min-width: 230px;
           height: auto;
-          // border: 0;
+          border-color: transparent;
           border-radius: 2px;
-          box-shadow: $whiteframe-shadow-20dp;
+          box-shadow: $whiteframe-shadow-18dp;
           transform: scale3d(1.1,1.1,1.1);
 
           .app-text {
@@ -168,7 +168,7 @@ applications {
             display: block;
             top: 0;
             overflow-y: scroll;
-            padding: 10px 0 15px 0;
+            padding: 12px 0 16px 0;
             min-height: 46px;
             max-height: 500px;
             height: auto;
@@ -182,10 +182,10 @@ applications {
 
           .app-number {
             position: absolute;
-            top: -9px;
-            left: -10px;
+            top: -12px;
+            left: -12px;
             border-radius: 1px;
-            transform: scale(1.35);
+            transform: scale(1.25);
           }
         }
       }
