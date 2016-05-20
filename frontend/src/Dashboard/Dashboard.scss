@@ -43,8 +43,29 @@
 
                 cursor: default;
 
-                viewers, followers {
-                    opacity:0.5;
+                .version {
+
+                    height: 200px;
+
+                    .gray {
+
+                        margin-top: 10px;
+                        border-top: 1px solid $color-gray-lighter;
+                        padding: 0 8px;
+                        background-color: $color-gray-lightest;
+                        height: 137px;
+                        border-bottom-right-radius: 3px;
+                        border-bottom-left-radius: 3px;
+
+                        .desc {
+                            font-size: 10px;
+                            color: $color-gray;
+                        }
+                    }
+                }
+
+                .hten md-card {
+                    height: 110px;
                 }
 
                 .dash-stat-tooltip-version {
@@ -54,17 +75,28 @@
 
                 .snapshot-button {
 
-                    margin: 10px 0 0 0;
+                    height: 60px;
+                    padding: 5px;
+                    margin: 0;
+                    min-width: 50px;
                     background-color: $color-green;
-                    border-top-left-radius: 0;
-                    border-top-right-radius: 0;
 
-                    span {
+                    .text {
 
                         color: white;
                         font-size: 12px;
+                        line-height: 15px;
                         font-weight: 500;
+                        display: block;
+
+                        &.plus {
+
+                            font-size: 42px;
+                            line-height: 32px;
+                            font-weight: 300;
+                        }
                     }
+
                 }
             }
 

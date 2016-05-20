@@ -7,31 +7,36 @@
             <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
 
                 <div class="dash-subhead">STATISTICS</div>
+
                 <div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
 
-                    <md-card class="dash-stat-card">
+                    <md-card class="dash-stat-card version">
 
-                        <!-- TODO: bind version nr. -->
-                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
-                        <span ng-if="!versionHovered" class="dash-stat-label">version</span>
+                        <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
+                        <span class="dash-stat-label">Version</span>
 
-                        <span ng-if="versionHovered" class="dash-stat-tooltip dash-stat-tooltip-version">Push the button below to save your current stats as a new version</span>
+                        <!-- <span ng-if="versionHovered" class="dash-stat-tooltip dash-stat-tooltip-version">Push the button below to save your current stats as a new version</span> -->
 
-                        <!-- TODO: bind snapshotting fn. -->
-                        <md-button
-                            class="snapshot-button"
-                            ng-click="vm.snapShot()"
-                            ng-mouseover="versionHovered = true"
-                            ng-mouseout="versionHovered = false">+ snapshot</md-button>
+                        <div class="gray" ng-if="true" layout="column" layout-align="space-around stretch">
+                            <span class="desc">
+                                Push to save your current stats as a new version:
+                            </span>
+                            <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
+                                <span class="text plus">+</span>
+                                <span class="text">snapshot</span>
+                            </md-button>
+                        </div>
+
+                        <div class="gray" ng-if="false">
+                            Here will come following button, right?
+                        </div>
+
 
                     </md-card>
 
+                    <followers class="hten" trend="'down'" number="87"></followers>
 
-                    <!-- TODO: bindings -->
-                    <viewers trend="'up'" number="1509"></viewers>
-                    <followers trend="'down'" number="87"></followers>
-
-                    <donors number="vm.projectData.donors.length"></donors>
+                    <donors class="hten" number="vm.projectData.donors.length"></donors>
 
                 </div>
             </div>
