@@ -8,8 +8,14 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.onInit();
+    }
+
+    onInit() {
+        this.defaultOnInit();
         this.cs = require('../Common/CommonServices');
-        this.$onInit();
+        this.watchers();
+        this.eventBinding();
         this.userProfile = this.cs.userProfile;
         this.currentPage = void 0;
         this.showFullNavigation = false;
@@ -29,7 +35,9 @@ class AppModuleController extends Protected {
         }
 
         this.notifications = [1, 2, 3];
+    }
 
+    watchers() {
         this.scope.$watch(() => {
             return this.state.current.name;
         }, value => {
@@ -37,10 +45,13 @@ class AppModuleController extends Protected {
             this.showCompleteNavigation(value, this.isLogin);
             this.checkUserProfile();
         });
-        this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
-        this.EE.on('logout', this.handleLogoutEvent.bind(this));
-        this.EE.on('projectListUpdated', this.fillUserData.bind(this));
-        this.EE.on('refreshProjects', this.refreshProjectsHandler.bind(this));
+    }
+
+    eventBinding() {
+        this.EE.on('unauthorized', this.handleUnauthorized, this);
+        this.EE.on('logout', this.handleLogoutEvent, this);
+        this.EE.on('projectListUpdated', this.fillUserData, this);
+        this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
     }
 
     checkUserProfile() {
