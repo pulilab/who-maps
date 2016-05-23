@@ -135,26 +135,48 @@ class ProjectDefinition extends Protected {
     // }
     //
     //
-    // addReportLink() {
-    //     this.project.reports.push({});
-    // }
-    //
-    // rmReportLink(l) {
-    //     _.remove(this.project.reports, item => {
-    //         return item.$$hashKey === l.$$hashKey;
-    //     });
-    // }
-    //
-    //
-    // addPublicationLink() {
-    //     this.project.publications.push({});
-    // }
-    //
-    // rmPublicationLink(l) {
-    //     _.remove(this.project.publications, item => {
-    //         return item.$$hashKey === l.$$hashKey;
-    //     });
-    // }
+
+    addReportLink() {
+        this.project.reports.push({});
+    }
+
+    rmReportLink(l) {
+        _.remove(this.project.reports, item => {
+            return item.$$hashKey === l.$$hashKey;
+        });
+    }
+
+    addReportFile() {
+        this.project.files.push({ type: 'report' });
+    }
+
+    delReportFile(l) {
+        _.remove(this.project.files, item => {
+            return item.$$hashKey === l.$$hashKey;
+        });
+    }
+
+
+    addPublicationLink() {
+        this.project.publications.push({});
+    }
+
+    rmPublicationLink(l) {
+        _.remove(this.project.publications, item => {
+            return item.$$hashKey === l.$$hashKey;
+        });
+    }
+
+
+    addPublicationFile() {
+        this.project.files.push({ type: 'publication' });
+    }
+
+    delPublicationFile(l) {
+        _.remove(this.project.files, item => {
+            return item.$$hashKey === l.$$hashKey;
+        });
+    }
 
     addDonor() {
         this.project.donors.push({});
