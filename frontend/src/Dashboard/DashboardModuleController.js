@@ -7,11 +7,12 @@ import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController extends Protected {
 
-    constructor($scope, $state) {
+    constructor($scope, $state, $timeout) {
         super();
         const vm = this;
         vm.scope = $scope;
         vm.state = $state;
+        vm.timeout = $timeout;
         vm.EE = window.EE;
         vm.$onInit = vm.onInit.bind(vm);
         vm.$onDestroy = vm.onDestroy.bind(vm);
@@ -20,6 +21,8 @@ class DashboardModuleController extends Protected {
 
     onInit() {
         const vm = this;
+        vm.cs = require('../Common/CommonServices');
+
         vm.defaultOnInit();
         vm.projectId = vm.state.params.appName;
         vm.currentVersion = 0;
@@ -28,7 +31,8 @@ class DashboardModuleController extends Protected {
 
         vm.fetchAxisData();
 
-        this.service.getProjectData(this.projectId).then(vm.fetchProjectData.bind(this));
+        const data = vm.cs.getProjectData(this.projectId);
+        vm.timeout(() => { vm.fetchProjectData(data); });
         vm.fetchToolkitData();
 
         vm.commProjects = commProjects;
@@ -344,12 +348,12 @@ class DashboardModuleController extends Protected {
     }
 
     static dashboardControllerFactory() {
-        function dashController($scope, $state) {
+        function dashController($scope, $state, $timeout) {
 
-            return new DashboardModuleController($scope, $state);
+            return new DashboardModuleController($scope, $state, $timeout);
         }
 
-        dashController.$inject = ['$scope', '$state'];
+        dashController.$inject = ['$scope', '$state', '$timeout'];
 
         return dashController;
     }
