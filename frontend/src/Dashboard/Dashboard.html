@@ -115,11 +115,13 @@
                         </md-tab>
 
                         <md-tab label="technology">
-                            <!-- TODO: bindings! -->
+
                             <div class="dash-tech">
                                 <div
                                     class="upper"
                                     layout="column">
+
+                                     <!-- <span>{{vm.projectData}}</span> -->
 
                                     <div flex layout="row">
                                         <md-icon class="material-icons">device_hub</md-icon>
@@ -130,26 +132,27 @@
                                     <div flex layout="row">
                                         <md-icon class="material-icons">playlist_add_check</md-icon>
                                         <span flex>License</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licences"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
                                     </div>
 
                                     <div flex layout="row">
                                         <md-icon class="material-icons">speaker_phone</md-icon>
                                         <span flex>Digital tools</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
+                                        <!-- <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips> -->
+                                        <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
                                     </div>
                                 </div>
 
                                 <div class="lower">
 
                                     <span>Code documentations & download:</span>
-                                    <a>http://github.com/project/repo/asfsdfasduifasuidfuiasdf8i4358345</a>
+                                    <a>http://github.com/onlyMOCKKKKKK</a>
 
                                     <span>Download applications:</span>
-                                    <a>http://google.playtore/app/app43563463456/45646</a>
+                                    <a>http://google.playtore/app/MOCKKKKKK</a>
 
                                     <span>Link to wiki page:</span>
-                                    <a>http://linktowiki/wiki/wiki.html</a>
+                                    <a>http://linktowiki/wiki/wikiMOCKKKKK.html</a>
                                 </div>
                             </div>
                         </md-tab>
