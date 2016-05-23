@@ -240,14 +240,14 @@
 
 
 
-                    <section class="resources">
-                        <h4>Resources ()</h4>
+                    <section class="resources" ng-if="vm.editMode">
+                        <h4>Resources ({{vm.project.files.length}})</h4>
 
                         <p>What reports and publications do you have for the project?</p>
 
                         <h6>Add project report(s):</h6>
                         <div layout="row" layout-align="start center" ng-repeat="r in vm.project.reports">
-                            <div layout="row" flex="60">
+                            <div layout="row" flex="70">
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
@@ -261,23 +261,37 @@
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
-                        <div layout="row" layout-align="start center">
-                    <span>
-                    <md-icon flex>insert_drive_file</md-icon>
-                    Upload file:
-                    </span>
-                            <div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>
-                            <span> Maximum file size: 10MB </span>
 
-                            <md-button layout="column" class="md-icon-button">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'}">
+                            <div layout="row" flex="70">
+                                <div class="intro">
+                                    <md-icon flex >insert_drive_file</md-icon>
+                                    Upload file:
+                                </div>
+                                <div  class="button selector"
+                                      ng-hide="report.filename" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')" ngf-max-size="10MB">
+                                    Select File
+                                </div>
+                                <div class=" button selector filename" ng-click="vm.downloadFile(report)" ng-show="report.filename">
+                                    <md-icon>attachment</md-icon>
+                                    {{report.filename}}
+                                </div>
+                                <span class="filesize" flex> Maximum file size: 10MB </span>
+                            </div>
+                            <md-button ng-hide="$last" ng-click="vm.rmReportFile(report)" layout="column" class="md-icon-button red">
+                                <md-icon>delete_forever</md-icon>
+                            </md-button>
+                            <md-button ng-show="$last" layout="column" ng-click="vm.addReportFile()" class="md-icon-button">
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
 
 
+
                         <h6>Add publication(s) / journal article(s):</h6>
+
                         <div layout="row" layout-align="start center" ng-repeat="p in vm.project.publications">
-                            <div layout="row" flex="60">
+                            <div layout="row" flex="70">
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
@@ -291,15 +305,25 @@
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
-                        <div layout="row" layout-align="start center">
-                    <span>
-                    <md-icon flex>insert_drive_file</md-icon>
-                    Upload file:
-                    </span>
-                            <div class="button" ngf-select ng-model="vm.file" name="file" ngf-max-size="10MB">Select File</div>
-                            <span> Maximum file size: 10MB </span>
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'}">
+                            <div layout="row" flex="70">
+                                <div class="intro">
+                                    <md-icon flex>insert_drive_file</md-icon>
+                                    Upload file:
+                                </div>
+                                <div class="button selector" ngf-select="vm.uploadFile($file, 'publication')" ng-model="publication" name="file" ngf-max-size="10MB">
+                                </div>
 
-                            <md-button layout="column" class="md-icon-button">
+                                <div class=" button selector filename" ng-click="vm.downloadFile(publication)" ng-show="publication.filename">
+                                    <md-icon>attachment</md-icon>
+                                    {{publication.filename}}
+                                </div>
+                                <span flex class="filesize"> Maximum file size: 10MB </span>
+                            </div>
+                            <md-button ng-hide="$last" ng-click="vm.rmPublicationFile(publication)" layout="column" class="md-icon-button red">
+                                <md-icon>delete_forever</md-icon>
+                            </md-button>
+                            <md-button ng-show="$last" layout="column" ng-click="vm.addPublicationFile()" class="md-icon-button">
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
@@ -307,7 +331,7 @@
 
                     </section>
 
-                    <section >
+                    <section class="vision">
                         <h4>2. Vision for scale</h4>
 
                         <div layout="column">

@@ -31,17 +31,20 @@ const cs = {
     getProjectData: jasmine.createSpy('gpd')
 };
 
+const upload = {};
+
 const structure = require('./Resources/structure.json');
 
 describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = new  NewProjectController($scope, $state, cs, structure);
+        sc = new  NewProjectController($scope, $state, upload, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
         };
+        sc.$onInit();
     });
 
     it('should have a function that import all the icons ', () => {
@@ -103,11 +106,11 @@ describe('NewProjectController', () => {
         expect(sc.createCoverageArray).toBeDefined();
     });
 
-    it('should have a function that handle the initialization when is in editMode', () => {
+    it('should have a function that handle the onInit when is in editMode', () => {
         spyOn(sc, 'handleDataLoad');
         spyOn(sc, 'handleStructureLoad');
         sc.editMode = true;
-        sc.initialization();
+        sc.onInit();
         expect(sc.handleDataLoad).toHaveBeenCalled();
         expect(sc.handleStructureLoad).toHaveBeenCalled();
     });

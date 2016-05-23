@@ -7,15 +7,14 @@ import ProjectDefinition from '../ProjectDefinition';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, CommonService, structure) {
+    constructor($scope, $state, Upload, CommonService, structure) {
         super(CommonService);
-        this.ns = new NewProjectService();
+        this.ns = new NewProjectService(Upload);
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
         this.axisStructure = this.processAxisStructure(structure);
-        this.$onInit = this.initialization.bind(this);
-        this.bindFunctions();
+        this.$onInit = this.onInit.bind(this);
     }
 
     bindFunctions() {
@@ -26,7 +25,8 @@ class NewProjectController extends ProjectDefinition {
         this.log = this.log.bind(this);
     }
 
-    initialization() {
+    onInit() {
+        this.bindFunctions();
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
@@ -75,10 +75,19 @@ class NewProjectController extends ProjectDefinition {
                 this.districtList = district;
                 this.unfoldCoverage();
                 this.assignDefaultCustom();
+                this.addDefaultEmpty();
                 this.scope.$evalAsync();
             });
 
+        console.log(this.project);
+
     }
+
+    addDefaultEmpty() {
+        this.project.files.push({ type: 'report' });
+        this.project.files.push({ type: 'publication' });
+    }
+
 
     isCurrentProject(projectId) {
         return parseInt(projectId, 10) === parseInt(this.projectId, 10);
@@ -303,6 +312,30 @@ class NewProjectController extends ProjectDefinition {
         });
     }
 
+    uploadFile(data, type) {
+        this.ns.uploadFile(data, type, this.projectId);
+    }
+
+    rmReportFile(f) {
+        this.ns.deleteFile(f.id)
+            .then(() => {
+                this.delReportFile(f);
+            });
+
+    }
+
+    rmPublicationFile(f) {
+        this.ns.deleteFile(f.id)
+            .then(() => {
+                this.delPublicationFile(f);
+            });
+    }
+
+    downloadFile(f) {
+        this.ns.downloadFile(f);
+    }
+
+
     handleCustomError(key) {
         this.newProjectForm[key].$setValidity('custom', true);
         this.newProjectForm[key].customError = [];
@@ -313,10 +346,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
-        function newProject($scope, $state) {
-            return new NewProjectController($scope, $state, CommonService, structure);
+        function newProject($scope, $state, Upload) {
+            return new NewProjectController($scope, $state, Upload, CommonService, structure);
         }
-        newProject.$inject = ['$scope', '$state'];
+        newProject.$inject = ['$scope', '$state', 'Upload'];
         return newProject;
     }
 }
