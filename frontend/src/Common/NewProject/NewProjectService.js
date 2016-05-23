@@ -1,6 +1,8 @@
 import AuthApi from '../AuthApi';
+import { StaticUtilities } from '../../Utilities';
 
-/* global Promise */
+
+/* global Promise, URL */
 
 class NewProjectService extends AuthApi {
     constructor(_upload) {
@@ -48,6 +50,17 @@ class NewProjectService extends AuthApi {
             headers: { Authorization },
             data: _data
         });
+    }
+
+    deleteFile(fileId) {
+        return this.del(`files/${fileId}/`);
+    }
+
+    downloadFile(file) {
+        return this.getBlob(`files/${file.id}/`)
+            .then(data => {
+                StaticUtilities.launchDownload(data, file.filename);
+            });
     }
 
     countryDistrict(id) {

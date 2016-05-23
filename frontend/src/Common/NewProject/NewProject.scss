@@ -299,7 +299,7 @@ new-project {
         color: $color-primary;
       }
 
-      .filename {
+      &.filename {
         text-transform: none;
       }
 

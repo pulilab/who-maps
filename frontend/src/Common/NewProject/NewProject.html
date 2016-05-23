@@ -241,13 +241,13 @@
 
 
                     <section class="resources" ng-if="vm.editMode">
-                        <h4>Resources ()</h4>
+                        <h4>Resources ({{vm.project.files.length}})</h4>
 
                         <p>What reports and publications do you have for the project?</p>
 
                         <h6>Add project report(s):</h6>
                         <div layout="row" layout-align="start center" ng-repeat="r in vm.project.reports">
-                            <div layout="row" flex="60">
+                            <div layout="row" flex="70">
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
@@ -263,20 +263,18 @@
                         </div>
 
                         <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'}">
-                            <div layout="row" flex="60">
+                            <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex >insert_drive_file</md-icon>
                                     Upload file:
                                 </div>
-                                <div  class="button selector" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')" ngf-max-size="10MB">
-                                    <div class="filename" ng-show="report.filename">
-                                        <md-icon>attachment</md-icon>
-                                        {{report.filename}}
-                                    </div>
-                                <span ng-hide="report.filename">
+                                <div  class="button selector"
+                                      ng-hide="report.filename" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')" ngf-max-size="10MB">
                                     Select File
-                                </span>
-
+                                </div>
+                                <div class=" button selector filename" ng-click="vm.downloadFile(report)" ng-show="report.filename">
+                                    <md-icon>attachment</md-icon>
+                                    {{report.filename}}
                                 </div>
                                 <span class="filesize" flex> Maximum file size: 10MB </span>
                             </div>
@@ -293,7 +291,7 @@
                         <h6>Add publication(s) / journal article(s):</h6>
 
                         <div layout="row" layout-align="start center" ng-repeat="p in vm.project.publications">
-                            <div layout="row" flex="60">
+                            <div layout="row" flex="70">
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
@@ -308,19 +306,17 @@
                             </md-button>
                         </div>
                         <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'}">
-                            <div layout="row" flex="60">
+                            <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex>insert_drive_file</md-icon>
                                     Upload file:
                                 </div>
                                 <div class="button selector" ngf-select="vm.uploadFile($file, 'publication')" ng-model="publication" name="file" ngf-max-size="10MB">
-                                    <div class="filename" ng-show="publication.filename">
-                                        <md-icon>attachment</md-icon>
-                                        {{publication.filename}}
-                                    </div>
-                                <span ng-hide="publication.filename">
-                                    Select File
-                                </span>
+                                </div>
+
+                                <div class=" button selector filename" ng-click="vm.downloadFile(publication)" ng-show="publication.filename">
+                                    <md-icon>attachment</md-icon>
+                                    {{publication.filename}}
                                 </div>
                                 <span flex class="filesize"> Maximum file size: 10MB </span>
                             </div>

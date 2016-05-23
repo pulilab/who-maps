@@ -317,11 +317,22 @@ class NewProjectController extends ProjectDefinition {
     }
 
     rmReportFile(f) {
-        this.delReportFile(f);
+        this.ns.deleteFile(f.id)
+            .then(() => {
+                this.delReportFile(f);
+            });
+
     }
 
     rmPublicationFile(f) {
-        this.delPublicationFile(f);
+        this.ns.deleteFile(f.id)
+            .then(() => {
+                this.delPublicationFile(f);
+            });
+    }
+
+    downloadFile(f) {
+        this.ns.downloadFile(f);
     }
 
 
