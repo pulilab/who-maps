@@ -32,6 +32,7 @@ class DashboardModuleController extends Protected {
         vm.fetchAxisData();
 
         const data = vm.cs.getProjectData(this.projectId);
+        vm.addResourcesMeta(data);
         vm.timeout(() => { vm.fetchProjectData(data); });
         vm.fetchToolkitData();
 
@@ -345,6 +346,48 @@ class DashboardModuleController extends Protected {
             return;
         }
         vm.pi[projectIndex] += 1;
+    }
+
+    addResourcesMeta(data) {
+
+        const res = { reports: [], articles: [] };
+
+        data.reports.forEach(link => {
+            res.reports.push({
+                type: 'link',
+                link: link.value,
+                title: 'Where should I know?'
+            });
+        });
+
+        data.publications.forEach(link => {
+            res.articles.push({
+                type: 'link',
+                link: link.value,
+                // Needed data!
+                title: 'Where should I know?'
+            });
+        });
+
+        data.files.forEach(fileObj => {
+            if (fileObj.type === 'report') {
+                res.reports.push({
+                    type: 'file',
+                    filename: fileObj.filename,
+                    id: fileObj.id,
+                    ext: fileObj.filename.split('.').slice(-1)[0],
+                    // Needed data!
+                    date: '#dateUploadedOrGiven',
+                    size: '#XY0Mb'
+                });
+            }
+            else {
+                console.error('File type (not report) isn\'t handled yet in the dashboardCtrl!');
+            }
+        });
+
+        this.resources = res;
+
     }
 
     static dashboardControllerFactory() {

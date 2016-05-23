@@ -160,48 +160,38 @@
                         <md-tab label="resources">
                             <md-content class="dash-res">
 
-                                <h3>PROJECT REPORT</h3>
 
-                                <md-card class="resource" layout="row" layout-align="space-around stretch">
+                                <h3>PROJECT REPORT</h3>
+                                <md-card
+                                    class="resource"
+                                    ng-repeat="report in vm.resources.reports"
+                                    layout="row"
+                                    layout-align="space-around stretch">
+
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>Interactive Alerts Annual Report 2015</h4>
-                                        <p>#date | #format&pipe | #size&pipe</p>
+                                        <h4>{{report.title || report.filename}}</h4>
+                                        <p ng-if="report.type === 'file'">{{report.date}} | .{{report.ext}} | {{report.size}}</p>
+                                        <p ng-if="report.type === 'link'">{{report.link}}</p>
                                     </div>
-                                    <md-icon>file_download</md-icon>
+                                    <md-icon ng-if="report.type === 'file'">file_download</md-icon>
+                                    <md-icon ng-if="report.type === 'link'">launch</md-icon>
                                 </md-card>
+
 
                                 <h3>ASSOCIATED JOURNAL ARTICLES</h3>
+                                <md-card
+                                    class="resource"
+                                    ng-repeat="article in vm.resources.articles"
+                                    layout="row"
+                                    layout-align="space-around stretch">
 
-                                <md-card class="resource" layout="row" layout-align="space-between center">
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>Interactive Alerts Annual Report 2015</h4>
-                                        <p>#date | #format&pipe | #size&pipe</p>
+                                        <h4>{{article.title || article.filename}}</h4>
+                                        <p ng-if="article.type === 'file'">{{article.date}} | .{{article.ext}} | {{article.size}}</p>
+                                        <p ng-if="article.type === 'link'">{{article.link}}</p>
                                     </div>
-                                    <md-icon>file_download</md-icon>
-                                </md-card>
-
-                                <md-card class="resource" layout="row" layout-align="space-between center">
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>Interactive Alerts Annual Report 2015</h4>
-                                        <p>#date | #format&pipe | #size&pipe</p>
-                                    </div>
-                                    <md-icon>file_download</md-icon>
-                                </md-card>
-
-                                <md-card class="resource" layout="row" layout-align="space-between center">
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>Interactive Alerts Annual Report 2015</h4>
-                                        <p>#date | #format&pipe | #size&pipe</p>
-                                    </div>
-                                    <md-icon>file_download</md-icon>
-                                </md-card>
-
-                                <md-card class="resource" layout="row" layout-align="space-between center">
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>Interactive Alerts Annual Report 2015</h4>
-                                        <p>#date | #format&pipe | #size&pipe</p>
-                                    </div>
-                                    <md-icon>file_download</md-icon>
+                                    <md-icon ng-if="article.type === 'file'">file_download</md-icon>
+                                    <md-icon ng-if="article.type === 'link'">launch</md-icon>
                                 </md-card>
                             </md-content>
                         </md-tab>
