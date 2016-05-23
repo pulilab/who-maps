@@ -29,6 +29,10 @@
 
         .dash-cardholder {
 
+            md-icon {
+                color: $color-gray-light;
+            }
+
             .dash-subhead {
 
                 text-align: center;
@@ -40,10 +44,9 @@
             .dash-stat-column {
 
                 justify-content: space-between;
-
                 cursor: default;
 
-                .version {
+                .longer {
 
                     height: 200px;
 
@@ -61,8 +64,21 @@
                             font-size: 10px;
                             color: $color-gray;
                         }
+
+                        &.gr-follow {
+                            height: 90px;
+                        }
                     }
                 }
+
+                .longer-follow {
+
+                    md-icon {
+                        margin-top: 15px;
+                    }
+                }
+
+
 
                 .hten md-card {
                     height: 110px;
@@ -96,7 +112,15 @@
                             font-weight: 300;
                         }
                     }
+                }
 
+                .follow-button {
+
+                    min-width: 50px;
+                    background-color: $color-primary;
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 500;
                 }
             }
 
