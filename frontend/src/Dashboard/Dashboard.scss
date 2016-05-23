@@ -226,7 +226,6 @@
 
                     padding: 0px 25px;
                     height: 180px;
-                    background-color: $color-gray-lightest;
 
                     div {
                         &:not(:last-child) {
@@ -235,9 +234,9 @@
 
                         md-icon {
 
-                            font-size: 18px;
-                            width: 18px;
-                            height: 18px;
+                            font-size: 24px;
+                            width: 24px;
+                            height: 24px;
                             color: $text-primary;
                         }
                         span {
@@ -276,7 +275,11 @@
 
                 .lower {
 
+                    background-color: $color-gray-lightest;
                     padding: 20px 25px;
+                    height: 193px;
+                    border-bottom-left-radius: 3px;
+                    border-bottom-right-radius: 3px;
 
                     span {
                         display: block;
