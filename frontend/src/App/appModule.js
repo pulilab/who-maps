@@ -11,7 +11,7 @@ import _appTemplate from './app.html';
 
 import hssModule from '../HssModule/';
 import cms from '../Cms/';
-import countryView from '../CountryView/';
+import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';

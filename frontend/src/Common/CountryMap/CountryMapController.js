@@ -15,37 +15,39 @@ class CountrymapController {
         this.tooltipOver = false;
         this.preventMouseOut = false;
 
-        this.$onInit = () => {
+        this.$onInit = this.onInit;
+        this.$onDestroy = this.onDestroy;
+    }
 
-            this.showPlaceholder = !this.big;
-            this.cs = require('../../Common/CommonServices');
-            this.svgPanZoom = svgPanZoom;
+    onInit() {
 
-            this.EE.removeListener('country Changed');
+        this.showPlaceholder = !this.big;
+        this.cs = require('../../Common/CommonServices');
+        this.svgPanZoom = svgPanZoom;
 
-            if (this.big) {
-                this.EE.on('country Changed', this.mapChanged, this);
-            }
-            else {
-                this.EE.once('country Changed', this.mapChanged, this);
-            }
-        };
+        this.EE.removeListener('country Changed');
 
-        this.$onDestroy = () => {
-            // this.svgZoom.destroy();
-            this.data = false;
-            this.map = false;
-        };
+        if (this.big) {
+            this.EE.on('country Changed', this.mapChanged, this);
+        }
+        else {
+            this.EE.once('country Changed', this.mapChanged, this);
+        }
+    }
+
+    onDestroy() {
+        // this.svgZoom.destroy();
+        this.data = false;
+        this.map = false;
     }
 
     dataArrived(data) {
-        // Aggregates the values of districts to show them all
 
-        const vm = this;
-        vm.data = vm.big ? { data } : data;
+        this.data = this.big ? { data } : data;
         this.dataHere = true;
 
-        vm.boundNrs = _.reduce(vm.data.data, (ret, value, key) => {
+        // Aggregates the values of districts to show them all
+        this.boundNrs = _.reduce(this.data.data, (ret, value, key) => {
 
             if (key === 'date') { return ret; }
 
@@ -56,12 +58,26 @@ class CountrymapController {
             return ret;
         }, {});
 
-        if (vm.mapHere) {
+        if (this.mapHere) {
             // console.debug('data arrived, map was here, starts drawing', data);
-            vm.preDraw(vm.map);
+            this.preDraw(this.map);
         }
         else {
             // console.debug('data arrived, waiting for map', data);
+        }
+    }
+
+    mapArrived(data) {
+
+        this.map = data;
+        this.mapHere = true;
+
+        if (this.dataHere) {
+            // console.debug('map arrived, data was here, so it starts drawing', data);
+            this.preDraw(data);
+        }
+        else {
+            // console.debug('map arrived, waiting for data');
         }
     }
 
@@ -72,21 +88,8 @@ class CountrymapController {
         this.EE.once('mapdataArrived', this.dataArrived, this);
     }
 
-    mapArrived(data) {
-        const vm = this;
-        vm.map = data;
-        vm.mapHere = true;
-
-        if (vm.dataHere) {
-            // console.debug('map arrived, data was here, so it starts drawing', data);
-            vm.preDraw(data);
-        }
-        else {
-            // console.debug('map arrived, waiting for data');
-        }
-    }
-
     makeGeoFromTopo(topo, level) {
+
         return topojson.feature(topo, topo.objects[level]);
     }
 

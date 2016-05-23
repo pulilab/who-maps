@@ -11,7 +11,7 @@ const hashCode = (str) => {
     for (i = 0, len = str.length; i < len; i += 1) {
         chr   = str.charCodeAt(i);
         hash  = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
+        hash |= 0;
     }
     return hash;
 };
@@ -70,6 +70,7 @@ const pollingProcess = (stop) => {
 
 
 const progressiveEmit = () => {
+    // console.log(`started: ${requests.started}, ended: ${requests.ended}`);
     if (!firstRequest) {
         firstRequest = true;
         emit({ progression: 10 });
