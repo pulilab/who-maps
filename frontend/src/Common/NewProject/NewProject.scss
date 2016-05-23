@@ -270,6 +270,57 @@ new-project {
 
   .resources {
 
+    md-input-container {
+      margin: 0px 0;
+    }
+
+    h6 {
+      margin-top: 30px;
+    }
+
+    .file-row {
+      height: 20px;
+      margin-bottom:30px;
+
+      .intro {
+        margin-right: 40px;
+      }
+    }
+
+    .button {
+      line-height: 20px;
+      color: $color-primary;
+      font-weight: 500;
+      font-size:14px;
+      text-transform: uppercase;
+      cursor:pointer;
+
+      md-icon {
+        color: $color-primary;
+      }
+
+      .filename {
+        text-transform: none;
+      }
+
+    }
+
+    .selector {
+      margin-right: 35px;
+    }
+
+    .filesize {
+      line-height: 20px;
+      font-size:12px;
+      color: $color-gray-light;
+    }
+  }
+
+  .vision {
+
+    &>div {
+      margin-bottom: 20px;
+    }
   }
 
   .my-projects {

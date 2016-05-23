@@ -3,8 +3,9 @@ import AuthApi from '../AuthApi';
 /* global Promise */
 
 class NewProjectService extends AuthApi {
-    constructor() {
+    constructor(_upload) {
         super('');
+        this.upload = _upload;
     }
 
     newProject(data) {
@@ -36,6 +37,19 @@ class NewProjectService extends AuthApi {
                 };
             });
     }
+
+    uploadFile(file, filetype, projectId) {
+        this.retrieveToken(true);
+        const _data = {};
+        _data[filetype] = file;
+        const Authorization = 'Token ' + this.token;
+        return this.upload.upload({
+            url: `api/projects/${projectId}/files/`,
+            headers: { Authorization },
+            data: _data
+        });
+    }
+
     countryDistrict(id) {
         return this.get('countries/' + id + '/districts');
     }

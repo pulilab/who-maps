@@ -114,6 +114,8 @@ class CommonServices extends Protected {
                     if (project) {
                         this.getProjectDetail(project);
                         promiseArray.push(project.detailPromise);
+                        this.getProjectFiles(project);
+                        promiseArray.push(project.filePromise);
                     }
                 });
 
@@ -144,6 +146,13 @@ class CommonServices extends Protected {
         project.detailPromise = this.get(`projects/${project.id}/`);
         project.detailPromise.then(data => {
             _.merge(project, data);
+        });
+    }
+
+    getProjectFiles(project) {
+        project.filePromise = this.get(`projects/${project.id}/files/`);
+        project.filePromise.then(files => {
+            project.files = files;
         });
     }
 
