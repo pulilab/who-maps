@@ -314,6 +314,9 @@ class NewProjectController extends ProjectDefinition {
 
     uploadFile(data, type) {
         this.ns.uploadFile(data, type, this.projectId);
+            // .then(result => {
+                // console.log(result)
+            // });
     }
 
     rmReportFile(f) {

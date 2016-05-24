@@ -7,6 +7,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 const production = process.argv.indexOf('--dist') > -1;
 const siteBuild = process.argv.indexOf('--site-build') > -1;
 const debug = process.argv.indexOf('--debug') > -1;
+const local = process.argv.indexOf('--local') > -1;
 
 const PATH = {
     build: 'builds'
@@ -120,11 +121,11 @@ module.exports = {
     devServer: {
         proxy: {
             '/api/*': {
-                target: 'http://192.168.99.100/',
+                target: local ? 'http://localhost/' : 'http://192.168.99.100/',
                 secure: false
             },
             '/media/*': {
-                target: 'http://192.168.99.100/',
+                target: local ? 'http://localhost/' : 'http://192.168.99.100/',
                 secure: false
             }
         }

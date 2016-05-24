@@ -241,7 +241,7 @@
 
 
                     <section class="resources" ng-if="vm.editMode">
-                        <h4>Resources ({{vm.project.files.length}})</h4>
+                        <h4>Resources ({{vm.project.files.length - 2}})</h4>
 
                         <p>What reports and publications do you have for the project?</p>
 
@@ -312,6 +312,7 @@
                                     Upload file:
                                 </div>
                                 <div class="button selector" ngf-select="vm.uploadFile($file, 'publication')" ng-model="publication" name="file" ngf-max-size="10MB">
+                                    Select File
                                 </div>
 
                                 <div class=" button selector filename" ng-click="vm.downloadFile(publication)" ng-show="publication.filename">
