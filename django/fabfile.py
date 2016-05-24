@@ -78,20 +78,6 @@ def tear_down():
         env.tear_down()
 
 
-def test(app=""):
-    local("docker exec -it whomaps_django_1 py.test {} --cov".format(app))
-
-
-def migrate():
-    local("docker exec -it whomaps_django_1 python manage.py migrate")
-
-
-def import_geodata():
-    local("python manage.py fetch_geodata --selected")
-    local("python manage.py topojson")
-    local("docker exec -it whomaps_django_1 python manage.py import_geodata")
-
-
 def _drop_db():
     run('docker exec -it whomaps_postgres_1 dropdb -U postgres postgres')
 
@@ -115,3 +101,48 @@ def _migrate_db():
 
 def _import_geodata():
     run('python geodata_import.py')
+
+
+# LOCAL STUFF #
+
+
+def test(app=""):
+    local("docker exec -it whomaps_django_1 py.test {} --cov".format(app))
+
+
+def migrate():
+    local("docker exec -it whomaps_django_1 python manage.py migrate")
+
+
+def import_geodata():
+    local("python geodata_import.py")
+
+
+def rebuild_db():
+    local("docker exec -it whomaps_postgres_1 dropdb -U postgres postgres")
+    local("docker exec -it whomaps_postgres_1 createdb -U postgres postgres")
+    local("cat ~/backup/dump.sql | docker exec -i whomaps_postgres_1 psql -Upostgres")
+
+
+def down():
+    local("docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump.sql")
+    local("docker-compose down")
+
+
+def up():
+    local("docker-compose up -d")
+    time.sleep(5)
+    rebuild_db()
+
+
+def up_debug():
+    up()
+    time.sleep(2)
+    local("docker stop whomaps_django_1")
+    local("docker-compose run --service-ports django python manage.py runserver 0.0.0.0:8000")
+
+
+def down_debug():
+    down()
+    time.sleep(5)
+    local('docker stop whomaps_django_run_1')
