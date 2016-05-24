@@ -124,8 +124,12 @@ def rebuild_db():
     local("cat ~/backup/dump.sql | docker exec -i whomaps_postgres_1 psql -Upostgres")
 
 
-def down():
+def backup_db():
     local("docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump.sql")
+
+
+def down():
+    backup_db()
     local("docker-compose down")
 
 
