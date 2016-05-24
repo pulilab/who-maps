@@ -1,5 +1,7 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
+import AuthApi from '../Common/AuthApi';
+import { StaticUtilities } from '../Utilities';
 import _ from 'lodash';
 import { Protected } from '../Common/';
 
@@ -387,7 +389,14 @@ class DashboardModuleController extends Protected {
         });
 
         this.resources = res;
+    }
 
+    downloadRes(resObj) {
+
+        return new AuthApi('').getBlob(`files/${resObj.id}/`)
+            .then(data => {
+                StaticUtilities.launchDownload(data, resObj.filename);
+            });
     }
 
     static dashboardControllerFactory() {
