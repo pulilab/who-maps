@@ -3,6 +3,7 @@ import json
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
+from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
@@ -198,13 +199,19 @@ def file_list(request, project_id):
     if request.method == "POST":
         project = get_object_or_400(Project, "No such project.", id=project_id)
         # Get and store binary files for publications and reports.
+        files = []
         for key, value in request.FILES.items():
             if "publication" in key:
                 file_type = "publication"
             elif "report" in key:
                 file_type = "report"
-            File.objects.create(project_id=project.id, type=file_type, filename=value.name, data=value.read())
-        return HttpResponse()
+            instance = File.objects.create(
+                                        project_id=project.id,
+                                        type=file_type,
+                                        filename=value.name,
+                                        data=value.read())
+            files.append(model_to_dict(instance, fields=["id", "type", "filename"]))
+        return Response(files)
     if request.method == "GET":
         files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
         return Response(files)
