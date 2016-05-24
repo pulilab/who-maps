@@ -2,8 +2,8 @@ import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
 import AuthApi from '../Common/AuthApi';
 import { StaticUtilities } from '../Utilities';
-import _ from 'lodash';
 import { Protected } from '../Common/';
+import _ from 'lodash';
 
 import commProjects from './Mocks/commProjects.js';
 
@@ -23,7 +23,7 @@ class DashboardModuleController extends Protected {
 
     onInit() {
         const vm = this;
-        vm.cs = require('../Common/CommonServices');
+        vm.reqCs();
 
         vm.defaultOnInit();
         vm.projectId = vm.state.params.appName;
@@ -44,9 +44,15 @@ class DashboardModuleController extends Protected {
     }
 
     onDestroy() {
+
         const vm = this;
         vm.defaultOnDestroy();
         vm.eventRemoving();
+    }
+
+    reqCs() {
+
+        this.cs = require('../Common/CommonServices');
     }
 
     resizeEvent() {
