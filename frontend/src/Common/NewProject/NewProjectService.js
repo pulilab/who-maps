@@ -63,6 +63,21 @@ class NewProjectService extends AuthApi {
             });
     }
 
+    autocompleteProjectName(name) {
+        const data = {
+            health_topic: false,
+            location: false,
+            organisation: false,
+            project_name: true,
+            query: name,
+            technology_platform: false
+        };
+        return this.post('search/projects/', data)
+            .then(results => {
+                return results.json();
+            });
+    }
+
     countryDistrict(id) {
         return this.get('countries/' + id + '/districts');
     }

@@ -40,7 +40,6 @@ class SignupController {
     processRegistrationResult(result, signupForm) {
         this.inProgress = false;
         if (result.success) {
-            console.log('success', result.data);
             this.registered = true;
         }
         else {
