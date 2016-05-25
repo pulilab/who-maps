@@ -246,25 +246,25 @@
 
             <md-card flex class="dash-improve">
 
-                <md-card-header class="axis1" layout="row" layout-align="space-between center">
+                <md-card-header ng-class="'axis' + (vm.improveArray[vm.improveNr].axis + 1)" layout="row" layout-align="space-between center">
 
-                    <img ng-src="src/Dashboard/img/icon-domain-{{2}}.svg"></img>
+                    <img ng-src="src/Dashboard/img/icon-domain-{{vm.improveNr + 1}}.svg"></img>
 
-                    <h4 flex>You've scored #12% in #Contextual Environment domain!</h4>
+                    <h4 flex>You've scored {{vm.improveArray[vm.improveNr].percentage}}% in <span class="domain-name">{{vm.improveArray[vm.improveNr].name}}</span> domain!</h4>
 
                     <ssmenu
                         searchable="false"
                         placeholder="Go to domain"
 
                     ></ssmenu>
-                    <md-icon>chevron_left</md-icon>
-                    <md-icon>chevron_right</md-icon>
+                    <md-icon ng-click="vm.improveNr = (15 + vm.improveNr) % 16">chevron_left</md-icon>
+                    <md-icon ng-click="vm.improveNr = (17 + vm.improveNr) % 16">chevron_right</md-icon>
                 </md-card-header>
 
                 <md-tabs md-border-bottom md-dynamic-height >
                     <md-tab label="LESSONS & TIPS">
                         <md-content>
-                            Lessons and tips content
+                            <p>Here you can find some tips and lessons to improve your result.</p>
                         </md-content>
                     </md-tab>
 
@@ -280,72 +280,6 @@
 
             </md-card>
 
-            <!-- <md-card flex class="dash-lessons-tips">
-
-                <md-tooltip md-direction="top">
-                    The "Improve project" feature is not available in this version of the software.
-                </md-tooltip>
-
-                <md-tabs md-border-bottom md-dynamic-height >
-
-
-                    <md-tab label="lessons & tips">
-                        <div class="svg-box" ng-class="'axis2'" layout="row">
-                            <div flex="33" flex-offset="66">
-                                <img class="book-keeper" src="./Img/book.svg">
-                            </div>
-                        </div>
-                        <div class="quarters" layout="column">
-
-                            <div class="firstquarter" flex="30">
-
-                                <md-icon class="material-icons">info</md-icon>
-
-                                <div class="score-yell bold">You've scored {33%} in {Scientific Basis} domain!</div>
-
-                                <div class="score-tip">Here you can find some tips and lessons to improve your result. For more info visit {Planning & Guidance} section.</div>
-                            </div>
-
-                            <md-card flex="20">
-                                <img class="tip-capture" src="http://placehold.it/60x60">
-                                <div class="bold lesson-header">Use the existing evidence base to bolster interventions</div>
-                                <div class="lesson-short">Project teams should remember that mHealth is a catalytic tool and not often a health…</div>
-                                <div class="comments">
-                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({17})
-                                </div>
-                            </md-card>
-
-                            <md-card flex="20">
-                                <img class="tip-capture" src="http://placehold.it/60x60">
-                                <div class="bold lesson-header">Conduct formative work to understand your context</div>
-                                <div class="lesson-short">Formative research is critical for local validation and contextualization of mHealth…</div>
-                                <div class="comments">
-                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({6})
-                                </div>
-                            </md-card>
-
-                            <md-card flex="20">
-                                <img class="tip-capture" src="http://placehold.it/60x60">
-                                <div class="bold lesson-header">Lorem ipsum dolor sit amet, consectetur adipisici elit</div>
-                                <div class="lesson-short">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore…</div>
-                                <div class="comments">
-                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({0})
-                                </div>
-                            </md-card>
-
-                        </div>
-                    </md-tab>
-
-                    <md-tab label="experiences" ng-disabled="true">
-                        Experiences content
-                    </md-tab>
-
-                    <md-tab label="resources" ng-disabled="true">
-                        Resources content
-                    </md-tab>
-
-                </md-tabs>
-            </md-card> -->
         </div>
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">

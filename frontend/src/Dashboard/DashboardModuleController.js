@@ -130,6 +130,7 @@ class DashboardModuleController extends Protected {
 
         this.service.getAxisData().then(data => {
             this.axisData = data;
+            this.fillImproveArray(data);
             // console.debug('Axisdata', data);
         });
     }
@@ -402,6 +403,48 @@ class DashboardModuleController extends Protected {
             .then(data => {
                 StaticUtilities.launchDownload(data, resObj.filename);
             });
+    }
+
+    fillImproveArray(data) {
+
+        let counter = 1;
+        const ret = [];
+
+        data.forEach((axisObj, i) => {
+            axisObj.domains.forEach((domainObj, j) => {
+                // console.log(domainObj);
+                ret.push(
+                    {
+                        id: counter,
+                        name: domainObj.domain
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase(),
+                        axis: +i,
+                        domain: +j,
+                        completion: domainObj.domain_completion,
+                        percentage: Math.round(domainObj.domain_percentage)
+                    }
+                );
+                counter += 1;
+            });
+        });
+        this.improveArray = ret;
+        console.info('the improveArray:', this.improveArray);
+
+
+        this.improveNr = this.calculateWorstId(ret);
+        console.info('the first index:', this.improveNr);
+
+        console.info('first obj from array:', this.improveArray[this.improveNr]);
+    }
+
+    calculateWorstId(data) {
+        if (data.every(dom => dom.completion === 0)) {
+            return ~(Math.random() * 17);
+        }
+        return data.filter(dom => dom.completion > 0)
+            .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
     }
 
     static dashboardControllerFactory() {
