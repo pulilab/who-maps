@@ -82,6 +82,7 @@ describe('DashboardModuleController', () => {
     });
 
     it('\'s .fetchCountryMap method fetches from the right endpoint', () => {
+        spyOn(vm, 'fillImproveArray');
         vm.service.getAxisData = () => {
             return { then: (fn) => { fn('adat'); } };
         };
