@@ -151,6 +151,7 @@ class ProjectTests(APITestCase):
         data.update(report_files)
         response = self.test_user_client.post(url, data, format="multipart")
         self.assertEqual(response.status_code, 200)
+        self.assertIn("id", response.json()[0])
 
     def test_retrieve_file(self):
         url = reverse("file-list", kwargs={"project_id": self.project_id})
