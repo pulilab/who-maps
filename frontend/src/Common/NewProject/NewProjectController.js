@@ -79,7 +79,6 @@ class NewProjectController extends ProjectDefinition {
                 this.scope.$evalAsync();
             });
 
-        console.log(this.project);
 
     }
 
@@ -313,10 +312,13 @@ class NewProjectController extends ProjectDefinition {
     }
 
     uploadFile(data, type) {
-        this.ns.uploadFile(data, type, this.projectId);
-            // .then(result => {
-                // console.log(result)
-            // });
+        const vm = this;
+        this.ns.uploadFile(data, type, this.projectId)
+            .then(result => {
+                console.log(result);
+                vm.project.files.splice(-2, 0, result.data[0]);
+                vm.scope.$evalAsync();
+            });
     }
 
     rmReportFile(f) {
@@ -342,6 +344,23 @@ class NewProjectController extends ProjectDefinition {
     handleCustomError(key) {
         this.newProjectForm[key].$setValidity('custom', true);
         this.newProjectForm[key].customError = [];
+    }
+
+    setCustomError(key, error) {
+        this.newProjectForm[key].$setValidity('custom', false);
+        this.newProjectForm[key].customError.push(error);
+    }
+
+    checkName() {
+        this.handleCustomError('name');
+        this.ns.autocompleteProjectName(this.project.name)
+            .then(result => {
+                this.similarProject = result[0];
+                if (result && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
+                    this.setCustomError('name', 'Project name is not unique');
+                }
+                this.scope.$evalAsync();
+            });
     }
 
 

@@ -17,14 +17,24 @@
         <form name="vm.newProjectForm" ng-submit="vm.save($event)"  novalidate>
             <div layout="column" class="main-form">
                 <h4>1. Project details</h4>
-                <md-input-container >
-                    <label>Name of the project</label>
-                    <input ng-model="vm.project.name" ng-disabled="vm.editMode" required name="name" md-maxlength="100" type="text" ng-change="vm.handleCustomError('name')" />
-                    <div ng-messages="vm.newProjectForm.name.$error">
-                        <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
+                <div class="project-name" flex="100" layout="row" layout-align="start center">
+                    <md-input-container flex="60">
+                        <label>Name of the project</label>
+                        <input ng-model="vm.project.name"
+                               ng-model-options="{debounce: 200}"
+                               ng-change="vm.checkName()"
+                               ng-disabled="vm.editMode"
+                               required name="name"
+                               md-maxlength="100" type="text" />
+                        <div ng-messages="vm.newProjectForm.name.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
+                        </div>
+                    </md-input-container>
+                    <div flex="30" class="similar-project" ui-sref="dashboard({appName: vm.similarProject.id})">
+                        Similar Project Names: {{vm.similarProject.name}}
                     </div>
-                </md-input-container>
+                </div>
                 <md-input-container >
                     <label>Name of the organization</label>
                     <input ng-model="vm.project.organisation"
@@ -262,7 +272,7 @@
                             </md-button>
                         </div>
 
-                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'}">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'} | orderBy:id:true">
                             <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex >insert_drive_file</md-icon>
@@ -305,7 +315,7 @@
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
-                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'}">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'} | orderBy:id:true">
                             <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex>insert_drive_file</md-icon>
