@@ -258,7 +258,7 @@ p.global-error {
    ============================= */
 
 .main-toolbar {
-  z-index: auto;
+  z-index: 1000;
   min-height: 48px;
 
   &.toolbar-global {

@@ -31,6 +31,7 @@
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
                         </div>
                     </md-input-container>
+                    <!-- TODO: Show it if it has at least one item -->
                     <div flex="30" class="similar-project" ui-sref="dashboard({appName: vm.similarProject.id})">
                         <span class="similar-label">Similar Project Name(s)</span>
                         <a href="#" class="similar-link">{{vm.similarProject.name}}</a>
