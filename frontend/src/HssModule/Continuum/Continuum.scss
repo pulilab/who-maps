@@ -14,7 +14,7 @@ continuum {
     position: fixed;
     top: 48px;
     left: $layout-gutter-width;
-    width: calc(100% - #{$layout-gutter-width * 3});
+    width: calc(100% - #{$layout-gutter-width * 2});
     height: 150px;
     z-index: 200;
     background: #fff;
