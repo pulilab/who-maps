@@ -8,7 +8,7 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
-        this.onInit();
+        this.$onInit = this.onInit.bind(this);
     }
 
     onInit() {
@@ -16,7 +16,7 @@ class AppModuleController extends Protected {
         this.cs = require('../Common/CommonServices');
         this.watchers();
         this.eventBinding();
-        this.userProfile = this.cs.userProfile;
+        this.projectId = this.state.params.appName;
         this.currentPage = void 0;
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
@@ -28,9 +28,17 @@ class AppModuleController extends Protected {
         };
         if (this.user) {
             this.fillUserData();
+            this.userProfile = this.cs.userProfile;
         }
 
         this.notifications = [1, 2, 3];
+
+        if (this.viewMode) {
+            this.cs.getProjectData(this.projectId)
+                .then(project => {
+                    this.currentProject = project;
+                });
+        }
     }
 
     watchers() {
@@ -79,15 +87,15 @@ class AppModuleController extends Protected {
         if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { appName });
+            this.state.go(state, { appName }, {
+                location: 'replace'
+            });
         }
         _.forEach(this.user.projects, item => {
             if (item.id === parseInt(this.state.params.appName, 10)) {
                 this.currentProject = item;
             }
         });
-
-        console.log(this.currentProject);
 
         this.scope.$evalAsync();
 
@@ -102,13 +110,13 @@ class AppModuleController extends Protected {
     }
 
     handleLogoutEvent() {
-        this.state.go('login', { appName: null });
+        this.state.go('landing', { appName: null });
 
     }
 
     showCompleteNavigation(state, isLogin) {
         const isLanding = state === 'landing-logged' || state === 'newProject';
-        this.showFullNavigation = !isLanding && isLogin;
+        this.showFullNavigation = (!isLanding && isLogin) || this.viewMode;
     }
 
 

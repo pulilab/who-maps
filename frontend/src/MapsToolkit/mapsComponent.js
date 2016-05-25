@@ -6,7 +6,10 @@ const hssComponent = {
     controller: MapsToolkitController.mapsControllerFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'mapsToolkit'
+    name: 'mapsToolkit',
+    bindings: {
+        viewMode: '@'
+    }
 };
 
 export default hssComponent;

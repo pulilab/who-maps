@@ -10,7 +10,8 @@ const continuumComponent = {
         tiles: '<',
         structure: '<',
         data: '<',
-        service: '<'
+        service: '<',
+        viewMode: '@'
     },
     name: 'continuum'
 };
