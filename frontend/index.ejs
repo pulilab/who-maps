@@ -26,10 +26,17 @@
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
             display: none !important;
         }
-        .md-container {
+
+        .main-loader {
+            position: absolute;
+            top:0;
+            z-index:10000;
+        }
+
+        .main-loader .md-container {
             background-color:#080D43 !important; ;
         }
-        .md-bar {
+        .main-loader .md-bar {
             background-color: #FFBB00 !important;
         }
     </style>
@@ -50,7 +57,7 @@
 <div id="<%= htmlWebpackPlugin.options.appMountId%>"></div>
 <% } %>
 
-<md-progress-linear class="md-warn" ng-show="showLoading" ng-value="progress" md-mode="determinate"></md-progress-linear>
+<md-progress-linear class="main-loader md-warn" ng-show="showLoading" ng-value="progress" md-mode="determinate"></md-progress-linear>
 <ui-view layout="column" layout-fill></ui-view>
 
 <% if (htmlWebpackPlugin.options.appMountIds && htmlWebpackPlugin.options.appMountIds.length > 0) { %>
