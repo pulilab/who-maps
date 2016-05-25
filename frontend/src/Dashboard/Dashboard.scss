@@ -350,21 +350,16 @@
                 }
             }
 
-            .dash-lessons-tips {
-                opacity:0.5;
-                pointer-events: none;
+            .dash-improve {
 
-                background-color: $color-gray-lightest;
+                md-card-header {
 
-                .svg-box {
-
-                    position: absolute;
-                    z-index: -20;
-                    left: 0;
-                    top: 0;
-                    right: 0;
-                    height: 170px;
-                    // background-blend-mode: multiply;
+                    color: white;
+                    height: 50px;
+                    padding: 0;
+                    box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.15);
+                    border-top-left-radius: 3px;
+                    border-top-right-radius: 3px;
 
                     &.axis1 {
                         background-color: $color-axis1;
@@ -385,106 +380,181 @@
                         background-color: $color-axis6;
                     }
 
-                    ::after {
-
-                        content: '';
-                        background: url(./Img/book-shelf.svg) 100% 100% no-repeat;
-                        // background-blend-mode: luminosity;
-                        display: block;
-                        width: 100%;
-                        height: 100px;
-                        position: absolute;
-                        z-index: -10;
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0.2;
+                    img {
+                        width: 40px;
+                        height: 40px;
+                        margin: 5px;
                     }
 
-                    img.book-keeper {
+                    h4 {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
 
-                        height: 180px;
-                        width: auto;
-                        float: right;
+                    ssmenu {
 
+                        margin-right: 30px;
+                        transform: translate(0, -3px);
+
+                        md-select-value span {
+
+                            color: white;
+                        }
+                    }
+
+                    md-icon {
+                        // font-size: 14px;
+                        margin-left: -15px;
+                        margin-right: 15px;
+                        color: white;
                     }
                 }
 
-                .dash-bookscroller {
+                md-tab-content {
 
-                    position: absolute;
-                    top: -30px;
-                    z-index: -20;
-                }
+                    height: 406px;
+                    border-bottom-left-radius: 3px;
+                    border-bottom-right-radius: 3px;
 
-                .quarters {
-
-                    height: 456px;
-
-                    .firstquarter {
-
-                        md-icon {
-
-                            color: white;
-                            position: absolute;
-                            top: 25px;
-                            left: 20px;
-                        }
-
-                        .score-yell {
-
-                            color: white;
-                            padding: 30px 300px 0 60px;
-                            font-size: 14px;
-                        }
-
-                        .score-tip {
-
-                            color: white;
-                            font-size: 12px;
-                            padding: 10px 300px 0 60px;
-                        }
-                    }
-
-                    md-card {
-
-                        padding: 7px;
-                        margin: 12px 10px;
-                        display: block;
-
-                        .lesson-header {
-                            color: $color-primary;
-                            font-size: 14px;
-                        }
-
-                        .lesson-short {
-                            color: $text-secondary;
-                            margin: 10px 0;
-                            font-size: 14px;
-                        }
-
-                        .comments {
-
-                            md-icon {
-                                font-size: 12px;
-                                width: 12px;
-                                height: 12px;
-                            }
-
-                            color: $text-secondary;
-                            font-size: 12px;
-                        }
-
-                        .tip-capture {
-
-                            display: inline-block;
-                            float: right;
-                            width: 60px;
-                            height: 60px;
-                            margin: 5px;
-                        }
+                    md-content {
+                        height: 406px;
                     }
                 }
+
             }
+
+            // .dash-lessons-tips {
+
+            //     background-color: $color-gray-lightest;
+
+            //     .svg-box {
+
+            //         position: absolute;
+            //         z-index: -20;
+            //         left: 0;
+            //         top: 0;
+            //         right: 0;
+            //         height: 170px;
+            //         // background-blend-mode: multiply;
+
+            //         &.axis1 {
+            //             background-color: $color-axis1;
+            //         }
+            //         &.axis2 {
+            //             background-color: $color-axis2;
+            //         }
+            //         &.axis3 {
+            //             background-color: $color-axis3;
+            //         }
+            //         &.axis4 {
+            //             background-color: $color-axis4;
+            //         }
+            //         &.axis5 {
+            //             background-color: $color-axis5;
+            //         }
+            //         &.axis6 {
+            //             background-color: $color-axis6;
+            //         }
+
+            //         ::after {
+
+            //             content: '';
+            //             background: url(./Img/book-shelf.svg) 100% 100% no-repeat;
+            //             // background-blend-mode: luminosity;
+            //             display: block;
+            //             width: 100%;
+            //             height: 100px;
+            //             position: absolute;
+            //             z-index: -10;
+            //             left: 0;
+            //             bottom: 0;
+            //             opacity: 0.2;
+            //         }
+
+            //         img.book-keeper {
+
+            //             height: 180px;
+            //             width: auto;
+            //             float: right;
+            //         }
+            //     }
+
+            //     .dash-bookscroller {
+
+            //         position: absolute;
+            //         top: -30px;
+            //         z-index: -20;
+            //     }
+
+            //     .quarters {
+
+            //         height: 456px;
+
+            //         .firstquarter {
+
+            //             md-icon {
+
+            //                 color: white;
+            //                 position: absolute;
+            //                 top: 25px;
+            //                 left: 20px;
+            //             }
+
+            //             .score-yell {
+
+            //                 color: white;
+            //                 padding: 30px 300px 0 60px;
+            //                 font-size: 14px;
+            //             }
+
+            //             .score-tip {
+
+            //                 color: white;
+            //                 font-size: 12px;
+            //                 padding: 10px 300px 0 60px;
+            //             }
+            //         }
+
+            //         md-card {
+
+            //             padding: 7px;
+            //             margin: 12px 10px;
+            //             display: block;
+
+            //             .lesson-header {
+            //                 color: $color-primary;
+            //                 font-size: 14px;
+            //             }
+
+            //             .lesson-short {
+            //                 color: $text-secondary;
+            //                 margin: 10px 0;
+            //                 font-size: 14px;
+            //             }
+
+            //             .comments {
+
+            //                 md-icon {
+            //                     font-size: 12px;
+            //                     width: 12px;
+            //                     height: 12px;
+            //                 }
+
+            //                 color: $text-secondary;
+            //                 font-size: 12px;
+            //             }
+
+            //             .tip-capture {
+
+            //                 display: inline-block;
+            //                 float: right;
+            //                 width: 60px;
+            //                 height: 60px;
+            //                 margin: 5px;
+            //             }
+            //         }
+            //     }
+            // }
 
             .dash-community {
                 opacity: 0.5;

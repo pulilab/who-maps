@@ -241,8 +241,46 @@
     <div layout="row" class="dashrow dashrow-lower">
 
         <div flex class="dashsection dashsection-left dash-cardholder" layout="column">
+
             <div class="dash-subhead">IMPROVE PROJECT</div>
-            <md-card flex class="dash-lessons-tips">
+
+            <md-card flex class="dash-improve">
+
+                <md-card-header class="axis1" layout="row" layout-align="space-between center">
+
+                    <img ng-src="src/Dashboard/img/icon-domain-{{2}}.svg"></img>
+
+                    <h4 flex>You've scored #12% in #Contextual Environment domain!</h4>
+
+                    <ssmenu
+                        searchable="false"
+                        placeholder="Go to domain"
+
+                    ></ssmenu>
+                    <md-icon>chevron_left</md-icon>
+                    <md-icon>chevron_right</md-icon>
+                </md-card-header>
+
+                <md-tabs md-border-bottom md-dynamic-height >
+                    <md-tab label="LESSONS & TIPS">
+                        <md-content>
+                            Lessons and tips content
+                        </md-content>
+                    </md-tab>
+
+                    <md-tab label="EXPERIENCES">
+                        Experiences content
+                    </md-tab>
+
+                    <md-tab label="RESOURCES">
+                        Resources content
+                    </md-tab>
+
+                </md-tabs>
+
+            </md-card>
+
+            <!-- <md-card flex class="dash-lessons-tips">
 
                 <md-tooltip md-direction="top">
                     The "Improve project" feature is not available in this version of the software.
@@ -252,7 +290,6 @@
 
 
                     <md-tab label="lessons & tips">
-                        <!-- TODO: choose, and bind random domain -->
                         <div class="svg-box" ng-class="'axis2'" layout="row">
                             <div flex="33" flex-offset="66">
                                 <img class="book-keeper" src="./Img/book.svg">
@@ -308,8 +345,7 @@
                     </md-tab>
 
                 </md-tabs>
-
-            </md-card>
+            </md-card> -->
         </div>
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
