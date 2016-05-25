@@ -21,10 +21,6 @@ class AppModuleController extends Protected {
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.currentProjectMock = {
-            version: {
-                id: '3',
-                date: '12 Feb, 2016'
-            },
             contact: {
                 name: 'Jane M Doe',
                 email: 'po@kungFu.panda'
@@ -90,6 +86,8 @@ class AppModuleController extends Protected {
                 this.currentProject = item;
             }
         });
+
+        console.log(this.currentProject);
 
         this.scope.$evalAsync();
 
