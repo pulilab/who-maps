@@ -262,7 +262,7 @@
                             </md-button>
                         </div>
 
-                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'}">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'} | orderBy:id:true">
                             <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex >insert_drive_file</md-icon>
@@ -305,7 +305,7 @@
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
-                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'}">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'} | orderBy:id:true">
                             <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex>insert_drive_file</md-icon>

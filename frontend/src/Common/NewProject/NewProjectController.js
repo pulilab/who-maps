@@ -313,10 +313,13 @@ class NewProjectController extends ProjectDefinition {
     }
 
     uploadFile(data, type) {
-        this.ns.uploadFile(data, type, this.projectId);
-            // .then(result => {
-                // console.log(result)
-            // });
+        const vm = this;
+        this.ns.uploadFile(data, type, this.projectId)
+            .then(result => {
+                console.log(result);
+                vm.project.files.splice(-2, 0, result.data[0]);
+                vm.scope.$evalAsync();
+            });
     }
 
     rmReportFile(f) {
