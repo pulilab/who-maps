@@ -32,7 +32,9 @@
                         </div>
                     </md-input-container>
                     <div flex="30" class="similar-project" ui-sref="dashboard({appName: vm.similarProject.id})">
-                        Similar Project Names: {{vm.similarProject.name}}
+                        <span class="similar-label">Similar Project Name(s)</span>
+                        <a href="#" class="similar-link">{{vm.similarProject.name}}</a>
+                        <!-- TODO: separate multiple projects with commas -->
                     </div>
                 </div>
                 <md-input-container >
