@@ -1,5 +1,6 @@
+import platform from 'platform';
+
 /* global define, Promise, URL */
-import _ from 'lodash';
 
 const components = {};
 
@@ -37,6 +38,19 @@ class StaticUtilities {
         a.download = filename;
         a.click();
         URL.revokeObjectURL(url);
+    }
+
+    static classifyString(str) {
+        return str.replace(/ /g, '_').toLowerCase();
+    }
+
+    static prefixHtml() {
+        const html = document.querySelector('html');
+        const strippedVersion = platform.version.split('.')[0];
+        html.classList.add('browser-' + StaticUtilities.classifyString(platform.name));
+        html.classList.add('version-' + StaticUtilities.classifyString(strippedVersion));
+        html.classList.add('os-' + StaticUtilities.classifyString(platform.os.family));
+        html.classList.add('os-version-' + StaticUtilities.classifyString(platform.os.version));
     }
 }
 
