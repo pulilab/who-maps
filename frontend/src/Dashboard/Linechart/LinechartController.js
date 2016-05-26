@@ -215,7 +215,7 @@ class LinechartController {
         // Label events to trigger classes, that opaques lines via css
         // timeout is sometimes needed, because the labels arent in the DOM yet after redraw
         if (d3.select(this.el[0]).select('.labelhov' + labels.length).empty()) {
-            this.timeout(labelHoverFn, 250);
+            this.timeout(labelHoverFn.bind(this), 250);
         }
         else {
             labelHoverFn();
