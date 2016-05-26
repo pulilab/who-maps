@@ -265,14 +265,18 @@
                             <p>Here you can find some tips and lessons to improve your result.</p>
                             <p>For more info visit <a ui-sref="#">Planning & Guidance</a> section.</p>
 
-                            <md-card layout="row">
-                                <img src="">
+
+                            <md-card layout="row" ng-repeat="item in vm.pgArray">
+
+                                <img ng-src="">
                                 <div flex class="txt" layout="column" layout-align="space-around stretch">
-                                    <h5>Title</h5>
-                                    <p class="desc text-truncate">Description. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste enim mollitia, commodi delectus repellat incidunt magni nesciunt nostrum fuga quisquam odio et aspernatur eius fugit ea voluptas a vel nam.</p>
-                                    <p class="comm"><md-icon>comments</md-icon> COMMENTS ( ## )</p>
+                                    <h5>{{item.title}}</h5>
+                                    <p class="desc text-truncate">{{item.description}}</p>
+                                    <p class="comm"><md-icon>comments</md-icon> COMMENTS ({{item.commentNr}})</p>
                                 </div>
                             </md-card>
+
+
                         </md-content>
                     </md-tab>
 
