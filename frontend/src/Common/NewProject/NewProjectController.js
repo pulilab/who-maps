@@ -83,8 +83,15 @@ class NewProjectController extends ProjectDefinition {
     }
 
     addDefaultEmpty() {
-        this.project.files.push({ type: 'report' });
-        this.project.files.push({ type: 'publication' });
+        this.project.files.push({ type: 'report', id: -1 });
+        this.project.files.push({ type: 'publication', id: -1 });
+    }
+
+    customOrder(a) {
+        if (a.id === -1) {
+            return Infinity;
+        }
+        return a.id;
     }
 
 

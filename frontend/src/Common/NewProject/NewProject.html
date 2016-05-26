@@ -272,7 +272,7 @@
                             </md-button>
                         </div>
 
-                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'} | orderBy:id:true">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="report in vm.project.files | filter:{type:'report'} | orderBy:vm.customOrder">
                             <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex >insert_drive_file</md-icon>
@@ -315,13 +315,13 @@
                                 <md-icon>add</md-icon>
                             </md-button>
                         </div>
-                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'} | orderBy:id:true">
+                        <div layout="row" layout-align="start center" class="file-row" ng-repeat="publication in vm.project.files | filter:{type:'publication'} | orderBy:vm.customOrder">
                             <div layout="row" flex="70">
                                 <div class="intro">
                                     <md-icon flex>insert_drive_file</md-icon>
                                     Upload file:
                                 </div>
-                                <div class="button selector" ngf-select="vm.uploadFile($file, 'publication')" ng-model="publication" name="file" ngf-max-size="10MB">
+                                <div class="button selector" ngf-select="vm.uploadFile($file, 'publication')" ng-hide="publication.filename" ng-model="publication" name="file" ngf-max-size="10MB">
                                     Select File
                                 </div>
 
