@@ -161,6 +161,10 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         project = get_object_or_400(Project, "No such project", id=kwargs["pk"])
         data = project.data
+        last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
+        if last_version:
+            data.update(last_version=last_version.version)
+            data.update(last_version_date=last_version.modified)
         data.update(id=project.id)
         return Response(project.data)
 

@@ -1,4 +1,5 @@
 /* global define, Promise, URL */
+import _ from 'lodash';
 
 const components = {};
 
@@ -35,10 +36,8 @@ class StaticUtilities {
         a.href = url;
         a.download = filename;
         a.click();
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
     }
-
-
 }
 
 
