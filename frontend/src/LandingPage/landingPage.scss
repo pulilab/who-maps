@@ -39,21 +39,22 @@
     margin: 0 30px;
     background-color: $color-primary;
 
-    &::after {
+    &::before {
       position: absolute;
-      bottom: -5px;
+      right: 0;
+      bottom: 0;
       left: 0;
       display: block;
       width: 100%;
-      height: 20px;
-      background: url("./images/maps-zebra.svg") 0 0 no-repeat;
-      background-size: 100% 100%;
+      height: 10px;
+      background: url("./images/maps-zebra.png") 0 0 no-repeat;
+      background-size: cover;
       content: "";
     }
 
     .what-is-aside {
       margin-top: -50px;
-      margin-bottom: 80px;
+      margin-bottom: 100px;
       padding: 50px;
       min-height: 500px;
       background: url("./images/bg-whatis.jpg") 0 0 no-repeat;
@@ -67,7 +68,7 @@
 
       .dha-feature {
         float: left;
-        margin: 10px 0 20px;
+        margin: 25px 0;
 
         .img-wrapper {
           position: relative;
@@ -101,17 +102,19 @@
     }
 
     .content-main {
+      position: relative;
+      top: -220px;
       z-index: 100;
-      margin-top: -225px;
+      margin-bottom: -100px;
+      float: none;
       margin-right: 0;
-      margin-bottom: 80px;
       margin-left: 0;
       padding: 40px 120px;
       background-color: $color-white;
 
       &.logged-in {
-        background-color: $color-gray-lightest;
         padding-bottom: 80px;
+        background-color: $color-gray-lightest;
       }
 
       h2 {
@@ -246,9 +249,9 @@
             margin: 0;
             padding: 5px 15px 20px;
             height: auto;
-            box-shadow: none;
-            border-radius: 0;
             border-left: 1px solid $color-gray-lighter;
+            border-radius: 0;
+            box-shadow: none;
           }
         }
 
