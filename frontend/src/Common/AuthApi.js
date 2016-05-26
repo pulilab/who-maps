@@ -41,7 +41,7 @@ class AuthApi {
             });
         };
         deepSearch(items);
-        return items
+        return items;
     }
 
     get(endpoint) {
