@@ -361,20 +361,24 @@ class DashboardModuleController extends Protected {
         const res = { reports: [], articles: [] };
 
         data.reports.forEach(link => {
-            res.reports.push({
-                type: 'link',
-                link: link.value,
-                title: 'Where should I know?'
-            });
+            if (_.keys(link).length) {
+                res.reports.push({
+                    type: 'link',
+                    link: link.value,
+                    title: 'Where should I know?'
+                });
+            }
         });
 
         data.publications.forEach(link => {
-            res.articles.push({
-                type: 'link',
-                link: link.value,
-                // Needed data!
-                title: 'Where should I know?'
-            });
+            if (_.keys(link).length) {
+                res.articles.push({
+                    type: 'link',
+                    link: link.value,
+                    // Needed data!
+                    title: 'Where should I know?'
+                });
+            }
         });
 
         data.files.forEach(fileObj => {
