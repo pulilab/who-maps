@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import 'whatwg-fetch';
+import { StaticUtilities } from '../Utilities';
 // import 'es6-promise';
 
 /* global Promise, API, DEV */
@@ -28,6 +29,21 @@ class AuthApi {
         this.updateOnNextRequest = true;
     }
 
+    cleanDoubleDollar(items) {
+        const deepSearch = (data) => {
+            _.forEach(data, (value, key, collection) => {
+                if (key && _.isString(key) && key.indexOf('$$') > -1) {
+                    delete collection[key];
+                }
+                if (value instanceof Object || value instanceof Array) {
+                    deepSearch(value);
+                }
+            });
+        };
+        deepSearch(items);
+        return items
+    }
+
     get(endpoint) {
         if (this.preGet) {
             this.preGet();
@@ -43,7 +59,7 @@ class AuthApi {
                 return response.json();
             })
             .then((json) =>{
-                return json;
+                return this.cleanDoubleDollar(json);
             });
     }
 
@@ -82,7 +98,8 @@ class AuthApi {
             });
     }
 
-    post(endpoint, data) {
+    post(endpoint, _data) {
+        const data = this.cleanDoubleDollar(_data);
         if (this.prePost) {
             this.prePost();
         }
@@ -96,7 +113,8 @@ class AuthApi {
             });
     }
 
-    put(endpoint, data) {
+    put(endpoint, _data) {
+        const data = this.cleanDoubleDollar(_data);
         if (this.prePut) {
             this.prePut();
         }
