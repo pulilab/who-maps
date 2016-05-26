@@ -455,13 +455,8 @@ class DashboardModuleController extends Protected {
             });
         });
         this.improveArray = ret;
-        console.info('the improveArray:', this.improveArray);
-
 
         this.improveNr = this.calculateWorstId(ret);
-        console.info('the first index:', this.improveNr);
-
-        console.info('first obj from array:', this.improveArray[this.improveNr]);
     }
 
     calculateWorstId(data) {
