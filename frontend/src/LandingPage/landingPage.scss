@@ -97,6 +97,10 @@
         p {
           margin: 0 0 25px 30px;
           color: $color-white;
+
+          .browser-safari & {
+            margin-left: 50px;
+          }
         }
       }
     }
@@ -110,6 +114,12 @@
       margin-left: 0;
       padding: 40px 120px;
       background-color: $color-white;
+
+      .browser-firefox & {
+        bottom: 220px;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
 
       &.logged-in {
         padding-bottom: 80px;
@@ -150,9 +160,7 @@
       }
 
       .role-form {
-
         .img-role {
-          // float: left;
           position: absolute;
           top: -15px;
           left: -120px;
