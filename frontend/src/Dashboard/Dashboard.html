@@ -7,31 +7,49 @@
             <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
 
                 <div class="dash-subhead">STATISTICS</div>
-                <div flex layout="column" class="dash-stat-column" ng-init="viewersnrHovered = false">
 
-                    <md-card class="dash-stat-card">
+                <div flex layout="column" class="dash-stat-column">
 
-                        <!-- TODO: bind version nr. -->
-                        <span ng-if="!versionHovered" class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
-                        <span ng-if="!versionHovered" class="dash-stat-label">version</span>
+                    <md-card class="dash-stat-card longer">
 
-                        <span ng-if="versionHovered" class="dash-stat-tooltip dash-stat-tooltip-version">Push the button below to save your current stats as a new version</span>
+                        <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
+                        <span class="dash-stat-label">Version</span>
 
-                        <!-- TODO: bind snapshotting fn. -->
-                        <md-button
-                            class="snapshot-button"
-                            ng-click="vm.snapShot()"
-                            ng-mouseover="versionHovered = true"
-                            ng-mouseout="versionHovered = false">+ snapshot</md-button>
+                        <div class="gray" ng-if="true" layout="column" layout-align="space-around stretch">
+                            <span class="desc">
+                                Push to save your current stats as a new version:
+                            </span>
+                            <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
+                                <span class="text plus">+</span>
+                                <span class="text">snapshot</span>
+                            </md-button>
+                        </div>
 
                     </md-card>
 
 
-                    <!-- TODO: bindings -->
-                    <viewers trend="'up'" number="1509"></viewers>
-                    <followers trend="'down'" number="87"></followers>
+                    <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
 
-                    <donors number="vm.projectData.donors.length"></donors>
+                        <md-icon class="material-icons dash-trendicon">visibility</md-icon>
+                        <span class="dash-stat-nr dash-stat-nr-follow">#</span>
+                        <span class="dash-stat-label">Followers</span>
+
+                        <div class="gray gr-follow" ng-if="true" layout="column" layout-align="space-around stretch">
+
+                            <span class="desc">
+                                Push button to follow this project:
+                            </span>
+
+                            <md-button class="md-raised follow-button" ng-click="">
+                                <span class="text">follow#</span>
+                            </md-button>
+
+                        </div>
+
+                    </md-card>
+
+                    <followers class="hten" trend="'down'" number="87"></followers>
+                    <donors class="hten" number="vm.projectData.donors.length"></donors>
 
                 </div>
             </div>
@@ -96,8 +114,8 @@
                             </div>
                         </md-tab>
 
-                        <md-tab label="technology" ng-disabled="true">
-                            <!-- TODO: bindings! -->
+                        <md-tab label="technology">
+
                             <div class="dash-tech">
                                 <div
                                     class="upper"
@@ -112,34 +130,72 @@
                                     <div flex layout="row">
                                         <md-icon class="material-icons">playlist_add_check</md-icon>
                                         <span flex>License</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licences"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
                                     </div>
 
                                     <div flex layout="row">
                                         <md-icon class="material-icons">speaker_phone</md-icon>
                                         <span flex>Digital tools</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
+                                        <!-- <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips> -->
+                                        <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
                                     </div>
                                 </div>
 
                                 <div class="lower">
 
                                     <span>Code documentations & download:</span>
-                                    <a>http://github.com/project/repo/asfsdfasduifasuidfuiasdf8i4358345</a>
+                                    <a>http://github.com/onlyMOCKKKKKK</a>
 
                                     <span>Download applications:</span>
-                                    <a>http://google.playtore/app/app43563463456/45646</a>
+                                    <a>http://google.playtore/app/MOCKKKKKK</a>
 
                                     <span>Link to wiki page:</span>
-                                    <a>http://linktowiki/wiki/wiki.html</a>
+                                    <a>http://linktowiki/wiki/wikiMOCKKKKK.html</a>
                                 </div>
                             </div>
                         </md-tab>
 
-                        <md-tab label="resources" ng-disabled="true">
-                            <div>
-                                RESOURCES content
-                            </div>
+                        <md-tab label="resources">
+                            <md-content class="dash-res">
+
+
+                                <h3>PROJECT REPORT</h3>
+                                <md-card
+                                    class="resource"
+                                    ng-repeat="report in vm.resources.reports"
+                                    layout="row"
+                                    layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{report.title || report.filename}}</h4>
+                                        <p ng-if="report.type === 'file'">{{report.date}} | .{{report.ext}} | {{report.size}}</p>
+                                        <p ng-if="report.type === 'link'">{{report.link}}</p>
+                                    </div>
+                                    <md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>
+                                    <a ng-href="http://{{report.link}}" ng-if="report.type === 'link'" layout="column" layout-align="center center">
+                                        <md-icon>launch</md-icon>
+                                    </a>
+                                </md-card>
+
+
+                                <h3>ASSOCIATED JOURNAL ARTICLES</h3>
+                                <md-card
+                                    class="resource"
+                                    ng-repeat="article in vm.resources.articles"
+                                    layout="row"
+                                    layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{article.title || article.filename}}</h4>
+                                        <p ng-if="article.type === 'file'">{{article.date}} | .{{article.ext}} | {{article.size}}</p>
+                                        <p ng-if="article.type === 'link'">{{article.link}}</p>
+                                    </div>
+                                    <md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>
+                                    <a ng-href="http://{{article.link}}" ng-if="article.type === 'link'" layout="column" layout-align="center center">
+                                        <md-icon>launch</md-icon>
+                                    </a>
+                                </md-card>
+                            </md-content>
                         </md-tab>
 
                     </md-tabs>
@@ -183,75 +239,62 @@
     <div layout="row" class="dashrow dashrow-lower">
 
         <div flex class="dashsection dashsection-left dash-cardholder" layout="column">
-            <div class="dash-subhead">IMPROVE PROJECT</div>
-            <md-card flex class="dash-lessons-tips">
 
-                <md-tooltip md-direction="top">
-                    The "Improve project" feature is not available in this version of the software.
-                </md-tooltip>
+            <div class="dash-subhead">IMPROVE PROJECT</div>
+
+            <md-card flex class="dash-improve">
+
+                <md-card-header class="unselectable" ng-class="'axis' + (vm.improveArray[vm.improveNr].axis + 1)" layout="row" layout-align="space-between center">
+
+                    <img ng-src="src/Dashboard/img/icon-domain-{{vm.improveNr + 1}}.svg"></img>
+
+                    <h4 flex>You've scored {{vm.improveArray[vm.improveNr].percentage}}% in <span class="domain-name">{{vm.improveArray[vm.improveNr].name}}</span> domain!</h4>
+
+                    <ssmenu
+                        searchable="false"
+                        placeholder="Go to domain"
+
+                    ></ssmenu>
+                    <md-icon ng-click="vm.improveNr = (15 + vm.improveNr) % 16">chevron_left</md-icon>
+                    <md-icon ng-click="vm.improveNr = (17 + vm.improveNr) % 16">chevron_right</md-icon>
+                </md-card-header>
 
                 <md-tabs md-border-bottom md-dynamic-height >
+                    <md-tab label="LESSONS & TIPS">
+                        <md-content>
 
-
-                    <md-tab label="lessons & tips">
-                        <!-- TODO: choose, and bind random domain -->
-                        <div class="svg-box" ng-class="'axis2'" layout="row">
-                            <div flex="33" flex-offset="66">
-                                <img class="book-keeper" src="./Img/book.svg">
-                            </div>
-                        </div>
-                        <div class="quarters" layout="column">
-
-                            <div class="firstquarter" flex="30">
-
-                                <md-icon class="material-icons">info</md-icon>
-
-                                <div class="score-yell bold">You've scored {33%} in {Scientific Basis} domain!</div>
-
-                                <div class="score-tip">Here you can find some tips and lessons to improve your result. For more info visit {Planning & Guidance} section.</div>
+                            <div class="subhead" layout="row" layout-align="space-between">
+                                <p>Here you can find some tips and lessons to improve your result.<br> For more info visit <a ui-sref="#">Planning & Guidance</a> section.</p>
+                                <img src="./Img/book.svg">
                             </div>
 
-                            <md-card flex="20">
-                                <img class="tip-capture" src="http://placehold.it/60x60">
-                                <div class="bold lesson-header">Use the existing evidence base to bolster interventions</div>
-                                <div class="lesson-short">Project teams should remember that mHealth is a catalytic tool and not often a health…</div>
-                                <div class="comments">
-                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({17})
+
+                            <md-card layout="row" ng-repeat="item in vm.pgArray">
+
+                                <img ng-src="">
+                                <div flex class="txt" layout="column" layout-align="space-around stretch">
+                                    <h5>{{item.title}}</h5>
+                                    <p class="desc text-truncate">{{item.description}}</p>
+                                    <p class="comm"><md-icon>comments</md-icon> COMMENTS ({{item.commentNr}})</p>
                                 </div>
                             </md-card>
 
-                            <md-card flex="20">
-                                <img class="tip-capture" src="http://placehold.it/60x60">
-                                <div class="bold lesson-header">Conduct formative work to understand your context</div>
-                                <div class="lesson-short">Formative research is critical for local validation and contextualization of mHealth…</div>
-                                <div class="comments">
-                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({6})
-                                </div>
-                            </md-card>
 
-                            <md-card flex="20">
-                                <img class="tip-capture" src="http://placehold.it/60x60">
-                                <div class="bold lesson-header">Lorem ipsum dolor sit amet, consectetur adipisici elit</div>
-                                <div class="lesson-short">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore…</div>
-                                <div class="comments">
-                                    <md-icon class="material-icons">comment</md-icon> COMMENTS ({0})
-                                </div>
-                            </md-card>
-
-                        </div>
+                        </md-content>
                     </md-tab>
 
-                    <md-tab label="experiences" ng-disabled="true">
+                    <md-tab label="EXPERIENCES">
                         Experiences content
                     </md-tab>
 
-                    <md-tab label="resources" ng-disabled="true">
+                    <md-tab label="RESOURCES">
                         Resources content
                     </md-tab>
 
                 </md-tabs>
 
             </md-card>
+
         </div>
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
@@ -305,7 +348,9 @@
     </div>
 
     <div class="disclaimer">
+
         <span>Disclaimer:</span> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+
     </div>
 
 </div>
