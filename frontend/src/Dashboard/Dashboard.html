@@ -262,8 +262,11 @@
                 <md-tabs md-border-bottom md-dynamic-height >
                     <md-tab label="LESSONS & TIPS">
                         <md-content>
-                            <p>Here you can find some tips and lessons to improve your result.</p>
-                            <p>For more info visit <a ui-sref="#">Planning & Guidance</a> section.</p>
+
+                            <div class="subhead" layout="row" layout-align="space-between">
+                                <p>Here you can find some tips and lessons to improve your result.<br> For more info visit <a ui-sref="#">Planning & Guidance</a> section.</p>
+                                <img src="./Img/book.svg">
+                            </div>
 
 
                             <md-card layout="row" ng-repeat="item in vm.pgArray">
