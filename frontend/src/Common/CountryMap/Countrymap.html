@@ -3,9 +3,9 @@
 	<!-- for DASH -->
 	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
 
-		<div class="countrychart-tooltip-header bold">
-			{{vm.countryName}}
-			<img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
+		<div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
+			<p flex>{{vm.countryName}}</p>
+			<img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
 		</div>
 
 		<div class="countrychart-tooltip-main" layout="column">
