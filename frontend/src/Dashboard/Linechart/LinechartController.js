@@ -127,7 +127,7 @@ class LinechartController {
 
         const xAxis = d3.svg.axis()
             .scale(xScale)
-            .ticks(data.length - 1)
+            .ticks(this.showdotted ? data.length : (data.length - 1))
             .tickFormat(d => {
                 const canShowDate = (width - margin.left - margin.right) / ((data.length - 1) * 80) >= 1.2;
                 return canShowDate ? d + '. ' + data[d - 1].date : d;
