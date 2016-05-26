@@ -441,7 +441,8 @@ class DashboardModuleController extends Protected {
 
     calculateWorstId(data) {
         if (data.every(dom => dom.completion === 0)) {
-            return ~(Math.random() * 17);
+
+            return Math.floor(Math.random() * 17);
         }
         return data.filter(dom => dom.completion > 0)
             .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
