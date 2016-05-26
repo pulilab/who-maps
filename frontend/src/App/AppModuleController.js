@@ -35,6 +35,13 @@ class AppModuleController extends Protected {
         }
 
         this.notifications = [1, 2, 3];
+        if (this.viewMode) {
+            this.cs.getProjectData(this.projectId)
+                .then(project => {
+                    this.currentProject = project;
+                    this.scope.$evalAsync();
+                });
+        }
     }
 
     watchers() {
