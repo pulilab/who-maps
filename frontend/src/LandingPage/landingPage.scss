@@ -103,11 +103,10 @@
 
     .content-main {
       position: relative;
-      top: -220px;
       z-index: 100;
-      margin-bottom: -100px;
-      float: none;
+      margin-top: -220px;
       margin-right: 0;
+      margin-bottom: 100px;
       margin-left: 0;
       padding: 40px 120px;
       background-color: $color-white;
