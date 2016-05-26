@@ -44,13 +44,17 @@ class DashboardModuleController extends Protected {
         this.pgArray = [
             {
                 title: 'Use the existing evidence base to bolster interventions',
-                description: 'Project teams should remember that mHealth is a catalytic tool and not often a health Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.',
+                description: 'Project teams should remember that mHealth is a catalytic' +
+                    ' tool and not often a health Lorem ipsum dolor sit amet,' +
+                    ' consectetur adipisicing elit, sed do eiusmod.',
                 commentNr: 17,
                 imageURL: 'someURL'
             },
             {
                 title: 'Conduct formative work to understand your context',
-                description: 'Formative research is critical for local validation and contextualization of mHealth Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
+                description: 'Formative research is critical for local validation and ' +
+                    'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
+                    ' adipisicing elit, sed do eiusmod',
                 commentNr: 6,
                 imageURL: 'someURL'
             },
