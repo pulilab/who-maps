@@ -68,6 +68,7 @@ class LinechartController {
         const data = vm.datachooser ? vm.chosenData : vm.data;
         const labels = vm.datachooser ? vm.chosenLabels : vm.labels;
 
+
         const outer = d3.select(vm.el[0])
             .append('div')
             .attr('class', 'linechartcontainer');
@@ -98,10 +99,17 @@ class LinechartController {
             .attr('width', outerWidth)
             .attr('height', outerHeight);
 
-        const tooltip = outer
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('opacity', 0);
+
+        let tooltip;
+        if (!d3.select('.chart-tooltip')[0][0]) {
+
+            tooltip = d3.select('body')
+                .append('div')
+                .attr('class', 'chart-tooltip');
+        }
+        else {
+            tooltip = d3.select('.chart-tooltip');
+        }
 
         const xScale = d3.scale.linear()
             .range([margin.left, width - margin.right]) // the area
@@ -190,10 +198,6 @@ class LinechartController {
                     .attr('cy', yScale(el['axis' + i] || 0))
                     .on('mouseover', () => {
 
-                        tooltip.transition()
-                            .duration(200)
-                            .style('opacity', 1);
-
                         const divString = [
                             'Score: ' + Math.round(el['axis' + i] * 100) + '%',
                             '<br>',
@@ -201,16 +205,13 @@ class LinechartController {
                         ];
 
                         tooltip.html(divString.join(''))
-                            .style('left', (d3.event.pageX - 190) + 'px')
-                            .style('top', (d3.event.pageY - height - 40) + 'px');
-
+                            .style('top', (d3.event.pageY - 15 + 'px'))
+                            .style('left', (d3.event.pageX + 15 + 'px'))
+                            .style('opacity', 1);
                     })
                     .on('mouseout', () => {
 
-                        tooltip.transition()
-                            .duration(500)
-                            .style('opacity', 0);
-
+                        tooltip.style('opacity', 0);
                     });
             }
         });
