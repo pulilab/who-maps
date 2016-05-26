@@ -10,7 +10,6 @@ class HssModuleController extends Protected {
         this.scope = $scope;
         this.state = $state;
         this.introJsSource = introJs;
-        $animate.enabled(false);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
 
