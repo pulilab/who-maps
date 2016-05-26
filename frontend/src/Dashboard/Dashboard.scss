@@ -432,11 +432,52 @@
                         background-color: $color-gray-lightest;
 
                         p {
-                            color: $text-primary;
+                            color: $text-secondary;
+                            font-size: 14px;
+                            line-height: 12px;
                         }
 
                         a {
                             color: $color-primary;
+                        }
+
+                        md-card {
+
+                            img {
+                                width: 70px;
+                                height: 70px;
+                                margin: 12px;
+                            }
+
+                            .txt {
+                                margin: 6px 20px 6px 0;
+
+                                * {
+                                    line-height: 14px;
+                                    margin: 0;
+                                    cursor: pointer;
+                                }
+
+                                h5 {
+                                    color: $color-primary;
+                                }
+                                .desc {
+                                    color: $color-gray;
+                                    cursor: default;
+                                }
+                                .comm {
+                                    color: $text-secondary;
+                                    font-size: 12px;
+                                    font-weight: 500;
+
+                                    md-icon {
+                                        font-size: 14px;
+                                        height: 14px;
+                                        width: 14px;
+                                    }
+                                }
+                            }
+
                         }
 
                     }
