@@ -180,8 +180,8 @@
             <div class="project-info" layout="row">
                 <span>
                     Version:
-                    {{vm.currentProjectMock.version.id}}
-                    ({{vm.currentProjectMock.version.date}})
+                    {{vm.currentProject.last_version}}
+                    ({{vm.currentProject.last_version_date | date: medium}})
                 </span>
                 <span class="menu-separator"></span>
                 <span>

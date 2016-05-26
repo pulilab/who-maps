@@ -1,3 +1,5 @@
+import platform from 'platform';
+
 /* global define, Promise, URL */
 
 const components = {};
@@ -35,10 +37,21 @@ class StaticUtilities {
         a.href = url;
         a.download = filename;
         a.click();
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
     }
 
+    static classifyString(str) {
+        return str.replace(/ /g, '_').replace(/\./g, '-').toLowerCase();
+    }
 
+    static prefixHtml() {
+        const html = document.querySelector('html');
+        const strippedVersion = platform.version.split('.')[0];
+        html.classList.add('browser-' + StaticUtilities.classifyString(platform.name));
+        html.classList.add('version-' + StaticUtilities.classifyString(strippedVersion));
+        html.classList.add('os-' + StaticUtilities.classifyString(platform.os.family));
+        html.classList.add('os-version-' + StaticUtilities.classifyString(platform.os.version));
+    }
 }
 
 

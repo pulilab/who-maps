@@ -205,6 +205,16 @@ class ProjectTests(APITestCase):
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[1]["version"], 2)
 
+    def test_retrieve_last_version(self):
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("last_version"), 1)
+        self.assertIn("last_version_date", response.json())
+
     def test_upload_partnerlogo(self):
         url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
         data = {}
