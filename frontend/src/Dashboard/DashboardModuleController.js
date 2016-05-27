@@ -9,20 +9,19 @@ import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController extends Protected {
 
-    constructor($scope, $state, $timeout) {
+    constructor($scope, $state, $timeout, CommonServices) {
 
         super();
         this.scope = $scope;
         this.state = $state;
         this.timeout = $timeout;
         this.EE = window.EE;
+        this.cs = CommonServices;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
     }
 
     onInit() {
-
-        this.reqCs();
 
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
@@ -474,10 +473,10 @@ class DashboardModuleController extends Protected {
     }
 
     static dashboardControllerFactory() {
-
+        const CommonServices = require('../Common/CommonServices');
         function dashController($scope, $state, $timeout) {
 
-            return new DashboardModuleController($scope, $state, $timeout);
+            return new DashboardModuleController($scope, $state, $timeout, CommonServices);
         }
 
         dashController.$inject = ['$scope', '$state', '$timeout'];
