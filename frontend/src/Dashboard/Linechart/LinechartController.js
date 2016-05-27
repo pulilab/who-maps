@@ -5,27 +5,25 @@ class LinechartController {
 
     constructor($element, $timeout) {
 
-        const vm = this;
-
         // BINDINGS
-        // vm.data <= holds data
-        // vm.labels <= array of labels for datasets
-        // vm.showdotted <= decides to show unsaved (last) ones
-        // vm.datachooser <= datastructure toggle, and allows showing ng-options on the view
-        // vm.notpercentage <= signs that data isnt given in percentages
+        // this.data <= holds data
+        // this.labels <= array of labels for datasets
+        // this.showdotted <= decides to show unsaved (last) ones
+        // this.datachooser <= datastructure toggle, and allows showing ng-options on the view
+        // this.notpercentage <= signs that data isnt given in percentages
 
-        vm.EE = window.EE;
-        vm.el = $element;
-        vm.timeout = $timeout;
-        vm.$onInit = () => {
+        this.EE = window.EE;
+        this.el = $element;
+        this.timeout = $timeout;
+        this.$onInit = () => {
 
-            if (!vm.datachooser) {
+            if (!this.datachooser) {
 
-                vm.EE.once(vm.notpercentage ? 'coverage chart data' : 'axis chart data', data => {
+                this.EE.once(this.notpercentage ? 'coverage chart data' : 'axis chart data', data => {
 
-                    if (vm.notpercentage) {
+                    if (this.notpercentage) {
                         // console.debug('chartmock 3', JSON.stringify(data));
-                        vm.maxValue = data.data.reduce((ret, version) => {
+                        this.maxValue = data.data.reduce((ret, version) => {
                             _.forOwn(version, (val, key) => {
 
                                 if (key !== 'date' || key !== 'x') {
@@ -37,23 +35,23 @@ class LinechartController {
                         }, 0);
                     }
 
-                    vm.data = data.data;
-                    vm.labels = data.labels;
-                    vm.chosenLabels = vm.labels;
-                    vm.draw();
+                    this.data = data.data;
+                    this.labels = data.labels;
+                    this.chosenLabels = this.labels;
+                    this.draw();
                 });
 
             }
             else {
 
-                vm.EE.once('domain chart data', (data) => {
+                this.EE.once('domain chart data', (data) => {
                     // console.debug('got data for chart DOMAINS', data);
-                    vm.data = data;
-                    vm.labels = vm.data.labels;
-                    vm.activeAxis = vm.data.labels[0];
-                    vm.chosenData = vm.data[vm.activeAxis].data;
-                    vm.chosenLabels = vm.data[vm.activeAxis].labels;
-                    vm.draw();
+                    this.data = data;
+                    this.labels = this.data.labels;
+                    this.activeAxis = this.data.labels[0];
+                    this.chosenData = this.data[this.activeAxis].data;
+                    this.chosenLabels = this.data[this.activeAxis].labels;
+                    this.draw();
                 });
             }
         };
@@ -61,14 +59,13 @@ class LinechartController {
 
     draw() {
 
-        const vm = this;
+        d3.select(this.el[0]).select('.linechartcontainer').remove();
 
-        d3.select(vm.el[0]).select('.linechartcontainer').remove();
+        const data = this.datachooser ? this.chosenData : this.data;
+        const labels = this.datachooser ? this.chosenLabels : this.labels;
 
-        const data = vm.datachooser ? vm.chosenData : vm.data;
-        const labels = vm.datachooser ? vm.chosenLabels : vm.labels;
 
-        const outer = d3.select(vm.el[0])
+        const outer = d3.select(this.el[0])
             .append('div')
             .attr('class', 'linechartcontainer');
 
@@ -98,14 +95,21 @@ class LinechartController {
             .attr('width', outerWidth)
             .attr('height', outerHeight);
 
-        const tooltip = outer
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('opacity', 0);
+
+        let tooltip;
+        if (!d3.select('.chart-tooltip')[0][0]) {
+
+            tooltip = d3.select('body')
+                .append('div')
+                .attr('class', 'chart-tooltip');
+        }
+        else {
+            tooltip = d3.select('.chart-tooltip');
+        }
 
         const xScale = d3.scale.linear()
             .range([margin.left, width - margin.right]) // the area
-            .domain([0.8, (vm.showdotted ? data.length : data.length - 1) + 0.2]); // min and max values
+            .domain([0.8, (this.showdotted ? data.length : data.length - 1) + 0.2]); // min and max values
 
         const percScale = d3.scale.linear()
             .range([height - margin.top, margin.bottom])
@@ -113,13 +117,13 @@ class LinechartController {
 
         const simpleScale = d3.scale.linear()
             .range([height - margin.top, margin.bottom])
-            .domain([0, vm.maxValue]);
+            .domain([0, this.maxValue]);
 
-        const yScale = vm.notpercentage ? simpleScale : percScale;
+        const yScale = this.notpercentage ? simpleScale : percScale;
 
         const xAxis = d3.svg.axis()
             .scale(xScale)
-            .ticks(data.length - 1)
+            .ticks(this.showdotted ? data.length : (data.length - 1))
             .tickFormat(d => {
                 const canShowDate = (width - margin.left - margin.right) / ((data.length - 1) * 80) >= 1.2;
                 return canShowDate ? d + '. ' + data[d - 1].date : d;
@@ -130,7 +134,7 @@ class LinechartController {
             .scale(yScale)
             .orient('left');
 
-        if (!vm.notpercentage) {
+        if (!this.notpercentage) {
             yAxis.tickFormat(d3.format('.0%'));
         }
 
@@ -170,7 +174,7 @@ class LinechartController {
                 .attr('d', line(data.slice(0, -1)));
 
             // Dashed lines
-            if (vm.showdotted) {
+            if (this.showdotted) {
                 element.append('svg:path')
                     .attr('class', 'line-axis line-axis-dashed line-axis' + i)
                     .attr('d', line(data.slice(-2)));
@@ -178,7 +182,7 @@ class LinechartController {
         }
 
         // DOTS
-        const dotData = vm.showdotted ? data : data.slice(0, -1);
+        const dotData = this.showdotted ? data : data.slice(0, -1);
 
         dotData.forEach(el => {
             for (let i = 1; i <= labels.length; i += 1) {
@@ -190,10 +194,6 @@ class LinechartController {
                     .attr('cy', yScale(el['axis' + i] || 0))
                     .on('mouseover', () => {
 
-                        tooltip.transition()
-                            .duration(200)
-                            .style('opacity', 1);
-
                         const divString = [
                             'Score: ' + Math.round(el['axis' + i] * 100) + '%',
                             '<br>',
@@ -201,24 +201,21 @@ class LinechartController {
                         ];
 
                         tooltip.html(divString.join(''))
-                            .style('left', (d3.event.pageX - 190) + 'px')
-                            .style('top', (d3.event.pageY - height - 40) + 'px');
-
+                            .style('top', (d3.event.pageY - 15 + 'px'))
+                            .style('left', (d3.event.pageX + 15 + 'px'))
+                            .style('opacity', 1);
                     })
                     .on('mouseout', () => {
 
-                        tooltip.transition()
-                            .duration(500)
-                            .style('opacity', 0);
-
+                        tooltip.style('opacity', 0);
                     });
             }
         });
 
         // Label events to trigger classes, that opaques lines via css
         // timeout is sometimes needed, because the labels arent in the DOM yet after redraw
-        if (d3.select(vm.el[0]).select('.labelhov' + labels.length).empty()) {
-            vm.timeout(labelHoverFn, 250);
+        if (d3.select(this.el[0]).select('.labelhov' + labels.length).empty()) {
+            this.timeout(labelHoverFn.bind(this), 250);
         }
         else {
             labelHoverFn();
@@ -228,7 +225,7 @@ class LinechartController {
 
             for (let i = 1; i <= labels.length; i += 1) {
 
-                d3.select(vm.el[0]).select('.labelhov' + i)
+                d3.select(this.el[0]).select('.labelhov' + i)
                     .on('mouseover', () => {
                         element.classed('activelabel' + i, true);
                     })
@@ -239,23 +236,21 @@ class LinechartController {
         }
 
         // Redraw on window size change
-        window.EE.once('dashResized', vm.reDraw.bind(vm));
+        window.EE.once('dashResized', this.reDraw.bind(this));
     }
 
     reDraw() {
-        const vm = this;
-        vm.draw(true);
+
+        this.draw(true);
     }
 
     // Ng-options change
     axisChange(newAxis) {
 
-        const vm = this;
+        this.chosenData = this.data[newAxis].data;
+        this.chosenLabels = this.data[newAxis].labels;
 
-        vm.chosenData = vm.data[newAxis].data;
-        vm.chosenLabels = vm.data[newAxis].labels;
-
-        vm.reDraw();
+        this.reDraw();
     }
 
     static linechartFactory() {

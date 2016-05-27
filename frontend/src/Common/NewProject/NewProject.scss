@@ -76,13 +76,29 @@ new-project {
     > md-input-container {
       width: 700px;
     }
-    
-    .similar-project{
-      cursor: pointer;
+
+    .similar-project {
+      position: relative;
+      top: -20px;
+      min-height: 50px;
+      margin-left: 50px;
+      color: $text-secondary;
+
+      .similar-label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: $caption-font-size-base;
+      }
+
+      .similar-link {
+        color: $color-primary;
+        text-decoration: none;
+      }
     }
 
     .strategies {
       height:70px;
+      margin-bottom: 40px;
 
       md-input-container {
         width: 400px;
@@ -95,8 +111,6 @@ new-project {
         line-height: 70px;
         color: $color-gray;
       }
-
-      margin-bottom: 40px;
     }
 
     .countries {

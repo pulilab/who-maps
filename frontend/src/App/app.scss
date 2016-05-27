@@ -264,8 +264,15 @@ p.global-error {
 /* TOP NAVIGATION BAR
    ============================= */
 
+ .main-loader .md-container {
+     height: 4px !important;
+ }
+ .main-loader .md-bar {
+     height: 3px !important;
+ }
+
 .main-toolbar {
-  z-index: auto;
+  z-index: 1000;
   min-height: 48px;
 
   &.toolbar-global {

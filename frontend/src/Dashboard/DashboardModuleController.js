@@ -1,65 +1,106 @@
 import DashboardService from './DashboardService.js';
 import DashboardMapService from './DashboardMapService.js';
-import _ from 'lodash';
+import AuthApi from '../Common/AuthApi';
+import { StaticUtilities } from '../Utilities';
 import { Protected } from '../Common/';
+import _ from 'lodash';
 
 import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController extends Protected {
 
-    constructor($scope, $state) {
-        super();
-        const vm = this;
-        vm.scope = $scope;
-        vm.state = $state;
-        vm.EE = window.EE;
-        vm.$onInit = vm.onInit.bind(vm);
-        vm.$onDestroy = vm.onDestroy.bind(vm);
+    constructor($scope, $state, $timeout) {
 
+        super();
+        this.scope = $scope;
+        this.state = $state;
+        this.timeout = $timeout;
+        this.EE = window.EE;
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
     }
 
     onInit() {
-        const vm = this;
-        vm.defaultOnInit();
-        vm.projectId = vm.state.params.appName;
-        vm.currentVersion = 0;
-        vm.service = new DashboardService(vm.projectId);
-        vm.mapService = new DashboardMapService();
 
-        vm.fetchAxisData();
+        this.reqCs();
 
-        this.service.getProjectData(this.projectId).then(vm.fetchProjectData.bind(this));
-        vm.fetchToolkitData();
+        this.defaultOnInit();
+        this.projectId = this.state.params.appName;
+        this.currentVersion = 0;
+        this.service = new DashboardService(this.projectId);
+        this.mapService = new DashboardMapService();
 
-        vm.commProjects = commProjects;
-        vm.resizeEvent();
-        vm.eventBinding();
+        this.fetchAxisData();
+
+        this.cs.getProjectData(this.projectId).then(data => {
+            this.addResourcesMeta(data);
+            this.timeout(() => { this.fetchProjectData(data); });
+        });
+
+        this.fetchToolkitData();
+
+        this.commProjects = commProjects;
+        this.resizeEvent();
+        this.eventBinding();
+
+        this.pgArray = [
+            {
+                title: 'Use the existing evidence base to bolster interventions',
+                description: 'Project teams should remember that mHealth is a catalytic' +
+                    ' tool and not often a health Lorem ipsum dolor sit amet,' +
+                    ' consectetur adipisicing elit, sed do eiusmod.',
+                commentNr: 17,
+                imageURL: 'someURL'
+            },
+            {
+                title: 'Conduct formative work to understand your context',
+                description: 'Formative research is critical for local validation and ' +
+                    'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
+                    ' adipisicing elit, sed do eiusmod',
+                commentNr: 6,
+                imageURL: 'someURL'
+            },
+            {
+                title: 'Lorem ipsum dolor sit amet, consectetur adipisici elit',
+                description: 'A short description!',
+                commentNr: 0,
+                imageURL: 'someURL'
+            }
+        ];
     }
 
     onDestroy() {
-        const vm = this;
-        vm.defaultOnDestroy();
-        vm.eventRemoving();
+
+        this.defaultOnDestroy();
+        this.eventRemoving();
+    }
+
+    reqCs() {
+
+        this.cs = require('../Common/CommonServices');
     }
 
     resizeEvent() {
-        const vm = this;
+
         let doit;
-        vm.resizefn = () => {
+        this.resizefn = () => {
             clearTimeout(doit);
-            doit = setTimeout(vm.resizedw, 50);
+            doit = setTimeout(this.resizedw, 50);
         };
-        window.onresize = vm.resizefn;
-        vm.resizedw = () => {
+        window.onresize = this.resizefn;
+        this.resizedw = () => {
             this.EE.emit('dashResized');
         };
     }
 
     eventBinding() {
+
         this.EE.on('mapsDomainChange', this.handleChangeDomain, this);
         this.EE.on('mapsAxisChange', this.handleChangeAxis, this);
     }
+
     eventRemoving() {
+
         this.EE.removeListener('mapsDomainChange', this.handleChangeDomain, this);
         this.EE.removeListener('mapsAxisChange', this.handleChangeAxis, this);
     }
@@ -74,6 +115,7 @@ class DashboardModuleController extends Protected {
     }
 
     parseMapData(coverage) {
+
         // console.debug('COVERAGE from API', coverage);
         const ret = { labels: [], data: {} };
 
@@ -96,7 +138,6 @@ class DashboardModuleController extends Protected {
 
                 ret.data[distObj.district][formattedKey] = val;
             });
-
         });
         // console.debug('FINAL PARSED COVERAGE: ', ret);
 
@@ -105,6 +146,7 @@ class DashboardModuleController extends Protected {
     }
 
     snapShot() {
+
         this.service.snapShot(this.projectId).then(() => {
             this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
         });
@@ -114,26 +156,25 @@ class DashboardModuleController extends Protected {
 
         this.service.getAxisData().then(data => {
             this.axisData = data;
+            this.fillImproveArray(data);
             // console.debug('Axisdata', data);
         });
     }
 
     fetchToolkitData() {
+
         this.service.getToolkitData(this.projectId).then(data => {
             // console.debug('RAW Toolkit data', data);
             this.rawToolkitData = data;
             this.fetchToolkitVersions();
         });
-
     }
 
     fetchToolkitVersions() {
 
-        const vm = this;
+        this.service.getToolkitVersions(this.projectId).then(data => {
 
-        vm.service.getToolkitVersions(vm.projectId).then(data => {
-
-            vm.currentVersion = data.length;
+            this.currentVersion = data.length;
 
             const axisData = {
                 labels: [
@@ -168,17 +209,17 @@ class DashboardModuleController extends Protected {
 
             // Current data (from tooltip)
             const lastAxisData = {
-                axis1: vm.rawToolkitData[0].axis_score / 100,
-                axis2: vm.rawToolkitData[1].axis_score / 100,
-                axis3: vm.rawToolkitData[2].axis_score / 100,
-                axis4: vm.rawToolkitData[3].axis_score / 100,
-                axis5: vm.rawToolkitData[4].axis_score / 100,
-                axis6: vm.rawToolkitData[5].axis_score / 100,
+                axis1: this.rawToolkitData[0].axis_score / 100,
+                axis2: this.rawToolkitData[1].axis_score / 100,
+                axis3: this.rawToolkitData[2].axis_score / 100,
+                axis4: this.rawToolkitData[3].axis_score / 100,
+                axis5: this.rawToolkitData[4].axis_score / 100,
+                axis6: this.rawToolkitData[5].axis_score / 100,
                 date: todayString
             };
 
             axisData.data.push(lastAxisData);
-            vm.EE.emit('axis chart data', axisData);
+            this.EE.emit('axis chart data', axisData);
 
 
             const domainData = {
@@ -250,15 +291,14 @@ class DashboardModuleController extends Protected {
 
 
                 const current = { date: todayString };
-                vm.rawToolkitData[axInd].domains.forEach((dom, ii) => {
+                this.rawToolkitData[axInd].domains.forEach((dom, ii) => {
                     current['axis' + (ii + 1)] = dom.domain_percentage / 100;
                 });
                 domainData[axis].data.push(current);
 
                 // console.debug(axInd + 1 + 'th axiss domaindata:', domainData[axis].data);
-
             });
-            vm.EE.emit('domain chart data', domainData);
+            this.EE.emit('domain chart data', domainData);
         });
     }
 
@@ -313,7 +353,6 @@ class DashboardModuleController extends Protected {
             }, { labels: [], data: [] });
 
             this.EE.emit('coverage chart data', historyChartData);
-
         });
     }
 
@@ -328,28 +367,120 @@ class DashboardModuleController extends Protected {
     }
 
     prewProject(projectIndex) {
-        const vm = this;
-        if (vm.pi[projectIndex] === 0) {
+
+        if (this.pi[projectIndex] === 0) {
             return;
         }
-        vm.pi[projectIndex] -= 1;
+        this.pi[projectIndex] -= 1;
     }
 
     nextProject(projectIndex) {
-        const vm = this;
-        if (vm.pi[projectIndex] === vm.commProjects[projectIndex].length - 1) {
+
+        if (this.pi[projectIndex] === this.commProjects[projectIndex].length - 1) {
             return;
         }
-        vm.pi[projectIndex] += 1;
+        this.pi[projectIndex] += 1;
+    }
+
+    addResourcesMeta(data) {
+
+        const res = { reports: [], articles: [] };
+
+        data.reports.forEach(link => {
+            if (_.keys(link).length) {
+                res.reports.push({
+                    type: 'link',
+                    link: link.value,
+                    title: 'Where should I know?'
+                });
+            }
+        });
+
+        data.publications.forEach(link => {
+            if (_.keys(link).length) {
+                res.articles.push({
+                    type: 'link',
+                    link: link.value,
+                    // Needed data!
+                    title: 'Where should I know?'
+                });
+            }
+        });
+
+        data.files.forEach(fileObj => {
+            if (fileObj.type === 'report') {
+                res.reports.push({
+                    type: 'file',
+                    filename: fileObj.filename,
+                    id: fileObj.id,
+                    ext: fileObj.filename.split('.').slice(-1)[0],
+                    // Needed data!
+                    date: '#dateUploadedOrGiven',
+                    size: '#XY0Mb'
+                });
+            }
+            else {
+                console.error('File type (not report) isn\'t handled yet in the dashboardCtrl!');
+            }
+        });
+
+        this.resources = res;
+    }
+
+    downloadRes(resObj) {
+
+        return new AuthApi('').getBlob(`files/${resObj.id}/`)
+            .then(data => {
+                StaticUtilities.launchDownload(data, resObj.filename);
+            });
+    }
+
+    fillImproveArray(data) {
+
+        let counter = 1;
+        const ret = [];
+
+        data.forEach((axisObj, i) => {
+            axisObj.domains.forEach((domainObj, j) => {
+                // console.log(domainObj);
+                ret.push(
+                    {
+                        id: counter,
+                        name: domainObj.domain
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase(),
+                        axis: +i,
+                        domain: +j,
+                        completion: domainObj.domain_completion,
+                        percentage: Math.round(domainObj.domain_percentage)
+                    }
+                );
+                counter += 1;
+            });
+        });
+        this.improveArray = ret;
+
+        this.improveNr = this.calculateWorstId(ret);
+    }
+
+    calculateWorstId(data) {
+        if (data.every(dom => dom.completion === 0)) {
+
+            return Math.floor(Math.random() * 16);
+        }
+        return data.filter(dom => dom.completion > 0)
+            .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
     }
 
     static dashboardControllerFactory() {
-        function dashController($scope, $state) {
 
-            return new DashboardModuleController($scope, $state);
+        function dashController($scope, $state, $timeout) {
+
+            return new DashboardModuleController($scope, $state, $timeout);
         }
 
-        dashController.$inject = ['$scope', '$state'];
+        dashController.$inject = ['$scope', '$state', '$timeout'];
 
         return dashController;
     }

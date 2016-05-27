@@ -37,6 +37,7 @@ class AppModuleController extends Protected {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
                     this.currentProject = project;
+                    this.scope.$evalAsync();
                 });
         }
     }

@@ -22,7 +22,7 @@
 
     <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
 
-        <div layout="column" layout-fill  >
+        <div layout="column" layout-fill>
             <div class="domain-header" layout="row">
                 <div class="left" flex>
                     <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
@@ -72,12 +72,12 @@
                 </div>
             </section>
         </div>
-        <div class="domain-scoore" flex="100" layout-fill  layout="row" layout-align="center start">
+        <div class="domain-scoore" flex="100" layout-fill layout="row" layout-align="center start">
             <span flex layout-fill layout="column"  layout-align="center start"> Total point earned (out of a possible {{vm.domain.domain_max}}) </span>
             <span flex layout="column" layout-fill layout-align="center end">{{vm.score}}</span>
         </div>
 
-        <div class="domain-button" layout="row" layout-fill >
+        <div class="domain-button" layout="row" layout-fill>
             <div flex="50" layout="column" layout-align="center start">
                 <md-button class="md-raised md-primary"
                            ng-disabled="vm.backButtonDisabled()"
