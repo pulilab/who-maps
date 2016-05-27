@@ -1,6 +1,6 @@
 import { default as DashboardModuleController } from './DashboardModuleController';
 
-/* global define, it, describe, expect, spyOn, beforeEach, jasmine */
+/* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise */
 let vm = {};
 const state = {
     params: {
@@ -42,8 +42,8 @@ const projectData = {
 const csMock = {
     getProjectData: () => {
         return new Promise(resolve => {
-            resolve(projectData)
-        })
+            resolve(projectData);
+        });
     }
 };
 
@@ -53,11 +53,7 @@ describe('DashboardModuleController', () => {
 
     beforeEach(() => {
         spyOn(window.EE, 'on').and.callThrough();
-        vm = DashboardModuleController.dashboardControllerFactory()({}, state, window.setTimeout);
-        // spyOn(vm, 'reqCs').and.callFake(() => {
-        //     vm.cs = csMock;
-        // });
-        
+        vm = DashboardModuleController.dashboardControllerFactory()({}, state, window.setTimeout, csMock);
         vm.$onInit();
     });
 
