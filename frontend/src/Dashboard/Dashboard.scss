@@ -29,6 +29,10 @@
 
         .dash-cardholder {
 
+            md-icon {
+                color: $color-gray-light;
+            }
+
             .dash-subhead {
 
                 text-align: center;
@@ -40,11 +44,44 @@
             .dash-stat-column {
 
                 justify-content: space-between;
-
                 cursor: default;
 
-                viewers, followers {
-                    opacity:0.5;
+                .longer {
+
+                    height: 200px;
+
+                    .gray {
+
+                        margin-top: 10px;
+                        border-top: 1px solid $color-gray-lighter;
+                        padding: 0 8px;
+                        background-color: $color-gray-lightest;
+                        height: 137px;
+                        border-bottom-right-radius: 3px;
+                        border-bottom-left-radius: 3px;
+
+                        .desc {
+                            font-size: 10px;
+                            color: $color-gray;
+                        }
+
+                        &.gr-follow {
+                            height: 90px;
+                        }
+                    }
+                }
+
+                .longer-follow {
+
+                    md-icon {
+                        margin-top: 15px;
+                    }
+                }
+
+
+
+                .hten md-card {
+                    height: 110px;
                 }
 
                 .dash-stat-tooltip-version {
@@ -54,17 +91,36 @@
 
                 .snapshot-button {
 
-                    margin: 10px 0 0 0;
+                    height: 60px;
+                    padding: 5px;
+                    margin: 0;
+                    min-width: 50px;
                     background-color: $color-green;
-                    border-top-left-radius: 0;
-                    border-top-right-radius: 0;
 
-                    span {
+                    .text {
 
                         color: white;
                         font-size: 12px;
+                        line-height: 15px;
                         font-weight: 500;
+                        display: block;
+
+                        &.plus {
+
+                            font-size: 42px;
+                            line-height: 32px;
+                            font-weight: 300;
+                        }
                     }
+                }
+
+                .follow-button {
+
+                    min-width: 50px;
+                    background-color: $color-primary;
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 500;
                 }
             }
 
@@ -170,7 +226,6 @@
 
                     padding: 0px 25px;
                     height: 180px;
-                    background-color: $color-gray-lightest;
 
                     div {
                         &:not(:last-child) {
@@ -179,9 +234,9 @@
 
                         md-icon {
 
-                            font-size: 18px;
-                            width: 18px;
-                            height: 18px;
+                            font-size: 24px;
+                            width: 24px;
+                            height: 24px;
                             color: $text-primary;
                         }
                         span {
@@ -208,7 +263,7 @@
                                         line-height: 22px;
 
                                         span {
-                                            font-size: 11px;
+                                            font-size: 12px;
                                         }
                                     }
 
@@ -220,7 +275,11 @@
 
                 .lower {
 
+                    background-color: $color-gray-lightest;
                     padding: 20px 25px;
+                    height: 193px;
+                    border-bottom-left-radius: 3px;
+                    border-bottom-right-radius: 3px;
 
                     span {
                         display: block;
@@ -235,21 +294,75 @@
                 }
             }
 
-            .dash-lessons-tips {
-                opacity:0.5;
-                pointer-events: none;
+            .dash-res {
 
-                background-color: $color-gray-lightest;
+                background-color: #F6F6F6;
+                height: 413px;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+                padding: 0 20px;
 
-                .svg-box {
+                h3 {
 
-                    position: absolute;
-                    z-index: -20;
-                    left: 0;
-                    top: 0;
-                    right: 0;
-                    height: 170px;
-                    // background-blend-mode: multiply;
+                    font-size: 12px;
+                    font-weight: 500;
+                    margin: 20px 0;
+                    color: $text-primary;
+                }
+
+                .resource {
+
+                    height: 60px;
+                    overflow: hidden;
+                    margin: 12px 0;
+
+                    .res-text {
+
+                        padding: 3px 0 7px 12px;
+
+                        h4, p {
+                            margin: 0;
+                        }
+
+                        h4 {
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: $color-primary;
+                        }
+
+                        p {
+                            font-size: 12px;
+                            color: $text-secondary;
+                        }
+                    }
+
+                    a {
+                        text-decoration: none;
+                    }
+
+                    md-icon {
+                        margin-right: 30px;
+                        color: $color-primary;
+                        font-size: 24px;
+                        outline: none;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .dash-improve {
+
+                md-card-header {
+
+                    color: white;
+                    height: 50px;
+                    padding: 0;
+                    box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.15);
+                    border-top-left-radius: 3px;
+                    border-top-right-radius: 3px;
+                    user-select: none;
+                    user-select: none;
+                    user-select: none;
 
                     &.axis1 {
                         background-color: $color-axis1;
@@ -270,105 +383,122 @@
                         background-color: $color-axis6;
                     }
 
-                    ::after {
-
-                        content: '';
-                        background: url(./Img/book-shelf.svg) 100% 100% no-repeat;
-                        // background-blend-mode: luminosity;
-                        display: block;
-                        width: 100%;
-                        height: 100px;
-                        position: absolute;
-                        z-index: -10;
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0.2;
+                    img {
+                        width: 40px;
+                        height: 40px;
+                        margin: 5px;
                     }
 
-                    img.book-keeper {
+                    h4 {
+                        font-size: 14px;
+                        font-weight: 500;
 
-                        height: 180px;
-                        width: auto;
-                        float: right;
+                        span {
+                            text-transform: capitalize;
+                        }
+                    }
 
+                    ssmenu {
+
+                        margin-right: 30px;
+                        transform: translate(0, -3px);
+
+                        md-select-value span {
+
+                            color: white;
+                        }
+                    }
+
+                    md-icon {
+                        // font-size: 14px;
+                        margin-left: -15px;
+                        margin-right: 15px;
+                        color: white;
+                        outline: none;
+                        cursor: pointer;
                     }
                 }
 
-                .dash-bookscroller {
+                md-tab-content {
 
-                    position: absolute;
-                    top: -30px;
-                    z-index: -20;
-                }
+                    height: 406px;
+                    border-bottom-left-radius: 3px;
+                    border-bottom-right-radius: 3px;
 
-                .quarters {
+                    md-content {
 
-                    height: 456px;
+                        height: 406px;
+                        padding: 0 10px;
+                        background-color: $color-gray-lightest;
 
-                    .firstquarter {
+                        .subhead {
+                            max-height: 88px;
 
-                        md-icon {
-
-                            color: white;
-                            position: absolute;
-                            top: 25px;
-                            left: 20px;
-                        }
-
-                        .score-yell {
-
-                            color: white;
-                            padding: 30px 300px 0 60px;
-                            font-size: 14px;
-                        }
-
-                        .score-tip {
-
-                            color: white;
-                            font-size: 12px;
-                            padding: 10px 300px 0 60px;
-                        }
-                    }
-
-                    md-card {
-
-                        padding: 7px;
-                        margin: 12px 10px;
-                        display: block;
-
-                        .lesson-header {
-                            color: $color-primary;
-                            font-size: 14px;
-                        }
-
-                        .lesson-short {
-                            color: $text-secondary;
-                            margin: 10px 0;
-                            font-size: 14px;
-                        }
-
-                        .comments {
-
-                            md-icon {
-                                font-size: 12px;
-                                width: 12px;
-                                height: 12px;
+                            p {
+                                margin: auto 0;
+                                padding-left: 12px;
+                                color: $text-secondary;
+                                font-size: 14px;
+                                line-height: 20px;
                             }
 
-                            color: $text-secondary;
-                            font-size: 12px;
+                            a {
+                                color: $color-primary;
+                            }
+
+                            img {
+                                height: 150px;
+                                width: auto;
+                            }
                         }
 
-                        .tip-capture {
 
-                            display: inline-block;
-                            float: right;
-                            width: 60px;
-                            height: 60px;
-                            margin: 5px;
+                        md-card {
+
+                            margin-bottom: 12px;
+                            z-index: 10;
+                            position: relative;
+
+                            img {
+                                width: 70px;
+                                height: 70px;
+                                margin: 12px;
+                            }
+
+                            .txt {
+                                margin: 6px 20px 6px 0;
+
+                                * {
+                                    line-height: 14px;
+                                    margin: 0;
+                                    cursor: pointer;
+                                }
+
+                                h5 {
+                                    color: $color-primary;
+                                }
+                                .desc {
+                                    color: $color-gray;
+                                    cursor: default;
+                                }
+                                .comm {
+                                    color: $text-secondary;
+                                    font-size: 12px;
+                                    font-weight: 500;
+
+                                    md-icon {
+                                        font-size: 14px;
+                                        height: 14px;
+                                        width: 14px;
+                                    }
+                                }
+                            }
+
                         }
+
                     }
                 }
+
             }
 
             .dash-community {
@@ -409,9 +539,7 @@
                                 color: $color-gray-light;
                             }
                         }
-
                     }
-
                 }
             }
         }

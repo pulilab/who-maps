@@ -34,6 +34,7 @@ let requests = {
 // const waitTime = 200;
 let progression = 0;
 let firstRequest = false;
+let hasStopped = true;
 
 const emit = (detail) => {
     const event = new CustomEvent('xhrmonitor', { detail });
@@ -63,16 +64,28 @@ const pollingProcess = (stop) => {
         }, 100);
     }
     else {
+        firstRequest = false;
         clearInterval(interval);
     }
 
 };
+
+setInterval(()=>{
+    if (!hasStopped) {
+        hasStopped = true;
+        if (interval) {
+            clearInterval(interval);
+        }
+        emit({ progression: 100 });
+    }
+}, 10000);
 
 
 const progressiveEmit = () => {
     // console.log(`started: ${requests.started}, ended: ${requests.ended}`);
     if (!firstRequest) {
         firstRequest = true;
+        hasStopped = false;
         emit({ progression: 10 });
     }
 
