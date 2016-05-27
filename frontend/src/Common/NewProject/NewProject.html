@@ -31,11 +31,12 @@
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
                         </div>
                     </md-input-container>
-                    <!-- TODO: Show it if it has at least one item -->
-                    <div flex="30" class="similar-project" ui-sref="dashboard({appName: vm.similarProject.id})">
+                    <div flex="30" class="similar-project" ng-show="vm.similarProject.length > 0" >
                         <span class="similar-label">Similar Project Name(s)</span>
-                        <a href="#" class="similar-link">{{vm.similarProject.name}}</a>
-                        <!-- TODO: separate multiple projects with commas -->
+                        <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
+                            <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a>
+                            <span ng-if="!$last">,</span>
+                        </div>
                     </div>
                 </div>
                 <md-input-container >

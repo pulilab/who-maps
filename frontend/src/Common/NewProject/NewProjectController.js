@@ -362,12 +362,25 @@ class NewProjectController extends ProjectDefinition {
         this.handleCustomError('name');
         this.ns.autocompleteProjectName(this.project.name)
             .then(result => {
-                this.similarProject = result[0];
+                _.forEach(result, project => {
+                    project.isOwn = _.find(this.cs.projectList, pj => {
+                        return pj.id === project.id;
+                    });
+                });
+                this.similarProject = result;
                 if (result && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
                     this.setCustomError('name', 'Project name is not unique');
                 }
                 this.scope.$evalAsync();
             });
+    }
+
+    openSimilarProject(project, event) {
+        event.preventDefault();
+        if (project.isOwn) {
+            this.state.go('dashboard', { appName: project.id });
+        }
+
     }
 
 
