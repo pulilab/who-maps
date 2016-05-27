@@ -92,6 +92,18 @@ class EditProfileController extends Protected {
         this.editProfileForm[key].customError = [];
     }
 
+    organisationSearch() {
+        this.es.autocompleteOrganization(this.userProfile.organisation)
+            .then(data => {
+                this.similarOrganisation = data;
+                this.scope.$evalAsync();
+            });
+    }
+
+    setOrganisation(org, event) {
+        event.preventDefault();
+        this.userProfile.organisation = org;
+    }
 
     static editProfileFactory() {
         require('./EditProfile.scss');

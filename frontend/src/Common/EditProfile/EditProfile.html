@@ -63,13 +63,27 @@
                 <!--</div>-->
                 <!--</md-input-container>-->
 
+                <div flex="100" layout="row">
+                    <md-input-container flex="60" >
+                        <label>Organization name</label>
+                        <input ng-model="vm.userProfile.organisation"
+                               required name="organisation"
+                               ng-model-options="{debounce: 200}"
+                               ng-change="vm.organisationSearch()"
+                               type="text" />
+                    </md-input-container>
 
-                <md-input-container >
-                    <label>Organization name</label>
-                    <input ng-model="vm.userProfile.organisation"
-                           required name="organisation"
-                           type="text" />
-                </md-input-container>
+                    <div flex="30" class="similar-organisation" ng-show="vm.similarOrganisation.length > 0" >
+                        <span class="similar-label">Similar Organisation(s)</span>
+                        <div  ng-repeat="similar in vm.similarOrganisation">
+                            <a href="#" ng-click="vm.setOrganisation(similar, $event)" class="similar-link">{{similar}}</a>
+                            <span ng-if="!$last">,</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
 
                 <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
