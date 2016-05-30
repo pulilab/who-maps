@@ -199,6 +199,7 @@ class LinechartController {
                             '<br>',
                             'Date: ' + el.date
                         ];
+                        divString[0] = this.notpercentage ? el['axis' + i] : divString[0];
 
                         tooltip.html(divString.join(''))
                             .style('top', (d3.event.pageY - 15 + 'px'))
