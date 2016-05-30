@@ -3,6 +3,12 @@
 
 signup {
 
+  .browser-safari & {
+    .signup-wrapper {
+      height: auto !important;
+    }
+  }
+
   md-content {
     min-width: 440px;
     max-width: 440px;
@@ -24,8 +30,9 @@ signup {
     }
 
     .md-button {
-      margin: 0;
+      margin: 5px 0 0;
     }
+
     .md-primary {
       float: right;
     }
@@ -38,12 +45,12 @@ signup {
       float: left;
       margin: 0 10px 0 5px;
       width: 24px;
-      transition: $swift-ease-out;
+      //transition: $swift-ease-out;
     }
 
     p.md-small {
       margin: 0 0 30px;
-      transition: $swift-ease-out;
+      //transition: $swift-ease-out;
     }
 
     md-radio-button:not(.md-checked) {
@@ -70,7 +77,8 @@ signup {
   .main-form {
     margin-top: 18px;
     padding: 20px 40px;
-    background-color: $color-gray-lightest;
+    // background-color: $color-gray-lightest;
+    background-color: #FFF9C4;
   }
 
   .form-success {
