@@ -2,8 +2,8 @@
 
     <ul flex>
 
-        <li ng-if="vm.showdotted">___ closed</li>
-        <li ng-if="vm.showdotted">…… in progress</li>
+        <li ng-if="vm.showdotted"><span class="smallness">___</span> closed</li>
+        <li ng-if="vm.showdotted"><span class="smallness">……</span> in progress</li>
 
         <li
             ng-repeat="label in vm.chosenLabels track by $index"
@@ -16,7 +16,7 @@
 
     </ul>
 
-    <div ng-if="vm.datachooser">
+    <div class="chosercontainer" ng-if="vm.datachooser">
         <md-input-container>
 
             <label>Axis to show: </label>

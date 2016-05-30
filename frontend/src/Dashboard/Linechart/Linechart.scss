@@ -18,7 +18,7 @@ linechart {
         ul {
 
             list-style-type: none;
-            padding-left: 15px;
+            padding-left: 5px;
             display: flex;
             flex-flow: column wrap;
             height: 35px;
@@ -27,6 +27,13 @@ linechart {
 
                 flex-basis: 50%;
                 height: 100%;
+
+                .smallness {
+                    position: relative;
+                    font-weight: 500;
+                    top: -4px;
+                    color: $color-gray;
+                }
 
                 &.labelhov {
                     text-transform: capitalize;
@@ -59,13 +66,17 @@ linechart {
             }
         }
 
-        div {
+        .chosercontainer {
 
             border-left: 1px solid #E0E0E0;
 
-            md-input-container, .axischooser {
+            md-input-container, .axischooser, label {
 
-                margin: 0;
+                margin: 0 8px;
+            }
+
+            .axischooser {
+                color: $text-primary;
             }
 
             md-input-container {
@@ -75,6 +86,7 @@ linechart {
 
 
                 label {
+                    font-size: 14px;
                     &:select, &:focus {
                         color: $color-primary;
                     }
