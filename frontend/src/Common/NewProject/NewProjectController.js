@@ -7,12 +7,13 @@ import ProjectDefinition from '../ProjectDefinition';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, Upload, CommonService, structure) {
+    constructor($scope, $state, $q, Upload, CommonService, structure) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.q = $q;
         this.axisStructure = this.processAxisStructure(structure);
         this.$onInit = this.onInit.bind(this);
     }
@@ -23,6 +24,7 @@ class NewProjectController extends ProjectDefinition {
         this.setStrategy = this.setStrategy.bind(this);
         this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
+        this.getUsers = this.getUsers.bind(this);
     }
 
     onInit() {
@@ -35,6 +37,43 @@ class NewProjectController extends ProjectDefinition {
             this.projectId = this.state.params.appName;
             this.handleDataLoad();
         }
+        this.mockUsers = [
+            { name: 'Torben Thomsen', organisation: 'Pulilab Studios' },
+            { name: 'Garett Mehl', organisation: 'World Health Organisation' },
+            { name: 'Tigest Tamrat', organisation: 'World Health Organisation' },
+            { name: 'Zoltán Party', organisation: 'Pulilab Studios' },
+            { name: 'György Fekete', organisation: 'Pulilab Studios' },
+            { name: 'Christian Buus Nielsen', organisation: 'Pulilab Studios' },
+            { name: 'Anna Forgách', organisation: 'Pulilab Studios' },
+            { name: 'Ilcsik Zoltán', organisation: 'Pulilab Studios' },
+            { name: 'Nicoló Maria Mezzopera', organisation: 'Pulilab Studios' },
+            { name: 'Takács András Tamás', organisation: 'Pulilab Studios' }
+        ];
+        this.teammates = [];
+        this.viewers = [];
+    }
+
+    getUsersSynch() {
+        // Filter out the actual user?
+        const ret = this.mockUsers.filter(el => {
+
+            return el.name.toLowerCase().includes(this.savedCrit.toLowerCase()) ||
+                el.organisation.toLowerCase().includes(this.savedCrit.toLowerCase());
+        });
+        return ret;
+    }
+
+    getUsers(criteria) {
+        this.savedCrit = criteria;
+        // Last search not long ago, or search is in progress????
+        this.pendingSearch = this.q((resolve /* , reject ???? */) => {
+            // Do the actual asynch loading intsead of this below...
+            window.setTimeout(() => {
+                resolve(this.getUsersSynch());
+            }, 200);
+        });
+
+        return this.pendingSearch;
     }
 
     importIconTemplates() {
@@ -388,10 +427,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
-        function newProject($scope, $state, Upload) {
-            return new NewProjectController($scope, $state, Upload, CommonService, structure);
+        function newProject($scope, $state, $q, Upload) {
+            return new NewProjectController($scope, $state, $q, Upload, CommonService, structure);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload'];
+        newProject.$inject = ['$scope', '$state', '$q', 'Upload'];
         return newProject;
     }
 }

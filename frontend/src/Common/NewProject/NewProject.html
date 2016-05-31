@@ -50,6 +50,33 @@
                     </div>
                 </md-input-container>
 
+                <md-contact-chips
+                    placeholder="Add Team members, who can edit this project lateron"
+                    secondary-placeholder="add another team member"
+                    class="chipschoser"
+                    ng-model="vm.teammates"
+                    md-contacts="vm.getUsers($query)"
+                    md-contact-name="name"
+                    md-contact-email="organisation"
+                    md-require-match="true"
+                    md-highlight-flags="i"
+                    filter-selected="true">
+                </md-contact-chips>
+
+                <md-contact-chips
+                    placeholder="Add Viewers, who will see the projects data"
+                    secondary-placeholder="add another viewer"
+                    class="chipschoser"
+                    ng-model="vm.viewers"
+                    md-contacts="vm.getUsers($query)"
+                    md-contact-name="name"
+                    md-contact-email="organisation"
+                    md-require-match="true"
+                    md-highlight-flags="i"
+                    filter-selected="true">
+                </md-contact-chips>
+
+
                 <ssmenu
 
                         class="strategies"
