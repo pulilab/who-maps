@@ -17,7 +17,7 @@
 
 		.countrychart-tooltip-header {
 
-			background-color: $color-gray-lighter;
+			background-color: #EEEEEE;
 			padding: 10px;
 
 			p {
@@ -42,12 +42,17 @@
 
 			&.countrychart-tooltip-main {
 
-				padding: 0 10px;
+				padding: 0 10px 0 12px;
 			}
 
 			.activename {
 
 				color: $color-primary;
+			}
+
+			.lh {
+				line-height: 20px;
+				margin: 3px 0;
 			}
 
 			.projectcont {
@@ -131,7 +136,7 @@
 
 		.d3district {
 
-			fill: #E5E5EE;
+			fill: $color-map-light;
 			stroke: #9B9DA8;
 			stroke-width: 5px;
 		    pointer-events: all;
@@ -139,7 +144,7 @@
 
 			&.d3district-data {
 
-				fill: #C8CAD5;
+				fill: $color-map-dark;
 				transition: $swift-ease-out;
 
 				&:hover {
@@ -148,7 +153,7 @@
 			}
 
 			&:hover {
-				fill: #A1A4EF;
+				fill: $color-map-hoverempty;
 			}
 		}
     }
