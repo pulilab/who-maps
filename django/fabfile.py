@@ -144,9 +144,3 @@ def up_debug():
     time.sleep(2)
     local("docker stop whomaps_django_1")
     local("docker-compose run --service-ports django python manage.py runserver 0.0.0.0:8000")
-
-
-def down_debug():
-    down()
-    time.sleep(5)
-    local('docker stop whomaps_django_run_1')
