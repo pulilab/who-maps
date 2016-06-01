@@ -17,6 +17,7 @@ class ProjectSerializer(serializers.Serializer):
     organisation = serializers.CharField()  # Should be text instead of ID - no Orgs in MVP
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
+    objective = serializers.CharField(required=False, max_length=250)
     technology_platforms = serializers.ListField(required=False)  # Can hold 'other' fields
     licenses = serializers.ListField(required=False)  # Can hold 'other' fields
     application = serializers.ListField(required=False)

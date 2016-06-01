@@ -58,6 +58,7 @@ class ProjectTests(APITestCase):
             "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -131,6 +132,7 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("objective"), "objective1")
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
@@ -296,6 +298,7 @@ class ProjectTests(APITestCase):
             "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -329,6 +332,7 @@ class ProjectTests(APITestCase):
             "organisation": "test_org2",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -372,6 +376,7 @@ class ProjectTests(APITestCase):
             "organisation": "test_org2",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -396,3 +401,10 @@ class ProjectTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.json(), dict)
         self.assertEqual(response.json().keys(), {"dist1": None, "dist2": None}.keys())
+
+    def test_objective_wrong_data(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(objective="a"*251)
+        response = self.test_user_client.put(url, data)
+        self.assertEqual(response.status_code, 400)

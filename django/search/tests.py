@@ -53,6 +53,7 @@ class ProjectTests(APITestCase):
             "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
