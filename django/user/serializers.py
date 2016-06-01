@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_auth.serializers import TokenSerializer
 from rest_auth.models import TokenModel
 
-from .models import UserProfile
+from .models import UserProfile, Organisation
 
 
 class ProfileTokenSerializer(TokenSerializer):
@@ -31,3 +31,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
+
+
+class OrganisationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organisation
+        fields = ("id", "name",)

@@ -88,8 +88,8 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
 
         user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
         if user_profile:
-            projects_own = list(projects.filter(data__organisation=user_profile.organisation))
-            projects_exclude_own = list(projects.exclude(data__organisation=user_profile.organisation))
+            projects_own = list(projects.filter(data__organisation=user_profile.organisation.id))
+            projects_exclude_own = list(projects.exclude(data__organisation=user_profile.organisation.id))
 
             result_list = functools.reduce(lambda acc, p: acc + [{
                 "id": p.id,
@@ -127,7 +127,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         Retrieves list of projects.
         """
         user_profile = UserProfile.objects.get(user_id=request.user.id)
-        projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
+        projects = Project.objects.filter(data__organisation=user_profile.organisation.id).values("id", "name")
         return Response(projects)
 
     def create(self, request, *args, **kwargs):

@@ -12,6 +12,7 @@ from hss.models import HSS
 from hss.hss_data import interventions
 from hss.views import InterventionView
 from country.models import Country
+from user.models import Organisation
 from .signals import intervention_save
 
 
@@ -63,7 +64,7 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.location = Country.objects.get(id=instance.data["country"]).name
     project_search.project_name = instance.data["name"]
     project_search.technology_platform = ", ".join([x for x in instance.data["technology_platforms"]])
-    project_search.organisation = instance.data["organisation"]
+    project_search.organisation = Organisation.objects.get(id=instance.data["organisation"]).name
     project_search.save()
 
 

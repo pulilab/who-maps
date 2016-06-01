@@ -5,8 +5,8 @@ from rest_auth.models import TokenModel
 from rest_framework_expiring_authtoken.views import ObtainExpiringAuthToken
 
 from core.views import TokenAuthMixin
-from .serializers import UserProfileSerializer
-from .models import UserProfile
+from .serializers import UserProfileSerializer, OrganisationSerializer
+from .models import UserProfile, Organisation
 
 
 class UserProfileViewSet(TokenAuthMixin, ModelViewSet):
@@ -52,3 +52,19 @@ class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
             userprofile = UserProfile.objects.get_object_or_none(user=authtoken.user)
             response.data.update(userprofile=True if userprofile else False)
         return response
+
+
+class OrganisationViewSet(TokenAuthMixin, ModelViewSet):
+    queryset = Organisation.objects.all()
+    serializer_class = OrganisationSerializer
+
+    def get_queryset(self):
+        """
+        Retrieves Organisation objects, filtered by search term if present,
+        for autocomplete of organisation fields.
+        """
+        search_term = self.request.query_params.get("name")
+        if search_term:
+            return Organisation.objects.filter(name__contains=search_term)
+        else:
+            return Organisation.objects.all()
