@@ -158,6 +158,38 @@
                                 border-bottom-right-radius: 5px;
                                 border-bottom-left-radius: 5px;
                                 background-color: $color-gray-lightest;
+                                &.infoview {
+                                    background-color: initial;
+                                    padding: 0;
+                                    .roww {
+                                        height: 55px;
+                                        margin: 0 30px;
+                                        border-bottom: 1px solid $color-gray-lighter;
+
+                                        &.borderless {
+                                            border-bottom-width: 0;
+                                        }
+                                    }
+                                    label {
+                                        font-size: 12px;
+                                        font-weight: 500;
+                                        color: $text-secondary;
+                                    }
+                                    .data {
+                                        font-size: 12px;
+                                        font-weight: 500;
+                                        color: $text-primary;
+                                    }
+                                    .gray {
+                                        background-color: $color-gray-lightest;
+                                        label {
+                                            margin: 20px 30px;
+                                        }
+                                        .data {
+                                            margin: 0 30px;
+                                        }
+                                    }
+                                }
 
                                 .dash-overview-tooltips {
 
