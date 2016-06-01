@@ -1,2 +1,4 @@
-Use this online tool to convert inline htmls:
+1. Use this online tool to convert inline htmls:
 https://inliner.cm
+
+2. Only copy & paste the <body>…</body> part
