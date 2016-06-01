@@ -13,3 +13,6 @@ class UserProfile(ExtendedModel):
     name = models.CharField(max_length=100)
     organisation = models.ForeignKey(Organisation)
     country = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.name, self.organisation)

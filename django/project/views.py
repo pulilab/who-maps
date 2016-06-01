@@ -126,9 +126,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         Retrieves list of projects.
         """
-        user_profile = UserProfile.objects.get(user_id=request.user.id)
-        projects = Project.objects.filter(data__organisation=user_profile.organisation.id).values("id", "name")
-        return Response(projects)
+        return Response(Project.projects.by_user(request.user).values("id", "name"))
 
     def create(self, request, *args, **kwargs):
         """
