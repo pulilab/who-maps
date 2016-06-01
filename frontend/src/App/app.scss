@@ -8,6 +8,7 @@
 ui-view > md-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
+  height: auto !important;
 }
 
 .page-wrapper {
@@ -291,8 +292,7 @@ p.global-error {
       }
 
       &.landing-link {
-        margin-right: 0;
-        margin-left: 24px;
+        margin-right: 12px;
       }
 
       .material-icons {
@@ -396,7 +396,7 @@ p.global-error {
       line-height: 36px;
 
       &:last-of-type {
-        margin-right: 12px;
+        margin-right: 14px;
       }
 
       &.menu-separator {
