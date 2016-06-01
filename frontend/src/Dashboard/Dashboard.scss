@@ -43,20 +43,27 @@
 
             .dash-stat-column {
 
-                justify-content: space-between;
+                // justify-content: space-between;
                 cursor: default;
+
+                .shorter, .longer {
+                    margin-bottom: 10px;
+                    md-icon.rotate {
+                        transform: translate(0, 7px);
+                    }
+                }
 
                 .longer {
 
-                    height: 200px;
+                    height: 225px;
 
                     .gray {
 
+                        height: 137px;
                         margin-top: 10px;
                         border-top: 1px solid $color-gray-lighter;
                         padding: 0 8px;
                         background-color: $color-gray-lightest;
-                        height: 137px;
                         border-bottom-right-radius: 3px;
                         border-bottom-left-radius: 3px;
 
@@ -71,22 +78,12 @@
                     }
                 }
 
-                .longer-follow {
-
-                    md-icon {
-                        margin-top: 15px;
-                    }
-                }
-
-
-
-                .hten md-card {
+                .shorter {
                     height: 110px;
                 }
 
-                .dash-stat-tooltip-version {
-
-                    padding-top: 11px;
+                .hten md-card {
+                    height: 110px;
                 }
 
                 .snapshot-button {
@@ -112,15 +109,6 @@
                             font-weight: 300;
                         }
                     }
-                }
-
-                .follow-button {
-
-                    min-width: 50px;
-                    background-color: $color-primary;
-                    color: white;
-                    font-size: 12px;
-                    font-weight: 500;
                 }
             }
 
