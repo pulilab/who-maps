@@ -2,9 +2,14 @@
 
     <div layout="row" class="dashrow dashrow-upper">
 
+        <div
+            ng-show="false"
+            ng-init="vm.userType = 0">
+        </div>
+
         <div flex class="dashsection dashsection-left" layout="row">
 
-            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-init="vm.userType = 3">
+            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
 
                 <div class="dash-subhead">STATISTICS</div>
 
@@ -30,7 +35,7 @@
 
 
                     <!-- FOLLOWING -->
-<!--                     <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
+                        <!-- <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
 
                         <md-icon class="material-icons dash-trendicon">visibility</md-icon>
                         <span class="dash-stat-nr dash-stat-nr-follow">#</span>
@@ -208,9 +213,9 @@
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
-            <md-card flex>
+            <md-card flex class="dash-perf">
 
-                <md-tabs md-border-bottom md-dynamic-height class="perf-tab">
+                <md-tabs ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
 
                     <md-tab label="geographical view">
                         <countrymap
@@ -231,6 +236,11 @@
                     </md-tab>
 
                 </md-tabs>
+
+                <div flex ng-if="vm.userType === 0" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
+                    <p>If you want to see world map for the geographical and historic view please subscribe first!</p>
+                    <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
+                </div>
 
             </md-card>
         </div>
