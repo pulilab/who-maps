@@ -7,6 +7,8 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
+from .models import Organisation
+
 
 class UserTests(APITestCase):
 
@@ -154,10 +156,11 @@ class UserProfileTests(APITestCase):
         self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
         # Create profile.
+        self.org = Organisation.objects.create(name="org1")
         url = reverse("userprofile-list")
         data = {
             "name": "Test Name",
-            "organisation": "test_org",
+            "organisation": self.org.id,
             "country": "test_country"}
         response = self.client.post(url, data)
 
@@ -217,7 +220,7 @@ class UserProfileTests(APITestCase):
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
-            "organisation": "test_org",
+            "organisation": self.org.id,
             "country": "test_country"}
         response = client.post(url, data)
         self.assertEqual(response.status_code, 201)
@@ -232,7 +235,7 @@ class UserProfileTests(APITestCase):
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
-            "organisation": "test_org",
+            "organisation": self.org.id,
             "country": "test_country"}
         response = client.post(url, data)
         self.assertEqual(response.status_code, 201)
@@ -240,7 +243,7 @@ class UserProfileTests(APITestCase):
         # shouldn't create duplicate profile
         data = {
             "name": "Test Name2",
-            "organisation": "test_org2",
+            "organisation": self.org.id,
             "country": "test_country2"}
         response = client.post(url, data)
         self.assertEqual(response.status_code, 200)
@@ -251,10 +254,42 @@ class UserProfileTests(APITestCase):
         data = response.json()[0]
         url = reverse("userprofile-detail", kwargs={"pk": data["id"]})
         data.update(country="updated country")
-        data.update(organisation="updated org")
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         url = reverse("userprofile-list")
         response = self.client.get(url)
         self.assertEqual(response.json()[0].get("country"), "updated country")
-        self.assertEqual(response.json()[0].get("organisation"), "updated org")
+
+    def test_create_org(self):
+        url = reverse("organisation-list")
+        data = {
+            "name": "org2"
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_retrieve_org(self):
+        url = reverse("organisation-list")
+        data = {
+            "name": "org2"
+        }
+        response = self.client.post(url, data)
+        url = reverse("organisation-detail", kwargs={"pk": response.json().get("id")})
+        response = self.client.get(url)
+        self.assertEqual(response.json().get("name"), "org2")
+
+    def test_organisation_autocomplete(self):
+        url = reverse("organisation-list")
+        data = {
+            "name": "other"
+        }
+        response = self.client.post(url, data)
+        url = reverse("organisation-list")
+        data = {
+            "name": "org2"
+        }
+        response = self.client.post(url, data)
+        url = reverse("organisation-list")
+        response = self.client.get(url, {"name": "org"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
