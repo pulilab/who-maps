@@ -1,2 +1,2 @@
 Use this online tool to convert inline htmls:
-https://inlinestyler.torchbox.com/styler/convert/
+https://inliner.cm
