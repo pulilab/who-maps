@@ -25,6 +25,21 @@ class NewProjectService extends AuthApi {
             });
     }
 
+    getUsers(query) {
+        let status = void 0;
+        return this.get(`users/${query}`)
+            .then(answer => {
+                status = answer.status;
+                return answer.json();
+            })
+            .then(json => {
+                return {
+                    success: status > 400,
+                    data: json
+                };
+            });
+    }
+
     updateProject(data, id) {
         let status = void 0;
         return this.put(`projects/${id}/`, data)
