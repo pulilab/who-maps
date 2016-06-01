@@ -138,7 +138,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         data_valid = data_serializer.is_valid()
         if model_valid and data_valid:
             project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
-            project.save()
+            project.team.add(request.user.userprofile)
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.

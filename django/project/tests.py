@@ -10,8 +10,8 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country
-from user.models import Organisation
-from .models import PartnerLogo
+from user.models import Organisation, UserProfile
+from .models import PartnerLogo, Project
 
 
 class ProjectTests(APITestCase):
@@ -411,3 +411,19 @@ class ProjectTests(APITestCase):
         data.update(objective="a"*251)
         response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 400)
+
+    def test_create_project_adds_owner_to_team(self):
+        url = reverse("project-list")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="Test Project3")
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        userprofile = UserProfile.objects.get(name="Test Name")
+        project = Project.objects.get(id=response.json()['id'])
+        self.assertEqual(project.team.first(), userprofile)
+
+    def test_by_user_manager(self):
+        url = reverse("project-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['name'], "Test Project1")
