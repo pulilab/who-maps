@@ -332,7 +332,7 @@ class ProjectTests(APITestCase):
         project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project2",
-            "organisation": self.org.id,
+            "organisation": str(Organisation.objects.create(name="org2").id),
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",

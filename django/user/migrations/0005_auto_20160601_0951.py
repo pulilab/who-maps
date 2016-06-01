@@ -9,6 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('project', '0016_auto_20160601_0928'),
         ('user', '0004_remove_userprofile_organisation'),
     ]
 

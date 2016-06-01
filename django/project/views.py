@@ -88,8 +88,8 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
 
         user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
         if user_profile:
-            projects_own = list(projects.filter(data__organisation=user_profile.organisation.id))
-            projects_exclude_own = list(projects.exclude(data__organisation=user_profile.organisation.id))
+            projects_own = list(projects.filter(data__organisation=str(user_profile.organisation.id)))
+            projects_exclude_own = list(projects.exclude(data__organisation=str(user_profile.organisation.id)))
 
             result_list = functools.reduce(lambda acc, p: acc + [{
                 "id": p.id,

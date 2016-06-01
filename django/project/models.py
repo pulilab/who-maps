@@ -14,10 +14,10 @@ class ProjectManager(models.Manager):
         """
         # TODO: these UserProfile hacks should be removed by adding User FK to Project
         user_profile = UserProfile.objects.get(user_id=user.id)
-        return self.get_queryset().filter(data__organisation=user_profile.organisation.id)
+        return self.get_queryset().filter(data__organisation=str(user_profile.organisation.id))
 
-    def by_organisation(self, organisation):
-        return self.get_queryset().filter(data__organisation=organisation)
+    def by_organisation(self, organisation_id):
+        return self.get_queryset().filter(data__organisation=organisation_id)
 
 
 class Project(ExtendedModel):
