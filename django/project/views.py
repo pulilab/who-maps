@@ -20,6 +20,8 @@ from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
+
+from .permissions import InTeamOrReadOnly
 from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
 from .models import Project, File, CoverageVersion, PartnerLogo
@@ -194,6 +196,8 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
 class ProjectGroupViewSet(RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupListSerializer
+    permission_classes = (IsAuthenticated, InTeamOrReadOnly)
+    authentication_classes = (TokenAuthentication,)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
