@@ -71,10 +71,6 @@
                             font-size: 10px;
                             color: $color-gray;
                         }
-
-                        &.gr-follow {
-                            height: 90px;
-                        }
                     }
                 }
 
@@ -170,7 +166,7 @@
                                             border-bottom-width: 0;
                                         }
                                     }
-                                    label {
+                                    .label {
                                         font-size: 12px;
                                         font-weight: 500;
                                         color: $text-secondary;
@@ -182,7 +178,7 @@
                                     }
                                     .gray {
                                         background-color: $color-gray-lightest;
-                                        label {
+                                        .labelobj {
                                             margin: 20px 30px;
                                         }
                                         .data {

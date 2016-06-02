@@ -105,28 +105,27 @@
 
                             <div class="dash-cardcontent infoview" layout="column" ng-if="vm.userType < 2" layout="column" layout-align="space-between stretch">
                                 <div layout="row" layout-align="start center" class="roww">
-                                    <label flex="25">NAME</label>
-                                    <div class="data">Missing binding</div>
+                                    <div flex="25" class='label'>NAME</div>
+                                    <div class="data">{{vm.projectData.name}}</div>
                                 </div>
 
                                 <div layout="row" layout-align="start center" class="roww">
-                                    <label flex="25">LOCATION</label>
-                                    <div class="data">Missing binding</div>
+                                    <div flex="25" class='label'>LOCATION</div>
+                                    <div class="data">{{vm.projectData.countryName}}</div>
                                 </div>
 
                                 <div layout="row" layout-align="start center" class="roww">
-                                    <label flex="25">ORGANISATION</label>
-                                    <div class="data">Missing binding</div>
+                                    <div flex="25" class='label'>ORGANISATION</div>
+                                    <div class="data">{{vm.projectData.organisation}}</div>
                                 </div>
 
                                 <div layout="row" layout-align="start center" class="roww borderless">
-                                    <label flex="25">CONTACT</label>
-                                    <div class="data">Missing binding</div>
-                                </div>
+                                    <div flex="25" class='label'>CONTACT</div>
+                                    <div class="data">MISSING BINDING!!</div> </div>
 
                                 <div flex class="gray">
-                                    <label>OBJECTIVES</label>
-                                    <div class="data">Missing binding</div>
+                                    <div class='label labelobj'>OBJECTIVES</div>
+                                    <div class="data">{{vm.projectData.goals_to_scale}}</div>
                                 </div>
 
                             </div>
