@@ -1,0 +1,27 @@
+@import '../../variables';
+@import '../../mixins';
+
+login {
+
+  md-content {
+    padding: 40px;
+    min-width: 440px;
+    max-width: 440px;
+  }
+
+  .layout-row {
+    margin: 18px 0 18px;
+
+    .md-button {
+      margin: 5px 0 0;
+    }
+    .md-primary {
+      float: right;
+    }
+  }
+
+  .disclaimer {
+    margin-bottom: 50px;
+    max-width: 640px;
+  }
+}
