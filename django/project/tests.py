@@ -427,3 +427,106 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['name'], "Test Project1")
+
+    def test_project_group_list_team(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['id'], 1)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
+        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
+
+    def test_project_group_add_user_to_team(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [user_profile_id],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [user_profile_id])
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['id'], user_profile_id)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name 2")
+        self.assertEqual(response.json()['team'][0]['org'], org.name)
+
+    def test_project_group_add_user_always_overwrites_all_groups(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        owner_id = response.json()['team'][0]['id']
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [user_profile_id],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertTrue(owner_id not in response.json()['team'])
+        self.assertEqual(response.json()['team'], [user_profile_id])
