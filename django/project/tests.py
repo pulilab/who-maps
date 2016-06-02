@@ -432,7 +432,6 @@ class ProjectTests(APITestCase):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['team'][0]['id'], 1)
         self.assertEqual(response.json()['team'][0]['name'], "Test Name")
         self.assertEqual(response.json()['team'][0]['org'], self.org.name)
 
