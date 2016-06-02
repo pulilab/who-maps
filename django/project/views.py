@@ -5,7 +5,8 @@ from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
 from rest_framework import status
-from rest_framework.viewsets import ViewSet
+from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes
@@ -19,7 +20,8 @@ from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
-from .serializers import ProjectSerializer, ProjectModelSerializer
+from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
+    ProjectGroupUpdateSerializer
 from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
@@ -187,6 +189,19 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
                 "json": data_serializer.errors
             }
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProjectGroupViewSet(RetrieveModelMixin, GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectGroupListSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
 @api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))
