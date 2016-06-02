@@ -11,6 +11,7 @@ class ProjectManager(models.Manager):
     def by_user(self, user):
         return self.get_queryset().filter(team=user.userprofile)
 
+    # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):
         return self.get_queryset().filter(data__organisation=organisation_id)
 
@@ -18,8 +19,8 @@ class ProjectManager(models.Manager):
 class Project(ExtendedModel):
     name = models.CharField(max_length=255, unique=True)
     data = JSONField()
-    team = models.ManyToManyField(UserProfile, related_name="team")
-    viewers = models.ManyToManyField(UserProfile, related_name="viewers")
+    team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
+    viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
 
     projects = ProjectManager()
 
