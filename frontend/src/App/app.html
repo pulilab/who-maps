@@ -14,12 +14,17 @@
             Country View
         </md-button>
 
-        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.isLogin" ng-show="vm.state.current.name !== 'dashboard'" md-no-ink>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.isLogin && !vm.viewMode" ng-show="vm.state.current.name !== 'dashboard'" md-no-ink>
             <md-icon class="material-icons ">apps</md-icon>
             Dashboard
         </md-button>
 
-        <span flex></span>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.viewMode"  md-no-ink>
+            <md-icon class="material-icons ">apps</md-icon>
+            Go to my dashboard
+        </md-button>
+
+        <span flex ></span>
 
         <searchbar compact-mode="true" ng-if="vm.showFullNavigation"></searchbar>
         <md-button class="md-icon-button" ng-disabled="!vm.userProfile" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
@@ -93,13 +98,21 @@
                 <md-button ui-sref="dashboard" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     Dashboard
                 </md-button>
-                <md-button ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
+                <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
                     <md-tooltip md-autohide>
                         CREATE VISUAL FRAMEWORK
                     </md-tooltip>
                     Visualize Project
                 </md-button>
-                <md-button ui-sref="editProject" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+
+                <md-button ng-if="vm.viewMode" ui-sref="public-hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
+                    <md-tooltip md-autohide>
+                        CREATE VISUAL FRAMEWORK
+                    </md-tooltip>
+                    Visualize Project
+                </md-button>
+
+                <md-button ui-sref="editProject" ng-disabled="!vm.userProfile" ng-if="!vm.viewMode" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         EDIT PROJECT DETAILS
                     </md-tooltip>
@@ -111,13 +124,29 @@
                     </md-tooltip>
                     Improve Project
                 </md-button>
-                <md-button ui-sref="maps" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="maps" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         GO TO MAPS TOOLKIT
                     </md-tooltip>
                     Update Score
                 </md-button>
-                <md-button ui-sref="summary" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+
+                <md-button ui-sref="public-maps" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-tooltip md-autohide>
+                        GO TO MAPS TOOLKIT
+                    </md-tooltip>
+                    Maps toolkit
+                </md-button>
+
+                <md-button ui-sref="summary" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-tooltip md-autohide>
+                        SHOW SCORE SUMMARY
+                    </md-tooltip>
+                    Summary Score
+                </md-button>
+
+
+                <md-button ui-sref="public-summary" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         SHOW SCORE SUMMARY
                     </md-tooltip>
@@ -127,45 +156,46 @@
             <div flex></div>
             <div class="project-submenu" layout="row">
                 <!--<md-button aria-label="Share" md-no-ink >-->
-                <!--<md-icon class="material-icons">share</md-icon>-->
-                <!--Share-->
+                    <!--<md-icon class="material-icons">share</md-icon>-->
+                    <!--Share-->
                 <!--</md-button>-->
 
-                <!--<md-menu md-position-mode="target-right target">-->
-                <!--<md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
-                <!--<md-icon class="material-icons">more_vert</md-icon>-->
-                <!--More-->
-                <!--</md-button>-->
+                <md-menu md-position-mode="target-right target" ng-if="!vm.viewMode">
+                    <md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                        <md-icon class="material-icons">more_vert</md-icon>
+                        More
+                    </md-button>
 
-                <!--<md-menu-content width="4">-->
-                <!--<span class="menu-group-title">-->
-                <!--More Actions-->
-                <!--</span>-->
-                <!--<md-menu-item>-->
-                <!--<md-button>-->
-                <!--<md-icon class="material-icons">person_add</md-icon>-->
-                <!--Assign owners/users-->
-                <!--</md-button>-->
-                <!--</md-menu-item>-->
-                <!--<md-menu-item>-->
-                <!--<md-button>-->
-                <!--<md-icon class="material-icons">lock_outline</md-icon>-->
-                <!--Publicity settings-->
-                <!--</md-button>-->
-                <!--</md-menu-item>-->
-                <!--<md-menu-item>-->
-                <!--<md-button>-->
-                <!--<md-icon class="material-icons">publish</md-icon>-->
-                <!--Export pdf/csv-->
-                <!--</md-button>-->
-                <!--</md-menu-item>-->
-                <!--</md-menu-content>-->
-                <!--</md-menu>-->
+                    <md-menu-content width="4">
+                <span class="menu-group-title">
+                More Actions
+                </span>
+                        <!--<md-menu-item>-->
+                            <!--<md-button>-->
+                                <!--<md-icon class="material-icons">person_add</md-icon>-->
+                                <!--Assign owners/users-->
+                            <!--</md-button>-->
+                        <!--</md-menu-item>-->
+                        <md-menu-item>
+                            <md-button>
+                                <md-icon class="material-icons">lock_outline</md-icon>
+                                Publicity settings
+                            </md-button>
+                        </md-menu-item>
+                        <!--<md-menu-item>-->
+                            <!--<md-button>-->
+                                <!--<md-icon class="material-icons">publish</md-icon>-->
+                                <!--Export pdf/csv-->
+                            <!--</md-button>-->
+                        <!--</md-menu-item>-->
+                    </md-menu-content>
+                </md-menu>
             </div>
         </div>
 
         <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <ssmenu
+                    ng-if="!vm.viewMode"
                     aria-label="Project Choser"
                     options="vm.user.projects"
                     option-label = "name"
@@ -174,6 +204,10 @@
                     class="large project-selector"
                     on-close-callback="vm.updateProject">
             </ssmenu>
+
+            <div ng-if="vm.viewMode" class="large project-name">
+                {{vm.currentProject.name}} ({{vm.currentProject.countryName}})
+            </div>
 
             <div flex></div>
 
@@ -186,7 +220,7 @@
                 <span class="menu-separator"></span>
                 <span>
                     Organization:
-                    {{vm.userProfile.organisation.name}}
+                    {{vm.currentProject.organisation}}
                 </span>
                 <!--span class="menu-separator"></span>
                 <span>

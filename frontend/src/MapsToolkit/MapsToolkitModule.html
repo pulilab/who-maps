@@ -4,20 +4,20 @@
 
 <div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
     <div layout="row" flex="100" md-whiteframe class="axis-row">
-            <axis flex="auto" show-current="true" domain-id="vm.domainId" axis-data="vm.axis" axis-id="vm.axisId"></axis>
-            <div flex="auto" layout="row" layout-align="end center">
-                <md-button class="md-primary" ui-sref="scorecard({axisId: vm.axisId})">
-                    <md-icon>insert_chart</md-icon>
-                    Scorecard
-                </md-button>
-                <thematic
+        <axis flex="auto" show-current="true" domain-id="vm.domainId" axis-data="vm.axis" axis-id="vm.axisId"></axis>
+        <div flex="auto" layout="row" layout-align="end center">
+            <md-button class="md-primary" ng-click="vm.goToScorecard()">
+                <md-icon>insert_chart</md-icon>
+                Scorecard
+            </md-button>
+            <thematic
                     axis="vm.state.params.axisId"
                     domain="0"
                     buttonclass="'md-primary'"
                     buttonicon="'toc'"
                     buttontext="'Overview'">
-                </thematic>
-            </div>
+            </thematic>
+        </div>
     </div>
 
     <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
@@ -31,10 +31,10 @@
                     </p>
                 </div>
                 <thematic
-                    axis="vm.state.params.axisId"
-                    domain="vm.state.params.domainId"
-                    buttonclass="'md-primary'"
-                    buttontext="'View instructions'">
+                        axis="vm.state.params.axisId"
+                        domain="vm.state.params.domainId"
+                        buttonclass="'md-primary'"
+                        buttontext="'View instructions'">
                 </thematic>
             </div>
             <section ng-repeat="question in vm.data.questions" >
@@ -58,10 +58,11 @@
                     </div>
                     <div flex="10" class="box" layout="column" layout-align="center center" ng-repeat="choice in question.choices">
                         <md-checkbox
-                            class="md-primary"
-                            ng-checked="vm.checkChecked(question.index, answer.index, choice.points )"
-                            aria-label="{{choice.label}}"
-                            ng-click="vm.setAnswer(question.index, answer.index, choice.points)"
+                                ng-disabled="{{vm.viewMode}}"
+                                class="md-primary"
+                                ng-checked="vm.checkChecked(question.index, answer.index, choice.points )"
+                                aria-label="{{choice.label}}"
+                                ng-click="vm.setAnswer(question.index, answer.index, choice.points)"
                         ></md-checkbox>
                     </div>
                     <div flex="10" class="fourth-box" layout="column" layout-align="center center">
@@ -79,16 +80,16 @@
         <div class="domain-button" layout="row" layout-fill>
             <div flex="50" layout="column" layout-align="center start">
                 <md-button class="md-raised md-primary"
-                    ng-disabled="vm.backButtonDisabled()"
-                    ng-click="vm.goToPrevDomain()">
+                           ng-disabled="vm.backButtonDisabled()"
+                           ng-click="vm.goToPrevDomain()">
                     <md-icon>arrow_back</md-icon>
                     Go to prev domain
                 </md-button>
             </div>
             <div flex="50" layout="row" layout-align="end center">
                 <md-button class="md-raised md-primary"
-                    ng-hide="vm.isLastDomainInAxis()"
-                    ng-click="vm.goToNextDomain()">
+                           ng-hide="vm.isLastDomainInAxis()"
+                           ng-click="vm.goToNextDomain()">
                     Go to next domain
                     <md-icon>arrow_forward</md-icon>
                 </md-button>

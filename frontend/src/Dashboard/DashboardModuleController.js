@@ -9,20 +9,19 @@ import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController extends Protected {
 
-    constructor($scope, $state, $timeout) {
+    constructor($scope, $state, $timeout, CommonServices) {
 
         super();
         this.scope = $scope;
         this.state = $state;
         this.timeout = $timeout;
         this.EE = window.EE;
+        this.cs = CommonServices;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
     }
 
     onInit() {
-
-        this.reqCs();
 
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
@@ -32,9 +31,11 @@ class DashboardModuleController extends Protected {
 
         this.fetchAxisData();
 
-        const data = this.cs.getProjectData(this.projectId);
-        this.addResourcesMeta(data);
-        this.timeout(() => { this.fetchProjectData(data); });
+        this.cs.getProjectData(this.projectId).then(data => {
+            this.addResourcesMeta(data);
+            this.timeout(() => { this.fetchProjectData(data); });
+        });
+
         this.fetchToolkitData();
 
         this.commProjects = commProjects;
@@ -104,7 +105,6 @@ class DashboardModuleController extends Protected {
     }
 
     fetchProjectData(data) {
-
         // console.debug('ProjectData', data);
         this.EE.emit('country Changed');
         this.projectData = data;
@@ -473,10 +473,10 @@ class DashboardModuleController extends Protected {
     }
 
     static dashboardControllerFactory() {
-
+        const CommonServices = require('../Common/CommonServices');
         function dashController($scope, $state, $timeout) {
 
-            return new DashboardModuleController($scope, $state, $timeout);
+            return new DashboardModuleController($scope, $state, $timeout, CommonServices);
         }
 
         dashController.$inject = ['$scope', '$state', '$timeout'];

@@ -47,7 +47,7 @@ class MapsToolkitController extends Protected {
 
     loadData() {
         if (_.isNaN(parseInt(this.domainId, 10)) || _.isNaN(parseInt(this.axisId, 10))) {
-            this.state.go('maps', {
+            this.state.go(this.state.current.name, {
                 domainId: this.domainId ? this.domainId : 0,
                 axisId: this.axisId ? this.axisId : 0
             }, {
@@ -116,6 +116,9 @@ class MapsToolkitController extends Protected {
     }
 
     setAnswer(questionId, answerId, points) {
+        if (this.viewMode) {
+            return;
+        }
         const answer = {
             axis: this.axisId,
             domain: this.domainId,
@@ -164,6 +167,11 @@ class MapsToolkitController extends Protected {
         }
 
         this.handleChangeDomain(prevAxis, prevDomain);
+    }
+
+    goToScorecard() {
+        const axisId = this.axisId;
+        this.state.go(this.viewMode ? 'public-scorecard' : 'scorecard', { axisId });
     }
 
 

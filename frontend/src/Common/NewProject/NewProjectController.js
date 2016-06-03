@@ -380,6 +380,9 @@ class NewProjectController extends ProjectDefinition {
         if (project.isOwn) {
             this.state.go('dashboard', { appName: project.id });
         }
+        else {
+            this.state.go('public-dashboard', { appName: project.id });
+        }
 
     }
 

@@ -12,8 +12,7 @@ const moduleName = 'maps';
 
 const config = ($stateProvider, $compileProvider) => {
     $stateProvider
-        .state(moduleName,
-        {
+        .state(moduleName, {
             url: '/maps/:axisId/:domainId',
             parent: 'app',
             views: {
@@ -33,13 +32,33 @@ const config = ($stateProvider, $compileProvider) => {
                 }
             }
         })
-        .state('scorecard',
-        {
+
+        .state('public-maps', {
+            url: '/maps/:axisId/:domainId',
+            parent: 'public',
+            views: {
+                main: {
+                    template: '<maps-toolkit view-mode="true"></maps-toolkit>',
+                    resolve: {
+                        'main': () => {
+                            return su.lazyLoader($compileProvider, 'mapsComponent');
+                        },
+                        'axisFooter': () => {
+                            return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
+                        },
+                        'thematic': () => {
+                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
+                        }
+                    }
+                }
+            }
+        })
+        .state('scorecard', {
             url: '/scorecard/:axisId',
             parent: 'app',
             views: {
                 main: {
-                    template: '<scorecard></scorecard>',
+                    template: '<scorecard ></scorecard>',
                     resolve: {
                         'scorecard': () => {
                             return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
@@ -54,8 +73,50 @@ const config = ($stateProvider, $compileProvider) => {
                 }
             }
         })
-        .state('summary',
-        {
+
+        .state('public-scorecard', {
+            url: '/scorecard/:axisId',
+            parent: 'public',
+            views: {
+                main: {
+                    template: '<scorecard view-mode="true"></scorecard>',
+                    resolve: {
+                        'scorecard': () => {
+                            return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
+                        },
+                        'thematic': () => {
+                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
+                        },
+                        'axisFooter': () => {
+                            return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
+                        }
+                    }
+                }
+            }
+        })
+
+        .state('public-summary', {
+            url: '/summary',
+            parent: 'public',
+            views: {
+                main: {
+                    template: '<scorecard summary="true" view-mode="true"></scorecard>',
+                    resolve: {
+                        'scorecard': () => {
+                            return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
+                        },
+                        'thematic': () => {
+                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
+                        },
+                        'axisFooter': () => {
+                            return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
+                        }
+                    }
+                }
+            }
+        })
+
+        .state('summary', {
             url: '/summary',
             parent: 'app',
             views: {

@@ -7,8 +7,6 @@ const singleton = Symbol();
 const singletonEnforcer = Symbol();
 
 
-const loadingArray = ['list', 'structure', 'user-profile'];
-
 class CommonServices extends Protected {
 
     constructor(enforcer) {
@@ -24,10 +22,11 @@ class CommonServices extends Protected {
         this.user = this.retrieveLoginStatus();
         this.userProfileId = this.retrieveProfileId();
         this.projectList = [];
+        this.publicProject = [];
         this.hash = Math.random().toString(36);
         this.projectStructure = [];
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
-        this.loadingCheck = _.cloneDeep(loadingArray);
+        this.loadingCheck = [];
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -37,9 +36,13 @@ class CommonServices extends Protected {
         if (this.user) {
             this.loadData();
         }
+        else {
+            this.loadingCheck = ['structure'];
+            this.populateProjectStructure();
+        }
     }
 
-    uglifyCountryName(name) {
+    uglyfyCountryName(name) {
         let nameParts = name.replace(' ', '-').split('-');
         nameParts = _.map(nameParts, item =>{
             return _.lowerCase(item);
@@ -61,6 +64,7 @@ class CommonServices extends Protected {
     }
 
     loadData() {
+        this.loadingCheck = ['list', 'structure', 'user-profile'];
         this.retrieveUserProfile();
         this.populateProjectList();
         this.populateProjectStructure();
@@ -76,18 +80,21 @@ class CommonServices extends Protected {
         if (this.loadingCheck.length === 0) {
             this.mergeOperations();
             this.promiseResolve();
-            this.loadingCheck = _.cloneDeep(loadingArray);
         }
 
 
     }
 
+    getCountryName(project) {
+        const country = _.find(this.projectStructure.countries, { id: project.country });
+        if (country) {
+            project.countryName = this.prettifyCountryName(country.name);
+        }
+    }
+
     mergeOperations() {
         _.forEach(this.projectList, project => {
-            const country = _.find(this.projectStructure.countries, { id: project.country });
-            if (country) {
-                project.countryName = this.prettifyCountryName(country.name);
-            }
+            this.getCountryName(project);
         });
 
         _.forEach(this.projectStructure.countries, country => {
@@ -161,9 +168,38 @@ class CommonServices extends Protected {
         });
     }
 
+    fetchSingleProjectData(resolve, _id) {
+        const vm = this;
+        if (vm.publicProject[_id]) {
+            resolve(vm.publicProject[_id]);
+        }
+        else {
+            const project = {
+                id: _id
+            };
+            vm.getProjectDetail(project);
+            vm.getProjectFiles(project);
+            Promise.all([project.detailPromise, project.filePromise]).then(data => {
+                vm.getCountryName(data[0]);
+                vm.publicProject[_id] = project;
+                resolve(project);
+            });
+        }
+    }
+
     getProjectData(_id) {
-        const id = parseInt(_id, 10);
-        return _.find(this.projectList, { id });
+        const vm = this;
+        return new Promise((resolve) => {
+            const id = parseInt(_id, 10);
+            const last = _.find(this.projectList, { id });
+            if (last) {
+                resolve(last);
+            }
+            else {
+                vm.fetchSingleProjectData(resolve, _id);
+            }
+
+        });
     }
 
     static commonServiceFactory() {

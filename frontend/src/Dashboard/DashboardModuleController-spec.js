@@ -1,6 +1,6 @@
 import { default as DashboardModuleController } from './DashboardModuleController';
 
-/* global define, it, describe, expect, spyOn, beforeEach, jasmine */
+/* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise */
 let vm = {};
 const state = {
     params: {
@@ -8,36 +8,42 @@ const state = {
     },
     go: jasmine.createSpy('go')
 };
+
+const projectData = {
+    'name': 'Some test project',
+    'id': 7,
+    'detailPromise': {},
+    'filePromise': {},
+    'anticipated_time': 'I have all the time on the Earth, but still, it would be good to win ASAP.',
+    'application': [],
+    'licenses': [],
+    'goals_to_scale': 'Winning the freakin lottery',
+    'country': 3,
+    'coverage': [
+        { 'Boss': 1, 'district': 'Narok' }
+    ],
+    'organisation': 'test_org',
+    'pre_assessment': [1, 1, 1, 1, 1, 1],
+    'started': '2016-05-15T22:00:00.000Z',
+    'reports': ['www.paragonhex.hu'],
+    'technology_platforms': [],
+    'date': '2016-05-23T14:53:24.943Z',
+    'publications': ['www.google.com'],
+    'donors': ['Donor 1', 'Donor 2', 'Donor 3', 'Donor 4'],
+    'strategy': ['Service Delivery'],
+    'files': [
+        { 'filename': '7e4cae13d23.jpg', 'id': 2, 'type': 'report' },
+        { 'filename': '1bb3923a6f4.jpg', 'id': 1, 'type': 'report' }
+    ],
+    'countryName': 'Kenya'
+};
+
+
 const csMock = {
     getProjectData: () => {
-        return {
-            'name': 'Some test project',
-            'id': 7,
-            'detailPromise': {},
-            'filePromise': {},
-            'anticipated_time': 'I have all the time on the Earth, but still, it would be good to win ASAP.',
-            'application': [],
-            'licenses': [],
-            'goals_to_scale': 'Winning the freakin lottery',
-            'country': 3,
-            'coverage': [
-                { 'Boss': 1, 'district': 'Narok' }
-            ],
-            'organisation': 'test_org',
-            'pre_assessment': [1, 1, 1, 1, 1, 1],
-            'started': '2016-05-15T22:00:00.000Z',
-            'reports': ['www.paragonhex.hu'],
-            'technology_platforms': [],
-            'date': '2016-05-23T14:53:24.943Z',
-            'publications': ['www.google.com'],
-            'donors': ['Donor 1', 'Donor 2', 'Donor 3', 'Donor 4'],
-            'strategy': ['Service Delivery'],
-            'files': [
-                { 'filename': '7e4cae13d23.jpg', 'id': 2, 'type': 'report' },
-                { 'filename': '1bb3923a6f4.jpg', 'id': 1, 'type': 'report' }
-            ],
-            'countryName': 'Kenya'
-        };
+        return new Promise(resolve => {
+            resolve(projectData);
+        });
     }
 };
 
@@ -47,10 +53,7 @@ describe('DashboardModuleController', () => {
 
     beforeEach(() => {
         spyOn(window.EE, 'on').and.callThrough();
-        vm = DashboardModuleController.dashboardControllerFactory()({}, state, window.setTimeout);
-        spyOn(vm, 'reqCs').and.callFake(() => {
-            vm.cs = csMock;
-        });
+        vm = DashboardModuleController.dashboardControllerFactory()({}, state, window.setTimeout, csMock);
         vm.$onInit();
     });
 
