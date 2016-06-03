@@ -23,6 +23,13 @@ class ProjectSearch(ExtendedModel):
     health_topic = models.TextField(blank=True)
     technology_platform = models.TextField(blank=True)
     organisation = models.TextField(blank=True)
+    contact_name = models.TextField(blank=True)
+    contact_email = models.TextField(blank=True)
+    implementation_overview = models.TextField(blank=True)
+    implementing_partners = models.TextField(blank=True)
+    implementation_dates = models.TextField(blank=True)
+    geographic_coverage = models.TextField(blank=True)
+    intervention_areas = models.TextField(blank=True)
 
     @classmethod
     def search(cls, **kwargs):
@@ -65,6 +72,13 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.project_name = instance.data["name"]
     project_search.technology_platform = ", ".join([x for x in instance.data["technology_platforms"]])
     project_search.organisation = Organisation.objects.get(id=instance.data["organisation"]).name
+    project_search.contact_name = instance.data["contact_name"]
+    project_search.contact_email = instance.data["contact_email"]
+    project_search.implementation_overview = instance.data["implementation_overview"]
+    project_search.implementing_partners = instance.data.get("implementing_partners", "")
+    project_search.implementation_dates = instance.data["implementation_dates"]
+    project_search.geographic_coverage = instance.data["geographic_coverage"]
+    project_search.intervention_areas = ", ".join([x for x in instance.data["intervention_areas"]])
     project_search.save()
 
 
