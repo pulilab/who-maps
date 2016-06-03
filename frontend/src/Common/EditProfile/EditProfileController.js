@@ -67,8 +67,10 @@ class EditProfileController extends Protected {
     save() {
         this.sentForm = true;
         if (this.editProfileForm.$valid) {
-            const request = this.userProfile.id ?
-                this.es.updateProfile(this.userProfile) : this.es.createProfile(this.userProfile);
+            const profile = _.cloneDeep(this.userProfile);
+            profile.organisation = profile.organisation.id;
+            const request = profile.id ?
+                this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
                 if (result.success) {
                     window.location.reload();
