@@ -55,10 +55,10 @@
                     <md-contact-chips
                         placeholder="Editors of this project"
                         secondary-placeholder="add new team member"
-                        ng-model="vm.teammates"
+                        ng-model="vm.team"
                         md-contacts="vm.getUsers($query)"
                         md-contact-name="name"
-                        md-contact-email="organisation"
+                        md-contact-email="org"
                         md-require-match="true"
                         md-highlight-flags="i"
                         filter-selected="true">
@@ -70,9 +70,10 @@
                     <md-contact-chips
                         placeholder="See all the projects data"
                         secondary-placeholder="add new viewer"
+                        ng-model="vm.viewers"
                         md-contacts="vm.getUsers($query)"
                         md-contact-name="name"
-                        md-contact-email="organisation"
+                        md-contact-email="org"
                         md-require-match="true"
                         md-highlight-flags="i"
                         filter-selected="true">

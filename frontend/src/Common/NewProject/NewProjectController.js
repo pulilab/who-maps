@@ -37,43 +37,22 @@ class NewProjectController extends ProjectDefinition {
             this.projectId = this.state.params.appName;
             this.handleDataLoad();
         }
-        this.mockUsers = [
-            { name: 'Torben Thomsen', organisation: 'Pulilab Studios' },
-            { name: 'Garett Mehl', organisation: 'World Health Organisation' },
-            { name: 'Tigest Tamrat', organisation: 'World Health Organisation' },
-            { name: 'Zoltán Party', organisation: 'Pulilab Studios' },
-            { name: 'György Fekete', organisation: 'Pulilab Studios' },
-            { name: 'Christian Buus Nielsen', organisation: 'Pulilab Studios' },
-            { name: 'Anna Forgách', organisation: 'Pulilab Studios' },
-            { name: 'Ilcsik Zoltán', organisation: 'Pulilab Studios' },
-            { name: 'Nicoló Maria Mezzopera', organisation: 'Pulilab Studios' },
-            { name: 'Takács András Tamás', organisation: 'Pulilab Studios' }
-        ];
-        this.teammates = [];
-        this.viewers = [];
-    }
 
-    getUsersSynch() {
-        // Filter out the actual user?
-        const ret = this.mockUsers.filter(el => {
-
-            return el.name.toLowerCase().includes(this.savedCrit.toLowerCase()) ||
-                el.organisation.toLowerCase().includes(this.savedCrit.toLowerCase());
-        });
-        return ret;
+        this.ns.getGroups(this.state.params.appName)
+            .then(groups => {
+                this.team = groups.data.team;
+                this.viewers = groups.data.viewers;
+                this.allUsers = groups.data.user_profiles;
+                console.debug('GROUPS', groups);
+            });
     }
 
     getUsers(criteria) {
-        this.savedCrit = criteria;
-        // Last search not long ago, or search is in progress????
-        this.pendingSearch = this.q((resolve /* , reject ???? */) => {
-            // Do the actual asynch loading intsead of this below...
-            window.setTimeout(() => {
-                resolve(this.getUsersSynch());
-            }, 200);
-        });
+        return this.allUsers.filter(el => {
 
-        return this.pendingSearch;
+            return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
+                el.organisation.toLowerCase().includes(criteria.toLowerCase());
+        });
     }
 
     importIconTemplates() {

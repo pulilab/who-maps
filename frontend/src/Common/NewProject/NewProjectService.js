@@ -25,17 +25,12 @@ class NewProjectService extends AuthApi {
             });
     }
 
-    getUsers(query) {
-        let status = void 0;
-        return this.get(`users/${query}`)
+    getGroups(projectId) {
+        return this.get(`projects/${projectId}/groups/`)
             .then(answer => {
-                status = answer.status;
-                return answer.json();
-            })
-            .then(json => {
                 return {
-                    success: status > 400,
-                    data: json
+                    success: answer.status < 400,
+                    data: answer
                 };
             });
     }
