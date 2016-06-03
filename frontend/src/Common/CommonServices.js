@@ -101,6 +101,10 @@ class CommonServices extends Protected {
             vm.userProfile = _userprofile;
             if (this.userProfile) {
                 vm.userProfile.email = this.storage.get('user').username;
+                vm.userProfile.organisation = {
+                    id: _userprofile.organisation,
+                    name: _userprofile.organisation_name
+                };
             }
             this.loadingProgress('user-profile');
         });

@@ -41,7 +41,10 @@ class NewProjectService extends AuthApi {
 
     addOrganization(name) {
         const data = { name };
-        return this.post('organisations/', data);
+        return this.post('organisations/', data)
+            .then(response => {
+                return response.json();
+            });
     }
 
 }

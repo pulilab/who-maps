@@ -99,7 +99,10 @@ class EditProfileController extends Protected {
     }
 
     addOrganisation(name) {
-        return this.es.addOrganization(name);
+        return this.es.addOrganization(name)
+            .then(response => {
+                this.userProfile.organisation = response;
+            });
     }
 
     static editProfileFactory() {
