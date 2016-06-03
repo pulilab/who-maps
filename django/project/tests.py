@@ -14,7 +14,7 @@ from user.models import Organisation, UserProfile
 from .models import PartnerLogo, Project
 
 
-class ProjectTests(APITestCase):
+class SetupTests(APITestCase):
 
     def setUp(self):
         # Create a test user with profile.
@@ -95,6 +95,9 @@ class ProjectTests(APITestCase):
         data.update(pub_files)
         data.update(report_files)
         response = self.test_user_client.post(url, data, format="multipart")
+
+
+class ProjectTests(SetupTests):
 
     def test_retrieve_project_srtucture(self):
         url = reverse("get-project-structure")
@@ -541,7 +544,7 @@ class ProjectTests(APITestCase):
         self.assertEqual(response.json()['member'], [self.user_profile_id])
 
 
-class PermissionTests(ProjectTests):
+class PermissionTests(SetupTests):
 
     def test_team_member_can_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
