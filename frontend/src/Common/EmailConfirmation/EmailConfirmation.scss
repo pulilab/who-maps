@@ -1,7 +1,7 @@
 @import '../../variables';
 @import '../../mixins';
 
-login {
+email-confirmation {
 
   md-content {
     padding: 40px;
@@ -9,19 +9,5 @@ login {
     max-width: 440px;
   }
 
-  .layout-row {
-    margin: 18px 0 18px;
 
-    .md-button {
-      margin: 5px 0 0;
-    }
-    .md-primary {
-      float: right;
-    }
-  }
-
-  .disclaimer {
-    margin-bottom: 50px;
-    max-width: 640px;
-  }
 }
