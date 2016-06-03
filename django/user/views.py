@@ -1,25 +1,19 @@
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.response import Response
 from rest_auth.models import TokenModel
 from rest_framework_expiring_authtoken.views import ObtainExpiringAuthToken
 
 from core.views import TokenAuthMixin
-from .serializers import UserProfileSerializer, OrganisationSerializer
+from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileWithGroupsSerializer
 from .models import UserProfile, Organisation
 
 
-class UserProfileViewSet(TokenAuthMixin, ModelViewSet):
+class UserProfileViewSet(TokenAuthMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
 
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-
-    def get_queryset(self):
-        """
-        Retrieves UserProfile objects, filtered by current user id.
-        """
-        # On list requests, retrieve only the current user's profile.
-        return UserProfile.objects.filter(user=self.request.user.id)
 
     def create(self, request, *args, **kwargs):
         """
@@ -39,6 +33,11 @@ class UserProfileViewSet(TokenAuthMixin, ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = UserProfileWithGroupsSerializer(instance)
+        return Response(serializer.data)
+
 
 class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
 
@@ -49,8 +48,8 @@ class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
         response = super(ExpiringAuthTokenWithUserProfile, self).post(request)
         if hasattr(response, "data") and "token" in response.data.keys():
             authtoken = TokenModel.objects.get(key=response.data.get("token"))
-            userprofile = UserProfile.objects.get_object_or_none(user=authtoken.user)
-            response.data.update(userprofile=True if userprofile else False)
+            user_profile = UserProfile.objects.get_object_or_none(user=authtoken.user)
+            response.data.update(user_profile_id=user_profile.id if user_profile else None)
         return response
 
 
