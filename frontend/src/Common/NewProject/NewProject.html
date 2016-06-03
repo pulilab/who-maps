@@ -50,7 +50,7 @@
                     </div>
                 </md-input-container>
 
-                <div class="chipper">
+                <div class="chipper" ng-if="vm.editMode">
                     <label>Team members</label>
                     <md-contact-chips
                         placeholder="Editors of this project"
@@ -65,7 +65,7 @@
                     </md-contact-chips>
                 </div>
 
-                <div class="chipper">
+                <div class="chipper" ng-if="vm.editMode">
                     <label>Superior viewers</label>
                     <md-contact-chips
                         placeholder="See all the projects data"

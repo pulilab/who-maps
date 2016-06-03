@@ -36,14 +36,14 @@ class NewProjectController extends ProjectDefinition {
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.handleDataLoad();
+            this.ns.getGroups(this.state.params.appName)
+                .then(groups => {
+                    this.team = this.editMode ? groups.data.team : [];
+                    this.viewers = this.editMode ? groups.data.viewers : [];
+                    this.allUsers = groups.data.user_profiles;
+                });
         }
 
-        this.ns.getGroups(this.state.params.appName)
-            .then(groups => {
-                this.team = groups.data.team;
-                this.viewers = groups.data.viewers;
-                this.allUsers = groups.data.user_profiles;
-            });
     }
 
     getUsers(criteria) {
@@ -228,12 +228,12 @@ class NewProjectController extends ProjectDefinition {
             const processedForm = _.cloneDeep(this.project);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
-            this.putGroups();
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
             else {
                 this.updateForm(processedForm);
+                this.putGroups();
             }
         }
     }

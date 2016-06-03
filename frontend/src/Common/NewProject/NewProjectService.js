@@ -38,8 +38,8 @@ class NewProjectService extends AuthApi {
     putGroups(projectId, team, viewers) {
 
         const ret = {
-            team: JSON.parse(team).map(el => +el.id),
-            viewers: JSON.parse(viewers).map(el => +el.id)
+            team: JSON.parse(team).map(el => el.id),
+            viewers: JSON.parse(viewers).map(el => el.id)
         };
         this.put(`projects/${projectId}/groups/`, ret);
     }
