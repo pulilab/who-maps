@@ -98,6 +98,16 @@ const config = ($stateProvider, $urlRouterProvider) => {
                     template: '<edit-profile ></edit-profile>'
                 }
             }
+        })
+
+        .state('emailConfirmation', {
+            url: '/email-confirmation/:key',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '<email-confirmation></email-confirmation>'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/landing');

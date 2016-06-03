@@ -10,9 +10,11 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country
-from .models import PartnerLogo
+from user.models import Organisation, UserProfile
+from .models import PartnerLogo, Project
 
-class ProjectTests(APITestCase):
+
+class SetupTests(APITestCase):
 
     def setUp(self):
         # Create a test user with profile.
@@ -41,12 +43,14 @@ class ProjectTests(APITestCase):
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
         # Create profile.
+        self.org = Organisation.objects.create(name="org1")
         url = reverse("userprofile-list")
         data = {
             "name": "Test Name",
-            "organisation": "test_org",
+            "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.post(url, data)
+        self.user_profile_id = response.json().get('id')
 
         country = Country.objects.create(name="country1")
         country.save()
@@ -55,9 +59,10 @@ class ProjectTests(APITestCase):
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
-            "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
+            "organisation": self.org.id,
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -90,6 +95,9 @@ class ProjectTests(APITestCase):
         data.update(pub_files)
         data.update(report_files)
         response = self.test_user_client.post(url, data, format="multipart")
+
+
+class ProjectTests(SetupTests):
 
     def test_retrieve_project_srtucture(self):
         url = reverse("get-project-structure")
@@ -131,6 +139,7 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("objective"), "objective1")
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
@@ -293,9 +302,10 @@ class ProjectTests(APITestCase):
         project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project2",
-            "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
+            "organisation": self.org.id,
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -326,9 +336,10 @@ class ProjectTests(APITestCase):
         project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project2",
-            "organisation": "test_org2",  # Should be text instead of ID - no Orgs in MVP
+            "organisation": str(Organisation.objects.create(name="org2").id),
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -369,9 +380,10 @@ class ProjectTests(APITestCase):
         project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project2",
-            "organisation": "test_org2",  # Should be text instead of ID - no Orgs in MVP
+            "organisation": self.org.id,
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
+            "objective": "objective1",
             "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
@@ -396,3 +408,252 @@ class ProjectTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.json(), dict)
         self.assertEqual(response.json().keys(), {"dist1": None, "dist2": None}.keys())
+
+    def test_objective_wrong_data(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(objective="a"*251)
+        response = self.test_user_client.put(url, data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_create_project_adds_owner_to_team(self):
+        url = reverse("project-list")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="Test Project3")
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        userprofile = UserProfile.objects.get(name="Test Name")
+        project = Project.objects.get(id=response.json()['id'])
+        self.assertEqual(project.team.first(), userprofile)
+
+    def test_by_user_manager(self):
+        url = reverse("project-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['name'], "Test Project1")
+
+    def test_project_group_list_team(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
+        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
+
+    def test_project_group_add_user_to_team(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [user_profile_id],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [user_profile_id])
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['id'], user_profile_id)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name 2")
+        self.assertEqual(response.json()['team'][0]['org'], org.name)
+
+    def test_project_group_add_user_always_overwrites_all_groups(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        owner_id = response.json()['team'][0]['id']
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [user_profile_id],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertTrue(owner_id not in response.json()['team'])
+        self.assertEqual(response.json()['team'], [user_profile_id])
+
+    def test_project_group_list_has_all_the_user_profiles_listed(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
+        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
+        self.assertTrue("user_profiles" in response.json())
+        self.assertEqual(len(response.json().get('user_profiles')), UserProfile.objects.count())
+
+
+class PermissionTests(SetupTests):
+
+    def test_team_member_can_update_project_groups(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        user_profile_id = UserProfile.objects.first().id
+        groups = {
+            "team": [user_profile_id],
+            "viewers": [user_profile_id]
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [user_profile_id])
+        self.assertEqual(response.json()['viewers'], [user_profile_id])
+
+    def test_team_viewer_cannot_update_project_groups(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        owner_id = response.json()['team'][0]['id']
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [owner_id],
+            "viewers": [user_profile_id]
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [owner_id])
+        self.assertEqual(response.json()['viewers'], [user_profile_id])
+
+        # try to update it with the viewer
+        response = test_user_client.put(url, groups)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+    def test_authenticated_users_can_list_project_groups(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertTrue(user_profile_id not in response.json()['team'])
+        self.assertTrue(user_profile_id not in response.json()['viewers'])
+
+    def test_not_authenticated_cannot_list_project_groups(self):
+        test_user_client = APIClient(format="json")
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()['detail'], 'Authentication credentials were not provided.')
