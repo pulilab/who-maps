@@ -48,10 +48,15 @@ class GroupSerializer(serializers.ModelSerializer):
 class ProjectGroupListSerializer(serializers.ModelSerializer):
     team = GroupSerializer(many=True)
     viewers = GroupSerializer(many=True)
+    user_profiles = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
-        fields = ("team", "viewers")
+        fields = ("team", "viewers", "user_profiles")
+
+    @staticmethod
+    def get_user_profiles(obj):
+        return UserProfile.objects.all().values("id", "name", "organisation__name")
 
 
 class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
