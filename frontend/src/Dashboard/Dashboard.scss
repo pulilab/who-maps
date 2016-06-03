@@ -127,6 +127,7 @@
             md-card {
 
                 margin: 0;
+                overflow: hidden;
 
                 md-tabs {
 
@@ -407,10 +408,13 @@
 
                             color: white;
                         }
+
+                        md-select-value {
+                            border-bottom-width: 0;
+                        }
                     }
 
                     md-icon {
-                        // font-size: 14px;
                         margin-left: -15px;
                         margin-right: 15px;
                         color: white;

@@ -10,20 +10,20 @@
 
 		<div class="countrychart-tooltip-main" layout="column">
 
-			<div flex class="bold">
+			<div flex class="bold lh">
 				Total numbers:
 			</div>
 
 			<div flex layout="row" ng-repeat="(key, numb) in vm.boundNrs">
-				<div class="cap" flex="85">{{key}}:<br></div>
-				<div flex class="bold">{{numb}}</div>
+				<div class="cap lh" flex="85">{{key}}:<br></div>
+				<div flex class="bold lh">{{numb}}</div>
 			</div>
 
 		</div>
 
 		<div class="countrychart-tooltip-main" ng-show="vm.activeDistrict.name" >
 
-			<div flex class="activename bold">
+			<div flex class="activename bold lh">
 				{{vm.activeDistrict.name}}
 			</div>
 
@@ -32,8 +32,8 @@
 				layout="row"
 				ng-repeat="(key, datum) in vm.activeDistrict.data">
 
-				<div flex="85" class="cap">{{key}}</div>
-				<div class="bold">{{datum}}</div>
+				<div flex="85" class="cap lh">{{key}}</div>
+				<div class="bold lh">{{datum}}</div>
 			</div>
 
 		</div>

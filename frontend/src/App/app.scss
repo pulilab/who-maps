@@ -54,6 +54,7 @@ md-tooltip {
 
 /* UI ELEMENTS
    ============================= */
+
 #main-view {
   display: block;
 }
@@ -283,6 +284,7 @@ p.global-error {
 
     .md-button {
       margin-left: 12px;
+      min-width: 10px !important;
 
       &.view-selector {
         margin-right: 12px;
@@ -299,8 +301,7 @@ p.global-error {
     }
 
     .add-new-project {
-      // margin-left: 24px;
-      margin-right: 0;
+      margin-right: 18px;
     }
   }
 
@@ -393,6 +394,10 @@ p.global-error {
       float: left;
       min-height: 36px;
       line-height: 36px;
+
+      &:last-of-type {
+        margin-right: 12px;
+      }
 
       &.menu-separator {
         margin: 10px 12px 10px 12px;
