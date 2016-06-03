@@ -22,8 +22,6 @@ const $state = {
     }
 };
 
-const $q = () => (() => {});
-
 const cs = {
     projectStructure: mockData,
     userProfile: {
@@ -41,7 +39,7 @@ describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = new  NewProjectController($scope, $state, $q, upload, cs, structure);
+        sc = new  NewProjectController($scope, $state, upload, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')

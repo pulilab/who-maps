@@ -8,13 +8,12 @@ import angular from 'angular';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, $q, Upload, CommonService, structure) {
+    constructor($scope, $state, Upload, CommonService, structure) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
-        this.q = $q;
         this.axisStructure = this.processAxisStructure(structure);
         this.$onInit = this.onInit.bind(this);
     }
@@ -410,10 +409,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
-        function newProject($scope, $state, $q, Upload) {
-            return new NewProjectController($scope, $state, $q, Upload, CommonService, structure);
+        function newProject($scope, $state, Upload) {
+            return new NewProjectController($scope, $state, Upload, CommonService, structure);
         }
-        newProject.$inject = ['$scope', '$state', '$q', 'Upload'];
+        newProject.$inject = ['$scope', '$state', 'Upload'];
         return newProject;
     }
 }
