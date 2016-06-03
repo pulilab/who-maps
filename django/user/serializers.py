@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_auth.serializers import TokenSerializer
 from rest_auth.models import TokenModel
 
+from project.models import Project
 from .models import UserProfile, Organisation
 
 
@@ -15,7 +16,8 @@ class ProfileTokenSerializer(TokenSerializer):
         model = TokenModel
         fields = ("key", "userprofile",)
 
-    def is_userprofile(self, obj):
+    @staticmethod
+    def is_userprofile(obj):
         """
         Checks the UserProfile existence for the given key.
         """
@@ -31,6 +33,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
+
+
+class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
+    member = serializers.SerializerMethodField()
+    viewer = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+
+    @staticmethod
+    def get_member(obj):
+        return Project.projects.by_member(obj.user).values_list('id', flat=True)
+
+    @staticmethod
+    def get_viewer(obj):
+        return Project.projects.by_viewer(obj.user).values_list('id', flat=True)
 
 
 class OrganisationSerializer(serializers.ModelSerializer):

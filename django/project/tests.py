@@ -50,6 +50,7 @@ class ProjectTests(APITestCase):
             "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.post(url, data)
+        self.user_profile_id = response.json().get('id')
 
         country = Country.objects.create(name="country1")
         country.save()
@@ -529,6 +530,15 @@ class ProjectTests(APITestCase):
         self.assertTrue("viewers" in response.json())
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(response.json()['team'], [user_profile_id])
+
+    def test_login_reveals_member_and_viewers(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("member" in response.json())
+        self.assertTrue("viewer" in response.json())
+        self.assertEqual(response.json()['member'], [self.user_profile_id])
 
 
 class PermissionTests(ProjectTests):

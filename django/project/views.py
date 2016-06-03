@@ -130,7 +130,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         Retrieves list of projects.
         """
-        return Response(Project.projects.by_user(request.user).values("id", "name"))
+        return Response(Project.projects.by_member(request.user).values("id", "name"))
 
     def create(self, request, *args, **kwargs):
         """
