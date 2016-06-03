@@ -2,6 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
+import angular from 'angular';
 
 /* global DEV, DEBUG, Promise */
 
@@ -43,16 +44,18 @@ class NewProjectController extends ProjectDefinition {
                 this.team = groups.data.team;
                 this.viewers = groups.data.viewers;
                 this.allUsers = groups.data.user_profiles;
-                console.debug('GROUPS', groups);
             });
     }
 
     getUsers(criteria) {
         return this.allUsers.filter(el => {
-
             return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
-                el.organisation.toLowerCase().includes(criteria.toLowerCase());
+                el.organisation__name.toLowerCase().includes(criteria.toLowerCase());
         });
+    }
+
+    putGroups() {
+        this.ns.putGroups(this.projectId, angular.toJson(this.team), angular.toJson(this.viewers));
     }
 
     importIconTemplates() {
@@ -226,6 +229,7 @@ class NewProjectController extends ProjectDefinition {
             const processedForm = _.cloneDeep(this.project);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
+            this.putGroups();
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
