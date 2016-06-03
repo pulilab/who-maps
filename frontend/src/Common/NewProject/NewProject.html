@@ -41,7 +41,7 @@
                 </div>
                 <md-input-container >
                     <label>Name of the organization</label>
-                    <input ng-model="vm.project.organisation"
+                    <input ng-model="vm.project.organisation.name"
                            ng-disabled="true" required name="organisation"
                            md-maxlength="100" type="text" ng-change="vm.handleCustomError('organisation')" />
                     <div ng-messages="vm.newProjectForm.organisation.$error">

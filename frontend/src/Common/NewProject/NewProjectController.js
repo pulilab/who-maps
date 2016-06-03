@@ -230,8 +230,10 @@ class NewProjectController extends ProjectDefinition {
     }
 
     saveForm(processedForm) {
-        processedForm.date = new Date().toJSON();
-        this.ns.newProject(processedForm)
+        const clone = _.cloneDeep(processedForm);
+        clone.date = new Date().toJSON();
+        clone.organisation = processedForm.organisation.id;
+        this.ns.newProject(clone)
             .then(response => {
                 if (response && response.success) {
                     this.EE.emit('refreshProjects');
