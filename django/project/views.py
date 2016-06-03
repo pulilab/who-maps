@@ -5,7 +5,8 @@ from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
 from rest_framework import status
-from rest_framework.viewsets import ViewSet
+from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes
@@ -19,7 +20,10 @@ from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
-from .serializers import ProjectSerializer, ProjectModelSerializer
+
+from .permissions import InTeamOrReadOnly
+from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
+    ProjectGroupUpdateSerializer
 from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
@@ -88,8 +92,8 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
 
         user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
         if user_profile:
-            projects_own = list(projects.filter(data__organisation=user_profile.organisation))
-            projects_exclude_own = list(projects.exclude(data__organisation=user_profile.organisation))
+            projects_own = list(projects.filter(data__organisation=str(user_profile.organisation.id)))
+            projects_exclude_own = list(projects.exclude(data__organisation=str(user_profile.organisation.id)))
 
             result_list = functools.reduce(lambda acc, p: acc + [{
                 "id": p.id,
@@ -126,9 +130,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         Retrieves list of projects.
         """
-        user_profile = UserProfile.objects.get(user_id=request.user.id)
-        projects = Project.objects.filter(data__organisation=user_profile.organisation).values("id", "name")
-        return Response(projects)
+        return Response(Project.projects.by_user(request.user).values("id", "name"))
 
     def create(self, request, *args, **kwargs):
         """
@@ -140,7 +142,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         data_valid = data_serializer.is_valid()
         if model_valid and data_valid:
             project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
-            project.save()
+            project.team.add(request.user.userprofile)
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.
@@ -189,6 +191,21 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
                 "json": data_serializer.errors
             }
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProjectGroupViewSet(RetrieveModelMixin, GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectGroupListSerializer
+    permission_classes = (IsAuthenticated, InTeamOrReadOnly)
+    authentication_classes = (TokenAuthentication,)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
 @api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))

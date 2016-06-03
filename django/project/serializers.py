@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from user.models import UserProfile
 from .models import Project
 
 
@@ -17,6 +18,7 @@ class ProjectSerializer(serializers.Serializer):
     organisation = serializers.CharField()  # Should be text instead of ID - no Orgs in MVP
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
+    objective = serializers.CharField(required=False, max_length=250)
     technology_platforms = serializers.ListField(required=False)  # Can hold 'other' fields
     licenses = serializers.ListField(required=False)  # Can hold 'other' fields
     application = serializers.ListField(required=False)
@@ -29,3 +31,36 @@ class ProjectSerializer(serializers.Serializer):
     goals_to_scale = serializers.CharField(required=False)
     anticipated_time = serializers.CharField(required=False)
     pre_assessment = serializers.ListField(required=False)
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    org = serializers.SerializerMethodField('get_org_name')
+
+    class Meta:
+        model = UserProfile
+        fields = ('id', 'name', 'org')
+
+    @staticmethod
+    def get_org_name(obj):
+        return obj.organisation.name
+
+
+class ProjectGroupListSerializer(serializers.ModelSerializer):
+    team = GroupSerializer(many=True)
+    viewers = GroupSerializer(many=True)
+
+    class Meta:
+        model = Project
+        fields = ("team", "viewers")
+
+
+class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ("team", "viewers")
+
+    def update(self, instance, validated_data):
+        instance.team = validated_data.get('team', instance.team)
+        instance.viewers = validated_data.get('viewers', instance.viewers)
+        return super(ProjectGroupUpdateSerializer, self).update(instance, validated_data)
