@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country
+from user.models import Organisation
 
 
 class ProjectTests(APITestCase):
@@ -38,10 +39,11 @@ class ProjectTests(APITestCase):
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
         # Create profile.
+        self.org = Organisation.objects.create(name="org1")
         url = reverse("userprofile-list")
         data = {
             "name": "Test Name",
-            "organisation": "test_org",
+            "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.post(url, data)
 
@@ -50,7 +52,7 @@ class ProjectTests(APITestCase):
         project_data = {
             "date": datetime.utcnow(),
             "name": "phrase1 phrase2",
-            "organisation": "test_org",  # Should be text instead of ID - no Orgs in MVP
+            "organisation": self.org.id,
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
             "objective": "objective1",
@@ -106,6 +108,16 @@ class ProjectTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
+
+    def test_search_org(self):
+        url = reverse("search-project")
+        data = {
+            "query": "org1",
+            "organisation": True,
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
 
     def test_search_health_topic(self):
         url = reverse("search-project")
