@@ -92,7 +92,7 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.json())
-        self.assertIn("userprofile", response.json())
+        self.assertIn("user_profile_id", response.json())
 
     def test_login_user_wrong_credentials(self):
         url = reverse("api_token_auth")

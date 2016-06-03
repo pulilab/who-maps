@@ -541,7 +541,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertTrue("member" in response.json())
         self.assertTrue("viewer" in response.json())
-        self.assertEqual(response.json()['member'], [self.user_profile_id])
+        self.assertIsInstance(response.json().get('member'), list)
+        self.assertIsInstance(response.json().get('viewer'), list)
 
 
 class PermissionTests(SetupTests):
