@@ -22,6 +22,7 @@ class CommonServices extends Protected {
 
     initialize() {
         this.user = this.retrieveLoginStatus();
+        this.userProfileId = this.retrieveProfileId();
         this.projectList = [];
         this.hash = Math.random().toString(36);
         this.projectStructure = [];
@@ -96,8 +97,8 @@ class CommonServices extends Protected {
 
     retrieveUserProfile() {
         const vm = this;
-        vm.get('userprofiles/').then(user => {
-            vm.userProfile = user[0];
+        vm.get(`userprofiles/${this.userProfileId}/`).then(_userprofile => {
+            vm.userProfile = _userprofile;
             if (this.userProfile) {
                 vm.userProfile.email = this.storage.get('user').username;
             }

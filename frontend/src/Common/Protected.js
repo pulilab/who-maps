@@ -22,6 +22,7 @@ class Protected extends AuthApi {
             console.debug('default protected init function called by', this.constructor.name);
         }
         this.isLogin = this.retrieveLoginStatus();
+        this.userProfileId = this.retrieveProfileId();
         this.user = this.storage.get('user');
         this.checkLoginStatus();
     }
@@ -50,6 +51,9 @@ class Protected extends AuthApi {
         return this.storage.get('login');
     }
 
+    retrieveProfileId() {
+        return this.storage.get('user_profile_id');
+    }
 }
 
 

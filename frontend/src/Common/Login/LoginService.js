@@ -23,6 +23,7 @@ class LoginService extends SimpleApi {
     processLoginJson(json) {
         if (json && json.token) {
             this.storage.set('token', json.token);
+            this.storage.set('user_profile_id', json.user_profile_id);
             return Promise.resolve(true);
         }
         return Promise.reject(json);
