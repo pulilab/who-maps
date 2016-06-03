@@ -101,7 +101,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
         })
 
         .state('emailConfirmation', {
-            url: '/email-confirmation?key',
+            url: '/email-confirmation/:key',
             parent: 'base',
             views: {
                 main: {
