@@ -38,9 +38,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
+    organisation_name = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
+
+    @staticmethod
+    def get_organisation_name(obj):
+        return obj.organisation.name
 
     @staticmethod
     def get_member(obj):

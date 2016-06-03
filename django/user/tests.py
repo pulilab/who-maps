@@ -292,3 +292,10 @@ class UserProfileTests(APITestCase):
         response = self.client.get(url, {"name": "org"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
+
+    def test_user_profile_api_should_return_organisation_name_id(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("organisation_name" in response.json())
+        self.assertTrue("organisation" in response.json())
