@@ -544,6 +544,15 @@ class ProjectTests(SetupTests):
         self.assertIsInstance(response.json().get('member'), list)
         self.assertIsInstance(response.json().get('viewer'), list)
 
+    def test_project_group_list_has_all_the_user_profiles_listed(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
+        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
+        self.assertTrue("user_profiles" in response.json())
+        self.assertEqual(len(response.json().get('user_profiles')), UserProfile.objects.count())
+
 
 class PermissionTests(SetupTests):
 
