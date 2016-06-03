@@ -12,7 +12,8 @@ def add_team_users(apps, schema_editor):
 
     for user in UserProfile.objects.all():
         project = Project.projects.by_organisation(user.organisation).first()
-        project.team.add(user)
+        if project:
+            project.team.add(user)
 
 
 class Migration(migrations.Migration):
