@@ -90,47 +90,35 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
 
-        user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
-        if user_profile:
-            projects_own = list(projects.filter(data__organisation=str(user_profile.organisation.id)))
-            projects_exclude_own = list(projects.exclude(data__organisation=str(user_profile.organisation.id)))
+        def is_own(project):
+            if hasattr(request.user, 'userprofile'):
+                own = project.team.filter(id=request.user.userprofile.id).exists()
+            else:
+                own = False
+            return own
 
-            result_list = functools.reduce(lambda acc, p: acc + [{
-                "id": p.id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "own": True
-            }], projects_own, result_list)
-
-            result_list = functools.reduce(lambda acc, p: acc + [{
-                "id": p.id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "own": False
-            }], projects_exclude_own, result_list)
-
-        else:
-            # TODO: this won't actually happen right now because of the TokenAuth Mixin, might be needed in the future
-            result_list = functools.reduce(lambda acc, p: acc + [{
-                "id": p.id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "own": False
-            }], projects, result_list)
+        result_list = functools.reduce(lambda acc, p: acc + [{
+            "id": p.id,
+            "name": p.name,
+            "organisation": p.data.get('organisation'),
+            "donors": p.data.get('donors'),
+            "country": p.data.get('country'),
+            "own": is_own(p)
+        }], projects, result_list)
 
         return Response(result_list)
 
+
+class ProjectListViewSet(TokenAuthMixin, ViewSet):
+
     def list(self, request, *args, **kwargs):
         """
-        Retrieves list of projects.
+        Retrieves list of projects user's projects.
         """
-        return Response(Project.projects.by_member(request.user).values("id", "name"))
+        return Response(Project.projects.member_of(request.user).values("id", "name"))
+
+
+class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
 
     def create(self, request, *args, **kwargs):
         """
