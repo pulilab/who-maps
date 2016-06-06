@@ -49,12 +49,14 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'corsheaders',
+    'djcelery_email',
     'user',
     'project',
     'hss',
     'toolkit',
     'country',
     'search',
+    'scheduler',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -177,12 +179,20 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
+# Celery settings
+BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+TOOLKIT_DIGEST_PERIOD = 1  # hours
+
 # Mailgun settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.mailgun.org"
 EMAIL_HOST_USER = "postmaster@whomaps.pulilab.com"
 EMAIL_HOST_PASSWORD = "5ede15430fbf90989648a0fe12e379cc"
 EMAIL_PORT = 587
+
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+
+FROM_EMAIL = "noreply@dhatlas.org"
 
 # Geodata settings
 GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')

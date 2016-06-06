@@ -2,6 +2,7 @@ from datetime import datetime
 from math import ceil
 
 from django.core.urlresolvers import reverse
+from django.core import mail
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
@@ -9,6 +10,7 @@ from rest_framework.test import APITestCase
 from country.models import Country
 from user.models import Organisation
 from .models import Toolkit
+from . import tasks
 
 
 class ToolkitTests(APITestCase):
@@ -47,6 +49,7 @@ class ToolkitTests(APITestCase):
             "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.post(url, data)
+        self.user_profile_id = response.json()['id']
 
         country = Country.objects.create(name="country1")
 
@@ -77,6 +80,13 @@ class ToolkitTests(APITestCase):
         url = reverse("project-list")
         response = self.test_user_client.post(url, self.project_data)
         self.project_id = response.json().get("id")
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        groups = {
+            "team": [self.user_profile_id],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
 
     def test_set_score(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
@@ -170,3 +180,16 @@ class ToolkitTests(APITestCase):
         self.assertEqual(ceil(response.json()[0]["domains"][1]["domain_completion"]), 10)
         self.assertEqual(ceil(response.json()[0]["axis_score"]), 38)
         self.assertEqual(ceil(response.json()[0]["axis_completion"]), 9)
+
+    def test_send_daily_toolkit_digest(self):
+        url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
+        data = {
+                "axis": 0,
+                "domain": 0,
+                "question": 0,
+                "answer":0,
+                "value": 2
+            }
+        response = self.test_user_client.post(url, data, format="json")
+        tasks.send_daily_toolkit_digest()
+        self.assertEqual(mail.outbox[1].subject, "MAPS Toolkit updated!")
