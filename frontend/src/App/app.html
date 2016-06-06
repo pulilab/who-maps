@@ -19,7 +19,7 @@
             Dashboard
         </md-button>
 
-        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.viewMode"  md-no-ink>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-show="vm.userType !== 0" ng-if="vm.viewMode"  md-no-ink>
             <md-icon class="material-icons ">apps</md-icon>
             Go to my dashboard
         </md-button>
@@ -82,7 +82,7 @@
         <!--</md-menu-content>-->
         <!--</md-menu>-->
 
-        <md-button class="add-new-project" ui-sref="newProject" ng-disabled="!vm.userProfile" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
+        <md-button class="add-new-project" ui-sref="newProject" ng-if="vm.isLogin" ng-disabled="!vm.userProfile" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
             <md-icon class="material-icons">add</md-icon>
             New Project
         </md-button>
@@ -95,9 +95,14 @@
     <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation" ng-show="vm.state.current.name !== 'country'">
         <div class="md-toolbar-tools">
             <div class="project-mainmenu">
-                <md-button ui-sref="dashboard" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="dashboard"  ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     Dashboard
                 </md-button>
+
+                <md-button ui-sref="public-dashboard"  ng-if="vm.viewMode" " ui-sref-active="active" md-no-ink>
+                    Dashboard
+                </md-button>
+
                 <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
                     <md-tooltip md-autohide>
                         CREATE VISUAL FRAMEWORK
@@ -105,40 +110,40 @@
                     Visualize Project
                 </md-button>
 
-                <md-button ng-if="vm.viewMode" ui-sref="public-hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
+                <md-button ng-if="vm.viewMode" ui-sref="public-hss"  ui-sref-active="active" md-no-ink class="active">
                     <md-tooltip md-autohide>
                         CREATE VISUAL FRAMEWORK
                     </md-tooltip>
                     Visualize Project
                 </md-button>
 
-                <md-button ui-sref="editProject" ng-disabled="!vm.userProfile" ng-if="!vm.viewMode" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="editProject" ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="!vm.viewMode" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         EDIT PROJECT DETAILS
                     </md-tooltip>
                     Edit Project
                 </md-button>
-                <md-button ui-sref="#" ng-disabled="!vm.userProfile" ng-if="false" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="#"  ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="false" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         TIPS AND RESOURCES
                     </md-tooltip>
                     Improve Project
                 </md-button>
-                <md-button ui-sref="maps" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="maps" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         GO TO MAPS TOOLKIT
                     </md-tooltip>
                     Update Score
                 </md-button>
 
-                <md-button ui-sref="public-maps" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="public-maps" ng-show="vm.userType !== 0" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         GO TO MAPS TOOLKIT
                     </md-tooltip>
                     Maps toolkit
                 </md-button>
 
-                <md-button ui-sref="summary" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         SHOW SCORE SUMMARY
                     </md-tooltip>
@@ -146,7 +151,7 @@
                 </md-button>
 
 
-                <md-button ui-sref="public-summary" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="public-summary" ng-show="vm.userType !== 0" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         SHOW SCORE SUMMARY
                     </md-tooltip>
@@ -211,28 +216,28 @@
 
             <div flex></div>
 
-            <div class="project-info" layout="row">
-                <span>
-                    Version:
-                    {{vm.currentProject.last_version}}
-                    ({{vm.currentProject.last_version_date | date: medium}})
-                </span>
-                <span class="menu-separator"></span>
-                <span>
-                    Organization:
-                    {{vm.currentProject.organisation}}
-                </span>
-                <!--span class="menu-separator"></span>
-                <span>
-                    Contact:
-                    <md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>
-                        <md-icon class="material-icons">
-                            send
-                        </md-icon>
-                        {{vm.currentProjectMock.contact.name}}
-                    </md-button>
-                </span-->
-            </div>
+            <!--<div class="project-info" layout="row">-->
+                <!--<span>-->
+                    <!--Version:-->
+                    <!--{{vm.currentProject.last_version}}-->
+                    <!--({{vm.currentProject.last_version_date | date: medium}})-->
+                <!--</span>-->
+                <!--<span class="menu-separator"></span>-->
+                <!--<span>-->
+                    <!--Organization:-->
+                    <!--{{vm.currentProject.organisation}}-->
+                <!--</span>-->
+                <!--&lt;!&ndash;span class="menu-separator"></span>-->
+                <!--<span>-->
+                    <!--Contact:-->
+                    <!--<md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>-->
+                        <!--<md-icon class="material-icons">-->
+                            <!--send-->
+                        <!--</md-icon>-->
+                        <!--{{vm.currentProjectMock.contact.name}}-->
+                    <!--</md-button>-->
+                <!--</span&ndash;&gt;-->
+            <!--</div>-->
         </div>
     </md-toolbar>
     <ui-view name="main" id="main-view" layout-fill></ui-view>

@@ -32,6 +32,7 @@ class EditProfileController extends Protected {
     }
 
     handleDataLoad() {
+        console.log(this.userProfile);
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;

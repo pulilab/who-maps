@@ -64,8 +64,12 @@ class CommonServices extends Protected {
     }
 
     loadData() {
-        this.loadingCheck = ['list', 'structure', 'user-profile'];
-        this.retrieveUserProfile();
+        this.loadingCheck = ['list', 'structure'];
+        if (this.userProfileId) {
+            this.loadingCheck.push('user-profile');
+            this.retrieveUserProfile();
+        }
+
         this.populateProjectList();
         this.populateProjectStructure();
     }

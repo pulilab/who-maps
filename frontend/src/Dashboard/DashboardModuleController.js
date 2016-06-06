@@ -22,23 +22,30 @@ class DashboardModuleController extends Protected {
     }
 
     onInit() {
-
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
         this.currentVersion = 0;
-        
+
+        if (this.cs.userProfile) {
+            this.adjustUserType(this.cs.userProfile)
+        }
 
         this.service = new DashboardService(this.projectId);
         this.mapService = new DashboardMapService();
 
-        this.fetchAxisData();
+        if (this.userType !== 0) {
 
-        this.cs.getProjectData(this.projectId).then(data => {
-            this.addResourcesMeta(data);
-            this.timeout(() => { this.fetchProjectData(data); });
-        });
+            this.fetchAxisData();
 
-        this.fetchToolkitData();
+            this.cs.getProjectData(this.projectId).then(data => {
+                this.addResourcesMeta(data);
+                this.timeout(() => {
+                    this.fetchProjectData(data);
+                });
+            });
+
+            this.fetchToolkitData();
+        }
 
         this.commProjects = commProjects;
         this.resizeEvent();
@@ -48,16 +55,16 @@ class DashboardModuleController extends Protected {
             {
                 title: 'Use the existing evidence base to bolster interventions',
                 description: 'Project teams should remember that mHealth is a catalytic' +
-                    ' tool and not often a health Lorem ipsum dolor sit amet,' +
-                    ' consectetur adipisicing elit, sed do eiusmod.',
+                ' tool and not often a health Lorem ipsum dolor sit amet,' +
+                ' consectetur adipisicing elit, sed do eiusmod.',
                 commentNr: 17,
                 imageURL: 'someURL'
             },
             {
                 title: 'Conduct formative work to understand your context',
                 description: 'Formative research is critical for local validation and ' +
-                    'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
-                    ' adipisicing elit, sed do eiusmod',
+                'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
+                ' adipisicing elit, sed do eiusmod',
                 commentNr: 6,
                 imageURL: 'someURL'
             },
@@ -76,9 +83,15 @@ class DashboardModuleController extends Protected {
         this.eventRemoving();
     }
 
-    reqCs() {
+    adjustUserType(profile) {
+        const projectId = parseInt(this.projectId, 10);
+        if (profile.viewer && profile.viewer.indexOf(projectId) > -1) {
+            this.userType = 2;
+        }
 
-        this.cs = require('../Common/CommonServices');
+        if (profile.member && profile.member.indexOf(projectId) > -1) {
+            this.userType = 3;
+        }
     }
 
     resizeEvent() {
@@ -471,7 +484,7 @@ class DashboardModuleController extends Protected {
             return Math.floor(Math.random() * 16);
         }
         return data.filter(dom => dom.completion > 0)
-            .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
+                .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
     }
 
     static dashboardControllerFactory() {

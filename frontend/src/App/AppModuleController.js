@@ -33,7 +33,7 @@ class AppModuleController extends Protected {
 
         this.notifications = [1, 2, 3];
 
-        if (this.viewMode) {
+        if (this.viewMode && this.userType !== 0) {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
                     this.currentProject = project;
