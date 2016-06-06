@@ -113,7 +113,7 @@
         <md-card ng-if="vm.isLogin" class="content-main logged-in md-card md-whiteframe-24dp" flex=55>
             <h2 class="md-display-3">My Projects</h2>
 
-            <md-card class="my-project" ng-repeat="project in vm.projectList">
+            <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projectList">
                 <h5 class="project-title md-headline">{{project.name}} ({{project.countryName}})</h5>
                 <div class="project-links md-block">
                   <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary" md-no-ink>
