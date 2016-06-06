@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.response import Response
 from rest_auth.models import TokenModel
@@ -53,7 +53,7 @@ class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
         return response
 
 
-class OrganisationViewSet(TokenAuthMixin, ModelViewSet):
+class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Organisation.objects.all()
     serializer_class = OrganisationSerializer
 

@@ -190,8 +190,6 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
 
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def hss_data(request, project_id):
     """
     Retrieves HSS data based on project_id.
@@ -207,8 +205,6 @@ def hss_data(request, project_id):
 
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def hss_structure(request):
     """
     Retrieves HSS structure for setting up the HSS page for e.g. dropdowns,

@@ -7,12 +7,14 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from core.views import TokenAuthMixin, get_object_or_400
+from project.permissions import InTeamOrReadOnly
+
+from .serializers import ScoreSerializer
 from .models import Toolkit
-from . import serializers
 
 
 class ScoreView(TokenAuthMixin, generics.CreateAPIView):
-    serializer_class = serializers.ScoreSerializer
+    serializer_class = ScoreSerializer
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
@@ -38,7 +40,7 @@ class ScoreView(TokenAuthMixin, generics.CreateAPIView):
 
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, InTeamOrReadOnly))
 def get_toolkit_data(request, project_id):
     """
     Retrieves Toolkit data based on project_id.
