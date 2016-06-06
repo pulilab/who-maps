@@ -80,11 +80,11 @@ class SetupTests(APITestCase):
             "pre_assessment": [1,0,3,0,4,0],
         }
 
-        url = reverse("project-list")
+        url = reverse("project-crud")
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.project_id = response.json().get("id")
 
-        url = reverse("file-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-files", kwargs={"project_id": self.project_id})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".pdf")
         file2 = tempfile.NamedTemporaryFile(suffix=".pdf")
@@ -99,7 +99,7 @@ class SetupTests(APITestCase):
 
 class ProjectTests(SetupTests):
 
-    def test_retrieve_project_srtucture(self):
+    def test_retrieve_project_structure(self):
         url = reverse("get-project-structure")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -107,7 +107,7 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "strategies")
 
     def test_create_new_project_basic_data(self):
-        url = reverse("project-list")
+        url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project3")
         response = self.test_user_client.post(url, data)
@@ -122,12 +122,12 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()["goals_to_scale"], "updated")
 
     def test_create_new_project_unique_name(self):
-        url = reverse("project-list")
+        url = reverse("project-crud")
         response = self.test_user_client.post(url, self.project_data)
         self.assertEqual(response.status_code, 400)
 
     def test_create_new_project_bad_data(self):
-        url = reverse("project-list")
+        url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name="")
         data.update(organisation="")
@@ -148,7 +148,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
 
     def test_upload_files_to_project(self):
-        url = reverse("file-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-files", kwargs={"project_id": self.project_id})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".pdf")
         file2 = tempfile.NamedTemporaryFile(suffix=".pdf")
@@ -174,7 +174,7 @@ class ProjectTests(SetupTests):
         url = reverse("file-list", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         data = response.json()
-        url = reverse("file-detail", kwargs={"pk": data[0]["id"]})
+        url = reverse("file-delete", kwargs={"pk": data[0]["id"]})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
 
@@ -225,7 +225,7 @@ class ProjectTests(SetupTests):
         self.assertIn("last_version_date", response.json())
 
     def test_upload_partnerlogo(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-partnerlogo", kwargs={"project_id": self.project_id})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".png")
         file2 = tempfile.NamedTemporaryFile(suffix=".png")
@@ -235,7 +235,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
 
     def test_upload_partnerlogo_wrong_project(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": 999})
+        url = reverse("project-partnerlogo", kwargs={"project_id": 999})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".png")
         file2 = tempfile.NamedTemporaryFile(suffix=".png")
@@ -245,7 +245,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
 
     def test_retrieve_partnerlogos_list(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-partnerlogo", kwargs={"project_id": self.project_id})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".png")
         file2 = tempfile.NamedTemporaryFile(suffix=".png")
@@ -258,7 +258,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(len(response.json()), 2)
 
     def test_delete_partnerlogo(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-partnerlogo", kwargs={"project_id": self.project_id})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".png")
         file2 = tempfile.NamedTemporaryFile(suffix=".png")
@@ -266,12 +266,12 @@ class ProjectTests(SetupTests):
         data.update(logo_files)
         response = self.test_user_client.post(url, data, format="multipart")
         logo = PartnerLogo.objects.all().first()
-        url = reverse("partnerlogo-detail", kwargs={"pk": logo.id})
+        url = reverse("partnerlogo-delete", kwargs={"pk": logo.id})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
 
     def test_upload_partnerlogo_returns_list_of_ids_urls(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-partnerlogo", kwargs={"project_id": self.project_id})
         data = {}
         file1 = tempfile.NamedTemporaryFile(suffix=".png")
         file2 = tempfile.NamedTemporaryFile(suffix=".png")
@@ -285,13 +285,14 @@ class ProjectTests(SetupTests):
         self.assertIn("id", response.data[0])
 
     def test_list_partnerlogos_returns_list_with_urls(self):
-        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
+        url = reverse("project-partnerlogo", kwargs={"project_id": self.project_id})
         data = {}
         image1 = tempfile.NamedTemporaryFile(suffix=".png")
         image2 = tempfile.NamedTemporaryFile(suffix=".png")
         logo_files = {"logo1": image1, "logo2": image2}
         data.update(logo_files)
         response = self.test_user_client.post(url, data, format="multipart")
+        url = reverse("partnerlogo-list", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertIsInstance(response.json(), list)
         self.assertEqual(len(response.json()), 2)
@@ -322,7 +323,7 @@ class ProjectTests(SetupTests):
             "anticipated_time": "time",
             "pre_assessment": [1,0,3,0,4,0],
         }
-        url = reverse("project-list")
+        url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
 
         url = reverse("project-country-list", kwargs={"country_id": self.country_id})
@@ -356,7 +357,7 @@ class ProjectTests(SetupTests):
             "anticipated_time": "time",
             "pre_assessment": [1,0,3,0,4,0],
         }
-        url = reverse("project-list")
+        url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data)
 
         url = reverse("project-country-list", kwargs={"country_id": self.country_id})
@@ -366,7 +367,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
         self.assertEqual(response.json()[0].get("own"), True)
         self.assertEqual(response.json()[1].get("name"), "Test Project2")
-        self.assertEqual(response.json()[1].get("own"), False)
+        self.assertEqual(response.json()[1].get("own"), True)
 
     def test_retrieve_project_list_all_without_country(self):
         url = reverse("project-all-list")
@@ -417,7 +418,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
 
     def test_create_project_adds_owner_to_team(self):
-        url = reverse("project-list")
+        url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project3")
         response = self.test_user_client.post(url, data)

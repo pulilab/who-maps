@@ -72,7 +72,7 @@ class ProjectTests(APITestCase):
             "anticipated_time": "time",
             "pre_assessment": [1,0,3,0,4,0],
         }
-        url = reverse("project-list")
+        url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data)
         self.project_id = response.json().get("id")
 
