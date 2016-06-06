@@ -2,6 +2,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 
+from project.permissions import InTeamOrReadOnly
+
 
 class TokenAuthMixin(object):
     """
@@ -10,6 +12,11 @@ class TokenAuthMixin(object):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+
+class TeamTokenAuthMixin(object):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
 class Http400(APIException):
