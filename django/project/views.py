@@ -108,6 +108,12 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
 
 class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
 
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return [] # Retrieve needs a bit more complex filtering based on user permission
+        else:
+            return super(ProjectCRUDViewSet, self).get_permissions()
+
     def create(self, request, *args, **kwargs):
         """
         Creates a project.
@@ -137,12 +143,24 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Retrieves a project.
         """
-        project = get_object_or_400(Project, "No such project", id=kwargs["pk"])
-        data = project.data
-        last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
-        if last_version:
-            data.update(last_version=last_version.version)
-            data.update(last_version_date=last_version.modified)
+        is_member = False
+        project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
+
+        if not request.user.is_authenticated():  # ANON
+            data = project.get_anon_data()
+        else:
+            is_member = project.is_member(request.user)
+            if is_member:  # MEMBER
+                data = project.get_member_data()
+            else:  # LOGGED IN
+                data = project.get_non_member_data()
+
+        if is_member:
+            last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
+            if last_version:
+                data.update(last_version=last_version.version)
+                data.update(last_version_date=last_version.modified)
+
         data.update(id=project.id)
         return Response(project.data)
 
@@ -153,6 +171,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         """
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        self.check_object_permissions(request, project)
         model_serializer = ProjectModelSerializer(instance=project, data={"name": data_serializer.initial_data["name"]})
         model_valid = model_serializer.is_valid()
         data_valid = data_serializer.is_valid()

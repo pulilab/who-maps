@@ -183,8 +183,8 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise]).then(data => {
-                vm.getCountryName(data[0]);
+            Promise.all([project.detailPromise, project.filePromise]).then(() => {
+                vm.getCountryName(project);
                 vm.publicProject[_id] = project;
                 resolve(project);
             });

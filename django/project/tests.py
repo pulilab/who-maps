@@ -11,7 +11,7 @@ from rest_framework.test import APITestCase
 
 from country.models import Country
 from user.models import Organisation, UserProfile
-from .models import PartnerLogo, Project
+from .models import PartnerLogo, Project, FIELDS_FOR_MEMBERS_ONLY, FIELDS_FOR_LOGGED_IN
 
 
 class SetupTests(APITestCase):
@@ -658,3 +658,52 @@ class PermissionTests(SetupTests):
         response = test_user_client.get(url)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.json()['detail'], 'Authentication credentials were not provided.')
+
+    def test_retrieve_project_anonym_user(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        anon_client = APIClient(format="json")
+        response = anon_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("objective"), "objective1")
+
+        # filtering checks
+        for key in FIELDS_FOR_MEMBERS_ONLY + FIELDS_FOR_LOGGED_IN:
+            self.assertNotIn(key, response.json())
+
+    def test_retrieve_project_non_member_user(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        # Create profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-list")
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        response = test_user_client.post(url, data)
+
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("objective"), "objective1")
+
+        # filtering checks
+        for key in FIELDS_FOR_MEMBERS_ONLY:
+            self.assertNotIn(key, response.json())

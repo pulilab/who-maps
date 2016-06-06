@@ -27,23 +27,21 @@ class DashboardModuleController extends Protected {
         this.currentVersion = 0;
 
         if (this.cs.userProfile) {
-            this.adjustUserType(this.cs.userProfile)
+            this.adjustUserType(this.cs.userProfile);
         }
 
         this.service = new DashboardService(this.projectId);
         this.mapService = new DashboardMapService();
 
-        if (this.userType !== 0) {
-
-            this.fetchAxisData();
-
-            this.cs.getProjectData(this.projectId).then(data => {
-                this.addResourcesMeta(data);
-                this.timeout(() => {
-                    this.fetchProjectData(data);
-                });
+        this.cs.getProjectData(this.projectId).then(data => {
+            this.addResourcesMeta(data);
+            this.timeout(() => {
+                this.fetchProjectData(data);
             });
+        });
 
+        if (this.userType !== 0) {
+            this.fetchAxisData();
             this.fetchToolkitData();
         }
 
@@ -78,9 +76,9 @@ class DashboardModuleController extends Protected {
     }
 
     onDestroy() {
-
         this.defaultOnDestroy();
         this.eventRemoving();
+        this.userType = 0;
     }
 
     adjustUserType(profile) {
@@ -123,9 +121,11 @@ class DashboardModuleController extends Protected {
         // console.debug('ProjectData', data);
         this.EE.emit('country Changed');
         this.projectData = data;
-        this.fetchCountryMap(data.country);
-        this.parseMapData(data.coverage);
-        this.fetchCoverageVersions();
+        if (this.userType !== 0) {
+            this.fetchCountryMap(data.country);
+            this.parseMapData(data.coverage);
+            this.fetchCoverageVersions();
+        }
     }
 
     parseMapData(coverage) {
