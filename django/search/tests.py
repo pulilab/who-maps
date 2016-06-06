@@ -53,6 +53,12 @@ class ProjectTests(APITestCase):
             "date": datetime.utcnow(),
             "name": "phrase1 phrase2",
             "organisation": self.org.id,
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
             "objective": "objective1",
