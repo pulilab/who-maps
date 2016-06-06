@@ -83,5 +83,22 @@ project_structure = {
             "IWG mHealth Catalytic Grant Mechanism",
             "Saving Lives at Birth",
             "USAID Developmenet Innovation Ventures"
+        ],
+        "intervention_areas": [
+            "Child health",
+            "Family Planning",
+            "HIV/AIDS",
+            "Infectious Diseases",
+            "Malaria and other vector-borne diseases",
+            "Maternal health",
+            "Newborn heath",
+            "Non Communicable Diseases",
+            "Nutrition/Food Security",
+            "Parasitic diseases",
+            "Primary Care",
+            "Sexual and Reproductive Health",
+            "Tuberculosis",
+            "Violence",
+            "Water, Sanitation, and Hygiene"
         ]
 }
