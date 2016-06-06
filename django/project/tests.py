@@ -11,7 +11,7 @@ from rest_framework.test import APITestCase
 
 from country.models import Country
 from user.models import Organisation, UserProfile
-from .models import PartnerLogo, Project, FIELDS_FOR_MEMBERS_ONLY, FIELDS_FOR_LOGGED_IN
+from .models import PartnerLogo, Project
 
 
 class SetupTests(APITestCase):
@@ -668,7 +668,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json().get("objective"), "objective1")
 
         # filtering checks
-        for key in FIELDS_FOR_MEMBERS_ONLY + FIELDS_FOR_LOGGED_IN:
+        for key in Project.FIELDS_FOR_MEMBERS_ONLY + Project.FIELDS_FOR_LOGGED_IN:
             self.assertNotIn(key, response.json())
 
     def test_retrieve_project_non_member_user(self):
@@ -705,5 +705,5 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json().get("objective"), "objective1")
 
         # filtering checks
-        for key in FIELDS_FOR_MEMBERS_ONLY:
+        for key in Project.FIELDS_FOR_MEMBERS_ONLY:
             self.assertNotIn(key, response.json())
