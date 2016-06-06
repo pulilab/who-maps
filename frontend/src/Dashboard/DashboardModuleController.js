@@ -26,6 +26,8 @@ class DashboardModuleController extends Protected {
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
         this.currentVersion = 0;
+        
+
         this.service = new DashboardService(this.projectId);
         this.mapService = new DashboardMapService();
 

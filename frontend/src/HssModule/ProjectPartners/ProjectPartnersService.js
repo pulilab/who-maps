@@ -20,7 +20,7 @@ class ProjectPartnersService extends AuthApi {
     }
 
     getLogoList(projectId) {
-        return this.get(`projects/${projectId}/partnerlogos/`);
+        return this.get(`projects/${projectId}/partnerlogo-list/`);
 
     }
     deleteLogo(logoId) {

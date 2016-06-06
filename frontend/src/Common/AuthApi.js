@@ -191,7 +191,9 @@ class AuthApi {
             this.updateOnNextRequest = false;
         }
         const headers = new Headers();
-        headers.append('Authorization', 'Token ' + this.token);
+        if (this.token) {
+            headers.append('Authorization', 'Token ' + this.token);
+        }
         headers.append('content-type', 'application/json');
         return headers;
     }

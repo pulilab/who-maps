@@ -119,7 +119,7 @@ class CommonServices extends Protected {
 
     populateProjectList() {
         const promiseArray = [];
-        this.get('projects/')
+        this.get('projects/member-of')
             .then((projects) => {
                 this.projectList = projects;
                 _.forEach(projects, project => {
@@ -162,7 +162,7 @@ class CommonServices extends Protected {
     }
 
     getProjectFiles(project) {
-        project.filePromise = this.get(`projects/${project.id}/files/`);
+        project.filePromise = this.get(`projects/${project.id}/file-list/`);
         project.filePromise.then(files => {
             project.files = files;
         });
