@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from core.views import TokenAuthMixin, get_object_or_400
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import UserProfile
 from hss.models import HSS
 from hss.hss_data import hss_default
@@ -28,19 +28,7 @@ from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
 
-@api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def get_project_structure(request):
-    """
-    View for providing form data for create/edit project.
-    """
-    countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
-    project_structure.update(countries=countries)
-    return Response(project_structure)
-
-
-class ProjectViewSet(TokenAuthMixin, ViewSet):
+class ProjectPublicViewSet(ViewSet):
 
     def by_district(self, request, country_id):
         """
@@ -181,11 +169,9 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProjectGroupViewSet(RetrieveModelMixin, GenericViewSet):
+class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupListSerializer
-    permission_classes = (IsAuthenticated, InTeamOrReadOnly)
-    authentication_classes = (TokenAuthentication,)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -195,20 +181,49 @@ class ProjectGroupViewSet(RetrieveModelMixin, GenericViewSet):
         return Response(serializer.data)
 
 
-@api_view(['GET', 'POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def file_list(request, project_id):
-    """
-    Enables to upload/list files for publications and reports.
+class PartnerLogoListViewSet(ViewSet):
 
-    Args:
-        project_id: id of the project the artifacts belong to.
-    """
-    if request.method == "POST":
+    def list(self, request, project_id):
+        """
+        Retrieves list of partnerlogo ids for a given project.
+        """
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        return Response([{"data": p.data.url, "id": p.id} for p in PartnerLogo.objects.filter(project_id=project.id)])
+
+
+class PartnerLogoViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def create(self, request, project_id):
+        """
+        Creates partnerlogos from the uploaded files.
+        """
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        logos = []
+        # Get and store binary files for partnerlogos.
+        for key, value in request.FILES.items():
+            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value)
+            logos.append({"id": logo.id, "data": logo.data.url})
+        return Response(logos)
+
+    def destroy(self, request, pk=None):
+        get_object_or_400(PartnerLogo, "No such logo.", id=pk).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FileListViewSet(ViewSet):
+
+    def list(self, request, project_id):
+        files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
+        return Response(files)
+
+
+class FilePostViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def create(self, request, project_id):
         project = get_object_or_400(Project, "No such project.", id=project_id)
         # Get and store binary files for publications and reports.
         files = []
+        file_type = None
         for key, value in request.FILES.items():
             if "publication" in key:
                 file_type = "publication"
@@ -221,22 +236,18 @@ def file_list(request, project_id):
                                         data=value.read())
             files.append(model_to_dict(instance, fields=["id", "type", "filename"]))
         return Response(files)
-    if request.method == "GET":
-        files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
-        return Response(files)
 
 
-@api_view(['GET', 'DELETE'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def file_detail(request, pk):
-    """
-    View for retrieving file.
-    """
-    if request.method == "GET":
+class FileDetailViewSet(ViewSet):
+
+    def retrieve(self, request, pk):
         file = get_object_or_400(File, "No such file.", id=pk)
         return HttpResponse(content=file.data, content_type="application/pdf")
-    if request.method == "DELETE":
+
+
+class FileDeleteViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def destroy(self, request, pk):
         file = get_object_or_400(File, "No such file.", id=pk)
         file.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -244,7 +255,7 @@ def file_detail(request, pk):
 
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, InTeamOrReadOnly))
 def make_version(request, project_id):
     """
     Makes versions out of Toolkit and coverage data for the project.
@@ -296,7 +307,7 @@ def get_coverage_versions(request, project_id):
 
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, InTeamOrReadOnly))
 def get_toolkit_versions(request, project_id):
     """
     Retrieves all toolkit versions for the given project_id.
@@ -306,27 +317,11 @@ def get_toolkit_versions(request, project_id):
     return Response(toolkit_versions)
 
 
-class PartnerLogoViewSet(TokenAuthMixin, ViewSet):
-
-    def list(self, request, project_id):
-        """
-        Retrieves list of partnerlogo ids for a given project.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        return Response([{"data": p.data.url, "id": p.id} for p in PartnerLogo.objects.filter(project_id=project.id)])
-
-    def create(self, request, project_id):
-        """
-        Creates partnerlogos from the uploaded files.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        logos = []
-        # Get and store binary files for partnerlogos.
-        for key, value in request.FILES.items():
-            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value)
-            logos.append({"id": logo.id, "data": logo.data.url})
-        return Response(logos)
-
-    def destroy(self, request, pk=None):
-        get_object_or_400(PartnerLogo, "No such logo.", id=pk).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+@api_view(['GET'])
+def get_project_structure(request):
+    """
+    View for providing form data for create/edit project.
+    """
+    countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
+    project_structure.update(countries=countries)
+    return Response(project_structure)
