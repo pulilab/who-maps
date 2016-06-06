@@ -5,6 +5,11 @@ from django.contrib.postgres.fields import JSONField
 from core.models import ExtendedModel
 from user.models import UserProfile
 
+FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date",
+                           "started", "application", "pipeline", "last_version")
+
+FIELDS_FOR_LOGGED_IN = ("coverage",)
+
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
@@ -30,6 +35,26 @@ class Project(ExtendedModel):
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
 
     projects = ProjectManager()
+
+    def is_member(self, user):
+        return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
+
+    def get_member_data(self):
+        return self.data
+
+    def get_non_member_data(self):
+        return self.remove_keys(self.data, FIELDS_FOR_MEMBERS_ONLY)
+
+    def get_anon_data(self):
+        return self.remove_keys(self.data, FIELDS_FOR_MEMBERS_ONLY + FIELDS_FOR_LOGGED_IN)
+
+    @staticmethod
+    def remove_keys(dictionary, keys):
+        d = dictionary
+        for key in keys:
+            if key in d:
+                d.pop(key, None)
+        return d
 
 
 class CoverageVersion(ExtendedModel):
