@@ -28,5 +28,5 @@ urlpatterns = [
     url(r"^projects/(?P<pk>\d+)/groups/$", view=views.ProjectGroupViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="project-groups"),
     url(r"^files/(?P<pk>\d+)/$", view=views.FileDetailViewSet.as_view({'get': 'retrieve'}), name="file-detail"),
     #TODO: notify team for change:
-    url(r"^files/(?P<pk>\d+)/delete$", view=views.FileDeleteViewSet.as_view({'delete': 'destroy'}), name="file-delete"),
+    url(r"^files/(?P<pk>\d+)/delete/$", view=views.FileDeleteViewSet.as_view({'delete': 'destroy'}), name="file-delete"),
 ]
