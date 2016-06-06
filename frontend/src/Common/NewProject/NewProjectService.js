@@ -25,6 +25,25 @@ class NewProjectService extends AuthApi {
             });
     }
 
+    getGroups(projectId) {
+        return this.get(`projects/${projectId}/groups/`)
+            .then(answer => {
+                return {
+                    success: answer.status < 400,
+                    data: answer
+                };
+            });
+    }
+
+    putGroups(projectId, team, viewers) {
+
+        const ret = {
+            team: team.map(el => el.id),
+            viewers: viewers.map(el => el.id)
+        };
+        this.put(`projects/${projectId}/groups/`, ret);
+    }
+
     updateProject(data, id) {
         let status = void 0;
         return this.put(`projects/${id}/`, data)
