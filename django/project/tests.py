@@ -369,6 +369,9 @@ class ProjectTests(APITestCase):
             "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
             "goals_to_scale": "scale",
             "anticipated_time": "time",
+            "repository": "repos1",
+            "mobile_application": "app1, app2",
+            "wiki": "http://wiki",
             "pre_assessment": [1,0,3,0,4,0],
         }
         url = reverse("project-list")

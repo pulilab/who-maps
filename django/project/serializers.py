@@ -37,6 +37,9 @@ class ProjectSerializer(serializers.Serializer):
     pipeline = serializers.ListField(required=False)  # Can hold 'other' fields
     goals_to_scale = serializers.CharField(required=False)
     anticipated_time = serializers.CharField(required=False)
+    repository = serializers.CharField(required=False)
+    mobile_application = serializers.CharField(required=False)
+    wiki = serializers.CharField(required=False)
     pre_assessment = serializers.ListField(required=False)
 
 
