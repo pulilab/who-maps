@@ -54,7 +54,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     putGroups() {
-        this.ns.putGroups(this.projectId, angular.toJson(this.team), angular.toJson(this.viewers));
+        this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
     importIconTemplates() {
