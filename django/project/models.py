@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 
 from core.models import ExtendedModel
@@ -8,11 +9,14 @@ from user.models import UserProfile
 class ProjectManager(models.Manager):
     use_in_migrations = True
 
-    def by_member(self, user):
+    def owner_of(self, user):
         return self.get_queryset().filter(team=user.userprofile)
 
-    def by_viewer(self, user):
+    def viewer_of(self, user):
         return self.get_queryset().filter(viewers=user.userprofile)
+
+    def member_of(self, user):
+        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile))
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):
