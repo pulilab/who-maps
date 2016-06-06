@@ -64,8 +64,12 @@ class CommonServices extends Protected {
     }
 
     loadData() {
-        this.loadingCheck = ['list', 'structure', 'user-profile'];
-        this.retrieveUserProfile();
+        this.loadingCheck = ['list', 'structure'];
+        if (this.userProfileId) {
+            this.loadingCheck.push('user-profile');
+            this.retrieveUserProfile();
+        }
+
         this.populateProjectList();
         this.populateProjectStructure();
     }
@@ -119,7 +123,7 @@ class CommonServices extends Protected {
 
     populateProjectList() {
         const promiseArray = [];
-        this.get('projects/')
+        this.get('projects/member-of')
             .then((projects) => {
                 this.projectList = projects;
                 _.forEach(projects, project => {
@@ -162,7 +166,7 @@ class CommonServices extends Protected {
     }
 
     getProjectFiles(project) {
-        project.filePromise = this.get(`projects/${project.id}/files/`);
+        project.filePromise = this.get(`projects/${project.id}/file-list/`);
         project.filePromise.then(files => {
             project.files = files;
         });
@@ -179,8 +183,8 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise]).then(data => {
-                vm.getCountryName(data[0]);
+            Promise.all([project.detailPromise, project.filePromise]).then(() => {
+                vm.getCountryName(project);
                 vm.publicProject[_id] = project;
                 resolve(project);
             });

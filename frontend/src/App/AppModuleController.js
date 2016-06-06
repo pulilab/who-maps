@@ -60,7 +60,7 @@ class AppModuleController extends Protected {
     }
 
     checkUserProfile() {
-        if (!this.userProfile) {
+        if (!this.userProfile && this.isLogin) {
             this.state.go('editProfile');
         }
     }

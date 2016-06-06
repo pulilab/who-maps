@@ -55,6 +55,7 @@ describe('DashboardModuleController', () => {
         spyOn(window.EE, 'on').and.callThrough();
         vm = DashboardModuleController.dashboardControllerFactory()({}, state, window.setTimeout, csMock);
         vm.$onInit();
+        vm.userType = 3;
     });
 
     it('is defined', () => {
