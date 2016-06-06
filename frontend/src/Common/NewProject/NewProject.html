@@ -50,6 +50,37 @@
                     </div>
                 </md-input-container>
 
+                <div class="chipper" ng-if="vm.editMode">
+                    <label>Team members</label>
+                    <md-contact-chips
+                        placeholder="Editors of this project"
+                        secondary-placeholder="add new team member"
+                        ng-model="vm.team"
+                        md-contacts="vm.getUsers($query)"
+                        md-contact-name="name"
+                        md-contact-email="organisation__name"
+                        md-require-match="true"
+                        md-highlight-flags="i"
+                        filter-selected="true">
+                    </md-contact-chips>
+                </div>
+
+                <div class="chipper" ng-if="vm.editMode">
+                    <label>Superior viewers</label>
+                    <md-contact-chips
+                        placeholder="See all the projects data"
+                        secondary-placeholder="add new viewer"
+                        ng-model="vm.viewers"
+                        md-contacts="vm.getUsers($query)"
+                        md-contact-name="name"
+                        md-contact-email="organisation__name"
+                        md-require-match="true"
+                        md-highlight-flags="i"
+                        filter-selected="true">
+                    </md-contact-chips>
+                </div>
+
+
                 <ssmenu
 
                         class="strategies"

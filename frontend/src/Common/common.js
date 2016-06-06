@@ -27,6 +27,7 @@ import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
 import EditProfileComponent from './EditProfile/editProfileComponent';
 import countrymap from './CountryMap/countrymap.js';
+import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
 
 const moduleName = 'Components';
 
@@ -48,7 +49,8 @@ angular.module(moduleName,
     .component(followersComponent.name, followersComponent)
     .component(donorsComponent.name, donorsComponent)
     .component(EditProfileComponent.name, EditProfileComponent)
-    .component(countrymap.name, countrymap);
+    .component(countrymap.name, countrymap)
+    .component(EmailConfirmationComponent.name, EmailConfirmationComponent);
 
 
 export { EE };

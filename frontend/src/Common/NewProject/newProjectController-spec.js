@@ -146,4 +146,35 @@ describe('NewProjectController', () => {
         expect(sc.newProjectForm.asd.$setValidity).toHaveBeenCalled();
     });
 
+    it('fetches all users, team members and viewers if in edit mode', () => {
+        sc.editMode = true;
+        spyOn(sc, 'bindFunctions');
+        spyOn(sc, 'handleStructureLoad');
+        spyOn(sc, 'handleDataLoad');
+        spyOn(sc.ns, 'getGroups').and.callFake(() => { return { then: () => {} }; });
+        sc.onInit();
+        expect(sc.ns.getGroups).toHaveBeenCalled();
+    });
+
+    it('has a function, that parses all users, and returns if they contain the string (#1 fn param)', () => {
+        expect(sc.getUsers).toBeDefined();
+        sc.allUsers = [
+            {
+                name: 'Jess', organisation__name: 'Flikli'
+            }, {
+                name: 'Nico', organisation__name: 'Pulilab'
+            }, {
+                name: 'Tigest', organisation__name: 'WHO'
+            }
+        ];
+        expect(sc.getUsers('tig')[0].organisation__name).toBe('WHO');
+        expect(sc.getUsers('E').length).toBe(2);
+    });
+
+    it('has a function, that saves team members and users to the API', () => {
+        spyOn(sc.ns, 'putGroups');
+        sc.putGroups();
+        expect(sc.ns.putGroups).toHaveBeenCalled();
+    });
+
 });

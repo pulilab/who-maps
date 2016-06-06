@@ -534,16 +534,6 @@ class ProjectTests(SetupTests):
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(response.json()['team'], [user_profile_id])
 
-    def test_login_reveals_member_and_viewers(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
-        response = self.test_user_client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("member" in response.json())
-        self.assertTrue("viewer" in response.json())
-        self.assertIsInstance(response.json().get('member'), list)
-        self.assertIsInstance(response.json().get('viewer'), list)
-
     def test_project_group_list_has_all_the_user_profiles_listed(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
