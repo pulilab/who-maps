@@ -64,6 +64,9 @@
                 <!--</md-input-container>-->
 
                 <md-autocomplete
+                        required="true"
+                        md-input-name="organisation"
+                        md-no-cache="true"
                         md-selected-item="vm.userProfile.organisation"
                         md-search-text="vm.searchText"
                         md-items="item in vm.organisationSearch(vm.searchText)"
@@ -73,13 +76,15 @@
                     <md-item-template>
                         <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
                     </md-item-template>
+
                     <md-not-found>
                         No organisation matching "{{vm.searchText}}" were found.
                         <a ng-click="vm.addOrganisation(vm.searchText)">Create a new one!</a>
                     </md-not-found>
                 </md-autocomplete>
-
-
+                <div class="autocomplete-errors" ng-messages="vm.editProfileForm.organisation.$error">
+                    <div ng-message="required">This field is required</div>
+                </div>
 
 
 
