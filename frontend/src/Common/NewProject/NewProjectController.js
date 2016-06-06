@@ -370,7 +370,7 @@ class NewProjectController extends ProjectDefinition {
                     });
                 });
                 this.similarProject = result;
-                if (result && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
+                if (result && result[0] && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
                     this.setCustomError('name', 'Project name is not unique');
                 }
                 this.scope.$evalAsync();
