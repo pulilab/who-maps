@@ -49,11 +49,11 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_member(obj):
-        return Project.projects.by_member(obj.user).values_list('id', flat=True)
+        return Project.projects.owner_of(obj.user).values_list('id', flat=True)
 
     @staticmethod
     def get_viewer(obj):
-        return Project.projects.by_viewer(obj.user).values_list('id', flat=True)
+        return Project.projects.viewer_of(obj.user).values_list('id', flat=True)
 
 
 class OrganisationSerializer(serializers.ModelSerializer):
