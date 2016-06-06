@@ -14,7 +14,7 @@ from user.models import Organisation, UserProfile
 from .models import PartnerLogo, Project
 
 
-class ProjectTests(APITestCase):
+class SetupTests(APITestCase):
 
     def setUp(self):
         # Create a test user with profile.
@@ -50,6 +50,7 @@ class ProjectTests(APITestCase):
             "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.post(url, data)
+        self.user_profile_id = response.json().get('id')
 
         country = Country.objects.create(name="country1")
         country.save()
@@ -94,6 +95,9 @@ class ProjectTests(APITestCase):
         data.update(pub_files)
         data.update(report_files)
         response = self.test_user_client.post(url, data, format="multipart")
+
+
+class ProjectTests(SetupTests):
 
     def test_retrieve_project_srtucture(self):
         url = reverse("get-project-structure")
@@ -530,8 +534,17 @@ class ProjectTests(APITestCase):
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(response.json()['team'], [user_profile_id])
 
+    def test_project_group_list_has_all_the_user_profiles_listed(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
+        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
+        self.assertTrue("user_profiles" in response.json())
+        self.assertEqual(len(response.json().get('user_profiles')), UserProfile.objects.count())
 
-class PermissionTests(ProjectTests):
+
+class PermissionTests(SetupTests):
 
     def test_team_member_can_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
