@@ -2,7 +2,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
-import angular from 'angular';
 
 /* global DEV, DEBUG, Promise */
 
