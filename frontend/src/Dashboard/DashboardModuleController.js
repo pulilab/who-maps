@@ -25,7 +25,7 @@ class DashboardModuleController extends Protected {
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
         this.currentVersion = 0;
-        this.userType = 0;
+        this.setUserType();
         if (this.cs.userProfile) {
             this.adjustUserType(this.cs.userProfile);
         }
