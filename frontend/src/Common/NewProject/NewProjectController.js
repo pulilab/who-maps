@@ -297,6 +297,8 @@ class NewProjectController extends ProjectDefinition {
     }
 
     mergeCustomAndDefault(collection) {
+
+        collection.organisation = collection.organisation.id;
         collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
         collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
