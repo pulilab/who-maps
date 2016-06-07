@@ -7,11 +7,12 @@ from core.models import ExtendedModel
 class Organisation(ExtendedModel):
     name = models.CharField(unique=True, max_length=100)
 
-    def get_name_by_id(self, org_id=None):
+    @classmethod
+    def get_name_by_id(cls, org_id=None):
         if not org_id:
             return ""
 
-        org = self.get_object_or_none(id=org_id)
+        org = cls.objects.get_object_or_none(id=org_id)
         return org.name if org else ""
 
 
