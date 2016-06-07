@@ -147,6 +147,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
         self.assertEqual(response.json().get("objective"), "objective1")
+        self.assertEqual(response.json().get("organisation_name"), self.org.name)
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")

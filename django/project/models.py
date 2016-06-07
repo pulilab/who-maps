@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 
 from core.models import ExtendedModel
-from user.models import UserProfile
+from user.models import UserProfile, Organisation
 
 
 class ProjectManager(models.Manager):
@@ -46,6 +46,9 @@ class Project(ExtendedModel):
 
     def get_anon_data(self):
         return self.remove_keys(self.data, self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
+
+    def get_organisation(self):
+        return Organisation.objects.filter(id=self.data.get('organisation')).first()
 
     @staticmethod
     def remove_keys(dictionary, keys):
