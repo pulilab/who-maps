@@ -573,6 +573,22 @@ class ProjectTests(SetupTests):
         self.assertTrue("user_profiles" in response.json())
         self.assertEqual(len(response.json().get('user_profiles')), UserProfile.objects.count())
 
+    def test_update_project_updates_intervention_areas(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('intervention_areas'), self.project_data['intervention_areas'])
+
+        data = copy.deepcopy(self.project_data)
+        data.update(intervention_areas=['area1'])
+        response = self.test_user_client.put(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["intervention_areas"], data['intervention_areas'])
+
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('intervention_areas'), data['intervention_areas'])
+
 
 class PermissionTests(SetupTests):
 
