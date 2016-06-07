@@ -1,5 +1,4 @@
 import {  Protected } from '../../Common/';
-import HssModuleService from '../HssModuleService';
 
 class ProjectScaleController extends Protected {
 

@@ -41,7 +41,6 @@ class CommonServices extends Protected {
             this.loadingCheck = ['structure'];
             this.populateProjectStructure();
         }
-        console.log('cs initialize: ', this)
     }
 
     uglyfyCountryName(name) {
@@ -189,7 +188,7 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise]).then(data => {
+            Promise.all([project.detailPromise, project.filePromise]).then(() => {
                 vm.getCountryName(project);
                 vm.publicProject[_id] = project;
                 resolve(project);

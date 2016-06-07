@@ -52,7 +52,6 @@ const config = ($stateProvider, $compileProvider) => {
                 }
             }
         })
-        
         .state('summary', {
             url: '/summary',
             parent: 'app',

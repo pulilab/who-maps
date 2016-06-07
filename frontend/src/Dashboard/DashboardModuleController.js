@@ -80,8 +80,6 @@ class DashboardModuleController extends Protected {
         this.userType = 0;
     }
 
-   
-
     resizeEvent() {
 
         let doit;
