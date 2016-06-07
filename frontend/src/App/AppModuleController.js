@@ -84,10 +84,6 @@ class AppModuleController extends Protected {
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
 
-        if (!lastProject || !lastProject.id) {
-            this.state.go('country');
-        }
-
         if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
