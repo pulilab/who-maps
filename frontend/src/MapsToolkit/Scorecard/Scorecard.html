@@ -2,7 +2,7 @@
     <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
 </div>
 
-<div class="wrapper"  layout="column" layout-fill ng-if="vm.dataLoaded && !vm.summary" md-whiteframe >
+<div class="wrapper"  layout="column" layout-fill ng-if="vm.dataLoaded && !vm.summary" md-whiteframe="2">
     <div layout="row" class="axis-buttons top">
         <div layout="row" flex="auto" layout-align="start">
             <md-button class="md-primary" ui-sref="maps({axisId: {{vm.axisId}}})">
@@ -127,7 +127,7 @@
             this sheet. This will allow you to compare your progress across the six axes, and to identify the domains
             that require greater attention and efforts.</h6>
     </div>
-    <div class="wrapper"  layout="column" layout-fill md-whiteframe >
+    <div class="wrapper"  layout="column" layout-fill md-whiteframe="2">
     <div layout="column" flex="100" layout-fill class="inner-wrapper">
         <div ng-repeat="(axIndex, axis) in vm.data" layout="column" class="axis">
             <div layout="row" class="axis-header" ng-class="axis.axisClass">

@@ -15,7 +15,14 @@ class ProjectSerializer(serializers.Serializer):
 
     date = serializers.CharField()
     name = serializers.CharField()
-    organisation = serializers.CharField()  # Should be text instead of ID - no Orgs in MVP
+    organisation = serializers.CharField()
+    contact_name = serializers.CharField()
+    contact_email = serializers.CharField()
+    implementation_overview = serializers.CharField(max_length=500)
+    implementing_partners = serializers.CharField(required=False)
+    implementation_dates = serializers.CharField()
+    geographic_coverage = serializers.CharField()
+    intervention_areas = serializers.ListField()
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
     objective = serializers.CharField(required=False, max_length=250)
@@ -30,6 +37,9 @@ class ProjectSerializer(serializers.Serializer):
     pipeline = serializers.ListField(required=False)  # Can hold 'other' fields
     goals_to_scale = serializers.CharField(required=False)
     anticipated_time = serializers.CharField(required=False)
+    repository = serializers.CharField(required=False)
+    mobile_application = serializers.CharField(required=False)
+    wiki = serializers.CharField(required=False)
     pre_assessment = serializers.ListField(required=False)
 
 
