@@ -29,7 +29,9 @@ class AppModuleController extends Protected {
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
-            this.adjustUserType(this.userProfile);
+            if (this.userProfile) {
+                this.adjustUserType(this.userProfile);
+            }
         }
 
         this.notifications = [1, 2, 3];
