@@ -136,12 +136,12 @@ scorecard {
 
             .md-button {
                 color: $color-gray-light;
-                height:15px;
-                width:auto;    
+                height: 15px;
+                width: auto;
             }
 
             h4 {
-                font-weight:500;
+                font-weight: 500;
             }
 
             .percentage {
@@ -151,8 +151,22 @@ scorecard {
 
 
         .scorecard-buttons {
-            padding:60px;
+            padding: 60px;
         }
 
+    }
+
+    .md-primary {
+        color: $color-primary!important;
+        md-icon {
+            color: $color-primary!important;
+        }
+        &.md-raised {
+            background-color: $color-primary!important;
+            color: white!important;
+            md-icon {
+                color: white!important;
+            }
+        }
     }
 }
