@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r"^projects/$", view=views.ProjectCRUDViewSet.as_view({'get': 'retrieve', 'post': 'create', 'put': 'update'}), name="project-crud"),
+    url(r"^projects/$", view=views.ProjectCRUDViewSet.as_view({'post': 'create'}), name="project-crud"),
     url(r"^projects/(?P<pk>\d+)/$", view=views.ProjectCRUDViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="project-detail"),
     url(r"^projects/member-of/$", view=views.ProjectListViewSet.as_view({'get': 'list'}), name="project-list"),
     url(r"^projects/by-view/map/(?P<country_id>\d+)/$", view=views.ProjectPublicViewSet.as_view({'get': 'by_district'}), name="project-by-district"),
