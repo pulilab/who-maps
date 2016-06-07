@@ -102,7 +102,7 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.location = Country.objects.get(id=instance.data["country"]).name
     project_search.project_name = instance.data.get("name", "")
     project_search.technology_platform = ", ".join([x for x in instance.data.get("technology_platforms", "")])
-    project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation", ""))
+    project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation"))
     project_search.contact_name = instance.data.get("contact_name", "")
     project_search.contact_email = instance.data.get("contact_email", "")
     project_search.implementation_overview = instance.data.get("implementation_overview", "")
