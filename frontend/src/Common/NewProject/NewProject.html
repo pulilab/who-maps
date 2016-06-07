@@ -397,8 +397,53 @@
                         </div>
                     </section>
 
+                    <section class="additional-info">
+                        <h4>3. Additional Info</h4>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="Contact name" ng-model="vm.project.contact_name"/>
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="Contact email" ng-model="vm.project.contact_email"/>
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" md-maxlength="500" placeholder="Overview of Digital health implementation" ng-model="vm.project.overview"/>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Implementing Partners" ng-model="vm.project.implementing_partners"/>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="Implementing Dates" ng-model="vm.project.implementing_dates"/>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="Geographic coverage" ng-model="vm.project.geographic_coverage"/>
+                            </md-input-container>
+                        </div>
+
+
+
+                    </section>
+
                     <section ng-if="!vm.editMode">
-                        <h4>3. Pre-assessment</h4>
+                        <h4>4. Pre-assessment</h4>
 
                         <p>
                             The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).

@@ -38,7 +38,13 @@ class ProjectDefinition extends Protected {
             pipelines: {
                 standard: [],
                 custom: void 0
-            }
+            },
+            contact_name: null,
+            contact_email: null,
+            overview: null,
+            'implementing_partners': null,
+            'implementing_dates': null,
+            'geographic_coverage': null
 
         };
     }
