@@ -99,16 +99,16 @@ def update_with_project_data(sender, instance, **kwargs):
     """
     project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
     project_search.location = Country.objects.get(id=instance.data["country"]).name
-    project_search.project_name = instance.data["name"]
-    project_search.technology_platform = ", ".join([x for x in instance.data["technology_platforms"]])
-    project_search.organisation = Organisation.objects.get(id=instance.data["organisation"]).name
-    project_search.contact_name = instance.data["contact_name"]
-    project_search.contact_email = instance.data["contact_email"]
-    project_search.implementation_overview = instance.data["implementation_overview"]
+    project_search.project_name = instance.data.get("name", "")
+    project_search.technology_platform = ", ".join([x for x in instance.data.get("technology_platforms", "")])
+    project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation", ""))
+    project_search.contact_name = instance.data.get("contact_name", "")
+    project_search.contact_email = instance.data.get("contact_email", "")
+    project_search.implementation_overview = instance.data.get("implementation_overview", "")
     project_search.implementing_partners = instance.data.get("implementing_partners", "")
-    project_search.implementation_dates = instance.data["implementation_dates"]
-    project_search.geographic_coverage = instance.data["geographic_coverage"]
-    project_search.intervention_areas = ", ".join([x for x in instance.data["intervention_areas"]])
+    project_search.implementation_dates = instance.data.get("implementation_dates", "")
+    project_search.geographic_coverage = instance.data.get("geographic_coverage", "")
+    project_search.intervention_areas = ", ".join([x for x in instance.data.get("intervention_areas", "")])
     project_search.repository = instance.data.get("repository", "")
     project_search.mobile_application = instance.data.get("mobile_application", "")
     project_search.wiki = instance.data.get("wiki", "")
