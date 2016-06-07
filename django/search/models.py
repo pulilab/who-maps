@@ -86,8 +86,8 @@ class ProjectSearch(ExtendedModel):
             results.append({
                 "id": ps.id,
                 "name": ps.project_name,
-                "organisation": ps.project.data.get('organisation'),
-                "countryName": Country.objects.get(id=ps.project.data.get('country')).name
+                "organisation_name": ps.project.get_organisation().name,
+                "country_name": Country.objects.get(id=ps.project.data.get('country')).name
             })
         return results
 
