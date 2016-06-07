@@ -27,6 +27,7 @@ class CommonServices extends Protected {
         this.projectStructure = [];
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = [];
+        this.userProfile = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -40,6 +41,7 @@ class CommonServices extends Protected {
             this.loadingCheck = ['structure'];
             this.populateProjectStructure();
         }
+        console.log('cs initialize: ', this)
     }
 
     uglyfyCountryName(name) {
@@ -99,6 +101,10 @@ class CommonServices extends Protected {
     mergeOperations() {
         _.forEach(this.projectList, project => {
             this.getCountryName(project);
+            project.organisation = {
+                id: project.organisation,
+                name: project.organisation_name
+            };
         });
 
         _.forEach(this.projectStructure.countries, country => {
@@ -183,7 +189,7 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise]).then(() => {
+            Promise.all([project.detailPromise, project.filePromise]).then(data => {
                 vm.getCountryName(project);
                 vm.publicProject[_id] = project;
                 resolve(project);

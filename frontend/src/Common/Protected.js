@@ -19,7 +19,7 @@ class Protected extends AuthApi {
 
     defaultOnInit() {
         if (DEBUG) {
-            console.debug('default protected init function called by', this.constructor.name);
+            console.debug(`default protected init function called by ${this.constructor.name}`);
         }
         this.isLogin = this.retrieveLoginStatus();
         this.userProfileId = this.retrieveProfileId();
@@ -37,12 +37,24 @@ class Protected extends AuthApi {
         }
     }
 
+    adjustUserType(profile) {
+        const projectId = parseInt(this.projectId, 10);
+        if (profile.viewer && profile.viewer.indexOf(projectId) > -1) {
+            this.userType = 2;
+        }
+
+        if (profile.member && profile.member.indexOf(projectId) > -1) {
+            this.userType = 3;
+        }
+    }
+
     defaultOnDestroy() {
         if (DEBUG) {
-            console.debug('default protected destroy function called by', this.constructor.name);
+            console.debug(`default protected destroy function called by ${this.constructor.name}`);
         }
         this.isLogin = void 0;
         this.user = void 0;
+        this.userType = 0;
     }
 
     checkLoginStatus() {
@@ -53,6 +65,7 @@ class Protected extends AuthApi {
 
     systemLogout() {
         this.isLogin = false;
+        this.userProfileId = null;
         this.storage.clear();
         this.EE.emit('logout');
     }

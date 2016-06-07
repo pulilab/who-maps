@@ -34,7 +34,8 @@ class NewProjectController extends ProjectDefinition {
         this.handleStructureLoad();
         if (this.editMode) {
             this.projectId = this.state.params.appName;
-            this.handleDataLoad();
+            this.cs.getProjectData(this.projectId)
+                .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
                 .then(groups => {
                     this.team = this.editMode ? groups.data.team : [];
@@ -82,8 +83,7 @@ class NewProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
-    handleDataLoad() {
-        const data = this.cs.getProjectData(this.projectId);
+    handleDataLoad(data) {
         this.createCoverageKeys(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
@@ -97,7 +97,8 @@ class NewProjectController extends ProjectDefinition {
                 this.addDefaultEmpty();
                 this.scope.$evalAsync();
             });
-
+        console.log(this.project);
+        this.scope.$evalAsync();
 
     }
 

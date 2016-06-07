@@ -17,15 +17,15 @@ class DashboardModuleController extends Protected {
         this.timeout = $timeout;
         this.EE = window.EE;
         this.cs = CommonServices;
-        this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
+        this.$onInit = this.onInit;
+        this.$onDestroy = this.onDestroy;
     }
 
     onInit() {
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
         this.currentVersion = 0;
-
+        this.userType = 0;
         if (this.cs.userProfile) {
             this.adjustUserType(this.cs.userProfile);
         }
@@ -39,7 +39,6 @@ class DashboardModuleController extends Protected {
                 this.fetchProjectData(data);
             });
         });
-
         if (this.userType !== 0) {
             this.fetchAxisData();
             this.fetchToolkitData();
@@ -81,16 +80,7 @@ class DashboardModuleController extends Protected {
         this.userType = 0;
     }
 
-    adjustUserType(profile) {
-        const projectId = parseInt(this.projectId, 10);
-        if (profile.viewer && profile.viewer.indexOf(projectId) > -1) {
-            this.userType = 2;
-        }
-
-        if (profile.member && profile.member.indexOf(projectId) > -1) {
-            this.userType = 3;
-        }
-    }
+   
 
     resizeEvent() {
 

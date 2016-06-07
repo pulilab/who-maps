@@ -100,7 +100,7 @@
                 </md-button>
 
                 <md-button ui-sref="public-dashboard"  ng-if="vm.viewMode" " ui-sref-active="active" md-no-ink>
-                    Dashboard
+                Dashboard
                 </md-button>
 
                 <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
@@ -117,7 +117,7 @@
                     Visualize Project
                 </md-button>
 
-                <md-button ui-sref="editProject" ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="!vm.viewMode" ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="editProject" ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
                     <md-tooltip md-autohide>
                         EDIT PROJECT DETAILS
                     </md-tooltip>
@@ -133,14 +133,8 @@
                     <md-tooltip md-autohide>
                         GO TO MAPS TOOLKIT
                     </md-tooltip>
-                    Update Score
-                </md-button>
-
-                <md-button ui-sref="public-maps" ng-show="vm.userType !== 0" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
-                    <md-tooltip md-autohide>
-                        GO TO MAPS TOOLKIT
-                    </md-tooltip>
-                    Maps toolkit
+                    <span ng-show="vm.userType === 3"> Update Score </span>
+                    <span ng-hide="vm.userType === 3"> Visualize Score </span>
                 </md-button>
 
                 <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
@@ -151,50 +145,44 @@
                 </md-button>
 
 
-                <md-button ui-sref="public-summary" ng-show="vm.userType !== 0" ng-if="vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
-                    <md-tooltip md-autohide>
-                        SHOW SCORE SUMMARY
-                    </md-tooltip>
-                    Summary Score
-                </md-button>
             </div>
             <div flex></div>
             <div class="project-submenu" layout="row">
                 <!--<md-button aria-label="Share" md-no-ink >-->
-                    <!--<md-icon class="material-icons">share</md-icon>-->
-                    <!--Share-->
+                <!--<md-icon class="material-icons">share</md-icon>-->
+                <!--Share-->
                 <!--</md-button>-->
 
-                <md-menu md-position-mode="target-right target" ng-if="!vm.viewMode">
-                    <md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                        <md-icon class="material-icons">more_vert</md-icon>
-                        More
-                    </md-button>
+                <!--<md-menu md-position-mode="target-right target" ng-if="!vm.viewMode">-->
+                <!--<md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
+                <!--<md-icon class="material-icons">more_vert</md-icon>-->
+                <!--More-->
+                <!--</md-button>-->
 
-                    <md-menu-content width="4">
-                <span class="menu-group-title">
-                More Actions
-                </span>
-                        <!--<md-menu-item>-->
-                            <!--<md-button>-->
-                                <!--<md-icon class="material-icons">person_add</md-icon>-->
-                                <!--Assign owners/users-->
-                            <!--</md-button>-->
-                        <!--</md-menu-item>-->
-                        <md-menu-item>
-                            <md-button>
-                                <md-icon class="material-icons">lock_outline</md-icon>
-                                Publicity settings
-                            </md-button>
-                        </md-menu-item>
-                        <!--<md-menu-item>-->
-                            <!--<md-button>-->
-                                <!--<md-icon class="material-icons">publish</md-icon>-->
-                                <!--Export pdf/csv-->
-                            <!--</md-button>-->
-                        <!--</md-menu-item>-->
-                    </md-menu-content>
-                </md-menu>
+                <!--<md-menu-content width="4">-->
+                <!--<span class="menu-group-title">-->
+                <!--More Actions-->
+                <!--</span>-->
+                <!--&lt;!&ndash;<md-menu-item>&ndash;&gt;-->
+                <!--&lt;!&ndash;<md-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<md-icon class="material-icons">person_add</md-icon>&ndash;&gt;-->
+                <!--&lt;!&ndash;Assign owners/users&ndash;&gt;-->
+                <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;</md-menu-item>&ndash;&gt;-->
+                <!--<md-menu-item>-->
+                <!--<md-button>-->
+                <!--<md-icon class="material-icons">lock_outline</md-icon>-->
+                <!--Publicity settings-->
+                <!--</md-button>-->
+                <!--</md-menu-item>-->
+                <!--&lt;!&ndash;<md-menu-item>&ndash;&gt;-->
+                <!--&lt;!&ndash;<md-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<md-icon class="material-icons">publish</md-icon>&ndash;&gt;-->
+                <!--&lt;!&ndash;Export pdf/csv&ndash;&gt;-->
+                <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;</md-menu-item>&ndash;&gt;-->
+                <!--</md-menu-content>-->
+                <!--</md-menu>-->
             </div>
         </div>
 
@@ -217,26 +205,26 @@
             <div flex></div>
 
             <!--<div class="project-info" layout="row">-->
-                <!--<span>-->
-                    <!--Version:-->
-                    <!--{{vm.currentProject.last_version}}-->
-                    <!--({{vm.currentProject.last_version_date | date: medium}})-->
-                <!--</span>-->
-                <!--<span class="menu-separator"></span>-->
-                <!--<span>-->
-                    <!--Organization:-->
-                    <!--{{vm.currentProject.organisation}}-->
-                <!--</span>-->
-                <!--&lt;!&ndash;span class="menu-separator"></span>-->
-                <!--<span>-->
-                    <!--Contact:-->
-                    <!--<md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>-->
-                        <!--<md-icon class="material-icons">-->
-                            <!--send-->
-                        <!--</md-icon>-->
-                        <!--{{vm.currentProjectMock.contact.name}}-->
-                    <!--</md-button>-->
-                <!--</span&ndash;&gt;-->
+            <!--<span>-->
+            <!--Version:-->
+            <!--{{vm.currentProject.last_version}}-->
+            <!--({{vm.currentProject.last_version_date | date: medium}})-->
+            <!--</span>-->
+            <!--<span class="menu-separator"></span>-->
+            <!--<span>-->
+            <!--Organization:-->
+            <!--{{vm.currentProject.organisation}}-->
+            <!--</span>-->
+            <!--&lt;!&ndash;span class="menu-separator"></span>-->
+            <!--<span>-->
+            <!--Contact:-->
+            <!--<md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>-->
+            <!--<md-icon class="material-icons">-->
+            <!--send-->
+            <!--</md-icon>-->
+            <!--{{vm.currentProjectMock.contact.name}}-->
+            <!--</md-button>-->
+            <!--</span&ndash;&gt;-->
             <!--</div>-->
         </div>
     </md-toolbar>

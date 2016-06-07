@@ -29,6 +29,7 @@ class AppModuleController extends Protected {
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
+            this.adjustUserType(this.userProfile)
         }
 
         this.notifications = [1, 2, 3];
@@ -126,9 +127,9 @@ class AppModuleController extends Protected {
     }
 
     logout() {
+        this.systemLogout();
         const rest = this.cs.reset();
         rest.loadedPromise.then(() => {
-            this.systemLogout();
             this.showCompleteNavigation(null, false);
         });
     }

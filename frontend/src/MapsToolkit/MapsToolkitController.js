@@ -4,10 +4,11 @@ import MapsToolkitService from './MapsToolkitService';
 
 class MapsToolkitController extends Protected {
 
-    constructor($scope, $state, structure) {
+    constructor($scope, $state, CommonService, structure) {
         super();
         this.state = $state;
         this.scope = $scope;
+        this.cs = CommonService;
         this.structure = _.cloneDeep(structure);
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
@@ -25,6 +26,8 @@ class MapsToolkitController extends Protected {
         vm.axisId = vm.state.params.axisId;
         vm.ms = new MapsToolkitService(vm.projectId);
         vm.loadData();
+        vm.adjustUserType(vm.cs.userProfile);
+        vm.viewMode = vm.userType < 3;
     }
 
     onDestroy() {
@@ -171,14 +174,15 @@ class MapsToolkitController extends Protected {
 
     goToScorecard() {
         const axisId = this.axisId;
-        this.state.go(this.viewMode ? 'public-scorecard' : 'scorecard', { axisId });
+        this.state.go(this.viewMode ? 'scorecard' : 'scorecard', { axisId });
     }
 
 
     static mapsControllerFactory() {
         function mapsController($scope, $state) {
             const structure = require('./Resource/structure.json');
-            return new MapsToolkitController($scope, $state, structure);
+            const CommonService = require('../Common/CommonServices');
+            return new MapsToolkitController($scope, $state, CommonService, structure);
         }
 
         mapsController.$inject = ['$scope', '$state'];
