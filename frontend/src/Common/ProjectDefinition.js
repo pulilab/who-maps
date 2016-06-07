@@ -41,10 +41,11 @@ class ProjectDefinition extends Protected {
             },
             contact_name: null,
             contact_email: null,
-            overview: null,
+            'implementation_overview': null,
             'implementing_partners': null,
-            'implementing_dates': null,
-            'geographic_coverage': null
+            'implementation_dates': null,
+            'geographic_coverage': null,
+            'intervention_areas': []
 
         };
     }
@@ -72,6 +73,22 @@ class ProjectDefinition extends Protected {
 
     technologyPlatformChecked(t) {
         return this.project.technology_platforms.standard.indexOf(t) > -1;
+    }
+
+
+    interventionAreaChanged(t) {
+        if (this.interventionAreaChecked(t)) {
+            _.remove(this.project.intervention_areas, item => {
+                return item === t;
+            });
+        }
+        else {
+            this.project.intervention_areas.push(t);
+        }
+    }
+
+    interventionAreaChecked(t) {
+        return this.project.intervention_areas.indexOf(t) > -1;
     }
 
 
