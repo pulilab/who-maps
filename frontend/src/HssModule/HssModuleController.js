@@ -28,7 +28,9 @@ class HssModuleController extends Protected {
         this.structure = {};
         this.data = {};
         this.columnHasContent = [];
-        this.adjustUserType(this.cs.userProfile);
+        if (this.cs.userProfile) {
+            this.adjustUserType(this.cs.userProfile);
+        }
         this.viewMode = this.userType < 3;
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
     }
