@@ -242,7 +242,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.updateProject(processedForm, this.projectId)
             .then(response => {
                 if (response && response.success) {
-                    this.EE.emit('refreshProjects');
+                    this.postSaveActions();
                 }
                 else {
                     this.handleResponse(response);
@@ -251,19 +251,21 @@ class NewProjectController extends ProjectDefinition {
     }
 
     saveForm(processedForm) {
-        const clone = _.cloneDeep(processedForm);
-        clone.date = new Date().toJSON();
-        clone.organisation = processedForm.organisation.id;
-        this.ns.newProject(clone)
+        this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.EE.emit('refreshProjects');
+                    this.postSaveActions();
                 }
                 else {
                     this.handleResponse(response);
                 }
 
             });
+    }
+
+    postSaveActions() {
+        this.EE.emit('refreshProjects');
+        this.state.go(this.state.current.name, {}, { reload: true });
     }
 
     handleResponse(response) {

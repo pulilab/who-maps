@@ -71,7 +71,6 @@ class AppModuleController extends Protected {
     refreshProjectsHandler() {
         this.cs.reset().loadedPromise.then(() => {
             this.fillUserData();
-            this.goToDashboard();
         });
     }
 
@@ -103,6 +102,10 @@ class AppModuleController extends Protected {
 
     goToDashboard() {
         this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
+    }
+
+    goToEditProject() {
+        this.state.go('editProject', { 'appName': _.last(this.user.projects).id });
     }
 
     handleUnauthorized() {

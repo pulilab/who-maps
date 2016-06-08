@@ -412,9 +412,10 @@
 
                         <div layout="column">
                             <md-input-container>
-                                <input type="text" ng-required="true" name="contact_email" placeholder="Contact email" ng-model="vm.project.contact_email"/>
+                                <input type="email" ng-required="true" name="contact_email" placeholder="Contact email" ng-model="vm.project.contact_email"/>
                                 <div ng-messages="vm.newProjectForm.contact_email.$error">
                                     <div ng-message="required">This is required.</div>
+                                    <div ng-message="email">This field must be an email</div>
                                 </div>
                             </md-input-container>
 

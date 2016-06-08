@@ -105,7 +105,8 @@ class CommonServices extends Protected {
                 name: project.organisation_name
             };
         });
-
+        this.projectList = _.sortBy(this.projectList, ['id']);
+        console.log(this.projectList);
         _.forEach(this.projectStructure.countries, country => {
             country.name = this.prettifyCountryName(country.name);
         });
