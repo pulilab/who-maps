@@ -3,7 +3,7 @@
 </div>
 
 <div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
-    <div layout="row" flex="100" md-whiteframe class="axis-row">
+    <div layout="row" flex="100" md-whiteframe="2" class="axis-row">
             <axis flex="auto" show-current="true" domain-id="vm.domainId" axis-data="vm.axis" axis-id="vm.axisId"></axis>
             <div flex="auto" layout="row" layout-align="end center">
                 <md-button class="md-primary" ui-sref="scorecard({axisId: vm.axisId})">
@@ -20,7 +20,7 @@
             </div>
     </div>
 
-    <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe class="domain-block md-padding">
+    <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe="2" class="domain-block md-padding">
 
         <div layout="column" layout-fill>
             <div class="domain-header" layout="row">

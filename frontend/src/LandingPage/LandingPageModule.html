@@ -113,7 +113,7 @@
         <md-card ng-if="vm.isLogin" class="content-main logged-in md-card md-whiteframe-24dp" flex=55>
             <h2 class="md-display-3">My Projects</h2>
 
-            <md-card class="my-project" ng-repeat="project in vm.projectList">
+            <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projectList">
                 <h5 class="project-title md-headline">{{project.name}} ({{project.countryName}})</h5>
                 <div class="project-links md-block">
                   <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary" md-no-ink>
@@ -144,6 +144,4 @@
     -->
 </div>
 
-<footer class="disclaimer">
-    <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
-</footer>
+<disclaimer></disclaimer>

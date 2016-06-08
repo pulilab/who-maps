@@ -35,7 +35,6 @@ class SkeletonController {
 
     axisClick(axis, id) {
         axis.expand = true;
-        console.debug(id, axis);
         this.changeSpot(id - 2, 0);
     }
 

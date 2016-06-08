@@ -60,6 +60,12 @@ class SetupTests(APITestCase):
             "date": datetime.utcnow(),
             "name": "Test Project1",
             "organisation": self.org.id,
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -105,6 +111,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "countries")
         self.assertContains(response, "strategies")
+        self.assertContains(response, "intervention_areas")
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-list")
@@ -303,6 +310,12 @@ class ProjectTests(SetupTests):
             "date": datetime.utcnow(),
             "name": "Test Project2",
             "organisation": self.org.id,
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -337,6 +350,12 @@ class ProjectTests(SetupTests):
             "date": datetime.utcnow(),
             "name": "Test Project2",
             "organisation": str(Organisation.objects.create(name="org2").id),
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -354,6 +373,9 @@ class ProjectTests(SetupTests):
             "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
             "goals_to_scale": "scale",
             "anticipated_time": "time",
+            "repository": "repos1",
+            "mobile_application": "app1, app2",
+            "wiki": "http://wiki",
             "pre_assessment": [1,0,3,0,4,0],
         }
         url = reverse("project-list")
@@ -381,6 +403,12 @@ class ProjectTests(SetupTests):
             "date": datetime.utcnow(),
             "name": "Test Project2",
             "organisation": self.org.id,
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
