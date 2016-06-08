@@ -69,7 +69,7 @@ class EditProfileController extends Protected {
         this.sentForm = true;
         if (this.editProfileForm.$valid) {
             const profile = _.cloneDeep(this.userProfile);
-            profile.organisation = profile.organisation.id;
+            profile.organisation = this.userProfile.organisation.id;
             const request = profile.id ?
                 this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
