@@ -9,33 +9,40 @@ import commProjects from './Mocks/commProjects.js';
 
 class DashboardModuleController extends Protected {
 
-    constructor($scope, $state, $timeout) {
+    constructor($scope, $state, $timeout, CommonServices) {
 
         super();
         this.scope = $scope;
         this.state = $state;
         this.timeout = $timeout;
         this.EE = window.EE;
-        this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
+        this.cs = CommonServices;
+        this.$onInit = this.onInit;
+        this.$onDestroy = this.onDestroy;
     }
 
     onInit() {
-
-        this.reqCs();
-
         this.defaultOnInit();
         this.projectId = this.state.params.appName;
         this.currentVersion = 0;
+        this.setUserType();
+        if (this.cs.userProfile) {
+            this.adjustUserType(this.cs.userProfile);
+        }
+
         this.service = new DashboardService(this.projectId);
         this.mapService = new DashboardMapService();
 
-        this.fetchAxisData();
-
-        const data = this.cs.getProjectData(this.projectId);
-        this.addResourcesMeta(data);
-        this.timeout(() => { this.fetchProjectData(data); });
-        this.fetchToolkitData();
+        this.cs.getProjectData(this.projectId).then(data => {
+            this.addResourcesMeta(data);
+            this.timeout(() => {
+                this.fetchProjectData(data);
+            });
+        });
+        if (this.userType !== 0) {
+            this.fetchAxisData();
+            this.fetchToolkitData();
+        }
 
         this.commProjects = commProjects;
         this.resizeEvent();
@@ -45,16 +52,16 @@ class DashboardModuleController extends Protected {
             {
                 title: 'Use the existing evidence base to bolster interventions',
                 description: 'Project teams should remember that mHealth is a catalytic' +
-                    ' tool and not often a health Lorem ipsum dolor sit amet,' +
-                    ' consectetur adipisicing elit, sed do eiusmod.',
+                ' tool and not often a health Lorem ipsum dolor sit amet,' +
+                ' consectetur adipisicing elit, sed do eiusmod.',
                 commentNr: 17,
                 imageURL: 'someURL'
             },
             {
                 title: 'Conduct formative work to understand your context',
                 description: 'Formative research is critical for local validation and ' +
-                    'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
-                    ' adipisicing elit, sed do eiusmod',
+                'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
+                ' adipisicing elit, sed do eiusmod',
                 commentNr: 6,
                 imageURL: 'someURL'
             },
@@ -68,14 +75,9 @@ class DashboardModuleController extends Protected {
     }
 
     onDestroy() {
-
         this.defaultOnDestroy();
         this.eventRemoving();
-    }
-
-    reqCs() {
-
-        this.cs = require('../Common/CommonServices');
+        this.userType = 0;
     }
 
     resizeEvent() {
@@ -104,13 +106,14 @@ class DashboardModuleController extends Protected {
     }
 
     fetchProjectData(data) {
-
         // console.debug('ProjectData', data);
         this.EE.emit('country Changed');
         this.projectData = data;
-        this.fetchCountryMap(data.country);
-        this.parseMapData(data.coverage);
-        this.fetchCoverageVersions();
+        if (this.userType !== 0) {
+            this.fetchCountryMap(data.country);
+            this.parseMapData(data.coverage);
+            this.fetchCoverageVersions();
+        }
     }
 
     parseMapData(coverage) {
@@ -469,14 +472,14 @@ class DashboardModuleController extends Protected {
             return Math.floor(Math.random() * 16);
         }
         return data.filter(dom => dom.completion > 0)
-            .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
+                .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
     }
 
     static dashboardControllerFactory() {
-
+        const CommonServices = require('../Common/CommonServices');
         function dashController($scope, $state, $timeout) {
 
-            return new DashboardModuleController($scope, $state, $timeout);
+            return new DashboardModuleController($scope, $state, $timeout, CommonServices);
         }
 
         dashController.$inject = ['$scope', '$state', '$timeout'];

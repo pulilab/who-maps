@@ -1,4 +1,6 @@
 from datetime import timedelta
+
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -7,7 +9,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
-from .models import Organisation
+from .models import Organisation, UserProfile
 
 
 class UserTests(APITestCase):
@@ -90,7 +92,7 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.json())
-        self.assertIn("userprofile", response.json())
+        self.assertIn("user_profile_id", response.json())
 
     def test_login_user_wrong_credentials(self):
         url = reverse("api_token_auth")
@@ -152,7 +154,6 @@ class UserProfileTests(APITestCase):
             "username": "test_user2@gmail.com",
             "password": "123456"}
         response = self.client.post(url, data)
-        url = reverse("userprofile-list")
         self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
         # Create profile.
@@ -163,6 +164,16 @@ class UserProfileTests(APITestCase):
             "organisation": self.org.id,
             "country": "test_country"}
         response = self.client.post(url, data)
+        self.user_profile_id = response.json().get('id')
+
+    def test_obtain_user_profile_returns_id(self):
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('user_profile_id'), UserProfile.objects.get(user__email="test_user2@gmail.com").id)
 
     def test_retrieve_nonexistent_user_profile_on_login(self):
         url = reverse("api_token_auth")
@@ -172,20 +183,8 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.json())
-        self.assertIn("userprofile", response.json())
-        self.assertFalse(response.json().get("userprofile"))
-
-    def test_retrieve_nonexistent_user_profile(self):
-        url = reverse("api_token_auth")
-        data = {
-            "username": "test_user1@gmail.com",
-            "password": "123456"}
-        response = self.client.post(url, data)
-        url = reverse("userprofile-list")
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual([], response.json())
+        self.assertIn("user_profile_id", response.json())
+        self.assertFalse(response.json().get("user_profile_id"))
 
     def test_retrieve_existent_user_profile_on_login(self):
         url = reverse("api_token_auth")
@@ -195,8 +194,8 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.json())
-        self.assertIn("userprofile", response.json())
-        self.assertTrue(response.json().get("userprofile"))
+        self.assertIn("user_profile_id", response.json())
+        self.assertTrue(response.json().get("user_profile_id"))
 
     def test_retrieve_existent_user_profile(self):
         url = reverse("api_token_auth")
@@ -204,11 +203,12 @@ class UserProfileTests(APITestCase):
             "username": "test_user2@gmail.com",
             "password": "123456"}
         response = self.client.post(url, data)
-        url = reverse("userprofile-list")
+        user_profile_id = response.json().get('user_profile_id')
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual([], response.json())
+        self.assertEqual(response.json().get('id'), user_profile_id)
 
     def test_create_user_profile(self):
         url = reverse("api_token_auth")
@@ -249,16 +249,15 @@ class UserProfileTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_update_user_profile(self):
-        url = reverse("userprofile-list")
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
-        data = response.json()[0]
-        url = reverse("userprofile-detail", kwargs={"pk": data["id"]})
+        data = response.json()
         data.update(country="updated country")
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        url = reverse("userprofile-list")
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
-        self.assertEqual(response.json()[0].get("country"), "updated country")
+        self.assertEqual(response.json().get("country"), "updated country")
 
     def test_create_org(self):
         url = reverse("organisation-list")
@@ -293,3 +292,14 @@ class UserProfileTests(APITestCase):
         response = self.client.get(url, {"name": "org"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
+
+    def test_user_profile_api_should_return_organisation_name_id(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("organisation_name" in response.json())
+        self.assertTrue("organisation" in response.json())
+
+    def test_organisation_returns_empty_string_when_no_org_id(self):
+        name = Organisation.get_name_by_id("")
+        self.assertEqual(name, "")

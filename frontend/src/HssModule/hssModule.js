@@ -49,6 +49,42 @@ function config($stateProvider, $compileProvider) {
 
                 }
             }
+        })
+        .state('public-hss', {
+            url: '/hss',
+            parent: 'public',
+            views: {
+                main: {
+                    template: '<hss-module view-mode="true"></hss-module>',
+                    resolve: {
+                        'ctrl': () => {
+                            return su.lazyLoader($compileProvider, 'hssModuleComponent');
+                        },
+                        'continuum': () => {
+                            return su.lazyLoader($compileProvider, 'Continuum/continuumComponent');
+                        },
+                        'interventions': () => {
+                            return su.lazyLoader($compileProvider, 'Interventions/interventionsComponent');
+                        },
+                        'constraints': () => {
+                            return su.lazyLoader($compileProvider, 'Constraints/constraintsComponent');
+                        },
+                        'applications': () => {
+                            return su.lazyLoader($compileProvider, 'Applications/applicationsComponent');
+                        },
+                        'projectScale': () => {
+                            return su.lazyLoader($compileProvider, 'ProjectScale/projectScaleComponent');
+                        },
+                        'projectPartners': () => {
+                            return su.lazyLoader($compileProvider, 'ProjectPartners/projectPartnersComponent');
+                        },
+                        'hint': () => {
+                            return su.lazyLoader($compileProvider, 'Hint/hintComponent');
+                        }
+                    }
+
+                }
+            }
         });
 
 }

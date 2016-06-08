@@ -367,4 +367,16 @@ new-project {
     }
   }
 
+  .custom-error {
+    position:relative;
+    top: -5px;
+    left: 0;
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    opacity: 1;
+    color: rgb(221,44,0);
+  }
+
 }

@@ -41,53 +41,54 @@ class ProjectSearch(ExtendedModel):
         """
         q_objects = []
         results = []
+        query = kwargs["query"]
 
-        selectable_fields = [
+        selectable_fields = {
             "location",
             "project_name",
             "health_topic",
             "technology_platform",
             "organisation"
-        ]
+        }
 
         intersect = selectable_fields & kwargs.keys()
 
         if intersect:
-            if kwargs.get("location", None):
-                q_objects.append(Q(location__icontains=kwargs["query"]))
-            if kwargs.get("project_name", None):
-                q_objects.append(Q(project_name__icontains=kwargs["query"]))
-            if kwargs.get("health_topic", None):
-                q_objects.append(Q(health_topic__icontains=kwargs["query"]))
-            if kwargs.get("technology_platform", None):
-                q_objects.append(Q(technology_platform__icontains=kwargs["query"]))
-            if kwargs.get("organisation", None):
-                q_objects.append(Q(organisation__icontains=kwargs["query"]))
+            if kwargs.get("location"):
+                q_objects.append(Q(location__icontains=query))
+            if kwargs.get("project_name"):
+                q_objects.append(Q(project_name__icontains=query))
+            if kwargs.get("health_topic"):
+                q_objects.append(Q(health_topic__icontains=query))
+            if kwargs.get("technology_platform"):
+                q_objects.append(Q(technology_platform__icontains=query))
+            if kwargs.get("organisation"):
+                q_objects.append(Q(organisation__icontains=query))
         else:
-            q_objects.append(Q(location__icontains=kwargs["query"]))
-            q_objects.append(Q(project_name__icontains=kwargs["query"]))
-            q_objects.append(Q(health_topic__icontains=kwargs["query"]))
-            q_objects.append(Q(technology_platform__icontains=kwargs["query"]))
-            q_objects.append(Q(organisation__icontains=kwargs["query"]))
-            q_objects.append(Q(contact_name__icontains=kwargs["query"]))
-            q_objects.append(Q(contact_email__icontains=kwargs["query"]))
-            q_objects.append(Q(implementation_overview__icontains=kwargs["query"]))
-            q_objects.append(Q(implementing_partners__icontains=kwargs["query"]))
-            q_objects.append(Q(geographic_coverage__icontains=kwargs["query"]))
-            q_objects.append(Q(implementation_dates__icontains=kwargs["query"]))
-            q_objects.append(Q(intervention_areas__icontains=kwargs["query"]))
-            q_objects.append(Q(repository__icontains=kwargs["query"]))
-            q_objects.append(Q(mobile_application__icontains=kwargs["query"]))
-            q_objects.append(Q(wiki__icontains=kwargs["query"]))
+            q_objects.append(Q(location__icontains=query))
+            q_objects.append(Q(project_name__icontains=query))
+            q_objects.append(Q(health_topic__icontains=query))
+            q_objects.append(Q(technology_platform__icontains=query))
+            q_objects.append(Q(organisation__icontains=query))
+            q_objects.append(Q(contact_name__icontains=query))
+            q_objects.append(Q(contact_email__icontains=query))
+            q_objects.append(Q(implementation_overview__icontains=query))
+            q_objects.append(Q(implementing_partners__icontains=query))
+            q_objects.append(Q(geographic_coverage__icontains=query))
+            q_objects.append(Q(implementation_dates__icontains=query))
+            q_objects.append(Q(intervention_areas__icontains=query))
+            q_objects.append(Q(repository__icontains=query))
+            q_objects.append(Q(mobile_application__icontains=query))
+            q_objects.append(Q(wiki__icontains=query))
 
         filter_exp = functools.reduce(operator.or_, q_objects)
 
         for ps in cls.objects.filter(filter_exp):
             results.append({
-                "id": ps.id,
+                "id": ps.project.id,
                 "name": ps.project_name,
-                "organisation": ps.project.data.get('organisation'),
-                "countryName": Country.objects.get(id=ps.project.data.get('country')).name
+                "organisation_name": ps.project.get_organisation().name,
+                "country_name": Country.objects.get(id=ps.project.data.get('country')).name
             })
         return results
 
@@ -101,7 +102,7 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.location = Country.objects.get(id=instance.data["country"]).name
     project_search.project_name = instance.data.get("name", "")
     project_search.technology_platform = ", ".join([x for x in instance.data.get("technology_platforms", "")])
-    project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation", ""))
+    project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation"))
     project_search.contact_name = instance.data.get("contact_name", "")
     project_search.contact_email = instance.data.get("contact_email", "")
     project_search.implementation_overview = instance.data.get("implementation_overview", "")

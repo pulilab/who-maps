@@ -4,6 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    url(r"^projects/(?P<project_id>\d+)/toolkit/score/$", view=views.ScoreView.as_view(), name="toolkit-scores"),
-    url(r"^projects/(?P<project_id>\d+)/toolkit/data/$", view=views.get_toolkit_data, name="toolkit-data"),
+    url(r"^projects/(?P<project_id>\d+)/toolkit/score/$", view=views.ToolkitViewSet.as_view({"post": "create"}), name="toolkit-scores"),
+    url(r"^projects/(?P<project_id>\d+)/toolkit/data/$", view=views.ToolkitViewSet.as_view({"get": "retrieve"}), name="toolkit-data"),
 ]

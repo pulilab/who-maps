@@ -9,13 +9,29 @@ const su = new StaticUtilities('Dashboard');
 
 function config($stateProvider, $compileProvider) {
     $stateProvider
-        .state(moduleName,
-        {
+        .state(moduleName, {
             url: '/dashboard',
             parent: 'app',
             views: {
                 main: {
                     template: '<dashboard></dashboard>',
+                    resolve: {
+                        'dashboard': () => {
+                            return su.lazyLoader($compileProvider, 'dashboardComponent');
+                        },
+                        'linechart': () => {
+                            return su.lazyLoader($compileProvider, 'Linechart/linechart');
+                        }
+                    }
+                }
+            }
+        })
+        .state('public-dashboard', {
+            url: '/dashboard',
+            parent: 'public',
+            views: {
+                main: {
+                    template: '<dashboard view-mode="true"></dashboard>',
                     resolve: {
                         'dashboard': () => {
                             return su.lazyLoader($compileProvider, 'dashboardComponent');

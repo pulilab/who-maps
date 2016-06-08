@@ -72,7 +72,7 @@ class NewProjectService extends AuthApi {
     }
 
     deleteFile(fileId) {
-        return this.del(`files/${fileId}/`);
+        return this.del(`files/${fileId}/delete/`);
     }
 
     downloadFile(file) {

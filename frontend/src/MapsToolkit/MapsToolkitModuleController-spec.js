@@ -21,6 +21,12 @@ const $scope = {
     $evalAsync: () => {}
 };
 
+const CommonService = {
+    userProfile: {
+        viewer: [],
+        member: []
+    }
+};
 const mockData = require('./Resource/mockData.json');
 
 const mockInvariantData = () => {
@@ -36,6 +42,7 @@ describe('MapsToolkitController', () => {
         spyOn(MapsToolkitModuleController.prototype, 'handleChangeAxis').and.callThrough();
         spyOn(MapsToolkitModuleController.prototype, 'handleChangeDomain').and.callThrough();
         mc = new MapsToolkitModuleController.mapsControllerFactory()($scope, $state, mockData);
+        mc.cs = CommonService;
         mc.$onInit();
         mc.processAxesData(mockInvariantData());
 
@@ -92,6 +99,7 @@ describe('MapsToolkitController', () => {
     });
 
     it('should have a function that save the answer selected', () => {
+        mc.viewMode = false;
         expect(mc.score).toBe(2);
         spyOn(mc.ms, 'saveAnswer');
         mc.setAnswer(0, 0, 0);
