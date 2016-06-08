@@ -5,6 +5,8 @@
     margin: 0 auto 0 auto;
     padding: 20px 30px 0 30px;
     max-width: 1440px;
+    min-height: calc(100vh - 120px);
+    justify-content: space-between;
 
     .dashrow {
 
