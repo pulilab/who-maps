@@ -1,12 +1,10 @@
 from django.db import transaction
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view, authentication_classes
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 
 from core.views import TeamTokenAuthMixin, CheckProjectAccessMixin, get_object_or_400
+from rest_framework.viewsets import GenericViewSet
 from search.signals import intervention_save
 from project.models import Project
 
@@ -15,7 +13,7 @@ from .models import HSS
 from . import serializers
 
 
-class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
+class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.BubbleSerializer
 
     def cmp_bubbles(self, bubble1, bubble2):
@@ -35,11 +33,10 @@ class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPI
                 and bubble1["column_id"] == bubble2["column_id"]
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Bubbles.
         """
-        project_id = kwargs.get("project_id", None)
         self.check_project_permission(request, project_id)
 
         serializer = self.get_serializer(data=request.data, many=True)
@@ -68,15 +65,14 @@ class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPI
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContinuumView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
+class ContinuumView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.ContinuumSerializer
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Continuum.
         """
-        project_id = kwargs.get("project_id", None)
         self.check_project_permission(request, project_id)
 
         serializer = self.get_serializer(data=request.data)
@@ -90,15 +86,14 @@ class ContinuumView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.Create
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ConstraintView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
+class ConstraintView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.ConstraintSerializer
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Constraints.
         """
-        project_id = kwargs.get("project_id", None)
         self.check_project_permission(request, project_id)
 
         serializer = self.get_serializer(data=request.data, many=True)
@@ -125,15 +120,14 @@ class ConstraintView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.Creat
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class InterventionView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
+class InterventionView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.InterventionSerializer
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Interventions.
         """
-        project_id = kwargs.get("project_id", None)
         self.check_project_permission(request, project_id)
 
         serializer = self.get_serializer(data=request.data)
@@ -149,7 +143,7 @@ class InterventionView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.Cre
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TaxonomyView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
+class TaxonomyView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.TaxonomySerializer
 
     def cmp_taxonomies(self, tax1, tax2):
@@ -168,11 +162,10 @@ class TaxonomyView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateA
                 and tax1["subapp_id"] == tax2["subapp_id"]
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Taxonomies.
         """
-        project_id = kwargs.get("project_id", None)
         self.check_project_permission(request, project_id)
 
         serializer = self.get_serializer(data=request.data)
