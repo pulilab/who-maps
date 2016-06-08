@@ -97,7 +97,6 @@ class NewProjectController extends ProjectDefinition {
                 this.addDefaultEmpty();
                 this.scope.$evalAsync();
             });
-        console.log(this.project);
         this.scope.$evalAsync();
 
     }
@@ -349,7 +348,6 @@ class NewProjectController extends ProjectDefinition {
         const vm = this;
         this.ns.uploadFile(data, type, this.projectId)
             .then(result => {
-                console.log(result);
                 vm.project.files.splice(-2, 0, result.data[0]);
                 vm.scope.$evalAsync();
             });

@@ -32,7 +32,6 @@ class EditProfileController extends Protected {
     }
 
     handleDataLoad() {
-        console.log(this.userProfile);
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
@@ -74,13 +73,23 @@ class EditProfileController extends Protected {
                 this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
                 if (result.success) {
-                    window.location.reload();
+                    this.handleSuccessSave(result);
                 }
                 else {
                     this.handleResponse(result.data);
                 }
             });
         }
+    }
+
+    handleSuccessSave(result) {
+        this.storage.set('user_profile_id', result.data.id);
+        const reset = this.cs.reset();
+        this.cs.userProfileId = result.data.id;
+        reset.loadedPromise.then(()=> {
+            this.userProfile = this.cs.userProfile;
+            this.scope.$evalAsync();
+        });
     }
 
     handleResponse(response) {
