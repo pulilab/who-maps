@@ -4,16 +4,16 @@ from django.conf import settings
 from django.utils import timezone
 from django.core import mail
 from django.template import loader
-from celery.decorators import periodic_task
 from celery.utils.log import get_task_logger
 
 from project.models import Project
 from toolkit.models import Toolkit
+from scheduler.celery import app
 
 logger = get_task_logger(__name__)
 
 
-@periodic_task(run_every=timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD), name="send_daily_toolkit_digest")
+@app.task(name="send_daily_toolkit_digest")
 def send_daily_toolkit_digest():
     """
     Sends daily digest on maps toolkit changes to team members.

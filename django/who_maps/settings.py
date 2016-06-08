@@ -182,7 +182,15 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
-TOOLKIT_DIGEST_PERIOD = 1  # hours
+TOOLKIT_DIGEST_PERIOD = 24  # hours
+
+if SITE_ID in [3]:
+    CELERYBEAT_SCHEDULE = {
+        "send_daily_toolkit_digest": {
+            "task": 'send_daily_toolkit_digest',
+            "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
+        }
+    }
 
 # Mailgun settings
 EMAIL_USE_TLS = True
