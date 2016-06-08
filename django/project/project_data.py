@@ -83,26 +83,22 @@ project_structure = {
             "IWG mHealth Catalytic Grant Mechanism",
             "Saving Lives at Birth",
             "USAID Developmenet Innovation Ventures"
+        ],
+        "intervention_areas": [
+            "Child health",
+            "Family Planning",
+            "HIV/AIDS",
+            "Infectious Diseases",
+            "Malaria and other vector-borne diseases",
+            "Maternal health",
+            "Newborn heath",
+            "Non Communicable Diseases",
+            "Nutrition/Food Security",
+            "Parasitic diseases",
+            "Primary Care",
+            "Sexual and Reproductive Health",
+            "Tuberculosis",
+            "Violence",
+            "Water, Sanitation, and Hygiene"
         ]
-}
-
-
-project_data = {
-    "date": "",
-    "name": "",
-    "organisation": "",  # Should be text instead of ID - no Orgs in MVP
-    "strategy": [],   # Can hold 'other' fields
-    "country": 0,
-    "technology_platforms": [],  # Can hold 'other' fields
-    "licenses": [],  # Can hold 'other' fields
-    "application": [],
-    "coverage": [],
-    "started": "",
-    "donors": [],  # Should be text instead of ID - no Donors in MVP
-    "reports": [],
-    "publications": [],
-    "pipeline": [],  # Can hold 'other' fields
-    "goals_to_scale": "",
-    "anticipated_time": "",
-    "pre_assessment": [0,0,0,0,0,0],
 }

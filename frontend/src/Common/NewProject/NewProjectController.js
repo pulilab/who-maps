@@ -23,6 +23,7 @@ class NewProjectController extends ProjectDefinition {
         this.setStrategy = this.setStrategy.bind(this);
         this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
+        this.getUsers = this.getUsers.bind(this);
     }
 
     onInit() {
@@ -34,7 +35,25 @@ class NewProjectController extends ProjectDefinition {
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.handleDataLoad();
+            this.ns.getGroups(this.state.params.appName)
+                .then(groups => {
+                    this.team = this.editMode ? groups.data.team : [];
+                    this.viewers = this.editMode ? groups.data.viewers : [];
+                    this.allUsers = groups.data.user_profiles;
+                });
         }
+
+    }
+
+    getUsers(criteria) {
+        return this.allUsers.filter(el => {
+            return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
+                el.organisation__name.toLowerCase().includes(criteria.toLowerCase());
+        });
+    }
+
+    putGroups() {
+        this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
     importIconTemplates() {
@@ -213,6 +232,7 @@ class NewProjectController extends ProjectDefinition {
             }
             else {
                 this.updateForm(processedForm);
+                this.putGroups();
             }
         }
     }
@@ -362,12 +382,25 @@ class NewProjectController extends ProjectDefinition {
         this.handleCustomError('name');
         this.ns.autocompleteProjectName(this.project.name)
             .then(result => {
-                this.similarProject = result[0];
+                _.forEach(result, project => {
+                    project.isOwn = _.find(this.cs.projectList, pj => {
+                        return pj.id === project.id;
+                    });
+                });
+                this.similarProject = result;
                 if (result && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
                     this.setCustomError('name', 'Project name is not unique');
                 }
                 this.scope.$evalAsync();
             });
+    }
+
+    openSimilarProject(project, event) {
+        event.preventDefault();
+        if (project.isOwn) {
+            this.state.go('dashboard', { appName: project.id });
+        }
+
     }
 
 

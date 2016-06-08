@@ -17,10 +17,7 @@ const hashCode = (str) => {
 };
 
 const hashArguments = args => {
-    let hash = void 0;
-    args.forEach(item => {
-        hash += JSON.stringify(item);
-    });
+    let hash = JSON.stringify(args);
     hash += Date.now();
     return hashCode(hash);
 };
@@ -30,8 +27,6 @@ let requests = {
     ended: 0
 };
 
-// let emitting = false;
-// const waitTime = 200;
 let progression = 0;
 let firstRequest = false;
 let hasStopped = true;
@@ -105,18 +100,6 @@ const progressiveEmit = () => {
 
 };
 
-// const delayedEmit = () => {
-//     if (!emitting || requests.started === requests.ended && requests.started !== 0) {
-//         emitting = true;
-//         setTimeout(() => {
-//             const detail = JSON.parse(JSON.stringify(requests));
-//             emit(detail);
-//             reset();
-//             emitting = false;
-//         }, waitTime);
-//     }
-// };
-
 const emitEvent = () => {
     progressiveEmit();
 };
@@ -149,3 +132,16 @@ window.fetch = (...args) => {
 };
 
 
+/* eslint func-names:0 */
+XMLHttpRequest.prototype.realSend = XMLHttpRequest.prototype.send;
+XMLHttpRequest.prototype.send = function(value) {
+    const hash = hashArguments(this);
+    this.addEventListener('progress', function() {
+        preRequest(hash);
+    }, false);
+
+    this.addEventListener('load', function() {
+        postRequest(hash);
+    }, false);
+    this.realSend(value);
+};

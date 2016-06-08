@@ -10,7 +10,7 @@
 
                 <div flex layout="column" class="dash-stat-column">
 
-                    <md-card class="dash-stat-card longer">
+                    <md-card md-whiteframe="2" class="dash-stat-card longer">
 
                         <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
                         <span class="dash-stat-label">Version</span>
@@ -28,7 +28,7 @@
                     </md-card>
 
 
-                    <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
+                    <md-card md-whiteframe="2" class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
 
                         <md-icon class="material-icons dash-trendicon">visibility</md-icon>
                         <span class="dash-stat-nr dash-stat-nr-follow">#</span>
@@ -57,7 +57,7 @@
             <div flex class="dashsection dash-cardholder" layout="column">
 
                 <div class="dash-subhead">PROJECT DETAILS</div>
-                <md-card flex>
+                <md-card md-whiteframe="2" flex>
 
                     <md-tabs md-border-bottom md-dynamic-height >
 
@@ -207,7 +207,7 @@
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
-            <md-card flex>
+            <md-card md-whiteframe="2" flex>
 
                 <md-tabs md-border-bottom md-dynamic-height class="perf-tab">
 
@@ -246,13 +246,15 @@
 
                 <md-card-header class="unselectable" ng-class="'axis' + (vm.improveArray[vm.improveNr].axis + 1)" layout="row" layout-align="space-between center">
 
-                    <img ng-src="src/Dashboard/img/icon-domain-{{vm.improveNr + 1}}.svg"></img>
+                    <img ng-src="src/Dashboard/img/icon-domain-{{vm.improveNr + 1}}.svg" />
 
                     <h4 flex>You've scored {{vm.improveArray[vm.improveNr].percentage}}% in <span class="domain-name">{{vm.improveArray[vm.improveNr].name}}</span> domain!</h4>
 
                     <ssmenu
                         searchable="false"
                         placeholder="Go to domain"
+                        class="small"
+                        multiple="false"
 
                     ></ssmenu>
                     <md-icon ng-click="vm.improveNr = (15 + vm.improveNr) % 16">chevron_left</md-icon>
@@ -347,10 +349,6 @@
 
     </div>
 
-    <div class="disclaimer">
-
-        <span>Disclaimer:</span> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
-
-    </div>
+    <disclaimer></disclaimer>
 
 </div>

@@ -7,6 +7,11 @@ class LoginModuleController {
         this.ls = new LoginService();
         this.EE = window.EE;
         this.scope = $scope;
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+    }
+
+    onInit() {
         this.user = {
             username: '',
             password: ''
@@ -16,6 +21,10 @@ class LoginModuleController {
         };
     }
 
+    onDestroy() {
+        this.user = void 0;
+    }
+
     calculateHeight() {
         const contentHeight = window.innerHeight - 48;
         return contentHeight + 'px';
@@ -23,28 +32,32 @@ class LoginModuleController {
 
     login() {
         const vm = this;
-        if (this.loginForm.$valid) {
-            this.ls.login(this.user)
+        if (vm.loginForm.$valid) {
+            vm.ls.login(vm.user)
                 .then(result => {
                     if (result) {
-                        this.user.password = void 0;
-                        this.ls.storeUser(this.user);
-                        this.EE.emit('login');
+                        const user = _.cloneDeep(vm.user);
+                        user.password = void 0;
+                        vm.ls.storeUser(user);
+                        vm.EE.emit('login');
                     }
-                }, data => {
-                    _.forEach(data, (item, key) => {
-                        if (vm.loginForm[key]) {
-                            vm.loginForm[key].customError = item;
-                            vm.loginForm[key].$setValidity('custom', false);
-
-                        }
-                        else {
-                            vm.loginForm[key] = item;
-                        }
-                    });
-                    vm.scope.$evalAsync();
-                });
+                }, vm.handleDataError.bind(vm));
         }
+    }
+
+    handleDataError(data) {
+        const vm = this;
+        _.forEach(data, (item, key) => {
+            if (vm.loginForm[key]) {
+                vm.loginForm[key].customError = item;
+                vm.loginForm[key].$setValidity('custom', false);
+
+            }
+            else {
+                vm.loginForm[key] = item;
+            }
+        });
+        vm.scope.$evalAsync();
     }
 
 

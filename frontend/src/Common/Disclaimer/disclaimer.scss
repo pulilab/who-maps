@@ -1,0 +1,14 @@
+@import "../../variables.scss";
+
+disclaimer footer {
+    margin: 30px 50px;
+    font-size: 10px;
+    text-align: center;
+    color: $text-disabled;
+
+    span {
+
+        font-weight: 500;
+        margin: 0;
+    }
+}

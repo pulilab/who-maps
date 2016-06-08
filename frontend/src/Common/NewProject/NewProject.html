@@ -31,11 +31,12 @@
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
                         </div>
                     </md-input-container>
-                    <!-- TODO: Show it if it has at least one item -->
-                    <div flex="30" class="similar-project" ui-sref="dashboard({appName: vm.similarProject.id})">
+                    <div flex="30" class="similar-project" ng-show="vm.similarProject.length > 0" >
                         <span class="similar-label">Similar Project Name(s)</span>
-                        <a href="#" class="similar-link">{{vm.similarProject.name}}</a>
-                        <!-- TODO: separate multiple projects with commas -->
+                        <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
+                            <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a>
+                            <span ng-if="!$last">,</span>
+                        </div>
                     </div>
                 </div>
                 <md-input-container >
@@ -48,6 +49,37 @@
                         <div ng-message="custom" ng-repeat="error in vm.newProjectForm.organisation.customError">{{error}} </div>
                     </div>
                 </md-input-container>
+
+                <div class="chipper" ng-if="vm.editMode">
+                    <label>Team members</label>
+                    <md-contact-chips
+                        placeholder="Editors of this project"
+                        secondary-placeholder="add new team member"
+                        ng-model="vm.team"
+                        md-contacts="vm.getUsers($query)"
+                        md-contact-name="name"
+                        md-contact-email="organisation__name"
+                        md-require-match="true"
+                        md-highlight-flags="i"
+                        filter-selected="true">
+                    </md-contact-chips>
+                </div>
+
+                <div class="chipper" ng-if="vm.editMode">
+                    <label>Superior viewers</label>
+                    <md-contact-chips
+                        placeholder="See all the projects data"
+                        secondary-placeholder="add new viewer"
+                        ng-model="vm.viewers"
+                        md-contacts="vm.getUsers($query)"
+                        md-contact-name="name"
+                        md-contact-email="organisation__name"
+                        md-require-match="true"
+                        md-highlight-flags="i"
+                        filter-selected="true">
+                    </md-contact-chips>
+                </div>
+
 
                 <ssmenu
 
@@ -422,7 +454,6 @@
         </projectcomp>
 
     </section>
-    <footer class="disclaimer">
-        <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
-    </footer>
+
+    <disclaimer></disclaimer>
 </div>

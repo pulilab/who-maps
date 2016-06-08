@@ -1,7 +1,7 @@
 
 <div id="clv-container" layout="column">
 
-	<md-card class="rel">
+	<md-card md-whiteframe="2" class="rel">
         <div class="littleheader">COUNTRY LEVEL VIEW</div>
         <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
@@ -11,7 +11,7 @@
 
             	<div class="tab-wrap" id="map" ng-class="{'emptyy': !vm.projectsData}">
 
-					<md-card class="countrychoser">
+					<md-card md-whiteframe="2" class="countrychoser">
 						<md-input-container>
 				        	<md-select
 				        		placeholder='Select a country'
@@ -37,7 +37,7 @@
 
 					<div class="headercont" layout="row">
 
-						<md-card class="countrychoser">
+						<md-card md-whiteframe="2" class="countrychoser">
 							<md-input-container>
 					        	<md-select
 					        		placeholder='Select a country'
@@ -97,8 +97,6 @@
         </md-tabs>
 	</md-card>
 
-	<div class="disclaimer">
-	    <span>Disclaimer:</span> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
-	</div>
+	<disclaimer></disclaimer>
 </div>
 

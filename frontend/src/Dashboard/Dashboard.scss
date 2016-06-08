@@ -408,10 +408,13 @@
 
                             color: white;
                         }
+
+                        md-select-value {
+                            border-bottom-width: 0;
+                        }
                     }
 
                     md-icon {
-                        // font-size: 14px;
                         margin-left: -15px;
                         margin-right: 15px;
                         color: white;
@@ -543,20 +546,6 @@
                     }
                 }
             }
-        }
-    }
-
-    .disclaimer {
-
-        margin: 30px 50px;
-        font-size: 10px;
-        text-align: center;
-        color: $text-disabled;
-
-        span {
-
-            font-weight: 500;
-            margin: 0;
         }
     }
 }

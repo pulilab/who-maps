@@ -1,0 +1,11 @@
+@import '../../variables';
+@import '../../mixins';
+
+email-confirmation {
+
+  md-content {
+    padding: 40px;
+    min-width: 440px;
+    max-width: 440px;
+  }
+}
