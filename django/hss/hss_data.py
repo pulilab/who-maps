@@ -276,77 +276,51 @@ continuum = [
     {
         'id': 0,
         'mother': {
-            'title': 'Adolescence',
+            'title': 'Identify target populations',
             'span': 1,
         },
-        'child': {
-            'title': None,
-            'span': 1,
-        }
     },
     {
         'id': 1,
         'mother': {
-            'title': 'Before Pregnancy',
+            'title': 'Health promotion and intervention',
             'span': 1,
         },
-        'child': {
-            'title': None,
-            'span': 1,
-        }
     },
     {
         'id': 2,
         'mother': {
-            'title': 'Pregnancy',
+            'title': 'Detection and diagnosis',
             'span': 1,
         },
-        'child': {
-            'title': None,
-            'span': 1,
-        }
     },
     {
         'id': 3,
         'mother': {
-            'title': 'Birth',
+            'title': 'Linkage to care',
             'span': 1,
         },
-        'child': {
-            'title': None,
-            'span': 1,
-        }
     },
     {
         'id': 4,
         'mother': {
-            'title': 'Postpartum Mother',
+            'title': 'Management and quality of care',
             'span': 1,
         },
-        'child': {
-            'title': 'Postnatal Newborn',
-            'span': 1,
-        }
     },
     {
         'id': 5,
         'mother': {
-            'title': 'Maternal Health',
-            'span': 2,
-        },
-        'child': {
-            'title': 'Infancy',
+            'title': 'Follow and retention to care',
             'span': 1,
-        }
+        },
     },
     {
         'id': 6,
         'mother': {
-        },
-        'child': {
-            'title': 'Childhood',
+            'title': 'Coordination of care',
             'span': 1,
-        }
+        },
     }
 ]
 

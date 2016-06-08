@@ -17,16 +17,17 @@ class ContinuumController {
         this.gridLoading = false;
         this.editMode = false;
         this.isFixed = false;
-        this.rowHeight = 51;
-        this.helperRealHeight = (this.rowHeight * 3) + 'px';
+        this.rowHeight = 60;
+        this.numberOfRow = 1;
+        this.helperRealHeight = (this.rowHeight * this.numberOfRow) + 'px';
         this.classGenerator = this.classGenerator.bind(this);
         vm.hs = this.service;
         vm.showEditModeSpinner = false;
         vm.firstRow = this.firstRowGenerator();
         vm.motherRow = this.motherRowGenerator();
-        vm.childRow = this.childRowGenerator();
+        // vm.childRow = this.childRowGenerator();
         vm.motherRow.forEach(tile => {
-            vm.checkColumnActivation(tile);
+            // vm.checkColumnActivation(tile);
         });
 
     }
@@ -113,28 +114,28 @@ class ContinuumController {
             .value();
     }
 
-    childRowGenerator() {
-        const self = this;
-        return _.chain(this.tiles)
-            .range()
-            .map(value => {
-                return {
-                    type: 'child',
-                    content: self.structure[value].child.title,
-                    className: 'child',
-                    colSpan: 1,
-                    rowSpan: 1,
-                    columnId: value,
-                    activated: self.data[value].child,
-                    empty: !self.structure[value].child.title,
-                    clickHandler: this.toggleColumnActivationClick.bind(self),
-                    introName: 'child_middle_' + value,
-                    invisible: false,
-                    classGenerator: this.classGenerator
-                };
-            })
-            .value();
-    }
+    // childRowGenerator() {
+    //     const self = this;
+    //     return _.chain(this.tiles)
+    //         .range()
+    //         .map(value => {
+    //             return {
+    //                 type: 'child',
+    //                 content: self.structure[value].child.title,
+    //                 className: 'child',
+    //                 colSpan: 1,
+    //                 rowSpan: 1,
+    //                 columnId: value,
+    //                 activated: self.data[value].child,
+    //                 empty: !self.structure[value].child.title,
+    //                 clickHandler: this.toggleColumnActivationClick.bind(self),
+    //                 introName: 'child_middle_' + value,
+    //                 invisible: false,
+    //                 classGenerator: this.classGenerator
+    //             };
+    //         })
+    //         .value();
+    // }
 
     classGenerator(tile) {
         const classes = [];
