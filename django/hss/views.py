@@ -6,20 +6,13 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from core.views import TeamTokenAuthMixin, get_object_or_400
+from core.views import TeamTokenAuthMixin, CheckProjectAccessMixin, get_object_or_400
 from search.signals import intervention_save
 from project.models import Project
 
 from .hss_data import interventions, applications, taxonomies, continuum
 from .models import HSS
 from . import serializers
-
-
-class CheckProjectAccessMixin(object):
-
-    def check_project_permission(self, request, project_id):
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        self.check_object_permissions(request, project)
 
 
 class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
