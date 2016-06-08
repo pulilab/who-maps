@@ -46,7 +46,12 @@ def deploy():
             # build
             run('docker-compose build')
             run('docker-compose down')
-            run('docker-compose up -d')
+            if env.name == 'dev':
+                run("docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d")
+            elif env.name == 'staging':
+                run("docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d")
+            else:
+                run("docker-compose up -d")
 
             # drop & create DB
             time.sleep(10)
@@ -134,7 +139,12 @@ def down():
 
 
 def up():
-    local("docker-compose up -d")
+    if env.name == 'dev':
+        local("docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d")
+    elif env.name == 'staging':
+        local("docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d")
+    else:
+        local("docker-compose up -d")
     time.sleep(5)
     rebuild_db()
 
