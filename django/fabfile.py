@@ -37,11 +37,13 @@ def deploy():
         time.sleep(20)
 
         if env.name == 'dev':
-            run('docker-compose -f docker-compose.yml -f docker-compose.dev.yml restart')
+            options = "-f {1}/docker-compose.yml -f {1}/docker-compose.dev.yml ".format(env.project_root)
         elif env.name == 'staging':
-            run('docker-compose -f docker-compose.yml -f docker-compose.test.yml restart')
+            options = "-f {1}/docker-compose.yml -f {1}/docker-compose.test.yml ".format(env.project_root)
         else:
-            run('docker-compose restart')
+            options = ""
+
+        run('docker-compose restart'.format(options))
 
         time.sleep(5)
 
@@ -51,12 +53,6 @@ def deploy():
             # backup DB
             _backup_db()
             # build
-            if env.name == 'dev':
-                options = "-f ../docker-compose.yml -f ../docker-compose.dev.yml "
-            elif env.name == 'staging':
-                options = "-f ../docker-compose.yml -f ../docker-compose.test.yml "
-            else:
-                options = ""
             run('docker-compose {}build'.format(options))
             run('docker-compose {}down'.format(options))
             run("docker-compose {}up -d".format(options))
