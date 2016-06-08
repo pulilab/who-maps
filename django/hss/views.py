@@ -6,14 +6,23 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from core.views import TokenAuthMixin, get_object_or_400
+from core.views import TeamTokenAuthMixin, get_object_or_400
 from search.signals import intervention_save
+from project.models import Project
+
 from .hss_data import interventions, applications, taxonomies, continuum
 from .models import HSS
 from . import serializers
 
 
-class BubbleView(TokenAuthMixin, generics.CreateAPIView):
+class CheckProjectAccessMixin(object):
+
+    def check_project_permission(self, request, project_id):
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        self.check_object_permissions(request, project)
+
+
+class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
     serializer_class = serializers.BubbleSerializer
 
     def cmp_bubbles(self, bubble1, bubble2):
@@ -37,10 +46,11 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
         """
         Overrides create to insert and update Bubbles.
         """
+        project_id = kwargs.get("project_id", None)
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data, many=True)
         if serializer.is_valid():
-            # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each bubble in the update request, insert if not exists,
             # update if exists.
@@ -65,7 +75,7 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
+class ContinuumView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
     serializer_class = serializers.ContinuumSerializer
 
     @transaction.atomic
@@ -73,10 +83,12 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
         """
         Overrides create to insert and update Continuum.
         """
+        project_id = kwargs.get("project_id", None)
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             hss.data["continuum"][serializer.validated_data["column_id"]].update(**serializer.validated_data)
             hss.save()
@@ -85,7 +97,7 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
+class ConstraintView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
     serializer_class = serializers.ConstraintSerializer
 
     @transaction.atomic
@@ -93,10 +105,12 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
         """
         Overrides create to insert and update Constraints.
         """
+        project_id = kwargs.get("project_id", None)
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data, many=True)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each constraint in the update request, insert if not exists,
             # update if exists.
@@ -118,7 +132,7 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class InterventionView(TokenAuthMixin, generics.CreateAPIView):
+class InterventionView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
     serializer_class = serializers.InterventionSerializer
 
     @transaction.atomic
@@ -126,10 +140,12 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
         """
         Overrides create to insert and update Interventions.
         """
+        project_id = kwargs.get("project_id", None)
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Update the column with the intervention.
             hss.data["interventions"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
@@ -140,7 +156,7 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
+class TaxonomyView(TeamTokenAuthMixin, CheckProjectAccessMixin, generics.CreateAPIView):
     serializer_class = serializers.TaxonomySerializer
 
     def cmp_taxonomies(self, tax1, tax2):
@@ -163,10 +179,12 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
         """
         Overrides create to insert and update Taxonomies.
         """
+        project_id = kwargs.get("project_id", None)
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             tax_update = dict(serializer.validated_data)
             # Check the constraint in the update request, insert if not exists,
