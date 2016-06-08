@@ -58,11 +58,6 @@ describe('HssModuleController', () => {
         expect(window.EE.emit).toHaveBeenCalled();
     });
 
-    it('answers to questions regarding last two column having any content', () => {
-        spyOn(window.EE, 'emit');
-        cc.onLastTwoContentAsked();
-        expect(window.EE.emit).toHaveBeenCalled();
-    });
 
     it('simply forwards simple activation requests', () => {
         spyOn(window.EE, 'emit');
