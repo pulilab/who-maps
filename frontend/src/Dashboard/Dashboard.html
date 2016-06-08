@@ -15,7 +15,7 @@
 
                 <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
 
-                    <md-card class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
+                    <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
 
                         <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
                         <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
@@ -35,25 +35,26 @@
 
 
                     <!-- FOLLOWING -->
-                    <!-- <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
+                        <!-- <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
 
-                    <md-icon class="material-icons dash-trendicon">visibility</md-icon>
-                    <span class="dash-stat-nr dash-stat-nr-follow">#</span>
-                    <span class="dash-stat-label">Followers</span>
 
-                    <div class="gray gr-follow" ng-if="true" layout="column" layout-align="space-around stretch">
+                        <md-icon class="material-icons dash-trendicon">visibility</md-icon>
+                        <span class="dash-stat-nr dash-stat-nr-follow">#</span>
+                        <span class="dash-stat-label">Followers</span>
 
-                        <span class="desc">
-                            Push button to follow this project:
-                        </span>
+                        <div class="gray gr-follow" ng-if="true" layout="column" layout-align="space-around stretch">
 
-                        <md-button class="md-raised follow-button" ng-click="">
-                            <span class="text">follow#</span>
-                        </md-button>
+                            <span class="desc">
+                                Push button to follow this project:
+                            </span>
 
-                    </div>
+                            <md-button class="md-raised follow-button" ng-click="">
+                                <span class="text">follow#</span>
+                            </md-button>
 
-                </md-card> -->
+                        </div>
+
+                    </md-card> -->
                     <!-- <followers class="hten" trend="'down'" number="87"></followers> -->
                     <donors class="hten" number="vm.projectData.donors.length"></donors>
 
@@ -63,7 +64,7 @@
             <div flex class="dashsection dash-cardholder" layout="column">
 
                 <div class="dash-subhead">PROJECT DETAILS</div>
-                <md-card flex>
+                <md-card md-whiteframe="2" flex>
 
                     <md-tabs md-border-bottom md-dynamic-height>
 
@@ -135,7 +136,7 @@
                         <md-tab label="axis" ng-if="vm.userType > 1">
                             <div>
                                 <linechart
-                                        showdotted="(vm.userType === 3)">
+                                    showdotted="(vm.userType === 3)">
                                 </linechart>
                             </div>
                         </md-tab>
@@ -143,8 +144,8 @@
                         <md-tab label="domains" ng-if="vm.userType > 1">
                             <div>
                                 <linechart
-                                        showdotted="(vm.userType === 3)"
-                                        datachooser="true"
+                                    showdotted="(vm.userType === 3)"
+                                    datachooser="true"
                                 ></linechart>
                             </div>
                         </md-tab>
@@ -153,8 +154,8 @@
 
                             <div class="dash-tech">
                                 <div
-                                        class="upper"
-                                        layout="column">
+                                    class="upper"
+                                    layout="column">
 
                                     <div flex layout="row">
                                         <md-icon class="material-icons">device_hub</md-icon>
@@ -196,10 +197,10 @@
 
                                 <h3>PROJECT REPORT</h3>
                                 <md-card
-                                        class="resource"
-                                        ng-repeat="report in vm.resources.reports"
-                                        layout="row"
-                                        layout-align="space-around stretch">
+                                    class="resource"
+                                    ng-repeat="report in vm.resources.reports"
+                                    layout="row"
+                                    layout-align="space-around stretch">
 
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
                                         <h4>{{report.title || report.filename}}</h4>
@@ -215,10 +216,10 @@
 
                                 <h3>ASSOCIATED JOURNAL ARTICLES</h3>
                                 <md-card
-                                        class="resource"
-                                        ng-repeat="article in vm.resources.articles"
-                                        layout="row"
-                                        layout-align="space-around stretch">
+                                    class="resource"
+                                    ng-repeat="article in vm.resources.articles"
+                                    layout="row"
+                                    layout-align="space-around stretch">
 
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
                                         <h4>{{article.title || article.filename}}</h4>
@@ -242,24 +243,24 @@
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
-            <md-card flex class="dash-perf">
+            <md-card md-whiteframe="2" flex class="dash-perf">
 
                 <md-tabs ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
 
                     <md-tab label="geographical view">
                         <countrymap
-                                flex
-                                big="false"
-                                data="vm.perfMockMap">
+                            flex
+                            big="false"
+                            data="vm.perfMockMap">
                         </countrymap>
                     </md-tab>
 
                     <md-tab label="historical view">
 
                         <linechart
-                                showdotted="true"
-                                datachooser="false"
-                                notpercentage="true"
+                            showdotted="true"
+                            datachooser="false"
+                            notpercentage="true"
                         ></linechart>
 
                     </md-tab>
