@@ -47,9 +47,9 @@ def deploy():
             run('docker-compose build')
             run('docker-compose down')
             if env.name == 'dev':
-                run("docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d")
+                run("docker-compose -f ../docker-compose.yml -f ../docker-compose.dev.yml up -d")
             elif env.name == 'staging':
-                run("docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d")
+                run("docker-compose -f ../docker-compose.yml -f ../docker-compose.test.yml up -d")
             else:
                 run("docker-compose up -d")
 
