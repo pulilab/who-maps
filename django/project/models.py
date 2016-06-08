@@ -42,17 +42,16 @@ class Project(ExtendedModel):
         return self.data
 
     def get_non_member_data(self):
-        return self.remove_keys(self.data, self.FIELDS_FOR_MEMBERS_ONLY)
+        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY)
 
     def get_anon_data(self):
-        return self.remove_keys(self.data, self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
+        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
     def get_organisation(self):
         return Organisation.objects.filter(id=self.data.get('organisation')).first()
 
-    @staticmethod
-    def remove_keys(dictionary, keys):
-        d = dictionary
+    def remove_keys(self, keys):
+        d = self.data
         for key in keys:
             if key in d:
                 d.pop(key, None)
