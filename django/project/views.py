@@ -193,11 +193,12 @@ class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet
     queryset = Project.objects.all()
     serializer_class = ProjectGroupListSerializer
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        # serializer.save()
         return Response(serializer.data)
 
 
