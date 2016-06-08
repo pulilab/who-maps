@@ -28,7 +28,7 @@ const cs = {
         organisation: 'asd'
     },
     populateProjectStructure: jasmine.createSpy('pps'),
-    getProjectData: jasmine.createSpy('gpd')
+    getProjectData: jasmine.createSpy('gpd').and.returnValue(Promise.resolve())
 };
 
 const upload = {};

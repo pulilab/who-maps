@@ -6,7 +6,10 @@ const hssComponent = {
     controller: DashboardModuleController.dashboardControllerFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'dashboard'
+    name: 'dashboard',
+    bindings: {
+        viewMode: '@'
+    }
 };
 
 export default hssComponent;

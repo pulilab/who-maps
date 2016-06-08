@@ -21,14 +21,15 @@ class ProjectComponentController {
             this.ngModel.countryName.replace('-', ' ');
         }
     }
-    showPointer() {
-        return !this.showDetails && this.ownProject;
-    }
 
     cardClick() {
-        if (this.showPointer()) {
-            this.state.go('dashboard', { appName: this.ngModel.id });
+        if (!this.showDetails) {
+            this.goToDashboard();
         }
+    }
+
+    goToDashboard() {
+        this.state.go(this.ownProject ? 'dashboard' : 'public-dashboard', { appName: this.ngModel.id });
     }
 
     static projectComponentFactory() {

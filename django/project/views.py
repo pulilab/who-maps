@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from core.views import TokenAuthMixin, get_object_or_400
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import UserProfile
 from hss.models import HSS
 from hss.hss_data import hss_default
@@ -28,21 +28,10 @@ from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
 
-@api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def get_project_structure(request):
-    """
-    View for providing form data for create/edit project.
-    """
-    countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
-    project_structure.update(countries=countries)
-    return Response(project_structure)
+class ProjectPublicViewSet(ViewSet):
 
-
-class ProjectViewSet(TokenAuthMixin, ViewSet):
-
-    def by_district(self, request, country_id):
+    @staticmethod
+    def by_district(request, country_id):
         """
         Retrieves list of projects by district
         """
@@ -79,7 +68,8 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
 
         return Response(result_dict)
 
-    def list_all(self, request, *args, **kwargs):
+    @staticmethod
+    def list_all(request, *args, **kwargs):
         """
         Retrieves list of projects (optionally by country)
         """
@@ -90,47 +80,47 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
 
-        user_profile = UserProfile.objects.get_object_or_none(user_id=request.user.id)
-        if user_profile:
-            projects_own = list(projects.filter(data__organisation=str(user_profile.organisation.id)))
-            projects_exclude_own = list(projects.exclude(data__organisation=str(user_profile.organisation.id)))
+        def is_own(project):
+            if hasattr(request.user, 'userprofile'):
+                own = project.team.filter(id=request.user.userprofile.id).exists()
+            else:
+                own = False
+            return own
 
-            result_list = functools.reduce(lambda acc, p: acc + [{
-                "id": p.id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "own": True
-            }], projects_own, result_list)
-
-            result_list = functools.reduce(lambda acc, p: acc + [{
-                "id": p.id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "own": False
-            }], projects_exclude_own, result_list)
-
-        else:
-            # TODO: this won't actually happen right now because of the TokenAuth Mixin, might be needed in the future
-            result_list = functools.reduce(lambda acc, p: acc + [{
-                "id": p.id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "own": False
-            }], projects, result_list)
+        result_list = functools.reduce(lambda acc, p: acc + [{
+            "id": p.id,
+            "name": p.name,
+            "organisation": p.data.get('organisation'),
+            "donors": p.data.get('donors'),
+            "country": p.data.get('country'),
+            "own": is_own(p)
+        }], projects, result_list)
 
         return Response(result_list)
 
+    @staticmethod
+    def project_structure(request):
+        countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
+        project_structure.update(countries=countries)
+        return Response(project_structure)
+
+
+class ProjectListViewSet(TokenAuthMixin, ViewSet):
+
     def list(self, request, *args, **kwargs):
         """
-        Retrieves list of projects.
+        Retrieves list of projects user's projects.
         """
-        return Response(Project.projects.by_user(request.user).values("id", "name"))
+        return Response(Project.projects.member_of(request.user).values("id", "name"))
+
+
+class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return [] # Retrieve needs a bit more complex filtering based on user permission
+        else:
+            return super(ProjectCRUDViewSet, self).get_permissions()
 
     def create(self, request, *args, **kwargs):
         """
@@ -161,13 +151,26 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         Retrieves a project.
         """
-        project = get_object_or_400(Project, "No such project", id=kwargs["pk"])
-        data = project.data
-        last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
-        if last_version:
-            data.update(last_version=last_version.version)
-            data.update(last_version_date=last_version.modified)
+        is_member = False
+        project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
+
+        if not request.user.is_authenticated():  # ANON
+            data = project.get_anon_data()
+        else:
+            is_member = project.is_member(request.user)
+            if is_member:  # MEMBER
+                data = project.get_member_data()
+            else:  # LOGGED IN
+                data = project.get_non_member_data()
+
+        if is_member:
+            last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
+            if last_version:
+                data.update(last_version=last_version.version)
+                data.update(last_version_date=last_version.modified)
+
         data.update(id=project.id)
+        data.update(organisation_name=project.get_organisation().name)
         return Response(project.data)
 
     @transaction.atomic
@@ -177,6 +180,7 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
         """
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        self.check_object_permissions(request, project)
         model_serializer = ProjectModelSerializer(instance=project, data={"name": data_serializer.initial_data["name"]})
         model_valid = model_serializer.is_valid()
         data_valid = data_serializer.is_valid()
@@ -193,34 +197,126 @@ class ProjectViewSet(TokenAuthMixin, ViewSet):
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProjectGroupViewSet(RetrieveModelMixin, GenericViewSet):
+class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupListSerializer
-    permission_classes = (IsAuthenticated, InTeamOrReadOnly)
-    authentication_classes = (TokenAuthentication,)
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        self.check_object_permissions(self.request, instance)
         serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
 
-@api_view(['GET', 'POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def file_list(request, project_id):
-    """
-    Enables to upload/list files for publications and reports.
+class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
 
-    Args:
-        project_id: id of the project the artifacts belong to.
-    """
-    if request.method == "POST":
+    def create(self, request, project_id):
+        """
+        Makes versions out of Toolkit and coverage data for the project.
+        """
         project = get_object_or_400(Project, "No such project.", id=project_id)
+        self.check_object_permissions(request, project)
+
+        last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version").first()
+        if not last_cov_ver:
+            # No versions yet.
+            new_version = 1
+        else:
+            new_version = last_cov_ver.version + 1
+        current_cov = project.data["coverage"]
+        new_cov_ver = CoverageVersion(
+                            project_id=project_id,
+                            version=new_version,
+                            data=current_cov)
+        new_cov_ver.save()
+
+        # Make a new version from current toolkit.
+        last_toolkit_ver = ToolkitVersion.objects.filter(project_id=project_id).order_by("-version").first()
+        if not last_toolkit_ver:
+            # No versions yet.
+            new_version = 1
+        else:
+            new_version = last_toolkit_ver.version + 1
+        current_toolkit = get_object_or_400(Toolkit, "No such Toolkit", project_id=project_id).data
+        new_toolkit_ver = ToolkitVersion(
+                            project_id=project_id,
+                            version=new_version,
+                            data=current_toolkit)
+        new_toolkit_ver.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+    def toolkit_versions(self, request, project_id):
+        """
+        Retrieves all toolkit versions for the given project_id.
+        """
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        self.check_object_permissions(request, project)
+
+        toolkit_versions = ToolkitVersion.objects.filter(project_id=project_id) \
+            .order_by("version").values("version", "data", "modified")
+        return Response(toolkit_versions)
+
+    def coverage_versions(self, request, project_id):
+        """
+        Retrieves all coverage versions for the given project_id.
+        """
+        coverage_versions = CoverageVersion.objects.filter(project_id=project_id) \
+            .order_by("version").values("version", "data", "modified")
+        return Response(coverage_versions)
+
+
+class PartnerLogoListViewSet(ViewSet):
+
+    def list(self, request, project_id):
+        """
+        Retrieves list of partnerlogo ids for a given project.
+        """
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        return Response([{"data": p.data.url, "id": p.id} for p in PartnerLogo.objects.filter(project_id=project.id)])
+
+
+class PartnerLogoViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def create(self, request, project_id):
+        """
+        Creates partnerlogos from the uploaded files.
+        """
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        self.check_object_permissions(self.request, project)
+
+        logos = []
+        # Get and store binary files for partnerlogos.
+        for key, value in request.FILES.items():
+            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value)
+            logos.append({"id": logo.id, "data": logo.data.url})
+        return Response(logos)
+
+    def destroy(self, request, pk=None):
+        partner_logo = get_object_or_400(PartnerLogo, "No such logo.", id=pk)
+        self.check_object_permissions(self.request, partner_logo.project)
+        partner_logo.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FileListViewSet(ViewSet):
+
+    def list(self, request, project_id):
+        files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
+        return Response(files)
+
+
+class FilePostViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def create(self, request, project_id):
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        self.check_object_permissions(self.request, project)
+
         # Get and store binary files for publications and reports.
         files = []
+        file_type = None
         for key, value in request.FILES.items():
             if "publication" in key:
                 file_type = "publication"
@@ -233,112 +329,19 @@ def file_list(request, project_id):
                                         data=value.read())
             files.append(model_to_dict(instance, fields=["id", "type", "filename"]))
         return Response(files)
-    if request.method == "GET":
-        files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
-        return Response(files)
 
 
-@api_view(['GET', 'DELETE'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def file_detail(request, pk):
-    """
-    View for retrieving file.
-    """
-    if request.method == "GET":
+class FileDetailViewSet(ViewSet):
+
+    def retrieve(self, request, pk):
         file = get_object_or_400(File, "No such file.", id=pk)
         return HttpResponse(content=file.data, content_type="application/pdf")
-    if request.method == "DELETE":
+
+
+class FileDeleteViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def destroy(self, request, pk):
         file = get_object_or_400(File, "No such file.", id=pk)
+        self.check_object_permissions(self.request, file.project)
         file.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(['POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def make_version(request, project_id):
-    """
-    Makes versions out of Toolkit and coverage data for the project.
-
-    Args:
-        project_id: id of the project.
-    """
-    # Make a new version from current coverage.
-    last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version").first()
-    if not last_cov_ver:
-        # No versions yet.
-        new_version = 1
-    else:
-        new_version = last_cov_ver.version + 1
-    current_cov = get_object_or_400(Project, "No such project.", id=project_id).data["coverage"]
-    new_cov_ver = CoverageVersion(
-                        project_id=project_id,
-                        version=new_version,
-                        data=current_cov)
-    new_cov_ver.save()
-
-    # Make a new version from current toolkit.
-    last_toolkit_ver = ToolkitVersion.objects.filter(project_id=project_id).order_by("-version").first()
-    if not last_toolkit_ver:
-        # No versions yet.
-        new_version = 1
-    else:
-        new_version = last_toolkit_ver.version + 1
-    current_toolkit = get_object_or_400(Toolkit, "No such Toolkit", project_id=project_id).data
-    new_toolkit_ver = ToolkitVersion(
-                        project_id=project_id,
-                        version=new_version,
-                        data=current_toolkit)
-    new_toolkit_ver.save()
-    return Response(status=status.HTTP_201_CREATED)
-
-
-@api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def get_coverage_versions(request, project_id):
-    """
-    Retrieves all coverage versions for the given project_id.
-    """
-    coverage_versions = CoverageVersion.objects.filter(project_id=project_id) \
-                            .order_by("version").values("version", "data", "modified")
-    return Response(coverage_versions)
-
-
-@api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def get_toolkit_versions(request, project_id):
-    """
-    Retrieves all toolkit versions for the given project_id.
-    """
-    toolkit_versions = ToolkitVersion.objects.filter(project_id=project_id) \
-                            .order_by("version").values("version", "data", "modified")
-    return Response(toolkit_versions)
-
-
-class PartnerLogoViewSet(TokenAuthMixin, ViewSet):
-
-    def list(self, request, project_id):
-        """
-        Retrieves list of partnerlogo ids for a given project.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        return Response([{"data": p.data.url, "id": p.id} for p in PartnerLogo.objects.filter(project_id=project.id)])
-
-    def create(self, request, project_id):
-        """
-        Creates partnerlogos from the uploaded files.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        logos = []
-        # Get and store binary files for partnerlogos.
-        for key, value in request.FILES.items():
-            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value)
-            logos.append({"id": logo.id, "data": logo.data.url})
-        return Response(logos)
-
-    def destroy(self, request, pk=None):
-        get_object_or_400(PartnerLogo, "No such logo.", id=pk).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

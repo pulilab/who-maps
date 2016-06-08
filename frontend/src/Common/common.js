@@ -28,6 +28,7 @@ import donorsComponent from './Donors/donorsComponent';
 import EditProfileComponent from './EditProfile/editProfileComponent';
 import countrymap from './CountryMap/countrymap.js';
 import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
+import disclaimerComponent from './Disclaimer/disclaimerComponent.js';
 
 const moduleName = 'Components';
 
@@ -50,7 +51,8 @@ angular.module(moduleName,
     .component(donorsComponent.name, donorsComponent)
     .component(EditProfileComponent.name, EditProfileComponent)
     .component(countrymap.name, countrymap)
-    .component(EmailConfirmationComponent.name, EmailConfirmationComponent);
+    .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
+    .component(disclaimerComponent.name, disclaimerComponent);
 
 
 export { EE };

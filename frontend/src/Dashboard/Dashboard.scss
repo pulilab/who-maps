@@ -43,20 +43,27 @@
 
             .dash-stat-column {
 
-                justify-content: space-between;
+                // justify-content: space-between;
                 cursor: default;
+
+                .shorter, .longer {
+                    margin-bottom: 10px;
+                    md-icon.rotate {
+                        transform: translate(0, 7px);
+                    }
+                }
 
                 .longer {
 
-                    height: 200px;
+                    height: 225px;
 
                     .gray {
 
+                        height: 137px;
                         margin-top: 10px;
                         border-top: 1px solid $color-gray-lighter;
                         padding: 0 8px;
                         background-color: $color-gray-lightest;
-                        height: 137px;
                         border-bottom-right-radius: 3px;
                         border-bottom-left-radius: 3px;
 
@@ -64,29 +71,15 @@
                             font-size: 10px;
                             color: $color-gray;
                         }
-
-                        &.gr-follow {
-                            height: 90px;
-                        }
                     }
                 }
 
-                .longer-follow {
-
-                    md-icon {
-                        margin-top: 15px;
-                    }
-                }
-
-
-
-                .hten md-card {
+                .shorter {
                     height: 110px;
                 }
 
-                .dash-stat-tooltip-version {
-
-                    padding-top: 11px;
+                .hten md-card {
+                    height: 110px;
                 }
 
                 .snapshot-button {
@@ -112,15 +105,6 @@
                             font-weight: 300;
                         }
                     }
-                }
-
-                .follow-button {
-
-                    min-width: 50px;
-                    background-color: $color-primary;
-                    color: white;
-                    font-size: 12px;
-                    font-weight: 500;
                 }
             }
 
@@ -170,6 +154,38 @@
                                 border-bottom-right-radius: 5px;
                                 border-bottom-left-radius: 5px;
                                 background-color: $color-gray-lightest;
+                                &.infoview {
+                                    background-color: initial;
+                                    padding: 0;
+                                    .roww {
+                                        height: 55px;
+                                        margin: 0 30px;
+                                        border-bottom: 1px solid $color-gray-lighter;
+
+                                        &.borderless {
+                                            border-bottom-width: 0;
+                                        }
+                                    }
+                                    .label {
+                                        font-size: 12px;
+                                        font-weight: 500;
+                                        color: $text-secondary;
+                                    }
+                                    .data {
+                                        font-size: 12px;
+                                        font-weight: 500;
+                                        color: $text-primary;
+                                    }
+                                    .gray {
+                                        background-color: $color-gray-lightest;
+                                        .labelobj {
+                                            margin: 20px 30px;
+                                        }
+                                        .data {
+                                            margin: 0 30px;
+                                        }
+                                    }
+                                }
 
                                 .dash-overview-tooltips {
 
@@ -351,215 +367,222 @@
                 }
             }
 
-            .dash-improve {
-
-                md-card-header {
-
-                    color: white;
-                    height: 50px;
-                    padding: 0;
-                    box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.15);
-                    border-top-left-radius: 3px;
-                    border-top-right-radius: 3px;
-                    user-select: none;
-                    user-select: none;
-                    user-select: none;
-
-                    &.axis1 {
-                        background-color: $color-axis1;
-                    }
-                    &.axis2 {
-                        background-color: $color-axis2;
-                    }
-                    &.axis3 {
-                        background-color: $color-axis3;
-                    }
-                    &.axis4 {
-                        background-color: $color-axis4;
-                    }
-                    &.axis5 {
-                        background-color: $color-axis5;
-                    }
-                    &.axis6 {
-                        background-color: $color-axis6;
-                    }
-
-                    img {
-                        width: 40px;
-                        height: 40px;
-                        margin: 5px;
-                    }
-
-                    h4 {
+            .dash-perf {
+                .perfloggedout {
+                    background: $color-gray-lightest url("./Img/wmap.svg") center center no-repeat;
+                    background-size: 140% auto;
+                    p {
+                        // display: inline-block;
+                        padding: 30px 11% 0 11%;
+                        text-align: center;
                         font-size: 14px;
-                        font-weight: 500;
-
-                        span {
-                            text-transform: capitalize;
-                        }
+                        font-color: $text-primary;
+                        line-height: 20px;
                     }
-
-                    ssmenu {
-
-                        margin-right: 30px;
-                        transform: translate(0, -3px);
-
-                        md-select-value span {
-
+                    a.md-button {
+                        background-color: $color-primary;
+                        span {
                             color: white;
                         }
-
-                        md-select-value {
-                            border-bottom-width: 0;
-                        }
-                    }
-
-                    md-icon {
-                        margin-left: -15px;
-                        margin-right: 15px;
-                        color: white;
-                        outline: none;
-                        cursor: pointer;
-                    }
-                }
-
-                md-tab-content {
-
-                    height: 406px;
-                    border-bottom-left-radius: 3px;
-                    border-bottom-right-radius: 3px;
-
-                    md-content {
-
-                        height: 406px;
-                        padding: 0 10px;
-                        background-color: $color-gray-lightest;
-
-                        .subhead {
-                            max-height: 88px;
-
-                            p {
-                                margin: auto 0;
-                                padding-left: 12px;
-                                color: $text-secondary;
-                                font-size: 14px;
-                                line-height: 20px;
-                            }
-
-                            a {
-                                color: $color-primary;
-                            }
-
-                            img {
-                                height: 150px;
-                                width: auto;
-                            }
-                        }
-
-
-                        md-card {
-
-                            margin-bottom: 12px;
-                            z-index: 10;
-                            position: relative;
-
-                            img {
-                                width: 70px;
-                                height: 70px;
-                                margin: 12px;
-                            }
-
-                            .txt {
-                                margin: 6px 20px 6px 0;
-
-                                * {
-                                    line-height: 14px;
-                                    margin: 0;
-                                    cursor: pointer;
-                                }
-
-                                h5 {
-                                    color: $color-primary;
-                                }
-                                .desc {
-                                    color: $color-gray;
-                                    cursor: default;
-                                }
-                                .comm {
-                                    color: $text-secondary;
-                                    font-size: 12px;
-                                    font-weight: 500;
-
-                                    md-icon {
-                                        font-size: 14px;
-                                        height: 14px;
-                                        width: 14px;
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-
-            }
-
-            .dash-community {
-                opacity: 0.5;
-                padding: 20px 10px;
-                background-color: $color-gray-lightest;
-                pointer-events: none;
-
-                .project-cont {
-
-                    overflow: hidden;
-                    margin: 0;
-
-                    &:nth-child(2) {
-                        margin: 20px 0 20px 0;
-                    }
-
-                    .header {
-
-                        span {
-
-                            color: text-primary;
-                            font-size: 12px;
-                            font-weight: 500;
-                            padding-left: 10px;
-                            cursor: default;
-                        }
-
-                        md-icon {
-
-                            font-size: 24px;
-                            cursor: pointer;
-                            margin: 0;
-                            transform: translate(-5px, -6px);
-                            outline: none;
-
-                            &[disabled] {
-                                color: $color-gray-light;
-                            }
-                        }
                     }
                 }
             }
-        }
-    }
 
-    .disclaimer {
+            // .dash-improve {
 
-        margin: 30px 50px;
-        font-size: 10px;
-        text-align: center;
-        color: $text-disabled;
+            //     md-card-header {
 
-        span {
+            //         color: white;
+            //         height: 50px;
+            //         padding: 0;
+            //         box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.15);
+            //         border-top-left-radius: 3px;
+            //         border-top-right-radius: 3px;
+            //         user-select: none;
+            //         user-select: none;
+            //         user-select: none;
 
-            font-weight: 500;
-            margin: 0;
+            //         &.axis1 {
+            //             background-color: $color-axis1;
+            //         }
+            //         &.axis2 {
+            //             background-color: $color-axis2;
+            //         }
+            //         &.axis3 {
+            //             background-color: $color-axis3;
+            //         }
+            //         &.axis4 {
+            //             background-color: $color-axis4;
+            //         }
+            //         &.axis5 {
+            //             background-color: $color-axis5;
+            //         }
+            //         &.axis6 {
+            //             background-color: $color-axis6;
+            //         }
+
+            //         img {
+            //             width: 40px;
+            //             height: 40px;
+            //             margin: 5px;
+            //         }
+
+            //         h4 {
+            //             font-size: 14px;
+            //             font-weight: 500;
+
+            //             span {
+            //                 text-transform: capitalize;
+            //             }
+            //         }
+
+            //         ssmenu {
+
+            //             margin-right: 30px;
+            //             transform: translate(0, -3px);
+
+            //             md-select-value span {
+
+            //                 color: white;
+            //             }
+
+            //             md-select-value {
+            //                 border-bottom-width: 0;
+            //             }
+            //         }
+
+            //         md-icon {
+            //             margin-left: -15px;
+            //             margin-right: 15px;
+            //             color: white;
+            //             outline: none;
+            //             cursor: pointer;
+            //         }
+            //     }
+
+            //     md-tab-content {
+
+            //         height: 406px;
+            //         border-bottom-left-radius: 3px;
+            //         border-bottom-right-radius: 3px;
+
+            //         md-content {
+
+            //             height: 406px;
+            //             padding: 0 10px;
+            //             background-color: $color-gray-lightest;
+
+            //             .subhead {
+            //                 max-height: 88px;
+
+            //                 p {
+            //                     margin: auto 0;
+            //                     padding-left: 12px;
+            //                     color: $text-secondary;
+            //                     font-size: 14px;
+            //                     line-height: 20px;
+            //                 }
+
+            //                 a {
+            //                     color: $color-primary;
+            //                 }
+
+            //                 img {
+            //                     height: 150px;
+            //                     width: auto;
+            //                 }
+            //             }
+
+
+            //             md-card {
+
+            //                 margin-bottom: 12px;
+            //                 z-index: 10;
+            //                 position: relative;
+
+            //                 img {
+            //                     width: 70px;
+            //                     height: 70px;
+            //                     margin: 12px;
+            //                 }
+
+            //                 .txt {
+            //                     margin: 6px 20px 6px 0;
+
+            //                     * {
+            //                         line-height: 14px;
+            //                         margin: 0;
+            //                         cursor: pointer;
+            //                     }
+
+            //                     h5 {
+            //                         color: $color-primary;
+            //                     }
+            //                     .desc {
+            //                         color: $color-gray;
+            //                         cursor: default;
+            //                     }
+            //                     .comm {
+            //                         color: $text-secondary;
+            //                         font-size: 12px;
+            //                         font-weight: 500;
+
+            //                         md-icon {
+            //                             font-size: 14px;
+            //                             height: 14px;
+            //                             width: 14px;
+            //                         }
+            //                     }
+            //                 }
+
+            //             }
+
+            //         }
+            //     }
+
+            // }
+
+            // .dash-community {
+            //     opacity: 0.5;
+            //     padding: 20px 10px;
+            //     background-color: $color-gray-lightest;
+            //     pointer-events: none;
+
+            //     .project-cont {
+
+            //         overflow: hidden;
+            //         margin: 0;
+
+            //         &:nth-child(2) {
+            //             margin: 20px 0 20px 0;
+            //         }
+
+            //         .header {
+
+            //             span {
+
+            //                 color: text-primary;
+            //                 font-size: 12px;
+            //                 font-weight: 500;
+            //                 padding-left: 10px;
+            //                 cursor: default;
+            //             }
+
+            //             md-icon {
+
+            //                 font-size: 24px;
+            //                 cursor: pointer;
+            //                 margin: 0;
+            //                 transform: translate(-5px, -6px);
+            //                 outline: none;
+
+            //                 &[disabled] {
+            //                     color: $color-gray-light;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 }

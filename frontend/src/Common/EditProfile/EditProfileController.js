@@ -32,6 +32,7 @@ class EditProfileController extends Protected {
     }
 
     handleDataLoad() {
+        console.log(this.userProfile);
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
@@ -67,8 +68,10 @@ class EditProfileController extends Protected {
     save() {
         this.sentForm = true;
         if (this.editProfileForm.$valid) {
-            const request = this.userProfile.id ?
-                this.es.updateProfile(this.userProfile) : this.es.createProfile(this.userProfile);
+            const profile = _.cloneDeep(this.userProfile);
+            profile.organisation = profile.organisation.id;
+            const request = profile.id ?
+                this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
                 if (result.success) {
                     window.location.reload();
@@ -92,6 +95,16 @@ class EditProfileController extends Protected {
         this.editProfileForm[key].customError = [];
     }
 
+    organisationSearch(name) {
+        return this.es.autocompleteOrganization(name);
+    }
+
+    addOrganisation(name) {
+        return this.es.addOrganization(name)
+            .then(response => {
+                this.userProfile.organisation = response;
+            });
+    }
 
     static editProfileFactory() {
         require('./EditProfile.scss');

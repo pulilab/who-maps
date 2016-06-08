@@ -1,4 +1,4 @@
-<md-card md-whiteframe="2" layout="column" layout-align="center" ng-click="vm.cardClick()" ng-class="{'showPointer': vm.showPointer(), 'my-project': vm.ownProject}">
+<md-card md-whiteframe="2" layout="column" layout-align="center" ng-click="vm.cardClick()" class="show-pointer" ng-class="{'my-project': vm.ownProject}">
 
     <div class="project-container" layout="row">
 
@@ -14,7 +14,7 @@
             <div class="upper" layout="row">
                 <div class="basic" flex="flex-grow" layout="column">
                     <span flex class="name bold">{{vm.ngModel.name}}</span>
-                    <span flex class="org-country">{{vm.ngModel.organisation}} | {{vm.ngModel.countryName}}</span>
+                    <span flex class="org-country">{{vm.ngModel.organisation_name}} | {{vm.ngModel.country_name}}</span>
                 </div>
                 <div ng-if="vm.showDetails" class="donors">
                     <span class="nr">
@@ -38,7 +38,7 @@
 
                 <md-button class="more" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
 
-                <md-button class="md-gray" ng-if="vm.ownProject" ui-sref="dashboard({appName: vm.ngModel.id})">Go to dashboard</md-button>
+                <md-button class="md-gray" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Go to dashboard</md-button>
 
                 <md-button class="md-primary" ng-if="vm.ownProject" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project Info</md-button>
             </div>

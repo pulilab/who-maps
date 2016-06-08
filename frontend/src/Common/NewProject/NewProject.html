@@ -41,7 +41,7 @@
                 </div>
                 <md-input-container >
                     <label>Name of the organization</label>
-                    <input ng-model="vm.project.organisation"
+                    <input ng-model="vm.project.organisation.name"
                            ng-disabled="true" required name="organisation"
                            md-maxlength="100" type="text" ng-change="vm.handleCustomError('organisation')" />
                     <div ng-messages="vm.newProjectForm.organisation.$error">
@@ -53,30 +53,30 @@
                 <div class="chipper" ng-if="vm.editMode">
                     <label>Team members</label>
                     <md-contact-chips
-                        placeholder="Editors of this project"
-                        secondary-placeholder="add new team member"
-                        ng-model="vm.team"
-                        md-contacts="vm.getUsers($query)"
-                        md-contact-name="name"
-                        md-contact-email="organisation__name"
-                        md-require-match="true"
-                        md-highlight-flags="i"
-                        filter-selected="true">
+                            placeholder="Editors of this project"
+                            secondary-placeholder="add new team member"
+                            ng-model="vm.team"
+                            md-contacts="vm.getUsers($query)"
+                            md-contact-name="name"
+                            md-contact-email="organisation__name"
+                            md-require-match="true"
+                            md-highlight-flags="i"
+                            filter-selected="true">
                     </md-contact-chips>
                 </div>
 
                 <div class="chipper" ng-if="vm.editMode">
                     <label>Superior viewers</label>
                     <md-contact-chips
-                        placeholder="See all the projects data"
-                        secondary-placeholder="add new viewer"
-                        ng-model="vm.viewers"
-                        md-contacts="vm.getUsers($query)"
-                        md-contact-name="name"
-                        md-contact-email="organisation__name"
-                        md-require-match="true"
-                        md-highlight-flags="i"
-                        filter-selected="true">
+                            placeholder="See all the projects data"
+                            secondary-placeholder="add new viewer"
+                            ng-model="vm.viewers"
+                            md-contacts="vm.getUsers($query)"
+                            md-contact-name="name"
+                            md-contact-email="organisation__name"
+                            md-require-match="true"
+                            md-highlight-flags="i"
+                            filter-selected="true">
                     </md-contact-chips>
                 </div>
 
@@ -397,8 +397,86 @@
                         </div>
                     </section>
 
+                    <section class="additional-info">
+                        <h4>3. Additional Info</h4>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" name="contact_name" placeholder="Contact name" ng-model="vm.project.contact_name"/>
+                                <div ng-messages="vm.newProjectForm.contact_name.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="email" ng-required="true" name="contact_email" placeholder="Contact email" ng-model="vm.project.contact_email"/>
+                                <div ng-messages="vm.newProjectForm.contact_email.$error">
+                                    <div ng-message="required">This is required.</div>
+                                    <div ng-message="email">This field must be an email</div>
+                                </div>
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" name="implementation_overview" md-maxlength="500" placeholder="Overview of Digital health implementation" ng-model="vm.project.implementation_overview"/>
+                                <div ng-messages="vm.newProjectForm.implementation_overview.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Implementing Partners" name="implementing_partners" ng-model="vm.project.implementing_partners"/>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="Implementing Dates" name="implementation_dates" ng-model="vm.project.implementation_dates"/>
+                                <div ng-messages="vm.newProjectForm.implementation_dates.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="Geographic coverage" name="geographic_coverage" ng-model="vm.project.geographic_coverage"/>
+                                <div ng-messages="vm.newProjectForm.geographic_coverage.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+
+                        <div md-layout="row">
+                            <h6 flex="100">Interventions Areas:</h6>
+                            <md-checkbox
+                                    name="intervention_areas"
+                                    ng-repeat="d in vm.structure.intervention_areas"
+                                    ng-checked="vm.interventionAreaChecked(d)"
+                                    ng-click="vm.interventionAreaChanged(d)"
+                                    flex="30"
+                                    aria-label="{{ d }}"
+                                    class="md-primary">
+                                {{ d }}
+                            </md-checkbox>
+                            <div class="custom-error" ng-show="vm.project.intervention_areas.length === 0">
+                                Select at least one area
+                            </div>
+                        </div>
+
+
+
+                    </section>
+
                     <section ng-if="!vm.editMode">
-                        <h4>3. Pre-assessment</h4>
+                        <h4>4. Pre-assessment</h4>
 
                         <p>
                             The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).
@@ -454,7 +532,6 @@
         </projectcomp>
 
     </section>
-    <footer class="disclaimer">
-        <b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
-    </footer>
+
+    <disclaimer></disclaimer>
 </div>

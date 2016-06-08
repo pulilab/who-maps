@@ -2,6 +2,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 
+from project.permissions import InTeamOrReadOnly
+from project.models import Project
+
 
 class TokenAuthMixin(object):
     """
@@ -10,6 +13,21 @@ class TokenAuthMixin(object):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+
+class TeamTokenAuthMixin(object):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated, InTeamOrReadOnly)
+
+
+class CheckProjectAccessMixin(object):
+    """
+    This method needs to be used with an APIView (or ViewSet) that implements `check_object_permissions`
+    """
+
+    def check_project_permission(self, request, project_id):
+        project = get_object_or_400(Project, "No such project.", id=project_id)
+        self.check_object_permissions(request, project)
 
 
 class Http400(APIException):
