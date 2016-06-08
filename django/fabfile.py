@@ -43,7 +43,7 @@ def deploy():
         else:
             options = ""
 
-        run('docker-compose {}restart').format(options)
+        run('docker-compose {}restart'.format(options))
         time.sleep(5)
 
         # handle backend
@@ -52,9 +52,9 @@ def deploy():
             # backup DB
             _backup_db()
             # build
-            run('docker-compose {}build').format(options)
-            run('docker-compose {}down').format(options)
-            run("docker-compose {}up -d").format(options)
+            run('docker-compose {}build'.format(options))
+            run('docker-compose {}down'.format(options))
+            run("docker-compose {}up -d".format(options))
 
             # drop & create DB
             time.sleep(10)
