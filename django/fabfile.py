@@ -139,12 +139,7 @@ def down():
 
 
 def up():
-    if env.name == 'dev':
-        local("docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d")
-    elif env.name == 'staging':
-        local("docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d")
-    else:
-        local("docker-compose up -d")
+    local("docker-compose up -d")
     time.sleep(5)
     rebuild_db()
 
