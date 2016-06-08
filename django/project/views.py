@@ -195,10 +195,11 @@ class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        self.check_object_permissions(self.request, instance)
         serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-        # serializer.save()
+        serializer.save()
         return Response(serializer.data)
 
 
