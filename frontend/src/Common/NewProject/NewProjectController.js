@@ -34,7 +34,8 @@ class NewProjectController extends ProjectDefinition {
         this.handleStructureLoad();
         if (this.editMode) {
             this.projectId = this.state.params.appName;
-            this.handleDataLoad();
+            this.cs.getProjectData(this.projectId)
+                .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
                 .then(groups => {
                     this.team = this.editMode ? groups.data.team : [];
@@ -82,8 +83,7 @@ class NewProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
-    handleDataLoad() {
-        const data = this.cs.getProjectData(this.projectId);
+    handleDataLoad(data) {
         this.createCoverageKeys(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
@@ -97,7 +97,7 @@ class NewProjectController extends ProjectDefinition {
                 this.addDefaultEmpty();
                 this.scope.$evalAsync();
             });
-
+        this.scope.$evalAsync();
 
     }
 
@@ -241,7 +241,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.updateProject(processedForm, this.projectId)
             .then(response => {
                 if (response && response.success) {
-                    this.EE.emit('refreshProjects');
+                    this.postSaveActions();
                 }
                 else {
                     this.handleResponse(response);
@@ -250,17 +250,21 @@ class NewProjectController extends ProjectDefinition {
     }
 
     saveForm(processedForm) {
-        processedForm.date = new Date().toJSON();
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.EE.emit('refreshProjects');
+                    this.postSaveActions();
                 }
                 else {
                     this.handleResponse(response);
                 }
 
             });
+    }
+
+    postSaveActions() {
+        this.EE.emit('refreshProjects');
+        this.state.go(this.state.current.name, {}, { reload: true });
     }
 
     handleResponse(response) {
@@ -294,6 +298,8 @@ class NewProjectController extends ProjectDefinition {
     }
 
     mergeCustomAndDefault(collection) {
+
+        collection.organisation = collection.organisation.id;
         collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
         collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
@@ -342,7 +348,6 @@ class NewProjectController extends ProjectDefinition {
         const vm = this;
         this.ns.uploadFile(data, type, this.projectId)
             .then(result => {
-                console.log(result);
                 vm.project.files.splice(-2, 0, result.data[0]);
                 vm.scope.$evalAsync();
             });
@@ -388,7 +393,7 @@ class NewProjectController extends ProjectDefinition {
                     });
                 });
                 this.similarProject = result;
-                if (result && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
+                if (result && result[0] && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
                     this.setCustomError('name', 'Project name is not unique');
                 }
                 this.scope.$evalAsync();
@@ -399,6 +404,9 @@ class NewProjectController extends ProjectDefinition {
         event.preventDefault();
         if (project.isOwn) {
             this.state.go('dashboard', { appName: project.id });
+        }
+        else {
+            this.state.go('public-dashboard', { appName: project.id });
         }
 
     }

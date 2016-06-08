@@ -13,8 +13,6 @@ from .serializers import CountryListSerializer
 
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def get_geodata(request, country_id):
     """
     Retrieves geodata based on country_id.
@@ -30,8 +28,6 @@ def get_geodata(request, country_id):
 
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def get_districts(request, country_id):
     """
     Retrieves districts based on country_id.
@@ -58,6 +54,6 @@ def get_districts(request, country_id):
         return Response(list())
 
 
-class CountryListAPIView(TokenAuthMixin, generics.ListAPIView):
+class CountryListAPIView(generics.ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountryListSerializer

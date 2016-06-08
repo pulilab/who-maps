@@ -10,15 +10,19 @@ const $state = {
     params: {}
 };
 
-const $animate = {
-    enabled: () => {}
+const CommonService = {
+    userProfile: {
+        viewer: [],
+        member: []
+    }
 };
 
 describe('HssModuleController', () => {
 
     beforeEach(() => {
-        cc = HssModuleController.hssControllerFactory()($scope, $state, $animate);
+        cc = HssModuleController.hssControllerFactory()($scope, $state);
         expect(cc).toBeDefined();
+        cc.cs = CommonService;
         cc.$onInit();
     });
 
