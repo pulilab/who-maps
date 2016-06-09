@@ -51,6 +51,9 @@ class HssModuleService extends AuthApi {
     postInterventions(columnId, interventions) {
         return this.post(this.projectId + '/hss/interventions/', { 'column_id': columnId, interventions });
     }
+    postAgeRanges(columnId, age_ranges) {
+        return this.post(this.projectId + '/hss/ageranges/', { 'column_id': columnId, age_ranges });
+    }
     postBubbles(data) {
         return this.post(this.projectId + '/hss/bubbles/', data);
     }
