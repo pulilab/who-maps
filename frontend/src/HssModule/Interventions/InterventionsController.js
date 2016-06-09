@@ -3,10 +3,11 @@ import { Protected } from '../../Common/';
 
 class InterventionsController extends Protected {
 
-    constructor() {
+    constructor($scope) {
         super();
         const vm = this;
         vm.EE = window.EE;
+        vm.scope = $scope;
         vm.$onInit = vm.onInit.bind(vm);
         vm.$onDestroy = vm.onDestroy.bind(vm);
     }
@@ -23,6 +24,7 @@ class InterventionsController extends Protected {
         this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
         vm.hs = vm.service;
         vm.interventionRow = this.middleColumnGenerator();
+        vm.ageRangesRow = vm.ageRangeColumnGenerator();
         vm.bindEvents();
     }
 
@@ -61,6 +63,13 @@ class InterventionsController extends Protected {
             }
             return value;
         });
+
+        _.map(this.ageRangesRow, (value) => {
+            if (value.columnId === event.columnId) {
+                value.activated = event.activated;
+            }
+            return value;
+        });
     }
 
     classGenerator(tile) {
@@ -75,10 +84,7 @@ class InterventionsController extends Protected {
         return _.chain(this.tiles)
             .range()
             .map((value) => {
-                let _activated = this.data.continuum[value].mother;
-                if (this.data.continuum[value].child) {
-                    _activated = _activated || this.data.continuum[value].child;
-                }
+                const _activated = this.data.continuum[value].state;
                 return {
                     content: this.data.interventions[value].interventions,
                     className: 'intervention',
@@ -90,6 +96,28 @@ class InterventionsController extends Protected {
                     introName: 'interventions_middle_' + value,
                     classGenerator: self.classGenerator,
                     saveInterventions: self.saveInterventions.bind(this, value)
+                };
+            })
+            .value();
+    }
+
+    ageRangeColumnGenerator() {
+        const self = this;
+        return _.chain(this.tiles)
+            .range()
+            .map((value) => {
+                const _activated = this.data.continuum[value].state;
+                return {
+                    content: this.data.age_ranges[value].age_ranges,
+                    className: 'intervention',
+                    colSpan: 1,
+                    rowSpan: 5,
+                    columnId: value,
+                    activated: _activated,
+                    selectValues: this.structure.age_ranges,
+                    introName: 'interventions_middle_' + value,
+                    classGenerator: self.classGenerator,
+                    saveAgeRanges: self.saveAgeRanges.bind(this, value)
                 };
             })
             .value();
@@ -126,18 +154,28 @@ class InterventionsController extends Protected {
         });
     }
 
+    stripParenthesis(str) {
+        return str.split('(')[0];
+    }
+
+    saveAgeRanges(columnId, value) {
+        this.ageRangesRow[columnId].content = value;
+        this.hs.postAgeRanges(columnId, value);
+    }
+
     saveInterventions(columnId, value) {
+        this.interventionRow[columnId].content = value;
         this.hs.postInterventions(columnId, value);
         this.calculateInterventionHeight(value);
     }
 
     static interventionsFactory() {
         require('./Interventions.scss');
-        function interventions() {
-            return new InterventionsController();
+        function interventions($scope) {
+            return new InterventionsController($scope);
         }
 
-        interventions.$inject = [];
+        interventions.$inject = ['$scope'];
 
         return interventions;
     }

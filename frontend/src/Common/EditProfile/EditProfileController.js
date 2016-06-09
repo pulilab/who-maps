@@ -88,6 +88,7 @@ class EditProfileController extends Protected {
         this.cs.userProfileId = result.data.id;
         reset.loadedPromise.then(()=> {
             this.userProfile = this.cs.userProfile;
+            this.EE.emit('profileUpdated');
             this.scope.$evalAsync();
         });
     }

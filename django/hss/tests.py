@@ -199,33 +199,18 @@ class HSSTests(APITestCase):
         url = reverse("hss-continuum", kwargs={"project_id": self.project_id})
         data = {
                 "column_id": 0,
-                "mother": True,
-                "child": True
+                "state": True
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         hss = HSS.objects.get_object_or_none(project=self.project_id)
-        self.assertTrue(hss.data["continuum"][0]["mother"])
-        self.assertTrue(hss.data["continuum"][0]["child"])
-
-    def test_update_continuum_only_mother(self):
-        url = reverse("hss-continuum", kwargs={"project_id": self.project_id})
-        data = {
-                "column_id": 0,
-                "mother": True
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        hss = HSS.objects.get_object_or_none(project=self.project_id)
-        self.assertTrue(hss.data["continuum"][0]["mother"])
-        self.assertFalse(hss.data["continuum"][0]["child"])
+        self.assertTrue(hss.data["continuum"][0]["state"])
 
     def test_update_continuum_wrong_project_id(self):
         url = reverse("hss-continuum", kwargs={"project_id": 999})
         data = {
                 "column_id": 0,
-                "mother": True,
-                "child": True
+                "state": True
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
@@ -235,8 +220,7 @@ class HSSTests(APITestCase):
         url = reverse("hss-continuum", kwargs={"project_id": self.project_id})
         data = {
                 "column_id": 0,
-                "mother": 24,
-                "child": "foo"
+                "state": "sdfdsf"
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
@@ -315,7 +299,28 @@ class HSSTests(APITestCase):
         url = reverse("hss-interventions", kwargs={"project_id": 999})
         data = {
                 "column_id": 0,
-                "interventions": [1,2],
+                "interventions": ["int1","int2"],
+            }
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["details"], "No such project.")
+
+    def test_update_ageranges(self):
+        url = reverse("hss-ageranges", kwargs={"project_id": self.project_id})
+        data = {
+                "column_id": 0,
+                "age_ranges": ["age1","age2"],
+            }
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        hss = HSS.objects.get_object_or_none(project=self.project_id)
+        self.assertEqual(hss.data["age_ranges"][0]["age_ranges"], ["age1","age2"])
+
+    def test_update_ageranges_wrong_project_id(self):
+        url = reverse("hss-ageranges", kwargs={"project_id": 999})
+        data = {
+                "column_id": 0,
+                "age_ranges": ["age1","age2"],
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)

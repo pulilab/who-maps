@@ -13,7 +13,6 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.Serializer):
 
-    date = serializers.CharField()
     name = serializers.CharField()
     organisation = serializers.CharField()
     contact_name = serializers.CharField()
