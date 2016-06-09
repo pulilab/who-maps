@@ -101,17 +101,6 @@ describe('continuumController', () => {
         });
     });
 
-    it('classGenerator fn. that return a string of classes for the child row', () => {
-        const tileMock = {
-            activated: true,
-            columnId: 0,
-            type: 'child'
-
-        };
-        const classString = cc.classGenerator(tileMock);
-        expect(classString).toContain('child odd activated zindex-100  empty');
-    });
-
     describe('has a function for activating columns', () => {
 
         it(', which runs only in edit mode', () => {

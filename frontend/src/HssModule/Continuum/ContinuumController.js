@@ -3,10 +3,11 @@ import angular from 'angular';
 
 class ContinuumController {
 
-    constructor($timeout, $element) {
+    constructor($timeout, $element, $scope) {
         this.EE = window.EE;
         this.timeout = $timeout;
         this.element = $element;
+        this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
 
     }
@@ -93,13 +94,13 @@ class ContinuumController {
             .map(value => {
                 return {
                     type: 'mother',
-                    content: self.structure[value].mother.title,
-                    colSpan: self.structure[value].mother.span,
+                    content: self.structure[value].title,
+                    colSpan: self.structure[value].span,
                     rowSpan: 1,
-                    invisible: _.isEmpty(self.structure[value].mother),
+                    invisible: _.isEmpty(self.structure[value]),
                     clickHandler: this.toggleColumnActivationClick.bind(self),
                     columnId: value,
-                    activated: self.data[value].mother,
+                    activated: self.data[value].state,
                     introName: 'mother_middle_' + value,
                     classGenerator: this.classGenerator
                 };
@@ -117,11 +118,6 @@ class ContinuumController {
         classes.push(tile.activated ? 'activated' : 'deactivated');
         classes.push('zindex-' + (100 - (tile.columnId * 10)));
         classes.push(tile.introName);
-
-        if (tile.type === 'child' && this.structure) {
-            classes.push(this.structure[tile.columnId].child.title ? 'filled' : 'empty');
-        }
-
         return classes.join(' ');
     }
 
@@ -163,11 +159,11 @@ class ContinuumController {
 
     static continuumFactory() {
         require('./Continuum.scss');
-        function continuum($timeout, $element) {
-            return new ContinuumController($timeout, $element);
+        function continuum($timeout, $element, $scope) {
+            return new ContinuumController($timeout, $element, $scope);
         }
 
-        continuum.$inject = ['$timeout', '$element'];
+        continuum.$inject = ['$timeout', '$element', '$scope'];
 
         return continuum;
     }

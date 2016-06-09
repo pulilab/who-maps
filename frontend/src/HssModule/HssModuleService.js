@@ -39,9 +39,9 @@ class HssModuleService extends AuthApi {
             .range()
             .forEach(item => {
                 const body = {
-                    'column_id': (data.columnId + item)
+                    'column_id': (data.columnId + item),
+                    state: data.activated
                 };
-                body[data.type] = data.activated;
 
                 return this.post(this.projectId + '/hss/continuum/', body);
             })
