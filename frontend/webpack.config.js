@@ -107,6 +107,10 @@ module.exports = {
                 loader: 'json'
             },
             {
+                test: /\.txt/,
+                loader: 'raw'
+            },
+            {
                 test: /\.(jpe?g|png|gif|ico)$/i,
                 loaders: [
                     'file?hash=sha512&digest=hex&name=[hash].[ext]',

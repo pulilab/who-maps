@@ -9,18 +9,18 @@
             <form layout="column" name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
                 <div layout="column" class="role-form">
                     <h4>1. Select your role</h4>
-                    <md-radio-group ng-model="vm.register.role">
-                        <md-radio-button value="1" ng-selected="true" class="md-primary">
+                    <md-radio-group ng-model="vm.register.account_type">
+                        <md-radio-button value="I" ng-selected="true" class="md-primary">
                           <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
                           Implementer
                         </md-radio-button>
                         <p class="md-small">How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation. </p>
-                        <md-radio-button value="2" class="md-primary">
+                        <md-radio-button value="D" class="md-primary">
                           <img src="./images/icon-role-investor.svg" alt="" class="img-role">
                           Financial Investor
                         </md-radio-button>
                         <p class="md-small">What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio. </p>
-                        <md-radio-button value="3" class="md-primary">
+                        <md-radio-button value="G" class="md-primary">
                           <img src="./images/icon-role-government.svg" alt="" class="img-role">
                           Government
                         </md-radio-button>
