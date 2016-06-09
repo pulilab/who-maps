@@ -118,7 +118,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
 
     def get_permissions(self):
         if self.action == "retrieve":
-            return [] # Retrieve needs a bit more complex filtering based on user permission
+            return []  # Retrieve needs a bit more complex filtering based on user permission
         else:
             return super(ProjectCRUDViewSet, self).get_permissions()
 

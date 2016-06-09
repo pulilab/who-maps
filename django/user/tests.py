@@ -303,3 +303,43 @@ class UserProfileTests(APITestCase):
     def test_organisation_returns_empty_string_when_no_org_id(self):
         name = Organisation.get_name_by_id("")
         self.assertEqual(name, "")
+
+    def test_user_profile_has_account_type_information(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("account_type" in response.json())
+
+    def test_user_profile_create_sets_account_type(self):
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user1@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        url = reverse("userprofile-list")
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        data = {
+            "name": "Test Name",
+            "organisation": self.org.id,
+            "country": "test_country",
+            "account_type": "D"
+        }
+        response = client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
+
+    def test_user_profile_update_changes_account_type(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['account_type'], UserProfile.IMPLEMENTER)
+
+        data = {
+            "name": "Test Name",
+            "organisation": self.org.id,
+            "country": "test_country",
+            "account_type": "G"
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['account_type'], UserProfile.GOVERNMENT)
