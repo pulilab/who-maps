@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import TokenSerializer
 from rest_auth.models import TokenModel
 
@@ -66,3 +67,11 @@ class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organisation
         fields = ("id", "name",)
+
+
+class RegisterWithProfileSerializer(RegisterSerializer):
+
+    def custom_signup(self, request, user):
+        if not hasattr(user, 'userprofile'):
+            account_type = request.POST.get('account_type', 'I')
+            UserProfile.objects.create(user=user, account_type=account_type)
