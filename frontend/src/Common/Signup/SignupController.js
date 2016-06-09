@@ -10,10 +10,10 @@ class SignupController {
         this.registered = false;
         this.processRegistrationResult = this.processRegistrationResult.bind(this);
         this.register = {
-            // email: 'c@c.com',
-            // password1: '123456',
-            // password2: '123456',
-            role: 1
+            email: null,
+            password1: null,
+            password2: null,
+            account_type: 'I'
         };
         this.style = {
             height: this.calculateHeight()
