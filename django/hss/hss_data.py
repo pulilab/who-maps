@@ -106,6 +106,16 @@ interventions = {
     ]
 }
 
+age_ranges = [
+    "Newborn (< 28 days)",
+    "Infant (< 12 months)",
+    "Childhood (1-9 years)",
+    "Adolescence (10-19 years)",
+    "Youth (20-24 years)",
+    "Adulthood (25-64 years)",
+    "Senior (> 65 years)",
+]
+
 applications = [
     {
         'id': 1,
@@ -275,52 +285,38 @@ taxonomies = {
 continuum = [
     {
         'id': 0,
-        'mother': {
-            'title': 'Identify target populations',
-            'span': 1,
-        },
+        'title': 'Identify target populations',
+        'span': 1,
     },
     {
         'id': 1,
-        'mother': {
-            'title': 'Health promotion and intervention',
-            'span': 1,
-        },
+        'title': 'Health promotion and intervention',
+        'span': 1,
     },
     {
         'id': 2,
-        'mother': {
-            'title': 'Detection and diagnosis',
-            'span': 1,
-        },
+        'title': 'Detection and diagnosis',
+        'span': 1,
     },
     {
         'id': 3,
-        'mother': {
-            'title': 'Linkage to care',
-            'span': 1,
-        },
+        'title': 'Linkage to care',
+        'span': 1,
     },
     {
         'id': 4,
-        'mother': {
-            'title': 'Management and quality of care',
-            'span': 1,
-        },
+        'title': 'Management and quality of care',
+        'span': 1,
     },
     {
         'id': 5,
-        'mother': {
-            'title': 'Follow and retention to care',
-            'span': 1,
-        },
+        'title': 'Follow and retention to care',
+        'span': 1,
     },
     {
         'id': 6,
-        'mother': {
-            'title': 'Coordination of care',
-            'span': 1,
-        },
+        'title': 'Coordination of care',
+        'span': 1,
     }
 ]
 
@@ -328,38 +324,31 @@ hss_default = {
     'continuum': [
         {
             'column_id': 0,
-            'mother': False,
-            'child': False
+            'state': False,
         },
         {
             'column_id': 1,
-            'mother': False,
-            'child': False
+            'state': False,
         },
         {
             'column_id': 2,
-            'mother': False,
-            'child': False
+            'state': False,
         },
         {
             'column_id': 3,
-            'mother': False,
-            'child': False
+            'state': False,
         },
         {
             'column_id': 4,
-            'mother': False,
-            'child': False
+            'state': False,
         },
         {
             'column_id': 5,
-            'mother': False,
-            'child': False
+            'state': False,
         },
         {
             'column_id': 6,
-            'mother': False,
-            'child': False
+            'state': False,
         },
     ],
     'applications': [
@@ -392,6 +381,36 @@ hss_default = {
         {
             'column_id': 6,
             'interventions': []
+        },
+    ],
+    'age_ranges': [
+        {
+            'column_id': 0,
+            'age_ranges': []
+        },
+        {
+            'column_id': 1,
+            'age_ranges': []
+        },
+        {
+            'column_id': 2,
+            'age_ranges': []
+        },
+        {
+            'column_id': 3,
+            'age_ranges': []
+        },
+        {
+            'column_id': 4,
+            'age_ranges': []
+        },
+        {
+            'column_id': 5,
+            'age_ranges': []
+        },
+        {
+            'column_id': 6,
+            'age_ranges': []
         },
     ],
     'taxonomies': [
