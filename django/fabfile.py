@@ -37,9 +37,9 @@ def deploy():
         time.sleep(20)
 
         if env.name == 'dev':
-            options = "-f {1}/docker-compose.yml -f {1}/docker-compose.dev.yml ".format(env.project_root)
+            options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(env.project_root, env.project_root)
         elif env.name == 'staging':
-            options = "-f {1}/docker-compose.yml -f {1}/docker-compose.test.yml ".format(env.project_root)
+            options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(env.project_root, env.project_root)
         else:
             options = ""
 
