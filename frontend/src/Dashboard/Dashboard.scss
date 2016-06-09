@@ -174,7 +174,7 @@
                                         color: $text-secondary;
                                     }
                                     .data {
-                                        font-size: 12px;
+                                        font-size: 14px;
                                         font-weight: 500;
                                         color: $text-primary;
                                     }
@@ -186,6 +186,12 @@
                                         .data {
                                             margin: 0 30px;
                                         }
+                                    }
+                                    a {
+                                        margin-left: 20px;
+                                        text-decoration: none;
+                                        color: $color-primary;
+                                        font-weight: 200;
                                     }
                                 }
 

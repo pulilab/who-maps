@@ -122,7 +122,10 @@
 
                                 <div layout="row" layout-align="start center" class="roww borderless">
                                     <div flex="25" class='label'>CONTACT</div>
-                                    <div class="data">MISSING BINDING!!</div> </div>
+                                    <div class="data">
+                                        {{vm.projectData.contact_name}} <a ng-href="mailto:{{vm.projectData.contact_email}}">Send Email</a>
+                                    </div>
+                                </div>
 
                                 <div flex class="gray">
                                     <div class='label labelobj'>OBJECTIVES</div>
