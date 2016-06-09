@@ -17,11 +17,10 @@ class SystemController {
     }
 
     handleUnauthorized() {
-        console.log('unauthorized');
         this.storage.clear();
         const rs = this.cs.reset();
         rs.loadedPromise.then(() => {
-            this.state.go('base.landing', { appName: null });
+            this.state.go('landing', { appName: null });
         }, () => {
             console.error('failed unauthorized handling ');
         });

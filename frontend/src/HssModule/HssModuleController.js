@@ -4,11 +4,12 @@ import 'es6-promise';
 
 class HssModuleController extends Protected {
 
-    constructor($scope, $state, $animate, introJs) {
+    constructor($scope, $state, CommonService, introJs) {
         super();
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.cs = CommonService;
         this.introJsSource = introJs;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -27,6 +28,10 @@ class HssModuleController extends Protected {
         this.structure = {};
         this.data = {};
         this.columnHasContent = [];
+        if (this.cs.userProfile) {
+            this.adjustUserType(this.cs.userProfile);
+        }
+        this.viewMode = this.userType < 3;
         Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
     }
 
@@ -38,7 +43,6 @@ class HssModuleController extends Protected {
     eventBindings() {
         this.EE.on('hssColumnContents', this.reFresh, this);
         this.EE.on('hssHasColumnContent', this.onAskIfColumnGotContent, this);
-        this.EE.on('hssHasColumnContentLastTwo', this.onLastTwoContentAsked, this);
         this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn, this);
         this.EE.on('hssEditMode', this.handleEditMode, this);
         this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent, this);
@@ -48,7 +52,6 @@ class HssModuleController extends Protected {
     eventRemoving() {
         this.EE.removeListener('hssColumnContents', this.reFresh, this);
         this.EE.removeListener('hssHasColumnContent', this.onAskIfColumnGotContent, this);
-        this.EE.removeListener('hssHasColumnContentLastTwo', this.onLastTwoContentAsked, this);
         this.EE.removeListener('hssPleaseActivateColumn', this.askedToActivateColumn, this);
         this.EE.removeListener('hssEditMode', this.handleEditMode, this);
         this.EE.removeListener('hssInnerLayoutDone', this.handleLayoutEvent, this);
@@ -86,24 +89,18 @@ class HssModuleController extends Protected {
         });
     }
 
-    onLastTwoContentAsked() {
-        this.EE.emit('hssHasContentLastTwo', {
-            five: this.columnHasContent[5],
-            six: this.columnHasContent[6]
-        });
-    }
-
     askedToActivateColumn(obj) {
         this.EE.emit('hssGuysActivateColumn', obj);
     }
 
     static hssControllerFactory() {
-        function hssController($scope, $state, $animate) {
+        function hssController($scope, $state) {
             const introJs = require('./resources/introJsSource.json');
-            return new HssModuleController($scope, $state, $animate, introJs);
+            const CommonService = require('../Common/CommonServices');
+            return new HssModuleController($scope, $state, CommonService, introJs);
         }
 
-        hssController.$inject = ['$scope', '$state', '$animate'];
+        hssController.$inject = ['$scope', '$state'];
 
         return hssController;
     }

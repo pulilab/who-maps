@@ -67,17 +67,30 @@ class EditProfileController extends Protected {
     save() {
         this.sentForm = true;
         if (this.editProfileForm.$valid) {
-            const request = this.userProfile.id ?
-                this.es.updateProfile(this.userProfile) : this.es.createProfile(this.userProfile);
+            const profile = _.cloneDeep(this.userProfile);
+            profile.organisation = this.userProfile.organisation.id;
+            const request = profile.id ?
+                this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
                 if (result.success) {
-                    window.location.reload();
+                    this.handleSuccessSave(result);
                 }
                 else {
                     this.handleResponse(result.data);
                 }
             });
         }
+    }
+
+    handleSuccessSave(result) {
+        this.storage.set('user_profile_id', result.data.id);
+        const reset = this.cs.reset();
+        this.cs.userProfileId = result.data.id;
+        reset.loadedPromise.then(()=> {
+            this.userProfile = this.cs.userProfile;
+            this.EE.emit('profileUpdated');
+            this.scope.$evalAsync();
+        });
     }
 
     handleResponse(response) {
@@ -92,6 +105,16 @@ class EditProfileController extends Protected {
         this.editProfileForm[key].customError = [];
     }
 
+    organisationSearch(name) {
+        return this.es.autocompleteOrganization(name);
+    }
+
+    addOrganisation(name) {
+        return this.es.addOrganization(name)
+            .then(response => {
+                this.userProfile.organisation = response;
+            });
+    }
 
     static editProfileFactory() {
         require('./EditProfile.scss');

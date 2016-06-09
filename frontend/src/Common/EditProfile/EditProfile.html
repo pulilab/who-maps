@@ -63,13 +63,29 @@
                 <!--</div>-->
                 <!--</md-input-container>-->
 
+                <md-autocomplete
+                        required="true"
+                        md-input-name="organisation"
+                        md-no-cache="true"
+                        md-selected-item="vm.userProfile.organisation"
+                        md-search-text="vm.searchText"
+                        md-items="item in vm.organisationSearch(vm.searchText)"
+                        md-item-text="item.name"
+                        md-min-length="2"
+                        placeholder="Organisation name">
+                    <md-item-template>
+                        <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+                    </md-item-template>
 
-                <md-input-container >
-                    <label>Organization name</label>
-                    <input ng-model="vm.userProfile.organisation"
-                           required name="organisation"
-                           type="text" />
-                </md-input-container>
+                    <md-not-found>
+                        <a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>
+                    </md-not-found>
+                </md-autocomplete>
+                <div class="autocomplete-errors" ng-messages="vm.editProfileForm.organisation.$error">
+                    <div ng-message="required">This field is required</div>
+                </div>
+
+
 
                 <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu

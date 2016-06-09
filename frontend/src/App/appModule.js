@@ -18,7 +18,7 @@ import mapsToolkit from '../MapsToolkit/';
 import { Components } from '../Common/';
 
 
-import AppController from './AppModuleController';
+import AppComponent from './appComponent';
 import SystemController from './SystemController';
 import './app.scss';
 
@@ -37,11 +37,26 @@ const config = ($stateProvider, $urlRouterProvider) => {
 
         .state(moduleName, {
             url: '/app/:appName',
-            template: _appTemplate,
-            controller: moduleName + '.appController',
-            controllerAs: 'vm',
+            template: '<app layout="column"></app>',
             resolve: {
                 data: ['$q', ($q) => {
+                    const def = $q.defer();
+                    const cs = require('../Common/CommonServices');
+                    cs.loadedPromise
+                        .then(() => {
+                            def.resolve();
+                        });
+
+                    return def.promise;
+                }]
+            }
+
+        })
+        .state('public', {
+            url: '/public/:appName',
+            template: '<app layout="column" view-mode="true"></app>',
+            resolve: {
+                project: ['$q', ($q) => {
                     const def = $q.defer();
                     const cs = require('../Common/CommonServices');
                     cs.loadedPromise
@@ -108,6 +123,15 @@ const config = ($stateProvider, $urlRouterProvider) => {
                     template: '<email-confirmation></email-confirmation>'
                 }
             }
+        })
+        .state('refreshProjects', {
+            url: '/refresh-projects',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<refresh-project></refresh-project>'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/landing');
@@ -151,8 +175,8 @@ angular.module(moduleName,
         mapsToolkit
     ]
     )
-    .controller(moduleName + '.appController', AppController.appControllerFactory())
     .controller('systemController', SystemController.systemControllerFactory())
+    .component(AppComponent.name, AppComponent)
     .config(config)
     .run(run);
 

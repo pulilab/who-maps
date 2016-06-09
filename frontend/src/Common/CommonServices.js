@@ -7,8 +7,6 @@ const singleton = Symbol();
 const singletonEnforcer = Symbol();
 
 
-const loadingArray = ['list', 'structure', 'user-profile'];
-
 class CommonServices extends Protected {
 
     constructor(enforcer) {
@@ -22,11 +20,14 @@ class CommonServices extends Protected {
 
     initialize() {
         this.user = this.retrieveLoginStatus();
+        this.userProfileId = this.retrieveProfileId();
         this.projectList = [];
+        this.publicProject = [];
         this.hash = Math.random().toString(36);
         this.projectStructure = [];
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
-        this.loadingCheck = _.cloneDeep(loadingArray);
+        this.loadingCheck = [];
+        this.userProfile = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -36,9 +37,13 @@ class CommonServices extends Protected {
         if (this.user) {
             this.loadData();
         }
+        else {
+            this.loadingCheck = ['structure'];
+            this.populateProjectStructure();
+        }
     }
 
-    uglifyCountryName(name) {
+    uglyfyCountryName(name) {
         let nameParts = name.replace(' ', '-').split('-');
         nameParts = _.map(nameParts, item =>{
             return _.lowerCase(item);
@@ -60,8 +65,13 @@ class CommonServices extends Protected {
     }
 
     loadData() {
-        this.retrieveUserProfile();
-        this.populateProjectList();
+        this.loadingCheck = ['structure'];
+        if (this.userProfileId) {
+            this.loadingCheck.push('list');
+            this.loadingCheck.push('user-profile');
+            this.retrieveUserProfile();
+            this.populateProjectList();
+        }
         this.populateProjectStructure();
     }
 
@@ -75,20 +85,27 @@ class CommonServices extends Protected {
         if (this.loadingCheck.length === 0) {
             this.mergeOperations();
             this.promiseResolve();
-            this.loadingCheck = _.cloneDeep(loadingArray);
         }
 
 
     }
 
+    getCountryName(project) {
+        const country = _.find(this.projectStructure.countries, { id: project.country });
+        if (country) {
+            project.countryName = this.prettifyCountryName(country.name);
+        }
+    }
+
     mergeOperations() {
         _.forEach(this.projectList, project => {
-            const country = _.find(this.projectStructure.countries, { id: project.country });
-            if (country) {
-                project.countryName = this.prettifyCountryName(country.name);
-            }
+            this.getCountryName(project);
+            project.organisation = {
+                id: project.organisation,
+                name: project.organisation_name
+            };
         });
-
+        this.projectList = _.sortBy(this.projectList, ['id']);
         _.forEach(this.projectStructure.countries, country => {
             country.name = this.prettifyCountryName(country.name);
         });
@@ -96,10 +113,14 @@ class CommonServices extends Protected {
 
     retrieveUserProfile() {
         const vm = this;
-        vm.get('userprofiles/').then(user => {
-            vm.userProfile = user[0];
-            if (this.userProfile) {
-                vm.userProfile.email = this.storage.get('user').username;
+        vm.get(`userprofiles/${vm.userProfileId}/`).then(_userprofile => {
+            vm.userProfile = _userprofile;
+            if (vm.userProfile) {
+                vm.userProfile.email = vm.storage.get('user').username;
+                vm.userProfile.organisation = {
+                    id: _userprofile.organisation,
+                    name: _userprofile.organisation_name
+                };
             }
             this.loadingProgress('user-profile');
         });
@@ -107,7 +128,7 @@ class CommonServices extends Protected {
 
     populateProjectList() {
         const promiseArray = [];
-        this.get('projects/')
+        this.get('projects/member-of/')
             .then((projects) => {
                 this.projectList = projects;
                 _.forEach(projects, project => {
@@ -150,15 +171,44 @@ class CommonServices extends Protected {
     }
 
     getProjectFiles(project) {
-        project.filePromise = this.get(`projects/${project.id}/files/`);
+        project.filePromise = this.get(`projects/${project.id}/file-list/`);
         project.filePromise.then(files => {
             project.files = files;
         });
     }
 
+    fetchSingleProjectData(resolve, _id) {
+        const vm = this;
+        if (vm.publicProject[_id]) {
+            resolve(vm.publicProject[_id]);
+        }
+        else {
+            const project = {
+                id: _id
+            };
+            vm.getProjectDetail(project);
+            vm.getProjectFiles(project);
+            Promise.all([project.detailPromise, project.filePromise]).then(() => {
+                vm.getCountryName(project);
+                vm.publicProject[_id] = project;
+                resolve(project);
+            });
+        }
+    }
+
     getProjectData(_id) {
-        const id = parseInt(_id, 10);
-        return _.find(this.projectList, { id });
+        const vm = this;
+        return new Promise((resolve) => {
+            const id = parseInt(_id, 10);
+            const last = _.find(this.projectList, { id });
+            if (last) {
+                resolve(last);
+            }
+            else {
+                vm.fetchSingleProjectData(resolve, _id);
+            }
+
+        });
     }
 
     static commonServiceFactory() {

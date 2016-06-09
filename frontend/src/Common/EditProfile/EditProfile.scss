@@ -72,4 +72,18 @@ edit-profile {
     }
   }
 
+
+  .autocomplete-errors {
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    opacity: 1;
+    margin-top: 0;
+    padding-top: 5px;
+    color: rgb(221,44,0)
+  }
+
+  
+
 }

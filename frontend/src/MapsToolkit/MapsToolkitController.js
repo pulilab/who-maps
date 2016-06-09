@@ -4,10 +4,11 @@ import MapsToolkitService from './MapsToolkitService';
 
 class MapsToolkitController extends Protected {
 
-    constructor($scope, $state, structure) {
+    constructor($scope, $state, CommonService, structure) {
         super();
         this.state = $state;
         this.scope = $scope;
+        this.cs = CommonService;
         this.structure = _.cloneDeep(structure);
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
@@ -25,6 +26,8 @@ class MapsToolkitController extends Protected {
         vm.axisId = vm.state.params.axisId;
         vm.ms = new MapsToolkitService(vm.projectId);
         vm.loadData();
+        vm.adjustUserType(vm.cs.userProfile);
+        vm.viewMode = vm.userType < 3;
     }
 
     onDestroy() {
@@ -47,7 +50,7 @@ class MapsToolkitController extends Protected {
 
     loadData() {
         if (_.isNaN(parseInt(this.domainId, 10)) || _.isNaN(parseInt(this.axisId, 10))) {
-            this.state.go('maps', {
+            this.state.go(this.state.current.name, {
                 domainId: this.domainId ? this.domainId : 0,
                 axisId: this.axisId ? this.axisId : 0
             }, {
@@ -116,6 +119,9 @@ class MapsToolkitController extends Protected {
     }
 
     setAnswer(questionId, answerId, points) {
+        if (this.viewMode) {
+            return;
+        }
         const answer = {
             axis: this.axisId,
             domain: this.domainId,
@@ -166,11 +172,17 @@ class MapsToolkitController extends Protected {
         this.handleChangeDomain(prevAxis, prevDomain);
     }
 
+    goToScorecard() {
+        const axisId = this.axisId;
+        this.state.go(this.viewMode ? 'scorecard' : 'scorecard', { axisId });
+    }
+
 
     static mapsControllerFactory() {
         function mapsController($scope, $state) {
             const structure = require('./Resource/structure.json');
-            return new MapsToolkitController($scope, $state, structure);
+            const CommonService = require('../Common/CommonServices');
+            return new MapsToolkitController($scope, $state, CommonService, structure);
         }
 
         mapsController.$inject = ['$scope', '$state'];

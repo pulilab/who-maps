@@ -1,19 +1,19 @@
 from django.db import transaction
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view, authentication_classes
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 
-from core.views import TokenAuthMixin, get_object_or_400
+from core.views import TeamTokenAuthMixin, CheckProjectAccessMixin, get_object_or_400
+from rest_framework.viewsets import GenericViewSet
 from search.signals import intervention_save
-from .hss_data import interventions, applications, taxonomies, continuum
+from project.models import Project
+
+from .hss_data import interventions, applications, taxonomies, continuum, age_ranges
 from .models import HSS
 from . import serializers
 
 
-class BubbleView(TokenAuthMixin, generics.CreateAPIView):
+class BubbleView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.BubbleSerializer
 
     def cmp_bubbles(self, bubble1, bubble2):
@@ -33,14 +33,14 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
                 and bubble1["column_id"] == bubble2["column_id"]
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Bubbles.
         """
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data, many=True)
         if serializer.is_valid():
-            # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each bubble in the update request, insert if not exists,
             # update if exists.
@@ -65,18 +65,19 @@ class BubbleView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
+class ContinuumView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.ContinuumSerializer
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Continuum.
         """
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             hss.data["continuum"][serializer.validated_data["column_id"]].update(**serializer.validated_data)
             hss.save()
@@ -85,18 +86,19 @@ class ContinuumView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
+class ConstraintView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.ConstraintSerializer
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Constraints.
         """
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data, many=True)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Check each constraint in the update request, insert if not exists,
             # update if exists.
@@ -118,18 +120,19 @@ class ConstraintView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class InterventionView(TokenAuthMixin, generics.CreateAPIView):
+class InterventionView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.InterventionSerializer
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Interventions.
         """
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Update the column with the intervention.
             hss.data["interventions"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
@@ -140,7 +143,29 @@ class InterventionView(TokenAuthMixin, generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
+class AgeRangeView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
+    serializer_class = serializers.AgeRangeSerializer
+
+    @transaction.atomic
+    def create(self, request, project_id):
+        """
+        Overrides create to insert and update Age range.
+        """
+        self.check_project_permission(request, project_id)
+
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            # Check if there's a project for the ID.
+            hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
+            # Update the column with the intervention.
+            hss.data["age_ranges"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
+            hss.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TaxonomyView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
     serializer_class = serializers.TaxonomySerializer
 
     def cmp_taxonomies(self, tax1, tax2):
@@ -159,14 +184,15 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
                 and tax1["subapp_id"] == tax2["subapp_id"]
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def create(self, request, project_id):
         """
         Overrides create to insert and update Taxonomies.
         """
+        self.check_project_permission(request, project_id)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            project_id = kwargs.get("project_id", None)
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             tax_update = dict(serializer.validated_data)
             # Check the constraint in the update request, insert if not exists,
@@ -190,8 +216,6 @@ class TaxonomyView(TokenAuthMixin, generics.CreateAPIView):
 
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def hss_data(request, project_id):
     """
     Retrieves HSS data based on project_id.
@@ -207,8 +231,6 @@ def hss_data(request, project_id):
 
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def hss_structure(request):
     """
     Retrieves HSS structure for setting up the HSS page for e.g. dropdowns,
@@ -219,6 +241,7 @@ def hss_structure(request):
     """
     data = {
         "interventions": interventions,
+        "age_ranges": age_ranges,
         "applications": applications,
         "taxonomies": taxonomies,
         "continuum": continuum

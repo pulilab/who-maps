@@ -5,9 +5,17 @@
 /* GENERAL
    ============================= */
 
-ui-view > md-content {
+app {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+}
+
+app > md-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
+  height: auto !important;
 }
 
 .page-wrapper {
@@ -93,6 +101,7 @@ md-tooltip {
 
 
 // Placeholder color
+
 md-input-container label,
 .md-select-placeholder span {
   color: rgba(0,0,0,.54);
@@ -117,11 +126,13 @@ md-backdrop {
 }
 
 // Progress Circular
+
 md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
   border-width: 16px !important;
 }
 
 // Checkbox - small
+
 $checkbox-size-small: 16px;
 
 md-checkbox.small {
@@ -186,6 +197,21 @@ p.global-error {
     }
   }
 }
+
+// Autocomplete
+
+.md-not-found {
+  a {
+    font-weight: 500;
+    color: $color-primary !important;
+
+    .material-icons {
+      position: relative;
+      top: 7px;
+    }
+  }
+}
+
 
 /* CUSTOM COLORS
    ============================= */
@@ -291,8 +317,7 @@ p.global-error {
       }
 
       &.landing-link {
-        margin-right: 0;
-        margin-left: 24px;
+        margin-right: 12px;
       }
 
       .material-icons {
@@ -337,6 +362,11 @@ p.global-error {
   .md-toolbar-tools-bottom {
     background-color: $color-white;
     box-shadow: 0 1px 0 #BDBDBD;
+  }
+
+  .project-name {
+    color: $text-primary;
+    font-size: 24px;
   }
 
   .project-selector {
@@ -396,7 +426,7 @@ p.global-error {
       line-height: 36px;
 
       &:last-of-type {
-        margin-right: 12px;
+        margin-right: 14px;
       }
 
       &.menu-separator {

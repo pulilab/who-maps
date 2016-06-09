@@ -7,13 +7,13 @@ from core.models import ExtendedModel
 class Organisation(ExtendedModel):
     name = models.CharField(unique=True, max_length=100)
 
-    @staticmethod
-    def get_name_by_id(org_id):
-        org = Organisation.objects.get_object_or_none(id=org_id)
-        if org:
-            return org.name
-        else:
+    @classmethod
+    def get_name_by_id(cls, org_id=None):
+        if not org_id:
             return ""
+
+        org = cls.objects.get_object_or_none(id=org_id)
+        return org.name if org else ""
 
 
 class UserProfile(ExtendedModel):

@@ -10,10 +10,6 @@ class HssModuleService extends AuthApi {
         this.projectId = _projectId;
     }
 
-    getDetail() {
-        return this.get(`${this.projectId}/`);
-    }
-
     getStructure() {
         return this.get('hss/structure/');
     }
@@ -43,9 +39,9 @@ class HssModuleService extends AuthApi {
             .range()
             .forEach(item => {
                 const body = {
-                    'column_id': (data.columnId + item)
+                    'column_id': (data.columnId + item),
+                    state: data.activated
                 };
-                body[data.type] = data.activated;
 
                 return this.post(this.projectId + '/hss/continuum/', body);
             })
@@ -54,6 +50,9 @@ class HssModuleService extends AuthApi {
 
     postInterventions(columnId, interventions) {
         return this.post(this.projectId + '/hss/interventions/', { 'column_id': columnId, interventions });
+    }
+    postAgeRanges(columnId, age_ranges) {
+        return this.post(this.projectId + '/hss/ageranges/', { 'column_id': columnId, age_ranges });
     }
     postBubbles(data) {
         return this.post(this.projectId + '/hss/bubbles/', data);

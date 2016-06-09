@@ -7,7 +7,8 @@ const scorecardComponent = {
     controllerAs: 'vm',
     name: 'scorecard',
     bindings: {
-        summary: '@'
+        summary: '@',
+        viewMode: '@'
     }
 };
 

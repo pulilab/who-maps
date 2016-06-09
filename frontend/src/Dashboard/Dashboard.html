@@ -3,8 +3,8 @@
     <div layout="row" class="dashrow dashrow-upper">
 
         <div
-            ng-show="false"
-            ng-init="vm.userType = 0"><!-- 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
+                ng-show="false">
+            <!-- 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
         </div>
 
         <div flex class="dashsection dashsection-left" layout="row">
@@ -15,9 +15,7 @@
 
                 <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
 
-
                     <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
-
 
                         <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
                         <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
@@ -245,7 +243,6 @@
 
         <div flex="40" class="dashsection dash-cardholder" layout="column">
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
-
             <md-card md-whiteframe="2" flex class="dash-perf">
 
                 <md-tabs ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">

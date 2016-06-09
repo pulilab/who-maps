@@ -5,7 +5,7 @@ import tarfile
 import json
 from xml.dom import minidom
 
-from who_maps import geodata_config
+import geodata_config
 
 try:
     # Python 2.7

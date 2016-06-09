@@ -1,5 +1,4 @@
 import {  Protected } from '../../Common/';
-import HssModuleService from '../HssModuleService';
 
 class ProjectScaleController extends Protected {
 
@@ -18,8 +17,6 @@ class ProjectScaleController extends Protected {
         vm.defaultOnInit();
         vm.bindEvents();
         vm.editMode = false;
-        vm.hms = new HssModuleService(this.projectId);
-        vm.hms.getDetail().then(this.handleData.bind(this));
 
     }
 

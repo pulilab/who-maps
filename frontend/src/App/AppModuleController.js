@@ -8,7 +8,7 @@ class AppModuleController extends Protected {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
-        this.onInit();
+        this.$onInit = this.onInit.bind(this);
     }
 
     onInit() {
@@ -16,15 +16,11 @@ class AppModuleController extends Protected {
         this.cs = require('../Common/CommonServices');
         this.watchers();
         this.eventBinding();
-        this.userProfile = this.cs.userProfile;
+        this.projectId = this.state.params.appName;
         this.currentPage = void 0;
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.currentProjectMock = {
-            version: {
-                id: '3',
-                date: '12 Feb, 2016'
-            },
             contact: {
                 name: 'Jane M Doe',
                 email: 'po@kungFu.panda'
@@ -32,9 +28,14 @@ class AppModuleController extends Protected {
         };
         if (this.user) {
             this.fillUserData();
+            this.userProfile = this.cs.userProfile;
+            if (this.userProfile) {
+                this.adjustUserType(this.userProfile);
+            }
         }
 
         this.notifications = [1, 2, 3];
+
         if (this.viewMode) {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
@@ -59,10 +60,16 @@ class AppModuleController extends Protected {
         this.EE.on('logout', this.handleLogoutEvent, this);
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
+        this.EE.on('profileUpdated', this.refreshProfileInfo, this);
+    }
+
+    refreshProfileInfo() {
+        this.userProfile = this.cs.userProfile;
+        this.scope.$evalAsync();
     }
 
     checkUserProfile() {
-        if (!this.userProfile) {
+        if (!this.userProfile && this.isLogin) {
             this.state.go('editProfile');
         }
     }
@@ -70,7 +77,6 @@ class AppModuleController extends Protected {
     refreshProjectsHandler() {
         this.cs.reset().loadedPromise.then(() => {
             this.fillUserData();
-            this.goToDashboard();
         });
     }
 
@@ -83,14 +89,12 @@ class AppModuleController extends Protected {
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
 
-        if (!lastProject || !lastProject.id) {
-            this.state.go('country');
-        }
-
         if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { appName });
+            this.state.go(state, { appName }, {
+                location: 'replace'
+            });
         }
         _.forEach(this.user.projects, item => {
             if (item.id === parseInt(this.state.params.appName, 10)) {
@@ -106,18 +110,22 @@ class AppModuleController extends Protected {
         this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
     }
 
+    goToEditProject() {
+        this.state.go('editProject', { 'appName': _.last(this.user.projects).id });
+    }
+
     handleUnauthorized() {
         this.logout();
     }
 
     handleLogoutEvent() {
-        this.state.go('login', { appName: null });
+        this.state.go('landing', { appName: null });
 
     }
 
     showCompleteNavigation(state, isLogin) {
         const isLanding = state === 'landing-logged' || state === 'newProject';
-        this.showFullNavigation = !isLanding && isLogin;
+        this.showFullNavigation = (!isLanding && isLogin) || this.viewMode;
     }
 
 
@@ -126,9 +134,9 @@ class AppModuleController extends Protected {
     }
 
     logout() {
+        this.systemLogout();
         const rest = this.cs.reset();
         rest.loadedPromise.then(() => {
-            this.systemLogout();
             this.showCompleteNavigation(null, false);
         });
     }

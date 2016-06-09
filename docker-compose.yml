@@ -5,10 +5,24 @@ django:
     - "8000"
   links:
     - postgres:postgres
+    - celery:celery
+    - rabbitmq:rabbitmq
   volumes:
     - ./django:/src
   command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
 #  command: python manage.py runserver 0.0.0.0:8000 # FOR DEBUG
+
+celery:
+  restart: always
+  build: ./django
+  environment:
+    - C_FORCE_ROOT=true
+  links:
+    - postgres:postgres
+    - rabbitmq:rabbitmq
+  volumes:
+    - ./django:/src
+  command: /usr/local/bin/celery -A scheduler worker -B -l info
 
 nginx:
   restart: always
@@ -40,3 +54,12 @@ postgresdata:
   volumes:
     - /var/lib/postgresql
   command: "/bin/true"
+
+rabbitmq:
+  restart: always
+  image: rabbitmq:3.6.2
+  environment:
+    - RABBITMQ_PASS=mypass
+  ports:
+    - "5672:5672"
+    - "15672:15672"

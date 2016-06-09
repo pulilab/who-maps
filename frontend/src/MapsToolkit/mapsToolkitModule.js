@@ -12,8 +12,7 @@ const moduleName = 'maps';
 
 const config = ($stateProvider, $compileProvider) => {
     $stateProvider
-        .state(moduleName,
-        {
+        .state(moduleName, {
             url: '/maps/:axisId/:domainId',
             parent: 'app',
             views: {
@@ -33,13 +32,12 @@ const config = ($stateProvider, $compileProvider) => {
                 }
             }
         })
-        .state('scorecard',
-        {
+        .state('scorecard', {
             url: '/scorecard/:axisId',
             parent: 'app',
             views: {
                 main: {
-                    template: '<scorecard></scorecard>',
+                    template: '<scorecard ></scorecard>',
                     resolve: {
                         'scorecard': () => {
                             return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
@@ -54,8 +52,7 @@ const config = ($stateProvider, $compileProvider) => {
                 }
             }
         })
-        .state('summary',
-        {
+        .state('summary', {
             url: '/summary',
             parent: 'app',
             views: {

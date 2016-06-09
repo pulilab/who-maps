@@ -68,12 +68,25 @@ class ScorecardController extends Protected {
     updateScore(domain, axis) {
         const domainId = domain.index;
         const axisId = axis ? axis.id : this.axisId;
-        this.state.go('maps', { axisId, domainId });
+        this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId, domainId });
+    }
+
+    goToAxis() {
+        const axisId = this.axisId;
+        this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId });
     }
 
     goToNextAxis() {
         const axisId = parseInt(this.axisId, 10) + 1;
-        this.state.go('maps', { axisId });
+        this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId });
+    }
+
+    goToSummary() {
+        this.state.go(this.viewMode ? 'public-summary' : 'summary');
+    }
+
+    goToDashboard() {
+        this.state.go(this.viewMode ? 'public-dashboard' : 'dashboard');
     }
 
     isLastAxis() {

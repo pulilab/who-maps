@@ -6,7 +6,10 @@ const hssComponent = {
     controller: HssModuleController.hssControllerFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'hssModule'
+    name: 'hssModule',
+    bindings: {
+        viewMode: '@'
+    }
 };
 
 export default hssComponent;

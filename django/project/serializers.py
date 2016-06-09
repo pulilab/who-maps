@@ -13,11 +13,10 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.Serializer):
 
-    date = serializers.CharField()
     name = serializers.CharField()
     organisation = serializers.CharField()
     contact_name = serializers.CharField()
-    contact_email = serializers.CharField()
+    contact_email = serializers.EmailField()
     implementation_overview = serializers.CharField(max_length=500)
     implementing_partners = serializers.CharField(required=False)
     implementation_dates = serializers.CharField()
