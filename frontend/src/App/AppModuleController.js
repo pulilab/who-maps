@@ -60,6 +60,12 @@ class AppModuleController extends Protected {
         this.EE.on('logout', this.handleLogoutEvent, this);
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
+        this.EE.on('profileUpdated', this.refreshProfileInfo, this);
+    }
+
+    refreshProfileInfo() {
+        this.userProfile = this.cs.userProfile;
+        this.scope.$evalAsync();
     }
 
     checkUserProfile() {
