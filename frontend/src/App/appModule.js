@@ -129,7 +129,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<div>Refreshing and Forwarding</div>'
+                    template: '<refresh-project></refresh-project>'
                 }
             }
         });

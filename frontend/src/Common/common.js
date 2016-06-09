@@ -29,6 +29,7 @@ import EditProfileComponent from './EditProfile/editProfileComponent';
 import countrymap from './CountryMap/countrymap.js';
 import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
 import disclaimerComponent from './Disclaimer/disclaimerComponent.js';
+import RefreshProjectComponenet from './RefreshProject/refreshProject';
 
 const moduleName = 'Components';
 
@@ -52,7 +53,8 @@ angular.module(moduleName,
     .component(EditProfileComponent.name, EditProfileComponent)
     .component(countrymap.name, countrymap)
     .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
-    .component(disclaimerComponent.name, disclaimerComponent);
+    .component(disclaimerComponent.name, disclaimerComponent)
+    .component(RefreshProjectComponenet.name, RefreshProjectComponenet);
 
 
 export { EE };

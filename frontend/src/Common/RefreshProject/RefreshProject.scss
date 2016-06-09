@@ -1,0 +1,13 @@
+@import '../../variables';
+@import '../../mixins';
+
+refresh-project {
+
+  md-content {
+    margin-top: 40px;
+    padding: 40px;
+    min-width: 440px;
+    max-width: 440px;
+  }
+
+}
