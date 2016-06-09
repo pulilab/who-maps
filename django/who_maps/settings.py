@@ -172,6 +172,10 @@ REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'user.serializers.ProfileTokenSerializer'
 }
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
+}
+
 import datetime
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=1)
 
