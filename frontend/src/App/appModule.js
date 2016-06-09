@@ -123,6 +123,15 @@ const config = ($stateProvider, $urlRouterProvider) => {
                     template: '<email-confirmation></email-confirmation>'
                 }
             }
+        })
+        .state('refreshProjects', {
+            url: '/refresh-projects',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<refresh-project></refresh-project>'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/landing');
