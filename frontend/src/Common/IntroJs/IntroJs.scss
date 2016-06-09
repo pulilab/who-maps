@@ -4,12 +4,23 @@
 introjs {
 
   &.start-hss-intro {
-    display: block;
-    width: 100%;
-    text-align: center;
+    // display: block;
+    // width: 100%;
+    // text-align: center;
+    //
+    // button {
+    //   margin: 2rem auto 2.5rem;
+    // }
 
-    button {
-      margin: 2rem auto 2.5rem;
+    a {
+      color: $color-primary;
+      cursor: pointer;
+
+      .material-icons {
+        position: relative;
+        top: 5px;
+        font-size: 20px;
+      }
     }
   }
 
