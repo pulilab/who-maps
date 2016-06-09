@@ -32,9 +32,6 @@ class UserProfile(ExtendedModel):
         default=IMPLEMENTER,
     )
     user = models.OneToOneField(User)
-    name = models.CharField(max_length=100)
-    organisation = models.ForeignKey(Organisation)
-    country = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return "%s (%s)" % (self.name, self.organisation)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    organisation = models.ForeignKey(Organisation, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
