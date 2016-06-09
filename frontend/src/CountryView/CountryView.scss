@@ -183,9 +183,12 @@
 
             padding-bottom: 20px;
             padding-top: 20px;
+            // overflow: scroll;
+            background-color: $color-gray-lightest;
 
             .headerrow {
 
+                width: 2000px;
                 border-bottom: 1px solid $color-gray-light;
                 background-color: white;
 
@@ -205,6 +208,7 @@
 
             .projectrow {
 
+                width: 2000px;
                 div {
 
                     font-size: 14px;

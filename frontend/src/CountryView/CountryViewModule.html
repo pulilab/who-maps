@@ -56,13 +56,20 @@
 						</div>
 					</div>
 
-					<div class="projectcont" ng-hide="!vm.projectsData">
+					<!-- <p>{{vm.projectsData}}</p> -->
 
-						<div class="headerrow" layout="row" layout-padding md-whiteframe="1">
+					<md-content class="projectcont" ng-hide="!vm.projectsData">
+
+						<div class="headerrow" layout="row" layout-padding md-whiteframe="2">
 							<div flex="30">Project name</div>
 							<div flex="20">Country</div>
 							<div flex="25">Organisation name</div>
 							<div flex="25">Donors</div>
+							<div flex="20">Point of Contact</div>
+							<div flex="20">Overview of digital health implementation</div>
+							<div flex="20">Implementing partners</div>
+							<div flex="20">Geographical coverage</div>
+							<div flex="20">mHealth interventions</div>
 						</div>
 
 						<div
@@ -86,11 +93,18 @@
 									{{(donor.value || donor) + ' '}}
 								</span>
 							</div>
+
+							<div flex="20"> MOCK Point of Contact</div>
+							<div flex="20"> MOCK Overview of digital health implementation</div>
+							<div flex="20"> MOCK Implememnting partners</div>
+							<div flex="20"> MOCK Geographical coverage</div>
+							<div flex="20"> MOCK mHealth interventions</div>
+
 						</div>
 						<div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>
 							<div flex>There is no project to show in this country.</div>
 						</div>
-					</div>
+					</md-content>
 
                 </div>
             </md-tab>
