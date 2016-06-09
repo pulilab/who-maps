@@ -10,23 +10,28 @@ class ProfileTokenSerializer(TokenSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
-    userprofile = serializers.SerializerMethodField("is_userprofile")
+    user_profile_id = serializers.SerializerMethodField()
+    account_type = serializers.SerializerMethodField()
 
     class Meta:
         model = TokenModel
-        fields = ("key", "userprofile",)
+        fields = ("key", "user_profile_id", "account_type")
 
     @staticmethod
-    def is_userprofile(obj):
+    def get_user_profile_id(obj):
         """
         Checks the UserProfile existence for the given key.
         """
-        authtoken = TokenModel.objects.get(key=obj)
-        userprofile = UserProfile.objects.get_object_or_none(user=authtoken.user)
-        if userprofile:
-            return True
-        else:
-            return False
+        if hasattr(obj.user, 'userprofile'):
+            return obj.user.userprofile.id
+
+    @staticmethod
+    def get_account_type(obj):
+        """
+        Checks the UserProfile existence for the given key.
+        """
+        if hasattr(obj.user, 'userprofile'):
+            return obj.user.userprofile.account_type
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
