@@ -16,7 +16,7 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(viewers=user.userprofile)
 
     def member_of(self, user):
-        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile))
+        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile)).distinct()
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):

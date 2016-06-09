@@ -35,7 +35,16 @@ def deploy():
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(20)
-        run('docker-compose restart')
+
+        if env.name == 'dev':
+            options = "-f {1}/docker-compose.yml -f {1}/docker-compose.dev.yml ".format(env.project_root)
+        elif env.name == 'staging':
+            options = "-f {1}/docker-compose.yml -f {1}/docker-compose.test.yml ".format(env.project_root)
+        else:
+            options = ""
+
+        run('docker-compose restart'.format(options))
+
         time.sleep(5)
 
         # handle backend
@@ -44,9 +53,9 @@ def deploy():
             # backup DB
             _backup_db()
             # build
-            run('docker-compose build')
-            run('docker-compose down')
-            run('docker-compose up -d')
+            run('docker-compose {}build'.format(options))
+            run('docker-compose {}down'.format(options))
+            run("docker-compose {}up -d".format(options))
 
             # drop & create DB
             time.sleep(10)

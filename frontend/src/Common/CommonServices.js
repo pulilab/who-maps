@@ -106,7 +106,6 @@ class CommonServices extends Protected {
             };
         });
         this.projectList = _.sortBy(this.projectList, ['id']);
-        console.log(this.projectList);
         _.forEach(this.projectStructure.countries, country => {
             country.name = this.prettifyCountryName(country.name);
         });
@@ -114,10 +113,10 @@ class CommonServices extends Protected {
 
     retrieveUserProfile() {
         const vm = this;
-        vm.get(`userprofiles/${this.userProfileId}/`).then(_userprofile => {
+        vm.get(`userprofiles/${vm.userProfileId}/`).then(_userprofile => {
             vm.userProfile = _userprofile;
-            if (this.userProfile) {
-                vm.userProfile.email = this.storage.get('user').username;
+            if (vm.userProfile) {
+                vm.userProfile.email = vm.storage.get('user').username;
                 vm.userProfile.organisation = {
                     id: _userprofile.organisation,
                     name: _userprofile.organisation_name
