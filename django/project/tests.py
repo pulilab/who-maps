@@ -388,9 +388,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
-        self.assertEqual(response.json()[0].get("own"), True)
         self.assertEqual(response.json()[1].get("name"), "Test Project2")
-        self.assertEqual(response.json()[1].get("own"), True)
 
     def test_retrieve_project_list_all_without_country(self):
         url = reverse("project-all-list")
@@ -589,6 +587,19 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('intervention_areas'), data['intervention_areas'])
 
+    def test_retrieve_project_list_all_has_all_new_fields(self):
+        url = reverse("project-all-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['country'], self.country_id)
+        self.assertIn("contact_name", response.json()[0])
+        self.assertIn("contact_email", response.json()[0])
+        self.assertIn("implementation_overview", response.json()[0])
+        self.assertIn("implementing_partners", response.json()[0])
+        self.assertIn("implementation_dates", response.json()[0])
+        self.assertIn("geographic_coverage", response.json()[0])
+        self.assertIn("intervention_areas", response.json()[0])
 
 class PermissionTests(SetupTests):
 
