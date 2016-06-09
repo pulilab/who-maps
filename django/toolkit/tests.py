@@ -40,15 +40,16 @@ class ToolkitTests(APITestCase):
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
+        self.user_profile_id = response.json().get('user_profile_id')
 
         # Create profile.
         self.org = Organisation.objects.create(name="org1")
-        url = reverse("userprofile-list")
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
             "country": "test_country"}
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json()['id']
 
         country = Country.objects.create(name="country1")
