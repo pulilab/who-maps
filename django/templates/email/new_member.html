@@ -39,12 +39,19 @@
       <table style="width:100%;" >
         <tr>
           <td>
-            <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;" >Your account has been created!</h3>
-            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;" >Your e-mail needs to be confirmed to finalize your registration.</p>
+            <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;" >Notification</h3>
+            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;" >You have been added to project {{ project_name }}.</p>
 
-            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;" ><b>Please visit this link below to confim your e-mail address:</b></p>
+            <!-- button -->
+            <table class="btn-primary last" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:0;width:auto !important;" >
+              <tr>
+                <td style="border-radius:5px;background-color:#283593;vertical-align:top;text-align:center;text-transform:uppercase;font-size:14px;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;" >
+                  <a href="{% site_url %}/#/app/{{ project_id }}/" style="word-break:break-all;display:inline-block;padding-top:12px;padding-bottom:12px;padding-right:12px;padding-left:12px;border-width:0;border-radius:5px;background-color:#283593;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26);color:#FFFFFF;text-decoration:none;font-weight:bold;line-height:1;cursor:pointer;" >Go to project</a>
+                </td>
+              </tr>
+            </table>
+            <!-- /button -->
 
-            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;" ><a href="{{ activate_url }}" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ activate_url }}</a></p>
           </td>
         </tr>
       </table>

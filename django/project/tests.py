@@ -2,6 +2,7 @@ import copy
 import tempfile
 from datetime import datetime
 
+from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.test.client import MULTIPART_CONTENT, BOUNDARY, encode_multipart
@@ -605,6 +606,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['team'], [user_profile_id])
         self.assertEqual(response.json()['viewers'], [user_profile_id])
+        self.assertEqual(mail.outbox[1].subject, "You are added to a project!")
 
     def test_team_viewer_cannot_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
