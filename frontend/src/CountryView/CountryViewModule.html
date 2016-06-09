@@ -50,23 +50,23 @@
 					      	</md-input-container>
 						</md-card>
 
-						<div class="starry" flex="10">
+						<div class="starry" flex="20">
 							<md-icon>grade</md-icon>
-							My projects
+							Team member
+							<md-icon>visibility</md-icon>
+							Viewer
 						</div>
 					</div>
 
-					<!-- <p>{{vm.projectsData}}</p> -->
-
-					<md-content class="projectcont" ng-hide="!vm.projectsData">
+					<md-content class="projectcont">
 
 						<div class="headerrow" layout="row" layout-padding md-whiteframe="2">
-							<div flex="30">Project name</div>
+							<div flex="25">Project name</div>
 							<div flex="20">Country</div>
-							<div flex="25">Organisation name</div>
-							<div flex="25">Donors</div>
+							<div flex="20">Organisation name</div>
+							<div flex="20">Donors</div>
 							<div flex="20">Point of Contact</div>
-							<div flex="20">Overview of digital health implementation</div>
+							<div flex="30">Overview of digital health implementation</div>
 							<div flex="20">Implementing partners</div>
 							<div flex="20">Geographical coverage</div>
 							<div flex="20">mHealth interventions</div>
@@ -77,28 +77,28 @@
 							layout="row"
 							layout-padding
 							ng-repeat="project in vm.projectsData track by $index"
-							ng-class="{'own': project.own}"
-							ui-sref="dashboard({ appName: project.id })">
+							ng-class="{'own': project.own}">
 
-							<div flex="30">
-								<md-icon ng-show="project.own">grade</md-icon>
+							<div flex="25" ui-sref="dashboard({ appName: project.id })">
+								<!-- waiting for NICO -->
+								<md-icon ng-show="false">grade</md-icon>
+								<md-icon ng-show="false">visibility</md-icon>
 								{{project.name}}
 							</div>
 							<div flex="20" class="cap">
 								{{vm.countriesLib[project.country]}}
 							</div>
-							<div flex="25">{{project.organisation}}</div>
-							<div flex="25">
+							<div flex="20">{{project.organisation}}</div>
+							<div flex="20">
 								<span ng-repeat="donor in project.donors">
 									{{(donor.value || donor) + ' '}}
 								</span>
 							</div>
-
-							<div flex="20"> MOCK Point of Contact</div>
-							<div flex="20"> MOCK Overview of digital health implementation</div>
-							<div flex="20"> MOCK Implememnting partners</div>
-							<div flex="20"> MOCK Geographical coverage</div>
-							<div flex="20"> MOCK mHealth interventions</div>
+							<div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
+							<div flex="30">{{project.implementation_overview}}</div>
+							<div flex="20">{{project.implementing_partners}}</div>
+							<div flex="20">{{project.geographic_coverage}}</div>
+							<div flex="20">{{project.intervention_areas.join(', ')}}</div>
 
 						</div>
 						<div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>

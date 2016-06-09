@@ -66,6 +66,10 @@
                 }
             }
         }
+
+        md-select-value {
+            text-transform: capitalize!important;
+        }
     }
 
     #map {
@@ -109,8 +113,6 @@
                 }
             }
         }
-
-
     }
 
     #list {
@@ -172,9 +174,11 @@
 
                 md-icon {
 
+                    margin-left: 15px;
                     font-size: 14px;
                     height: 14px;
                     width: 14px;
+                    transform: translate(0, -1px);
                 }
             }
         }
@@ -188,7 +192,7 @@
 
             .headerrow {
 
-                width: 2000px;
+                width: 1500px;
                 border-bottom: 1px solid $color-gray-light;
                 background-color: white;
 
@@ -208,7 +212,7 @@
 
             .projectrow {
 
-                width: 2000px;
+                width: 1500px;
                 div {
 
                     font-size: 14px;
@@ -239,21 +243,6 @@
                     background-color: #FFF9C4;
                 }
             }
-        }
-    }
-
-    .disclaimer {
-
-        margin: 30px 50px 0 50px;
-        font-size: 10px;
-        text-align: center;
-        color: $text-disabled;
-        padding-bottom: 10px;
-
-        span {
-
-            font-weight: 500;
-            margin: 0;
         }
     }
 }
