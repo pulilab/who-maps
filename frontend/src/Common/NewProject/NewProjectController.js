@@ -253,7 +253,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.postSaveActions();
+                    this.postSaveActions(response.data.id);
                 }
                 else {
                     this.handleResponse(response);
@@ -262,9 +262,13 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
-    postSaveActions() {
+    postSaveActions(id) {
+        let appName = this.state.params.appName;
+        if (id) {
+            appName = id;
+        }
         this.EE.emit('refreshProjects');
-        this.state.go('editProject', {}, { reload: true });
+        this.state.go('editProject', { appName }, { reload: true });
     }
 
     handleResponse(response) {
@@ -298,8 +302,9 @@ class NewProjectController extends ProjectDefinition {
     }
 
     mergeCustomAndDefault(collection) {
-
-        collection.organisation = collection.organisation.id;
+        const copy = _.cloneDeep(collection);
+        collection.organisation = copy.organisation.id;
+        this.log(copy, collection);
         collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
         collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
@@ -314,10 +319,11 @@ class NewProjectController extends ProjectDefinition {
         collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
     }
 
-    log(data) {
+    log(...args) {
         if (DEBUG) {
-            console.log(data);
-            console.log(this.project);
+            args.forEach(item => {
+                console.log(item);
+            });
         }
     }
 
