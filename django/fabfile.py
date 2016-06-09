@@ -43,7 +43,7 @@ def deploy():
         else:
             options = ""
 
-        run('docker-compose restart'.format(options))
+        run('docker-compose {}restart'.format(options))
 
         time.sleep(5)
 
