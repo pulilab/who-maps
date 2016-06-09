@@ -251,6 +251,16 @@ export const taxonomyLib = {
     }
 };
 
+export const  age_ranges = [
+    'Newborn (< 28 days)',
+    'Infant (< 12 months)',
+    'Childhood (1-9 years)',
+    'Adolescence (10-19 years)',
+    'Youth (20-24 years)',
+    'Adulthood (25-64 years)',
+    'Senior (> 65 years)'
+];
+
 // Bindable things
 // ***************
 
@@ -439,6 +449,38 @@ export const continuumData = [
         'column_id': 6,
         'mother': true,
         'child': false
+    }
+];
+
+
+export const ageRangesData = [
+    {
+        'column_id': 0,
+        age_ranges: []
+    },
+    {
+        'column_id': 1,
+        age_ranges: []
+    },
+    {
+        'column_id': 2,
+        age_ranges: []
+    },
+    {
+        'column_id': 3,
+        age_ranges: []
+    },
+    {
+        'column_id': 4,
+        age_ranges: []
+    },
+    {
+        'column_id': 5,
+        age_ranges: []
+    },
+    {
+        'column_id': 6,
+        age_ranges: []
     }
 ];
 

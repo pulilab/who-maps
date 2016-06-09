@@ -128,7 +128,7 @@ class CommonServices extends Protected {
 
     populateProjectList() {
         const promiseArray = [];
-        this.get('projects/member-of')
+        this.get('projects/member-of/')
             .then((projects) => {
                 this.projectList = projects;
                 _.forEach(projects, project => {

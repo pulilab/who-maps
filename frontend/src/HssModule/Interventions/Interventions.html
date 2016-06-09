@@ -7,16 +7,18 @@
 >
 
     <md-grid-tile
-        md-colspan="9"
-        md-rowspan="1" >
-        <div class="header" layout="row" layout-align="start center">
-            <h2 class="md-title text-uppercase">RMNCH Essential Interventions</h2>
+            md-colspan="9"
+            md-rowspan="1" >
+        <div class="header age-range" layout="row" layout-align="start center">
+            <h2 class="md-title text-uppercase">Beneficiary age range</h2>
         </div>
     </md-grid-tile>
 
+
+
     <md-grid-tile
         md-colspan="2"
-        md-rowspan="{{vm.interventionsRowSpan.size + 1}}"
+        md-rowspan="{{(vm.interventionsRowSpan.size + 1) * 2}}"
         class="constraints">
         <constraints
             structure="vm.structure"
@@ -24,6 +26,56 @@
             service="vm.service"
             resize-callback="vm.resizeRow"></constraints>
     </md-grid-tile>
+
+    <md-grid-tile
+            md-colspan="2"
+            md-rowspan="{{vm.interventionsRowSpan.size}}"
+    <!-- This is empty! -->
+    </md-grid-tile>
+
+
+    <md-grid-tile
+            md-colspan="{{tile.colSpan}}"
+            md-rowspan="{{tile.rowSpan}}"
+            ng-repeat="tile in vm.ageRangesRow"
+            class="intervention">
+
+        <div ng-class="tile.classGenerator(tile)">
+            <div ng-if="tile.activated">
+                <md-list flex ng-if="!vm.editMode">
+                    <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                        <div class="md-list-item-text md-small" layout="column">
+                            {{vm.stripParenthesis(item)}}
+                        </div>
+                    </md-list-item>
+                </md-list>
+                <ssmenu
+                        ng-if="vm.editMode"
+                        ng-model="tile.content"
+                        options="tile.selectValues"
+                        aria-label="intervention-option"
+                        multiple="true"
+                        data-placeholder="Add new"
+                        md-container-class="small"
+                        replace-comma="true"
+                        searchable="true"
+                        class="small multiline"
+                        on-close-callback="tile.saveAgeRanges">
+                </ssmenu>
+            </div>
+        </div>
+    </md-grid-tile>
+
+
+    <md-grid-tile
+            md-colspan="9"
+            md-rowspan="1" >
+        <div class="header" layout="row" layout-align="start center">
+            <h2 class="md-title text-uppercase">RMNCH Essential Interventions</h2>
+        </div>
+    </md-grid-tile>
+
+
 
     <md-grid-tile
         md-colspan="2"
@@ -52,7 +104,7 @@
                     options="tile.selectValues"
                     aria-label="intervention-option"
                     multiple="true"
-                    data-placeholder="Select item(s)"
+                    data-placeholder="Add new"
                     md-container-class="small"
                     replace-comma="true"
                     searchable="true"

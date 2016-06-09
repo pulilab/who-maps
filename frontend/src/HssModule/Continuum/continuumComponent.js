@@ -11,7 +11,7 @@ const continuumComponent = {
         structure: '<',
         data: '<',
         service: '<',
-        viewMode: '@'
+        viewMode: '<'
     },
     name: 'continuum'
 };

@@ -13,8 +13,7 @@ class BubbleSerializer(serializers.Serializer):
 class ContinuumSerializer(serializers.Serializer):
 
     column_id = serializers.IntegerField()
-    mother = serializers.BooleanField(required=False)
-    child = serializers.BooleanField(required=False)
+    state = serializers.BooleanField(required=False)
 
 
 class ConstraintSerializer(serializers.Serializer):
@@ -28,6 +27,12 @@ class InterventionSerializer(serializers.Serializer):
 
     column_id = serializers.IntegerField()
     interventions = serializers.ListField()
+
+
+class AgeRangeSerializer(serializers.Serializer):
+
+    column_id = serializers.IntegerField()
+    age_ranges = serializers.ListField()
 
 
 class TaxonomySerializer(serializers.Serializer):
