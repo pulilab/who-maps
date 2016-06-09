@@ -5,7 +5,7 @@ import json
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from who_maps import geodata_config
+import geodata_config
 from country.models import Country
 
 class Command(BaseCommand):

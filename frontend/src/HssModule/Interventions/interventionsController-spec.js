@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import InterventionsController from './InterventionsController';
 import { EE } from '../../Common/';
-import { continuumData, interventionsLib } from '../hssMockData';
+import { continuumData, interventionsLib, age_ranges, ageRangesData } from '../hssMockData';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn */
 
@@ -18,10 +18,12 @@ describe('interventionsController', () => {
         ic.tiles = 7;
         ic.data = {
             continuum: continuumData,
-            interventions: interventionsLib
+            interventions: interventionsLib,
+            age_ranges: ageRangesData
         };
         ic.structure = {
-            interventions: interventionsLib
+            interventions: interventionsLib,
+            age_ranges
         };
         ic.service = {
             postInterventions: () => {}
@@ -118,7 +120,8 @@ describe('interventionsController', () => {
 
     it('should have a function that save the interventions', () => {
         spyOn(ic, 'calculateInterventionHeight');
-        ic.saveInterventions(null, null);
+        ic.interventionRow[0].content = [1, 2, 3];
+        ic.saveInterventions(0, 'a');
         expect(ic.calculateInterventionHeight).toHaveBeenCalled();
     });
 });

@@ -34,7 +34,7 @@ def deploy():
         # get new stuff from git
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
-        time.sleep(20)
+        time.sleep(10)
 
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(env.project_root, env.project_root)
@@ -58,7 +58,7 @@ def deploy():
             run("docker-compose {}up -d".format(options))
 
             # drop & create DB
-            time.sleep(10)
+            time.sleep(20)
             _drop_db()
             time.sleep(1)
             _create_db()

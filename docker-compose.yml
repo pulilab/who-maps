@@ -5,6 +5,8 @@ django:
     - "8000"
   links:
     - postgres:postgres
+    - celery:celery
+    - rabbitmq:rabbitmq
   volumes:
     - ./django:/src
   command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120

@@ -43,7 +43,6 @@ class HssModuleController extends Protected {
     eventBindings() {
         this.EE.on('hssColumnContents', this.reFresh, this);
         this.EE.on('hssHasColumnContent', this.onAskIfColumnGotContent, this);
-        this.EE.on('hssHasColumnContentLastTwo', this.onLastTwoContentAsked, this);
         this.EE.on('hssPleaseActivateColumn', this.askedToActivateColumn, this);
         this.EE.on('hssEditMode', this.handleEditMode, this);
         this.EE.on('hssInnerLayoutDone', this.handleLayoutEvent, this);
@@ -53,7 +52,6 @@ class HssModuleController extends Protected {
     eventRemoving() {
         this.EE.removeListener('hssColumnContents', this.reFresh, this);
         this.EE.removeListener('hssHasColumnContent', this.onAskIfColumnGotContent, this);
-        this.EE.removeListener('hssHasColumnContentLastTwo', this.onLastTwoContentAsked, this);
         this.EE.removeListener('hssPleaseActivateColumn', this.askedToActivateColumn, this);
         this.EE.removeListener('hssEditMode', this.handleEditMode, this);
         this.EE.removeListener('hssInnerLayoutDone', this.handleLayoutEvent, this);
@@ -88,13 +86,6 @@ class HssModuleController extends Protected {
         this.EE.emit('hssGuysActivateColumn', {
             columnId: id,
             activated: this.columnHasContent[id]
-        });
-    }
-
-    onLastTwoContentAsked() {
-        this.EE.emit('hssHasContentLastTwo', {
-            five: this.columnHasContent[5],
-            six: this.columnHasContent[6]
         });
     }
 

@@ -264,7 +264,7 @@ class NewProjectController extends ProjectDefinition {
 
     postSaveActions() {
         this.EE.emit('refreshProjects');
-        this.state.go(this.state.current.name, {}, { reload: true });
+        this.state.go('editProject', {}, { reload: true });
     }
 
     handleResponse(response) {

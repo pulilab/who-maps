@@ -78,8 +78,7 @@
                     </md-item-template>
 
                     <md-not-found>
-                        No organisation matching "{{vm.searchText}}" were found.
-                        <a ng-click="vm.addOrganisation(vm.searchText)">Create a new one!</a>
+                        <a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>
                     </md-not-found>
                 </md-autocomplete>
                 <div class="autocomplete-errors" ng-messages="vm.editProfileForm.organisation.$error">
