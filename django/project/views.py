@@ -80,20 +80,19 @@ class ProjectPublicViewSet(ViewSet):
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
 
-        def is_own(project):
-            if hasattr(request.user, 'userprofile'):
-                own = project.team.filter(id=request.user.userprofile.id).exists()
-            else:
-                own = False
-            return own
-
         result_list = functools.reduce(lambda acc, p: acc + [{
             "id": p.id,
             "name": p.name,
             "organisation": p.data.get('organisation'),
             "donors": p.data.get('donors'),
             "country": p.data.get('country'),
-            "own": is_own(p)
+            "contact_name": p.data.get('contact_name'),
+            "contact_email": p.data.get('contact_email'),
+            "implementation_overview": p.data.get('implementation_overview'),
+            "implementing_partners": p.data.get('implementing_partners'),
+            "implementation_dates": p.data.get('implementation_dates'),
+            "geographic_coverage": p.data.get('geographic_coverage'),
+            "intervention_areas": p.data.get('intervention_areas')
         }], projects, result_list)
 
         return Response(result_list)
@@ -118,7 +117,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
 
     def get_permissions(self):
         if self.action == "retrieve":
-            return [] # Retrieve needs a bit more complex filtering based on user permission
+            return []  # Retrieve needs a bit more complex filtering based on user permission
         else:
             return super(ProjectCRUDViewSet, self).get_permissions()
 
