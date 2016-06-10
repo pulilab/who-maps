@@ -14,7 +14,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
-from user.models import UserProfile
+from user.models import UserProfile, Organisation
 from hss.models import HSS
 from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
@@ -61,7 +61,7 @@ class ProjectPublicViewSet(ViewSet):
                             result_dict[district_name].append({
                                 "id": project.id,
                                 "name": project.name,
-                                "organisation": project.data.get('organisation')
+                                "organisation": Organisation.get_name_by_id(project.data.get('organisation'))
                             })
 
         filter_project_by_district_name(district_names, projects)
