@@ -21,12 +21,7 @@ class AppModuleController extends Protected {
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
-        this.currentProjectMock = {
-            contact: {
-                name: 'Jane M Doe',
-                email: 'po@kungFu.panda'
-            }
-        };
+
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -80,6 +75,22 @@ class AppModuleController extends Protected {
             base.style.color = '#CD9924';
         }
         return base;
+    }
+
+    writeUserRole() {
+        let type = null;
+        switch (this.userProfile.account_type) {
+        case 'I':
+            type = 'Implementer';
+            break;
+        case 'G':
+            type = 'Financial Investor';
+            break;
+        case 'D':
+            type = 'Government';
+            break;
+        }
+        return type;
     }
 
     refreshProfileInfo() {
