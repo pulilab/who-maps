@@ -44,7 +44,8 @@
 
           <projectcomp
               ng-repeat="project in vm.projects | limitTo: 5"
-              own-project="vm.isOwner(project)"
+              viewer="vm.isViewer(project)"
+              member="vm.isMember(project)"
               ng-model="project"
               has-link=true
               has-logo=false>

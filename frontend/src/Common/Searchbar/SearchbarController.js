@@ -17,8 +17,8 @@ class SearchbarController {
         vm.resultNr = 0;
         vm.projects = void 0;
 
-        vm.isOwner = vm.isOwner.bind(this);
-
+        vm.isMember = vm.isMember.bind(this);
+        vm.isViewer = vm.isViewer.bind(this);
 
         vm.scope.$watch(() => {
             return vm.searchStr;
@@ -38,14 +38,20 @@ class SearchbarController {
     getUserData() {
         const commonServices = require('../CommonServices');
         this.userProjects = commonServices.projectList;
+        this.viewer = commonServices.userProfile.viewer;
+        this.member = commonServices.userProfile.member;
     }
 
     toggleSearch() {
         this.showSearch = !this.showSearch;
     }
 
-    isOwner(project) {
-        return _.some(this.userProjects, { id: project.id });
+    isViewer(project) {
+        return this.viewer.indexOf(project.id) > -1;
+    }
+
+    isMember(project) {
+        return this.member.indexOf(project.id) > -1;
     }
 
     search(tmpStr) {

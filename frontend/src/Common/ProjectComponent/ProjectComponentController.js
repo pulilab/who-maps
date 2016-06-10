@@ -1,11 +1,15 @@
 class ProjectComponentController {
 
-    constructor($state) {
+    constructor($state, CommonServices) {
         this.state = $state;
+        this.cs = CommonServices;
         this.$onInit = this.initialization.bind(this);
     }
 
     initialization() {
+
+        this.ownProject = this.member || this.viewer;
+
         if (!this.ngModel) {
             this.ngModel = {};
         }
@@ -16,9 +20,8 @@ class ProjectComponentController {
         if (!this.ngModel.followersTrend) {
             this.ngModel.followersTrend = 'up';
         }
-
-        if (this.ngModel.countryName) {
-            this.ngModel.countryName.replace('-', ' ');
+        if (this.ngModel.country) {
+            this.ngModel.countryName = this.cs.projectStructure.countries[this.ngModel.country].name;
         }
     }
 
@@ -29,13 +32,14 @@ class ProjectComponentController {
     }
 
     goToDashboard() {
-        this.state.go(this.ownProject ? 'dashboard' : 'public-dashboard', { appName: this.ngModel.id });
+        this.state.go(this.member || this.viewer ? 'dashboard' : 'public-dashboard', { appName: this.ngModel.id });
     }
 
     static projectComponentFactory() {
         require('./ProjectComponent.scss');
         function projectCp($state) {
-            return new ProjectComponentController($state);
+            const CommonServices = require('../CommonServices');
+            return new ProjectComponentController($state, CommonServices);
         }
 
         projectCp.$inject = ['$state'];
