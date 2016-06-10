@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import TokenSerializer
 from rest_auth.models import TokenModel
 
@@ -10,23 +11,28 @@ class ProfileTokenSerializer(TokenSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
-    userprofile = serializers.SerializerMethodField("is_userprofile")
+    user_profile_id = serializers.SerializerMethodField()
+    account_type = serializers.SerializerMethodField()
 
     class Meta:
         model = TokenModel
-        fields = ("key", "userprofile",)
+        fields = ("key", "user_profile_id", "account_type")
 
     @staticmethod
-    def is_userprofile(obj):
+    def get_user_profile_id(obj):
         """
         Checks the UserProfile existence for the given key.
         """
-        authtoken = TokenModel.objects.get(key=obj)
-        userprofile = UserProfile.objects.get_object_or_none(user=authtoken.user)
-        if userprofile:
-            return True
-        else:
-            return False
+        if hasattr(obj.user, 'userprofile'):
+            return obj.user.userprofile.id
+
+    @staticmethod
+    def get_account_type(obj):
+        """
+        Checks the UserProfile existence for the given key.
+        """
+        if hasattr(obj.user, 'userprofile'):
+            return obj.user.userprofile.account_type
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -45,7 +51,7 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_organisation_name(obj):
-        return obj.organisation.name
+        return obj.organisation.name if obj.organisation else None
 
     @staticmethod
     def get_member(obj):
@@ -61,3 +67,11 @@ class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organisation
         fields = ("id", "name",)
+
+
+class RegisterWithProfileSerializer(RegisterSerializer):
+
+    def custom_signup(self, request, user):
+        if not hasattr(user, 'userprofile'):
+            account_type = request.POST.get('account_type', request.data.get('account_type', 'I'))
+            UserProfile.objects.create(user=user, account_type=account_type)
