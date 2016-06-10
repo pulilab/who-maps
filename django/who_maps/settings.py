@@ -182,7 +182,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
-TOOLKIT_DIGEST_PERIOD = 24  # hours
+TOOLKIT_DIGEST_PERIOD = 1  # hours
 
 if SITE_ID in [4]:
     CELERYBEAT_SCHEDULE = {
