@@ -10,32 +10,22 @@ from .serializers import UserProfileSerializer, OrganisationSerializer, UserProf
 from .models import UserProfile, Organisation
 
 
-class UserProfileViewSet(TokenAuthMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
 
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
 
-    def create(self, request, *args, **kwargs):
-        """
-        Creates a new UserProfile object for the current User.
-        """
-        # If user already has a profile, don't do anything
-        if hasattr(request.user, 'userprofile'):
-            return Response(status=status.HTTP_200_OK)
-
-        serializer = self.get_serializer(data=request.data)
-        # Add the current user's ID to the data.
-        serializer.initial_data.update({"user": request.user.id})
-        if serializer.is_valid():
-            # Save the entity.
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = UserProfileWithGroupsSerializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.initial_data.update({"user": request.user.id})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
 
 
@@ -50,6 +40,7 @@ class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
             authtoken = TokenModel.objects.get(key=response.data.get("token"))
             user_profile = UserProfile.objects.get_object_or_none(user=authtoken.user)
             response.data.update(user_profile_id=user_profile.id if user_profile else None)
+            response.data.update(account_type=user_profile.account_type if user_profile else None)
         return response
 
 

@@ -17,10 +17,21 @@ class Organisation(ExtendedModel):
 
 
 class UserProfile(ExtendedModel):
-    user = models.OneToOneField(User)
-    name = models.CharField(max_length=100)
-    organisation = models.ForeignKey(Organisation)
-    country = models.CharField(max_length=100)
+    IMPLEMENTER = 'I'
+    DONOR = 'D'
+    GOVERNMENT = 'G'
+    ACCOUNT_TYPE_CHOICES = (
+        (IMPLEMENTER, 'Implementer'),
+        (DONOR, 'Financial Investor'),
+        (GOVERNMENT, 'Government'),
+    )
 
-    def __unicode__(self):
-        return "%s (%s)" % (self.name, self.organisation)
+    account_type = models.CharField(
+        max_length=1,
+        choices=ACCOUNT_TYPE_CHOICES,
+        default=IMPLEMENTER,
+    )
+    user = models.OneToOneField(User)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    organisation = models.ForeignKey(Organisation, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)

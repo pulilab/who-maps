@@ -48,8 +48,11 @@ class NewProjectController extends ProjectDefinition {
 
     getUsers(criteria) {
         return this.allUsers.filter(el => {
-            return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
-                el.organisation__name.toLowerCase().includes(criteria.toLowerCase());
+            if (el && el.name) {
+                return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
+                    el.organisation__name.toLowerCase().includes(criteria.toLowerCase());
+            }
+            return false;
         });
     }
 
@@ -253,7 +256,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.postSaveActions();
+                    this.postSaveActions(response.data.id);
                 }
                 else {
                     this.handleResponse(response);
@@ -262,9 +265,13 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
-    postSaveActions() {
+    postSaveActions(id) {
+        let appName = this.state.params.appName;
+        if (id) {
+            appName = id;
+        }
         this.EE.emit('refreshProjects');
-        this.state.go('editProject', {}, { reload: true });
+        this.state.go('editProject', { appName }, { reload: true });
     }
 
     handleResponse(response) {
@@ -298,26 +305,31 @@ class NewProjectController extends ProjectDefinition {
     }
 
     mergeCustomAndDefault(collection) {
+        const copy = _.cloneDeep(collection);
+        collection.organisation = copy.organisation.id;
+        this.log(copy, collection);
+        // collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
+        collection.technology_platforms = this.project.technology_platforms;
 
-        collection.organisation = collection.organisation.id;
-        collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
-        collection.technology_platforms = this.concatCustom(collection.technology_platforms);
+        // collection.licenses.custom = this.flattenCustom(collection.licenses);
+        collection.licenses = this.project.licenses;
 
-        collection.licenses.custom = this.flattenCustom(collection.licenses);
-        collection.licenses = this.concatCustom(collection.licenses);
-
-        collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
-        collection.digital_tools = this.concatCustom(collection.digital_tools);
+        // collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
+        // collection.digital_tools = this.concatCustom(collection.digital_tools);
 
         collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);
         collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
+        collection.wiki = this.project.wiki;
+        collection.repository = this.project.repository;
+        collection.mobile_application = this.project.mobile_application;
     }
 
-    log(data) {
+    log(...args) {
         if (DEBUG) {
-            console.log(data);
-            console.log(this.project);
+            args.forEach(item => {
+                console.log(item);
+            });
         }
     }
 
