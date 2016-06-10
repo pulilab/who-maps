@@ -37,12 +37,12 @@ class CountryViewModuleController {
         });
     }
 
-    isViewer(project) {
-        return this.cs.userProfile.viewer.indexOf(project.id) > -1;
-    }
-
     isMember(project) {
         return this.cs.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    isViewer(project) {
+        return this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
     }
 
     getProjects(countryObj) {
