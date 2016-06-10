@@ -15,6 +15,23 @@
     white-space: nowrap;
     min-width: 160px;
 
+    .colorednr {
+      color: white;
+      font-weight: 500;
+      text-align: center;
+      border-radius: 3px;
+      opacity: 0.85;
+    }
+    .color0 { background-color: #7CB342; }
+    .color1 { background-color: #039BE5; }
+    .color2 { background-color: #FB8C00; }
+    .color3 { background-color: #EF5350; }
+    .color4 { background-color: #AB47BC; }
+    .color5 { background-color: #7E57C2; }
+    .color6 { background-color: #2196F3; }
+    .color7 { background-color: #009688; }
+    .color8 { background-color: #C0CA33; }
+
     .countrychart-tooltip-header {
 
       background-color: #EEEEEE;
@@ -37,13 +54,9 @@
 
 			border-top: 1px solid #BDBDBD;
 			background-color: #FFFFFF;
-			padding: 10px;
 			opacity: 0.87;
+      padding: 0 12px;
 
-      &.countrychart-tooltip-main {
-
-        padding: 0 0px 0 12px;
-      }
 
       .activename {
 

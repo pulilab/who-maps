@@ -24,6 +24,7 @@ class CountrymapController {
         this.showPlaceholder = !this.big;
         this.cs = require('../../Common/CommonServices');
         this.svgPanZoom = svgPanZoom;
+        this.covLib = {};
 
         this.EE.removeListener('country Changed');
 
@@ -39,6 +40,10 @@ class CountrymapController {
         // this.svgZoom.destroy();
         this.data = false;
         this.map = false;
+    }
+
+    saveClass(key, index) {
+        this.covLib[key] = index;
     }
 
     dataArrived(data) {
@@ -57,6 +62,7 @@ class CountrymapController {
 
             return ret;
         }, {});
+
 
         if (this.mapHere) {
             // console.debug('data arrived, map was here, starts drawing', data);
