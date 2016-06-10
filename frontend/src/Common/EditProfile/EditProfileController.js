@@ -56,6 +56,14 @@ class EditProfileController extends Protected {
         this.handleCustomError('country');
     }
 
+    isViewer(project) {
+        return this.cs.userProfile.viewer.indexOf(project.id) > -1;
+    }
+
+    isMember(project) {
+        return this.cs.userProfile.member.indexOf(project.id) > -1;
+    }
+
     checkErrors(field) {
         if (this.editProfileForm && this.editProfileForm[field]) {
             return !_.isEmpty(this.editProfileForm[field].$error);

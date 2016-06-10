@@ -69,7 +69,7 @@ class CountryViewModuleController {
     fetchDistrictProjects(countryId) {
 
         this.service.getDisctrictProjects(countryId).then(data => {
-            // console.debug('getDistrictProjects:', data);
+            console.debug('getDistrictProjects:', data);
             this.EE.emit('mapdataArrived', data);
         });
     }

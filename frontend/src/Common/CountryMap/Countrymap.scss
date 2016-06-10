@@ -2,159 +2,193 @@
 
 .relative {
 
-	position: relative;
+  position: relative;
 
-	.countrychart-tooltip {
+  .countrychart-tooltip {
 
-		position: absolute;
-		top: 10px;
-		left: 10px;
-		color: $text-primary;
-		font-size: 12px;
-		line-height: 16px;
-		white-space: nowrap;
-		min-width: 160px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: $text-primary;
+    font-size: 12px;
+    line-height: 16px;
+    white-space: nowrap;
+    min-width: 160px;
 
-		.countrychart-tooltip-header {
+    .countrychart-tooltip-header {
 
-			background-color: #EEEEEE;
-			padding: 10px;
+      background-color: #EEEEEE;
+      padding: 10px;
 
-			p {
-				margin: 0;
-			}
+      p {
+        margin: 0;
+      }
 
-			.tooltip-flag {
+      .tooltip-flag {
 
-				height: 16px;
-				width: auto;
-				float: right;
-				margin-left: 10px;
-			}
-		}
+        height: 16px;
+        width: auto;
+        float: right;
+        margin-left: 10px;
+      }
+    }
 
-		.countrychart-tooltip-main {
+    .countrychart-tooltip-main {
 
-			border-top: 1px solid #BDBDBD;
-			background-color: white;
-			padding: 10px;
-			opacity: 0.8;
+      border-top: 1px solid #BDBDBD;
+      background-color: white;
+      padding: 10px;
+      opacity: 0.8;
 
-			&.countrychart-tooltip-main {
+      &.countrychart-tooltip-main {
 
-				padding: 0 10px 0 12px;
-			}
+        padding: 0 0px 0 12px;
+      }
 
-			.activename {
+      .activename {
 
-				color: $color-primary;
-			}
+        color: $color-primary;
+      }
 
-			.lh {
-				line-height: 20px;
-				margin: 3px 0;
-			}
+      .lh {
+        line-height: 20px;
+        margin: 3px 0;
+      }
 
-			.projectcont {
+      .projectcont {
 
-				height: 60px;
-				border-top: 1px solid #E0E0E0;
+        height: 60px;
+        border-top: 1px solid #E0E0E0;
+        position:relative;
+        overflow:hidden;
+        width:100%;
 
-				.projectname {
+        .projectname {
 
-					color: $color-primary;
-					font-size: 14px;
-					font-weight: 500;
-				}
+          color: $color-primary;
+          font-size: 14px;
+          font-weight: 500;
+        }
 
-				.projectorg {
+        .projectorg {
 
-					color: $text-secondary;
-					font-size: 14px;
-				}
-			}
-		}
+          color: $text-secondary;
+          font-size: 14px;
+        }
 
-		.cap {
-			text-transform: capitalize;
-		}
-	}
+        .my-eye,
+        .my-star {
+          position: absolute;
+          top: -6px;
+          right: -17px;
+          background-color: #CD9924;
+          // background-color: $color-gray-lightest;
+          display: block;
+          width: 55px;
+          height: 25px;
+          box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
+          // box-shadow: inset 0 -1px 0 rgba(0,0,0,.075);
+          transform: rotate(40deg);
 
-	.zoomhandlers {
+          md-icon {
+            position: absolute;
+            top: 4px;
+            left: 24px;
+            font-size: 13px;
+            color: $color-white;
+            // color: #CD9924;
+            transform: rotate(-40deg);
+          }
+        }
+        .my-eye {
+          background-color: #53A0CE;
+        }
+      }
 
-		position: absolute;
-		left: 15px;
-		top: 350px;
+    }
 
-		md-icon {
-			color: $color-gray-light;
-			cursor: pointer;
-			outline: none;
-		}
-	}
+    .cap {
+      text-transform: capitalize;
+    }
+  }
 
-	.zoomhandlers2 {
+  .zoomhandlers {
 
-		position: absolute;
-		right: 15px;
-		top: 300px;
+    position: absolute;
+    left: 15px;
+    top: 350px;
 
-		md-icon {
+    md-icon {
+      color: $color-gray-light;
+      cursor: pointer;
+      outline: none;
+    }
+  }
 
-			color: $color-gray-light;
-			cursor: pointer;
-			outline: none;
-		}
-	}
+  .zoomhandlers2 {
 
-	.spinner {
-		position: relative;
-		width: 100%;
-		background-color: transparent;
-		min-height: 60px;
+    position: absolute;
+    right: 15px;
+    top: 300px;
 
-		span {
-			color: $text-primary;
-			font-size: 14px;
-			text-align: right;
-		}
-	}
+    md-icon {
+
+      color: $color-gray-light;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+
+  .spinner {
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    min-height: 60px;
+
+    span {
+      color: $text-primary;
+      font-size: 14px;
+      text-align: right;
+    }
+  }
 
 }
 
 
 .countrymapcontainer {
 
-    background-color: $color-gray-lightest;
-    overflow: hidden;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
+  background-color: $color-gray-lightest;
+  overflow: hidden;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 
-    .countrymap {
+  .countrymap {
 
-	    shape-rendering: optimizeSpeed;
+    shape-rendering: optimizeSpeed;
 
-		.d3district {
+    .d3district {
 
-			fill: $color-map-light;
-			stroke: #9B9DA8;
-			stroke-width: 5px;
-		    pointer-events: all;
-		    cursor: default;
+      fill: $color-map-light;
+      stroke: #9B9DA8;
+      stroke-width: 5px;
+      pointer-events: all;
+      cursor: default;
 
-			&.d3district-data {
+      &.d3district-data {
 
-				fill: $color-map-dark;
-				transition: $swift-ease-out;
+        fill: $color-map-dark;
+        transition: $swift-ease-out;
 
-				&:hover {
-					fill: $color-primary;
-				}
-			}
+        &:hover {
+          fill: $color-primary;
+        }
+      }
 
-			&:hover {
-				fill: $color-map-hoverempty;
-			}
-		}
+      &:hover {
+        fill: $color-map-hoverempty;
+      }
     }
+
+
+  }
 }

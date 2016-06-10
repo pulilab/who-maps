@@ -120,7 +120,8 @@
     <section md-whiteframe="2" layout-fill class="my-projects" >
         <h5> My projects ({{vm.userProjects.length}})</h5>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                     own-project="true"
+                     viewer="vm.isViewer(p)"
+                     member="vm.isMember(p)"
                      show-details="true"
                      show-logo="true"
                      ng-model="p">
