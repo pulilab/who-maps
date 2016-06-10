@@ -51,7 +51,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_org_name(obj):
-        return obj.organisation.name
+        return obj.organisation.name if obj.organisation else None
 
 
 class ProjectGroupListSerializer(serializers.ModelSerializer):
