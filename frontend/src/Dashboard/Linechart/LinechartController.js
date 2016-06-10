@@ -67,7 +67,8 @@ class LinechartController {
 
         const outer = d3.select(this.el[0])
             .append('div')
-            .attr('class', 'linechartcontainer');
+            .attr('class', 'linechartcontainer')
+            .classed('secondary-colors', this.notpercentage);
 
         const outerWidth = outer[0][0].offsetWidth;
         const outerHeight = outer[0][0].offsetHeight;

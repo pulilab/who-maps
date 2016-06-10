@@ -250,6 +250,35 @@ linechart {
         }
     }
 
+    .secondary-colors {
+        .line-axis1 { stroke: #7CB342!important; }
+        .line-axis2 { stroke: #039BE5!important; }
+        .line-axis3 { stroke: #FB8C00!important; }
+        .line-axis4 { stroke: #EF5350!important; }
+        .line-axis5 { stroke: #AB47BC!important; }
+        .line-axis6 { stroke: #7E57C2!important; }
+        .line-axis7 { stroke: #2196F3!important; }
+        .line-axis8 { stroke: #009688!important; }
+        .dot-axis1 { fill: #7CB342!important; }
+        .dot-axis2 { fill: #039BE5!important; }
+        .dot-axis3 { fill: #FB8C00!important; }
+        .dot-axis4 { fill: #EF5350!important; }
+        .dot-axis5 { fill: #AB47BC!important; }
+        .dot-axis6 { fill: #7E57C2!important; }
+        .dot-axis7 { fill: #2196F3!important; }
+        .dot-axis8 { fill: #009688!important; }
+    }
+
+    .secondary-labelcolors {
+        .labelicon1 { color: #7CB342!important; }
+        .labelicon2 { color: #039BE5!important; }
+        .labelicon3 { color: #FB8C00!important; }
+        .labelicon4 { color: #EF5350!important; }
+        .labelicon5 { color: #AB47BC!important; }
+        .labelicon6 { color: #7E57C2!important; }
+        .labelicon7 { color: #2196F3!important; }
+        .labelicon8 { color: #009688!important; }
+    }
 }
 
 .chart-tooltip {
