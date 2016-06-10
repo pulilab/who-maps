@@ -149,7 +149,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-SITE_ID = os.environ.get('SITE_ID', 2)
+SITE_ID = os.environ.get('SITE_ID', 1)
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -189,7 +189,7 @@ ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
-if SITE_ID in [4]:
+if SITE_ID in [3]:
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
