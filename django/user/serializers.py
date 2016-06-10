@@ -51,7 +51,7 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_organisation_name(obj):
-        return obj.organisation.name
+        return obj.organisation.name if obj.organisation else None
 
     @staticmethod
     def get_member(obj):
