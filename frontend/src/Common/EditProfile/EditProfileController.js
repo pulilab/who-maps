@@ -66,7 +66,7 @@ class EditProfileController extends Protected {
 
     save() {
         this.sentForm = true;
-        if (this.editProfileForm.$valid) {
+        if (this.editProfileForm.$valid && this.userProfile.organisation) {
             const profile = _.cloneDeep(this.userProfile);
             profile.organisation = this.userProfile.organisation.id;
             const request = profile.id ?

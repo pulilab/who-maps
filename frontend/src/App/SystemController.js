@@ -31,12 +31,16 @@ class SystemController {
         const rs = this.cs.reset();
         rs.loadedPromise.then(() => {
             let appName = _.last(rs.projectList);
-            if (appName && appName.id) {
+            if (_.isNull(this.cs.userProfile.name)) {
+                this.state.go('editProfile');
+            }
+            else if (appName && appName.id && this.cs.userProfile.account_type === 'I') {
                 appName = appName.id;
                 this.state.go('dashboard', { appName });
             }
             else {
-                this.state.go('country');
+                appName = appName && appName.id ? appName.id : null;
+                this.state.go('country', { appName });
             }
         }, () => {
             console.error('failed login');

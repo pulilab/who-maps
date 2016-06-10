@@ -48,8 +48,11 @@ class NewProjectController extends ProjectDefinition {
 
     getUsers(criteria) {
         return this.allUsers.filter(el => {
-            return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
-                el.organisation__name.toLowerCase().includes(criteria.toLowerCase());
+            if (el && el.name) {
+                return el.name.toLowerCase().includes(criteria.toLowerCase()) ||
+                    el.organisation__name.toLowerCase().includes(criteria.toLowerCase());
+            }
+            return false;
         });
     }
 
