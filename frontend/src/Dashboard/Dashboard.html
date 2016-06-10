@@ -122,11 +122,14 @@
 
                                 <div layout="row" layout-align="start center" class="roww borderless">
                                     <div flex="25" class='label'>CONTACT</div>
-                                    <div class="data">MISSING BINDING!!</div> </div>
+                                    <div class="data">
+                                        {{vm.projectData.contact_name}} <a ng-href="mailto:{{vm.projectData.contact_email}}">Send Email</a>
+                                    </div>
+                                </div>
 
                                 <div flex class="gray">
                                     <div class='label labelobj'>OBJECTIVES</div>
-                                    <div class="data">{{vm.projectData.goals_to_scale}}</div>
+                                    <div class="data data2">{{vm.projectData.goals_to_scale}}</div>
                                 </div>
 
                             </div>
@@ -169,12 +172,12 @@
                                         <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
                                     </div>
 
-                                    <div flex layout="row">
+                                    <!-- <div flex layout="row">
                                         <md-icon class="material-icons">speaker_phone</md-icon>
                                         <span flex>Digital tools</span>
-                                        <!-- <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips> -->
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
                                         <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="lower">

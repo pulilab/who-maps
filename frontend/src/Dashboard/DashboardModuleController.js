@@ -114,6 +114,7 @@ class DashboardModuleController extends Protected {
             this.parseMapData(data.coverage);
             this.fetchCoverageVersions();
         }
+        // console.debug(data);
     }
 
     parseMapData(coverage) {

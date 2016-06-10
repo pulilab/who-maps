@@ -22,4 +22,4 @@ django/temp
 nginx/html/
 diff.txt
 dump.*
-django/celerybeat-schedule.db
+django/celerybeat-schedule.*

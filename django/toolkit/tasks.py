@@ -26,7 +26,6 @@ def send_daily_toolkit_digest():
             logger.info("Toolkit updated recently.")
             html_template = loader.get_template("email/toolkit_digest.html")
             html_message = html_template.render({"project_id": project.id})
-            emails = []
             for profile in project.team.all():
                 mail.send_mail(
                     subject="MAPS Toolkit updated!",

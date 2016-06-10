@@ -149,7 +149,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-SITE_ID = os.environ.get('SITE_ID', 1)
+SITE_ID = os.environ.get('SITE_ID', 2)
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -186,9 +186,9 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
-TOOLKIT_DIGEST_PERIOD = 24  # hours
+TOOLKIT_DIGEST_PERIOD = 1  # hours
 
-if SITE_ID in [3]:
+if SITE_ID in [4]:
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
