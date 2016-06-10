@@ -24,14 +24,15 @@
                     ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
                     value="{{ option }}">
                 {{ option }}
-
             </md-option>
             <md-option
                     ng-if="vm.optionLabel"
                     ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
                     value="{{ option[vm.optionLabel] }}">
                 {{ option[vm.optionLabel] }}
+                <md-icon ng-style="vm.iconFunction(option).style">{{vm.iconFunction(option).name}}</md-icon>
             </md-option>
+
         </div>
     </md-select>
     <div class="hint" ng-if="vm.hint">{{ vm.hint }}</div>

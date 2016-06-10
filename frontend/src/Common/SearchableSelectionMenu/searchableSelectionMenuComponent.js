@@ -22,9 +22,10 @@ const searchableSelectionMenuComponent = {
         onOpenCallback: '=',
         limit: '<',
         optionLabel: '@',
-        hint: '@'
-
+        hint: '@',
+        iconFunction: '='
     }
+
 };
 
 export default searchableSelectionMenuComponent;

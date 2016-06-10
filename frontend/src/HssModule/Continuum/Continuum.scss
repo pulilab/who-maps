@@ -36,16 +36,10 @@ continuum {
   .continuum-component {
 
     .edit-mode-button {
-
       .md-button {
-        width:120px;
+        float: right;
+        width: 120px;
       }
-    }
-
-    .continuum-sub-title {
-      font-size: 12px;
-      color: $text-disabled;
-      line-height: 16px;
     }
 
     md-grid-tile {
@@ -64,7 +58,8 @@ continuum {
         text-align: center;
         font-size: $caption-font-size-base;
         font-weight: 500;
-        text-transform: uppercase;
+        line-height: 16px;
+        // text-transform: uppercase;
         cursor: default;
         outline: none;
         @include not-selectable();
@@ -75,8 +70,10 @@ continuum {
           top: 0;
           left: 100%;
           width: 11px;
-          height: 50px;
-          background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
+          // height: 50px;
+          height: 60px;
+          // background: transparent url("./images/continuum-disabled-end.svg") 100% 100% no-repeat;
+          background: transparent url("./images/continuum-disabled-end-2.svg") 100% 100% no-repeat;
         }
 
         &.empty {
@@ -96,8 +93,10 @@ continuum {
             top: 0;
             left: 0;
             width: 10px;
-            height: 50px;
-            background: transparent url("./images/continuum-first-in-a-row.svg") 100% 100% no-repeat;
+            // height: 50px;
+            height: 60px;
+            // background: transparent url("./images/continuum-first-in-a-row.svg") 100% 100% no-repeat;
+            background: transparent url("./images/continuum-first-in-a-row-2.svg") 100% 100% no-repeat;
           }
         }
 
@@ -131,16 +130,29 @@ continuum {
           top: 0;
           left: 0;
           width: 10px;
-          height: 50px;
+          // height: 50px;
+          height: 60px;
         }
       }
 
       &.row-title-mother {
         &::before {
-          background: transparent url("./images/continuum-triangle-mother.svg") 100% 100% no-repeat;
+          // background: transparent url("./images/continuum-triangle-mother.svg") 100% 100% no-repeat;
+          background: transparent url("./images/continuum-triangle-mother-2.svg") 100% 100% no-repeat;
+        }
+        p {
+          width: 100%;
+          padding: 0 40px;
         }
         .continuum-row-title {
+          display: block;
           color: $color-green;
+          line-height: 18px;
+        }
+        .continuum-sub-title {
+          display: block;
+          font-size: $caption-font-size-base;
+          color: $text-disabled;
         }
       }
 
@@ -198,7 +210,8 @@ continuum {
         color: $color-white;
 
         &::after {
-          background-image: url("./images/continuum-mother-end.svg");
+          // background-image: url("./images/continuum-mother-end.svg");
+          background-image: url("./images/continuum-mother-end-2.svg");
         }
       }
 
@@ -257,13 +270,13 @@ continuum {
         }
       }
 
-      //&.mother {
-      //  &::before,
-      //  &::after {
-      //    background-image: url("./images/continuum-arrow-mother.svg");
-      //  }
-      //
-      //}
+      &.mother {
+       &::before,
+       &::after {
+         background-image: url("./images/continuum-arrow-mother.svg");
+       }
+
+      }
 
       &.child {
         &::before,
