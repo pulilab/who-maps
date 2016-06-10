@@ -73,5 +73,5 @@ class RegisterWithProfileSerializer(RegisterSerializer):
 
     def custom_signup(self, request, user):
         if not hasattr(user, 'userprofile'):
-            account_type = request.POST.get('account_type', 'I')
+            account_type = request.POST.get('account_type', request.data.get('account_type', 'I'))
             UserProfile.objects.create(user=user, account_type=account_type)
