@@ -12,8 +12,11 @@ app {
   height: 100%;
 }
 
-app > md-content,
-ui-view > md-content {
+ui-view {
+  background-color: $color-page-background;
+}
+
+.main-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
   height: auto !important;
