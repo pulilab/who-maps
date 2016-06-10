@@ -35,10 +35,10 @@
 
     .countrychart-tooltip-main {
 
-      border-top: 1px solid #BDBDBD;
-      background-color: white;
-      padding: 10px;
-      opacity: 0.8;
+			border-top: 1px solid #BDBDBD;
+			background-color: #FFFFFF;
+			padding: 10px;
+			opacity: 0.87;
 
       &.countrychart-tooltip-main {
 
@@ -58,7 +58,7 @@
       .projectcont {
 
         height: 60px;
-        border-top: 1px solid #E0E0E0;
+        border-top: 1px solid $color-gray-lighter;
         position:relative;
         overflow:hidden;
         width:100%;

@@ -91,7 +91,7 @@
 
     </div>
 </md-toolbar>
-<md-content style="display: block;">
+<md-content class="main-content" style="display: block;">
     <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation" ng-show="vm.state.current.name !== 'country'">
         <div class="md-toolbar-tools">
             <div class="project-mainmenu">
@@ -99,7 +99,7 @@
                     Dashboard
                 </md-button>
 
-                <md-button ui-sref="public-dashboard"  ng-if="vm.viewMode" " ui-sref-active="active" md-no-ink>
+                <md-button ui-sref="public-dashboard"  ng-if="vm.viewMode" ui-sref-active="active" md-no-ink>
                 Dashboard
                 </md-button>
 

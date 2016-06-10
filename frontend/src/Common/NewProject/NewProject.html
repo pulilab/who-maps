@@ -110,98 +110,6 @@
 
                 <div ng-class="{disabled: vm.disableDetails()}">
 
-                    <!--<p>What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</p>-->
-
-                    <!--<section md-layout="row" layout-wrap>-->
-                    <!--<h6 flex="100">Technology Platforms:</h6>-->
-                    <!--<md-checkbox-->
-                    <!--ng-repeat="t in vm.structure.technology_platforms"-->
-                    <!--ng-checked="vm.technologyPlatformChecked(t)"-->
-                    <!--ng-click="vm.technologyPlatformChange(t)"-->
-                    <!--flex="30"-->
-                    <!--aria-label="{{ t }}"-->
-                    <!--class="">-->
-                    <!--{{ t }}-->
-                    <!--</md-checkbox>-->
-                    <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">-->
-                    <!--<md-input-container flex>-->
-                    <!--<label>Other</label>-->
-                    <!--<input type="text" ng-model="c.value" />-->
-                    <!--</md-input-container>-->
-                    <!--<md-button ng-hide="$last" ng-click="vm.rmTechnologyPlatform(c)" layout="column" class="md-icon-button red">-->
-                    <!--<md-icon>delete_forever</md-icon>-->
-                    <!--</md-button>-->
-                    <!--<md-button ng-show="$last" ng-click="vm.addTechnologyPlatform()" layout="column" class="md-icon-button">-->
-                    <!--<md-icon>add</md-icon>-->
-                    <!--</md-button>-->
-                    <!--</div>-->
-                    <!--</section>-->
-
-                    <!--<section md-layout="row">-->
-                    <!--<h6 flex="100">License:</h6>-->
-                    <!--<md-checkbox-->
-                    <!--ng-repeat="l in vm.structure.licenses"-->
-                    <!--ng-checked="vm.licenseChecked(l)"-->
-                    <!--ng-click="vm.licenseChange(l)"-->
-                    <!--flex="30"-->
-                    <!--aria-label="{{ l }}"-->
-                    <!--class="">-->
-                    <!--{{ l }}-->
-                    <!--</md-checkbox>-->
-                    <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.licenses.custom">-->
-                    <!--<md-input-container flex>-->
-                    <!--<label>Other</label>-->
-                    <!--<input type="text" ng-model="c.value" />-->
-                    <!--</md-input-container>-->
-                    <!--<md-button ng-hide="$last" ng-click="vm.rmLicense(c)" layout="column" class="md-icon-button red">-->
-                    <!--<md-icon>delete_forever</md-icon>-->
-                    <!--</md-button>-->
-                    <!--<md-button ng-show="$last" layout="column" ng-click="vm.addLicense()" class="md-icon-button">-->
-                    <!--<md-icon>add</md-icon>-->
-                    <!--</md-button>-->
-                    <!--</div>-->
-                    <!--</section>-->
-
-                    <!--<section md-layout="row">-->
-                    <!--<h6 flex="100">Digital tools:</h6>-->
-                    <!--<md-checkbox-->
-                    <!--ng-repeat="d in vm.structure.digital_tools"-->
-                    <!--ng-checked="vm.digitalToolChecked(d)"-->
-                    <!--ng-click="vm.digitalToolChange(d)"-->
-                    <!--flex="30"-->
-                    <!--aria-label="{{ d }}"-->
-                    <!--class="">-->
-                    <!--{{ d }}-->
-                    <!--</md-checkbox>-->
-                    <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.digital_tools.custom">-->
-                    <!--<md-input-container flex>-->
-                    <!--<label>Other</label>-->
-                    <!--<input type="text" ng-model="c.value" />-->
-                    <!--</md-input-container>-->
-                    <!--<md-button ng-hide="$last" ng-click="vm.rmDigitalTool(c)" layout="column" class="md-icon-button red">-->
-                    <!--<md-icon>delete_forever</md-icon>-->
-                    <!--</md-button>-->
-                    <!--<md-button ng-show="$last" layout="column" ng-click="vm.addDigitalTool()" class="md-icon-button">-->
-                    <!--<md-icon>add</md-icon>-->
-                    <!--</md-button>-->
-                    <!--</div>-->
-                    <!--</section>-->
-
-
-                    <!--<section layout="column">-->
-                    <!--<p>How are you applying these technology strategies or communication channels? (Check all that apply)</p>-->
-                    <!--<md-checkbox-->
-                    <!--ng-repeat="a in vm.structure.applications"-->
-                    <!--ng-checked="vm.applicationChecked(a)"-->
-                    <!--ng-click="vm.applicationChange(a)"-->
-                    <!--flex="100"-->
-                    <!--aria-label="{{ a }}"-->
-                    <!--class="">-->
-                    <!--{{ a }}-->
-                    <!--</md-checkbox>-->
-
-                    <!--</section>-->
-
                     <section class="coverage-section">
                         <p>What is the current coverage of your project? (e.g. numbers of health workers, clinics and/or client beneficiaries reached)</p>
 
@@ -397,8 +305,125 @@
                         </div>
                     </section>
 
+                    <!-- 3. TECHNOLOGY -->
+                    <section class="tech">
+                        <h4>3. Technology</h4>
+
+                        <!-- Tech platforms -->
+                        <section md-layout="row" layout-wrap>
+
+                            <h5>Technology Platforms:</h5>
+                            <span class="hint">What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</span><br>
+
+                            <md-checkbox
+                                ng-repeat="t in vm.structure.technology_platforms"
+                                ng-checked="vm.technologyPlatformChecked(t)"
+                                ng-click="vm.technologyPlatformChange(t)"
+                                flex="30"
+                                aria-label="{{ t }}"
+                                class="">
+                                {{ t }}
+                            </md-checkbox>
+                            <!-- <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">
+                                <md-input-container flex>
+                                    <label>Other</label>
+                                    <input type="text" ng-model="c.value" />
+                                </md-input-container>
+                                <md-button ng-hide="$last" ng-click="vm.rmTechnologyPlatform(c)" layout="column" class="md-icon-button red">
+                                    <md-icon>delete_forever</md-icon>
+                                </md-button>
+                                <md-button ng-show="$last" ng-click="vm.addTechnologyPlatform()" layout="column" class="md-icon-button">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                            </div> -->
+                        </section>
+
+                        <!-- Licenses -->
+                        <section md-layout="row">
+
+                            <h5>Licenses:</h5>
+                            <span class="hint">Under what license is the project governed?</span><br>
+                            <md-checkbox
+                                ng-repeat="l in vm.structure.licenses"
+                                ng-checked="vm.licenseChecked(l)"
+                                ng-click="vm.licenseChange(l)"
+                                flex="30"
+                                aria-label="{{ l }}"
+                                class="">
+                                {{ l }}
+                            </md-checkbox>
+                            <!-- <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.licenses.custom">
+                                <md-input-container flex>
+                                    <label>Other</label>
+                                    <input type="text" ng-model="c.value"/>
+                                </md-input-container>
+                                <md-button ng-hide="$last" ng-click="vm.rmLicense(c)" layout="column" class="md-icon-button red">
+                                    <md-icon>delete_forever</md-icon>
+                                </md-button>
+                                <md-button ng-show="$last" layout="column" ng-click="vm.addLicense()" class="md-icon-button">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                            </div> -->
+                        </section>
+
+                        <!--<section md-layout="row">-->
+                        <!--<h6 flex="100">Digital tools:</h6>-->
+                        <!--<md-checkbox-->
+                        <!--ng-repeat="d in vm.structure.digital_tools"-->
+                        <!--ng-checked="vm.digitalToolChecked(d)"-->
+                        <!--ng-click="vm.digitalToolChange(d)"-->
+                        <!--flex="30"-->
+                        <!--aria-label="{{ d }}"-->
+                        <!--class="">-->
+                        <!--{{ d }}-->
+                        <!--</md-checkbox>-->
+                        <!--<div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.digital_tools.custom">-->
+                        <!--<md-input-container flex>-->
+                        <!--<label>Other</label>-->
+                        <!--<input type="text" ng-model="c.value" />-->
+                        <!--</md-input-container>-->
+                        <!--<md-button ng-hide="$last" ng-click="vm.rmDigitalTool(c)" layout="column" class="md-icon-button red">-->
+                        <!--<md-icon>delete_forever</md-icon>-->
+                        <!--</md-button>-->
+                        <!--<md-button ng-show="$last" layout="column" ng-click="vm.addDigitalTool()" class="md-icon-button">-->
+                        <!--<md-icon>add</md-icon>-->
+                        <!--</md-button>-->
+                        <!--</div>-->
+                        <!--</section>-->
+
+
+                        <!--<section layout="column">-->
+                        <!--<p>How are you applying these technology strategies or communication channels? (Check all that apply)</p>-->
+                        <!--<md-checkbox-->
+                        <!--ng-repeat="a in vm.structure.applications"-->
+                        <!--ng-checked="vm.applicationChecked(a)"-->
+                        <!--ng-click="vm.applicationChange(a)"-->
+                        <!--flex="100"-->
+                        <!--aria-label="{{ a }}"-->
+                        <!--class="">-->
+                        <!--{{ a }}-->
+                        <!--</md-checkbox>-->
+                        <!--</section>-->
+
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Code documentation or download link" name="repository" ng-model="vm.project.repository"/>
+                            </md-input-container>
+                        </div>
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Link to the application:" name="mobile_application" ng-model="vm.project.mobile_application"/>
+                            </md-input-container>
+                        </div>
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" placeholder="Link to wiki page:" name="wiki" ng-model="vm.project.wiki"/>
+                            </md-input-container>
+                        </div>
+                    </section>
+
                     <section class="additional-info">
-                        <h4>3. Additional Info</h4>
+                        <h4>4. Additional Info</h4>
 
                         <div layout="column">
                             <md-input-container>
@@ -462,8 +487,7 @@
                                     ng-checked="vm.interventionAreaChecked(d)"
                                     ng-click="vm.interventionAreaChanged(d)"
                                     flex="30"
-                                    aria-label="{{ d }}"
-                                    class="md-primary">
+                                    aria-label="{{ d }}">
                                 {{ d }}
                             </md-checkbox>
                             <div class="custom-error" ng-show="vm.project.intervention_areas.length === 0">
@@ -476,7 +500,7 @@
                     </section>
 
                     <section ng-if="!vm.editMode">
-                        <h4>4. Pre-assessment</h4>
+                        <h4>5. Pre-assessment</h4>
 
                         <p>
                             The following are pre-assessment questions on your initial thoughts of how well your mHealth project performs along the following axes (see below for definitions).

@@ -316,18 +316,21 @@ class NewProjectController extends ProjectDefinition {
         const copy = _.cloneDeep(collection);
         collection.organisation = copy.organisation.id;
         this.log(copy, collection);
-        collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
-        collection.technology_platforms = this.concatCustom(collection.technology_platforms);
+        // collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
+        collection.technology_platforms = this.project.technology_platforms;
 
-        collection.licenses.custom = this.flattenCustom(collection.licenses);
-        collection.licenses = this.concatCustom(collection.licenses);
+        // collection.licenses.custom = this.flattenCustom(collection.licenses);
+        collection.licenses = this.project.licenses;
 
-        collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
-        collection.digital_tools = this.concatCustom(collection.digital_tools);
+        // collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
+        // collection.digital_tools = this.concatCustom(collection.digital_tools);
 
         collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);
         collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
+        collection.wiki = this.project.wiki;
+        collection.repository = this.project.repository;
+        collection.mobile_application = this.project.mobile_application;
     }
 
     log(...args) {

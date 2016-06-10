@@ -379,4 +379,23 @@ new-project {
     color: rgb(221,44,0);
   }
 
+  .md-primary {
+    color: $color-primary!important;
+    md-icon {
+      color: $color-primary!important;
+    }
+    &.md-raised {
+      background-color: $color-primary!important;
+      color: white!important;
+      md-icon {
+        color: white!important;
+      }
+    }
+  }
+
+  md-checkbox[checked="checked"]{
+    .md-icon {
+      background-color: $color-primary!important;
+    }
+  }
 }

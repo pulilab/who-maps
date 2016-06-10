@@ -41,7 +41,8 @@ scorecard {
     .axis-header {
         height:75px;
         color: $color-white;
-        font-size:32px;
+        font-size: 20px;
+        font-weight: 500;
         padding-left: 60px;
         padding-right: 60px;
         margin-bottom: 40px;
@@ -55,6 +56,10 @@ scorecard {
 
     .domain {
         margin-bottom:40px;
+
+        h4 {
+          padding-left: 70px;
+        }
     }
 
     .domain-header {

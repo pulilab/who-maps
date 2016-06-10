@@ -22,29 +22,17 @@ describe('ProjectDefinition class', () => {
         pd = new ProjectDefinition(cs);
     });
 
-    it('should have a function that add a tp', () => {
-        pd.addTechnologyPlatform();
-        expect(pd.project.technology_platforms.custom.length).toBe(2);
-    });
-
-    it('should have a function that remove a tp', () => {
-
-        pd.project.technology_platforms.custom[0] = t;
-        pd.rmTechnologyPlatform(t);
-        expect(pd.project.technology_platforms.custom.length).toBe(0);
-    });
-
     it('should have a function that check if a tp is checked', () => {
-        pd.project.technology_platforms.standard[0] = t;
+        pd.project.technology_platforms[0] = t;
         const r = pd.technologyPlatformChecked(t);
         expect(r).toBeTruthy();
     });
 
     it('should have a function that check a tp or uncheck it onclick', () => {
         pd.technologyPlatformChange(t);
-        expect(pd.project.technology_platforms.standard[0]).toBe(t);
+        expect(pd.project.technology_platforms[0]).toBe(t);
         pd.technologyPlatformChange(t);
-        expect(pd.project.technology_platforms.standard[0]).not.toBe(t);
+        expect(pd.project.technology_platforms[0]).not.toBe(t);
     });
 
 
