@@ -37,6 +37,14 @@ class CountryViewModuleController {
         });
     }
 
+    isViewer(project) {
+        return this.cs.userProfile.viewer.indexOf(project.id) > -1;
+    }
+
+    isMember(project) {
+        return this.cs.userProfile.member.indexOf(project.id) > -1;
+    }
+
     getProjects(countryObj) {
         // console.debug('Selected:', countryObj);
         this.service.getProjects(countryObj.id).then(data => {

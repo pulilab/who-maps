@@ -2,253 +2,270 @@
 
 #clv-container {
 
-    margin: 0 auto 0 auto;
-    padding: 20px 30px 0 30px;
-    max-width: 1440px;
-    min-height: calc(100vh - 48px);
-    justify-content: space-between;
+  margin: 0 auto 0 auto;
+  padding: 20px 30px 0 30px;
+  max-width: 1440px;
+  min-height: calc(100vh - 48px);
+  justify-content: space-between;
 
-    .rel {
+  .rel {
 
-        position: relative;
+    position: relative;
 
-        .littleheader {
+    .littleheader {
 
-            position: absolute;
-            left: 12px;
-            top: 13px;
+      position: absolute;
+      left: 12px;
+      top: 13px;
+      font-size: 14px;
+      color: $text-primary;
+      font-weight: bold;
+    }
+  }
+
+  md-tabs {
+
+    .tab-wrap {
+
+      background-color: $color-gray-lightest;
+
+      &.emptyy {
+
+        background: url("./img/wmap.svg") center center no-repeat;
+        background-size: 80% auto;
+      }
+    }
+
+    md-tabs-wrapper {
+
+      md-tabs-canvas {
+
+        height: 40px;
+
+        md-pagination-wrapper {
+
+          height: 40px;
+
+          md-tab-item {
+
+            color: $text-disabled;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            font-size: 12px;
+
+            &.md-active {
+
+              color: $text-primary;
+            }
+          }
+
+          md-ink-bar {
+
+            background-color: $color-primary;
+          }
+        }
+      }
+    }
+
+    md-select-value {
+      text-transform: capitalize!important;
+    }
+  }
+
+  #map {
+
+    position: relative;
+    min-height: calc(100vh - 200px);
+    background-color: $color-gray-lightest;
+
+    .countrychoser {
+
+      height: 45px;
+      display: block;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+
+      md-input-container {
+
+        margin: 2px 15px 0 15px;
+
+        span {
+
+          font-size: 14px;
+          font-weight: 14px;
+          color: $text-primary!important;
+
+          .md-text {
+
             font-size: 14px;
+            font-weight: 14px;
+            color: $text-primary!important;
+          }
+        }
+
+        label {
+
+          &:select, &:focus {
+
+            color: $color-primary;
+          }
+        }
+      }
+    }
+  }
+
+  #list {
+
+    min-height: calc(100vh - 200px);
+
+    .projectcont {
+
+      margin: 0 20px;
+
+      .cap {
+        text-transform: capitalize!important;
+      }
+    }
+
+    .headercont {
+
+      justify-content: space-between;
+      padding: 20px;
+
+      .countrychoser {
+
+        height: 45px;
+        display: block;
+
+        md-input-container {
+
+          margin: 2px 15px 0 15px;
+
+          span {
+
+            font-size: 14px;
+            font-weight: 14px;
+            color: $text-primary!important;
+
+            .md-text {
+
+              font-size: 14px;
+              font-weight: 14px;
+              color: $text-primary!important;
+            }
+          }
+
+          label {
+
+            &:select, &:focus {
+
+              color: $color-primary;
+            }
+          }
+        }
+      }
+
+      .starry {
+
+        font-size: 12px;
+        color: $text-secondary;
+        padding-top: 20px;
+
+        md-icon {
+
+          margin-left: 15px;
+          font-size: 14px;
+          height: 14px;
+          width: 14px;
+          transform: translate(0, -1px);
+        }
+      }
+    }
+
+    .projectcont {
+
+      padding-bottom: 20px;
+      padding-top: 20px;
+      // overflow: scroll;
+      background-color: $color-gray-lightest;
+
+      .headerrow {
+
+        width: 1500px;
+        border-bottom: 1px solid $color-gray-light;
+        background-color: white;
+
+        div {
+
+          font-size: 14px;
+          font-weight: 500;
+          color: $text-secondary;
+        }
+
+        :first-child {
+
+          color: $text-primary;
+          cursor: pointer;
+        }
+      }
+
+      .projectrow {
+
+        &.member {
+          background-color: #FFF9C4 !important;
+        }
+
+        &.viewer {
+          background-color: #D5E1E8 !important;
+        }
+
+        width: 1500px;
+        div {
+
+          font-size: 14px;
+          color: $text-secondary;
+
+          &:first-child {
+
+            font-weight: 500;
             color: $text-primary;
-            font-weight: bold;
+          }
         }
+
+        md-icon {
+
+          font-size: 14px;
+          height: 14px;
+          width: 14px;
+
+          &.member {
+            color: #CD9924;
+          }
+
+          &.viewer {
+            color: #53A0CE;
+          }
+        }
+
+
+
+        &:nth-child(even) {
+
+          background-color: #EEEEEE;
+        }
+
+        &.own {
+
+          background-color: #FFF9C4;
+        }
+      }
     }
-
-    md-tabs {
-
-        .tab-wrap {
-
-            background-color: $color-gray-lightest;
-
-            &.emptyy {
-
-                background: url("./img/wmap.svg") center center no-repeat;
-                background-size: 80% auto;
-            }
-        }
-
-        md-tabs-wrapper {
-
-            md-tabs-canvas {
-
-                height: 40px;
-
-                md-pagination-wrapper {
-
-                    height: 40px;
-
-                    md-tab-item {
-
-                        color: $text-disabled;
-                        padding-top: 8px;
-                        padding-bottom: 8px;
-                        font-size: 12px;
-
-                        &.md-active {
-
-                            color: $text-primary;
-                        }
-                    }
-
-                    md-ink-bar {
-
-                        background-color: $color-primary;
-                    }
-                }
-            }
-        }
-
-        md-select-value {
-            text-transform: capitalize!important;
-        }
-    }
-
-    #map {
-
-        position: relative;
-        min-height: calc(100vh - 200px);
-        background-color: $color-gray-lightest;
-
-        .countrychoser {
-
-            height: 45px;
-            display: block;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-
-            md-input-container {
-
-                margin: 2px 15px 0 15px;
-
-                span {
-
-                    font-size: 14px;
-                    font-weight: 14px;
-                    color: $text-primary!important;
-
-                    .md-text {
-
-                        font-size: 14px;
-                        font-weight: 14px;
-                        color: $text-primary!important;
-                    }
-                }
-
-                label {
-
-                    &:select, &:focus {
-
-                        color: $color-primary;
-                    }
-                }
-            }
-        }
-    }
-
-    #list {
-
-        min-height: calc(100vh - 200px);
-
-        .projectcont {
-
-            margin: 0 20px;
-
-            .cap {
-                text-transform: capitalize!important;
-            }
-        }
-
-        .headercont {
-
-            justify-content: space-between;
-            padding: 20px;
-
-            .countrychoser {
-
-                height: 45px;
-                display: block;
-
-                md-input-container {
-
-                    margin: 2px 15px 0 15px;
-
-                    span {
-
-                        font-size: 14px;
-                        font-weight: 14px;
-                        color: $text-primary!important;
-
-                        .md-text {
-
-                            font-size: 14px;
-                            font-weight: 14px;
-                            color: $text-primary!important;
-                        }
-                    }
-
-                    label {
-
-                        &:select, &:focus {
-
-                            color: $color-primary;
-                        }
-                    }
-                }
-            }
-
-            .starry {
-
-                font-size: 12px;
-                color: $text-secondary;
-                padding-top: 20px;
-
-                md-icon {
-
-                    margin-left: 15px;
-                    font-size: 14px;
-                    height: 14px;
-                    width: 14px;
-                    transform: translate(0, -1px);
-                }
-            }
-        }
-
-        .projectcont {
-
-            padding-bottom: 20px;
-            padding-top: 20px;
-            // overflow: scroll;
-            background-color: $color-gray-lightest;
-
-            .headerrow {
-
-                width: 1500px;
-                border-bottom: 1px solid $color-gray-light;
-                background-color: white;
-
-                div {
-
-                    font-size: 14px;
-                    font-weight: 500;
-                    color: $text-secondary;
-                }
-
-                :first-child {
-
-                    color: $text-primary;
-                    cursor: pointer;
-                }
-            }
-
-            .projectrow {
-
-                width: 1500px;
-                div {
-
-                    font-size: 14px;
-                    color: $text-secondary;
-
-                    &:first-child {
-
-                        font-weight: 500;
-                        color: $text-primary;
-                    }
-                }
-
-                md-icon {
-
-                    font-size: 14px;
-                    height: 14px;
-                    width: 14px;
-                    color: #CD9924;
-                }
-
-                &:nth-child(even) {
-
-                    background-color: #EEEEEE;
-                }
-
-                &.own {
-
-                    background-color: #FFF9C4;
-                }
-            }
-        }
-    }
+  }
 }
 
 md-select-menu {
-    .md-text {
-        text-transform: capitalize!important;
-    }
+  .md-text {
+    text-transform: capitalize!important;
+  }
 }
