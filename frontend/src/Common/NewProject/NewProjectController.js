@@ -47,12 +47,13 @@ class NewProjectController extends ProjectDefinition {
     }
 
     isViewer(project) {
-        return this.cs.userProfile.viewer.indexOf(project.id) > -1;
+        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
     }
+
 
     getUsers(criteria) {
         return this.allUsers.filter(el => {

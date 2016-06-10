@@ -36,10 +36,10 @@ class SearchbarController {
     }
 
     getUserData() {
-        const commonServices = require('../CommonServices');
-        this.userProjects = commonServices.projectList;
-        this.viewer = commonServices.userProfile.viewer;
-        this.member = commonServices.userProfile.member;
+        this.cs  = require('../CommonServices');
+        this.userProjects = this.cs.projectList;
+        this.viewer = this.cs.userProfile.viewer;
+        this.member = this.cs.userProfile.member;
     }
 
     toggleSearch() {
@@ -47,12 +47,13 @@ class SearchbarController {
     }
 
     isViewer(project) {
-        return this.viewer.indexOf(project.id) > -1;
+        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
     }
 
     isMember(project) {
-        return this.member.indexOf(project.id) > -1;
+        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
     }
+
 
     search(tmpStr) {
         const vm = this;
