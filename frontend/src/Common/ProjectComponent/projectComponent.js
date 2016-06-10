@@ -10,7 +10,8 @@ const projectComponent = {
         ngModel: '<',
         showDetails: '<',
         showLogo: '<',
-        ownProject: '<',
+        member: '<',
+        viewer: '<',
         currentProject: '<'
     }
 };

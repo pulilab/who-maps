@@ -16,7 +16,7 @@ projectcomp {
     overflow: hidden;
     outline: none;
 
-    &.my-project {
+      .my-eye,
       .my-star {
         position: absolute;
         top: -6px;
@@ -40,11 +40,11 @@ projectcomp {
           transform: rotate(-40deg);
         }
       }
+
+    .my-eye {
+      background-color: #53A0CE;
     }
 
-    .my-star {
-      display: none;
-    }
 
     .project-container {
       height: auto;
