@@ -15,5 +15,5 @@ urlpatterns = [
     url(r"^rest-auth/", include("rest_auth.urls")),
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
     url(r'^api-token-auth/', view=views.ExpiringAuthTokenWithUserProfile.as_view(), name="api_token_auth"),
-    url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),  # override default activation url
+    url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
 ]

@@ -183,6 +183,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
