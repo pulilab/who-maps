@@ -18,18 +18,9 @@ class ProjectDefinition extends Protected {
             country: null,
             countryName: null,
             coverage: [{}],
-            'technology_platforms': {
-                standard: [],
-                custom: [{}]
-            },
-            licenses: {
-                standard: [],
-                custom: [{}]
-            },
-            'digital_tools': {
-                standard: [],
-                custom: [{}]
-            },
+            'technology_platforms': [],
+            licenses: [],
+            // 'digital_tools': [],
             'pre_assessment': [{}, {}, {}, {}, {}, {}],
             donors: [{}],
             application: [],
@@ -45,36 +36,35 @@ class ProjectDefinition extends Protected {
             'implementing_partners': null,
             'implementation_dates': null,
             'geographic_coverage': null,
-            'intervention_areas': []
-
+            'intervention_areas': [],
+            wiki: '',
+            repository: '',
+            'mobile_application': ''
         };
     }
 
 
-    addTechnologyPlatform() {
-        this.project.technology_platforms.custom.push({});
-    }
-    rmTechnologyPlatform(t) {
-        _.remove(this.project.technology_platforms.custom, item => {
-            return item.$$hashKey === t.$$hashKey;
-        });
-    }
-
     technologyPlatformChange(t) {
         if (this.technologyPlatformChecked(t)) {
-            _.remove(this.project.technology_platforms.standard, item => {
-                return item === t;
-            });
+            _.remove(this.project.technology_platforms, item => item === t);
         }
         else {
-            this.project.technology_platforms.standard.push(t);
+            this.project.technology_platforms.push(t);
         }
     }
 
     technologyPlatformChecked(t) {
-        return this.project.technology_platforms.standard.indexOf(t) > -1;
+        return this.project.technology_platforms.indexOf(t) > -1;
     }
 
+    // addTechnologyPlatform() {
+    //     this.project.technology_platforms.custom.push({});
+    // }
+    // rmTechnologyPlatform(t) {
+    //     _.remove(this.project.technology_platforms.custom, item => {
+    //         return item.$$hashKey === t.$$hashKey;
+    //     });
+    // }
 
     interventionAreaChanged(t) {
         if (this.interventionAreaChecked(t)) {
@@ -92,21 +82,21 @@ class ProjectDefinition extends Protected {
     }
 
 
-    // licenseChange(t) {
-    //     if (this.licenseChecked(t)) {
-    //         _.remove(this.project.licenses.standard, item => {
-    //             return item === t;
-    //         });
-    //     }
-    //     else {
-    //         this.project.licenses.standard.push(t);
-    //     }
-    // }
-    //
-    // licenseChecked(t) {
-    //     return this.project.licenses.standard.indexOf(t) > -1;
-    // }
-    //
+    licenseChange(t) {
+        if (this.licenseChecked(t)) {
+            _.remove(this.project.licenses, item => {
+                return item === t;
+            });
+        }
+        else {
+            this.project.licenses.push(t);
+        }
+    }
+
+    licenseChecked(t) {
+        return this.project.licenses.indexOf(t) > -1;
+    }
+
     // digitalToolChange(t) {
     //     if (this.digitalToolChecked(t)) {
     //         _.remove(this.project.digital_tools.standard, item => {

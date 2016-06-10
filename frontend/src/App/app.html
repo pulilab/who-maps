@@ -50,7 +50,7 @@
                     </span>
                 <md-menu-item>
                     <md-button>
-                        <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.user.role}}
+                        <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
                     </md-button>
                 </md-menu-item>
                 <md-menu-item>
@@ -82,7 +82,7 @@
         <!--</md-menu-content>-->
         <!--</md-menu>-->
 
-        <md-button class="add-new-project" ui-sref="newProject" ng-if="vm.isLogin" ng-disabled="!vm.userProfile" aria-label="Add new project" ng-if="vm.showFullNavigation" md-no-ink>
+        <md-button class="add-new-project" ui-sref="newProject" ng-if="vm.isLogin" ng-disabled="!vm.userProfile" aria-label="Add new project" ng-show="vm.showFullNavigation && vm.userProfile.account_type === 'I'" md-no-ink>
             <md-icon class="material-icons">add</md-icon>
             New Project
         </md-button>
@@ -195,7 +195,10 @@
                     ng-model="vm.currentProject.name"
                     md-container-class="large"
                     class="large project-selector"
-                    on-close-callback="vm.updateProject">
+                    on-close-callback="vm.updateProject"
+                    icon-function="vm.iconFunction"
+            >
+                <icon>asd</icon>
             </ssmenu>
 
             <div ng-if="vm.viewMode" class="large project-name">

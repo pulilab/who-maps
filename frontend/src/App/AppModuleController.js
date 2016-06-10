@@ -20,12 +20,8 @@ class AppModuleController extends Protected {
         this.currentPage = void 0;
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
-        this.currentProjectMock = {
-            contact: {
-                name: 'Jane M Doe',
-                email: 'po@kungFu.panda'
-            }
-        };
+        this.iconFunction = this.iconFunction.bind(this);
+
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -61,6 +57,40 @@ class AppModuleController extends Protected {
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
         this.EE.on('profileUpdated', this.refreshProfileInfo, this);
+    }
+
+    iconFunction(item) {
+        const base = {
+            name: 'visibility',
+            style: {
+                color: '#53A0CE',
+                position: 'absolute',
+                right: '5px',
+                fontSize: '15px',
+                lineHeight: '24px'
+            }
+        };
+        if (this.userProfile.member.indexOf(item.id) > -1) {
+            base.name = 'grade';
+            base.style.color = '#CD9924';
+        }
+        return base;
+    }
+
+    writeUserRole() {
+        let type = null;
+        switch (this.userProfile.account_type) {
+        case 'I':
+            type = 'Implementer';
+            break;
+        case 'G':
+            type = 'Financial Investor';
+            break;
+        case 'D':
+            type = 'Government';
+            break;
+        }
+        return type;
     }
 
     refreshProfileInfo() {

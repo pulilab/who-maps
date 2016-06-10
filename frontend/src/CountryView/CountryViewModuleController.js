@@ -4,9 +4,11 @@ import _ from 'lodash';
 
 class CountryViewModuleController {
 
-    constructor() {
+    constructor($scope, CommonService) {
 
         this.EE = window.EE;
+        this.cs = CommonService;
+        this.scope = $scope;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
         this.getCountries();
@@ -26,7 +28,12 @@ class CountryViewModuleController {
             // console.debug('COUNTRY LIB', this.countriesLib);
             this.countries2 = _.cloneDeep(this.countries);
             this.countries2.push({ id: false, name: 'Show all countries' });
-            // console.debug(this.countries2);
+            if (this.cs.userProfile && this.cs.userProfile.country) {
+                const name = this.cs.userProfile.country.toLowerCase();
+                this.selectedCountry = _.find(this.countries2, { name });
+                this.updateCountry(this.selectedCountry);
+                this.scope.$evalAsync();
+            }
         });
     }
 
@@ -36,6 +43,11 @@ class CountryViewModuleController {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
         });
+    }
+
+    updateCountry(countryObj) {
+        this.changeMapTo(countryObj);
+        this.getProjects(countryObj);
     }
 
     changeMapTo(countryObj) {
@@ -65,12 +77,12 @@ class CountryViewModuleController {
     }
 
     static countryControllerFactory() {
-        function countryController() {
-
-            return new CountryViewModuleController();
+        function countryController($scope) {
+            const CommonService = require('../Common/CommonServices');
+            return new CountryViewModuleController($scope, CommonService);
         }
 
-        countryController.$inject = [];
+        countryController.$inject = ['$scope'];
 
         return countryController;
     }

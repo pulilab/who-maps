@@ -174,9 +174,12 @@
                                         color: $text-secondary;
                                     }
                                     .data {
-                                        font-size: 12px;
+                                        font-size: 14px;
                                         font-weight: 500;
                                         color: $text-primary;
+                                    }
+                                    .data2 {
+                                        font-weight: 400;
                                     }
                                     .gray {
                                         background-color: $color-gray-lightest;
@@ -186,6 +189,12 @@
                                         .data {
                                             margin: 0 30px;
                                         }
+                                    }
+                                    a {
+                                        margin-left: 20px;
+                                        text-decoration: none;
+                                        color: $color-primary;
+                                        font-weight: 400;
                                     }
                                 }
 
@@ -244,7 +253,7 @@
                 .upper {
 
                     padding: 0px 25px;
-                    height: 180px;
+                    height: 120px;
 
                     div {
                         &:not(:last-child) {
@@ -296,7 +305,7 @@
 
                     background-color: $color-gray-lightest;
                     padding: 20px 25px;
-                    height: 193px;
+                    height: 253px;
                     border-bottom-left-radius: 3px;
                     border-bottom-right-radius: 3px;
 
