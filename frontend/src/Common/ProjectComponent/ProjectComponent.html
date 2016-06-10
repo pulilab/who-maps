@@ -10,7 +10,7 @@
         <div class="text-container" layout="column">
 
             <div ng-show="vm.member" ng-class="{'my-star':vm.member}"><md-icon>grade</md-icon></div>
-            <div ng-show="vm.viewer" ng-class="{'my-eye': vm.viewer}"><md-icon>visibility</md-icon></div>
+            <div ng-show="vm.viewer && !vm.member" ng-class="{'my-eye': vm.viewer}"><md-icon>visibility</md-icon></div>
 
             <div class="upper" layout="row">
                 <div class="basic" flex="flex-grow" layout="column">

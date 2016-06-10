@@ -1,87 +1,87 @@
 <div class="relative">
 
-	<!-- for DASH -->
-	<div class="countrychart-tooltip md-whiteframe-2dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
+    <!-- for DASH -->
+    <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
 
-		<div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
-			<p flex>{{vm.countryName}}</p>
-			<img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
-		</div>
+        <div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
+            <p flex>{{vm.countryName}}</p>
+            <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
+        </div>
 
-		<div class="countrychart-tooltip-main" layout="column">
+        <div class="countrychart-tooltip-main" layout="column">
 
-			<div flex class="bold lh">
-				Total numbers:
-			</div>
+            <div flex class="bold lh">
+                Total numbers:
+            </div>
 
-			<div flex layout="row" ng-repeat="(key, numb) in vm.boundNrs">
-				<div class="cap lh" flex="85">{{key}}:<br></div>
-				<div flex class="bold lh">{{numb}}</div>
-			</div>
+            <div flex layout="row" ng-repeat="(key, numb) in vm.boundNrs">
+                <div class="cap lh" flex="85">{{key}}:<br></div>
+                <div flex class="bold lh">{{numb}}</div>
+            </div>
 
-		</div>
+        </div>
 
-		<div class="countrychart-tooltip-main" ng-show="vm.activeDistrict.name" >
+        <div class="countrychart-tooltip-main" ng-show="vm.activeDistrict.name" >
 
-			<div flex class="activename bold lh">
-				{{vm.activeDistrict.name}}
-			</div>
+            <div flex class="activename bold lh">
+                {{vm.activeDistrict.name}}
+            </div>
 
-			<div
-				flex
-				layout="row"
-				ng-repeat="(key, datum) in vm.activeDistrict.data">
+            <div
+                    flex
+                    layout="row"
+                    ng-repeat="(key, datum) in vm.activeDistrict.data">
 
-				<div flex="85" class="cap lh">{{key}}</div>
-				<div class="bold lh">{{datum}}</div>
-			</div>
+                <div flex="85" class="cap lh">{{key}}</div>
+                <div class="bold lh">{{datum}}</div>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<!-- for CLV -->
-	<div class="countrychart-tooltip md-whiteframe-1dp" ng-if="vm.big" ng-hide="!vm.map">
+    <!-- for CLV -->
+    <div class="countrychart-tooltip md-whiteframe-1dp" ng-if="vm.big" ng-hide="!vm.map">
 
-		<div class="countrychart-tooltip-header bold">
-			{{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
-			<img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
-		</div>
+        <div class="countrychart-tooltip-header bold">
+            {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
+            <img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
+        </div>
 
-		<div class="countrychart-tooltip-main countrychart-tooltip-main-big" ng-show="vm.activeDistrict.name" >
+        <div class="countrychart-tooltip-main countrychart-tooltip-main-big" ng-show="vm.activeDistrict.name" >
 
-			<div
-				flex
-				layout="column"
-				layout-align="space-around start"
-				class="projectcont"
-				ng-repeat="project in vm.activeDistrict.data | limitTo:5"
-				ng-init="member = vm.isMember(project); viewer = vm.isViewer(project) "
-			>
+            <div
+                    flex
+                    layout="column"
+                    layout-align="space-around start"
+                    class="projectcont"
+                    ng-repeat="project in vm.activeDistrict.data | limitTo:5"
+                    ng-init="member = vm.isMember(project); viewer = vm.isViewer(project) "
+            >
 
-				<div class="projectname" ui-sref="dashboard({ appName: project.id })">{{project.name}}</div>
-				<div class="projectorg">{{project.organisation}}</div>
+                <div class="projectname" ui-sref="dashboard({ appName: project.id })">{{project.name}}</div>
+                <div class="projectorg">{{project.organisation}}</div>
 
-				<div ng-show="member" ng-class="{'my-star':member}"><md-icon>grade</md-icon></div>
-				<div ng-show="viewer" ng-class="{'my-eye': viewer}"><md-icon>visibility</md-icon></div>
+                <div ng-show="member" ng-class="{'my-star':member}"><md-icon>grade</md-icon></div>
+                <div ng-show="viewer && !vm.member" ng-class="{'my-eye': viewer}"><md-icon>visibility</md-icon></div>
 
-			</div>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.map">
-		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-		<br>
-		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
-	</div>
+    <div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.map">
+        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+        <br>
+        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+    </div>
 
-	<div class="zoomhandlers2" ng-if="vm.big" ng-hide="!vm.map">
-		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-		<br>
-		<md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
-	</div>
+    <div class="zoomhandlers2" ng-if="vm.big" ng-hide="!vm.map">
+        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+        <br>
+        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+    </div>
 
-	<!-- Placeholder spinner -->
+    <!-- Placeholder spinner -->
     <div class="spinner" layout="row" layout-align="center center" ng-show="vm.showPlaceholder">
         <span flex>Loading map</span>
         <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
