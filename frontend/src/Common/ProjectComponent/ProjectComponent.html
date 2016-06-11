@@ -15,7 +15,7 @@
             <div class="upper" layout="row">
                 <div class="basic" flex="flex-grow" layout="column">
                     <span flex class="name bold">{{vm.ngModel.name}}</span>
-                    <span flex class="org-country">{{vm.ngModel.organisation_name}} | {{vm.ngModel.countryName}}</span>
+                    <span flex class="org-country">{{vm.ngModel.organisation_name}} | {{vm.ngModel.countryName}} {{vm.ngModel.country_name}}</span>
                 </div>
                 <div ng-if="vm.showDetails" class="donors">
                     <span class="nr">
