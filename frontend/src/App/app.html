@@ -46,7 +46,8 @@
 
             <md-menu-content width="4">
                     <span class="menu-group-title">
-                        {{vm.user.username}}
+                        <span ng-hide ="vm.userProfile.name">{{vm.user.username}} </span>
+                        <span ng-show ="vm.userProfile.name">{{vm.userProfile.name}} </span>
                     </span>
                 <md-menu-item>
                     <md-button>
