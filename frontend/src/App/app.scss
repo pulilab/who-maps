@@ -306,7 +306,6 @@ p.global-error {
       padding-right: 12px;
     }
   }
-
   .md-toolbar-tools {
     max-height: 48px;
     height: 48px;
@@ -456,6 +455,18 @@ p.global-error {
         .material-icons,
         > span {
           color: $text-primary !important;
+        }
+      }
+    }
+
+    .contact-button {
+      &.md-button {
+
+        span,
+        .material-icons {
+          line-height: 24px;
+          color: $color-gray-light !important;
+          font-size: 14px !important;
         }
       }
     }

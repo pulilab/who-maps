@@ -100,7 +100,7 @@
                 </md-button>
 
                 <md-button ui-sref="public-dashboard"  ng-if="vm.viewMode" ui-sref-active="active" md-no-ink>
-                Dashboard
+                    Dashboard
                 </md-button>
 
                 <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
@@ -207,28 +207,28 @@
 
             <div flex></div>
 
-            <!--<div class="project-info" layout="row">-->
-            <!--<span>-->
-            <!--Version:-->
-            <!--{{vm.currentProject.last_version}}-->
-            <!--({{vm.currentProject.last_version_date | date: medium}})-->
-            <!--</span>-->
-            <!--<span class="menu-separator"></span>-->
-            <!--<span>-->
-            <!--Organization:-->
-            <!--{{vm.currentProject.organisation}}-->
-            <!--</span>-->
-            <!--&lt;!&ndash;span class="menu-separator"></span>-->
-            <!--<span>-->
-            <!--Contact:-->
-            <!--<md-button ng-href="mailto:{{vm.currentProject.contact.email}}"  md-no-ink>-->
-            <!--<md-icon class="material-icons">-->
-            <!--send-->
-            <!--</md-icon>-->
-            <!--{{vm.currentProjectMock.contact.name}}-->
-            <!--</md-button>-->
-            <!--</span&ndash;&gt;-->
-            <!--</div>-->
+            <div class="project-info" layout="row">
+            <span>
+            Version:
+            {{vm.currentProject.last_version}}
+            ({{vm.currentProject.last_version_date | date: medium}})
+            </span>
+                <span class="menu-separator"></span>
+            <span>
+            Organization:
+            {{vm.currentProject.organisation.name}}
+            </span>
+                <span class="menu-separator"></span>
+            <span>
+            Contact Person:
+            <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
+            <md-icon class="material-icons">
+            mail_outline
+            </md-icon>
+            {{vm.currentProject.contact_name}}
+            </md-button>
+            </span>
+            </div>
         </div>
     </md-toolbar>
     <ui-view name="main" id="main-view" layout-fill></ui-view>
