@@ -51,9 +51,8 @@ class SignupController {
             this.storage.set('user_profile_id', result.data.user_profile_id);
             this.storage.set('user', user);
             setTimeout(() => {
-                this.EE.emit('login');    
-            }, 5000)
-            
+                this.EE.emit('login');
+            }, 5000);
         }
         else {
             _.forEach(result.data, (item, key) => {

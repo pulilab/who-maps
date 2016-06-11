@@ -10,15 +10,15 @@ define('SessionStorage class', () => {
     });
 
 
-    it('can store and read data into/from sessionStorage', () => {
+    it('can store and read data into/from localStorage', () => {
         const store = new SessionStorage();
-        spyOn(window.sessionStorage, 'setItem');
+        spyOn(window.localStorage, 'setItem');
         store.set('a', 'asdf');
-        expect(window.sessionStorage.setItem).toHaveBeenCalledWith('a', 'asdf');
+        expect(window.localStorage.setItem).toHaveBeenCalledWith('a', 'asdf');
 
-        spyOn(window.sessionStorage, 'getItem');
+        spyOn(window.localStorage, 'getItem');
         store.get('a');
-        expect(window.sessionStorage.getItem).toHaveBeenCalledWith('a');
+        expect(window.localStorage.getItem).toHaveBeenCalledWith('a');
     });
 
 
@@ -30,17 +30,17 @@ define('SessionStorage class', () => {
 
     it('can remove a key', () => {
         const store = new SessionStorage();
-        spyOn(window.sessionStorage, 'removeItem');
+        spyOn(window.localStorage, 'removeItem');
         store.remove('a');
-        expect(window.sessionStorage.removeItem).toHaveBeenCalledWith('a');
+        expect(window.localStorage.removeItem).toHaveBeenCalledWith('a');
     });
 
 
-    it('can clean the whole sessionStorage', () => {
+    it('can clean the whole localStorage', () => {
         const store = new SessionStorage();
-        spyOn(window.sessionStorage, 'clear');
+        spyOn(window.localStorage, 'clear');
         store.clear();
-        expect(window.sessionStorage.clear).toHaveBeenCalled();
+        expect(window.localStorage.clear).toHaveBeenCalled();
     });
 
 

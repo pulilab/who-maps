@@ -1,43 +1,47 @@
 class SessionStorage {
 
+    constructor() {
+        this.storage = window.localStorage;
+    }
+
     set(key, value) {
 
         if (typeof key !== 'string') {
-            throw new TypeError('SessionStorage key should be a string!');
+            throw new TypeError('this.storage key should be a string!');
         }
 
         const val = typeof value === 'string' ?
             value :
             JSON.stringify(value);
 
-        sessionStorage.setItem(key, val);
+        this.storage.setItem(key, val);
 
     }
 
     get(key) {
         try {
-            return JSON.parse(sessionStorage.getItem(key));
+            return JSON.parse(this.storage.getItem(key));
         }
         catch (e) {
-            return null;
+            return this.storage.getItem(key);
         }
     }
 
     remove(key) {
-        sessionStorage.removeItem(key);
+        this.storage.removeItem(key);
     }
 
     clear() {
-        sessionStorage.clear();
+        this.storage.clear();
     }
 
     // DEBUG
     check() {
-        console.log('sessionStorage contains:\n');
+        console.log('this.storage contains:\n');
         const ret = {};
-        for (const key in sessionStorage) {
-            console.log(key + ': ' + sessionStorage.getItem(key));
-            ret[key] = sessionStorage.getItem(key);
+        for (const key in this.storage) {
+            console.log(key + ': ' + this.storage.getItem(key));
+            ret[key] = this.storage.getItem(key);
         }
         return ret;
     }

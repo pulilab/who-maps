@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import 'whatwg-fetch';
+import Storage from './Storage';
 // import 'es6-promise';
 
 /* global Promise, API, DEV */
@@ -7,8 +8,9 @@ import 'whatwg-fetch';
 class AuthApi {
 
     constructor(module) {
-        this.retrieveToken();
         this.EE = window.EE;
+        this.storage = new Storage();
+        this.retrieveToken();
         this.apiUrl = API;
         this.updateOnNextRequest = false;
 
@@ -173,7 +175,7 @@ class AuthApi {
 
     retrieveToken(update) {
         if (update || !this.token) {
-            this.token = window.sessionStorage.getItem('token');
+            this.token = this.storage.get('token');
         }
     }
 

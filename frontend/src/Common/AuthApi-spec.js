@@ -1,15 +1,18 @@
 import AuthApi from './AuthApi';
 import _ from 'lodash';
+import Storage from './Storage';
 
 /* global define, it, describe, beforeEach, expect, xit, spyOn, Promise */
 
 let aa = {};
+const storage = new Storage();
 
 describe('AuthApi class', () => {
 
     beforeEach(()=>{
         aa = new AuthApi();
-        sessionStorage.setItem('token', 'something');
+
+        storage.set('token', 'something');
         const res = new window.Response('{"hello":"world"}', {
             status: 200,
             headers: {
@@ -54,17 +57,17 @@ describe('AuthApi class', () => {
     });
 
     it('should have a function that retrieve a token from the session storage', () => {
-        sessionStorage.clear();
+        storage.clear();
         aa.retrieveToken(true);
         expect(aa.token).toBeNull();
 
-        sessionStorage.setItem('token', 'something');
+        storage.set('token', 'something');
         aa.retrieveToken();
         expect(aa.token).toBe('something');
     });
 
     it('should have a function that return an Headers object with the Authentication token', () => {
-        sessionStorage.setItem('token', 'something');
+        storage.set('token', 'something');
         const headers = aa.generateHeaders();
         expect(headers.get('Authorization')).toBe('Token something');
         expect(headers.get('content-type')).toBe('application/json');
