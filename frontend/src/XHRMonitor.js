@@ -65,22 +65,20 @@ const pollingProcess = (stop) => {
 
 };
 
-setInterval(()=>{
-    if (!hasStopped) {
-        hasStopped = true;
+const closeForTimeout = () => {
+    setTimeout(()=> {
         if (interval) {
             clearInterval(interval);
         }
         emit({ progression: 100 });
-    }
-}, 10000);
-
+    }, 10000);
+};
 
 const progressiveEmit = () => {
     // console.log(`started: ${requests.started}, ended: ${requests.ended}`);
     if (!firstRequest) {
         firstRequest = true;
-        hasStopped = false;
+        closeForTimeout();
         emit({ progression: 10 });
     }
 
