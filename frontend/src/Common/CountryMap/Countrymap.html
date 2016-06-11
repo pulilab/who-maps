@@ -14,7 +14,7 @@
                 Total numbers:
             </div>
 
-            <div flex layout="row" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
+            <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
                 <div class="cap lh" flex="85">{{key}}:<br></div>
                 <div flex class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
             </div>
@@ -29,6 +29,7 @@
 
             <div
                     flex
+                    class="coverage-data"
                     layout="row"
                     ng-repeat="(key, datum) in vm.activeDistrict.data">
 
