@@ -27,9 +27,9 @@
         <span flex ></span>
 
         <searchbar compact-mode="true" ng-if="vm.showFullNavigation"></searchbar>
-        <md-button class="md-icon-button" ng-disabled="!vm.userProfile" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
+        <!-- <md-button class="md-icon-button" ng-disabled="!vm.userProfile" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
             <md-icon class="material-icons">help_outline</md-icon>
-        </md-button>
+        </md-button> -->
 
         <md-button class="landing-link" ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink>
             Login
