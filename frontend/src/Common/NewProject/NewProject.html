@@ -72,40 +72,42 @@
                 <div class="chipper" ng-if="vm.editMode">
                     <label>Viewers (only view role)</label>
                     <md-contact-chips
-                            placeholder="Add viewers"
-                            secondary-placeholder="add new viewer"
-                            ng-model="vm.viewers"
-                            md-contacts="vm.getUsers($query)"
-                            md-contact-name="name"
-                            md-contact-email="organisation__name"
-                            md-require-match="true"
-                            md-highlight-flags="i"
-                            filter-selected="true">
+                        placeholder="Add viewers"
+                        secondary-placeholder="add new viewer"
+                        ng-model="vm.viewers"
+                        md-contacts="vm.getUsers($query)"
+                        md-contact-name="name"
+                        md-contact-email="organisation__name"
+                        md-require-match="true"
+                        md-highlight-flags="i"
+                        filter-selected="true">
                     </md-contact-chips>
                 </div>
 
-
-                <ssmenu
-
+                <div class="strat-cont">
+                    <ssmenu
                         class="strategies"
                         options="vm.structure.strategies"
                         on-close-callback="vm.setStrategy"
                         multiple="true"
                         ng-model="vm.project.strategy"
                         placeholder="Select strategies from list"
-                        hint="What is your mHealth project strategy to address the health need?"
-                ></ssmenu>
-                <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
+                        hint="What is your mHealth project strategy to address the health need?">
+                    </ssmenu>
+                </div>
+
+                <div class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
-                            ng-disabled="vm.editMode"
-                            ng-required="vm.sentForm"
-                            name="country"
-                            on-close-callback="vm.countryCloseCallback"
-                            option-label="name"
-                            options="vm.structure.countries"
-                            ng-model="vm.project.countryName"
-                            placeholder="Select project’s country from list"
-                    ></ssmenu>
+                        class="countryss"
+                        ng-disabled="vm.editMode"
+                        ng-required="vm.sentForm"
+                        name="country"
+                        on-close-callback="vm.countryCloseCallback"
+                        option-label="name"
+                        options="vm.structure.countries"
+                        ng-model="vm.project.countryName"
+                        placeholder="Select project’s country from list">
+                    </ssmenu>
                     <div ng-messages="vm.newProjectForm.country.$error">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="custom" ng-repeat="error in vm.newProjectForm.country.customError">{{error}} </div>
