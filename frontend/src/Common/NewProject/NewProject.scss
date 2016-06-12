@@ -396,6 +396,9 @@ new-project {
     md-icon {
       color: $color-primary!important;
     }
+    .md-label {
+      color: $text-primary!important;
+    }
     &.md-raised {
       background-color: $color-primary!important;
       color: white!important;
