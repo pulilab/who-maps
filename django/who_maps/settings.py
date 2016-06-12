@@ -149,7 +149,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-SITE_ID = os.environ.get('SITE_ID', 1)
+SITE_ID = int(os.environ.get('SITE_ID', 1))
 
 CORS_ORIGIN_ALLOW_ALL = True
 
