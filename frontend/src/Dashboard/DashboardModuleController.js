@@ -410,20 +410,12 @@ class DashboardModuleController extends Protected {
         });
 
         data.files.forEach(fileObj => {
-            if (fileObj.type === 'report') {
-                res.reports.push({
-                    type: 'file',
-                    filename: fileObj.filename,
-                    id: fileObj.id,
-                    ext: fileObj.filename.split('.').slice(-1)[0],
-                    // Needed data!
-                    date: '#dateUploadedOrGiven',
-                    size: '#XY0Mb'
-                });
-            }
-            else {
-                console.error('File type (not report) isn\'t handled yet in the dashboardCtrl!');
-            }
+            const type = fileObj.type === 'report' ? 'reports' : 'articles';
+            res[type].push({
+                type: 'file',
+                filename: fileObj.filename,
+                id: fileObj.id
+            });
         });
 
         this.resources = res;
