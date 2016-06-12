@@ -204,7 +204,7 @@
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
-                                    <input type="text" ng-model="r.value" />
+                                    <input type="url" ng-model="r.value" />
                                 </md-input-container>
                             </div>
                             <md-button ng-hide="$last" ng-click="vm.rmReportLink(r)" layout="column" class="md-icon-button red">
@@ -248,7 +248,7 @@
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
-                                    <input type="text" ng-model="p.value" />
+                                    <input type="url" ng-model="p.value" />
                                 </md-input-container>
                             </div>
                             <md-button ng-hide="$last" ng-click="vm.rmPublicationLink(p)" layout="column" class="md-icon-button red">
