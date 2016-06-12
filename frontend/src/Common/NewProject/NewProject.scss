@@ -361,12 +361,28 @@ new-project {
     }
   }
 
+  .checkbox-container {
+    flex-wrap: wrap;
+
+    md-checkbox {
+      display: flex;
+      align-items: center;
+      .md-container {
+        flex-basis: 10;
+      }
+      .md-label {
+        vertical-align: middle;
+      }
+    }
+
+  }
+
   .my-projects {
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
     padding-left: 60px;
-    padding-right:60px;
-    padding-bottom:30px;
+    padding-right: 60px;
+    padding-bottom: 30px;
 
     h5 {
       font-size:20px;

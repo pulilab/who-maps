@@ -198,7 +198,7 @@
 
                         <p>What reports and publications do you have for the project?</p>
 
-                        <h6>Add project report(s):</h6>
+                        <h5>Add project report(s):</h5>
                         <div layout="row" layout-align="start center" ng-repeat="r in vm.project.reports">
                             <div layout="row" flex="70">
                                 <md-icon>link</md-icon>
@@ -241,7 +241,7 @@
 
 
 
-                        <h6>Add publication(s) / journal article(s):</h6>
+                        <h5>Add publication(s) / journal article(s):</h5>
 
                         <div layout="row" layout-align="start center" ng-repeat="p in vm.project.publications">
                             <div layout="row" flex="70">
@@ -312,18 +312,20 @@
                         <!-- Tech platforms -->
                         <section md-layout="row" layout-wrap>
 
+                            <p>What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</p>
                             <h5>Technology Platforms:</h5>
-                            <span class="hint">What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</span><br>
 
-                            <md-checkbox
-                                ng-repeat="t in vm.structure.technology_platforms"
-                                ng-checked="vm.technologyPlatformChecked(t)"
-                                ng-click="vm.technologyPlatformChange(t)"
-                                flex="30"
-                                aria-label="{{ t }}"
-                                class="">
-                                {{ t }}
-                            </md-checkbox>
+                            <div class="checkbox-container" layout="row">
+                                <md-checkbox
+                                    ng-repeat="t in vm.structure.technology_platforms"
+                                    ng-checked="vm.technologyPlatformChecked(t)"
+                                    ng-click="vm.technologyPlatformChange(t)"
+                                    flex="15"
+                                    aria-label="{{ t }}"
+                                    class="">
+                                    {{ t }}
+                                </md-checkbox>
+                            </div>
                             <!-- <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">
                                 <md-input-container flex>
                                     <label>Other</label>
@@ -341,17 +343,19 @@
                         <!-- Licenses -->
                         <section md-layout="row">
 
+                            <p>Under what license is the project governed?</p>
                             <h5>Licenses:</h5>
-                            <span class="hint">Under what license is the project governed?</span><br>
-                            <md-checkbox
-                                ng-repeat="l in vm.structure.licenses"
-                                ng-checked="vm.licenseChecked(l)"
-                                ng-click="vm.licenseChange(l)"
-                                flex="30"
-                                aria-label="{{ l }}"
-                                class="">
-                                {{ l }}
-                            </md-checkbox>
+                            <div class="checkbox-container checkbox-container-lic" layout="row">
+                                <md-checkbox
+                                    ng-repeat="l in vm.structure.licenses"
+                                    ng-checked="vm.licenseChecked(l)"
+                                    ng-click="vm.licenseChange(l)"
+                                    flex="30"
+                                    aria-label="{{ l }}"
+                                    class="">
+                                    {{ l }}
+                                </md-checkbox>
+                            </div>
                             <!-- <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.licenses.custom">
                                 <md-input-container flex>
                                     <label>Other</label>
@@ -496,16 +500,18 @@
                         </div>
 
                         <div md-layout="row">
-                            <h6 flex="100">Interventions Areas:</h6>
-                            <md-checkbox
-                                    name="intervention_areas"
-                                    ng-repeat="d in vm.structure.intervention_areas"
-                                    ng-checked="vm.interventionAreaChecked(d)"
-                                    ng-click="vm.interventionAreaChanged(d)"
-                                    flex="30"
-                                    aria-label="{{ d }}">
-                                {{ d }}
-                            </md-checkbox>
+                            <h5 flex="100">Interventions Areas:</h5>
+                            <div class="checkbox-container" layout="row">
+                                <md-checkbox
+                                        name="intervention_areas"
+                                        ng-repeat="d in vm.structure.intervention_areas"
+                                        ng-checked="vm.interventionAreaChecked(d)"
+                                        ng-click="vm.interventionAreaChanged(d)"
+                                        flex="30"
+                                        aria-label="{{ d }}">
+                                    {{ d }}
+                                </md-checkbox>
+                            </div>
                             <div class="custom-error" ng-show="vm.project.intervention_areas.length === 0">
                                 Select at least one area
                             </div>
@@ -524,7 +530,7 @@
 
                         <div class="axis-assessment" layout="column"  >
                             <div layout="row" layout-align="start center" class="assessment" ng-repeat="a in vm.project.pre_assessment track by $index">
-                                <div flex="65" >
+                                <div flex="65">
                                     <p>
                                         {{vm.axisStructure[$index].description}}
                                     </p>
@@ -537,7 +543,7 @@
                                     </div>
                                 </div>
                                 <div flex="35" class="axis-description">
-                                    <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}">{{vm.axisStructure[$index].title}}</h6>
+                                    <img class="axis{{$index + 1}}" ng-src="{{vm.axisStructure[$index].img}}">{{vm.axisStructure[$index].title}}
                                     <p>{{vm.axisStructure[$index].text}}</p>
                                 </div>
                             </div>
