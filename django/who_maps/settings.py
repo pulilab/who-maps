@@ -185,7 +185,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
-DEFAULT_FROM_EMAIL = "noreply@dhatlas.org"
+DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
