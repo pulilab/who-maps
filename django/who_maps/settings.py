@@ -184,6 +184,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
+DEFAULT_FROM_EMAIL = "noreply@dhatlas.org"
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
@@ -206,7 +208,7 @@ EMAIL_PORT = 587
 
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
-FROM_EMAIL = "noreply@dhatlas.org"
+FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 # Geodata settings
 GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')
