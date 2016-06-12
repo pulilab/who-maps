@@ -51,7 +51,7 @@
                 </md-input-container>
 
                 <div class="chipper" ng-if="vm.editMode">
-                    <label>Team members</label>
+                    <label>Team members (editor role)</label>
                     <md-contact-chips
                             placeholder="Editors of this project"
                             secondary-placeholder="add new team member"
@@ -66,9 +66,9 @@
                 </div>
 
                 <div class="chipper" ng-if="vm.editMode">
-                    <label>Superior viewers</label>
+                    <label>Viewers (only view role)</label>
                     <md-contact-chips
-                            placeholder="See all the projects data"
+                            placeholder="Add viewers"
                             secondary-placeholder="add new viewer"
                             ng-model="vm.viewers"
                             md-contacts="vm.getUsers($query)"
