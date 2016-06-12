@@ -133,11 +133,8 @@ class LinechartController {
 
         const yAxis = d3.svg.axis()
             .scale(yScale)
-            .orient('left');
-
-        if (!this.notpercentage) {
-            yAxis.tickFormat(d3.format('.0%'));
-        }
+            .orient('left')
+            .tickFormat(this.notpercentage ? d3.format('d') : d3.format('.0%'));
 
         // Appending the X axis
         element.append('svg:g')
