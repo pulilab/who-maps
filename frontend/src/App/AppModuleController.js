@@ -96,6 +96,7 @@ class AppModuleController extends Protected {
     refreshProfileInfo() {
         this.userProfile = this.cs.userProfile;
         this.scope.$evalAsync();
+        this.state.go('dashboard');
     }
 
     checkUserProfile() {

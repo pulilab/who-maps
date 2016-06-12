@@ -4,20 +4,19 @@
       "intro": "How to visualize my project"
     },
     {
-      "intro": "Click which part(s) of the RMNCH continuum your project falls under",
-      "element": ".continuum-component"
+      "intro": "Click which part(s) of the RMNCH continuum your project falls under"
     },
     {
-      "intro": "Select down for the appropriate health interventions. Choose all that apply.",
-      "element": ".interventions-component"
+      "intro": "Select down the appropriate age ranges, chose all that apply for each continuum column"
     },
     {
-      "intro": "Select which health system constraints are the focus of your project",
-      "element": ".constraints-component"
+      "intro": "Select down for the appropriate health interventions. Choose all that apply."
     },
     {
-      "intro": "Create a bubble and insert text on what your intervention does",
-      "element": ".applications-component"
+      "intro": "Select which health system constraints are the focus of your project"
+    },
+    {
+      "intro": "Create a bubble and insert text on what your intervention does"
     },
     {
       "intro": "Congratulations! Introduction completed"
