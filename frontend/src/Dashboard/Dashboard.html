@@ -207,7 +207,7 @@
 
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
                                         <h4>{{report.title || report.filename}}</h4>
-                                        <p ng-if="report.type === 'file'">{{report.date}} | .{{report.ext}} | {{report.size}}</p>
+                                        <!-- <p ng-if="report.type === 'file'">{{report.date}} | .{{report.ext}} | {{report.size}}</p> -->
                                         <p ng-if="report.type === 'link'">{{report.link}}</p>
                                     </div>
                                     <md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>
@@ -226,7 +226,7 @@
 
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
                                         <h4>{{article.title || article.filename}}</h4>
-                                        <p ng-if="article.type === 'file'">{{article.date}} | .{{article.ext}} | {{article.size}}</p>
+                                        <!-- <p ng-if="article.type === 'file'">{{article.date}} | .{{article.ext}} | {{article.size}}</p> -->
                                         <p ng-if="article.type === 'link'">{{article.link}}</p>
                                     </div>
                                     <md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>
