@@ -211,9 +211,9 @@
 
                 <div class="project-info" layout="row">
             <span>
-            Version:
-            {{vm.currentProject.last_version}}
-            ({{vm.currentProject.last_version_date | date: medium}})
+                Version:
+                {{vm.currentProject.last_version || '0'}}.
+                {{vm.currentProject.last_version ? ('(' + (vm.currentProject.last_version_date | date: medium) + ')') : '' }}
             </span>
                     <span class="menu-separator"></span>
             <span>
