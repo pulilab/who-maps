@@ -20,27 +20,27 @@ class ProjectSerializer(serializers.Serializer):
     contact_name = serializers.CharField()
     contact_email = serializers.EmailField()
     implementation_overview = serializers.CharField(max_length=500)
-    implementing_partners = serializers.CharField(required=False)
+    implementing_partners = serializers.CharField(required=False, allow_blank=True)
     implementation_dates = serializers.CharField()
     geographic_coverage = serializers.CharField()
     intervention_areas = serializers.ListField()
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
-    objective = serializers.CharField(required=False, max_length=250)
+    objective = serializers.CharField(required=False, allow_blank=True, max_length=250)
     technology_platforms = serializers.ListField(required=False)  # Can hold 'other' fields
     licenses = serializers.ListField(required=False)  # Can hold 'other' fields
     application = serializers.ListField(required=False)
     coverage = serializers.ListField(required=False)
-    started = serializers.CharField(required=False)
+    started = serializers.CharField(required=False, allow_blank=True)
     donors = serializers.ListField(required=False)  # Should be text instead of ID - no Donors in MVP
     reports = serializers.ListField(required=False)
     publications = serializers.ListField(required=False)
     pipeline = serializers.ListField(required=False)  # Can hold 'other' fields
-    goals_to_scale = serializers.CharField(required=False)
-    anticipated_time = serializers.CharField(required=False)
-    repository = serializers.CharField(required=False)
-    mobile_application = serializers.CharField(required=False)
-    wiki = serializers.CharField(required=False)
+    goals_to_scale = serializers.CharField(required=False, allow_blank=True)
+    anticipated_time = serializers.CharField(required=False, allow_blank=True)
+    repository = serializers.URLField(required=False, allow_blank=True)
+    mobile_application = serializers.CharField(required=False, allow_blank=True)
+    wiki = serializers.URLField(required=False, allow_blank=True)
     pre_assessment = serializers.ListField(required=False)
 
 
