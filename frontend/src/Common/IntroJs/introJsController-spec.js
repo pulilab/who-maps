@@ -15,7 +15,7 @@ const createDiv =  (className, id) => {
 describe('introJsController', () => {
 
     beforeEach(() => {
-        document.body.appendChild(createDiv('main', 'main-view'));
+        document.body.appendChild(createDiv('main', 'intro-wrapper'));
         ic = IntroJsController.introJsFactory()();
     });
 

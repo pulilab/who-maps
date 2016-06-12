@@ -29,7 +29,6 @@ let requests = {
 
 let progression = 0;
 let firstRequest = false;
-let hasStopped = true;
 
 const emit = (detail) => {
     const event = new CustomEvent('xhrmonitor', { detail });
