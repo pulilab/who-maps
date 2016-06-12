@@ -215,6 +215,8 @@ class CountrymapController {
 
     drawDistricts(element, distrData, topoJSON) {
 
+        const self = this;
+
         const projection = d3.geo.mercator()
             .scale(this.calculateScale(topoJSON));
 
@@ -225,6 +227,7 @@ class CountrymapController {
 
             const gotData = typeof this.data.data[distrName] === 'object';
 
+
             element
                 .append('path')
                 .datum({
@@ -233,17 +236,46 @@ class CountrymapController {
                     features: [distrData.features[i]]
                 })
                 .attr('d', d3.geo.path().projection(projection))
-                .attr('class', 'd3district')
+                .classed('d3district', true)
                 .classed('d3district-data', gotData)
                 .on('mouseover', () => {
+                    if (!this.big) {
+                        this.activeDistrict = {
+                            name: distrName,
+                            data: this.data.data[distrName]
+                        };
+                        this.scope.$evalAsync();
+                    }
+                })
+                .attr('data-justtocatchdomelement', function setDictrictActiveIfHoveredLonger() {
+                    // this bound as DOM iteratee (current district)
+                    if (!self.big) {
+                        return '';
+                    }
+                    d3.select(this).on('mouseover', () => {
 
-                    this.activeDistrict = {
-                        name: distrName,
-                        data: this.data.data[distrName]
-                    };
-                    this.scope.$evalAsync();
+                        window.setTimeout((e) => {
 
+                            const stillHovered = (e.parentElement.querySelector(':hover') === e);
+
+                            if (stillHovered) {
+                                self.activeDistrict = {
+                                    name: distrName,
+                                    data: self.data.data[distrName]
+                                };
+                                self.scope.$evalAsync();
+                            }
+                        }, 1000, this);
+                    });
+                    return '';
                 });
+                // .on('click', () => {
+                //     this.activeDistrict = {
+                //         name: distrName,
+                //         data: this.data.data[distrName]
+                //     };
+                //     this.scope.$evalAsync();
+                // });
         }
     }
 
