@@ -85,12 +85,26 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
     def _send_notification(self, instance, validated_data):
         new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]
         new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
-        all_new_members = set(new_team_members + new_viewers)
 
         html_template = loader.get_template("email/new_member.html")
-        html_message = html_template.render({"project_id": instance.id, "project_name": instance.name})
+        html_message = html_template.render({
+                                        "project_id": instance.id,
+                                        "project_name": instance.name,
+                                        "role": "team member"})
+        for profile in new_team_members:
+            mail.send_mail(
+                subject="You were added to a project!",
+                message="",
+                from_email=settings.FROM_EMAIL,
+                recipient_list=[profile.user.email],
+                html_message=html_message,
+                fail_silently=True)
 
-        for profile in all_new_members:
+        html_message = html_template.render({
+                                        "project_id": instance.id,
+                                        "project_name": instance.name,
+                                        "role": "viewer"})
+        for profile in new_viewers:
             mail.send_mail(
                 subject="You were added to a project!",
                 message="",
