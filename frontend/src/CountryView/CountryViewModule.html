@@ -81,7 +81,7 @@
                                 ng-repeat="project in vm.projectsData track by $index"
                                 ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
 
-                            <div flex="25" ui-sref="dashboard({ appName: project.id })">
+                            <div flex="25" ui-sref="dashboard({ appName: project.id })" class="projectlink">
                                 <md-icon class="member" ng-show="vm.isMember(project)">grade</md-icon>
                                 <md-icon class="viewer" ng-show="vm.isViewer(project)">visibility</md-icon>
                                 {{project.name}}
