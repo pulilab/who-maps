@@ -605,6 +605,7 @@ class ProjectTests(SetupTests):
         self.assertIn("geographic_coverage", response.json()[0])
         self.assertIn("intervention_areas", response.json()[0])
 
+
 class PermissionTests(SetupTests):
 
     def test_team_member_can_update_project_groups(self):
@@ -771,3 +772,21 @@ class PermissionTests(SetupTests):
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
             self.assertNotIn(key, response.json())
+
+    def test_members_receive_last_version_info(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("last_version", response.json())
+
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("last_version", response.json())
