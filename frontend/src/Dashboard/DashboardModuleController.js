@@ -392,8 +392,7 @@ class DashboardModuleController extends Protected {
             if (_.keys(link).length) {
                 res.reports.push({
                     type: 'link',
-                    link: link.value,
-                    title: 'Where should I know?'
+                    link: link.value
                 });
             }
         });
@@ -402,9 +401,7 @@ class DashboardModuleController extends Protected {
             if (_.keys(link).length) {
                 res.articles.push({
                     type: 'link',
-                    link: link.value,
-                    // Needed data!
-                    title: 'Where should I know?'
+                    link: link.value
                 });
             }
         });
