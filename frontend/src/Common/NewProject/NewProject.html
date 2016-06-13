@@ -420,6 +420,7 @@
                                 <input type="url" placeholder="Code documentation or download link" ng-required="true" name="repository" ng-model="vm.project.repository"/>
                                 <div ng-messages="vm.newProjectForm.repository.$error">
                                     <div ng-message="required">This is required.</div>
+                                    <div ng-message="url">This should be a valid link</div>
                                 </div>
                             </md-input-container>
                         </div>
@@ -428,6 +429,7 @@
                                 <input type="url" placeholder="Link to the application:" name="mobile_application" ng-required="true" ng-model="vm.project.mobile_application"/>
                                 <div ng-messages="vm.newProjectForm.mobile_application.$error">
                                     <div ng-message="required">This is required.</div>
+                                    <div ng-message="url">This should be a valid link</div>
                                 </div>
                             </md-input-container>
                         </div>
@@ -436,6 +438,7 @@
                                 <input type="url" placeholder="Link to wiki page:" name="wiki" ng-required="true" ng-model="vm.project.wiki"/>
                                 <div ng-messages="vm.newProjectForm.wiki.$error">
                                     <div ng-message="required">This is required.</div>
+                                    <div ng-message="url">This should be a valid link</div>
                                 </div>
                             </md-input-container>
                         </div>
