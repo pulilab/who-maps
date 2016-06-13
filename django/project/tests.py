@@ -377,9 +377,9 @@ class ProjectTests(SetupTests):
             "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
             "goals_to_scale": "scale",
             "anticipated_time": "time",
-            "repository": "repos1",
+            "repository": "http://some.repo",
             "mobile_application": "app1, app2",
-            "wiki": "http://wiki",
+            "wiki": "http://wiki.org",
             "pre_assessment": [1,0,3,0,4,0],
         }
         url = reverse("project-crud")
@@ -430,7 +430,7 @@ class ProjectTests(SetupTests):
             "anticipated_time": "time",
             "pre_assessment": [1,0,3,0,4,0],
         }
-        url = reverse("project-list")
+        url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
 
         url = reverse("project-by-district", kwargs={"country_id": self.country_id})
@@ -605,6 +605,44 @@ class ProjectTests(SetupTests):
         self.assertIn("geographic_coverage", response.json()[0])
         self.assertIn("intervention_areas", response.json()[0])
 
+    def test_project_create_can_send_blank_fields_in(self):
+        # add one new project where intervention_areas is empty
+        project_data = {
+            "date": datetime.utcnow(),
+            "name": "Test Project2",
+            "organisation": self.org.id,
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
+            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
+            "country": self.country_id,
+            "objective": "objective1",
+            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
+            "application": ["app1", "app2"],
+            "coverage": [
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
+            "started": datetime.utcnow(),
+            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
+            "reports": ["http://foo.com", "http://bar.com"],
+            "publications": ["http://foo.com", "http://bar.com"],
+            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
+            "goals_to_scale": "scale",
+            "anticipated_time": "time",
+            "pre_assessment": [1,0,3,0,4,0],
+            "implementing_partners": ""
+        }
+        url = reverse("project-crud")
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertIn("implementing_partners", response.json())
+
+
 class PermissionTests(SetupTests):
 
     def test_team_member_can_update_project_groups(self):
@@ -771,3 +809,21 @@ class PermissionTests(SetupTests):
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
             self.assertNotIn(key, response.json())
+
+    def test_members_receive_last_version_info(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("last_version", response.json())
+
+        url = reverse("make-version", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.post(url)
+        url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("last_version", response.json())

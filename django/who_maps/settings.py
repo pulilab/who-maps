@@ -149,7 +149,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-SITE_ID = os.environ.get('SITE_ID', 1)
+SITE_ID = int(os.environ.get('SITE_ID', 1))
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -185,7 +185,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
-DEFAULT_FROM_EMAIL = "noreply@dhatlas.org"
+DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'

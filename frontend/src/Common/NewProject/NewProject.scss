@@ -109,7 +109,7 @@ new-project {
       margin-bottom: 40px;
 
       md-input-container {
-        width: 400px;
+        width: 600px;
       }
 
       .separator {
@@ -121,12 +121,8 @@ new-project {
       }
     }
 
-    .countries {
-      width: 400px;
-
-      md-input-container {
-        width:320px;
-      }
+    .countries md-input-container {
+        width: 600px;
     }
 
     > p {
@@ -162,6 +158,10 @@ new-project {
 
   .strategies {
     height:$strategies-height;
+
+    md-select .md-text {
+      padding-right: 0px;
+    }
 
     > span {
       line-height: $strategies-height + 10px;
@@ -279,16 +279,28 @@ new-project {
     margin-bottom: 40px;
 
     md-datepicker {
-      width: 445px;
+      width: 345px;
 
       .md-datepicker-input-container {
-        width: 400px;
-        height: 30px;
+        font-size: 16px;
+        width: 300px;
+        height: 24px;
         margin-left: 0;
+        padding-bottom: 2px;
+
+        input {
+          font-size: 16px;
+        }
+
+        .md-datepicker-expand-triangle {
+          transform: scale(1.5, 1.5) translate(-50%, 0);
+        }
+
       }
 
       .md-datepicker-button {
         float: right;
+        transform: translate(0, -7px);
       }
     }
 
@@ -349,12 +361,28 @@ new-project {
     }
   }
 
+  .checkbox-container {
+    flex-wrap: wrap;
+
+    md-checkbox {
+      display: flex;
+      align-items: center;
+      .md-container {
+        flex-basis: 10;
+      }
+      .md-label {
+        vertical-align: middle;
+      }
+    }
+
+  }
+
   .my-projects {
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
     padding-left: 60px;
-    padding-right:60px;
-    padding-bottom:30px;
+    padding-right: 60px;
+    padding-bottom: 30px;
 
     h5 {
       font-size:20px;
@@ -383,6 +411,9 @@ new-project {
     color: $color-primary!important;
     md-icon {
       color: $color-primary!important;
+    }
+    .md-label {
+      color: $text-primary!important;
     }
     &.md-raised {
       background-color: $color-primary!important;

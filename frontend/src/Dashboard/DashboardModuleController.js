@@ -392,8 +392,7 @@ class DashboardModuleController extends Protected {
             if (_.keys(link).length) {
                 res.reports.push({
                     type: 'link',
-                    link: link.value,
-                    title: 'Where should I know?'
+                    link: link.value
                 });
             }
         });
@@ -402,28 +401,18 @@ class DashboardModuleController extends Protected {
             if (_.keys(link).length) {
                 res.articles.push({
                     type: 'link',
-                    link: link.value,
-                    // Needed data!
-                    title: 'Where should I know?'
+                    link: link.value
                 });
             }
         });
 
         data.files.forEach(fileObj => {
-            if (fileObj.type === 'report') {
-                res.reports.push({
-                    type: 'file',
-                    filename: fileObj.filename,
-                    id: fileObj.id,
-                    ext: fileObj.filename.split('.').slice(-1)[0],
-                    // Needed data!
-                    date: '#dateUploadedOrGiven',
-                    size: '#XY0Mb'
-                });
-            }
-            else {
-                console.error('File type (not report) isn\'t handled yet in the dashboardCtrl!');
-            }
+            const type = fileObj.type === 'report' ? 'reports' : 'articles';
+            res[type].push({
+                type: 'file',
+                filename: fileObj.filename,
+                id: fileObj.id
+            });
         });
 
         this.resources = res;

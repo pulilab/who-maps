@@ -212,6 +212,10 @@
 
       .projectrow {
 
+        .projectlink {
+          cursor: pointer;
+        }
+
         &.member {
           background-color: #FFF9C4 !important;
         }
