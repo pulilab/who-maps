@@ -49,6 +49,19 @@ class SystemController {
         });
     }
 
+    openMenu($mdOpenMenu, event) {
+        $mdOpenMenu(event);
+    }
+
+    logout() {
+        const rest = this.cs.reset();
+        rest.loadedPromise.then(() => {
+            this.isLogin = false;
+            this.userProfileId = null;
+            this.storage.clear();
+        });
+    }
+
 
     static systemControllerFactory() {
 
