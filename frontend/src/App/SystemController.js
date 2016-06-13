@@ -10,6 +10,7 @@ class SystemController {
         this.eventBindings();
         this.cs = require('../Common/CommonServices');
         this.isLogin = this.storage.get('login');
+        this.userProfile = this.cs.userProfile;
     }
 
     eventBindings() {
