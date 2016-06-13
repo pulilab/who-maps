@@ -15,8 +15,8 @@
             </div>
 
             <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
-                <div class="cap lh" flex="85">{{key}}:<br></div>
-                <div flex class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
+                <div flex class="cap lh">{{key}}:<br></div>
+                <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
             </div>
 
         </div>
@@ -33,8 +33,8 @@
                     layout="row"
                     ng-repeat="(key, datum) in vm.activeDistrict.data">
 
-                <div flex="85" class="cap lh">{{key}}</div>
-                <div flex="15" class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
+                <div flex class="cap lh">{{key}}</div>
+                <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
             </div>
 
         </div>
