@@ -84,6 +84,7 @@ class ProjectPublicViewSet(ViewSet):
             "id": p.id,
             "name": p.name,
             "organisation": p.data.get('organisation'),
+            "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
             "donors": p.data.get('donors'),
             "country": p.data.get('country'),
             "contact_name": p.data.get('contact_name'),

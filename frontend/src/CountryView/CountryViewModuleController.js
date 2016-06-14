@@ -55,7 +55,10 @@ class CountryViewModuleController {
     }
 
     updateCountry(countryObj) {
-        this.changeMapTo(countryObj);
+        // console.debug('To countryObj: ', countryObj);
+        if (countryObj.name !== 'Show all countries') {
+            this.changeMapTo(countryObj);
+        }
         this.getProjects(countryObj);
     }
 
