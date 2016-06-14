@@ -175,21 +175,15 @@ applications = [
     },
     {
         'id': 7,
-        'name': 'Provider training and education',
+        'name': 'Human resource management',
         'subApplications': {
             1: 'Provider training and education',
+            2: 'Supportive supervision',
+            3: 'Constituent feedback on service quality'
         }
     },
     {
         'id': 8,
-        'name': 'Human resource management',
-        'subApplications': {
-            1: 'Supportive supervision',
-            2: 'Constituent feedback on service quality'
-        }
-    },
-    {
-        'id': 9,
         'name': 'Supply management',
         'subApplications': {
             1: 'Cold chain management',
@@ -200,7 +194,7 @@ applications = [
         }
     },
     {
-        'id': 10,
+        'id': 9,
         'name': 'Financial transactions and incentives',
         'subApplications': {
             1: 'Payment for Services',
