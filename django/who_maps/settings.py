@@ -210,6 +210,12 @@ if SITE_ID in [3]:
         # 'release': raven.fetch_git_sha(os.path.dirname(__file__)),
     }
 
+    DEBUG = False
+
+    ALLOWED_HOSTS = ['digitalhealthatlas.org', '46.101.227.24',
+                     'test.whomaps.pulilab.com', 'dhatlas.org',
+                     'digitalhealthatlas.com']
+
 
 # Mailgun settings
 EMAIL_USE_TLS = True
