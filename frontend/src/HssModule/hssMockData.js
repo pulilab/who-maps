@@ -417,38 +417,31 @@ export const continuumStructure = [
 export const continuumData = [
     {
         'column_id': 0,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 1,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 2,
-        'mother': false,
-        'child': false
+        'state': false
     },
     {
         'column_id': 3,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 4,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 5,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 6,
-        'mother': true,
-        'child': false
+        'state': true
     }
 ];
 

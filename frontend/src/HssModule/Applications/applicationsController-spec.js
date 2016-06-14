@@ -131,15 +131,11 @@ describe('applicationsController', () => {
     it('should have a function that return the activated '
     + 'state of the column if the mother or child continuum are activated', () => {
 
-        ac.data.continuum[1].mother = true;
+        ac.data.continuum[1].state = true;
         expect(ac.applicationActivated(1)).toBeTruthy();
 
-        ac.data.continuum[1].mother = false;
+        ac.data.continuum[1].state = false;
         expect(ac.applicationActivated(1)).toBeFalsy();
-
-        ac.data.continuum[1].child = true;
-        expect(ac.applicationActivated(1)).toBeTruthy();
-
     });
 
     it('should have a function that returns an array of application header tile', () => {
