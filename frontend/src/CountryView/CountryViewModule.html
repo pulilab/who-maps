@@ -63,7 +63,8 @@
                     <md-content class="projectcont">
 
                         <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
-                            <div flex="25">Project name</div>
+                            <div flex="35">Project name</div>
+                            <!-- <div flex="15">HSS</div> -->
                             <div flex="20">Country</div>
                             <div flex="20">Organisation name</div>
                             <div flex="20">Donors</div>
@@ -81,10 +82,16 @@
                                 ng-repeat="project in vm.projectsData track by $index"
                                 ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
 
-                            <div flex="25" ui-sref="dashboard({ appName: project.id })" class="projectlink">
-                                <md-icon class="member" ng-show="vm.isMember(project)">grade</md-icon>
-                                <md-icon class="viewer" ng-show="vm.isViewer(project)">visibility</md-icon>
-                                {{project.name}}
+                            <div flex="35" class="projectlink" layout="row">
+                                <div flex class="name">
+                                    <md-icon class="member" ng-show="vm.isMember(project)">grade</md-icon>
+                                    <md-icon class="viewer" ng-show="vm.isViewer(project)">visibility</md-icon>
+                                    {{project.name}}
+                                </div>
+                                <div layout="column" class="links">
+                                    <span ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ui-sref="hss({ appName: project.id })">Visualize Project</span>
+                                </div>
                             </div>
                             <div flex="20" class="cap">
                                 {{vm.countriesLib[project.country]}}
