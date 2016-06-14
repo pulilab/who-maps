@@ -13,17 +13,19 @@ def dev():
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
+    env.webpack_options = ''
 
 
-def staging():
+def production():
     """Configure staging"""
     env.hosts = ['whomaps@test.whomaps.pulilab.com']
-    env.name = 'staging'
+    env.name = 'production'
     env.port = 22
     env.branch = "master"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
+    env.webpack_options = '-- --live'
 
 
 # COMMANDS #
@@ -71,11 +73,10 @@ def deploy():
             time.sleep(1)
             _import_geodata()
 
-
         # handle frontend
         with cd(env.frontend_root):
             run('npm install')
-            run('npm run dist')
+            run('npm run dist {}'.format(env.webpack_options))
             run('npm run clean-server-folder')
             run('npm run copy-to-server')
 
