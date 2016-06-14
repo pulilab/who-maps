@@ -159,7 +159,7 @@ class CountrymapController {
         })) * 10;
     }
 
-    makeSvgPannableAndZoomable() {
+    makeSvgPannableAndZoomable(element) {
 
         const zoomOptions = {
             panEnabled: true,
@@ -175,7 +175,7 @@ class CountrymapController {
             refreshRate: 'auto'
         };
 
-        this.svgZoom = this.svgPanZoom('.countrymap', zoomOptions);
+        this.svgZoom = this.svgPanZoom(element, zoomOptions);
         this.svgZoom.zoomOut();
     }
 
@@ -199,14 +199,22 @@ class CountrymapController {
         const width = outer[0][0].offsetWidth;
         const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
 
-        const element = outer.append('svg')
-            .attr('class', 'countrymap')
+
+        const inMemoryElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        inMemoryElement.createSVGMatrix();
+        const element = d3.select(inMemoryElement);
+
+        element.attr('class', 'countrymap')
             .attr('width', width)
             .attr('height', height);
 
         this.drawDistricts(element, distrData, topoJSON);
 
-        this.makeSvgPannableAndZoomable();
+        outer.append(() => {
+            return element.node();
+        });
+
+        this.makeSvgPannableAndZoomable(element.node());
 
         this.showPlaceholder = false;
         this.dataHere = false;
@@ -277,6 +285,7 @@ class CountrymapController {
                 //     this.scope.$evalAsync();
                 // });
         }
+
     }
 
     static countrymapFactory() {
