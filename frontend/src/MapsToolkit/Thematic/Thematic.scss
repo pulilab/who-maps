@@ -123,6 +123,10 @@ md-dialog {
             cursor: pointer;
             transition: color 200ms ease;
 
+            span {
+              outline: none;
+            }
+
             &.active,
             &:hover {
               color: $text-primary;
