@@ -19,7 +19,7 @@ class CountryViewModuleController {
         this.mapService.getCountries().then(data => {
 
             // console.debug('COUNTRIES:', data);
-            this.countries = data;
+            this.countries = data.sort();
             this.countriesLib = {};
             data.forEach(country => {
                 this.countriesLib[country.id] = country.name;
@@ -27,7 +27,7 @@ class CountryViewModuleController {
 
             // console.debug('COUNTRY LIB', this.countriesLib);
             this.countries2 = _.cloneDeep(this.countries);
-            this.countries2.push({ id: false, name: 'Show all countries' });
+            this.countries2.unshift({ id: false, name: 'Show all countries' });
             if (this.cs.userProfile && this.cs.userProfile.country) {
                 const name = this.cs.userProfile.country.toLowerCase();
                 this.selectedCountry = _.find(this.countries2, { name });
