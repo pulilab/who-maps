@@ -9,7 +9,11 @@ from django.template import loader
 
 
 class Command(BaseCommand):
-    help = "Sends HTML rendered template"
+    help = """
+    Sends HTML rendered template
+    usage: send_html_email <html> <email address>
+    eg: send_html_email account/email/email_confirmation_signup_message.html no@pulilab.com
+    """
 
     def add_arguments(self, parser):
         parser.add_argument('html')
