@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -191,6 +192,7 @@ DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
+# PRODUCTION SETTINGS
 if SITE_ID in [3]:
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
@@ -198,6 +200,16 @@ if SITE_ID in [3]:
             "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
         }
     }
+
+    import raven
+
+    RAVEN_CONFIG = {
+        'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
+        # If you are using git, you can also automatically configure the
+        # release based on the git info.
+        # 'release': raven.fetch_git_sha(os.path.dirname(__file__)),
+    }
+
 
 # Mailgun settings
 EMAIL_USE_TLS = True
