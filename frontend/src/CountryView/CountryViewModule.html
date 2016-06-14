@@ -6,7 +6,7 @@
         <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
 
 
-            <!-- COUNTRY VIEW -->
+            <!-- MAP VIEW -->
             <md-tab label="map view">
 
                 <div class="tab-wrap" id="map" ng-class="{'emptyy': !vm.projectsData}">
@@ -64,7 +64,6 @@
 
                         <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
                             <div flex="35">Project name</div>
-                            <!-- <div flex="15">HSS</div> -->
                             <div flex="20">Country</div>
                             <div flex="20">Organisation name</div>
                             <div flex="20">Donors</div>
@@ -76,11 +75,11 @@
                         </div>
 
                         <div
-                                class="projectrow"
-                                layout="row"
-                                layout-padding
-                                ng-repeat="project in vm.projectsData track by $index"
-                                ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
+                            class="projectrow"
+                            layout="row"
+                            layout-padding
+                            ng-repeat="project in vm.projectsData track by $index"
+                            ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
 
                             <div flex="35" class="projectlink" layout="row">
                                 <div flex class="name">
@@ -99,7 +98,7 @@
                             <div flex="20">{{project.organisation_name}}</div>
                             <div flex="20">
 								<span ng-repeat="donor in project.donors">
-									{{(donor.value || donor) + ' '}}
+                                    {{donor}}{{$last ? '' : ', '}}
 								</span>
                             </div>
                             <div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
