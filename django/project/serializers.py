@@ -23,7 +23,7 @@ class ProjectSerializer(serializers.Serializer):
     implementing_partners = serializers.CharField(required=False, allow_blank=True)
     implementation_dates = serializers.CharField()
     geographic_coverage = serializers.CharField()
-    intervention_areas = serializers.ListField()
+    health_focus_areas = serializers.ListField()
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
     objective = serializers.CharField(required=False, allow_blank=True, max_length=250)

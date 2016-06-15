@@ -59,7 +59,7 @@ class ProjectTests(APITestCase):
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "geographic_coverage": "somewhere",
-            "intervention_areas": ["area1", "area2"],
+            "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
             "objective": "objective1",

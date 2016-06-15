@@ -67,7 +67,7 @@ class SetupTests(APITestCase):
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "geographic_coverage": "somewhere",
-            "intervention_areas": ["area1", "area2"],
+            "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -113,7 +113,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "countries")
         self.assertContains(response, "strategies")
-        self.assertContains(response, "intervention_areas")
+        self.assertContains(response, "health_focus_areas")
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-crud")
@@ -319,7 +319,7 @@ class ProjectTests(SetupTests):
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "geographic_coverage": "somewhere",
-            "intervention_areas": ["area1", "area2"],
+            "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -359,7 +359,7 @@ class ProjectTests(SetupTests):
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "geographic_coverage": "somewhere",
-            "intervention_areas": ["area1", "area2"],
+            "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -410,7 +410,7 @@ class ProjectTests(SetupTests):
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "geographic_coverage": "somewhere",
-            "intervention_areas": ["area1", "area2"],
+            "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
@@ -575,21 +575,21 @@ class ProjectTests(SetupTests):
         self.assertTrue("user_profiles" in response.json())
         self.assertEqual(len(response.json().get('user_profiles')), UserProfile.objects.count())
 
-    def test_update_project_updates_intervention_areas(self):
+    def test_update_project_updates_health_focus_areas(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('intervention_areas'), self.project_data['intervention_areas'])
+        self.assertEqual(response.json().get('health_focus_areas'), self.project_data['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
-        data.update(intervention_areas=['area1'])
+        data.update(health_focus_areas=['area1'])
         response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["intervention_areas"], data['intervention_areas'])
+        self.assertEqual(response.json()["health_focus_areas"], data['health_focus_areas'])
 
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('intervention_areas'), data['intervention_areas'])
+        self.assertEqual(response.json().get('health_focus_areas'), data['health_focus_areas'])
 
     def test_retrieve_project_list_all_has_all_new_fields(self):
         url = reverse("project-all-list")
@@ -603,10 +603,10 @@ class ProjectTests(SetupTests):
         self.assertIn("implementing_partners", response.json()[0])
         self.assertIn("implementation_dates", response.json()[0])
         self.assertIn("geographic_coverage", response.json()[0])
-        self.assertIn("intervention_areas", response.json()[0])
+        self.assertIn("health_focus_areas", response.json()[0])
 
     def test_project_create_can_send_blank_fields_in(self):
-        # add one new project where intervention_areas is empty
+        # add one new project where health_focus_areas is empty
         project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project2",
@@ -616,7 +616,7 @@ class ProjectTests(SetupTests):
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "geographic_coverage": "somewhere",
-            "intervention_areas": ["area1", "area2"],
+            "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",

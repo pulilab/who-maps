@@ -93,7 +93,7 @@ class ProjectPublicViewSet(ViewSet):
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
             "geographic_coverage": p.data.get('geographic_coverage'),
-            "intervention_areas": p.data.get('intervention_areas')
+            "health_focus_areas": p.data.get('health_focus_areas')
         }], projects, result_list)
 
         return Response(result_list)
