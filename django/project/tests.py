@@ -66,7 +66,7 @@ class SetupTests(APITestCase):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
+            "geographic_scope": "somewhere",
             "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
@@ -318,7 +318,7 @@ class ProjectTests(SetupTests):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
+            "geographic_scope": "somewhere",
             "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
@@ -358,7 +358,7 @@ class ProjectTests(SetupTests):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
+            "geographic_scope": "somewhere",
             "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
@@ -409,7 +409,7 @@ class ProjectTests(SetupTests):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
+            "geographic_scope": "somewhere",
             "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
@@ -602,7 +602,7 @@ class ProjectTests(SetupTests):
         self.assertIn("implementation_overview", response.json()[0])
         self.assertIn("implementing_partners", response.json()[0])
         self.assertIn("implementation_dates", response.json()[0])
-        self.assertIn("geographic_coverage", response.json()[0])
+        self.assertIn("geographic_scope", response.json()[0])
         self.assertIn("intervention_areas", response.json()[0])
 
     def test_project_create_can_send_blank_fields_in(self):
@@ -615,7 +615,7 @@ class ProjectTests(SetupTests):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
+            "geographic_scope": "somewhere",
             "intervention_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
