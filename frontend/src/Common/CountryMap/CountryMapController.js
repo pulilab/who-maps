@@ -104,18 +104,26 @@ class CountrymapController {
 
     makeGeoFromTopo(topo, level) {
 
-        return topojson.feature(topo, topo.objects[level]);
+        // console.warn('TOPO', topo);
+        // console.warn('lvl', level);
+
+        const ret = topojson.feature(topo, topo.objects[level]);
+
+        // console.warn('GEO', ret);
+        // ret.features.forEach(el => { console.debug(el.properties.name); });
+
+        return ret;
     }
 
     defaultLevels() {
         const defaultLib = {};
         _.forEach(this.cs.projectStructure.countries, country => {
-            defaultLib[country.name] = 'admin_level_5';
+            defaultLib[country.name] = 'admin_level_4';
         });
 
         const levelLib = {
             'Sierra Leone': 'admin_level_5',
-            'India': 'admin_level_4', // Precise enough map-data?
+            'India': 'admin_level_5', // Precise enough map-data?
             'Kenya': 'admin_level_4',
             'Philippines': 'admin_level_3', // Precise enough map-data?
             'Border India - Bangladesh': 'admin_level_4',
@@ -123,7 +131,21 @@ class CountrymapController {
             'Border Malawi - Mozambique': 'admin_level_4',
             'The Gambia': 'admin_level_3',
             'Tunisia': 'admin_level_4',
-            'Pakistan': 'admin_level_4'
+            'Pakistan': 'admin_level_4',
+
+            // New maps
+            'Tanzania': 'admin_level_4', // Not good enough map data...
+            'Ghana': 'admin_level_4',
+            'Benin': 'admin_level_4',
+            'South Africa': 'admin_level_4',
+            'Sri Lanka': 'admin_level_4',
+            'Nigeria': 'admin_level_4',
+            'Nepal': 'admin_level_6',
+            'Zambia': 'admin_level_4',
+            'Vietnam': 'admin_level_4', // Lvl 6 is missing data
+            'Uganda': 'admin_level_6',
+            'Liberia': 'admin_level_4',
+            'Mali': 'admin_level_4'
         };
 
         _.merge(defaultLib, levelLib);
@@ -180,6 +202,8 @@ class CountrymapController {
     }
 
     preDraw(topoJSON) {
+
+        // console.log(JSON.stringify(topoJSON));
 
         d3.select(this.el[0]).select('.countrymapcontainer').remove();
 
