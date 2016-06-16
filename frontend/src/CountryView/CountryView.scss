@@ -187,12 +187,11 @@
 
       padding-bottom: 20px;
       padding-top: 20px;
-      // overflow: scroll;
       background-color: $color-gray-lightest;
 
       .headerrow {
 
-        width: 1500px;
+        width: 1600px;
         border-bottom: 1px solid $color-gray-light;
         background-color: white;
 
@@ -212,8 +211,21 @@
 
       .projectrow {
 
+        width: 1600px;
+        border-bottom: 1px solid $color-gray-lighter;
+        cursor: default;
+
         .projectlink {
-          cursor: pointer;
+          .links {
+            margin-right: 10px;
+            span {
+              color: $color-primary;
+              cursor: pointer;
+              &:first-child {
+                margin-bottom: 7px;
+              }
+            }
+          }
         }
 
         &.member {
@@ -224,7 +236,11 @@
           background-color: #D5E1E8 !important;
         }
 
-        width: 1500px;
+        a {
+          color: $color-primary;
+          text-decoration: none;
+        }
+
         div {
 
           font-size: 14px;
