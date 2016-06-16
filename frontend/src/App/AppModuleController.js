@@ -96,7 +96,12 @@ class AppModuleController extends Protected {
     refreshProfileInfo() {
         this.userProfile = this.cs.userProfile;
         this.scope.$evalAsync();
-        this.state.go('dashboard');
+        if (this.cs.projectList > 0) {
+            this.state.go('dashboard');
+        }
+        else {
+            this.state.go('country');
+        }
     }
 
     checkUserProfile() {
@@ -105,9 +110,9 @@ class AppModuleController extends Protected {
         }
     }
 
-    refreshProjectsHandler() {
+    refreshProjectsHandler(data) {
         this.cs.reset().loadedPromise.then(() => {
-            this.fillUserData();
+            this.fillUserData(data.go);
         });
     }
 
@@ -116,11 +121,11 @@ class AppModuleController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData() {
+    fillUserData(forcedPath) {
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
 
-        if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
+        if (!forcedPath && this.state.params.appName.length === 0 && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
             this.state.go(state, { appName }, {
@@ -132,6 +137,13 @@ class AppModuleController extends Protected {
                 this.currentProject = item;
             }
         });
+
+        if (forcedPath) {
+            const appName = lastProject.id;
+            this.state.go(forcedPath, { appName }, {
+                location: 'replace'
+            });
+        }
 
         this.scope.$evalAsync();
 

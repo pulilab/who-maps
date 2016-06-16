@@ -279,8 +279,7 @@ class NewProjectController extends ProjectDefinition {
         if (id) {
             appName = id;
         }
-        this.EE.emit('refreshProjects');
-        this.state.go('editProject', { appName }, { reload: true });
+        this.EE.emit('refreshProjects', { go: 'editProject' });
     }
 
     handleResponse(response) {
