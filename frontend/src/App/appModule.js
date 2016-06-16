@@ -15,7 +15,7 @@ import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
-import { Components } from '../Common/';
+import { Components, Storage } from '../Common/';
 
 
 import AppComponent from './appComponent';
@@ -150,7 +150,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
 
 function logUiRouteEvents(...args) { console.debug(`Ui route state change ${this} :`, args); }
 
-const run = ($rootScope) => {
+const run = ($rootScope, $state) => {
     if (DEBUG) {
         $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
         $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
@@ -164,9 +164,17 @@ const run = ($rootScope) => {
 
     window.addEventListener('xhrmonitor', checkXHR.bind(this));
 
+    window.EE.on('unauthorized', () => {
+        const storage = new Storage();
+        storage.clear();
+        $state.go('landing');
+        const cs = require('../Common/CommonServices');
+        cs.reset();
+    });
+
 };
 
-run.$inject = ['$rootScope'];
+run.$inject = ['$rootScope', '$state'];
 
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];

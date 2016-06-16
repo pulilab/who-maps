@@ -112,7 +112,7 @@ class AppModuleController extends Protected {
 
     refreshProjectsHandler(data) {
         this.cs.reset().loadedPromise.then(() => {
-            this.fillUserData(data.go);
+            this.fillUserData(data);
         });
     }
 
@@ -139,8 +139,7 @@ class AppModuleController extends Protected {
         });
 
         if (forcedPath) {
-            const appName = lastProject.id;
-            this.state.go(forcedPath, { appName }, {
+            this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
                 location: 'replace'
             });
         }
@@ -163,7 +162,6 @@ class AppModuleController extends Protected {
 
     handleLogoutEvent() {
         this.state.go('landing', { appName: null });
-
     }
 
     showCompleteNavigation(state, isLogin) {
@@ -181,6 +179,7 @@ class AppModuleController extends Protected {
         const rest = this.cs.reset();
         rest.loadedPromise.then(() => {
             this.showCompleteNavigation(null, false);
+            this.handleLogoutEvent();
         });
     }
 

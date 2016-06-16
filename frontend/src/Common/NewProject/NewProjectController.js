@@ -253,7 +253,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.updateProject(processedForm, this.projectId)
             .then(response => {
                 if (response && response.success) {
-                    this.postSaveActions();
+                    this.state.go('dashboard');
                 }
                 else {
                     this.handleResponse(response);
@@ -279,7 +279,7 @@ class NewProjectController extends ProjectDefinition {
         if (id) {
             appName = id;
         }
-        this.EE.emit('refreshProjects', { go: 'editProject' });
+        this.EE.emit('refreshProjects', { go: 'editProject', appName });
     }
 
     handleResponse(response) {
