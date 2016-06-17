@@ -35,7 +35,7 @@ require('../Favicons/mstile-144x144.png');
 
 
 const moduleName = 'app';
-const config = ($stateProvider, $urlRouterProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $stateProvider
 
         .state('base', {
@@ -146,6 +146,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
         });
 
     $urlRouterProvider.otherwise('/landing');
+    $locationProvider.html5Mode(true);
 };
 
 function logUiRouteEvents(...args) { console.debug(`Ui route state change ${this} :`, args); }
@@ -177,7 +178,7 @@ const run = ($rootScope, $state) => {
 run.$inject = ['$rootScope', '$state'];
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
 
 angular.module(moduleName,
     [
