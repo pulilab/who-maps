@@ -40,7 +40,7 @@ def deploy():
 
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(env.project_root, env.project_root)
-        elif env.name == 'staging':
+        elif env.name == 'production':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(env.project_root, env.project_root)
         else:
             options = ""
