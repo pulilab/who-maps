@@ -125,6 +125,7 @@ module.exports = {
         }
     },
     devServer: {
+        historyApiFallback: true,
         proxy: {
             '/api/*': {
                 target: local ? 'http://localhost/' : 'http://192.168.99.100/',

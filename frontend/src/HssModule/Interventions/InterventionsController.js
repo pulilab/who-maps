@@ -111,7 +111,7 @@ class InterventionsController extends Protected {
                     content: this.data.age_ranges[value].age_ranges,
                     className: 'intervention',
                     colSpan: 1,
-                    rowSpan: 5,
+                    rowSpan: 4,
                     columnId: value,
                     activated: _activated,
                     selectValues: this.structure.age_ranges,
