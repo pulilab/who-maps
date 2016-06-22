@@ -112,3 +112,12 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
+
+
+class ProjectFilterSerializer(serializers.Serializer):
+
+    technology_platforms = serializers.ListField(required=False)
+    application = serializers.ListField(required=False)
+    continuum = serializers.ListField(required=False)
+    interventions = serializers.ListField(required=False)
+    constraints = serializers.ListField(required=False)

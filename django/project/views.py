@@ -1,9 +1,11 @@
 import functools
 import json
+import operator
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -13,17 +15,17 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+import hss.hss_data as hss_data
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import UserProfile, Organisation
 from hss.models import HSS
-from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 
 from .permissions import InTeamOrReadOnly
 from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
-    ProjectGroupUpdateSerializer
+    ProjectGroupUpdateSerializer, ProjectFilterSerializer
 from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
@@ -99,6 +101,79 @@ class ProjectPublicViewSet(ViewSet):
         return Response(result_list)
 
     @staticmethod
+    def list_filter(request, *args, **kwargs):
+        """
+        Retrieves list of projects filtered by options.
+        """
+        serializer = ProjectFilterSerializer(data=request.data)
+        if serializer.is_valid():
+            hss_q_objects = []
+            hss_results = []
+
+            # Filter by continuum
+            if serializer.validated_data.get("continuum", None):
+                continuum_titles = serializer.validated_data.get("continuum")
+                continuums = [{"column_id": x.get("id"), "state": True}
+                                for x in hss_data.continuum
+                                if x.get("title") in continuum_titles]
+                hss_q_objects.append(Q(data__continuum__contains=continuums))
+            # Filter by interventions
+            if serializer.validated_data.get("interventions", None):
+                interventions = serializer.validated_data.get("interventions")
+                interventions_q_objects = []
+                interventions_q_objects.append(Q(data__interventions__0__interventions__contains=interventions))
+                interventions_q_objects.append(Q(data__interventions__1__interventions__contains=interventions))
+                interventions_q_objects.append(Q(data__interventions__2__interventions__contains=interventions))
+                interventions_q_objects.append(Q(data__interventions__3__interventions__contains=interventions))
+                interventions_q_objects.append(Q(data__interventions__4__interventions__contains=interventions))
+                interventions_q_objects.append(Q(data__interventions__5__interventions__contains=interventions))
+                interventions_q_objects.append(Q(data__interventions__6__interventions__contains=interventions))
+                hss_q_objects.append(functools.reduce(operator.or_, interventions_q_objects))
+            # Filter by constraints
+            if serializer.validated_data.get("constraints", None):
+                constraint_names = serializer.validated_data.get("constraints")
+                constraints = [{"name": x, "active": True} for x in constraint_names]
+                hss_q_objects.append(Q(data__constraints__contains=constraints))
+
+            if hss_q_objects:
+                filter_exp = functools.reduce(operator.and_, hss_q_objects)
+                for hss in HSS.objects.filter(filter_exp):
+                    hss_results.append(hss.project.id)
+
+            project_q_objects = [Q(id__in=hss_results)]
+            project_results = []
+
+            # Filter by technology_platforms
+            if serializer.validated_data.get("technology_platforms", None):
+                project_q_objects.append(Q(data__technology_platforms__contains=serializer.validated_data.get("technology_platforms")))
+            # Filter by application
+            if serializer.validated_data.get("application", None):
+                project_q_objects.append(Q(data__application__contains=serializer.validated_data.get("application")))
+
+            if project_q_objects:
+                filter_exp = functools.reduce(operator.and_, project_q_objects)
+                for p in Project.objects.filter(filter_exp):
+                    project_results.append({
+                        "id": p.id,
+                        "name": p.name,
+                        "organisation": p.data.get('organisation'),
+                        "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
+                        "donors": p.data.get('donors'),
+                        "country": p.data.get('country'),
+                        "contact_name": p.data.get('contact_name'),
+                        "contact_email": p.data.get('contact_email'),
+                        "implementation_overview": p.data.get('implementation_overview'),
+                        "implementing_partners": p.data.get('implementing_partners'),
+                        "implementation_dates": p.data.get('implementation_dates'),
+                        "geographic_coverage": p.data.get('geographic_coverage'),
+                        "intervention_areas": p.data.get('intervention_areas')
+                    })
+
+            return Response(project_results)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
     def project_structure(request):
         countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
         project_structure.update(countries=countries)
@@ -134,7 +209,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
             project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
             project.team.add(request.user.userprofile)
             # Add default HSS structure for the new project.
-            HSS.objects.create(project_id=project.id, data=hss_default)
+            HSS.objects.create(project_id=project.id, data=hss_data.hss_default)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
             data = dict(data_serializer.data)
