@@ -241,7 +241,19 @@ LEVELS_FOR_DISTRICTS = {
     "malawi": "admin_level_4",
     "pakistan": "admin_level_4",
     "indonesia": "admin_level_4",
-    "tunisia": "admin_level_4"
+    "tunisia": "admin_level_4",
+    "tanzania": "admin_level_4",
+    "ghana": "admin_level_4",
+    "benin": "admin_level_4",
+    "south-africa": "admin_level_4",
+    "sri-lanka": "admin_level_4",
+    "nigeria": "admin_level_4",
+    "nepal": "admin_level_6",
+    "zambia": "admin_level_4",
+    "vietnam": "admin_level_6",
+    "uganda": "admin_level_6",
+    "liberia": "admin_level_4",
+    "mali": "admin_level_4"
 }
 
 # Logging
