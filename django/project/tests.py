@@ -78,6 +78,9 @@ class SetupTests(APITestCase):
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
+            "national_level_deployment": [
+                {"clients": 2000000, "health_workers": 0, "facilities": 0},
+            ],
             "started": datetime.utcnow(),
             "donors": ["donor1", "donor2"],  # Should be text instead of ID - no Donors in MVP
             "reports": ["http://foo.com", "http://bar.com"],
@@ -150,6 +153,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get("name"), "Test Project1")
         self.assertEqual(response.json().get("objective"), "objective1")
         self.assertEqual(response.json().get("organisation_name"), self.org.name)
+        self.assertEqual(response.json().get("national_level_deployment")[0]["clients"], 2000000)
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
