@@ -17,6 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 
+from project.views import create_from_file
+
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
@@ -25,4 +27,5 @@ urlpatterns = [
     url(r"^api/", include("toolkit.urls")),
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
+    url(r"^web/projects/bulk/$", view=create_from_file, name="project-bulk"),
 ]

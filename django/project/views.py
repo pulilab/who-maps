@@ -1,9 +1,14 @@
 import functools
 import json
+from io import StringIO
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -195,6 +200,68 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
                 "json": data_serializer.errors
             }
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def create_from_file(request):
+    if request.method == 'GET':
+        return render_to_response(
+            "project/create_from_file.html",
+            context_instance=RequestContext(request))
+    if request.method == 'POST':
+        projects_file = request.FILES["file"]
+        data = StringIO(projects_file.read().decode())
+        try:
+            projects_data = json.loads(data.read())
+        except ValueError as e:
+            return render_to_response(
+                "project/create_from_file.html",
+                {"errors": ["Malformed JSON file: {}".format(e)]},
+                context_instance=RequestContext(request)
+            )
+        else:
+            imported = []
+            failed = []
+            for project_item in projects_data:
+                country = Country.objects.get_object_or_none(name=project_item["country"])
+                if not country:
+                    failed.append("Importing '{}' is failed: No such country: {}"
+                                    .format(project_item["name"], project_item["country"]))
+                    continue
+                project_item["country"] = country.id
+                organisation = Organisation.objects.get_object_or_none(name=project_item["organisation"])
+                if not organisation:
+                    failed.append("Importing '{}' is failed: No such organisation: {}"
+                                    .format(project_item["name"], project_item["organisation"]))
+                    continue
+                project_item["organisation"] = organisation.id
+                owner = project_item.pop("owner")
+                try:
+                    user = User.objects.get(email=owner)
+                except ObjectDoesNotExist:
+                    failed.append("Importing '{}' is failed: No such user: {}"
+                                    .format(project_item["name"], owner))
+                    continue
+                data_serializer = ProjectSerializer(data=project_item)
+                model_serializer = ProjectModelSerializer(data={"name": project_item["name"]})
+                model_valid = model_serializer.is_valid()
+                data_valid = data_serializer.is_valid()
+                if model_valid and data_valid:
+                    project = Project(name=project_item["name"], data=project_item)
+                    project.save()
+                    project.team.add(user.userprofile)
+                    # Add default HSS structure for the new project.
+                    HSS.objects.create(project_id=project.id, data=hss_default)
+                    # Add default Toolkit structure for the new project.
+                    Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+                    imported.append(project.name)
+                else:
+                    failed.append("Importing '{}' is failed: {}{}"
+                                    .format(project_item["name"], data_serializer.errors, model_serializer.errors))
+            return render_to_response(
+                "project/create_from_file.html",
+                {"imported": imported, "failed": failed},
+                context_instance=RequestContext(request)
+            )
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
