@@ -21,7 +21,7 @@ class ProjectInventoryForm(ModelForm):
     # "owner" needs to be already registered.
     owner = fields.EmailField()
     name = fields.CharField()
-    organisation = fields.ChoiceField(choices={(x.id,x.name) for x in Organisation.objects.all()})
+    organisation = models.ModelChoiceField(queryset=Organisation.objects.all())
     contact_name = fields.CharField()
     contact_email = fields.EmailField()
     implementation_overview = fields.CharField(max_length=500)
