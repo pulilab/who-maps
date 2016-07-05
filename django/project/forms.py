@@ -1,4 +1,4 @@
-from django.forms import ModelForm, fields, ValidationError
+from django.forms import ModelForm, fields, ValidationError, models
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -30,7 +30,7 @@ class ProjectInventoryForm(ModelForm):
     geographic_coverage = fields.CharField()
     intervention_areas = fields.MultipleChoiceField(choices={(x,x) for x in project_structure["intervention_areas"]})
     strategy = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["strategies"]})
-    country = fields.ChoiceField(choices={(x.id,x.name) for x in Country.objects.all()})
+    country = models.ModelChoiceField(queryset=Country.objects.all())
     objective = fields.CharField(required=False, max_length=250)
     technology_platforms = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["technology_platforms"]})
     licenses = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["licenses"]})
