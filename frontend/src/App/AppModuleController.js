@@ -84,10 +84,10 @@ class AppModuleController extends Protected {
             type = 'Implementer';
             break;
         case 'G':
-            type = 'Financial Investor';
+            type = 'Government';
             break;
         case 'D':
-            type = 'Government';
+            type = 'Financial Investor';
             break;
         }
         return type;
