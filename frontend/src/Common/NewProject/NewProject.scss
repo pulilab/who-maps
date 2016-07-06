@@ -5,6 +5,9 @@ $coverage-height:60px;
 $strategies-height:60px;
 
 new-project {
+  height: auto !important;
+  padding:16px;
+  flex: 1 0 auto !important;
 
   .axis1 {
     background-color: $color-axis1;
@@ -23,6 +26,11 @@ new-project {
   }
   .axis6 {
     background-color: $color-axis6;
+  }
+
+
+  .new-edit-project {
+    flex: 1 0 auto !important;
   }
 
   .error {
@@ -44,8 +52,7 @@ new-project {
     }
   }
 
-  display:block;
-  padding:16px;
+
 
   .disabled {
     opacity:0.5;
@@ -58,6 +65,11 @@ new-project {
 
   .wrapper {
     background: $color-white;
+    flex: 1 0 auto !important;
+
+    form {
+      flex: 1 0 auto !important;
+    }
   }
 
   h4 {
@@ -72,6 +84,7 @@ new-project {
     padding-bottom:50px;
     margin-bottom:50px;
     border-bottom: 1px solid $color-gray;
+    flex: 1 0 auto !important;
 
     > md-input-container {
       width: 700px;
