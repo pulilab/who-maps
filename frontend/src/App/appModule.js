@@ -48,7 +48,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
 
         .state(moduleName, {
             url: '/app/:appName',
-            template: '<app layout="column"></app>',
+            template: '<app layout="column" layout-fill></app>',
             resolve: {
                 data: ['$q', ($q) => {
                     const def = $q.defer();

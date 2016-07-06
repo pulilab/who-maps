@@ -9,17 +9,28 @@ app {
   margin: 0;
   width: 100%;
   min-height: 100%;
-  height: 100%;
+  height: auto;
+  flex: 1 0 auto !important;
 }
 
 ui-view {
   background-color: $color-page-background;
+  height:auto !important;
+  min-height:100%;
+  flex: 1 0 auto !important;
 }
 
 .main-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
   height: auto !important;
+  flex: 1 0 auto !important;
+}
+
+#intro-wrapper {
+  height:auto;
+  min-height: 100%;
+  flex: 1 0 auto !important;
 }
 
 .page-wrapper {
@@ -67,9 +78,7 @@ md-tooltip {
 /* UI ELEMENTS
    ============================= */
 
-#main-view {
-  display: block;
-}
+
 
 .md-button {
 
