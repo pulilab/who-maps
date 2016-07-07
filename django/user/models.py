@@ -15,6 +15,9 @@ class Organisation(ExtendedModel):
         org = cls.objects.get_object_or_none(id=org_id)
         return org.name if org else ""
 
+    def __str__(self):
+        return self.name
+
 
 class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'

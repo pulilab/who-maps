@@ -83,8 +83,8 @@ class ProjectInventoryForm(ModelForm):
             raise ValidationError("No such user: {}".format(self.cleaned_data["owner"]))
         else:
             self.cleaned_data["started"] = str(self.cleaned_data["started"])
-            self.cleaned_data["organisation"] = int(self.cleaned_data["organisation"])
-            self.cleaned_data["country"] = int(self.cleaned_data["country"])
+            self.cleaned_data["organisation"] = int(self.cleaned_data["organisation"].id)
+            self.cleaned_data["country"] = int(self.cleaned_data["country"].id)
             project = Project(name=self.cleaned_data["name"], data=self.cleaned_data)
             project.save()
             project.team.add(user.userprofile)
