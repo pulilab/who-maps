@@ -92,8 +92,8 @@
 
     </div>
 </md-toolbar>
-<md-content class="main-content" style="display: block;">
-    <div id="intro-wrapper">
+<md-content class="main-content" layout="column" layout-fill>
+    <div id="intro-wrapper" layout="column" layout-fill>
         <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation && vm.user.projects.length != 0" ng-show="vm.state.current.name !== 'country'">
             <div class="md-toolbar-tools">
                 <div class="project-mainmenu">
@@ -233,6 +233,6 @@
                 </div>
             </div>
         </md-toolbar>
-        <ui-view name="main" id="main-view" layout-fill></ui-view>
+        <ui-view name="main" id="main-view" layout="column" layout-fill></ui-view>
     </div>
 </md-content>

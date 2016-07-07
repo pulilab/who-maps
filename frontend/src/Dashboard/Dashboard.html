@@ -120,7 +120,10 @@
                                 <div layout="row" layout-align="start center" class="roww borderless">
                                     <div flex="25" class='label'>CONTACT</div>
                                     <div class="data">
-                                        {{vm.projectData.contact_name}} <a ng-href="mailto:{{vm.projectData.contact_email}}">Send Email</a>
+                                        {{vm.projectData.contact_name}}
+                                        <a ng-href="mailto:{{vm.projectData.contact_email + '?subject=Request for approval'}}">
+                                            Request to be part of this project
+                                        </a>
                                     </div>
                                 </div>
 

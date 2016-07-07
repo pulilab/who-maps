@@ -1,27 +1,32 @@
 @import '../variables';
 @import '../mixins';
 
-.question-header {
-    padding-bottom: 10px;
-    height: 73px;
-    background: #EEEEEE;
-    box-shadow: 0px 1px 0px 0px #BDBDBD;
-    color: $color-black;
-    text-transform: uppercase;
-    font-size: 12px;
+maps-toolkit {
+  flex: 1 0 auto !important;
+  height:auto !important;
+}
 
-    .question-text {
-        padding-top:23px;
-        padding-bottom:13px;
-        padding-left:60px;
-        text-transform: none;
-        font-size:20px;
-        line-height: 24px;
-    }
+.question-header {
+  padding-bottom: 10px;
+  height: 73px;
+  background: #EEEEEE;
+  box-shadow: 0px 1px 0px 0px #BDBDBD;
+  color: $color-black;
+  text-transform: uppercase;
+  font-size: 12px;
+
+  .question-text {
+    padding-top:23px;
+    padding-bottom:13px;
+    padding-left:60px;
+    text-transform: none;
+    font-size:20px;
+    line-height: 24px;
+  }
 }
 
 .md-subheader .md-subheader-inner {
-    padding: 0;
+  padding: 0;
 }
 
 .md-sticky-clone {
@@ -30,129 +35,132 @@
 
 .maps-toolkit {
 
-    padding-top:10px;
-    padding-left:30px;
-    padding-right:30px;
-    padding-bottom: 30px;
+  padding-top:10px;
+  padding-left:30px;
+  padding-right:30px;
+  padding-bottom: 30px;
+  flex: 1 0 auto !important;
 
 
-    .domain-header {
-        padding-top:40px;
-        padding-left:60px;
-        color:$text-primary;
+  .domain-header {
+    padding-top:40px;
+    padding-left:60px;
+    color:$text-primary;
 
-        .left {
+    .left {
 
-            h4 {
-                padding-bottom:24px;
-                font-weight: normal;
-                font-size:32px;
-                margin: 0;
-            }
-            p {
-                padding-bottom:40px;
-                font-style:italic;
-                font-size:14px;
-                margin: 0;
-            }
-        }
-
-        thematic {
-            margin-right: 40px;
-        }
-
-    }
-
-
-
-    .axis-row {
-        margin-top:10px;
-        margin-bottom:10px;
-        max-height:50px;
-        height:50px;
-        background-color: $color-white;
-
-        md-card {
-            margin:0;
-            box-shadow:none;
-        }
-    }
-    .domain-questions {
-        margin-bottom:40px;
-        background-color: $color-white;
-    }
-
-    md-content {
-        width:100%;
-    }
-
-    md-checkbox {
-        margin-bottom:0;
-        width: 20px;
-    }
-
-    .answer {
-        border-bottom: 1px solid #BDBDBD;
-
-
-        .first-box,
-        .box {
-            border-right: 1px solid $color-gray-lighter;
-        }
-    }
-
-    .answer-wrapper {
-        padding-top: 24px;
-        padding-right: 100px;
+      h4 {
         padding-bottom:24px;
-        padding-left: 60px;
-        color: $text-primary;
-        font-size: 14px;
-        line-height: 20px;
-
-        li {
-            margin-left:20px;
-        }
+        font-weight: normal;
+        font-size:32px;
+        margin: 0;
+      }
+      p {
+        padding-bottom:40px;
+        font-style:italic;
+        font-size:14px;
+        margin: 0;
+      }
     }
 
-    .domain-scoore {
-        margin-bottom:40px;
-        padding-right:60px;
-        padding-left:60px;
-        height: 76px;
-        background: #FFF9C4;
-        font-weight: 500;
-        font-size:20px;
+    thematic {
+      margin-right: 40px;
     }
 
-    .domain-button {
-        margin-bottom:47px;
-        padding-right:60px;
-        padding-left:60px;
+  }
 
-        .md-button {
-            padding-right:20px;
-            padding-left:20px;
-        }
-    }
 
-    .md-primary {
-        color: $color-primary!important;
-        md-icon {
-            color: $color-primary!important;
-        }
-        &.md-raised {
-            background-color: $color-primary!important;
-            color: white!important;
-            md-icon {
-                color: white!important;
-            }
-        }
-    }
 
-    md-checkbox[checked="checked"]{
-        .md-icon {
-            background-color: $color-primary!important;
-        }
+  .axis-row {
+    margin-top:10px;
+    margin-bottom:10px;
+    max-height:50px;
+    height:50px;
+    background-color: $color-white;
+
+    md-card {
+      margin:0;
+      box-shadow:none;
     }
+  }
+  .domain-questions {
+    margin-bottom:40px;
+    background-color: $color-white;
+  }
+
+  md-content {
+    width:100%;
+  }
+
+  md-checkbox {
+    margin-bottom:0;
+    width: 20px;
+  }
+
+  .answer {
+    border-bottom: 1px solid #BDBDBD;
+
+
+    .first-box,
+    .box {
+      border-right: 1px solid $color-gray-lighter;
+    }
+  }
+
+  .answer-wrapper {
+    padding-top: 24px;
+    padding-right: 100px;
+    padding-bottom:24px;
+    padding-left: 60px;
+    color: $text-primary;
+    font-size: 14px;
+    line-height: 20px;
+
+    li {
+      margin-left:20px;
+    }
+  }
+
+  .domain-score {
+    margin-bottom:40px;
+    padding-right:60px;
+    padding-left:60px;
+    height: 76px;
+    min-height:76px; // fix for FF
+    background: #FFF9C4;
+    font-weight: 500;
+    font-size:20px;
+  }
+
+  .domain-button {
+    margin-bottom:47px;
+    padding-right:60px;
+    padding-left:60px;
+    min-height: 0; // fix for FF
+
+    .md-button {
+      padding-right:20px;
+      padding-left:20px;
+    }
+  }
+
+  .md-primary {
+    color: $color-primary!important;
+    md-icon {
+      color: $color-primary!important;
+    }
+    &.md-raised {
+      background-color: $color-primary!important;
+      color: white!important;
+      md-icon {
+        color: white!important;
+      }
+    }
+  }
+
+  md-checkbox[checked="checked"]{
+    .md-icon {
+      background-color: $color-primary!important;
+    }
+  }
 }

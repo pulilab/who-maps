@@ -300,12 +300,12 @@ continuum = [
     },
     {
         'id': 3,
-        'title': 'Linkage to care',
+        'title': 'Linkage to care & Coordination',
         'span': 1,
     },
     {
         'id': 4,
-        'title': 'Management and quality of care',
+        'title': 'Management and quality of Care',
         'span': 1,
     },
     {
@@ -315,7 +315,7 @@ continuum = [
     },
     {
         'id': 6,
-        'title': 'Coordination of care',
+        'title': 'Reporting and Planning',
         'span': 1,
     }
 ]

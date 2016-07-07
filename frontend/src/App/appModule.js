@@ -48,7 +48,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
 
         .state(moduleName, {
             url: '/app/:appName',
-            template: '<app layout="column"></app>',
+            template: '<app layout="column" layout-fill></app>',
             resolve: {
                 data: ['$q', ($q) => {
                     const def = $q.defer();
@@ -103,7 +103,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project ></new-project>'
+                    template: '<new-project layout-fill layout="column" ></new-project>'
                 }
             }
         })
@@ -112,7 +112,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project edit-mode="true" ></new-project>'
+                    template: '<new-project edit-mode="true" layout-fill layout="column" ></new-project>'
                 }
             }
         })
