@@ -1,6 +1,7 @@
 from django.forms import ModelForm, fields, ValidationError, models
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.admin.widgets import AdminDateWidget
 
 from hss.models import HSS
 from hss.hss_data import hss_default
@@ -35,7 +36,7 @@ class ProjectInventoryForm(ModelForm):
     technology_platforms = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["technology_platforms"]})
     licenses = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["licenses"]})
     application = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["applications"]})
-    started = fields.DateField(required=False)
+    started = fields.DateField(widget=AdminDateWidget, required=False)
     donors = fields.CharField(required=False)
     pipeline = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["pipelines"]})
     goals_to_scale = fields.CharField(required=False)
