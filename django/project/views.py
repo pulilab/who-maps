@@ -208,7 +208,13 @@ def create_from_file(request):
             "project/create_from_file.html",
             context_instance=RequestContext(request))
     if request.method == 'POST':
-        projects_file = request.FILES["file"]
+        projects_file = request.FILES.get("file", None)
+        if not projects_file:
+            return render_to_response(
+                "project/create_from_file.html",
+                {"errors": ["Please select a file to upload."]},
+                context_instance=RequestContext(request)
+            )
         data = StringIO(projects_file.read().decode())
         try:
             projects_data = json.loads(data.read())
