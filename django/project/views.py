@@ -140,7 +140,7 @@ class ProjectPublicViewSet(ViewSet):
                 for hss in HSS.objects.filter(filter_exp):
                     hss_results.append(hss.project.id)
 
-            project_q_objects = [Q(id__in=hss_results)]
+            project_q_objects = [Q(id__in=hss_results)] if hss_results else []
             project_results = []
 
             # Filter by technology_platforms

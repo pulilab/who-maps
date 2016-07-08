@@ -415,7 +415,7 @@ class ProjectTests(SetupTests):
         data = {
             "technology_platforms": ["tech1", "tech3"],
             "application": ["app1"],
-            "continuum": "Detection and diagnosis",
+            "continuum": ["Detection and diagnosis"],
             "interventions": ["int1"],
             "constraints": ["Information"],
         }
@@ -443,7 +443,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         url = reverse("project-filter-list")
         data = {
-            "technology_platforms": ["tech1", "tech3"],
+            "technology_platforms": ["somethingelse", "tech3"],
             "application": ["app1"],
             "continuum": "Detection and diagnosis",
             "interventions": ["int1"],
