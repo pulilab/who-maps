@@ -118,6 +118,7 @@ class CountrymapController {
     defaultLevels() {
         const defaultLib = {};
         _.forEach(this.cs.projectStructure.countries, country => {
+            // console.debug(country.name);
             defaultLib[country.name] = 'admin_level_4';
         });
 
@@ -133,7 +134,7 @@ class CountrymapController {
             'Tunisia': 'admin_level_4',
             'Pakistan': 'admin_level_4',
 
-            // New maps
+            // New maps vol I.
             'Tanzania': 'admin_level_4', // Not good enough map data...
             'Ghana': 'admin_level_4',
             'Benin': 'admin_level_4',
@@ -145,7 +146,43 @@ class CountrymapController {
             'Vietnam': 'admin_level_4', // Lvl 6 is missing data
             'Uganda': 'admin_level_6',
             'Liberia': 'admin_level_4',
-            'Mali': 'admin_level_4'
+            'Mali': 'admin_level_4',
+
+            // All maps for v2.0
+            'Afghanistan': 'admin_level_4',
+            'Angola': 'admin_level_4',
+            'Botswana': 'admin_level_4',
+            'Brazil': 'admin_level_4',
+            'Burkina Faso': 'admin_level_5',
+            'Cameroon': 'admin_level_4',
+            'Central African-republic': 'admin_level_4',
+            'Chad': 'admin_level_4',
+            'Costa Rica': 'admin_level_4',
+            'Congo Brazzaville': 'admin_level_4',
+            'Congo Kinshasa': 'admin_level_4',
+            'Ethiopia': 'admin_level_4',
+            'Gabon': 'admin_level_4',
+            // 'The Gambia': 'admin_level_4',
+            'Guinea': 'admin_level_6',
+            'Guinea Bissau': 'admin_level_4',
+            'Haiti': 'admin_level_4',
+            'Honduras': 'admin_level_4',
+            'Madagascar': 'admin_level_4',
+            'Malaysia': 'admin_level_4',
+            'Mozambique': 'admin_level_4',
+            'Mexico': 'admin_level_4',
+            'Morocco': 'admin_level_4',
+            'Myanmar': 'admin_level_4',
+            'Namibia': 'admin_level_4',
+            'Nicaragua': 'admin_level_4',
+            'Niger': 'admin_level_4',
+            'Peru': 'admin_level_4',
+            'Rwanda': 'admin_level_4',
+            'South Sudan': 'admin_level_4',
+            'Sudan': 'admin_level_4',
+            'Swaziland': 'admin_level_4',
+            'Togo': 'admin_level_4',
+            'Zimbabwe': 'admin_level_4'
         };
 
         _.merge(defaultLib, levelLib);
