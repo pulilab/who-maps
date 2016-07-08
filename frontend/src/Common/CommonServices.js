@@ -43,7 +43,7 @@ class CommonServices extends Protected {
         }
     }
 
-    uglyfyCountryName(name) {
+    uglifyCountryName(name) {
         let nameParts = name.replace(' ', '-').split('-');
         nameParts = _.map(nameParts, item =>{
             return _.lowerCase(item);
@@ -209,6 +209,12 @@ class CommonServices extends Protected {
             }
 
         });
+    }
+
+    updateProject(project, projectId) {
+        const id = parseInt(projectId, 10);
+        const last = _.find(this.projectList, { id });
+        _.merge(last, project);
     }
 
     static commonServiceFactory() {
