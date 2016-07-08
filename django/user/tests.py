@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.conf import settings
+from django.core import mail
 from django.core.urlresolvers import reverse
 from mock import patch
 from rest_framework.test import APIClient
@@ -140,6 +141,16 @@ class UserTests(APITestCase):
         self.assertIn("user_profile_id", response.json())
         self.assertIn("account_type", response.json())
         self.assertEqual(response.json().get("account_type"), UserProfile.GOVERNMENT)
+
+    def test_forgot_password_send_email(self):
+        url = reverse("rest_password_reset")
+        data = {
+            "email": "test_user1@gmail.com",
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("success", response.json())
+        self.assertIn("Password reset", mail.outbox[2].subject)
 
 
 class UserProfileTests(APITestCase):
