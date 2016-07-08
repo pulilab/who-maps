@@ -205,9 +205,6 @@ if SITE_ID in [3]:
 
     RAVEN_CONFIG = {
         'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
-        # If you are using git, you can also automatically configure the
-        # release based on the git info.
-        # 'release': raven.fetch_git_sha(os.path.dirname(__file__)),
     }
 
     DEBUG = False
