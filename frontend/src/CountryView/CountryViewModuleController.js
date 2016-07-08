@@ -18,8 +18,7 @@ class CountryViewModuleController {
 
         this.mapService.getCountries().then(data => {
 
-            // console.debug('COUNTRIES:', data);
-            this.countries = data.sort();
+            this.countries = data.sort((a, b) => a.name.localeCompare(b.name));
             this.countriesLib = {};
             data.forEach(country => {
                 this.countriesLib[country.id] = country.name;
