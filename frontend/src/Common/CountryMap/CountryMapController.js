@@ -88,11 +88,11 @@ class CountrymapController {
     }
 
     isViewer(project) {
-        return this.cs.userProfile.viewer.indexOf(project.id) > -1;
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project);
     }
 
     mapChanged() {

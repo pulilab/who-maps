@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 class UUIDLoadController {
 
     constructor($state, CommonServices) {
@@ -11,7 +12,7 @@ class UUIDLoadController {
 
     onInit() {
         this.style = {
-            height: this.calculateHeight()
+            height: this.cs.calculateHeight()
         };
 
         const reset = this.cs.reset();
@@ -40,12 +41,6 @@ class UUIDLoadController {
         }
         this.state.go(state, { appName });
     }
-
-    calculateHeight() {
-        const contentHeight = window.innerHeight - 48;
-        return contentHeight + 'px';
-    }
-
 
     static uuidLoadFactory() {
         require('./UUIDLoad.scss');

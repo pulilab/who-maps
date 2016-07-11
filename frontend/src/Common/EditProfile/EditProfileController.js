@@ -61,11 +61,11 @@ class EditProfileController extends Protected {
     }
 
     isViewer(project) {
-        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project);
     }
 
     checkErrors(field) {
