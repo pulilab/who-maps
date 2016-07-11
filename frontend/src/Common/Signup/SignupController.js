@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import SignupService from './SignupService';
 import Storage from '../Storage';
-
+import CommonServices from '../CommonServices';
 class SignupController {
 
     constructor($scope) {
@@ -19,14 +19,11 @@ class SignupController {
             account_type: 'I'
         };
         this.style = {
-            height: this.calculateHeight()
+            height: CommonServices.calculateHeight()
         };
     }
 
-    calculateHeight() {
-        const contentHeight = window.innerHeight - 48;
-        return contentHeight + 'px';
-    }
+
 
     signup(signupForm) {
         if (signupForm.$valid) {
