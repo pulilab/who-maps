@@ -8,36 +8,39 @@
             <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
         </div>
 
-        <div class="countrychart-tooltip-main" layout="column">
+        <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
+            <md-tab label="Total">
 
-            <div flex class="bold lh">
-                Total numbers:
-            </div>
+                <div class="countrychart-tooltip-main" layout="column">
 
-            <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
-                <div flex class="cap lh">{{key}}:<br></div>
-                <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
-            </div>
+                    <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
+                        <div flex class="cap lh">{{key}}:<br></div>
+                        <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
+                    </div>
 
-        </div>
+                </div>
 
-        <div class="countrychart-tooltip-main" ng-show="vm.activeDistrict.name" >
+                <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
 
-            <div flex class="activename bold lh">
-                {{vm.activeDistrict.name}}
-            </div>
+                    <div flex class="activename bold lh">
+                        {{vm.activeDistrict.name}}:
+                    </div>
 
-            <div
-                    flex
-                    class="coverage-data"
-                    layout="row"
-                    ng-repeat="(key, datum) in vm.activeDistrict.data">
+                    <div flex
+                         class="coverage-data"
+                         layout="row"
+                         ng-repeat="(key, datum) in vm.activeDistrict.data">
 
-                <div flex class="cap lh">{{key}}</div>
-                <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
-            </div>
+                        <div flex class="cap lh">{{key}}</div>
+                        <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
+                    </div>
 
-        </div>
+                </div>
+
+            </md-tab>
+            <md-tab label="Global">Some content here too</md-tab>
+        </md-tabs>
+
     </div>
 
     <!-- for CLV -->
