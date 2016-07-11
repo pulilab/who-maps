@@ -1,9 +1,9 @@
 
 <div id="clv-container" layout="column">
 
-    <md-card md-whiteframe="2" class="rel">
+    <md-card md-whiteframe="2" class="rel" layout="row">
         <div class="littleheader">COUNTRY LEVEL VIEW</div>
-        <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true">
+        <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" flex="75" class="clv-tab-container">
 
 
             <!-- MAP VIEW -->
@@ -75,11 +75,11 @@
                         </div>
 
                         <div
-                            class="projectrow"
-                            layout="row"
-                            layout-padding
-                            ng-repeat="project in vm.projectsData track by $index"
-                            ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
+                                class="projectrow"
+                                layout="row"
+                                layout-padding
+                                ng-repeat="project in vm.projectsData track by $index"
+                                ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
 
                             <div flex="35" class="projectlink" layout="row">
                                 <div flex class="name">
@@ -116,6 +116,28 @@
                 </div>
             </md-tab>
         </md-tabs>
+
+        <div class="clv-filter-container" flex="25" layout="row">
+            <div class="filter-wrapper" layout="row" flex="100">
+                <div class="filter-project-counter" md-whiteframe="2">
+                    <div class="project-counter-name">
+                        <div class="description">
+                            Number of Projects
+                        </div>
+                        <div class="country-name">
+                            in {{vm.selectedCountry.name}}
+                        </div>
+                    </div>
+                    <div class="project-counter-arrow">
+                        <img src="img/after-white.svg" />
+                    </div>
+                    <div class="project-counter-number">
+                        {{ vm.projectsData.length}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </md-card>
 
     <disclaimer></disclaimer>
