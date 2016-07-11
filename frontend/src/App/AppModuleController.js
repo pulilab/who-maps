@@ -36,21 +36,13 @@ class AppModuleController extends Protected {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
                     this.currentProject = project;
+                    this.createShareDefinition();
                     this.scope.$evalAsync();
                 });
         }
-
-        this.shareUrl = {
-            url: window.location.href,
-            copyClicked: false,
-            clipboard: new Clipboard('.share-copy')
-        };
-
-        this.shareUrl.clipboard.on('success', event => {
-            this.shareUrl.copyClicked = true;
-            event.clearSelection();
-
-        });
+        else if (this.currentProject) {
+            this.createShareDefinition();
+        }
     }
 
     watchers() {
@@ -69,6 +61,19 @@ class AppModuleController extends Protected {
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
         this.EE.on('profileUpdated', this.refreshProfileInfo, this);
+    }
+
+    createShareDefinition() {
+        this.shareUrl = {
+            url: `http://${window.location.host}/project/${this.currentProject.public_id}`,
+            copyClicked: false,
+            clipboard: new Clipboard('.share-copy')
+        };
+
+        this.shareUrl.clipboard.on('success', event => {
+            this.shareUrl.copyClicked = true;
+            event.clearSelection();
+        });
     }
 
     iconFunction(item) {
