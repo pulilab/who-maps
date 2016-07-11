@@ -519,6 +519,7 @@ p.global-error {
   height:170px;
   padding: 0;
   margin: 0;
+  overflow: hidden;
 
   .share-title {
     position: absolute;
@@ -546,6 +547,8 @@ p.global-error {
   }
 
   .share-button-container {
+
+    overflow: hidden;
 
     .share-copy {
       padding: 0;
