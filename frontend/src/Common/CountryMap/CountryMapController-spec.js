@@ -223,10 +223,6 @@ describe('CountryMapController', () => {
         vm.formatCountryName();
         expect(vm.countryName).toBe('Malawi');
 
-        vm.countryName = 'The Gambia';
-        vm.formatCountryName();
-        expect(vm.countryName).toBe('Senegal');
-
         vm.countryName = 'Something not in the lib';
         vm.formatCountryName();
         expect(vm.countryName).toBe('Something not in the lib');
