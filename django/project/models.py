@@ -37,7 +37,7 @@ class Project(ExtendedModel):
     data = JSONField()
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
-    public_id = models.CharField(max_length=64, unique=True, default="",
+    public_id = models.CharField(max_length=64, default="",
                                  help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
     projects = ProjectManager()
