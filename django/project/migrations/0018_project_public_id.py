@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='public_id',
-            field=models.CharField(default='', help_text='<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1', max_length=64, unique=True),
+            field=models.CharField(default='', help_text='<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1', max_length=64),
         ),
     ]
