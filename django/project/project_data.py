@@ -6,7 +6,6 @@ project_structure = {
             "Client Information Systems",
             "Data Collection and Reporting",
             "Service Delivery",
-            "Provider work planning and scheduling",
             "Provider training and education",
             "Human resource management",
             "Supply management",

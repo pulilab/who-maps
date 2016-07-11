@@ -122,6 +122,19 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
+    def test_create_new_project_makes_public_id(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="Test Project4")
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        project_id = response.json()['id']
+
+        url = reverse("project-detail", kwargs={"pk": project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['public_id'].endswith(str(project_id)))
+
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)

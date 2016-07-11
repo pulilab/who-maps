@@ -88,11 +88,11 @@ class CountrymapController {
     }
 
     isViewer(project) {
-        return this.cs.userProfile.viewer.indexOf(project.id) > -1;
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project);
     }
 
     mapChanged() {
@@ -104,26 +104,81 @@ class CountrymapController {
 
     makeGeoFromTopo(topo, level) {
 
-        return topojson.feature(topo, topo.objects[level]);
+        // console.warn('TOPO', topo);
+        // console.warn('lvl', level);
+
+        const ret = topojson.feature(topo, topo.objects[level]);
+
+        // console.warn('GEO', ret);
+        // ret.features.forEach(el => { console.debug(el.properties.name); });
+
+        return ret;
     }
 
     defaultLevels() {
         const defaultLib = {};
         _.forEach(this.cs.projectStructure.countries, country => {
-            defaultLib[country.name] = 'admin_level_5';
+            // console.debug(country.name);
+            defaultLib[country.name] = 'admin_level_4';
         });
 
         const levelLib = {
-            'Sierra Leone': 'admin_level_5',
-            'India': 'admin_level_4', // Precise enough map-data?
-            'Kenya': 'admin_level_4',
-            'Philippines': 'admin_level_3', // Precise enough map-data?
-            'Border India - Bangladesh': 'admin_level_4',
-            'Indonesia': 'admin_level_4', // Precise enough map-data?
-            'Border Malawi - Mozambique': 'admin_level_4',
-            'The Gambia': 'admin_level_3',
-            'Tunisia': 'admin_level_4',
-            'Pakistan': 'admin_level_4'
+            'Afghanistan':                  'admin_level_4', // #2
+            'Angola':                       'admin_level_4', // #2
+            'Benin':                        'admin_level_4', // #1.5
+            'Border India - Bangladesh':    'admin_level_4', // #1
+            'Border Malawi - Mozambique':   'admin_level_4', // #1
+            'Botswana':                     'admin_level_4', // #2
+            'Brazil':                       'admin_level_4', // #2
+            'Burkina Faso':                 'admin_level_5', // #2
+            'Cameroon':                     'admin_level_4', // #2
+            'Central Arican Republic':      'admin_level_4', // #2
+            'Chad':                         'admin_level_4', // #2
+            'Congo Bazzaville':             'admin_level_4', // #2
+            'Congo Kinshasa':               'admin_level_4', // #2
+            'Costa Rica':                   'admin_level_4', // #2
+            'Ethiopia':                     'admin_level_4', // #2
+            'Gabon':                        'admin_level_4', // #2
+            'Ghana':                        'admin_level_4', // #1.5
+            'Guinea Bissau':                'admin_level_4', // #2
+            'Guinea':                       'admin_level_6', // #2
+            'Haiti':                        'admin_level_4', // #2
+            'Honduras':                     'admin_level_4', // #2
+            'India':                        'admin_level_5', // #1
+            'Indonesia':                    'admin_level_4', // #1
+            'Kenya':                        'admin_level_4', // #1
+            'Liberia':                      'admin_level_4', // #1.5
+            'Madagascar':                   'admin_level_4', // #2
+            'Malaysia':                     'admin_level_4', // #2
+            'Mali':                         'admin_level_4', // #1.5
+            'Mexico':                       'admin_level_4', // #2
+            'Morocco':                      'admin_level_4', // #2
+            'Mozambique':                   'admin_level_4', // #2
+            'Myanmar':                      'admin_level_4', // #2
+            'Namibia':                      'admin_level_4', // #2
+            'Nepal':                        'admin_level_6', // #1.5
+            'Nicaragua':                    'admin_level_4', // #2
+            'Niger':                        'admin_level_4', // #2
+            'Nigeria':                      'admin_level_4', // #1.5
+            'Pakistan':                     'admin_level_4', // #1
+            'Peru':                         'admin_level_4', // #2
+            'Philippines':                  'admin_level_3', // #1
+            'Rwanda':                       'admin_level_4', // #2
+            // 'Senegal':                       'admin_level_3', // #1
+            'Sierra Leone':                 'admin_level_5', // #1
+            'South Arica':                  'admin_level_4', // #1.5
+            'South Sudan':                  'admin_level_4', // #2
+            'Sri Lanka':                    'admin_level_4', // #1.5
+            'Sudan':                        'admin_level_4', // #2
+            'Swaziland':                    'admin_level_4', // #2
+            'Tanzania':                     'admin_level_4', // #1.5
+            'The Gambia':                   'admin_level_5', // #1
+            'Togo':                         'admin_level_4', // #2
+            'Tunisia':                      'admin_level_4', // #1
+            'Uganda':                       'admin_level_6', // #1.5
+            'Vietnam':                      'admin_level_4', // #1.5
+            'Zambia':                       'admin_level_4', // #1.5
+            'Zimbabwe':                     'admin_level_4'  // #2
         };
 
         _.merge(defaultLib, levelLib);
@@ -134,8 +189,7 @@ class CountrymapController {
     formatCountryName() {
         const dictionary = {
             'Border India - Bangladesh': 'Bangladesh',
-            'Border Malawi - Mozambique': 'Malawi',
-            'The Gambia': 'Senegal'
+            'Border Malawi - Mozambique': 'Malawi'
         };
         this.countryName = dictionary[this.countryName]
             ? dictionary[this.countryName] : this.countryName;
@@ -143,20 +197,35 @@ class CountrymapController {
 
     getBindablesFromTopo(topoJSON) {
 
-        this.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
+        try {
+            this.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
+                topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
+                topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
 
-        this.countryName =
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
-            topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
+            this.countryName =
+                topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
+                topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
+        }
+        catch (err) {
+            this.flagUrl = 'https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_The_Gambia.svg';
+            this.countryName = 'Gambia';
+        }
+
     }
 
     calculateScale(topoJSON) {
-        return Math.max.apply(null,
+        let ret = Math.max.apply(null,
         topoJSON.admin_level_2.transform.scale.map(nr => {
             return 1 / nr;
         })) * 10;
+
+        // console.log(ret);
+
+        if (this.countryName === 'Gambia') {
+            ret = 30000;
+        }
+
+        return ret;
     }
 
     makeSvgPannableAndZoomable(element) {
@@ -181,12 +250,17 @@ class CountrymapController {
 
     preDraw(topoJSON) {
 
+        // console.log(JSON.stringify(topoJSON));
+
         d3.select(this.el[0]).select('.countrymapcontainer').remove();
 
         this.getBindablesFromTopo(topoJSON);
 
         const levelLib = this.defaultLevels();
-        const level = levelLib[this.countryName] ? levelLib[this.countryName] : 'admin_level_5';
+        const level = levelLib[this.countryName] ? levelLib[this.countryName] : 'admin_level_4';
+
+        // console.warn('Country name:', this.countryName);
+        // console.warn('LVL', level);
 
         this.formatCountryName();
 
@@ -223,10 +297,16 @@ class CountrymapController {
 
     drawDistricts(element, distrData, topoJSON) {
 
+        // console.debug('element', element);
+        // console.debug('distrData', distrData);
+        // console.debug('topoJSON', topoJSON);
+
         const self = this;
 
         const projection = d3.geo.mercator()
             .scale(this.calculateScale(topoJSON));
+
+        // console.debug('Is .features an array?', Array.isArray(distrData.features));
 
         for (let i = 0; i < distrData.features.length; i += 1) {
 
