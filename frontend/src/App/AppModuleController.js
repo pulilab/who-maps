@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Protected } from '../Common/';
+import Clipboard from 'clipboard';
 
 class AppModuleController extends Protected {
 
@@ -21,7 +22,6 @@ class AppModuleController extends Protected {
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
-
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -39,6 +39,18 @@ class AppModuleController extends Protected {
                     this.scope.$evalAsync();
                 });
         }
+
+        this.shareUrl = {
+            url: window.location.href,
+            copyClicked: false,
+            clipboard: new Clipboard('.share-copy')
+        };
+
+        this.shareUrl.clipboard.on('success', event => {
+            this.shareUrl.copyClicked = true;
+            event.clearSelection();
+
+        });
     }
 
     watchers() {
