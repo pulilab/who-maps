@@ -111,14 +111,13 @@ class DashboardModuleController extends Protected {
         this.projectData = data;
         if (this.userType !== 0) {
             this.fetchCountryMap(data.country);
-            this.parseMapData(data.coverage);
+            this.parseMapData(data.coverage, data.national_level_deployment);
             this.fetchCoverageVersions();
         }
     }
 
-    parseMapData(coverage) {
+    parseMapData(coverage, national) {
 
-        // console.debug('COVERAGE from API', coverage);
         const ret = { labels: [], data: {} };
 
         coverage.forEach(el => {
@@ -126,24 +125,21 @@ class DashboardModuleController extends Protected {
                 ret.labels.push(el.district);
             }
         });
-        // console.debug('Labels', ret.labels);
+
 
         coverage.forEach(distObj => {
 
             ret.data[distObj.district] = {};
 
             _.forOwn(distObj, (val, key) => {
-                // console.debug(key, val);
+
                 if (key === 'district') { return; }
-
                 const formattedKey = key.replace('_', ' ');
-
                 ret.data[distObj.district][formattedKey] = val;
             });
         });
-        // console.debug('FINAL PARSED COVERAGE: ', ret);
 
-        this.EE.emit('mapdataArrived', ret);
+        this.EE.emit('mapdataArrived', ret, national);
         this.perfMockMap = ret;
     }
 

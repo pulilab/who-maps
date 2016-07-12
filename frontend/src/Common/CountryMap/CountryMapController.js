@@ -24,6 +24,7 @@ class CountrymapController {
         this.showPlaceholder = !this.big;
         this.cs = require('../../Common/CommonServices');
         this.svgPanZoom = svgPanZoom;
+        this.nationalCov = {};
         this.covLib = {};
 
         this.EE.removeListener('country Changed');
@@ -46,10 +47,36 @@ class CountrymapController {
         this.covLib[key] = index;
     }
 
-    dataArrived(data) {
+    setGlobal() {
+        const districts = document.getElementsByClassName('d3district');
+        Array.prototype.forEach.call(districts, distr => {
+            distr.classList.add('global');
+        });
+    }
+
+    setTotal() {
+        const districts = document.getElementsByClassName('d3district');
+        Array.prototype.forEach.call(districts, distr => {
+            distr.classList.remove('global');
+        });
+    }
+
+    dataArrived(data, national) {
 
         this.data = this.big ? { data } : data;
         this.dataHere = true;
+
+        this.nationalCov = national[0];
+        if (this.nationalCov.hasOwnProperty('district')) {
+            delete this.nationalCov.district;
+        }
+        if (this.nationalCov.hasOwnProperty('health_workers')) {
+            this.nationalCov['Health workers'] = '' + this.nationalCov.health_workers;
+            delete this.nationalCov.health_workers;
+        }
+        this.scope.$evalAsync();
+
+        // console.warn('National data arrived to the mapCTRL:', this.nationalCov);
 
         // Aggregates the values of districts to show them all
         this.boundNrs = _.reduce(this.data.data, (ret, value, key) => {

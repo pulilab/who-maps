@@ -23,7 +23,7 @@
                 <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
 
                     <div flex class="activename bold lh">
-                        {{vm.activeDistrict.name}}:
+                        {{vm.activeDistrict.name}}
                     </div>
 
                     <div flex
@@ -32,13 +32,29 @@
                          ng-repeat="(key, datum) in vm.activeDistrict.data">
 
                         <div flex class="cap lh">{{key}}</div>
+                        <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
+                    </div>
+
+                </div>
+
+            </md-tab>
+            <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+
+                <div class="countrychart-tooltip-main">
+
+                    <div flex
+                         class="coverage-data"
+                         layout="row"
+                         ng-repeat="(key, datum) in vm.nationalCov"
+                         ng-init="vm.saveClass(key, $index)">
+
+                        <div flex class="cap lh">{{key}}</div>
                         <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
                     </div>
 
                 </div>
 
             </md-tab>
-            <md-tab label="Global">Some content here too</md-tab>
         </md-tabs>
 
     </div>
