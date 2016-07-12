@@ -43,8 +43,14 @@ class CountrymapController {
         this.map = false;
     }
 
-    saveClass(key, index) {
-        this.covLib[key] = index;
+    saveClass(key, index, boundNrs) {
+        if (boundNrs) {
+            index += _.keys(boundNrs).length;
+        }
+        if (!this.covLib.hasOwnProperty(key)) {
+            this.covLib[key] = index;
+        }
+        console.log(this.covLib);
     }
 
     setGlobal() {

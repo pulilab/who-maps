@@ -46,7 +46,7 @@
                          class="coverage-data"
                          layout="row"
                          ng-repeat="(key, datum) in vm.nationalCov"
-                         ng-init="vm.saveClass(key, $index)">
+                         ng-init="vm.saveClass(key, $index, vm.boundNrs)">
 
                         <div flex class="cap lh">{{key}}</div>
                         <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
