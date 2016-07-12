@@ -11,8 +11,99 @@ class CountryViewModuleController {
         this.scope = $scope;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
-        this.getCountries();
+        this.$onInit = this.onInit.bind(this);
     }
+
+
+    onInit() {
+        this.getCountries();
+        this.createFiltersObject();
+    }
+
+    createBaseObj(name) {
+        return { name, items: [], open: false };
+    }
+
+    createFiltersObject() {
+        const continuumObj = this.createBaseObj('continuum');
+        const ageRangeObj = this.createBaseObj('age range');
+        const interventionsObj = this.createBaseObj('interventions');
+        const technologyPlatformsObj = this.createBaseObj('technology platforms');
+        const applicationObj = this.createBaseObj('applications');
+        const constraintsObj = this.createBaseObj('constraints');
+
+        _.forEach(this.cs.hssStructure.continuum, continuum => {
+            continuumObj.items.push({
+                name: continuum.title,
+                value: false
+            });
+
+        });
+
+        _.forEach(this.cs.hssStructure.age_ranges, age_range => {
+            ageRangeObj.items.push({
+                name: age_range,
+                value: false
+            });
+        });
+
+        _.forEach(this.cs.hssStructure.interventions, interventions => {
+            _.forEach(interventions, intervention => {
+                interventionsObj.items.push({
+                    name: intervention,
+                    value: false
+                });
+            });
+
+        });
+        interventionsObj.items = _.uniqBy(interventionsObj.items, 'name');
+
+        _.forEach(this.cs.projectStructure.technology_platforms, tp => {
+            technologyPlatformsObj.items.push({
+                name: tp,
+                value: false
+            });
+        });
+
+        _.forEach(this.cs.hssStructure.applications, application => {
+            _.forEach(application.subApplications, subApp => {
+                applicationObj.items.push({
+                    name: subApp,
+                    value: false
+                });
+            });
+        });
+
+        _.forEach(this.cs.hssStructure.taxonomies, taxonomy => {
+            _.forEach(taxonomy.values, constraint => {
+                constraintsObj.items.push({
+                    name: constraint,
+                    value: false
+                });
+            });
+        });
+
+        this.filterCategory = [continuumObj, interventionsObj, technologyPlatformsObj, applicationObj, constraintsObj];
+
+    }
+
+    filterClv() {
+        const filters = {};
+        _.forEach(this.filterCategory, category => {
+            filters[category.name] = _.chain(category.items)
+                .map(value => {
+                    return value.value ? value.name : false;
+                })
+                .filter()
+                .value();
+        });
+
+        this.service.filterProjects(filters).then(data => {
+            this.projectsData = data;
+            this.scope.$evalAsync();
+        });
+    }
+
 
     getCountries() {
 
@@ -41,7 +132,7 @@ class CountryViewModuleController {
     }
 
     isMember(project) {
-        return this.cs.isMember(project)
+        return this.cs.isMember(project);
     }
 
 
@@ -71,7 +162,7 @@ class CountryViewModuleController {
     // For map TAB
     fetchDistrictProjects(countryId) {
 
-        this.service.getDisctrictProjects(countryId).then(data => {
+        this.service.getDistrictProjects(countryId).then(data => {
             // console.debug('getDistrictProjects:', data);
             this.EE.emit('mapdataArrived', data);
         });

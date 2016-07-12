@@ -28,6 +28,7 @@ class CommonServices extends Protected {
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = [];
         this.userProfile = null;
+        this.hssStructure = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -69,6 +70,8 @@ class CommonServices extends Protected {
         if (this.userProfileId) {
             this.loadingCheck.push('list');
             this.loadingCheck.push('user-profile');
+            this.loadingCheck.push('hss-structure');
+            this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
         }
@@ -159,6 +162,18 @@ class CommonServices extends Protected {
                 this.projectStructure = structure;
                 this.loadingProgress('structure');
             }, () => {
+                this.loadingProgress('structure');
+                this.promiseReject();
+            });
+    }
+
+    populateHssStructure() {
+        this.get('projects/hss/structure/')
+            .then(structure => {
+                this.hssStructure = structure;
+                this.loadingProgress('hss-structure');
+            }, () => {
+                this.loadingProgress('hss-structure');
                 this.promiseReject();
             });
     }

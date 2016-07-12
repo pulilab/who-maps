@@ -69,7 +69,7 @@ interventions = {
         'Malaria',
         'Depression',
         'Postnatal care',
-        'HIV/AIDs',
+        'HIV/AIDS',
         'PMTCT',
         'Newborn illnesses',
         'Low birth weight/pre term care',

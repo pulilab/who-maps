@@ -30,10 +30,11 @@
 
       .filter-wrapper {
         background: $color-map-filter-background;
+        position: relative;
 
 
         .filter-project-counter {
-          position: relative;
+          position: absolute;
           top:20px;
           left:20px;
           width:240px;
@@ -42,7 +43,7 @@
 
 
           .project-counter-name {
-            position: relative;
+            position: absolute;
 
             .description {
               position: absolute;
@@ -90,6 +91,14 @@
             color: $color-black;
           }
 
+
+        }
+
+        .filter-list {
+          position: absolute;
+          top:110px;
+          left:20px;
+          width:240px;
 
         }
       }
