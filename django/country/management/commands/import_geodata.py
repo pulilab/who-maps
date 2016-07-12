@@ -25,12 +25,16 @@ class Command(BaseCommand):
             country, created = Country.objects.get_or_create(name=folder)
             country.geodata = geodata
 
-            for geom in geodata['admin_level_2']['objects']['admin_level_2']['geometries']:
-                try:
-                    country.code = geom['properties']['ISO3166-1']
-                    break
-                except KeyError:
-                    pass
+            try:
+                for geom in geodata['admin_level_2']['objects']['admin_level_2']['geometries']:
+                    try:
+                        country.code = geom['properties']['ISO3166-1']
+                        break
+                    except KeyError:
+                        country.code = geom['properties']['ISO3166-1:alpha2']
+            except KeyError:
+                if country.name == 'the-gambia':
+                    country.code = 'GM'
 
             if not country.code:
                 country.code = "NULL"
