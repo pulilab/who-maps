@@ -314,6 +314,8 @@ class DashboardModuleController extends Protected {
 
         this.service.getCoverageVersions(this.projectId).then(data => {
 
+            // console.debug(this.projectData);
+
             data.push({ data: this.projectData.coverage });
 
             const today = new Date();
@@ -351,7 +353,7 @@ class DashboardModuleController extends Protected {
                 return ret;
             }, { labels: [], data: [] });
 
-            _.forOwn(this.projectData.national_level_deployment[0], (value, key) => {
+            _.forOwn((this.projectData.national_level_deployment || [{}]) [0], (value, key) => {
 
                 if (key === 'district') {
                     return;
