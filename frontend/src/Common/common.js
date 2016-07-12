@@ -19,6 +19,7 @@ import projectComponent from './ProjectComponent/projectComponent';
 import searchBarComponent from './Searchbar/searchbarComponent';
 import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
+import ResetComponent from './ResetPass/resetComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
 import NewProjectComponent from './NewProject/newProjectComponent';
@@ -44,6 +45,7 @@ angular.module(moduleName,
     .component(projectComponent.name, projectComponent)
     .component(searchBarComponent.name, searchBarComponent)
     .component(LoginComponent.name, LoginComponent)
+    .component(ResetComponent.name, ResetComponent)
     .component(SignupComponent.name, SignupComponent)
     .component(AxisComponent.name, AxisComponent)
     .component(NewProjectComponent.name, NewProjectComponent)

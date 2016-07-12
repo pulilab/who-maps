@@ -269,6 +269,8 @@ LOGGING = {
     },
 }
 
+LOGIN_URL = '/login/'
+
 for arg in sys.argv:
     if 'test' in arg:
         DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'

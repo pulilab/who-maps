@@ -89,6 +89,15 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
                 }
             }
         })
+        .state('reset', {
+            url: '/reset',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '<reset></reset>'
+                }
+            }
+        })
         .state('signup', {
             url: '/signup',
             parent: 'base',
