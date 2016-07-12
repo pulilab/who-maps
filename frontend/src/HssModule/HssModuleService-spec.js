@@ -17,12 +17,6 @@ describe('HssModuleService class', () => {
         spyOn(window, 'fetch').and.returnValue(Promise.resolve(res));
     });
 
-    it('should have a function that perform a get'
-    + 'request on the structure api', () => {
-        spyOn(hs, 'get');
-        hs.getStructure();
-        expect(hs.get).toHaveBeenCalled();
-    });
 
     it('should have a function that perform a get'
     + 'request on the data api', () => {
