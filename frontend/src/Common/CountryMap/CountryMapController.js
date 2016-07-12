@@ -26,12 +26,14 @@ class CountrymapController {
         this.svgPanZoom = svgPanZoom;
         this.nationalCov = {};
         this.covLib = {};
+        this.allProjects = {};
 
         this.EE.removeListener('country Changed');
+        this.EE.removeListener('all country projects');
 
         if (this.big) {
             this.EE.on('country Changed', this.mapChanged, this);
-            this.EE.once('all country projects', (data) => {
+            this.EE.on('all country projects', (data) => {
                 this.allProjects = data;
                 this.scope.$evalAsync();
             });
