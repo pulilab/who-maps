@@ -31,6 +31,7 @@ import countrymap from './CountryMap/countrymap.js';
 import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
 import disclaimerComponent from './Disclaimer/disclaimerComponent.js';
 import RefreshProjectComponenet from './RefreshProject/refreshProject';
+import UUILoadComponent from './UUIDLoad/UUIDLoad';
 
 const moduleName = 'Components';
 
@@ -56,7 +57,8 @@ angular.module(moduleName,
     .component(countrymap.name, countrymap)
     .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
     .component(disclaimerComponent.name, disclaimerComponent)
-    .component(RefreshProjectComponenet.name, RefreshProjectComponenet);
+    .component(RefreshProjectComponenet.name, RefreshProjectComponenet)
+    .component(UUILoadComponent.name, UUILoadComponent);
 
 
 export { EE };

@@ -35,7 +35,7 @@ class EditProfileController extends Protected {
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
-        if (_.isNull(this.userProfile.organisation.name)) {
+        if (this.userProfile && _.isNull(this.userProfile.organisation.name)) {
             this.userProfile.organisation = null;
         }
         if (!this.userProfile || !this.userProfile.email) {
@@ -61,11 +61,11 @@ class EditProfileController extends Protected {
     }
 
     isViewer(project) {
-        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project);
     }
 
     checkErrors(field) {

@@ -1,4 +1,5 @@
 import EmailConfirmationService from './EmailConfirmationService';
+import CommonServices from '../CommonServices';
 
 class EmailConfirmationController {
 
@@ -14,7 +15,7 @@ class EmailConfirmationController {
     onInit() {
         this.inProcess = true;
         this.style = {
-            height: this.calculateHeight()
+            height: CommonServices.calculateHeight()
         };
         this.key = this.state.params.key;
 
@@ -37,11 +38,6 @@ class EmailConfirmationController {
                 this.success = false;
                 this.scope.$evalAsync();
             });
-    }
-
-    calculateHeight() {
-        const contentHeight = window.innerHeight - 48;
-        return contentHeight + 'px';
     }
 
 

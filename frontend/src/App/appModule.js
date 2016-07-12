@@ -46,6 +46,12 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             abstract: true
         })
 
+        .state('share', {
+            url: '/project/:projectUUID',
+            template: '<uuid-load />',
+            controllerAs: 'vm'
+        })
+
         .state(moduleName, {
             url: '/app/:appName',
             template: '<app layout="column" layout-fill></app>',

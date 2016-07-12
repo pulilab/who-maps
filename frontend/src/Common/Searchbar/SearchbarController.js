@@ -47,15 +47,15 @@ class SearchbarController {
     }
 
     isViewer(project) {
-        if (this.cs && this.cs.userProfile) {
-            return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
+        if (this.cs ) {
+            return this.cs.isViewer(project);
         }
         return false;
     }
 
     isMember(project) {
-        if (this.cs && this.cs.userProfile) {
-            return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
+        if (this.cs) {
+            return this.cs.isMember(project);
         }
         return false;
     }
