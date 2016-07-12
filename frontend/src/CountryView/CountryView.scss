@@ -31,6 +31,7 @@
       .filter-wrapper {
         background: $color-map-filter-background;
         position: relative;
+        overflow: scroll;
 
 
         .filter-project-counter {
@@ -90,8 +91,6 @@
             text-align: center;
             color: $color-black;
           }
-
-
         }
 
         .filter-list {
@@ -99,6 +98,50 @@
           top:110px;
           left:20px;
           width:240px;
+
+          .description {
+            font-size: 14px;
+            font-weight: 500;
+            color: $color-black;
+            margin-bottom: 20px;
+          }
+
+          .list-headers {
+
+            .header{
+              outline:none;
+              cursor: pointer;
+              font-weight: 500;
+              font-size:12px;
+              color: $color-black;
+              text-transform: capitalize;
+
+            }
+
+            .list-item {
+              margin-left:25px;
+              margin-bottom: 10px;
+
+              md-checkbox {
+                margin:0;
+                font-size: 12px;
+                font-weight: 300;
+                color: $color-black;
+                height: 17px;
+
+                .md-icon {
+                  width: 17px;
+                  height:17px;
+                  font-size: 17px;
+                }
+                .md-label {
+                  margin-left: 22px;
+                }
+              }
+
+            }
+
+          }
 
         }
       }
