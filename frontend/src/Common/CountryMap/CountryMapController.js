@@ -31,6 +31,10 @@ class CountrymapController {
 
         if (this.big) {
             this.EE.on('country Changed', this.mapChanged, this);
+            this.EE.once('all country projects', (data) => {
+                this.allProjects = data;
+                this.scope.$evalAsync();
+            });
         }
         else {
             this.EE.once('country Changed', this.mapChanged, this);
@@ -69,15 +73,18 @@ class CountrymapController {
     dataArrived(data, national) {
 
         this.data = this.big ? { data } : data;
+        // console.log('DATA arrived', this.data);
         this.dataHere = true;
 
-        this.nationalCov = _.clone(national[0]);
-        if (this.nationalCov.hasOwnProperty('district')) {
-            delete this.nationalCov.district;
-        }
-        if (this.nationalCov.hasOwnProperty('health_workers')) {
-            this.nationalCov['Health workers'] = '' + this.nationalCov.health_workers;
-            delete this.nationalCov.health_workers;
+        if (national) {
+            this.nationalCov = _.clone(national[0]);
+            if (this.nationalCov.hasOwnProperty('district')) {
+                delete this.nationalCov.district;
+            }
+            if (this.nationalCov.hasOwnProperty('health_workers')) {
+                this.nationalCov['Health workers'] = '' + this.nationalCov.health_workers;
+                delete this.nationalCov.health_workers;
+            }
         }
         this.scope.$evalAsync();
 

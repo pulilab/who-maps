@@ -56,37 +56,60 @@
 
             </md-tab>
         </md-tabs>
-
     </div>
 
     <!-- for CLV -->
-    <div class="countrychart-tooltip md-whiteframe-1dp" ng-if="vm.big" ng-hide="!vm.map">
+    <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="vm.big" ng-hide="!vm.map">
 
         <div class="countrychart-tooltip-header bold">
             {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
             <img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
         </div>
 
-        <div class="countrychart-tooltip-main countrychart-tooltip-main-big" ng-show="vm.activeDistrict.name" >
+        <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
 
-            <div
-                flex
-                layout="column"
-                layout-align="space-around start"
-                class="projectcont"
-                ng-repeat="project in vm.activeDistrict.data | limitTo:5"
-                ng-init="member = vm.isMember(project); viewer = vm.isViewer(project)"
-                ui-sref="dashboard({ appName: project.id })">
+            <md-tab label="Local">
 
-                <div class="projectname">{{project.name}}</div>
-                <div class="projectorg">{{project.organisation}}</div>
+                <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
 
-                <div ng-show="member" ng-class="{'my-star':member}"><md-icon>grade</md-icon></div>
-                <div ng-show="viewer && !vm.member" ng-class="{'my-eye': viewer}"><md-icon>visibility</md-icon></div>
+                    <div
+                        flex
+                        layout="column"
+                        layout-align="space-around start"
+                        class="projectcont"
+                        ng-repeat="project in vm.activeDistrict.data | limitTo:5"
+                        ng-init="member = vm.isMember(project); viewer = vm.isViewer(project)"
+                        ui-sref="dashboard({ appName: project.id })">
 
-            </div>
+                        <div class="projectname">{{project.name}}</div>
+                        <div class="projectorg">{{project.organisation}}</div>
 
-        </div>
+                        <div ng-show="member" ng-class="{'my-star':member}"><md-icon>grade</md-icon></div>
+                        <div ng-show="viewer && !vm.member" ng-class="{'my-eye': viewer}"><md-icon>visibility</md-icon></div>
+                    </div>
+                </div>
+            </md-tab>
+
+            <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+                <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
+
+                    <div flex
+                        layout="column"
+                        layout-align="space-around start"
+                        class="projectcont"
+                        ng-repeat="project in vm.allProjects | limitTo:5"
+                        ng-init="member = vm.isMember(project); viewer = vm.isViewer(project)"
+                        ui-sref="dashboard({ appName: project.id })">
+
+                        <div class="projectname">{{project.name}}</div>
+                        <div class="projectorg">{{project.organisation_name}}</div>
+
+                        <div ng-show="member" ng-class="{'my-star':member}"><md-icon>grade</md-icon></div>
+                        <div ng-show="viewer && !vm.member" ng-class="{'my-eye': viewer}"><md-icon>visibility</md-icon></div>
+                    </div>
+                </div>
+            </md-tab>
+        </md-tabs>
     </div>
 
     <div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.map">
