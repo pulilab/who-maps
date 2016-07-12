@@ -1,0 +1,48 @@
+@import '../../variables';
+@import '../../mixins';
+
+reset {
+
+  #title-text {
+    margin-top: 15px;
+    margin-bottom: 35px;
+    margin-left: 2px;
+  }
+
+  md-content {
+    padding: 40px;
+    min-width: 440px;
+    max-width: 440px;
+  }
+
+  .layout-row {
+    margin: 18px 0 18px;
+
+    .md-button {
+      margin: 5px 0 0;
+    }
+    .md-primary {
+      float: right;
+    }
+  }
+
+  .form-success {
+    padding: 40px;
+
+    h4 {
+      margin-bottom: 12px;
+    }
+
+    i.material-icons {
+      display: block;
+      color: $color-green;
+      text-align: center;
+      font-size: 48px;
+    }
+  }
+
+  disclaimer footer {
+    margin-bottom: 50px;
+    max-width: 640px;
+  }
+}
