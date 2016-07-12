@@ -18,8 +18,7 @@ class CountryViewModuleController {
 
         this.mapService.getCountries().then(data => {
 
-            // console.debug('COUNTRIES:', data);
-            this.countries = data.sort();
+            this.countries = data.sort((a, b) => a.name.localeCompare(b.name));
             this.countriesLib = {};
             data.forEach(country => {
                 this.countriesLib[country.id] = country.name;
@@ -38,11 +37,11 @@ class CountryViewModuleController {
     }
 
     isViewer(project) {
-        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project)
     }
 
 

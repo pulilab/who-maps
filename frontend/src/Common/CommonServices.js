@@ -217,6 +217,19 @@ class CommonServices extends Protected {
         _.merge(last, project);
     }
 
+    isViewer(project) {
+        return this.userProfile && this.userProfile.viewer.indexOf(project.id) > -1 && ! this.isMember(project);
+    }
+
+    isMember(project) {
+        return this.userProfile && this.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    calculateHeight() {
+        const contentHeight = window.innerHeight - 48;
+        return contentHeight + 'px';
+    }
+
     static commonServiceFactory() {
         if (!this[singleton]) {
             this[singleton] = new CommonServices(singletonEnforcer);
