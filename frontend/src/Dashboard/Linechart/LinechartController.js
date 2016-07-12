@@ -22,7 +22,7 @@ class LinechartController {
                 this.EE.once(this.notpercentage ? 'coverage chart data' : 'axis chart data', data => {
 
                     if (this.notpercentage) {
-                        // console.debug('chartmock 3', JSON.stringify(data));
+
                         this.maxValue = data.data.reduce((ret, version) => {
                             _.forOwn(version, (val, key) => {
 

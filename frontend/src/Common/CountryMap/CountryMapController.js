@@ -50,7 +50,6 @@ class CountrymapController {
         if (!this.covLib.hasOwnProperty(key)) {
             this.covLib[key] = index;
         }
-        console.log(this.covLib);
     }
 
     setGlobal() {
@@ -72,7 +71,7 @@ class CountrymapController {
         this.data = this.big ? { data } : data;
         this.dataHere = true;
 
-        this.nationalCov = national[0];
+        this.nationalCov = _.clone(national[0]);
         if (this.nationalCov.hasOwnProperty('district')) {
             delete this.nationalCov.district;
         }
