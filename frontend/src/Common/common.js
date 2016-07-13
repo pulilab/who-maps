@@ -19,7 +19,7 @@ import projectComponent from './ProjectComponent/projectComponent';
 import searchBarComponent from './Searchbar/searchbarComponent';
 import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
-import ResetComponent from './ResetPass/resetComponent';
+import ResetComponent from './Reset/resetComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
 import NewProjectComponent from './NewProject/newProjectComponent';

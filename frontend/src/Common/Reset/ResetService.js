@@ -8,7 +8,7 @@ class ResetService extends SimpleApi {
     }
 
     reset(data) {
-        let status = false;
+        let status = 599;
 
         return this.post('', data)
         .then(answer => {
