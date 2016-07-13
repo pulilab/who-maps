@@ -222,6 +222,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
+        self.assertEqual(len(response.json()[0]['data']), 3)
 
     def test_get_toolkit_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
