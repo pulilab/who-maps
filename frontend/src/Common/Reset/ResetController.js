@@ -54,6 +54,11 @@ class ResetModuleController {
         vm.scope.$evalAsync();
     }
 
+    handleCustomError(key) {
+        this.resetForm[key].$setValidity('custom', true);
+        this.resetForm[key].customError = [];
+    }
+
 
     static resetFactory() {
         require('./Reset.scss');

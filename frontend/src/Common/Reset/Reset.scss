@@ -41,6 +41,11 @@ reset {
     }
   }
 
+  .md-input-message-animation {
+    opacity: 1 !important;
+    margin-top:0 !important;
+  }
+
   disclaimer footer {
     margin-bottom: 50px;
     max-width: 640px;

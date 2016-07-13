@@ -11,7 +11,7 @@
                 </div>
                 <md-input-container>
                     <label>Email address</label>
-                    <input ng-required="true" name="email" ng-model="vm.email" type="email" />
+                    <input ng-required="true" name="email" ng-model="vm.email" type="email" ng-change="vm.handleCustomError('email')" />
                     <div ng-messages="vm.resetForm.email.$error">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="email">This field must be a valid email.</div>

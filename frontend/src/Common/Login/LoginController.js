@@ -56,6 +56,11 @@ class LoginModuleController {
         vm.scope.$evalAsync();
     }
 
+    handleCustomError(key) {
+        this.loginForm[key].$setValidity('custom', true);
+        this.loginForm[key].customError = [];
+    }
+
 
     static loginFactory() {
         require('./Login.scss');
