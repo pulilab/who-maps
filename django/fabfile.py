@@ -125,7 +125,7 @@ def migrate():
 
 
 def import_geodata():
-    local("python geodata_import.py")
+    local("python geodata_import.py prod")
 
 
 def rebuild_db():
