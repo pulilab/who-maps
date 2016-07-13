@@ -60,6 +60,11 @@ SELECTED_FILE_LIST = [
     "zambia_geojson.tgz",
     "zimbabwe_geojson.tgz",
 ]
+SELECTED_FILE_LIST_DEV = [
+    "sierra-leone_geojson.tgz",
+    "rwanda_geojson.tgz",
+    "uganda_geojson.tgz"
+]
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
     "admin_level_3.geojson",
