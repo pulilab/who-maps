@@ -10,7 +10,7 @@ class TermOfUseController {
     }
 
     onInit() {
-        this.menuEntry = ['contact', 'impressum', 'legal', 'terms of use'];
+        this.menuEntry = ['contact', 'terms of use'];
         this.currentSection = 'terms of use';
         this.style = {
             height: CommonServices.calculateHeight()
