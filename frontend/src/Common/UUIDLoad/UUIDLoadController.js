@@ -49,7 +49,7 @@ class UUIDLoadController {
             return new UUIDLoadController($state, CommonServices);
         }
 
-        uuidLoadController.$inject = [ '$state'];
+        uuidLoadController.$inject = ['$state'];
 
         return uuidLoadController;
     }

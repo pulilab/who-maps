@@ -1,0 +1,90 @@
+<div  layout="column" layout-align="start center" ng-style="vm.style">
+
+
+    <div md-whiteframe="2" class="tou-wrapper" layout="row" layout-wrap>
+
+        <div class="title" flex="100">
+            DHA Help Center — <span>{{vm.currentSection}}</span>
+        </div>
+
+        <div class="side-menu" flex="25">
+            <div class="menu-entry" ng-class="{active: vm.currentSection === entry}"
+                 ng-click="vm.openSection(entry)"
+                 ng-repeat="entry in vm.menuEntry">
+                {{entry}}
+            </div>
+
+        </div>
+
+        <md-content class="content" layout="column" flex="74">
+            <div class="content-entry" ng-show="vm.currentSection === 'terms of use'">
+                <div class="content-title">
+                    Terms of Use
+                </div>
+                <div class="content-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Nec dubitamus multa iter quae et nos invenerat. Pellentesque habitant morbi tristique senectus et netus. Non equidem invideo, miror magis posuere velit aliquet. Me non paenitet nullum festiviorem excogitasse ad hoc. Paullum deliquit, ponderibus modulisque suis ratio utitur. Fictum,  deserunt mollit anim laborum astutumque! Ab illo tempore, ab est sed immemorabili. At nos hinc posthac, sitientis piros Afros.
+
+                    Morbi fringilla convallis sapien, id pulvinar odio volutpat. Prima luce, cum quibus mons aliud  consensu ab eo. Tu quoque, Brute, fili mi, nihil timor populi, nihil!
+                    Quam temere in vitiis, legem sancimus haerentia. Quis aute iure reprehenderit in voluptate velit esse. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Phasellus laoreet lorem vel dolor tempus vehicula.
+                    Ut enim ad minim veniam, quis nostrud exercitation. Quo usque tandem abutere, Catilina, patientia nostra? A communi observantia non est recedendum. Curabitur est gravida et libero vitae dictum. Cum ceteris in veneratione tui montes, nascetur mus. Magna pars studiorum, prodita quaerimus.
+                    Quid securi etiam tamquam eu fugiat nulla pariatur. Contra legem facit qui id facit quod lex prohibet. Mercedem aut nummos unde unde extricat, amaras. Gallia est omnis divisa in partes tres, quarum. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Sed haec quis possit intrepidus aestimare tellus.
+                    Praeterea iter est quasdam res quas ex communi. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Plura mihi bona sunt, inclinet, amari petere vellent. Idque Caesaris facere voluntate liceret: sese habere.
+                    Excepteur sint obcaecat cupiditat non proident culpa. Nihil hic munitissimus habendi senatus locus, nihil horum? Quam diu etiam furor iste tuus nos eludet? Integer legentibus erat a ante historiarum dapibus.Tityre, tu patulae recubans sub tegmine fagi  dolor. Curabitur blandit tempus ardua ridiculus sed magna. Inmensae subtilitatis, obscuris et malesuada fames. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ambitioni dedisse scripsisse iudicaretur.
+                </div>
+            </div>
+
+            <div class="content-entry" ng-show="vm.currentSection === 'legal'">
+                <div class="content-title">
+                    Legal
+                </div>
+                <div class="content-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Nec dubitamus multa iter quae et nos invenerat. Pellentesque habitant morbi tristique senectus et netus. Non equidem invideo, miror magis posuere velit aliquet. Me non paenitet nullum festiviorem excogitasse ad hoc. Paullum deliquit, ponderibus modulisque suis ratio utitur. Fictum,  deserunt mollit anim laborum astutumque! Ab illo tempore, ab est sed immemorabili. At nos hinc posthac, sitientis piros Afros.
+
+                    Morbi fringilla convallis sapien, id pulvinar odio volutpat. Prima luce, cum quibus mons aliud  consensu ab eo. Tu quoque, Brute, fili mi, nihil timor populi, nihil!
+                    Quam temere in vitiis, legem sancimus haerentia. Quis aute iure reprehenderit in voluptate velit esse. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Phasellus laoreet lorem vel dolor tempus vehicula.
+                    Ut enim ad minim veniam, quis nostrud exercitation. Quo usque tandem abutere, Catilina, patientia nostra? A communi observantia non est recedendum. Curabitur est gravida et libero vitae dictum. Cum ceteris in veneratione tui montes, nascetur mus. Magna pars studiorum, prodita quaerimus.
+                    Quid securi etiam tamquam eu fugiat nulla pariatur. Contra legem facit qui id facit quod lex prohibet. Mercedem aut nummos unde unde extricat, amaras. Gallia est omnis divisa in partes tres, quarum. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Sed haec quis possit intrepidus aestimare tellus.
+                    Praeterea iter est quasdam res quas ex communi. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Plura mihi bona sunt, inclinet, amari petere vellent. Idque Caesaris facere voluntate liceret: sese habere.
+                    Excepteur sint obcaecat cupiditat non proident culpa. Nihil hic munitissimus habendi senatus locus, nihil horum? Quam diu etiam furor iste tuus nos eludet? Integer legentibus erat a ante historiarum dapibus.Tityre, tu patulae recubans sub tegmine fagi  dolor. Curabitur blandit tempus ardua ridiculus sed magna. Inmensae subtilitatis, obscuris et malesuada fames. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ambitioni dedisse scripsisse iudicaretur.
+                </div>
+            </div>
+
+            <div class="content-entry" ng-show="vm.currentSection === 'impressum'">
+                <div class="content-title">
+                    Impressum
+                </div>
+                <div class="content-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Nec dubitamus multa iter quae et nos invenerat. Pellentesque habitant morbi tristique senectus et netus. Non equidem invideo, miror magis posuere velit aliquet. Me non paenitet nullum festiviorem excogitasse ad hoc. Paullum deliquit, ponderibus modulisque suis ratio utitur. Fictum,  deserunt mollit anim laborum astutumque! Ab illo tempore, ab est sed immemorabili. At nos hinc posthac, sitientis piros Afros.
+
+                    Morbi fringilla convallis sapien, id pulvinar odio volutpat. Prima luce, cum quibus mons aliud  consensu ab eo. Tu quoque, Brute, fili mi, nihil timor populi, nihil!
+                    Quam temere in vitiis, legem sancimus haerentia. Quis aute iure reprehenderit in voluptate velit esse. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Phasellus laoreet lorem vel dolor tempus vehicula.
+                    Ut enim ad minim veniam, quis nostrud exercitation. Quo usque tandem abutere, Catilina, patientia nostra? A communi observantia non est recedendum. Curabitur est gravida et libero vitae dictum. Cum ceteris in veneratione tui montes, nascetur mus. Magna pars studiorum, prodita quaerimus.
+                    Quid securi etiam tamquam eu fugiat nulla pariatur. Contra legem facit qui id facit quod lex prohibet. Mercedem aut nummos unde unde extricat, amaras. Gallia est omnis divisa in partes tres, quarum. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Sed haec quis possit intrepidus aestimare tellus.
+                    Praeterea iter est quasdam res quas ex communi. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Plura mihi bona sunt, inclinet, amari petere vellent. Idque Caesaris facere voluntate liceret: sese habere.
+                    Excepteur sint obcaecat cupiditat non proident culpa. Nihil hic munitissimus habendi senatus locus, nihil horum? Quam diu etiam furor iste tuus nos eludet? Integer legentibus erat a ante historiarum dapibus.Tityre, tu patulae recubans sub tegmine fagi  dolor. Curabitur blandit tempus ardua ridiculus sed magna. Inmensae subtilitatis, obscuris et malesuada fames. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ambitioni dedisse scripsisse iudicaretur.
+                </div>
+            </div>
+
+
+            <div class="content-entry" ng-show="vm.currentSection === 'contact'">
+                <div class="content-title">
+                    Contact
+                </div>
+                <div class="content-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Nec dubitamus multa iter quae et nos invenerat. Pellentesque habitant morbi tristique senectus et netus. Non equidem invideo, miror magis posuere velit aliquet. Me non paenitet nullum festiviorem excogitasse ad hoc. Paullum deliquit, ponderibus modulisque suis ratio utitur. Fictum,  deserunt mollit anim laborum astutumque! Ab illo tempore, ab est sed immemorabili. At nos hinc posthac, sitientis piros Afros.
+
+                    Morbi fringilla convallis sapien, id pulvinar odio volutpat. Prima luce, cum quibus mons aliud  consensu ab eo. Tu quoque, Brute, fili mi, nihil timor populi, nihil!
+                    Quam temere in vitiis, legem sancimus haerentia. Quis aute iure reprehenderit in voluptate velit esse. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Phasellus laoreet lorem vel dolor tempus vehicula.
+                    Ut enim ad minim veniam, quis nostrud exercitation. Quo usque tandem abutere, Catilina, patientia nostra? A communi observantia non est recedendum. Curabitur est gravida et libero vitae dictum. Cum ceteris in veneratione tui montes, nascetur mus. Magna pars studiorum, prodita quaerimus.
+                    Quid securi etiam tamquam eu fugiat nulla pariatur. Contra legem facit qui id facit quod lex prohibet. Mercedem aut nummos unde unde extricat, amaras. Gallia est omnis divisa in partes tres, quarum. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Sed haec quis possit intrepidus aestimare tellus.
+                    Praeterea iter est quasdam res quas ex communi. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Plura mihi bona sunt, inclinet, amari petere vellent. Idque Caesaris facere voluntate liceret: sese habere.
+                    Excepteur sint obcaecat cupiditat non proident culpa. Nihil hic munitissimus habendi senatus locus, nihil horum? Quam diu etiam furor iste tuus nos eludet? Integer legentibus erat a ante historiarum dapibus.Tityre, tu patulae recubans sub tegmine fagi  dolor. Curabitur blandit tempus ardua ridiculus sed magna. Inmensae subtilitatis, obscuris et malesuada fames. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ambitioni dedisse scripsisse iudicaretur.
+                </div>
+            </div>
+
+
+        </md-content>
+    </div>
+
+    <disclaimer></disclaimer>
+</div>

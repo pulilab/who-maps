@@ -14,6 +14,7 @@ import SimpleApi from './SimpleApi';
 import Storage from './Storage';
 import Protected from './Protected';
 import IntroJs from './IntroJs/introJsComponent';
+import CommonServices from './CommonServices';
 import SearchableSelectionMenu from './SearchableSelectionMenu/searchableSelectionMenuComponent';
 import projectComponent from './ProjectComponent/projectComponent';
 import searchBarComponent from './Searchbar/searchbarComponent';
@@ -30,8 +31,9 @@ import EditProfileComponent from './EditProfile/editProfileComponent';
 import countrymap from './CountryMap/countrymap.js';
 import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
 import disclaimerComponent from './Disclaimer/disclaimerComponent.js';
-import RefreshProjectComponenet from './RefreshProject/refreshProject';
+import RefreshProjectComponent from './RefreshProject/refreshProject';
 import UUILoadComponent from './UUIDLoad/UUIDLoad';
+import TermsOfUseComponent from './TermsOfUse/TermsOfUse';
 
 const moduleName = 'Components';
 
@@ -57,8 +59,9 @@ angular.module(moduleName,
     .component(countrymap.name, countrymap)
     .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
     .component(disclaimerComponent.name, disclaimerComponent)
-    .component(RefreshProjectComponenet.name, RefreshProjectComponenet)
-    .component(UUILoadComponent.name, UUILoadComponent);
+    .component(RefreshProjectComponent.name, RefreshProjectComponent)
+    .component(UUILoadComponent.name, UUILoadComponent)
+    .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 
 export { EE };
@@ -66,4 +69,5 @@ export { AuthApi };
 export { Storage };
 export { SimpleApi };
 export { Protected };
+export { CommonServices };
 export { moduleName as Components };

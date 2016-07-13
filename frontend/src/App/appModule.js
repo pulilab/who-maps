@@ -158,6 +158,16 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
                     template: '<refresh-project></refresh-project>'
                 }
             }
+        })
+        .state('terms-of-use', {
+            url: '/terms-of-use',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '<terms-of-use></terms-of-use>'
+
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/landing');
