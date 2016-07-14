@@ -130,6 +130,11 @@ special_population = [
     "Especially vulnerable children",
 ]
 
+target_population = [
+    {'age_ranges': age_ranges},
+    {'special_population': special_population}
+]
+
 applications = [
     {
         'id': 1,
@@ -397,64 +402,34 @@ hss_default = {
             'interventions': []
         },
     ],
-    'age_ranges': [
+    'target_population': [
         {
             'column_id': 0,
-            'age_ranges': []
+            'target_population': []
         },
         {
             'column_id': 1,
-            'age_ranges': []
+            'target_population': []
         },
         {
             'column_id': 2,
-            'age_ranges': []
+            'target_population': []
         },
         {
             'column_id': 3,
-            'age_ranges': []
+            'target_population': []
         },
         {
             'column_id': 4,
-            'age_ranges': []
+            'target_population': []
         },
         {
             'column_id': 5,
-            'age_ranges': []
+            'target_population': []
         },
         {
             'column_id': 6,
-            'age_ranges': []
-        },
-    ],
-    'special_population': [
-        {
-            'column_id': 0,
-            'special_population': []
-        },
-        {
-            'column_id': 1,
-            'special_population': []
-        },
-        {
-            'column_id': 2,
-            'special_population': []
-        },
-        {
-            'column_id': 3,
-            'special_population': []
-        },
-        {
-            'column_id': 4,
-            'special_population': []
-        },
-        {
-            'column_id': 5,
-            'special_population': []
-        },
-        {
-            'column_id': 6,
-            'special_population': []
+            'target_population': []
         },
     ],
     'taxonomies': [

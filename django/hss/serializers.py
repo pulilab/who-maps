@@ -35,12 +35,6 @@ class AgeRangeSerializer(serializers.Serializer):
     age_ranges = serializers.ListField()
 
 
-class PopulationSerializer(serializers.Serializer):
-
-    column_id = serializers.IntegerField()
-    special_population = serializers.ListField()
-
-
 class TaxonomySerializer(serializers.Serializer):
     app_id = serializers.IntegerField()
     subapp_id = serializers.IntegerField()

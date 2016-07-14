@@ -327,27 +327,6 @@ class HSSTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["details"], "No such project.")
 
-    def test_update_special_population(self):
-        url = reverse("hss-special-population", kwargs={"project_id": self.project_id})
-        data = {
-                "column_id": 0,
-                "special_population": ["pop1","pop2"],
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        hss = HSS.objects.get_object_or_none(project=self.project_id)
-        self.assertEqual(hss.data["special_population"][0]["special_population"], ["pop1","pop2"])
-
-    def test_update_special_population_wrong_project_id(self):
-        url = reverse("hss-special-population", kwargs={"project_id": 999})
-        data = {
-                "column_id": 0,
-                "special_population": ["pop1","pop2"],
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["details"], "No such project.")
-
     def test_update_continuum_wrong_data(self):
         url = reverse("hss-interventions", kwargs={"project_id": self.project_id})
         data = {
