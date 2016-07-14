@@ -31,6 +31,34 @@
 
         .dash-emptyleft {
             height: 454px;
+            background: $color-white url("./Img/squares.svg") center 0px no-repeat;
+
+            .emptychild {
+                height: 454px;
+                background: url("./Img/icons-all.svg") center 63px no-repeat;
+                padding-top: 230px;
+                padding-left: 170px;
+                padding-right: 170px;
+
+                a.md-button {
+                    background-color: $color-primary!important;
+                    padding-top: 4px;
+                    padding-left: 25px;
+                    padding-right: 25px;
+                    height: 42px;
+                    span {
+                        color: white!important;
+                        font-size: 16px;
+                    }
+                }
+
+                p {
+                    font-size: 12px;
+                    color: #757575;
+                    text-align: center;
+                }
+
+            }
         }
 
         .dash-cardholder {
@@ -415,7 +443,6 @@
                     background-size: 140% auto;
 
                     p.loggedout {
-                        // display: inline-block;
                         padding: 30px 11% 0 11%;
                         text-align: center;
                         font-size: 14px;
