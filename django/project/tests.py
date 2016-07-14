@@ -410,66 +410,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
         self.assertEqual(response.json()[1].get("name"), "Test Project2")
 
-    def test_project_filter_list(self):
-        url = reverse("hss-continuum", kwargs={"project_id": self.project_id})
-        data = {
-                "column_id": 2,
-                "state": True
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        url = reverse("hss-interventions", kwargs={"project_id": self.project_id})
-        data = {
-                "column_id": 1,
-                "interventions": ["int1","int2"],
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        url = reverse("hss-constraints", kwargs={"project_id": self.project_id})
-        data = [
-                {"name": "Information", "icon": "info", "active": True},
-                {"name": "Availability", "icon": "check", "active": False},
-            ]
-        response = self.test_user_client.post(url, data, format="json")
-        url = reverse("project-filter-list")
-        data = {
-            "technology_platforms": ["tech1", "tech3"],
-            "application": ["app1"],
-            "continuum": ["Detection and diagnosis"],
-            "interventions": ["int1"],
-            "constraints": ["Information"],
-        }
-        response = self.test_user_client.post(url, data)
-        self.assertEqual(response.json()[0]['id'], self.project_id)
-
-    def test_project_filter_list_no_results(self):
-        url = reverse("hss-continuum", kwargs={"project_id": self.project_id})
-        data = {
-                "column_id": 2,
-                "state": True
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        url = reverse("hss-interventions", kwargs={"project_id": self.project_id})
-        data = {
-                "column_id": 1,
-                "interventions": ["int1","int2"],
-            }
-        response = self.test_user_client.post(url, data, format="json")
-        url = reverse("hss-constraints", kwargs={"project_id": self.project_id})
-        data = [
-                {"name": "Information", "icon": "info", "active": True},
-                {"name": "Availability", "icon": "check", "active": False},
-            ]
-        response = self.test_user_client.post(url, data, format="json")
-        url = reverse("project-filter-list")
-        data = {
-            "technology_platforms": ["somethingelse", "tech3"],
-            "application": ["app1"],
-            "continuum": "Detection and diagnosis",
-            "interventions": ["int1"],
-            "constraints": ["Information", "Availability"],
-        }
-        response = self.test_user_client.post(url, data)
-        self.assertEqual(response.json(), [])
-
     def test_retrieve_project_list_all_without_country(self):
         url = reverse("project-all-list")
         response = self.test_user_client.get(url)
