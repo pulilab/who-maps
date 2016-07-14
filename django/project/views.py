@@ -75,8 +75,6 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
-        query_filters = []
-        result_list = []
         projects = Project.objects.all()  # lazy QuerySet
 
         if kwargs.get("country_id"):
@@ -96,12 +94,12 @@ class ProjectPublicViewSet(ViewSet):
             "implementation_dates": p.data.get('implementation_dates'),
             "geographic_coverage": p.data.get('geographic_coverage'),
             "intervention_areas": p.data.get('intervention_areas'),
-            "interventions": p.hss_set.first().data.get('interventions'),
-            "continuum": p.hss_set.first().data.get('continuum'),
-            "constraints": p.hss_set.first().data.get('constraints'),
-            "applications": p.hss_set.first().data.get('applications'),
             "technology_platforms": p.data.get('technology_platforms'),
-        }], projects, result_list)
+            "interventions": p.hss_set.first().get_interventions_list(),
+            "continuum": p.hss_set.first().get_continuum_list(),
+            "constraints": p.hss_set.first().get_constraints_list(),
+            "applications": p.hss_set.first().get_applications_list(),
+        }], projects, [])
 
         return Response(result_list)
 
