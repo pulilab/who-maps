@@ -32,7 +32,7 @@ class CountryService extends AuthApi {
 
 
     getDistrictProjects(countryId) {
-        return this.get('by-view/map/' + countryId);
+        return this.get(`by-view/map/${countryId}/`);
     }
 
     filterProjects(filters) {

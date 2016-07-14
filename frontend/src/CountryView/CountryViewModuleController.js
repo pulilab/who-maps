@@ -17,79 +17,41 @@ class CountryViewModuleController {
 
     onInit() {
         this.getCountries();
-        this.createFiltersObject();
+        this.filterArray = [
+            this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
+            this.createFilterCategory('interventions',
+                this.cs.hssStructure.interventions, 'name'),
+            this.createFilterCategory('technology_platforms',
+                this.cs.projectStructure.technology_platforms),
+            this.createFilterCategory('applications', this.cs.hssStructure.applications),
+            this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies)
+        ];    }
+
+    createFilterCategory(name, collection, unique, subItem) {
+        const base = { name, items: [], open: false };
+        if (collection) {
+            _.forEach(collection, item => {
+                base.items.push({
+                    name: subItem ? item[subItem] : item,
+                    value: false
+                });
+            });
+            if (unique) {
+                base.items = _.uniqBy(base.items, unique);
+            }
+        }
+        return base;
     }
 
-    createBaseObj(name) {
-        return { name, items: [], open: false };
-    }
-
-    createFiltersObject() {
-        const continuumObj = this.createBaseObj('continuum');
-        const ageRangeObj = this.createBaseObj('age range');
-        const interventionsObj = this.createBaseObj('interventions');
-        const technologyPlatformsObj = this.createBaseObj('technology platforms');
-        const applicationObj = this.createBaseObj('applications');
-        const constraintsObj = this.createBaseObj('constraints');
-
-        _.forEach(this.cs.hssStructure.continuum, continuum => {
-            continuumObj.items.push({
-                name: continuum.title,
-                value: false
-            });
-
-        });
-
-        _.forEach(this.cs.hssStructure.age_ranges, age_range => {
-            ageRangeObj.items.push({
-                name: age_range,
-                value: false
-            });
-        });
-
-        _.forEach(this.cs.hssStructure.interventions, interventions => {
-            _.forEach(interventions, intervention => {
-                interventionsObj.items.push({
-                    name: intervention,
-                    value: false
-                });
-            });
-
-        });
-        interventionsObj.items = _.uniqBy(interventionsObj.items, 'name');
-
-        _.forEach(this.cs.projectStructure.technology_platforms, tp => {
-            technologyPlatformsObj.items.push({
-                name: tp,
-                value: false
-            });
-        });
-
-        _.forEach(this.cs.hssStructure.applications, application => {
-            _.forEach(application.subApplications, subApp => {
-                applicationObj.items.push({
-                    name: subApp,
-                    value: false
-                });
-            });
-        });
-
-        _.forEach(this.cs.hssStructure.taxonomies, taxonomy => {
-            _.forEach(taxonomy.values, constraint => {
-                constraintsObj.items.push({
-                    name: constraint,
-                    value: false
-                });
-            });
-        });
-
-        this.filterCategory = [continuumObj, interventionsObj, technologyPlatformsObj, applicationObj, constraintsObj];
-
+    replaceLodash(item) {
+        if (item) {
+            return item.replace('_', ' ');
+        }
     }
 
     filterClv() {
         const filters = {};
-        _.forEach(this.filterCategory, category => {
+        _.forEach(this.filterArray, category => {
             filters[category.name] = _.chain(category.items)
                 .map(value => {
                     return value.value ? value.name : false;
@@ -97,13 +59,30 @@ class CountryViewModuleController {
                 .filter()
                 .value();
         });
-
-        this.service.filterProjects(filters).then(data => {
-            this.projectsData = data;
-            this.scope.$evalAsync();
-        });
+        if (_.flattenDeep(_.toArray(filters)).length > 0) {
+            filters.provisonalArray = _.cloneDeep(this.countryProjects);
+            this.generalFilter(filters, 'continuum');
+            this.generalFilter(filters, 'interventions');
+            this.generalFilter(filters, 'applications');
+            this.generalFilter(filters, 'constraints');
+            this.generalFilter(filters, 'technology_platforms');
+            this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
+        }
+        else {
+            this.projectsData = this.countryProjects;
+        }
     }
 
+    generalFilter(filters, name) {
+        const localArray = [];
+        _.forEach(filters.provisonalArray, project => {
+            const inter = _.intersection(project[name], filters[name]);
+            if (inter.length === filters[name].length) {
+                localArray.push(project);
+            }
+        });
+        filters.provisonalArray = localArray;
+    }
 
     getCountries() {
 
@@ -141,6 +120,7 @@ class CountryViewModuleController {
         this.service.getProjects(countryObj.id).then(data => {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
+            this.countryProjects = _.cloneDeep(data);
         });
     }
 
