@@ -14,7 +14,7 @@ class HSS(ExtendedModel):
     def get_interventions_list(self):
         interventions = self.data.get('interventions')
         if interventions:
-            return [i['interventions'] for i in interventions]
+            return list(set([i['interventions'] for i in interventions for i['interventions'] in i]))
         else:
             return []
 
@@ -28,7 +28,7 @@ class HSS(ExtendedModel):
     def get_constraints_list(self):
         taxonomies = self.data.get('taxonomies')
         if taxonomies:
-            return [t['content'] for t in taxonomies]
+            return list(set([t['content'] for t in taxonomies for t['taxonomies'] in t]))
         else:
             return []
 
