@@ -3,8 +3,8 @@ from django.contrib.postgres.fields import JSONField
 
 from core.models import ExtendedModel
 from project.models import Project
-from hss_data import continuum as CONTINUUM
-from hss_data import applications as APPLICATIONS
+from .hss_data import continuum as CONTINUUM
+from .hss_data import applications as APPLICATIONS
 
 
 class HSS(ExtendedModel):
@@ -38,5 +38,5 @@ class HSS(ExtendedModel):
         if applications:
             for a in applications:
                 result.add(APPLICATIONS[a['app_id'] + 1]['subApplications'][a['subapp_id']])
-                
+
         return list(result)
