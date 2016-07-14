@@ -29,6 +29,10 @@
             }
         }
 
+        .dash-emptyleft {
+            height: 454px;
+        }
+
         .dash-cardholder {
 
             md-icon {
@@ -378,11 +382,39 @@
                 }
             }
 
+            .emptyright {
+
+                background: $color-gray-lightest url("./Img/wmap.svg") center 135px no-repeat;
+                background-size: 140% auto;
+
+
+                p.afteri {
+                    margin-top: 35px;
+                    margin-left: 20px;
+                    margin-bottom: 0;
+                    color: #212121;
+                    font-size: 14px;
+                    font-weight: 500;
+                    md-icon {
+                        height: 20px;
+                        width: 20px;
+                        margin-right: 5px;
+                    }
+                }
+                p.detail {
+                    margin-left: 50px;
+                    color: #888888;
+                    font-size: 12px;
+                }
+            }
+
             .dash-perf {
                 .perfloggedout {
+
                     background: $color-gray-lightest url("./Img/wmap.svg") center center no-repeat;
                     background-size: 140% auto;
-                    p {
+
+                    p.loggedout {
                         // display: inline-block;
                         padding: 30px 11% 0 11%;
                         text-align: center;
@@ -390,6 +422,7 @@
                         font-color: $text-primary;
                         line-height: 20px;
                     }
+
                     a.md-button {
                         background-color: $color-primary;
                         span {
