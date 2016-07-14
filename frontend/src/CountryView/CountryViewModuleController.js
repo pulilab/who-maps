@@ -24,7 +24,6 @@ class CountryViewModuleController {
                 this.countriesLib[country.id] = country.name;
             });
 
-            // console.debug('COUNTRY LIB', this.countriesLib);
             this.countries2 = _.cloneDeep(this.countries);
             this.countries2.unshift({ id: false, name: 'Show all countries' });
             if (this.cs.userProfile && this.cs.userProfile.country) {

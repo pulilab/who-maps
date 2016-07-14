@@ -117,7 +117,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     mergeNationalLevelWithDistrictCoverage() {
-        this.districtList.push(wholeCountryName);
+        this.districtList.unshift(wholeCountryName);
         _.forEach(this.project.national_level_deployment, item => {
             item.district = wholeCountryName;
             this.project.coverage.push(item);
