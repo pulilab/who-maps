@@ -11,8 +11,8 @@ terms-of-use {
     width: calc( 100% - 60px );
     height: calc( 100% - 30px );
     background: $color-white;
-    overflow: scroll;
-
+    overflow-x: hidden;
+    overflow-y: scroll;
 
     .title {
       height:55px;
