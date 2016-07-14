@@ -305,7 +305,10 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
             new_version = 1
         else:
             new_version = last_cov_ver.version + 1
+
         current_cov = project.data["coverage"]
+        current_cov += project.data.get('national_level_deployment', [])
+
         new_cov_ver = CoverageVersion(
                             project_id=project_id,
                             version=new_version,

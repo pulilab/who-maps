@@ -24,12 +24,19 @@ class CountrymapController {
         this.showPlaceholder = !this.big;
         this.cs = require('../../Common/CommonServices');
         this.svgPanZoom = svgPanZoom;
+        this.nationalCov = {};
         this.covLib = {};
+        this.allProjects = {};
 
         this.EE.removeListener('country Changed');
+        this.EE.removeListener('all country projects');
 
         if (this.big) {
             this.EE.on('country Changed', this.mapChanged, this);
+            this.EE.on('all country projects', (data) => {
+                this.allProjects = data;
+                this.scope.$evalAsync();
+            });
         }
         else {
             this.EE.once('country Changed', this.mapChanged, this);
@@ -42,14 +49,48 @@ class CountrymapController {
         this.map = false;
     }
 
-    saveClass(key, index) {
-        this.covLib[key] = index;
+    saveClass(key, index, boundNrs) {
+        if (boundNrs) {
+            index += _.keys(boundNrs).length;
+        }
+        if (!this.covLib.hasOwnProperty(key)) {
+            this.covLib[key] = index;
+        }
     }
 
-    dataArrived(data) {
+    setGlobal() {
+        const districts = document.getElementsByClassName('d3district');
+        Array.prototype.forEach.call(districts, distr => {
+            distr.classList.add('global');
+        });
+    }
+
+    setTotal() {
+        const districts = document.getElementsByClassName('d3district');
+        Array.prototype.forEach.call(districts, distr => {
+            distr.classList.remove('global');
+        });
+    }
+
+    dataArrived(data, national) {
 
         this.data = this.big ? { data } : data;
+        // console.log('DATA arrived', this.data);
         this.dataHere = true;
+
+        if (national) {
+            this.nationalCov = _.clone(national[0]);
+            if (this.nationalCov.hasOwnProperty('district')) {
+                delete this.nationalCov.district;
+            }
+            if (this.nationalCov.hasOwnProperty('health_workers')) {
+                this.nationalCov['Health workers'] = '' + this.nationalCov.health_workers;
+                delete this.nationalCov.health_workers;
+            }
+        }
+        this.scope.$evalAsync();
+
+        // console.warn('National data arrived to the mapCTRL:', this.nationalCov);
 
         // Aggregates the values of districts to show them all
         this.boundNrs = _.reduce(this.data.data, (ret, value, key) => {

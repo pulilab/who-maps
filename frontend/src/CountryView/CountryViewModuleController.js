@@ -122,6 +122,7 @@ class CountryViewModuleController {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
             this.countryProjects = _.cloneDeep(data);
+            this.EE.emit('all country projects', data);
         });
     }
 
