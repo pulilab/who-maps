@@ -25,7 +25,8 @@ class CountryViewModuleController {
                 this.cs.projectStructure.technology_platforms),
             this.createFilterCategory('applications', this.cs.hssStructure.applications),
             this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies)
-        ];    }
+        ];
+    }
 
     createFilterCategory(name, collection, unique, subItem) {
         const base = { name, items: [], open: false };
