@@ -127,7 +127,16 @@ special_population = [
     "Immigrant populations",
     "Lesbian, gay, bisexual, and transgender",
     "Men (only)",
+    "Women (only)",
     "Especially vulnerable children",
+    "Parents",
+    "Racial and ethnic minorities",
+    "Refugee",
+    "Pregnant women",
+    "Rural populations",
+    "Student populations",
+    "Urban populations",
+    "Workforce"
 ]
 
 target_population = [
