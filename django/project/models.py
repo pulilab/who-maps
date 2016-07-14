@@ -1,8 +1,13 @@
+import uuid
+
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 from core.models import ExtendedModel
+from country.models import Country
 from user.models import UserProfile, Organisation
 
 
@@ -32,6 +37,8 @@ class Project(ExtendedModel):
     data = JSONField()
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
+    public_id = models.CharField(max_length=64, default="",
+                                 help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
     projects = ProjectManager()
 
@@ -56,6 +63,21 @@ class Project(ExtendedModel):
             if key in d:
                 d.pop(key, None)
         return d
+
+    def make_public_id(self):
+        if not self.public_id:
+            if self.data.get('country'):
+                project_country = Country.objects.filter(id=self.data['country']).first()
+                if project_country:
+                    self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0] + 'x' + str(self.id)
+                    return True
+        return False
+
+
+@receiver(post_save, sender=Project)
+def update_with_public_id(sender, instance, **kwargs):
+    if instance.make_public_id():
+        instance.save()
 
 
 class CoverageVersion(ExtendedModel):

@@ -203,21 +203,15 @@ applications = [
     },
     {
         'id': 7,
-        'name': 'Provider training and education',
+        'name': 'Human resource management',
         'subApplications': {
             1: 'Provider training and education',
+            2: 'Supportive supervision',
+            3: 'Constituent feedback on service quality'
         }
     },
     {
         'id': 8,
-        'name': 'Human resource management',
-        'subApplications': {
-            1: 'Supportive supervision',
-            2: 'Constituent feedback on service quality'
-        }
-    },
-    {
-        'id': 9,
         'name': 'Supply management',
         'subApplications': {
             1: 'Cold chain management',
@@ -228,7 +222,7 @@ applications = [
         }
     },
     {
-        'id': 10,
+        'id': 9,
         'name': 'Financial transactions and incentives',
         'subApplications': {
             1: 'Payment for Services',
@@ -328,12 +322,12 @@ continuum = [
     },
     {
         'id': 3,
-        'title': 'Linkage to care',
+        'title': 'Linkage to care & Coordination',
         'span': 1,
     },
     {
         'id': 4,
-        'title': 'Management and quality of care',
+        'title': 'Management and quality of Care',
         'span': 1,
     },
     {
@@ -343,7 +337,7 @@ continuum = [
     },
     {
         'id': 6,
-        'title': 'Coordination of care',
+        'title': 'Reporting and Planning',
         'span': 1,
     }
 ]

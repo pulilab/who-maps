@@ -19,6 +19,7 @@ import projectComponent from './ProjectComponent/projectComponent';
 import searchBarComponent from './Searchbar/searchbarComponent';
 import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
+import ResetComponent from './Reset/resetComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
 import NewProjectComponent from './NewProject/newProjectComponent';
@@ -30,6 +31,7 @@ import countrymap from './CountryMap/countrymap.js';
 import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
 import disclaimerComponent from './Disclaimer/disclaimerComponent.js';
 import RefreshProjectComponenet from './RefreshProject/refreshProject';
+import UUILoadComponent from './UUIDLoad/UUIDLoad';
 
 const moduleName = 'Components';
 
@@ -44,6 +46,7 @@ angular.module(moduleName,
     .component(projectComponent.name, projectComponent)
     .component(searchBarComponent.name, searchBarComponent)
     .component(LoginComponent.name, LoginComponent)
+    .component(ResetComponent.name, ResetComponent)
     .component(SignupComponent.name, SignupComponent)
     .component(AxisComponent.name, AxisComponent)
     .component(NewProjectComponent.name, NewProjectComponent)
@@ -54,7 +57,8 @@ angular.module(moduleName,
     .component(countrymap.name, countrymap)
     .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
     .component(disclaimerComponent.name, disclaimerComponent)
-    .component(RefreshProjectComponenet.name, RefreshProjectComponenet);
+    .component(RefreshProjectComponenet.name, RefreshProjectComponenet)
+    .component(UUILoadComponent.name, UUILoadComponent);
 
 
 export { EE };

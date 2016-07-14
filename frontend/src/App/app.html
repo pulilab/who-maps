@@ -92,8 +92,8 @@
 
     </div>
 </md-toolbar>
-<md-content class="main-content" style="display: block;">
-    <div id="intro-wrapper">
+<md-content class="main-content" layout="column" layout-fill>
+    <div id="intro-wrapper" layout="column" layout-fill>
         <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation && vm.user.projects.length != 0" ng-show="vm.state.current.name !== 'country'">
             <div class="md-toolbar-tools">
                 <div class="project-mainmenu">
@@ -150,10 +150,36 @@
                 </div>
                 <div flex></div>
                 <div class="project-submenu" layout="row">
-                    <!--<md-button aria-label="Share" md-no-ink >-->
-                    <!--<md-icon class="material-icons">share</md-icon>-->
-                    <!--Share-->
-                    <!--</md-button>-->
+                    <md-menu md-offset="16">
+                        <md-button ng-click="vm.openMenu($mdOpenMenu, $event)"  class="" aria-label="Share">
+                            <md-icon class="material-icons">share</md-icon>
+                            Share
+                        </md-button>
+                        <md-menu-content class="share-url">
+                            <md-menu-item>
+                                <span class="share-title">Share Public Link</span>
+                            </md-menu-item>
+                            <md-menu-item>
+                                    <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
+                            </md-menu-item>
+                            <md-menu-item>
+                                <div class="share-button-container" >
+                                    <md-button ng-hide="vm.shareUrl.copyClicked"
+                                               data-clipboard-target='.share-url-box'
+                                               class="md-primary md-raised share-copy"
+                                               md-prevent-menu-close="md-prevent-menu-close" >
+                                        Copy URL
+                                    </md-button>
+                                    <md-button ng-show="vm.shareUrl.copyClicked"
+                                               class="md-raised share-copy share-copied">
+                                        <md-icon>check</md-icon>
+                                        Copied
+                                    </md-button>
+                                    <md-button class="share-cancel"  >Close</md-button>
+                                </div>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
 
                     <!--<md-menu md-position-mode="target-right target" ng-if="!vm.viewMode">-->
                     <!--<md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
@@ -233,6 +259,6 @@
                 </div>
             </div>
         </md-toolbar>
-        <ui-view name="main" id="main-view" layout-fill></ui-view>
+        <ui-view name="main" id="main-view" layout="column" layout-fill></ui-view>
     </div>
 </md-content>
