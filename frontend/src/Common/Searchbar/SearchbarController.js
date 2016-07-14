@@ -47,7 +47,7 @@ class SearchbarController {
     }
 
     isViewer(project) {
-        if (this.cs ) {
+        if (this.cs) {
             return this.cs.isViewer(project);
         }
         return false;

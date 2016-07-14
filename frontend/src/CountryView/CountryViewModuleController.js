@@ -41,7 +41,7 @@ class CountryViewModuleController {
     }
 
     isMember(project) {
-        return this.cs.isMember(project)
+        return this.cs.isMember(project);
     }
 
 
