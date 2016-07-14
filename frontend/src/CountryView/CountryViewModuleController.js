@@ -45,9 +45,8 @@ class CountryViewModuleController {
     }
 
     replaceLodash(item) {
-        if (item) {
-            return item.replace('_', ' ');
-        }
+        return item ? item.replace('_', ' ') : '';
+
     }
 
     filterClv() {
@@ -72,6 +71,9 @@ class CountryViewModuleController {
         else {
             this.projectsData = this.countryProjects;
         }
+
+        this.EE.emit('projectsUpdated', this.projectsData);
+
     }
 
     generalFilter(filters, name) {

@@ -33,6 +33,7 @@ class CountrymapController {
 
         if (this.big) {
             this.EE.on('country Changed', this.mapChanged, this);
+            this.EE.on('projectsUpdated', this.handleUpdatedProjects, this);
             this.EE.on('all country projects', (data) => {
                 this.allProjects = data;
                 this.scope.$evalAsync();
@@ -72,9 +73,31 @@ class CountrymapController {
         });
     }
 
+    handleUpdatedProjects(projects) {
+        const provisionalDistrictObject = {};
+        _.forEach(this.initialData.data, (district, key) => {
+            const newProjectArray = [];
+            _.forEach(district, project => {
+                const exist = _.find(projects, item => {
+                    return item.id === project.id;
+                });
+                if (exist) {
+                    newProjectArray.push(project);
+                }
+            });
+            if (newProjectArray.length > 0) {
+                provisionalDistrictObject[key] = newProjectArray;
+            }
+        });
+        this.data.data = provisionalDistrictObject;
+        this.activeDistrict = void 0;
+        this.preDraw(this.map);
+    }
+
     dataArrived(data, national) {
 
         this.data = this.big ? { data } : data;
+        this.initialData = _.cloneDeep(this.data);
         // console.log('DATA arrived', this.data);
         this.dataHere = true;
 
@@ -256,9 +279,9 @@ class CountrymapController {
 
     calculateScale(topoJSON) {
         let ret = Math.max.apply(null,
-        topoJSON.admin_level_2.transform.scale.map(nr => {
-            return 1 / nr;
-        })) * 10;
+                topoJSON.admin_level_2.transform.scale.map(nr => {
+                    return 1 / nr;
+                })) * 10;
 
         // console.log(ret);
 
@@ -398,13 +421,6 @@ class CountrymapController {
                     });
                     return '';
                 });
-                // .on('click', () => {
-                //     this.activeDistrict = {
-                //         name: distrName,
-                //         data: this.data.data[distrName]
-                //     };
-                //     this.scope.$evalAsync();
-                // });
         }
 
     }
