@@ -10,7 +10,6 @@ urlpatterns = [
     url(r"^projects/by-view/map/(?P<country_id>\d+)/$", view=views.ProjectPublicViewSet.as_view({'get': 'by_district'}), name="project-by-district"),
     url(r"^projects/by-view/list/(?P<country_id>\d+)/$", view=views.ProjectPublicViewSet.as_view({'get': 'list_all'}), name="project-country-list"),
     url(r"^projects/by-view/list/$", view=views.ProjectPublicViewSet.as_view({'get': 'list_all'}), name="project-all-list"),
-    url(r"^projects/by-view/filter/$", view=views.ProjectPublicViewSet.as_view({'post': 'list_filter'}), name="project-filter-list"),
     url(r"^projects/structure/$", view=views.ProjectPublicViewSet.as_view({'get': 'project_structure'}), name="get-project-structure"),
     url(r"^projects/(?P<project_id>\d+)/file-list/$", view=views.FileListViewSet.as_view({'get': 'list'}), name="file-list"),
     url(r"^projects/(?P<project_id>\d+)/files/$", view=views.FilePostViewSet.as_view({'post': 'create'}), name="project-files"),
