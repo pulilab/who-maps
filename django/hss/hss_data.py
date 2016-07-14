@@ -139,10 +139,10 @@ special_population = [
     "Workforce"
 ]
 
-target_population = [
-    {'age_ranges': age_ranges},
-    {'special_population': special_population}
-]
+target_population = {
+    "age_ranges": age_ranges,
+    "special_population": special_population
+}
 
 applications = [
     {
@@ -414,31 +414,31 @@ hss_default = {
     'target_population': [
         {
             'column_id': 0,
-            'target_population': []
+            'target_population': {}
         },
         {
             'column_id': 1,
-            'target_population': []
+            'target_population': {}
         },
         {
             'column_id': 2,
-            'target_population': []
+            'target_population': {}
         },
         {
             'column_id': 3,
-            'target_population': []
+            'target_population': {}
         },
         {
             'column_id': 4,
-            'target_population': []
+            'target_population': {}
         },
         {
             'column_id': 5,
-            'target_population': []
+            'target_population': {}
         },
         {
             'column_id': 6,
-            'target_population': []
+            'target_population': {}
         },
     ],
     'taxonomies': [
