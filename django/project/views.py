@@ -95,7 +95,12 @@ class ProjectPublicViewSet(ViewSet):
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
             "geographic_coverage": p.data.get('geographic_coverage'),
-            "intervention_areas": p.data.get('intervention_areas')
+            "intervention_areas": p.data.get('intervention_areas'),
+            "interventions": p.hss_set.first().data.get('interventions'),
+            "continuum": p.hss_set.first().data.get('continuum'),
+            "constraints": p.hss_set.first().data.get('constraints'),
+            "applications": p.hss_set.first().data.get('applications'),
+            "technology_platforms": p.data.get('technology_platforms'),
         }], projects, result_list)
 
         return Response(result_list)
