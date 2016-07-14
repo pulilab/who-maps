@@ -1,3 +1,6 @@
+import functools
+
+import operator
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
@@ -14,7 +17,7 @@ class HSS(ExtendedModel):
     def get_interventions_list(self):
         interventions = self.data.get('interventions')
         if interventions:
-            return list(set([i['interventions'] for i in interventions for i['interventions'] in i]))
+            return functools.reduce(operator.add, [i['interventions'] for i in interventions])
         else:
             return []
 
@@ -28,7 +31,7 @@ class HSS(ExtendedModel):
     def get_constraints_list(self):
         taxonomies = self.data.get('taxonomies')
         if taxonomies:
-            return list(set([t['content'] for t in taxonomies for t['taxonomies'] in t]))
+            return functools.reduce(operator.add, [t['content'] for t in taxonomies])
         else:
             return []
 
