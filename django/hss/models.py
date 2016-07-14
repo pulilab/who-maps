@@ -17,7 +17,7 @@ class HSS(ExtendedModel):
     def get_interventions_list(self):
         interventions = self.data.get('interventions')
         if interventions:
-            return functools.reduce(operator.add, [i['interventions'] for i in interventions])
+            return list(set(functools.reduce(operator.add, [i['interventions'] for i in interventions])))
         else:
             return []
 
