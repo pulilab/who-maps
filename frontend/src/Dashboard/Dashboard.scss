@@ -37,8 +37,8 @@
                 height: 454px;
                 background: url("./Img/icons-all.svg") center 63px no-repeat;
                 padding-top: 230px;
-                padding-left: 170px;
-                padding-right: 170px;
+                padding-left: 145px;
+                padding-right: 145px;
 
                 a.md-button {
                     background-color: $color-primary!important;
@@ -415,7 +415,6 @@
                 background: $color-gray-lightest url("./Img/wmap.svg") center 135px no-repeat;
                 background-size: 140% auto;
 
-
                 p.afteri {
                     margin-top: 35px;
                     margin-left: 20px;
@@ -424,9 +423,11 @@
                     font-size: 14px;
                     font-weight: 500;
                     md-icon {
+                        color: #212121;
                         height: 20px;
                         width: 20px;
                         margin-right: 5px;
+                        transform: translate(-2px, -2px);
                     }
                 }
                 p.detail {
