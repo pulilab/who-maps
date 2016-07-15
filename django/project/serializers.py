@@ -42,6 +42,7 @@ class ProjectSerializer(serializers.Serializer):
     mobile_application = serializers.CharField(required=False, allow_blank=True)
     wiki = serializers.URLField(required=False, allow_blank=True)
     pre_assessment = serializers.ListField(required=False)
+    links = serializers.ListField(required=False)
 
 
 class GroupSerializer(serializers.ModelSerializer):
