@@ -261,6 +261,11 @@ export const  age_ranges = [
     'Senior (> 65 years)'
 ];
 
+export const target_population_structure = {
+    special_population: ['a', 'b'],
+    age_ranges
+};
+
 // Bindable things
 // ***************
 
@@ -446,34 +451,55 @@ export const continuumData = [
 ];
 
 
-export const ageRangesData = [
+export const target_population = [
     {
         'column_id': 0,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 1,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 2,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 3,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 4,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 5,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 6,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     }
 ];
 
