@@ -1,6 +1,6 @@
 <div id="dashcontainer" layout="column">
 
-    <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty=true">
+    <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty = !(vm.state.params.appName)">
 
         <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
 
