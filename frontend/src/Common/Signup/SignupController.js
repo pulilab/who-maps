@@ -23,8 +23,6 @@ class SignupController {
         };
     }
 
-
-
     signup(signupForm) {
         if (signupForm.$valid) {
             this.inProgress = true;

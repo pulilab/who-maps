@@ -1,0 +1,50 @@
+<div class="reset-wrapper" layout="column" layout-align="start center" ng-style="vm.style">
+    <div class="page-title">
+        <h1 class="md-display-1 text-center">Reset password</h1>
+    </div>
+
+    <div md-whiteframe="2">
+        <md-content layout="column">
+            <form layout="column" name="vm.resetForm" ng-submit="vm.reset()" ng-hide="vm.sent" novalidate>
+                <div id="title-text">
+                    Enter your email address and follow the instructions you will get by email.
+                </div>
+                <md-input-container>
+                    <label>Email address</label>
+                    <input ng-required="true" name="email" ng-model="vm.email" type="email" ng-change="vm.handleCustomError('email')" />
+                    <div ng-messages="vm.resetForm.email.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="email">This field must be a valid email.</div>
+                        <div ng-message="custom" ng-repeat="error in vm.resetForm.email.customError">{{error}} </div>
+                    </div>
+                </md-input-container>
+
+                <p class="global-error">
+                    <span ng-repeat="error in vm.resetForm.non_field_errors"> {{error}}</span>
+                </p>
+
+                <div layout="row" layout-align="start">
+                    <div flex=auto>
+                        <md-button class="md-gray md-small" ui-sref="login">
+                            Go back to login
+                        </md-button>
+                    </div>
+                    <div flex=grow layout-align="end">
+                        <md-button type="submit" class="md-raised md-primary">
+                            Reset
+                        </md-button>
+                    </div>
+                </div>
+            </form>
+            <div layout="column" class="form-success" ng-show="vm.sent">
+                <i class="material-icons">check_circle</i>
+                <h4 class="text-center">Congratulations!</h4>
+                <p class="text-center">
+                    An email with instructions to reset your password have been sent.
+                </p>
+            </div>
+        </md-content>
+    </div>
+
+    <disclaimer></disclaimer>
+</div>

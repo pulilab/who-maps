@@ -170,7 +170,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 REST_AUTH_SERIALIZERS = {
-    'TOKEN_SERIALIZER': 'user.serializers.ProfileTokenSerializer'
+    'TOKEN_SERIALIZER': 'user.serializers.ProfileTokenSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
@@ -310,6 +311,8 @@ LOGGING = {
         },
     },
 }
+
+LOGIN_URL = '/login/'
 
 for arg in sys.argv:
     if 'test' in arg:
