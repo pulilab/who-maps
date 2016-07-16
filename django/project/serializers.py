@@ -31,6 +31,7 @@ class ProjectSerializer(serializers.Serializer):
     licenses = serializers.ListField(required=False)  # Can hold 'other' fields
     application = serializers.ListField(required=False)
     coverage = serializers.ListField(required=False)
+    national_level_deployment = serializers.ListField(required=False)
     started = serializers.CharField(required=False, allow_blank=True)
     donors = serializers.ListField(required=False)  # Should be text instead of ID - no Donors in MVP
     reports = serializers.ListField(required=False)

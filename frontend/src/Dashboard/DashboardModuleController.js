@@ -111,14 +111,13 @@ class DashboardModuleController extends Protected {
         this.projectData = data;
         if (this.userType !== 0) {
             this.fetchCountryMap(data.country);
-            this.parseMapData(data.coverage);
+            this.parseMapData(data.coverage, data.national_level_deployment);
             this.fetchCoverageVersions();
         }
     }
 
-    parseMapData(coverage) {
+    parseMapData(coverage, national) {
 
-        // console.debug('COVERAGE from API', coverage);
         const ret = { labels: [], data: {} };
 
         coverage.forEach(el => {
@@ -126,24 +125,21 @@ class DashboardModuleController extends Protected {
                 ret.labels.push(el.district);
             }
         });
-        // console.debug('Labels', ret.labels);
+
 
         coverage.forEach(distObj => {
 
             ret.data[distObj.district] = {};
 
             _.forOwn(distObj, (val, key) => {
-                // console.debug(key, val);
+
                 if (key === 'district') { return; }
-
                 const formattedKey = key.replace('_', ' ');
-
                 ret.data[distObj.district][formattedKey] = val;
             });
         });
-        // console.debug('FINAL PARSED COVERAGE: ', ret);
 
-        this.EE.emit('mapdataArrived', ret);
+        this.EE.emit('mapdataArrived', ret, national);
         this.perfMockMap = ret;
     }
 
@@ -318,6 +314,8 @@ class DashboardModuleController extends Protected {
 
         this.service.getCoverageVersions(this.projectId).then(data => {
 
+            // console.debug(this.projectData);
+
             data.push({ data: this.projectData.coverage });
 
             const today = new Date();
@@ -349,10 +347,28 @@ class DashboardModuleController extends Protected {
                         }
 
                     });
+
                 });
 
                 return ret;
             }, { labels: [], data: [] });
+
+            _.forOwn((this.projectData.national_level_deployment || [{}]) [0], (value, key) => {
+
+                if (key === 'district') {
+                    return;
+                }
+
+                if (historyChartData.labels.indexOf(key.replace('_', ' ')) >= 0) {
+                    const i = historyChartData.labels.indexOf(key.replace('_', ' '));
+                    historyChartData.data[0]['axis' + (i + 1)] += value;
+                }
+                else {
+                    const i = historyChartData.labels.length;
+                    historyChartData.labels.push(key);
+                    historyChartData.data[0]['axis' + (i + 1)] = value;
+                }
+            });
 
             this.EE.emit('coverage chart data', historyChartData);
         });

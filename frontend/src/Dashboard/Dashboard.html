@@ -1,12 +1,24 @@
 <div id="dashcontainer" layout="column">
 
-    <div layout="row" class="dashrow dashrow-upper">
+    <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty = !(vm.state.params.appName)">
 
         <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
 
         <div flex class="dashsection dashsection-left" layout="row">
 
-            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats">
+            <div ng-show="vm.showEmpty" flex class="dashsection dash-cardholder">
+
+                <div class="dash-subhead">PROJECT DETAILS</div>
+
+                <md-card md-whiteframe="2" flex class="dash-emptyleft">
+                    <div class="emptychild" layout="column" layout-align="start center">
+                        <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">start new project</md-button>
+                        <p>Lorem ipsum dolor sit amet, lorem ipsum, lorem lorem ipssumm</p>
+                    </div>
+                </md-card>
+            </div>
+
+            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-hide="vm.showEmpty">
 
                 <div class="dash-subhead">STATISTICS</div>
 
@@ -58,7 +70,7 @@
                 </div>
             </div>
 
-            <div flex class="dashsection dash-cardholder" layout="column">
+            <div flex class="dashsection dash-cardholder" layout="column" ng-hide="vm.showEmpty">
 
                 <div class="dash-subhead">PROJECT DETAILS</div>
                 <md-card md-whiteframe="2" flex>
@@ -244,7 +256,15 @@
             <div class="dash-subhead">PROJECT PERFORMANCE</div>
             <md-card md-whiteframe="2" flex class="dash-perf">
 
-                <md-tabs ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
+                <div flex class="emptyright" layout="column" ng-show="vm.showEmpty">
+                    <p class="afteri">
+                        <md-icon class="material-icons unselectable">info</md-icon>
+                        What will you find here?
+                    </p>
+                    <p class="detail">Lorem ipsum dolor sit amet, if you read this, I need help here... consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Excepteur sint obcaecat cupiditat non proident culpa.</p>
+                </div>
+
+                <md-tabs ng-hide="vm.showEmpty" ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
 
                     <md-tab label="geographical view">
                         <countrymap
@@ -267,7 +287,7 @@
                 </md-tabs>
 
                 <div flex ng-if="vm.userType === 0" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
-                    <p>If you want to see world map for the geographical and historic view please subscribe first!</p>
+                    <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
                     <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
                 </div>
 
