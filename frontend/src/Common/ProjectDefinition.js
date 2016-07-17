@@ -26,6 +26,7 @@ class ProjectDefinition extends Protected {
             application: [],
             reports: [{}],
             publications: [{}],
+            links: [{}],
             pipelines: {
                 standard: [],
                 custom: void 0
@@ -187,6 +188,16 @@ class ProjectDefinition extends Protected {
 
     delPublicationFile(l) {
         _.remove(this.project.files, item => {
+            return item.$$hashKey === l.$$hashKey;
+        });
+    }
+
+    addCHMILink() {
+        this.project.links.push({});
+    }
+
+    rmCHMILink(l) {
+        _.remove(this.project.links, item => {
             return item.$$hashKey === l.$$hashKey;
         });
     }
