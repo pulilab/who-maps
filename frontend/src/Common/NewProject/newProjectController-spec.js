@@ -1,4 +1,5 @@
 import NewProjectController from './NewProjectController';
+import _ from 'lodash';
 
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
@@ -28,7 +29,8 @@ const cs = {
         organisation: 'asd'
     },
     populateProjectStructure: jasmine.createSpy('pps'),
-    getProjectData: jasmine.createSpy('gpd').and.returnValue(Promise.resolve())
+    getProjectData: jasmine.createSpy('gpd').and.returnValue(Promise.resolve()),
+    updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve())
 };
 
 const upload = {};
@@ -80,11 +82,13 @@ describe('NewProjectController', () => {
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'createCoverageArray');
         spyOn(sc, 'saveForm');
+        spyOn(sc, 'separateCoverageAndNationalLevelDeployments');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
         expect(sc.createCoverageArray).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
+        expect(sc.separateCoverageAndNationalLevelDeployments).toHaveBeenCalled();
     });
 
     it('should have a function that save a new form', () => {
@@ -94,10 +98,11 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that update an existing form', () => {
-        spyOn(sc.ns, 'updateProject').and.returnValue(Promise.resolve());
+        spyOn(sc.ns, 'updateProject').and.returnValue(Promise.resolve({ success: true }));
         sc.editMode = true;
         sc.updateForm(sc.project);
         expect(sc.ns.updateProject).toHaveBeenCalled();
+        expect(sc.cs.updateProject).toHaveBeenCalled();
     });
 
     it('should have some utility function', () => {
@@ -124,15 +129,41 @@ describe('NewProjectController', () => {
 
     it('should have a function that handle the data loaded from the server', () => {
         spyOn(sc, 'createCoverageKeys');
-        spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve());
+        spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve({}));
         spyOn(sc, 'unfoldCoverage');
         spyOn(sc, 'assignDefaultCustom');
+        spyOn(sc, 'mergeNationalLevelWithDistrictCoverage');
+        spyOn(sc, 'addDefaultEmpty');
 
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();
         expect(sc.createCoverageKeys).toHaveBeenCalled();
         expect(sc.unfoldCoverage).toHaveBeenCalled();
         expect(sc.assignDefaultCustom).toHaveBeenCalled();
+        expect(sc.mergeNationalLevelWithDistrictCoverage).toHaveBeenCalled();
+        expect(sc.addDefaultEmpty).toHaveBeenCalled();
+
+    });
+
+    it('should have a function that handles the national level deployment', () => {
+        sc.project.national_level_deployment = [{ clients: 33 }];
+        sc.mergeNationalLevelWithDistrictCoverage();
+        expect(sc.districtList).toContain('ENTIRE COUNTRY');
+        expect(_.filter(sc.project.coverage, item => item.district === 'ENTIRE COUNTRY').length).toBeGreaterThan(0);
+    });
+
+    it('should have a function that separates the national level deployment before saving', () => {
+        const isCoverage = item => item.district !== 'ENTIRE COUNTRY';
+        sc.project.coverage = [
+            { district: 'someDistrict' },
+            { district: 'ENTIRE COUNTRY' }
+        ];
+        sc.separateCoverageAndNationalLevelDeployments(sc.project.coverage);
+        const normalCoverage = _.filter(sc.project.coverage, isCoverage);
+        const nationalLevelCoverage = _.reject(sc.project.coverage, isCoverage);
+        expect(normalCoverage.length).toBe(1);
+        expect(nationalLevelCoverage.length).toBe(1);
+
 
     });
 

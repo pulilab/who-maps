@@ -113,12 +113,7 @@ class AppModuleController extends Protected {
     refreshProfileInfo() {
         this.userProfile = this.cs.userProfile;
         this.scope.$evalAsync();
-        if (this.cs.projectList > 0) {
-            this.state.go('dashboard');
-        }
-        else {
-            this.state.go('country');
-        }
+        this.state.go('dashboard');
     }
 
     checkUserProfile() {
