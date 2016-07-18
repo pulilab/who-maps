@@ -64,12 +64,7 @@ class AuthApi {
         if (response.status === 401) {
             this.EE.emit('unauthorized');
         }
-        if (response.ok) {
-            return response;
-        }
-        else {
-            return response.json().then(Promise.reject.bind(Promise));
-        }
+        return response.ok ?  response : response.json().then(Promise.reject.bind(Promise));
     }
 
     getBlob(endpoint) {

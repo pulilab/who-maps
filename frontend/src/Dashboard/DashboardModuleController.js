@@ -33,15 +33,17 @@ class DashboardModuleController extends Protected {
         this.service = new DashboardService(this.projectId);
         this.mapService = new DashboardMapService();
 
-        this.cs.getProjectData(this.projectId).then(data => {
-            this.addResourcesMeta(data);
-            this.timeout(() => {
-                this.fetchProjectData(data);
+        if (this.projectId) {
+            this.cs.getProjectData(this.projectId).then(data => {
+                this.addResourcesMeta(data);
+                this.timeout(() => {
+                    this.fetchProjectData(data);
+                });
             });
-        });
-        if (this.userType !== 0) {
-            this.fetchAxisData();
-            this.fetchToolkitData();
+            if (this.userType !== 0) {
+                this.fetchAxisData();
+                this.fetchToolkitData();
+            }
         }
 
         this.commProjects = commProjects;

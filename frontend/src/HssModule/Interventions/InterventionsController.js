@@ -136,7 +136,7 @@ class InterventionsController extends Protected {
                     selectValues: self.targetPopulationOptions,
                     introName: 'interventions_middle_' + value,
                     classGenerator: self.classGenerator,
-                    saveSpecialPopulations: self.saveSpecialPopulations.bind(this, value),
+                    saveSpecialPopulations: self.saveSpecialPopulations.bind(this, value)
                 };
             })
             .value();
@@ -192,10 +192,6 @@ class InterventionsController extends Protected {
         });
     }
 
-    stripParenthesis(str) {
-        return str;
-        return str.split('(')[0];
-    }
 
     saveSpecialPopulations(columnId, value) {
         const toSave = {
