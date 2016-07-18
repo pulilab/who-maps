@@ -35,7 +35,7 @@ class EditProfileController extends Protected {
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
-        if (this.userProfile && _.isNull(this.userProfile.organisation.name)) {
+        if (this.userProfile && this.userProfile.organisation && _.isNull(this.userProfile.organisation.name)) {
             this.userProfile.organisation = null;
         }
         if (!this.userProfile || !this.userProfile.email) {
