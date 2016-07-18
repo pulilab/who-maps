@@ -242,6 +242,23 @@
                                         <md-icon>launch</md-icon>
                                     </a>
                                 </md-card>
+
+
+                                <h3>ASSOCIATED CHMI LINKS</h3>
+                                <md-card
+                                        class="resource"
+                                        ng-repeat="link in vm.resources.links"
+                                        layout="row"
+                                        layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{link.type === 'file' ? link.filename : link.link}}</h4>
+                                    </div>
+                                    <md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>
+                                    <a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">
+                                        <md-icon>launch</md-icon>
+                                    </a>
+                                </md-card>
                             </md-content>
                         </md-tab>
 

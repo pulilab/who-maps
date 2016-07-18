@@ -289,6 +289,25 @@
                         </div>
 
 
+
+                        <h5>Other Digital Innovation Project Repositories Links:</h5>
+                        <div layout="row" layout-align="start center" ng-repeat="r in vm.project.links">
+                            <div layout="row" flex="70">
+                                <md-icon>link</md-icon>
+                                <md-input-container flex>
+                                    <label>Add link to a webpage</label>
+                                    <input type="url" ng-model="r.value" placeholder="CHMI, USAID Compendium, GSMA Tracker, HingX" />
+                                </md-input-container>
+                            </div>
+                            <md-button ng-hide="$last" ng-click="vm.rmCHMILink(r)" layout="column" class="md-icon-button red">
+                                <md-icon>delete_forever</md-icon>
+                            </md-button>
+                            <md-button ng-show="$last" layout="column" ng-click="vm.addCHMILink()" class="md-icon-button">
+                                <md-icon>add</md-icon>
+                            </md-button>
+                        </div>
+
+
                     </section>
 
                     <section class="vision">

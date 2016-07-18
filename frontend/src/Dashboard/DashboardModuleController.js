@@ -402,7 +402,7 @@ class DashboardModuleController extends Protected {
 
     addResourcesMeta(data) {
 
-        const res = { reports: [], articles: [] };
+        const res = { reports: [], articles: [], links: [] };
 
         data.reports.forEach(link => {
             if (_.keys(link).length) {
@@ -416,6 +416,15 @@ class DashboardModuleController extends Protected {
         data.publications.forEach(link => {
             if (_.keys(link).length) {
                 res.articles.push({
+                    type: 'link',
+                    link: link.value
+                });
+            }
+        });
+
+        data.links.forEach(link => {
+            if (_.keys(link).length) {
+                res.links.push({
                     type: 'link',
                     link: link.value
                 });
