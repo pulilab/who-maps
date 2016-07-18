@@ -290,13 +290,13 @@
 
 
 
-                        <h5>Add your CHMI links:</h5>
+                        <h5>Other Digital Innovation Project Repositories Links:</h5>
                         <div layout="row" layout-align="start center" ng-repeat="r in vm.project.links">
                             <div layout="row" flex="70">
                                 <md-icon>link</md-icon>
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
-                                    <input type="url" ng-model="r.value" />
+                                    <input type="url" ng-model="r.value" placeholder="CHMI, USAID Compendium, GSMA Tracker, HingX" />
                                 </md-input-container>
                             </div>
                             <md-button ng-hide="$last" ng-click="vm.rmCHMILink(r)" layout="column" class="md-icon-button red">
