@@ -71,7 +71,7 @@ class SetupTests(APITestCase):
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "technology_platforms": ["tech1", "tech2", "tech3"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
             "coverage": [

@@ -11,7 +11,80 @@ class CountryViewModuleController {
         this.scope = $scope;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
+        this.$onInit = this.onInit.bind(this);
+    }
+
+
+    onInit() {
         this.getCountries();
+        this.filterArray = [
+            this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
+            this.createFilterCategory('interventions',
+                this.cs.hssStructure.interventions, 'name'),
+            this.createFilterCategory('technology_platforms',
+                this.cs.projectStructure.technology_platforms),
+            this.createFilterCategory('applications', this.cs.hssStructure.applications),
+            this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies)
+        ];
+    }
+
+    createFilterCategory(name, collection, unique, subItem) {
+        const base = { name, items: [], open: false };
+        if (collection) {
+            _.forEach(collection, item => {
+                base.items.push({
+                    name: subItem ? item[subItem] : item,
+                    value: false
+                });
+            });
+            if (unique) {
+                base.items = _.uniqBy(base.items, unique);
+            }
+        }
+        return base;
+    }
+
+    replaceLodash(item) {
+        return item ? item.replace('_', ' ') : '';
+
+    }
+
+    filterClv() {
+        const filters = {};
+        _.forEach(this.filterArray, category => {
+            filters[category.name] = _.chain(category.items)
+                .map(value => {
+                    return value.value ? value.name : false;
+                })
+                .filter()
+                .value();
+        });
+        if (_.flattenDeep(_.toArray(filters)).length > 0) {
+            filters.provisonalArray = _.cloneDeep(this.countryProjects);
+            this.generalFilter(filters, 'continuum');
+            this.generalFilter(filters, 'interventions');
+            this.generalFilter(filters, 'applications');
+            this.generalFilter(filters, 'constraints');
+            this.generalFilter(filters, 'technology_platforms');
+            this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
+        }
+        else {
+            this.projectsData = this.countryProjects;
+        }
+
+        this.EE.emit('projectsUpdated', this.projectsData);
+
+    }
+
+    generalFilter(filters, name) {
+        const localArray = [];
+        _.forEach(filters.provisonalArray, project => {
+            const inter = _.intersection(project[name], filters[name]);
+            if (inter.length === filters[name].length) {
+                localArray.push(project);
+            }
+        });
+        filters.provisonalArray = localArray;
     }
 
     getCountries() {
@@ -24,6 +97,7 @@ class CountryViewModuleController {
                 this.countriesLib[country.id] = country.name;
             });
 
+            // console.debug('COUNTRY LIB', this.countriesLib);
             this.countries2 = _.cloneDeep(this.countries);
             this.countries2.unshift({ id: false, name: 'Show all countries' });
             if (this.cs.userProfile && this.cs.userProfile.country) {
@@ -47,8 +121,9 @@ class CountryViewModuleController {
     getProjects(countryObj) {
         // console.debug('Selected:', countryObj);
         this.service.getProjects(countryObj.id).then(data => {
-            // console.debug('all PROJECTS in country ' + countryObj.name, data);
+            // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
+            this.countryProjects = _.cloneDeep(data);
             this.EE.emit('all country projects', data);
         });
     }
@@ -71,7 +146,7 @@ class CountryViewModuleController {
     // For map TAB
     fetchDistrictProjects(countryId) {
 
-        this.service.getDisctrictProjects(countryId).then(data => {
+        this.service.getDistrictProjects(countryId).then(data => {
             // console.debug('getDistrictProjects:', data);
             this.EE.emit('mapdataArrived', data);
         });

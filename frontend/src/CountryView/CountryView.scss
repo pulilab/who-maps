@@ -21,6 +21,134 @@
       color: $text-primary;
       font-weight: bold;
     }
+
+    .clv-tab-container {
+    }
+
+    .clv-filter-container {
+      padding-top: 40px;
+
+      .filter-wrapper {
+        background: $color-map-filter-background;
+        position: relative;
+        overflow: scroll;
+
+
+        .filter-project-counter {
+          position: absolute;
+          top:20px;
+          left:20px;
+          width:240px;
+          height: 60px;
+          background: $color-white;
+
+
+          .project-counter-name {
+            position: absolute;
+
+            .description {
+              position: absolute;
+              width: 125px;
+              height:20px;
+              top:12px;
+              left:15px;
+              font-weight: 500;
+              font-size: 14px;
+            }
+
+            .country-name {
+              position: absolute;
+              width:125px;
+              height: 16px;
+              top: 32px;
+              left:15px;
+              font-size:12px;
+              color: $color-gray;
+            }
+          }
+
+          .project-counter-arrow {
+            position: absolute;
+            left: 165px;
+            height: 60px;
+            overflow: hidden;
+
+            img {
+              position: relative;
+              height: 67px;
+              width: auto;
+              top: -3.5px;
+            }
+          }
+
+          .project-counter-number {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            width: 40px;
+            height: 36px;
+            font-size: 36px;
+            text-align: center;
+            color: $color-black;
+          }
+        }
+
+        .filter-list {
+          position: absolute;
+          top:110px;
+          left:20px;
+          width:240px;
+
+          .description {
+            font-size: 14px;
+            font-weight: 500;
+            color: $color-black;
+            margin-bottom: 20px;
+          }
+
+          .list-headers {
+
+            .header{
+              outline:none;
+              cursor: pointer;
+              font-weight: 500;
+              font-size:12px;
+              color: $color-black;
+              text-transform: capitalize;
+
+            }
+
+            .list-item {
+              margin-left:25px;
+              margin-bottom: 5px;
+
+              md-checkbox {
+                margin:0;
+                font-size: 12px;
+                font-weight: 300;
+                color: $color-black;
+                height: 17px;
+                min-height: 17px;
+
+                .md-icon {
+                  width: 17px;
+                  height:17px;
+                  font-size: 17px;
+                }
+                .md-label {
+                  margin-left: 22px;
+                }
+              }
+
+            }
+
+          }
+
+        }
+      }
+
+    }
+
   }
 
   md-tabs {
