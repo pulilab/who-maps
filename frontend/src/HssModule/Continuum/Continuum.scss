@@ -148,12 +148,15 @@ continuum {
         .continuum-row-title {
           display: block;
           width:100%;
-          white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           color: $color-green;
           line-height: 14px;
           text-transform: capitalize;
+
+          &.no-wrap {
+            white-space: nowrap;
+          }
         }
         .continuum-sub-title {
           display: block;

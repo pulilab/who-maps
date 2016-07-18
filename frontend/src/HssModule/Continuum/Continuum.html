@@ -31,8 +31,8 @@
             class="row-title-mother"
             layout="row">
         <p layout="column">
-            <span flex class="md-body-2 continuum-row-title">Health system care continuum</span>
-            <span flex class="continuum-sub-title">Please select one or more!</span>
+            <span flex class="md-body-2 continuum-row-title" ng-class="{'no-wrap': vm.editMode}">Health system care continuum</span>
+            <span flex class="continuum-sub-title" ng-show="vm.editMode">Please select one or more!</span>
         </p>
         <!-- <span class="to-be-continued mother"></span> -->
     </md-grid-tile>
