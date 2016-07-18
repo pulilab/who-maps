@@ -161,7 +161,7 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.projectStructure = structure;
                 this.loadingProgress('structure');
-            }, () => {
+            }).catch(() => {
                 this.loadingProgress('structure');
                 this.promiseReject();
             });
@@ -172,7 +172,7 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.hssStructure = structure;
                 this.loadingProgress('hss-structure');
-            }, () => {
+            }).catch(() => {
                 this.loadingProgress('hss-structure');
                 this.promiseReject();
             });

@@ -21,7 +21,6 @@ describe('interventionsController', () => {
             interventions: interventionsLib,
             target_population
         };
-        console.log(target_population)
         ic.structure = {
             interventions: interventionsLib,
             target_population: target_population_structure
