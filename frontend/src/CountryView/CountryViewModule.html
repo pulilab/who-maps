@@ -146,7 +146,7 @@
                             <md-icon ng-show="header.open" >expand_less</md-icon>
                             {{vm.replaceLodash(header.name)}} ({{header.items.length}})
                         </div>
-                        <div class="list-item" ng-repeat="item in header.items" ng-show="header.open">
+                        <div class="list-item" ng-repeat="item in header.items  | orderBy: 'name' " ng-show="header.open">
                             <md-checkbox class="md-primary" ng-model="item.value" aria-label="item.name" ng-change="vm.filterClv()">
                                 {{item.name}}
                             </md-checkbox>

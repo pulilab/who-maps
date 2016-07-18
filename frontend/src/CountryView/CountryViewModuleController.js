@@ -17,19 +17,43 @@ class CountryViewModuleController {
 
     onInit() {
         this.getCountries();
+
         this.filterArray = [
             this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
             this.createFilterCategory('interventions',
-                this.cs.hssStructure.interventions, 'name'),
+                this.cs.hssStructure.interventions, 'name', false, collection => _.flattenDeep(_.toArray(collection))),
             this.createFilterCategory('technology_platforms',
                 this.cs.projectStructure.technology_platforms),
-            this.createFilterCategory('applications', this.cs.hssStructure.applications),
-            this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies)
+            this.createFilterCategory('applications', this.cs.hssStructure.applications,
+                false, false, this.concatenateApplications),
+            this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies,
+                false, false, this.extractConstraints)
         ];
     }
 
-    createFilterCategory(name, collection, unique, subItem) {
+    extractConstraints(collection) {
+        const result = [];
+        _.forEach(collection, (tax, key) => {
+            result.push(key);
+        });
+        return result;
+    }
+
+    concatenateApplications(collection) {
+        let result = [];
+        _.forEach(collection, application => {
+            result = _.concat(result, _.toArray(application.subApplications));
+        });
+        return result;
+    }
+
+    createFilterCategory(name, collection, unique, subItem, preParse) {
         const base = { name, items: [], open: false };
+
+        if (preParse) {
+            collection = preParse(collection);
+        }
+
         if (collection) {
             _.forEach(collection, item => {
                 base.items.push({
