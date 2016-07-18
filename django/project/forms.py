@@ -20,36 +20,46 @@ class ProjectInventoryForm(ModelForm):
     # "reports", "publications", and "coverage" removed for now to cut corners.
     # "other" fields are removed.
     # "owner" needs to be already registered.
-    owner = fields.EmailField()
-    name = fields.CharField()
-    organisation = models.ModelChoiceField(queryset=Organisation.objects.all())
-    contact_name = fields.CharField()
-    contact_email = fields.EmailField()
-    implementation_overview = fields.CharField(max_length=500)
-    implementing_partners = fields.CharField(required=False)
-    implementation_dates = fields.CharField()
-    geographic_coverage = fields.CharField()
-    intervention_areas = fields.MultipleChoiceField(choices={(x,x) for x in project_structure["intervention_areas"]})
-    strategy = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["strategies"]})
-    country = models.ModelChoiceField(queryset=Country.objects.all())
-    objective = fields.CharField(required=False, max_length=250)
-    technology_platforms = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["technology_platforms"]})
-    licenses = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["licenses"]})
-    application = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["applications"]})
-    started = fields.DateField(widget=AdminDateWidget, required=False)
-    donors = fields.CharField(required=False)
-    pipeline = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["pipelines"]})
-    goals_to_scale = fields.CharField(required=False)
-    anticipated_time = fields.CharField(required=False)
-    repository = fields.URLField(required=False)
-    mobile_application = fields.CharField(required=False)
-    wiki = fields.URLField(required=False)
+    owner = fields.EmailField(label="Owner of the project")
+    name = fields.CharField(label="Name of the project")
+    organisation = models.ModelChoiceField(queryset=Organisation.objects.all(), label="Name of the organization")
+    contact_name = fields.CharField(label="Contact name")
+    contact_email = fields.EmailField(label="Contact email")
+    implementation_overview = fields.CharField(max_length=500, label="Overview of Digital health implementation")
+    implementing_partners = fields.CharField(required=False, label="Implementing Partners")
+    implementation_dates = fields.CharField(label="Implementing Dates")
+    geographic_coverage = fields.CharField(label="Geographic coverage")
+    intervention_areas = fields.MultipleChoiceField(choices={(x,x) for x in project_structure["intervention_areas"]}, label="Interventions Areas")
+    strategy = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["strategies"]}, label="Select strategies")
+    country = models.ModelChoiceField(queryset=Country.objects.all(), label="Select project's country")
+    technology_platforms = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["technology_platforms"]}, label="Technology Platforms")
+    licenses = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["licenses"]}, label="Licenses")
+    started = fields.DateField(widget=AdminDateWidget, required=False, label="Start date")
+    donors = fields.CharField(required=False, label="Donors name")
+    pipeline = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["pipelines"]}, label="Accelerator or innovation pipeline")
+    goals_to_scale = fields.CharField(required=False, label="Your goals")
+    anticipated_time = fields.CharField(required=False, label="Your timeframe")
+    repository = fields.URLField(required=False, label="Code documentation or download link")
+    mobile_application = fields.CharField(required=False, label="Link to the application")
+    wiki = fields.URLField(required=False, label="Link to wiki page")
 
     class Meta:
         fields = (
                 "owner",
                 "name",
                 "organisation",
+                "strategy",
+                "country",
+                "started",
+                "pipeline",
+                "donors",
+                "goals_to_scale",
+                "anticipated_time",
+                "technology_platforms",
+                "licenses",
+                "repository",
+                "mobile_application",
+                "wiki",
                 "contact_name",
                 "contact_email",
                 "implementation_overview",
@@ -57,20 +67,6 @@ class ProjectInventoryForm(ModelForm):
                 "implementation_dates",
                 "geographic_coverage",
                 "intervention_areas",
-                "strategy",
-                "country",
-                "objective",
-                "technology_platforms",
-                "licenses",
-                "application",
-                "started",
-                "donors",
-                "pipeline",
-                "goals_to_scale",
-                "anticipated_time",
-                "repository",
-                "mobile_application",
-                "wiki",
             )
 
     def save_m2m(self):
@@ -89,6 +85,7 @@ class ProjectInventoryForm(ModelForm):
             project = Project(name=self.cleaned_data["name"], data=self.cleaned_data)
             project.save()
             project.team.add(user.userprofile)
+            #project.team.add(self.inventory_user.userprofile)
             # Add default HSS structure for the new project.
             HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.
