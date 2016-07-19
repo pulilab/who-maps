@@ -23,10 +23,12 @@ class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'
     DONOR = 'D'
     GOVERNMENT = 'G'
+    INVENTORY = 'Y'
     ACCOUNT_TYPE_CHOICES = (
         (IMPLEMENTER, 'Implementer'),
         (DONOR, 'Financial Investor'),
         (GOVERNMENT, 'Government'),
+        (INVENTORY, 'Inventory User'),
     )
 
     account_type = models.CharField(
