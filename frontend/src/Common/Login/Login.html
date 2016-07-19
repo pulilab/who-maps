@@ -9,7 +9,7 @@
             <form layout="column" name="vm.loginForm" ng-submit="vm.login()" novalidate>
                 <md-input-container>
                     <label>Email address</label>
-                    <input ng-required="true" name="username" ng-model="vm.user.username" type=text/>
+                    <input ng-required="true" name="username" ng-model="vm.user.username" type="text" ng-change="vm.handleCustomError('username')" />
                     <div ng-messages="vm.loginForm.username.$error">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="email">This field must be a valid email.</div>
@@ -18,7 +18,7 @@
                 </md-input-container>
                 <md-input-container>
                     <label>Password</label>
-                    <input ng-required="true" name="password" ng-model="vm.user.password" type="password"/>
+                    <input ng-required="true" name="password" ng-model="vm.user.password" type="password" ng-change="vm.handleCustomError('password')"/>
                     <div ng-messages="vm.loginForm.password.$error">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="custom" ng-repeat="error in vm.loginForm.password.customError">{{error}} </div>
@@ -31,7 +31,7 @@
 
                 <div layout="row" layout-align="start">
                     <div flex=auto>
-                        <md-button class="md-gray md-small">
+                        <md-button class="md-gray md-small" ui-sref="reset">
                             Forgot password?
                         </md-button>
                     </div>

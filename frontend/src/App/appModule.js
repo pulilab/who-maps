@@ -15,7 +15,7 @@ import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
-import { Components } from '../Common/';
+import { Components, Storage } from '../Common/';
 
 
 import AppComponent from './appComponent';
@@ -35,7 +35,7 @@ require('../Favicons/mstile-144x144.png');
 
 
 const moduleName = 'app';
-const config = ($stateProvider, $urlRouterProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $stateProvider
 
         .state('base', {
@@ -46,9 +46,15 @@ const config = ($stateProvider, $urlRouterProvider) => {
             abstract: true
         })
 
+        .state('share', {
+            url: '/project/:projectUUID',
+            template: '<uuid-load />',
+            controllerAs: 'vm'
+        })
+
         .state(moduleName, {
             url: '/app/:appName',
-            template: '<app layout="column"></app>',
+            template: '<app layout="column" layout-fill></app>',
             resolve: {
                 data: ['$q', ($q) => {
                     const def = $q.defer();
@@ -89,6 +95,15 @@ const config = ($stateProvider, $urlRouterProvider) => {
                 }
             }
         })
+        .state('reset', {
+            url: '/reset',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '<reset></reset>'
+                }
+            }
+        })
         .state('signup', {
             url: '/signup',
             parent: 'base',
@@ -103,7 +118,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project ></new-project>'
+                    template: '<new-project layout-fill layout="column" ></new-project>'
                 }
             }
         })
@@ -112,7 +127,7 @@ const config = ($stateProvider, $urlRouterProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project edit-mode="true" ></new-project>'
+                    template: '<new-project edit-mode="true" layout-fill layout="column" ></new-project>'
                 }
             }
         })
@@ -143,14 +158,25 @@ const config = ($stateProvider, $urlRouterProvider) => {
                     template: '<refresh-project></refresh-project>'
                 }
             }
+        })
+        .state('terms-of-use', {
+            url: '/terms-of-use',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '<terms-of-use></terms-of-use>'
+
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/landing');
+    $locationProvider.html5Mode(true);
 };
 
 function logUiRouteEvents(...args) { console.debug(`Ui route state change ${this} :`, args); }
 
-const run = ($rootScope) => {
+const run = ($rootScope, $state) => {
     if (DEBUG) {
         $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
         $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
@@ -164,12 +190,20 @@ const run = ($rootScope) => {
 
     window.addEventListener('xhrmonitor', checkXHR.bind(this));
 
+    window.EE.on('unauthorized', () => {
+        const storage = new Storage();
+        storage.clear();
+        $state.go('landing');
+        const cs = require('../Common/CommonServices');
+        cs.reset();
+    });
+
 };
 
-run.$inject = ['$rootScope'];
+run.$inject = ['$rootScope', '$state'];
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
 
 angular.module(moduleName,
     [

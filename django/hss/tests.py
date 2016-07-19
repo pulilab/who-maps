@@ -306,23 +306,32 @@ class HSSTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["details"], "No such project.")
 
-    def test_update_ageranges(self):
-        url = reverse("hss-ageranges", kwargs={"project_id": self.project_id})
+    def test_update_target_population(self):
+        url = reverse("hss-targetpopulation", kwargs={"project_id": self.project_id})
         data = {
-                "column_id": 0,
-                "age_ranges": ["age1","age2"],
-            }
+            "column_id": 0,
+            "target_population":
+                {
+                    "age_ranges": ["age1", "age2"],
+                    "special_population": ["special1", "special2"]
+                }
+        }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         hss = HSS.objects.get_object_or_none(project=self.project_id)
-        self.assertEqual(hss.data["age_ranges"][0]["age_ranges"], ["age1","age2"])
+        self.assertEqual(hss.data["target_population"][0]["target_population"]["age_ranges"], ["age1","age2"])
+        self.assertEqual(hss.data["target_population"][0]["target_population"]["special_population"], ["special1", "special2"])
 
-    def test_update_ageranges_wrong_project_id(self):
-        url = reverse("hss-ageranges", kwargs={"project_id": 999})
+    def test_update_target_population_wrong_project_id(self):
+        url = reverse("hss-targetpopulation", kwargs={"project_id": 999})
         data = {
-                "column_id": 0,
-                "age_ranges": ["age1","age2"],
-            }
+            "column_id": 0,
+            "target_population":
+                {
+                    "age_ranges": ["age1", "age2"],
+                    "special_population": ["special1", "special2"]
+                }
+        }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["details"], "No such project.")

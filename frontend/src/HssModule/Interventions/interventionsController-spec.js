@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import InterventionsController from './InterventionsController';
 import { EE } from '../../Common/';
-import { continuumData, interventionsLib, age_ranges, ageRangesData } from '../hssMockData';
+import { continuumData, interventionsLib, target_population, target_population_structure } from '../hssMockData';
 
 /* global define, it, describe, expect, beforeEach, jasmine, spyOn */
 
@@ -19,11 +19,11 @@ describe('interventionsController', () => {
         ic.data = {
             continuum: continuumData,
             interventions: interventionsLib,
-            age_ranges: ageRangesData
+            target_population
         };
         ic.structure = {
             interventions: interventionsLib,
-            age_ranges
+            target_population: target_population_structure
         };
         ic.service = {
             postInterventions: () => {}
@@ -93,25 +93,25 @@ describe('interventionsController', () => {
     });
 
     it('should have a function that check the max number of interventions selected', () => {
-        spyOn(ic, 'resizeRow');
+        spyOn(ic, 'resizeInterventionsRow');
         ic.interventionRow[0].content = [1, 2, 3];
         ic.checkSelected();
-        expect(ic.resizeRow).toHaveBeenCalledWith(2);
+        expect(ic.resizeInterventionsRow).toHaveBeenCalledWith(2);
 
     });
 
     it('should have a function that calculate the interventions rows', () => {
         const model = [1, 2, 3, 4];
-        spyOn(ic, 'resizeRow');
+        spyOn(ic, 'resizeInterventionsRow');
         ic.calculateInterventionHeight(model);
-        expect(ic.resizeRow).toHaveBeenCalledWith(2);
+        expect(ic.resizeInterventionsRow).toHaveBeenCalledWith(2.4);
         ic.calculateInterventionHeight({});
-        expect(ic.resizeRow).toHaveBeenCalledTimes(1);
+        expect(ic.resizeInterventionsRow).toHaveBeenCalledTimes(1);
     });
 
     it('should have a function that resize all the rows', () => {
-        ic.resizeRow(9);
-        ic.resizeRow(null);
+        ic.resizeInterventionsRow(9);
+        ic.resizeInterventionsRow(null);
         expect(ic.interventionsRowSpan.size).toBe(9);
         _.forEach(ic.interventionRow, item => {
             expect(item.rowSpan).toBe(9);

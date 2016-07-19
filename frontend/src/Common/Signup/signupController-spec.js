@@ -12,10 +12,6 @@ describe('signupController', () => {
         sc = signupController.signupFactory()();
     });
 
-    it('should have a function that return the content height of the page ', () => {
-        const h = sc.calculateHeight();
-        expect(h).toBeDefined();
-    });
 
     it('should have a function that execute the signup service when the form is valid', () => {
         sc.user = {};

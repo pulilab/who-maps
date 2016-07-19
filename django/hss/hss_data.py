@@ -69,7 +69,7 @@ interventions = {
         'Malaria',
         'Depression',
         'Postnatal care',
-        'HIV/AIDs',
+        'HIV/AIDS',
         'PMTCT',
         'Newborn illnesses',
         'Low birth weight/pre term care',
@@ -109,12 +109,40 @@ interventions = {
 age_ranges = [
     "Newborn (< 28 days)",
     "Infant (< 12 months)",
-    "Childhood (1-9 years)",
+    "Early Childhood (1-4 years)",
+    "Late Childhood (5-9 years)",
     "Adolescence (10-19 years)",
     "Youth (20-24 years)",
     "Adulthood (25-64 years)",
     "Senior (> 65 years)",
 ]
+
+special_population = [
+    "At risk for a particular disease or infection",
+    "Incarcerated",
+    "Commercial Sex Workers",
+    "Disabled",
+    "Drug users",
+    "Family as a unit",
+    "Immigrant populations",
+    "Lesbian, gay, bisexual, and transgender",
+    "Men (only)",
+    "Women (only)",
+    "Especially vulnerable children",
+    "Parents",
+    "Racial and ethnic minorities",
+    "Refugee",
+    "Pregnant women",
+    "Rural populations",
+    "Student populations",
+    "Urban populations",
+    "Workforce"
+]
+
+target_population = {
+    "age_ranges": age_ranges,
+    "special_population": special_population
+}
 
 applications = [
     {
@@ -175,21 +203,15 @@ applications = [
     },
     {
         'id': 7,
-        'name': 'Provider training and education',
+        'name': 'Human resource management',
         'subApplications': {
             1: 'Provider training and education',
+            2: 'Supportive supervision',
+            3: 'Constituent feedback on service quality'
         }
     },
     {
         'id': 8,
-        'name': 'Human resource management',
-        'subApplications': {
-            1: 'Supportive supervision',
-            2: 'Constituent feedback on service quality'
-        }
-    },
-    {
-        'id': 9,
         'name': 'Supply management',
         'subApplications': {
             1: 'Cold chain management',
@@ -200,7 +222,7 @@ applications = [
         }
     },
     {
-        'id': 10,
+        'id': 9,
         'name': 'Financial transactions and incentives',
         'subApplications': {
             1: 'Payment for Services',
@@ -300,12 +322,12 @@ continuum = [
     },
     {
         'id': 3,
-        'title': 'Linkage to care',
+        'title': 'Linkage to care & Coordination',
         'span': 1,
     },
     {
         'id': 4,
-        'title': 'Management and quality of care',
+        'title': 'Management and quality of Care',
         'span': 1,
     },
     {
@@ -315,7 +337,7 @@ continuum = [
     },
     {
         'id': 6,
-        'title': 'Coordination of care',
+        'title': 'Reporting and Planning',
         'span': 1,
     }
 ]
@@ -383,34 +405,34 @@ hss_default = {
             'interventions': []
         },
     ],
-    'age_ranges': [
+    'target_population': [
         {
             'column_id': 0,
-            'age_ranges': []
+            'target_population': {}
         },
         {
             'column_id': 1,
-            'age_ranges': []
+            'target_population': {}
         },
         {
             'column_id': 2,
-            'age_ranges': []
+            'target_population': {}
         },
         {
             'column_id': 3,
-            'age_ranges': []
+            'target_population': {}
         },
         {
             'column_id': 4,
-            'age_ranges': []
+            'target_population': {}
         },
         {
             'column_id': 5,
-            'age_ranges': []
+            'target_population': {}
         },
         {
             'column_id': 6,
-            'age_ranges': []
+            'target_population': {}
         },
     ],
     'taxonomies': [

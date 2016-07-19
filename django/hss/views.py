@@ -8,7 +8,7 @@ from rest_framework.viewsets import GenericViewSet
 from search.signals import intervention_save
 from project.models import Project
 
-from .hss_data import interventions, applications, taxonomies, continuum, age_ranges
+from .hss_data import interventions, applications, taxonomies, continuum, target_population
 from .models import HSS
 from . import serializers
 
@@ -143,8 +143,8 @@ class InterventionView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewS
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AgeRangeView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
-    serializer_class = serializers.AgeRangeSerializer
+class TargetPopulationView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
+    serializer_class = serializers.TeamPopulationSerializer
 
     @transaction.atomic
     def create(self, request, project_id):
@@ -158,7 +158,7 @@ class AgeRangeView(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet):
             # Check if there's a project for the ID.
             hss = get_object_or_400(HSS, select_for_update=True, error_message="No such project.", project=project_id)
             # Update the column with the intervention.
-            hss.data["age_ranges"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
+            hss.data["target_population"][serializer.validated_data["column_id"]] = dict(serializer.validated_data)
             hss.save()
             return Response(serializer.data)
         else:
@@ -241,7 +241,7 @@ def hss_structure(request):
     """
     data = {
         "interventions": interventions,
-        "age_ranges": age_ranges,
+        "target_population": target_population,
         "applications": applications,
         "taxonomies": taxonomies,
         "continuum": continuum
