@@ -67,7 +67,6 @@ class Protected extends AuthApi {
         this.isLogin = false;
         this.userProfileId = null;
         this.storage.clear();
-        this.EE.emit('logout');
     }
 
     retrieveLoginStatus() {

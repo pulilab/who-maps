@@ -17,7 +17,7 @@ const config = ($stateProvider, $compileProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<maps-toolkit></maps-toolkit>',
+                    template: '<maps-toolkit layout="column" layout-fill></maps-toolkit>',
                     resolve: {
                         'main': () => {
                             return su.lazyLoader($compileProvider, 'mapsComponent');
@@ -57,7 +57,7 @@ const config = ($stateProvider, $compileProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<scorecard summary="true"></scorecard>',
+                    template: '<scorecard layout-fill layout="column" summary="true"></scorecard>',
                     resolve: {
                         'scorecard': () => {
                             return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');

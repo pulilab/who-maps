@@ -37,7 +37,6 @@ function config($stateProvider, $compileProvider) {
                 }
             }
         });
-
 }
 
 config.$inject = ['$stateProvider', '$compileProvider'];

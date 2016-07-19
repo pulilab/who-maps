@@ -31,6 +31,7 @@ class ProjectSerializer(serializers.Serializer):
     licenses = serializers.ListField(required=False)  # Can hold 'other' fields
     application = serializers.ListField(required=False)
     coverage = serializers.ListField(required=False)
+    national_level_deployment = serializers.ListField(required=False)
     started = serializers.CharField(required=False, allow_blank=True)
     donors = serializers.ListField(required=False)  # Should be text instead of ID - no Donors in MVP
     reports = serializers.ListField(required=False)
@@ -42,6 +43,7 @@ class ProjectSerializer(serializers.Serializer):
     mobile_application = serializers.CharField(required=False, allow_blank=True)
     wiki = serializers.URLField(required=False, allow_blank=True)
     pre_assessment = serializers.ListField(required=False)
+    links = serializers.ListField(required=False)
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -112,3 +114,12 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
+
+
+class ProjectFilterSerializer(serializers.Serializer):
+
+    technology_platforms = serializers.ListField(required=False)
+    application = serializers.ListField(required=False)
+    continuum = serializers.ListField(required=False)
+    interventions = serializers.ListField(required=False)
+    constraints = serializers.ListField(required=False)

@@ -9,17 +9,28 @@ app {
   margin: 0;
   width: 100%;
   min-height: 100%;
-  height: 100%;
+  height: auto;
+  flex: 1 0 auto !important;
 }
 
 ui-view {
   background-color: $color-page-background;
+  height:auto !important;
+  min-height:100%;
+  flex: 1 0 auto !important;
 }
 
 .main-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
   height: auto !important;
+  flex: 1 0 auto !important;
+}
+
+#intro-wrapper {
+  height:auto;
+  min-height: 100%;
+  flex: 1 0 auto !important;
 }
 
 .page-wrapper {
@@ -67,9 +78,7 @@ md-tooltip {
 /* UI ELEMENTS
    ============================= */
 
-#main-view {
-  display: block;
-}
+
 
 .md-button {
 
@@ -500,6 +509,83 @@ p.global-error {
   .md-menu {
     .has-message {
       color: $color-white !important;
+    }
+  }
+}
+
+.share-url {
+  position: relative;
+  width:400px;
+  height:170px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+  .share-title {
+    position: absolute;
+    padding:0;
+    margin:0;
+    top:20px;
+    left:20px;
+    color: $color-gray-light;
+    text-transform: uppercase;
+    font-size:12px;
+  }
+
+  .share-url-box {
+    padding:0 0 0 10px;
+    margin:0;
+    position: absolute;
+    outline:none;
+    border:0;
+    left: 20px;
+    top: 50px;
+    width:351px;
+    height:35px;
+    background: $color-gray-lighter;
+
+  }
+
+  .share-button-container {
+
+    overflow: hidden;
+
+    .share-copy {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      left: 20px;
+      top: 105px;
+      width: 115px;
+      height: 35px;
+      font-weight: bold;
+      font-size: 14px;
+      color: $color-white;
+    }
+
+    .share-copied {
+      background-color: $color-green;
+      pointer-events: none;
+
+      &:hover {
+        background-color: $color-green;
+      }
+
+      md-icon {
+        color: $color-white;
+      }
+    }
+
+    .share-cancel {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      left: 160px;
+      top: 105px;
+      width: 40px;
+      height: 15px;
+      color: $color-gray-light;
+
     }
   }
 }

@@ -81,7 +81,7 @@ describe('DashboardModuleController', () => {
 
         expect(vm.projectData).toBe(mock);
         expect(vm.fetchCountryMap).toHaveBeenCalledWith(mock.country);
-        expect(vm.parseMapData).toHaveBeenCalledWith(mock.coverage);
+        expect(vm.parseMapData).toHaveBeenCalledWith(mock.coverage, undefined);
         expect(vm.fetchCoverageVersions).toHaveBeenCalled();
     });
 

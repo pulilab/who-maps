@@ -20,9 +20,9 @@
         </div>
     </div>
 
-    <div layout="column" layout-align="start start" class="domain-questions" md-whiteframe="2" class="domain-block md-padding">
+    <div layout="column" layout-align="start start" md-whiteframe="2" class="domain-questions domain-block md-padding">
 
-        <div layout="column" layout-fill>
+        <div layout="column">
             <div class="domain-header" layout="row">
                 <div class="left" flex>
                     <h4>{{vm.data.domain}} ({{vm.data.domain_max}} points)</h4>
@@ -72,8 +72,9 @@
                 </div>
             </section>
         </div>
-        <div class="domain-scoore" flex="100" layout-fill layout="row" layout-align="center start">
-            <span flex layout-fill layout="column"  layout-align="center start"> Total point earned (out of a possible {{vm.domain.domain_max}}) </span>
+
+        <div class="domain-score"  layout-fill layout="row" layout-align="center start">
+            <span flex layout="column" layout-fill layout-align="center start"> Total point earned (out of a possible {{vm.domain.domain_max}}) </span>
             <span flex layout="column" layout-fill layout-align="center end">{{vm.score}}</span>
         </div>
 

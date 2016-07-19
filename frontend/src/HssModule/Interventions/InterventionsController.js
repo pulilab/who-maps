@@ -17,14 +17,28 @@ class InterventionsController extends Protected {
         vm.defaultOnInit();
         vm.editMode = false;
         vm.interventionsRowSpan = {
-            size: 5
+            size: 1
+        };
+        vm.targetPopulationRowSpan = {
+            size: 1
         };
         this.gridLoading = false;
-        this.resizeRow = this.resizeRow.bind(this);
+        this.resizeInterventionsRow = this.resizeInterventionsRow.bind(this);
         this.calculateInterventionHeight = this.calculateInterventionHeight.bind(this);
         vm.hs = vm.service;
+        vm.targetPopulationOptions = [
+            {
+                name: 'Special Population',
+                item: _.cloneDeep(vm.structure.target_population.special_population)
+            },
+            {
+                name: 'Age Ranges',
+                item: _.cloneDeep(vm.structure.target_population.age_ranges)
+            }
+        ];
+
         vm.interventionRow = this.middleColumnGenerator();
-        vm.ageRangesRow = vm.ageRangeColumnGenerator();
+        vm.specialPopulationRow = vm.specialPopulationsColumnGenerator();
         vm.bindEvents();
     }
 
@@ -64,7 +78,7 @@ class InterventionsController extends Protected {
             return value;
         });
 
-        _.map(this.ageRangesRow, (value) => {
+        _.map(this.specialPopulationRow, (value) => {
             if (value.columnId === event.columnId) {
                 value.activated = event.activated;
             }
@@ -84,12 +98,14 @@ class InterventionsController extends Protected {
         return _.chain(this.tiles)
             .range()
             .map((value) => {
+                const content = this.data.interventions[value].interventions;
+                self.calculateInterventionHeight(content);
                 const _activated = this.data.continuum[value].state;
                 return {
-                    content: this.data.interventions[value].interventions,
+                    content,
                     className: 'intervention',
                     colSpan: 1,
-                    rowSpan: 5,
+                    rowSpan: this.interventionsRowSpan.size,
                     columnId: value,
                     activated: _activated,
                     selectValues: this.structure.interventions[value],
@@ -101,23 +117,26 @@ class InterventionsController extends Protected {
             .value();
     }
 
-    ageRangeColumnGenerator() {
+    specialPopulationsColumnGenerator() {
         const self = this;
         return _.chain(this.tiles)
             .range()
             .map((value) => {
+                const content = _.concat(self.data.target_population[value].target_population.special_population,
+                    self.data.target_population[value].target_population.age_ranges);
+                self.calculateTargetPopulationHeight(content);
                 const _activated = this.data.continuum[value].state;
                 return {
-                    content: this.data.age_ranges[value].age_ranges,
+                    content,
                     className: 'intervention',
                     colSpan: 1,
-                    rowSpan: 5,
+                    rowSpan: this.targetPopulationRowSpan.size,
                     columnId: value,
                     activated: _activated,
-                    selectValues: this.structure.age_ranges,
+                    selectValues: self.targetPopulationOptions,
                     introName: 'interventions_middle_' + value,
                     classGenerator: self.classGenerator,
-                    saveAgeRanges: self.saveAgeRanges.bind(this, value)
+                    saveSpecialPopulations: self.saveSpecialPopulations.bind(this, value)
                 };
             })
             .value();
@@ -131,7 +150,7 @@ class InterventionsController extends Protected {
             return 0;
         });
         if (max.content) {
-            this.resizeRow(Math.abs(max.content.length / 1.5));
+            this.resizeInterventionsRow(Math.abs(max.content.length / 1.5));
         }
 
     }
@@ -140,10 +159,10 @@ class InterventionsController extends Protected {
         if (!newValue || !newValue.length) {
             return;
         }
-        this.resizeRow(newValue.length * 0.5);
+        this.resizeInterventionsRow(newValue.length * 0.6);
     }
 
-    resizeRow(newValue) {
+    resizeInterventionsRow(newValue) {
         if (!newValue) {
             return;
         }
@@ -154,14 +173,49 @@ class InterventionsController extends Protected {
         });
     }
 
-    stripParenthesis(str) {
-        return str.split('(')[0];
+
+    calculateTargetPopulationHeight(newValue) {
+        if (!newValue || !newValue.length) {
+            return;
+        }
+        this.resizeTargetPopulationRows(newValue.length * 0.6);
     }
 
-    saveAgeRanges(columnId, value) {
-        this.ageRangesRow[columnId].content = value;
-        this.hs.postAgeRanges(columnId, value);
+    resizeTargetPopulationRows(newValue) {
+        if (!newValue) {
+            return;
+        }
+        const rowSpan = Math.max(newValue, this.targetPopulationRowSpan.size);
+        this.targetPopulationRowSpan.size = rowSpan;
+        _.forEach(this.specialPopulationRow, item => {
+            item.rowSpan = rowSpan;
+        });
     }
+
+
+    saveSpecialPopulations(columnId, value) {
+        const toSave = {
+            special_population: [],
+            age_ranges: []
+        };
+
+        _.forEach(value, item => {
+            if (!_.isObject(item)) {
+                const isAge = this.structure.target_population.age_ranges.indexOf(item) > -1;
+                if (isAge) {
+                    toSave.age_ranges.push(item);
+                }
+                else {
+                    toSave.special_population.push(item);
+                }
+            }
+        });
+        this.specialPopulationRow[columnId].content = value;
+        this.hs.postSpecialPopulations(columnId, toSave);
+        this.calculateTargetPopulationHeight(value);
+
+    }
+
 
     saveInterventions(columnId, value) {
         this.interventionRow[columnId].content = value;
@@ -173,6 +227,7 @@ class InterventionsController extends Protected {
         require('./Interventions.scss');
         function interventions($scope) {
             return new InterventionsController($scope);
+
         }
 
         interventions.$inject = ['$scope'];

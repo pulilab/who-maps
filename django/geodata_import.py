@@ -3,6 +3,7 @@ import shutil
 import logging
 import tarfile
 import json
+import sys
 from xml.dom import minidom
 
 import geodata_config
@@ -16,11 +17,10 @@ except ImportError:
 
 
 def fetch_geodata():
-
     print("-- Fetching pre-selected country files from Mapzen...")
     # Use pre-selected countries.
-    file_list = geodata_config.SELECTED_FILE_LIST
 
+    file_list = geodata_config.SELECTED_FILE_LIST if len(sys.argv) > 1 and sys.argv[1] == 'prod' else geodata_config.SELECTED_FILE_LIST_DEV
 
     # Recreating temporary folder for the files.
     try:
@@ -45,6 +45,7 @@ def fetch_geodata():
 
     print("-- Fetching is done!")
 
+
 def topojson():
     print("-- Transforming geodata files with Topojson...")
     for folder in os.listdir(geodata_config.GEOJSON_TEMP_DIR):
@@ -56,6 +57,7 @@ def topojson():
         print("{} transformed.".format(filename))
 
     print("-- Transforming is done!")
+
 
 def import_geodata():
     os.system("docker exec -it whomaps_django_1 python manage.py import_geodata")
