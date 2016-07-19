@@ -1,4 +1,3 @@
-
 class EmailConfirmationController {
 
     constructor($scope, $state, CommonServices) {
@@ -12,7 +11,7 @@ class EmailConfirmationController {
 
     onInit() {
         this.style = {
-            height: this.calculateHeight()
+            height: this.cs.calculateHeight()
         };
 
         const reset = this.cs.reset();
@@ -24,13 +23,6 @@ class EmailConfirmationController {
 
     onDestroy() {
     }
-
-
-    calculateHeight() {
-        const contentHeight = window.innerHeight - 48;
-        return contentHeight + 'px';
-    }
-
 
     static refreshProjectFactory() {
         require('./RefreshProject.scss');

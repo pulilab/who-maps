@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Protected } from '../Common/';
+import Clipboard from 'clipboard';
 
 class AppModuleController extends Protected {
 
@@ -21,7 +22,6 @@ class AppModuleController extends Protected {
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
-
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -36,8 +36,12 @@ class AppModuleController extends Protected {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
                     this.currentProject = project;
+                    this.createShareDefinition();
                     this.scope.$evalAsync();
                 });
+        }
+        else if (this.currentProject) {
+            this.createShareDefinition();
         }
     }
 
@@ -57,6 +61,19 @@ class AppModuleController extends Protected {
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
         this.EE.on('profileUpdated', this.refreshProfileInfo, this);
+    }
+
+    createShareDefinition() {
+        this.shareUrl = {
+            url: `http://${window.location.host}/project/${this.currentProject.public_id}`,
+            copyClicked: false,
+            clipboard: new Clipboard('.share-copy')
+        };
+
+        this.shareUrl.clipboard.on('success', event => {
+            this.shareUrl.copyClicked = true;
+            event.clearSelection();
+        });
     }
 
     iconFunction(item) {
@@ -84,10 +101,10 @@ class AppModuleController extends Protected {
             type = 'Implementer';
             break;
         case 'G':
-            type = 'Financial Investor';
+            type = 'Government';
             break;
         case 'D':
-            type = 'Government';
+            type = 'Financial Investor';
             break;
         }
         return type;
@@ -96,12 +113,7 @@ class AppModuleController extends Protected {
     refreshProfileInfo() {
         this.userProfile = this.cs.userProfile;
         this.scope.$evalAsync();
-        if (this.cs.projectList > 0) {
-            this.state.go('dashboard');
-        }
-        else {
-            this.state.go('country');
-        }
+        this.state.go('dashboard');
     }
 
     checkUserProfile() {

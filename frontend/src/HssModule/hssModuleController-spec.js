@@ -42,12 +42,11 @@ describe('HssModuleController', () => {
     });
 
     it('has a function that handle the backend data and structure', () => {
-        const mockValues = [1, 2];
+        const mockValues = 2;
         expect(cc.dataReady).toBeFalsy();
         cc.handleServerData(mockValues);
         expect(cc.dataReady).toBeTruthy();
-        expect(cc.structure).toBe(1);
-        expect(cc.data).toBe(2);
+        expect(cc.data).toBe(mockValues);
     });
 
     it('has a function which refreshes the array containing info about column contents', () => {

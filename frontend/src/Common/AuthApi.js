@@ -53,15 +53,18 @@ class AuthApi {
         const request = this.generateRequest();
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
-            .then((response) => {
-                if (response.status === 401) {
-                    this.EE.emit('unauthorized');
-                }
-                return response.json();
-            })
+            .then(this.responseProcessing.bind(this))
+            .then(response => response.json())
             .then((json) =>{
                 return this.cleanDoubleDollar(json);
             });
+    }
+
+    responseProcessing(response) {
+        if (response.status === 401) {
+            this.EE.emit('unauthorized');
+        }
+        return response.ok ?  response : response.json().then(Promise.reject.bind(Promise));
     }
 
     getBlob(endpoint) {
@@ -72,12 +75,8 @@ class AuthApi {
         const request = this.generateRequest();
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
-            .then((response) => {
-                if (response.status === 401) {
-                    this.EE.emit('unauthorized');
-                }
-                return response.blob();
-            })
+            .then(this.responseProcessing.bind(this))
+            .then(response => response.blob())
             .then(blob => {
                 return blob;
             });
@@ -91,12 +90,7 @@ class AuthApi {
         const request = this.generateRequest();
         request.method = 'DELETE';
         return fetch(this.apiUrl + endpoint, request)
-            .then((response) => {
-                if (response.status === 401) {
-                    this.EE.emit('unauthorized');
-                }
-                return response;
-            });
+            .then(this.responseProcessing.bind(this));
     }
 
     post(endpoint, _data) {
@@ -109,9 +103,7 @@ class AuthApi {
         request.method = 'POST';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
-            .then((response) => {
-                return response;
-            });
+            .then(this.responseProcessing.bind(this));
     }
 
     put(endpoint, _data) {
@@ -124,9 +116,7 @@ class AuthApi {
         request.method = 'PUT';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
-            .then((response) => {
-                return response;
-            });
+            .then(this.responseProcessing.bind(this));
     }
 
     postFormData(endpoint, data) {
@@ -155,9 +145,7 @@ class AuthApi {
         request.method = 'POST';
         request.body = body;
         return fetch(this.apiUrl + endpoint, request)
-            .then((response) => {
-                return response;
-            });
+            .then(this.responseProcessing.bind(this));
     }
 
     postSingleFormData(endpoint, name, value) {

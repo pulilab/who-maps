@@ -99,23 +99,28 @@ describe('CountryMapController', () => {
 
     describe('on data arrival', () => {
 
+        const nationalMock = [{ a: 1, b: 2, district: 'shouldGetDeleted' }];
+        const mockLibAfter = { a: 1, b: 2 };
+
         it('stores data & notes that data have arrived', () => {
 
+
             vm.big = true;
-            vm.dataArrived(perfMockMap);
+            vm.dataArrived(perfMockMap, nationalMock);
             expect(vm.data.data).toBe(perfMockMap);
             expect(vm.dataHere).toBe(true);
+            expect(JSON.stringify(vm.nationalCov)).toBe(JSON.stringify(mockLibAfter));
             vm.dataHere = false;
 
             vm.big = false;
-            vm.dataArrived(perfMockMap);
+            vm.dataArrived(perfMockMap, nationalMock);
             expect(vm.data).toBe(perfMockMap);
             expect(vm.dataHere).toBe(true);
         });
 
         it('aggregates the values of districts to show them all', () => {
 
-            vm.dataArrived(perfMockMap);
+            vm.dataArrived(perfMockMap, nationalMock);
 
             expect(typeof vm.boundNrs).toBe('object');
             expect(vm.boundNrs.clients).toBe(12);
@@ -127,7 +132,7 @@ describe('CountryMapController', () => {
             spyOn(vm, 'preDraw');
             vm.mapHere = true;
             vm.map = 'mapdata';
-            vm.dataArrived(perfMockMap);
+            vm.dataArrived(perfMockMap, nationalMock);
             expect(vm.preDraw).toHaveBeenCalledWith('mapdata');
         });
     });
@@ -168,7 +173,7 @@ describe('CountryMapController', () => {
 
     it('has a method .makeGeoFromTopo(), that uses the topojson lib to make a geojson out of the data', () => {
 
-        const ret = vm.makeGeoFromTopo(mockMap.admin_level_5, 'admin_level_5');
+        const ret = vm.makeGeoFromTopo(mockMap.admin_level_4, 'admin_level_4');
         expect(typeof ret).toBe('object');
     });
 
@@ -210,7 +215,7 @@ describe('CountryMapController', () => {
         vm.cs = { projectStructure: { countries: countriesMock } };
 
         const levLibMadeNow = vm.defaultLevels();
-        expect(levLibMadeNow.India).toBe('admin_level_4');
+        expect(levLibMadeNow.India).toBe('admin_level_5');
     });
 
     it('formatCountryName() formats the self.country bindable upon a library', () => {
@@ -222,10 +227,6 @@ describe('CountryMapController', () => {
         vm.countryName = 'Border Malawi - Mozambique';
         vm.formatCountryName();
         expect(vm.countryName).toBe('Malawi');
-
-        vm.countryName = 'The Gambia';
-        vm.formatCountryName();
-        expect(vm.countryName).toBe('Senegal');
 
         vm.countryName = 'Something not in the lib';
         vm.formatCountryName();

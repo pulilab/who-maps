@@ -19,6 +19,8 @@ from django.views.generic import TemplateView
 
 from project.views import create_from_file
 
+admin.site.site_header = 'Digital Health Atlas'
+
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
@@ -29,3 +31,4 @@ urlpatterns = [
     url(r"^api/", include("search.urls")),
     url(r"^web/projects/bulk/$", view=create_from_file, name="project-bulk"),
 ]
+

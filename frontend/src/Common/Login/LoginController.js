@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import LoginService from './LoginService';
+import CommonServices from '../CommonServices';
 
 class LoginModuleController {
 
@@ -17,17 +18,12 @@ class LoginModuleController {
             password: ''
         };
         this.style = {
-            height: this.calculateHeight()
+            height: CommonServices.calculateHeight()
         };
     }
 
     onDestroy() {
         this.user = void 0;
-    }
-
-    calculateHeight() {
-        const contentHeight = window.innerHeight - 48;
-        return contentHeight + 'px';
     }
 
     login() {
@@ -58,6 +54,11 @@ class LoginModuleController {
             }
         });
         vm.scope.$evalAsync();
+    }
+
+    handleCustomError(key) {
+        this.loginForm[key].$setValidity('custom', true);
+        this.loginForm[key].customError = [];
     }
 
 

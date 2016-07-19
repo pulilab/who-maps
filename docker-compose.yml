@@ -46,8 +46,8 @@ postgres:
     - POSTGRESQL_PASSWORD=postgres
   volumes_from:
     - postgresdata
-  ports:
-    - "5432:5432"
+  expose:
+    - "5432"
 
 postgresdata:
   image: postgres:9.5.1
