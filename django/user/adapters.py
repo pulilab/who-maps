@@ -4,7 +4,7 @@ from django.contrib.sites.models import Site
 
 
 class DefaultAccountAdapterCustom(DefaultAccountAdapter):
-    ACTIVATE_BASE_URL = 'http://' + Site.objects.get(id=settings.SITE_ID).domain + '/#/'
+    ACTIVATE_BASE_URL = 'http://' + Site.objects.get(id=settings.SITE_ID).domain + '/'
 
     def send_mail(self, template_prefix, email, context):
         context['activate_url'] = self.ACTIVATE_BASE_URL + \
