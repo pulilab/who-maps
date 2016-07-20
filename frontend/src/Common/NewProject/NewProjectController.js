@@ -38,6 +38,11 @@ class NewProjectController extends ProjectDefinition {
         this.handleStructureLoad();
 
         this.allUsers = this.cs.usersProfiles;
+
+        this.team = [];
+        this.viewers = [];
+        this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
+
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.cs.getProjectData(this.projectId)
@@ -50,10 +55,7 @@ class NewProjectController extends ProjectDefinition {
         }
 
         if (this.inventoryMode) {
-            this.team = [];
-            this.viewers = [];
             this.project.organisation = void 0;
-            this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
         }
 
     }
@@ -308,7 +310,7 @@ class NewProjectController extends ProjectDefinition {
 
     ownershipCheck(project) {
         const id = this.userProfile.id;
-        const rights = _.concat(this.tem, this.viewers);
+        const rights = _.concat(this.team, this.viewers);
         if (rights.length > 0 && _.find(rights, { id })) {
             this.projectId = project.id;
         }

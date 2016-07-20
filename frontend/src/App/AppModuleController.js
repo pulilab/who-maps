@@ -159,9 +159,7 @@ class AppModuleController extends Protected {
                 location: 'replace',
                 reload: true
             });
-            if (forcedPath.go === 'inventory') {
-                window.scrollTo(0, 0);
-            }
+            window.scrollTo(0, 0);
         }
 
         this.scope.$evalAsync();
