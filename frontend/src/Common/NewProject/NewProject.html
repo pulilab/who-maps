@@ -1,4 +1,4 @@
-<div layout="column" layout-align="start center" >
+<div layout="column" class="new-edit-project" layout-fill layout-align="start center" >
     <div class="page-title" ng-hide="vm.editMode">
         <h1 class="md-display-1 text-center">Add new project sheet</h1>
         <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
@@ -14,20 +14,20 @@
     </div>
 
     <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="vm.newProjectForm" ng-submit="vm.save($event)"  novalidate>
-            <div layout="column" class="main-form">
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate>
+            <div layout="column" layout-fill class="main-form">
                 <h4>1. Project details</h4>
                 <div class="project-name" flex="100" layout="row" layout-align="start center">
                     <md-input-container flex="60">
                         <label>Name of the project</label>
                         <input
-                            class="input-name"
-                            ng-model="vm.project.name"
-                            ng-model-options="{debounce: 200}"
-                            ng-change="vm.checkName()"
-                            ng-disabled="vm.editMode"
-                            required name="name"
-                            md-maxlength="100" type="text" />
+                                class="input-name"
+                                ng-model="vm.project.name"
+                                ng-model-options="{debounce: 200}"
+                                ng-change="vm.checkName()"
+                                ng-disabled="vm.editMode"
+                                required name="name"
+                                md-maxlength="100" type="text" />
                         <div ng-messages="vm.newProjectForm.name.$error">
                             <div ng-message="required">This is required.</div>
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.name.customError">{{error}} </div>
@@ -50,6 +50,19 @@
                         <div ng-messages="vm.newProjectForm.organisation.$error">
                             <div ng-message="required">This is required.</div>
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.organisation.customError">{{error}} </div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div flex="100" layout="row" layout-align="start center">
+                    <md-input-container flex="60">
+                        <label>Overview of Digital health implementation</label>
+                        <input type="text"
+                               ng-required="true" name="implementation_overview" md-maxlength="500"
+                               ng-model="vm.project.implementation_overview"
+                               ng-change="vm.handleCustomError('implementation_overview')"/>
+                        <div ng-messages="vm.newProjectForm.implementation_overview.$error">
+                            <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -289,6 +302,25 @@
                         </div>
 
 
+
+                        <h5>Other Digital Innovation Project Repositories Links:</h5>
+                        <div layout="row" layout-align="start center" ng-repeat="r in vm.project.links">
+                            <div layout="row" flex="70">
+                                <md-icon>link</md-icon>
+                                <md-input-container flex>
+                                    <label>Add link to a webpage</label>
+                                    <input type="url" ng-model="r.value" placeholder="CHMI, USAID Compendium, GSMA Tracker, HingX" />
+                                </md-input-container>
+                            </div>
+                            <md-button ng-hide="$last" ng-click="vm.rmCHMILink(r)" layout="column" class="md-icon-button red">
+                                <md-icon>delete_forever</md-icon>
+                            </md-button>
+                            <md-button ng-show="$last" layout="column" ng-click="vm.addCHMILink()" class="md-icon-button">
+                                <md-icon>add</md-icon>
+                            </md-button>
+                        </div>
+
+
                     </section>
 
                     <section class="vision">
@@ -437,7 +469,6 @@
                             <md-input-container>
                                 <input type="url" placeholder="Link to wiki page:" name="wiki" ng-required="true" ng-model="vm.project.wiki"/>
                                 <div ng-messages="vm.newProjectForm.wiki.$error">
-                                    <div ng-message="required">This is required.</div>
                                     <div ng-message="url">This should be a valid link</div>
                                 </div>
                             </md-input-container>
@@ -473,15 +504,6 @@
                                 </div>
                             </md-input-container>
 
-                        </div>
-
-                        <div layout="column">
-                            <md-input-container>
-                                <input type="text" ng-required="true" name="implementation_overview" md-maxlength="500" placeholder="Overview of Digital health implementation" ng-model="vm.project.implementation_overview"/>
-                                <div ng-messages="vm.newProjectForm.implementation_overview.$error">
-                                    <div ng-message="required">This is required.</div>
-                                </div>
-                            </md-input-container>
                         </div>
 
                         <div layout="column">

@@ -7,6 +7,8 @@ from django.conf import settings
 
 import geodata_config
 from country.models import Country
+from project.models import Project
+
 
 class Command(BaseCommand):
     help = "Imports geodata of countries from Mapzen."
@@ -22,8 +24,27 @@ class Command(BaseCommand):
                     geodata[filename.strip(".geojson")] = json_content
             country, created = Country.objects.get_or_create(name=folder)
             country.geodata = geodata
+
+            try:
+                for geom in geodata['admin_level_2']['objects']['admin_level_2']['geometries']:
+                    try:
+                        country.code = geom['properties']['ISO3166-1']
+                        break
+                    except KeyError:
+                        country.code = geom['properties']['ISO3166-1:alpha2']
+            except KeyError:
+                if country.name == 'the-gambia':
+                    country.code = 'GM'
+
+            if not country.code:
+                country.code = "NULL"
+
             country.save()
             self.stdout.write("{} imported.".format(country.name))
+
+        self.stdout.write("-- Writing Project Public IDs based on country codes...")
+        for p in Project.objects.all():
+            p.save()
 
         self.stdout.write("-- Removing temporary files...")
         shutil.rmtree(settings.GEOJSON_TEMP_DIR)

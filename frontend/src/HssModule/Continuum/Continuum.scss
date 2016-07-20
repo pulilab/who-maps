@@ -143,12 +143,20 @@ continuum {
         }
         p {
           width: 100%;
-          padding: 0 40px;
+          padding: 0 20px;
         }
         .continuum-row-title {
           display: block;
+          width:100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
           color: $color-green;
-          line-height: 18px;
+          line-height: 14px;
+          text-transform: capitalize;
+
+          &.no-wrap {
+            white-space: nowrap;
+          }
         }
         .continuum-sub-title {
           display: block;

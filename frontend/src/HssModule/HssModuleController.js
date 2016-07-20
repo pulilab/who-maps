@@ -32,7 +32,7 @@ class HssModuleController extends Protected {
             this.adjustUserType(this.cs.userProfile);
         }
         this.viewMode = this.userType < 3;
-        Promise.all([this.hs.getStructure(), this.hs.getData()]).then(this.handleServerData.bind(this));
+        this.hs.getData().then(this.handleServerData.bind(this));
     }
 
     onDestroy() {
@@ -67,9 +67,9 @@ class HssModuleController extends Protected {
         this.gridLoading = counter;
     }
 
-    handleServerData(values) {
-        this.structure = values[0];
-        this.data = values[1];
+    handleServerData(data) {
+        this.structure = this.cs.hssStructure;
+        this.data = data;
         this.scope.$evalAsync();
         this.dataReady = true;
     }

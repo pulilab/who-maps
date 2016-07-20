@@ -28,6 +28,7 @@ class CommonServices extends Protected {
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = [];
         this.userProfile = null;
+        this.hssStructure = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
         this.loadedPromise = new Promise((resolve, reject) => {
@@ -43,7 +44,7 @@ class CommonServices extends Protected {
         }
     }
 
-    uglyfyCountryName(name) {
+    uglifyCountryName(name) {
         let nameParts = name.replace(' ', '-').split('-');
         nameParts = _.map(nameParts, item =>{
             return _.lowerCase(item);
@@ -69,6 +70,8 @@ class CommonServices extends Protected {
         if (this.userProfileId) {
             this.loadingCheck.push('list');
             this.loadingCheck.push('user-profile');
+            this.loadingCheck.push('hss-structure');
+            this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
         }
@@ -158,7 +161,19 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.projectStructure = structure;
                 this.loadingProgress('structure');
-            }, () => {
+            }).catch(() => {
+                this.loadingProgress('structure');
+                this.promiseReject();
+            });
+    }
+
+    populateHssStructure() {
+        this.get('projects/hss/structure/')
+            .then(structure => {
+                this.hssStructure = structure;
+                this.loadingProgress('hss-structure');
+            }).catch(() => {
+                this.loadingProgress('hss-structure');
                 this.promiseReject();
             });
     }
@@ -209,6 +224,25 @@ class CommonServices extends Protected {
             }
 
         });
+    }
+
+    updateProject(project, projectId) {
+        const id = parseInt(projectId, 10);
+        const last = _.find(this.projectList, { id });
+        _.merge(last, project);
+    }
+
+    isViewer(project) {
+        return this.userProfile && this.userProfile.viewer.indexOf(project.id) > -1 && ! this.isMember(project);
+    }
+
+    isMember(project) {
+        return this.userProfile && this.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    calculateHeight() {
+        const contentHeight = window.innerHeight - 48;
+        return contentHeight + 'px';
     }
 
     static commonServiceFactory() {

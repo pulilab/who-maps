@@ -5,6 +5,8 @@ import ProjectDefinition from '../ProjectDefinition';
 
 /* global DEV, DEBUG, Promise */
 
+const wholeCountryName = 'ENTIRE COUNTRY';
+
 class NewProjectController extends ProjectDefinition {
 
     constructor($scope, $state, Upload, CommonService, structure) {
@@ -53,11 +55,11 @@ class NewProjectController extends ProjectDefinition {
     }
 
     isViewer(project) {
-        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project);
     }
 
 
@@ -111,6 +113,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;
+                this.mergeNationalLevelWithDistrictCoverage();
                 this.unfoldCoverage();
                 this.assignDefaultCustom();
                 this.addDefaultEmpty();
@@ -118,6 +121,14 @@ class NewProjectController extends ProjectDefinition {
             });
         this.scope.$evalAsync();
 
+    }
+
+    mergeNationalLevelWithDistrictCoverage() {
+        this.districtList.unshift(wholeCountryName);
+        _.forEach(this.project.national_level_deployment, item => {
+            item.district = wholeCountryName;
+            this.project.coverage.push(item);
+        });
     }
 
     addDefaultEmpty() {
@@ -207,6 +218,7 @@ class NewProjectController extends ProjectDefinition {
 
     handleDistrictData(data) {
         this.districtList = data;
+        this.mergeNationalLevelWithDistrictCoverage();
         this.scope.$evalAsync();
     }
 
@@ -246,6 +258,7 @@ class NewProjectController extends ProjectDefinition {
             const processedForm = _.cloneDeep(this.project);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
+            this.separateCoverageAndNationalLevelDeployments(processedForm);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
@@ -260,6 +273,8 @@ class NewProjectController extends ProjectDefinition {
         this.ns.updateProject(processedForm, this.projectId)
             .then(response => {
                 if (response && response.success) {
+                    // update cached project data with the one from the backend
+                    this.cs.updateProject(response.data, this.projectId);
                     this.state.go('dashboard');
                 }
                 else {
@@ -371,6 +386,14 @@ class NewProjectController extends ProjectDefinition {
         _.forEach(coverage, item => {
             collection.coverage.push(item);
         });
+    }
+
+    separateCoverageAndNationalLevelDeployments(processedForm) {
+        const filterWholeCountry = item => {
+            return item.district === wholeCountryName;
+        };
+        processedForm.national_level_deployment = _.filter(processedForm.coverage, filterWholeCountry);
+        processedForm.coverage = _.reject(processedForm.coverage, filterWholeCountry);
     }
 
     uploadFile(data, type) {
