@@ -33,7 +33,7 @@ class SystemController {
         const rs = this.cs.reset();
         rs.loadedPromise.then(() => {
             let appName = _.last(rs.projectList);
-            if (_.isNull(this.cs.userProfile) || _.isNull(this.cs.userProfile.name)) {
+            if (!this.cs.userProfile || _.isNull(this.cs.userProfile.name)) {
                 this.state.go('editProfile');
             }
             else if (appName && appName.id && this.cs.userProfile.account_type === 'I') {
