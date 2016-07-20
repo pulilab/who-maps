@@ -25,6 +25,7 @@ class AppModuleController extends Protected {
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
+            console.log(this.userProfile)
             if (this.userProfile) {
                 this.adjustUserType(this.userProfile);
             }

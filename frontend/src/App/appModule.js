@@ -116,6 +116,15 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
                 }
             }
         })
+        .state('inventory', {
+            url: '/inventory',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<new-project inventory-mode="true" ></new-project>'
+                }
+            }
+        })
         .state('editProfile', {
             url: '/edit-profile',
             parent: 'app',

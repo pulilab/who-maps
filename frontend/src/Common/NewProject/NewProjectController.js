@@ -38,10 +38,16 @@ class NewProjectController extends ProjectDefinition {
                 .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
                 .then(groups => {
-                    this.team = this.editMode ? groups.data.team : [];
-                    this.viewers = this.editMode ? groups.data.viewers : [];
+                    this.team = groups.data.team;
+                    this.viewers = groups.data.viewers;
                     this.allUsers = groups.data.user_profiles;
                 });
+        }
+
+        if (this.inventoryMode) {
+            this.team = [];
+            this.viewers = [];
+            this.project.organisation = {};
         }
 
     }
@@ -101,6 +107,7 @@ class NewProjectController extends ProjectDefinition {
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;
@@ -265,7 +272,13 @@ class NewProjectController extends ProjectDefinition {
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.postSaveActions(response.data.id);
+                    this.projectId = response.data.id;
+                    if (this.inventoryMode) {
+                        this.putGroups().then(this.postSaveActions);
+                    }
+                    else {
+                        this.postSaveActions();
+                    }
                 }
                 else {
                     this.handleResponse(response);
@@ -274,12 +287,8 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
-    postSaveActions(id) {
-        let appName = this.state.params.appName;
-        if (id) {
-            appName = id;
-        }
-        this.EE.emit('refreshProjects', { go: 'editProject', appName });
+    postSaveActions() {
+        this.EE.emit('refreshProjects', { go: 'editProject', appName: this.projectId });
     }
 
     handleResponse(response) {

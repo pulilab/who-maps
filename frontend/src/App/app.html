@@ -119,11 +119,18 @@
                         Visualize Project
                     </md-button>
 
-                    <md-button ui-sref="editProject" ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
+                    <md-button ui-sref="editProject" n ng-disabled="!vm.userProfile" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
                         <md-tooltip md-autohide>
                             EDIT PROJECT DETAILS
                         </md-tooltip>
                         Edit Project
+                    </md-button>
+
+                    <md-button ui-sref="inventory"  ng-disabled="!vm.userProfile" ng-if="vm.userProfile.account_type === 'I'" ui-sref-active="active" md-no-ink>
+                        <md-tooltip md-autohide>
+                            INVENTORY PROJECT CREATION
+                        </md-tooltip>
+                        Inventory
                     </md-button>
                     <md-button ui-sref="#"  ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="false" ui-sref-active="active" md-no-ink>
                         <md-tooltip md-autohide>
