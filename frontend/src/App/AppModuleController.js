@@ -25,7 +25,6 @@ class AppModuleController extends Protected {
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
-            console.log(this.userProfile)
             if (this.userProfile) {
                 this.adjustUserType(this.userProfile);
             }
@@ -75,6 +74,10 @@ class AppModuleController extends Protected {
             this.shareUrl.copyClicked = true;
             event.clearSelection();
         });
+    }
+
+    hasProfile() {
+        return this.cs.hasProfile();
     }
 
     iconFunction(item) {
@@ -153,8 +156,12 @@ class AppModuleController extends Protected {
 
         if (forcedPath) {
             this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
-                location: 'replace'
+                location: 'replace',
+                reload: true
             });
+            if (forcedPath.go === 'inventory') {
+                window.scrollTo(0, 0);
+            }
         }
 
         this.scope.$evalAsync();

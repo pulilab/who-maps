@@ -42,7 +42,8 @@
                     </div>
                 </div>
                 <div flex="100" layout="row" layout-align="start center">
-                    <md-input-container flex="60">
+                    <md-input-container flex="60"
+                                        ng-if="!vm.inventoryMode">
                         <label>Name of the organization</label>
                         <input ng-model="vm.project.organisation.name"
                                ng-disabled="true && !vm.inventoryMode" required name="organisation"
@@ -52,6 +53,33 @@
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.organisation.customError">{{error}} </div>
                         </div>
                     </md-input-container>
+
+                    <div flex="60" class="autocomplete-organisation">
+                        <md-autocomplete
+                                flex="100"
+                                ng-if="vm.inventoryMode"
+                                required="true"
+                                md-input-name="organisation"
+                                md-no-cache="true"
+                                md-selected-item="vm.project.organisation"
+                                md-search-text="vm.searchText"
+                                md-items="item in vm.organisationSearch(vm.searchText)"
+                                md-item-text="item.name"
+                                md-min-length="2"
+                                placeholder="Organisation name">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+                            </md-item-template>
+
+                            <md-not-found>
+                                <a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>
+                            </md-not-found>
+                        </md-autocomplete>
+                        <div class="autocomplete-errors" ng-messages="vm.newProjectForm.organisation.$error">
+                            <div ng-message="required">This field is required</div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div flex="100" layout="row" layout-align="start center">
@@ -85,41 +113,41 @@
                 <div class="chipper" ng-if="vm.editMode || vm.inventoryMode">
                     <label>Viewers (only view role)</label>
                     <md-contact-chips
-                        placeholder="Add viewers"
-                        secondary-placeholder="add new viewer"
-                        ng-model="vm.viewers"
-                        md-contacts="vm.getUsers($query)"
-                        md-contact-name="name"
-                        md-contact-email="organisation__name"
-                        md-require-match="true"
-                        md-highlight-flags="i"
-                        filter-selected="true">
+                            placeholder="Add viewers"
+                            secondary-placeholder="add new viewer"
+                            ng-model="vm.viewers"
+                            md-contacts="vm.getUsers($query)"
+                            md-contact-name="name"
+                            md-contact-email="organisation__name"
+                            md-require-match="true"
+                            md-highlight-flags="i"
+                            filter-selected="true">
                     </md-contact-chips>
                 </div>
 
                 <div class="strat-cont">
                     <ssmenu
-                        class="strategies"
-                        options="vm.structure.strategies"
-                        on-close-callback="vm.setStrategy"
-                        multiple="true"
-                        ng-model="vm.project.strategy"
-                        placeholder="Select strategies from list"
-                        hint="What is your mHealth project strategy to address the health need?">
+                            class="strategies"
+                            options="vm.structure.strategies"
+                            on-close-callback="vm.setStrategy"
+                            multiple="true"
+                            ng-model="vm.project.strategy"
+                            placeholder="Select strategies from list"
+                            hint="What is your mHealth project strategy to address the health need?">
                     </ssmenu>
                 </div>
 
                 <div class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
-                        class="countryss"
-                        ng-disabled="vm.editMode"
-                        ng-required="vm.sentForm"
-                        name="country"
-                        on-close-callback="vm.countryCloseCallback"
-                        option-label="name"
-                        options="vm.structure.countries"
-                        ng-model="vm.project.countryName"
-                        placeholder="Select project’s country from list">
+                            class="countryss"
+                            ng-disabled="vm.editMode"
+                            ng-required="vm.sentForm"
+                            name="country"
+                            on-close-callback="vm.countryCloseCallback"
+                            option-label="name"
+                            options="vm.structure.countries"
+                            ng-model="vm.project.countryName"
+                            placeholder="Select project’s country from list">
                     </ssmenu>
                     <div ng-messages="vm.newProjectForm.country.$error">
                         <div ng-message="required">This is required.</div>
@@ -355,12 +383,12 @@
 
                             <div class="checkbox-container" layout="row">
                                 <md-checkbox
-                                    ng-repeat="t in vm.structure.technology_platforms"
-                                    ng-checked="vm.technologyPlatformChecked(t)"
-                                    ng-click="vm.technologyPlatformChange(t)"
-                                    flex="15"
-                                    aria-label="{{ t }}"
-                                    class="">
+                                        ng-repeat="t in vm.structure.technology_platforms"
+                                        ng-checked="vm.technologyPlatformChecked(t)"
+                                        ng-click="vm.technologyPlatformChange(t)"
+                                        flex="15"
+                                        aria-label="{{ t }}"
+                                        class="">
                                     {{ t }}
                                 </md-checkbox>
                             </div>
@@ -385,12 +413,12 @@
                             <h5>Licenses:</h5>
                             <div class="checkbox-container checkbox-container-lic" layout="row">
                                 <md-checkbox
-                                    ng-repeat="l in vm.structure.licenses"
-                                    ng-checked="vm.licenseChecked(l)"
-                                    ng-click="vm.licenseChange(l)"
-                                    flex="30"
-                                    aria-label="{{ l }}"
-                                    class="">
+                                        ng-repeat="l in vm.structure.licenses"
+                                        ng-checked="vm.licenseChecked(l)"
+                                        ng-click="vm.licenseChange(l)"
+                                        flex="30"
+                                        aria-label="{{ l }}"
+                                        class="">
                                     {{ l }}
                                 </md-checkbox>
                             </div>
@@ -467,7 +495,7 @@
                         </div>
                         <div layout="column">
                             <md-input-container>
-                                <input type="url" placeholder="Link to wiki page:" name="wiki" ng-required="true" ng-model="vm.project.wiki"/>
+                                <input type="url" placeholder="Link to wiki page:" name="wiki" ng-required="false" ng-model="vm.project.wiki"/>
                                 <div ng-messages="vm.newProjectForm.wiki.$error">
                                     <div ng-message="url">This should be a valid link</div>
                                 </div>
@@ -491,13 +519,13 @@
                         <div layout="column">
                             <md-input-container>
                                 <input
-                                    ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
-                                    md-minlength="4"
-                                    md-maxlength="256"
-                                    ng-required="true"
-                                    name="contact_email"
-                                    placeholder="Contact email"
-                                    ng-model="vm.project.contact_email"/>
+                                        ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
+                                        md-minlength="4"
+                                        md-maxlength="256"
+                                        ng-required="true"
+                                        name="contact_email"
+                                        placeholder="Contact email"
+                                        ng-model="vm.project.contact_email"/>
                                 <div ng-messages="vm.newProjectForm.contact_email.$error">
                                     <div ng-message="required">This is required.</div>
                                     <div ng-message="pattern">This field must be an email</div>
@@ -593,7 +621,8 @@
                     <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
                 </div>
                 <div flex="50" layout="row" layout-align="end center">
-                    <md-button type="submit" ng-if="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="!vm.editMode && !vm.inventoryMode" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="vm.inventoryMode" class="md-primary md-raised">Save and add another</md-button>
                     <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
                 </div>
             </div>

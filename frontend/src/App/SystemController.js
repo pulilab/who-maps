@@ -33,7 +33,7 @@ class SystemController {
         const rs = this.cs.reset();
         rs.loadedPromise.then(() => {
             let appName = _.last(rs.projectList);
-            if (!this.cs.userProfile || _.isNull(this.cs.userProfile.name)) {
+            if (!this.cs.userProfile || _.isNull(this.cs.userProfile.name) || this.cs.userProfile.name === '') {
                 this.state.go('editProfile');
             }
             else if (appName && appName.id && this.cs.userProfile.account_type === 'I') {
@@ -41,12 +41,17 @@ class SystemController {
                 this.state.go('dashboard', { appName });
             }
             else {
+                const state = this.cs.userProfile.account_type === 'Y' ? 'inventory' : 'country';
                 appName = appName && appName.id ? appName.id : null;
-                this.state.go('country', { appName });
+                this.state.go(state, { appName });
             }
         }, () => {
             console.error('failed login');
         });
+    }
+
+    hasProfile() {
+        return this.cs.hasProfile();
     }
 
     openMenu($mdOpenMenu, event) {

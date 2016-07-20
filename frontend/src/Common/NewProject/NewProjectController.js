@@ -2,6 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
+import EditProfileService from '../EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
@@ -12,6 +13,7 @@ class NewProjectController extends ProjectDefinition {
     constructor($scope, $state, Upload, CommonService, structure) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
+        this.es = new EditProfileService();
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
@@ -34,6 +36,8 @@ class NewProjectController extends ProjectDefinition {
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleStructureLoad();
+
+        this.allUsers = this.cs.usersProfiles;
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.cs.getProjectData(this.projectId)
@@ -42,14 +46,14 @@ class NewProjectController extends ProjectDefinition {
                 .then(groups => {
                     this.team = groups.data.team;
                     this.viewers = groups.data.viewers;
-                    this.allUsers = groups.data.user_profiles;
                 });
         }
 
         if (this.inventoryMode) {
             this.team = [];
             this.viewers = [];
-            this.project.organisation = {};
+            this.project.organisation = void 0;
+            this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
         }
 
     }
@@ -74,7 +78,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     putGroups() {
-        this.ns.putGroups(this.projectId, this.team, this.viewers);
+        return this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
     importIconTemplates() {
@@ -287,9 +291,9 @@ class NewProjectController extends ProjectDefinition {
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.projectId = response.data.id;
+                    this.ownershipCheck(response.data);
                     if (this.inventoryMode) {
-                        this.putGroups().then(this.postSaveActions);
+                        this.putGroups().then(this.postSaveActions.bind(this));
                     }
                     else {
                         this.postSaveActions();
@@ -302,8 +306,21 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
+    ownershipCheck(project) {
+        const id = this.userProfile.id;
+        const rights = _.concat(this.tem, this.viewers);
+        if (rights.length > 0 && _.find(rights, { id })) {
+            this.projectId = project.id;
+        }
+        else {
+            const last  = _.last(this.cs.projectList);
+            this.projectId = last && last.id ? last.id : null;
+        }
+    }
+
     postSaveActions() {
-        this.EE.emit('refreshProjects', { go: 'editProject', appName: this.projectId });
+        const go = this.inventoryMode ?  'inventory' : 'editProject';
+        this.EE.emit('refreshProjects', { go, appName: this.projectId });
     }
 
     handleResponse(response) {
@@ -461,6 +478,17 @@ class NewProjectController extends ProjectDefinition {
             this.state.go('public-dashboard', { appName: project.id });
         }
 
+    }
+
+    organisationSearch(name) {
+        return this.es.autocompleteOrganization(name);
+    }
+
+    addOrganisation(name) {
+        return this.es.addOrganization(name)
+            .then(response => {
+                this.userProfile.organisation = response;
+            });
     }
 
 

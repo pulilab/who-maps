@@ -15,6 +15,7 @@ class CommonServices extends Protected {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
+        this.EE.on('unauthorized', this.handleUnauthorized, this);
         this.initialize();
     }
 
@@ -28,6 +29,7 @@ class CommonServices extends Protected {
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = [];
         this.userProfile = null;
+        this.usersProfiles = null;
         this.hssStructure = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
@@ -65,15 +67,22 @@ class CommonServices extends Protected {
         return this;
     }
 
+    handleUnauthorized() {
+        this.storage.clear();
+        this.initialize();
+    }
+
     loadData() {
         this.loadingCheck = ['structure'];
         if (this.userProfileId) {
             this.loadingCheck.push('list');
             this.loadingCheck.push('user-profile');
+            this.loadingCheck.push('users-profiles');
             this.loadingCheck.push('hss-structure');
             this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
+            this.getUsersProfiles();
         }
         this.populateProjectStructure();
     }
@@ -129,6 +138,16 @@ class CommonServices extends Protected {
         });
     }
 
+    getUsersProfiles() {
+        const vm = this;
+        vm.get('userprofiles').then(data => {
+            vm.usersProfiles = _.filter(data, item => {
+                return item.name !== null && item.name !== '';
+            });
+            vm.loadingProgress('users-profiles');
+        });
+    }
+
     populateProjectList() {
         const promiseArray = [];
         this.get('projects/member-of/')
@@ -161,7 +180,8 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.projectStructure = structure;
                 this.loadingProgress('structure');
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.loadingProgress('structure');
                 this.promiseReject();
             });
@@ -172,7 +192,8 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.hssStructure = structure;
                 this.loadingProgress('hss-structure');
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.loadingProgress('hss-structure');
                 this.promiseReject();
             });
@@ -238,6 +259,10 @@ class CommonServices extends Protected {
 
     isMember(project) {
         return this.userProfile && this.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    hasProfile() {
+        return this.userProfile && this.userProfile.name !== '' && !_.isNull(this.userProfile.name);
     }
 
     calculateHeight() {
