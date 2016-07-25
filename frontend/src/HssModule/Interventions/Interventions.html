@@ -43,7 +43,7 @@
         <div ng-class="tile.classGenerator(tile)">
             <div ng-if="tile.activated">
                 <md-list flex ng-if="!vm.editMode">
-                    <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                    <md-list-item class="md-1-line" ng-repeat="item in tile.content track by $index">
                         <div class="md-list-item-text md-small" layout="column">
                             {{item}}
                         </div>
@@ -95,7 +95,7 @@
         <div ng-class="tile.classGenerator(tile)">
             <div ng-if="tile.activated">
                 <md-list flex ng-if="!vm.editMode">
-                    <md-list-item class="md-1-line" ng-repeat="item in tile.content">
+                    <md-list-item class="md-1-line" ng-repeat="item in tile.content track by $index">
                         <div class="md-list-item-text md-small" layout="column">
                             {{item}}
                         </div>
