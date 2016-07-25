@@ -44,6 +44,8 @@ class ProjectSerializer(serializers.Serializer):
     wiki = serializers.URLField(required=False, allow_blank=True)
     pre_assessment = serializers.ListField(required=False)
     links = serializers.ListField(required=False)
+    interoperability_links = serializers.ListField(required=False)
+    interoperability_standards = serializers.ListField(required=False)
 
 
 class GroupSerializer(serializers.ModelSerializer):
