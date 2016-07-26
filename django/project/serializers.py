@@ -80,9 +80,18 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
-        instance.team = validated_data.get('team', instance.team)
-        instance.viewers = validated_data.get('viewers', instance.viewers)
-        return super(ProjectGroupUpdateSerializer, self).update(instance, validated_data)
+
+        # don't allow empty team, so no orphan projects
+        if 'team' in validated_data and isinstance(validated_data['team'], list):
+            instance.team = validated_data.get('team') or instance.team.all()
+
+        # a project however can exist without viewers
+        if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
+            instance.viewers = validated_data['viewers']
+
+        instance.save()
+
+        return instance
 
     def _send_notification(self, instance, validated_data):
         new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]

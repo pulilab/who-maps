@@ -75,6 +75,10 @@ class AppModuleController extends Protected {
         });
     }
 
+    hasProfile() {
+        return this.cs.hasProfile();
+    }
+
     iconFunction(item) {
         const base = {
             name: 'visibility',
@@ -151,8 +155,10 @@ class AppModuleController extends Protected {
 
         if (forcedPath) {
             this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
-                location: 'replace'
+                location: 'replace',
+                reload: true
             });
+            window.scrollTo(0, 0);
         }
 
         this.scope.$evalAsync();
