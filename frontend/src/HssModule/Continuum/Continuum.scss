@@ -39,6 +39,7 @@ continuum {
       .md-button {
         float: right;
         width: 120px;
+        background-color: $color-primary;
       }
     }
 
@@ -142,12 +143,20 @@ continuum {
         }
         p {
           width: 100%;
-          padding: 0 40px;
+          padding: 0 20px;
         }
         .continuum-row-title {
           display: block;
+          width:100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
           color: $color-green;
-          line-height: 18px;
+          line-height: 14px;
+          text-transform: capitalize;
+
+          &.no-wrap {
+            white-space: nowrap;
+          }
         }
         .continuum-sub-title {
           display: block;
@@ -231,7 +240,15 @@ continuum {
           opacity: .35;
         }
       }
+
+      &.upperrowicons {
+        img {
+          opacity: .35;
+        }
+      }
     }
+
+
 
     .to-be-continued {
       &.mother,

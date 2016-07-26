@@ -37,7 +37,7 @@ module.exports = function(config) {
                         loader: 'json'
                     },
                     {
-                        test: /\.(jpe?g|png|gif)$/i,
+                        test: /\.(jpe?g|png|gif|ico)$/i,
                         loaders: [
                             'file?hash=sha512&digest=hex&name=[hash].[ext]',
                             'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'

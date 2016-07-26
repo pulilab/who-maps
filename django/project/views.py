@@ -1,9 +1,11 @@
 import functools
 import json
+import operator
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -13,17 +15,17 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+import hss.hss_data as hss_data
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import UserProfile, Organisation
 from hss.models import HSS
-from hss.hss_data import hss_default
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 
 from .permissions import InTeamOrReadOnly
 from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
-    ProjectGroupUpdateSerializer
+    ProjectGroupUpdateSerializer, ProjectFilterSerializer
 from .models import Project, File, CoverageVersion, PartnerLogo
 from .project_data import project_structure
 
@@ -73,8 +75,6 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
-        query_filters = []
-        result_list = []
         projects = Project.objects.all()  # lazy QuerySet
 
         if kwargs.get("country_id"):
@@ -84,6 +84,7 @@ class ProjectPublicViewSet(ViewSet):
             "id": p.id,
             "name": p.name,
             "organisation": p.data.get('organisation'),
+            "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
             "donors": p.data.get('donors'),
             "country": p.data.get('country'),
             "contact_name": p.data.get('contact_name'),
@@ -92,8 +93,13 @@ class ProjectPublicViewSet(ViewSet):
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
             "geographic_coverage": p.data.get('geographic_coverage'),
-            "intervention_areas": p.data.get('intervention_areas')
-        }], projects, result_list)
+            "intervention_areas": p.data.get('intervention_areas'),
+            "technology_platforms": p.data.get('technology_platforms'),
+            "interventions": p.hss_set.first().get_interventions_list(),
+            "continuum": p.hss_set.first().get_continuum_list(),
+            "constraints": p.hss_set.first().get_constraints_list(),
+            "applications": p.hss_set.first().get_applications_list(),
+        }], projects, [])
 
         return Response(result_list)
 
@@ -133,7 +139,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
             project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
             project.team.add(request.user.userprofile)
             # Add default HSS structure for the new project.
-            HSS.objects.create(project_id=project.id, data=hss_default)
+            HSS.objects.create(project_id=project.id, data=hss_data.hss_default)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
             data = dict(data_serializer.data)
@@ -170,6 +176,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
 
         data.update(id=project.id)
         data.update(organisation_name=project.get_organisation().name)
+        data.update(public_id=project.public_id)
         return Response(project.data)
 
     @transaction.atomic
@@ -225,7 +232,10 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
             new_version = 1
         else:
             new_version = last_cov_ver.version + 1
+
         current_cov = project.data["coverage"]
+        current_cov += project.data.get('national_level_deployment', [])
+
         new_cov_ver = CoverageVersion(
                             project_id=project_id,
                             version=new_version,

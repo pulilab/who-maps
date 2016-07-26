@@ -71,12 +71,15 @@ class SetupTests(APITestCase):
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
             "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "technology_platforms": ["tech1", "tech2", "tech3"],  # Can hold 'other' fields
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
             "application": ["app1", "app2"],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
+            "national_level_deployment": [
+                {"clients": 2000000, "health_workers": 0, "facilities": 0},
             ],
             "started": datetime.utcnow(),
             "donors": ["donor1", "donor2"],  # Should be text instead of ID - no Donors in MVP
@@ -122,6 +125,19 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
+    def test_create_new_project_makes_public_id(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="Test Project4")
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        project_id = response.json()['id']
+
+        url = reverse("project-detail", kwargs={"pk": project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['public_id'].endswith(str(project_id)))
+
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
@@ -150,6 +166,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get("name"), "Test Project1")
         self.assertEqual(response.json().get("objective"), "objective1")
         self.assertEqual(response.json().get("organisation_name"), self.org.name)
+        self.assertEqual(response.json().get("national_level_deployment")[0]["clients"], 2000000)
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
@@ -205,6 +222,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
+        self.assertEqual(len(response.json()[0]['data']), 3)
 
     def test_get_toolkit_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})

@@ -28,7 +28,7 @@ let requests = {
 };
 
 let progression = 0;
-let firstRequest = false;
+let firstRequestSent = false;
 
 const emit = (detail) => {
     const event = new CustomEvent('xhrmonitor', { detail });
@@ -37,12 +37,12 @@ const emit = (detail) => {
 
 
 const reset = () => {
-    if (requests.started !== 0 && requests.started === requests.ended) {
-        requests = {
-            started: 0,
-            ended: 0
-        };
-    }
+    requests = {
+        started: 0,
+        ended: 0,
+        end: null,
+        start: null
+    };
 };
 
 let interval = void 0;
@@ -58,62 +58,79 @@ const pollingProcess = (stop) => {
         }, 100);
     }
     else {
-        firstRequest = false;
+        reset();
+        firstRequestSent = false;
         clearInterval(interval);
     }
 
 };
 
-const closeForTimeout = () => {
-    setTimeout(()=> {
-        if (interval) {
-            clearInterval(interval);
-        }
-        emit({ progression: 100 });
-    }, 10000);
+const getRequests = () => {
+    return requests;
 };
 
+let checkInterval = null;
+const cleanFrozenState = () => {
+    if (! checkInterval) {
+        checkInterval = setInterval(() => {
+            const req = getRequests();
+            if (req && !req.end && !req.start) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+
+            if (req && req.end && req.start && req.end - req.start > 10000) {
+                emit({ progression: 100 });
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+        }, 1000);
+    }
+};
+
+
 const progressiveEmit = () => {
-    // console.log(`started: ${requests.started}, ended: ${requests.ended}`);
-    if (!firstRequest) {
-        firstRequest = true;
-        closeForTimeout();
+    if (!firstRequestSent) {
+        pollingProcess(false);
+        firstRequestSent = true;
         emit({ progression: 10 });
     }
 
-    if (requests.started === requests.ended) {
+    if (requests.started === requests.ended && requests.started > 0) {
         pollingProcess(true);
         progression = 0;
-        reset();
         emit({ progression: 90 });
         setTimeout(() => {
             emit({ progression: 100 });
         }, 100);
     }
-
-    if (progression === 0) {
-        pollingProcess(false);
-    }
-
 };
 
 const emitEvent = () => {
     progressiveEmit();
+    cleanFrozenState();
 };
 
 
 const preRequest = (hash) => {
-    requests[hash] = false;
+    const now = Date.now();
+    requests[hash] = {};
+    requests[hash].done = false;
     requests.started += 1;
+    requests[hash].start = now;
+    if (requests.started === 1) {
+        requests.start = now;
+    }
     emitEvent();
 };
 
 const postRequest = (hash) => {
-    if (requests[hash] === false) {
-        requests[hash] = true;
-        requests.ended += 1;
-        emitEvent();
-    }
+    const now = Date.now();
+    requests[hash].done = true;
+    requests[hash].end = now;
+    requests.ended += 1;
+    requests.end = now;
+    emitEvent();
 };
 
 window.fetch = (...args) => {

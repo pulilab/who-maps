@@ -29,10 +29,10 @@ class InterventionSerializer(serializers.Serializer):
     interventions = serializers.ListField()
 
 
-class AgeRangeSerializer(serializers.Serializer):
+class TeamPopulationSerializer(serializers.Serializer):
 
     column_id = serializers.IntegerField()
-    age_ranges = serializers.ListField()
+    target_population = serializers.DictField()
 
 
 class TaxonomySerializer(serializers.Serializer):

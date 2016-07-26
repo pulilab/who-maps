@@ -120,11 +120,7 @@ class ApplicationsController extends Protected {
     }
 
     applicationActivated(value) {
-        let _activated = this.data.continuum[value].mother;
-        if (this.data.continuum[value].child) {
-            _activated = _activated || this.data.continuum[value].child;
-        }
-        return _activated;
+        return this.data.continuum[value].state;
     }
 
     applicationHeaderGenerator(index) {

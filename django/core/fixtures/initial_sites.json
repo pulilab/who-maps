@@ -19,8 +19,8 @@
     "model": "sites.site",
     "pk": 3,
     "fields": {
-      "domain": "test.whomaps.pulilab.com",
-      "name": "test"
+      "domain": "digitalhealthatlas.org",
+      "name": "production"
     }
   }
 ]

@@ -17,6 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 
+admin.site.site_header = 'Digital Health Atlas'
+
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
@@ -26,3 +28,4 @@ urlpatterns = [
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
 ]
+

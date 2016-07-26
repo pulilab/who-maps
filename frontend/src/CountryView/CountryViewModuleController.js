@@ -11,15 +11,111 @@ class CountryViewModuleController {
         this.scope = $scope;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
+        this.$onInit = this.onInit.bind(this);
+    }
+
+
+    onInit() {
         this.getCountries();
+
+        this.filterArray = [
+            this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
+            this.createFilterCategory('interventions',
+                this.cs.hssStructure.interventions, 'name', false, collection => _.flattenDeep(_.toArray(collection))),
+            this.createFilterCategory('technology_platforms',
+                this.cs.projectStructure.technology_platforms),
+            this.createFilterCategory('applications', this.cs.hssStructure.applications,
+                false, false, this.concatenateApplications),
+            this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies,
+                false, false, this.extractConstraints)
+        ];
+    }
+
+    extractConstraints(collection) {
+        const result = [];
+        _.forEach(collection, (tax, key) => {
+            result.push(key);
+        });
+        return result;
+    }
+
+    concatenateApplications(collection) {
+        let result = [];
+        _.forEach(collection, application => {
+            result = _.concat(result, _.toArray(application.subApplications));
+        });
+        return result;
+    }
+
+    createFilterCategory(name, collection, unique, subItem, preParse) {
+        const base = { name, items: [], open: false };
+
+        if (preParse) {
+            collection = preParse(collection);
+        }
+
+        if (collection) {
+            _.forEach(collection, item => {
+                base.items.push({
+                    name: subItem ? item[subItem] : item,
+                    value: false
+                });
+            });
+            if (unique) {
+                base.items = _.uniqBy(base.items, unique);
+            }
+        }
+        return base;
+    }
+
+    replaceLodash(item) {
+        return item ? item.replace('_', ' ') : '';
+
+    }
+
+    filterClv() {
+        const filters = {};
+        _.forEach(this.filterArray, category => {
+            filters[category.name] = _.chain(category.items)
+                .map(value => {
+                    return value.value ? value.name : false;
+                })
+                .filter()
+                .value();
+        });
+        if (_.flattenDeep(_.toArray(filters)).length > 0) {
+            filters.provisonalArray = _.cloneDeep(this.countryProjects);
+            this.generalFilter(filters, 'continuum');
+            this.generalFilter(filters, 'interventions');
+            this.generalFilter(filters, 'applications');
+            this.generalFilter(filters, 'constraints');
+            this.generalFilter(filters, 'technology_platforms');
+            this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
+        }
+        else {
+            this.projectsData = this.countryProjects;
+        }
+
+        this.EE.emit('projectsUpdated', this.projectsData);
+
+    }
+
+    generalFilter(filters, name) {
+        const localArray = [];
+        _.forEach(filters.provisonalArray, project => {
+            const inter = _.intersection(project[name], filters[name]);
+            if (inter.length === filters[name].length) {
+                localArray.push(project);
+            }
+        });
+        filters.provisonalArray = localArray;
     }
 
     getCountries() {
 
         this.mapService.getCountries().then(data => {
 
-            // console.debug('COUNTRIES:', data);
-            this.countries = data;
+            this.countries = data.sort((a, b) => a.name.localeCompare(b.name));
             this.countriesLib = {};
             data.forEach(country => {
                 this.countriesLib[country.id] = country.name;
@@ -27,7 +123,7 @@ class CountryViewModuleController {
 
             // console.debug('COUNTRY LIB', this.countriesLib);
             this.countries2 = _.cloneDeep(this.countries);
-            this.countries2.push({ id: false, name: 'Show all countries' });
+            this.countries2.unshift({ id: false, name: 'Show all countries' });
             if (this.cs.userProfile && this.cs.userProfile.country) {
                 const name = this.cs.userProfile.country.toLowerCase();
                 this.selectedCountry = _.find(this.countries2, { name });
@@ -38,11 +134,11 @@ class CountryViewModuleController {
     }
 
     isViewer(project) {
-        return this.cs.userProfile && this.cs.userProfile.viewer.indexOf(project.id) > -1 && !this.isMember(project);
+        return this.cs.isViewer(project);
     }
 
     isMember(project) {
-        return this.cs.userProfile && this.cs.userProfile.member.indexOf(project.id) > -1;
+        return this.cs.isMember(project);
     }
 
 
@@ -51,11 +147,16 @@ class CountryViewModuleController {
         this.service.getProjects(countryObj.id).then(data => {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
+            this.countryProjects = _.cloneDeep(data);
+            this.EE.emit('all country projects', data);
         });
     }
 
     updateCountry(countryObj) {
-        this.changeMapTo(countryObj);
+        // console.debug('To countryObj: ', countryObj);
+        if (countryObj.name !== 'Show all countries') {
+            this.changeMapTo(countryObj);
+        }
         this.getProjects(countryObj);
     }
 
@@ -69,7 +170,7 @@ class CountryViewModuleController {
     // For map TAB
     fetchDistrictProjects(countryId) {
 
-        this.service.getDisctrictProjects(countryId).then(data => {
+        this.service.getDistrictProjects(countryId).then(data => {
             // console.debug('getDistrictProjects:', data);
             this.EE.emit('mapdataArrived', data);
         });

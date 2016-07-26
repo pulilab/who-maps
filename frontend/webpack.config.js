@@ -5,6 +5,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 
 // Determine if is a production build based on environment variable
 const production = process.argv.indexOf('--dist') > -1;
+const live = process.argv.indexOf('--live') > -1;
 const siteBuild = process.argv.indexOf('--site-build') > -1;
 const debug = process.argv.indexOf('--debug') > -1;
 const local = process.argv.indexOf('--local') > -1;
@@ -18,7 +19,8 @@ const basePlugins = [
     new webpack.DefinePlugin({
         API: production ? '"/api/"' : '"/api/"',
         DEV: !production,
-        DEBUG: debug
+        DEBUG: debug,
+        LIVE: live
     }),
     new webpack.optimize.CommonsChunkPlugin(
         'vendor', 'vendor.js', Infinity
@@ -53,7 +55,10 @@ const devPreLoaders = [
     {
         test: /\.js$/,
         loader: 'eslint-loader',
-        exclude: /node_modules/
+        exclude: [
+            /node_modules/,
+            /-spec.js/
+        ]
     }
 ];
 
@@ -123,6 +128,7 @@ module.exports = {
         }
     },
     devServer: {
+        historyApiFallback: true,
         proxy: {
             '/api/*': {
                 target: local ? 'http://localhost/' : 'http://192.168.99.100/',

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import TokenSerializer
+from rest_auth.serializers import TokenSerializer, PasswordResetSerializer
 from rest_auth.models import TokenModel
 
 from project.models import Project
@@ -75,3 +75,14 @@ class RegisterWithProfileSerializer(RegisterSerializer):
         if not hasattr(user, 'userprofile'):
             account_type = request.POST.get('account_type', request.data.get('account_type', 'I'))
             UserProfile.objects.create(user=user, account_type=account_type)
+
+
+class PasswordResetHTMLEmailSerializer(PasswordResetSerializer):
+    """
+    Serializer for requesting a password reset e-mail.
+    """
+
+    def get_email_options(self):
+        """ Override this method to change default e-mail options
+        """
+        return {'html_email_template_name': 'registration/password_reset_html_email.html'}

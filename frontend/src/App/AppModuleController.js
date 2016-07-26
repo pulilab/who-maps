@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Protected } from '../Common/';
+import Clipboard from 'clipboard';
 
 class AppModuleController extends Protected {
 
@@ -21,7 +22,6 @@ class AppModuleController extends Protected {
         this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
-
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -36,8 +36,12 @@ class AppModuleController extends Protected {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
                     this.currentProject = project;
+                    this.createShareDefinition();
                     this.scope.$evalAsync();
                 });
+        }
+        else if (this.currentProject) {
+            this.createShareDefinition();
         }
     }
 
@@ -57,6 +61,19 @@ class AppModuleController extends Protected {
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
         this.EE.on('profileUpdated', this.refreshProfileInfo, this);
+    }
+
+    createShareDefinition() {
+        this.shareUrl = {
+            url: `http://${window.location.host}/project/${this.currentProject.public_id}`,
+            copyClicked: false,
+            clipboard: new Clipboard('.share-copy')
+        };
+
+        this.shareUrl.clipboard.on('success', event => {
+            this.shareUrl.copyClicked = true;
+            event.clearSelection();
+        });
     }
 
     iconFunction(item) {
@@ -84,10 +101,10 @@ class AppModuleController extends Protected {
             type = 'Implementer';
             break;
         case 'G':
-            type = 'Financial Investor';
+            type = 'Government';
             break;
         case 'D':
-            type = 'Government';
+            type = 'Financial Investor';
             break;
         }
         return type;
@@ -105,9 +122,9 @@ class AppModuleController extends Protected {
         }
     }
 
-    refreshProjectsHandler() {
+    refreshProjectsHandler(data) {
         this.cs.reset().loadedPromise.then(() => {
-            this.fillUserData();
+            this.fillUserData(data);
         });
     }
 
@@ -116,11 +133,11 @@ class AppModuleController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData() {
+    fillUserData(forcedPath) {
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
 
-        if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
+        if (!forcedPath && this.state.params.appName.length === 0 && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
             this.state.go(state, { appName }, {
@@ -132,6 +149,12 @@ class AppModuleController extends Protected {
                 this.currentProject = item;
             }
         });
+
+        if (forcedPath) {
+            this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
+                location: 'replace'
+            });
+        }
 
         this.scope.$evalAsync();
 
@@ -151,7 +174,6 @@ class AppModuleController extends Protected {
 
     handleLogoutEvent() {
         this.state.go('landing', { appName: null });
-
     }
 
     showCompleteNavigation(state, isLogin) {
@@ -169,6 +191,7 @@ class AppModuleController extends Protected {
         const rest = this.cs.reset();
         rest.loadedPromise.then(() => {
             this.showCompleteNavigation(null, false);
+            this.handleLogoutEvent();
         });
     }
 

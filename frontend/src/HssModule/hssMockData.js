@@ -261,6 +261,11 @@ export const  age_ranges = [
     'Senior (> 65 years)'
 ];
 
+export const target_population_structure = {
+    special_population: ['a', 'b'],
+    age_ranges
+};
+
 // Bindable things
 // ***************
 
@@ -417,70 +422,84 @@ export const continuumStructure = [
 export const continuumData = [
     {
         'column_id': 0,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 1,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 2,
-        'mother': false,
-        'child': false
+        'state': false
     },
     {
         'column_id': 3,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 4,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 5,
-        'mother': true,
-        'child': false
+        'state': true
     },
     {
         'column_id': 6,
-        'mother': true,
-        'child': false
+        'state': true
     }
 ];
 
 
-export const ageRangesData = [
+export const target_population = [
     {
         'column_id': 0,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 1,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 2,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 3,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 4,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 5,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     },
     {
         'column_id': 6,
-        age_ranges: []
+        target_population: {
+            age_ranges: [],
+            special_population: []
+        }
     }
 ];
 
