@@ -474,6 +474,42 @@ class ProjectTests(SetupTests):
         project = Project.objects.get(id=response.json()['id'])
         self.assertEqual(project.team.first(), userprofile)
 
+    def test_team_cant_be_but_viewers_can_be_empty(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="Test Project4")
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        userprofile = UserProfile.objects.get(name="Test Name")
+        project = Project.objects.get(id=response.json()['id'])
+        self.assertEqual(project.team.first(), userprofile)
+
+        url = reverse("project-groups", kwargs={"pk": project.id})
+
+        groups = {
+            "team": [userprofile.id],
+            "viewers": [userprofile.id]
+        }
+
+        response = self.test_user_client.put(url, groups)
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [userprofile.id])
+        self.assertEqual(response.json()['viewers'], [userprofile.id])
+
+        url = reverse("project-groups", kwargs={"pk": project.id})
+
+        groups = {
+            "team": [],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [userprofile.id])
+        self.assertEqual(response.json()['viewers'], [])
+
     def test_by_user_manager(self):
         url = reverse("project-list")
         response = self.test_user_client.get(url)

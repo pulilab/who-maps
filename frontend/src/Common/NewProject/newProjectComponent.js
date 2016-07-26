@@ -8,7 +8,8 @@ const newProjectComponent = {
     controllerAs: 'vm',
     name: 'newProject',
     bindings: {
-        editMode: '@'
+        editMode: '@',
+        inventoryMode: '@'
     }
 };
 

@@ -42,6 +42,9 @@ class Project(ExtendedModel):
 
     projects = ProjectManager()
 
+    def __str__(self):
+        return self.name
+
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 

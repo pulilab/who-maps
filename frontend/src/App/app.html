@@ -1,15 +1,15 @@
 <md-toolbar class="main-toolbar toolbar-global">
     <div class="md-toolbar-tools">
 
-        <md-button ng-if="!vm.isLogin" ng-disabled="!vm.userProfile && vm.isLogin" ui-sref="landing" aria-label="Digital Health Atlas" class="app-title" md-no-ink>
+        <md-button ng-if="!vm.isLogin" ng-disabled="!vm.hasProfile() && vm.isLogin" ui-sref="landing" aria-label="Digital Health Atlas" class="app-title" md-no-ink>
             <span>Digital Health Atlas</span>
         </md-button>
 
-        <md-button ng-if="vm.isLogin " ng-disabled="!vm.userProfile" ui-sref="landing-logged" aria-label="Digital Health Atlas" class="app-title" md-no-ink>
+        <md-button ng-if="vm.isLogin " ng-disabled="!vm.hasProfile()" ui-sref="landing-logged" aria-label="Digital Health Atlas" class="app-title" md-no-ink>
             <span>Digital Health Atlas</span>
         </md-button>
 
-        <md-button aria-label="Country Level View" class="view-selector" ui-sref="country" ng-disabled="!vm.userProfile" ng-if="vm.isLogin" ng-show="vm.state.current.name !== 'country'" md-no-ink>
+        <md-button aria-label="Country Level View" class="view-selector" ui-sref="country" ng-disabled="!vm.hasProfile()" ng-if="vm.isLogin" ng-show="vm.state.current.name !== 'country'" md-no-ink>
             <md-icon class="material-icons">public</md-icon>
             Country View
         </md-button>
@@ -83,7 +83,7 @@
         <!--</md-menu-content>-->
         <!--</md-menu>-->
 
-        <md-button class="add-new-project" ui-sref="newProject" ng-if="vm.isLogin" ng-disabled="!vm.userProfile" aria-label="Add new project" ng-show="vm.showFullNavigation && vm.userProfile.account_type === 'I'" md-no-ink>
+        <md-button class="add-new-project" ui-sref="newProject" ng-if="vm.isLogin" ng-disabled="!vm.hasProfile()" aria-label="Add new project" ng-show="vm.showFullNavigation && vm.userProfile.account_type === 'I'" md-no-ink>
             <md-icon class="material-icons">add</md-icon>
             New Project
         </md-button>
@@ -97,7 +97,7 @@
         <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showFullNavigation && vm.user.projects.length != 0" ng-show="vm.state.current.name !== 'country'">
             <div class="md-toolbar-tools">
                 <div class="project-mainmenu">
-                    <md-button ui-sref="dashboard"  ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-button ui-sref="dashboard"  ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
                         Dashboard
                     </md-button>
 
@@ -105,7 +105,7 @@
                         Dashboard
                     </md-button>
 
-                    <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink class="active">
+                    <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink class="active">
                         <md-tooltip md-autohide>
                             CREATE VISUAL FRAMEWORK
                         </md-tooltip>
@@ -119,19 +119,26 @@
                         Visualize Project
                     </md-button>
 
-                    <md-button ui-sref="editProject" ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
+                    <md-button ui-sref="editProject" n ng-disabled="!vm.hasProfile()" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
                         <md-tooltip md-autohide>
                             EDIT PROJECT DETAILS
                         </md-tooltip>
                         Edit Project
                     </md-button>
-                    <md-button ui-sref="#"  ng-show="vm.userType !== 0" ng-disabled="!vm.userProfile" ng-if="false" ui-sref-active="active" md-no-ink>
+
+                    <md-button ui-sref="inventory"  ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'Y'" ui-sref-active="active" md-no-ink>
+                        <md-tooltip md-autohide>
+                            INVENTORY PROJECT CREATION
+                        </md-tooltip>
+                        Inventory
+                    </md-button>
+                    <md-button ui-sref="#"  ng-show="vm.userType !== 0" ng-disabled="!vm.hasProfile()" ng-if="false" ui-sref-active="active" md-no-ink>
                         <md-tooltip md-autohide>
                             TIPS AND RESOURCES
                         </md-tooltip>
                         Improve Project
                     </md-button>
-                    <md-button ui-sref="maps" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-button ui-sref="maps" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
                         <md-tooltip md-autohide>
                             GO TO MAPS TOOLKIT
                         </md-tooltip>
@@ -139,7 +146,7 @@
                         <span ng-hide="vm.userType === 3"> Visualize Score </span>
                     </md-button>
 
-                    <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.userProfile" ui-sref-active="active" md-no-ink>
+                    <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
                         <md-tooltip md-autohide>
                             SHOW SCORE SUMMARY
                         </md-tooltip>
