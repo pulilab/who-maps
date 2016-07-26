@@ -307,6 +307,9 @@ p.global-error {
 .main-toolbar {
   z-index: 1000;
   min-height: 48px;
+  position: fixed;
+  top:0;
+  left: 0;
 
   &.toolbar-global {
     background-color: #1A237E;
@@ -367,11 +370,16 @@ p.global-error {
 
 .md-medium-tall {
 
+  &>.md-toolbar-tools {
+    margin-top:48px;
+  }
+
   .md-toolbar-tools {
     background-color: $color-primary;
   }
 
   .md-toolbar-tools-bottom {
+    margin-top: 0;
     background-color: $color-white;
     box-shadow: 0 1px 0 #BDBDBD;
   }

@@ -196,7 +196,7 @@ class CommonServices extends Protected {
             });
     }
 
-    populateHssStructure(){
+    populateHssStructure() {
         this.get('projects/hss/structure/')
             .then(structure => {
                 this.hssStructure = structure;
