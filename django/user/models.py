@@ -15,15 +15,20 @@ class Organisation(ExtendedModel):
         org = cls.objects.get_object_or_none(id=org_id)
         return org.name if org else ""
 
+    def __str__(self):
+        return self.name
+
 
 class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'
     DONOR = 'D'
     GOVERNMENT = 'G'
+    INVENTORY = 'Y'
     ACCOUNT_TYPE_CHOICES = (
         (IMPLEMENTER, 'Implementer'),
         (DONOR, 'Financial Investor'),
         (GOVERNMENT, 'Government'),
+        (INVENTORY, 'Inventory User'),
     )
 
     account_type = models.CharField(

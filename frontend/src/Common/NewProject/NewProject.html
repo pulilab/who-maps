@@ -42,18 +42,45 @@
                     </div>
                 </div>
                 <div flex="100" layout="row" layout-align="start center">
-                    <md-input-container flex="60">
+                    <md-input-container flex="60"
+                                        ng-if="!vm.inventoryMode">
                         <label>Name of the organization</label>
                         <input ng-model="vm.project.organisation.name"
-                               ng-disabled="true" required name="organisation"
+                               ng-disabled="true && !vm.inventoryMode" required name="organisation"
                                md-maxlength="100" type="text" ng-change="vm.handleCustomError('organisation')" />
                         <div ng-messages="vm.newProjectForm.organisation.$error">
                             <div ng-message="required">This is required.</div>
                             <div ng-message="custom" ng-repeat="error in vm.newProjectForm.organisation.customError">{{error}} </div>
                         </div>
                     </md-input-container>
-                </div>
 
+                    <div flex="60" class="autocomplete-organisation">
+                        <md-autocomplete
+                                flex="100"
+                                ng-if="vm.inventoryMode"
+                                required="true"
+                                md-input-name="organisation"
+                                md-no-cache="true"
+                                md-selected-item="vm.project.organisation"
+                                md-search-text="vm.searchText"
+                                md-items="item in vm.organisationSearch(vm.searchText)"
+                                md-item-text="item.name"
+                                md-min-length="2"
+                                placeholder="Organisation name">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+                            </md-item-template>
+
+                            <md-not-found>
+                                <a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>
+                            </md-not-found>
+                        </md-autocomplete>
+                        <div class="autocomplete-errors" ng-messages="vm.newProjectForm.organisation.$error">
+                            <div ng-message="required">This field is required</div>
+                        </div>
+                    </div>
+
+                </div>
 
                 <div flex="100" layout="row" layout-align="start center">
                     <md-input-container flex="60">
@@ -68,7 +95,7 @@
                     </md-input-container>
                 </div>
 
-                <div class="chipper" ng-if="vm.editMode">
+                <div class="chipper" ng-if="vm.editMode || vm.inventoryMode">
                     <label>Team members (editor role)</label>
                     <md-contact-chips
                             placeholder="Editors of this project"
@@ -83,7 +110,7 @@
                     </md-contact-chips>
                 </div>
 
-                <div class="chipper" ng-if="vm.editMode">
+                <div class="chipper" ng-if="vm.editMode || vm.inventoryMode">
                     <label>Viewers (only view role)</label>
                     <md-contact-chips
                             placeholder="Add viewers"
@@ -148,8 +175,9 @@
                                     ariaLabel="coverageType"
                             ></ssmenu>
                             <span class="separator">or</span>
-
-
+                            <md-input-container  class="other">
+                                <input placeholder="Specify 'Other'" type="text" ng-model="cover.other" />
+                            </md-input-container>
                             <span class="separator">and</span>
                             <ssmenu
                                     class="district"
@@ -467,7 +495,7 @@
                         </div>
                         <div layout="column">
                             <md-input-container>
-                                <input type="url" placeholder="Link to wiki page:" name="wiki" ng-required="true" ng-model="vm.project.wiki"/>
+                                <input type="url" placeholder="Link to wiki page:" name="wiki" ng-required="false" ng-model="vm.project.wiki"/>
                                 <div ng-messages="vm.newProjectForm.wiki.$error">
                                     <div ng-message="url">This should be a valid link</div>
                                 </div>
@@ -598,7 +626,7 @@
                         </div>
                     </section>
 
-                    <section ng-if="!vm.editMode">
+                    <section ng-if="!vm.editMode && !vm.inventoryMode">
                         <h4>5. Pre-assessment</h4>
 
                         <p>
@@ -639,7 +667,8 @@
                     <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
                 </div>
                 <div flex="50" layout="row" layout-align="end center">
-                    <md-button type="submit" ng-if="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="!vm.editMode && !vm.inventoryMode" class="md-primary md-raised">Add new project</md-button>
+                    <md-button type="submit" ng-if="vm.inventoryMode" class="md-primary md-raised">Save and add another</md-button>
                     <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
                 </div>
             </div>
