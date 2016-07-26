@@ -101,7 +101,7 @@ class CountrymapController {
         // console.log('DATA arrived', this.data);
         this.dataHere = true;
 
-        if (national) {
+        if (national && national[0]) {
             this.nationalCov = _.clone(national[0]);
             if (this.nationalCov.hasOwnProperty('district')) {
                 delete this.nationalCov.district;
