@@ -28,12 +28,12 @@ class InterventionsController extends Protected {
         vm.hs = vm.service;
         vm.targetPopulationOptions = [
             {
-                name: 'Special Population',
-                item: _.cloneDeep(vm.structure.target_population.special_population)
-            },
-            {
                 name: 'Age Ranges',
                 item: _.cloneDeep(vm.structure.target_population.age_ranges)
+            },
+            {
+                name: 'Special Population',
+                item: _.cloneDeep(vm.structure.target_population.special_population)
             }
         ];
 
