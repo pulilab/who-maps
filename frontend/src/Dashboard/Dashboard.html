@@ -262,6 +262,42 @@
                             </md-content>
                         </md-tab>
 
+                        <md-tab label="interoperability">
+                            <md-content class="dash-res">
+
+
+                                <h3>Health Information System Links</h3>
+                                <md-card
+                                        class="resource"
+                                        ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
+                                        layout="row"
+                                        layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{link}}</h4>
+                                    </div>
+                                    <a ng-href="{{link}}" target="_blank"  layout="column" layout-align="center center">
+                                        <md-icon>launch</md-icon>
+                                    </a>
+                                </md-card>
+
+
+                                <h3>Health Information Exchange Standards</h3>
+                                <md-card
+                                        class="resource"
+                                        ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
+                                        layout="row"
+                                        layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{standard}}</h4>
+                                    </div>
+                                </md-card>
+
+
+                            </md-content>
+                        </md-tab>
+
                     </md-tabs>
 
                 </md-card>
