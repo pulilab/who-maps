@@ -55,7 +55,10 @@ const devPreLoaders = [
     {
         test: /\.js$/,
         loader: 'eslint-loader',
-        exclude: /node_modules/
+        exclude: [
+            /node_modules/,
+            /-spec.js/
+        ]
     }
 ];
 
