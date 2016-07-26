@@ -253,7 +253,7 @@
                                     <label>Add link to a webpage</label>
                                     <input
                                             type="text"
-                                           ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                           ng-pattern="vm.urlRegex"
                                            ng-model="r.value" />
                                 </md-input-container>
                             </div>
@@ -299,7 +299,7 @@
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
                                     <input type="text"
-                                           ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                           ng-pattern="vm.urlRegex"
                                            ng-model="p.value" />
                                 </md-input-container>
                             </div>
@@ -343,7 +343,7 @@
                                 <md-input-container flex>
                                     <label>Add link to a webpage</label>
                                     <input type="text"
-                                           ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                           ng-pattern="vm.urlRegex"
                                            ng-model="r.value" placeholder="CHMI, USAID Compendium, GSMA Tracker, HingX" />
                                 </md-input-container>
                             </div>
@@ -485,7 +485,7 @@
                         <div layout="column">
                             <md-input-container>
                                 <input type="text"
-                                       ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                       ng-pattern="vm.urlRegex"
                                        placeholder="Code documentation or download link" ng-required="true" name="repository" ng-model="vm.project.repository"/>
                                 <div ng-messages="vm.newProjectForm.repository.$error">
                                     <div ng-message="required">This is required.</div>
@@ -496,7 +496,7 @@
                         <div layout="column">
                             <md-input-container>
                                 <input type="text"
-                                       ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                       ng-pattern="vm.urlRegex"
                                        placeholder="Link to the application:" name="mobile_application" ng-required="true" ng-model="vm.project.mobile_application"/>
                                 <div ng-messages="vm.newProjectForm.mobile_application.$error">
                                     <div ng-message="required">This is required.</div>
@@ -507,7 +507,7 @@
                         <div layout="column">
                             <md-input-container>
                                 <input type="text"
-                                       ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                       ng-pattern="vm.urlRegex"
                                        placeholder="Link to wiki page:" name="wiki" ng-required="false" ng-model="vm.project.wiki"/>
                                 <div ng-messages="vm.newProjectForm.wiki.$error">
                                     <div ng-message="pattern">This should be a valid link</div>
@@ -614,7 +614,7 @@
                                         <label>Specify URL:</label>
                                         <input
                                                 type="text"
-                                                ng-pattern="/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/"
+                                                ng-pattern="vm.urlRegex"
                                                 name="link_{{$index}}" id="interoperabilityLink_{{$index}}" ng-blur="vm.interoperabilityLinkBlur($index)" ng-model="vm.project.interoperability_links[$index]">
                                         <div ng-messages="vm.newProjectForm['link_' + $index].$error">
                                             <div ng-message="pattern">This should be a valid link</div>

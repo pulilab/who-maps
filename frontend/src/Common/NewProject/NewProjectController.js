@@ -32,6 +32,7 @@ class NewProjectController extends ProjectDefinition {
 
     onInit() {
         this.bindFunctions();
+        this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
