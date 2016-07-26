@@ -469,6 +469,11 @@ class NewProjectController extends ProjectDefinition {
 
     }
 
+    focusSpecifyField(index) {
+        const field = document.getElementById(`interoperabilityLink_${index}`)
+        field.focus();
+    }
+
 
     static newProjectFactory() {
         require('./NewProject.scss');
