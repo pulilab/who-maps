@@ -15,6 +15,7 @@ class ContinuumController {
     onInit() {
         const vm = this;
         vm.bindEvents();
+        this.reqIcons();
         this.gridLoading = false;
         this.editMode = false;
         this.isFixed = false;
@@ -156,6 +157,16 @@ class ContinuumController {
         console.warn('The "export to .pdf" function is not yet available!');
     }
 
+    reqIcons() {
+        this.icons = [];
+        this.icons[0] = require('./images/icon-1.svg');
+        this.icons[1] = require('./images/icon-2.svg');
+        this.icons[2] = require('./images/icon-3.svg');
+        this.icons[3] = require('./images/icon-4.svg');
+        this.icons[4] = require('./images/icon-5.svg');
+        this.icons[5] = require('./images/icon-6.svg');
+        this.icons[6] = require('./images/icon-7.svg');
+    }
 
     static continuumFactory() {
         require('./Continuum.scss');
