@@ -610,3 +610,9 @@ footer.disclaimer {
   font-size: 10px;
   line-height: 14px;
 }
+
+.md-select-menu-container {
+  &.topalign {
+    transform: translate(10px, 65px);
+  }
+}
