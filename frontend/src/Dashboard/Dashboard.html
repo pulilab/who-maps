@@ -266,10 +266,10 @@
                             <md-content class="dash-res">
 
 
-                                <h3>Health Information System links</h3>
+                                <h3>Health Information System Links</h3>
                                 <md-card
                                         class="resource"
-                                        ng-repeat="link in vm.projectData.interoperability_links track by $index"
+                                        ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
                                         layout="row"
                                         layout-align="space-around stretch">
 
@@ -282,7 +282,7 @@
                                 </md-card>
 
 
-                                <h3>Health Information System standards</h3>
+                                <h3>Health Information Exchange Standards</h3>
                                 <md-card
                                         class="resource"
                                         ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
