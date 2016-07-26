@@ -612,6 +612,7 @@ footer.disclaimer {
 }
 
 .md-select-menu-container {
+  z-index: 500;
   &.topalign {
     transform: translate(10px, 65px);
   }
