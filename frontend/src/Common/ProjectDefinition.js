@@ -38,6 +38,11 @@ class ProjectDefinition extends Protected {
             'implementation_dates': null,
             'geographic_coverage': null,
             'intervention_areas': [],
+            interoperability_links: [],
+            interoperability_standards: {
+                standard: [],
+                custom: void 0
+            },
             wiki: '',
             repository: '',
             'mobile_application': ''
@@ -80,6 +85,25 @@ class ProjectDefinition extends Protected {
 
     interventionAreaChecked(t) {
         return this.project.intervention_areas.indexOf(t) > -1;
+    }
+
+    interoperabilityLinksChecked(t) {
+        const inter = this.project.interoperability_links[t];
+        return inter && inter.length > 0;
+    }
+    interoperabilityStandardsChecked(t) {
+        return this.project.interoperability_standards.standard.indexOf(t) > -1;
+    }
+
+    interoperabilityStandardsChanged(t) {
+        if (this.interoperabilityStandardsChecked(t)) {
+            _.remove(this.project.interoperability_standards.standard, item => {
+                return item === t;
+            });
+        }
+        else {
+            this.project.interoperability_standards.standard.push(t);
+        }
     }
 
 
