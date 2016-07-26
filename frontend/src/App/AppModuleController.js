@@ -57,7 +57,6 @@ class AppModuleController extends Protected {
 
     eventBinding() {
         this.EE.on('unauthorized', this.handleUnauthorized, this);
-        this.EE.on('logout', this.handleLogoudtEvent, this);
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
         this.EE.on('profileUpdated', this.refreshProfileInfo, this);
