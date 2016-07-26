@@ -15,6 +15,7 @@ class CommonServices extends Protected {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
+        this.EE.on('unauthorized', this.handleUnauthorized, this);
         this.initialize();
     }
 
@@ -28,6 +29,7 @@ class CommonServices extends Protected {
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = [];
         this.userProfile = null;
+        this.usersProfiles = null;
         this.hssStructure = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
@@ -64,11 +66,17 @@ class CommonServices extends Protected {
         return this;
     }
 
+    handleUnauthorized() {
+        this.storage.clear();
+        this.initialize();
+    }
+
     loadData() {
         if (this.userProfileId) {
             this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
+            this.getUsersProfiles();
         }
         this.populateProjectStructure();
     }
@@ -125,6 +133,16 @@ class CommonServices extends Protected {
                 this.loadingProgress('user-profile');
             });
         }
+    }
+
+    getUsersProfiles() {
+        const vm = this;
+        vm.get('userprofiles').then(data => {
+            vm.usersProfiles = _.filter(data, item => {
+                return item.name !== null && item.name !== '';
+            });
+            vm.loadingProgress('users-profiles');
+        });
     }
 
     populateProjectList() {
@@ -247,6 +265,10 @@ class CommonServices extends Protected {
 
     isMember(project) {
         return this.userProfile && this.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    hasProfile() {
+        return this.userProfile && this.userProfile.name !== '' && !_.isNull(this.userProfile.name);
     }
 
     calculateHeight() {
