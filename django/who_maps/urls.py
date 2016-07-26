@@ -22,6 +22,7 @@ from project.views import create_from_file
 admin.site.site_header = 'Digital Health Atlas'
 
 urlpatterns = [
+    # url(r"^admin/projects/bulk/$", view=create_from_file, name="project-bulk"),
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
@@ -29,6 +30,5 @@ urlpatterns = [
     url(r"^api/", include("toolkit.urls")),
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
-    url(r"^web/projects/bulk/$", view=create_from_file, name="project-bulk"),
 ]
 
