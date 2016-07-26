@@ -135,8 +135,8 @@ class NewProjectController extends ProjectDefinition {
             standard: [],
             custom: void 0
         };
-
-        this.structure.interoperability_standards = _.union(this.structure.interoperability_standards, data.interoperability_standards)
+        this.structure.interoperability_standards =
+            _.union(this.structure.interoperability_standards, data.interoperability_standards);
         interoperability_standards.standard = data.interoperability_standards;
         data.interoperability_standards = interoperability_standards;
 
@@ -498,17 +498,16 @@ class NewProjectController extends ProjectDefinition {
     }
 
     focusSpecifyField(index) {
-        const field = document.getElementById(`interoperabilityLink_${index}`)
-        if(!field.value) {
-            field.value = 'http://';
+        const field = document.getElementById(`interoperabilityLink_${index}`);
+        if (!field.value) {
+            this.project.interoperability_links[index] = 'http://';
         }
         field.focus();
     }
 
     interoperabilityLinkBlur(index) {
-        const field = document.getElementById(`interoperabilityLink_${index}`)
-        if (field.value === 'http://') {
-            field.value = null;
+        if (this.project.interoperability_links[index] === 'http://') {
+            this.project.interoperability_links[index] = null;
         }
     }
 
