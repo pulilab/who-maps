@@ -99,6 +99,7 @@ class NewProjectController extends ProjectDefinition {
 
     handleDataLoad(data) {
         this.createCoverageKeys(data);
+        this.convertArraytoStandardCustomObj(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
@@ -114,6 +115,16 @@ class NewProjectController extends ProjectDefinition {
             });
         this.scope.$evalAsync();
 
+    }
+
+    convertArraytoStandardCustomObj(data) {
+        const interoperability_standards = {
+            standard: [],
+            custom: void 0
+        };
+
+        interoperability_standards.standard = data.interoperability_standards;
+        data.interoperability_standards = interoperability_standards;
     }
 
     mergeNationalLevelWithDistrictCoverage() {
@@ -339,7 +350,8 @@ class NewProjectController extends ProjectDefinition {
 
         // collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
         // collection.digital_tools = this.concatCustom(collection.digital_tools);
-
+        collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
+        collection.interoperability_links = _.toArray(collection.interoperability_links);
         collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);
         collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);

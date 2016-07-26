@@ -562,7 +562,7 @@
                                 <div flex="40">
                                     <md-checkbox
                                             class="md-primary"
-                                            ng-checked="vm.interoperabilityLinksChecked(link)">
+                                            ng-checked="vm.interoperabilityLinksChecked($index)">
                                         {{link}}
                                     </md-checkbox>
                                 </div>
@@ -570,7 +570,7 @@
                                 <div flex="60">
                                     <md-input-container flex="100" layout-fill>
                                         <label>Specify:</label>
-                                        <input type="url" name="link_{{$index}}" ng-model="vm.project.interoperability_links[link]">
+                                        <input type="url" name="link_{{$index}}" ng-model="vm.project.interoperability_links[$index]">
                                         <div ng-messages="vm.newProjectForm['link_' + $index].$error">
                                             <div ng-message="url">This should be a valid link</div>
                                         </div>
@@ -584,7 +584,8 @@
                         <div class="interoperability-standards" layout="row" layout-wrap>
                             <div class="interoperability" layout="column" layout-align="center left" flex="33"  ng-repeat="standard in vm.structure.interoperability_standards">
                                 <md-checkbox
-                                        ng-checked="vm.interoperabilityStandardsChecked(link)"
+                                        ng-checked="vm.interoperabilityStandardsChecked(standard)"
+                                        ng-click="vm.interoperabilityStandardsChanged(standard)"
                                 >
                                     {{standard}}
                                 </md-checkbox>
