@@ -269,7 +269,7 @@
                                 <h3>Health Information System links</h3>
                                 <md-card
                                         class="resource"
-                                        ng-repeat="link in vm.projectData.interoperability_links"
+                                        ng-repeat="link in vm.projectData.interoperability_links track by $index"
                                         layout="row"
                                         layout-align="space-around stretch">
 
@@ -285,7 +285,7 @@
                                 <h3>Health Information System standards</h3>
                                 <md-card
                                         class="resource"
-                                        ng-repeat="standard in vm.projectData.interoperability_standards"
+                                        ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
                                         layout="row"
                                         layout-align="space-around stretch">
 
