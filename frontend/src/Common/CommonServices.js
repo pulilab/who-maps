@@ -39,6 +39,7 @@ class CommonServices extends Protected {
             this.loadData();
         }
         else {
+            this.checkLoadPresence('structure');
             this.populateProjectStructure();
         }
     }
@@ -66,16 +67,30 @@ class CommonServices extends Protected {
 
     loadData() {
         if (this.userProfileId) {
+            this.createLoadingOrder();
             this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
         }
+        this.checkLoadPresence('structure');
         this.populateProjectStructure();
+    }
+
+    checkLoadPresence(name) {
+        if (this.loadingCheck.indexOf(name) === -1) {
+            this.loadingCheck.push(name);
+        }
+    }
+
+    createLoadingOrder() {
+        this.checkLoadPresence('user-profile');
+        this.checkLoadPresence('hss-structure');
+        this.checkLoadPresence('list');
     }
 
     loadingProgress(name) {
         if (DEBUG) {
-            console.debug(this.loadingCheck, name);
+            console.debug(_.cloneDeep(this.loadingCheck), name);
         }
         _.remove(this.loadingCheck, item => {
             return item === name;
@@ -110,81 +125,69 @@ class CommonServices extends Protected {
     }
 
     retrieveUserProfile() {
-        if (this.loadingCheck.indexOf('user-profile') === -1) {
-            const vm = this;
-            vm.loadingCheck.push('user-profile');
-            vm.get(`userprofiles/${vm.userProfileId}/`).then(_userprofile => {
-                vm.userProfile = _userprofile;
-                if (vm.userProfile) {
-                    vm.userProfile.email = vm.storage.get('user').username;
-                    vm.userProfile.organisation = {
-                        id: _userprofile.organisation,
-                        name: _userprofile.organisation_name
-                    };
-                }
-                this.loadingProgress('user-profile');
-            });
-        }
+        const vm = this;
+        vm.get(`userprofiles/${vm.userProfileId}/`).then(_userprofile => {
+            vm.userProfile = _userprofile;
+            if (vm.userProfile) {
+                vm.userProfile.email = vm.storage.get('user').username;
+                vm.userProfile.organisation = {
+                    id: _userprofile.organisation,
+                    name: _userprofile.organisation_name
+                };
+            }
+            this.loadingProgress('user-profile');
+        });
     }
 
     populateProjectList() {
-        if (this.loadingCheck.indexOf('list') === -1) {
-            this.loadingCheck.push('list');
-            const promiseArray = [];
-            this.get('projects/member-of/')
-                .then((projects) => {
-                    this.projectList = projects;
-                    _.forEach(projects, project => {
-                        if (project) {
-                            this.getProjectDetail(project);
-                            promiseArray.push(project.detailPromise);
-                            this.getProjectFiles(project);
-                            promiseArray.push(project.filePromise);
-                        }
-                    });
-
-                    Promise.all(promiseArray)
-                        .then(() => {
-                            this.loadingProgress('list');
-                        }, () => {
-                            this.promiseReject();
-                        });
-                }, () => {
-                    // if the user has no user profile the loading should still go on!
-                    console.warn('the user has no user profile');
-                    this.loadingProgress('list');
+        const promiseArray = [];
+        this.get('projects/member-of/')
+            .then((projects) => {
+                this.projectList = projects;
+                _.forEach(projects, project => {
+                    if (project) {
+                        this.getProjectDetail(project);
+                        promiseArray.push(project.detailPromise);
+                        this.getProjectFiles(project);
+                        promiseArray.push(project.filePromise);
+                    }
                 });
-        }
+
+                Promise.all(promiseArray)
+                    .then(() => {
+                        this.loadingProgress('list');
+                    }, () => {
+                        this.promiseReject();
+                    });
+            }, () => {
+                // if the user has no user profile the loading should still go on!
+                console.warn('the user has no user profile');
+                this.loadingProgress('list');
+            });
     }
 
     populateProjectStructure() {
-        if (this.loadingCheck.indexOf('structure') === -1) {
-            this.loadingCheck = ['structure'];
-            this.get('projects/structure/')
-                .then(structure => {
-                    this.projectStructure = structure;
-                    this.loadingProgress('structure');
-                })
-                .catch(() => {
-                    this.loadingProgress('structure');
-                    this.promiseReject();
-                });
-        }
+        this.get('projects/structure/')
+            .then(structure => {
+                this.projectStructure = structure;
+                this.loadingProgress('structure');
+            })
+            .catch(() => {
+                this.loadingProgress('structure');
+                this.promiseReject();
+            });
     }
 
     populateHssStructure(){
-        if (this.loadingCheck.indexOf('hss-structure') === -1) {
-            this.loadingCheck.push('hss-structure');
-            this.get('projects/hss/structure/')
-                .then(structure => {
-                    this.hssStructure = structure;
-                    this.loadingProgress('hss-structure');
-                })
-                .catch(() => {
-                    this.loadingProgress('hss-structure');
-                    this.promiseReject();
-                });
-        }
+        this.get('projects/hss/structure/')
+            .then(structure => {
+                this.hssStructure = structure;
+                this.loadingProgress('hss-structure');
+            })
+            .catch(() => {
+                this.loadingProgress('hss-structure');
+                this.promiseReject();
+            });
     }
 
     getProjectDetail(project) {
@@ -212,11 +215,12 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise]).then(() => {
-                vm.getCountryName(project);
-                vm.publicProject[_id] = project;
-                resolve(project);
-            });
+            Promise.all([project.detailPromise, project.filePromise])
+                .then(() => {
+                    vm.getCountryName(project);
+                    vm.publicProject[_id] = project;
+                    resolve(project);
+                });
         }
     }
 
