@@ -471,7 +471,9 @@ class NewProjectController extends ProjectDefinition {
 
     focusSpecifyField(index) {
         const field = document.getElementById(`interoperabilityLink_${index}`)
-        field.value = 'http://';
+        if(!field.value) {
+            field.value = 'http://';
+        }
         field.focus();
     }
 
