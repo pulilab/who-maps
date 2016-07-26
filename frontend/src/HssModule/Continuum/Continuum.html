@@ -45,7 +45,7 @@
             md-colspan="2"
             md-rowspan="2"
             class="hss-controls" ng-cloak>
-        <div >
+        <div ng-if="!vm.viewMode" >
             <div >
                 <span ng-if="!vm.showEditModeSpinner" class="edit-mode-button">
                   <md-button md-no-ink

@@ -23,11 +23,13 @@ class AuthApi {
         this.prePut = false;
         this.preDelete = false;
         this.EE.on('logout', this.invalidate, this);
+        this.EE.on('unauthorized', this.invalidate, this);
     }
 
     invalidate() {
         this.token = void 0;
         this.updateOnNextRequest = true;
+        this.storage.clear();
     }
 
     cleanDoubleDollar(items) {

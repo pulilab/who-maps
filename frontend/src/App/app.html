@@ -14,12 +14,12 @@
             Country View
         </md-button>
 
-        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.isLogin && !vm.viewMode && vm.user.projects.length != 0" ng-show="vm.state.current.name !== 'dashboard'" md-no-ink>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.isLogin && !vm.viewMode" ng-show="vm.state.current.name !== 'dashboard'" md-no-ink>
             <md-icon class="material-icons ">apps</md-icon>
             Dashboard
         </md-button>
 
-        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-show="vm.userType !== 0" ng-if="vm.viewMode && vm.user.projects.length != 0"  md-no-ink>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-show="vm.userType !== 0" ng-if="vm.viewMode"  md-no-ink>
             <md-icon class="material-icons ">apps</md-icon>
             Go to my dashboard
         </md-button>
