@@ -580,6 +580,52 @@
 
                     </section>
 
+                    <section ng-if="vm.editMode">
+                        <h4>5. Interoperability</h4>
+                        <h5 flex="100">Does your digital health project link to a digital Health Information System *HIS?</h5>
+
+
+                        <div class="interoperability-links" layout="column"  >
+                            <div class="interoperability" layout="row" layout-align="left center" ng-repeat="link in vm.structure.interoperability_links">
+                                <div flex="40">
+                                    <md-checkbox
+                                            class="md-primary"
+                                            ng-checked="vm.interoperabilityLinksChecked($index)"
+                                            ng-click="vm.focusSpecifyField($index)">
+                                        {{link}}
+                                    </md-checkbox>
+                                </div>
+
+                                <div flex="60">
+                                    <md-input-container flex="100" ng-click="vm.focusSpecifyField($index)" layout-fill>
+                                        <label>Specify URL:</label>
+                                        <input type="url" name="link_{{$index}}" id="interoperabilityLink_{{$index}}" ng-blur="vm.interoperabilityLinkBlur($index)" ng-model="vm.project.interoperability_links[$index]">
+                                        <div ng-messages="vm.newProjectForm['link_' + $index].$error">
+                                            <div ng-message="url">This should be a valid link</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <h5 flex="100">What data standards does your digital health project use?</h5>
+                        <div class="interoperability-standards" layout="row" layout-wrap>
+                            <div class="interoperability" layout="column" layout-align="center left" flex="33"  ng-repeat="standard in vm.structure.interoperability_standards">
+                                <md-checkbox
+                                        ng-checked="vm.interoperabilityStandardsChecked(standard)"
+                                        ng-click="vm.interoperabilityStandardsChanged(standard)"
+                                >
+                                    {{standard}}
+                                </md-checkbox>
+                            </div>
+                            <md-input-container>
+                                <input type="text" placeholder="Specify other" ng-model="vm.project.interoperability_standards.custom"/>
+                            </md-input-container>
+
+                        </div>
+                    </section>
+
                     <section ng-if="!vm.editMode && !vm.inventoryMode">
                         <h4>5. Pre-assessment</h4>
 
