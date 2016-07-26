@@ -569,9 +569,9 @@
                                 </div>
 
                                 <div flex="60">
-                                    <md-input-container flex="100" layout-fill>
-                                        <label>Specify:</label>
-                                        <input type="url" name="link_{{$index}}" id="interoperabilityLink_{{$index}}" ng-model="vm.project.interoperability_links[$index]">
+                                    <md-input-container flex="100" ng-click="vm.focusSpecifyField($index)" layout-fill>
+                                        <label>Specify URL:</label>
+                                        <input type="url" name="link_{{$index}}" id="interoperabilityLink_{{$index}}" ng-blur="vm.interoperabilityLinkBlur($index)" ng-model="vm.project.interoperability_links[$index]">
                                         <div ng-messages="vm.newProjectForm['link_' + $index].$error">
                                             <div ng-message="url">This should be a valid link</div>
                                         </div>

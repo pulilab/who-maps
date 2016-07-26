@@ -477,6 +477,13 @@ class NewProjectController extends ProjectDefinition {
         field.focus();
     }
 
+    interoperabilityLinkBlur(index) {
+        const field = document.getElementById(`interoperabilityLink_${index}`)
+        if (field.value === 'http://') {
+            field.value = null;
+        }
+    }
+
 
     static newProjectFactory() {
         require('./NewProject.scss');
