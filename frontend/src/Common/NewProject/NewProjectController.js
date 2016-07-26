@@ -123,8 +123,11 @@ class NewProjectController extends ProjectDefinition {
             custom: void 0
         };
 
+        this.structure.interoperability_standards = _.union(this.structure.interoperability_standards, data.interoperability_standards)
         interoperability_standards.standard = data.interoperability_standards;
         data.interoperability_standards = interoperability_standards;
+
+
     }
 
     mergeNationalLevelWithDistrictCoverage() {
