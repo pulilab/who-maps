@@ -63,7 +63,8 @@ class NewProjectController extends ProjectDefinition {
 
     createDateStructure() {
         this.availableYears = _.range(1980, 2051);
-        this.availableMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        this.availableMonths = ['January', 'February', 'March', 'April', 'May',
+            'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     }
 
     isViewer(project) {
@@ -317,7 +318,7 @@ class NewProjectController extends ProjectDefinition {
             .toJSON();
 
         month = this.availableMonths.indexOf(this.implementingDateMonth);
-        processedForm.implementation_dates = moment({ year: this.implementingDateYear, month,})
+        processedForm.implementation_dates = moment({ year: this.implementingDateYear, month })
             .toJSON();
     }
 

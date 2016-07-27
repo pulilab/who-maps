@@ -46,13 +46,6 @@ describe('NewProjectController', () => {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
         };
-        sc.startDateMonth = 2;
-        sc.startDateYear = 2000;
-        sc.startDateDay = 12;
-        sc.project.health_focus_areas = {
-            standard: [1,2,3],
-            custom: void 0
-        };
         sc.$onInit();
     });
 
@@ -91,6 +84,7 @@ describe('NewProjectController', () => {
         spyOn(sc, 'saveForm');
         spyOn(sc, 'separateCoverageAndNationalLevelDeployments');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
+        spyOn(sc, 'isProjectObjValid').and.returnValue(true);
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
         expect(sc.createCoverageArray).toHaveBeenCalled();
