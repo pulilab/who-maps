@@ -22,7 +22,7 @@ class ProjectSerializer(serializers.Serializer):
     implementation_overview = serializers.CharField(max_length=500)
     implementing_partners = serializers.CharField(required=False, allow_blank=True)
     implementation_dates = serializers.CharField()
-    geographic_coverage = serializers.CharField()
+    geographic_scope = serializers.CharField()
     intervention_areas = serializers.ListField()
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)

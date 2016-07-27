@@ -94,7 +94,7 @@ class ProjectPublicViewSet(ViewSet):
             "implementation_overview": p.data.get('implementation_overview'),
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
-            "geographic_coverage": p.data.get('geographic_coverage'),
+            "geographic_scope": p.data.get('geographic_coverage'),
             "intervention_areas": p.data.get('intervention_areas'),
             "technology_platforms": p.data.get('technology_platforms'),
             "interventions": p.hss_set.first().get_interventions_list(),
