@@ -106,8 +106,8 @@
                             <div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
                             <div flex="30">{{project.implementation_overview}}</div>
                             <div flex="20">{{project.implementing_partners}}</div>
-                            <div flex="20">{{project.geographic_coverage}}</div>
-                            <div flex="20">{{project.intervention_areas.join(', ')}}</div>
+                            <div flex="20">{{project.geographic_scope}}</div>
+                            <div flex="20">{{project.health_focus_areas.join(', ')}}</div>
 
                         </div>
                         <div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>

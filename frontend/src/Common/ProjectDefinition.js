@@ -18,7 +18,10 @@ class ProjectDefinition extends Protected {
             country: null,
             countryName: null,
             coverage: [{}],
-            'technology_platforms': [],
+            'technology_platforms': {
+                standard: [],
+                custom: void 0
+            },
             licenses: [],
             // 'digital_tools': [],
             'pre_assessment': [{}, {}, {}, {}, {}, {}],
@@ -36,8 +39,11 @@ class ProjectDefinition extends Protected {
             'implementation_overview': null,
             'implementing_partners': null,
             'implementation_dates': null,
-            'geographic_coverage': null,
-            'intervention_areas': [],
+            'health_focus_areas': {
+                standard: [],
+                custom: void 0
+            },
+            'geographic_scope': null,
             interoperability_links: [],
             interoperability_standards: {
                 standard: [],
@@ -52,15 +58,15 @@ class ProjectDefinition extends Protected {
 
     technologyPlatformChange(t) {
         if (this.technologyPlatformChecked(t)) {
-            _.remove(this.project.technology_platforms, item => item === t);
+            _.remove(this.project.technology_platforms.standard, item => item === t);
         }
         else {
-            this.project.technology_platforms.push(t);
+            this.project.technology_platforms.standard.push(t);
         }
     }
 
     technologyPlatformChecked(t) {
-        return this.project.technology_platforms.indexOf(t) > -1;
+        return this.project.technology_platforms.standard.indexOf(t) > -1;
     }
 
     // addTechnologyPlatform() {
@@ -74,17 +80,17 @@ class ProjectDefinition extends Protected {
 
     interventionAreaChanged(t) {
         if (this.interventionAreaChecked(t)) {
-            _.remove(this.project.intervention_areas, item => {
+            _.remove(this.project.health_focus_areas.standard, item => {
                 return item === t;
             });
         }
         else {
-            this.project.intervention_areas.push(t);
+            this.project.health_focus_areas.standard.push(t);
         }
     }
 
     interventionAreaChecked(t) {
-        return this.project.intervention_areas.indexOf(t) > -1;
+        return this.project.health_focus_areas.standard.indexOf(t) > -1;
     }
 
     interoperabilityLinksChecked(t) {
