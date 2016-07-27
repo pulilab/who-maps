@@ -290,7 +290,7 @@ class NewProjectController extends ProjectDefinition {
         }
         if (!_.isEmpty(this.newProjectForm.$error)) {
 
-            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid .custom-error .md-input-message .md-input-message-animation .md-errors.spacer');
 
             if (firstInvalid) {
                 firstInvalid.focus();
