@@ -29,6 +29,21 @@ class EditProfileController extends Protected {
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleDataLoad();
+        this.createBlurHandle();
+    }
+
+    createBlurHandle() {
+
+        this.scope.$$postDigest(() => {
+
+            document.querySelector('#orgauto')
+                .querySelector('input')
+                .addEventListener('blur', () => {
+                    if (!this.latestOrgs.some(org => org.name === this.searchText)) {
+                        this.addOrganisation(this.searchText);
+                    }
+                });
+        });
     }
 
     handleDataLoad() {
@@ -118,7 +133,11 @@ class EditProfileController extends Protected {
     }
 
     organisationSearch(name) {
-        return this.es.autocompleteOrganization(name);
+        const getOrgsPromise  = this.es.autocompleteOrganization(name);
+        getOrgsPromise.then(data => {
+            this.latestOrgs = data;
+        });
+        return getOrgsPromise;
     }
 
     addOrganisation(name) {
