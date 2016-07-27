@@ -158,6 +158,15 @@
                 <div ng-class="{disabled: vm.disableDetails()}">
 
                     <section class="coverage-section">
+                        <div layout="column">
+                            <md-input-container>
+                                <input type="text" ng-required="true" placeholder="What is the geographic scope of the project?" name="geographic_scope" ng-model="vm.project.geographic_scope"/>
+                                <div ng-messages="vm.newProjectForm.geographic_scope.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+
                         <p>What is the current coverage of your project? (e.g. numbers of health workers, clinics and/or client beneficiaries reached)</p>
 
                         <div layout="row" layout-align="start start" class="coverage" ng-repeat="cover in vm.project.coverage" ng-init="vm.repeatBind(cover)">
@@ -562,29 +571,23 @@
                             </md-input-container>
                         </div>
 
-                        <div layout="column">
-                            <md-input-container>
-                                <input type="text" ng-required="true" placeholder="Geographic coverage" name="geographic_coverage" ng-model="vm.project.geographic_coverage"/>
-                                <div ng-messages="vm.newProjectForm.geographic_coverage.$error">
-                                    <div ng-message="required">This is required.</div>
-                                </div>
-                            </md-input-container>
-                        </div>
-
                         <div md-layout="row">
-                            <h5 flex="100">Interventions Areas:</h5>
+                            <h5 flex="100">Health Focus Areas:</h5>
                             <div class="checkbox-container" layout="row">
                                 <md-checkbox
-                                        name="intervention_areas"
-                                        ng-repeat="d in vm.structure.intervention_areas"
+                                        name="health_focus_areas"
+                                        ng-repeat="d in vm.structure.health_focus_areas"
                                         ng-checked="vm.interventionAreaChecked(d)"
                                         ng-click="vm.interventionAreaChanged(d)"
                                         flex="30"
                                         aria-label="{{ d }}">
                                     {{ d }}
                                 </md-checkbox>
+                                <md-input-container>
+                                    <input type="text" placeholder="Specify other" ng-model="vm.project.health_focus_areas.custom"/>
+                                </md-input-container>
                             </div>
-                            <div class="custom-error" ng-show="vm.project.intervention_areas.length === 0">
+                            <div class="custom-error" ng-show="vm.project.health_focus_areas.standard.length === 0 && vm.project.health_focus_areas.custom === undefined">
                                 Select at least one area
                             </div>
                         </div>
