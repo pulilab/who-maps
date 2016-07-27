@@ -86,6 +86,7 @@ describe('NewProjectController', () => {
         const e = document.createElement('div');
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
+        spyOn(sc, 'scroll');
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'createCoverageArray');
         spyOn(sc, 'saveForm');
@@ -97,6 +98,7 @@ describe('NewProjectController', () => {
         expect(sc.createCoverageArray).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
         expect(sc.separateCoverageAndNationalLevelDeployments).toHaveBeenCalled();
+        expect(sc.scroll).toHaveBeenCalledWith('customerror1');
     });
 
     it('should have a function that save a new form', () => {
