@@ -705,7 +705,7 @@ class ProjectTests(SetupTests):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
+            "geographic_scope": "somewhere",
             "health_focus_areas": ["area1", "area2"],
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
