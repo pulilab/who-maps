@@ -126,7 +126,7 @@ class CountryViewModuleController {
             this.countries2.unshift({ id: false, name: 'Show all countries' });
             if (this.cs.userProfile && this.cs.userProfile.country) {
                 const name = this.cs.userProfile.country.toLowerCase();
-                this.selectedCountry = _.find(this.countries2, { name });
+                this.selectedCountry = _.find(this.countries2, { name: this.cs.uglifyCountryName(name) });
                 this.updateCountry(this.selectedCountry);
                 this.scope.$evalAsync();
             }
@@ -153,7 +153,7 @@ class CountryViewModuleController {
     }
 
     updateCountry(countryObj) {
-        // console.debug('To countryObj: ', countryObj);
+        console.debug('To countryObj: ', countryObj);
         if (countryObj.name !== 'Show all countries') {
             this.changeMapTo(countryObj);
         }
