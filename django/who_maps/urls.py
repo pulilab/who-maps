@@ -17,9 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 
+from project.views import create_from_file
+
 admin.site.site_header = 'Digital Health Atlas'
 
 urlpatterns = [
+    # url(r"^admin/projects/bulk/$", view=create_from_file, name="project-bulk"),
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),

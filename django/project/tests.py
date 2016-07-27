@@ -474,6 +474,42 @@ class ProjectTests(SetupTests):
         project = Project.objects.get(id=response.json()['id'])
         self.assertEqual(project.team.first(), userprofile)
 
+    def test_team_cant_be_but_viewers_can_be_empty(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="Test Project4")
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        userprofile = UserProfile.objects.get(name="Test Name")
+        project = Project.objects.get(id=response.json()['id'])
+        self.assertEqual(project.team.first(), userprofile)
+
+        url = reverse("project-groups", kwargs={"pk": project.id})
+
+        groups = {
+            "team": [userprofile.id],
+            "viewers": [userprofile.id]
+        }
+
+        response = self.test_user_client.put(url, groups)
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [userprofile.id])
+        self.assertEqual(response.json()['viewers'], [userprofile.id])
+
+        url = reverse("project-groups", kwargs={"pk": project.id})
+
+        groups = {
+            "team": [],
+            "viewers": []
+        }
+        response = self.test_user_client.put(url, groups)
+
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [userprofile.id])
+        self.assertEqual(response.json()['viewers'], [])
+
     def test_by_user_manager(self):
         url = reverse("project-list")
         response = self.test_user_client.get(url)
@@ -659,6 +695,53 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("implementing_partners", response.json())
+
+    def test_interoperability_features(self):
+        project_data = {
+            "date": datetime.utcnow(),
+            "name": "Test Project2",
+            "organisation": self.org.id,
+            "contact_name": "name1",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "geographic_coverage": "somewhere",
+            "intervention_areas": ["area1", "area2"],
+            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
+            "country": self.country_id,
+            "objective": "objective1",
+            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
+            "application": ["app1", "app2"],
+            "coverage": [
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
+            "started": datetime.utcnow(),
+            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
+            "reports": ["http://foo.com", "http://bar.com"],
+            "publications": ["http://foo.com", "http://bar.com"],
+            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
+            "goals_to_scale": "scale",
+            "anticipated_time": "time",
+            "pre_assessment": [1,0,3,0,4,0],
+            "implementing_partners": "dsfsdf",
+            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None, "http://example.org"],
+            "interoperability_standards": ["CSD – Care Services Discovery"]
+        }
+        url = reverse("project-crud")
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertIn("interoperability_links", response.json())
+        self.assertIn("interoperability_standards", response.json())
+        self.assertEqual(project_data["interoperability_links"], response.json()["interoperability_links"])
+        self.assertEqual(project_data["interoperability_standards"], response.json()["interoperability_standards"])
+
+        url = reverse("get-project-structure")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("interoperability_links", response.json())
+        self.assertIn("interoperability_standards", response.json())
 
 
 class PermissionTests(SetupTests):

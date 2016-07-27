@@ -2,6 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
+import EditProfileService from '../EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
@@ -12,6 +13,7 @@ class NewProjectController extends ProjectDefinition {
     constructor($scope, $state, Upload, CommonService, structure) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
+        this.es = new EditProfileService();
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
@@ -30,20 +32,31 @@ class NewProjectController extends ProjectDefinition {
 
     onInit() {
         this.bindFunctions();
+        this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleStructureLoad();
+
+        this.allUsers = this.cs.usersProfiles;
+
+        this.team = [];
+        this.viewers = [];
+        this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
+
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.cs.getProjectData(this.projectId)
                 .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
                 .then(groups => {
-                    this.team = this.editMode ? groups.data.team : [];
-                    this.viewers = this.editMode ? groups.data.viewers : [];
-                    this.allUsers = groups.data.user_profiles;
+                    this.team = groups.data.team;
+                    this.viewers = groups.data.viewers;
                 });
+        }
+
+        if (this.inventoryMode) {
+            this.project.organisation = void 0;
         }
 
     }
@@ -68,7 +81,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     putGroups() {
-        this.ns.putGroups(this.projectId, this.team, this.viewers);
+        return this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
     importIconTemplates() {
@@ -99,10 +112,12 @@ class NewProjectController extends ProjectDefinition {
 
     handleDataLoad(data) {
         this.createCoverageKeys(data);
+        this.convertArraytoStandardCustomObj(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;
@@ -113,6 +128,19 @@ class NewProjectController extends ProjectDefinition {
                 this.scope.$evalAsync();
             });
         this.scope.$evalAsync();
+
+    }
+
+    convertArraytoStandardCustomObj(data) {
+        const interoperability_standards = {
+            standard: [],
+            custom: void 0
+        };
+        this.structure.interoperability_standards =
+            _.union(this.structure.interoperability_standards, data.interoperability_standards);
+        interoperability_standards.standard = data.interoperability_standards;
+        data.interoperability_standards = interoperability_standards;
+
 
     }
 
@@ -280,7 +308,13 @@ class NewProjectController extends ProjectDefinition {
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.postSaveActions(response.data.id);
+                    this.ownershipCheck(response.data);
+                    if (this.inventoryMode) {
+                        this.putGroups().then(this.postSaveActions.bind(this));
+                    }
+                    else {
+                        this.postSaveActions();
+                    }
                 }
                 else {
                     this.handleResponse(response);
@@ -289,12 +323,21 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
-    postSaveActions(id) {
-        let appName = this.state.params.appName;
-        if (id) {
-            appName = id;
+    ownershipCheck(project) {
+        const id = this.userProfile.id;
+        const rights = _.concat(this.team, this.viewers);
+        if (rights.length > 0 && _.find(rights, { id })) {
+            this.projectId = project.id;
         }
-        this.EE.emit('refreshProjects', { go: 'editProject', appName });
+        else {
+            const last  = _.last(this.cs.projectList);
+            this.projectId = last && last.id ? last.id : null;
+        }
+    }
+
+    postSaveActions() {
+        const go = this.inventoryMode ?  'inventory' : 'editProject';
+        this.EE.emit('refreshProjects', { go, appName: this.projectId });
     }
 
     handleResponse(response) {
@@ -339,7 +382,8 @@ class NewProjectController extends ProjectDefinition {
 
         // collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
         // collection.digital_tools = this.concatCustom(collection.digital_tools);
-
+        collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
+        collection.interoperability_links = _.toArray(collection.interoperability_links);
         collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);
         collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
@@ -452,6 +496,31 @@ class NewProjectController extends ProjectDefinition {
             this.state.go('public-dashboard', { appName: project.id });
         }
 
+    }
+
+    focusSpecifyField(index) {
+        const field = document.getElementById(`interoperabilityLink_${index}`);
+        if (!field.value) {
+            this.project.interoperability_links[index] = 'http://';
+        }
+        field.focus();
+    }
+
+    interoperabilityLinkBlur(index) {
+        if (this.project.interoperability_links[index] === 'http://') {
+            this.project.interoperability_links[index] = null;
+        }
+    }
+
+    organisationSearch(name) {
+        return this.es.autocompleteOrganization(name);
+    }
+
+    addOrganisation(name) {
+        return this.es.addOrganization(name)
+            .then(response => {
+                this.userProfile.organisation = response;
+            });
     }
 
 

@@ -36,9 +36,15 @@ class ProfileTokenSerializer(TokenSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    organisation_name = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
+        fields = ("id", "name", "country", "account_type", "organisation", "user", "created", "organisation_name")
+
+    @staticmethod
+    def get_organisation_name(obj):
+        return obj.organisation.name if obj.organisation else None
 
 
 class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
@@ -66,7 +72,6 @@ class OrganisationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organisation
-        fields = ("id", "name",)
 
 
 class RegisterWithProfileSerializer(RegisterSerializer):

@@ -99,5 +99,35 @@ project_structure = {
             "Tuberculosis",
             "Violence",
             "Water, Sanitation, and Hygiene"
+        ],
+        "interoperability_links": [
+            "Yes, links to a client registry.",
+            "Yes, links to digital HMIS.",
+            "Yes, links to a health worker registry.",
+            "Yes, links to eLMIS.",
+            "Yes, links to digital laboratory information system.",
+            "Yes, links to a facility registry.",
+            "Yes, links to a Shared Health Record.",
+            "Yes, links to a Terminology Service.",
+            "Other"
+        ],
+        "interoperability_standards": [
+            "ADX – Aggregate Data Exchange",
+            "ATNA - Audit Trail and Node Authentication",
+            "BPPC - Basic Patient Privacy Consents",
+            "CDA – Clinical Document Architecture",
+            "CSD – Care Services Discovery",
+            "DICOM",
+            "GS1",
+            "HL7 v2",
+            "HL7 v3",
+            "HL7 FHIR Value Set & Sharing Value Sets (SVS)",
+            "mACM - Mobile Alert Communication Management",
+            "MHD – Mobile Access to Health Documents",
+            "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
+            "PDQ or PDQm – (Mobile) Patient Demographics Query",
+            "SDMX - Statistical Data and Metadata Exchange",
+            "XDS - Cross-Enterprise Document Sharing",
+            "XUA - Cross-Enterprise User Assertion"
         ]
 }

@@ -29,6 +29,7 @@ ui-view {
 
 #intro-wrapper {
   height:auto;
+  margin-top: 48px;
   min-height: 100%;
   flex: 1 0 auto !important;
 }
@@ -307,6 +308,9 @@ p.global-error {
 .main-toolbar {
   z-index: 1000;
   min-height: 48px;
+  position: fixed;
+  top:0;
+  left: 0;
 
   &.toolbar-global {
     background-color: #1A237E;
@@ -366,6 +370,9 @@ p.global-error {
 }
 
 .md-medium-tall {
+
+  &>.md-toolbar-tools {
+  }
 
   .md-toolbar-tools {
     background-color: $color-primary;
@@ -590,6 +597,16 @@ p.global-error {
   }
 }
 
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
 /* FOOTER - DISCLAIMER
    ============================= */
 
@@ -599,4 +616,11 @@ footer.disclaimer {
   text-align: center;
   font-size: 10px;
   line-height: 14px;
+}
+
+.md-select-menu-container {
+  z-index: 500;
+  &.topalign {
+    transform: translate(10px, 65px);
+  }
 }

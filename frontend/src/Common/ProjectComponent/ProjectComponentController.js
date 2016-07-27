@@ -20,7 +20,9 @@ class ProjectComponentController {
         if (!this.ngModel.followersTrend) {
             this.ngModel.followersTrend = 'up';
         }
-        if (this.ngModel.country) {
+        if (this.ngModel.country
+            && this.cs.projectStructure.countries
+            && this.cs.projectStructure.countries[this.ngModel.country] ) {
             this.ngModel.countryName = this.cs.projectStructure.countries[this.ngModel.country].name;
         }
     }
