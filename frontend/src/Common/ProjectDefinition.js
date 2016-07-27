@@ -36,7 +36,10 @@ class ProjectDefinition extends Protected {
             'implementation_overview': null,
             'implementing_partners': null,
             'implementation_dates': null,
-            'health_focus_areas': [],
+            'health_focus_areas': {
+                standard: [],
+                custom: void 0
+            },
             'geographic_scope': null,
             interoperability_links: [],
             interoperability_standards: {
@@ -74,17 +77,17 @@ class ProjectDefinition extends Protected {
 
     interventionAreaChanged(t) {
         if (this.interventionAreaChecked(t)) {
-            _.remove(this.project.health_focus_areas, item => {
+            _.remove(this.project.health_focus_areas.standard, item => {
                 return item === t;
             });
         }
         else {
-            this.project.health_focus_areas.push(t);
+            this.project.health_focus_areas.standard.push(t);
         }
     }
 
     interventionAreaChecked(t) {
-        return this.project.health_focus_areas.indexOf(t) > -1;
+        return this.project.health_focus_areas.standard.indexOf(t) > -1;
     }
 
     interoperabilityLinksChecked(t) {

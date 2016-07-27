@@ -587,7 +587,7 @@
                                     <input type="text" placeholder="Specify other" ng-model="vm.project.health_focus_areas.custom"/>
                                 </md-input-container>
                             </div>
-                            <div class="custom-error" ng-show="vm.project.health_focus_areas.length === 0">
+                            <div class="custom-error" ng-show="vm.project.health_focus_areas.standard.length === 0 && vm.project.health_focus_areas.custom === undefined">
                                 Select at least one area
                             </div>
                         </div>
