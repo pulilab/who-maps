@@ -58,8 +58,8 @@ class HSSTests(APITestCase):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "geographic_coverage": "somewhere",
             "health_focus_areas": ["area1", "area2"],
+            "geographic_scope": "somewhere",
             "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
             "objective": "objective1",

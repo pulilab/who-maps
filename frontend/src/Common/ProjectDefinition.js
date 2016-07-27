@@ -36,8 +36,8 @@ class ProjectDefinition extends Protected {
             'implementation_overview': null,
             'implementing_partners': null,
             'implementation_dates': null,
-            'geographic_coverage': null,
             'health_focus_areas': [],
+            'geographic_scope': null,
             interoperability_links: [],
             interoperability_standards: {
                 standard: [],
