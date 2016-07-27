@@ -33,6 +33,10 @@ const cs = {
     updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve())
 };
 
+const $anchorScroll = {
+    scroll: jasmine.createSpy('scroll').and.returnValue(true)
+};
+const $location = {};
 const upload = {};
 
 const structure = require('./Resources/structure.json');
@@ -41,7 +45,7 @@ describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = new  NewProjectController($scope, $state, upload, cs, structure);
+        sc = new  NewProjectController($scope, $state, upload, $anchorScroll, $location, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -79,6 +83,9 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that handle the saving process ', () => {
+        const e = document.createElement('div');
+        e.setAttribute('id', 'npf');
+        document.body.appendChild(e);
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'createCoverageArray');
         spyOn(sc, 'saveForm');
