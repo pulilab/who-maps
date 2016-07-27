@@ -28,8 +28,8 @@ class ProjectInventoryForm(ModelForm):
     implementation_overview = fields.CharField(max_length=500, label="Overview of Digital health implementation")
     implementing_partners = fields.CharField(required=False, label="Implementing Partners")
     implementation_dates = fields.CharField(label="Implementing Dates")
-    geographic_coverage = fields.CharField(label="Geographic coverage")
-    intervention_areas = fields.MultipleChoiceField(choices={(x,x) for x in project_structure["intervention_areas"]}, label="Interventions Areas")
+    geographic_scope = fields.CharField(label="Geographic scope")
+    health_focus_areas = fields.MultipleChoiceField(choices={(x,x) for x in project_structure["health_focus_areas"]}, label="Health Focus Areas")
     strategy = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["strategies"]}, label="Select strategies")
     country = models.ModelChoiceField(queryset=Country.objects.all(), label="Select project's country")
     technology_platforms = fields.MultipleChoiceField(required=False, choices={(x,x) for x in project_structure["technology_platforms"]}, label="Technology Platforms")
@@ -65,8 +65,8 @@ class ProjectInventoryForm(ModelForm):
                 "implementation_overview",
                 "implementing_partners",
                 "implementation_dates",
-                "geographic_coverage",
-                "intervention_areas",
+                "geographic_scope",
+                "health_focus_areas",
             )
 
     def save_m2m(self):

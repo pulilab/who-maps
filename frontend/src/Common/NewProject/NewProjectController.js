@@ -136,12 +136,20 @@ class NewProjectController extends ProjectDefinition {
             standard: [],
             custom: void 0
         };
+        const health_focus_areas = {
+            standard: [],
+            custom: void 0
+        };
+
         this.structure.interoperability_standards =
             _.union(this.structure.interoperability_standards, data.interoperability_standards);
         interoperability_standards.standard = data.interoperability_standards;
         data.interoperability_standards = interoperability_standards;
 
-
+        this.structure.health_focus_areas =
+            _.union(this.structure.health_focus_areas, data.health_focus_areas);
+        health_focus_areas.standard = data.health_focus_areas;
+        data.health_focus_areas = health_focus_areas;
     }
 
     mergeNationalLevelWithDistrictCoverage() {
@@ -391,6 +399,7 @@ class NewProjectController extends ProjectDefinition {
         // collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
         // collection.digital_tools = this.concatCustom(collection.digital_tools);
         collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
+        collection.health_focus_areas = this.concatCustom(collection.health_focus_areas);
         collection.interoperability_links = _.toArray(collection.interoperability_links);
         collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);

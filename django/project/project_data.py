@@ -83,7 +83,7 @@ project_structure = {
             "Saving Lives at Birth",
             "USAID Developmenet Innovation Ventures"
         ],
-        "intervention_areas": [
+        "health_focus_areas": [
             "Child health",
             "Family Planning",
             "HIV/AIDS",

@@ -29,6 +29,7 @@ ui-view {
 
 #intro-wrapper {
   height:auto;
+  margin-top: 48px;
   min-height: 100%;
   flex: 1 0 auto !important;
 }
@@ -371,7 +372,6 @@ p.global-error {
 .md-medium-tall {
 
   &>.md-toolbar-tools {
-    margin-top:48px;
   }
 
   .md-toolbar-tools {
@@ -379,7 +379,6 @@ p.global-error {
   }
 
   .md-toolbar-tools-bottom {
-    margin-top: 0;
     background-color: $color-white;
     box-shadow: 0 1px 0 #BDBDBD;
   }
