@@ -22,17 +22,6 @@ import AppComponent from './appComponent';
 import SystemController from './SystemController';
 import './app.scss';
 
-// Favicons
-require('../Favicons/apple-touch-icon-57x57.png');
-require('../Favicons/apple-touch-icon-114x114.png');
-require('../Favicons/apple-touch-icon-72x72.png');
-require('../Favicons/apple-touch-icon-144x144.png');
-require('../Favicons/apple-touch-icon-120x120.png');
-require('../Favicons/apple-touch-icon-152x152.png');
-require('../Favicons/favicon-32x32.png');
-require('../Favicons/favicon-16x16.png');
-require('../Favicons/mstile-144x144.png');
-
 
 const moduleName = 'app';
 const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
