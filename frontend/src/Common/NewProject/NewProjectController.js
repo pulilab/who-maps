@@ -68,8 +68,9 @@ class NewProjectController extends ProjectDefinition {
 
     calculateDays() {
         if (this.startDateYear &&  this.startDateMonth) {
-            const month = this.availableMonths.indexOf(this.startDateMonth) + 1;
-            const dayInMonth =  new Date(this.startDateYear, month, 0).getDate();
+            const month = this.availableMonths.indexOf(this.startDateMonth);
+            const year = this.startDateYear;
+            const dayInMonth = moment().set({ year, month }).daysInMonth();
             this.availableDays = _.range(1, dayInMonth + 1);
         }
     }
@@ -129,7 +130,12 @@ class NewProjectController extends ProjectDefinition {
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        const backEndDate  = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+        this.availableDays = _.range(1, backEndDate.daysInMonth() + 1);
+        this.startDateMonth = backEndDate.format('MMMM');
+        this.startDateDay = backEndDate.get('date');
+        this.startDateYear = backEndDate.get('year');
 
         this.ns.countryDistrict(this.project.country)
             .then(district => {
@@ -290,7 +296,7 @@ class NewProjectController extends ProjectDefinition {
         this.sentForm = true;
         if (this.newProjectForm.$valid) {
             const processedForm = _.cloneDeep(this.project);
-            processedForm.started = new Date(this.startDateYear, this.startDateMonth, this.startDateDay);
+            processedForm.started = new Date(this.startDateYear, this.startDateMonth, this.startDateDay).toJSON();
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
             this.separateCoverageAndNationalLevelDeployments(processedForm);
