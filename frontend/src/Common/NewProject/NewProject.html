@@ -139,7 +139,7 @@
 
                 <div class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
-                            class="countryss"
+                            class="countries"
                             ng-disabled="vm.editMode"
                             ng-required="vm.sentForm"
                             name="country"
@@ -198,10 +198,24 @@
                     </section>
 
                     <section>
+                        <h5 >When was this project started? </h5>
 
-                        <div layout="column" class="start-date">
-                            <md-datepicker ng-model="vm.project.started" md-placeholder="Start date"></md-datepicker>
-                            <span class="hint">When was this project started? </span>
+                        <div layout="row" class="start-date">
+                            <md-input-container>
+                                <md-select ng-model="vm.startDateYear" placeholder="Year" ng-change="vm.calculateDays()">
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <md-select ng-model="vm.startDateMonth" placeholder="Month" ng-change="vm.calculateDays()">
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <md-select ng-model="vm.startDateDay" placeholder="Day">
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableDays">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
                         </div>
 
                         <div layout="column" class="strategies" >

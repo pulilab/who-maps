@@ -37,7 +37,7 @@ class NewProjectController extends ProjectDefinition {
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleStructureLoad();
-
+        this.createDateStructure();
         this.allUsers = this.cs.usersProfiles;
 
         this.team = [];
@@ -59,6 +59,19 @@ class NewProjectController extends ProjectDefinition {
             this.project.organisation = void 0;
         }
 
+    }
+
+    createDateStructure() {
+        this.availableYears = _.range(1980, 2051);
+        this.availableMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    }
+
+    calculateDays() {
+        if (this.startDateYear &&  this.startDateMonth) {
+            const month = this.availableMonths.indexOf(this.startDateMonth) + 1;
+            const dayInMonth =  new Date(this.startDateYear, month, 0).getDate();
+            this.availableDays = _.range(1, dayInMonth + 1);
+        }
     }
 
     isViewer(project) {
@@ -277,6 +290,7 @@ class NewProjectController extends ProjectDefinition {
         this.sentForm = true;
         if (this.newProjectForm.$valid) {
             const processedForm = _.cloneDeep(this.project);
+            processedForm.started = new Date(this.startDateYear, this.startDateMonth, this.startDateDay);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
             this.separateCoverageAndNationalLevelDeployments(processedForm);
