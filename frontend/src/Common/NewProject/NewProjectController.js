@@ -288,6 +288,14 @@ class NewProjectController extends ProjectDefinition {
                 this.putGroups();
             }
         }
+        if (!_.isEmpty(this.newProjectForm.$error)) {
+
+            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+
+            if (firstInvalid) {
+                firstInvalid.focus();
+            }
+        }
     }
 
     updateForm(processedForm) {
