@@ -202,7 +202,7 @@
 
                         <div layout="row" class="start-date">
                             <md-input-container>
-                                <md-select ng-model="vm.startDateYear" placeholder="Year" ng-change="vm.calculateDays()">
+                                <md-select  ng-model="vm.startDateYear" placeholder="Year" ng-change="vm.calculateDays()">
                                     <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
                                 </md-select>
                             </md-input-container>
@@ -216,6 +216,10 @@
                                     <md-option ng-value="opt" ng-repeat="opt in vm.availableDays">{{ opt }}</md-option>
                                 </md-select>
                             </md-input-container>
+                        </div>
+
+                        <div class="custom-error" ng-hide="vm.startDateYear && vm.startDateMonth && vm.startDateDay">
+                            Select Month, Year and Day
                         </div>
 
                         <div layout="column" class="strategies" >

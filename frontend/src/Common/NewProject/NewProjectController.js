@@ -294,9 +294,11 @@ class NewProjectController extends ProjectDefinition {
 
     save() {
         this.sentForm = true;
-        if (this.newProjectForm.$valid) {
+        if (this.newProjectForm.$valid && this.startDateMonth && this.startDateYear && this.startDateDay) {
             const processedForm = _.cloneDeep(this.project);
-            processedForm.started = new Date(this.startDateYear, this.startDateMonth, this.startDateDay).toJSON();
+            const month = this.availableMonths.indexOf(this.startDateMonth);
+            processedForm.started = moment({ year: this.startDateYear, month, date: this.startDateDay })
+                .toJSON();
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
             this.separateCoverageAndNationalLevelDeployments(processedForm);
