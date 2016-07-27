@@ -55,7 +55,6 @@ class ContinuumController {
         this.showEditModeSpinner = false;
     }
     scrollEventHandler() {
-        console.log('scroll')
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
