@@ -134,6 +134,7 @@ describe('NewProjectController', () => {
         spyOn(sc, 'assignDefaultCustom');
         spyOn(sc, 'mergeNationalLevelWithDistrictCoverage');
         spyOn(sc, 'addDefaultEmpty');
+        spyOn(sc, 'convertArraytoStandardCustomObj')
 
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();
@@ -142,6 +143,7 @@ describe('NewProjectController', () => {
         expect(sc.assignDefaultCustom).toHaveBeenCalled();
         expect(sc.mergeNationalLevelWithDistrictCoverage).toHaveBeenCalled();
         expect(sc.addDefaultEmpty).toHaveBeenCalled();
+        expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
 
     });
 

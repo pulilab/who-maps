@@ -104,7 +104,7 @@ describe('interventionsController', () => {
         const model = [1, 2, 3, 4];
         spyOn(ic, 'resizeInterventionsRow');
         ic.calculateInterventionHeight(model);
-        expect(ic.resizeInterventionsRow).toHaveBeenCalledWith(2.4);
+        expect(ic.resizeInterventionsRow).toHaveBeenCalledWith(2.8);
         ic.calculateInterventionHeight({});
         expect(ic.resizeInterventionsRow).toHaveBeenCalledTimes(1);
     });

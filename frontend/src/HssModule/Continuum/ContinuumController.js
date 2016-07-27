@@ -15,6 +15,7 @@ class ContinuumController {
     onInit() {
         const vm = this;
         vm.bindEvents();
+        this.reqIcons();
         this.gridLoading = false;
         this.editMode = false;
         this.isFixed = false;
@@ -38,8 +39,7 @@ class ContinuumController {
     bindEvents() {
         const vm = this;
         vm.EE.on('editModeDone', vm.editModeChangeDone, vm);
-        vm.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
-        vm.mdContent.on('scroll', vm.scrollEventHandler.bind(vm));
+        window.onscroll = vm.scrollEventHandler.bind(vm);
     }
 
     removeEvents() {
@@ -58,7 +58,7 @@ class ContinuumController {
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
-                const scrollTop = this.mdContent[0].scrollTop;
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
                 vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
             }
@@ -156,6 +156,16 @@ class ContinuumController {
         console.warn('The "export to .pdf" function is not yet available!');
     }
 
+    reqIcons() {
+        this.icons = [];
+        this.icons[0] = require('./images/icon-1.svg');
+        this.icons[1] = require('./images/icon-2.svg');
+        this.icons[2] = require('./images/icon-3.svg');
+        this.icons[3] = require('./images/icon-4.svg');
+        this.icons[4] = require('./images/icon-5.svg');
+        this.icons[5] = require('./images/icon-6.svg');
+        this.icons[6] = require('./images/icon-7.svg');
+    }
 
     static continuumFactory() {
         require('./Continuum.scss');

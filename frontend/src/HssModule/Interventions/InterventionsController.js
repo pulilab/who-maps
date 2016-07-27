@@ -28,12 +28,12 @@ class InterventionsController extends Protected {
         vm.hs = vm.service;
         vm.targetPopulationOptions = [
             {
-                name: 'Special Population',
-                item: _.cloneDeep(vm.structure.target_population.special_population)
-            },
-            {
                 name: 'Age Ranges',
                 item: _.cloneDeep(vm.structure.target_population.age_ranges)
+            },
+            {
+                name: 'Special Population',
+                item: _.cloneDeep(vm.structure.target_population.special_population)
             }
         ];
 
@@ -122,8 +122,9 @@ class InterventionsController extends Protected {
         return _.chain(this.tiles)
             .range()
             .map((value) => {
-                const content = _.concat(self.data.target_population[value].target_population.special_population,
+                let content = _.concat(self.data.target_population[value].target_population.special_population,
                     self.data.target_population[value].target_population.age_ranges);
+                content = _.compact(content);
                 self.calculateTargetPopulationHeight(content);
                 const _activated = this.data.continuum[value].state;
                 return {
@@ -159,7 +160,7 @@ class InterventionsController extends Protected {
         if (!newValue || !newValue.length) {
             return;
         }
-        this.resizeInterventionsRow(newValue.length * 0.6);
+        this.resizeInterventionsRow(newValue.length * 0.7);
     }
 
     resizeInterventionsRow(newValue) {
@@ -178,7 +179,7 @@ class InterventionsController extends Protected {
         if (!newValue || !newValue.length) {
             return;
         }
-        this.resizeTargetPopulationRows(newValue.length * 0.6);
+        this.resizeTargetPopulationRows(newValue.length);
     }
 
     resizeTargetPopulationRows(newValue) {

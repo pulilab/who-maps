@@ -10,7 +10,7 @@ from .serializers import UserProfileSerializer, OrganisationSerializer, UserProf
 from .models import UserProfile, Organisation
 
 
-class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
 
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer

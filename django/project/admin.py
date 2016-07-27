@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from .forms import ProjectInventoryForm
+from .models import Project
+
+
+class ProjectInventoryAdmin(admin.ModelAdmin):
+    form = ProjectInventoryForm
+
+
+admin.site.register(Project, ProjectInventoryAdmin)
