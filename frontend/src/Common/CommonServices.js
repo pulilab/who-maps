@@ -260,7 +260,9 @@ class CommonServices extends Protected {
     updateProject(project, projectId) {
         const id = parseInt(projectId, 10);
         const last = _.find(this.projectList, { id });
+        project.organisation = _.cloneDeep(last.organisation);
         _.merge(last, project);
+
     }
 
     isViewer(project) {

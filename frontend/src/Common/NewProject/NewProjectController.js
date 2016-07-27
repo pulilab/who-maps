@@ -37,7 +37,7 @@ class NewProjectController extends ProjectDefinition {
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleStructureLoad();
-
+        this.createDateStructure();
         this.allUsers = this.cs.usersProfiles;
 
         this.team = [];
@@ -59,6 +59,12 @@ class NewProjectController extends ProjectDefinition {
             this.project.organisation = void 0;
         }
 
+    }
+
+    createDateStructure() {
+        this.availableYears = _.range(1980, 2051);
+        this.availableMonths = ['January', 'February', 'March', 'April', 'May',
+            'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     }
 
     isViewer(project) {
@@ -116,7 +122,14 @@ class NewProjectController extends ProjectDefinition {
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        const backEndStartDate  = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+        const backEndImplementationDate = moment(this.project.implementation_dates, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+        this.startDateMonth = backEndStartDate.format('MMMM');
+        this.startDateYear = backEndStartDate.get('year');
+
+        this.implementingDateMonth = backEndImplementationDate.format('MMMM');
+        this.implementingDateYear = backEndImplementationDate.get('year');
 
         this.ns.countryDistrict(this.project.country)
             .then(district => {
@@ -140,6 +153,10 @@ class NewProjectController extends ProjectDefinition {
             standard: [],
             custom: void 0
         };
+        const technology_platforms = {
+            standard: [],
+            custom: void 0
+        };
 
         this.structure.interoperability_standards =
             _.union(this.structure.interoperability_standards, data.interoperability_standards);
@@ -150,6 +167,11 @@ class NewProjectController extends ProjectDefinition {
             _.union(this.structure.health_focus_areas, data.health_focus_areas);
         health_focus_areas.standard = data.health_focus_areas;
         data.health_focus_areas = health_focus_areas;
+
+        this.structure.technology_platforms =
+            _.union(this.structure.technology_platforms, data.technology_platforms);
+        technology_platforms.standard = data.technology_platforms;
+        data.technology_platforms = technology_platforms;
     }
 
     mergeNationalLevelWithDistrictCoverage() {
@@ -280,11 +302,32 @@ class NewProjectController extends ProjectDefinition {
         return true;
     }
 
+    isProjectObjValid() {
+        return this.newProjectForm.$valid
+            && this.startDateMonth
+            && this.startDateYear
+            && this.implementingDateMonth
+            && this.implementingDateYear
+            && (this.project.health_focus_areas.standard.length > 0 || this.project.health_focus_areas.custom);
+    }
+
+    createDateFields(processedForm) {
+        let month = this.availableMonths.indexOf(this.startDateMonth);
+
+        processedForm.started = moment({ year: this.startDateYear, month })
+            .toJSON();
+
+        month = this.availableMonths.indexOf(this.implementingDateMonth);
+        processedForm.implementation_dates = moment({ year: this.implementingDateYear, month })
+            .toJSON();
+    }
+
 
     save() {
         this.sentForm = true;
-        if (this.newProjectForm.$valid) {
+        if (this.isProjectObjValid()) {
             const processedForm = _.cloneDeep(this.project);
+            this.createDateFields(processedForm);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
             this.separateCoverageAndNationalLevelDeployments(processedForm);
@@ -391,7 +434,8 @@ class NewProjectController extends ProjectDefinition {
         collection.organisation = copy.organisation.id;
         this.log(copy, collection);
         // collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
-        collection.technology_platforms = this.project.technology_platforms;
+        // collection.technology_platforms = this.project.technology_platforms;
+        collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
         // collection.licenses.custom = this.flattenCustom(collection.licenses);
         collection.licenses = this.project.licenses;

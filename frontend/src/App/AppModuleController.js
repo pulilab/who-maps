@@ -158,7 +158,6 @@ class AppModuleController extends Protected {
                 location: 'replace',
                 reload: true
             });
-            window.scrollTo(0, 0);
         }
 
         this.scope.$evalAsync();

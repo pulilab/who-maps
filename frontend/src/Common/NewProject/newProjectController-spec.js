@@ -84,6 +84,7 @@ describe('NewProjectController', () => {
         spyOn(sc, 'saveForm');
         spyOn(sc, 'separateCoverageAndNationalLevelDeployments');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
+        spyOn(sc, 'isProjectObjValid').and.returnValue(true);
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
         expect(sc.createCoverageArray).toHaveBeenCalled();
@@ -134,7 +135,7 @@ describe('NewProjectController', () => {
         spyOn(sc, 'assignDefaultCustom');
         spyOn(sc, 'mergeNationalLevelWithDistrictCoverage');
         spyOn(sc, 'addDefaultEmpty');
-        spyOn(sc, 'convertArraytoStandardCustomObj')
+        spyOn(sc, 'convertArraytoStandardCustomObj');
 
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();

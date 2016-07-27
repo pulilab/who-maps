@@ -139,7 +139,7 @@
 
                 <div class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
-                            class="countryss"
+                            class="countries"
                             ng-disabled="vm.editMode"
                             ng-required="vm.sentForm"
                             name="country"
@@ -207,10 +207,39 @@
                     </section>
 
                     <section>
+                        <p>When was this project started? </p>
 
-                        <div layout="column" class="start-date">
-                            <md-datepicker ng-model="vm.project.started" md-placeholder="Start date"></md-datepicker>
-                            <span class="hint">When was this project started? </span>
+                        <div layout="row" class="start-date">
+                            <md-input-container>
+                                <md-select  ng-model="vm.startDateYear" placeholder="Year" >
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <md-select md-container-class="menu-large" ng-model="vm.startDateMonth" placeholder="Month" >
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+
+                        <div class="custom-error" ng-hide="vm.startDateYear && vm.startDateMonth">
+                            Select Month, Year
+                        </div>
+
+                        <p>Date when technology was implemented/deployed</p>
+                        <md-input-container>
+                            <md-select  ng-model="vm.implementingDateYear" placeholder="Year" >
+                                <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container>
+                            <md-select md-container-class="menu-large" ng-model="vm.implementingDateMonth" placeholder="Month" >
+                                <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <div class="custom-error" ng-hide="vm.implementingDateYear && vm.implementingDateMonth">
+                            Select Month, Year
                         </div>
 
                         <div layout="column" class="strategies" >
@@ -281,7 +310,7 @@
                                     Upload file:
                                 </div>
                                 <div  class="button selector"
-                                      ng-hide="report.filename" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')" ngf-max-size="10MB">
+                                      ng-hide="report.filename" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')">
                                     Select File
                                 </div>
                                 <div class=" button selector filename" ng-click="vm.downloadFile(report)" ng-show="report.filename">
@@ -407,6 +436,9 @@
                                         class="">
                                     {{ t }}
                                 </md-checkbox>
+                                <md-input-container class="specify-other">
+                                    <input type="text" placeholder="Specify other" ng-model="vm.project.technology_platforms.custom"/>
+                                </md-input-container>
                             </div>
                             <!-- <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">
                                 <md-input-container flex>
@@ -562,15 +594,6 @@
                             </md-input-container>
                         </div>
 
-                        <div layout="column">
-                            <md-input-container>
-                                <input type="text" ng-required="true" placeholder="Implementing Dates" name="implementation_dates" ng-model="vm.project.implementation_dates"/>
-                                <div ng-messages="vm.newProjectForm.implementation_dates.$error">
-                                    <div ng-message="required">This is required.</div>
-                                </div>
-                            </md-input-container>
-                        </div>
-
                         <div md-layout="row">
                             <h5 flex="100">Health Focus Areas:</h5>
                             <div class="checkbox-container" layout="row">
@@ -583,7 +606,7 @@
                                         aria-label="{{ d }}">
                                     {{ d }}
                                 </md-checkbox>
-                                <md-input-container>
+                                <md-input-container class="specify-other">
                                     <input type="text" placeholder="Specify other" ng-model="vm.project.health_focus_areas.custom"/>
                                 </md-input-container>
                             </div>
@@ -638,7 +661,7 @@
                                     {{standard}}
                                 </md-checkbox>
                             </div>
-                            <md-input-container>
+                            <md-input-container class="specify-other">
                                 <input type="text" placeholder="Specify other" ng-model="vm.project.interoperability_standards.custom"/>
                             </md-input-container>
 
