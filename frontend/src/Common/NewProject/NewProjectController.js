@@ -66,15 +66,6 @@ class NewProjectController extends ProjectDefinition {
         this.availableMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     }
 
-    calculateDays() {
-        if (this.startDateYear &&  this.startDateMonth) {
-            const month = this.availableMonths.indexOf(this.startDateMonth);
-            const year = this.startDateYear;
-            const dayInMonth = moment().set({ year, month }).daysInMonth();
-            this.availableDays = _.range(1, dayInMonth + 1);
-        }
-    }
-
     isViewer(project) {
         return this.cs.isViewer(project);
     }
@@ -130,12 +121,14 @@ class NewProjectController extends ProjectDefinition {
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        const backEndDate  = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+        const backEndStartDate  = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+        const backEndImplementationDate = moment(this.project.implementation_dates, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
 
-        this.availableDays = _.range(1, backEndDate.daysInMonth() + 1);
-        this.startDateMonth = backEndDate.format('MMMM');
-        this.startDateDay = backEndDate.get('date');
-        this.startDateYear = backEndDate.get('year');
+        this.startDateMonth = backEndStartDate.format('MMMM');
+        this.startDateYear = backEndStartDate.get('year');
+
+        this.implementingDateMonth = backEndImplementationDate.format('MMMM');
+        this.implementingDateYear = backEndImplementationDate.get('year');
 
         this.ns.countryDistrict(this.project.country)
             .then(district => {
@@ -308,15 +301,32 @@ class NewProjectController extends ProjectDefinition {
         return true;
     }
 
+    isProjectObjValid() {
+        return this.newProjectForm.$valid
+            && this.startDateMonth
+            && this.startDateYear
+            && this.implementingDateMonth
+            && this.implementingDateYear
+            && (this.project.health_focus_areas.standard.length > 0 || this.project.health_focus_areas.custom);
+    }
+
+    createDateFields(processedForm) {
+        let month = this.availableMonths.indexOf(this.startDateMonth);
+
+        processedForm.started = moment({ year: this.startDateYear, month })
+            .toJSON();
+
+        month = this.availableMonths.indexOf(this.implementingDateMonth);
+        processedForm.implementation_dates = moment({ year: this.implementingDateYear, month,})
+            .toJSON();
+    }
+
 
     save() {
         this.sentForm = true;
-        if (this.newProjectForm.$valid && this.startDateMonth && this.startDateYear && this.startDateDay &&
-            (this.project.health_focus_areas.standard.length > 0 || this.project.health_focus_areas.custom)) {
+        if (this.isProjectObjValid()) {
             const processedForm = _.cloneDeep(this.project);
-            const month = this.availableMonths.indexOf(this.startDateMonth);
-            processedForm.started = moment({ year: this.startDateYear, month, date: this.startDateDay })
-                .toJSON();
+            this.createDateFields(processedForm);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
             this.separateCoverageAndNationalLevelDeployments(processedForm);
