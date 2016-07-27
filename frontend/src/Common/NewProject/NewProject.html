@@ -14,7 +14,7 @@
     </div>
 
     <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate>
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate id="npf">
             <div layout="column" layout-fill class="main-form">
                 <h4>1. Project details</h4>
                 <div class="project-name" flex="100" layout="row" layout-align="start center">
@@ -222,7 +222,7 @@
                             </md-input-container>
                         </div>
 
-                        <div class="custom-error" ng-hide="vm.startDateYear && vm.startDateMonth">
+                        <div id="customerror1" class="custom-error" ng-hide="vm.startDateYear && vm.startDateMonth">
                             Select Month, Year
                         </div>
 
@@ -238,7 +238,7 @@
                             </md-select>
                         </md-input-container>
 
-                        <div class="custom-error" ng-hide="vm.implementingDateYear && vm.implementingDateMonth">
+                        <div id="customerror2" class="custom-error" ng-hide="vm.implementingDateYear && vm.implementingDateMonth">
                             Select Month, Year
                         </div>
 
@@ -610,7 +610,7 @@
                                     <input type="text" placeholder="Specify other" ng-model="vm.project.health_focus_areas.custom"/>
                                 </md-input-container>
                             </div>
-                            <div class="custom-error" ng-show="vm.project.health_focus_areas.standard.length === 0 && vm.project.health_focus_areas.custom === undefined">
+                            <div id="customerror3" class="custom-error" ng-show="vm.project.health_focus_areas.standard.length === 0 && vm.project.health_focus_areas.custom === undefined">
                                 Select at least one area
                             </div>
                         </div>

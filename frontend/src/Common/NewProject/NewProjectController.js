@@ -10,13 +10,16 @@ const wholeCountryName = 'ENTIRE COUNTRY';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, Upload, CommonService, structure) {
+    constructor($scope, $state, Upload, $anchorScroll, $location, CommonService, structure) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.es = new EditProfileService();
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.location = $location;
+        this.scroll = $anchorScroll;
+        this.scroll.yOffset = 140;
         this.axisStructure = this.processAxisStructure(structure);
         this.$onInit = this.onInit.bind(this);
     }
@@ -339,6 +342,22 @@ class NewProjectController extends ProjectDefinition {
                 this.putGroups();
             }
         }
+        const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+
+        if (firstInvalid) {
+            firstInvalid.focus();
+        }
+        else if (!(this.startDateYear && this.startDateMonth)) {
+            this.scroll('customerror1');
+        }
+        else if (!(this.implementingDateYear && this.implementingDateMonth)) {
+            this.scroll('customerror2');
+        }
+        else if (this.project.health_focus_areas.standard.length === 0
+            && this.project.health_focus_areas.custom === undefined) {
+
+            this.scroll('customerror3');
+        }
     }
 
     updateForm(processedForm) {
@@ -581,10 +600,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
-        function newProject($scope, $state, Upload) {
-            return new NewProjectController($scope, $state, Upload, CommonService, structure);
+        function newProject($scope, $state, Upload, $anchorScroll, $location) {
+            return new NewProjectController($scope, $state, Upload, $anchorScroll, $location, CommonService, structure);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$anchorScroll', '$location'];
         return newProject;
     }
 }
