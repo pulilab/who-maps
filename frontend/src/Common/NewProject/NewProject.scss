@@ -4,6 +4,10 @@
 $coverage-height:60px;
 $strategies-height:60px;
 
+.menu-large {
+  width: 200px;
+}
+
 new-project {
   height: auto !important;
   padding:16px;
@@ -315,33 +319,7 @@ new-project {
 
   .start-date {
 
-    margin-bottom: 40px;
 
-    md-datepicker {
-      width: 345px;
-
-      .md-datepicker-input-container {
-        font-size: 16px;
-        width: 300px;
-        height: 24px;
-        margin-left: 0;
-        padding-bottom: 2px;
-
-        input {
-          font-size: 16px;
-        }
-
-        .md-datepicker-expand-triangle {
-          transform: scale(1.5, 1.5) translate(-50%, 0);
-        }
-
-      }
-
-      .md-datepicker-button {
-        float: right;
-        transform: translate(0, -7px);
-      }
-    }
 
   }
 

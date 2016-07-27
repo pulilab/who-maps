@@ -139,7 +139,7 @@
 
                 <div class="countries" ng-class="{error: vm.checkErrors('country')}">
                     <ssmenu
-                            class="countryss"
+                            class="countries"
                             ng-disabled="vm.editMode"
                             ng-required="vm.sentForm"
                             name="country"
@@ -207,10 +207,39 @@
                     </section>
 
                     <section>
+                        <p>When was this project started? </p>
 
-                        <div layout="column" class="start-date">
-                            <md-datepicker ng-model="vm.project.started" md-placeholder="Start date"></md-datepicker>
-                            <span class="hint">When was this project started? </span>
+                        <div layout="row" class="start-date">
+                            <md-input-container>
+                                <md-select  ng-model="vm.startDateYear" placeholder="Year" >
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <md-select md-container-class="menu-large" ng-model="vm.startDateMonth" placeholder="Month" >
+                                    <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+
+                        <div class="custom-error" ng-hide="vm.startDateYear && vm.startDateMonth">
+                            Select Month, Year
+                        </div>
+
+                        <p>Date when technology was implemented/deployed</p>
+                        <md-input-container>
+                            <md-select  ng-model="vm.implementingDateYear" placeholder="Year" >
+                                <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container>
+                            <md-select md-container-class="menu-large" ng-model="vm.implementingDateMonth" placeholder="Month" >
+                                <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <div class="custom-error" ng-hide="vm.implementingDateYear && vm.implementingDateMonth">
+                            Select Month, Year
                         </div>
 
                         <div layout="column" class="strategies" >
@@ -562,15 +591,6 @@
                         <div layout="column">
                             <md-input-container>
                                 <input type="text" placeholder="Implementing Partners" name="implementing_partners" ng-model="vm.project.implementing_partners"/>
-                            </md-input-container>
-                        </div>
-
-                        <div layout="column">
-                            <md-input-container>
-                                <input type="text" ng-required="true" placeholder="Implementing Dates" name="implementation_dates" ng-model="vm.project.implementation_dates"/>
-                                <div ng-messages="vm.newProjectForm.implementation_dates.$error">
-                                    <div ng-message="required">This is required.</div>
-                                </div>
                             </md-input-container>
                         </div>
 
