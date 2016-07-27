@@ -407,6 +407,9 @@
                                         class="">
                                     {{ t }}
                                 </md-checkbox>
+                                <md-input-container class="specify-other">
+                                    <input type="text" placeholder="Specify other" ng-model="vm.project.technology_platforms.custom"/>
+                                </md-input-container>
                             </div>
                             <!-- <div layout="row" class="other" layout-align="start center" ng-repeat="c in vm.project.technology_platforms.custom">
                                 <md-input-container flex>
@@ -583,7 +586,7 @@
                                         aria-label="{{ d }}">
                                     {{ d }}
                                 </md-checkbox>
-                                <md-input-container>
+                                <md-input-container class="specify-other">
                                     <input type="text" placeholder="Specify other" ng-model="vm.project.health_focus_areas.custom"/>
                                 </md-input-container>
                             </div>
@@ -638,7 +641,7 @@
                                     {{standard}}
                                 </md-checkbox>
                             </div>
-                            <md-input-container>
+                            <md-input-container class="specify-other">
                                 <input type="text" placeholder="Specify other" ng-model="vm.project.interoperability_standards.custom"/>
                             </md-input-container>
 

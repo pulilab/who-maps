@@ -140,6 +140,10 @@ class NewProjectController extends ProjectDefinition {
             standard: [],
             custom: void 0
         };
+        const technology_platforms = {
+            standard: [],
+            custom: void 0
+        };
 
         this.structure.interoperability_standards =
             _.union(this.structure.interoperability_standards, data.interoperability_standards);
@@ -150,6 +154,11 @@ class NewProjectController extends ProjectDefinition {
             _.union(this.structure.health_focus_areas, data.health_focus_areas);
         health_focus_areas.standard = data.health_focus_areas;
         data.health_focus_areas = health_focus_areas;
+
+        this.structure.technology_platforms =
+            _.union(this.structure.technology_platforms, data.technology_platforms);
+        technology_platforms.standard = data.technology_platforms;
+        data.technology_platforms = technology_platforms;
     }
 
     mergeNationalLevelWithDistrictCoverage() {
@@ -383,7 +392,8 @@ class NewProjectController extends ProjectDefinition {
         collection.organisation = copy.organisation.id;
         this.log(copy, collection);
         // collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
-        collection.technology_platforms = this.project.technology_platforms;
+        // collection.technology_platforms = this.project.technology_platforms;
+        collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
         // collection.licenses.custom = this.flattenCustom(collection.licenses);
         collection.licenses = this.project.licenses;
