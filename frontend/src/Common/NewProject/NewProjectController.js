@@ -489,7 +489,7 @@ class NewProjectController extends ProjectDefinition {
         this.ns.uploadFile(data, type, this.projectId)
             .then(result => {
                 vm.project.files.splice(-2, 0, result.data[0]);
-                vm.scope.$evalAsync();
+                // vm.scope.$evalAsync();
             });
     }
 

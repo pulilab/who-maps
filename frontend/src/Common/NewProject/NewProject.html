@@ -310,7 +310,7 @@
                                     Upload file:
                                 </div>
                                 <div  class="button selector"
-                                      ng-hide="report.filename" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')" ngf-max-size="10MB">
+                                      ng-hide="report.filename" ng-model="report" name="file" ngf-select="vm.uploadFile($file, 'report')">
                                     Select File
                                 </div>
                                 <div class=" button selector filename" ng-click="vm.downloadFile(report)" ng-show="report.filename">
