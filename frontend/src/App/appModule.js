@@ -183,12 +183,17 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
 };
 
-function logUiRouteEvents(...args) { console.debug(`Ui route state change ${this} :`, args); }
+function handleStateChange(...args) {
+    console.debug(`Ui route state change ${this} :`, args);
+    if (this === 'success') {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }
+}
 
 const run = ($rootScope, $state) => {
     if (DEBUG) {
-        $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
-        $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
+        $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
+        $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
     }
 
     const checkXHR = (event) => {
