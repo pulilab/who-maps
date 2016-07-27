@@ -46,6 +46,13 @@ describe('NewProjectController', () => {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
         };
+        sc.startDateMonth = 2;
+        sc.startDateYear = 2000;
+        sc.startDateDay = 12;
+        sc.project.health_focus_areas = {
+            standard: [1,2,3],
+            custom: void 0
+        };
         sc.$onInit();
     });
 
@@ -134,7 +141,7 @@ describe('NewProjectController', () => {
         spyOn(sc, 'assignDefaultCustom');
         spyOn(sc, 'mergeNationalLevelWithDistrictCoverage');
         spyOn(sc, 'addDefaultEmpty');
-        spyOn(sc, 'convertArraytoStandardCustomObj')
+        spyOn(sc, 'convertArraytoStandardCustomObj');
 
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();

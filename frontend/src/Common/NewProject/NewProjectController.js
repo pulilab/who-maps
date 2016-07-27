@@ -311,7 +311,8 @@ class NewProjectController extends ProjectDefinition {
 
     save() {
         this.sentForm = true;
-        if (this.newProjectForm.$valid && this.startDateMonth && this.startDateYear && this.startDateDay) {
+        if (this.newProjectForm.$valid && this.startDateMonth && this.startDateYear && this.startDateDay &&
+            (this.project.health_focus_areas.standard.length > 0 || this.project.health_focus_areas.custom)) {
             const processedForm = _.cloneDeep(this.project);
             const month = this.availableMonths.indexOf(this.startDateMonth);
             processedForm.started = moment({ year: this.startDateYear, month, date: this.startDateDay })
