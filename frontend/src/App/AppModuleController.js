@@ -109,7 +109,12 @@ class AppModuleController extends Protected {
         case 'D':
             type = 'Financial Investor';
             break;
+        case 'Y':
+            type = 'Inventory';
+            break;
         }
+
+
         return type;
     }
 
