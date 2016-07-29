@@ -1,21 +1,9 @@
-//sample base test to prove that protractor works
+var assert = require('assert');
 
-describe('angularjs homepage todo list', function() {
-
-    it('should add a todo', function() {
-        browser.get('https://angularjs.org');
-
-        element(by.model('todoList.todoText')).sendKeys('write first protractor test');
-        element(by.css('[value="add"]')).click();
-
-        var todoList = element.all(by.repeater('todo in todoList.todos'));
-        expect(todoList.count()).toEqual(3);
-        expect(todoList.get(2).getText()).toEqual('write first protractor test');
-
-        // You wrote your first test, cross it off the list
-        todoList.get(2).element(by.css('input')).click();
-        var completedAmount = element.all(by.css('.done-true'));
-        expect(completedAmount.count()).toEqual(2);
+describe('webdriver.io page', function() {
+    it('should have the right title - the fancy generator way', function () {
+        browser.url('http://webdriver.io');
+        var title = browser.getTitle();
+        assert.equal(title, 'WebdriverIO - Selenium 2.0 javascript bindings for nodejs');
     });
-
 });

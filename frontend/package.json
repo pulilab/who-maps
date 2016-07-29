@@ -18,8 +18,8 @@
     "clean-server-folder": "rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.*",
     "copy-to-server": "cp -R builds/* ../nginx/site/html/",
     "e2e-init": "node_modules/protractor/bin/webdriver-manager update",
-    "e2e-server": "node_modules/protractor/bin/webdriver-manager start",
-    "e2e": "node_modules/protractor/bin/protractor e2e/conf.js"
+    "e2e-server": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver",
+    "e2e": "./node_modules/.bin/wdio wdio.conf.js"
   },
   "author": "",
   "license": "ISC",
@@ -66,6 +66,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
+    "wdio-jasmine-framework": "^0.2.5",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
