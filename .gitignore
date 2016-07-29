@@ -23,3 +23,6 @@ nginx/html/
 diff.txt
 dump.*
 django/celerybeat-schedule.*
+.floo
+.flooignore
+errorShots/
