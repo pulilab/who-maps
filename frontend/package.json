@@ -17,7 +17,6 @@
     "dist": "webpack --dist",
     "clean-server-folder": "rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.*",
     "copy-to-server": "cp -R builds/* ../nginx/site/html/",
-    "e2e-init": "node_modules/protractor/bin/webdriver-manager update",
     "e2e-server": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver",
     "e2e": "./node_modules/.bin/wdio wdio.conf.js"
   },
