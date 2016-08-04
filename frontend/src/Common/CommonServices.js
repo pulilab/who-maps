@@ -149,7 +149,7 @@ class CommonServices extends Protected {
 
     getUsersProfiles() {
         const vm = this;
-        vm.get('userprofiles').then(data => {
+        vm.get('userprofiles/').then(data => {
             vm.usersProfiles = _.filter(data, item => {
                 return item.name !== null && item.name !== '';
             });

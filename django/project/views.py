@@ -107,7 +107,7 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
-        countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
+        countries = Country.objects.values('id', 'name')
         project_structure.update(countries=countries)
         return Response(project_structure)
 
