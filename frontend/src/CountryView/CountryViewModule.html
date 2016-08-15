@@ -65,15 +65,15 @@
                     <md-content class="projectcont">
 
                         <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
-                            <div flex="35">Project name</div>
-                            <div flex="20">Country</div>
-                            <div flex="20">Organisation name</div>
-                            <div flex="20">Donors</div>
-                            <div flex="20">Point of Contact</div>
-                            <div flex="30">Overview of digital health implementation</div>
-                            <div flex="20">Implementing partners</div>
-                            <div flex="20">Geographical coverage</div>
-                            <div flex="20">mHealth interventions</div>
+                            <div flex="35" ng-click="vm.orderTable('name')">Project name</div>
+                            <div flex="20" ng-click="vm.orderTable('country')">Country</div>
+                            <div flex="20" ng-click="vm.orderTable('organisation_name')">Organisation name</div>
+                            <div flex="20" ng-click="vm.orderTable('donors')">Donors</div>
+                            <div flex="20" ng-click="vm.orderTable('contact_name')">Point of Contact</div>
+                            <div flex="30" ng-click="vm.orderTable('implementation_overview')">Overview of digital health implementation</div>
+                            <div flex="20" ng-click="vm.orderTable('implementing_partners')">Implementing partners</div>
+                            <div flex="20" ng-click="vm.orderTable('geographic_scope')">Geographical coverage</div>
+                            <div flex="20" ng-click="vm.orderTable('health_focus_areas')">mHealth interventions</div>
                         </div>
 
                         <div

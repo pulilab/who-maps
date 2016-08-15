@@ -4,20 +4,22 @@ import _ from 'lodash';
 
 class CountryViewModuleController {
 
-    constructor($scope, CommonService) {
+    constructor($scope, $filter,  CommonService) {
 
         this.EE = window.EE;
         this.cs = CommonService;
         this.scope = $scope;
+        this.filter = $filter;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
         this.$onInit = this.onInit.bind(this);
+
     }
 
 
     onInit() {
         this.getCountries();
-
+        this.lastFilter = null;
         this.filterArray = [
             this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
             this.createFilterCategory('interventions',
@@ -102,13 +104,13 @@ class CountryViewModuleController {
 
     constraintsFilter(filters) {
         const localArray = [];
-        let constraintFilter = [];
+        const constraintFilter = [];
 
         _.forEach(filters.provisonalArray, project => {
 
             _.forEach(this.cs.hssStructure.taxonomies, (t, key) => {
                 const inter = _.intersection(t.values, project.constraints);
-                if (inter.length > 0 ) {
+                if (inter.length > 0) {
                     constraintFilter.push(key);
                 }
             });
@@ -207,13 +209,25 @@ class CountryViewModuleController {
         });
     }
 
+    orderTable(name) {
+        if (name === this.lastFilter) {
+            this.lastFilter = null;
+            this.projectsData = this.filter('orderBy')(this.projectsData, `-${name}`);
+        }
+        else {
+            this.lastFilter = name;
+            this.projectsData = this.filter('orderBy')(this.projectsData, name);
+        }
+        console.log(this.projectsData)
+    }
+
     static countryControllerFactory() {
-        function countryController($scope) {
+        function countryController($scope, $filter) {
             const CommonService = require('../Common/CommonServices');
-            return new CountryViewModuleController($scope, CommonService);
+            return new CountryViewModuleController($scope, $filter, CommonService);
         }
 
-        countryController.$inject = ['$scope'];
+        countryController.$inject = ['$scope', '$filter'];
 
         return countryController;
     }

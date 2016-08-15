@@ -95,7 +95,7 @@ class ProjectPublicViewSet(ViewSet):
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
             "health_focus_areas": p.data.get('health_focus_areas'),
-            "geographic_scope": p.data.get('geographic_coverage'),
+            "geographic_scope": p.data.get('geographic_scope'),
             "technology_platforms": p.data.get('technology_platforms'),
             "interventions": p.hss_set.first().get_interventions_list(),
             "continuum": p.hss_set.first().get_continuum_list(),
