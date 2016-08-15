@@ -88,7 +88,7 @@ class CountryViewModuleController {
             this.generalFilter(filters, 'continuum');
             this.generalFilter(filters, 'interventions');
             this.generalFilter(filters, 'applications');
-            this.generalFilter(filters, 'constraints');
+            this.constraintsFilter(filters);
             this.generalFilter(filters, 'technology_platforms');
             this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
         }
@@ -98,6 +98,27 @@ class CountryViewModuleController {
 
         this.EE.emit('projectsUpdated', this.projectsData);
 
+    }
+
+    constraintsFilter(filters) {
+        const localArray = [];
+        let constraintFilter = [];
+
+        _.forEach(filters.provisonalArray, project => {
+
+            _.forEach(this.cs.hssStructure.taxonomies, (t, key) => {
+                const inter = _.intersection(t.values, project.constraints);
+                if (inter.length > 0 ) {
+                    constraintFilter.push(key);
+                }
+            });
+
+            const inter = _.intersection(filters.constraints, constraintFilter);
+            if (inter.length === filters.constraints.length) {
+                localArray.push(project);
+            }
+        });
+        filters.provisonalArray = localArray;
     }
 
     generalFilter(filters, name) {
