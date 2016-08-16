@@ -210,15 +210,14 @@ class CountryViewModuleController {
     }
 
     orderTable(name) {
-        if (name === this.lastFilter) {
-            this.lastFilter = null;
-            this.projectsData = this.filter('orderBy')(this.projectsData, `-${name}`);
+        let lastFilter = null;
+        let orderKey = `-${name}`;
+        if (name !== this.lastFilter) {
+            lastFilter = name;
+            orderKey = name;
         }
-        else {
-            this.lastFilter = name;
-            this.projectsData = this.filter('orderBy')(this.projectsData, name);
-        }
-        console.log(this.projectsData)
+        this.lastFilter = lastFilter;
+        this.projectsData = this.filter('orderBy')(this.projectsData, orderKey);
     }
 
     static countryControllerFactory() {

@@ -46,7 +46,7 @@ module.exports = function(config) {
                 ],
                 preLoaders: [
                     {
-                        test: /-spec\.js$/,
+                        test: /.*-spec\.js$/,
                         exclude: /node_modules/,
                         loader: 'babel'
                     },
