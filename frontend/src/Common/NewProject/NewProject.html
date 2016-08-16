@@ -58,6 +58,7 @@
                         <md-autocomplete
                                 flex="100"
                                 ng-if="vm.inventoryMode"
+                                id="orgauto"
                                 required="true"
                                 md-input-name="organisation"
                                 md-no-cache="true"
@@ -71,9 +72,9 @@
                                 <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
                             </md-item-template>
 
-                            <md-not-found>
-                                <a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>
-                            </md-not-found>
+                            <!--<md-not-found>-->
+                                <!--<a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>-->
+                            <!--</md-not-found>-->
                         </md-autocomplete>
                         <div class="autocomplete-errors" ng-messages="vm.newProjectForm.organisation.$error">
                             <div ng-message="required">This field is required</div>
