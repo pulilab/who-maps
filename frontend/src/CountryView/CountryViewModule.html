@@ -65,15 +65,51 @@
                     <md-content class="projectcont">
 
                         <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
-                            <div flex="35" ng-click="vm.orderTable('name')">Project name</div>
-                            <div flex="20" ng-click="vm.orderTable('country')">Country</div>
-                            <div flex="20" ng-click="vm.orderTable('organisation_name')">Organisation name</div>
-                            <div flex="20" ng-click="vm.orderTable('donors')">Donors</div>
-                            <div flex="20" ng-click="vm.orderTable('contact_name')">Point of Contact</div>
-                            <div flex="30" ng-click="vm.orderTable('implementation_overview')">Overview of digital health implementation</div>
-                            <div flex="20" ng-click="vm.orderTable('implementing_partners')">Implementing partners</div>
-                            <div flex="20" ng-click="vm.orderTable('geographic_scope')">Geographical coverage</div>
-                            <div flex="20" ng-click="vm.orderTable('health_focus_areas')">mHealth interventions</div>
+                            <div flex="35" ng-click="vm.orderTable('name')">
+                                Project name
+                                <md-icon ng-show="vm.header.name.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.name.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="15" ng-click="vm.orderTable('country')">
+                                Country
+                                <md-icon ng-show="vm.header.country.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.country.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="25" ng-click="vm.orderTable('organisation_name')">
+                                Organisation name
+                                <md-icon ng-show="vm.header.organisation_name.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.organisation_name.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('donors')">
+                                Donors
+                                <md-icon ng-show="vm.header.donors.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.donors.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('contact_name')">
+                                Point of Contact
+                                <md-icon ng-show="vm.header.contact_name.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.contact_name.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="30" ng-click="vm.orderTable('implementation_overview')">
+                                Overview of digital health implementation
+                                <md-icon ng-show="vm.header.implementation_overview.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.implementation_overview.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('implementing_partners')">
+                                Implementing partners
+                                <md-icon ng-show="vm.header.implementing_partners.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.implementing_partners.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('geographic_scope')">
+                                Geographical coverage
+                                <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
+                                mHealth interventions
+                                <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
+                            </div>
                         </div>
 
                         <div

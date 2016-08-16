@@ -6,7 +6,9 @@ let cvc = null;
 
 const $scope = {};
 
-const $filter = {};
+const orderBy = jasmine.createSpy('orderBy').and.returnValue([]);
+
+const $filter = jasmine.createSpy('filter').and.returnValue(orderBy);
 
 const cs = {
     hssStructure: {
@@ -29,7 +31,7 @@ const mapService = {
     getCountries:  jasmine.createSpy('getCountries').and.returnValue(Promise.resolve())
 };
 
-fdescribe('CountryViewModuleController', () => {
+describe('CountryViewModuleController', () => {
 
     beforeEach(()=>{
         cvc = new CountryViewModuleController($scope, $filter, cs);
@@ -76,7 +78,12 @@ fdescribe('CountryViewModuleController', () => {
 
     it('should have a function that replace lower dash', () => {
         const result = cvc.replaceLodash('_a');
-        expect(result).toBe('a');
+        expect(result).toBe(' a');
+    });
+
+    it('should have a function that order by the name', () => {
+        cvc.orderTable('name');
+        expect(cvc.filter).toHaveBeenCalled();
     });
 
 });
