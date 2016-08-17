@@ -7,7 +7,8 @@ import _ from 'lodash';
 let sc = {};
 
 const $scope = {
-    $evalAsync: jasmine.createSpy('eval')
+    $evalAsync: jasmine.createSpy('eval'),
+    $$postDigest: jasmine.createSpy('digest')
 };
 
 const mockData = {

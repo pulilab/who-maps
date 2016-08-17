@@ -35,6 +35,7 @@ class NewProjectController extends ProjectDefinition {
 
     onInit() {
         this.bindFunctions();
+        this.createBlurHandle();
         this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;
@@ -559,6 +560,20 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
+    createBlurHandle() {
+
+        this.scope.$$postDigest(() => {
+
+            document.querySelector('#orgauto')
+                .querySelector('input')
+                .addEventListener('blur', () => {
+                    if (!this.latestOrgs.some(org => org.name === this.searchText)) {
+                        this.addOrganisation(this.searchText);
+                    }
+                });
+        });
+    }
+
     openSimilarProject(project, event) {
         event.preventDefault();
         if (project.isOwn) {
@@ -585,13 +600,18 @@ class NewProjectController extends ProjectDefinition {
     }
 
     organisationSearch(name) {
-        return this.es.autocompleteOrganization(name);
+        const getOrgsPromise  = this.es.autocompleteOrganization(name);
+        getOrgsPromise.then(data => {
+            this.latestOrgs = data;
+        });
+        return getOrgsPromise;
     }
 
     addOrganisation(name) {
         return this.es.addOrganization(name)
             .then(response => {
                 this.userProfile.organisation = response;
+                this.scope.$evalAsync();
             });
     }
 

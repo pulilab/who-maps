@@ -327,7 +327,8 @@
         background-color: white;
 
         div {
-
+          outline: none;
+          cursor: pointer;
           font-size: 14px;
           font-weight: 500;
           color: $text-secondary;
