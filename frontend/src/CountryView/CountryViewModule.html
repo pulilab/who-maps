@@ -39,7 +39,26 @@
 
                     <div class="headercont" layout="row">
 
-                        <md-card md-whiteframe="2" class="countrychoser">
+
+                        <div class="exports" flex="40">
+                            <md-button class="md-primary" ng-click="vm.exportPDF()">
+                                <md-icon>file_download</md-icon>
+                                Export (PDF)
+                            </md-button>
+                            <md-button class="md-primary">
+                                <md-icon>file_download</md-icon>
+                                Export (CSV)
+                            </md-button>
+                        </div>
+
+                        <div class="starry" flex="25">
+                            <md-icon>grade</md-icon>
+                            Team member
+                            <md-icon>visibility</md-icon>
+                            Viewer
+                        </div>
+
+                        <md-card md-whiteframe="2" class="countrychoser" flex="no-grow">
                             <md-input-container>
                                 <md-select
                                         md-container-class="topalign"
@@ -54,13 +73,9 @@
                             </md-input-container>
                         </md-card>
 
-                        <div class="starry" flex="20">
-                            <md-icon>grade</md-icon>
-                            Team member
-                            <md-icon>visibility</md-icon>
-                            Viewer
-                        </div>
                     </div>
+
+
 
                     <md-content class="projectcont">
 

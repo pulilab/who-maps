@@ -1,16 +1,19 @@
+import _ from 'lodash';
 import CountryMapService from './CountryMapService.js';
 import CountryService from './CountryService.js';
-import _ from 'lodash';
+import PDFExportStorage from './PDFExport/PDFExportStorage';
 
 class CountryViewModuleController {
 
-    constructor($scope, CommonService) {
+    constructor($scope, $state, CommonService) {
 
         this.EE = window.EE;
         this.cs = CommonService;
         this.scope = $scope;
+        this.state = $state;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
+        this.pdfStorage = PDFExportStorage.factory();
         this.$onInit = this.onInit.bind(this);
     }
 
@@ -102,13 +105,13 @@ class CountryViewModuleController {
 
     constraintsFilter(filters) {
         const localArray = [];
-        let constraintFilter = [];
+        const constraintFilter = [];
 
         _.forEach(filters.provisonalArray, project => {
 
             _.forEach(this.cs.hssStructure.taxonomies, (t, key) => {
                 const inter = _.intersection(t.values, project.constraints);
-                if (inter.length > 0 ) {
+                if (inter.length > 0) {
                     constraintFilter.push(key);
                 }
             });
@@ -207,13 +210,19 @@ class CountryViewModuleController {
         });
     }
 
+    exportPDF() {
+        this.pdfStorage.setData(this.projectsData, this.selectedCountry);
+        const href = this.state.href('pdf-export');
+        window.open(href);
+    }
+
     static countryControllerFactory() {
-        function countryController($scope) {
+        function countryController($scope, $state) {
             const CommonService = require('../Common/CommonServices');
-            return new CountryViewModuleController($scope, CommonService);
+            return new CountryViewModuleController($scope, $state, CommonService);
         }
 
-        countryController.$inject = ['$scope'];
+        countryController.$inject = ['$scope', '$state'];
 
         return countryController;
     }
