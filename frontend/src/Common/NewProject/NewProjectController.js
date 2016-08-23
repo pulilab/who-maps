@@ -35,7 +35,9 @@ class NewProjectController extends ProjectDefinition {
 
     onInit() {
         this.bindFunctions();
-        this.createBlurHandle();
+        if (this.inventoryMode) {
+            this.createBlurHandle();
+        }
         this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;

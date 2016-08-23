@@ -528,9 +528,8 @@
                             <md-input-container>
                                 <input type="text"
                                        ng-pattern="vm.urlRegex"
-                                       placeholder="Code documentation or download link" ng-required="true" name="repository" ng-model="vm.project.repository"/>
+                                       placeholder="Code documentation or download link"  name="repository" ng-model="vm.project.repository"/>
                                 <div ng-messages="vm.newProjectForm.repository.$error">
-                                    <div ng-message="required">This is required.</div>
                                     <div ng-message="pattern">This should be a valid link</div>
                                 </div>
                             </md-input-container>
@@ -539,9 +538,8 @@
                             <md-input-container>
                                 <input type="text"
                                        ng-pattern="vm.urlRegex"
-                                       placeholder="Link to the application:" name="mobile_application" ng-required="true" ng-model="vm.project.mobile_application"/>
+                                       placeholder="Link to the application:" name="mobile_application" ng-model="vm.project.mobile_application"/>
                                 <div ng-messages="vm.newProjectForm.mobile_application.$error">
-                                    <div ng-message="required">This is required.</div>
                                     <div ng-message="pattern">This should be a valid link</div>
                                 </div>
                             </md-input-container>
