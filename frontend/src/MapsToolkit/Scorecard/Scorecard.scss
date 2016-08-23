@@ -2,8 +2,6 @@
 @import '../../mixins';
 
 scorecard {
-    flex: 1 0 auto !important;
-
     margin-top:20px;
     padding-left: 30px !important;
     padding-right: 30px !important;
@@ -33,6 +31,7 @@ scorecard {
         background: $color-white;
         margin-bottom: 40px;
         flex: 1 0 auto !important;
+        min-height: auto !important;
     }
 
     .inner-wrapper {
