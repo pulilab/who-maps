@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import pdfMake from 'pdfmake-browserified';
+import pdfMake from 'pdfmake-browserified/';
 import base64Images from './images/base64Images';
 
 
@@ -8,11 +8,11 @@ import PDFExportStorage from './PDFExportStorage';
 
 class PDFExportController {
 
-    constructor($state) {
+    constructor() {
         this.pdfStorage = PDFExportStorage.factory();
-        this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.pdfMake = pdfMake;
     }
 
     onInit() {
@@ -160,31 +160,17 @@ class PDFExportController {
                 }
             });
         });
-
-
-        pdfMake(docDefinition).download('clv-searchable-export.pdf');
-    }
-
-    makePrettyPDF() {
-        const doc = new jsPDF('l', 'mm', 'a4');
-        html2canvas(document.getElementById('pdf-export'))
-            .then((canvas) => {
-
-                const imgData = canvas.toDataURL('image/jpeg');
-                doc.addImage(imgData, 'JPEG', 0, 0);
-
-                doc.save('clv-pretty-export.pdf');
-            });
+        this.pdfMake(docDefinition).download('clv-searchable-export.pdf');
     }
 
     static pdfExportFactory() {
         require('./PDFExport.scss');
 
-        function pdfExportController($state) {
-            return new PDFExportController($state);
+        function pdfExportController() {
+            return new PDFExportController();
         }
 
-        pdfExportController.$inject = ['$state'];
+        pdfExportController.$inject = [];
 
         return pdfExportController;
     }

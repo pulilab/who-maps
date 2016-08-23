@@ -18,7 +18,11 @@ export default class PDFExportStorage {
     getData() {
         let fromStorage = this.storage.get('pdfExport');
         if (!fromStorage) {
-            fromStorage = {};
+            fromStorage = {
+                projectList: this.projectList,
+                country: this.country,
+                countryFlag: this.countryFlag
+            };
         }
         const projectList = this.projectList  = fromStorage.projectList;
         const country = this.country = fromStorage.country;
