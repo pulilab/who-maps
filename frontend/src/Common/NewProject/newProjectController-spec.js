@@ -161,8 +161,8 @@ describe('NewProjectController', () => {
     it('should have a function that handles the national level deployment', () => {
         sc.project.national_level_deployment = [{ clients: 33 }];
         sc.mergeNationalLevelWithDistrictCoverage();
-        expect(sc.districtList).toContain('ENTIRE COUNTRY');
-        expect(_.filter(sc.project.coverage, item => item.district === 'ENTIRE COUNTRY').length).toBeGreaterThan(0);
+        expect(sc.districtList).toContain(' ENTIRE COUNTRY');
+        expect(_.filter(sc.project.coverage, item => item.district === ' ENTIRE COUNTRY').length).toBeGreaterThan(0);
     });
 
     it('should have a function that separates the national level deployment before saving', () => {

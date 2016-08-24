@@ -96,7 +96,7 @@ class CountryViewModuleController {
             this.projectsData = this.countryProjects;
         }
 
-        this.EE.emit('projectsUpdated', this.projectsData);
+        this.EE.emit('projectFiltered', this.projectsData);
 
     }
 
@@ -174,7 +174,6 @@ class CountryViewModuleController {
     }
 
     updateCountry(countryObj) {
-        console.debug('To countryObj: ', countryObj);
         if (countryObj.name !== 'Show all countries') {
             this.changeMapTo(countryObj);
         }
