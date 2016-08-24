@@ -188,6 +188,7 @@ class CountrymapController {
 
         const levelLib = {
             'Afghanistan':                  'admin_level_4', // #2
+            'Albania':                      'admin_level_6', // #2.1
             'Angola':                       'admin_level_4', // #2
             'Benin':                        'admin_level_4', // #1.5
             'Border India - Bangladesh':    'admin_level_4', // #1

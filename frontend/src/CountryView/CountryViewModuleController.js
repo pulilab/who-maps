@@ -174,7 +174,6 @@ class CountryViewModuleController {
     }
 
     updateCountry(countryObj) {
-        console.debug('To countryObj: ', countryObj);
         if (countryObj.name !== 'Show all countries') {
             this.changeMapTo(countryObj);
         }
