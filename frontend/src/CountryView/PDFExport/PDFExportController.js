@@ -23,7 +23,7 @@ class PDFExportController {
         if (this.instantDownload) {
             this.makePDF();
             setTimeout(() => {
-                // window.close();
+                window.close();
             }, 500);
         }
     }
