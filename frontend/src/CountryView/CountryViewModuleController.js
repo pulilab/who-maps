@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import CountryMapService from './CountryMapService.js';
 import CountryService from './CountryService.js';
 import PDFExportStorage from './PDFExport/PDFExportStorage';
@@ -221,7 +222,14 @@ class CountryViewModuleController {
             return p.id;
         });
         this.service.exportCSV(ids).then(response => {
-            console.log(response);
+            const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${response}`);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `clv-export-${moment().format('MMMM-Do-YYYY-h-mm-ss ')}.csv`);
+            link.setAttribute('target', '_blank');
+            document.body.appendChild(link);
+
+            link.click();
         });
     }
 

@@ -43,7 +43,10 @@ class CountryService extends AuthApi {
     }
 
     exportCSV(ids) {
-        return this.post('csv-export/', ids);
+        return this.post('csv-export/', ids)
+            .then(response => {
+                return response.text();
+            });
     }
 }
 
