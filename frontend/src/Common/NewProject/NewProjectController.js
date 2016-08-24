@@ -6,7 +6,7 @@ import EditProfileService from '../EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
-const wholeCountryName = 'ENTIRE COUNTRY';
+const wholeCountryName = ' ENTIRE COUNTRY';
 
 class NewProjectController extends ProjectDefinition {
 
