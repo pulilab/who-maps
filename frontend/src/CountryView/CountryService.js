@@ -36,10 +36,14 @@ class CountryService extends AuthApi {
     }
 
     filterProjects(filters) {
-        return this.post('/by-view/filter/', filters)
+        return this.post('by-view/filter/', filters)
             .then(response => {
                 return response.json();
             });
+    }
+
+    exportCSV(ids) {
+        return this.post('csv-export/', ids);
     }
 }
 

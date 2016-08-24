@@ -211,10 +211,18 @@ class CountryViewModuleController {
     }
 
     exportPDF() {
-        console.log(this.projectsData)
         this.pdfStorage.setData(this.projectsData, this.selectedCountry);
         const href = this.state.href('pdf-export');
         window.open(href);
+    }
+
+    exportCSV() {
+        const ids = _.map(this.projectsData, p => {
+            return p.id;
+        });
+        this.service.exportCSV(ids).then(response => {
+            console.log(response);
+        });
     }
 
     static countryControllerFactory() {
