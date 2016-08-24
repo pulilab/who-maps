@@ -2,7 +2,7 @@
     <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
 </div>
 
-<div class="maps-toolkit" layout="column" layout-fill ng-if="vm.dataLoaded" >
+<div class="maps-toolkit" layout="column" ng-if="vm.dataLoaded" >
     <div layout="row" flex="100" md-whiteframe="2" class="axis-row">
         <axis flex="auto" show-current="true" domain-id="vm.domainId" axis-data="vm.axis" axis-id="vm.axisId"></axis>
         <div flex="auto" layout="row" layout-align="end center">
