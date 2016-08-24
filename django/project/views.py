@@ -1,5 +1,6 @@
 import functools
 import json
+import csv
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
@@ -425,3 +426,46 @@ class FileDeleteViewSet(TeamTokenAuthMixin, ViewSet):
         self.check_object_permissions(self.request, file.project)
         file.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def create(self, request):
+        """
+        Creates CSV file out of a list of project IDs
+        """
+        projects = Project.objects.filter(id__in=request.data)
+
+        result_list = functools.reduce(lambda acc, p: acc + [{
+            "name": p.name,
+            "date": p.data.get('date'),
+            # "implementation_dates": p.data.get('implementation_dates'),
+            "country_name": Country.get_name_by_id(p.data.get('country')),
+            "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
+            "donors": p.data.get('donors'),
+            "implementing_partners": p.data.get('implementing_partners'),
+            "interventions": p.hss_set.first().get_interventions_list(),
+            "contact_name": p.data.get('contact_name'),
+            "contact_email": p.data.get('contact_email'),
+            "implementation_overview": p.data.get('implementation_overview'),
+            # "health_focus_areas": p.data.get('health_focus_areas'),
+            # "geographic_scope": p.data.get('geographic_coverage'),
+            # "technology_platforms": p.data.get('technology_platforms'),
+            # "continuum": p.hss_set.first().get_continuum_list(),
+            # "constraints": p.hss_set.first().get_constraints_list(),
+            # "applications": p.hss_set.first().get_applications_list(),
+        }], projects, [])
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+        writer = csv.writer(response)
+        # HEADER
+        writer.writerow(['Name', 'Country', 'Date', 'Organisation Name', 'Donors', "Implementing Partners",
+                         "mHealth Interventions", "Point of Contact",
+                         "Overview of digital health implementation", "Geographical coverage"])
+
+        # Projects
+        # writer.writerow()
+
+        return response
