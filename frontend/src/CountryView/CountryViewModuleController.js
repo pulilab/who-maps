@@ -102,13 +102,13 @@ class CountryViewModuleController {
 
     constraintsFilter(filters) {
         const localArray = [];
-        let constraintFilter = [];
+        const constraintFilter = [];
 
         _.forEach(filters.provisonalArray, project => {
 
             _.forEach(this.cs.hssStructure.taxonomies, (t, key) => {
                 const inter = _.intersection(t.values, project.constraints);
-                if (inter.length > 0 ) {
+                if (inter.length > 0) {
                     constraintFilter.push(key);
                 }
             });
