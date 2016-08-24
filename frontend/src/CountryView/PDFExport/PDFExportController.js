@@ -19,10 +19,11 @@ class PDFExportController {
         _.merge(this, this.pdfStorage.getData());
         this.logo = require('./images/dha-logo.svg');
         this.exportDate = moment().format('Do MMM, YYYY');
+        this.isAllCountry = this.country && this.country.name === 'Show all countries';
         if (this.instantDownload) {
             this.makePDF();
             setTimeout(() => {
-                window.close();
+                // window.close();
             }, 500);
         }
     }
@@ -32,6 +33,8 @@ class PDFExportController {
     }
 
     makePDF() {
+
+
         // units of measure is point.. friggin point
         const docDefinition = {
             content: [
@@ -109,6 +112,9 @@ class PDFExportController {
         };
 
         _.forEach(this.projectList, (project, index)  => {
+
+            const country = project.country_name.replace('-', ' ').toUpperCase();
+
             docDefinition.content.push({
                 margin: [0, 10],
                 table: {
@@ -119,8 +125,8 @@ class PDFExportController {
                             {
                                 text: `${index + 1}. ${project.name || ''}`,
                                 fillColor: '#EEEEEE',
-                                style: 'tableHeader', colSpan: 6
-                            }, '', '', '', '', ''
+                                style: 'tableHeader', colSpan: this.isAllCountry ? 5 : 6
+                            }, '', '', '', '', this.isAllCountry ? country : ''
                         ],
                         [
                             [{ text: 'Date of: ', style: 'subHeader' }, project.implementation_dates || ''],

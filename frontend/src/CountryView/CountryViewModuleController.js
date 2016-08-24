@@ -211,6 +211,7 @@ class CountryViewModuleController {
     }
 
     exportPDF() {
+        console.log(this.projectsData)
         this.pdfStorage.setData(this.projectsData, this.selectedCountry);
         const href = this.state.href('pdf-export');
         window.open(href);
