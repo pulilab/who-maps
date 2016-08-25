@@ -269,7 +269,7 @@ class CountryViewModuleController {
             return new CountryViewModuleController($scope, $filter, $state, CommonService);
         }
 
-        countryController.$inject = ['$scope', '$filter', $state];
+        countryController.$inject = ['$scope', '$filter', '$state'];
 
         return countryController;
     }
