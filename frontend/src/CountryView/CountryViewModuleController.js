@@ -1,19 +1,22 @@
+import _ from 'lodash';
+import moment from 'moment';
 import CountryMapService from './CountryMapService.js';
 import CountryService from './CountryService.js';
-import _ from 'lodash';
+import PDFExportStorage from './PDFExport/PDFExportStorage';
 
 class CountryViewModuleController {
 
-    constructor($scope, $filter,  CommonService) {
+    constructor($scope, $filter, $state,  CommonService) {
 
         this.EE = window.EE;
         this.cs = CommonService;
         this.scope = $scope;
         this.filter = $filter;
+        this.state = $state;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
+        this.pdfStorage = PDFExportStorage.factory();
         this.$onInit = this.onInit.bind(this);
-
     }
 
 
@@ -220,6 +223,28 @@ class CountryViewModuleController {
         });
     }
 
+    exportPDF() {
+        this.pdfStorage.setData(this.projectsData, this.selectedCountry);
+        const href = this.state.href('pdf-export');
+        window.open(href);
+    }
+
+    exportCSV() {
+        const ids = _.map(this.projectsData, p => {
+            return p.id;
+        });
+        this.service.exportCSV(ids).then(response => {
+            const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${response}`);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `clv-export-${moment().format('MMMM-Do-YYYY-h-mm-ss ')}.csv`);
+            link.setAttribute('target', '_blank');
+            document.body.appendChild(link);
+
+            link.click();
+        });
+    }
+
     orderTable(name) {
         _.forEach(this.header, h => {
             h.up = false;
@@ -239,12 +264,12 @@ class CountryViewModuleController {
     }
 
     static countryControllerFactory() {
-        function countryController($scope, $filter) {
+        function countryController($scope, $filter, $state) {
             const CommonService = require('../Common/CommonServices');
-            return new CountryViewModuleController($scope, $filter, CommonService);
+            return new CountryViewModuleController($scope, $filter, $state, CommonService);
         }
 
-        countryController.$inject = ['$scope', '$filter'];
+        countryController.$inject = ['$scope', '$filter', $state];
 
         return countryController;
     }

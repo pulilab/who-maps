@@ -10,6 +10,10 @@ const orderBy = jasmine.createSpy('orderBy').and.returnValue([]);
 
 const $filter = jasmine.createSpy('filter').and.returnValue(orderBy);
 
+const $state = {
+    go: jasmine.createSpy('go').and.returnValue(true)
+};
+
 const cs = {
     hssStructure: {
         continuum: {},
@@ -34,7 +38,7 @@ const mapService = {
 describe('CountryViewModuleController', () => {
 
     beforeEach(()=>{
-        cvc = new CountryViewModuleController($scope, $filter, cs);
+        cvc = new CountryViewModuleController($scope, $filter, $state, cs);
         cvc.service = service;
         cvc.mapService = mapService;
         cvc.$onInit();
