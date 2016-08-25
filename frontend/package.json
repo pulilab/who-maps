@@ -13,7 +13,7 @@
   "scripts": {
     "test": "karma start",
     "serve": "node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline",
-    "site-build": "webpack-dev-server --progress --colors --hot --inline --site-build",
+    "site-build": "webpack-dev-server --progress --colors --hot --inline --site-build --host='0.0.0.0'",
     "dist": "webpack --dist",
     "clean-server-folder": "rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.*",
     "copy-to-server": "cp -R builds/* ../nginx/site/html/",
