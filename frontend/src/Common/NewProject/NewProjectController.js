@@ -6,7 +6,7 @@ import EditProfileService from '../EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
-const wholeCountryName = 'ENTIRE COUNTRY';
+const wholeCountryName = ' ENTIRE COUNTRY';
 
 class NewProjectController extends ProjectDefinition {
 
@@ -35,7 +35,9 @@ class NewProjectController extends ProjectDefinition {
 
     onInit() {
         this.bindFunctions();
-        this.createBlurHandle();
+        if (this.inventoryMode) {
+            this.createBlurHandle();
+        }
         this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;
