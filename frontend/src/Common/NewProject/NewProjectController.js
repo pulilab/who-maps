@@ -611,6 +611,7 @@ class NewProjectController extends ProjectDefinition {
         return this.es.addOrganization(name)
             .then(response => {
                 this.userProfile.organisation = response;
+                this.scope.$evalAsync();
             });
     }
 

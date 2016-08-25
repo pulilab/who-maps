@@ -6,11 +6,12 @@ import PDFExportStorage from './PDFExport/PDFExportStorage';
 
 class CountryViewModuleController {
 
-    constructor($scope, $state, CommonService) {
+    constructor($scope, $filter, $state,  CommonService) {
 
         this.EE = window.EE;
         this.cs = CommonService;
         this.scope = $scope;
+        this.filter = $filter;
         this.state = $state;
         this.mapService = new CountryMapService();
         this.service = new CountryService();
@@ -20,8 +21,19 @@ class CountryViewModuleController {
 
 
     onInit() {
+        this.header = {
+            name: { up: false, down: false },
+            country: { up: false, down: false },
+            organisation_name: { up: false, down: false },
+            donors: { up: false, down: false },
+            contact_name: { up: false, down: false },
+            implementation_overview: { up: false, down: false },
+            implementing_partners: { up: false, down: false },
+            geographic_scope: { up: false, down: false },
+            health_focus_area: { up: false, down: false }
+        };
         this.getCountries();
-
+        this.lastFilter = null;
         this.filterArray = [
             this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
             this.createFilterCategory('interventions',
@@ -233,13 +245,31 @@ class CountryViewModuleController {
         });
     }
 
+    orderTable(name) {
+        _.forEach(this.header, h => {
+            h.up = false;
+            h.down = false;
+        });
+        this.header[name].down = true;
+        let lastFilter = null;
+        let orderKey = `-${name}`;
+        if (name !== this.lastFilter) {
+            lastFilter = name;
+            orderKey = name;
+            this.header[name].down = false;
+            this.header[name].up = true;
+        }
+        this.lastFilter = lastFilter;
+        this.projectsData = this.filter('orderBy')(this.projectsData, orderKey);
+    }
+
     static countryControllerFactory() {
-        function countryController($scope, $state) {
+        function countryController($scope, $filter, $state) {
             const CommonService = require('../Common/CommonServices');
-            return new CountryViewModuleController($scope, $state, CommonService);
+            return new CountryViewModuleController($scope, $filter, $state, CommonService);
         }
 
-        countryController.$inject = ['$scope', '$state'];
+        countryController.$inject = ['$scope', '$filter', $state];
 
         return countryController;
     }
