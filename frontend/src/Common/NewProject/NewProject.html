@@ -640,6 +640,7 @@
                                                 type="text"
                                                 ng-pattern="vm.urlRegex"
                                                 name="link_{{$index}}" id="interoperabilityLink_{{$index}}"
+                                                ng-disabled="!vm.project.interoperability_links[$index].selected"
                                                 ng-model="vm.project.interoperability_links[$index].link">
                                         <div ng-messages="vm.newProjectForm['link_' + $index].$error">
                                             <div ng-message="pattern">This should be a valid link</div>
