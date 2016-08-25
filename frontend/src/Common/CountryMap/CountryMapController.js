@@ -38,6 +38,7 @@ class CountrymapController {
                 this.allProjects = data;
                 this.scope.$evalAsync();
             });
+            this.EE.on('projectFiltered', this.handleFilteredProject, this);
         }
         else {
             this.EE.once('country Changed', this.mapChanged, this);
@@ -60,6 +61,10 @@ class CountrymapController {
     }
 
     setGlobal() {
+        this.isGlobalOrNational = true;
+        if (this.allProjects.length === 0) {
+            return;
+        }
         const districts = document.getElementsByClassName('d3district');
         Array.prototype.forEach.call(districts, distr => {
             distr.classList.add('global');
@@ -71,6 +76,19 @@ class CountrymapController {
         Array.prototype.forEach.call(districts, distr => {
             distr.classList.remove('global');
         });
+    }
+
+    handleFilteredProject(projects) {
+        this.handleUpdatedProjects(projects);
+        this.allProjects = projects;
+        if (this.isGlobalOrNational) {
+            if (this.allProjects.length > 0) {
+                this.setGlobal();
+            }
+            else {
+                this.setTotal();
+            }
+        }
     }
 
     handleUpdatedProjects(projects) {
@@ -101,7 +119,7 @@ class CountrymapController {
         // console.log('DATA arrived', this.data);
         this.dataHere = true;
 
-        if (national) {
+        if (national && national[0]) {
             this.nationalCov = _.clone(national[0]);
             if (this.nationalCov.hasOwnProperty('district')) {
                 delete this.nationalCov.district;

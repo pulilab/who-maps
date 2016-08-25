@@ -4,6 +4,10 @@
 $coverage-height:60px;
 $strategies-height:60px;
 
+.menu-large {
+  width: 200px;
+}
+
 new-project {
   height: auto !important;
   padding:16px;
@@ -28,9 +32,34 @@ new-project {
     background-color: $color-axis6;
   }
 
+  .autocomplete-errors {
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    opacity: 1;
+    margin-top: 0;
+    padding-top: 5px;
+    color: rgb(221,44,0)
+  }
+
+  .autocomplete-organisation {
+    margin-bottom: 20px;
+  }
+
 
   .new-edit-project {
     flex: 1 0 auto !important;
+  }
+
+  .interoperability-links {
+    md-input-container{
+      margin: 0;
+    }
+  }
+
+  .specify-other {
+    margin: 0;
   }
 
   .error {
@@ -252,6 +281,7 @@ new-project {
     margin-bottom: 60px;
 
     p {
+      margin: 0;
       width:560px;
     }
 
@@ -291,33 +321,7 @@ new-project {
 
   .start-date {
 
-    margin-bottom: 40px;
 
-    md-datepicker {
-      width: 345px;
-
-      .md-datepicker-input-container {
-        font-size: 16px;
-        width: 300px;
-        height: 24px;
-        margin-left: 0;
-        padding-bottom: 2px;
-
-        input {
-          font-size: 16px;
-        }
-
-        .md-datepicker-expand-triangle {
-          transform: scale(1.5, 1.5) translate(-50%, 0);
-        }
-
-      }
-
-      .md-datepicker-button {
-        float: right;
-        transform: translate(0, -7px);
-      }
-    }
 
   }
 

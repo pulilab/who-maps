@@ -57,7 +57,6 @@ class AppModuleController extends Protected {
 
     eventBinding() {
         this.EE.on('unauthorized', this.handleUnauthorized, this);
-        this.EE.on('logout', this.handleLogoutEvent, this);
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
         this.EE.on('profileUpdated', this.refreshProfileInfo, this);
@@ -74,6 +73,10 @@ class AppModuleController extends Protected {
             this.shareUrl.copyClicked = true;
             event.clearSelection();
         });
+    }
+
+    hasProfile() {
+        return this.cs.hasProfile();
     }
 
     iconFunction(item) {
@@ -106,7 +109,12 @@ class AppModuleController extends Protected {
         case 'D':
             type = 'Financial Investor';
             break;
+        case 'Y':
+            type = 'Inventory';
+            break;
         }
+
+
         return type;
     }
 
@@ -152,7 +160,8 @@ class AppModuleController extends Protected {
 
         if (forcedPath) {
             this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
-                location: 'replace'
+                location: 'replace',
+                reload: true
             });
         }
 
@@ -187,6 +196,7 @@ class AppModuleController extends Protected {
     }
 
     logout() {
+        this.EE.emit('logout');
         this.systemLogout();
         const rest = this.cs.reset();
         rest.loadedPromise.then(() => {

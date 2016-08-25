@@ -55,5 +55,5 @@ def get_districts(request, country_id):
 
 
 class CountryListAPIView(generics.ListAPIView):
-    queryset = Country.objects.all()
+    queryset = Country.objects.values('id', 'name')
     serializer_class = CountryListSerializer

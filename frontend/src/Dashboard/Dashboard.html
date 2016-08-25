@@ -12,8 +12,8 @@
 
                 <md-card md-whiteframe="2" flex class="dash-emptyleft">
                     <div class="emptychild" layout="column" layout-align="start center">
-                        <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">start new project</md-button>
-                        <p>Lorem ipsum dolor sit amet, lorem ipsum, lorem lorem ipssumm</p>
+                        <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">add new project</md-button>
+                        <p>to include your project in the inventory and begin tracking your performance</p>
                     </div>
                 </md-card>
             </div>
@@ -262,6 +262,42 @@
                             </md-content>
                         </md-tab>
 
+                        <md-tab label="interoperability">
+                            <md-content class="dash-res">
+
+
+                                <h3>Health Information System Links</h3>
+                                <md-card
+                                        class="resource"
+                                        ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
+                                        layout="row"
+                                        layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{link}}</h4>
+                                    </div>
+                                    <a ng-href="{{link}}" target="_blank"  layout="column" layout-align="center center">
+                                        <md-icon>launch</md-icon>
+                                    </a>
+                                </md-card>
+
+
+                                <h3>Health Information Exchange Standards</h3>
+                                <md-card
+                                        class="resource"
+                                        ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
+                                        layout="row"
+                                        layout-align="space-around stretch">
+
+                                    <div flex class="res-text" layout="column" layout-align="space-around start">
+                                        <h4>{{standard}}</h4>
+                                    </div>
+                                </md-card>
+
+
+                            </md-content>
+                        </md-tab>
+
                     </md-tabs>
 
                 </md-card>
@@ -278,7 +314,7 @@
                         <md-icon class="material-icons unselectable">info</md-icon>
                         What will you find here?
                     </p>
-                    <p class="detail">Lorem ipsum dolor sit amet, if you read this, I need help here... consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Excepteur sint obcaecat cupiditat non proident culpa.</p>
+                    <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
                 </div>
 
                 <md-tabs ng-hide="vm.showEmpty" ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">

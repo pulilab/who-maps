@@ -39,8 +39,7 @@ class ContinuumController {
     bindEvents() {
         const vm = this;
         vm.EE.on('editModeDone', vm.editModeChangeDone, vm);
-        vm.mdContent = angular.element(document.getElementsByTagName('md-content')[0]);
-        vm.mdContent.on('scroll', vm.scrollEventHandler.bind(vm));
+        window.onscroll = vm.scrollEventHandler.bind(vm);
     }
 
     removeEvents() {
@@ -59,7 +58,7 @@ class ContinuumController {
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
-                const scrollTop = this.mdContent[0].scrollTop;
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
                 vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
             }

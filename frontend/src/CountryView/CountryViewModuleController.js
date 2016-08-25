@@ -88,7 +88,7 @@ class CountryViewModuleController {
             this.generalFilter(filters, 'continuum');
             this.generalFilter(filters, 'interventions');
             this.generalFilter(filters, 'applications');
-            this.generalFilter(filters, 'constraints');
+            this.constraintsFilter(filters);
             this.generalFilter(filters, 'technology_platforms');
             this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
         }
@@ -96,8 +96,29 @@ class CountryViewModuleController {
             this.projectsData = this.countryProjects;
         }
 
-        this.EE.emit('projectsUpdated', this.projectsData);
+        this.EE.emit('projectFiltered', this.projectsData);
 
+    }
+
+    constraintsFilter(filters) {
+        const localArray = [];
+        const constraintFilter = [];
+
+        _.forEach(filters.provisonalArray, project => {
+
+            _.forEach(this.cs.hssStructure.taxonomies, (t, key) => {
+                const inter = _.intersection(t.values, project.constraints);
+                if (inter.length > 0) {
+                    constraintFilter.push(key);
+                }
+            });
+
+            const inter = _.intersection(filters.constraints, constraintFilter);
+            if (inter.length === filters.constraints.length) {
+                localArray.push(project);
+            }
+        });
+        filters.provisonalArray = localArray;
     }
 
     generalFilter(filters, name) {
@@ -126,7 +147,7 @@ class CountryViewModuleController {
             this.countries2.unshift({ id: false, name: 'Show all countries' });
             if (this.cs.userProfile && this.cs.userProfile.country) {
                 const name = this.cs.userProfile.country.toLowerCase();
-                this.selectedCountry = _.find(this.countries2, { name });
+                this.selectedCountry = _.find(this.countries2, { name: this.cs.uglifyCountryName(name) });
                 this.updateCountry(this.selectedCountry);
                 this.scope.$evalAsync();
             }
@@ -153,7 +174,6 @@ class CountryViewModuleController {
     }
 
     updateCountry(countryObj) {
-        // console.debug('To countryObj: ', countryObj);
         if (countryObj.name !== 'Show all countries') {
             this.changeMapTo(countryObj);
         }

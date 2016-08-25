@@ -10,6 +10,7 @@ class LoginModuleController {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.handleDataError = this.handleDataError.bind(this);
     }
 
     onInit() {
@@ -37,7 +38,7 @@ class LoginModuleController {
                         vm.ls.storeUser(user);
                         vm.EE.emit('login');
                     }
-                }, vm.handleDataError.bind(vm));
+                }, vm.handleDataError);
         }
     }
 

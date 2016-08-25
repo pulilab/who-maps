@@ -7,7 +7,8 @@ import _ from 'lodash';
 let sc = {};
 
 const $scope = {
-    $evalAsync: jasmine.createSpy('eval')
+    $evalAsync: jasmine.createSpy('eval'),
+    $$postDigest: jasmine.createSpy('digest')
 };
 
 const mockData = {
@@ -33,6 +34,10 @@ const cs = {
     updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve())
 };
 
+const $anchorScroll = {
+    scroll: jasmine.createSpy('scroll').and.returnValue(true)
+};
+const $location = {};
 const upload = {};
 
 const structure = require('./Resources/structure.json');
@@ -41,7 +46,7 @@ describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = new  NewProjectController($scope, $state, upload, cs, structure);
+        sc = new  NewProjectController($scope, $state, upload, $anchorScroll, $location, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -79,16 +84,22 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that handle the saving process ', () => {
+        const e = document.createElement('div');
+        e.setAttribute('id', 'npf');
+        document.body.appendChild(e);
+        spyOn(sc, 'scroll');
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'createCoverageArray');
         spyOn(sc, 'saveForm');
         spyOn(sc, 'separateCoverageAndNationalLevelDeployments');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
+        spyOn(sc, 'isProjectObjValid').and.returnValue(true);
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
         expect(sc.createCoverageArray).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
         expect(sc.separateCoverageAndNationalLevelDeployments).toHaveBeenCalled();
+        expect(sc.scroll).toHaveBeenCalledWith('customerror1');
     });
 
     it('should have a function that save a new form', () => {
@@ -134,6 +145,7 @@ describe('NewProjectController', () => {
         spyOn(sc, 'assignDefaultCustom');
         spyOn(sc, 'mergeNationalLevelWithDistrictCoverage');
         spyOn(sc, 'addDefaultEmpty');
+        spyOn(sc, 'convertArraytoStandardCustomObj');
 
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();
@@ -142,14 +154,15 @@ describe('NewProjectController', () => {
         expect(sc.assignDefaultCustom).toHaveBeenCalled();
         expect(sc.mergeNationalLevelWithDistrictCoverage).toHaveBeenCalled();
         expect(sc.addDefaultEmpty).toHaveBeenCalled();
+        expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
 
     });
 
     it('should have a function that handles the national level deployment', () => {
         sc.project.national_level_deployment = [{ clients: 33 }];
         sc.mergeNationalLevelWithDistrictCoverage();
-        expect(sc.districtList).toContain('ENTIRE COUNTRY');
-        expect(_.filter(sc.project.coverage, item => item.district === 'ENTIRE COUNTRY').length).toBeGreaterThan(0);
+        expect(sc.districtList).toContain(' ENTIRE COUNTRY');
+        expect(_.filter(sc.project.coverage, item => item.district === ' ENTIRE COUNTRY').length).toBeGreaterThan(0);
     });
 
     it('should have a function that separates the national level deployment before saving', () => {

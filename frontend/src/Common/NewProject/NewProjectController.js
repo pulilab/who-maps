@@ -2,19 +2,24 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
 import ProjectDefinition from '../ProjectDefinition';
+import EditProfileService from '../EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
-const wholeCountryName = 'ENTIRE COUNTRY';
+const wholeCountryName = ' ENTIRE COUNTRY';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, Upload, CommonService, structure) {
+    constructor($scope, $state, Upload, $anchorScroll, $location, CommonService, structure) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
+        this.es = new EditProfileService();
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.location = $location;
+        this.scroll = $anchorScroll;
+        this.scroll.yOffset = 140;
         this.axisStructure = this.processAxisStructure(structure);
         this.$onInit = this.onInit.bind(this);
     }
@@ -30,22 +35,42 @@ class NewProjectController extends ProjectDefinition {
 
     onInit() {
         this.bindFunctions();
+        if (this.inventoryMode) {
+            this.createBlurHandle();
+        }
+        this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleStructureLoad();
+        this.createDateStructure();
+        this.allUsers = this.cs.usersProfiles;
+
+        this.team = [];
+        this.viewers = [];
+        this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
+
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.cs.getProjectData(this.projectId)
                 .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
                 .then(groups => {
-                    this.team = this.editMode ? groups.data.team : [];
-                    this.viewers = this.editMode ? groups.data.viewers : [];
-                    this.allUsers = groups.data.user_profiles;
+                    this.team = groups.data.team;
+                    this.viewers = groups.data.viewers;
                 });
         }
 
+        if (this.inventoryMode) {
+            this.project.organisation = void 0;
+        }
+
+    }
+
+    createDateStructure() {
+        this.availableYears = _.range(1980, 2051);
+        this.availableMonths = ['January', 'February', 'March', 'April', 'May',
+            'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     }
 
     isViewer(project) {
@@ -68,7 +93,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     putGroups() {
-        this.ns.putGroups(this.projectId, this.team, this.viewers);
+        return this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
     importIconTemplates() {
@@ -99,10 +124,19 @@ class NewProjectController extends ProjectDefinition {
 
     handleDataLoad(data) {
         this.createCoverageKeys(data);
+        this.convertArraytoStandardCustomObj(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.date = moment(this.project.date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        const backEndStartDate  = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+        const backEndImplementationDate = moment(this.project.implementation_dates, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+        this.startDateMonth = backEndStartDate.format('MMMM');
+        this.startDateYear = backEndStartDate.get('year');
+
+        this.implementingDateMonth = backEndImplementationDate.format('MMMM');
+        this.implementingDateYear = backEndImplementationDate.get('year');
+
         this.ns.countryDistrict(this.project.country)
             .then(district => {
                 this.districtList = district;
@@ -114,6 +148,36 @@ class NewProjectController extends ProjectDefinition {
             });
         this.scope.$evalAsync();
 
+    }
+
+    convertArraytoStandardCustomObj(data) {
+        const interoperability_standards = {
+            standard: [],
+            custom: void 0
+        };
+        const health_focus_areas = {
+            standard: [],
+            custom: void 0
+        };
+        const technology_platforms = {
+            standard: [],
+            custom: void 0
+        };
+
+        this.structure.interoperability_standards =
+            _.union(this.structure.interoperability_standards, data.interoperability_standards);
+        interoperability_standards.standard = data.interoperability_standards;
+        data.interoperability_standards = interoperability_standards;
+
+        this.structure.health_focus_areas =
+            _.union(this.structure.health_focus_areas, data.health_focus_areas);
+        health_focus_areas.standard = data.health_focus_areas;
+        data.health_focus_areas = health_focus_areas;
+
+        this.structure.technology_platforms =
+            _.union(this.structure.technology_platforms, data.technology_platforms);
+        technology_platforms.standard = data.technology_platforms;
+        data.technology_platforms = technology_platforms;
     }
 
     mergeNationalLevelWithDistrictCoverage() {
@@ -244,11 +308,32 @@ class NewProjectController extends ProjectDefinition {
         return true;
     }
 
+    isProjectObjValid() {
+        return this.newProjectForm.$valid
+            && this.startDateMonth
+            && this.startDateYear
+            && this.implementingDateMonth
+            && this.implementingDateYear
+            && (this.project.health_focus_areas.standard.length > 0 || this.project.health_focus_areas.custom);
+    }
+
+    createDateFields(processedForm) {
+        let month = this.availableMonths.indexOf(this.startDateMonth);
+
+        processedForm.started = moment({ year: this.startDateYear, month })
+            .toJSON();
+
+        month = this.availableMonths.indexOf(this.implementingDateMonth);
+        processedForm.implementation_dates = moment({ year: this.implementingDateYear, month })
+            .toJSON();
+    }
+
 
     save() {
         this.sentForm = true;
-        if (this.newProjectForm.$valid) {
+        if (this.isProjectObjValid()) {
             const processedForm = _.cloneDeep(this.project);
+            this.createDateFields(processedForm);
             this.mergeCustomAndDefault(processedForm);
             this.createCoverageArray(processedForm);
             this.separateCoverageAndNationalLevelDeployments(processedForm);
@@ -259,6 +344,22 @@ class NewProjectController extends ProjectDefinition {
                 this.updateForm(processedForm);
                 this.putGroups();
             }
+        }
+        const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+
+        if (firstInvalid) {
+            firstInvalid.focus();
+        }
+        else if (!(this.startDateYear && this.startDateMonth)) {
+            this.scroll('customerror1');
+        }
+        else if (!(this.implementingDateYear && this.implementingDateMonth)) {
+            this.scroll('customerror2');
+        }
+        else if (this.project.health_focus_areas.standard.length === 0
+            && this.project.health_focus_areas.custom === undefined) {
+
+            this.scroll('customerror3');
         }
     }
 
@@ -280,7 +381,13 @@ class NewProjectController extends ProjectDefinition {
         this.ns.newProject(processedForm)
             .then(response => {
                 if (response && response.success) {
-                    this.postSaveActions(response.data.id);
+                    this.ownershipCheck(response.data);
+                    if (this.inventoryMode) {
+                        this.putGroups().then(this.postSaveActions.bind(this));
+                    }
+                    else {
+                        this.postSaveActions();
+                    }
                 }
                 else {
                     this.handleResponse(response);
@@ -289,12 +396,21 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
-    postSaveActions(id) {
-        let appName = this.state.params.appName;
-        if (id) {
-            appName = id;
+    ownershipCheck(project) {
+        const id = this.userProfile.id;
+        const rights = _.concat(this.team, this.viewers);
+        if (rights.length > 0 && _.find(rights, { id })) {
+            this.projectId = project.id;
         }
-        this.EE.emit('refreshProjects', { go: 'editProject', appName });
+        else {
+            const last  = _.last(this.cs.projectList);
+            this.projectId = last && last.id ? last.id : null;
+        }
+    }
+
+    postSaveActions() {
+        const go = this.inventoryMode ?  'inventory' : 'editProject';
+        this.EE.emit('refreshProjects', { go, appName: this.projectId });
     }
 
     handleResponse(response) {
@@ -332,14 +448,17 @@ class NewProjectController extends ProjectDefinition {
         collection.organisation = copy.organisation.id;
         this.log(copy, collection);
         // collection.technology_platforms.custom = this.flattenCustom(collection.technology_platforms);
-        collection.technology_platforms = this.project.technology_platforms;
+        // collection.technology_platforms = this.project.technology_platforms;
+        collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
         // collection.licenses.custom = this.flattenCustom(collection.licenses);
         collection.licenses = this.project.licenses;
 
         // collection.digital_tools.custom = this.flattenCustom(collection.digital_tools);
         // collection.digital_tools = this.concatCustom(collection.digital_tools);
-
+        collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
+        collection.health_focus_areas = this.concatCustom(collection.health_focus_areas);
+        collection.interoperability_links = _.toArray(collection.interoperability_links);
         collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);
         collection.pre_assessment = this.unfoldObjects(collection.pre_assessment);
@@ -443,6 +562,20 @@ class NewProjectController extends ProjectDefinition {
             });
     }
 
+    createBlurHandle() {
+
+        this.scope.$$postDigest(() => {
+
+            document.querySelector('#orgauto')
+                .querySelector('input')
+                .addEventListener('blur', () => {
+                    if (!this.latestOrgs.some(org => org.name === this.searchText)) {
+                        this.addOrganisation(this.searchText);
+                    }
+                });
+        });
+    }
+
     openSimilarProject(project, event) {
         event.preventDefault();
         if (project.isOwn) {
@@ -454,15 +587,44 @@ class NewProjectController extends ProjectDefinition {
 
     }
 
+    focusSpecifyField(index) {
+        const field = document.getElementById(`interoperabilityLink_${index}`);
+        if (!field.value) {
+            this.project.interoperability_links[index] = 'http://';
+        }
+        field.focus();
+    }
+
+    interoperabilityLinkBlur(index) {
+        if (this.project.interoperability_links[index] === 'http://') {
+            this.project.interoperability_links[index] = null;
+        }
+    }
+
+    organisationSearch(name) {
+        const getOrgsPromise  = this.es.autocompleteOrganization(name);
+        getOrgsPromise.then(data => {
+            this.latestOrgs = data;
+        });
+        return getOrgsPromise;
+    }
+
+    addOrganisation(name) {
+        return this.es.addOrganization(name)
+            .then(response => {
+                this.userProfile.organisation = response;
+            });
+    }
+
 
     static newProjectFactory() {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
-        function newProject($scope, $state, Upload) {
-            return new NewProjectController($scope, $state, Upload, CommonService, structure);
+        function newProject($scope, $state, Upload, $anchorScroll, $location) {
+            return new NewProjectController($scope, $state, Upload, $anchorScroll, $location, CommonService, structure);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$anchorScroll', '$location'];
         return newProject;
     }
 }

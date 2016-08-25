@@ -15,6 +15,7 @@ class CommonServices extends Protected {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
+        this.EE.on('unauthorized', this.handleUnauthorized, this);
         this.initialize();
     }
 
@@ -28,6 +29,7 @@ class CommonServices extends Protected {
         this.retrieveUserProfile = this.retrieveUserProfile.bind(this);
         this.loadingCheck = [];
         this.userProfile = null;
+        this.usersProfiles = null;
         this.hssStructure = null;
         this.promiseResolve = void 0;
         this.promiseReject = void 0;
@@ -39,7 +41,7 @@ class CommonServices extends Protected {
             this.loadData();
         }
         else {
-            this.loadingCheck = ['structure'];
+            this.checkLoadPresence('structure');
             this.populateProjectStructure();
         }
     }
@@ -65,22 +67,38 @@ class CommonServices extends Protected {
         return this;
     }
 
+    handleUnauthorized() {
+        this.storage.clear();
+        this.initialize();
+    }
+
     loadData() {
-        this.loadingCheck = ['structure'];
         if (this.userProfileId) {
-            this.loadingCheck.push('list');
-            this.loadingCheck.push('user-profile');
-            this.loadingCheck.push('hss-structure');
+            this.createLoadingOrder();
             this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
+            this.getUsersProfiles();
         }
+        this.checkLoadPresence('structure');
         this.populateProjectStructure();
+    }
+
+    checkLoadPresence(name) {
+        if (this.loadingCheck.indexOf(name) === -1) {
+            this.loadingCheck.push(name);
+        }
+    }
+
+    createLoadingOrder() {
+        this.checkLoadPresence('user-profile');
+        this.checkLoadPresence('hss-structure');
+        this.checkLoadPresence('list');
     }
 
     loadingProgress(name) {
         if (DEBUG) {
-            console.debug(this.loadingCheck, name);
+            console.debug(_.cloneDeep(this.loadingCheck), name);
         }
         _.remove(this.loadingCheck, item => {
             return item === name;
@@ -129,6 +147,16 @@ class CommonServices extends Protected {
         });
     }
 
+    getUsersProfiles() {
+        const vm = this;
+        vm.get('userprofiles/').then(data => {
+            vm.usersProfiles = _.filter(data, item => {
+                return item.name !== null && item.name !== '';
+            });
+            vm.loadingProgress('users-profiles');
+        });
+    }
+
     populateProjectList() {
         const promiseArray = [];
         this.get('projects/member-of/')
@@ -161,7 +189,8 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.projectStructure = structure;
                 this.loadingProgress('structure');
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.loadingProgress('structure');
                 this.promiseReject();
             });
@@ -172,7 +201,8 @@ class CommonServices extends Protected {
             .then(structure => {
                 this.hssStructure = structure;
                 this.loadingProgress('hss-structure');
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.loadingProgress('hss-structure');
                 this.promiseReject();
             });
@@ -203,11 +233,12 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise]).then(() => {
-                vm.getCountryName(project);
-                vm.publicProject[_id] = project;
-                resolve(project);
-            });
+            Promise.all([project.detailPromise, project.filePromise])
+                .then(() => {
+                    vm.getCountryName(project);
+                    vm.publicProject[_id] = project;
+                    resolve(project);
+                });
         }
     }
 
@@ -229,7 +260,9 @@ class CommonServices extends Protected {
     updateProject(project, projectId) {
         const id = parseInt(projectId, 10);
         const last = _.find(this.projectList, { id });
+        project.organisation = _.cloneDeep(last.organisation);
         _.merge(last, project);
+
     }
 
     isViewer(project) {
@@ -238,6 +271,10 @@ class CommonServices extends Protected {
 
     isMember(project) {
         return this.userProfile && this.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    hasProfile() {
+        return this.userProfile && this.userProfile.name !== '' && !_.isNull(this.userProfile.name);
     }
 
     calculateHeight() {

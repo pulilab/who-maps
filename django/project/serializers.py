@@ -22,8 +22,8 @@ class ProjectSerializer(serializers.Serializer):
     implementation_overview = serializers.CharField(max_length=500)
     implementing_partners = serializers.CharField(required=False, allow_blank=True)
     implementation_dates = serializers.CharField()
-    geographic_coverage = serializers.CharField()
-    intervention_areas = serializers.ListField()
+    health_focus_areas = serializers.ListField()
+    geographic_scope = serializers.CharField()
     strategy = serializers.ListField(required=False)   # Can hold 'other' fields
     country = serializers.IntegerField(required=False)
     objective = serializers.CharField(required=False, allow_blank=True, max_length=250)
@@ -44,6 +44,8 @@ class ProjectSerializer(serializers.Serializer):
     wiki = serializers.URLField(required=False, allow_blank=True)
     pre_assessment = serializers.ListField(required=False)
     links = serializers.ListField(required=False)
+    interoperability_links = serializers.ListField(required=False)
+    interoperability_standards = serializers.ListField(required=False)
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -80,9 +82,18 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
-        instance.team = validated_data.get('team', instance.team)
-        instance.viewers = validated_data.get('viewers', instance.viewers)
-        return super(ProjectGroupUpdateSerializer, self).update(instance, validated_data)
+
+        # don't allow empty team, so no orphan projects
+        if 'team' in validated_data and isinstance(validated_data['team'], list):
+            instance.team = validated_data.get('team') or instance.team.all()
+
+        # a project however can exist without viewers
+        if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
+            instance.viewers = validated_data['viewers']
+
+        instance.save()
+
+        return instance
 
     def _send_notification(self, instance, validated_data):
         new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]

@@ -22,17 +22,6 @@ import AppComponent from './appComponent';
 import SystemController from './SystemController';
 import './app.scss';
 
-// Favicons
-require('../Favicons/apple-touch-icon-57x57.png');
-require('../Favicons/apple-touch-icon-114x114.png');
-require('../Favicons/apple-touch-icon-72x72.png');
-require('../Favicons/apple-touch-icon-144x144.png');
-require('../Favicons/apple-touch-icon-120x120.png');
-require('../Favicons/apple-touch-icon-152x152.png');
-require('../Favicons/favicon-32x32.png');
-require('../Favicons/favicon-16x16.png');
-require('../Favicons/mstile-144x144.png');
-
 
 const moduleName = 'app';
 const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
@@ -131,6 +120,15 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
                 }
             }
         })
+        .state('inventory', {
+            url: '/inventory',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '<new-project inventory-mode="true" ></new-project>'
+                }
+            }
+        })
         .state('editProfile', {
             url: '/edit-profile',
             parent: 'app',
@@ -174,13 +172,19 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
 };
 
-function logUiRouteEvents(...args) { console.debug(`Ui route state change ${this} :`, args); }
+function handleStateChange(...args) {
+    if (DEBUG) {
+        console.debug(`Ui route state change ${this} :`, args);
+    }
+    if (this === 'success') {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }
+}
 
 const run = ($rootScope, $state) => {
-    if (DEBUG) {
-        $rootScope.$on('$stateChangeError', logUiRouteEvents.bind('error'));
-        $rootScope.$on('$stateChangeSuccess', logUiRouteEvents.bind('success'));
-    }
+    $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
+    $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
+
 
     const checkXHR = (event) => {
         $rootScope.progress = event.detail.progression;

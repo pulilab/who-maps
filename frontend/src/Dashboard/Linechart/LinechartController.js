@@ -14,8 +14,10 @@ class LinechartController {
 
         this.EE = window.EE;
         this.el = $element;
+        // console.log('this.el at constructor ', this.el);
         this.timeout = $timeout;
         this.$onInit = () => {
+            // console.log('this.el at onInit() ', this.el);
 
             if (!this.datachooser) {
 
@@ -59,6 +61,7 @@ class LinechartController {
 
     draw() {
 
+        // console.log('this.el at draw() ', this.el);
         d3.select(this.el[0]).select('.linechartcontainer').remove();
 
         const data = this.datachooser ? this.chosenData : this.data;

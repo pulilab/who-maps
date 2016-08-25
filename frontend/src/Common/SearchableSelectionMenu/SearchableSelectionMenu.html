@@ -21,13 +21,13 @@
             <span ng-if="vm.subHeader" class="option-group-title">{{ group[vm.subHeader] }}</span>
             <md-option
                     ng-if="!vm.optionLabel"
-                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
+                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text | orderBy:option"
                     value="{{ option }}">
                 {{ option }}
             </md-option>
             <md-option
                     ng-if="vm.optionLabel"
-                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text"
+                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text | orderBy:option[vm.optionLabel]"
                     value="{{ option[vm.optionLabel] }}">
                 {{ option[vm.optionLabel] }}
                 <md-icon ng-style="vm.iconFunction(option).style">{{vm.iconFunction(option).name}}</md-icon>

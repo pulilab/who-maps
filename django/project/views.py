@@ -1,11 +1,13 @@
 import functools
 import json
-import operator
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
-from django.db.models import Q
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -15,7 +17,7 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-import hss.hss_data as hss_data
+from hss import hss_data
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import UserProfile, Organisation
 from hss.models import HSS
@@ -92,8 +94,8 @@ class ProjectPublicViewSet(ViewSet):
             "implementation_overview": p.data.get('implementation_overview'),
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
-            "geographic_coverage": p.data.get('geographic_coverage'),
-            "intervention_areas": p.data.get('intervention_areas'),
+            "health_focus_areas": p.data.get('health_focus_areas'),
+            "geographic_scope": p.data.get('geographic_coverage'),
             "technology_platforms": p.data.get('technology_platforms'),
             "interventions": p.hss_set.first().get_interventions_list(),
             "continuum": p.hss_set.first().get_continuum_list(),
@@ -105,7 +107,7 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
-        countries = [dict(id=x.id, name=x.name) for x in Country.objects.all()]
+        countries = Country.objects.values('id', 'name')
         project_structure.update(countries=countries)
         return Response(project_structure)
 
@@ -201,6 +203,74 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
                 "json": data_serializer.errors
             }
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def create_from_file(request):
+    if request.method == 'GET':
+        return render_to_response(
+            "project/create_from_file.html",
+            context_instance=RequestContext(request))
+    if request.method == 'POST':
+        projects_file = request.FILES.get("file", None)
+        if not projects_file:
+            return render_to_response(
+                "project/create_from_file.html",
+                {"errors": ["Please select a file to upload."]},
+                context_instance=RequestContext(request)
+            )
+        data = StringIO(projects_file.read().decode())
+        try:
+            projects_data = json.loads(data.read())
+        except ValueError as e:
+            return render_to_response(
+                "project/create_from_file.html",
+                {"errors": ["Malformed JSON file: {}".format(e)]},
+                context_instance=RequestContext(request)
+            )
+        else:
+            imported = []
+            failed = []
+            for project_item in projects_data:
+                country = Country.objects.get_object_or_none(name=project_item["country"])
+                if not country:
+                    failed.append("Importing '{}' is failed: No such country: {}"
+                                    .format(project_item["name"], project_item["country"]))
+                    continue
+                project_item["country"] = country.id
+                organisation = Organisation.objects.get_object_or_none(name=project_item["organisation"])
+                if not organisation:
+                    failed.append("Importing '{}' is failed: No such organisation: {}"
+                                    .format(project_item["name"], project_item["organisation"]))
+                    continue
+                project_item["organisation"] = organisation.id
+                owner = project_item.pop("owner")
+                try:
+                    user = User.objects.get(email=owner)
+                except ObjectDoesNotExist:
+                    failed.append("Importing '{}' is failed: No such user: {}"
+                                    .format(project_item["name"], owner))
+                    continue
+                data_serializer = ProjectSerializer(data=project_item)
+                model_serializer = ProjectModelSerializer(data={"name": project_item["name"]})
+                model_valid = model_serializer.is_valid()
+                data_valid = data_serializer.is_valid()
+                if model_valid and data_valid:
+                    project = Project(name=project_item["name"], data=project_item)
+                    project.save()
+                    project.team.add(user.userprofile)
+                    # Add default HSS structure for the new project.
+                    HSS.objects.create(project_id=project.id, data=hss_default)
+                    # Add default Toolkit structure for the new project.
+                    Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+                    imported.append(project.name)
+                else:
+                    failed.append("Importing '{}' is failed: {}{}"
+                                    .format(project_item["name"], data_serializer.errors, model_serializer.errors))
+            return render_to_response(
+                "project/create_from_file.html",
+                {"imported": imported, "failed": failed},
+                context_instance=RequestContext(request)
+            )
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
