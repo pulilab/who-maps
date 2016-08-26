@@ -9,9 +9,8 @@ $strategies-height:60px;
 }
 
 new-project {
-  height: auto !important;
-  padding:16px;
-  flex: 1 0 auto !important;
+  // flex: 1 0 auto !important;
+  padding: 16px;
 
   .axis1 {
     background-color: $color-axis1;
@@ -49,7 +48,8 @@ new-project {
 
 
   .new-edit-project {
-    flex: 1 0 auto !important;
+    // flex: 1 0 auto !important;
+    display: block;
   }
 
   .interoperability-links {
@@ -94,10 +94,10 @@ new-project {
 
   .wrapper {
     background: $color-white;
-    flex: 1 0 auto !important;
+    // flex: 1 0 auto !important;
 
     form {
-      flex: 1 0 auto !important;
+      // flex: 1 0 auto !important;
     }
   }
 
@@ -113,8 +113,8 @@ new-project {
     padding-bottom:50px;
     margin-bottom:50px;
     border-bottom: 1px solid $color-gray;
-    flex: 1 0 auto !important;
-    height: auto !important;
+    //flex: 1 0 auto !important;
+    //height: auto !important;
     display: block;
 
     > md-input-container {
@@ -397,6 +397,9 @@ new-project {
   }
 
   .my-projects {
+    // flex: 1 0 auto !important;
+    // height: auto;
+    display: block;
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
     padding-left: 60px;

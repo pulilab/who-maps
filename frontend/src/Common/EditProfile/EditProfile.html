@@ -118,7 +118,7 @@
             </div>
         </form>
     </div>
-    <section md-whiteframe="2" layout-fill class="my-projects" >
+    <section md-whiteframe="2" class="my-projects" >
         <h5> My projects ({{vm.userProjects.length}})</h5>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                      viewer="vm.isViewer(p)"
