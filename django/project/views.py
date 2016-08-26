@@ -85,6 +85,7 @@ class ProjectPublicViewSet(ViewSet):
 
         result_list = functools.reduce(lambda acc, p: acc + [{
             "id": p.id,
+            "uuid": p.public_id,
             "name": p.name,
             "organisation": p.data.get('organisation'),
             "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
