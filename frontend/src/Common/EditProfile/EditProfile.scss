@@ -5,6 +5,8 @@ $coverage-height:60px;
 $strategies-height:60px;
 
 edit-profile {
+  display: block;
+  padding: 0 30px;
 
   .error {
 
@@ -24,10 +26,6 @@ edit-profile {
       color: rgb(221,44,0);
     }
   }
-
-  display:block;
-  padding:16px;
-
 
   .wrapper {
     background: $color-white;
