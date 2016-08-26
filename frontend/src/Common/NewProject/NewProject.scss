@@ -10,7 +10,7 @@ $strategies-height:60px;
 
 new-project {
   // flex: 1 0 auto !important;
-  padding: 16px;
+  padding: 0 30px;
 
   .axis1 {
     background-color: $color-axis1;
@@ -398,7 +398,7 @@ new-project {
 
   .my-projects {
     // flex: 1 0 auto !important;
-    // height: auto;
+    // height: auto !important;
     display: block;
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
