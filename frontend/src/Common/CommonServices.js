@@ -42,7 +42,9 @@ class CommonServices extends Protected {
         }
         else {
             this.checkLoadPresence('structure');
+            this.checkLoadPresence('hss-structure');
             this.populateProjectStructure();
+            this.populateHssStructure();
         }
     }
 
@@ -75,12 +77,13 @@ class CommonServices extends Protected {
     loadData() {
         if (this.userProfileId) {
             this.createLoadingOrder();
-            this.populateHssStructure();
             this.retrieveUserProfile();
             this.populateProjectList();
             this.getUsersProfiles();
         }
         this.checkLoadPresence('structure');
+        this.checkLoadPresence('hss-structure');
+        this.populateHssStructure();
         this.populateProjectStructure();
     }
 
@@ -92,7 +95,7 @@ class CommonServices extends Protected {
 
     createLoadingOrder() {
         this.checkLoadPresence('user-profile');
-        this.checkLoadPresence('hss-structure');
+
         this.checkLoadPresence('list');
     }
 

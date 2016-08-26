@@ -25,7 +25,7 @@ class HssModuleController extends Protected {
         this.dataReady = false;
         this.gridLoading = 3;
         this.editMode = false;
-        this.structure = {};
+        this.structure = this.cs.hssStructure;
         this.data = {};
         this.columnHasContent = [];
         if (this.cs.userProfile) {
@@ -68,7 +68,6 @@ class HssModuleController extends Protected {
     }
 
     handleServerData(data) {
-        this.structure = this.cs.hssStructure;
         this.data = data;
         this.scope.$evalAsync();
         this.dataReady = true;

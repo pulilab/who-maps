@@ -89,6 +89,7 @@ class ContinuumController {
 
     motherRowGenerator() {
         const self = this;
+        console.log(this.tiles);
         return _.chain(this.tiles)
             .range()
             .map(value => {

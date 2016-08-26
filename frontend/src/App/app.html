@@ -14,7 +14,7 @@
             Country View
         </md-button>
 
-        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.isLogin && !vm.viewMode" ng-show="vm.state.current.name !== 'dashboard'" md-no-ink>
+        <md-button aria-label="Go to Dashboard" class="view-selector" ng-disabled="!vm.userProfile" ui-sref="dashboard" ng-if="vm.isLogin && !vm.viewMode" ng-show="vm.state.current.name === 'landing' || vm.state.current.name === 'newProject'" md-no-ink>
             <md-icon class="material-icons ">apps</md-icon>
             Dashboard
         </md-button>
