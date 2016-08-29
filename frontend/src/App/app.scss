@@ -5,6 +5,35 @@
 /* GENERAL
    ============================= */
 
+// Rewrite scrollbars
+//
+//
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border: 2px solid white;
+  border-radius: 8px;
+  background-color: $text-disabled;
+
+}
+::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 0;
+}
+
+//
+//
+//
+
 app {
   margin: 0;
   width: 100%;
@@ -25,26 +54,6 @@ ui-view {
   background-color: $color-page-background;
   // height: auto !important;
   // flex: 1 0 auto !important;
-  &::-webkit-scrollbar {
-    -webkit-appearance: none;
-  }
-  &::-webkit-scrollbar:vertical {
-    width: 11px;
-  }
-
-  &::-webkit-scrollbar:horizontal {
-    height: 11px;
-  }
-  &::-webkit-scrollbar-thumb {
-    border: 2px solid white;
-    border-radius: 8px;
-    background-color: $text-disabled;
-
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #fff;
-    border-radius: 0;
-  }
 }
 
 #intro-wrapper {
@@ -341,7 +350,8 @@ p.global-error {
   position: fixed;
   top:0;
   left: 0;
-  width: calc(100% - 11px);
+  width: calc(100% - 10px);
+  box-shadow: $whiteframe-shadow-4dp;
 
   &.toolbar-global {
     background-color: #1A237E;
@@ -406,7 +416,8 @@ p.global-error {
   }
 
   .md-toolbar-tools {
-    background-color: $color-primary;
+    // background-color: $color-primary;
+    background-color: #1A237E;
   }
 
   .md-toolbar-tools-bottom {
@@ -456,6 +467,12 @@ p.global-error {
       margin-right: 10px;
       padding: 0 12px !important;
       line-height: 48px;
+      // border-radius: 3px 3px 0 0;
+
+      &:hover {
+        color: #fff;
+        background-color: $color-primary !important;
+      }
 
       &.active {
         background-color: #fff !important;
@@ -587,7 +604,6 @@ p.global-error {
   }
 
   .share-button-container {
-
     overflow: hidden;
 
     .share-copy {
@@ -630,16 +646,6 @@ p.global-error {
   }
 }
 
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 7px;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0,0,0,.5);
-  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
-}
-
 /* FOOTER - DISCLAIMER
    ============================= */
 
@@ -655,5 +661,13 @@ footer.disclaimer {
   z-index: 500;
   &.topalign {
     transform: translate(10px, 65px);
+  }
+}
+
+
+// IE Edge fixes
+.browser-microsoft_edge {
+  .main-toolbar {
+    width: calc(100% - 12px);
   }
 }

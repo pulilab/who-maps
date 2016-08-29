@@ -30,16 +30,20 @@ maps-toolkit {
   }
 }
 
+.md-subheader {
+  z-index: 100;
+}
+
 .md-subheader .md-subheader-inner {
   padding: 0;
 }
 
 .md-sticky-clone {
+  top: 50px !important;
   width: calc( 100% - 60px ) !important;
 }
 
 .maps-toolkit {
-
   padding-top:10px;
   padding-left:30px;
   padding-right:30px;
@@ -177,4 +181,11 @@ maps-toolkit {
       background-color: $color-primary!important;
     }
   }
+}
+
+
+// IE Edge fix
+.browser-microsoft_edge {
+
+  .md-sticky-clone {}
 }
