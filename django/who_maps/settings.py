@@ -286,6 +286,9 @@ LEVELS_FOR_DISTRICTS = {
     "swaziland": "admin_level_4",
     "togo": "admin_level_4",
     "zimbabwe": "admin_level_4",
+
+    "jamaica": "admin_level_6",
+    "albania": "admin_level_6"
 }
 
 # Logging

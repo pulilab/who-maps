@@ -136,6 +136,12 @@ class CountryViewModuleController {
 
         this.mapService.getCountries().then(data => {
 
+            data.forEach(countryObj  => {
+                if (countryObj.name === 'c-te-d-ivoire') {
+                    countryObj.name = 'cote d\'ivoire';
+                }
+            });
+
             this.countries = data.sort((a, b) => a.name.localeCompare(b.name));
             this.countriesLib = {};
             data.forEach(country => {

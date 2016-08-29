@@ -3,6 +3,29 @@ import os
 MAPZEN_S3_URL = "https://s3.amazonaws.com/osm-polygons.mapzen.com/"
 GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), 'temp/')
 SELECTED_FILE_LIST = [
+    # NEW ONES WORKING
+    "albania_geojson.tgz",
+    "algeria_geojson.tgz",
+    "argentina_geojson.tgz",
+    "armenia_geojson.tgz",
+    "azerbaijan_geojson.tgz",
+    "bolivia_geojson.tgz",
+    "burundi_geojson.tgz",
+    "c-te-d-ivoire_geojson.tgz",
+    "djibouti_geojson.tgz",
+    "egypt_geojson.tgz",
+    "guatemala_geojson.tgz",
+    "jamaica_geojson.tgz",
+    "mauritania_geojson.tgz",
+    "turkey_geojson.tgz",
+    "uruguay_geojson.tgz"
+
+    # NEW ONES NOT WORKING:
+    # "paraguay_geojson.tgz",               # no geodata whatsoever
+    # "thailand_geojson.tgz",               # doesnt draw all of them somehow
+    # "trinidad-and-tobago_geojson.tgz"     # no geodata whatsoever
+
+    # OLDER ONES:
     "afghanistan_geojson.tgz",
     "angola_geojson.tgz",
     "bangladesh_geojson.tgz",
@@ -58,19 +81,15 @@ SELECTED_FILE_LIST = [
     "uganda_geojson.tgz",
     "vietnam_geojson.tgz",
     "zambia_geojson.tgz",
-    "zimbabwe_geojson.tgz",
-    "albania_geojson.tgz",
-    "algeria_geojson.tgz",
-    "argentina_geojson.tgz",
-    "armenia_geojson.tgz"
-    "azerbaijan_geojson.tgz"
+    "zimbabwe_geojson.tgz"
 ]
+
 SELECTED_FILE_LIST_DEV = [
     "sierra-leone_geojson.tgz",
     "rwanda_geojson.tgz",
-    "uganda_geojson.tgz",
-
+    "uganda_geojson.tgz"
 ]
+
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
     "admin_level_3.geojson",
