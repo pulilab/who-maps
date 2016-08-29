@@ -716,7 +716,7 @@
         </form>
 
     </div>
-    <section md-whiteframe="2" layout-fill class="my-projects" ng-if="vm.editMode">
+    <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
         <h5> My projects ({{vm.userProjects.length}})</h5>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                      current-project="vm.isCurrentProject(p.id)"
