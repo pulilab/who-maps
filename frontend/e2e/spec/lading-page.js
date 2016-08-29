@@ -1,3 +1,5 @@
+import SignupForm from '../util/signup-form';
+
 const assert = require('assert');
 
 /* global define, describe, it, beforeEach, expect, browser  */
@@ -92,12 +94,20 @@ describe('signup page', () => {
         let signupForm = void 0;
 
         beforeEach(() => {
-            signupForm = browser.element('form[name="signupForm"]');
+            signupForm = new SignupForm();
         });
 
-        it('should have a signupForm form', () => {
-            expect(signupForm.isVisible()).toBeTruthy();
+        it('should have a SignupForm form', () => {
+            expect(signupForm.form.isVisible()).toBeTruthy();
         });
+
+        it('should have a role checkbox', () => {
+            expect(signupForm.radio.isVisible()).toBeTruthy();
+        });
+
+        it('should have an email form field', () => {
+            expect(signupForm.email.isVisible()).toBeTruthy();
+        })
 
     });
 
