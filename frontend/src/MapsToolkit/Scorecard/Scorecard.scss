@@ -29,7 +29,6 @@ scorecard {
 
     .wrapper {
         background: $color-white;
-        margin-bottom: 40px;
         flex: 1 0 auto !important;
         min-height: auto !important;
     }
@@ -162,7 +161,12 @@ scorecard {
 
 
         .scorecard-buttons {
-            padding: 60px;
+          padding: 60px;
+
+          .md-button {
+            padding-right:20px;
+            padding-left:20px;
+          }
         }
 
     }

@@ -32,6 +32,13 @@ edit-profile {
     flex: 1 0 auto !important;
     height: auto !important;
     display: block;
+
+    .edit-button {
+      .md-button {
+        padding-right:20px;
+        padding-left:20px;
+      }
+    }
   }
 
   .profile-header {
@@ -86,7 +93,5 @@ edit-profile {
     padding-top: 5px;
     color: rgb(221,44,0)
   }
-
-
 
 }

@@ -39,9 +39,9 @@
 
                 <md-button class="more" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
 
-                <md-button class="md-gray" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Go to dashboard</md-button>
+                <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Dashboard</md-button>
 
-                <md-button class="md-primary" ng-if="vm.member" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project Info</md-button>
+                <md-button class="md-primary md-no-ink" ng-if="vm.member" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project</md-button>
             </div>
         </div>
     </div>

@@ -99,6 +99,13 @@ new-project {
     form {
       // flex: 1 0 auto !important;
     }
+
+    .edit-button {
+      .md-button {
+        padding-right:20px;
+        padding-left:20px;
+      }
+    }
   }
 
   h4 {

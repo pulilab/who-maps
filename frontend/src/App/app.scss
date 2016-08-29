@@ -9,29 +9,49 @@ app {
   margin: 0;
   width: 100%;
   min-height: 100%;
-  height: auto;
-  flex: 1 0 auto !important;
+  // height: auto;
+  // flex: 1 0 auto !important;
 }
 
 ui-view {
   background-color: $color-page-background;
-  height:auto !important;
-  min-height:100%;
-  flex: 1 0 auto !important;
+  min-height: 100%;
+  // height:auto !important;
+  // flex: 1 0 auto !important;
 }
 
 .main-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
-  height: auto !important;
-  flex: 1 0 auto !important;
+  // height: auto !important;
+  // flex: 1 0 auto !important;
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  &::-webkit-scrollbar:vertical {
+    width: 11px;
+  }
+
+  &::-webkit-scrollbar:horizontal {
+    height: 11px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border: 2px solid white;
+    border-radius: 8px;
+    background-color: $text-disabled;
+
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #fff;
+    border-radius: 0;
+  }
 }
 
 #intro-wrapper {
   height:auto;
   margin-top: 48px;
-  min-height: 100%;
-  flex: 1 0 auto !important;
+  // min-height: 100%;
+  // flex: 1 0 auto !important;
 }
 
 .page-wrapper {
@@ -245,7 +265,17 @@ p.global-error {
   // Button
   &.md-button,
   &.md-button:not([disabled]):hover {
-    color: $color-gray-light !important;
+    color: $color-white !important;
+    background-color: $text-disabled !important;
+  }
+
+  &.md-button.md-no-ink {
+    color: $text-secondary !important;
+    background-color: transparent !important;
+    &:hover {
+      color: $text-secondary !important;
+      background-color: rgba(158, 158, 158, 0.2) !important;
+    }
   }
 }
 
@@ -311,6 +341,7 @@ p.global-error {
   position: fixed;
   top:0;
   left: 0;
+  width: calc(100% - 11px);
 
   &.toolbar-global {
     background-color: #1A237E;
@@ -348,7 +379,7 @@ p.global-error {
 
   .app-title {
     display: inline-block;
-    margin: 0 24px 0 0 !important;
+    margin: 0 24px 0 3px !important;
     padding: 4px 0;
     min-height: 28px;
     height: 28px;
@@ -411,8 +442,10 @@ p.global-error {
   }
 
   .project-submenu {
+    margin: 0 10px 0 10px;
+    .md-menu,
     .md-button {
-      margin: 0 6px 0 14px;
+      min-width: 80px !important;
     }
   }
 
@@ -460,7 +493,7 @@ p.global-error {
 
     .md-button {
       float: right;
-      margin: 0 12px 0 5px;
+      margin: 0 14px 0 6px;
 
       .material-icons,
       > span {
