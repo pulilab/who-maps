@@ -25,3 +25,4 @@ dump.*
 django/celerybeat-schedule.*
 .floo
 .flooignore
+errorShots/
