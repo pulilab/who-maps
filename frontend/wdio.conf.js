@@ -109,6 +109,7 @@ exports.config = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
+    execArgv: ['--use_strict'],
     framework: 'jasmine',
     //
     // Test reporter for stdout.

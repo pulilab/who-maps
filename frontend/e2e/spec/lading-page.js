@@ -1,5 +1,7 @@
 const assert = require('assert');
 
+/* global define, describe, it, beforeEach, expect, browser  */
+
 
 describe('landing page', () => {
 
@@ -50,7 +52,7 @@ describe('login page', () => {
     });
 
     describe('login form', () => {
-        var loginForm = void 0;
+        let loginForm = void 0;
 
         beforeEach(() => {
             loginForm = browser.element('form[name="vm.loginForm"]');
@@ -69,11 +71,35 @@ describe('login page', () => {
         });
 
         it('that has forgot password button', () => {
-            expect(loginForm.getAttribute('a', 'aria-label')).toContain("Forgot password?");
+            expect(loginForm.getAttribute('a', 'aria-label')).toContain('Forgot password?');
         });
 
         it('that has login button', () => {
             expect(loginForm.getText('button.md-button')).toContain('LOGIN');
         });
     });
+});
+
+
+describe('signup page', () => {
+
+    beforeEach(() => {
+        browser.url('/signup');
+    });
+
+    describe('signup form', () => {
+
+        let signupForm = void 0;
+
+        beforeEach(() => {
+            signupForm = browser.element('form[name="signupForm"]');
+        });
+
+        it('should have a signupForm form', () => {
+            expect(signupForm.isVisible()).toBeTruthy();
+        });
+
+    });
+
+
 });
