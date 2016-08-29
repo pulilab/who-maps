@@ -29,6 +29,13 @@ signup {
       color: $color-gray-light;
     }
 
+    .login-back a {
+      &:hover {
+        color: $color-primary;
+        text-decoration: none;
+      }
+    }
+
     .md-button {
       margin: 5px 0 0;
     }
@@ -96,7 +103,7 @@ signup {
     }
   }
 
-  .disclaimer {
+  footer {
     margin-bottom: 50px;
     max-width: 640px;
   }

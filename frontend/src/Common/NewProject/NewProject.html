@@ -1,4 +1,4 @@
-<div layout="column" class="new-edit-project" layout-fill layout-align="start center" >
+<div layout="column" class="new-edit-project" layout-align="start center" >
     <div class="page-title" ng-hide="vm.editMode">
         <h1 class="md-display-1 text-center">Add new project sheet</h1>
         <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
@@ -13,9 +13,9 @@
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
 
-    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate id="npf">
-            <div layout="column" layout-fill class="main-form">
+    <div md-whiteframe="2" class="layout-padding-xl wrapper" ng-if="vm.dataLoaded">
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate>
+            <div layout="column" class="main-form">
                 <h4>1. Project details</h4>
                 <div class="project-name" flex="100" layout="row" layout-align="start center">
                     <md-input-container flex="60">

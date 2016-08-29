@@ -156,7 +156,6 @@ applications {
       .bubble-shape {
         &:hover {
           z-index: 1000;
-          min-width: 230px;
           height: auto;
           border-color: transparent;
           border-radius: 2px;
@@ -170,10 +169,10 @@ applications {
             // overflow-y: scroll;
             box-sizing: content-box;
             padding: 12px 0 16px 0;
+            height: auto;
             min-height: 46px;
             max-height: 500px;
             width: calc( 100% - 80px);
-            height: auto;
             vertical-align: middle;
             transform: none;
 
@@ -470,5 +469,18 @@ applications {
     line-height: 16px;
 
     @include text-truncate();
+  }
+}
+
+// Safari fix
+
+.browser-safari {
+  .tile.view-mode {
+    .bubble-shape {
+      &:hover {
+        min-height: 120px;
+        transition-duration: 150ms;
+      }
+    }
   }
 }

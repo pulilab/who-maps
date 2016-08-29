@@ -114,6 +114,8 @@ new-project {
     margin-bottom:50px;
     border-bottom: 1px solid $color-gray;
     flex: 1 0 auto !important;
+    height: auto !important;
+    display: block;
 
     > md-input-container {
       width: 700px;
