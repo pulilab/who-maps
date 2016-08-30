@@ -101,6 +101,8 @@ new-project {
     }
 
     .edit-button {
+      padding-bottom: 20px;
+
       .md-button {
         padding-right:20px;
         padding-left:20px;
@@ -409,9 +411,9 @@ new-project {
     display: block;
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding-bottom: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 40px;
 
     h5 {
       font-size:20px;

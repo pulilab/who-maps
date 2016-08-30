@@ -113,7 +113,7 @@
     </div>
 </div>
 <axis-footer ng-if="vm.dataLoaded && !vm.summary" axes="vm.rawData"></axis-footer>
-
+<disclaimer></disclaimer>
 <div ng-if="vm.dataLoaded && vm.summary" layout="column" class="axes-scorecard">
     <div class="page-title">
         <h1 class="md-display-1 text-center">Summary scorecard</h1>
@@ -121,7 +121,7 @@
             this sheet. This will allow you to compare your progress across the six axes, and to identify the domains
             that require greater attention and efforts.</h6>
     </div>
-    <div class="wrapper"  layout="column" md-whiteframe="2">
+    <div class="wrapper layout-padding-xl" layout="column" md-whiteframe="2">
     <div layout="column" flex="100" class="inner-wrapper">
         <div ng-repeat="(axIndex, axis) in vm.data" layout="column" class="axis">
             <div layout="row" class="axis-header" ng-class="axis.axisClass">
@@ -182,5 +182,3 @@
 
 </div>
 </div>
-
-<disclaimer></disclaimer>

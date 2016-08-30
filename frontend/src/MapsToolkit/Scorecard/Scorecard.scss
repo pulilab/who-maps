@@ -7,6 +7,10 @@ scorecard {
     padding-right: 30px !important;
     display:block;
 
+    disclaimer footer {
+      padding: 50px 50px 80px;
+    }
+
     .axis1 {
         background-color: $color-axis1;
     }
