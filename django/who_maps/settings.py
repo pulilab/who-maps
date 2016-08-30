@@ -288,7 +288,8 @@ LEVELS_FOR_DISTRICTS = {
     "zimbabwe": "admin_level_4",
 
     "jamaica": "admin_level_6",
-    "albania": "admin_level_6"
+    "albania": "admin_level_6",
+    "cape-verde": "admin_level_6"
 }
 
 # Logging

@@ -189,16 +189,18 @@ class CountrymapController {
         const levelLib = {
             'Albania':                      'admin_level_6', // #2.1
             'Burkina Faso':                 'admin_level_5', // #2
+            'Cape Verde':                   'admin_level_6', // #2.1
             'Guinea':                       'admin_level_6', // #2
             'India':                        'admin_level_5', // #1
             'Jamaica':                      'admin_level_6', // #2.1
             'Nepal':                        'admin_level_6', // #1.5
             'Philippines':                  'admin_level_3', // #1
-            // 'Senegal':                       'admin_level_3', // #1
             'Sierra Leone':                 'admin_level_5', // #1
             'The Gambia':                   'admin_level_5', // #1
-            // 'Thailand':                     'admin_level_4', // #2.1
             'Uganda':                       'admin_level_6', // #1.5
+            // 'Senegal':                       'admin_level_3', // #1
+            // 'Thailand':                     'admin_level_4', // #2.1
+            // 'Île Verte':                    'admin_level_6', // #2.1 Canada
             // 'Trinidad and Tobago':          'admin_level_2'  // #2.1
         };
 
