@@ -1,8 +1,9 @@
 import SignupForm from '../util/signup-form';
+import FieldErrors from '../util/field-errors';
 
 const assert = require('assert');
 
-/* global define, describe, it, beforeEach, expect, browser  */
+/* global define, describe, it, beforeEach, expect, browser, it  */
 
 
 describe('landing page', () => {
@@ -102,12 +103,67 @@ describe('signup page', () => {
         });
 
         it('should have a role checkbox', () => {
-            expect(signupForm.radio.isVisible()).toBeTruthy();
+            expect(signupForm.radio.group.isVisible()).toBeTruthy();
+
+            expect(signupForm.radio.implementer.isVisible()).toBeTruthy();
+
+            expect(signupForm.radio.financial.isVisible()).toBeTruthy();
+
+            expect(signupForm.radio.governament.isVisible()).toBeTruthy();
+
         });
 
-        it('should have an email form field', () => {
-            expect(signupForm.email.isVisible()).toBeTruthy();
+        describe('email form field', () => {
+            it('should be preset', () => {
+                expect(signupForm.email.isVisible()).toBeTruthy();
+            });
+
+            it('should show an error message when is filled with a wrong email', () => {
+                signupForm.fillWrongly();
+                const emailError = new FieldErrors(signupForm.email).email;
+                expect(emailError.isVisible()).toBeTruthy();
+            })
+        });
+
+        describe('should have a password form field', () => {
+
+            it('should exist', () => {
+                expect(signupForm.password.isVisible()).toBeTruthy();
+            });
+
+            it('should show an error message when is focused and not filled', () => {
+                signupForm.password.click();
+                signupForm.passwordConfirmation.click();
+                const requiredError = new FieldErrors(signupForm.password).required;
+                expect(requiredError.isVisible()).toBeTruthy();
+            });
+
+        });
+
+        it('should have a password confirmation form field', () => {
+            expect(signupForm.passwordConfirmation.isVisible()).toBeTruthy();
+
+        });
+
+        describe('sigup button', () => {
+            it('should be present', () => {
+                expect(signupForm.submit.isVisible()).toBeTruthy();
+            });
+
+            it('should be disabled until the form is completed correctly', () => {
+                expect(signupForm.submit.isEnabled()).toBeFalsy();
+            });
+
+            it('should be enabled when the form is completed correctly', () => {
+                signupForm.fillCorrectly();
+                expect(signupForm.submit.isEnabled).toBeTruthy();
+            })
+        });
+
+        it('should have a login text link', () => {
+            expect(signupForm.loginText.isVisible()).toBeTruthy();
         })
+
 
     });
 
