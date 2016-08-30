@@ -15,8 +15,8 @@
     .littleheader {
 
       position: absolute;
-      left: 12px;
-      top: 13px;
+      left: 20px;
+      top: 12px;
       font-size: 14px;
       color: $text-primary;
       font-weight: bold;
@@ -92,6 +92,7 @@
             width: 40px;
             height: 36px;
             font-size: 36px;
+            line-height: 40px;
             text-align: center;
             color: $color-black;
           }
@@ -210,13 +211,23 @@
     min-height: calc(100vh - 200px);
     background-color: $color-gray-lightest;
 
+    .zoomhandlers2 {
+      //
+      right: 50px;
+    }
+
+    .countrychart-tooltip {
+      top: 20px;
+      left: 20px;
+    }
+
     .countrychoser {
 
       height: 45px;
       display: block;
       position: absolute;
       top: 10px;
-      right: 20px;
+      right: 15px;
 
       md-input-container {
 
@@ -271,7 +282,7 @@
         display: block;
         position: absolute;
         top: 10px;
-        right: 20px;
+        left: 13px;
 
         md-input-container {
 
@@ -302,7 +313,9 @@
       }
 
       .starry {
-
+        position: absolute;
+        top: 12px;
+        right: 25px;
         font-size: 12px;
         color: $text-secondary;
         padding-top: 20px;
@@ -313,15 +326,13 @@
           font-size: 14px;
           height: 14px;
           width: 14px;
-          transform: translate(0, -1px);
         }
       }
     }
 
     .projectcont {
-
-      padding-bottom: 20px;
-      padding-top: 20px;
+      margin-top: 35px;
+      padding: 10px 0;
       background-color: $color-gray-lightest;
 
       .headerrow {

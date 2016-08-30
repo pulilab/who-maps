@@ -204,6 +204,17 @@ md-checkbox.small {
   }
 }
 
+// Md-select
+
+md-select {
+  &.no-border {
+    .md-select-value {
+      border: none !important;
+    }
+  }
+}
+
+
 // Md-menu
 
 md-menu-content {

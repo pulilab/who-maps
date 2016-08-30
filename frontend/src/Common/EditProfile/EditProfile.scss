@@ -34,6 +34,8 @@ edit-profile {
     display: block;
 
     .edit-button {
+      padding: 20px 0;
+      
       .md-button {
         padding-right:20px;
         padding-left:20px;
@@ -47,6 +49,7 @@ edit-profile {
     line-height: 55px;
     padding-left:20px;
     padding-right:20px;
+    margin: 20px 0;
     border-bottom: 1px solid $color-gray-light;
 
     div {
@@ -67,9 +70,9 @@ edit-profile {
     width: 100%;
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
-    padding-left: 60px;
-    padding-right:60px;
-    padding-bottom:30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 40px;
 
     h5 {
       font-size:20px;
