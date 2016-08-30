@@ -20,6 +20,11 @@ continuum {
     background: #fff;
     box-shadow: $whiteframe-shadow-4dp;
     animation: show_continuum 300ms ease-out 1;
+
+    .browser-microsoft_edge & {
+      width: calc(100% - 72px);
+      max-width: calc(100% - 72px);
+    }
   }
 
   @keyframes show_continuum {
@@ -310,16 +315,5 @@ continuum {
       }
     }
 
-  }
-}
-
-
-// IE Edge fixes
-.browser-microsoft_edge {
-  continuum {
-    .fixed-mode {
-      width: calc(100% - 71px);
-      max-width: calc(100% - 71px);
-    }
   }
 }

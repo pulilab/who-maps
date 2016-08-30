@@ -116,6 +116,8 @@ ssmenu.multiline {
 }
 
 .md-select-menu-container {
+  z-index: 500;
+
   .option-group-title,
   .selection-limit {
     display: block;
@@ -127,6 +129,11 @@ ssmenu.multiline {
 
   &.small .option-group-title {
     font-size: $caption-font-size-base;
+  }
+
+  &.project-chooser {
+    transform: translate(9px, 9px);
+    min-width: 200px;
   }
 
   .selection-limit {
@@ -191,7 +198,7 @@ ssmenu {
 
   .hint {
     font-size: 12px;
-    padding-top:5px;
+    padding-top: 5px;
     color: $color-gray;
   }
 
