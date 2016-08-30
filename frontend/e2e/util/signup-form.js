@@ -1,3 +1,5 @@
+import { validUser } from './common-data';
+
 /* global define, describe, it, beforeEach, expect, browser  */
 
 export default class SignupForm {
@@ -8,13 +10,14 @@ export default class SignupForm {
             group: browser.element('md-radio-group'),
             implementer: browser.element('#radio_0'),
             financial: browser.element('#radio_1'),
-            governament: browser.element('#radio_2')
+            government: browser.element('#radio_2')
         };
         this.email = browser.element('input[name="email"');
         this.password = browser.element('input[name="password1"]');
         this.passwordConfirmation = browser.element('input[name="password2"]');
         this.submit = browser.element('button[aria-label="Sign up"]');
         this.loginText = browser.element('a[ui-sref="login"]');
+        this.confrimationBox = browser.element('.form-success');
 
         this.correctValues = {
             email: 'a@a.com',
@@ -39,6 +42,13 @@ export default class SignupForm {
         this.email.setValue(this.incorrectValues.email);
         this.password.setValue(this.incorrectValues.password);
         this.passwordConfirmation.setValue(this.incorrectValues.passwordConfirmation);
+    }
+
+    register() {
+        this.email.setValue(validUser.email);
+        this.password.setValue(validUser.password);
+        this.passwordConfirmation.setValue(validUser.password);
+        this.submit.click();
     }
 
 }

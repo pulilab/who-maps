@@ -1,4 +1,5 @@
 import SignupForm from '../util/signup-form';
+import LoginForm from '../util/login-form';
 import FieldErrors from '../util/field-errors';
 
 const assert = require('assert');
@@ -58,27 +59,27 @@ describe('login page', () => {
         let loginForm = void 0;
 
         beforeEach(() => {
-            loginForm = browser.element('form[name="vm.loginForm"]');
+            loginForm = new LoginForm();
         });
 
         it('should have a login form', () => {
-            expect(loginForm.isVisible()).toBeTruthy();
+            expect(loginForm.form.isVisible()).toBeTruthy();
         });
 
         it('that has email address input', () => {
-            expect(loginForm.getValue('input[name="username"]').length).toBe(0);
+            expect(loginForm.email.isVisible()).toBeTruthy();
         });
 
         it('that has password input', () => {
-            expect(loginForm.getValue('input[name="password"]').length).toBe(0);
+            expect(loginForm.password.isVisible()).toBeTruthy();
         });
 
         it('that has forgot password button', () => {
-            expect(loginForm.getAttribute('a', 'aria-label')).toContain('Forgot password?');
+            expect(loginForm.reset.isVisible()).toBeTruthy();
         });
 
         it('that has login button', () => {
-            expect(loginForm.getText('button.md-button')).toContain('LOGIN');
+            expect(loginForm.submit.isVisible()).toBeTruthy();
         });
     });
 });
@@ -109,7 +110,7 @@ describe('signup page', () => {
 
             expect(signupForm.radio.financial.isVisible()).toBeTruthy();
 
-            expect(signupForm.radio.governament.isVisible()).toBeTruthy();
+            expect(signupForm.radio.government.isVisible()).toBeTruthy();
 
         });
 
@@ -140,12 +141,22 @@ describe('signup page', () => {
 
         });
 
-        it('should have a password confirmation form field', () => {
-            expect(signupForm.passwordConfirmation.isVisible()).toBeTruthy();
+        describe('password confirmation form field', () => {
 
+            it('should be visible', () => {
+                expect(signupForm.passwordConfirmation.isVisible()).toBeTruthy();
+            });
+
+            it('should show an error message if the confirmation password is different', () => {
+                signupForm.password.setValue('a');
+                signupForm.passwordConfirmation.setValue('b');
+                signupForm.password.click();
+                const error = new FieldErrors(signupForm.password);
+                expect(error.passwordMatch.isVisible()).toBeTruthy();
+            })
         });
 
-        describe('sigup button', () => {
+        describe('signup button', () => {
             it('should be present', () => {
                 expect(signupForm.submit.isVisible()).toBeTruthy();
             });
@@ -157,6 +168,12 @@ describe('signup page', () => {
             it('should be enabled when the form is completed correctly', () => {
                 signupForm.fillCorrectly();
                 expect(signupForm.submit.isEnabled).toBeTruthy();
+            });
+
+            it('should perform the registration when clicked', () => {
+                signupForm.fillCorrectly();
+                signupForm.submit.click();
+                signupForm.confrimationBox.waitForVisible(3000);
             })
         });
 
