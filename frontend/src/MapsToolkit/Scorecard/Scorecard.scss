@@ -58,10 +58,10 @@ scorecard {
     }
 
     .domain {
-        margin-bottom:40px;
+        margin-bottom: 40px;
 
         h4 {
-          padding-left: 70px;
+          font-size: 16px;
         }
     }
 
@@ -79,11 +79,10 @@ scorecard {
         color: #212121;
         height:50px;
         padding-left: 50px;
-        padding-right: 20px;
+        padding-right: 30px;
 
         strong {
-            margin-right:0.3em;
-        }
+            margin-right: 5px;        }
     }
 
     .domain-total {
@@ -92,10 +91,10 @@ scorecard {
         background: #FAFAFA;
         border-bottom: 1px solid #E0E0E0;
         padding-left: 50px;
-        padding-right: 20px;
+        padding-right: 30px;
 
         strong {
-            margin-right:0.3em;
+            margin-right: 5px;
         }
     }
 
@@ -105,7 +104,7 @@ scorecard {
         background: #FFF9C4;
         border-bottom: 1px solid #E0E0E0;
         padding-left: 50px;
-        padding-right: 20px;
+        padding-right: 30px;
     }
 
     .axis-buttons {
@@ -116,6 +115,10 @@ scorecard {
         &.top {
             margin-bottom:30px;
             margin-top:30px;
+        }
+        .md-button {
+          padding-right:20px;
+          padding-left:20px;
         }
     }
 

@@ -39,8 +39,7 @@ maps-toolkit {
 }
 
 .md-sticky-clone {
-  top: 50px !important;
-  width: calc( 100% - 60px ) !important;
+  max-width: calc( 100% - 60px ) !important;
 }
 
 .maps-toolkit {
@@ -52,8 +51,8 @@ maps-toolkit {
   display: block;
 
   .domain-header {
-    padding-top:40px;
-    padding-left:60px;
+    padding-top: 40px;
+    padding-left: 60px;
     color:$text-primary;
 
     .left {

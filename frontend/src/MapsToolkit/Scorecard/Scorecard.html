@@ -25,12 +25,8 @@
     <div layout="row" class="axis-header" ng-class="vm.data.axisClass">
         <div layout="row" flex="auto" layout-align="start center">
             <img ng-src="{{vm.data.axisPicture}}" />
-            <span> {{vm.data.axis}}</span>
+            <span>{{vm.data.axis}} (Scorecard)</span>
         </div>
-        <div layout="row" flex="auto" layout-align="end center">
-                <span>Scorecard</span>
-        </div>
-
     </div>
 
     <div layout="column" class="inner-wrapper">
@@ -62,8 +58,6 @@
                 <div flex="auto" layout="row" layout-align="end center">
                     <strong>{{question.question_sum}}</strong> / {{question.question_max}} points
                 </div>
-
-
             </div>
 
             <div class="domain-total" layout="row">
