@@ -38,7 +38,7 @@
                 </thematic>
             </div>
             <section ng-repeat="question in vm.data.questions" >
-                <md-subheader >
+                <md-subheader class="md-no-sticky" >
                     <div layout="row" flex="100" class="question-header">
                         <div flex="{{vm.calculateMainBoxSize(question)}}" layout="column" class="question-text" layout-align="center start">
                             {{question.id}}.{{question.text}} ({{question.question_max}} Points)
