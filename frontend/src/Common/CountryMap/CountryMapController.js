@@ -197,7 +197,7 @@ class CountrymapController {
             'Philippines':                  'admin_level_3', // #1
             'Sierra Leone':                 'admin_level_5', // #1
             'The Gambia':                   'admin_level_5', // #1
-            'Uganda':                       'admin_level_6', // #1.5
+            'Uganda':                       'admin_level_6'  // #1.5
             // 'Senegal':                       'admin_level_3', // #1
             // 'Thailand':                     'admin_level_4', // #2.1
             // 'Île Verte':                    'admin_level_6', // #2.1 Canada
