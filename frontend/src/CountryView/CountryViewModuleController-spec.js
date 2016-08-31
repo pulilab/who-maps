@@ -1,4 +1,4 @@
-import { default as CountryViewModuleController } from './CountryViewModuleController';
+import CountryViewModuleController from './CountryViewModuleController';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
 
@@ -229,6 +229,41 @@ describe('CountryViewModuleController', () => {
 
         expect(Array.isArray(filters.provisonalArray));
 
-
     });
+
+    it('should have a function to extract constraints', () => {
+        const collection = {
+            a: [1, 2],
+            b: [3, 4]
+        };
+        const extract = cvc.extractConstraints(collection);
+        expect(extract).toContain('a');
+        expect(extract.length).toBe(2);
+    });
+
+    it('should have a function to concatenate applications', () => {
+        const applications = [
+            { subApplications: ['a', 'b'] },
+            { subApplications: ['c', 'd'] }
+        ];
+
+        const result = cvc.concatenateApplications(applications);
+        expect(result).toContain('d');
+        expect(result.length).toBe(4);
+    });
+
+    it('should have a function that creates the filter category', ()=> {
+        expect(cvc.createFilterCategory).toBeDefined();
+    });
+
+    it('should have a function that replace lower dash', () => {
+        const result = cvc.replaceLodash('_a');
+        expect(result).toBe(' a');
+    });
+
+    it('should have a function that order by the name', () => {
+        cvc.orderTable('name');
+        expect(cvc.filter).toHaveBeenCalled();
+    });
+
 });

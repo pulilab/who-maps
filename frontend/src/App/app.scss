@@ -5,33 +5,64 @@
 /* GENERAL
    ============================= */
 
+// Rewrite scrollbars
+//
+//
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid white;
+  border-radius: 8px;
+  background-color: $text-disabled;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 0;
+}
+
+//
+//
+//
+
 app {
   margin: 0;
   width: 100%;
   min-height: 100%;
-  height: auto;
-  flex: 1 0 auto !important;
+  // height: auto;
+  // flex: 1 0 auto !important;
 }
 
 ui-view {
   background-color: $color-page-background;
-  height:auto !important;
-  min-height:100%;
-  flex: 1 0 auto !important;
+  min-height: 100%;
+  // height:auto !important;
+  // flex: 1 0 auto !important;
 }
 
 .main-content {
   min-width: $page-min-width !important;
   background-color: $color-page-background;
-  height: auto !important;
-  flex: 1 0 auto !important;
+  // height: auto !important;
+  // flex: 1 0 auto !important;
 }
 
 #intro-wrapper {
   height:auto;
   margin-top: 48px;
-  min-height: 100%;
-  flex: 1 0 auto !important;
+  // min-height: 100%;
+  // flex: 1 0 auto !important;
 }
 
 .page-wrapper {
@@ -39,7 +70,7 @@ ui-view {
 }
 
 .layout-padding-xl > * {
-  padding: $layout-gutter-width * 2;
+  padding: 30px 40px;
 }
 
 .main-wrapper {
@@ -51,6 +82,10 @@ md-tooltip {
     // background-color: yellow;
     opacity: 0 !important;
   }
+}
+
+.page-loader {
+  padding: 40px 0;
 }
 
 
@@ -169,6 +204,17 @@ md-checkbox.small {
   }
 }
 
+// Md-select
+
+md-select {
+  &.no-border {
+    .md-select-value {
+      border: none !important;
+    }
+  }
+}
+
+
 // Md-menu
 
 md-menu-content {
@@ -245,7 +291,17 @@ p.global-error {
   // Button
   &.md-button,
   &.md-button:not([disabled]):hover {
-    color: $color-gray-light !important;
+    color: $color-white !important;
+    background-color: $text-disabled !important;
+  }
+
+  &.md-button.md-no-ink {
+    color: $text-secondary !important;
+    background-color: transparent !important;
+    &:hover {
+      color: $text-secondary !important;
+      background-color: rgba(158, 158, 158, 0.2) !important;
+    }
   }
 }
 
@@ -311,6 +367,8 @@ p.global-error {
   position: fixed;
   top:0;
   left: 0;
+  width: calc(100% - 10px);
+  box-shadow: $whiteframe-shadow-4dp;
 
   &.toolbar-global {
     background-color: #1A237E;
@@ -319,6 +377,7 @@ p.global-error {
       padding-right: 12px;
     }
   }
+
   .md-toolbar-tools {
     max-height: 48px;
     height: 48px;
@@ -367,6 +426,11 @@ p.global-error {
   searchbar {
     padding-right: 0;
   }
+
+  // Crossbrowser fixes
+  .browser-microsoft_edge & {
+    width: calc(100% - 12px);
+  }
 }
 
 .md-medium-tall {
@@ -375,7 +439,8 @@ p.global-error {
   }
 
   .md-toolbar-tools {
-    background-color: $color-primary;
+    // background-color: $color-primary;
+    background-color: #1A237E;
   }
 
   .md-toolbar-tools-bottom {
@@ -411,8 +476,10 @@ p.global-error {
   }
 
   .project-submenu {
+    margin: 0 10px 0 10px;
+    .md-menu,
     .md-button {
-      margin: 0 12px;
+      min-width: 80px !important;
     }
   }
 
@@ -423,6 +490,12 @@ p.global-error {
       margin-right: 10px;
       padding: 0 12px !important;
       line-height: 48px;
+      // border-radius: 3px 3px 0 0;
+
+      &:hover {
+        color: #fff;
+        background-color: $color-primary !important;
+      }
 
       &.active {
         background-color: #fff !important;
@@ -445,7 +518,7 @@ p.global-error {
       line-height: 36px;
 
       &:last-of-type {
-        margin-right: 14px;
+        margin-right: 0;
       }
 
       &.menu-separator {
@@ -460,7 +533,7 @@ p.global-error {
 
     .md-button {
       float: right;
-      margin: 0 12px 0 5px;
+      margin: 0 14px 0 6px;
 
       .material-icons,
       > span {
@@ -554,7 +627,6 @@ p.global-error {
   }
 
   .share-button-container {
-
     overflow: hidden;
 
     .share-copy {
@@ -597,16 +669,6 @@ p.global-error {
   }
 }
 
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 7px;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0,0,0,.5);
-  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
-}
-
 /* FOOTER - DISCLAIMER
    ============================= */
 
@@ -616,11 +678,4 @@ footer.disclaimer {
   text-align: center;
   font-size: 10px;
   line-height: 14px;
-}
-
-.md-select-menu-container {
-  z-index: 500;
-  &.topalign {
-    transform: translate(10px, 65px);
-  }
 }

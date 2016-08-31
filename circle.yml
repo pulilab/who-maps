@@ -1,8 +1,8 @@
 machine:
   python:
     version: 3.4.3
-  # node:
-    # version: 4.2.2
+  node:
+    version: 5.7.0
   environment:
     DATABASE_URL: localhost
   services:

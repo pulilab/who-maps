@@ -6,7 +6,10 @@ const signupComponent = {
     controller: SignupController.signupFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'signup'
+    name: 'signup',
+    bindings: {
+        landingPage: '@'
+    }
 };
 
 export default signupComponent;

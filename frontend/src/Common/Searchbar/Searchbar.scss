@@ -122,6 +122,8 @@ searchbar {
 
     #closebtn {
       top: 15px;
+      right: 40px;
+      border-radius: 50px;
 
       .material-icons {
         color: $color-gray-light !important;

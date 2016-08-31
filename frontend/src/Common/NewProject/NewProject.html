@@ -1,4 +1,4 @@
-<div layout="column" class="new-edit-project" layout-fill layout-align="start center" >
+<div layout="column" class="new-edit-project" layout-align="start center" >
     <div class="page-title" ng-hide="vm.editMode">
         <h1 class="md-display-1 text-center">Add new project sheet</h1>
         <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
@@ -13,9 +13,9 @@
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
 
-    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate id="npf">
-            <div layout="column" layout-fill class="main-form">
+    <div md-whiteframe="2" class="layout-padding-xl wrapper" ng-if="vm.dataLoaded">
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)" layout="column" layout-fill novalidate>
+            <div layout="column" class="main-form">
                 <h4>1. Project details</h4>
                 <div class="project-name" flex="100" layout="row" layout-align="start center">
                     <md-input-container flex="60">
@@ -624,23 +624,24 @@
 
 
                         <div class="interoperability-links" layout="column"  >
-                            <div class="interoperability" layout="row" layout-align="left center" ng-repeat="link in vm.structure.interoperability_links">
+                            <div class="interoperability" layout="row" layout-align="left center"  ng-repeat="link in vm.structure.interoperability_links">
                                 <div flex="40">
                                     <md-checkbox
                                             class="md-primary"
-                                            ng-checked="vm.interoperabilityLinksChecked($index)"
-                                            ng-click="vm.focusSpecifyField($index)">
+                                            ng-model="vm.project.interoperability_links[$index].selected">
                                         {{link}}
                                     </md-checkbox>
                                 </div>
 
                                 <div flex="60">
-                                    <md-input-container flex="100" ng-click="vm.focusSpecifyField($index)" layout-fill>
+                                    <md-input-container flex="100"  layout-fill>
                                         <label>Specify URL:</label>
                                         <input
                                                 type="text"
                                                 ng-pattern="vm.urlRegex"
-                                                name="link_{{$index}}" id="interoperabilityLink_{{$index}}" ng-blur="vm.interoperabilityLinkBlur($index)" ng-model="vm.project.interoperability_links[$index]">
+                                                name="link_{{$index}}" id="interoperabilityLink_{{$index}}"
+                                                ng-disabled="!vm.project.interoperability_links[$index].selected"
+                                                ng-model="vm.project.interoperability_links[$index].link">
                                         <div ng-messages="vm.newProjectForm['link_' + $index].$error">
                                             <div ng-message="pattern">This should be a valid link</div>
                                         </div>
@@ -702,7 +703,7 @@
                 </div>
 
             </div>
-            <div layout="row">
+            <div layout="row" class="edit-button">
                 <div flex="50" layout="row" layout-align="start center">
                     <md-button class="md-gray md-raised" ng-if="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
                     <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
@@ -716,7 +717,7 @@
         </form>
 
     </div>
-    <section md-whiteframe="2" layout-fill class="my-projects" ng-if="vm.editMode">
+    <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
         <h5> My projects ({{vm.userProjects.length}})</h5>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                      current-project="vm.isCurrentProject(p.id)"

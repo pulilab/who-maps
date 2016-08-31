@@ -13,8 +13,7 @@ class ContinuumController {
     }
 
     onInit() {
-        const vm = this;
-        vm.bindEvents();
+        this.bindEvents();
         this.reqIcons();
         this.gridLoading = false;
         this.editMode = false;
@@ -23,10 +22,10 @@ class ContinuumController {
         this.numberOfRow = 1;
         this.helperRealHeight = (this.rowHeight * this.numberOfRow) + 'px';
         this.classGenerator = this.classGenerator.bind(this);
-        vm.hs = this.service;
-        vm.showEditModeSpinner = false;
-        vm.firstRow = this.firstRowGenerator();
-        vm.motherRow = this.motherRowGenerator();
+        this.hs = this.service;
+        this.showEditModeSpinner = false;
+        this.firstRow = this.firstRowGenerator();
+        this.motherRow = this.motherRowGenerator();
 
     }
 
@@ -37,9 +36,9 @@ class ContinuumController {
     }
 
     bindEvents() {
-        const vm = this;
-        vm.EE.on('editModeDone', vm.editModeChangeDone, vm);
-        window.onscroll = vm.scrollEventHandler.bind(vm);
+        this.EE.on('editModeDone', this.editModeChangeDone, this);
+        window.onscroll = this.scrollEventHandler.bind(this);
+        document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
     }
 
     removeEvents() {
@@ -54,11 +53,11 @@ class ContinuumController {
     editModeChangeDone() {
         this.showEditModeSpinner = false;
     }
-    scrollEventHandler() {
+    scrollEventHandler(e) {
         const vm = this;
         vm.timeout(() => {
             if (angular.element(vm.element)[0]) {
-                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollTop = e.target.scrollTop;
                 vm.isFixed = scrollTop >= angular.element(vm.element)[0].offsetTop;
                 vm.helperHeight = vm.isFixed ? vm.helperRealHeight : 0;
             }
