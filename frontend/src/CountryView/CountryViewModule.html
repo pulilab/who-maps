@@ -5,7 +5,6 @@
         <div class="littleheader">COUNTRY LEVEL VIEW</div>
         <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" flex="75" class="clv-tab-container">
 
-
             <!-- MAP VIEW -->
             <md-tab label="map view">
 
@@ -15,7 +14,7 @@
                         <md-input-container>
                             <md-select
                                     class="no-border"
-                                    md-container-class="country-chooser"
+                                    md-container-class="country-chooser topalign"
                                     ng-model-options="{trackBy: '$value.id'}"
                                     placeholder='Select a country'
                                     ng-model="vm.selectedCountry"
@@ -63,7 +62,7 @@
                             <md-input-container>
                                 <md-select
                                         class="no-border"
-                                        md-container-class="country-chooser"
+                                        md-container-class="country-chooser topalign"
                                         ng-model-options="{trackBy: '$value.id'}"
                                         placeholder='Select a country'
                                         ng-model="vm.selectedCountry"
