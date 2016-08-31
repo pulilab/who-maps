@@ -3,7 +3,9 @@
 
 signup {
 
-  .browser-safari & {
+  // Crossbrowser fixes
+  .browser-safari &,
+  .browser-ie.version-11 & {
     .signup-wrapper {
       height: auto !important;
     }

@@ -208,7 +208,7 @@
   #map {
 
     position: relative;
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 150px);
     background-color: $color-gray-lightest;
 
     .zoomhandlers2 {
@@ -228,10 +228,10 @@
 
     .countrychoser {
 
-      height: 45px;
+      height: 43px;
       display: block;
       position: absolute;
-      top: 10px;
+      top: 12px;
       right: 15px;
 
       md-input-container {
@@ -265,7 +265,7 @@
 
   #list {
 
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 150px);
 
     .projectcont {
 
@@ -283,10 +283,10 @@
 
       .countrychoser {
 
-        height: 45px;
+        height: 43px;
         display: block;
         position: absolute;
-        top: 10px;
+        top: 12px;
         left: 13px;
 
         md-input-container {

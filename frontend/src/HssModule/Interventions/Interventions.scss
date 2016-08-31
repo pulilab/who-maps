@@ -40,8 +40,14 @@ interventions {
     height: 100%;
 
     md-list-item {
+      box-sizing: border-box;
       padding: 5px;
       min-height: auto;
+      width: 100%;
+
+      .md-list-item-text {
+        width: 100%;
+      }
     }
 
     md-input-container {

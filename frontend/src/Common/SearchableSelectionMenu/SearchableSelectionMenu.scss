@@ -132,7 +132,13 @@ ssmenu.multiline {
   }
 
   &.project-chooser {
-    transform: translate(9px, 9px);
+    transform: translate(9px, 9px) !important;
+  }
+
+  &.topalign {
+    // top: 0 !important;
+    // left: 0 !important;
+    // transform: translate(17px, 65px) !important;
   }
 
   .selection-limit {

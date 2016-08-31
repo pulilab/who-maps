@@ -431,6 +431,9 @@ p.global-error {
   .browser-microsoft_edge & {
     width: calc(100% - 12px);
   }
+  .browser-ie.version-11 & {
+    width: calc(100% - 17px);
+  }
 }
 
 .md-medium-tall {
@@ -610,6 +613,12 @@ p.global-error {
     color: $color-gray-light;
     text-transform: uppercase;
     font-size:12px;
+
+    // Crossbrowser fixes
+    .browser-ie.version-11 & {
+      left: 0;
+      margin-left: 20px;
+    }
   }
 
   .share-url-box {
@@ -620,10 +629,9 @@ p.global-error {
     border:0;
     left: 20px;
     top: 50px;
-    width:351px;
+    width:350px;
     height:35px;
     background: $color-gray-lighter;
-
   }
 
   .share-button-container {
