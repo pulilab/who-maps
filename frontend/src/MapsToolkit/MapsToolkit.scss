@@ -10,6 +10,14 @@ maps-toolkit {
   }
 }
 
+// Crossbrowser fixes
+.domain-questions {
+  .browser-ie.version-11 & {
+    display: block;
+    overflow: hidden;
+  }
+}
+
 .question-header {
   flex: 1 0 auto !important;
   padding-bottom: 10px;
@@ -27,6 +35,7 @@ maps-toolkit {
     text-transform: none;
     font-size:20px;
     line-height: 24px;
+    display: block;
   }
 }
 
