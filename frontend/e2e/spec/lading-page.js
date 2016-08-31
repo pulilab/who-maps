@@ -66,8 +66,18 @@ describe('login page', () => {
             expect(loginForm.form.isVisible()).toBeTruthy();
         });
 
-        it('that has email address input', () => {
-            expect(loginForm.email.isVisible()).toBeTruthy();
+        describe('email address input', () => {
+            it('should exist', () => {
+                expect(loginForm.email.isVisible()).toBeTruthy();
+            });
+
+            it('should have an error message if is filled with a wrong address', () => {
+                loginForm.email.setValue('a');
+                loginForm.password.click();
+                const error = new FieldErrors(loginForm.email).email;
+                console.log(error);
+                expect(error.isVisible()).toBeTruthy();
+            })
         });
 
         it('that has password input', () => {
@@ -123,6 +133,13 @@ describe('signup page', () => {
                 signupForm.fillWrongly();
                 const emailError = new FieldErrors(signupForm.email).email;
                 expect(emailError.isVisible()).toBeTruthy();
+            });
+
+            it('should show an error when left empty after being clicked', () => {
+                signupForm.email.click();
+                signupForm.password.click();
+                const requiredError = new FieldErrors(signupForm.email).required;
+                expect(requiredError.isVisible()).toBeTruthy();
             })
         });
 
@@ -171,8 +188,7 @@ describe('signup page', () => {
             });
 
             it('should perform the registration when clicked', () => {
-                signupForm.fillCorrectly();
-                signupForm.submit.click();
+                signupForm.register();
                 signupForm.confrimationBox.waitForVisible(3000);
             })
         });

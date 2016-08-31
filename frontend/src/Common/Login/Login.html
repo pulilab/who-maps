@@ -9,7 +9,7 @@
             <form layout="column" name="vm.loginForm" ng-submit="vm.login()" novalidate>
                 <md-input-container>
                     <label>Email address</label>
-                    <input ng-required="true" name="username" ng-model="vm.user.username" type="text" ng-change="vm.handleCustomError('username')" />
+                    <input ng-required="true" name="username" ng-model="vm.user.username" type="email" ng-change="vm.handleCustomError('username')" />
                     <div ng-messages="vm.loginForm.username.$error">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="email">This field must be a valid email.</div>
