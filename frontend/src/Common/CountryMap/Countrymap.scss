@@ -99,7 +99,11 @@
       padding: 5px 12px;
 
       &.mainbig {
-        padding: 0 0 3px 5px;
+        padding: 0;
+
+        .projectname, .projectorg {
+          padding-left: 12px;
+        }
       }
 
       &.main2 {
