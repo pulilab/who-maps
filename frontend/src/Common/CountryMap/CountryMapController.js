@@ -209,7 +209,7 @@ class CountrymapController {
             'Burkina Faso':                 'admin_level_5', // #2
             'Cape Verde':                   'admin_level_6', // #2.1
             'Guinea':                       'admin_level_6', // #2
-            'India':                        'admin_level_5', // #1
+            // 'India':                        'admin_level_5', // #1
             'Jamaica':                      'admin_level_6', // #2.1
             'Nepal':                        'admin_level_6', // #1.5
             'Philippines':                  'admin_level_3', // #1
