@@ -13,12 +13,18 @@ continuum {
     position: fixed;
     top: 48px;
     left: 30px;
-    width: calc(100% - 60px);
+    width: calc(100% - 70px);
+    max-width: calc(100% - 70px);
     height: 150px;
     z-index: 200;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,.2);
-    animation: show_continuum 400ms ease-out 1;
+    box-shadow: $whiteframe-shadow-4dp;
+    animation: show_continuum 300ms ease-out 1;
+
+    .browser-microsoft_edge & {
+      width: calc(100% - 72px);
+      max-width: calc(100% - 72px);
+    }
   }
 
   @keyframes show_continuum {

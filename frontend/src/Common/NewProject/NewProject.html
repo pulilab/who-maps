@@ -703,7 +703,7 @@
                 </div>
 
             </div>
-            <div layout="row">
+            <div layout="row" class="edit-button">
                 <div flex="50" layout="row" layout-align="start center">
                     <md-button class="md-gray md-raised" ng-if="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
                     <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
@@ -717,7 +717,7 @@
         </form>
 
     </div>
-    <section md-whiteframe="2" layout-fill class="my-projects" ng-if="vm.editMode">
+    <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
         <h5> My projects ({{vm.userProjects.length}})</h5>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                      current-project="vm.isCurrentProject(p.id)"

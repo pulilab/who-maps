@@ -99,6 +99,15 @@ new-project {
     form {
       // flex: 1 0 auto !important;
     }
+
+    .edit-button {
+      padding-bottom: 20px;
+
+      .md-button {
+        padding-right:20px;
+        padding-left:20px;
+      }
+    }
   }
 
   h4 {
@@ -106,6 +115,7 @@ new-project {
     background: #EEEEEE;
     line-height: 55px;
     padding-left:20px;
+    margin: 20px 0;
     border-bottom: 1px solid $color-gray-light;
   }
 
@@ -402,9 +412,9 @@ new-project {
     display: block;
     border-top: 1px solid $color-gray-light;
     background: $color-gray-lightest;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding-bottom: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 40px;
 
     h5 {
       font-size:20px;

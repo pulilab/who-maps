@@ -4,9 +4,10 @@
         <h6 class="md-subhead text-center">Use this framework to present 1) what your digital health intervention does, 2) the health system constraints it addresses, and 3) the essential health interventions it impacts. <introjs source-string="vm.introJsSource" class="start-hss-intro"></introjs></h6>
     </div>
 
-    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.gridLoading">
+    <div class="page-loader" layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.gridLoading">
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
+
     <div md-whiteframe="2" class="page-wrapper" ng-if="vm.dataReady" ng-hide="vm.gridLoading">
         <hint show-long="true">
             <long>You can click on the continuum areas to activate or deactivate a section. Please note that this will affect the Applications part too.</long>

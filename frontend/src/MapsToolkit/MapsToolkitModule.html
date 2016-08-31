@@ -1,4 +1,4 @@
-<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+<div class="page-loader" layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
     <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
 </div>
 
@@ -38,7 +38,7 @@
                 </thematic>
             </div>
             <section ng-repeat="question in vm.data.questions" >
-                <md-subheader >
+                <md-subheader class="md-no-sticky" >
                     <div layout="row" flex="100" class="question-header">
                         <div flex="{{vm.calculateMainBoxSize(question)}}" layout="column" class="question-text" layout-align="center start">
                             {{question.id}}.{{question.text}} ({{question.question_max}} Points)
@@ -73,13 +73,13 @@
             </section>
         </div>
 
-        <div class="domain-score"  layout-fill layout="row" layout-align="center start">
-            <span flex layout="column" layout-fill layout-align="center start"> Total point earned (out of a possible {{vm.domain.domain_max}}) </span>
-            <span flex layout="column" layout-fill layout-align="center end">{{vm.score}}</span>
+        <div class="domain-score" flex layout="row">
+            <div flex="90" class="total-point"> Total point earned (out of a possible {{vm.domain.domain_max}}) </div>
+            <div flex="10" class="vm-score">{{vm.score}}</div>
         </div>
 
-        <div class="domain-button" layout="row" layout-fill>
-            <div flex="50" layout="column" layout-align="center start">
+        <div class="domain-button" layout="row">
+            <div flex="50" class="domain-action-left">
                 <md-button class="md-raised md-primary"
                            ng-disabled="vm.backButtonDisabled()"
                            ng-click="vm.goToPrevDomain()">
@@ -87,7 +87,7 @@
                     Go to prev domain
                 </md-button>
             </div>
-            <div flex="50" layout="row" layout-align="end center">
+            <div flex="50" class="domain-action-right">
                 <md-button class="md-raised md-primary"
                            ng-hide="vm.isLastDomainInAxis()"
                            ng-click="vm.goToNextDomain()">
@@ -103,3 +103,5 @@
     </div>
     <axis-footer axes="vm.rawData"></axis-footer>
 </div>
+
+<disclaimer></disclaimer>

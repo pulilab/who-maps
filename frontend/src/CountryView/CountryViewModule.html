@@ -14,7 +14,8 @@
                     <md-card md-whiteframe="2" class="countrychoser">
                         <md-input-container>
                             <md-select
-                                    md-container-class="topalign"
+                                    class="no-border"
+                                    md-container-class="country-chooser"
                                     ng-model-options="{trackBy: '$value.id'}"
                                     placeholder='Select a country'
                                     ng-model="vm.selectedCountry"
@@ -61,7 +62,8 @@
                         <md-card md-whiteframe="2" class="countrychoser" flex="nogrow">
                             <md-input-container>
                                 <md-select
-                                        md-container-class="topalign"
+                                        class="no-border"
+                                        md-container-class="country-chooser"
                                         ng-model-options="{trackBy: '$value.id'}"
                                         placeholder='Select a country'
                                         ng-model="vm.selectedCountry"
@@ -72,10 +74,7 @@
                                 </md-select>
                             </md-input-container>
                         </md-card>
-
                     </div>
-
-
 
                     <md-content class="projectcont">
 
@@ -216,4 +215,3 @@
 
     <disclaimer></disclaimer>
 </div>
-
