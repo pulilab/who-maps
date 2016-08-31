@@ -39,7 +39,26 @@
 
                     <div class="headercont" layout="row">
 
-                        <md-card md-whiteframe="2" class="countrychoser">
+
+                        <div class="exports" flex="40">
+                            <md-button class="md-primary" ng-click="vm.exportPDF()">
+                                <md-icon>file_download</md-icon>
+                                Export (PDF)
+                            </md-button>
+                            <md-button class="md-primary" ng-click="vm.exportCSV()">
+                                <md-icon>file_download</md-icon>
+                                Export (CSV)
+                            </md-button>
+                        </div>
+
+                        <div class="starry" flex="25">
+                            <md-icon>grade</md-icon>
+                            Team member
+                            <md-icon>visibility</md-icon>
+                            Viewer
+                        </div>
+
+                        <md-card md-whiteframe="2" class="countrychoser" flex="nogrow">
                             <md-input-container>
                                 <md-select
                                         class="no-border"
@@ -54,27 +73,56 @@
                                 </md-select>
                             </md-input-container>
                         </md-card>
-
-                        <div class="starry">
-                            <md-icon>grade</md-icon>
-                            Team member
-                            <md-icon>visibility</md-icon>
-                            Viewer
-                        </div>
                     </div>
 
                     <md-content class="projectcont">
 
                         <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
-                            <div flex="35">Project name</div>
-                            <div flex="20">Country</div>
-                            <div flex="20">Organisation name</div>
-                            <div flex="20">Donors</div>
-                            <div flex="20">Point of Contact</div>
-                            <div flex="30">Overview of digital health implementation</div>
-                            <div flex="20">Implementing partners</div>
-                            <div flex="20">Geographical coverage</div>
-                            <div flex="20">mHealth interventions</div>
+                            <div flex="35" ng-click="vm.orderTable('name')">
+                                Project name
+                                <md-icon ng-show="vm.header.name.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.name.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="15" ng-click="vm.orderTable('country')">
+                                Country
+                                <md-icon ng-show="vm.header.country.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.country.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="25" ng-click="vm.orderTable('organisation_name')">
+                                Organisation name
+                                <md-icon ng-show="vm.header.organisation_name.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.organisation_name.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('donors')">
+                                Donors
+                                <md-icon ng-show="vm.header.donors.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.donors.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('contact_name')">
+                                Point of Contact
+                                <md-icon ng-show="vm.header.contact_name.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.contact_name.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="30" ng-click="vm.orderTable('implementation_overview')">
+                                Overview of digital health implementation
+                                <md-icon ng-show="vm.header.implementation_overview.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.implementation_overview.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('implementing_partners')">
+                                Implementing partners
+                                <md-icon ng-show="vm.header.implementing_partners.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.implementing_partners.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('geographic_scope')">
+                                Geographical coverage
+                                <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
+                            </div>
+                            <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
+                                mHealth interventions
+                                <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
+                            </div>
                         </div>
 
                         <div
