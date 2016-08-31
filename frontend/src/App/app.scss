@@ -508,27 +508,38 @@ p.global-error {
   }
 
   .project-info {
+    height:48px;
     color: $color-gray;
     font-size: $body-font-size-base;
+
+    .info-block {
+      float: left;
+      height: 48px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-left: 1px solid #E0E0E0;
+
+      h6 {
+        font-size: 10px;
+        font-weight: 500;
+        height:14px;
+        margin: 10px 0 0;
+        padding: 0;
+        text-transform: uppercase;
+      }
 
     > span {
       display: inline-block;
       float: left;
-      min-height: 36px;
-      line-height: 36px;
-
+      min-height: 24px;
+      line-height: 12px;
+      color: $color-black;
+      font-size:12px;
+      font-weight: 500;
       &:last-of-type {
         margin-right: 0;
       }
-
-      &.menu-separator {
-        margin: 10px 12px 10px 12px;
-        min-height: 16px;
-        width: 1px;
-        height: 16px;
-        background-color: #BDBDBD;
-        line-height: 16px;
-      }
+    }
     }
 
     .md-button {
@@ -550,12 +561,18 @@ p.global-error {
 
     .contact-button {
       &.md-button {
+        margin: 0;
+        font-size:12px;
+        padding-top: 10px;
 
         span,
         .material-icons {
-          line-height: 24px;
-          color: $color-gray-light !important;
-          font-size: 14px !important;
+          margin:0;
+          padding: 0;
+          line-height: 12px;
+          font-size:12px;
+          height:12px;
+          color: $color-primary !important;
         }
       }
     }
