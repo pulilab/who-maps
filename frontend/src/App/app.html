@@ -167,7 +167,7 @@
                                 <span class="share-title">Share Public Link</span>
                             </md-menu-item>
                             <md-menu-item>
-                                    <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
+                                <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
                             </md-menu-item>
                             <md-menu-item>
                                 <div class="share-button-container" >
@@ -243,26 +243,31 @@
                 <div flex></div>
 
                 <div class="project-info" layout="row">
-                    <span>
-                        Version:
-                        {{vm.currentProject.last_version || '0'}}.
-                        {{vm.currentProject.last_version ? ('(' + (vm.currentProject.last_version_date | date: medium) + ')') : '' }}
-                    </span>
-                        <span class="menu-separator"></span>
-                    <span>
-                    Organization:
-                    {{vm.currentProject.organisation.name}}
-                    </span>
-                        <span class="menu-separator"></span>
-                    <span>
-                    Contact Person:
+                    <div class="info-block">
+                        <h6>UUID</h6>
+                        <span>{{vm.currentProject.public_id}}</span>
+                    </div>
+                    <div class="info-block">
+                        <h6>Version</h6>
+                        <span>
+                            {{vm.currentProject.last_version || '0'}}.
+                            {{vm.currentProject.last_version ? ('(' + (vm.currentProject.last_version_date | date: medium) + ')') : '' }}
+                       </span>
+                    </div>
+                    <div class="info-block">
+                        <h6>Organization</h6>
+                        <span>{{vm.currentProject.organisation.name}}</span>
+                    </div>
+                    <div class="info-block">
+                        <h6>Contact Person</h6>
+                        <span>{{vm.currentProject.contact_name}}</span>
+                    </div>
                     <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
-                    <md-icon class="material-icons">
-                    mail_outline
-                    </md-icon>
-                    {{vm.currentProject.contact_name}}
+                        <md-icon class="material-icons">
+                            mail_outline
+                        </md-icon>
+                        EMAIL
                     </md-button>
-                    </span>
                 </div>
             </div>
         </md-toolbar>

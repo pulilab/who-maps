@@ -205,62 +205,21 @@ class CountrymapController {
         });
 
         const levelLib = {
-            'Afghanistan':                  'admin_level_4', // #2
-            'Angola':                       'admin_level_4', // #2
-            'Benin':                        'admin_level_4', // #1.5
-            'Border India - Bangladesh':    'admin_level_4', // #1
-            'Border Malawi - Mozambique':   'admin_level_4', // #1
-            'Botswana':                     'admin_level_4', // #2
-            'Brazil':                       'admin_level_4', // #2
+            'Albania':                      'admin_level_6', // #2.1
             'Burkina Faso':                 'admin_level_5', // #2
-            'Cameroon':                     'admin_level_4', // #2
-            'Central Arican Republic':      'admin_level_4', // #2
-            'Chad':                         'admin_level_4', // #2
-            'Congo Bazzaville':             'admin_level_4', // #2
-            'Congo Kinshasa':               'admin_level_4', // #2
-            'Costa Rica':                   'admin_level_4', // #2
-            'Ethiopia':                     'admin_level_4', // #2
-            'Gabon':                        'admin_level_4', // #2
-            'Ghana':                        'admin_level_4', // #1.5
-            'Guinea Bissau':                'admin_level_4', // #2
+            'Cape Verde':                   'admin_level_6', // #2.1
             'Guinea':                       'admin_level_6', // #2
-            'Haiti':                        'admin_level_4', // #2
-            'Honduras':                     'admin_level_4', // #2
             'India':                        'admin_level_5', // #1
-            'Indonesia':                    'admin_level_4', // #1
-            'Kenya':                        'admin_level_4', // #1
-            'Liberia':                      'admin_level_4', // #1.5
-            'Madagascar':                   'admin_level_4', // #2
-            'Malaysia':                     'admin_level_4', // #2
-            'Mali':                         'admin_level_4', // #1.5
-            'Mexico':                       'admin_level_4', // #2
-            'Morocco':                      'admin_level_4', // #2
-            'Mozambique':                   'admin_level_4', // #2
-            'Myanmar':                      'admin_level_4', // #2
-            'Namibia':                      'admin_level_4', // #2
+            'Jamaica':                      'admin_level_6', // #2.1
             'Nepal':                        'admin_level_6', // #1.5
-            'Nicaragua':                    'admin_level_4', // #2
-            'Niger':                        'admin_level_4', // #2
-            'Nigeria':                      'admin_level_4', // #1.5
-            'Pakistan':                     'admin_level_4', // #1
-            'Peru':                         'admin_level_4', // #2
             'Philippines':                  'admin_level_3', // #1
-            'Rwanda':                       'admin_level_4', // #2
-            // 'Senegal':                       'admin_level_3', // #1
             'Sierra Leone':                 'admin_level_5', // #1
-            'South Arica':                  'admin_level_4', // #1.5
-            'South Sudan':                  'admin_level_4', // #2
-            'Sri Lanka':                    'admin_level_4', // #1.5
-            'Sudan':                        'admin_level_4', // #2
-            'Swaziland':                    'admin_level_4', // #2
-            'Tanzania':                     'admin_level_4', // #1.5
             'The Gambia':                   'admin_level_5', // #1
-            'Togo':                         'admin_level_4', // #2
-            'Tunisia':                      'admin_level_4', // #1
-            'Uganda':                       'admin_level_6', // #1.5
-            'Vietnam':                      'admin_level_4', // #1.5
-            'Zambia':                       'admin_level_4', // #1.5
-            'Zimbabwe':                     'admin_level_4'  // #2
+            'Uganda':                       'admin_level_6'  // #1.5
+            // 'Senegal':                       'admin_level_3', // #1
+            // 'Thailand':                     'admin_level_4', // #2.1
+            // 'Île Verte':                    'admin_level_6', // #2.1 Canada
+            // 'Trinidad and Tobago':          'admin_level_2'  // #2.1
         };
 
         _.merge(defaultLib, levelLib);

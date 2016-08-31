@@ -3,6 +3,47 @@ import os
 MAPZEN_S3_URL = "https://s3.amazonaws.com/osm-polygons.mapzen.com/"
 GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), 'temp/')
 SELECTED_FILE_LIST = [
+    # NEW ONES
+    "albania_geojson.tgz",
+    "algeria_geojson.tgz",
+    "argentina_geojson.tgz",
+    "armenia_geojson.tgz",
+    "azerbaijan_geojson.tgz",
+    "bolivia_geojson.tgz",
+    "burundi_geojson.tgz",
+    "c-te-d-ivoire_geojson.tgz",
+    "djibouti_geojson.tgz",
+    "egypt_geojson.tgz",
+    "guatemala_geojson.tgz",
+    "jamaica_geojson.tgz",
+    "mauritania_geojson.tgz",
+    "turkey_geojson.tgz",
+    "uruguay_geojson.tgz"
+
+    "belarus_geojson.tgz"
+    "bhutan_geojson.tgz",
+    "cape-verde_geojson.tgz",
+    "china_geojson.tgz",
+    "israel_geojson.tgz",
+    "maldives_geojson.tgz",
+    "united-states-of-america_geojson.tgz",
+    "turkmenistan_geojson.tgz",
+    "ukraine_geojson.tgz",
+    "uzbekistan_geojson.tgz",
+    "venezuela_geojson.tgz",
+    "yemen_geojson.tgz"
+
+    # NOT WORKING:
+    # "senegal_geojson.tgz",
+
+    # "paraguay_geojson.tgz",               # no geodata whatsoever
+    # "thailand_geojson.tgz",               # doesnt draw all of them somehow
+    # "trinidad-and-tobago_geojson.tgz"     # no geodata whatsoever
+
+    # "canada_geojson.tgz",                 # malformed json
+    # "eritrea_geojson.tgz",                # no geodata whatsoever
+
+    # OLDER ONES:
     "afghanistan_geojson.tgz",
     "angola_geojson.tgz",
     "bangladesh_geojson.tgz",
@@ -45,7 +86,6 @@ SELECTED_FILE_LIST = [
     "philippines_geojson.tgz",
     "rwanda_geojson.tgz",
     "sierra-leone_geojson.tgz",
-    # "senegal_geojson.tgz",
     "south-africa_geojson.tgz",
     "south-sudan_geojson.tgz",
     "sri-lanka_geojson.tgz",
@@ -58,13 +98,16 @@ SELECTED_FILE_LIST = [
     "uganda_geojson.tgz",
     "vietnam_geojson.tgz",
     "zambia_geojson.tgz",
-    "zimbabwe_geojson.tgz",
+    "zimbabwe_geojson.tgz"
 ]
+
+# SELECTED_FILE_LIST_DEV = SELECTED_FILE_LIST
 SELECTED_FILE_LIST_DEV = [
     "sierra-leone_geojson.tgz",
     "rwanda_geojson.tgz",
     "uganda_geojson.tgz"
 ]
+
 ADMIN_LEVELS_TO_IMPORT = [
     "admin_level_2.geojson",
     "admin_level_3.geojson",

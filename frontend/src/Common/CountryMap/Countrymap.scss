@@ -17,7 +17,10 @@
 
     .colorednr {
       color: white;
-      width: 30px;
+      min-width: 42px;
+      padding-left: 2px;
+      padding-right: 2px;
+      margin-left: 8px !important;
       font-weight: 500;
       text-align: center;
       border-radius: 3px;
