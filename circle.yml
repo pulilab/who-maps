@@ -29,7 +29,7 @@ test:
   pre:
     - cd django && py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc
     - cd frontend && npm run test -- --single-run
-    - cd frontend && npm run e2e
+    - cd frontend && npm run e2e-circleci
     # - docker build ./django
     # - docker-compose up -d
     # - docker exec -it whomaps_django_1 python manage.py migrate
