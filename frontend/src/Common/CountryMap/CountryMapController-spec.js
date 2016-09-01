@@ -215,7 +215,7 @@ describe('CountryMapController', () => {
         vm.cs = { projectStructure: { countries: countriesMock } };
 
         const levLibMadeNow = vm.defaultLevels();
-        expect(levLibMadeNow.India).toBe('admin_level_5');
+        expect(levLibMadeNow.India).toBe('admin_level_4');
     });
 
     it('formatCountryName() formats the self.country bindable upon a library', () => {
