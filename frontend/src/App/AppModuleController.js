@@ -158,6 +158,7 @@ class AppModuleController extends Protected {
             }
         });
 
+
         if (forcedPath) {
             this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
                 location: 'replace',

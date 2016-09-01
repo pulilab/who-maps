@@ -16,6 +16,11 @@
     &.logged-in {
       background-image: url("./images/bg-welcome-2.jpg");
     }
+
+    // Crossbrowser fixes
+    .browser-microsoft_edge & {
+      background-position: 0 0;
+    }
   }
 
   .welcome {
@@ -29,6 +34,10 @@
       padding-right: 50px;
     }
 
+    searchbar {
+      z-index: 900 !important;
+    }
+
     h2, h5 {
       color: $color-white;
       word-wrap: break-word;
@@ -38,7 +47,15 @@
   .content-wrapper {
     position: relative;
     margin: 0 30px;
+    padding: 0 0 100px;
     background-color: $color-primary;
+
+    // Crossbrowser fixes
+    .browser-firefox &,
+    .browser-microsoft_edge &,
+    .browser-ie.version-11 & {
+      padding: 0;
+    }
 
     &::before {
       position: absolute;
@@ -55,7 +72,6 @@
 
     .what-is-aside {
       margin-top: -50px;
-      margin-bottom: 100px;
       padding: 50px;
       min-height: 500px;
       background: url("./images/bg-whatis.jpg") 0 0 no-repeat;
@@ -69,6 +85,7 @@
 
       .dha-feature {
         float: left;
+        width: 100%;
         margin: 25px 0;
 
         .img-wrapper {
@@ -99,6 +116,7 @@
           margin: 0 0 25px 30px;
           color: $color-white;
 
+          // Crossbrowser fixes
           .browser-safari & {
             margin-left: 50px;
           }
@@ -107,23 +125,26 @@
     }
 
     .content-main {
+      overflow: hidden;
       position: relative;
       z-index: 100;
       margin-top: -225px;
       margin-right: 0;
-      margin-bottom: 100px;
       margin-left: 0;
-      padding: 40px 120px;
+      padding: 40px 100px 40px;
       background-color: $color-white;
 
-      .browser-firefox & {
-        bottom: 220px;
-        margin-top: 0;
-        margin-bottom: 0;
+      // Crossbrowser fixes
+      .browser-firefox &,
+      .browser-microsoft_edge &,
+      .browser-ie.version-11 & {
+        padding-bottom: 240px;
       }
 
+      &.logged-out {}
+
       &.logged-in {
-        padding-bottom: 80px;
+        padding: 40px 100px 340px;
         background-color: $color-gray-lightest;
       }
 
@@ -141,11 +162,10 @@
         font-size: $title-font-size-base;
       }
 
-      .hidden {
-        overflow: hidden;
-        height: 0;
-        opacity: 0;
-        pointer-events: none;
+      form {
+        display: block;
+        float: left;
+        width: 100%;
       }
 
       .form-actions {
@@ -157,60 +177,6 @@
         .md-button {
           margin: 0;
           min-width: 150px;
-        }
-      }
-
-      .role-form {
-        .img-role {
-          position: absolute;
-          top: -15px;
-          left: -120px;
-          margin: 0 10px 0 5px;
-          width: 48px;
-          transition: $swift-ease-out;
-        }
-
-        p {
-          margin: 0 20px 40px 100px;
-          transition: $swift-ease-out;
-        }
-
-        md-radio-button {
-          margin: 0 0 20px;
-          padding: 0 20px 0 100px;
-          font-size: $title-font-size-base;
-
-          .md-container {
-            margin-top: 2px;
-            margin-left: 100px;
-          }
-        }
-
-        md-radio-button:not(.md-checked) {
-          .md-label,
-          + p {
-            color: $text-disabled;
-          }
-          .img-role {
-            opacity: .4;
-          }
-        }
-
-        md-radio-button.md-checked {
-          .md-label,
-          + p {
-            color: $text-primary;
-          }
-          .img-role {
-            opacity: 1;
-          }
-        }
-      }
-
-      .main-form {
-        .form-actions {
-          margin-top: 0;
-          border-top: none;
         }
       }
 
@@ -247,7 +213,6 @@
             opacity: 0.5;
           }
         }
-
 
         viewers,
         followers,

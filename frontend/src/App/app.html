@@ -157,8 +157,8 @@
                 </div>
                 <div flex></div>
                 <div class="project-submenu" layout="row">
-                    <md-menu md-offset="16">
-                        <md-button ng-click="vm.openMenu($mdOpenMenu, $event)"  class="" aria-label="Share">
+                    <md-menu md-offset="15" md-position-mode="target-right target">
+                        <md-button ng-click="vm.openMenu($mdOpenMenu, $event)"  class="" aria-label="Share" md-no-ink>
                             <md-icon class="material-icons">share</md-icon>
                             Share
                         </md-button>
@@ -167,7 +167,7 @@
                                 <span class="share-title">Share Public Link</span>
                             </md-menu-item>
                             <md-menu-item>
-                                    <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
+                                <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
                             </md-menu-item>
                             <md-menu-item>
                                 <div class="share-button-container" >
@@ -182,7 +182,7 @@
                                         <md-icon>check</md-icon>
                                         Copied
                                     </md-button>
-                                    <md-button class="share-cancel"  >Close</md-button>
+                                    <md-button class="share-cancel">Close</md-button>
                                 </div>
                             </md-menu-item>
                         </md-menu-content>
@@ -224,11 +224,11 @@
             <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
                 <ssmenu
                         ng-if="!vm.viewMode"
-                        aria-label="Project Choser"
+                        aria-label="Project Chooser"
                         options="vm.user.projects"
                         option-label = "name"
                         ng-model="vm.currentProject.name"
-                        md-container-class="large topalign"
+                        md-container-class="large project-chooser"
                         class="large project-selector"
                         on-close-callback="vm.updateProject"
                         icon-function="vm.iconFunction"
@@ -243,26 +243,31 @@
                 <div flex></div>
 
                 <div class="project-info" layout="row">
-            <span>
-                Version:
-                {{vm.currentProject.last_version || '0'}}.
-                {{vm.currentProject.last_version ? ('(' + (vm.currentProject.last_version_date | date: medium) + ')') : '' }}
-            </span>
-                    <span class="menu-separator"></span>
-            <span>
-            Organization:
-            {{vm.currentProject.organisation.name}}
-            </span>
-                    <span class="menu-separator"></span>
-            <span>
-            Contact Person:
-            <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
-            <md-icon class="material-icons">
-            mail_outline
-            </md-icon>
-            {{vm.currentProject.contact_name}}
-            </md-button>
-            </span>
+                    <div class="info-block">
+                        <h6>UUID</h6>
+                        <span>{{vm.currentProject.public_id}}</span>
+                    </div>
+                    <div class="info-block">
+                        <h6>Version</h6>
+                        <span>
+                            {{vm.currentProject.last_version || '0'}}.
+                            {{vm.currentProject.last_version ? ('(' + (vm.currentProject.last_version_date | date: medium) + ')') : '' }}
+                       </span>
+                    </div>
+                    <div class="info-block">
+                        <h6>Organization</h6>
+                        <span>{{vm.currentProject.organisation.name}}</span>
+                    </div>
+                    <div class="info-block">
+                        <h6>Contact Person</h6>
+                        <span>{{vm.currentProject.contact_name}}</span>
+                    </div>
+                    <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
+                        <md-icon class="material-icons">
+                            mail_outline
+                        </md-icon>
+                        EMAIL
+                    </md-button>
                 </div>
             </div>
         </md-toolbar>

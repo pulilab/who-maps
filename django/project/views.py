@@ -1,5 +1,6 @@
 import functools
 import json
+import csv
 
 from django.db import transaction
 from django.http import HttpResponse, Http404
@@ -84,18 +85,20 @@ class ProjectPublicViewSet(ViewSet):
 
         result_list = functools.reduce(lambda acc, p: acc + [{
             "id": p.id,
+            "uuid": p.public_id,
             "name": p.name,
             "organisation": p.data.get('organisation'),
             "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
             "donors": p.data.get('donors'),
             "country": p.data.get('country'),
+            "country_name": Country.get_name_by_id(p.data.get('country')),
             "contact_name": p.data.get('contact_name'),
             "contact_email": p.data.get('contact_email'),
             "implementation_overview": p.data.get('implementation_overview'),
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
             "health_focus_areas": p.data.get('health_focus_areas'),
-            "geographic_scope": p.data.get('geographic_coverage'),
+            "geographic_scope": p.data.get('geographic_scope'),
             "technology_platforms": p.data.get('technology_platforms'),
             "interventions": p.hss_set.first().get_interventions_list(),
             "continuum": p.hss_set.first().get_continuum_list(),
@@ -424,3 +427,42 @@ class FileDeleteViewSet(TeamTokenAuthMixin, ViewSet):
         self.check_object_permissions(self.request, file.project)
         file.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
+
+    def create(self, request):
+        """
+        Creates CSV file out of a list of project IDs
+        """
+        if not request.data or not isinstance(request.data, list):
+            return HttpResponse()
+
+        projects = Project.objects.filter(id__in=request.data)
+
+        results = [[
+            p.name,
+            Country.get_name_by_id(p.data.get('country')),
+            p.data.get('implementation_dates'),
+            Organisation.get_name_by_id(p.data.get('organisation')),
+            ", ".join(p.data.get('donors')),
+            p.data.get('implementing_partners'),
+            ", ".join(p.hss_set.first().get_interventions_list()),
+            " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
+            p.data.get('implementation_overview')
+        ] for p in projects]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="csv.csv"'
+
+        writer = csv.writer(response)
+
+        # HEADER
+        writer.writerow(['Name', 'Country', 'Date', 'Organisation Name', 'Donors', "Implementing Partners",
+                         "mHealth Interventions", "Point of Contact",
+                         "Overview of digital health implementation", "Geographical coverage"])
+
+        # PROJECTS
+        [writer.writerow([field for field in project]) for project in results]
+
+        return response

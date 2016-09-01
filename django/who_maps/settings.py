@@ -231,7 +231,7 @@ GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')
 
 LEVELS_FOR_DISTRICTS = {
     "sierra-leone": "admin_level_5",
-    "india": "admin_level_5",
+    "india": "admin_level_4",
     "kenya": "admin_level_4",
     "philippines": "admin_level_3",
     "bangladesh": "admin_level_4",
@@ -286,6 +286,10 @@ LEVELS_FOR_DISTRICTS = {
     "swaziland": "admin_level_4",
     "togo": "admin_level_4",
     "zimbabwe": "admin_level_4",
+
+    "jamaica": "admin_level_6",
+    "albania": "admin_level_6",
+    "cape-verde": "admin_level_6"
 }
 
 # Logging

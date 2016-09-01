@@ -1,8 +1,8 @@
 machine:
   python:
     version: 3.4.3
-  # node:
-    # version: 4.2.2
+  node:
+    version: 5.7.0
   environment:
     DATABASE_URL: localhost
   services:
@@ -21,6 +21,9 @@ dependencies:
     - cd frontend && npm install -g webpack
     - cd django && pip install -r requirements.txt
     - cd django && python manage.py migrate
+#    - cd frontend && npm run e2e-server-circleci:
+#          background: true
+#    - sleep 5
 
 test:
   pre:
