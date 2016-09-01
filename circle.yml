@@ -21,11 +21,16 @@ dependencies:
     - cd frontend && npm install -g webpack
     - cd django && pip install -r requirements.txt
     - cd django && python manage.py migrate
+  post:
+    - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
+    - java -jar selenium-server-standalone-2.44.0.jar:
+        background: true
 
 test:
   pre:
     - cd django && py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc
     - cd frontend && npm run test -- --single-run
+    - cd frontend $$ npm run e2e
     # - docker build ./django
     # - docker-compose up -d
     # - docker exec -it whomaps_django_1 python manage.py migrate
