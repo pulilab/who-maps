@@ -22,8 +22,7 @@ dependencies:
     - cd django && pip install -r requirements.txt
     - cd django && python manage.py migrate
   post:
-    - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
-    - java -jar selenium-server-standalone-2.44.0.jar:
+    - cd frontend && npm run e2e-server:
         background: true
 
 test:

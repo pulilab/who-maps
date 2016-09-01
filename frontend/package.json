@@ -66,6 +66,7 @@
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "wdio-jasmine-framework": "^0.2.5",
+    "webdriverio": "^4.2.11",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
