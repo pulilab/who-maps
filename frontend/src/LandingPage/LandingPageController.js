@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { trendingProjects } from './landingMock';
 import { Storage } from '../Common/';
 import SignupService from '../Common/Signup/SignupService';

@@ -447,3 +447,14 @@ md-select-menu {
     text-transform: capitalize!important;
   }
 }
+
+
+// monkey patch for IE
+
+.browser-ie.version-11 {
+  #list {
+    .headercont {
+      height:85px;
+    }
+  }
+}
