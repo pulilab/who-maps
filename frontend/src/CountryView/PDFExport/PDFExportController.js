@@ -127,8 +127,8 @@ class PDFExportController {
                                 fillColor: '#EEEEEE',
                                 style: 'tableHeader', colSpan: this.isAllCountry ? 4 : 5
                             }, '', '', '',
-                            { text: `UUID: ${project.uuid || ''}`, style: 'subHeader' },
-                            this.isAllCountry ? country : ''
+                            this.isAllCountry ? { text: `UUID: ${project.uuid || ''}`, style: 'subHeader' } : '',
+                            this.isAllCountry ? country :  { text: `UUID: ${project.uuid || ''}`, style: 'subHeader' }
                         ],
                         [
                             [{ text: 'Date of: ', style: 'subHeader' }, project.implementation_dates || ''],
