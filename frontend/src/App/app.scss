@@ -511,7 +511,9 @@ p.global-error {
   }
 
   .project-info {
-    height:48px;
+    margin-right: 13px;
+    display: block;
+    height: 48px;
     color: $color-gray;
     font-size: $body-font-size-base;
 
@@ -520,29 +522,29 @@ p.global-error {
       height: 48px;
       padding-left: 15px;
       padding-right: 15px;
-      border-left: 1px solid #E0E0E0;
+      border-left: 1px solid $color-gray-lighter;
 
-      h6 {
-        font-size: 10px;
+        h6 {
+          font-size: 10px;
+          font-weight: 500;
+          height:14px;
+          margin: 8px 0 2px;
+          padding: 0;
+          text-transform: uppercase;
+        }
+
+      > span {
+        display: inline-block;
+        float: left;
+        min-height: 24px;
+        line-height: 12px;
+        color: $text-primary;
+        font-size:12px;
         font-weight: 500;
-        height:14px;
-        margin: 10px 0 0;
-        padding: 0;
-        text-transform: uppercase;
+        &:last-of-type {
+          margin-right: 0;
+        }
       }
-
-    > span {
-      display: inline-block;
-      float: left;
-      min-height: 24px;
-      line-height: 12px;
-      color: $color-black;
-      font-size:12px;
-      font-weight: 500;
-      &:last-of-type {
-        margin-right: 0;
-      }
-    }
     }
 
     .md-button {
@@ -564,18 +566,24 @@ p.global-error {
 
     .contact-button {
       &.md-button {
+        min-width: 0 !important;
         margin: 0;
+        padding: 0;
         font-size:12px;
-        padding-top: 10px;
+        margin-top: 12px;
 
         span,
         .material-icons {
-          margin:0;
+          margin: 0;
           padding: 0;
           line-height: 12px;
           font-size:12px;
           height:12px;
           color: $color-primary !important;
+        }
+        .material-icons {
+          position: relative;
+          top: -1px;
         }
       }
     }

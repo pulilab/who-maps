@@ -317,6 +317,11 @@
         }
       }
 
+      .exports {
+        position: absolute;
+        right: 205px;
+      }
+
       .starry {
         position: absolute;
         top: 15px;
@@ -338,8 +343,7 @@
     }
 
     .projectcont {
-      margin-top: 35px;
-      padding: 10px 0;
+      padding: 0 0 10px;
       background-color: $color-gray-lightest;
 
       .headerrow {
@@ -441,5 +445,16 @@
 md-select-menu {
   .md-text {
     text-transform: capitalize!important;
+  }
+}
+
+
+// monkey patch for IE
+
+.browser-ie.version-11 {
+  #list {
+    .headercont {
+      height:85px;
+    }
   }
 }

@@ -34,6 +34,10 @@
       padding-right: 50px;
     }
 
+    searchbar {
+      z-index: 900 !important;
+    }
+
     h2, h5 {
       color: $color-white;
       word-wrap: break-word;
@@ -43,7 +47,15 @@
   .content-wrapper {
     position: relative;
     margin: 0 30px;
+    padding: 0 0 100px;
     background-color: $color-primary;
+
+    // Crossbrowser fixes
+    .browser-firefox &,
+    .browser-microsoft_edge &,
+    .browser-ie.version-11 & {
+      padding: 0;
+    }
 
     &::before {
       position: absolute;
@@ -60,7 +72,6 @@
 
     .what-is-aside {
       margin-top: -50px;
-      margin-bottom: 100px;
       padding: 50px;
       min-height: 500px;
       background: url("./images/bg-whatis.jpg") 0 0 no-repeat;
@@ -74,6 +85,7 @@
 
       .dha-feature {
         float: left;
+        width: 100%;
         margin: 25px 0;
 
         .img-wrapper {
@@ -113,25 +125,26 @@
     }
 
     .content-main {
+      overflow: hidden;
       position: relative;
       z-index: 100;
       margin-top: -225px;
       margin-right: 0;
-      margin-bottom: 100px;
       margin-left: 0;
-      padding: 40px 100px;
+      padding: 40px 100px 40px;
       background-color: $color-white;
 
       // Crossbrowser fixes
       .browser-firefox &,
-      .browser-microsoft_edge & {
-        bottom: 220px;
-        margin-top: 0;
-        margin-bottom: 0;
+      .browser-microsoft_edge &,
+      .browser-ie.version-11 & {
+        padding-bottom: 240px;
       }
 
+      &.logged-out {}
+
       &.logged-in {
-        padding: 40px 100px 80px;
+        padding: 40px 100px 340px;
         background-color: $color-gray-lightest;
       }
 
@@ -149,6 +162,11 @@
         font-size: $title-font-size-base;
       }
 
+      form {
+        display: block;
+        float: left;
+        width: 100%;
+      }
 
       .form-actions {
         margin-top: 20px;
@@ -161,8 +179,6 @@
           min-width: 150px;
         }
       }
-
-
 
       .my-project {
         margin: 50px 0 0;
@@ -197,7 +213,6 @@
             opacity: 0.5;
           }
         }
-
 
         viewers,
         followers,

@@ -18,7 +18,9 @@
     "clean-server-folder": "rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.*",
     "copy-to-server": "cp -R builds/* ../nginx/site/html/",
     "e2e-server": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver",
-    "e2e": "./node_modules/.bin/wdio wdio.conf.js"
+    "e2e-server-circleci": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver_linux",
+    "e2e": "./node_modules/.bin/wdio wdio.conf.js",
+    "e2e-circleci": "./node_modules/.bin/wdio wdio_prod.conf.js"
   },
   "author": "",
   "license": "ISC",
@@ -66,6 +68,7 @@
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "wdio-jasmine-framework": "^0.2.5",
+    "webdriverio": "^4.2.11",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
