@@ -280,6 +280,7 @@
 
       justify-content: space-between;
       padding: 20px;
+      height:85px;
 
       .countrychoser {
 
@@ -445,16 +446,5 @@
 md-select-menu {
   .md-text {
     text-transform: capitalize!important;
-  }
-}
-
-
-// monkey patch for IE
-
-.browser-ie.version-11 {
-  #list {
-    .headercont {
-      height:85px;
-    }
   }
 }
