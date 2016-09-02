@@ -18,9 +18,9 @@ SELECTED_FILE_LIST = [
     "jamaica_geojson.tgz",
     "mauritania_geojson.tgz",
     "turkey_geojson.tgz",
-    "uruguay_geojson.tgz"
+    "uruguay_geojson.tgz",
 
-    "belarus_geojson.tgz"
+    "belarus_geojson.tgz",
     "bhutan_geojson.tgz",
     "cape-verde_geojson.tgz",
     "china_geojson.tgz",
@@ -31,7 +31,7 @@ SELECTED_FILE_LIST = [
     "ukraine_geojson.tgz",
     "uzbekistan_geojson.tgz",
     "venezuela_geojson.tgz",
-    "yemen_geojson.tgz"
+    "yemen_geojson.tgz",
 
     # NOT WORKING:
     # "senegal_geojson.tgz",
