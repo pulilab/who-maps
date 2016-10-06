@@ -5,7 +5,7 @@ module.exports = function(config) {
         files: [
             { pattern: 'test-context.js', watched: false }
         ],
-        frameworks: ['jasmine', 'phantomjs-shim'],
+        frameworks: ['jasmine'],
         preprocessors: {
             'test-context.js': ['webpack', 'sourcemap']
         },

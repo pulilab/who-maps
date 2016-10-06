@@ -114,58 +114,6 @@ describe('CountryViewModuleController', () => {
         expect(vm.fetchDistrictProjects).toHaveBeenCalledWith('id');
     });
 
-    it('has fetchDistrictProjects fn.', () => {
-        spyOn(vm.EE, 'emit');
-        spyOn(vm.service, 'getDistrictProjects').and.returnValue(new Promise((res, rej) => {
-            res('resolved');
-        }));
-
-        vm.fetchDistrictProjects('id');
-        expect(vm.service.getDistrictProjects).toHaveBeenCalledWith('id');
-        expect(vm.EE.emit).toHaveBeenCalledWith('mapdataArrived', 'resolved');
-    });
-
-    it('has working fetchCountryMap fn.', () => {
-        spyOn(vm.EE, 'emit');
-        spyOn(vm.mapService, 'getCountryTopo').and.returnValue(new Promise((res, rej) => {
-            res('resolved');
-        }));
-
-        vm.fetchCountryMap('id');
-        expect(vm.mapService.getCountryTopo).toHaveBeenCalledWith('id');
-        expect(vm.EE.emit).toHaveBeenCalledWith('topoArrived', 'resolved');
-    });
-
-    it('has working getProjects fn.', () => {
-        spyOn(vm.EE, 'emit');
-        spyOn(vm.service, 'getProjects').and.returnValue(new Promise((res, rej) => {
-            res('resolved data');
-        }));
-
-        vm.getProjects({id: '1'});
-        expect(vm.service.getProjects).toHaveBeenCalledWith('1');
-        expect(vm.projectsData).toBe('resolved data');
-        expect(vm.countryProjects).toBe('resolved data');
-        expect(vm.EE.emit).toHaveBeenCalledWith('all country projects', 'resolved data');
-    });
-
-    it('has working getCountries fn.', () => {
-        const countryCollMock = [
-            {id: 0, name: 'c-te-d-ivoire'},
-            {id: 1, name: 'tunguska'},
-            {id: 2, name: 'albania'}
-        ];
-        spyOn(vm.mapService, 'getCountries').and.returnValue(new Promise((res, rej) => {
-            res(countryCollMock);
-        }));
-
-        vm.getCountries();
-
-        expect(vm.countriesLib[0]).toBe('cote d\'ivoire');
-        expect(vm.countriesLib[1]).toBe('tunguska');
-        expect(vm.countriesLib[2]).toBe('albania');
-    });
-
     it('has generalFilter fn.', () => {
         const filters = {
             "continuum":["Identify target populations"],

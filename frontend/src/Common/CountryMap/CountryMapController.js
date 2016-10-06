@@ -1,14 +1,13 @@
-/* global d3, DEV */
-
 import _ from 'lodash';
-import topojson from 'topojson';
+import * as topojson from "topojson"
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
+
+/* global d3, DEV */
 
 class CountrymapController {
 
     constructor($element, $scope) {
-
         this.el = $element;
         this.scope = $scope;
         this.EE = window.EE;
@@ -188,7 +187,6 @@ class CountrymapController {
 
         // console.warn('TOPO', topo);
         // console.warn('lvl', level);
-
         const ret = topojson.feature(topo, topo.objects[level]);
 
         // console.warn('GEO', ret);

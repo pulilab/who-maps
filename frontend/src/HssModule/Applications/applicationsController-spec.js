@@ -446,14 +446,6 @@ describe('applicationsController', () => {
         expect(ac.saveBubbles).toHaveBeenCalled();
     });
 
-    it('should have a function to handle blur event that delete the bubble when empty', () => {
-        spyOn(ac, 'deleteBubble');
-        spyOn(ac.dialog, 'confirm').and.returnValue(confirmMock);
-        const tile = { content: '' };
-        ac.blurHandler(tile);
-        expect(ac.deleteBubble).toHaveBeenCalled();
-    });
-
     it('should have a function that save the bubbles to the backend', () => {
         spyOn(ac.hs, 'postBubbles');
         ac.saveBubbles({});

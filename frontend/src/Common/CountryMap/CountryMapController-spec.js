@@ -172,7 +172,6 @@ describe('CountryMapController', () => {
     });
 
     it('has a method .makeGeoFromTopo(), that uses the topojson lib to make a geojson out of the data', () => {
-
         const ret = vm.makeGeoFromTopo(mockMap.admin_level_4, 'admin_level_4');
         expect(typeof ret).toBe('object');
     });

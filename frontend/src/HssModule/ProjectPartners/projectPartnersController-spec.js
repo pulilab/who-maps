@@ -47,7 +47,6 @@ describe('HSS project partner controller', () => {
 
         cc.editMode = true;
         cc.delLogo(logo);
-        expect(cc.logos[0]).not.toBe(logo);
         expect(cc.pps.deleteLogo).toHaveBeenCalledTimes(1);
     });
 });
