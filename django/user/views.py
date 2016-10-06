@@ -20,14 +20,6 @@ class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, Upd
         serializer = UserProfileWithGroupsSerializer(instance)
         return Response(serializer.data)
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.initial_data.update({"user": request.user.id})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
 
 class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
 
