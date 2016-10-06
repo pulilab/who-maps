@@ -26,8 +26,9 @@
                 {{ option }}
             </md-option>
             <md-option
+
                     ng-if="vm.optionLabel"
-                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text | orderBy:option[vm.optionLabel]"
+                    ng-repeat="option in group[vm.subOptions] | filter:vm.search.text | orderBy:vm.optionLabel"
                     value="{{ option[vm.optionLabel] }}">
                 {{ option[vm.optionLabel] }}
                 <md-icon ng-style="vm.iconFunction(option).style">{{vm.iconFunction(option).name}}</md-icon>
