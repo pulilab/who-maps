@@ -40,6 +40,9 @@ class HSS(ExtendedModel):
         result = set()
         if applications:
             for a in applications:
-                result.add(APPLICATIONS[a['app_id'] + 1]['subApplications'][a['subapp_id']])
+                try:
+                    result.add(APPLICATIONS[a['app_id'] + 1]['subApplications'][a['subapp_id']])
+                except Exception:
+                    pass
 
         return list(result)
