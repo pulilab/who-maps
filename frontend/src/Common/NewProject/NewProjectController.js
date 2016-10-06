@@ -31,6 +31,7 @@ class NewProjectController extends ProjectDefinition {
         this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
         this.getUsers = this.getUsers.bind(this);
+        this.handleDistrictRequest = this.handleDistrictRequest.bind(this);
     }
 
     onInit() {
@@ -138,16 +139,18 @@ class NewProjectController extends ProjectDefinition {
         this.implementingDateYear = backEndImplementationDate.get('year');
 
         this.ns.countryDistrict(this.project.country)
-            .then(district => {
-                this.districtList = district;
-                this.mergeNationalLevelWithDistrictCoverage();
-                this.unfoldCoverage();
-                this.assignDefaultCustom();
-                this.addDefaultEmpty();
-                this.scope.$evalAsync();
-            });
+            .then(this.handleDistrictRequest);
         this.scope.$evalAsync();
 
+    }
+
+    handleDistrictRequest(district) {
+        this.districtList = district;
+        this.unfoldCoverage();
+        this.assignDefaultCustom();
+        this.addDefaultEmpty();
+        this.mergeNationalLevelWithDistrictCoverage();
+        this.scope.$evalAsync();
     }
 
     convertArraytoStandardCustomObj(data) {
@@ -266,7 +269,7 @@ class NewProjectController extends ProjectDefinition {
         const countries = _.filter(this.structure.countries, { name });
         if (countries.length === 1) {
             this.project.countryName = name;
-            this.project.country = countries[0].id;
+            this.project.country = _.cloneDeep(countries[0]).id;
             this.ns.countryDistrict(this.project.country)
                 .then(this.handleDistrictData.bind(this));
         }

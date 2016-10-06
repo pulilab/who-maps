@@ -53,13 +53,10 @@ describe('AppModuleController', () => {
 
     it('should have a function to perform logout', () => {
         spyOn(ac, 'systemLogout');
-        spyOn(ac, 'showCompleteNavigation');
 
         ac.logout();
-
         expect(ac.cs.reset).toHaveBeenCalled();
         expect(ac.systemLogout).toHaveBeenCalled();
-        expect(ac.showCompleteNavigation).toHaveBeenCalled();
 
     });
 

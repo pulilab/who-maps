@@ -113,7 +113,6 @@ describe('NewProjectController', () => {
         sc.editMode = true;
         sc.updateForm(sc.project);
         expect(sc.ns.updateProject).toHaveBeenCalled();
-        expect(sc.cs.updateProject).toHaveBeenCalled();
     });
 
     it('should have some utility function', () => {
@@ -123,11 +122,10 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that handle the onInit when is in editMode', () => {
-        spyOn(sc, 'handleDataLoad');
         spyOn(sc, 'handleStructureLoad');
         sc.editMode = true;
         sc.onInit();
-        expect(sc.handleDataLoad).toHaveBeenCalled();
+        expect(sc.cs.getProjectData).toHaveBeenCalled();
         expect(sc.handleStructureLoad).toHaveBeenCalled();
     });
 
@@ -141,22 +139,28 @@ describe('NewProjectController', () => {
     it('should have a function that handle the data loaded from the server', () => {
         spyOn(sc, 'createCoverageKeys');
         spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve({}));
-        spyOn(sc, 'unfoldCoverage');
-        spyOn(sc, 'assignDefaultCustom');
-        spyOn(sc, 'mergeNationalLevelWithDistrictCoverage');
-        spyOn(sc, 'addDefaultEmpty');
         spyOn(sc, 'convertArraytoStandardCustomObj');
-
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();
         expect(sc.createCoverageKeys).toHaveBeenCalled();
+        expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
+
+    });
+    it('should have a function that handles the district callbacks', () => {
+        spyOn(sc, 'unfoldCoverage').and.returnValue(true);
+        spyOn(sc, 'assignDefaultCustom').and.returnValue(true);
+        spyOn(sc, 'mergeNationalLevelWithDistrictCoverage').and.returnValue(true);
+        spyOn(sc, 'addDefaultEmpty').and.returnValue(true);
+
+        sc.handleStructureLoad(mockData);
+        sc.handleDistrictRequest({});
+
         expect(sc.unfoldCoverage).toHaveBeenCalled();
         expect(sc.assignDefaultCustom).toHaveBeenCalled();
         expect(sc.mergeNationalLevelWithDistrictCoverage).toHaveBeenCalled();
         expect(sc.addDefaultEmpty).toHaveBeenCalled();
-        expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
 
-    });
+    })
 
     it('should have a function that handles the national level deployment', () => {
         sc.project.national_level_deployment = [{ clients: 33 }];
