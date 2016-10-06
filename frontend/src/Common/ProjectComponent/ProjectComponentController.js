@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 class ProjectComponentController {
 
     constructor($state, CommonServices) {
@@ -23,7 +25,9 @@ class ProjectComponentController {
         if (this.ngModel.country
             && this.cs.projectStructure.countries
             && this.cs.projectStructure.countries[this.ngModel.country]) {
-            this.ngModel.countryName = this.cs.projectStructure.countries[this.ngModel.country].name;
+            this.ngModel.countryName = _.find(this.cs.projectStructure.countries, (item) => {
+                return item.id === this.ngModel.country;
+            }).name;
         }
     }
 
