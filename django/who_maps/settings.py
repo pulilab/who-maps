@@ -212,7 +212,8 @@ if SITE_ID in [3]:
 
     ALLOWED_HOSTS = ['digitalhealthatlas.org', '46.101.227.24',
                      'test.whomaps.pulilab.com', 'dhatlas.org',
-                     'digitalhealthatlas.com']
+                     'digitalhealthatlas.com', 'www.digitalhealthatlas.org'
+                     'www.digitalhealthatlas.com', 'www.dhatlas.org']
 
 
 # Mailgun settings
