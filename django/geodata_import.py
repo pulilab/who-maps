@@ -53,7 +53,7 @@ def topojson():
         os.chdir(os.path.join(geodata_config.GEOJSON_TEMP_DIR, folder))
         for filename in geodata_config.ADMIN_LEVELS_TO_IMPORT:
             print("-- " + filename)
-            os.system("topojson -p -o {} {}".format("topojson_"+filename, filename))
+            os.system("geo2topo -p -o {} {}".format("topojson_"+filename, filename))
         print("{} transformed.".format(filename))
 
     print("-- Transforming is done!")
