@@ -10,7 +10,7 @@ const wholeCountryName = ' ENTIRE COUNTRY';
 
 class NewProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, Upload, $anchorScroll, $location, CommonService, structure) {
+    constructor($scope, $state, Upload, $anchorScroll, $location, CommonService, structure, toast) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.es = new EditProfileService();
@@ -22,6 +22,7 @@ class NewProjectController extends ProjectDefinition {
         this.scroll.yOffset = 140;
         this.axisStructure = this.processAxisStructure(structure);
         this.$onInit = this.onInit.bind(this);
+        this.toast = toast;
     }
 
     bindFunctions() {
@@ -69,7 +70,7 @@ class NewProjectController extends ProjectDefinition {
     }
 
     createDateStructure() {
-        this.availableYears = _.range(1980, 2051);
+        this.availableYears = _.range(2005, 2018);
         this.availableMonths = ['January', 'February', 'March', 'April', 'May',
             'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     }
@@ -391,6 +392,13 @@ class NewProjectController extends ProjectDefinition {
                     else {
                         this.postSaveActions();
                     }
+
+                    this.toast.show(
+                        this.toast.simple()
+                            .textContent('Project Saved!')
+                            .position('bottom right')
+                            .hideDelay(3000)
+                    );
                 }
                 else {
                     this.handleResponse(response);
@@ -626,10 +634,10 @@ class NewProjectController extends ProjectDefinition {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
-        function newProject($scope, $state, Upload, $anchorScroll, $location) {
-            return new NewProjectController($scope, $state, Upload, $anchorScroll, $location, CommonService, structure);
+        function newProject($scope, $state, Upload, $anchorScroll, $location, $mdToast) {
+            return new NewProjectController($scope, $state, Upload, $anchorScroll, $location, CommonService, structure, $mdToast);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload', '$anchorScroll', '$location'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$anchorScroll', '$location', '$mdToast'];
         return newProject;
     }
 }
