@@ -105,14 +105,14 @@
                         Dashboard
                     </md-button>
 
-                    <md-button ng-if="!vm.viewMode" ui-sref="hss" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink class="active">
+                    <md-button ng-if="!vm.viewMode && false" ui-sref="hss" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink class="active">
                         <md-tooltip md-autohide>
                             CREATE VISUAL FRAMEWORK
                         </md-tooltip>
                         Visualize Project
                     </md-button>
 
-                    <md-button ng-if="vm.viewMode" ui-sref="public-hss"  ui-sref-active="active" md-no-ink class="active">
+                    <md-button ng-if="vm.viewMode && false" ui-sref="public-hss"  ui-sref-active="active" md-no-ink class="active">
                         <md-tooltip md-autohide>
                             CREATE VISUAL FRAMEWORK
                         </md-tooltip>

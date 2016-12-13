@@ -172,16 +172,23 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
 };
 
-function handleStateChange(...args) {
+function handleStateChange(event, toState, toParams, fromState, fromParams, options) {
     if (DEBUG) {
-        console.debug(`Ui route state change ${this} :`, args);
+        console.debug(`Ui route state change ${this} :`, toState.name);
     }
     if (this === 'success') {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
+    // DISABLE HSS MODULE TEMPORARILY
+    if (this === 'start') {
+        if (toState.name === 'hss') {
+            event.preventDefault();
+        }
+    }
 }
 
 const run = ($rootScope, $state) => {
+    $rootScope.$on('$stateChangeStart', handleStateChange.bind('start'));
     $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
     $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
 
