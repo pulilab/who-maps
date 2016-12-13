@@ -37,7 +37,7 @@ class ProjectDefinition extends Protected {
             contact_name: null,
             contact_email: null,
             'implementation_overview': null,
-            'implementing_partners': null,
+            'implementing_partners': '',
             'implementation_dates': null,
             'health_focus_areas': {
                 standard: [],
