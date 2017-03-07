@@ -1,4 +1,4 @@
 window.Symbol = () => {};
-const context = require.context('./src', true, /-spec\.js$/);
+var context = require.context('./src', true, /-spec\.js$/);
 context.keys().forEach(context);
 

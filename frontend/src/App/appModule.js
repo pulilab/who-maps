@@ -172,7 +172,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
 };
 
-function handleStateChange(event, toState, toParams, fromState, fromParams, options) {
+function handleStateChange(event, toState) {
     if (DEBUG) {
         console.debug(`Ui route state change ${this} :`, toState.name);
     }

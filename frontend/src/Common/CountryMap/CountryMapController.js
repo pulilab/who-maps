@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as topojson from "topojson"
+import * as topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
 

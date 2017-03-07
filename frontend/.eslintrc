@@ -197,7 +197,7 @@
     "max-params": 0,
     "max-statements": 0,
     "no-bitwise": 0,
-    "no-plusplus": 1,
+    "no-plusplus": 0,
 
     /* Babel */
     // "babel/block-scoped-var": 1,

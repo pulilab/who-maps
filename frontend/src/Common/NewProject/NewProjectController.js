@@ -635,7 +635,8 @@ class NewProjectController extends ProjectDefinition {
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../CommonServices');
         function newProject($scope, $state, Upload, $anchorScroll, $location, $mdToast) {
-            return new NewProjectController($scope, $state, Upload, $anchorScroll, $location, CommonService, structure, $mdToast);
+            return new NewProjectController($scope, $state, Upload, $anchorScroll,
+                $location, CommonService, structure, $mdToast);
         }
         newProject.$inject = ['$scope', '$state', 'Upload', '$anchorScroll', '$location', '$mdToast'];
         return newProject;
