@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.4.3
   node:
-    version: 7.2.1
+    version: 6.10.0
   environment:
     DATABASE_URL: localhost
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
