@@ -2,9 +2,10 @@ machine:
   python:
     version: 3.4.3
   node:
-    version: 5.7.0
+    version: 6.10.0
   environment:
     DATABASE_URL: localhost
+    PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
   services:
     # - docker
     - postgresql
@@ -15,10 +16,11 @@ machine:
 dependencies:
   cache_directories:
     - "frontend/node_modules"
+    - "~/.cache/yarn"
   override:
     # - sudo pip install docker-compose
-    - cd frontend && npm install
-    - cd frontend && npm install -g webpack
+    - cd frontend && yarn
+    #- cd frontend && npm install -g webpack
     - cd django && pip install -r requirements.txt
     - cd django && python manage.py migrate
 #    - cd frontend && npm run e2e-server-circleci:
@@ -28,7 +30,7 @@ dependencies:
 test:
   pre:
     - cd django && py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc
-    - cd frontend && npm run test -- --single-run
+    - cd frontend && yarn test -- --single-run
     # - docker build ./django
     # - docker-compose up -d
     # - docker exec -it whomaps_django_1 python manage.py migrate

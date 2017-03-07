@@ -163,7 +163,7 @@ describe('applicationsController', () => {
             return item === '';
         });
         const expectedArray = ['app', 'odd', 'app-sub', 'applications_middle_0',
-         'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub'];
+            'view-mode', 'application_disabled', 'no-bubble', 'activated', 'app-closed', 'sub'];
         expect(_.difference(classArray, expectedArray).length).toBe(0);
     });
 

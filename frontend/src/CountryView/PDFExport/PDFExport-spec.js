@@ -1,11 +1,11 @@
 import PDFExportController from './PDFExportController';
 
-/* global define, it, describe, xit, expect, beforeEach */
+/* global define, it, describe, xit, expect, beforeEach, jasmine, spyOn */
 let pef = {};
 
 const pdfMakeReturn = {
     download: jasmine.createSpy('pdfdownload')
-}
+};
 
 
 describe('PDFExport Controller', () => {

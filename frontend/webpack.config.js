@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
@@ -6,12 +7,10 @@ const CleanPlugin = require('clean-webpack-plugin');
 // Determine if is a production build based on environment variable
 const production = process.argv.indexOf('--dist') > -1;
 const live = process.argv.indexOf('--live') > -1;
-const siteBuild = process.argv.indexOf('--site-build') > -1;
 const debug = process.argv.indexOf('--debug') > -1;
-const local = process.argv.indexOf('--local') > -1;
 
 const PATH = {
-    build: 'builds'
+    build: path.resolve(__dirname, 'builds')
 };
 
 
@@ -22,9 +21,7 @@ const basePlugins = [
         DEBUG: debug,
         LIVE: live
     }),
-    new webpack.optimize.CommonsChunkPlugin(
-        'vendor', 'vendor.js', Infinity
-    ),
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js'}),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
         title: 'Digital Health Atlas',
@@ -34,11 +31,13 @@ const basePlugins = [
 ];
 
 const distPlugins = [
-    new ExtractTextPlugin('[name].[chunkhash].css', {
-        allChunks: true
-    }),
+    new ExtractTextPlugin(
+        {
+            filename: '[name].[chunkhash].css',
+            allChunks: true
+        }
+    ),
     new webpack.optimize.OccurrenceOrderPlugin(true),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.MinChunkSizePlugin({
         minChunkSize: 51200 // ~50kb
     }),
@@ -86,61 +85,61 @@ module.exports = {
         }
     },
     module: {
-        preLoaders: siteBuild ? [] : devPreLoaders,
-
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel'
+                use: [
+                    'babel-loader',
+                    'eslint-loader'
+                ]
             },
             {
                 test: /\.scss$/,
-                // loaders: ['style', 'css', 'sass']
-                loader: production ? ExtractTextPlugin.extract('style', 'css!sass') : 'style!css!sass'
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
             },
             {
                 test: /\.html/,
-                loader: 'html?minimize=false'
+                loader: 'html-loader?minimize=false'
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
-                loader: 'file?name=public/fonts/[name].[ext]'
+                loader: 'file-loader?name=public/fonts/[name].[ext]'
             },
             {
-                test: /\.json|geojson/,
-                loader: 'json'
+                test: /\.geojson/,
+                loader: 'json-loader'
             },
             {
                 test: /\.txt/,
-                loader: 'raw'
+                loader: 'raw-loader'
             },
             {
                 test: /\.(jpe?g|png|gif|ico)$/i,
                 loaders: [
-                    'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                    'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                    'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                 ]
             }
-        ],
-        sassLoader: {
-            outputStyle: 'compressed'
-        }
+        ]
     },
     devServer: {
         historyApiFallback: true,
         proxy: {
             '/api/*': {
-                target: local ? 'http://localhost/' : 'http://192.168.99.100/',
+                target: 'http://localhost/',
                 secure: false
             },
             '/media/*': {
-                target: local ? 'http://localhost/' : 'http://192.168.99.100/',
+                target:  'http://localhost/',
                 secure: false
             }
         }
     },
-    debug: !production,
-    devtool: production || siteBuild ? false : 'eval-cheap-source-map',
+    devtool: production ? false : 'eval-cheap-source-map',
     plugins: production ? distPlugins : devPlugins
 };

@@ -1,9 +1,7 @@
 import PDFExportStorage from './PDFExportStorage';
 
-/* global define, it, describe, xit, expect, beforeEach */
+/* global define, it, describe, xit, expect, beforeEach, spyOn */
 let pes = {};
-
-
 
 describe('PDFExport Controller', () => {
 

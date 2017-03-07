@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+var webpack = require('webpack');
 module.exports = function(config) {
     config.set({
         browsers: ['PhantomJS'],
@@ -27,45 +27,55 @@ module.exports = function(config) {
         webpack: {
             devtool: 'inline-source-map',
             module: {
-                loaders: [
+                rules: [
                     {
-                        test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
-                        loaders: ['null']
+                        test: /\.js$/,
+                        exclude: /node_modules/,
+                        loader: 'babel-loader'
                     },
                     {
-                        test: /\.(json|geojson)/,
-                        loader: 'json'
+                        test: /^((?!-spec).)*.js$/,
+                        enforce: 'pre',
+                        exclude: /(node_modules|bower_components)/,
+                        loader: 'istanbul-instrumenter-loader',
+                        query: {
+                            esModules: true
+                        }
+                    },
+                    {
+                        test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
+                        loaders: ['null-loader']
+                    },
+                    {
+                        test: /\.geojson/,
+                        loader: 'json-loader'
                     },
                     {
                         test: /\.(jpe?g|png|gif|ico)$/i,
                         loaders: [
-                            'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                            'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                            'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                         ]
-                    }
-                ],
-                preLoaders: [
-                    {
-                        test: /.*-spec\.js$/,
-                        exclude: /node_modules/,
-                        loader: 'babel'
-                    },
-                    {
-                        test: /^((?!-spec).)*.js$/,
-                        exclude: /(node_modules|bower_components)/,
-                        loaders: ['babel-istanbul']
                     }
                 ]
             },
             plugins: [
                 new webpack.DefinePlugin({
                     API: '"/api/"',
-                    DEV: false
+                    DEV: false,
+                    DEBUG: false
                 })
             ]
         },
         webpackServer: {
             noInfo: true
-        }
+        },
+        plugins: [
+            require('karma-webpack'),
+            require('karma-jasmine'),
+            require('karma-coverage'),
+            require('karma-sourcemap-loader'),
+            require('karma-phantomjs-launcher')
+        ]
     });
 };

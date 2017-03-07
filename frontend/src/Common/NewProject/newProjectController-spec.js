@@ -160,7 +160,7 @@ describe('NewProjectController', () => {
         expect(sc.mergeNationalLevelWithDistrictCoverage).toHaveBeenCalled();
         expect(sc.addDefaultEmpty).toHaveBeenCalled();
 
-    })
+    });
 
     it('should have a function that handles the national level deployment', () => {
         sc.project.national_level_deployment = [{ clients: 33 }];

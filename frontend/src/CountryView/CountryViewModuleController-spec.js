@@ -41,7 +41,7 @@ describe('CountryViewModuleController', () => {
     });
 
     it('has an extractConstraints fn,', () => {
-        const ret = vm.extractConstraints({'key': 'value', 'key2': 'value2'});
+        const ret = vm.extractConstraints({ 'key': 'value', 'key2': 'value2' });
         expect(ret).toContain('key');
         expect(ret).toContain('key2');
     });
@@ -49,8 +49,8 @@ describe('CountryViewModuleController', () => {
     it('has a concatenateApplications fn.', () => {
         const ret = vm.concatenateApplications(
             {
-                'first': {'subApplications': {'a': 1, 'b': 2}},
-                'second': {'subApplications': {'c': 3, 'd': 4}},
+                'first': { 'subApplications': { 'a': 1, 'b': 2 } },
+                'second': { 'subApplications': { 'c': 3, 'd': 4 } }
             }
         );
         expect(ret).toContain(1);
@@ -62,7 +62,7 @@ describe('CountryViewModuleController', () => {
     it('has a createFilterCategory fn.', () => {
         const ret = vm.createFilterCategory(
             'filtername',
-            {'key': 1.1, 'key2': 1.2, 'key': 2.0},
+            { 'key': 1.1, 'key2': 1.2, 'key3': 2.0 },
             'key',
             null,
             a => a++
@@ -90,7 +90,7 @@ describe('CountryViewModuleController', () => {
         spyOn(vm, 'changeMapTo');
         spyOn(vm, 'getProjects');
 
-        const countryObj = {name: 'aa'};
+        const countryObj = { name: 'aa' };
         vm.updateCountry(countryObj);
         expect(vm.changeMapTo).toHaveBeenCalledWith(countryObj);
         expect(vm.getProjects).toHaveBeenCalledWith(countryObj);
@@ -102,7 +102,7 @@ describe('CountryViewModuleController', () => {
     });
 
     it('has changeMapTo fn.', () => {
-        const countryMock = {id: 'id'};
+        const countryMock = { id: 'id' };
         spyOn(vm.EE, 'emit');
         spyOn(vm, 'fetchCountryMap');
         spyOn(vm, 'fetchDistrictProjects');
@@ -116,11 +116,11 @@ describe('CountryViewModuleController', () => {
 
     it('has generalFilter fn.', () => {
         const filters = {
-            "continuum":["Identify target populations"],
-            "interventions":[],
-            "technology_platforms":[],
-            "applications":[],
-            "constraints":[]
+            'continuum':['Identify target populations'],
+            'interventions':[],
+            'technology_platforms':[],
+            'applications':[],
+            'constraints':[]
         };
         vm.generalFilter(filters, 'continuum');
         expect(Array.isArray(filters.provisonalArray)).toBe(true);
@@ -128,34 +128,34 @@ describe('CountryViewModuleController', () => {
 
     it('has filterClv fn.', () => {
         vm.filterArray = [
-          {
-            "name": "continuum",
-            "items": [
-              {
-                "name": "Identify target populations",
-                "value": true
-              },
-              {
-                "name": "Health promotion and intervention",
-                "value": false
-              }
-            ],
-            "open": false
-          },
-          {
-            "name": "constraints",
-            "items": [
-              {
-                "name": "Availability",
-                "value": false
-              },
-              {
-                "name": "Utilization",
-                "value": false
-              }
-            ],
-            "open": false
-          }
+            {
+                'name': 'continuum',
+                'items': [
+                    {
+                        'name': 'Identify target populations',
+                        'value': true
+                    },
+                    {
+                        'name': 'Health promotion and intervention',
+                        'value': false
+                    }
+                ],
+                'open': false
+            },
+            {
+                'name': 'constraints',
+                'items': [
+                    {
+                        'name': 'Availability',
+                        'value': false
+                    },
+                    {
+                        'name': 'Utilization',
+                        'value': false
+                    }
+                ],
+                'open': false
+            }
         ];
         spyOn(vm.EE, 'emit');
         spyOn(vm, 'generalFilter');
@@ -167,11 +167,11 @@ describe('CountryViewModuleController', () => {
 
     it('has constraintsFilter fn.', () => {
         const filters = {
-            "continuum":["Identify target populations"],
-            "interventions":[],
-            "technology_platforms":[],
-            "applications":[],
-            "constraints":[]
+            'continuum':['Identify target populations'],
+            'interventions':[],
+            'technology_platforms':[],
+            'applications':[],
+            'constraints':[]
         };
         vm.constraintsFilter(filters);
 
