@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.4.3
   node:
-    version: 5.7.0
+    version: 7.2.1
   environment:
     DATABASE_URL: localhost
   services:
