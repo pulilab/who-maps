@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.4.3
   node:
-    version: 7.2.1
+    version: 6.10.0
   environment:
     DATABASE_URL: localhost
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
@@ -12,16 +12,14 @@ machine:
   pre:
     # - sudo curl -L -o /usr/bin/docker 'http://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.1-circleci'
     # - sudo chmod 0755 /usr/bin/docker
-    - sudo apt-get install g++ build-essential
 
 dependencies:
   cache_directories:
     - "frontend/node_modules"
     - "~/.cache/yarn"
   override:
-    - yarn
     # - sudo pip install docker-compose
-    - cd frontend && yarn install
+    - cd frontend && yarn
     #- cd frontend && npm install -g webpack
     - cd django && pip install -r requirements.txt
     - cd django && python manage.py migrate
@@ -32,7 +30,7 @@ dependencies:
 test:
   pre:
     - cd django && py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc
-    - cd frontend && npm run test -- --single-run
+    - cd frontend && yarn test -- --single-run
     # - docker build ./django
     # - docker-compose up -d
     # - docker exec -it whomaps_django_1 python manage.py migrate
