@@ -28,3 +28,4 @@ django/celerybeat-schedule.*
 .flooignore
 .sublimelinterrc
 errorShots/
+.yarnclean
