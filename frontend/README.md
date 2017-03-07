@@ -1,9 +1,13 @@
+### Prerequisite
+1. brew update
+2. brew install yarn
+3. brew install node
+
 ### Setting up:
 
-1. npm install
+1. yarn
 2. npm install -g webpack
 3. npm install -g webpack-dev-server
-4. npm install -g karma ( not mandatory )
 5. npm run serve
 
 
