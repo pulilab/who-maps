@@ -9,7 +9,7 @@ import angularMd from 'angular-material';
 
 import _appTemplate from './app.html';
 
-import hssModule from '../HssModule/';
+// import hssModule from '../HssModule/';
 import cms from '../Cms/';
 import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
@@ -223,7 +223,7 @@ angular.module(moduleName,
         ngMessages,
         'ngPassword',
         Components,
-        hssModule,
+        // hssModule,
         cms,
         countryView,
         dashboard,

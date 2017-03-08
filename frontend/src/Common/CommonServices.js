@@ -95,7 +95,6 @@ class CommonServices extends Protected {
 
     createLoadingOrder() {
         this.checkLoadPresence('user-profile');
-
         this.checkLoadPresence('list');
     }
 
@@ -110,8 +109,6 @@ class CommonServices extends Protected {
             this.mergeOperations();
             this.promiseResolve();
         }
-
-
     }
 
     getCountryName(project) {
