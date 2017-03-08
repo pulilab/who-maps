@@ -9,7 +9,6 @@ import angularMd from 'angular-material';
 
 import _appTemplate from './app.html';
 
-// import hssModule from '../HssModule/';
 import cms from '../Cms/';
 import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
@@ -179,12 +178,6 @@ function handleStateChange(event, toState) {
     if (this === 'success') {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
-    // DISABLE HSS MODULE TEMPORARILY
-    if (this === 'start') {
-        if (toState.name === 'hss') {
-            event.preventDefault();
-        }
-    }
 }
 
 const run = ($rootScope, $state) => {
@@ -223,7 +216,6 @@ angular.module(moduleName,
         ngMessages,
         'ngPassword',
         Components,
-        // hssModule,
         cms,
         countryView,
         dashboard,

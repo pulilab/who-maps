@@ -12,7 +12,6 @@ if (LIVE) {
 
     window.onunhandledrejection = (event) => {
         Raven.captureException(event.reason);
-
     };
 }
 
