@@ -75,10 +75,10 @@ def deploy():
 
         # handle frontend
         with cd(env.frontend_root):
-            run('npm install')
-            run('npm run dist {}'.format(env.webpack_options))
-            run('npm run clean-server-folder')
-            run('npm run copy-to-server')
+            run('yarn')
+            run('yarn dist {}'.format(env.webpack_options))
+            run('yarn clean-server-folder')
+            run('yarn copy-to-server')
 
     tear_down()
 

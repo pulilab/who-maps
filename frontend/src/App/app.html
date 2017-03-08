@@ -27,9 +27,6 @@
         <span flex ></span>
 
         <searchbar compact-mode="true" ng-if="vm.showFullNavigation"></searchbar>
-        <!-- <md-button class="md-icon-button" ng-disabled="!vm.userProfile" ui-sref="info" aria-label="Info" ng-if="vm.isLogin"  md-no-ink>
-            <md-icon class="material-icons">help_outline</md-icon>
-        </md-button> -->
 
         <md-button class="landing-link" ui-sref-active="active" ui-sref="login" aria-label="Login" ng-if="!vm.isLogin" ng-hide="vm.currentPage === 'login'" md-no-ink>
             Login
@@ -66,22 +63,6 @@
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
-
-
-        <!--<md-menu md-position-mode="target-right target" ng-if="vm.showFullNavigation " >-->
-
-        <!--<md-button class="md-icon-button" aria-label="Notification"  ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
-        <!--<md-icon md-menu-origin class="material-icons has-message">email</md-icon>-->
-        <!--<badge counter="vm.notifications.length"></badge>-->
-        <!--</md-button>-->
-        <!--<md-menu-content width="6">-->
-        <!--<md-menu-item ng-repeat="notification in vm.notifications">-->
-        <!--<p>-->
-        <!--Pabst pop-up jean shorts portland gastropub everyday carry.-->
-        <!--</p>-->
-        <!--</md-menu-item>-->
-        <!--</md-menu-content>-->
-        <!--</md-menu>-->
 
         <md-button class="add-new-project" ui-sref="newProject" ng-if="vm.isLogin" ng-disabled="!vm.hasProfile()" aria-label="Add new project" ng-show="vm.showFullNavigation && vm.userProfile.account_type === 'I'" md-no-ink>
             <md-icon class="material-icons">add</md-icon>
@@ -187,37 +168,6 @@
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
-
-                    <!--<md-menu md-position-mode="target-right target" ng-if="!vm.viewMode">-->
-                    <!--<md-button md-menu-origin aria-label="More" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>-->
-                    <!--<md-icon class="material-icons">more_vert</md-icon>-->
-                    <!--More-->
-                    <!--</md-button>-->
-
-                    <!--<md-menu-content width="4">-->
-                    <!--<span class="menu-group-title">-->
-                    <!--More Actions-->
-                    <!--</span>-->
-                    <!--&lt;!&ndash;<md-menu-item>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<md-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<md-icon class="material-icons">person_add</md-icon>&ndash;&gt;-->
-                    <!--&lt;!&ndash;Assign owners/users&ndash;&gt;-->
-                    <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</md-menu-item>&ndash;&gt;-->
-                    <!--<md-menu-item>-->
-                    <!--<md-button>-->
-                    <!--<md-icon class="material-icons">lock_outline</md-icon>-->
-                    <!--Publicity settings-->
-                    <!--</md-button>-->
-                    <!--</md-menu-item>-->
-                    <!--&lt;!&ndash;<md-menu-item>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<md-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<md-icon class="material-icons">publish</md-icon>&ndash;&gt;-->
-                    <!--&lt;!&ndash;Export pdf/csv&ndash;&gt;-->
-                    <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</md-menu-item>&ndash;&gt;-->
-                    <!--</md-menu-content>-->
-                    <!--</md-menu>-->
                 </div>
             </div>
 

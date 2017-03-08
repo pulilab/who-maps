@@ -5,9 +5,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 
 // Determine if is a production build based on environment variable
-const production = process.argv.indexOf('--dist') > -1;
-const live = process.argv.indexOf('--live') > -1;
-const debug = process.argv.indexOf('--debug') > -1;
+const production = process.env.NODE_ENV === 'production';
+const live = process.env.LIVE_FLAG === 'live';
+const debug = process.env.DEBUG_MODE === 'debug';
 
 const PATH = {
     build: path.resolve(__dirname, 'builds')
