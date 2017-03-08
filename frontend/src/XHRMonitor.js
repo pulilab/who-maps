@@ -85,7 +85,7 @@ const getRequests = () => {
 
 let checkInterval = null;
 const cleanFrozenState = () => {
-    if (! checkInterval) {
+    if (!checkInterval) {
         checkInterval = setInterval(() => {
             const req = getRequests();
             if (req && !req.end && !req.start) {
@@ -169,6 +169,9 @@ XMLHttpRequest.prototype.send = function(value) {
     }, false);
 
     this.addEventListener('load', function() {
+        postRequest(hash);
+    }, false);
+    this.addEventListener('error', function() {
         postRequest(hash);
     }, false);
     this.realSend(value);
