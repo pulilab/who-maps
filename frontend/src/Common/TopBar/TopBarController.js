@@ -24,7 +24,11 @@ class TopBarController extends Protected {
     }
 
     showNewProjectButton() {
-        return this.showFullNavigation && this.userProfile.account_type === 'I'
+        let isImplementer = true;
+        if (this.userProfile && this.userProfile.account_type !== 'I') {
+            isImplementer = false;
+        }
+        return this.showFullNavigation && isImplementer
             && this.isLogin && this.hasProfile();
     }
 
@@ -33,6 +37,9 @@ class TopBarController extends Protected {
     }
 
     showGoToMyDashboardButton() {
+        if (this.showSubBar) {
+            return false;
+        }
         return this.showFullNavigation && this.userType !== 0
             && (this.viewMode || this.state.current.name !== 'dashboard');
     }

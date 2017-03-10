@@ -9,7 +9,8 @@ const topBarComponent = {
     name: 'topBar',
     bindings: {
         viewMode: '<',
-        showFullNavigation: '<'
+        showFullNavigation: '<',
+        showSubBar: '<'
     }
 };
 

@@ -15,7 +15,6 @@ class SubBarController extends Protected {
     onInit() {
         this.defaultOnInit();
         this.cs = require('../CommonServices');
-        this.watchers();
         this.eventBinding();
         this.projectId = this.state.params.appName;
         this.currentPage = void 0;
@@ -42,21 +41,9 @@ class SubBarController extends Protected {
         }
     }
 
-    watchers() {
-        this.scope.$watch(() => {
-            return this.state.current.name;
-        }, value => {
-            this.currentPage = value;
-            this.showCompleteNavigation(value, this.isLogin);
-            this.checkUserProfile();
-        });
-    }
-
     eventBinding() {
-        this.EE.on('unauthorized', this.handleUnauthorized, this);
         this.EE.on('projectListUpdated', this.fillUserData, this);
         this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
-        this.EE.on('profileUpdated', this.refreshProfileInfo, this);
     }
 
     createShareDefinition() {
@@ -92,39 +79,6 @@ class SubBarController extends Protected {
             base.style.color = '#CD9924';
         }
         return base;
-    }
-
-    writeUserRole() {
-        let type = null;
-        switch (this.userProfile.account_type) {
-        case 'I':
-            type = 'Implementer';
-            break;
-        case 'G':
-            type = 'Government';
-            break;
-        case 'D':
-            type = 'Financial Investor';
-            break;
-        case 'Y':
-            type = 'Inventory';
-            break;
-        }
-
-
-        return type;
-    }
-
-    refreshProfileInfo() {
-        this.userProfile = this.cs.userProfile;
-        this.scope.$evalAsync();
-        this.state.go('dashboard');
-    }
-
-    checkUserProfile() {
-        if (!this.userProfile && this.isLogin) {
-            this.state.go('editProfile');
-        }
     }
 
     refreshProjectsHandler(data) {
@@ -177,32 +131,9 @@ class SubBarController extends Protected {
         this.state.go('editProject', { 'appName': _.last(this.user.projects).id });
     }
 
-    handleUnauthorized() {
-        this.logout();
-    }
-
-    handleLogoutEvent() {
-        this.state.go('landing', { appName: null });
-    }
-
-    showCompleteNavigation(state, isLogin) {
-        const isLanding = state === 'landing-logged' || state === 'newProject';
-        this.showFullNavigation = (!isLanding && isLogin) || this.viewMode;
-    }
-
 
     openMenu($mdOpenMenu, event) {
         $mdOpenMenu(event);
-    }
-
-    logout() {
-        this.EE.emit('logout');
-        this.systemLogout();
-        const rest = this.cs.reset();
-        rest.loadedPromise.then(() => {
-            this.showCompleteNavigation(null, false);
-            this.handleLogoutEvent();
-        });
     }
 
     static subBarControllerFactory() {

@@ -36,12 +36,15 @@ class AppModuleController extends Protected {
         }
     }
 
+    showSubBar() {
+        return this.showCountryTopBar && this.user.projects.length !== 0;
+    }
+
     watchers() {
         this.scope.$watch(() => {
             return this.state.current.name;
         }, value => {
             this.currentPage = value;
-            console.log(value);
             this.showCompleteNavigation(value, this.isLogin);
             this.checkUserProfile();
         });
@@ -98,8 +101,8 @@ class AppModuleController extends Protected {
     }
 
     showCompleteNavigation(state, isLogin) {
-        const isLanding = state === 'landing-logged' || state === 'newProject';
-        this.showFullNavigation = (!isLanding && isLogin) || this.viewMode;
+        const isLandingOrNewProject = state === 'landing-logged' || state === 'newProject';
+        this.showFullNavigation = (!isLandingOrNewProject && isLogin) || this.viewMode;
     }
 
     static appControllerFactory() {

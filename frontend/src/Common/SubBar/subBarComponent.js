@@ -8,7 +8,8 @@ const subBarComponent = {
     controllerAs: 'vm',
     name: 'subBar',
     bindings: {
-        viewMode: '@'
+        viewMode: '<',
+        showFullNavigation: '<'
     }
 };
 
