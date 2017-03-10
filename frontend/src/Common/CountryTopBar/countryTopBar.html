@@ -1,0 +1,45 @@
+<md-toolbar class="main-toolbar toolbar-global md-medium-tall">
+    <div class="md-toolbar-tools">
+
+        <div class="country-logo">
+            <img src="images/dha-logo.svg" />
+        </div>
+
+        <md-button aria-label="Go to my Dashboard"
+                   class="view-selector"
+                   ui-sref="dashboard"
+                   ng-hide="true"
+                   md-no-ink>
+            <md-icon class="material-icons ">apps</md-icon>
+            Go to my dashboard
+        </md-button>
+
+        <span flex ></span>
+
+        <div class="current-country row">
+            <div class="country-flag"></div>
+            <div class="country-name">Singapore</div>
+        </div>
+
+        <md-button class="landing-link"
+                   ui-sref-active="active"
+                   ui-sref="login"
+                   aria-label="Login"
+                   ng-show="vm.showLogin()"
+                   md-no-ink>
+            Login
+        </md-button>
+
+        <md-button class="landing-link"
+                   ui-sref-active="active"
+                   ui-sref="signup"
+                   aria-label="Singup"
+                   ng-show="vm.showSignUp()"
+                   md-no-ink >
+            Sign Up
+        </md-button>
+    </div>
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        BOTTOM PART
+    </div>
+</md-toolbar>

@@ -36,6 +36,7 @@ import UUILoadComponent from './UUIDLoad/UUIDLoad';
 import TermsOfUseComponent from './TermsOfUse/TermsOfUse';
 import TopBarComponent from './TopBar/topBarComponent';
 import SubBarComponent from './SubBar/subBarComponent';
+import CountryTopBarComponent from './CountryTopBar/countryTopBarComponent';
 
 const moduleName = 'Components';
 
@@ -65,6 +66,7 @@ angular.module(moduleName,
     .component(UUILoadComponent.name, UUILoadComponent)
     .component(TopBarComponent.name, TopBarComponent)
     .component(SubBarComponent.name, SubBarComponent)
+    .component(CountryTopBarComponent.name, CountryTopBarComponent)
     .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 

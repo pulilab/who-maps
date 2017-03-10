@@ -1,4 +1,7 @@
-<top-bar view-mode="vm.viewMode" show-full-navigation="vm.showFullNavigation"></top-bar>
+<country-top-bar ng-if="vm.showCountryTopBar"></country-top-bar>
+
+<top-bar ng-if="!vm.showCountryTopBar" view-mode="vm.viewMode" show-full-navigation="vm.showFullNavigation"></top-bar>
+
 <md-content class="main-content" layout="column" layout-fill>
     <div id="intro-wrapper" layout="column" layout-fill>
         <!--<sub-bar view-mode="vm.viewMode" show-full-navigation="vm.showFullNavigation"></sub-bar>-->

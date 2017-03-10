@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { Protected } from '../Common/';
-import Clipboard from 'clipboard';
 
 class AppModuleController extends Protected {
 
@@ -18,7 +17,8 @@ class AppModuleController extends Protected {
         this.watchers();
         this.eventBinding();
         this.projectId = this.state.params.appName;
-        this.currentPage = void 0;
+        this.currentPage = this.state.current.name;
+        this.showCountryTopBar = false;
         this.showFullNavigation = false;
         if (this.user) {
             this.fillUserData();
@@ -41,6 +41,7 @@ class AppModuleController extends Protected {
             return this.state.current.name;
         }, value => {
             this.currentPage = value;
+            console.log(value);
             this.showCompleteNavigation(value, this.isLogin);
             this.checkUserProfile();
         });
@@ -87,8 +88,6 @@ class AppModuleController extends Protected {
 
     }
 
-
-
     handleLogoutEvent() {
         this.systemLogout();
         const rest = this.cs.reset();
@@ -102,8 +101,6 @@ class AppModuleController extends Protected {
         const isLanding = state === 'landing-logged' || state === 'newProject';
         this.showFullNavigation = (!isLanding && isLogin) || this.viewMode;
     }
-
-
 
     static appControllerFactory() {
 

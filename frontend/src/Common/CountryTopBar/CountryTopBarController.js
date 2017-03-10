@@ -1,6 +1,6 @@
 import Protected  from '../Protected';
 
-class TopBarController extends Protected {
+class CountryTopBarController extends Protected {
 
     constructor($state, $scope) {
         super();
@@ -41,11 +41,13 @@ class TopBarController extends Protected {
         return this.showFullNavigation;
     }
     showLogin() {
-        return this.state.current.name !== 'login' && !this.isLogin;
+        // return this.state.current.name !== 'login' && !this.isLogin;
+        return true;
     }
 
     showSignUp() {
-        return this.state.current.name !== 'signup' && !this.isLogin;
+        // return this.state.current.name !== 'signup' && !this.isLogin;
+        return true;
     }
 
     writeUserRole() {
@@ -75,17 +77,17 @@ class TopBarController extends Protected {
         this.EE.emit('logout');
     }
 
-    static topBarControllerFactory() {
-        require('./topBar.scss');
-        function topBarController($state, $scope) {
-            return new TopBarController($state, $scope);
+    static countryTopBarControllerFactory() {
+        require('./countryTopBar.scss');
+        function countryTopBarController($state, $scope) {
+            return new CountryTopBarController($state, $scope);
         }
 
-        topBarController.$inject = ['$state', '$scope'];
+        countryTopBarController.$inject = ['$state', '$scope'];
 
-        return topBarController;
+        return countryTopBarController;
     }
 
 }
 
-export default TopBarController;
+export default CountryTopBarController;
