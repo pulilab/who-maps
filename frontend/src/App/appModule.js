@@ -16,7 +16,6 @@ import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
 import { Components, Storage } from '../Common/';
 
-
 import AppComponent from './appComponent';
 import SystemController from './SystemController';
 import './app.scss';

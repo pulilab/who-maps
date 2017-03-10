@@ -20,8 +20,6 @@ class AppModuleController extends Protected {
         this.projectId = this.state.params.appName;
         this.currentPage = void 0;
         this.showFullNavigation = false;
-        this.updateProject = this.updateProject.bind(this);
-        this.iconFunction = this.iconFunction.bind(this);
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -29,19 +27,12 @@ class AppModuleController extends Protected {
                 this.adjustUserType(this.userProfile);
             }
         }
-
-        this.notifications = [1, 2, 3];
-
         if (this.viewMode) {
             this.cs.getProjectData(this.projectId)
                 .then(project => {
                     this.currentProject = project;
-                    this.createShareDefinition();
                     this.scope.$evalAsync();
                 });
-        }
-        else if (this.currentProject) {
-            this.createShareDefinition();
         }
     }
 
@@ -56,89 +47,15 @@ class AppModuleController extends Protected {
     }
 
     eventBinding() {
-        this.EE.on('unauthorized', this.handleUnauthorized, this);
+        this.EE.on('unauthorized', this.handleLogoutEvent, this);
+        this.EE.on('logout', this.handleLogoutEvent, this);
         this.EE.on('projectListUpdated', this.fillUserData, this);
-        this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
-        this.EE.on('profileUpdated', this.refreshProfileInfo, this);
-    }
-
-    createShareDefinition() {
-        this.shareUrl = {
-            url: `http://${window.location.host}/project/${this.currentProject.public_id}`,
-            copyClicked: false,
-            clipboard: new Clipboard('.share-copy')
-        };
-
-        this.shareUrl.clipboard.on('success', event => {
-            this.shareUrl.copyClicked = true;
-            event.clearSelection();
-        });
-    }
-
-    hasProfile() {
-        return this.cs.hasProfile();
-    }
-
-    iconFunction(item) {
-        const base = {
-            name: 'visibility',
-            style: {
-                color: '#53A0CE',
-                position: 'absolute',
-                right: '5px',
-                fontSize: '15px',
-                lineHeight: '24px'
-            }
-        };
-        if (this.userProfile.member.indexOf(item.id) > -1) {
-            base.name = 'grade';
-            base.style.color = '#CD9924';
-        }
-        return base;
-    }
-
-    writeUserRole() {
-        let type = null;
-        switch (this.userProfile.account_type) {
-        case 'I':
-            type = 'Implementer';
-            break;
-        case 'G':
-            type = 'Government';
-            break;
-        case 'D':
-            type = 'Financial Investor';
-            break;
-        case 'Y':
-            type = 'Inventory';
-            break;
-        }
-
-
-        return type;
-    }
-
-    refreshProfileInfo() {
-        this.userProfile = this.cs.userProfile;
-        this.scope.$evalAsync();
-        this.state.go('dashboard');
     }
 
     checkUserProfile() {
         if (!this.userProfile && this.isLogin) {
             this.state.go('editProfile');
         }
-    }
-
-    refreshProjectsHandler(data) {
-        this.cs.reset().loadedPromise.then(() => {
-            this.fillUserData(data);
-        });
-    }
-
-    updateProject(name) {
-        const id = _.filter(this.user.projects, { name })[0].id;
-        this.state.go(this.state.current.name, { 'appName': id });
     }
 
     fillUserData(forcedPath) {
@@ -170,20 +87,15 @@ class AppModuleController extends Protected {
 
     }
 
-    goToDashboard() {
-        this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
-    }
 
-    goToEditProject() {
-        this.state.go('editProject', { 'appName': _.last(this.user.projects).id });
-    }
-
-    handleUnauthorized() {
-        this.logout();
-    }
 
     handleLogoutEvent() {
-        this.state.go('landing', { appName: null });
+        this.systemLogout();
+        const rest = this.cs.reset();
+        rest.loadedPromise.then(() => {
+            this.showCompleteNavigation(null, false);
+            this.state.go('landing', { appName: null });
+        });
     }
 
     showCompleteNavigation(state, isLogin) {
@@ -192,19 +104,6 @@ class AppModuleController extends Protected {
     }
 
 
-    openMenu($mdOpenMenu, event) {
-        $mdOpenMenu(event);
-    }
-
-    logout() {
-        this.EE.emit('logout');
-        this.systemLogout();
-        const rest = this.cs.reset();
-        rest.loadedPromise.then(() => {
-            this.showCompleteNavigation(null, false);
-            this.handleLogoutEvent();
-        });
-    }
 
     static appControllerFactory() {
 
