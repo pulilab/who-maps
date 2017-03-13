@@ -3,8 +3,6 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from .models import Country
-
 
 class CountryTests(APITestCase):
 
@@ -34,16 +32,11 @@ class CountryTests(APITestCase):
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        country, _ = Country.objects.get_or_create(name="sierra-leone")
-        country.save()
-        self.country_id = country.id
-
-        country, _ = Country.objects.get_or_create(name="kenya")
-        country.save()
-        self.country_id2 = country.id
-
     def test_get_countries(self):
         url = reverse("country-list")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("name", response.json()[0].keys())
+        self.assertIn("code", response.json()[0].keys())
+        self.assertIn("id", response.json()[0].keys())
+        self.assertEqual(82, len(response.json()))

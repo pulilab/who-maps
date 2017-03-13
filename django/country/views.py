@@ -4,5 +4,5 @@ from .serializers import CountryListSerializer
 
 
 class CountryListAPIView(generics.ListAPIView):
-    queryset = Country.objects.values('id', 'name')
+    queryset = Country.objects.values('id', 'name', 'code')
     serializer_class = CountryListSerializer
