@@ -128,6 +128,10 @@ module.exports = {
             '/media/*': {
                 target:  'http://localhost/',
                 secure: false
+            },
+            '/static/*': {
+                target:  'http://localhost/',
+                secure: false
             }
         }
     },
