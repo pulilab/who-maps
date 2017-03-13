@@ -31,7 +31,7 @@ class CustomCountryService extends SimpleApi {
 
     getCountryFlag(subDomain) {
         const country = this.getCountry(subDomain);
-        country.countryFlag = `/static/flags/${subDomain}.png`;
+        country.countryFlag = `http://${window.location.hostname}/static/flags/${subDomain}.png`;
         return country.countryFlag;
     }
 
