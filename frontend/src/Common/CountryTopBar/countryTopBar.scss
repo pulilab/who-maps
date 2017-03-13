@@ -25,7 +25,7 @@
   }
 
   .md-toolbar-tools {
-    height: 120px !important;
+    height: auto !important;
     max-height: 120px !important; /* 160 */
     padding: 35px 40px !important;
     font-size: $body-font-size-base;
@@ -34,13 +34,14 @@
     .country-logo {
       img {
         float: left;
+        width: auto;
         min-height: 30px;
         max-height: 90px;
         transform-origin: top left !important;
         transition: $swift-ease-out;
 
         &.no-country {
-          height: 28px;
+          height: 30px;
         }
       }
     }
