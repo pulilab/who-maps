@@ -38,6 +38,7 @@
         min-height: 30px;
         max-height: 90px;
         transform-origin: top left !important;
+        //transform: translate3d(0,0,0);
         transition: $swift-ease-out;
 
         &.no-country {
@@ -137,7 +138,7 @@
       background-size: auto 100%;
       background-repeat: no-repeat;
       background-position: 0 14px;
-      opacity: 0.9;
+      opacity: 0.5;
     }
 
     h3 {
@@ -172,7 +173,6 @@
       float: right;
       width: 150px;
       margin: 7px 100px 0 30px;
-      color: $color-primary;
     }
   }
 
