@@ -2,11 +2,12 @@ import Protected  from '../Protected';
 
 class CountryTopBarController extends Protected {
 
-    constructor($state, $scope) {
+    constructor($state, $scope, $timeout) {
         super();
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
     }
 
@@ -17,7 +18,17 @@ class CountryTopBarController extends Protected {
         if (this.user) {
             this.userProfile = this.cs.userProfile;
         }
+        window.onscroll = this.scrollEventHandler.bind(this);
+        document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
     }
+
+    scrollEventHandler(e) {
+        const vm = this;
+        vm.timeout(() => {
+            vm.isScrolled = e.target.scrollTop > 10 ? 'scrolled-down' : 'not-scrolled';
+        });
+    }
+
 
     hasProfile() {
         return this.cs.hasProfile();
@@ -79,11 +90,11 @@ class CountryTopBarController extends Protected {
 
     static countryTopBarControllerFactory() {
         require('./countryTopBar.scss');
-        function countryTopBarController($state, $scope) {
-            return new CountryTopBarController($state, $scope);
+        function countryTopBarController($state, $scope, $timeout) {
+            return new CountryTopBarController($state, $scope, $timeout);
         }
 
-        countryTopBarController.$inject = ['$state', '$scope'];
+        countryTopBarController.$inject = ['$state', '$scope', '$timeout'];
 
         return countryTopBarController;
     }
