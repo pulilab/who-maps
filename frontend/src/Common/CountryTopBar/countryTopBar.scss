@@ -4,7 +4,7 @@
 /* TOP NAVIGATION BAR
    ============================= */
 
-.main-toolbar {
+.main-toolbar.toolbar-global {
   z-index: 1000;
   min-height: 48px;
   position: fixed;
@@ -13,9 +13,17 @@
   transform: translateX(-50%);
   width: calc(100% - 10px);
   max-width: $page-max-width !important;
-  min-height: 120px;
+  min-width: $page-min-width;
+  min-height: 98px;
   max-height: 160px;
   box-shadow: none;
+
+  @media only screen and (max-width: 1140px) {
+    position: absolute;
+    transform: none;
+    left: 0;
+    width: calc(100% - 20px);
+  }
 
   &.toolbar-global {
     background-color: #FFFFFF;
@@ -70,6 +78,7 @@
       .country-flag {
         float: left;
         display: inline-block;
+        width: auto;
         min-width: 30px;
         height: 20px;
         margin-top: 8px;
