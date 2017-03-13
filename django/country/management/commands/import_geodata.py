@@ -32,14 +32,28 @@ class Command(BaseCommand):
                         break
                     except KeyError:
                         country.code = geom['properties']['ISO3166-1:alpha2']
-            except KeyError:
+            except:
                 if country.name == 'the-gambia':
                     country.code = 'GM'
+                elif country.name == 'bangladesh':
+                    country.code = 'BD'
+                elif country.name == 'malawi':
+                    country.code = 'MW'
+                elif country.name == 'uzbekistan':
+                    country.code = 'UZ'
+                elif country.name == 'india':
+                    country.code = 'IN'
+                elif country.name == 'togo':
+                    country.code = 'TG'
+                elif country.name == 'azerbaijan':
+                    country.code = 'AZ'
 
-            if not country.code:
-                country.code = "NULL"
+            finally:
+                if not country.code:
+                    country.code = "NULL"
 
-            country.save()
+                country.save()
+
             self.stdout.write("{} imported.".format(country.name))
 
         self.stdout.write("-- Writing Project Public IDs based on country codes...")
