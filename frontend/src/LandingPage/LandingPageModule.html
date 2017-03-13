@@ -1,9 +1,9 @@
 <div class="landing-wrapper" layout=column>
-    <div class="bg-hero" layout=row layout-align="start end">
+    <div class="bg-hero" ng-style="vm.countryCover" layout=row layout-align="start end">
         <div class="welcome">
             <div class="welcome-text">
                 <h2 class="md-display-3">Welcome!</h2>
-                <h5 class="md-headline">This Digital Health Atlas aims to strengthen the value and impact of digital health investments, improve coordination, and facilitate institutionalization and scale.</h5>
+                <h5 class="md-headline">{{vm.countryData.cover_text}}</h5>
             </div>
 
             <searchbar></searchbar>

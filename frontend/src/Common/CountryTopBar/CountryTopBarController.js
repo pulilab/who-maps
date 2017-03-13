@@ -12,12 +12,22 @@ class CountryTopBarController extends Protected {
     }
 
     onInit() {
+        const vm = this;
         this.defaultOnInit();
         this.cs = require('../CommonServices');
+        this.ccs = require('../CustomCountryService');
         this.writeUserRole = this.writeUserRole.bind(this);
         if (this.user) {
             this.userProfile = this.cs.userProfile;
         }
+        const subDomain = this.ccs.getSubDomain();
+        this.countryFlag = this.ccs.getCountryFlag(subDomain);
+        this.ccs.getCountryData(subDomain).then(data => {
+            this.scope.$evalAsync(() => {
+                vm.countryData = data;
+            });
+        });
+
         window.onscroll = this.scrollEventHandler.bind(this);
         document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
     }

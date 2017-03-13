@@ -1,13 +1,14 @@
 import { Storage } from '../Common/';
 import SignupService from '../Common/Signup/SignupService';
-import LandingPageService from './landingPageService';
+import { CustomCountryService } from '../Common/';
 
 class LandingPageModuleController {
 
     constructor($scope, $location, $anchorScroll) {
         this.storage = new Storage();
         this.ss = new SignupService();
-        this.lps = new LandingPageService();
+        this.ccs = CustomCountryService;
+        this.scope = $scope;
         this.EE = window.EE;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
@@ -23,11 +24,15 @@ class LandingPageModuleController {
             const commonService = require('../Common/CommonServices');
             this.projectList = commonService.projectList;
         }
-        const hostArray = window.location.host.split('.');
-        const subDomain = hostArray.length > 1 ? hostArray.shift() : 'who';
-        this.lps.getCountryData(subDomain).then(data => {
-            console.log(data);
-            vm.countryData = data;
+        const subDomain = this.ccs.getSubDomain();
+        this.ccs.getCountryData(subDomain).then(data => {
+            this.scope.$evalAsync(() => {
+                vm.countryData = data;
+                vm.countryCover = {
+                    background: `url(${data.cover}) 0 -10px`,
+                    'background-size': 'cover'
+                };
+            });
         });
     }
 

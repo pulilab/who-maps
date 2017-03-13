@@ -52,17 +52,6 @@ const distPlugins = [
 const devPlugins = [].concat(basePlugins);
 
 
-const devPreLoaders = [
-    {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: [
-            /node_modules/,
-            /.*-spec\.js/
-        ]
-    }
-];
-
 
 module.exports = {
     entry: {
@@ -99,9 +88,9 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'sass-loader' }
                 ]
             },
             {

@@ -37,6 +37,7 @@ import TermsOfUseComponent from './TermsOfUse/TermsOfUse';
 import TopBarComponent from './TopBar/topBarComponent';
 import SubBarComponent from './SubBar/subBarComponent';
 import CountryTopBarComponent from './CountryTopBar/countryTopBarComponent';
+import CustomCountryService from './CustomCountryService';
 
 const moduleName = 'Components';
 
@@ -76,4 +77,5 @@ export { Storage };
 export { SimpleApi };
 export { Protected };
 export { CommonServices };
+export { CustomCountryService };
 export { moduleName as Components };
