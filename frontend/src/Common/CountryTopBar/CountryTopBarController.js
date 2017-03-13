@@ -35,7 +35,7 @@ class CountryTopBarController extends Protected {
     scrollEventHandler(e) {
         const vm = this;
         vm.timeout(() => {
-            vm.isScrolled = e.target.scrollTop > 10 ? 'scrolled-down' : 'not-scrolled';
+            vm.isScrolled = e.target.scrollTop > 100 ? 'scrolled-down' : 'not-scrolled';
         });
     }
 
