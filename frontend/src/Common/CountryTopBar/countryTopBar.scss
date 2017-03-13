@@ -9,60 +9,80 @@
   min-height: 48px;
   position: fixed;
   top: 0;
-  left: 0;
+  left: calc(50% - 5px);
+  transform: translateX(-50%);
   width: calc(100% - 10px);
-  box-shadow: $whiteframe-shadow-4dp;
+  max-width: $page-max-width !important;
+  min-height: 120px;
+  max-height: 160px;
+  box-shadow: none;
 
   &.toolbar-global {
-    background-color: #1A237E;
-
-    .md-toolbar-tools {
-      padding-right: 12px;
-    }
+    background-color: #FFFFFF;
   }
 
   .md-toolbar-tools {
-    max-height: 48px;
-    height: 48px;
+    height: auto;
+    padding: 35px 40px !important;
     font-size: $body-font-size-base;
 
+    .country-logo {
+      img {
+        width: auto;
+        min-height: 28px;
+        max-height: 90px;
+
+        &.no-country {
+          height: 28px;
+        }
+      }
+    }
+
     .md-button {
-      margin-left: 12px;
-      min-width: 10px !important;
+      margin: 0 0 0 30px !important;
 
-      &.view-selector {
-        margin-right: 12px;
+      .material-icons,
+      > span {
+        width: auto;
+        color: $color-primary !important;
       }
 
-      &.landing-link {
-        margin-right: 12px;
-      }
-
-      .material-icons {
-        transform: translateY(-1px);
+      &:hover {
+        .material-icons,
+        > span {
+          color: $color-primary-muted !important;
+        }
       }
     }
 
     .add-new-project {
-      margin-right: 18px;
+      margin-right: 0 !important;
     }
-  }
 
-  .app-title {
-    display: inline-block;
-    margin: 0 24px 0 0 !important;
-    padding: 4px 0;
-    min-height: 28px;
-    height: 28px;
-
-    > span {
+    .current-country {
       display: inline-block;
-      min-width: 165px;
-      height: 24px;
-      background: red url("images/dha-logo.svg") left center no-repeat;
-      text-indent: -999em;
+      height: 36px;
+      line-height: 36px;
+      margin: 6px 0;
+      padding-right: 30px;
+      border-right: 1px solid $color-gray-lighter;
 
-      @include text-hide();
+      .country-flag {
+        float: left;
+        display: inline-block;
+        min-width: 30px;
+        height: 20px;
+        margin-top: 8px;
+        background-color: $color-gray-lighter;
+        border: 1px solid $color-gray-lighter;
+      }
+
+      .country-name {
+        float: left;
+        margin-left: 10px;
+        color: $color-gray;
+        text-transform: uppercase;
+      }
     }
   }
 
@@ -70,270 +90,79 @@
     padding-right: 0;
   }
 
-}
-
-.md-medium-tall {
-
-  &>.md-toolbar-tools {
-  }
-
-  .md-toolbar-tools {
-    // background-color: $color-primary;
-    background-color: #1A237E;
-  }
-
   .md-toolbar-tools-bottom {
-    background-color: $color-white;
-    box-shadow: 0 1px 0 #BDBDBD;
-  }
-
-  .project-name {
-    color: $text-primary;
-    font-size: 24px;
-  }
-
-  .project-selector {
-    md-input-container {
-      margin: 0 0 0 12px !important;
-      padding: 0 !important;
-      max-width: 50vw;
-
-      md-select {
-        transform: translateY(-4px);
-
-        .md-select-value {
-          padding-left: 0;
-          border: none;
-          color: $text-primary;
-        }
-
-        .md-select-icon {
-          margin: 0;
-        }
-      }
-    }
-  }
-
-  .project-submenu {
-    margin: 0 10px 0 10px;
-    .md-menu,
-    .md-button {
-      min-width: 80px !important;
-    }
-  }
-
-  .project-mainmenu {
-    .md-button {
-      position: relative;
-      overflow: visible;
-      margin-right: 10px;
-      padding: 0 12px !important;
-      line-height: 48px;
-      // border-radius: 3px 3px 0 0;
-
-      &:hover {
-        color: #fff;
-        background-color: $color-primary !important;
-      }
-
-      &.active {
-        background-color: #fff !important;
-
-        > span {
-          color: $color-primary !important;
-        }
-      }
-    }
-  }
-
-  .project-info {
-    margin-right: 13px;
+    position: absolute;
+    top: 100%;
+    left: 0;
     display: block;
-    height: 48px;
-    color: $color-gray;
-    font-size: $body-font-size-base;
+    width: 100%;
+    height: 80px;
+    padding: 16px 40px;
+    background-color: rgba(159,176,185,0.9);
+    color: $color-white;
 
-    .info-block {
+    &::after {
+      position: absolute;
+      top: -40px;
+      right: 28px;
+      content: "";
+      display: inline-block;
+      width: 110px;
+      height: 133px;
+      background-image: url("./images/book-maps-toolkit.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      content: "";
+      display: inline-block;
+      width: 420px;
+      height: 80px;
+      background-image: url("./images/book-maps-toolkit-bg.svg");
+      background-size: auto 100%;
+      background-repeat: no-repeat;
+      background-position: 0 14px;
+      opacity: 0.9;
+    }
+
+    h3 {
       float: left;
+      margin: 0 30px 0 0;
+      padding: 0 30px 0 0;
       height: 48px;
-      padding-left: 15px;
-      padding-right: 15px;
-      border-left: 1px solid $color-gray-lighter;
-
-        h6 {
-          font-size: 10px;
-          font-weight: 500;
-          height:14px;
-          margin: 8px 0 2px;
-          padding: 0;
-          text-transform: uppercase;
-        }
-
-      > span {
-        display: inline-block;
-        float: left;
-        min-height: 24px;
-        line-height: 12px;
-        color: $text-primary;
-        font-size:12px;
-        font-weight: 500;
-        &:last-of-type {
-          margin-right: 0;
-        }
-      }
+      font-size: 20px;
+      line-height: 48px;
+      border-right: 1px solid $color-gray-lighter;
     }
 
-    .md-button {
-      float: right;
-      margin: 0 14px 0 6px;
+    .dl-note {
+      position: relative;
+      float: left;
+      width: 30%;
+      height: 48px;
 
-      .material-icons,
-      > span {
-        color: $color-gray !important;
-      }
-
-      &:hover {
-        .material-icons,
-        > span {
-          color: $text-primary !important;
-        }
-      }
-    }
-
-    .contact-button {
-      &.md-button {
-        min-width: 0 !important;
+      > p {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
         margin: 0;
-        padding: 0;
-        font-size:12px;
-        margin-top: 12px;
-
-        span,
-        .material-icons {
-          margin: 0;
-          padding: 0;
-          line-height: 12px;
-          font-size:12px;
-          height:12px;
-          color: $color-primary !important;
-        }
-        .material-icons {
-          position: relative;
-          top: -1px;
-        }
-      }
-    }
-  }
-}
-
-.md-toolbar-tools {
-  .md-button {
-    margin: 0;
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-    min-width: auto;
-    border-radius: 0;
-    background-color: transparent !important;
-
-    .material-icons,
-    > span {
-      width: auto;
-      color: $color-primary-muted !important;
-      transition: $swift-ease-out;
-    }
-
-    &:hover {
-      .material-icons,
-      > span {
-        color: $color-white !important;
-      }
-    }
-  }
-
-  .md-menu {
-    .has-message {
-      color: $color-white !important;
-    }
-  }
-}
-
-.share-url {
-  position: relative;
-  width:400px;
-  height:170px;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-
-  .share-title {
-    position: absolute;
-    padding:0;
-    margin:0;
-    top:20px;
-    left:20px;
-    color: $color-gray-light;
-    text-transform: uppercase;
-    font-size:12px;
-
-    // Crossbrowser fixes
-    .browser-ie.version-11 & {
-      left: 0;
-      margin-left: 20px;
-    }
-  }
-
-  .share-url-box {
-    padding:0 0 0 10px;
-    margin:0;
-    position: absolute;
-    outline:none;
-    border:0;
-    left: 20px;
-    top: 50px;
-    width:350px;
-    height:35px;
-    background: $color-gray-lighter;
-  }
-
-  .share-button-container {
-    overflow: hidden;
-
-    .share-copy {
-      padding: 0;
-      margin: 0;
-      position: absolute;
-      left: 20px;
-      top: 105px;
-      width: 115px;
-      height: 35px;
-      font-weight: bold;
-      font-size: 14px;
-      color: $color-white;
-    }
-
-    .share-copied {
-      background-color: $color-green;
-      pointer-events: none;
-
-      &:hover {
-        background-color: $color-green;
-      }
-
-      md-icon {
-        color: $color-white;
+        font-size: 14px;
+        line-height: 18px;
+        color: $color-gray-lightest;
       }
     }
 
-    .share-cancel {
-      padding: 0;
-      margin: 0;
-      position: absolute;
-      left: 160px;
-      top: 105px;
-      width: 40px;
-      height: 15px;
-      color: $color-gray-light;
-
+    .dl-maps-link {
+      float: right;
+      width: 150px;
+      margin: 7px 110px 0 30px;
+      color: $color-primary;
     }
   }
+
 }

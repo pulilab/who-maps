@@ -1,8 +1,7 @@
-<md-toolbar class="main-toolbar toolbar-global md-tall">
+<md-toolbar class="main-toolbar toolbar-global" ng-class="vm.isScrolled">
     <div class="md-toolbar-tools">
-
         <div class="country-logo">
-            <img src="images/dha-logo.svg" />
+            <img src="images/dha-logo-blue.svg" class="no-country" />
         </div>
 
         <md-button aria-label="Go to my Dashboard"
@@ -21,7 +20,7 @@
             <div class="country-name">Singapore</div>
         </div>
 
-        <md-button class="landing-link"
+        <md-button class="landing-link md-primary"
                    ui-sref-active="active"
                    ui-sref="login"
                    aria-label="Login"
@@ -30,7 +29,7 @@
             Login
         </md-button>
 
-        <md-button class="landing-link"
+        <md-button class="landing-link md-primary"
                    ui-sref-active="active"
                    ui-sref="signup"
                    aria-label="Singup"
@@ -39,7 +38,14 @@
             Sign Up
         </md-button>
     </div>
-    <div class="md-toolbar-tools md-toolbar-tools-bottom">
-        BOTTOM PART
+    <div class="md-toolbar-tools-bottom">
+        <h3>Get MAPS Toolkit now!</h3>
+        <div class="dl-note">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt umque!</p>
+        </div>
+        <md-button class="dl-maps-link md-raised"
+                   aria-label="Download MAPS Toolkit">
+            Download Pdf
+        </md-button>
     </div>
 </md-toolbar>
