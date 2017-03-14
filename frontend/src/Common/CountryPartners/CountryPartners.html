@@ -1,0 +1,17 @@
+<div flex="100">
+    <h4>Project Partners</h4>
+</div>
+
+<div class="partnerscontainer">
+
+    <div
+            ng-repeat="logo in vm.logos track by $index | limitTo:8 "
+            class="partner"
+            ng-if="vm.logos.length">
+
+        <figure>
+            <img class="logoimg" ng-src="{{logo}}">
+        </figure>
+    </div>
+
+</div>
