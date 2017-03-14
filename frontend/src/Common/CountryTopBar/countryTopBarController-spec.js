@@ -1,5 +1,5 @@
-import { default as AppModuleController } from './AppModuleController';
-import { EE } from '../Common/';
+import { default as AppModuleController } from './CountryTopBarController';
+import { EE } from '../common';
 
 EE.initialize();
 
@@ -24,10 +24,10 @@ const $scope = {
     $watch: () => {}
 };
 
-describe('SubBarController', () => {
+describe('CountryTopBarController', () => {
 
     beforeEach(() => {
-        ac = AppModuleController.appControllerFactory()($state, $scope);
+        ac = AppModuleController.subBarControllerFactory()($state, $scope);
         ac.cs = {
             projectList: [],
             projectStructure: mockData,

@@ -1,5 +1,5 @@
-import { default as AppModuleController } from './AppModuleController';
-import { EE } from '../Common/';
+import { default as SubBarController } from './SubBarController';
+import EE  from '../EE';
 
 EE.initialize();
 
@@ -27,7 +27,7 @@ const $scope = {
 describe('SubBarController', () => {
 
     beforeEach(() => {
-        ac = AppModuleController.appControllerFactory()($state, $scope);
+        ac = SubBarController.subBarControllerFactory()($state, $scope);
         ac.cs = {
             projectList: [],
             projectStructure: mockData,

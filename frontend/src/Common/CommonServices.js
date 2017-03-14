@@ -128,7 +128,12 @@ class CommonServices extends Protected {
         });
         this.projectList = _.sortBy(this.projectList, ['id']);
         _.forEach(this.projectStructure.countries, country => {
-            country.name = this.prettifyCountryName(country.name);
+            try {
+                country.name = this.prettifyCountryName(country.name);
+            }
+            catch (e) {
+                console.debug('the object was already parsed');
+            }
             Object.freeze(country);
         });
 

@@ -1,0 +1,59 @@
+<md-toolbar class="main-toolbar toolbar-global toolbar-landing" ng-class="vm.isScrolled">
+    <div class="md-toolbar-tools">
+        <div class="country-logo" layout-align="">
+
+            <!-- No country -->
+            <!-- <img src="images/dha-logo-blue.svg" class="no-country" /> -->
+
+            <!-- Country sample -->
+            <img src="images/sample-country-logo.png" class="" />
+
+        </div>
+
+        <md-button aria-label="Go to my Dashboard"
+                   class="view-selector"
+                   ui-sref="dashboard"
+                   ng-hide="true"
+                   md-no-ink>
+            <md-icon class="material-icons ">apps</md-icon>
+            Go to my dashboard
+        </md-button>
+
+        <span flex ></span>
+
+        <div class="current-country row">
+            <div class="country-flag">
+              <img src="images/si.png" alt="Singapore">
+            </div>
+            <div class="country-name">Slovakia</div>
+        </div>
+
+        <md-button class="landing-link md-primary"
+                   ui-sref-active="active"
+                   ui-sref="login"
+                   aria-label="Login"
+                   ng-show="vm.showLogin()"
+                   md-no-ink>
+            Login
+        </md-button>
+
+        <md-button class="landing-link md-primary"
+                   ui-sref-active="active"
+                   ui-sref="signup"
+                   aria-label="Singup"
+                   ng-show="vm.showSignUp()"
+                   md-no-ink >
+            Sign Up
+        </md-button>
+    </div>
+    <div class="md-toolbar-tools-bottom">
+        <h3>Get MAPS Toolkit now!</h3>
+        <div class="dl-note">
+          <p>A new toolkit has been launched to help mHealth implementers<br> to successfully and sustainably scale-up their innovations.</p>
+        </div>
+        <md-button class="dl-maps-link md-raised md-primary"
+                   aria-label="Download MAPS Toolkit">
+            Download Pdf
+        </md-button>
+    </div>
+</md-toolbar>

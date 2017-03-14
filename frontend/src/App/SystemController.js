@@ -7,6 +7,7 @@ class SystemController {
         this.EE = window.EE;
         this.state = $state;
         this.storage = new Storage();
+        this.showCountryTopBar = true;
         this.eventBindings();
         this.cs = require('../Common/CommonServices');
         this.isLogin = this.storage.get('login');

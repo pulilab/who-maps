@@ -9,6 +9,8 @@ const production = process.env.NODE_ENV === 'production';
 const live = process.env.LIVE_FLAG === 'live';
 const debug = process.env.DEBUG_MODE === 'debug';
 
+console.log(production)
+
 const PATH = {
     build: path.resolve(__dirname, 'builds')
 };
@@ -140,6 +142,6 @@ module.exports = {
             }
         }
     },
-    devtool: production ? false : 'eval-cheap-source-map',
+    devtool: production ? false : 'cheap-module-eval-source-map',
     plugins: production ? distPlugins : devPlugins
 };

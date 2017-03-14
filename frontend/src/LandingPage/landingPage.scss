@@ -3,13 +3,16 @@
 
 .landing-wrapper {
 
+  max-width: $page-max-width !important;
+  margin: 70px auto 0;
+
   h2 {
     font-size: rem(6.000);
   }
 
   .bg-hero {
-    min-height: 800px;
-    background: $color-primary url("./images/bg-welcome-3.jpg") 0 -10px;
+    min-height: 720px;
+    background: $color-primary url("./images/hero-bg-image.jpg") 0 0;
     background-size: cover;
 
     // TODO
@@ -24,18 +27,19 @@
   }
 
   .welcome {
-    margin: 0 30px;
-    padding: 30px 50px 80px;
+    margin: 0;
+    padding: 30px 60px 20px;
     width: calc( 45% - 100px );
-    background-color: rgba(219,126,3,.87);
+    background-color: rgba(250,140,0,.87);
 
     .welcome-text,
     .search-project {
-      padding-right: 50px;
+      padding-right: 40px;
     }
 
     searchbar {
       z-index: 900 !important;
+      padding-top: 10px;
     }
 
     h2, h5 {
@@ -46,9 +50,9 @@
 
   .content-wrapper {
     position: relative;
-    margin: 0 30px;
+    margin: 0;
     padding: 0 0 100px;
-    background-color: $color-primary;
+    // background-color: $color-primary;
 
     // Crossbrowser fixes
     .browser-firefox &,
@@ -57,36 +61,20 @@
       padding: 0;
     }
 
-    &::before {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      display: block;
-      width: 100%;
-      height: 10px;
-      background: url("./images/maps-zebra.png") 0 0 no-repeat;
-      background-size: cover;
-      content: "";
-    }
-
     .what-is-aside {
-      margin-top: -50px;
-      padding: 50px;
+      padding: 25px 50px;
       min-height: 500px;
-      background: url("./images/bg-whatis.jpg") 0 0 no-repeat;
-      background-size: 100% auto;
 
       @include clearfix();
 
       h2, h5 {
-        color: $color-white;
+        color: $text-primary;
       }
 
       .dha-feature {
         float: left;
         width: 100%;
-        margin: 25px 0;
+        margin: 20px 0;
 
         .img-wrapper {
           position: relative;
@@ -113,8 +101,10 @@
           }
         }
         p {
-          margin: 0 0 25px 30px;
-          color: $color-white;
+          margin: 0 20px 20px 30px;
+          font-size: 14px;
+          line-height: 20px;
+          color: $text-secondary;
 
           // Crossbrowser fixes
           .browser-safari & {
@@ -128,17 +118,30 @@
       overflow: hidden;
       position: relative;
       z-index: 100;
-      margin-top: -225px;
+      margin-top: -230px;
       margin-right: 0;
       margin-left: 0;
       padding: 40px 100px 40px;
       background-color: $color-white;
+      border-radius: 0 !important;
 
       // Crossbrowser fixes
       .browser-firefox &,
       .browser-microsoft_edge &,
       .browser-ie.version-11 & {
         padding-bottom: 240px;
+      }
+
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 13px;
+        background: url("./images/maps-zebra.png") 0 0 no-repeat;
+        background-size: 100% 100%;
+        content: "";
       }
 
       &.logged-out {}
@@ -168,10 +171,13 @@
         width: 100%;
       }
 
+      .role-form {
+        padding: 20px 0;
+      }
+
       .form-actions {
-        margin-top: 20px;
-        margin-bottom: 50px;
-        padding-top: 30px;
+        margin-top: 30px;
+        padding-top: 40px;
         border-top: 1px solid $color-gray-lighter;
 
         .md-button {
