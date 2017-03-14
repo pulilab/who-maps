@@ -4,18 +4,17 @@
 /* TOP NAVIGATION BAR
    ============================= */
 
-.main-toolbar.toolbar-global {
+.main-toolbar.toolbar-landing {
   z-index: 1000;
-  min-height: 48px;
   position: fixed;
-  top: 0;
   left: calc(50% - 5px);
   transform: translateX(-50%);
   width: calc(100% - 10px);
   max-width: $page-max-width !important;
   min-width: $page-min-width;
-  min-height: 98px;
-  max-height: 160px;
+  height: auto !important;
+  max-height: auto !important;
+  background-color: #FFFFFF;
   box-shadow: none;
 
   @media only screen and (max-width: 1140px) {
@@ -25,29 +24,32 @@
     width: calc(100% - 20px);
   }
 
-  &.toolbar-global {
-    background-color: #FFFFFF;
-  }
-
   .md-toolbar-tools {
-    height: auto;
+    height: auto !important;
+    max-height: 120px !important; /* 160 */
     padding: 35px 40px !important;
     font-size: $body-font-size-base;
+    transition: $swift-ease-out;
 
     .country-logo {
       img {
+        float: left;
         width: auto;
-        min-height: 28px;
+        min-height: 30px;
         max-height: 90px;
+        transform-origin: top left !important;
+        //transform: translate3d(0,0,0);
+        transition: $swift-ease-out;
 
         &.no-country {
-          height: 28px;
+          height: 30px;
         }
       }
     }
 
     .md-button {
       margin: 0 0 0 30px !important;
+      line-height: 48px;
 
       .material-icons,
       > span {
@@ -77,13 +79,17 @@
 
       .country-flag {
         float: left;
-        display: inline-block;
-        width: auto;
-        min-width: 30px;
-        height: 20px;
-        margin-top: 8px;
+        margin-top: 7px;
         background-color: $color-gray-lighter;
         border: 1px solid $color-gray-lighter;
+
+        img {
+          float: left;
+          display: inline-block;
+          width: auto;
+          min-width: 30px;
+          height: 20px;
+        }
       }
 
       .country-name {
@@ -93,10 +99,6 @@
         text-transform: uppercase;
       }
     }
-  }
-
-  searchbar {
-    padding-right: 0;
   }
 
   .md-toolbar-tools-bottom {
@@ -109,11 +111,12 @@
     padding: 16px 40px;
     background-color: rgba(159,176,185,0.9);
     color: $color-white;
+    transition: $swift-ease-out;
 
     &::after {
       position: absolute;
-      top: -40px;
-      right: 28px;
+      top: -28px;
+      right: 22px;
       content: "";
       display: inline-block;
       width: 110px;
@@ -135,23 +138,23 @@
       background-size: auto 100%;
       background-repeat: no-repeat;
       background-position: 0 14px;
-      opacity: 0.9;
+      opacity: 0.2;
     }
 
     h3 {
       float: left;
-      margin: 0 30px 0 0;
+      margin: 6px 30px 6px 0;
       padding: 0 30px 0 0;
-      height: 48px;
+      height: 36px;
       font-size: 20px;
-      line-height: 48px;
+      line-height: 36px;
       border-right: 1px solid $color-gray-lighter;
     }
 
     .dl-note {
       position: relative;
       float: left;
-      width: 30%;
+      width: 40%;
       height: 48px;
 
       > p {
@@ -161,7 +164,7 @@
         transform: translateY(-50%);
         margin: 0;
         font-size: 14px;
-        line-height: 18px;
+        line-height: 20px;
         color: $color-gray-lightest;
       }
     }
@@ -169,8 +172,32 @@
     .dl-maps-link {
       float: right;
       width: 150px;
-      margin: 7px 110px 0 30px;
-      color: $color-primary;
+      margin: 7px 100px 0 30px;
+    }
+  }
+
+  &.scrolled-down {
+    min-height: 10px;
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+
+    .md-toolbar-tools {
+      height: auto !important;
+      max-height: 120px !important;
+      padding: 15px 40px !important;
+
+      .country-logo {
+        img {
+          max-height: 60px;
+
+          &.no-country {}
+        }
+      }
+    }
+
+    .md-toolbar-tools-bottom {
+      pointer-events: none;
+      transform: translate3d(0,-10px,0);
+      opacity: 0;
     }
   }
 

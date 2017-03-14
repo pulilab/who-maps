@@ -1,10 +1,7 @@
 import os
 import shutil
-import logging
 import tarfile
-import json
 import sys
-from xml.dom import minidom
 
 import geodata_config
 
