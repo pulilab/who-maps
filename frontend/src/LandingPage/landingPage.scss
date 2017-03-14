@@ -205,7 +205,7 @@
         }
 
         .country-title {
-          margin: 0 8px;
+          margin: 8px 8px 0;
           font-size: 14px;
           text-transform: uppercase;
           color: $text-secondary;
@@ -228,12 +228,13 @@
         .project-stats-2 {
           position: relative;
           min-width: 120px;
-          border-left: 1px solid $color-gray-lighter;
-          background-color: $color-gray-lightest;
+          border-left: 1px solid darken($color-gray-lighter, 6%);
+          background-color: $color-gray-lighter;
 
           donors .dash-stat-card {
             width: 80px;
-            padding: 0 20px;
+            height: auto;
+            padding: 5px 20px 15px;
             margin: 0 auto;
             position: absolute;;
             top: 50%;
