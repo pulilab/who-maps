@@ -49,26 +49,38 @@
             <h2 class="md-display-3">My Projects</h2>
 
             <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projectList">
-                <h5 class="project-title md-headline">{{project.name}} ({{project.countryName}})</h5>
-                <div class="project-links md-block">
-                  <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary" md-no-ink>
-                      <md-icon class="material-icons">apps</md-icon>
-                      Dashboard
-                  </md-button>
-                    <md-button aria-label="Update Scores" ui-sref="maps({appName: project.id})" class="md-primary" md-no-ink>
-                        <md-icon class="material-icons">playlist_add_check</md-icon>
-                        Update
+              <div layout="row" layout-align="start stretch">
+                <div flex="85">
+                  <hgroup>
+                    <h3 class="project-title md-headline">{{project.name}}</h3>
+                    <h6 class="country-title md-subhead">{{project.countryName}}</h6>
+                  </hgroup>
+                  <div class="project-links md-block">
+                    <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary md-small" md-no-ink>
+                        <md-icon class="material-icons">apps</md-icon>
+                        Dashboard
                     </md-button>
-                    <md-button aria-label="Summary Score" ui-sref="summary({appName: project.id})" class="md-primary" md-no-ink>
-                        <md-icon class="material-icons">insert_chart</md-icon>
-                        Summary
-                    </md-button>
+                      <md-button aria-label="Update Scores" ui-sref="maps({appName: project.id})" class="md-primary md-small" md-no-ink>
+                          <md-icon class="material-icons">playlist_add_check</md-icon>
+                          Update
+                      </md-button>
+                      <md-button aria-label="Summary Score" ui-sref="summary({appName: project.id})" class="md-primary md-small" md-no-ink>
+                          <md-icon class="material-icons">insert_chart</md-icon>
+                          Summary
+                      </md-button>
+                    </div>
+                  </div>
+                  <div class="project-stats-2" flex="15">
+                    <donors number="project.donors.length"></donors>
+                  </div>
                 </div>
-                <div class="project-stats" layout="row" layou-align="start center">
-                    <!--<viewers flex="33" trend="'up'" number="1509"></viewers>-->
-                    <!--<followers flex="33" trend="'down'" number="87"></followers>-->
+
+
+                <!-- <div class="project-stats" layout="row" layout-align="start center">
+                    <viewers flex="33" trend="'up'" number="1509"></viewers>
+                    <followers flex="33" trend="'down'" number="87"></followers>
                     <donors flex="20" number="project.donors.length"></donors>
-                </div>
+                </div> -->
             </md-card>
 
         </md-card>
