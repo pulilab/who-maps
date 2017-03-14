@@ -3,16 +3,14 @@ import tempfile
 from datetime import datetime
 
 from django.core import mail
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
-from django.test.client import MULTIPART_CONTENT, BOUNDARY, encode_multipart
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country
 from user.models import Organisation, UserProfile
-from .models import PartnerLogo, Project
+from .models import Project
 
 
 class SetupTests(APITestCase):
