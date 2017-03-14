@@ -37,6 +37,7 @@ import TermsOfUseComponent from './TermsOfUse/TermsOfUse';
 import TopBarComponent from './TopBar/topBarComponent';
 import SubBarComponent from './SubBar/subBarComponent';
 import CountryTopBarComponent from './CountryTopBar/countryTopBarComponent';
+import CountryPartners from './CountryPartners/countryPartnersComponent';
 
 const moduleName = 'Components';
 
@@ -67,6 +68,7 @@ angular.module(moduleName,
     .component(TopBarComponent.name, TopBarComponent)
     .component(SubBarComponent.name, SubBarComponent)
     .component(CountryTopBarComponent.name, CountryTopBarComponent)
+    .component(CountryPartners.name, CountryPartners)
     .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 
