@@ -12,7 +12,7 @@
 
   .bg-hero {
     min-height: 720px;
-    background: $color-primary url("./images/bg-welcome-3.jpg") 0 0;
+    background: $color-primary url("./images/hero-bg-image.jpg") 0 0;
     background-size: cover;
 
     // TODO
@@ -117,7 +117,7 @@
       overflow: hidden;
       position: relative;
       z-index: 100;
-      margin-top: -225px;
+      margin-top: -230px;
       margin-right: 0;
       margin-left: 0;
       padding: 40px 100px 40px;
@@ -137,7 +137,7 @@
         left: 0;
         display: block;
         width: 100%;
-        height: 10px;
+        height: 13px;
         background: url("./images/maps-zebra.png") 0 0 no-repeat;
         background-size: 100% 100%;
         content: "";
