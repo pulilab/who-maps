@@ -11,8 +11,8 @@
   }
 
   .bg-hero {
-    min-height: 800px;
-    background: $color-primary url("./images/bg-welcome-3.jpg") 0 -10px;
+    min-height: 720px;
+    background: $color-primary url("./images/bg-welcome-3.jpg") 0 0;
     background-size: cover;
 
     // TODO
@@ -27,18 +27,19 @@
   }
 
   .welcome {
-    margin: 0 30px;
-    padding: 30px 50px 80px;
+    margin: 0;
+    padding: 30px 60px 20px;
     width: calc( 45% - 100px );
     background-color: rgba(219,126,3,.87);
 
     .welcome-text,
     .search-project {
-      padding-right: 50px;
+      padding-right: 40px;
     }
 
     searchbar {
       z-index: 900 !important;
+      padding-top: 10px;
     }
 
     h2, h5 {
@@ -49,9 +50,9 @@
 
   .content-wrapper {
     position: relative;
-    margin: 0 30px;
+    margin: 0;
     padding: 0 0 100px;
-    background-color: $color-primary;
+    // background-color: $color-primary;
 
     // Crossbrowser fixes
     .browser-firefox &,
@@ -60,30 +61,14 @@
       padding: 0;
     }
 
-    &::before {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      display: block;
-      width: 100%;
-      height: 10px;
-      background: url("./images/maps-zebra.png") 0 0 no-repeat;
-      background-size: cover;
-      content: "";
-    }
-
     .what-is-aside {
-      margin-top: -50px;
-      padding: 50px;
+      padding: 25px 50px;
       min-height: 500px;
-      background: url("./images/bg-whatis.jpg") 0 0 no-repeat;
-      background-size: 100% auto;
 
       @include clearfix();
 
       h2, h5 {
-        color: $color-white;
+        color: $text-primary;
       }
 
       .dha-feature {
@@ -116,8 +101,9 @@
           }
         }
         p {
-          margin: 0 0 25px 30px;
-          color: $color-white;
+          margin: 0 20px 25px 30px;
+          font-size: 14px;
+          color: $text-secondary;
 
           // Crossbrowser fixes
           .browser-safari & {
@@ -136,12 +122,25 @@
       margin-left: 0;
       padding: 40px 100px 40px;
       background-color: $color-white;
+      border-radius: 0 !important;
 
       // Crossbrowser fixes
       .browser-firefox &,
       .browser-microsoft_edge &,
       .browser-ie.version-11 & {
         padding-bottom: 240px;
+      }
+
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 10px;
+        background: url("./images/maps-zebra.png") 0 0 no-repeat;
+        background-size: 100% 100%;
+        content: "";
       }
 
       &.logged-out {}
@@ -169,6 +168,10 @@
         display: block;
         float: left;
         width: 100%;
+      }
+
+      .role-form {
+        padding: 20px 0;
       }
 
       .form-actions {

@@ -138,7 +138,7 @@
       background-size: auto 100%;
       background-repeat: no-repeat;
       background-position: 0 14px;
-      opacity: 0.5;
+      opacity: 0.2;
     }
 
     h3 {
@@ -196,6 +196,7 @@
 
     .md-toolbar-tools-bottom {
       pointer-events: none;
+      transform: translate3d(0,-10px,0);
       opacity: 0;
     }
   }
