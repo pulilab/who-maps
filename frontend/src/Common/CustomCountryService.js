@@ -73,9 +73,9 @@ class CustomCountryService extends SimpleApi {
                 resolve(country.mapData);
             }
             this.get(`/static/country-geodata/${countryCode}.json`, true).then(data =>{
-            console.log(data);
-            country.mapData = data;
-            // country
+                console.log(data);
+                country.mapData = data;
+                // country
             });
         });
 
