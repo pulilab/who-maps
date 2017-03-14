@@ -1,3 +1,22 @@
 from django.contrib import admin
+from country.models import Country, PartnerLogo
 
-# Register your models here.
+
+class PartnerLogoInline(admin.TabularInline):
+    model = PartnerLogo
+    extra = 0
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')
+    ordering = ('name',)
+    inlines = (PartnerLogoInline, )
+
+    def get_queryset(self, request):
+        qs = super(CountryAdmin, self).get_queryset(request)
+
+        if request.user.is_staff and not request.user.is_superuser:
+            qs = qs.filter(user__user=request.user)
+
+        return qs
