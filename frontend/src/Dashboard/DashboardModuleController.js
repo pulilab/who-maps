@@ -1,5 +1,4 @@
 import DashboardService from './DashboardService.js';
-import DashboardMapService from './DashboardMapService.js';
 import AuthApi from '../Common/AuthApi';
 import { StaticUtilities } from '../Utilities';
 import { Protected } from '../Common/';
@@ -31,7 +30,7 @@ class DashboardModuleController extends Protected {
         }
 
         this.service = new DashboardService(this.projectId);
-        this.mapService = new DashboardMapService();
+        this.mapService = require('../Common/CustomCountryService');
 
         if (this.projectId) {
             this.cs.getProjectData(this.projectId).then(data => {
@@ -303,11 +302,7 @@ class DashboardModuleController extends Protected {
     }
 
     fetchCountryMap(id) {
-
-        // console.debug('TRYING TO FETCH COUNTRYMAP for ID:', id);
-        this.mapService.getCountryTopo(id).then(data => {
-
-            // console.debug('RAW topo arrived from API, will send over EE', data);
+        this.mapService.getCountryMapData(id).then(data => {
             this.EE.emit('topoArrived', data);
         });
     }

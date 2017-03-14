@@ -37,7 +37,7 @@ class AppModuleController extends Protected {
     }
 
     showSubBar() {
-        return this.showCountryTopBar && this.user.projects.length !== 0;
+        return !this.showCountryTopBar && this.user.projects.length !== 0;
     }
 
     watchers() {

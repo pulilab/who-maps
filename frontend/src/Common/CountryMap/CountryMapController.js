@@ -183,46 +183,11 @@ class CountrymapController {
         this.EE.once('mapdataArrived', this.dataArrived, this);
     }
 
-    makeGeoFromTopo(topo, level) {
-
+    makeGeoFromTopo(topo) {
         // console.warn('TOPO', topo);
-        // console.warn('lvl', level);
-        const ret = topojson.feature(topo, topo.objects[level]);
-
-        // console.warn('GEO', ret);
-        // ret.features.forEach(el => { console.debug(el.properties.name); });
-
+        const subKey = _.keys(topo.objects)[0];
+        const ret = topojson.feature(topo, topo.objects[subKey]);
         return ret;
-    }
-
-    defaultLevels() {
-        const defaultLib = {};
-        _.forEach(this.cs.projectStructure.countries, country => {
-            // console.debug(country.name);
-            defaultLib[country.name] = 'admin_level_4';
-        });
-
-        const levelLib = {
-            'Albania':                      'admin_level_6', // #2.1
-            'Burkina Faso':                 'admin_level_5', // #2
-            'Cape Verde':                   'admin_level_6', // #2.1
-            'Guinea':                       'admin_level_6', // #2
-            // 'India':                        'admin_level_5', // #1
-            'Jamaica':                      'admin_level_6', // #2.1
-            'Nepal':                        'admin_level_6', // #1.5
-            'Philippines':                  'admin_level_3', // #1
-            'Sierra Leone':                 'admin_level_5', // #1
-            'The Gambia':                   'admin_level_5', // #1
-            'Uganda':                       'admin_level_6'  // #1.5
-            // 'Senegal':                       'admin_level_3', // #1
-            // 'Thailand':                     'admin_level_4', // #2.1
-            // 'Île Verte':                    'admin_level_6', // #2.1 Canada
-            // 'Trinidad and Tobago':          'admin_level_2'  // #2.1
-        };
-
-        _.merge(defaultLib, levelLib);
-
-        return defaultLib;
     }
 
     formatCountryName() {
@@ -254,7 +219,7 @@ class CountrymapController {
 
     calculateScale(topoJSON) {
         let ret = Math.max.apply(null,
-                topoJSON.admin_level_2.transform.scale.map(nr => {
+                topoJSON.transform.scale.map(nr => {
                     return 1 / nr;
                 })) * 10;
 
@@ -295,16 +260,12 @@ class CountrymapController {
 
         this.getBindablesFromTopo(topoJSON);
 
-        const levelLib = this.defaultLevels();
-        const level = levelLib[this.countryName] ? levelLib[this.countryName] : 'admin_level_4';
-
         // console.warn('Country name:', this.countryName);
         // console.warn('LVL', level);
 
         this.formatCountryName();
 
-        const distrData = this.makeGeoFromTopo(topoJSON[level], level);
-
+        const distrData = this.makeGeoFromTopo(topoJSON);
         const outer = d3.select(this.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');

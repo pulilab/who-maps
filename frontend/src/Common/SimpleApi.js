@@ -18,10 +18,11 @@ class SimpleApi {
         };
     }
 
-    get(endpoint) {
+    get(endpoint, replace) {
         const request = _.cloneDeep(this.request);
         request.method = 'GET';
-        return fetch(this.apiUrl + endpoint, request)
+        const url = replace ? endpoint : this.apiUrl + endpoint;
+        return fetch(url, request)
             .then((response) => {
                 return response.json();
             })
