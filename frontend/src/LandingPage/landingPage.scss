@@ -30,7 +30,7 @@
     margin: 0;
     padding: 30px 60px 20px;
     width: calc( 45% - 100px );
-    background-color: rgba(219,126,3,.87);
+    background-color: rgba(250,140,0,.87);
 
     .welcome-text,
     .search-project {
@@ -74,7 +74,7 @@
       .dha-feature {
         float: left;
         width: 100%;
-        margin: 25px 0;
+        margin: 20px 0;
 
         .img-wrapper {
           position: relative;
@@ -101,8 +101,9 @@
           }
         }
         p {
-          margin: 0 20px 25px 30px;
+          margin: 0 20px 20px 30px;
           font-size: 14px;
+          line-height: 20px;
           color: $text-secondary;
 
           // Crossbrowser fixes
