@@ -129,7 +129,7 @@ signup {
       }
 
       p {
-        margin: 0 20px 40px 100px;
+        margin: 0 20px 50px 100px;
         font-size: 16px;
         line-height: 24px;
         transition: $swift-ease-out;
@@ -151,17 +151,19 @@ signup {
           color: $text-disabled;
         }
         .img-role {
-          opacity: .4;
+          opacity: .3;
         }
       }
 
-      md-radio-button.md-checked {
+      md-radio-button.md-checked,
+      md-radio-button:hover {
         .md-label,
         + p {
           color: $text-primary;
         }
         .img-role {
           opacity: 1;
+          fill: $color-primary;
         }
       }
     }
