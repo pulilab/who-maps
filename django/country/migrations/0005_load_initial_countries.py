@@ -9,6 +9,8 @@ fixture = 'initial_countries'
 
 
 def load_fixture(apps, schema_editor):
+    Country = apps.get_model('country', 'Country')
+    Country.objects.all().delete()
     call_command('loaddata', fixture)
 
 
