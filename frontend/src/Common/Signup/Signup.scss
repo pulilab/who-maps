@@ -151,7 +151,7 @@ signup {
           color: $text-disabled;
         }
         .img-role {
-          opacity: .4;
+          opacity: .3;
         }
       }
 
@@ -163,6 +163,7 @@ signup {
         }
         .img-role {
           opacity: 1;
+          fill: $color-primary;
         }
       }
     }

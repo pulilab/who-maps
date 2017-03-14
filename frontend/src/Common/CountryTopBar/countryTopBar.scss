@@ -38,7 +38,6 @@
         min-height: 30px;
         max-height: 90px;
         transform-origin: top left !important;
-        //transform: translate3d(0,0,0);
         transition: $swift-ease-out;
 
         &.no-country,
@@ -66,9 +65,7 @@
       }
     }
 
-    .add-new-project {
-      margin-right: 0 !important;
-    }
+    .add-new-project {}
 
     .current-country {
       display: inline-block;
@@ -172,8 +169,14 @@
 
     .dl-maps-link {
       float: right;
-      width: 150px;
+      width: 160px;
       margin: 7px 100px 0 30px;
+
+      md-icon {
+        position: relative;
+        top: -1px;
+        margin-right: 2px;
+      }
     }
   }
 
@@ -188,7 +191,7 @@
 
       .country-logo {
         img {
-          max-height: 60px;
+          max-height: 50px;
 
           &.no-country {}
         }
@@ -197,6 +200,7 @@
 
     .md-toolbar-tools-bottom {
       pointer-events: none;
+      // filter: blur(5px);
       transform: translate3d(0,-10px,0);
       opacity: 0;
     }
