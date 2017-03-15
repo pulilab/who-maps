@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import moment from 'moment';
-import CountryMapService from './CountryMapService.js';
 import CountryService from './CountryService.js';
 import PDFExportStorage from './PDFExport/PDFExportStorage';
 
@@ -13,7 +12,7 @@ class CountryViewModuleController {
         this.scope = $scope;
         this.filter = $filter;
         this.state = $state;
-        this.mapService = new CountryMapService();
+        this.mapService = require('../Common/CustomCountryService');
         this.service = new CountryService();
         this.pdfStorage = PDFExportStorage.factory();
         this.$onInit = this.onInit.bind(this);
@@ -219,11 +218,7 @@ class CountryViewModuleController {
     }
 
     fetchCountryMap(id) {
-
-        // console.debug('TRYING TO FETCH COUNTRYMAP for ID:', id);
-        this.mapService.getCountryTopo(id).then(data => {
-
-            // console.debug('RAW topo arrived from API, will send over EE', data);
+        this.mapService.getCountryMapData(id).then(data => {
             this.EE.emit('topoArrived', data);
         });
     }

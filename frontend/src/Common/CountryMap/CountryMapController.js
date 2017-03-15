@@ -296,25 +296,14 @@ class CountrymapController {
     }
 
     drawDistricts(element, distrData, topoJSON) {
-
-        // console.debug('element', element);
-        // console.debug('distrData', distrData);
-        // console.debug('topoJSON', topoJSON);
-
         const self = this;
-
         const projection = d3.geo.mercator()
             .scale(this.calculateScale(topoJSON));
 
-        // console.debug('Is .features an array?', Array.isArray(distrData.features));
-
         for (let i = 0; i < distrData.features.length; i += 1) {
 
-            const distrName = distrData.features[i].properties['name:en'] ||
-                distrData.features[i].properties.name;
-
+            const distrName = topoJSON.districts[i];
             const gotData = typeof this.data.data[distrName] === 'object';
-
 
             element
                 .append('path')

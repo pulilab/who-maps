@@ -21,23 +21,50 @@ class CustomCountryService extends SimpleApi {
     }
 
     getCountry(cn) {
-        if (!this.countryLib[cn]) {
-            this.countryLib[cn] = {
-                serverData: false
-            };
-        }
-        return this.countryLib[cn];
+        const self = this;
+        return new Promise(resolve => {
+            if (self.countryLib[cn]) {
+                resolve(self.countryLib[cn]);
+            }
+            else {
+                self.getCountriesList().then(countries => {
+                    resolve(countries[cn]);
+                });
+            }
+        });
     }
+
+    getCountries() {
+        const self = this;
+        return new Promise(resolve=> {
+            const keys = _.keys(self.countryLib);
+            if (keys > 0) {
+                resolve(_.values(self.countryLib));
+            }
+            else {
+                self.getCountriesList().then(countries => {
+                    resolve(_.values(countries));
+                });
+            }
+        });
+    }
+
     getCountriesList() {
+        const self = this;
         return this.get('countries')
-            .then(data => {
-                return data;
+            .then(countries => {
+                _.forEach(countries, cn => {
+                    cn.code = cn.code.toLocaleLowerCase();
+                    self.countryLib[cn.code] = self.countryLib[cn.code] ? self.countryLib[cn.code] : {};
+                    Object.assign(self.countryLib[cn.code], cn);
+                });
+                return self.countryLib;
             });
     }
     findCountryById(countryId) {
         const self = this;
         return new Promise(resolve => {
-            let country =  _.find(self.countryLib, cn => {
+            let country = _.find(self.countryLib, cn => {
                 return cn.id === countryId;
             });
             if (country && country.code) {
@@ -45,12 +72,8 @@ class CustomCountryService extends SimpleApi {
             }
             else {
                 self.getCountriesList().then(countries => {
-                    _.forEach(countries, cn => {
-                        cn.code = cn.code.toLocaleLowerCase();
-                        Object.assign(self.getCountry(cn.code), cn);
-                        if (cn.id === countryId) {
-                            country = cn;
-                        }
+                    country = _.find(countries, cn => {
+                        return cn.id === countryId;
                     });
                     resolve(country);
                 });
@@ -65,6 +88,22 @@ class CustomCountryService extends SimpleApi {
         });
     }
 
+    getCountryDistricts(countryId) {
+        const self = this;
+        return new Promise(resolve => {
+            self.findCountryById(countryId).then(country => {
+                if (country.mapData) {
+                    resolve(country.mapData.districts);
+                }
+                else {
+                    self.fetchMapData(country.code).then((mapData)=> {
+                        resolve(mapData.districts);
+                    });
+                }
+            });
+        });
+    }
+
     fetchMapData(countryCode) {
         const self = this;
         return new Promise(resolve => {
@@ -73,41 +112,49 @@ class CustomCountryService extends SimpleApi {
                 resolve(country.mapData);
             }
             this.get(`/static/country-geodata/${countryCode}.json`, true).then(data =>{
-                console.log(data);
                 country.mapData = data;
-                // country
+                const subKey = _.keys(data.objects)[0];
+                country.mapData.districts = _.map(data.objects[subKey].geometries, object => {
+                    return object.properties['name:en'] || object.properties.name;
+                });
+                resolve(country.mapData);
             });
         });
-
     }
 
+
     getCountryFlag(subDomain) {
-        const country = this.getCountry(subDomain);
-        country.countryFlag = `/static/flags/${subDomain}.png`;
-        return country.countryFlag;
+        return `/static/flags/${subDomain}.png`;
     }
 
     getCountryData(subDomain) {
-        const country = this.getCountry(subDomain);
-        if (country.serverData) {
-            return Promise.resolve(country);
-        }
-        const fakeData = {
-            name: 'Uganda',
-            code: 'ug',
-            logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/' +
-            'Coat_of_arms_of_the_Republic_of_Uganda.svg/955px-Coat_of_arms_of_the_Republic_of_Uganda.svg.png',
-            id: 12,
-            cover: 'http://www.worldbank.org/content/dam/photos/780x439/2016/oct-3/' +
-            'ug-brewing-prosperity-in-uganda-coffee-farmers-turn-to-climate-smart-agriculture-780x439.jpg',
-            cover_text: 'some ugandian cover text',
-            footer_title: 'footer title',
-            footer_text: 'some footer text',
-            partner_logo: ['some partner array']
-        };
-        Object.assign(country, fakeData);
-        country.serverData = true;
-        return Promise.resolve(country);
+        const self = this;
+        return new Promise(resolve => {
+            self.getCountry(subDomain).then(country=> {
+                if (country.logo) {
+                    resolve(country);
+                }
+                else {
+                    const fakeData = {
+                        name: 'Uganda',
+                        code: 'ug',
+                        logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/' +
+                        'Coat_of_arms_of_the_Republic_of_Uganda.svg/' +
+                        '955px-Coat_of_arms_of_the_Republic_of_Uganda.svg.png',
+                        id: 12,
+                        cover: 'http://www.worldbank.org/content/dam/photos/780x439/2016/oct-3/' +
+                        'ug-brewing-prosperity-in-uganda-coffee-farmers-turn-to-climate-smart-agriculture-780x439.jpg',
+                        cover_text: 'some ugandian cover text',
+                        footer_title: 'footer title',
+                        footer_text: 'some footer text',
+                        partner_logo: ['some partner array']
+                    };
+                    Object.assign(country, fakeData);
+                    resolve(country);
+                }
+            });
+        });
+
     }
 
     static customCountryServiceFactory() {
