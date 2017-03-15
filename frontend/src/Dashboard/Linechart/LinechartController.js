@@ -220,7 +220,7 @@ class LinechartController {
             this.timeout(labelHoverFn.bind(this), 250);
         }
         else {
-            labelHoverFn();
+            labelHoverFn.bind(this)();
         }
 
         function labelHoverFn() {

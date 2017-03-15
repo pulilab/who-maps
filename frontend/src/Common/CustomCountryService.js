@@ -53,7 +53,6 @@ class CustomCountryService extends SimpleApi {
     }
 
     getCountriesList() {
-        console.warn('getCountriesList');
         const self = this;
         return this.get('countries')
             .then(countries => {
@@ -68,7 +67,6 @@ class CustomCountryService extends SimpleApi {
             });
     }
     findCountryById(countryId) {
-        console.warn('findCountryById');
         const self = this;
         return new Promise(resolve => {
             let country = _.find(self.countryLib, cn => {
