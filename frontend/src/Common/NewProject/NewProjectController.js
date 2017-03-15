@@ -14,6 +14,7 @@ class NewProjectController extends ProjectDefinition {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.es = new EditProfileService();
+        this.ccs = require('../CustomCountryService');
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
@@ -139,7 +140,7 @@ class NewProjectController extends ProjectDefinition {
         this.implementingDateMonth = backEndImplementationDate.format('MMMM');
         this.implementingDateYear = backEndImplementationDate.get('year');
 
-        this.ns.countryDistrict(this.project.country)
+        this.ccs.getCountryDistricts(this.project.country)
             .then(this.handleDistrictRequest);
         this.scope.$evalAsync();
 

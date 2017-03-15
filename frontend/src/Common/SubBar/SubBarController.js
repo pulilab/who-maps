@@ -18,7 +18,6 @@ class SubBarController extends Protected {
         this.eventBinding();
         this.projectId = this.state.params.appName;
         this.currentPage = void 0;
-        this.showFullNavigation = false;
         this.updateProject = this.updateProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
         if (this.user) {

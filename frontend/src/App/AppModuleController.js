@@ -19,7 +19,6 @@ class AppModuleController extends Protected {
         this.projectId = this.state.params.appName;
         this.currentPage = this.state.current.name;
         this.showCountryTopBar = false;
-        this.showFullNavigation = false;
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -37,7 +36,10 @@ class AppModuleController extends Protected {
     }
 
     showSubBar() {
-        return !this.showCountryTopBar && this.user.projects.length !== 0;
+        return !this.showCountryTopBar
+            && this.user && this.user.projects
+            && this.user.projects.length !== 0
+            && this.state.current.name !== 'newProject';
     }
 
     watchers() {
@@ -45,7 +47,6 @@ class AppModuleController extends Protected {
             return this.state.current.name;
         }, value => {
             this.currentPage = value;
-            this.showCompleteNavigation(value, this.isLogin);
             this.checkUserProfile();
         });
     }
@@ -95,14 +96,8 @@ class AppModuleController extends Protected {
         this.systemLogout();
         const rest = this.cs.reset();
         rest.loadedPromise.then(() => {
-            this.showCompleteNavigation(null, false);
             this.state.go('landing', { appName: null });
         });
-    }
-
-    showCompleteNavigation(state, isLogin) {
-        const isLandingOrNewProject = state === 'landing-logged' || state === 'newProject';
-        this.showFullNavigation = (!isLandingOrNewProject && isLogin) || this.viewMode;
     }
 
     static appControllerFactory() {

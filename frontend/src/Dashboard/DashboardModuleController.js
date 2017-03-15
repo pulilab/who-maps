@@ -118,15 +118,12 @@ class DashboardModuleController extends Protected {
     }
 
     parseMapData(coverage, national) {
-
         const ret = { labels: [], data: {} };
-
         coverage.forEach(el => {
             if (ret.labels.indexOf(el.district) < 0) {
                 ret.labels.push(el.district);
             }
         });
-
 
         coverage.forEach(distObj => {
 
@@ -145,7 +142,6 @@ class DashboardModuleController extends Protected {
     }
 
     snapShot() {
-
         this.service.snapShot(this.projectId).then(() => {
             this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
         });
@@ -455,7 +451,6 @@ class DashboardModuleController extends Protected {
 
         data.forEach((axisObj, i) => {
             axisObj.domains.forEach((domainObj, j) => {
-                // console.log(domainObj);
                 ret.push(
                     {
                         id: counter,

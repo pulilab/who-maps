@@ -1,10 +1,10 @@
 <country-top-bar ng-if="vm.showCountryTopBar"></country-top-bar>
 
-<top-bar ng-if="!vm.showCountryTopBar" show-sub-bar="vm.showSubBar()" view-mode="vm.viewMode" show-full-navigation="vm.showFullNavigation"></top-bar>
+<top-bar ng-if="!vm.showCountryTopBar" show-sub-bar="vm.showSubBar()" view-mode="vm.viewMode"></top-bar>
 
 <md-content class="main-content" layout="column" layout-fill>
     <div id="intro-wrapper" layout="column" layout-fill>
-        <sub-bar ng-if="vm.showSubBar()" view-mode="vm.viewMode" show-full-navigation="vm.showFullNavigation"></sub-bar>
+        <sub-bar ng-if="vm.showSubBar()" view-mode="vm.viewMode"></sub-bar>
         <ui-view name="main" id="main-view" layout="column" layout-fill></ui-view>
     </div>
 </md-content>

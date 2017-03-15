@@ -1,4 +1,5 @@
 import SimpleApi from './SimpleApi';
+import Storage from './Storage';
 import _ from 'lodash';
 /* global Promise, Symbol */
 
@@ -12,7 +13,9 @@ class CustomCountryService extends SimpleApi {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
-        this.countryLib = {};
+        this.store = new Storage();
+        const savedStore = this.store.get('countryLib');
+        this.countryLib = savedStore ? savedStore : {};
     }
 
     getSubDomain() {
@@ -55,9 +58,11 @@ class CustomCountryService extends SimpleApi {
             .then(countries => {
                 _.forEach(countries, cn => {
                     cn.code = cn.code.toLocaleLowerCase();
+                    cn.flag = self.getCountryFlag(cn.code);
                     self.countryLib[cn.code] = self.countryLib[cn.code] ? self.countryLib[cn.code] : {};
                     Object.assign(self.countryLib[cn.code], cn);
                 });
+                this.store.set('countryLib', self.countryLib);
                 return self.countryLib;
             });
     }
@@ -93,11 +98,11 @@ class CustomCountryService extends SimpleApi {
         return new Promise(resolve => {
             self.findCountryById(countryId).then(country => {
                 if (country.mapData) {
-                    resolve(country.mapData.districts);
+                    resolve(country.districts);
                 }
                 else {
-                    self.fetchMapData(country.code).then((mapData)=> {
-                        resolve(mapData.districts);
+                    self.fetchMapData(country.code).then((cn)=> {
+                        resolve(cn.districts);
                     });
                 }
             });
@@ -107,17 +112,19 @@ class CustomCountryService extends SimpleApi {
     fetchMapData(countryCode) {
         const self = this;
         return new Promise(resolve => {
-            const country = self.getCountry(countryCode);
-            if (country.mapData) {
-                resolve(country.mapData);
-            }
-            this.get(`/static/country-geodata/${countryCode}.json`, true).then(data =>{
-                country.mapData = data;
-                const subKey = _.keys(data.objects)[0];
-                country.mapData.districts = _.map(data.objects[subKey].geometries, object => {
-                    return object.properties['name:en'] || object.properties.name;
+            self.getCountry(countryCode).then(country =>{
+                if (country.mapData) {
+                    resolve(country);
+                }
+                this.get(`/static/country-geodata/${countryCode}.json`, true).then(data =>{
+                    country.mapData = data;
+                    const subKey = _.keys(data.objects)[0];
+                    country.districts = _.map(data.objects[subKey].geometries, object => {
+                        return object.properties['name:en'] || object.properties.name;
+                    });
+                    this.store.set('countryLib', self.countryLib);
+                    resolve(country);
                 });
-                resolve(country.mapData);
             });
         });
     }
@@ -150,6 +157,7 @@ class CustomCountryService extends SimpleApi {
                         partner_logo: ['some partner array']
                     };
                     Object.assign(country, fakeData);
+                    this.store.set('countryLib', self.countryLib);
                     resolve(country);
                 }
             });

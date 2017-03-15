@@ -95,10 +95,6 @@ class NewProjectService extends AuthApi {
                 return results.json();
             });
     }
-
-    countryDistrict(id) {
-        return this.get('countries/' + id + '/districts');
-    }
 }
 
 export default NewProjectService;

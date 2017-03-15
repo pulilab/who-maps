@@ -28,7 +28,7 @@ class TopBarController extends Protected {
         if (this.userProfile && this.userProfile.account_type !== 'I') {
             isImplementer = false;
         }
-        return this.showFullNavigation && isImplementer
+        return isImplementer
             && this.isLogin && this.hasProfile();
     }
 
@@ -40,12 +40,12 @@ class TopBarController extends Protected {
         if (this.showSubBar) {
             return false;
         }
-        return this.showFullNavigation && this.userType !== 0
+        return this.userType !== 0
             && (this.viewMode || this.state.current.name !== 'dashboard');
     }
 
     showSearch() {
-        return this.showFullNavigation;
+        return true;
     }
     showLogin() {
         return this.state.current.name !== 'login' && !this.isLogin;
