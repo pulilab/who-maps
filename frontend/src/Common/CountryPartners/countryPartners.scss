@@ -23,7 +23,11 @@
 }
 
 .content-preset {
-  padding-right: 100px;
+  padding-right: 80px;
+}
+
+.content-logos {
+  padding-left: 60px;
 }
 
 country-partners {
@@ -34,25 +38,21 @@ country-partners {
 		.partner {
       box-sizing: border-box;
       float: left;
-      width: 20%;
-      margin: 5px 25px 20px 0;
+      // Partner logo placholder size
+      width: 120px;
+      height: 120px;
+      //
+      margin: 10px 25px 5px 0;
       // background-color: $color-gray-lightest;
 
-      figure {
-        float: left;
-        position: relative;
-        display: inline-block;
-        margin: 0;
-        width: 100%;
-        height: 70px;
-      }
-
 			.logoimg {
+        float: left;
         display: block;
-				width: auto;
-        max-width: 100%;
+        width: 100%;
         height: 100%;
-        margin: 0 auto;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
 			}
 		}
   }
