@@ -50,14 +50,4 @@ describe('SubBarController', () => {
         ac.openMenu(spy, {});
         expect(spy).toHaveBeenCalled();
     });
-
-    it('should have a function to perform logout', () => {
-        spyOn(ac, 'systemLogout');
-
-        ac.logout();
-        expect(ac.cs.reset).toHaveBeenCalled();
-        expect(ac.systemLogout).toHaveBeenCalled();
-
-    });
-
 });

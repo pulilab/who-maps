@@ -272,8 +272,9 @@ class NewProjectController extends ProjectDefinition {
         if (countries.length === 1) {
             this.project.countryName = name;
             this.project.country = _.cloneDeep(countries[0]).id;
-            this.ns.countryDistrict(this.project.country)
-                .then(this.handleDistrictData.bind(this));
+            this.ccs.getCountryDistricts(this.project.country)
+            .then(this.handleDistrictData.bind(this));
+
         }
         this.handleCustomError('country');
     }

@@ -1,4 +1,4 @@
-import { default as AppModuleController } from './TopBarController';
+import { default as TopBarController } from './TopBarController';
 import { EE } from '../common';
 
 EE.initialize();
@@ -27,7 +27,7 @@ const $scope = {
 describe('TopBarController', () => {
 
     beforeEach(() => {
-        ac = AppModuleController.subBarControllerFactory()($state, $scope);
+        ac = TopBarController.topBarControllerFactory()($state, $scope);
         ac.cs = {
             projectList: [],
             projectStructure: mockData,
@@ -37,27 +37,9 @@ describe('TopBarController', () => {
         };
     });
 
-
-    it('should have a function that update the selected project', () => {
-        spyOn(ac.state, 'go');
-        ac.user = { projects: [{ name: 'asd', id: 1 }] };
-        ac.updateProject('asd');
-        expect(ac.state.go).toHaveBeenCalled();
-    });
-
     it('should have a function to open a modal menu', () => {
         const spy = jasmine.createSpy('menuOpener');
         ac.openMenu(spy, {});
         expect(spy).toHaveBeenCalled();
     });
-
-    it('should have a function to perform logout', () => {
-        spyOn(ac, 'systemLogout');
-
-        ac.logout();
-        expect(ac.cs.reset).toHaveBeenCalled();
-        expect(ac.systemLogout).toHaveBeenCalled();
-
-    });
-
 });

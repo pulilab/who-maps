@@ -46,7 +46,7 @@ describe('NewProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
-        sc = new  NewProjectController($scope, $state, upload, $anchorScroll, $location, cs, structure);
+        sc = new NewProjectController($scope, $state, upload, $anchorScroll, $location, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -75,12 +75,12 @@ describe('NewProjectController', () => {
     });
 
     it('should have a function that handles the country ssmenu callback', () => {
-        spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve());
+        spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve());
         spyOn(sc, 'handleCustomError');
         sc.handleStructureLoad();
         sc.countryCloseCallback('asd');
         expect(sc.project.countryName).toBe('asd');
-        expect(sc.ns.countryDistrict).toHaveBeenCalled();
+        expect(sc.ccs.getCountryDistricts).toHaveBeenCalled();
     });
 
     it('should have a function that handle the saving process ', () => {
@@ -138,7 +138,7 @@ describe('NewProjectController', () => {
 
     it('should have a function that handle the data loaded from the server', () => {
         spyOn(sc, 'createCoverageKeys');
-        spyOn(sc.ns, 'countryDistrict').and.returnValue(Promise.resolve({}));
+        spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
         spyOn(sc, 'convertArraytoStandardCustomObj');
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();

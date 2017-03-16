@@ -24,7 +24,7 @@ const $scope = {
     $watch: () => {}
 };
 
-describe('SubBarController', () => {
+describe('CountryTopBarController', () => {
 
     beforeEach(() => {
         ac = AppModuleController.appControllerFactory()($state, $scope);
@@ -35,29 +35,6 @@ describe('SubBarController', () => {
             getProjectData: jasmine.createSpy('gpd'),
             reset: jasmine.createSpy('asd').and.returnValue({ loadedPromise: Promise.resolve() })
         };
-    });
-
-
-    it('should have a function that update the selected project', () => {
-        spyOn(ac.state, 'go');
-        ac.user = { projects: [{ name: 'asd', id: 1 }] };
-        ac.updateProject('asd');
-        expect(ac.state.go).toHaveBeenCalled();
-    });
-
-    it('should have a function to open a modal menu', () => {
-        const spy = jasmine.createSpy('menuOpener');
-        ac.openMenu(spy, {});
-        expect(spy).toHaveBeenCalled();
-    });
-
-    it('should have a function to perform logout', () => {
-        spyOn(ac, 'systemLogout');
-
-        ac.logout();
-        expect(ac.cs.reset).toHaveBeenCalled();
-        expect(ac.systemLogout).toHaveBeenCalled();
-
     });
 
 });

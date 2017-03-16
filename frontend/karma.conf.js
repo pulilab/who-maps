@@ -6,13 +6,15 @@ module.exports = function(config) {
             { pattern: 'test-context.js', watched: false }
         ],
         frameworks: ['jasmine'],
+        logLevel: config.LOG_INFO,
         preprocessors: {
             'test-context.js': ['webpack', 'sourcemap']
         },
         coverageReporter: {
             reporters: [
                 { type: 'lcov', subdir: '.' },
-                { type: 'text-summary' }
+                { type: 'text-summary' },
+                { type: 'html',  subdir: 'html' }
             ],
             check: {
                 global: {
@@ -43,12 +45,8 @@ module.exports = function(config) {
                         }
                     },
                     {
-                        test: /\.(eot|svg|ttf|woff|woff2|html|scss)$/,
+                        test: /\.(eot|svg|ttf|woff|woff2|html|scss|geojson)$/,
                         loaders: ['null-loader']
-                    },
-                    {
-                        test: /\.geojson/,
-                        loader: 'json-loader'
                     },
                     {
                         test: /\.(jpe?g|png|gif|ico)$/i,

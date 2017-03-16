@@ -26,7 +26,7 @@ class LandingPageModuleController {
         }
         const subDomain = this.ccs.getSubDomain();
         this.ccs.getCountryData(subDomain).then(data => {
-            this.scope.$evalAsync(() => {
+            vm.scope.$evalAsync(() => {
                 vm.countryData = data;
                 vm.countryCover = {
                     background: `url(${data.cover}) 0 -10px`,

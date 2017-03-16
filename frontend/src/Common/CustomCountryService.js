@@ -42,7 +42,7 @@ class CustomCountryService extends SimpleApi {
         return new Promise(resolve=> {
             const keys = _.keys(self.countryLib);
             if (keys > 0) {
-                resolve(_.values(self.countryLib));
+                resolve(_.values(_.cloneDeep(self.countryLib)));
             }
             else {
                 self.getCountriesList().then(countries => {
@@ -63,7 +63,7 @@ class CustomCountryService extends SimpleApi {
                     Object.assign(self.countryLib[cn.code], cn);
                 });
                 this.store.set('countryLib', self.countryLib);
-                return self.countryLib;
+                return _.cloneDeep(self.countryLib);
             });
     }
     findCountryById(countryId) {
@@ -98,11 +98,11 @@ class CustomCountryService extends SimpleApi {
         return new Promise(resolve => {
             self.findCountryById(countryId).then(country => {
                 if (country.mapData) {
-                    resolve(country.districts);
+                    resolve(_.cloneDeep(country.districts));
                 }
                 else {
                     self.fetchMapData(country.code).then((cn)=> {
-                        resolve(cn.districts);
+                        resolve(_.cloneDeep(cn.districts));
                     });
                 }
             });
@@ -114,7 +114,7 @@ class CustomCountryService extends SimpleApi {
         return new Promise(resolve => {
             self.getCountry(countryCode).then(country =>{
                 if (country.mapData) {
-                    resolve(country);
+                    resolve(Object.assign({}, country));
                 }
                 else {
                     this.get(`/static/country-geodata/${countryCode}.json`, true).then(data => {
@@ -124,7 +124,7 @@ class CustomCountryService extends SimpleApi {
                             return object.properties['name:en'] || object.properties.name;
                         });
                         this.store.set('countryLib', self.countryLib);
-                        resolve(country);
+                        resolve(Object.assign({}, country));
                     });
                 }
             });
@@ -141,7 +141,7 @@ class CustomCountryService extends SimpleApi {
         return new Promise(resolve => {
             self.getCountry(subDomain).then(country=> {
                 if (country.logo) {
-                    resolve(country);
+                    resolve(Object.assign({}, country));
                 }
                 else {
                     const fakeData = {
@@ -160,7 +160,7 @@ class CustomCountryService extends SimpleApi {
                     };
                     Object.assign(country, fakeData);
                     this.store.set('countryLib', self.countryLib);
-                    resolve(country);
+                    resolve(Object.assign({}, country));
                 }
             });
         });
