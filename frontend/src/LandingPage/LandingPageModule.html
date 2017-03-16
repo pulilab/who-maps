@@ -41,11 +41,11 @@
         </div>
 
 
-        <md-card ng-if="!vm.isLogin" class="content-main logged-out md-card md-whiteframe-24dp" ng-hide="vm.registered" flex=60>
+        <md-card ng-if="!vm.isLogin" class="content-main logged-out md-card md-whiteframe-14dp" ng-hide="vm.registered" flex=60>
             <signup landing-page="true"></signup>
         </md-card>
 
-        <md-card ng-if="vm.isLogin" class="content-main logged-in md-card md-whiteframe-24dp" flex=60>
+        <md-card ng-if="vm.isLogin" class="content-main logged-in md-card md-whiteframe-14dp" flex=60>
             <h2 class="md-display-3">My Projects</h2>
 
             <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projectList">
