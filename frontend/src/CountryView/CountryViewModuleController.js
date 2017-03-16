@@ -210,7 +210,6 @@ class CountryViewModuleController {
 
     // For map TAB
     fetchDistrictProjects(countryId) {
-
         this.service.getDistrictProjects(countryId).then(data => {
             // console.debug('getDistrictProjects:', data);
             this.EE.emit('mapdataArrived', data);

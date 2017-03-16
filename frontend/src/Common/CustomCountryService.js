@@ -37,16 +37,24 @@ class CustomCountryService extends SimpleApi {
         });
     }
 
+    stripMapData(countries) {
+        return _.map(countries, country => {
+            country.mapData = null;
+            return country;
+        });
+    }
+
     getCountries() {
         const self = this;
         return new Promise(resolve=> {
             const keys = _.keys(self.countryLib);
             if (keys > 0) {
-                resolve(_.values(_.cloneDeep(self.countryLib)));
+                const countryArray = _.values(_.cloneDeep(self.countryLib));
+                resolve(self.stripMapData(countryArray));
             }
             else {
                 self.getCountriesList().then(countries => {
-                    resolve(_.values(countries));
+                    resolve(self.stripMapData(_.values(countries)));
                 });
             }
         });

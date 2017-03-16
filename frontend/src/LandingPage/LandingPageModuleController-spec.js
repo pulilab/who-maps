@@ -1,6 +1,6 @@
 import { default as LandingPageModuleController } from './LandingPageController';
 
-/* global define, it, describe, expect, beforeEach, jasmine */
+/* global define, it, describe, expect, beforeEach, spyOn, jasmine, Promise */
 
 let landing = new LandingPageModuleController();
 
@@ -37,9 +37,9 @@ describe('LandingPageModuleController', () => {
         expect(landing.$anchorScroll).toHaveBeenCalled();
     });
 
-   it('should have a function to fetch the custom country data', (done) => {
+    it('should have a function to fetch the custom country data', () => {
         expect(landing.ccs.getCountryData).toBeDefined();
-        spyOn(landing.ccs, 'getCountryData').and.returnValue(Promise.resolve({cover:'some'}));
+        spyOn(landing.ccs, 'getCountryData').and.returnValue(Promise.resolve('some'));
         landing.$onInit();
     });
 });
