@@ -35,6 +35,9 @@
       img {
         float: left;
         width: auto;
+        // handle horizontal logos ?!
+        max-width: 380px;
+        // LOL
         min-height: 30px;
         max-height: 90px;
         transform-origin: top left !important;
@@ -42,6 +45,7 @@
 
         &.no-country,
         &.logo-wide {
+          // DHA logo's special case
           height: 30px;
         }
       }
