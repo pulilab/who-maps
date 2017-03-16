@@ -162,9 +162,16 @@ class CustomCountryService extends SimpleApi {
                         cover: 'http://www.worldbank.org/content/dam/photos/780x439/2016/oct-3/' +
                         'ug-brewing-prosperity-in-uganda-coffee-farmers-turn-to-climate-smart-agriculture-780x439.jpg',
                         cover_text: 'some ugandian cover text',
-                        footer_title: 'footer title',
-                        footer_text: 'some footer text',
-                        partner_logo: ['some partner array']
+                        footer_title: 'customizable footer title',
+                        footer_text: '(Editable preset text) Lorem ipsum dolor sit amet, consectetur ' +
+                        'adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.' +
+                        'Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili.' +
+                        'Quisque ut dolor gravida, placerat libero vel, euismod. Fictum, ' +
+                        'deserunt mollit anim laborum astutumque!',
+                        partner_logo: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg']
                     };
                     Object.assign(country, fakeData);
                     this.store.set('countryLib', self.countryLib);

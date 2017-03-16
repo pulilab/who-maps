@@ -9,14 +9,11 @@ class CountryPartnersController {
     }
 
     onInit() {
-        this.logos = [
-            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg'
-        ];
-        this.scope.$evalAsync();
 
+    }
+
+    computeLogoStyle(logo) {
+        return { 'background-image': `url(${logo})` };
     }
 
     static countryPartnersFactory() {

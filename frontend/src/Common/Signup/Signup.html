@@ -87,12 +87,12 @@
 </div>
 
 
-<div ng-if="vm.landingPage" class="landing-page" ng-style="vm.style">
+<div ng-if="vm.landingPage" class="landing-page" ng-style="vm.style" >
     <h2 class="md-display-3">Sign up</h2>
-    <h5 class="md-headline">Whether you are an implementer, government, or financial investor, sign up below.</h5>
+    <h5 class="md-headline" id="scroll-to-head">Whether you are an implementer, government, or financial investor, sign up below.</h5>
 
-    <form name="signupForm" ng-submit="vm.signup(signupForm)"  novalidate ng-hide="vm.registered" id="scroll-to-head">
-        <div layout="column" class="role-form" ng-init="hideMainForm = false" ng-class="{'hidden' : hideMainForm}">
+    <form name="signupForm" ng-submit="vm.signup(signupForm)"  novalidate ng-hide="vm.registered" >
+        <div layout="column" class="role-form" ng-class="{'hidden' : vm.hideMainForm}">
             <h4>1. Select your role</h4>
             <md-radio-group ng-model="vm.register.role">
                 <md-radio-button value="1" ng-selected="true" class="md-primary">
@@ -113,12 +113,12 @@
             </md-radio-group>
 
             <div class="form-actions" layout=row layout-align=end>
-                <md-button class="md-raised md-primary" type="submit" ng-click="hideMainForm = true; vm.scrollTo('scroll-to-head')">
+                <md-button class="md-raised md-primary" type="submit" ng-click="vm.nextStep()">
                     Go to next step
                 </md-button>
             </div>
         </div>
-        <div layout="column" class="main-form next-step" ng-class="{'hidden' : !hideMainForm}">
+        <div layout="column" class="main-form next-step" ng-class="{'hidden' : !vm.hideMainForm}">
             <h4>2. Fill out the form below</h4>
             <md-input-container class="md-block">
                 <label>Email address</label>

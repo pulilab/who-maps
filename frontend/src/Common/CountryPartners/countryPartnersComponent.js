@@ -5,7 +5,12 @@ const countryPartnersComponent = {
     controller: CountryPartnersController.countryPartnersFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'countryPartners'
+    name: 'countryPartners',
+    bindings: {
+        footerText: '<',
+        footerTitle: '<',
+        partners: '<'
+    }
 };
 
 export default countryPartnersComponent;

@@ -4,13 +4,16 @@ import Storage from '../Storage';
 import CommonServices from '../CommonServices';
 class SignupController {
 
-    constructor($scope) {
+    constructor($scope, $location, $anchorScroll) {
         this.ss = new SignupService();
         this.EE = window.EE;
         this.scope = $scope;
+        this.$location = $location;
+        this.$anchorScroll = $anchorScroll;
         this.storage = new Storage();
         this.inProgress = false;
         this.registered = false;
+        this.hideMainForm = false;
         this.processRegistrationResult = this.processRegistrationResult.bind(this);
         this.register = {
             email: null,
@@ -33,6 +36,16 @@ class SignupController {
                 }
             });
         }
+    }
+
+    scrollTo(idString) {
+        this.$location.hash(idString);
+        this.$anchorScroll();
+    }
+
+    nextStep() {
+        this.hideMainForm = true;
+        this.scrollTo('scroll-to-head');
     }
 
     processRegistrationResult(result, signupForm) {
@@ -66,10 +79,10 @@ class SignupController {
 
     static signupFactory() {
         require('./Signup.scss');
-        function signup($scope) {
-            return new SignupController($scope);
+        function signup($scope, $location, $anchorScroll) {
+            return new SignupController($scope, $location, $anchorScroll);
         }
-        signup.$inject = ['$scope'];
+        signup.$inject = ['$scope', '$location', '$anchorScroll'];
         return signup;
     }
 }
