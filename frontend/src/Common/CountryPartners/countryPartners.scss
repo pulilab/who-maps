@@ -3,13 +3,13 @@
 
 .wrapper-preset {
   width: 100%;
-  padding: 0 50px 20px;
+  padding: 0 50px;
   background-color: $color-white;
 
   > div {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 30px;
+    padding: 40px 30px 50px;
   }
 
   h4 {
@@ -37,7 +37,7 @@ country-partners {
       float: left;
       width: 20%;
       margin: 5px 25px 20px 0;
-      background-color: $color-gray-lightest;
+      // background-color: $color-gray-lightest;
 
       figure {
         float: left;
