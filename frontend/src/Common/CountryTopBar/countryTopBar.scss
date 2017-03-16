@@ -35,6 +35,9 @@
       img {
         float: left;
         width: auto;
+        // handle horizontal logos ?!
+        max-width: 380px;
+        // LOL
         min-height: 30px;
         max-height: 90px;
         transform-origin: top left !important;
@@ -42,6 +45,7 @@
 
         &.no-country,
         &.logo-wide {
+          // DHA logo's special case
           height: 30px;
         }
       }
@@ -181,8 +185,8 @@
   }
 
   &.scrolled-down {
-    min-height: 10px;
-    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    min-height: 70px;
+    box-shadow: 0 9px 46px 8px rgba(0,0,0,.14);
 
     .md-toolbar-tools {
       height: auto !important;

@@ -1,79 +1,59 @@
 @import '../../variables';
 @import '../../mixins';
 
-country-partners {
-	width: 100%;
-	height: 100%;
+.wrapper-preset {
+  width: 100%;
+  background-color: $color-white;
+
+  > div {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 50px 50px;
+  }
 
   h4 {
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: $body-font-size-base;
+    font-weight: 400;
   }
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+    color: $text-secondary;
+  }
+}
+
+.content-preset {
+  padding-right: 80px;
+}
+
+.content-logos {
+  padding-left: 60px;
+}
+
+country-partners {
 
 	.partnerscontainer {
     @include clearfix();
 
 		.partner {
+      box-sizing: border-box;
       float: left;
-      margin: 5px 25px 20px 0;
-      text-align: center;
-
-      figure {
-        position: relative;
-        display: inline-block;
-        margin: 0;
-      }
+      // Partner logo placholder size
+      width: 120px;
+      height: 120px;
+      //
+      margin: 10px 25px 5px 0;
+      // background-color: $color-gray-lightest;
 
 			.logoimg {
-        display: block;
-        box-sizing: border-box;
-				width: auto;
-        height: 80px;
-			}
-
-      .logo-remove {
-        position: absolute;
-        top: -17px;
-        right: -17px;
-        md-icon {
-          outline: none;
-          color: $color-white;
-        }
-      }
-
-      &.editing {
-        .logoimg {
-          padding: 5px;
-          border: 1px solid $color-gray-lighter;
-        }
-      }
-		}
-
-    .add-partner {
-      float: left;
-      margin: 20px 0;
-      width: 100%;
-
-      .file-upload {
         float: left;
-
-        label {
-          .md-button {
-            margin: 0 20px 0 0;
-          }
-
-          #file-input {
-            display: none;
-          }
-        }
-      }
-
-      .file-upload-info {
-        display: inline-block;
-        line-height:18px;
-        color: $color-gray-light;
-      }
-    }
-	}
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+			}
+		}
+  }
 }
