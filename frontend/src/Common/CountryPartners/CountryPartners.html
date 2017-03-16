@@ -1,17 +1,30 @@
-<div flex="100">
-    <h4>Project Partners</h4>
-</div>
+<div class="wrapper-preset">
+    <div layout="row" laxout-align="start start">
 
-<div class="partnerscontainer">
+        <div class="content-preset" flex="40">
 
-    <div
-            ng-repeat="logo in vm.logos track by $index | limitTo:8 "
-            class="partner"
-            ng-if="vm.logos.length">
+          <h4 class="md-title">Editable Preset Title</h4>
 
-        <figure>
-            <img class="logoimg" ng-src="{{logo}}">
-        </figure>
+          <p>(Editable preset text) Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili. Quisque ut dolor gravida, placerat libero vel, euismod. Fictum,  deserunt mollit anim laborum astutumque!</p>
+
+        </div>
+
+        <div class="content-logos" flex="60">
+            <h4 class="md-title">Project Partners</h4>
+
+            <div class="partnerscontainer">
+                <div
+                    ng-repeat="logo in vm.logos track by $index | limitTo:8 "
+                    class="partner"
+                    ng-if="vm.logos.length">
+
+                    <figure>
+                        <img class="logoimg" ng-src="{{logo}}">
+                        <!-- <img src="https://dummyimage.com/400x300/000/fff" alt="" class="logoimg"> -->
+                    </figure>
+                </div>
+            </div>
+        </div>
+
     </div>
-
 </div>

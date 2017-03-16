@@ -1,79 +1,60 @@
 @import '../../variables';
 @import '../../mixins';
 
-country-partners {
-	width: 100%;
-	height: 100%;
+.wrapper-preset {
+  width: 100%;
+  padding: 0 50px 20px;
+  background-color: $color-white;
+
+  > div {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 30px;
+  }
 
   h4 {
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: $body-font-size-base;
+    font-weight: 400;
   }
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+    color: $text-secondary;
+  }
+}
+
+.content-preset {
+  padding-right: 100px;
+}
+
+country-partners {
 
 	.partnerscontainer {
     @include clearfix();
 
 		.partner {
+      box-sizing: border-box;
       float: left;
+      width: 20%;
       margin: 5px 25px 20px 0;
-      text-align: center;
+      background-color: $color-gray-lightest;
 
       figure {
+        float: left;
         position: relative;
         display: inline-block;
         margin: 0;
+        width: 100%;
+        height: 70px;
       }
 
 			.logoimg {
         display: block;
-        box-sizing: border-box;
 				width: auto;
-        height: 80px;
+        max-width: 100%;
+        height: 100%;
+        margin: 0 auto;
 			}
-
-      .logo-remove {
-        position: absolute;
-        top: -17px;
-        right: -17px;
-        md-icon {
-          outline: none;
-          color: $color-white;
-        }
-      }
-
-      &.editing {
-        .logoimg {
-          padding: 5px;
-          border: 1px solid $color-gray-lighter;
-        }
-      }
 		}
-
-    .add-partner {
-      float: left;
-      margin: 20px 0;
-      width: 100%;
-
-      .file-upload {
-        float: left;
-
-        label {
-          .md-button {
-            margin: 0 20px 0 0;
-          }
-
-          #file-input {
-            display: none;
-          }
-        }
-      }
-
-      .file-upload-info {
-        display: inline-block;
-        line-height:18px;
-        color: $color-gray-light;
-      }
-    }
-	}
+  }
 }

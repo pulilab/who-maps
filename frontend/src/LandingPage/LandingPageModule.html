@@ -16,7 +16,7 @@
             <h5 class="md-headline">What Digital Health Atlas is?</h5>
             <div class="md-block dha-feature" layout="row" layout-align="start start">
                 <div class="img-wrapper" flex=auto>
-                    <img src="./images/screenshot-1.png" alt="" class="md-whiteframe-14dp">
+                    <img src="./images/screenshot-1.png" alt="">
                 </div>
                 <div flex=grow>
                   <p>Digital Health Atlas offers technologists, implementers, financial investors, and governments a platform of tools and guidance to improve the use of digital innovations for health. Leverages the WHO mHealth Assessment and Planning for Scale (MAPS) Toolkit.</p>
@@ -24,7 +24,7 @@
             </div>
             <div class="md-block dha-feature" layout="row" layout-align="start start">
                 <div class="img-wrapper" flex=auto>
-                    <img src="./images/screenshot-2.png" alt="" class="md-whiteframe-14dp">
+                    <img src="./images/screenshot-2.png" alt="">
                 </div>
                 <div flex=grow>
                     <p>Using metrics from the WHO mHealth Assessment and Planning for Scale (MAPS) Toolkit, the DHA allows implementers to assess the maturity of digital health projects, gain personalized guidance, and benefit from implementation experiences and other resources. </p>
@@ -32,7 +32,7 @@
             </div>
             <div class="md-block dha-feature" layout="row" layout-align="start start">
                 <div class="img-wrapper" flex=auto>
-                    <img src="./images/screenshot-3.png" alt="" class="md-whiteframe-14dp">
+                    <img src="./images/screenshot-3.png" alt="">
                 </div>
                 <div flex=grow>
                     <p>This interactive website also helps to curate the range of digital health implementations around the world. This will enable a global community of implementers, governments, and financial investors to map, monitor, and foster the growth of digital health innovations investments. </p>
@@ -41,11 +41,11 @@
         </div>
 
 
-        <md-card ng-if="!vm.isLogin" class="content-main logged-out md-card md-whiteframe-14dp" ng-hide="vm.registered" flex=60>
+        <md-card ng-if="!vm.isLogin" class="content-main logged-out md-card" ng-hide="vm.registered" flex=60>
             <signup landing-page="true"></signup>
         </md-card>
 
-        <md-card ng-if="vm.isLogin" class="content-main logged-in md-card md-whiteframe-14dp" flex=60>
+        <md-card ng-if="vm.isLogin" class="content-main logged-in md-card" flex=60>
             <h2 class="md-display-3">My Projects</h2>
 
             <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projectList">
