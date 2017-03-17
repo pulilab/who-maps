@@ -1,6 +1,5 @@
-import AuthApi from '../AuthApi';
-import { StaticUtilities } from '../../Utilities';
-
+import AuthApi  from '../Common/AuthApi';
+import { StaticUtilities } from '../Utilities';
 
 /* global Promise, URL */
 

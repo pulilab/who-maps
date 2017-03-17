@@ -23,7 +23,7 @@ import LoginComponent from './Login/loginComponent';
 import ResetComponent from './Reset/resetComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
-import NewProjectComponent from './NewProject/newProjectComponent';
+import NewProjectComponent from '../NewProject/newProjectComponent';
 import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';

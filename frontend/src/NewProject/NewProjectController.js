@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './NewProjectService';
-import ProjectDefinition from '../ProjectDefinition';
-import EditProfileService from '../EditProfile/EditProfileService';
+import ProjectDefinition from '../Common/ProjectDefinition';
+import EditProfileService from '../Common/EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
@@ -14,7 +14,7 @@ class NewProjectController extends ProjectDefinition {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.es = new EditProfileService();
-        this.ccs = require('../CustomCountryService');
+        this.ccs = require('../Common/CustomCountryService');
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
@@ -635,7 +635,7 @@ class NewProjectController extends ProjectDefinition {
     static newProjectFactory() {
         require('./NewProject.scss');
         const structure = require('./Resources/structure.json');
-        const CommonService =  require('../CommonServices');
+        const CommonService =  require('../Common/CommonServices');
         function newProject($scope, $state, Upload, $anchorScroll, $location, $mdToast) {
             return new NewProjectController($scope, $state, Upload, $anchorScroll,
                 $location, CommonService, structure, $mdToast);
