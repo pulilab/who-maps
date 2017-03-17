@@ -1,14 +1,33 @@
-<div class="project-section" md-whiteframe="2">
-    <div class="section-title">Navigation</div>
-    <div layout="column" class="edit-button">
-        <div flex="50" layout="row" layout-align="start center">
+<div class="project-section project-navigation" md-whiteframe="2">
+    <div class="section-title md-title">Navigation</div>
+    <div layout="column" class="stepper">
+      <ul>
+        <li class="active"><a href="#">
+          <span><i class="material-icons">&#xE5C8;</i></span>Project details
+        </a></li>
+        <li><a href="#">
+          <span><i class="material-icons">&#xE5C8;</i></span>Strategy
+        </a></li>
+        <li><a href="#">
+          <span><i class="material-icons">&#xE5C8;</i></span>Technology
+        </a></li>
+        <li><a href="#">
+          <span><i class="material-icons">&#xE5C8;</i></span>Additional info
+        </a></li>
+        <li><a href="#">
+          <span><i class="material-icons">&#xE5C8;</i></span>Interoperability
+        </a></li>
+      </ul>
+    </div>
+    <div layout="column" class="edit-buttons">
+        <div layout="row" layout-align="center start">
+            <md-button type="submit" ng-if="!vm.editMode && !vm.inventoryMode" class="md-primary md-raised">Add new project</md-button>
+            <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
+            <md-button type="submit" ng-if="vm.inventoryMode" class="md-primary">Save and add another</md-button>
+        </div>
+        <div layout="row" layout-align="center start">
             <md-button class="md-gray md-raised" ng-if="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
             <md-button class="md-gray md-raised" ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
-        </div>
-        <div flex="50" layout="row" layout-align="end center">
-            <md-button type="submit" ng-if="!vm.editMode && !vm.inventoryMode" class="md-primary md-raised">Add new project</md-button>
-            <md-button type="submit" ng-if="vm.inventoryMode" class="md-primary md-raised">Save and add another</md-button>
-            <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
         </div>
     </div>
 </div>
