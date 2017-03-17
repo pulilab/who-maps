@@ -1,1 +1,49 @@
-<span>{{vm.counter}}</span>
+<div class="project-section" md-whiteframe="2">
+    <div class="section-title">Strategies</div>
+    <div class="strat-cont">
+        <ssmenu
+                class="his-buckets"
+                options="vm.structure.strategies"
+                on-close-callback="vm.setStrategy"
+                multiple="true"
+                ng-model="vm.project.strategy"
+                placeholder="HIS Buckets"
+                hint="What is your mHealth project strategy to address the health need?">
+        </ssmenu>
+    </div>
+    <div class="">
+        <ssmenu
+                class="strategies"
+                options="vm.structure.strategies"
+                on-close-callback="vm.setStrategy"
+                multiple="true"
+                ng-model="vm.project.strategy"
+                placeholder="Digital Health strategies"
+                hint="What is your mHealth project strategy to address the health need?">
+        </ssmenu>
+    </div>
+
+    <div class="">
+        <ssmenu
+                class="hsc-challenges"
+                options="vm.structure.strategies"
+                on-close-callback="vm.setStrategy"
+                multiple="true"
+                ng-model="vm.project.strategy"
+                placeholder="HSC challenges"
+                hint="What is your mHealth project strategy to address the health need?">
+        </ssmenu>
+    </div>
+
+    <div class="">
+        <ssmenu
+                class="essential-interventions"
+                options="vm.structure.strategies"
+                on-close-callback="vm.setStrategy"
+                multiple="true"
+                ng-model="vm.project.strategy"
+                placeholder="Essential Interventions"
+                hint="What is your mHealth project strategy to address the health need?">
+        </ssmenu>
+    </div>
+</div>

@@ -106,7 +106,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project layout-fill layout="column" ></new-project>'
+                    template: '<project layout-fill layout="column" ></project>'
                 }
             }
         })
@@ -115,7 +115,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project edit-mode="true" layout-fill layout="column" ></new-project>'
+                    template: '<project edit-mode="true" layout-fill layout="column" ></project>'
                 }
             }
         })
@@ -124,7 +124,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project inventory-mode="true" ></new-project>'
+                    template: '<project inventory-mode="true" ></project>'
                 }
             }
         })

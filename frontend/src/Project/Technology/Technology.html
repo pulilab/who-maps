@@ -1,1 +1,94 @@
-<span>{{vm.counter}}</span>
+<div class="project-section" md-whiteframe="2">
+    <div class="section-title">3. Technology</div>
+
+    <!-- THIS CODE HAS TO BE REPLACED WITH A PROPER DATE PICKER -->
+
+    <p>Date when technology was implemented/deployed</p>
+    <md-input-container>
+        <md-select  ng-model="vm.implementingDateYear" placeholder="Year" >
+            <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <md-select md-container-class="menu-large" ng-model="vm.implementingDateMonth" placeholder="Month" >
+            <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
+        </md-select>
+    </md-input-container>
+
+    <div id="customerror2" class="custom-error" ng-hide="vm.implementingDateYear && vm.implementingDateMonth">
+        Select Year, Month
+    </div>
+
+
+    <!-- Tech platforms -->
+    <section md-layout="row" layout-wrap>
+
+        <p>What technologies and/or communication channels (e.g. software platform, such as RapidPro, and communication via text message or SMS) are the strategy based on? (Check all that apply)</p>
+        <h5>Technology Platforms:</h5>
+
+        <div class="checkbox-container" layout="row">
+            <md-checkbox
+                    ng-repeat="t in vm.structure.technology_platforms"
+                    ng-checked="vm.technologyPlatformChecked(t)"
+                    ng-click="vm.technologyPlatformChange(t)"
+                    flex="15"
+                    aria-label="{{ t }}"
+                    class="">
+                {{ t }}
+            </md-checkbox>
+            <md-input-container class="specify-other">
+                <input type="text" placeholder="Specify other" ng-model="vm.project.technology_platforms.custom"/>
+            </md-input-container>
+        </div>
+
+    </section>
+
+    <!-- Licenses -->
+    <section md-layout="row">
+
+        <p>Under what license is the project governed?</p>
+        <h5>Licenses:</h5>
+        <div class="checkbox-container checkbox-container-lic" layout="row">
+            <md-checkbox
+                    ng-repeat="l in vm.structure.licenses"
+                    ng-checked="vm.licenseChecked(l)"
+                    ng-click="vm.licenseChange(l)"
+                    flex="30"
+                    aria-label="{{ l }}"
+                    class="">
+                {{ l }}
+            </md-checkbox>
+        </div>
+    </section>
+
+    <div layout="column">
+        <md-input-container>
+            <input type="text"
+                   ng-pattern="vm.urlRegex"
+                   placeholder="Code documentation or download link"  name="repository" ng-required="false" ng-model="vm.project.repository"/>
+            <div ng-messages="vm.newProjectForm.repository.$error">
+                <div ng-message="pattern">This should be a valid link</div>
+            </div>
+        </md-input-container>
+    </div>
+    <div layout="column">
+        <md-input-container>
+            <input type="text"
+                   ng-pattern="vm.urlRegex"
+                   placeholder="Link to the application:" name="mobile_application" ng-required="false" ng-model="vm.project.mobile_application"/>
+            <div ng-messages="vm.newProjectForm.mobile_application.$error">
+                <div ng-message="pattern">This should be a valid link</div>
+            </div>
+        </md-input-container>
+    </div>
+    <div layout="column">
+        <md-input-container>
+            <input type="text"
+                   ng-pattern="vm.urlRegex"
+                   placeholder="Link to wiki page:" name="wiki" ng-required="false" ng-model="vm.project.wiki"/>
+            <div ng-messages="vm.newProjectForm.wiki.$error">
+                <div ng-message="pattern">This should be a valid link</div>
+            </div>
+        </md-input-container>
+    </div>
+</div>

@@ -6,7 +6,7 @@ const newProjectComponent = {
     controller: NewProjectController.newProjectFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'newProject',
+    name: 'project',
     bindings: {
         editMode: '@',
         inventoryMode: '@'

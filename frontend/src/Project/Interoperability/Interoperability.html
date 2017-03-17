@@ -1,1 +1,49 @@
-<span>{{vm.counter}}</span>
+<div class="project-section" md-whiteframe="2">
+    <div class="section-title">5. Interoperability</div>
+    <h5 flex="100">Does your digital health project link to a digital Health Information System *HIS?</h5>
+
+
+    <div class="interoperability-links" layout="column"  >
+        <div class="interoperability" layout="row" layout-align="left center"  ng-repeat="link in vm.structure.interoperability_links">
+            <div flex="40">
+                <md-checkbox
+                        class="md-primary"
+                        ng-model="vm.project.interoperability_links[$index].selected">
+                    {{link}}
+                </md-checkbox>
+            </div>
+
+            <div flex="60">
+                <md-input-container flex="100"  layout-fill>
+                    <label>Specify URL:</label>
+                    <input
+                            type="text"
+                            ng-pattern="vm.urlRegex"
+                            name="link_{{$index}}" id="interoperabilityLink_{{$index}}"
+                            ng-disabled="!vm.project.interoperability_links[$index].selected"
+                            ng-model="vm.project.interoperability_links[$index].link">
+                    <div ng-messages="vm.newProjectForm['link_' + $index].$error">
+                        <div ng-message="pattern">This should be a valid link</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+
+    </div>
+
+    <h5 flex="100">What data standards does your digital health project use?</h5>
+    <div class="interoperability-standards" layout="row" layout-wrap>
+        <div class="interoperability" layout="column" layout-align="center left" flex="33"  ng-repeat="standard in vm.structure.interoperability_standards">
+            <md-checkbox
+                    ng-checked="vm.interoperabilityStandardsChecked(standard)"
+                    ng-click="vm.interoperabilityStandardsChanged(standard)"
+            >
+                {{standard}}
+            </md-checkbox>
+        </div>
+        <md-input-container class="specify-other">
+            <input type="text" placeholder="Specify other" ng-model="vm.project.interoperability_standards.custom"/>
+        </md-input-container>
+
+    </div>
+</div>
