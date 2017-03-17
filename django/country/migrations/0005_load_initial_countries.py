@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import os
+import sys
 from django.core import serializers
 from django.core.serializers import python
 from django.db import migrations
@@ -22,6 +23,11 @@ def load_fixture(app, fixture, ignorenonexistent=True):
         defined in `models.py`.
         Based on https://gist.github.com/leifdenby/4586e350586c014c1c9a
         """
+        # Do not run this when testing
+        for arg in sys.argv:
+            if 'test' in arg:
+                return False
+
         # Delete all the previous data
         Country = apps.get_model('country', 'Country')
         Country.objects.all().delete()
