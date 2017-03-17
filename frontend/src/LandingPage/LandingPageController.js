@@ -29,8 +29,9 @@ class LandingPageModuleController {
             vm.scope.$evalAsync(() => {
                 vm.countryData = data;
                 vm.countryCover = {
-                    background: `url(${data.cover}) 0 -10px`,
-                    'background-size': 'cover'
+                    background: `url(${data.cover}) 0 0`,
+                    'background-size': 'cover',
+                    'background-repeat': 'no-repeat'
                 };
             });
         });
