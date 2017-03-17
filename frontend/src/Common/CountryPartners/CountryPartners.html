@@ -3,22 +3,22 @@
 
         <div class="content-preset" flex="40">
 
-          <h4 class="md-title">{{vm.footerTitle}}</h4>
+          <h4 class="md-title">Editable Preset Title</h4>
 
-          <p>{{vm.footerText}}</p>
+          <p>(Editable preset text) Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili. Quisque ut dolor gravida, placerat libero vel, euismod. Fictum,  deserunt mollit anim laborum astutumque!</p>
 
         </div>
 
         <div class="content-logos" flex="60">
-            <h4 class="md-title">Country Partners</h4>
+            <h4 class="md-title">Project Partners</h4>
 
             <div class="partnerscontainer">
                 <div
-                    ng-repeat="logo in vm.partners track by $index | limitTo:8 "
+                    ng-repeat="logo in vm.logos track by $index | limitTo:8 "
                     class="partner"
-                    ng-if="vm.partners.length">
+                    ng-if="vm.logos.length">
 
-                      <span class="logoimg" ng-style="vm.computeLogoStyle(logo)"></span>
+                      <span class="logoimg" style="background-image: url({{logo}})"></span>
                 </div>
             </div>
         </div>
