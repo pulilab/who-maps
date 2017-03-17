@@ -1,4 +1,4 @@
-import NewProjectService from './NewProjectService';
+import NewProjectService from './ProjectService';
 
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */

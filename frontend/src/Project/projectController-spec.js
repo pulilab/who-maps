@@ -1,4 +1,4 @@
-import NewProjectController from './NewProjectController';
+import NewProjectController from './ProjectController';
 import _ from 'lodash';
 
 

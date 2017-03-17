@@ -1,5 +1,5 @@
-import _template from './NewProject.html';
-import NewProjectController from './NewProjectController';
+import _template from './Project.html';
+import NewProjectController from './ProjectController';
 
 
 const newProjectComponent = {

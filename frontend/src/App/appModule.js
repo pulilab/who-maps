@@ -14,6 +14,7 @@ import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
+import { Project } from '../Project/';
 import { Components, Storage } from '../Common/';
 
 import AppComponent from './appComponent';
@@ -215,6 +216,7 @@ angular.module(moduleName,
         ngMessages,
         'ngPassword',
         Components,
+        Project,
         cms,
         countryView,
         dashboard,

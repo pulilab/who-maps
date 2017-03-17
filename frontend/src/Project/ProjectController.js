@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import NewProjectService from './NewProjectService';
+import NewProjectService from './ProjectService';
 import ProjectDefinition from '../Common/ProjectDefinition';
 import EditProfileService from '../Common/EditProfile/EditProfileService';
 
@@ -633,7 +633,7 @@ class NewProjectController extends ProjectDefinition {
 
 
     static newProjectFactory() {
-        require('./NewProject.scss');
+        require('./Project.scss');
         const structure = require('./Resources/structure.json');
         const CommonService =  require('../Common/CommonServices');
         function newProject($scope, $state, Upload, $anchorScroll, $location, $mdToast) {
