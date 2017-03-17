@@ -24,6 +24,11 @@
     width: calc(100% - 20px);
   }
 
+  // Crossbrowser fixes
+  .browser-firefox & {
+    left: 50%;
+  }
+
   .md-toolbar-tools {
     height: auto !important;
     max-height: 120px !important; /* 160 */
