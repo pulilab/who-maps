@@ -34,15 +34,8 @@ class CountryViewModuleController {
         this.getCountries();
         this.lastFilter = null;
         this.filterArray = [
-            this.createFilterCategory('continuum', this.cs.hssStructure.continuum, null, 'title'),
-            this.createFilterCategory('interventions',
-                this.cs.hssStructure.interventions, 'name', false, collection => _.flattenDeep(_.toArray(collection))),
             this.createFilterCategory('technology_platforms',
-                this.cs.projectStructure.technology_platforms),
-            this.createFilterCategory('applications', this.cs.hssStructure.applications,
-                false, false, this.concatenateApplications),
-            this.createFilterCategory('constraints', this.cs.hssStructure.taxonomies,
-                false, false, this.extractConstraints)
+                this.cs.projectStructure.technology_platforms)
         ];
     }
 
@@ -100,10 +93,6 @@ class CountryViewModuleController {
         });
         if (_.flattenDeep(_.toArray(filters)).length > 0) {
             filters.provisonalArray = _.cloneDeep(this.countryProjects);
-            this.generalFilter(filters, 'continuum');
-            this.generalFilter(filters, 'interventions');
-            this.generalFilter(filters, 'applications');
-            this.constraintsFilter(filters);
             this.generalFilter(filters, 'technology_platforms');
             this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
         }

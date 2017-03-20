@@ -42,9 +42,7 @@ class CommonServices extends Protected {
         }
         else {
             this.checkLoadPresence('structure');
-            this.checkLoadPresence('hss-structure');
             this.populateProjectStructure();
-            this.populateHssStructure();
         }
     }
 
@@ -82,8 +80,6 @@ class CommonServices extends Protected {
             this.getUsersProfiles();
         }
         this.checkLoadPresence('structure');
-        this.checkLoadPresence('hss-structure');
-        this.populateHssStructure();
         this.populateProjectStructure();
     }
 
@@ -199,18 +195,6 @@ class CommonServices extends Protected {
             })
             .catch(() => {
                 this.loadingProgress('structure');
-                this.promiseReject();
-            });
-    }
-
-    populateHssStructure() {
-        this.get('projects/hss/structure/')
-            .then(structure => {
-                this.hssStructure = structure;
-                this.loadingProgress('hss-structure');
-            })
-            .catch(() => {
-                this.loadingProgress('hss-structure');
                 this.promiseReject();
             });
     }
