@@ -20,7 +20,7 @@ module.exports = function(config) {
                 global: {
                     statements: 50,
                     branches: 30,
-                    functions: 50,
+                    functions: 45,
                     lines: 50
                 }
             }

@@ -8,15 +8,15 @@ class CountryTopBarController extends Protected {
         this.state = $state;
         this.scope = $scope;
         this.timeout = $timeout;
+        this.cs = require('../CommonServices');
+        this.ccs = require('../CustomCountryService');
         this.$onInit = this.onInit.bind(this);
     }
 
     onInit() {
         const vm = this;
         this.defaultOnInit();
-        self.profileDataReady = false;
-        this.cs = require('../CommonServices');
-        this.ccs = require('../CustomCountryService');
+        this.profileDataReady = false;
         if (this.user) {
             this.cs.loadedPromise.then(() => {
                 vm.userProfile = vm.cs.userProfile;
@@ -60,9 +60,6 @@ class CountryTopBarController extends Protected {
         return this.profileDataReady;
     }
 
-    showSearch() {
-        return this.showFullNavigation;
-    }
     showLogin() {
         return !this.isLogin;
     }
