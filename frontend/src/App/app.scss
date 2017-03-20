@@ -94,6 +94,7 @@ md-tooltip {
 
 .page-title {
   color: $color-primary;
+  max-width: $page-max-width;
 
   .md-display-1 {
     margin: 40px 0;

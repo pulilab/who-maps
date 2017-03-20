@@ -1,6 +1,65 @@
-<div class="project-section" md-whiteframe="2">
-    <div class="section-title">1. Project details</div>
-    <div class="project-name" flex="100" layout="row" layout-align="start center">
+<div class="project-section active" md-whiteframe="2">
+
+    <div class="section-title md-title">
+      1. Project details
+      <span class="toggler"><i class="material-icons">&#xE313;</i></span>
+    </div>
+
+    <div class="section-wrapper">
+
+      <md-input-container class="md-block">
+        <label>Project name</label>
+        <input md-maxlength="100" required name="name" ng-model="project.name">
+        <div ng-messages="name.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+        </div>
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Organisation (Platform owner)</label>
+        <input md-maxlength="100" required name="owner" ng-model="project.owner">
+        <div ng-messages="projectDetails.owner.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+        </div>
+      </md-input-container>
+
+      <div layout="row">
+        <md-input-container class="md-block" flex>
+          <label>Project country</label>
+          <md-select ng-model="project.country">
+            <md-option value="Value 1">
+              Value 1
+            </md-option>
+            <md-option value="Value 2">
+              Value 2
+            </md-option>
+            <md-option value="Value 3">
+              Value 3
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container class="md-block" flex>
+          <label>Project start date</label>
+          <md-select ng-model="project.date">
+            <md-option value="Value 1">
+              Value 1
+            </md-option>
+            <md-option value="Value 2">
+              Value 2
+            </md-option>
+            <md-option value="Value 3">
+              Value 3
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+    </div>
+
+
+    <!-- <div class="project-name" flex="100" layout="row" layout-align="start center">
         <md-input-container flex="60">
             <label>Name of the project</label>
             <input
@@ -208,5 +267,5 @@
                     filter-selected="true">
             </md-contact-chips>
         </div>
-    </section>
+    </section> -->
 </div>
