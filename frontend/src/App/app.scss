@@ -115,6 +115,23 @@ md-tooltip {
 /* UI ELEMENTS
    ============================= */
 
+// md-input-container,
+// md-input-container .md-input,
+// md-input-container textarea.md-input {
+//   padding: 0 !important;
+// }
+//
+// md-input-container label {
+//   padding-left: 0 !important;
+// }
+
+md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float), md-input-container.md-input-has-value label:not(.md-no-float) {
+  color: $text-primary;
+  font-weight: 500;
+  transform: translate3d(0, 3px, 0) scale(0.75);
+}
+
+
 
 
 .md-button {
