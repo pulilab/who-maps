@@ -139,18 +139,6 @@
       }
     }
 
-    .layout-column {
-      md-input-container {
-        margin-top: 0;
-        margin-bottom: 0;
-        min-height: 72px;
-
-        + md-input-container {
-          margin-top: 16px;
-        }
-      }
-    }
-
     .input-group {
       position: relative;
       box-sizing: border-box;
@@ -173,7 +161,6 @@
         top: 9px;
         color: $text-disabled;
         text-align: center;
-        width: 30px;
       }
     }
 

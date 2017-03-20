@@ -115,15 +115,11 @@ md-tooltip {
 /* UI ELEMENTS
    ============================= */
 
-// md-input-container,
-// md-input-container .md-input,
-// md-input-container textarea.md-input {
-//   padding: 0 !important;
-// }
-//
-// md-input-container label {
-//   padding-left: 0 !important;
-// }
+// Enhance form input indentation
+
+md-input-container {
+  padding-left: 0;
+}
 
 md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float), md-input-container.md-input-has-value label:not(.md-no-float) {
   color: $text-primary;
