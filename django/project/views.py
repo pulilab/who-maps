@@ -29,7 +29,7 @@ from country.models import Country
 from .permissions import InTeamOrReadOnly
 from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer, ProjectFilterSerializer
-from .models import Project, File, CoverageVersion, PartnerLogo
+from .models import Project, File, CoverageVersion
 from .project_data import project_structure
 
 
@@ -110,8 +110,6 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
-        countries = Country.objects.values('id', 'name')
-        project_structure.update(countries=countries)
         return Response(project_structure)
 
 
@@ -348,39 +346,6 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         coverage_versions = CoverageVersion.objects.filter(project_id=project_id) \
             .order_by("version").values("version", "data", "modified")
         return Response(coverage_versions)
-
-
-class PartnerLogoListViewSet(ViewSet):
-
-    def list(self, request, project_id):
-        """
-        Retrieves list of partnerlogo ids for a given project.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        return Response([{"data": p.data.url, "id": p.id} for p in PartnerLogo.objects.filter(project_id=project.id)])
-
-
-class PartnerLogoViewSet(TeamTokenAuthMixin, ViewSet):
-
-    def create(self, request, project_id):
-        """
-        Creates partnerlogos from the uploaded files.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        self.check_object_permissions(self.request, project)
-
-        logos = []
-        # Get and store binary files for partnerlogos.
-        for key, value in request.FILES.items():
-            logo = PartnerLogo.objects.create(project_id=project.id, type=value.content_type, data=value)
-            logos.append({"id": logo.id, "data": logo.data.url})
-        return Response(logos)
-
-    def destroy(self, request, pk=None):
-        partner_logo = get_object_or_400(PartnerLogo, "No such logo.", id=pk)
-        self.check_object_permissions(self.request, partner_logo.project)
-        partner_logo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class FileListViewSet(ViewSet):
