@@ -6,7 +6,6 @@ from rest_framework.decorators import api_view
 from core.views import TeamTokenAuthMixin, CheckProjectAccessMixin, get_object_or_400
 from rest_framework.viewsets import GenericViewSet
 from search.signals import intervention_save
-from project.models import Project
 
 from .hss_data import interventions, applications, taxonomies, continuum, target_population
 from .models import HSS
