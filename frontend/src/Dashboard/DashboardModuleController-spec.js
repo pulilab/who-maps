@@ -109,14 +109,14 @@ describe('DashboardModuleController', () => {
     });
 
     it('\'s .fetchCountryMap fn. calls the service with the id given, then emits', () => {
-        vm.mapService.getCountryTopo = () => {
+        vm.mapService.getCountryMapData = () => {
             return { then: (fn) => { fn('adat'); } };
         };
         spyOn(vm.EE, 'emit');
-        spyOn(vm.mapService, 'getCountryTopo').and.callThrough();
+        spyOn(vm.mapService, 'getCountryMapData').and.callThrough();
         vm.fetchCountryMap('aaa');
 
-        expect(vm.mapService.getCountryTopo).toHaveBeenCalled();
+        expect(vm.mapService.getCountryMapData).toHaveBeenCalled();
         expect(vm.EE.emit).toHaveBeenCalledWith('topoArrived', 'adat');
     });
 

@@ -1,5 +1,4 @@
 import DashboardService from './DashboardService.js';
-import DashboardMapService from './DashboardMapService.js';
 import AuthApi from '../Common/AuthApi';
 import { StaticUtilities } from '../Utilities';
 import { Protected } from '../Common/';
@@ -31,7 +30,7 @@ class DashboardModuleController extends Protected {
         }
 
         this.service = new DashboardService(this.projectId);
-        this.mapService = new DashboardMapService();
+        this.mapService = require('../Common/CustomCountryService');
 
         if (this.projectId) {
             this.cs.getProjectData(this.projectId).then(data => {
@@ -119,15 +118,12 @@ class DashboardModuleController extends Protected {
     }
 
     parseMapData(coverage, national) {
-
         const ret = { labels: [], data: {} };
-
         coverage.forEach(el => {
             if (ret.labels.indexOf(el.district) < 0) {
                 ret.labels.push(el.district);
             }
         });
-
 
         coverage.forEach(distObj => {
 
@@ -146,7 +142,6 @@ class DashboardModuleController extends Protected {
     }
 
     snapShot() {
-
         this.service.snapShot(this.projectId).then(() => {
             this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
         });
@@ -303,11 +298,7 @@ class DashboardModuleController extends Protected {
     }
 
     fetchCountryMap(id) {
-
-        // console.debug('TRYING TO FETCH COUNTRYMAP for ID:', id);
-        this.mapService.getCountryTopo(id).then(data => {
-
-            // console.debug('RAW topo arrived from API, will send over EE', data);
+        this.mapService.getCountryMapData(id).then(data => {
             this.EE.emit('topoArrived', data);
         });
     }
@@ -460,7 +451,6 @@ class DashboardModuleController extends Protected {
 
         data.forEach((axisObj, i) => {
             axisObj.domains.forEach((domainObj, j) => {
-                // console.log(domainObj);
                 ret.push(
                     {
                         id: counter,

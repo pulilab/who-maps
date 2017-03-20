@@ -1,14 +1,15 @@
-import { trendingProjects } from './landingMock';
 import { Storage } from '../Common/';
 import SignupService from '../Common/Signup/SignupService';
+import { CustomCountryService } from '../Common/';
 
 class LandingPageModuleController {
 
     constructor($scope, $location, $anchorScroll) {
         this.storage = new Storage();
         this.ss = new SignupService();
+        this.ccs = CustomCountryService;
+        this.scope = $scope;
         this.EE = window.EE;
-        this.trendingProjects = trendingProjects;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
         this.$onInit = this.onInit.bind(this);
@@ -17,11 +18,26 @@ class LandingPageModuleController {
     }
 
     onInit() {
+        const vm = this;
         this.isLogin = this.storage.get('login');
         if (this.isLogin) {
             const commonService = require('../Common/CommonServices');
             this.projectList = commonService.projectList;
         }
+        const subDomain = this.ccs.getSubDomain();
+        this.ccs.getCountryData(subDomain).then(data => {
+            vm.scope.$evalAsync(() => {
+                vm.countryData = data;
+                vm.countryCover = null;
+                if (data.cover) {
+                    vm.countryCover = {
+                        background: `url(${data.cover}) 0 -10px`,
+                        'background-size': 'cover'
+                    };
+                }
+                vm.showFooter = data.footer_text && data.footer_title;
+            });
+        });
     }
 
     onDestroy() {

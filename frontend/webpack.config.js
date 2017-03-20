@@ -9,6 +9,8 @@ const production = process.env.NODE_ENV === 'production';
 const live = process.env.LIVE_FLAG === 'live';
 const debug = process.env.DEBUG_MODE === 'debug';
 
+console.log(production)
+
 const PATH = {
     build: path.resolve(__dirname, 'builds')
 };
@@ -50,17 +52,6 @@ const distPlugins = [
 const devPlugins = [].concat(basePlugins);
 
 
-const devPreLoaders = [
-    {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: [
-            /node_modules/,
-            /.*-spec\.js/
-        ]
-    }
-];
-
 
 module.exports = {
     entry: {
@@ -97,9 +88,9 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'sass-loader' }
                 ]
             },
             {
@@ -137,9 +128,13 @@ module.exports = {
             '/media/*': {
                 target:  'http://localhost/',
                 secure: false
+            },
+            '/static/*': {
+                target:  'http://localhost/',
+                secure: false
             }
         }
     },
-    devtool: production ? false : 'eval-cheap-source-map',
+    devtool: production ? false : 'cheap-module-eval-source-map',
     plugins: production ? distPlugins : devPlugins
 };

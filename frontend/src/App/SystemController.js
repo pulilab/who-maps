@@ -3,14 +3,24 @@ import { Storage } from '../Common/';
 
 class SystemController {
 
-    constructor($state) {
+    constructor($state, $scope) {
         this.EE = window.EE;
         this.state = $state;
+        this.scope = $scope;
         this.storage = new Storage();
         this.eventBindings();
         this.cs = require('../Common/CommonServices');
         this.isLogin = this.storage.get('login');
         this.userProfile = this.cs.userProfile;
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watch(() => {
+            return this.state.current.name;
+        }, value => {
+            this.showCountryTopBar = value === 'landing';
+        });
     }
 
     eventBindings() {
@@ -70,12 +80,12 @@ class SystemController {
 
     static systemControllerFactory() {
 
-        function systemController($state) {
+        function systemController($state, $scope) {
 
-            return new SystemController($state);
+            return new SystemController($state, $scope);
         }
 
-        systemController.$inject = ['$state'];
+        systemController.$inject = ['$state', '$scope'];
 
         return systemController;
     }

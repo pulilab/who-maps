@@ -2,7 +2,7 @@ import CountryMapController from './CountryMapController';
 import d3 from 'd3';
 import angular from 'angular';
 import perfMockMap from './mock/perfMockMap.js';
-import { default as mockMap } from './mock/sierra-leone/topoTest.json';
+import { default as countryMapData } from './mock/sierra-leone/topoTest.json';
 
 /* global define, it, describe, expect, spyOn, beforeEach, afterEach, angular, xit, xdescribe */
 
@@ -20,7 +20,6 @@ let vm;
 describe('CountryMapController', () => {
 
     beforeEach(() => {
-
         vm = CountryMapController.countrymapFactory()(el, scopeMock);
     });
 
@@ -92,9 +91,9 @@ describe('CountryMapController', () => {
 
     it('$onDestroy resets self.data & self.map', () => {
         vm.data = true;
-        vm.map = true;
+        vm.countryMapData = true;
         vm.onDestroy();
-        expect(vm.data || vm.map).toBe(false);
+        expect(vm.data || vm.countryMapData).toBe(false);
     });
 
     describe('on data arrival', () => {
@@ -131,7 +130,7 @@ describe('CountryMapController', () => {
         it('if map is aleady here, calls preDraw() with it', () => {
             spyOn(vm, 'preDraw');
             vm.mapHere = true;
-            vm.map = 'mapdata';
+            vm.countryMapData = 'mapdata';
             vm.dataArrived(perfMockMap, nationalMock);
             expect(vm.preDraw).toHaveBeenCalledWith('mapdata');
         });
@@ -139,9 +138,9 @@ describe('CountryMapController', () => {
 
     describe('on map arrived', () => {
 
-        it('saves the data into vm.map, notes it in vm.mapHere', () => {
+        it('saves the data into vm.countryMapData, notes it in vm.mapHere', () => {
             vm.mapArrived('mapData');
-            expect(vm.map).toBe('mapData');
+            expect(vm.countryMapData).toBe('mapData');
             expect(vm.mapHere).toBe(true);
         });
 
@@ -172,50 +171,10 @@ describe('CountryMapController', () => {
     });
 
     it('has a method .makeGeoFromTopo(), that uses the topojson lib to make a geojson out of the data', () => {
-        const ret = vm.makeGeoFromTopo(mockMap.admin_level_4, 'admin_level_4');
+        const ret = vm.makeGeoFromTopo(countryMapData.mapData);
         expect(typeof ret).toBe('object');
     });
 
-    it('defaultLevels() provides a library for countries to get the admin levels from', () => {
-
-        const countriesMock = [
-            {
-                'name': 'Bangladesh',
-                'id': 1
-            }, {
-                'name': 'India',
-                'id': 2
-            }, {
-                'name': 'Indonesia',
-                'id': 6
-            }, {
-                'name': 'Kenya',
-                'id': 3
-            }, {
-                'name': 'Malawi',
-                'id': 7
-            }, {
-                'name': 'Pakistan',
-                'id': 8
-            }, {
-                'name': 'Philippines',
-                'id': 4
-            }, {
-                'name': 'Senegal',
-                'id': 9
-            }, {
-                'name': 'Sierra Leone',
-                'id': 5
-            }, {
-                'name': 'Tunisia',
-                'id': 10
-            }
-        ];
-        vm.cs = { projectStructure: { countries: countriesMock } };
-
-        const levLibMadeNow = vm.defaultLevels();
-        expect(levLibMadeNow.India).toBe('admin_level_4');
-    });
 
     it('formatCountryName() formats the self.country bindable upon a library', () => {
 
@@ -232,14 +191,9 @@ describe('CountryMapController', () => {
         expect(vm.countryName).toBe('Something not in the lib');
     });
 
-    it('getbindablesFromTopo() mines flagUrl and countryName from the topoJson', () => {
-        vm.getBindablesFromTopo(mockMap);
-        expect(vm.flagUrl).toBeDefined();
-        expect(vm.countryName).toBeDefined();
-    });
 
     it('calculateScale() should return a number from the topoJson', () => {
-        const ret = vm.calculateScale(mockMap);
+        const ret = vm.calculateScale(countryMapData.mapData);
         expect(typeof ret).toBe('number');
     });
 
@@ -257,7 +211,6 @@ describe('CountryMapController', () => {
     describe('preDraw', () => {
 
         beforeEach(() => {
-            spyOn(vm, 'getBindablesFromTopo');
 
             const countriesMock = [
                 {
@@ -293,7 +246,6 @@ describe('CountryMapController', () => {
                 }
             ];
             vm.cs = { projectStructure: { countries: countriesMock } };
-            spyOn(vm, 'defaultLevels').and.callThrough();
 
             spyOn(vm, 'formatCountryName');
             spyOn(vm, 'makeGeoFromTopo');
@@ -306,38 +258,28 @@ describe('CountryMapController', () => {
                 .classed('countrymapcontainer', true)
                 .classed('lastone', true);
 
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
             expect(d3.select('.lastone')[0][0]).toBe(null);
         });
 
-        it('calls getBindablesFromTopo() with the topoJSON', () => {
-            vm.preDraw(mockMap);
-            expect(vm.getBindablesFromTopo).toHaveBeenCalledWith(mockMap);
-        });
-
-        it('calls defaultLevels() to figure out the level to use', () => {
-            vm.preDraw(mockMap);
-            expect(vm.defaultLevels).toHaveBeenCalled();
-        });
-
         it('formats country name', () => {
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
             expect(vm.formatCountryName).toHaveBeenCalled();
         });
 
         it('calls makeGeoFromTopo() with the topoJSON', () => {
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
             expect(vm.makeGeoFromTopo).toHaveBeenCalled();
         });
 
         it('makes DIV element & SVG element', () => {
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
             expect(d3.select('.countrymapcontainer').length).toBe(1);
             expect(d3.select('.countrymap').length).toBe(1);
         });
 
         it('calls drawDistricts()', () => {
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
             expect(vm.drawDistricts).toHaveBeenCalled();
         });
 
@@ -345,7 +287,7 @@ describe('CountryMapController', () => {
             vm.showPlaceholder = true;
             vm.dataHere = true;
             vm.mapHere = true;
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
             expect(vm.showPlaceholder).toBe(false);
             expect(vm.dataHere).toBe(false);
             expect(vm.mapHere).toBe(false);
@@ -392,7 +334,7 @@ describe('CountryMapController', () => {
             vm.cs = { projectStructure: { countries: countriesMock } };
             vm.data = perfMockMap;
             spyOn(vm, 'svgPanZoom').and.returnValue({ zoomOut: a => a });
-            vm.preDraw(mockMap);
+            vm.preDraw(countryMapData);
         });
 
         it('appends the right number of svg paths(.d3district) to .countrymap', () => {

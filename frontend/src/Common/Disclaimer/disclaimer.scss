@@ -1,14 +1,25 @@
 @import "../../variables.scss";
 
 disclaimer footer {
-  padding: 36px 50px;
+  width: 100%;
   color: $color-gray-light;
   text-align: center;
   font-size: 12px;
   line-height: 16px;
+  background-color: $color-gray-lightest;
+
+  > div {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 50px 30px;
+
+  }
 
   a {
+    display: inline-block;
+    margin: 10px 0 0;
     color: $color-gray-light;
+
     &:hover {
       text-decoration: none;
       color: $color-primary;

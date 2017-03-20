@@ -5,7 +5,7 @@ import d3 from 'd3';
 
 /* global d3, DEV */
 
-class CountrymapController {
+class CountryMapController {
 
     constructor($element, $scope) {
         this.el = $element;
@@ -47,7 +47,7 @@ class CountrymapController {
     onDestroy() {
         // this.svgZoom.destroy();
         this.data = false;
-        this.map = false;
+        this.countryMapData = false;
     }
 
     saveClass(key, index, boundNrs) {
@@ -108,7 +108,7 @@ class CountrymapController {
         });
         this.data.data = provisionalDistrictObject;
         this.activeDistrict = void 0;
-        this.preDraw(this.map);
+        this.preDraw(this.countryMapData);
     }
 
     dataArrived(data, national) {
@@ -147,7 +147,7 @@ class CountrymapController {
 
         if (this.mapHere) {
             // console.debug('data arrived, map was here, starts drawing', data);
-            this.preDraw(this.map);
+            this.preDraw(this.countryMapData);
         }
         else {
             // console.debug('data arrived, waiting for map', data);
@@ -156,12 +156,12 @@ class CountrymapController {
 
     mapArrived(data) {
 
-        this.map = data;
+        this.countryMapData = data;
         this.mapHere = true;
 
         if (this.dataHere) {
             // console.debug('map arrived, data was here, so it starts drawing', data);
-            this.preDraw(data);
+            this.preDraw(this.countryMapData);
         }
         else {
             // console.debug('map arrived, waiting for data');
@@ -183,46 +183,11 @@ class CountrymapController {
         this.EE.once('mapdataArrived', this.dataArrived, this);
     }
 
-    makeGeoFromTopo(topo, level) {
-
+    makeGeoFromTopo(topo) {
         // console.warn('TOPO', topo);
-        // console.warn('lvl', level);
-        const ret = topojson.feature(topo, topo.objects[level]);
-
-        // console.warn('GEO', ret);
-        // ret.features.forEach(el => { console.debug(el.properties.name); });
-
+        const subKey = _.keys(topo.objects)[0];
+        const ret = topojson.feature(topo, topo.objects[subKey]);
         return ret;
-    }
-
-    defaultLevels() {
-        const defaultLib = {};
-        _.forEach(this.cs.projectStructure.countries, country => {
-            // console.debug(country.name);
-            defaultLib[country.name] = 'admin_level_4';
-        });
-
-        const levelLib = {
-            'Albania':                      'admin_level_6', // #2.1
-            'Burkina Faso':                 'admin_level_5', // #2
-            'Cape Verde':                   'admin_level_6', // #2.1
-            'Guinea':                       'admin_level_6', // #2
-            // 'India':                        'admin_level_5', // #1
-            'Jamaica':                      'admin_level_6', // #2.1
-            'Nepal':                        'admin_level_6', // #1.5
-            'Philippines':                  'admin_level_3', // #1
-            'Sierra Leone':                 'admin_level_5', // #1
-            'The Gambia':                   'admin_level_5', // #1
-            'Uganda':                       'admin_level_6'  // #1.5
-            // 'Senegal':                       'admin_level_3', // #1
-            // 'Thailand':                     'admin_level_4', // #2.1
-            // 'Île Verte':                    'admin_level_6', // #2.1 Canada
-            // 'Trinidad and Tobago':          'admin_level_2'  // #2.1
-        };
-
-        _.merge(defaultLib, levelLib);
-
-        return defaultLib;
     }
 
     formatCountryName() {
@@ -234,27 +199,9 @@ class CountrymapController {
             ? dictionary[this.countryName] : this.countryName;
     }
 
-    getBindablesFromTopo(topoJSON) {
-
-        try {
-            this.flagUrl = topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.flag ||
-                topoJSON.admin_level_2.objects.admin_level_2.geometries[1].properties.flag ||
-                topoJSON.admin_level_2.objects.admin_level_2.geometries[2].properties.flag;
-
-            this.countryName =
-                topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties['name:en'] ||
-                topoJSON.admin_level_2.objects.admin_level_2.geometries[0].properties.name;
-        }
-        catch (err) {
-            this.flagUrl = 'https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_The_Gambia.svg';
-            this.countryName = 'Gambia';
-        }
-
-    }
-
     calculateScale(topoJSON) {
         let ret = Math.max.apply(null,
-                topoJSON.admin_level_2.transform.scale.map(nr => {
+                topoJSON.transform.scale.map(nr => {
                     return 1 / nr;
                 })) * 10;
 
@@ -287,24 +234,16 @@ class CountrymapController {
         this.svgZoom.zoomOut();
     }
 
-    preDraw(topoJSON) {
-
+    preDraw(countryMapData) {
         // console.log(JSON.stringify(topoJSON));
-
         d3.select(this.el[0]).select('.countrymapcontainer').remove();
 
-        this.getBindablesFromTopo(topoJSON);
-
-        const levelLib = this.defaultLevels();
-        const level = levelLib[this.countryName] ? levelLib[this.countryName] : 'admin_level_4';
-
-        // console.warn('Country name:', this.countryName);
-        // console.warn('LVL', level);
-
+        const topoJSON = countryMapData.mapData;
+        this.countryName = countryMapData.name;
+        this.flagUrl = countryMapData.flag;
         this.formatCountryName();
 
-        const distrData = this.makeGeoFromTopo(topoJSON[level], level);
-
+        const geoData = this.makeGeoFromTopo(topoJSON);
         const outer = d3.select(this.el[0])
             .append('div')
             .attr('class', 'countrymapcontainer');
@@ -321,7 +260,7 @@ class CountrymapController {
             .attr('width', width)
             .attr('height', height);
 
-        this.drawDistricts(element, distrData, topoJSON);
+        this.drawDistricts(element, geoData, countryMapData);
 
         outer.append(() => {
             return element.node();
@@ -334,33 +273,22 @@ class CountrymapController {
         this.mapHere = false;
     }
 
-    drawDistricts(element, distrData, topoJSON) {
-
-        // console.debug('element', element);
-        // console.debug('distrData', distrData);
-        // console.debug('topoJSON', topoJSON);
-
+    drawDistricts(element, geoData, countryMapData) {
         const self = this;
-
         const projection = d3.geo.mercator()
-            .scale(this.calculateScale(topoJSON));
+            .scale(this.calculateScale(countryMapData.mapData));
 
-        // console.debug('Is .features an array?', Array.isArray(distrData.features));
+        for (let i = 0; i < geoData.features.length; i += 1) {
 
-        for (let i = 0; i < distrData.features.length; i += 1) {
-
-            const distrName = distrData.features[i].properties['name:en'] ||
-                distrData.features[i].properties.name;
-
-            const gotData = typeof this.data.data[distrName] === 'object';
-
+            const districtsName = countryMapData.districts[i];
+            const gotData = typeof this.data.data[districtsName] === 'object';
 
             element
                 .append('path')
                 .datum({
-                    type: distrData.type,
-                    geocoding: distrData.geocoding,
-                    features: [distrData.features[i]]
+                    type: geoData.type,
+                    geocoding: geoData.geocoding,
+                    features: [geoData.features[i]]
                 })
                 .attr('d', d3.geo.path().projection(projection))
                 .classed('d3district', true)
@@ -368,8 +296,8 @@ class CountrymapController {
                 .on('mouseover', () => {
                     if (!this.big) {
                         this.activeDistrict = {
-                            name: distrName,
-                            data: this.data.data[distrName]
+                            name: districtsName,
+                            data: this.data.data[districtsName]
                         };
                         this.scope.$evalAsync();
                     }
@@ -387,8 +315,8 @@ class CountrymapController {
 
                             if (stillHovered) {
                                 self.activeDistrict = {
-                                    name: distrName,
-                                    data: self.data.data[distrName]
+                                    name: districtsName,
+                                    data: self.data.data[districtsName]
                                 };
                                 self.scope.$evalAsync();
                             }
@@ -404,7 +332,7 @@ class CountrymapController {
         require('./Countrymap.scss');
 
         function countrymap($element, $scope) {
-            return new CountrymapController($element, $scope);
+            return new CountryMapController($element, $scope);
         }
 
         countrymap.$inject = ['$element', '$scope'];
@@ -413,4 +341,4 @@ class CountrymapController {
     }
 }
 
-export default CountrymapController;
+export default CountryMapController;
