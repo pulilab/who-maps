@@ -32,3 +32,6 @@ class UserProfile(ExtendedModel):
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

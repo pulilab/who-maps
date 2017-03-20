@@ -23,11 +23,20 @@ class SimpleApi {
         request.method = 'GET';
         const url = replace ? endpoint : this.apiUrl + endpoint;
         return fetch(url, request)
+            .then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response;
+            })
             .then((response) => {
+
                 return response.json();
             })
             .then((json) =>{
                 return json;
+            }).catch(error => {
+                return error;
             });
     }
 

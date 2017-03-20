@@ -28,11 +28,15 @@ class LandingPageModuleController {
         this.ccs.getCountryData(subDomain).then(data => {
             vm.scope.$evalAsync(() => {
                 vm.countryData = data;
-                vm.countryCover = {
-                    background: `url(${data.cover}) 0 0`,
-                    'background-size': 'cover',
-                    'background-repeat': 'no-repeat'
-                };
+                vm.countryCover = null;
+                if (data.cover) {
+                    vm.countryCover = {
+                        background: `url(${data.cover}) 0 0`,
+                        'background-size': 'cover',
+                        'background-repeat': 'no-repeat'
+                    };
+                }
+                vm.showFooter = data.footer_text && data.footer_title;
             });
         });
     }

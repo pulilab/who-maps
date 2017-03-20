@@ -41,10 +41,4 @@ describe('CountryTopBarController', () => {
         };
     });
 
-    it('should have a function to open a modal menu', () => {
-        const spy = jasmine.createSpy('menuOpener');
-        ac.openMenu(spy, {});
-        expect(spy).toHaveBeenCalled();
-    });
-
 });

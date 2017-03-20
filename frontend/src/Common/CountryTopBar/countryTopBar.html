@@ -2,27 +2,18 @@
     <div class="md-toolbar-tools">
         <div class="country-logo" layout-align="">
 
-            <!-- No country -->
-            <!-- <img src="images/dha-logo-blue.svg" class="no-country" /> -->
+            <img ng-if="!vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
 
-            <!-- Country sample -->
-            <img src="images/sample-country-logo.png" class="" />
+            <img ng-if="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
 
         </div>
 
-        <md-button aria-label="Go to my Dashboard"
-                   class="view-selector"
-                   ui-sref="dashboard"
-                   ng-hide="true"
-                   md-no-ink>
-            <md-icon class="material-icons ">apps</md-icon>
-            Go to my dashboard
-        </md-button>
+
 
         <span flex ></span>
 
-        <div class="current-country row">
-            <div class="country-flag">
+        <div class="current-country row" ng-if="vm.countryData.logo">
+            <div class="country-flag" >
               <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
             </div>
             <div class="country-name">{{vm.countryData.name}}</div>
@@ -44,6 +35,33 @@
                    ng-show="vm.showSignUp()"
                    md-no-ink >
             Sign Up
+        </md-button>
+
+
+        <md-button aria-label="Country Level View"
+                   class="view-selector"
+                   ui-sref="country"
+                   ng-show="vm.showCountryLevelViewButton()"
+                   md-no-ink>
+            <md-icon class="material-icons">public</md-icon>
+            Country View
+        </md-button>
+
+        <md-button aria-label="Go to my Dashboard"
+                   class="view-selector"
+                   ui-sref="dashboard"
+                   ng-show="vm.showGoToMyDashboardButton()"
+                   md-no-ink>
+            <md-icon class="material-icons ">apps</md-icon>
+            Dashboard
+        </md-button>
+
+        <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
+                   aria-label="Add new project"
+                   ng-show="vm.showNewProjectButton()"
+                   md-no-ink>
+            <md-icon class="material-icons">add</md-icon>
+            New Project
         </md-button>
     </div>
     <div class="md-toolbar-tools-bottom">

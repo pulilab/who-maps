@@ -16,11 +16,8 @@ urlpatterns = [
     url(r"^projects/(?P<project_id>\d+)/version/$", view=views.ProjectVersionViewSet.as_view({'post': 'create'}), name="make-version"),
     url(r"^projects/(?P<project_id>\d+)/coverage/versions/$", view=views.ProjectVersionViewSet.as_view({'get': 'coverage_versions'}), name="get-coverage-versions"),
     url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$", view=views.ProjectVersionViewSet.as_view({'get': 'toolkit_versions'}), name="get-toolkit-versions"),
-    url(r"^projects/(?P<project_id>\d+)/partnerlogo-list/$", view=views.PartnerLogoListViewSet.as_view({'get': 'list'}), name="partnerlogo-list"),
-    url(r"^projects/(?P<project_id>\d+)/partnerlogos/$", view=views.PartnerLogoViewSet.as_view({'post': 'create'}), name="project-partnerlogo"),
     url(r"^projects/(?P<pk>\d+)/groups/$", view=views.ProjectGroupViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="project-groups"),
     url(r"^projects/csv-export/$", view=views.CSVExportViewSet.as_view({'post': 'create'}), name="csv-export"),
-    url(r"^partnerlogos/(?P<pk>\d+)/$", view=views.PartnerLogoViewSet.as_view({'delete': 'destroy'}), name="partnerlogo-delete"),
     url(r"^files/(?P<pk>\d+)/$", view=views.FileDetailViewSet.as_view({'get': 'retrieve'}), name="file-detail"),
     url(r"^files/(?P<pk>\d+)/delete/$", view=views.FileDeleteViewSet.as_view({'delete': 'destroy'}), name="file-delete"),
 ]

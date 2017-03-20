@@ -14,11 +14,15 @@ class CountryTopBarController extends Protected {
     onInit() {
         const vm = this;
         this.defaultOnInit();
+        self.profileDataReady = false;
         this.cs = require('../CommonServices');
         this.ccs = require('../CustomCountryService');
-        this.writeUserRole = this.writeUserRole.bind(this);
         if (this.user) {
-            this.userProfile = this.cs.userProfile;
+            this.cs.loadedPromise.then(() => {
+                vm.userProfile = vm.cs.userProfile;
+                vm.profileDataReady = true;
+                vm.scope.$evalAsync();
+            });
         }
         const subDomain = this.ccs.getSubDomain();
         this.countryFlag = this.ccs.getCountryFlag(subDomain);
@@ -45,57 +49,26 @@ class CountryTopBarController extends Protected {
     }
 
     showNewProjectButton() {
-        return this.showFullNavigation && this.userProfile.account_type === 'I'
-            && this.isLogin && this.hasProfile();
+        return this.profileDataReady && this.userProfile.account_type === 'I' && this.hasProfile();
     }
 
     showCountryLevelViewButton() {
-        return this.state.current.name !== 'country' && this.isLogin;
+        return this.isLogin;
     }
 
     showGoToMyDashboardButton() {
-        return this.showFullNavigation && this.userType !== 0
-            && (this.viewMode || this.state.current.name !== 'dashboard');
+        return this.profileDataReady;
     }
 
     showSearch() {
         return this.showFullNavigation;
     }
     showLogin() {
-        // return this.state.current.name !== 'login' && !this.isLogin;
-        return true;
+        return !this.isLogin;
     }
 
     showSignUp() {
-        // return this.state.current.name !== 'signup' && !this.isLogin;
-        return true;
-    }
-
-    writeUserRole() {
-        let type = null;
-        switch (this.userProfile.account_type) {
-        case 'I':
-            type = 'Implementer';
-            break;
-        case 'G':
-            type = 'Government';
-            break;
-        case 'D':
-            type = 'Financial Investor';
-            break;
-        case 'Y':
-            type = 'Inventory';
-            break;
-        }
-        return type;
-    }
-
-    openMenu($mdOpenMenu, event) {
-        $mdOpenMenu(event);
-    }
-
-    logout() {
-        this.EE.emit('logout');
+        return !this.isLogin;
     }
 
     static countryTopBarControllerFactory() {

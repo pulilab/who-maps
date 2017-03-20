@@ -75,21 +75,9 @@
                   </div>
                 </div>
 
-
-                <!-- <div class="project-stats" layout="row" layout-align="start center">
-                    <viewers flex="33" trend="'up'" number="1509"></viewers>
-                    <followers flex="33" trend="'down'" number="87"></followers>
-                    <donors flex="20" number="project.donors.length"></donors>
-                </div> -->
-            </md-card>
-
         </md-card>
     </div>
-
-    <!-- Add it later...
-    <div class="trending" flex></div>
-    -->
 </div>
 
-<country-partners footer-title="vm.countryData.footer_title" footer-text="vm.countryData.footer_text" partners="vm.countryData.partner_logo"></country-partners>
+<country-partners ng-if="vm.showFooter" footer-title="vm.countryData.footer_title" footer-text="vm.countryData.footer_text" partners="vm.countryData.partner_logos"></country-partners>
 <disclaimer></disclaimer>
