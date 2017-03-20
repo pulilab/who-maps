@@ -14,21 +14,13 @@
 
       &:hover {
         background-color: darken(#CD9923, 3%) !important;
+
+        .toggler {
+          transform: rotateX(0deg);
+        }
       }
     }
 
-    .toggler {
-      transform: rotateX(180deg);
-    }
-
-    &:hover {
-      .toggler {
-        transform: rotateX(0deg);
-      }
-    }
-  }
-
-  &:hover {
     .toggler {
       transform: rotateX(180deg);
     }
@@ -62,10 +54,10 @@
 
     &:hover {
       background-color: darken(#B0BEC5, 5%);
-    }
 
-    &.active {
-      background-color: #CD9923 !important;
+      .toggler {
+        transform: rotateX(180deg);
+      }
     }
 
     .toggler {
@@ -148,6 +140,10 @@
       margin: 0 0 60px;
       padding: 20px 0 0 20px;
       border-left: 4px solid $color-gray-lighter;
+
+      + .input-group {
+        margin-top: -40px;
+      }
 
       .textual-separator {
         position: relative;
