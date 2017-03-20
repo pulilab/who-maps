@@ -3,6 +3,7 @@
 
 
 .project-section {
+  overflow: hidden;
   margin: 0 30px 30px;
   padding: 0;
   background: $color-white;
@@ -16,17 +17,30 @@
         background-color: darken(#CD9923, 3%) !important;
 
         .toggler {
-          transform: rotateX(0deg);
+          transform: rotateX(180deg);
         }
       }
     }
 
     .toggler {
-      transform: rotateX(180deg);
+      transform: rotateX(0deg);
     }
   }
 
-  &.collapsed {}
+  &.collapsed {
+    height: 56px;
+    
+    .section-title {
+      .toggler {
+        transform: rotateX(180deg);
+      }
+      &:hover {
+        .toggler {
+          transform: rotateX(0deg);
+        }
+      }
+    }
+  }
 
   &.project-navigation {
     margin-left: 0;
@@ -74,8 +88,10 @@
   }
 
   .section-wrapper {
+    max-height: auto;
     min-width: 830px;
     padding: 40px 80px 40px 40px;
+    transition: $swift-ease-out;
 
     &:last-of-type {
       // padding-bottom: 80px;
