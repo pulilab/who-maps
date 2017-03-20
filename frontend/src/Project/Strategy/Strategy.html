@@ -4,7 +4,121 @@
       <span class="toggler"><i class="material-icons">&#xE313;</i></span>
     </div>
 
-    <div class="section-wrapper"></div>
+    <div class="section-wrapper">
+      <h6>What is the current coverage of your project?</h6>
+
+      <div class="input-group last">
+        <div layout="column">
+          <div layout="row">
+            <md-input-container class="md-block" flex="50">
+              <label>Platform</label>
+              <md-select ng-model="project.platform">
+                <md-option value="Platform 1">
+                  Platform 1
+                </md-option>
+                <md-option value="Platform 2">
+                  Platform 2
+                </md-option>
+                <md-option value="Platform 3">
+                  Platform 3
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <div layout="row">
+            <md-input-container class="md-block" flex="50">
+              <label>Strategies (select multiple)</label>
+              <md-select ng-model="project.strategies">
+                <md-option value="Strategy 1">
+                  Strategy 1
+                </md-option>
+                <md-option value="Strategy 2">
+                  Strategy 2
+                </md-option>
+                <md-option value="Strategy 3">
+                  Strategy 3
+                </md-option>
+              </md-select>
+            </md-input-container>
+            <div class="add-more-item" flex>
+              <md-button class="md-primary" aria-label="Add more">
+                <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+              </md-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-wrapper alt-2">
+      <div layout="row">
+        <md-input-container class="md-block" flex>
+          <label>HIS buckets (select from list)</label>
+          <md-select ng-model="project.strategy.his">
+            <md-option value="Strategy 1">
+              Strategy 1
+            </md-option>
+            <md-option value="Strategy 2">
+              Strategy 2
+            </md-option>
+            <md-option value="Strategy 3">
+              Strategy 3
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="md-block" flex>
+          <label>Digital health strategy (select from list)</label>
+          <md-select ng-model="project.strategy.dhs">
+            <md-option value="Strategy 1">
+              Strategy 1
+            </md-option>
+            <md-option value="Strategy 2">
+              Strategy 2
+            </md-option>
+            <md-option value="Strategy 3">
+              Strategy 3
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="md-block" flex>
+          <label>HSC challenges (select from list)</label>
+          <md-select ng-model="project.strategy.hsc">
+            <md-option value="Strategy 1">
+              Strategy 1
+            </md-option>
+            <md-option value="Strategy 2">
+              Strategy 2
+            </md-option>
+            <md-option value="Strategy 3">
+              Strategy 3
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="md-block" flex>
+          <label>Essential interventions (select from list)</label>
+          <md-select ng-model="project.strategy.interventions">
+            <md-option value="Strategy 1">
+              Strategy 1
+            </md-option>
+            <md-option value="Strategy 2">
+              Strategy 2
+            </md-option>
+            <md-option value="Strategy 3">
+              Strategy 3
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+    </div>
 
 
     <!-- <div class="strat-cont">
