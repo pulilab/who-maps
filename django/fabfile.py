@@ -106,7 +106,7 @@ def _restore_db():
 
 
 def _migrate_db():
-    run('docker exec -it whomaps_django_1 python manage.py migrate')
+    run('docker exec -it whomaps_django_1 python manage.py migrate --noinput')
 
 
 def _import_geodata():
@@ -121,7 +121,7 @@ def test(app=""):
 
 
 def migrate():
-    local("docker exec -it whomaps_django_1 python manage.py migrate")
+    local("docker exec -it whomaps_django_1 python manage.py migrate --noinput")
 
 
 def import_geodata():
