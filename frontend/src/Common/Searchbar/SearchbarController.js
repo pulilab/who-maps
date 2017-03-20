@@ -36,10 +36,13 @@ class SearchbarController {
     }
 
     getUserData() {
-        this.cs  = require('../CommonServices');
-        this.userProjects = this.cs.projectList;
-        this.viewer = this.cs.userProfile.viewer;
-        this.member = this.cs.userProfile.member;
+        const self = this;
+        self.cs  = require('../CommonServices');
+        self.cs.loadedPromise.then(()=> {
+            self.userProjects = self.cs.projectList;
+            self.viewer = self.cs.userProfile.viewer;
+            self.member = self.cs.userProfile.member;
+        });
     }
 
     toggleSearch() {

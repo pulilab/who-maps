@@ -11,11 +11,17 @@ class TopBarController extends Protected {
     }
 
     onInit() {
+        const self = this;
         this.defaultOnInit();
         this.cs = require('../CommonServices');
+        this.profileDataReady = false;
         this.writeUserRole = this.writeUserRole.bind(this);
         if (this.user) {
-            this.userProfile = this.cs.userProfile;
+            this.cs.loadedPromise.then(() => {
+                self.userProfile = self.cs.userProfile;
+                self.profileDataReady = true;
+                self.scope.$evalAsync();
+            });
         }
     }
 
