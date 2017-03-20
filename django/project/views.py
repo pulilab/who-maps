@@ -110,8 +110,6 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
-        countries = Country.objects.values('id', 'name')
-        project_structure.update(countries=countries)
         return Response(project_structure)
 
 
