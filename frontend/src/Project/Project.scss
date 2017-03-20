@@ -10,14 +10,31 @@
   &.active {
 
     .section-title {
-      background-color: #CD9923;
+      background-color: #CD9923 !important;
+
+      &:hover {
+        background-color: darken(#CD9923, 3%) !important;
+      }
     }
 
     .toggler {
       transform: rotateX(180deg);
-      transform-origin: 0 19px;
+    }
+
+    &:hover {
+      .toggler {
+        transform: rotateX(0deg);
+      }
     }
   }
+
+  &:hover {
+    .toggler {
+      transform: rotateX(180deg);
+    }
+  }
+
+  &.collapsed {}
 
   &.project-navigation {
     margin-left: 0;
@@ -25,7 +42,7 @@
 
     .section-title {
       text-align: center;
-      background-color: #CD9923;
+      background-color: #CD9923 !important;
     }
   }
 
@@ -55,6 +72,7 @@
       position: absolute;
       top: 8px;
       right: 22px;
+      transform-origin: 0 19px;
       transition: $swift-ease-out;
 
       .material-icons {
@@ -67,24 +85,97 @@
     min-width: 830px;
     padding: 40px 80px 40px 40px;
 
+    &:last-of-type {
+      // padding-bottom: 80px;
+    }
+
+    &.alt {
+      background-color: #FFF3D7;
+    }
+
     md-input-container {
       margin-bottom: 30px;
     }
 
+    md-checkbox {
+      margin-top: 8px;
+    }
+
+    h6 {
+      padding: 20px 0 0;
+      font-size: 12px;
+
+      &.first {
+        padding-top: 0;
+      }
+    }
+
     .layout-row {
-      md-input-container {
-        margin-top: 0;
+      + .layout-row {
+        margin-top: 16px;
       }
 
-      > .flex {
-        margin-left: 20px;
+      md-input-container {
+        margin-top: 0;
+        margin-bottom: 0;
+        min-height: 72px;
+      }
 
-        &:first-of-type {
+
+
+      > .flex {
+        margin-left: 40px;
+
+        &:first-of-type,
+        &.no-margin {
           margin-left: 0;
-          margin-right: 20px;
+
+          + .flex-nogrow {
+            margin-left: 40px;
+          }
+        }
+      }
+
+      > .flex-nogrow {
+        margin-left: 40px;
+      }
+    }
+
+    .input-group {
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      margin: 0 0 60px;
+      padding: 20px 0 0 20px;
+      border-left: 4px solid $color-gray-lighter;
+
+      .textual-separator {
+        position: relative;
+        top: 9px;
+        color: $text-disabled;
+        text-align: center;
+        width: 30px;
+      }
+
+      .add-more-item {
+        .md-button {
+          position: relative;
+          top: -5px;
         }
       }
     }
+
+    .hint {
+      position: absolute;
+      left: 2px;
+      right: auto;
+      bottom: 5px;
+      font-size: 12px;
+      line-height: 14px;
+      color: $text-disabled;
+    }
+
+
   }
 
 }
