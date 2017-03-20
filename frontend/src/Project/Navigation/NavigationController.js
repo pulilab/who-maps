@@ -9,11 +9,10 @@ class NavigationController {
 
     onInit() {
         window.addEventListener('hashchange', this.locationHashChanged);
-
     }
 
     onDestroy() {
-        window.removeEvent('hashchange', this.locationHashChanged);
+        window.removeEventListener('hashchange', this.locationHashChanged);
     }
 
     locationHashChanged() {
