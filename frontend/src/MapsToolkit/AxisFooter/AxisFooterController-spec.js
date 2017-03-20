@@ -1,4 +1,5 @@
 import AxisFooterController from './AxisFooterController';
+import EventEmitter from 'eventemitter3';
 
 /* global define, it, describe, expect, beforeEach, spyOn, Promise */
 
@@ -23,6 +24,7 @@ const $scope = {
 describe('AxisFooterController', () => {
 
     beforeEach(() => {
+        window.EE = new EventEmitter();
         spyOn(AxisFooterController.prototype, 'onInit').and.callThrough();
         afc = new AxisFooterController.axisFooterFactory()($scope, $state);
         afc.axes = require('../Resource/mockData.json');

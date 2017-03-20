@@ -1,7 +1,7 @@
 import { default as AppModuleController } from './AppModuleController';
 import { EE } from '../Common/';
 
-EE.initialize();
+
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
@@ -27,6 +27,7 @@ const $scope = {
 describe('CountryTopBarController', () => {
 
     beforeEach(() => {
+        EE.initialize();
         ac = AppModuleController.appControllerFactory()($state, $scope);
         ac.cs = {
             projectList: [],
