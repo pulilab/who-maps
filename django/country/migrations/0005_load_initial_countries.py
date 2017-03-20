@@ -829,6 +829,7 @@ COUNTRIES = [{
 
 def load_countries(apps, schema_editor):
     Country = apps.get_model("country", "Country")
+    Country.objects.all().delete()
     from operator import itemgetter
     countries = sorted(COUNTRIES, key=itemgetter('pk'))
 
