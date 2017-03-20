@@ -29,7 +29,7 @@
 
   &.collapsed {
     height: 56px;
-    
+
     .section-title {
       .toggler {
         transform: rotateX(180deg);
@@ -128,7 +128,7 @@
 
     .layout-row {
       + .layout-row {
-        margin-top: 16px;
+        margin-top: 18px;
       }
 
       md-input-container {
@@ -137,7 +137,8 @@
         min-height: 72px;
       }
 
-      > .flex {
+      > .flex,
+      > [class*="flex"] {
         margin-left: 40px;
 
         &:first-of-type,
@@ -177,6 +178,40 @@
         top: 9px;
         color: $text-disabled;
         text-align: center;
+      }
+    }
+
+    .checklist {
+      display: block;
+      margin: 60px 0;
+
+      ul {
+        display: block;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        @include clearfix();
+      }
+
+      li {
+        box-sizing: border-box;
+        float: left;
+        margin: 10px 0;
+        padding: 0 40px 0 0;
+        width: 33%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-height: 20px;
+        height: 48px;
+      }
+
+      md-checkbox .md-container {
+        top: 0;
+        transform: none;
       }
     }
 

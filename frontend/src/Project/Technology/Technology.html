@@ -4,7 +4,78 @@
       <span class="toggler"><i class="material-icons">&#xE313;</i></span>
     </div>
 
-    <div class="section-wrapper"></div>
+    <div class="section-wrapper">
+      <md-input-container class="md-block" flex="50">
+        <label>Technology deployment date</label>
+        <md-select ng-model="project.tech.deploydate">
+          <md-option value="Value 1">
+            Value 1
+          </md-option>
+          <md-option value="Value 2">
+            Value 2
+          </md-option>
+          <md-option value="Value 3">
+            Value 3
+          </md-option>
+        </md-select>
+      </md-input-container>
+
+      <div class="checklist">
+        <h6>Under what license is the project governed?</h6>
+        <ul>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="d1" class="md-primary">
+              Public domain
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="d2" class="md-primary">
+              Freemium
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="d3" class="md-primary">
+              Non protective free and open source software (e.g. Apache)
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="d4" class="md-primary">
+              Proprietary
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="d5" class="md-primary">
+              Protective free and open source source software
+            </md-checkbox>
+          </li>
+          <li>
+            <span layout="row">
+            <md-checkbox md-no-ink aria-label="" ng-model="d6" class="md-primary" flex="nogrow"></md-checkbox>
+            <md-input-container class="md-block" flex>
+              <label>Specify other</label>
+              <input required name="license.spectype" ng-model="project.license.spectype" disabled>
+            </md-input-container>
+          </span>
+          </li>
+        </ul>
+      </div>
+
+      <md-input-container class="md-block">
+        <label>Code documentation or download link</label>
+        <input required name="link.documentation" ng-model="project.link.documentation">
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Link to the application</label>
+        <input required name="link.app" ng-model="project.link.app">
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Link to the wiki page</label>
+        <input required name="link.wiki" ng-model="project.link.wiki">
+      </md-input-container>
+
+    </div>
 
     <!-- THIS CODE HAS TO BE REPLACED WITH A PROPER DATE PICKER -->
 
