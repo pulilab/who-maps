@@ -13,12 +13,6 @@ const $state = {
     }
 };
 
-const mockData = {
-    countries: [{
-        id: 1,
-        name: 'asd'
-    }]
-};
 
 const $scope = {
     $watch: () => {}

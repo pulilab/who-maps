@@ -1,8 +1,6 @@
 import { default as AppModuleController } from './AppModuleController';
 import { EE } from '../Common/';
 
-
-
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let ac = {};
