@@ -1,0 +1,15 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Country Admin",
+      "permissions": [
+        71,
+        73,
+        74,
+        75
+      ]
+    }
+  }
+]
