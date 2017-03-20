@@ -24,3 +24,7 @@ class Country(NameByIDMixin, ExtendedModel):
 class PartnerLogo(ExtendedModel):
     country = models.ForeignKey(Country)
     image = models.ImageField(null=True)
+
+    @property
+    def image_url(self):
+        return self.image.url if self.image else None
