@@ -71,7 +71,7 @@ def deploy():
             time.sleep(1)
             _migrate_db()
             time.sleep(1)
-            _import_geodata()
+            # _import_geodata()
 
         # handle frontend
         with cd(env.frontend_root):
