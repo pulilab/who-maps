@@ -28,10 +28,14 @@ class LandingPageModuleController {
         this.ccs.getCountryData(subDomain).then(data => {
             vm.scope.$evalAsync(() => {
                 vm.countryData = data;
-                vm.countryCover = {
-                    background: `url(${data.cover}) 0 -10px`,
-                    'background-size': 'cover'
-                };
+                vm.countryCover = null;
+                if (data.cover) {
+                    vm.countryCover = {
+                        background: `url(${data.cover}) 0 -10px`,
+                        'background-size': 'cover'
+                    };
+                }
+                vm.showFooter = data.footer_text && data.footer_title;
             });
         });
     }

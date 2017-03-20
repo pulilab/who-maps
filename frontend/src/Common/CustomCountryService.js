@@ -62,17 +62,22 @@ class CustomCountryService extends SimpleApi {
 
     getCountriesList() {
         const self = this;
-        return this.get('countries')
-            .then(countries => {
-                _.forEach(countries, cn => {
-                    cn.code = cn.code.toLocaleLowerCase();
-                    cn.flag = self.getCountryFlag(cn.code);
-                    self.countryLib[cn.code] = self.countryLib[cn.code] ? self.countryLib[cn.code] : {};
-                    Object.assign(self.countryLib[cn.code], cn);
-                });
-                this.store.set('countryLib', self.countryLib);
-                return _.cloneDeep(self.countryLib);
+        if (!this.countryListPromise
+            || this.countryListPromise.promiseDone) {
+            this.countryListPromise = this.get('countries/');
+            this.countryListPromise.promiseDone = false;
+        }
+        return this.countryListPromise.then(countries => {
+            _.forEach(countries, cn => {
+                cn.code = cn.code.toLocaleLowerCase();
+                cn.flag = self.getCountryFlag(cn.code);
+                self.countryLib[cn.code] = self.countryLib[cn.code] ? self.countryLib[cn.code] : {};
+                Object.assign(self.countryLib[cn.code], cn);
             });
+            this.store.set('countryLib', self.countryLib);
+            self.countryListPromise.promiseDone = true;
+            return _.cloneDeep(self.countryLib);
+        });
     }
     findCountryById(countryId) {
         const self = this;
@@ -144,39 +149,58 @@ class CustomCountryService extends SimpleApi {
         return `/static/flags/${subDomain}.png`;
     }
 
+    sendDefaultCountryData(data) {
+        const standard = {
+            name: 'WHO',
+            code: 'who',
+            logo: false,
+            cover: '',
+            cover_text: 'This Digital Health Atlas aims to strengthen the value and impact of' +
+            ' digital health investments, improve coordination,' +
+            ' and facilitate institutionalization and scale.',
+            footer_title: 'customizable footer title',
+            footer_text: '(Editable preset text) Lorem ipsum dolor sit amet, consectetur ' +
+            'adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.' +
+            'Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili.' +
+            'Quisque ut dolor gravida, placerat libero vel, euismod. Fictum, ' +
+            'deserunt mollit anim laborum astutumque!',
+            partner_logos: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg']
+        };
+        _.forEach(standard, (standardValue, key) => {
+            const value = data[key];
+            if (value === null || value === undefined || value === '') {
+                data[key] = standardValue;
+            }
+        });
+        return data;
+    }
+
     getCountryData(subDomain) {
         const self = this;
         return new Promise(resolve => {
+            if (subDomain === 'who') {
+                resolve(self.sendDefaultCountryData());
+                return;
+            }
             self.getCountry(subDomain).then(country=> {
-                if (country.logo) {
+                if (country && country.logo) {
                     resolve(Object.assign({}, country));
                 }
                 else {
-                    const fakeData = {
-                        name: 'Uganda',
-                        code: 'ug',
-                        logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/' +
-                        'Coat_of_arms_of_the_Republic_of_Uganda.svg/' +
-                        '955px-Coat_of_arms_of_the_Republic_of_Uganda.svg.png',
-                        id: 12,
-                        cover: 'http://www.worldbank.org/content/dam/photos/780x439/2016/oct-3/' +
-                        'ug-brewing-prosperity-in-uganda-coffee-farmers-turn-to-climate-smart-agriculture-780x439.jpg',
-                        cover_text: 'some ugandian cover text',
-                        footer_title: 'customizable footer title',
-                        footer_text: '(Editable preset text) Lorem ipsum dolor sit amet, consectetur ' +
-                        'adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.' +
-                        'Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili.' +
-                        'Quisque ut dolor gravida, placerat libero vel, euismod. Fictum, ' +
-                        'deserunt mollit anim laborum astutumque!',
-                        partner_logo: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                            'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg']
-                    };
-                    Object.assign(country, fakeData);
-                    this.store.set('countryLib', self.countryLib);
-                    resolve(Object.assign({}, country));
+                    if (!self.countyDataPromise || self.countyDataPromise.promiseDone) {
+                        self.countyDataPromise = self.get(`landing/${subDomain.toUpperCase()}/`);
+                    }
+                    self.countyDataPromise.then(data => {
+                        country = Object.assign({}, country, data);
+                        resolve(self.sendDefaultCountryData(country));
+                    }).catch(() => {
+                        resolve(self.sendDefaultCountryData());
+                    });
                 }
+
             });
         });
 

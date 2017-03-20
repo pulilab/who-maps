@@ -2,11 +2,9 @@
     <div class="md-toolbar-tools">
         <div class="country-logo" layout-align="">
 
-            <!-- No country -->
-            <!-- <img src="images/dha-logo-blue.svg" class="no-country" /> -->
+            <img ng-if="!vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
 
-            <!-- Country sample -->
-            <img src="images/sample-country-logo.png" class="" />
+            <img ng-if="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
 
         </div>
 
@@ -21,8 +19,8 @@
 
         <span flex ></span>
 
-        <div class="current-country row">
-            <div class="country-flag">
+        <div class="current-country row" ng-if="vm.countryData.logo">
+            <div class="country-flag" >
               <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
             </div>
             <div class="country-name">{{vm.countryData.name}}</div>
