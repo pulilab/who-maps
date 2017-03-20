@@ -94,14 +94,15 @@ md-tooltip {
 
 .page-title {
   color: $color-primary;
+  max-width: $page-max-width;
 
   .md-display-1 {
-    margin: 40px 0;
+    margin: 50px 0;
     font-size: 40px;
   }
 
   .md-subhead {
-    margin: -10px auto 40px;
+    margin: -20px auto 50px;
     max-width: 80%;
     color: $color-gray;
   }
@@ -113,6 +114,19 @@ md-tooltip {
 
 /* UI ELEMENTS
    ============================= */
+
+// Enhance form input indentation
+
+md-input-container {
+  padding-left: 0;
+}
+
+md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float), md-input-container.md-input-has-value label:not(.md-no-float) {
+  color: $text-primary;
+  font-weight: 500;
+  transform: translate3d(0, 0, 0) scale(0.75);
+}
+
 
 
 

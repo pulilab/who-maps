@@ -99,6 +99,12 @@
       width: 170px;
       margin: 0 0 20px;
     }
+
+    .secondary-buttons {
+      .md-button {
+        color: $text-secondary;
+      }
+    }
   }
 
 }
