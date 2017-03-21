@@ -1,2 +1,10 @@
 @import '../../variables';
 @import '../../mixins';
+
+.section-interoperability {
+  .section-wrapper {
+    > .layout-row {
+      margin-top: 18px;
+    }
+  }
+}
