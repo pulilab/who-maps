@@ -127,6 +127,7 @@
     }
 
     .layout-row {
+      &.first,
       + .layout-row {
         margin-top: 18px;
       }
@@ -184,6 +185,10 @@
     .checklist {
       display: block;
       margin: 60px 0;
+
+      &.small-margin {
+        margin: 20px 0;
+      }
 
       ul {
         display: block;
