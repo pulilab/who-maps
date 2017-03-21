@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminDateWidget
 
-from hss.models import HSS
-from hss.hss_data import hss_default
 from toolkit.models import Toolkit
 from toolkit.toolkit_data import toolkit_default
 from user.models import Organisation
@@ -85,9 +83,6 @@ class ProjectInventoryForm(ModelForm):
             project = Project(name=self.cleaned_data["name"], data=self.cleaned_data)
             project.save()
             project.team.add(user.userprofile)
-            #project.team.add(self.inventory_user.userprofile)
-            # Add default HSS structure for the new project.
-            HSS.objects.create(project_id=project.id, data=hss_default)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
             return project

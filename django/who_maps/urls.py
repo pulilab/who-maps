@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.views.generic import TemplateView
 
 from project.views import create_from_file
 
@@ -26,7 +25,6 @@ urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
-    url(r"^api/", include("hss.urls")),
     url(r"^api/", include("toolkit.urls")),
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
