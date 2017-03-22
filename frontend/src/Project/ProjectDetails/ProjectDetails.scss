@@ -2,10 +2,11 @@
 @import '../../mixins';
 
 .section-projectdetails {
-  
+
   .md-block.number {
     max-width: 90px;
   }
+
 
   .md-block.district {
     max-width: calc(50% + 30px);
