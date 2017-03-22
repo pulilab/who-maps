@@ -32,16 +32,18 @@
                 </div-->
             </div>
 
-            <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="end center">
+            <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="start center">
                 <div flex class="description">
                     {{vm.ngModel.goals_to_scale}}
                 </div>
 
-                <md-button class="more" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
+                <div class="buttons" layout="row">
+                  <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
 
-                <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Dashboard</md-button>
+                  <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Dashboard</md-button>
 
-                <md-button class="md-primary md-no-ink" ng-if="vm.member" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project</md-button>
+                  <md-button class="md-primary md-no-ink" ng-if="vm.member" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project</md-button>
+                </div>
             </div>
         </div>
     </div>

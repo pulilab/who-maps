@@ -65,6 +65,7 @@ projectcomp {
 
       .project-logo {
         width: 140px;
+        min-width: 140px;
         height: 140px;
         border-right: 1px solid darken($color-gray-lighter, 10%);
         background: $color-gray-lighter;
@@ -110,7 +111,7 @@ projectcomp {
           }
 
           .donors {
-            padding: 8px;
+            padding: 10px;
             max-width: 100px;
             width: 100px;
             border-left: 1px solid $color-gray-lighter;
@@ -134,7 +135,7 @@ projectcomp {
           }
 
           .followers {
-            padding: 8px;
+            padding: 10px;
             max-width: 100px;
             width: 100px;
             border-left: 1px solid $color-gray-lighter;
@@ -185,19 +186,10 @@ projectcomp {
             padding: 10px 20px;
             color: $text-secondary;
             font-size: 14px;
+            @include text-truncate();
           }
 
-          .more {
-            margin: auto;
-            padding: 0 20px;
-
-            a {
-              color: $color-primary;
-              text-decoration: none;
-              font-weight: 500;
-              font-size: 12px;
-            }
-          }
+          .more {}
         }
       }
     }
