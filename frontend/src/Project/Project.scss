@@ -127,6 +127,7 @@
     }
 
     .layout-row {
+      &.first,
       + .layout-row {
         margin-top: 18px;
       }
@@ -185,6 +186,10 @@
       display: block;
       margin: 60px 0;
 
+      &.small-margin {
+        margin: 20px 0;
+      }
+
       ul {
         display: block;
         list-style: none;
@@ -208,11 +213,6 @@
         line-height: 20px;
         height: 48px;
       }
-
-      md-checkbox .md-container {
-        top: 0;
-        transform: none;
-      }
     }
 
     .add-more-item {
@@ -233,7 +233,5 @@
       color: $text-disabled;
     }
 
-
   }
-
 }

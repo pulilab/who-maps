@@ -1,10 +1,13 @@
 @import '../../variables';
 @import '../../mixins';
 
-.md-block.number {
-  max-width: 90px;
-}
+.section-projectdetails {
+  
+  .md-block.number {
+    max-width: 90px;
+  }
 
-.md-block.district {
-  max-width: calc(50% + 30px);
+  .md-block.district {
+    max-width: calc(50% + 30px);
+  }
 }

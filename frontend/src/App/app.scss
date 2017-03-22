@@ -119,15 +119,52 @@ md-tooltip {
 
 md-input-container {
   padding-left: 0;
+
+  &.md-has-icon {
+    padding-left: 0;
+
+    md-icon {
+      top: 6px;
+      left: 0;
+
+      .material-icons {
+        font-size: 22px;
+        color: $text-secondary;
+      }
+    }
+
+    // Select
+    .md-select-value {
+      padding-left: 36px;
+    }
+
+    //Input
+    .md-input {
+      padding-left: 36px;
+    }
+  }
 }
 
-md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float), md-input-container.md-input-has-value label:not(.md-no-float) {
+md-input-container label:not(.md-no-float):not(.md-container-ignore), md-input-container .md-placeholder {
+  padding-left: 0;
+}
+
+md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float),
+md-input-container.md-input-has-value label:not(.md-no-float) {
   color: $text-primary;
   font-weight: 500;
   transform: translate3d(0, 0, 0) scale(0.75);
 }
 
+md-input-container.md-input-focused.md-has-icon label:not(.md-no-float), md-input-container.md-input-has-placeholder.md-has-icon label:not(.md-no-float),
+md-input-container.md-input-has-value.md-has-icon label:not(.md-no-float) {
+  transform: translate3d(-36px, 0, 0) scale(0.75);
+}
 
+md-checkbox .md-container {
+  top: 0;
+  transform: none;
+}
 
 
 .md-button {

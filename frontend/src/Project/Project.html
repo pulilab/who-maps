@@ -26,7 +26,8 @@
         </div>
     </form>
 
-    <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
+    <!-- TODO!!! Bug -->
+    <!-- <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
         <h5> My projects ({{vm.userProjects.length}})</h5>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                      current-project="vm.isCurrentProject(p.id)"
@@ -37,8 +38,7 @@
                      ng-model="p">
 
         </projectcomp>
-
-    </section>
+    </section> -->
 
     <!-- TODO!!! Bug -->
     <!-- <disclaimer></disclaimer> -->
