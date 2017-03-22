@@ -1,8 +1,14 @@
 @import '../variables';
 @import '../mixins';
 
+.new-edit-project {
+  form {
+
+  }
+}
+
 .main-section {
-  max-width: $page-max-width;
+  max-width: $page-min-width;
   margin: 0 auto;
 }
 
@@ -11,6 +17,10 @@
   margin: 0 30px 30px;
   padding: 0;
   background: $color-white;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 
   &.active {
 
