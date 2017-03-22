@@ -18,11 +18,7 @@ class CountryTopBarController extends Protected {
         this.defaultOnInit();
         this.profileDataReady = false;
         if (this.user) {
-            this.cs.loadedPromise.then(() => {
-                vm.userProfile = vm.cs.userProfile;
-                vm.profileDataReady = true;
-                vm.scope.$evalAsync();
-            });
+            this.cs.loadedPromise.then(vm.setProfileData.bind(vm));
         }
         const subDomain = this.ccs.getSubDomain();
         this.countryFlag = this.ccs.getCountryFlag(subDomain);
@@ -34,6 +30,12 @@ class CountryTopBarController extends Protected {
 
         window.onscroll = this.scrollEventHandler.bind(this);
         document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
+    }
+
+    setProfileData() {
+        this.userProfile = this.cs.userProfile;
+        this.profileDataReady = true;
+        this.scope.$evalAsync();
     }
 
     scrollEventHandler(e) {

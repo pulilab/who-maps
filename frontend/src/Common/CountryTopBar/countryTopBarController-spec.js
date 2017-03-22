@@ -15,7 +15,8 @@ const $state = {
 
 
 const $scope = {
-    $watch: () => {}
+    $watch: () => {},
+    $evalAsync: ()=>{}
 };
 
 const $timeout = toCall => {
@@ -55,6 +56,13 @@ describe('CountryTopBarController', () => {
         controller.user = false;
         controller.$onInit();
         expect(controller.profileDataReady).toBeFalsy();
+    });
+
+    it('should have a function that set the profile data', ()=> {
+        expect(controller.setProfileData).toBeDefined();
+        expect(controller.profileDataReady).toBeFalsy();
+        controller.setProfileData();
+        expect(controller.profileDataReady).toBeTruthy();
     });
 
     it('should have a show CLV button function', () => {

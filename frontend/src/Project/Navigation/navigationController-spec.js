@@ -27,8 +27,9 @@ describe('NavigationController', () => {
     });
     it('on destroy the bound events must not be triggerable anymore', () => {
         controller.$onDestroy();
+        $anchorScroll.calls.reset();
         window.location.hash = Math.random().toString(36).substring(7);
-        expect(controller.scroll).toHaveBeenCalledTimes(1);
+        expect(controller.scroll).toHaveBeenCalledTimes(0);
     });
     it('should have a factory function', () => {
         expect(NavigationController.navigationFactory).toBeDefined();

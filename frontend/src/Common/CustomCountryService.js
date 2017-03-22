@@ -46,9 +46,9 @@ class CustomCountryService extends SimpleApi {
 
     getCountries() {
         const self = this;
-        return new Promise(resolve=> {
+        return new Promise(resolve => {
             const keys = _.keys(self.countryLib);
-            if (keys > 0) {
+            if (keys.length > 0) {
                 const countryArray = _.values(_.cloneDeep(self.countryLib));
                 resolve(self.stripMapData(countryArray));
             }
