@@ -2,6 +2,8 @@
 @import '../../mixins';
 
 .section-interoperability {
+  margin-bottom: 0;
+  
   .section-wrapper {
     > .layout-row {
       margin-top: 18px;
