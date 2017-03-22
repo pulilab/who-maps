@@ -3,10 +3,16 @@
 
 .section-interoperability {
   margin-bottom: 0;
-  
+
   .section-wrapper {
     > .layout-row {
       margin-top: 18px;
+
+      md-checkbox {
+        .md-label {
+          margin-right: 20px;
+        }
+      }
     }
   }
 }
