@@ -10,15 +10,13 @@
     </div>
 
     <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
+      <div class="profile-header md-title">
+        General info
+        <span class="last-update">Last update: {{vm.userProfile.modified}}</span>
+      </div>
         <form name="vm.editProfileForm" ng-submit="vm.save($event)" novalidate>
-            <div layout="column" class="main-form" flex="'50">
-                <div class="profile-header" layout="row" layout-align="start center">
-                    <h4 flex="50">General Info</h4>
-                    <div  flex="50" layout="row" layout-align="end center">
-                        Last Update: {{vm.userProfile.modified}}
-                    </div>
-                </div>
-                <md-input-container >
+            <div layout="column" class="main-form">
+                <md-input-container>
                     <label>My name</label>
                     <input ng-model="vm.userProfile.name" required name="name"  type="text" ng-change="vm.handleCustomError('name')" />
                     <div ng-messages="vm.editProfileForm.name.$error">
@@ -119,7 +117,7 @@
         </form>
     </div>
     <section md-whiteframe="2" class="my-projects" >
-        <h5> My projects ({{vm.userProjects.length}})</h5>
+        <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
         <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                      viewer="vm.isViewer(p)"
                      member="vm.isMember(p)"
