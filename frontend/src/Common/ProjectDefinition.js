@@ -128,74 +128,12 @@ class ProjectDefinition extends Protected {
         return this.project.licenses.indexOf(t) > -1;
     }
 
-    // digitalToolChange(t) {
-    //     if (this.digitalToolChecked(t)) {
-    //         _.remove(this.project.digital_tools.standard, item => {
-    //             return item === t;
-    //         });
-    //     }
-    //     else {
-    //         this.project.digital_tools.standard.push(t);
-    //     }
-    // }
-    //
-    // digitalToolChecked(t) {
-    //     return this.project.digital_tools.standard.indexOf(t) > -1;
-    // }
-    //
-    // applicationChange(t) {
-    //     if (this.applicationChecked(t)) {
-    //         _.remove(this.project.application, item => {
-    //             return item === t;
-    //         });
-    //     }
-    //     else {
-    //         this.project.application.push(t);
-    //     }
-    // }
-    //
-    // applicationChecked(t) {
-    //     return this.project.application.indexOf(t) > -1;
-    // }
-    //
-    // addLicense() {
-    //     this.project.licenses.custom.push({});
-    // }
-    //
-    // rmLicense(l) {
-    //     _.remove(this.project.licenses.custom, item => {
-    //         return item.$$hashKey === l.$$hashKey;
-    //     });
-    // }
-    //
-    // addDigitalTool() {
-    //     this.project.digital_tools.custom.push({});
-    // }
-    //
-    // rmDigitalTool(d) {
-    //     _.remove(this.project.digital_tools.custom, item => {
-    //         return item.$$hashKey === d.$$hashKey;
-    //     });
-    // }
-    //
-    //
-
     addReportLink() {
         this.project.reports.push({});
     }
 
     rmReportLink(l) {
         _.remove(this.project.reports, item => {
-            return item.$$hashKey === l.$$hashKey;
-        });
-    }
-
-    addReportFile() {
-        this.project.files.push({ type: 'report' });
-    }
-
-    delReportFile(l) {
-        _.remove(this.project.files, item => {
             return item.$$hashKey === l.$$hashKey;
         });
     }
@@ -207,17 +145,6 @@ class ProjectDefinition extends Protected {
 
     rmPublicationLink(l) {
         _.remove(this.project.publications, item => {
-            return item.$$hashKey === l.$$hashKey;
-        });
-    }
-
-
-    addPublicationFile() {
-        this.project.files.push({ type: 'publication' });
-    }
-
-    delPublicationFile(l) {
-        _.remove(this.project.files, item => {
             return item.$$hashKey === l.$$hashKey;
         });
     }

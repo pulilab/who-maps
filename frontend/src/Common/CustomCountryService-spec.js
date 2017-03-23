@@ -7,8 +7,18 @@ let service = null;
 const countries = {
     ug: {
         code: 'ug',
-        mapData: 'someMapData'
+        id: 1,
+        mapData: 'someMapData',
+        districts: ['a', 'b']
     }
+};
+
+const delayedPromise = result => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(result);
+        }, 500);
+    });
 };
 
 describe('CustomCountryService class', () => {
@@ -59,12 +69,72 @@ describe('CustomCountryService class', () => {
 
     it('should have a function to get the countries list from the server', done => {
         const countryArray = [countries.ug];
-        spyOn(service, 'get').and.returnValue(Promise.resolve(countryArray));
+        spyOn(service, 'get').and.returnValue(delayedPromise(countryArray));
+        spyOn(service.store, 'set').and.callThrough();
         expect(service.countryListPromise).toBe(undefined);
-        service.getCountriesList().then(result => {
-            expect(result.ug.code).toBe('ug');
+        service.getCountriesList();
+        service.getCountriesList();
+        service.countryListPromise.then(result => {
+            expect(result[0].code).toBe('ug');
+            expect(service.get).toHaveBeenCalledTimes(1);
+            done();
         });
+    });
+
+    it('should have a function to find a country based on his ID', (done)=> {
+        spyOn(service, 'getCountriesList').and.returnValue(Promise.resolve(countries));
+        service.findCountryById(1).then(result => {
+            expect(result.code).toBe('ug');
+        });
+        service.countryLib = countries;
+        service.findCountryById(1).then(result => {
+            expect(result.code).toBe('ug');
+            expect(service.getCountriesList).toHaveBeenCalledTimes(1);
+            done();
+        });
+    });
+
+    it('should have a function to return map data based on a country id', (done) => {
+        spyOn(service, 'findCountryById').and.returnValue(Promise.resolve(countries.ug.id));
+        spyOn(service, 'fetchMapData').and.returnValue(Promise.resolve(countries.ug.mapData));
+        service.getCountryMapData(1).then(()=> {
+            expect(service.findCountryById).toHaveBeenCalled();
+            expect(service.fetchMapData).toHaveBeenCalled();
+            done();
+        });
+    });
+
+    it('should have a function that return the country districts', done => {
+        spyOn(service, 'findCountryById').and.returnValue(Promise.resolve(countries.ug.id));
+        spyOn(service, 'fetchMapData').and.returnValue(Promise.resolve(countries.ug.mapData));
+        expect(service.getCountryDistricts).toBeDefined();
         done();
     });
 
+    it('should have a function that fetch map data based on a country code', done => {
+        spyOn(service, 'getCountry').and.returnValue(Promise.resolve(countries.ug));
+        spyOn(service, 'get').and.returnValue(Promise.resolve('someMapData'));
+        expect(service.fetchMapData).toBeDefined();
+        done();
+    });
+
+    it('should have a function that return the correct url for a flag ', () => {
+        const result = service.getCountryFlag('ug');
+        expect(result).toBe('/static/flags/ug.png');
+    });
+
+    it('should have a function that mix the data with the default country data', () => {
+        const data = {
+            name: 'Hungary'
+        };
+        const result = service.sendDefaultCountryData(data);
+        expect(result.name).toBe('Hungary');
+        expect(result.code).toBe('who');
+    });
+
+    it('should have a function that fetch the country details', ()=> {
+        spyOn(service, 'sendDefaultCountryData');
+        spyOn(service, 'get').and.returnValue(Promise.resolve());
+        expect(service.getCountryData).toBeDefined();
+    });
 });

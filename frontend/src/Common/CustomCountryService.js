@@ -76,9 +76,11 @@ class CustomCountryService extends SimpleApi {
             });
             this.store.set('countryLib', self.countryLib);
             self.countryListPromise.promiseDone = true;
+            console.warn('DJSADYASYD ' + self.countryListPromise.promiseDone);
             return _.cloneDeep(self.countryLib);
         });
     }
+
     findCountryById(countryId) {
         const self = this;
         return new Promise(resolve => {
