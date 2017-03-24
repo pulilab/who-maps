@@ -19,11 +19,10 @@
           <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
         </div>
       </md-input-container>
-      <div flex="30" class="similar-project" ng-show="vm.similarProject.length > 0" >
-            <span class="similar-label">Similar Project Name(s)</span>
+      <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="50">
+            <span class="similar-label">Similar Project name(s)</span>
             <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
-                <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a>
-                <span ng-if="!$last">,</span>
+                <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a><span ng-if="!$last">, </span>
             </div>
         </div>
     </div>
@@ -36,26 +35,28 @@
     <!--<div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>-->
     <!--</div>-->
     <!--</md-input-container>-->
-    <div class="autocomplete-wrapper">
-      <md-autocomplete
-              class="md-block"
-              id="orgauto"
-              required="true"
-              md-input-name="organisation"
-              md-no-cache="true"
-              md-selected-item="vm.project.organisation"
-              md-search-text="vm.searchText"
-              md-items="item in vm.organisationSearch(vm.searchText)"
-              md-item-text="item.name"
-              md-min-length="2"
-              placeholder="Organisation name">
-        <md-item-template>
-          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
-        </md-item-template>
 
-      </md-autocomplete>
-      <div class="autocomplete-errors" ng-messages="vm.newProjectForm.organisation.$error">
-        <div ng-message="required">This field is required</div>
+    <div layout="row">
+      <div class="autocomplete-wrapper md-block" flex="50">
+        <md-autocomplete
+                id="orgauto"
+                required="true"
+                md-input-name="organisation"
+                md-no-cache="true"
+                md-selected-item="vm.project.organisation"
+                md-search-text="vm.searchText"
+                md-items="item in vm.organisationSearch(vm.searchText)"
+                md-item-text="item.name"
+                md-min-length="2"
+                md-floating-label="Organisation name">
+          <md-item-template>
+            <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+          </md-item-template>
+
+        </md-autocomplete>
+        <div class="autocomplete-errors" ng-messages="vm.newProjectForm.organisation.$error">
+          <div ng-message="required">This field is required</div>
+        </div>
       </div>
     </div>
 
