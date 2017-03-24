@@ -7,12 +7,30 @@
     max-width: 90px;
   }
 
-  .autocomplete-wrapper {
-    margin-bottom: 30px;
-  }
-
-
   .md-block.district {
     max-width: calc(50% + 30px);
+  }
+
+  .similar-project {
+    margin-left: 40px !important;
+
+    .similar-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      transform: translateY(-19px);
+    }
+
+    .ownProject {
+      position: relative;
+      top: -6px;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .similar-link {
+      color: $color-primary;
+      text-decoration: none;
+    }
   }
 }

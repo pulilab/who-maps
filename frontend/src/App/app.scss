@@ -120,15 +120,15 @@ md-tooltip {
 md-input-container {
   padding-left: 0;
 
-  &.md-has-icon {
+  &.md-icon-float {
     padding-left: 0;
 
     md-icon {
-      top: 6px;
+      top: 4px;
       left: 0;
 
       .material-icons {
-        font-size: 22px;
+        font-size: 24px;
         color: $text-secondary;
       }
     }
@@ -149,16 +149,33 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore), md-input-c
   padding-left: 0;
 }
 
-md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float),
-md-input-container.md-input-has-value label:not(.md-no-float) {
+md-input-container.md-input-focused label:not(.md-no-float):not(.md-container-ignore), md-input-container.md-input-focused .md-placeholder {
   color: $text-primary;
   font-weight: 500;
   transform: translate3d(0, 0, 0) scale(0.75);
 }
 
-md-input-container.md-input-focused.md-has-icon label:not(.md-no-float), md-input-container.md-input-has-placeholder.md-has-icon label:not(.md-no-float),
-md-input-container.md-input-has-value.md-has-icon label:not(.md-no-float) {
-  transform: translate3d(-36px, 0, 0) scale(0.75);
+md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float),
+md-input-container.md-input-has-value label:not(.md-no-float) {
+  color: $text-primary;
+  font-weight: 500 !important;
+  transform: translate3d(0, 0, 0) scale(0.75);
+}
+
+md-input-container.md-input-focused .md-select-placeholder:not(.md-no-float), md-input-container.md-input-has-placeholder .md-select-placeholder:not(.md-no-float),
+md-input-container.md-input-has-value .md-select-placeholder:not(.md-no-float) {
+
+  > span:first-child {
+    color: $text-primary;
+    font-weight: 500;
+    transform: translate3d(-36px, -27px, 0) scale(0.75);
+  }
+}
+
+md-input-container.md-input-focused.md-icon-float label:not(.md-no-float), md-input-container.md-input-has-placeholder.md-icon-float label:not(.md-no-float),
+md-input-container.md-input-has-value.md-icon-float label:not(.md-no-float) {
+  font-weight: 500;
+  transform: translate3d(-36px, 0, 0) scale(0.75) !important;
 }
 
 md-checkbox .md-container {

@@ -146,7 +146,7 @@
       }
 
       > .flex,
-      > [class*="flex"] {
+      > [class*="flex-"] {
         margin-left: 40px;
 
         &:first-of-type,
@@ -231,6 +231,8 @@
         position: relative;
         top: -8px;
         margin-left: 10px;
+        padding-left: 8px;
+        padding-right: 12px;
       }
     }
 
