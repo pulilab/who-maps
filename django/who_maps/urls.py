@@ -28,7 +28,6 @@ urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
-    url(r"^api/", include("hss.urls")),
     url(r"^api/", include("toolkit.urls")),
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),

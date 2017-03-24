@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'core',
     'user',
     'project',
-    'hss',
     'toolkit',
     'country',
     'search',

@@ -8,12 +8,8 @@ from django.dispatch import receiver
 
 from core.models import ExtendedModel
 from project.models import Project
-from hss.models import HSS
-from hss.hss_data import interventions
-from hss.views import InterventionView
 from country.models import Country
 from user.models import Organisation
-from .signals import intervention_save
 
 
 class ProjectSearch(ExtendedModel):
@@ -114,15 +110,3 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.mobile_application = instance.data.get("mobile_application", "")
     project_search.wiki = instance.data.get("wiki", "")
     project_search.save()
-
-
-@receiver(intervention_save, sender=InterventionView)
-def update_with_hss_data(sender, instance, **kwargs):
-    intervention_labels = []
-    for col_index, col in enumerate(instance.data["interventions"]):
-        for value in col["interventions"]:
-            intervention_labels.append(value)
-    if intervention_labels:
-        project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.project_id)
-        project_search.health_topic = ", ".join(intervention_labels)
-        project_search.save()

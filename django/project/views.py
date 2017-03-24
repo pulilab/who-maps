@@ -5,7 +5,7 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.forms.models import model_to_dict
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,15 +13,8 @@ from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view, authentication_classes
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
-
-from hss import hss_data
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import UserProfile, Organisation
-from hss.models import HSS
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
@@ -100,10 +93,6 @@ class ProjectPublicViewSet(ViewSet):
             "health_focus_areas": p.data.get('health_focus_areas'),
             "geographic_scope": p.data.get('geographic_scope'),
             "technology_platforms": p.data.get('technology_platforms'),
-            "interventions": p.hss_set.first().get_interventions_list(),
-            "continuum": p.hss_set.first().get_continuum_list(),
-            "constraints": p.hss_set.first().get_constraints_list(),
-            "applications": p.hss_set.first().get_applications_list(),
         }], projects, [])
 
         return Response(result_list)
@@ -141,8 +130,6 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         if model_valid and data_valid:
             project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
             project.team.add(request.user.userprofile)
-            # Add default HSS structure for the new project.
-            HSS.objects.create(project_id=project.id, data=hss_data.hss_default)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
             data = dict(data_serializer.data)
@@ -259,8 +246,6 @@ def create_from_file(request):
                     project = Project(name=project_item["name"], data=project_item)
                     project.save()
                     project.team.add(user.userprofile)
-                    # Add default HSS structure for the new project.
-                    HSS.objects.create(project_id=project.id, data=hss_default)
                     # Add default Toolkit structure for the new project.
                     Toolkit.objects.create(project_id=project.id, data=toolkit_default)
                     imported.append(project.name)
@@ -412,7 +397,6 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             Organisation.get_name_by_id(p.data.get('organisation')),
             ", ".join(p.data.get('donors')),
             p.data.get('implementing_partners'),
-            ", ".join(p.hss_set.first().get_interventions_list()),
             " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
             p.data.get('implementation_overview')
         ] for p in projects]
