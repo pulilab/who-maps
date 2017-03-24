@@ -149,7 +149,7 @@
       > [class*="flex-"] {
         margin-left: 40px;
 
-        &:first-of-type,
+        &:first-child,
         &.no-margin {
           margin-left: 0;
 

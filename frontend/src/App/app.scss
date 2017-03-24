@@ -282,6 +282,39 @@ md-select {
   }
 }
 
+// Datepicker
+
+.md-datepicker-calendar-pane {
+  .md-datepicker-input-mask {
+    display: none;
+  }
+}
+
+md-datepicker {
+  padding: 2px 0;
+
+  .md-datepicker-button.md-icon-button{
+    margin: 0;
+  }
+
+  .md-datepicker-triangle-button.md-icon-button{
+    top: -1px;
+    right: 5px;
+    .md-datepicker-expand-triangle {
+      border-top-color: $text-secondary;
+    }
+  }
+
+
+  .md-datepicker-input-container {
+    padding-bottom: 1px;
+
+    input {
+      font-size: 16px;
+    }
+
+  }
+}
 
 // Md-menu
 
