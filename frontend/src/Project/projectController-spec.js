@@ -45,7 +45,6 @@ const structure = require('./Resources/structure.json');
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();
         sc = new NewProjectController($scope, $state, upload, $anchorScroll, $location, cs, structure);
         sc.newProjectForm = {
             $valid: true,
@@ -74,14 +73,6 @@ describe('ProjectController', () => {
 
     });
 
-    it('should have a function that handles the country ssmenu callback', () => {
-        spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve());
-        spyOn(sc, 'handleCustomError');
-        sc.handleStructureLoad();
-        sc.countryCloseCallback('asd');
-        expect(sc.project.countryName).toBe('asd');
-        expect(sc.ccs.getCountryDistricts).toHaveBeenCalled();
-    });
 
     it('should have a function that handle the saving process ', () => {
         const e = document.createElement('div');
@@ -93,13 +84,11 @@ describe('ProjectController', () => {
         spyOn(sc, 'saveForm');
         spyOn(sc, 'separateCoverageAndNationalLevelDeployments');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
-        spyOn(sc, 'isProjectObjValid').and.returnValue(true);
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
         expect(sc.createCoverageArray).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
         expect(sc.separateCoverageAndNationalLevelDeployments).toHaveBeenCalled();
-        expect(sc.scroll).toHaveBeenCalledWith('customerror1');
     });
 
     it('should have a function that save a new form', () => {
@@ -146,26 +135,10 @@ describe('ProjectController', () => {
         expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
 
     });
-    it('should have a function that handles the district callbacks', () => {
-        spyOn(sc, 'unfoldCoverage').and.returnValue(true);
-        spyOn(sc, 'assignDefaultCustom').and.returnValue(true);
-        spyOn(sc, 'mergeNationalLevelWithDistrictCoverage').and.returnValue(true);
-        spyOn(sc, 'addDefaultEmpty').and.returnValue(true);
-
-        sc.handleStructureLoad(mockData);
-        sc.handleDistrictRequest({});
-
-        expect(sc.unfoldCoverage).toHaveBeenCalled();
-        expect(sc.assignDefaultCustom).toHaveBeenCalled();
-        expect(sc.mergeNationalLevelWithDistrictCoverage).toHaveBeenCalled();
-        expect(sc.addDefaultEmpty).toHaveBeenCalled();
-
-    });
 
     it('should have a function that handles the national level deployment', () => {
         sc.project.national_level_deployment = [{ clients: 33 }];
         sc.mergeNationalLevelWithDistrictCoverage();
-        expect(sc.districtList).toContain(' ENTIRE COUNTRY');
         expect(_.filter(sc.project.coverage, item => item.district === ' ENTIRE COUNTRY').length).toBeGreaterThan(0);
     });
 
@@ -204,20 +177,7 @@ describe('ProjectController', () => {
         expect(sc.ns.getGroups).toHaveBeenCalled();
     });
 
-    it('has a function, that parses all users, and returns if they contain the string (#1 fn param)', () => {
-        expect(sc.getUsers).toBeDefined();
-        sc.allUsers = [
-            {
-                name: 'Jess', organisation__name: 'Flikli'
-            }, {
-                name: 'Nico', organisation__name: 'Pulilab'
-            }, {
-                name: 'Tigest', organisation__name: 'WHO'
-            }
-        ];
-        expect(sc.getUsers('tig')[0].organisation__name).toBe('WHO');
-        expect(sc.getUsers('E').length).toBe(2);
-    });
+
 
     it('has a function, that saves team members and users to the API', () => {
         spyOn(sc.ns, 'putGroups');
