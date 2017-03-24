@@ -17,6 +17,12 @@
   pointer-events: none;
 }
 
+md-dialog.thematic-overview {
+  md-dialog-content {
+    overflow-x: hidden;
+  }
+}
+
 md-dialog {
 
   md-dialog-content {
