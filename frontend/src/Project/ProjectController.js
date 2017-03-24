@@ -47,7 +47,7 @@ class ProjectController extends ProjectDefinition {
 
         this.team = [];
         this.viewers = [];
-        this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
+        this.team.push(_.find(this.users, { id: this.userProfile.id }));
 
         if (this.editMode) {
             this.projectId = this.state.params.appName;
@@ -262,6 +262,9 @@ class ProjectController extends ProjectDefinition {
         this.createCoverageArray(processedForm);
         this.separateCoverageAndNationalLevelDeployments(processedForm);
         if (!this.editMode) {
+            processedForm.contact_email = 'WIP@wip.com';
+            processedForm.contact_name = "TEMPORARY";
+            processedForm.implementation_dates =new Date().toJSON();
             this.saveForm(processedForm);
         }
         else {
