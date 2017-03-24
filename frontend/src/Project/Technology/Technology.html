@@ -1,59 +1,34 @@
 <div class="project-section section-technology" md-whiteframe="2">
     <div class="section-title md-title">
       3. Technologies
-      <span class="toggler"><i class="material-icons">&#xE313;</i></span>
+      <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
     </div>
 
     <div class="section-wrapper">
       <md-input-container class="md-block" flex="50">
         <label>Technology deployment date</label>
-        <md-select ng-model="project.tech.deploydate">
-          <md-option value="Value 1">
-            Value 1
-          </md-option>
-          <md-option value="Value 2">
-            Value 2
-          </md-option>
-          <md-option value="Value 3">
-            Value 3
-          </md-option>
-        </md-select>
+        <md-datepicker ng-model="vm.project.implementation_dates"></md-datepicker>
       </md-input-container>
 
       <div class="checklist">
         <h6>Under what license is the project governed?</h6>
         <ul>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="d1" class="md-primary">
-              Public domain
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="d2" class="md-primary">
-              Freemium
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="d3" class="md-primary">
-              Non protective free and open source software (e.g. Apache)
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="d4" class="md-primary">
-              Proprietary
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="d5" class="md-primary">
-              Protective free and open source source software
+          <li ng-repeat="l in vm.structure.licenses">
+            <md-checkbox
+                    ng-checked="vm.checkboxChecked(l, 'licenses')"
+                    ng-click="vm.checkboxToggle(l, 'licenses')"
+                    md-no-ink
+                    aria-label="{{ l }}"
+                    class="md-primary">
+                {{ l }}
             </md-checkbox>
           </li>
           <li>
             <span layout="row">
-              <md-checkbox md-no-ink aria-label="" ng-model="d6" class="md-primary" flex="nogrow"></md-checkbox>
+              <md-checkbox md-no-ink aria-label="" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
               <md-input-container class="md-block" flex>
                 <label>Specify other</label>
-                <input required name="license.spectype" ng-model="project.license.spectype" disabled>
+                <input ng-required="!vm.customLicense" name="license.spectype" ng-model="vm.project.custom.license" ng-disabled="!vm.customLicense">
               </md-input-container>
             </span>
           </li>
@@ -63,40 +38,22 @@
       <md-input-container class="md-icon-float md-block">
         <label>Code documentation or download link</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-        <input required name="link.documentation" ng-model="project.link.documentation">
+        <input required name="link.documentation" ng-model="vm.project.repository">
       </md-input-container>
 
       <md-input-container class="md-icon-float md-block">
         <label>Link to the application</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-        <input required name="link.app" ng-model="project.link.app">
+        <input required name="link.app" g-model="vm.project.mobile_application">
       </md-input-container>
 
       <md-input-container class="md-icon-float md-block">
         <label>Link to the wiki page</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-        <input required name="link.wiki" ng-model="project.link.wiki">
+        <input required name="link.wiki" ng-model="vm.project.wiki">
       </md-input-container>
 
     </div>
-
-    <!-- THIS CODE HAS TO BE REPLACED WITH A PROPER DATE PICKER -->
-
-    <!-- <p>Date when technology was implemented/deployed</p>
-    <md-input-container>
-        <md-select  ng-model="vm.implementingDateYear" placeholder="Year" >
-            <md-option ng-value="opt" ng-repeat="opt in vm.availableYears">{{ opt }}</md-option>
-        </md-select>
-    </md-input-container>
-    <md-input-container>
-        <md-select md-container-class="menu-large" ng-model="vm.implementingDateMonth" placeholder="Month" >
-            <md-option ng-value="opt" ng-repeat="opt in vm.availableMonths">{{ opt }}</md-option>
-        </md-select>
-    </md-input-container>
-
-    <div id="customerror2" class="custom-error" ng-hide="vm.implementingDateYear && vm.implementingDateMonth">
-        Select Year, Month
-    </div> -->
 
 
     <!-- Tech platforms -->
@@ -121,54 +78,5 @@
         </div>
 
     </section> -->
-
-    <!-- Licenses -->
-    <!-- <section md-layout="row">
-
-        <p>Under what license is the project governed?</p>
-        <h5>Licenses:</h5>
-        <div class="checkbox-container checkbox-container-lic" layout="row">
-            <md-checkbox
-                    ng-repeat="l in vm.structure.licenses"
-                    ng-checked="vm.licenseChecked(l)"
-                    ng-click="vm.licenseChange(l)"
-                    flex="30"
-                    aria-label="{{ l }}"
-                    class="">
-                {{ l }}
-            </md-checkbox>
-        </div>
-    </section>
-
-    <div layout="column">
-        <md-input-container>
-            <input type="text"
-                   ng-pattern="vm.urlRegex"
-                   placeholder="Code documentation or download link"  name="repository" ng-required="false" ng-model="vm.project.repository"/>
-            <div ng-messages="vm.newProjectForm.repository.$error">
-                <div ng-message="pattern">This should be a valid link</div>
-            </div>
-        </md-input-container>
-    </div>
-    <div layout="column">
-        <md-input-container>
-            <input type="text"
-                   ng-pattern="vm.urlRegex"
-                   placeholder="Link to the application:" name="mobile_application" ng-required="false" ng-model="vm.project.mobile_application"/>
-            <div ng-messages="vm.newProjectForm.mobile_application.$error">
-                <div ng-message="pattern">This should be a valid link</div>
-            </div>
-        </md-input-container>
-    </div>
-    <div layout="column">
-        <md-input-container>
-            <input type="text"
-                   ng-pattern="vm.urlRegex"
-                   placeholder="Link to wiki page:" name="wiki" ng-required="false" ng-model="vm.project.wiki"/>
-            <div ng-messages="vm.newProjectForm.wiki.$error">
-                <div ng-message="pattern">This should be a valid link</div>
-            </div>
-        </md-input-container>
-    </div> -->
 
 </div>

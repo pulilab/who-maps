@@ -1,15 +1,15 @@
+import AdditionalInfoController from './AdditionalInfoController';
 import _template from './AdditionalInfo.html';
 
 
 const component = {
     template: _template,
-    controller: () => {
-        require('./AdditionalInfo.scss');
-    },
+    controller: AdditionalInfoController.additionalInfoControllerFactory(),
     controllerAs: 'vm',
     name: 'additionalInfo',
     bindings: {
-        counter: '='
+        project: '<',
+        structure: '<'
     }
 };
 

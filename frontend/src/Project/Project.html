@@ -24,10 +24,25 @@
                         users="vm.users"
                         project-list="vm.cs.projectList">
                 </project-details>
-                <strategy id="strategy"></strategy>
-                <technology id="technology"></technology>
-                <additional-info id="additional-info"></additional-info>
-                <interoperability id="interoperability"></interoperability>
+                <strategy id="strategy"
+                          project="vm.project"
+                          structure="vm.structure">
+                </strategy>
+                <technology
+                        id="technology"
+                        project="vm.project"
+                        structure="vm.structure">
+                </technology>
+                <additional-info
+                        id="additional-info"
+                        project="vm.project"
+                        structure="vm.structure">
+                </additional-info>
+                <interoperability
+                        id="interoperability"
+                        project="vm.project"
+                        structure="vm.structure">
+                </interoperability>
             </div>
             <div class="navigation-area" layout="column">
                 <navigation edit-mode="vm.editMode"></navigation>

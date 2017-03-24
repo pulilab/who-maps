@@ -1,7 +1,7 @@
 <div class="project-section section-strategy" md-whiteframe="2">
     <div class="section-title md-title">
       2. Strategies
-      <span class="toggler"><i class="material-icons">&#xE313;</i></span>
+      <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
     </div>
 
     <div class="section-wrapper">
@@ -55,23 +55,6 @@
         <md-input-container class="md-block" flex>
           <label>HIS buckets (select from list)</label>
           <md-select ng-model="project.strategy.his">
-            <md-option value="Strategy 1">
-              Strategy 1
-            </md-option>
-            <md-option value="Strategy 2">
-              Strategy 2
-            </md-option>
-            <md-option value="Strategy 3">
-              Strategy 3
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
-
-      <div layout="row">
-        <md-input-container class="md-block" flex>
-          <label>Digital health strategy (select from list)</label>
-          <md-select ng-model="project.strategy.dhs">
             <md-option value="Strategy 1">
               Strategy 1
             </md-option>

@@ -178,7 +178,6 @@ describe('ProjectController', () => {
     });
 
 
-
     it('has a function, that saves team members and users to the API', () => {
         spyOn(sc.ns, 'putGroups');
         sc.putGroups();

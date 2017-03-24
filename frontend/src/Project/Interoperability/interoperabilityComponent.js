@@ -1,15 +1,15 @@
+import InteroperabilityController from './InteroperabilityController';
 import _template from './Interoperability.html';
 
 
 const component = {
     template: _template,
-    controller: () => {
-        require('./Interoperability.scss');
-    },
+    controller: InteroperabilityController.interoperabilityControllerFactory(),
     controllerAs: 'vm',
     name: 'interoperability',
     bindings: {
-        counter: '='
+        projects: '<',
+        structure: '<'
     }
 };
 

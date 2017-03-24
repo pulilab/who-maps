@@ -112,11 +112,8 @@ class ProjectController extends ProjectDefinition {
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
         this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        const backEndImplementationDate = moment(this.project.implementation_dates, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-
-
-        this.implementingDateMonth = backEndImplementationDate.format('MMMM');
-        this.implementingDateYear = backEndImplementationDate.get('year');
+        this.project.implementation_dates =
+            moment(this.project.implementation_dates, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
 
         this.unfoldCoverage();
         this.assignDefaultCustom();
@@ -255,7 +252,6 @@ class ProjectController extends ProjectDefinition {
 
 
     save() {
-        this.sentForm = true;
         const processedForm = _.cloneDeep(this.project);
         this.createDateFields(processedForm);
         this.mergeCustomAndDefault(processedForm);
@@ -263,8 +259,8 @@ class ProjectController extends ProjectDefinition {
         this.separateCoverageAndNationalLevelDeployments(processedForm);
         if (!this.editMode) {
             processedForm.contact_email = 'WIP@wip.com';
-            processedForm.contact_name = "TEMPORARY";
-            processedForm.implementation_dates =new Date().toJSON();
+            processedForm.contact_name = 'TEMPORARY';
+            processedForm.implementation_dates = new Date().toJSON();
             this.saveForm(processedForm);
         }
         else {

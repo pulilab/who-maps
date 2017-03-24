@@ -8,7 +8,7 @@ const wholeCountryName = ' ENTIRE COUNTRY';
 class ProjectDetailsController extends CollapsibleSet {
 
     constructor($scope, $element) {
-        super($element);
+        super($element, 'project');
         this.ccs = require('../../Common/CustomCountryService');
         this.ns = new ProjectService();
         this.es = new EditProfileService();
@@ -23,8 +23,6 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     onInit() {
-        window.TEST = this.project;
-        console.log(this);
         this.bindFunctions();
         this.watchers();
         this.getStructureData();
@@ -62,13 +60,6 @@ class ProjectDetailsController extends CollapsibleSet {
         });
     }
 
-    addChild(childName) {
-        this.project[childName].push({});
-    }
-
-    showAddMore(index, collection) {
-        return index === (collection.length - 1);
-    }
 
     fetchDistricts(country) {
         const self = this;
