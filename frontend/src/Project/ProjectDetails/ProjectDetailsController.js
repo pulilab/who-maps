@@ -19,6 +19,7 @@ class ProjectDetailsController extends CollapsibleSet {
     bindFunctions() {
         this.fetchDistricts = this.fetchDistricts.bind(this);
         this.getUsers = this.getUsers.bind(this);
+        this.checkName = this.checkName.bind(this);
     }
 
     onInit() {
@@ -32,6 +33,7 @@ class ProjectDetailsController extends CollapsibleSet {
         this.users = [];
         this.team = [];
         this.viewers = [];
+        this.projectList = [];
     }
 
     watchers() {
@@ -93,19 +95,20 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     checkName() {
-        this.handleCustomError('name');
-        this.ns.autocompleteProjectName(this.project.name)
+        const self = this;
+        // this.handleCustomError('name');
+        self.ns.autocompleteProjectName(self.project.name)
             .then(result => {
                 _.forEach(result, project => {
-                    project.isOwn = _.find(this.cs.projectList, pj => {
+                    project.isOwn = _.find(self.projectList, pj => {
                         return pj.id === project.id;
                     });
                 });
-                this.similarProject = result;
-                if (result && result[0] && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
-                    this.setCustomError('name', 'Project name is not unique');
+                self.similarProject = result;
+                if (result && result[0] && result[0].name.toLowerCase() === self.project.name.toLowerCase()) {
+                    self.setCustomError('name', 'Project name is not unique');
                 }
-                this.scope.$evalAsync();
+                self.scope.$evalAsync();
             });
     }
 

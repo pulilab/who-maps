@@ -8,7 +8,7 @@
   <div class="section-wrapper">
 
     <div layout="row">
-      <md-input-container class="md-block">
+      <md-input-container class="md-block" flex="50">
         <label>Project name</label>
         <input md-maxlength="100" required name="name"
                ng-model="vm.project.name"
@@ -19,6 +19,13 @@
           <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
         </div>
       </md-input-container>
+      <div flex="30" class="similar-project" ng-show="vm.similarProject.length > 0" >
+            <span class="similar-label">Similar Project Name(s)</span>
+            <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
+                <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a>
+                <span ng-if="!$last">,</span>
+            </div>
+        </div>
     </div>
 
     <!--<md-input-container class="md-block">-->
@@ -63,21 +70,6 @@
         </md-select>
       </md-input-container>
 
-      <!--<md-input-container class="md-icon-float md-block" flex="25">-->
-      <!--<label>Project start date</label>-->
-      <!--<md-icon><i class="material-icons">&#xE8DF;</i></md-icon>-->
-      <!--<md-select ng-model="project.date">-->
-      <!--<md-option value="Value 1">-->
-      <!--Value 1-->
-      <!--</md-option>-->
-      <!--<md-option value="Value 2">-->
-      <!--Value 2-->
-      <!--</md-option>-->
-      <!--<md-option value="Value 3">-->
-      <!--Value 3-->
-      <!--</md-option>-->
-      <!--</md-select>-->
-      <!--</md-input-container>-->
       <md-datepicker ng-model="vm.project.started"></md-datepicker>
     </div>
 

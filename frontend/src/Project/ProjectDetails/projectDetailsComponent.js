@@ -11,7 +11,8 @@ const component = {
         structure: '<',
         team: '<',
         viewers: '<',
-        users: '<'
+        users: '<',
+        projectList: '<'
     }
 };
 
