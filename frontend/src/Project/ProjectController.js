@@ -262,6 +262,9 @@ class ProjectController extends ProjectDefinition {
         this.createCoverageArray(processedForm);
         this.separateCoverageAndNationalLevelDeployments(processedForm);
         if (!this.editMode) {
+            processedForm.contact_email = 'WIP@wip.com';
+            processedForm.contact_name = "TEMPORARY";
+            processedForm.implementation_dates =new Date().toJSON();
             this.saveForm(processedForm);
         }
         else {
