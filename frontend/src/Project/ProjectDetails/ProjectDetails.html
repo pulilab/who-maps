@@ -1,168 +1,200 @@
 <div class="project-section section-projectdetails active" md-whiteframe="2">
 
-    <div class="section-title md-title">
-      1. Project details
-      <span class="toggler"><i class="material-icons">&#xE313;</i></span>
-    </div>
+  <div class="section-title md-title">
+    1. Project details
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  </div>
 
-    <div class="section-wrapper">
+  <div class="section-wrapper">
 
+    <div layout="row">
       <md-input-container class="md-block">
         <label>Project name</label>
-        <input md-maxlength="100" required name="name" ng-model="project.name">
+        <input md-maxlength="100" required name="name"
+               ng-model="vm.project.name"
+               ng-model-options="{debounce: 200}"
+               ng-change="vm.checkName()">
         <div ng-messages="name.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
         </div>
       </md-input-container>
-
-      <md-input-container class="md-block">
-        <label>Organisation (Platform owner)</label>
-        <input md-maxlength="100" required name="owner" ng-model="project.owner">
-        <div ng-messages="projectDetails.owner.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
-        </div>
-      </md-input-container>
-
-      <div layout="row">
-        <md-input-container class="md-icon-float md-block" flex="50">
-          <label>Project country</label>
-          <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
-          <md-select ng-model="project.country">
-            <md-option value="Value 1">
-              Value 1
-            </md-option>
-            <md-option value="Value 2">
-              Value 2
-            </md-option>
-            <md-option value="Value 3">
-              Value 3
-            </md-option>
-          </md-select>
-        </md-input-container>
-        <md-input-container class="md-icon-float md-block" flex="25">
-          <label>Project start date</label>
-          <md-icon><i class="material-icons">&#xE8DF;</i></md-icon>
-          <md-select ng-model="project.date">
-            <md-option value="Value 1">
-              Value 1
-            </md-option>
-            <md-option value="Value 2">
-              Value 2
-            </md-option>
-            <md-option value="Value 3">
-              Value 3
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
-
-      <md-input-container class="md-block">
-        <label>Geographic scope</label>
-        <textarea ng-model="project.scope" md-maxlength="500" rows="1" md-select-on-focus></textarea>
-      </md-input-container>
-
-      <md-input-container class="md-block">
-        <label>Overview of the digital health implementation</label>
-        <textarea ng-model="project.overview" md-maxlength="500" rows="1" md-select-on-focus></textarea>
-      </md-input-container>
-
-      <h6>What is the current coverage of your project?</h6>
-
-      <div class="input-group">
-        <div layout="column">
-
-          <div layout="row">
-            <md-input-container class="md-block number" flex>
-              <label># Number</label>
-              <input required name="coverage.number" ng-model="project.coverage.number">
-            </md-input-container>
-
-            <div class="textual-separator" flex="nogrow">of</div>
-
-            <md-input-container class="md-block" flex>
-              <label>Type</label>
-              <md-select ng-model="project.coverage.type">
-                <md-option value="Type 1">
-                  Type 1
-                </md-option>
-                <md-option value="Type 2">
-                  Type 2
-                </md-option>
-                <md-option value="Type 3">
-                  Type 3
-                </md-option>
-              </md-select>
-            </md-input-container>
-
-            <div class="textual-separator" flex="nogrow">or</div>
-
-            <div class="md-block" flex="nogrow">
-              <md-checkbox ng-model="data.othertype" class="md-primary" aria-label="Other type"></md-checkbox>
-            </div>
-
-            <md-input-container class="md-block no-margin" flex>
-              <label>Specify other type</label>
-              <input required name="coverage.spectype" ng-model="project.coverage.spectype" disabled>
-            </md-input-container>
-          </div>
-
-          <div layout="row">
-            <md-input-container class="md-block district" flex="50">
-              <label>District</label>
-              <md-select ng-model="project.coverage.district">
-                <md-option value="District 1">
-                  District 1
-                </md-option>
-                <md-option value="District 2">
-                  District 2
-                </md-option>
-                <md-option value="District 3">
-                  District 3
-                </md-option>
-              </md-select>
-            </md-input-container>
-
-            <div class="add-more-item" flex>
-              <md-button class="md-primary" aria-label="Add more">
-                <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
-              </md-button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <h6>What is the current coverage of your project?</h6>
-
-      <div layout="row">
-        <md-input-container md-no-float class="md-block" flex="50">
-          <input ng-model="donor.name" placeholder="Donor's name">
-        </md-input-container>
-        <div class="add-more-item" flex>
-          <md-button class="md-primary" aria-label="Add more">
-            <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
-          </md-button>
-        </div>
-      </div>
-
     </div>
 
-    <div class="section-wrapper alt-2">
-      <h6 class="first">Add Team members (Editor role)</h6>
+    <!--<md-input-container class="md-block">-->
+    <!--<label>Organisation (Platform owner)</label>-->
+    <!--<input md-maxlength="100" required name="owner" ng-model="vm.project.organisation.name">-->
+    <!--<div ng-messages="projectDetails.owner.$error">-->
+    <!--<div ng-message="required">This is required.</div>-->
+    <!--<div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>-->
+    <!--</div>-->
+    <!--</md-input-container>-->
+    <div class="autocomplete-wrapper">
+      <md-autocomplete
+              class="md-block"
+              id="orgauto"
+              required="true"
+              md-input-name="organisation"
+              md-no-cache="true"
+              md-selected-item="vm.project.organisation"
+              md-search-text="vm.searchText"
+              md-items="item in vm.organisationSearch(vm.searchText)"
+              md-item-text="item.name"
+              md-min-length="2"
+              placeholder="Organisation name">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+        </md-item-template>
 
-      <md-input-container md-no-float class="md-block">
-        <input ng-model="member.team" placeholder="Add new member" />
-        <div class="hint">You can only add existing users.</div>
+      </md-autocomplete>
+      <div class="autocomplete-errors" ng-messages="vm.newProjectForm.organisation.$error">
+        <div ng-message="required">This field is required</div>
+      </div>
+    </div>
+
+    <div layout="row">
+      <md-input-container class="md-icon-float md-block" flex="50">
+        <label>Project country</label>
+        <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
+        <md-select ng-model="vm.project.country">
+          <md-option ng-value="{{country.id}}" ng-repeat=" country in vm.countriesList">
+            {{country.prettyName}}
+          </md-option>
+        </md-select>
       </md-input-container>
 
-      <h6>Add Viewers (only Viewer role)</h6>
+      <!--<md-input-container class="md-icon-float md-block" flex="25">-->
+      <!--<label>Project start date</label>-->
+      <!--<md-icon><i class="material-icons">&#xE8DF;</i></md-icon>-->
+      <!--<md-select ng-model="project.date">-->
+      <!--<md-option value="Value 1">-->
+      <!--Value 1-->
+      <!--</md-option>-->
+      <!--<md-option value="Value 2">-->
+      <!--Value 2-->
+      <!--</md-option>-->
+      <!--<md-option value="Value 3">-->
+      <!--Value 3-->
+      <!--</md-option>-->
+      <!--</md-select>-->
+      <!--</md-input-container>-->
+      <md-datepicker ng-model="vm.project.started"></md-datepicker>
+    </div>
 
-      <md-input-container md-no-float class="md-block">
-        <input ng-model="member.viewer" placeholder="Add new member" />
-        <div class="hint">You can only add existing users.</div>
+    <md-input-container class="md-block">
+      <label>Geographic scope</label>
+      <textarea ng-model="vm.project.geographic_scope" md-maxlength="500" rows="1" md-select-on-focus></textarea>
+    </md-input-container>
+
+    <md-input-container class="md-block">
+      <label>Overview of the digital health implementation</label>
+      <textarea ng-model="vm.project.implementation_overview" md-maxlength="500" rows="1" md-select-on-focus></textarea>
+    </md-input-container>
+
+    <h6>What is the current coverage of your project?</h6>
+
+    <div class="input-group" ng-repeat="cov in vm.project.coverage">
+      <div layout="column">
+
+        <div layout="row">
+          <md-input-container class="md-block number" flex>
+            <label># Number</label>
+            <input required name="coverage.number" ng-model="cov.number">
+          </md-input-container>
+
+          <div class="textual-separator" flex="nogrow">of</div>
+
+          <md-input-container class="md-block type" flex>
+            <label>Type</label>
+            <md-select ng-model="cov.typeChosen">
+              <md-option value="{{type}}" ng-repeat="type in vm.structure.coverageTypes">
+                {{type}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <div class="textual-separator" flex="nogrow">or</div>
+
+          <div class="md-block" flex="nogrow">
+            <md-checkbox ng-model="data.othertype" class="md-primary" aria-label="Other type"></md-checkbox>
+          </div>
+
+          <md-input-container class="md-block no-margin" flex>
+            <label>Specify other type</label>
+            <input required name="coverage.spectype" ng-model="project.coverage.spectype" disabled>
+          </md-input-container>
+        </div>
+
+        <div layout="row">
+          <md-input-container class="md-block district" flex="50">
+            <label>District</label>
+            <md-select ng-model="cov.district">
+              <md-option value="{{district}}" ng-repeat="district in vm.districtList">
+                {{district}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <div class="add-more-item" flex>
+            <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showAddMore($index, vm.project.coverage)"
+                       ng-click="vm.addChild('coverage')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+            </md-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h6>Donor?</h6>
+
+    <div layout="row" ng-repeat="donor in vm.project.donors">
+      <md-input-container md-no-float class="md-block" flex="50">
+        <input ng-model="donor.value" placeholder="Donor's name">
       </md-input-container>
+      <div class="add-more-item" flex>
+        <md-button class="md-primary" aria-label="Add more"
+                   ng-show="vm.showAddMore($index, vm.project.donors)"
+                   ng-click="vm.addChild('donors')">
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+        </md-button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-wrapper alt-2">
+    <h6 class="first">Add Team members (Editor role)</h6>
+
+    <div class="chipper">
+      <md-contact-chips
+              placeholder="Editors of this project"
+              secondary-placeholder="add new team member"
+              ng-model="vm.team"
+              md-contacts="vm.getUsers($query)"
+              md-contact-name="name"
+              md-contact-email="organisation__name"
+              md-require-match="true"
+              md-highlight-flags="i"
+              filter-selected="true">
+      </md-contact-chips>
+    </div>
+
+    <h6>Add Viewers (only Viewer role)</h6>
+
+    <div class="chipper">
+      <md-contact-chips
+              placeholder="Add viewers"
+              secondary-placeholder="add new viewer"
+              ng-model="vm.viewers"
+              md-contacts="vm.getUsers($query)"
+              md-contact-name="name"
+              md-contact-email="organisation__name"
+              md-require-match="true"
+              md-highlight-flags="i"
+              filter-selected="true">
+      </md-contact-chips>
     </div>
 
 
@@ -375,4 +407,4 @@
             </md-contact-chips>
         </div>
     </section> -->
-</div>
+  </div>

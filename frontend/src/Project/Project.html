@@ -8,38 +8,47 @@
         <h1 class="md-display-1 text-center">Edit Project Info</h1>
     </div>
 
-
     <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
         <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
 
-    <form name="vm.newProjectForm" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
-        <div class="main-section" layout="column">
-            <project-details id="project-details"></project-details>
-            <strategy id="strategy"></strategy>
-            <technology id="technology"></technology>
-            <additional-info id="additional-info"></additional-info>
-            <interoperability id="interoperability"></interoperability>
-        </div>
-        <div class="navigation-area" layout="column">
-           <navigation></navigation>
-        </div>
-    </form>
+    <div class="project-form-wrapper md-block">
+        <form name="vm.newProjectForm" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
+            <div class="main-section" layout="column">
+                <project-details
+                        id="project-details"
+                        project="vm.project"
+                        structure="vm.structure"
+                        team="vm.team"
+                        viewers="vm.viewers"
+                        users="vm.users">
+                </project-details>
+                <strategy id="strategy"></strategy>
+                <technology id="technology"></technology>
+                <additional-info id="additional-info"></additional-info>
+                <interoperability id="interoperability"></interoperability>
+            </div>
+            <div class="navigation-area" layout="column">
+                <navigation edit-mode="vm.editMode"></navigation>
+            </div>
+        </form>x
 
-    <!-- TODO!!! Bug -->
-    <!-- <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
-        <h5> My projects ({{vm.userProjects.length}})</h5>
-        <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                     current-project="vm.isCurrentProject(p.id)"
-                     viewer="vm.isViewer(p)"
-                     member="vm.isMember(p)"
-                     show-details="true"
-                     show-logo="true"
-                     ng-model="p">
+        <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
 
-        </projectcomp>
-    </section> -->
+            <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
+            <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                         current-project="vm.isCurrentProject(p.id)"
+                         viewer="vm.isViewer(p)"
+                         member="vm.isMember(p)"
+                         show-details="true"
+                         show-logo="true"
+                         ng-model="p">
 
-    <!-- TODO!!! Bug -->
-    <!-- <disclaimer></disclaimer> -->
+            </projectcomp>
+
+
+        </section>
+    </div>
+
+    <disclaimer></disclaimer>
 </div>

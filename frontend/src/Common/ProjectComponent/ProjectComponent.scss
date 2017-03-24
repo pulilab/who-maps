@@ -1,6 +1,18 @@
 @import "../../variables.scss";
 @import "../../mixins.scss";
 
+.my-projects {
+  box-sizing: border-box;
+  min-width: calc($page-min-width - 340px) !important;
+  margin: 30px 340px 0 30px;
+  padding: 10px 40px 40px;
+  background: $color-gray-lightest;
+
+  .md-title {
+    margin-bottom: 30px;
+  }
+}
+
 projectcomp {
 
   .show-pointer {
@@ -15,6 +27,7 @@ projectcomp {
     position: relative;
     overflow: hidden;
     outline: none;
+    margin: 0;
 
       .my-eye,
       .my-star {
@@ -47,12 +60,14 @@ projectcomp {
 
 
     .project-container {
+      width: 100%;
       height: auto;
 
       .project-logo {
-        width: 115px;
-        height: 115px;
-        border-right: 1px solid $color-gray-light;
+        width: 140px;
+        min-width: 140px;
+        height: 140px;
+        border-right: 1px solid darken($color-gray-lighter, 10%);
         background: $color-gray-lighter;
 
         md-icon {
@@ -67,11 +82,12 @@ projectcomp {
         width: 100%;
 
         .upper {
-          height: 60px;
+          width: 100%;
+          height: 80px;
           cursor: default;
 
           .basic {
-            padding: 10px 12px;
+            padding: 15px 20px;
 
             .name, .org-country {
               display: block;
@@ -82,26 +98,31 @@ projectcomp {
 
             .name {
               color: $color-primary;
-              font-size: $body-font-size-base;
+              font-size: 16px;
+              font-weight: 500;
+              margin: 4px 0 8px;
             }
 
             .org-country {
-              color: $text-primary;
+              color: $text-secondary;
               font-size: $body-font-size-base;
+              text-transform: uppercase;
             }
           }
 
           .donors {
-            padding: 8px;
-            min-width: 65px;
-            border-left: 1px solid $color-gray-lightest;
+            padding: 10px;
+            max-width: 100px;
+            width: 100px;
+            border-left: 1px solid $color-gray-lighter;
 
             .nr {
               display: block;
+              margin-top: 6px;
               text-align: center;
               font-weight: 500;
-              font-size: 14px;
-              line-height: 24px;
+              font-size: 20px;
+              line-height: 30px;
             }
 
 
@@ -114,16 +135,19 @@ projectcomp {
           }
 
           .followers {
-            padding: 8px;
-            min-width: 90px;
-            border-left: 1px solid $color-gray-lightest;
+            padding: 10px;
+            max-width: 100px;
+            width: 100px;
+            border-left: 1px solid $color-gray-lighter;
 
 
             .nr {
               display: block;
+              margin-top: 6px;
               text-align: center;
               font-weight: 500;
-              font-size: 14px;
+              font-size: 20px;
+              line-height: 30px;
 
               md-icon {
                 font-size: 18px;
@@ -154,26 +178,18 @@ projectcomp {
         }
 
         .lower {
-          height: 55px;
-          border-top: 1px solid $color-gray-lightest;
+          height: 60px;
+          padding: 0 15px 0 0;
+          border-top: 1px solid $color-gray-lighter;
 
           .description {
-            padding: 10px;
+            padding: 10px 20px;
             color: $text-secondary;
-            font-size: 12px;
+            font-size: 14px;
+            @include text-truncate();
           }
 
-          .more {
-            margin: auto;
-            padding: 0 15px;
-
-            a {
-              color: $color-primary;
-              text-decoration: none;
-              font-weight: 500;
-              font-size: 12px;
-            }
-          }
+          .more {}
         }
       }
     }

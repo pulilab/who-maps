@@ -21,13 +21,15 @@
     </div>
     <div layout="column" class="edit-buttons">
         <div layout="row" layout-align="center start" class="primary-buttons">
-            <md-button type="submit" ng-if="!vm.editMode && !vm.inventoryMode" class="md-primary md-raised">Add new project</md-button>
-            <md-button type="submit" ng-if="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
-            <md-button type="submit" ng-if="vm.inventoryMode" class="md-primary">Save and add another</md-button>
+            <md-button type="submit" ng-show="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
+            <md-button type="submit" ng-show="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
+        </div>
+        <div layout="row" layout-align="center start" class="primary-buttons">
+            <md-button class="md-primary md-raised">Save &amp; add another</md-button>
         </div>
         <div layout="row" layout-align="center start" class="secondary-buttons">
-            <md-button ng-if="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
-            <md-button ng-if="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
+            <md-button ng-show="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
+            <md-button ng-show="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
         </div>
     </div>
 </div>

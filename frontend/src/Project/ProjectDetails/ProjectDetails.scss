@@ -2,10 +2,15 @@
 @import '../../mixins';
 
 .section-projectdetails {
-  
+
   .md-block.number {
     max-width: 90px;
   }
+
+  .autocomplete-wrapper {
+    margin-bottom: 30px;
+  }
+
 
   .md-block.district {
     max-width: calc(50% + 30px);

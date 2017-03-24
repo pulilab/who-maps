@@ -42,7 +42,7 @@ const upload = {};
 
 const structure = require('./Resources/structure.json');
 
-describe('NewProjectController', () => {
+describe('ProjectController', () => {
 
     beforeEach(() => {
         spyOn(NewProjectController.prototype, 'handleDistrictData').and.callThrough();

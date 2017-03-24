@@ -1,81 +1,85 @@
 import _ from 'lodash';
-import NewProjectService from '../ProjectService';
-import ProjectDefinition from '../../Common/ProjectDefinition';
+import CollapsibleSet from '../CollapsibleSet';
+import ProjectService from '../ProjectService';
 import EditProfileService from '../../Common/EditProfile/EditProfileService';
 
-/* global DEV, DEBUG, Promise */
+const wholeCountryName = ' ENTIRE COUNTRY';
 
+class ProjectDetailsController extends CollapsibleSet {
 
-class ProjectDetailsController extends ProjectDefinition {
-
-    constructor($scope, $state, $anchorScroll, $location, CommonService, toast) {
-        super(CommonService);
-        this.ns = new NewProjectService();
-        this.es = new EditProfileService();
+    constructor($scope, $element) {
+        super($element);
         this.ccs = require('../../Common/CustomCountryService');
-        this.EE = window.EE;
+        this.ns = new ProjectService();
+        this.es = new EditProfileService();
         this.scope = $scope;
-        this.state = $state;
-        this.location = $location;
-        this.scroll = $anchorScroll;
-        this.scroll.yOffset = 140;
         this.$onInit = this.onInit.bind(this);
-        this.toast = toast;
     }
 
     bindFunctions() {
-        this.countryCloseCallback = this.countryCloseCallback.bind(this);
-        this.districtCloseCallback = this.districtCloseCallback.bind(this);
-        this.setStrategy = this.setStrategy.bind(this);
+        this.fetchDistricts = this.fetchDistricts.bind(this);
         this.getUsers = this.getUsers.bind(this);
-        this.handleDistrictRequest = this.handleDistrictRequest.bind(this);
     }
 
     onInit() {
+        window.TEST = this.project;
+        console.log(this);
         this.bindFunctions();
+        this.watchers();
+        this.getStructureData();
         this.createBlurHandle();
         this.districtList = [];
-        this.allUsers = this.cs.usersProfiles;
-
+        this.users = [];
         this.team = [];
         this.viewers = [];
-        this.team.push(_.find(this.allUsers, { id: this.userProfile.id }));
     }
 
-    putGroups() {
-        return this.ns.putGroups(this.projectId, this.team, this.viewers);
+    watchers() {
+        const self = this;
+        self.scope.$watch(() => {
+            return this.project.country;
+        }, self.fetchDistricts);
     }
 
-    countryCloseCallback(name) {
-        console.log(name);
-        // const countries = _.filter(this.structure.countries, { name });
-        // if (countries.length === 1) {
-        //     this.project.countryName = name;
-        //     this.project.country = _.cloneDeep(countries[0]).id;
-        //     this.ccs.getCountryDistricts(this.project.country)
-        //     .then(this.handleDistrictData.bind(this));
-        //
-        // }
-        this.handleCustomError('country');
+    getStructureData() {
+        const self = this;
+        this.ccs.getCountries().then(data => {
+            self.scope.$evalAsync(() => {
+                self.countriesList = data;
+            });
+        });
+    }
+
+    getUsers(criteria) {
+        return this.users.filter(el => {
+            if (el && el.name) {
+                return _.includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
+                    _.includes(el.organisation__name.toLowerCase(), criteria.toLowerCase());
+            }
+            return false;
+        });
+    }
+
+    addChild(childName) {
+        this.project[childName].push({});
+    }
+
+    showAddMore(index, collection) {
+        return index === (collection.length - 1);
+    }
+
+    fetchDistricts(country) {
+        const self = this;
+        if (country) {
+            self.ccs.getCountryDistricts(country)
+                .then(self.handleDistrictData.bind(self));
+        }
     }
 
     handleDistrictData(data) {
+        data.unshift(wholeCountryName);
         this.districtList = data;
-        this.mergeNationalLevelWithDistrictCoverage();
         this.scope.$evalAsync();
-    }
-
-    repeatBind(item) {
-        item.districtCallback = this.districtCloseCallback.bind(this, item);
-        item.typeCallback = this.typeCloseCallback.bind(this, item);
-    }
-
-    typeCloseCallback(coverage, type) {
-        coverage.typeChosen = type;
-    }
-
-    districtCloseCallback(coverage, district) {
-        coverage.district = district;
     }
 
     handleCustomError(key) {
@@ -109,13 +113,13 @@ class ProjectDetailsController extends ProjectDefinition {
 
         this.scope.$$postDigest(() => {
 
-            document.querySelector('#orgauto')
-                .querySelector('input')
-                .addEventListener('blur', () => {
-                    if (!this.latestOrgs.some(org => org.name === this.searchText)) {
-                        this.addOrganisation(this.searchText);
-                    }
-                });
+            // document.querySelector('#orgauto')
+            //     .querySelector('input')
+            //     .addEventListener('blur', () => {
+            //         if (!this.latestOrgs.some(org => org.name === this.searchText)) {
+            //             this.addOrganisation(this.searchText);
+            //         }
+            //     });
         });
     }
 
@@ -149,12 +153,11 @@ class ProjectDetailsController extends ProjectDefinition {
 
 
     static projectDetailFactory() {
-        const CommonService =  require('../../Common/CommonServices');
-        function projectDetail($scope, $state, $anchorScroll, $location, $mdToast) {
-            return new ProjectDetailsController($scope, $state, $anchorScroll,
-                $location, CommonService, $mdToast);
+        require('./ProjectDetails.scss');
+        function projectDetail($scope, $element) {
+            return new ProjectDetailsController($scope, $element);
         }
-        projectDetail.$inject = ['$scope', '$state', '$anchorScroll', '$location', '$mdToast'];
+        projectDetail.$inject = ['$scope', '$element'];
         return projectDetail;
     }
 }

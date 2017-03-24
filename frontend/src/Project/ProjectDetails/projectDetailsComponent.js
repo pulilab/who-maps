@@ -1,15 +1,17 @@
 import _template from './ProjectDetails.html';
-
+import ProjectDetailsController from './ProjectDetailsController';
 
 const component = {
     template: _template,
-    controller: () => {
-        require('./ProjectDetails.scss');
-    },
+    controller: ProjectDetailsController.projectDetailFactory(),
     controllerAs: 'vm',
     name: 'projectDetails',
     bindings: {
-        counter: '='
+        project: '<',
+        structure: '<',
+        team: '<',
+        viewers: '<',
+        users: '<'
     }
 };
 

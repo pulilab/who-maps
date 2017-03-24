@@ -60,6 +60,11 @@ class CustomCountryService extends SimpleApi {
         });
     }
 
+    prettyName(name) {
+        const split = name.split('-');
+        return split.join(' ');
+    }
+
     getCountriesList() {
         const self = this;
         if (!this.countryListPromise
@@ -71,12 +76,12 @@ class CustomCountryService extends SimpleApi {
             _.forEach(countries, cn => {
                 cn.code = cn.code.toLocaleLowerCase();
                 cn.flag = self.getCountryFlag(cn.code);
+                cn.prettyName = self.prettyName(cn.name);
                 self.countryLib[cn.code] = self.countryLib[cn.code] ? self.countryLib[cn.code] : {};
                 Object.assign(self.countryLib[cn.code], cn);
             });
             this.store.set('countryLib', self.countryLib);
             self.countryListPromise.promiseDone = true;
-            console.warn('DJSADYASYD ' + self.countryListPromise.promiseDone);
             return _.cloneDeep(self.countryLib);
         });
     }
@@ -152,6 +157,7 @@ class CustomCountryService extends SimpleApi {
     }
 
     sendDefaultCountryData(data) {
+        data = data ? data : {};
         const standard = {
             name: 'WHO',
             code: 'who',
