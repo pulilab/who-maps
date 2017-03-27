@@ -1,5 +1,4 @@
 import copy
-import tempfile
 from datetime import datetime
 
 from django.core import mail
@@ -65,44 +64,42 @@ class SetupTests(APITestCase):
             "implementation_dates": "2016",
             "health_focus_areas": ["area1", "area2"],
             "geographic_scope": "somewhere",
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2", "tech3"],  # Can hold 'other' fields
+            "platforms": [{
+                "name": "platform1",
+                "strategies": ["strat1", "strat2"]
+            }, {
+                "name": "platform2",
+                "strategies": ["strat1", "strat9"]
+            }],
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
             "national_level_deployment": [
-                {"clients": 2000000, "health_workers": 0, "facilities": 0},
+                {"clients": 20000, "health_workers": 0, "facilities": 0},
             ],
             "started": datetime.utcnow(),
-            "donors": ["donor1", "donor2"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
-            "pre_assessment": [1,0,3,0,4,0],
+            "donors": ["donor1", "donor2"],
+            "his_bucket": ["tax1", "tax2"],
+            "hsc_challenges": ["challange1", "challange2"],
+            "interventions": ["int1", "int2", "int3"],
+            "project_end_date": datetime.utcnow(),
+            "government_investor": True,
+            "implementing_partners": ["partner1", "partner2"],
+            "repository": "http://some.repo",
+            "mobile_application": "app1, app2",
+            "wiki": "http://wiki.org",
+            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
+                                       "http://example.org"],
+            "interoperability_standards": ["CSD - Care Services Discovery"],
+            "data_exchanges": ["de1", "de2"],
         }
 
         url = reverse("project-crud")
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.project_id = response.json().get("id")
-
-        url = reverse("project-files", kwargs={"project_id": self.project_id})
-        data = {}
-        file1 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        file2 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        file3 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        file4 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        pub_files = {"publication_0": file1, "publication_1": file2}
-        report_files = {"report_0": file3, "report_1": file4}
-        data.update(pub_files)
-        data.update(report_files)
-        response = self.test_user_client.post(url, data, format="multipart")
 
 
 class ProjectTests(SetupTests):
@@ -111,22 +108,75 @@ class ProjectTests(SetupTests):
         url = reverse("get-project-structure")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "countries")
         self.assertContains(response, "strategies")
         self.assertContains(response, "health_focus_areas")
+        self.assertContains(response, "technology_platforms")
+        self.assertContains(response, "licenses")
+        self.assertContains(response, "applications")
+        self.assertContains(response, "interoperability_links")
+        self.assertContains(response, "interoperability_standards")
+        self.assertContains(response, "his_bucket")
+        self.assertContains(response, "hsc_challenges")
+        self.assertContains(response, "interventions")
+        self.assertEqual(len(response.json().keys()), 10)
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
-        data.update(name="Test Project3")
-        response = self.test_user_client.post(url, data)
+        data.update(dict(name="Test Project3"))
+        response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
+
+    def test_create_new_project_with_platform_name_missing(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        new_data = {
+            "name": "Test Project91",
+            "platforms": [{
+                "strategies": []
+            }]
+        }
+        data.update(new_data)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("platforms", response.json())
+        self.assertEqual(response.json()['platforms'][0]['name'][0], 'This field is required.')
+
+    def test_create_new_project_with_platform_strategies_missing(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        new_data = {
+            "name": "Test Project92",
+            "platforms": [{
+                "name": "strat1"
+            }]
+        }
+        data.update(new_data)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("platforms", response.json())
+        self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
+
+    def test_create_new_project_with_platform_strategies_empty(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        new_data = {
+            "name": "Test Project93",
+            "platforms": [{
+                "name": "strat1",
+                "strategies": []
+            }]
+        }
+        data.update(new_data)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['platforms'][0]['strategies'], list())
 
     def test_create_new_project_makes_public_id(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project4")
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
 
@@ -138,10 +188,11 @@ class ProjectTests(SetupTests):
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(goals_to_scale="updated")
-        response = self.test_user_client.put(url, data)
+        data.update(platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
+        response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["goals_to_scale"], "updated")
+        self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
+        self.assertEqual(response.json()["platforms"][0]["strategies"][0], "new strat")
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-crud")
@@ -153,7 +204,7 @@ class ProjectTests(SetupTests):
         data = copy.deepcopy(self.project_data)
         data.update(name="")
         data.update(organisation="")
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
 
     def test_retrieve_project(self):
@@ -161,9 +212,9 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("objective"), "objective1")
         self.assertEqual(response.json().get("organisation_name"), self.org.name)
-        self.assertEqual(response.json().get("national_level_deployment")[0]["clients"], 2000000)
+        self.assertEqual(response.json().get("national_level_deployment")[0]["clients"], 20000)
+        self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
@@ -171,50 +222,19 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
 
-    def test_upload_files_to_project(self):
-        url = reverse("project-files", kwargs={"project_id": self.project_id})
-        data = {}
-        file1 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        file2 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        file3 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        file4 = tempfile.NamedTemporaryFile(suffix=".pdf")
-        pub_files = {"publication_0": file1, "publication_1": file2}
-        report_files = {"report_0": file3, "report_1": file4}
-        data.update(pub_files)
-        data.update(report_files)
-        response = self.test_user_client.post(url, data, format="multipart")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("id", response.json()[0])
-
-    def test_retrieve_file(self):
-        url = reverse("file-list", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.get(url)
-        data = response.json()
-        url = reverse("file-detail", kwargs={"pk": data[0]["id"]})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_delete_file(self):
-        url = reverse("file-list", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.get(url)
-        data = response.json()
-        url = reverse("file-delete", kwargs={"pk": data[0]["id"]})
-        response = self.test_user_client.delete(url)
-        self.assertEqual(response.status_code, 204)
-
     def test_make_version(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
         self.assertEqual(response.status_code, 201)
 
     def test_make_version_wrong_id(self):
         url = reverse("make-version", kwargs={"project_id": 999})
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
         self.assertEqual(response.status_code, 400)
 
     def test_get_coverage_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
         url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -223,7 +243,7 @@ class ProjectTests(SetupTests):
 
     def test_get_toolkit_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
         url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -231,8 +251,8 @@ class ProjectTests(SetupTests):
 
     def test_version_numbers_increasing(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url)
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
+        response = self.test_user_client.post(url, format="json")
         url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -241,7 +261,7 @@ class ProjectTests(SetupTests):
 
     def test_retrieve_last_version(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -260,24 +280,37 @@ class ProjectTests(SetupTests):
             "implementation_dates": "2016",
             "health_focus_areas": ["area1", "area2"],
             "geographic_scope": "somewhere",
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "platforms": [{
+                "name": "platform1",
+                "strategies": ["strat1", "strat2"]
+            }, {
+                "name": "platform2",
+                "strategies": ["strat1", "strat9"]
+            }],
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
+            "national_level_deployment": [
+                {"clients": 20000, "health_workers": 0, "facilities": 0},
+            ],
             "started": datetime.utcnow(),
-            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
-            "pre_assessment": [1,0,3,0,4,0],
+            "donors": ["donor1", "donor2"],
+            "his_bucket": ["tax1", "tax2"],
+            "hsc_challenges": ["challange1", "challange2"],
+            "interventions": ["int1", "int2", "int3"],
+            "project_end_date": datetime.utcnow(),
+            "government_investor": True,
+            "implementing_partners": ["partner1", "partner2"],
+            "repository": "http://some.repo",
+            "mobile_application": "app1, app2",
+            "wiki": "http://wiki.org",
+            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
+                                       "http://example.org"],
+            "interoperability_standards": ["CSD - Care Services Discovery"],
+            "data_exchanges": ["de1", "de2"],
         }
         url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
@@ -300,30 +333,41 @@ class ProjectTests(SetupTests):
             "implementation_dates": "2016",
             "health_focus_areas": ["area1", "area2"],
             "geographic_scope": "somewhere",
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": self.country_id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "platforms": [{
+                "name": "platform1",
+                "strategies": ["strat1", "strat2"]
+            }, {
+                "name": "platform2",
+                "strategies": ["strat1", "strat9"]
+            }],
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
+            "national_level_deployment": [
+                {"clients": 20000, "health_workers": 0, "facilities": 0},
+            ],
             "started": datetime.utcnow(),
-            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
+            "donors": ["donor1", "donor2"],
+            "his_bucket": ["tax1", "tax2"],
+            "hsc_challenges": ["challange1", "challange2"],
+            "interventions": ["int1", "int2", "int3"],
+            "project_end_date": datetime.utcnow(),
+            "government_investor": True,
+            "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
             "mobile_application": "app1, app2",
             "wiki": "http://wiki.org",
-            "pre_assessment": [1,0,3,0,4,0],
+            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
+                                       "http://example.org"],
+            "interoperability_standards": ["CSD - Care Services Discovery"],
+            "data_exchanges": ["de1", "de2"],
         }
         url = reverse("project-crud")
-        response = self.test_user_client.post(url, project_data)
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
 
         url = reverse("project-country-list", kwargs={"country_id": self.country_id})
         response = self.test_user_client.get(url)
@@ -341,35 +385,8 @@ class ProjectTests(SetupTests):
 
     def test_retrieve_project_list_by_district_name(self):
         # add one new project to detect district name project duplications
-        project_data = {
-            "date": datetime.utcnow(),
-            "name": "Test Project2",
-            "organisation": self.org.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": ["area1", "area2"],
-            "geographic_scope": "somewhere",
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
-            "country": self.country_id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
-            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "started": datetime.utcnow(),
-            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
-            "pre_assessment": [1,0,3,0,4,0],
-        }
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project 2"
         url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
 
@@ -379,18 +396,11 @@ class ProjectTests(SetupTests):
         self.assertIsInstance(response.json(), dict)
         self.assertEqual(response.json().keys(), {"dist1": None, "dist2": None}.keys())
 
-    def test_objective_wrong_data(self):
-        url = reverse("project-detail", kwargs={"pk": self.project_id})
-        data = copy.deepcopy(self.project_data)
-        data.update(objective="a"*251)
-        response = self.test_user_client.put(url, data)
-        self.assertEqual(response.status_code, 400)
-
     def test_create_project_adds_owner_to_team(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project3")
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         userprofile = UserProfile.objects.get(name="Test Name")
         project = Project.objects.get(id=response.json()['id'])
@@ -400,7 +410,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project4")
-        response = self.test_user_client.post(url, data)
+        response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         userprofile = UserProfile.objects.get(name="Test Name")
         project = Project.objects.get(id=response.json()['id'])
@@ -452,7 +462,7 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456",
             "password2": "123456"}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -471,7 +481,7 @@ class ProjectTests(SetupTests):
             "name": "Test Name 2",
             "organisation": org.id,
             "country": "test_country"}
-        response = test_user_client.put(url, data)
+        response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
 
@@ -481,7 +491,7 @@ class ProjectTests(SetupTests):
             "team": [user_profile_id],
             "viewers": []
         }
-        response = self.test_user_client.put(url, groups)
+        response = self.test_user_client.put(url, groups, format="json")
 
         self.assertTrue("team" in response.json())
         self.assertTrue("viewers" in response.json())
@@ -506,7 +516,7 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456",
             "password2": "123456"}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -525,7 +535,7 @@ class ProjectTests(SetupTests):
             "name": "Test Name 2",
             "organisation": org.id,
             "country": "test_country"}
-        response = test_user_client.put(url, data)
+        response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
 
@@ -535,7 +545,7 @@ class ProjectTests(SetupTests):
             "team": [user_profile_id],
             "viewers": []
         }
-        response = self.test_user_client.put(url, groups)
+        response = self.test_user_client.put(url, groups, format="json")
 
         self.assertTrue("team" in response.json())
         self.assertTrue("viewers" in response.json())
@@ -559,7 +569,7 @@ class ProjectTests(SetupTests):
 
         data = copy.deepcopy(self.project_data)
         data.update(health_focus_areas=['area1'])
-        response = self.test_user_client.put(url, data)
+        response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["health_focus_areas"], data['health_focus_areas'])
 
@@ -583,87 +593,13 @@ class ProjectTests(SetupTests):
 
     def test_project_create_can_send_blank_fields_in(self):
         # add one new project where health_focus_areas is empty
-        project_data = {
-            "date": datetime.utcnow(),
-            "name": "Test Project2",
-            "organisation": self.org.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": ["area1", "area2"],
-            "geographic_scope": "somewhere",
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
-            "country": self.country_id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
-            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "started": datetime.utcnow(),
-            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
-            "pre_assessment": [1,0,3,0,4,0],
-            "implementing_partners": ""
-        }
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project8"
+        project_data['health_focus_areas'] = []
         url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("implementing_partners", response.json())
-
-    def test_interoperability_features(self):
-        project_data = {
-            "date": datetime.utcnow(),
-            "name": "Test Project2",
-            "organisation": self.org.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "implementation_dates": "2016",
-            "geographic_scope": "somewhere",
-            "health_focus_areas": ["area1", "area2"],
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
-            "country": self.country_id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
-            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "started": datetime.utcnow(),
-            "donors": ["donor3", "donor4"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
-            "pre_assessment": [1,0,3,0,4,0],
-            "implementing_partners": "dsfsdf",
-            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None, "http://example.org"],
-            "interoperability_standards": ["CSD – Care Services Discovery"]
-        }
-        url = reverse("project-crud")
-        response = self.test_user_client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertIn("interoperability_links", response.json())
-        self.assertIn("interoperability_standards", response.json())
-        self.assertEqual(project_data["interoperability_links"], response.json()["interoperability_links"])
-        self.assertEqual(project_data["interoperability_standards"], response.json()["interoperability_standards"])
-
-        url = reverse("get-project-structure")
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("interoperability_links", response.json())
-        self.assertIn("interoperability_standards", response.json())
 
 
 class PermissionTests(SetupTests):
@@ -676,7 +612,7 @@ class PermissionTests(SetupTests):
             "team": [user_profile_id],
             "viewers": [user_profile_id]
         }
-        response = self.test_user_client.put(url, groups)
+        response = self.test_user_client.put(url, groups, format="json")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['team'], [user_profile_id])
@@ -695,7 +631,7 @@ class PermissionTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456",
             "password2": "123456"}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -714,7 +650,7 @@ class PermissionTests(SetupTests):
             "name": "Test Name 2",
             "organisation": org.id,
             "country": "test_country"}
-        response = test_user_client.put(url, data)
+        response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
 
@@ -724,7 +660,7 @@ class PermissionTests(SetupTests):
             "team": [owner_id],
             "viewers": [user_profile_id]
         }
-        response = self.test_user_client.put(url, groups)
+        response = self.test_user_client.put(url, groups, format="json")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['team'], [owner_id])
@@ -742,14 +678,14 @@ class PermissionTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456",
             "password2": "123456"}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
             "password": "123456"}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
         user_profile_id = response.json().get('user_profile_id')
@@ -761,7 +697,7 @@ class PermissionTests(SetupTests):
             "name": "Test Name 2",
             "organisation": org.id,
             "country": "test_country"}
-        response = test_user_client.put(url, data)
+        response = test_user_client.put(url, data, format="json")
         user_profile_id = response.json()['id']
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -789,7 +725,7 @@ class PermissionTests(SetupTests):
         response = anon_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("objective"), "objective1")
+        self.assertEqual(response.json().get("platforms")[0].get('name'), "platform1")
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY + Project.FIELDS_FOR_LOGGED_IN:
@@ -802,14 +738,14 @@ class PermissionTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456",
             "password2": "123456"}
-        response = self.client.post(url, data)
+        self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
             "password": "123456"}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
         user_profile_id = response.json().get('user_profile_id')
@@ -821,13 +757,13 @@ class PermissionTests(SetupTests):
             "name": "Test Name 2",
             "organisation": org.id,
             "country": "test_country"}
-        response = test_user_client.put(url, data)
+        test_user_client.put(url, data, format="json")
 
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("objective"), "objective1")
+        self.assertEqual(response.json().get("platforms")[0].get('name'), "platform1")
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
@@ -840,7 +776,7 @@ class PermissionTests(SetupTests):
         self.assertNotIn("last_version", response.json())
 
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url)
+        response = self.test_user_client.post(url, format="json")
         url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
