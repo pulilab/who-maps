@@ -8,6 +8,15 @@
   margin: 0 auto;
 }
 
+.navigation-area {
+  position: relative;
+  width: 310px;
+
+  navigation {
+    position:absolute;
+  }
+}
+
 .project-section {
   overflow: hidden;
   margin: 0 30px 30px;
@@ -134,7 +143,17 @@
     }
 
     .layout-row {
-      &.first,
+      position: relative;
+
+      &.first {
+        margin-top: 20px;
+      }
+
+      &.extra-margin,
+      &.chipper {
+        margin-bottom: 40px;
+      }
+
       + .layout-row {
         margin-top: 18px;
       }
@@ -197,6 +216,18 @@
         margin: 20px 0;
       }
 
+      &.small-top {
+        margin-top: 30px;
+      }
+
+      &.first {
+        margin-top: 0;
+
+        h6 {
+          padding: 0;
+        }
+      }
+
       ul {
         display: block;
         list-style: none;
@@ -229,8 +260,7 @@
     .add-more-item {
       .md-button {
         position: relative;
-        top: -8px;
-        margin-left: 10px;
+        margin: 0;
         padding-left: 8px;
         padding-right: 12px;
       }

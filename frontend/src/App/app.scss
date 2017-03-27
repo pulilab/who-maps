@@ -178,14 +178,16 @@ md-input-container.md-input-has-value.md-icon-float label:not(.md-no-float) {
   transform: translate3d(-36px, 0, 0) scale(0.75) !important;
 }
 
+md-input-container.md-input-focused .md-select-placeholder:not(.md-no-float) > span:first-child, md-input-container.md-input-has-placeholder .md-select-placeholder:not(.md-no-float) > span:first-child, md-input-container.md-input-has-value .md-select-placeholder:not(.md-no-float) > span:first-child {
+  transform: translate3d(-2px, -27px, 0) scale(0.75);
+}
+
 md-checkbox .md-container {
   top: 0;
   transform: none;
 }
 
-
 .md-button {
-
   &.wide {
     padding: $button-padding-wide;
   }
@@ -284,35 +286,79 @@ md-select {
 
 // Datepicker
 
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon > label:not(.md-no-float):not(.md-container-ignore) {
+  right: 0;
+  left: 44px;
+  margin-bottom: 2px;
+  width: calc(100% - 90px);
+}
+
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon.md-input-focused > label:not(.md-no-float):not(.md-container-ignore),
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon.md-input-has-value > label:not(.md-no-float):not(.md-container-ignore) {
+  width: 100%;
+}
+
 .md-datepicker-calendar-pane {
   .md-datepicker-input-mask {
     display: none;
   }
 }
 
+.md-datepicker-open {}
+
 md-datepicker {
+  margin-right: 0;
   padding: 2px 0;
 
-  .md-datepicker-button.md-icon-button{
+  .md-datepicker-button.md-icon-button {
+    top: -4px;
+    left: -8px;
     margin: 0;
+
+    + .md-datepicker-input-container {
+      margin-left: 0;
+    }
   }
 
-  .md-datepicker-triangle-button.md-icon-button{
-    top: -1px;
-    right: 5px;
+  .md-datepicker-triangle-button.md-icon-button {
+    top: 6px;
+    right: 6px;
+
     .md-datepicker-expand-triangle {
       border-top-color: $text-secondary;
     }
   }
 
-
   .md-datepicker-input-container {
+    float: left;
+    display: block;
+    width: calc(100% - 44px);
+
+    box-sizing: border-box;
     padding-bottom: 1px;
 
     input {
       font-size: 16px;
+      margin: 0 !important;
+      max-width: none;
+      height: auto !important;
     }
+  }
+}
 
+// Md-chip
+
+.md-contact-chips .md-chips md-chip {
+  padding: 0 30px 0 8px;
+  background-color: #52A0CE;
+  color: $color-white;
+
+  button.md-chip-remove md-icon {
+    min-width: 20px;
+    min-height: 20px;
+    width: 20px;
+    height: 20px;
+    color: $color-white;
   }
 }
 

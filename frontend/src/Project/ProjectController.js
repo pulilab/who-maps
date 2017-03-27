@@ -20,6 +20,7 @@ class ProjectController extends ProjectDefinition {
         this.state = $state;
 
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.toast = toast;
     }
 
@@ -30,7 +31,7 @@ class ProjectController extends ProjectDefinition {
     eventListeners() {
         this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
         this.EE.on('componentLoaded', this.automaticScroll, this);
-
+        this.EE.on('activateFieldSet', this.changeHash, this);
     }
 
     onInit() {
@@ -60,6 +61,12 @@ class ProjectController extends ProjectDefinition {
         }
     }
 
+    onDestroy() {
+        this.EE.removeListener('projectScrollTo', this.scrollToFieldSet);
+        this.EE.removeListener('componentLoaded', this.automaticScroll);
+        this.EE.removeListener('activateFieldSet', this.changeHash);
+    }
+
     automaticScroll(fieldSet) {
         const hash = window.location.hash.replace('#', '');
         if (hash === fieldSet) {
@@ -71,9 +78,15 @@ class ProjectController extends ProjectDefinition {
         const element = window.document.getElementById(hash);
         const toScroll = window.document.getElementsByClassName('main-content')[0];
         if (element) {
-            window.location.hash = hash;
+            this.EE.emit('activateFieldSet', hash);
             toScroll.scrollTop = element.offsetTop - 60;
         }
+    }
+
+    changeHash(hash) {
+        const l = window.location;
+        const url = `${l.protocol}//${l.host}${l.pathname}#${hash}`;
+        history.replaceState({}, '', url);
     }
 
     isViewer(project) {

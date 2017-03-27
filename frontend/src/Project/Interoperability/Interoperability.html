@@ -5,8 +5,61 @@
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
   </div>
 
-  <div class="section-wrapper">
-    <h6 class="first">Does your digital health project link to a digital HIS?</h6>
+    <div class="section-wrapper">
+      <div class="checklist small-margin first">
+        <h6>What interoperability data exchanges does your project use?</h6>
+        <ul>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="x1" class="md-primary">
+              Data exchange label 1
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="x2" class="md-primary">
+              Data exchange label 2
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="x3" class="md-primary">
+              Data exchange label 3
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="x4" class="md-primary">
+              Data exchange label 4
+            </md-checkbox>
+          </li>
+          <li>
+            <md-checkbox md-no-ink aria-label="" ng-model="x5" class="md-primary">
+              Data exchange label 5
+            </md-checkbox>
+          </li>
+        </ul>
+      </div>
+
+      <h6>Implementing partners</h6>
+
+      <div layout="row" >
+        <md-input-container md-no-float class="md-block" flex="50">
+          <input ng-model="impartners.value" placeholder="Partner's name">
+        </md-input-container>
+        <div class="add-more-item" flex>
+          <md-button class="md-primary" aria-label="Add more">
+            <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+          </md-button>
+        </div>
+      </div>
+
+      <h6>Government as investor?</h6>
+
+      <div layout="row" class="extra-margin">
+        <md-checkbox md-no-ink aria-label="" ng-model="investor.government" class="md-primary md-block">
+          Yes
+        </md-checkbox>
+      </div>
+
+      <h6 >Does your digital health project link to a digital HIS?</h6>
+
 
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
       <md-checkbox md-no-ink aria-label=""
@@ -24,7 +77,7 @@
       </md-input-container>
     </div>
 
-    <div class="checklist">
+    <div class="checklist small-top">
       <h6>What data standards does your digital health project use?</h6>
       <ul>
         <li ng-repeat="standard in vm.structure.interoperability_standards">

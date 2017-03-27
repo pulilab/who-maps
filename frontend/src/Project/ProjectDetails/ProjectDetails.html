@@ -61,7 +61,7 @@
     </div>
 
     <div layout="row">
-      <md-input-container class="md-icon-float md-block" flex="50">
+      <md-input-container class="md-icon-float md-block" flex="40">
         <label>Project country</label>
         <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
         <md-select ng-model="vm.project.country">
@@ -71,7 +71,15 @@
         </md-select>
       </md-input-container>
 
-      <md-datepicker ng-model="vm.project.started" flex></md-datepicker>
+      <md-input-container flex="30">
+          <label>Project start date</label>
+          <md-datepicker ng-model="vm.project.started"></md-datepicker>
+      </md-input-container>
+
+      <md-input-container flex="30">
+          <label>Project end date</label>
+          <md-datepicker ng-model="vm.project.ended"></md-datepicker>
+      </md-input-container>
     </div>
 
     <md-input-container class="md-block">
@@ -160,8 +168,8 @@
   <div class="section-wrapper alt-2">
     <h6 class="first">Add Team members (Editor role)</h6>
 
-    <div class="chipper">
-      <md-contact-chips
+    <div layout="row" class="chipper">
+      <md-contact-chips flex
               placeholder="Editors of this project"
               secondary-placeholder="add new team member"
               ng-model="vm.team"
@@ -176,8 +184,8 @@
 
     <h6>Add Viewers (only Viewer role)</h6>
 
-    <div class="chipper">
-      <md-contact-chips
+    <div layout="row" class="chipper">
+      <md-contact-chips flex
               placeholder="Add viewers"
               secondary-placeholder="add new viewer"
               ng-model="vm.viewers"

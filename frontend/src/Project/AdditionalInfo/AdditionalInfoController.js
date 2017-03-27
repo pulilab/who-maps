@@ -5,6 +5,7 @@ class AdditionalInfoController extends CollapsibleSet {
     constructor($scope, $element) {
         super($element, $scope, 'project');
         this.$onInit = this.defaultOnInit.bind(this);
+        this.$onDestroy = this.defaultOnDestroy.bind(this);
     }
 
 

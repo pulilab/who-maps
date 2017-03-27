@@ -11,14 +11,25 @@ class CollapsibleSet {
     }
 
     defaultOnInit() {
+        this.bindElementClick();
         this.elementId = this.element[0].getAttribute('id');
         this.elementMainSection = this.element[0].getElementsByClassName('project-section')[0];
-        this.EE.on('projectScrollTo', this.activateFieldSet, this);
+        this.EE.on('activateFieldSet', this.activateFieldSet, this);
         setTimeout(() => {
             this.EE.emit('componentLoaded', this.elementId);
         });
-        console.log(this);
         window.TEST = this.project;
+    }
+
+    defaultOnDestroy() {
+        this.EE.removeListener('projectScrollTo', this.activateFieldSet);
+    }
+
+    bindElementClick() {
+        const self = this;
+        this.element[0].addEventListener('click', ()=> {
+            self.EE.emit('activateFieldSet', this.elementId);
+        });
     }
 
     activateFieldSet(hash) {

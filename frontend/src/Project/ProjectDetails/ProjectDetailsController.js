@@ -13,6 +13,7 @@ class ProjectDetailsController extends CollapsibleSet {
         this.ns = new ProjectService();
         this.es = new EditProfileService();
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.defaultOnDestroy.bind(this);
     }
 
     bindFunctions() {
