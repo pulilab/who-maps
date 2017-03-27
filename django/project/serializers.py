@@ -34,12 +34,10 @@ class ProjectSerializer(serializers.Serializer):
     geographic_scope = serializers.CharField(required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     licenses = serializers.ListField(max_length=16, required=False)  # Can hold 'other' fields
-    started = serializers.CharField(max_length=64, required=False, allow_blank=True)
     donors = serializers.ListField(max_length=32)
     his_bucket = serializers.ListField(max_length=64)
     hsc_challenges = serializers.ListField(max_length=64)
     interventions = serializers.ListField(max_length=64)
-    project_end_date = serializers.CharField(max_length=64, required=False, allow_blank=True)
     government_investor = serializers.BooleanField()
     repository = serializers.URLField(required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
@@ -50,6 +48,8 @@ class ProjectSerializer(serializers.Serializer):
     coverage = CoverageSerializer(many=True, required=False)
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
     national_level_deployment = NDPSerializer(many=True, required=False)
+    start_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
 
 
 class GroupSerializer(serializers.ModelSerializer):

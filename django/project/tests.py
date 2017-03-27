@@ -80,12 +80,10 @@ class SetupTests(APITestCase):
             "national_level_deployment": [
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
             ],
-            "started": datetime.utcnow(),
             "donors": ["donor1", "donor2"],
             "his_bucket": ["tax1", "tax2"],
             "hsc_challenges": ["challange1", "challange2"],
             "interventions": ["int1", "int2", "int3"],
-            "project_end_date": datetime.utcnow(),
             "government_investor": True,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
@@ -95,6 +93,8 @@ class SetupTests(APITestCase):
                                        "http://example.org"],
             "interoperability_standards": ["CSD - Care Services Discovery"],
             "data_exchanges": ["de1", "de2"],
+            "start_date": str(datetime.today().date()),
+            "end_date": str(datetime.today().date())
         }
 
         url = reverse("project-crud")
@@ -270,48 +270,8 @@ class ProjectTests(SetupTests):
         self.assertIn("last_version_date", response.json())
 
     def test_retrieve_project_list_by_country(self):
-        project_data = {
-            "date": datetime.utcnow(),
-            "name": "Test Project2",
-            "organisation": self.org.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": ["area1", "area2"],
-            "geographic_scope": "somewhere",
-            "country": self.country_id,
-            "platforms": [{
-                "name": "platform1",
-                "strategies": ["strat1", "strat2"]
-            }, {
-                "name": "platform2",
-                "strategies": ["strat1", "strat9"]
-            }],
-            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "national_level_deployment": [
-                {"clients": 20000, "health_workers": 0, "facilities": 0},
-            ],
-            "started": datetime.utcnow(),
-            "donors": ["donor1", "donor2"],
-            "his_bucket": ["tax1", "tax2"],
-            "hsc_challenges": ["challange1", "challange2"],
-            "interventions": ["int1", "int2", "int3"],
-            "project_end_date": datetime.utcnow(),
-            "government_investor": True,
-            "implementing_partners": ["partner1", "partner2"],
-            "repository": "http://some.repo",
-            "mobile_application": "app1, app2",
-            "wiki": "http://wiki.org",
-            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
-                                       "http://example.org"],
-            "interoperability_standards": ["CSD - Care Services Discovery"],
-            "data_exchanges": ["de1", "de2"],
-        }
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project2"
         url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
 
@@ -323,48 +283,10 @@ class ProjectTests(SetupTests):
 
     def test_retrieve_project_list_by_country_all(self):
         # add a new project that I don't own
-        project_data = {
-            "date": datetime.utcnow(),
-            "name": "Test Project2",
-            "organisation": str(Organisation.objects.create(name="org2").id),
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": ["area1", "area2"],
-            "geographic_scope": "somewhere",
-            "country": self.country_id,
-            "platforms": [{
-                "name": "platform1",
-                "strategies": ["strat1", "strat2"]
-            }, {
-                "name": "platform2",
-                "strategies": ["strat1", "strat9"]
-            }],
-            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "national_level_deployment": [
-                {"clients": 20000, "health_workers": 0, "facilities": 0},
-            ],
-            "started": datetime.utcnow(),
-            "donors": ["donor1", "donor2"],
-            "his_bucket": ["tax1", "tax2"],
-            "hsc_challenges": ["challange1", "challange2"],
-            "interventions": ["int1", "int2", "int3"],
-            "project_end_date": datetime.utcnow(),
-            "government_investor": True,
-            "implementing_partners": ["partner1", "partner2"],
-            "repository": "http://some.repo",
-            "mobile_application": "app1, app2",
-            "wiki": "http://wiki.org",
-            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
-                                       "http://example.org"],
-            "interoperability_standards": ["CSD - Care Services Discovery"],
-            "data_exchanges": ["de1", "de2"],
-        }
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project2"
+        project_data['organisation'] = str(Organisation.objects.create(name="org2").id)
+
         url = reverse("project-crud")
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
