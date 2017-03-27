@@ -134,6 +134,7 @@
     }
 
     .layout-row {
+      position: relative;
       &.first,
       + .layout-row {
         margin-top: 18px;

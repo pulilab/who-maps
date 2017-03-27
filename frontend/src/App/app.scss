@@ -178,6 +178,10 @@ md-input-container.md-input-has-value.md-icon-float label:not(.md-no-float) {
   transform: translate3d(-36px, 0, 0) scale(0.75) !important;
 }
 
+md-input-container.md-input-focused .md-select-placeholder:not(.md-no-float) > span:first-child, md-input-container.md-input-has-placeholder .md-select-placeholder:not(.md-no-float) > span:first-child, md-input-container.md-input-has-value .md-select-placeholder:not(.md-no-float) > span:first-child {
+  transform: translate3d(-2px, -27px, 0) scale(0.75);
+}
+
 md-checkbox .md-container {
   top: 0;
   transform: none;
@@ -289,6 +293,11 @@ md-select {
   left: 44px;
   margin-bottom: 2px;
   width: calc(100% - 90px);
+}
+
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon.md-input-focused > label:not(.md-no-float):not(.md-container-ignore),
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon.md-input-has-value > label:not(.md-no-float):not(.md-container-ignore) {
+  width: 100%;
 }
 
 .md-datepicker-calendar-pane {
