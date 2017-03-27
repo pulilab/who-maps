@@ -54,12 +54,6 @@ describe('ProjectController', () => {
         expect(a['icon-axis1']).toBeDefined();
     });
 
-    it('should have a function that process the axis structure', () => {
-
-        expect(sc.processAxisStructure).toBeDefined();
-        expect(sc.axisStructure[0]).toBeDefined();
-    });
-
     it('should have a function that handle the server data loading', () => {
 
         sc.handleStructureLoad();
@@ -74,7 +68,6 @@ describe('ProjectController', () => {
         const e = document.createElement('div');
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
-        spyOn(sc, 'scroll');
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'createCoverageArray');
         spyOn(sc, 'saveForm');
