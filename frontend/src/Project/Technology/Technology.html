@@ -7,17 +7,7 @@
     <div class="section-wrapper">
       <md-input-container class="md-block" flex="50">
         <label>Technology deployment date</label>
-        <md-select ng-model="project.tech.deploydate">
-          <md-option value="Value 1">
-            Value 1
-          </md-option>
-          <md-option value="Value 2">
-            Value 2
-          </md-option>
-          <md-option value="Value 3">
-            Value 3
-          </md-option>
-        </md-select>
+        <md-datepicker ng-model="vm.tech.deployed"></md-datepicker>
       </md-input-container>
 
       <div class="checklist">

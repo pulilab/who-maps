@@ -187,9 +187,7 @@ md-checkbox .md-container {
   transform: none;
 }
 
-
 .md-button {
-
   &.wide {
     padding: $button-padding-wide;
   }
@@ -314,10 +312,11 @@ md-datepicker {
 
   .md-datepicker-button.md-icon-button {
     top: -4px;
+    left: -8px;
     margin: 0;
 
     + .md-datepicker-input-container {
-      margin-left: 4px;
+      margin-left: 0;
     }
   }
 
@@ -341,6 +340,7 @@ md-datepicker {
     input {
       font-size: 16px;
       margin: 0 !important;
+      max-width: none;
       height: auto !important;
     }
   }

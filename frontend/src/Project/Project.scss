@@ -135,7 +135,15 @@
 
     .layout-row {
       position: relative;
-      &.first,
+
+      &.first {
+        margin-top: 20px;
+      }
+
+      &.extra-margin {
+        margin-bottom: 40px;
+      }
+
       + .layout-row {
         margin-top: 18px;
       }
@@ -196,6 +204,14 @@
 
       &.small-margin {
         margin: 20px 0;
+      }
+
+      &.first {
+        margin-top: 0;
+
+        h6 {
+          padding: 0;
+        }
       }
 
       ul {
