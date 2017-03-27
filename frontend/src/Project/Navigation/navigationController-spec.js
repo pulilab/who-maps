@@ -4,36 +4,26 @@ import NavigationController from './NavigationController';
 
 let controller = {};
 
-const $anchorScroll = jasmine.createSpy('scroll');
-
+const EEmock = {
+    emit: jasmine.createSpy('emit')
+};
 
 describe('NavigationController', () => {
 
     beforeEach(() => {
-        controller = new NavigationController($anchorScroll);
+        controller = new NavigationController();
+        controller.EE = EEmock;
     });
 
-    it('should have a function that invoke scroll', () => {
-        expect(controller.locationHashChanged).toBeDefined();
-        controller.locationHashChanged();
-        expect(controller.scroll).toHaveBeenCalled();
+    it('should have a function that emit a scroll request', () => {
+        expect(controller.scrollTo).toBeDefined();
+        controller.scrollTo();
+        expect(controller.EE.emit).toHaveBeenCalled();
 
-    });
-    it('should have a function that is triggered when the hash change', () => {
-        controller.$onInit();
-        window.location.hash = Math.random().toString(36).substring(7);
-        expect(controller.scroll).toHaveBeenCalledTimes(1);
-
-    });
-    it('on destroy the bound events must not be triggerable anymore', () => {
-        controller.$onDestroy();
-        $anchorScroll.calls.reset();
-        window.location.hash = Math.random().toString(36).substring(7);
-        expect(controller.scroll).toHaveBeenCalledTimes(0);
     });
     it('should have a factory function', () => {
         expect(NavigationController.navigationFactory).toBeDefined();
-        const factored = NavigationController.navigationFactory()($anchorScroll);
+        const factored = NavigationController.navigationFactory()();
         expect(factored instanceof NavigationController).toBeTruthy();
     });
 

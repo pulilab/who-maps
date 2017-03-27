@@ -8,7 +8,7 @@ const component = {
     controllerAs: 'vm',
     name: 'interoperability',
     bindings: {
-        projects: '<',
+        project: '<',
         structure: '<'
     }
 };

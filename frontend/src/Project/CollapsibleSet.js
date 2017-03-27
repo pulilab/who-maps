@@ -1,10 +1,33 @@
 import _ from 'lodash';
 
 class CollapsibleSet {
-    constructor(element, collectionName) {
+    constructor(element, scope, collectionName) {
+        this.EE = window.EE;
         this.element = element;
+        this.scope = scope;
         this.toggleClass = 'collapsed';
+        this.activateClass = 'active';
         this.collectionName = collectionName;
+    }
+
+    defaultOnInit() {
+        this.elementId = this.element[0].getAttribute('id');
+        this.elementMainSection = this.element[0].getElementsByClassName('project-section')[0];
+        this.EE.on('projectScrollTo', this.activateFieldSet, this);
+        setTimeout(() => {
+            this.EE.emit('componentLoaded', this.elementId);
+        });
+        console.log(this);
+        window.TEST = this.project;
+    }
+
+    activateFieldSet(hash) {
+        if (hash === this.elementId) {
+            this.elementMainSection.classList.add(this.activateClass);
+        }
+        else {
+            this.elementMainSection.classList.remove(this.activateClass);
+        }
     }
 
     addChild(childName) {
@@ -16,8 +39,7 @@ class CollapsibleSet {
     }
 
     collapse() {
-        const elm = this.element[0].getElementsByClassName('project-section')[0];
-        elm.classList.toggle(this.toggleClass);
+        this.elementMainSection.classList.toggle(this.toggleClass);
     }
 
     findField(key) {

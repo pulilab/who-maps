@@ -1,30 +1,21 @@
+
 class NavigationController {
 
-    constructor($anchorScroll) {
-        this.scroll = $anchorScroll;
-        this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
-        this.locationHashChanged = this.locationHashChanged.bind(this);
+    constructor() {
+        this.EE = window.EE;
+        this.scrollTo = this.scrollTo.bind(this);
     }
 
-    onInit() {
-        window.addEventListener('hashchange', this.locationHashChanged);
-    }
-
-    onDestroy() {
-        window.removeEventListener('hashchange', this.locationHashChanged);
-    }
-
-    locationHashChanged() {
-        this.scroll();
+    scrollTo(hash) {
+        this.EE.emit('projectScrollTo', hash);
     }
 
     static navigationFactory() {
         require('./Navigation.scss');
-        function navigation($anchorScroll) {
-            return new NavigationController($anchorScroll);
+        function navigation() {
+            return new NavigationController();
         }
-        navigation.$inject = ['$anchorScroll'];
+        navigation.$inject = [];
         return navigation;
     }
 }

@@ -3,15 +3,10 @@ import CollapsibleSet from '../CollapsibleSet';
 class AdditionalInfoController extends CollapsibleSet {
 
     constructor($scope, $element) {
-        super($element, 'project');
-        this.scope = $scope;
-        this.$onInit = this.onInit.bind(this);
+        super($element, $scope, 'project');
+        this.$onInit = this.defaultOnInit.bind(this);
     }
 
-    onInit() {
-        console.log(this);
-        window.TEST = this.project;
-    }
 
     static additionalInfoControllerFactory() {
         require('./AdditionalInfo.scss');

@@ -1,266 +1,61 @@
 <div class="project-section section-interoperability" md-whiteframe="2">
 
-    <div class="section-title md-title">
-      5. Interoperability
-      <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  <div class="section-title md-title">
+    5. Interoperability
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  </div>
+
+  <div class="section-wrapper">
+    <h6 class="first">Does your digital health project link to a digital HIS?</h6>
+
+    <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
+      <md-checkbox md-no-ink aria-label=""
+                   ng-model="vm.project.interoperability_links[$index].selected"
+                   class="md-primary" flex>
+        {{link}}
+      </md-checkbox>
+      <md-input-container class="md-icon-float md-block" flex>
+        <label>Specify URL</label>
+        <md-icon><i class="material-icons">&#xE157;</i></md-icon>
+        <input ng-required="vm.project.interoperability_links[$index].selected"
+               ng-disabled="!vm.project.interoperability_links[$index].selected"
+               name="link.interop1"
+               ng-model="vm.project.interoperability_links[$index].link">
+      </md-input-container>
     </div>
 
-    <div class="section-wrapper">
-      <h6 class="first">Does your digital health project link to a digital HIS?</h6>
-
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b1" class="md-primary" flex>
-            Yes, links to a client registry.
+    <div class="checklist">
+      <h6>What data standards does your digital health project use?</h6>
+      <ul>
+        <li ng-repeat="standard in vm.structure.interoperability_standards">
+          <md-checkbox md-no-ink aria-label="{{standard}}"
+                       ng-checked="vm.checkboxChecked(standard, 'interoperability_standards')"
+                       ng-click="vm.checkboxToggle(standard, 'interoperability_standards')" class="md-primary">
+            {{standard}}
           </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop1" ng-model="project.link.interop1">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b2" class="md-primary" flex>
-            Yes, links to digital HMIS.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop2" ng-model="project.link.interop2">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b3" class="md-primary" flex>
-            Yes, links to a health worker registry.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop3" ng-model="project.link.interop3">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b4" class="md-primary" flex>
-            Yes, links to eLMIS.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop4" ng-model="project.link.interop4">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b5" class="md-primary" flex>
-            Yes, links to digital laboratory information system.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop5" ng-model="project.link.interop5">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b6" class="md-primary" flex>
-            Yes, links to a facility registry.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop6" ng-model="project.link.interop6">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b7" class="md-primary" flex>
-            Yes, links to a facility registry.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop7" ng-model="project.link.interop7">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b8" class="md-primary" flex>
-            Yes, links to a Shared Health Record.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop8" ng-model="project.link.interop8">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b9" class="md-primary" flex>
-            Yes, links to a Terminology Service.
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop9" ng-model="project.link.interop9">
-          </md-input-container>
-        </div>
-        <div layout="row">
-          <md-checkbox md-no-ink aria-label="" ng-model="b10" class="md-primary" flex>
-            Other
-          </md-checkbox>
-          <md-input-container class="md-icon-float md-block" flex>
-            <label>Specify URL</label>
-            <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-            <input required name="link.interop10" ng-model="project.link.interop10">
-          </md-input-container>
-        </div>
-
-        <div class="checklist">
-          <h6>What data standards does your digital health project use?</h6>
-          <ul>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c1" class="md-primary">
-                ADX – Aggregate Data Exchange
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c2" class="md-primary">
-                ATNA - Audit Trail and Node Authentication
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c3" class="md-primary">
-                BPPC - Basic Patient Privacy Consents
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c4" class="md-primary">
-                CDA – Clinical Document Architecture
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c5" class="md-primary">
-                CSD – Care Services Discovery
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c6" class="md-primary">
-                DICOM
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c7" class="md-primary">
-                GS1
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c8" class="md-primary">
-                HL7 v2
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c9" class="md-primary">
-                HL7 v3
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c10" class="md-primary">
-                HL7 FHIR Value Set & Sharing Value Sets (SVS)
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c11" class="md-primary">
-                mACM - Mobile Alert Communication Management
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c12" class="md-primary">
-                MHD – Mobile Access to Health Documents
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c13" class="md-primary">
-                PIX or PIXm - (Mobile) Patient Identifier Cross Reference
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c14" class="md-primary">
-                PDQ or PDQm – (Mobile) Patient Demographics Query
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c15" class="md-primary">
-                SDMX - Statistical Data and Metadata Exchange
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c16" class="md-primary">
-                XDS - Cross-Enterprise Document Sharing
-              </md-checkbox>
-            </li>
-            <li>
-              <md-checkbox md-no-ink aria-label="" ng-model="c17" class="md-primary">
-                XUA - Cross-Enterprise User Assertion
-              </md-checkbox>
-            </li>
-            <li>
+        </li>
+        <li>
               <span layout="row">
-                <md-checkbox md-no-ink aria-label="" ng-model="c18" class="md-primary" flex="nogrow"></md-checkbox>
+                <md-checkbox md-no-ink aria-label="other-standard"
+                             ng-model="vm.specifyOtherStandard"
+                             class="md-primary"
+                             flex="nogrow">
+                </md-checkbox>
                 <md-input-container class="md-block" flex>
                   <label>Specify other</label>
-                  <input required name="data.c18" ng-model="project.data.c18" disabled>
+                  <input ng-disabled="!vm.specifyOtherStandard"
+                         ng-required="vm.specifyOtherStandard"
+                         name="data.c18" ng-model="vm.project.interoperability_standards.custom">
                 </md-input-container>
               </span>
-            </li>
-          </ul>
-        </div>
-
-        <h6>Government as investor?</h6>
-        <md-checkbox md-no-ink aria-label="" ng-model="investor.government" class="md-primary">
-          Yes
-        </md-checkbox>
+        </li>
+      </ul>
     </div>
 
-
-    <!-- <h5 flex="100">Does your digital health project link to a digital Health Information System *HIS?</h5>
-
-
-    <div class="interoperability-links" layout="column"  >
-        <div class="interoperability" layout="row" layout-align="left center"  ng-repeat="link in vm.structure.interoperability_links">
-            <div flex="40">
-                <md-checkbox
-                        class="md-primary"
-                        ng-model="vm.project.interoperability_links[$index].selected">
-                    {{link}}
-                </md-checkbox>
-            </div>
-
-            <div flex="60">
-                <md-input-container flex="100"  layout-fill>
-                    <label>Specify URL:</label>
-                    <input
-                            type="text"
-                            ng-pattern="vm.urlRegex"
-                            name="link_{{$index}}" id="interoperabilityLink_{{$index}}"
-                            ng-disabled="!vm.project.interoperability_links[$index].selected"
-                            ng-model="vm.project.interoperability_links[$index].link">
-                    <div ng-messages="vm.newProjectForm['link_' + $index].$error">
-                        <div ng-message="pattern">This should be a valid link</div>
-                    </div>
-                </md-input-container>
-            </div>
-        </div>
-
-    </div>
-
-    <h5 flex="100">What data standards does your digital health project use?</h5>
-    <div class="interoperability-standards" layout="row" layout-wrap>
-        <div class="interoperability" layout="column" layout-align="center left" flex="33"  ng-repeat="standard in vm.structure.interoperability_standards">
-            <md-checkbox
-                    ng-checked="vm.interoperabilityStandardsChecked(standard)"
-                    ng-click="vm.interoperabilityStandardsChanged(standard)"
-            >
-                {{standard}}
-            </md-checkbox>
-        </div>
-        <md-input-container class="specify-other">
-            <input type="text" placeholder="Specify other" ng-model="vm.project.interoperability_standards.custom"/>
-        </md-input-container>
-
-    </div> -->
+    <h6>Government as investor?</h6>
+    <md-checkbox md-no-ink aria-label="" ng-model="investor.government" class="md-primary">
+      Yes
+    </md-checkbox>
+  </div>
 
 </div>

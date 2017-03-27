@@ -23,7 +23,7 @@ import './app.scss';
 
 
 const moduleName = 'app';
-const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider) => {
     $stateProvider
 
         .state('base', {
@@ -169,6 +169,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
 
     $urlRouterProvider.otherwise('/landing');
     $locationProvider.html5Mode(true);
+    $anchorScrollProvider.disableAutoScrolling();
 };
 
 function handleStateChange(event, toState) {
@@ -207,7 +208,7 @@ const run = ($rootScope, $state) => {
 run.$inject = ['$rootScope', '$state'];
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$anchorScrollProvider'];
 
 angular.module(moduleName,
     [

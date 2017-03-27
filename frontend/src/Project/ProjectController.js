@@ -10,7 +10,7 @@ const wholeCountryName = ' ENTIRE COUNTRY';
 
 class ProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, Upload, $anchorScroll, $location, CommonService, structure, toast) {
+    constructor($scope, $state, Upload, CommonService, toast) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.es = new EditProfileService();
@@ -18,31 +18,30 @@ class ProjectController extends ProjectDefinition {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
-        this.location = $location;
-        this.scroll = $anchorScroll;
-        this.scroll.yOffset = 140;
-        this.axisStructure = this.processAxisStructure(structure);
+
         this.$onInit = this.onInit.bind(this);
         this.toast = toast;
     }
 
     bindFunctions() {
-        this.setStrategy = this.setStrategy.bind(this);
-        this.pipelinesCallback = this.pipelinesCallback.bind(this);
         this.log = this.log.bind(this);
+    }
+
+    eventListeners() {
+        this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
+        this.EE.on('componentLoaded', this.automaticScroll, this);
+
     }
 
     onInit() {
         this.bindFunctions();
+        this.eventListeners();
         if (this.inventoryMode) {
             this.createBlurHandle();
         }
-        this.urlRegex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
         this.districtList = [];
         this.dataLoaded = false;
-        this.sentForm = false;
         this.handleStructureLoad();
-        this.createDateStructure();
         this.users = this.cs.usersProfiles;
 
         this.team = [];
@@ -59,17 +58,22 @@ class ProjectController extends ProjectDefinition {
                     this.viewers = groups.data.viewers;
                 });
         }
-
-        if (this.inventoryMode) {
-            this.project.organisation = void 0;
-        }
-
     }
 
-    createDateStructure() {
-        this.availableYears = _.range(2005, 2018);
-        this.availableMonths = ['January', 'February', 'March', 'April', 'May',
-            'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    automaticScroll(fieldSet) {
+        const hash = window.location.hash.replace('#', '');
+        if (hash === fieldSet) {
+            this.EE.emit('projectScrollTo', hash);
+        }
+    }
+
+    scrollToFieldSet(hash) {
+        const element = window.document.getElementById(hash);
+        const toScroll = window.document.getElementsByClassName('main-content')[0];
+        if (element) {
+            window.location.hash = hash;
+            toScroll.scrollTop = element.offsetTop - 60;
+        }
     }
 
     isViewer(project) {
@@ -89,14 +93,6 @@ class ProjectController extends ProjectDefinition {
             templates[key] = templateRequire(item);
         });
         return templates;
-    }
-
-    processAxisStructure(structure) {
-        const icons = this.importIconTemplates();
-        _.forEach(structure, element => {
-            element.img = icons[element.image];
-        });
-        return structure;
     }
 
     handleStructureLoad() {
@@ -226,16 +222,6 @@ class ProjectController extends ProjectDefinition {
             });
         });
         this.project.coverage = newCoverage.length > 0 ? newCoverage : [{}];
-    }
-
-
-    pipelinesCallback(data) {
-        this.project.pipelines.standard = [];
-        this.project.pipelines.standard.push(data);
-    }
-
-    setStrategy(strategy) {
-        this.project.strategy = strategy;
     }
 
     checkErrors(field) {
@@ -428,70 +414,6 @@ class ProjectController extends ProjectDefinition {
         this.newProjectForm[key].customError.push(error);
     }
 
-    checkName() {
-        this.handleCustomError('name');
-        this.ns.autocompleteProjectName(this.project.name)
-            .then(result => {
-                _.forEach(result, project => {
-                    project.isOwn = _.find(this.cs.projectList, pj => {
-                        return pj.id === project.id;
-                    });
-                });
-                this.similarProject = result;
-                if (result && result[0] && result[0].name.toLowerCase() === this.project.name.toLowerCase()) {
-                    this.setCustomError('name', 'Project name is not unique');
-                }
-                this.scope.$evalAsync();
-            });
-    }
-
-    createBlurHandle() {
-
-        this.scope.$$postDigest(() => {
-
-            document.querySelector('#orgauto')
-                .querySelector('input')
-                .addEventListener('blur', () => {
-                    if (!this.latestOrgs.some(org => org.name === this.searchText)) {
-                        this.addOrganisation(this.searchText);
-                    }
-                });
-        });
-    }
-
-    openSimilarProject(project, event) {
-        event.preventDefault();
-        if (project.isOwn) {
-            this.state.go('dashboard', { appName: project.id });
-        }
-        else {
-            this.state.go('public-dashboard', { appName: project.id });
-        }
-
-    }
-
-    focusSpecifyField(index) {
-        const field = document.getElementById(`interoperabilityLink_${index}`);
-        if (!field.value) {
-            this.project.interoperability_links[index] = 'http://';
-        }
-        field.focus();
-    }
-
-    interoperabilityLinkBlur(index) {
-        if (this.project.interoperability_links[index] === 'http://') {
-            this.project.interoperability_links[index] = null;
-        }
-    }
-
-    organisationSearch(name) {
-        const getOrgsPromise  = this.es.autocompleteOrganization(name);
-        getOrgsPromise.then(data => {
-            this.latestOrgs = data;
-        });
-        return getOrgsPromise;
-    }
-
     addOrganisation(name) {
         return this.es.addOrganization(name)
             .then(response => {
@@ -504,13 +426,11 @@ class ProjectController extends ProjectDefinition {
 
     static newProjectFactory() {
         require('./Project.scss');
-        const structure = require('./Resources/structure.json');
         const CommonService =  require('../Common/CommonServices');
-        function newProject($scope, $state, Upload, $anchorScroll, $location, $mdToast) {
-            return new ProjectController($scope, $state, Upload, $anchorScroll,
-                $location, CommonService, structure, $mdToast);
+        function newProject($scope, $state, Upload, $mdToast) {
+            return new ProjectController($scope, $state, Upload, CommonService, $mdToast);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload', '$anchorScroll', '$location', '$mdToast'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast'];
         return newProject;
     }
 }

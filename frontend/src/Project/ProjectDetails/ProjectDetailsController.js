@@ -8,11 +8,10 @@ const wholeCountryName = ' ENTIRE COUNTRY';
 class ProjectDetailsController extends CollapsibleSet {
 
     constructor($scope, $element) {
-        super($element, 'project');
+        super($element, $scope, 'project');
         this.ccs = require('../../Common/CustomCountryService');
         this.ns = new ProjectService();
         this.es = new EditProfileService();
-        this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
     }
 
@@ -23,6 +22,7 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     onInit() {
+        this.defaultOnInit();
         this.bindFunctions();
         this.watchers();
         this.getStructureData();

@@ -34,10 +34,6 @@ const cs = {
     updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve())
 };
 
-const $anchorScroll = {
-    scroll: jasmine.createSpy('scroll').and.returnValue(true)
-};
-const $location = {};
 const upload = {};
 
 const structure = require('./Resources/structure.json');
@@ -45,7 +41,7 @@ const structure = require('./Resources/structure.json');
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new NewProjectController($scope, $state, upload, $anchorScroll, $location, cs, structure);
+        sc = new NewProjectController($scope, $state, upload, cs, structure);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
