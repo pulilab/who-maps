@@ -17,14 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
 
-from project.views import create_from_file
-
 admin.site.site_header = 'Digital Health Atlas'
 API_TITLE = 'Digital Health Atlas API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
-    # url(r"^admin/projects/bulk/$", view=create_from_file, name="project-bulk"),
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
