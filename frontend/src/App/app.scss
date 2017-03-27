@@ -346,6 +346,22 @@ md-datepicker {
   }
 }
 
+// Md-chip
+
+.md-contact-chips .md-chips md-chip {
+  padding: 0 30px 0 8px;
+  background-color: #52A0CE;
+  color: $color-white;
+
+  button.md-chip-remove md-icon {
+    min-width: 20px;
+    min-height: 20px;
+    width: 20px;
+    height: 20px;
+    color: $color-white;
+  }
+}
+
 // Md-menu
 
 md-menu-content {

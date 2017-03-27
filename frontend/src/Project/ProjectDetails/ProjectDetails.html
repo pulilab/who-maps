@@ -168,8 +168,8 @@
   <div class="section-wrapper alt-2">
     <h6 class="first">Add Team members (Editor role)</h6>
 
-    <div class="chipper">
-      <md-contact-chips
+    <div layout="row" class="chipper">
+      <md-contact-chips flex
               placeholder="Editors of this project"
               secondary-placeholder="add new team member"
               ng-model="vm.team"
@@ -184,8 +184,8 @@
 
     <h6>Add Viewers (only Viewer role)</h6>
 
-    <div class="chipper">
-      <md-contact-chips
+    <div layout="row" class="chipper">
+      <md-contact-chips flex
               placeholder="Add viewers"
               secondary-placeholder="add new viewer"
               ng-model="vm.viewers"
