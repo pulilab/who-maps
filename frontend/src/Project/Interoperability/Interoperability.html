@@ -39,21 +39,23 @@
 
       <h6>Implementing partners</h6>
 
-      <div layout="row" >
+      <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
         <md-input-container md-no-float class="md-block" flex="50">
-          <input ng-model="impartners.value" placeholder="Partner's name">
+          <input ng-model="partner.value" placeholder="Partner's name">
         </md-input-container>
         <div class="add-more-item" flex>
-          <md-button class="md-primary" aria-label="Add more">
-            <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
-          </md-button>
+          <md-button class="md-primary" aria-label="Add more"
+                   ng-show="vm.showAddMore($index, vm.project.implementing_partners)"
+                   ng-click="vm.addChild('implementing_partners')">
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+        </md-button>
         </div>
       </div>
 
       <h6>Government as investor?</h6>
 
       <div layout="row" class="extra-margin">
-        <md-checkbox md-no-ink aria-label="" ng-model="investor.government" class="md-primary md-block">
+        <md-checkbox md-no-ink aria-label="" ng-model="vm.project.government_investor" class="md-primary md-block">
           Yes
         </md-checkbox>
       </div>
@@ -106,7 +108,7 @@
     </div>
 
     <h6>Government as investor?</h6>
-    <md-checkbox md-no-ink aria-label="" ng-model="investor.government" class="md-primary">
+    <md-checkbox md-no-ink aria-label="" ng-model="vm.project.government_investor" class="md-primary">
       Yes
     </md-checkbox>
   </div>

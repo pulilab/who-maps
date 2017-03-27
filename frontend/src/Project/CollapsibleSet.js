@@ -44,9 +44,16 @@ class CollapsibleSet {
     addChild(childName) {
         this[this.collectionName][childName].push({});
     }
+    removeChild(index, childName) {
+        return this[this.collectionName][childName].splice(index, 1);
+    }
 
     showAddMore(index, collection) {
         return index === (collection.length - 1);
+    }
+
+    showRemove(index, collection) {
+        return index !== (collection.length - 1);
     }
 
     collapse() {

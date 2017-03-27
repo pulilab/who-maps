@@ -1,154 +1,162 @@
 <div class="project-section section-strategy" md-whiteframe="2">
-    <div class="section-title md-title">
-      2. Strategies
-      <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
-    </div>
+  <div class="section-title md-title">
+    2. Strategies
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  </div>
 
-    <div class="section-wrapper">
-      <h6 class="first">Add one or more platform and related strategies:</h6>
+  <div class="section-wrapper">
+    <h6 class="first">Add one or more platform and related strategies:</h6>
 
-      <div class="input-group last">
-        <div layout="column">
-          <div layout="row">
-            <md-input-container class="md-block" flex="50">
-              <label>Platform</label>
-              <md-select ng-model="project.platform">
-                <md-option value="Platform 1">
-                  Platform 1
-                </md-option>
-                <md-option value="Platform 2">
-                  Platform 2
-                </md-option>
-                <md-option value="Platform 3">
-                  Platform 3
-                </md-option>
-              </md-select>
-            </md-input-container>
+    <div class="input-group" ng-class="{last: $last}" ng-repeat="platform in vm.project.platforms">
+      <div layout="column" >
+        <div layout="row">
+          <md-input-container class="md-block" flex="50">
+            <label>Platform</label>
+            <md-select ng-model="project.platform">
+              <md-option value="Platform 1">
+                Platform 1
+              </md-option>
+              <md-option value="Platform 2">
+                Platform 2
+              </md-option>
+              <md-option value="Platform 3">
+                Platform 3
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout="row">
+          <md-input-container class="md-block" flex="50">
+            <label>Strategies (select multiple)</label>
+            <md-select ng-model="project.strategies">
+              <md-option value="Strategy 1">
+                Strategy 1
+              </md-option>
+              <md-option value="Strategy 2">
+                Strategy 2
+              </md-option>
+              <md-option value="Strategy 3">
+                Strategy 3
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <div class="add-more-item" flex>
+            <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showAddMore($index, vm.project.platforms)"
+                       ng-click="vm.addChild('platforms')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+            </md-button>
+            <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showRemove($index, vm.project.platforms)"
+                       ng-click="vm.removeChild($index, 'platforms')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Remove
+            </md-button>
           </div>
-          <div layout="row">
-            <md-input-container class="md-block" flex="50">
-              <label>Strategies (select multiple)</label>
-              <md-select ng-model="project.strategies">
-                <md-option value="Strategy 1">
-                  Strategy 1
-                </md-option>
-                <md-option value="Strategy 2">
-                  Strategy 2
-                </md-option>
-                <md-option value="Strategy 3">
-                  Strategy 3
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <div class="add-more-item" flex>
-              <md-button class="md-primary" aria-label="Add more">
-                <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
-              </md-button>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="section-wrapper alt">
-      <div layout="row" class="first">
-        <md-input-container class="md-block" flex>
-          <label>HIS buckets (select from list)</label>
-          <md-select ng-model="project.strategy.his">
-            <md-option value="Strategy 1">
-              Strategy 1
-            </md-option>
-            <md-option value="Strategy 2">
-              Strategy 2
-            </md-option>
-            <md-option value="Strategy 3">
-              Strategy 3
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
-
-      <div layout="row">
-        <md-input-container class="md-block" flex>
-          <label>HSC challenges (select from list)</label>
-          <md-select ng-model="project.strategy.hsc">
-            <md-option value="Strategy 1">
-              Strategy 1
-            </md-option>
-            <md-option value="Strategy 2">
-              Strategy 2
-            </md-option>
-            <md-option value="Strategy 3">
-              Strategy 3
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
-
-      <div layout="row">
-        <md-input-container class="md-block" flex>
-          <label>Essential interventions (select from list)</label>
-          <md-select ng-model="project.strategy.interventions">
-            <md-option value="Strategy 1">
-              Strategy 1
-            </md-option>
-            <md-option value="Strategy 2">
-              Strategy 2
-            </md-option>
-            <md-option value="Strategy 3">
-              Strategy 3
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
+  <div class="section-wrapper alt">
+    <div layout="row" class="first">
+      <md-input-container class="md-block" flex>
+        <label>HIS buckets (select from list)</label>
+        <md-select ng-model="project.strategy.his">
+          <md-option value="Strategy 1">
+            Strategy 1
+          </md-option>
+          <md-option value="Strategy 2">
+            Strategy 2
+          </md-option>
+          <md-option value="Strategy 3">
+            Strategy 3
+          </md-option>
+        </md-select>
+      </md-input-container>
     </div>
 
-
-    <!-- <div class="strat-cont">
-        <ssmenu
-                class="his-buckets"
-                options="vm.structure.strategies"
-                on-close-callback="vm.setStrategy"
-                multiple="true"
-                ng-model="vm.project.strategy"
-                placeholder="HIS Buckets"
-                hint="What is your mHealth project strategy to address the health need?">
-        </ssmenu>
-    </div>
-    <div class="">
-        <ssmenu
-                class="strategies"
-                options="vm.structure.strategies"
-                on-close-callback="vm.setStrategy"
-                multiple="true"
-                ng-model="vm.project.strategy"
-                placeholder="Digital Health strategies"
-                hint="What is your mHealth project strategy to address the health need?">
-        </ssmenu>
+    <div layout="row">
+      <md-input-container class="md-block" flex>
+        <label>HSC challenges (select from list)</label>
+        <md-select ng-model="project.strategy.hsc">
+          <md-option value="Strategy 1">
+            Strategy 1
+          </md-option>
+          <md-option value="Strategy 2">
+            Strategy 2
+          </md-option>
+          <md-option value="Strategy 3">
+            Strategy 3
+          </md-option>
+        </md-select>
+      </md-input-container>
     </div>
 
-    <div class="">
-        <ssmenu
-                class="hsc-challenges"
-                options="vm.structure.strategies"
-                on-close-callback="vm.setStrategy"
-                multiple="true"
-                ng-model="vm.project.strategy"
-                placeholder="HSC challenges"
-                hint="What is your mHealth project strategy to address the health need?">
-        </ssmenu>
+    <div layout="row">
+      <md-input-container class="md-block" flex>
+        <label>Essential interventions (select from list)</label>
+        <md-select ng-model="project.strategy.interventions">
+          <md-option value="Strategy 1">
+            Strategy 1
+          </md-option>
+          <md-option value="Strategy 2">
+            Strategy 2
+          </md-option>
+          <md-option value="Strategy 3">
+            Strategy 3
+          </md-option>
+        </md-select>
+      </md-input-container>
     </div>
+  </div>
 
-    <div class="">
-        <ssmenu
-                class="essential-interventions"
-                options="vm.structure.strategies"
-                on-close-callback="vm.setStrategy"
-                multiple="true"
-                ng-model="vm.project.strategy"
-                placeholder="Essential Interventions"
-                hint="What is your mHealth project strategy to address the health need?">
-        </ssmenu>
-    </div> -->
+
+  <!-- <div class="strat-cont">
+      <ssmenu
+              class="his-buckets"
+              options="vm.structure.strategies"
+              on-close-callback="vm.setStrategy"
+              multiple="true"
+              ng-model="vm.project.strategy"
+              placeholder="HIS Buckets"
+              hint="What is your mHealth project strategy to address the health need?">
+      </ssmenu>
+  </div>
+  <div class="">
+      <ssmenu
+              class="strategies"
+              options="vm.structure.strategies"
+              on-close-callback="vm.setStrategy"
+              multiple="true"
+              ng-model="vm.project.strategy"
+              placeholder="Digital Health strategies"
+              hint="What is your mHealth project strategy to address the health need?">
+      </ssmenu>
+  </div>
+
+  <div class="">
+      <ssmenu
+              class="hsc-challenges"
+              options="vm.structure.strategies"
+              on-close-callback="vm.setStrategy"
+              multiple="true"
+              ng-model="vm.project.strategy"
+              placeholder="HSC challenges"
+              hint="What is your mHealth project strategy to address the health need?">
+      </ssmenu>
+  </div>
+
+  <div class="">
+      <ssmenu
+              class="essential-interventions"
+              options="vm.structure.strategies"
+              on-close-callback="vm.setStrategy"
+              multiple="true"
+              ng-model="vm.project.strategy"
+              placeholder="Essential Interventions"
+              hint="What is your mHealth project strategy to address the health need?">
+      </ssmenu>
+  </div> -->
 
 </div>

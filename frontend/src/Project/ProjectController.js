@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './ProjectService';
-import ProjectDefinition from '../Common/ProjectDefinition';
+import ProjectDefinition from './ProjectDefinition';
 import EditProfileService from '../Common/EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
@@ -116,19 +116,28 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleDataLoad(data) {
+
         this.createCoverageKeys(data);
         this.convertArraytoStandardCustomObj(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
-        this.project.started = moment(this.project.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
-        this.project.implementation_dates =
-            moment(this.project.implementation_dates, 'YYYY-MM-DDTHH:mm:ss.SSSZ').toDate();
+        this.project.started = this.convertDate(this.project.started);
+        this.project.implementation_dates = this.convertDate(this.project.implementation_dates);
+        this.project.project_end_date = this.convertDate(this.project.project_end_date);
 
         this.unfoldCoverage();
         this.assignDefaultCustom();
         this.mergeNationalLevelWithDistrictCoverage();
         this.scope.$evalAsync();
 
+    }
+
+    convertDate(date) {
+        const dateFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+        if (date) {
+            return moment(date, dateFormat).toDate();
+        }
+        return undefined;
     }
 
 
@@ -237,12 +246,6 @@ class ProjectController extends ProjectDefinition {
         this.project.coverage = newCoverage.length > 0 ? newCoverage : [{}];
     }
 
-    checkErrors(field) {
-        if (this.newProjectForm && this.newProjectForm[field]) {
-            return !_.isEmpty(this.newProjectForm[field].$error);
-        }
-        return true;
-    }
 
     createDateFields(processedForm) {
         processedForm.started = moment(this.project.started).toJSON();
@@ -368,9 +371,9 @@ class ProjectController extends ProjectDefinition {
         collection.licenses = this.project.licenses;
 
         collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
+        collection.licenses = this.concatCustom(collection.licenses);
         collection.health_focus_areas = this.concatCustom(collection.health_focus_areas);
         collection.interoperability_links = _.toArray(collection.interoperability_links);
-        collection.pipelines = this.concatCustom(collection.pipelines);
         collection.donors = this.unfoldObjects(collection.donors);
         collection.wiki = this.project.wiki;
         collection.repository = this.project.repository;
@@ -425,15 +428,6 @@ class ProjectController extends ProjectDefinition {
     setCustomError(key, error) {
         this.newProjectForm[key].$setValidity('custom', false);
         this.newProjectForm[key].customError.push(error);
-    }
-
-    addOrganisation(name) {
-        return this.es.addOrganization(name)
-            .then(response => {
-                this.userProfile.organisation = response;
-                this.project.organisation = response;
-                this.scope.$evalAsync();
-            });
     }
 
 
