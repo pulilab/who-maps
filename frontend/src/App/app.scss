@@ -284,35 +284,56 @@ md-select {
 
 // Datepicker
 
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon > label:not(.md-no-float):not(.md-container-ignore) {
+  right: 0;
+  left: 44px;
+  margin-bottom: 2px;
+  width: calc(100% - 90px);
+}
+
 .md-datepicker-calendar-pane {
   .md-datepicker-input-mask {
     display: none;
   }
 }
 
+.md-datepicker-open {}
+
 md-datepicker {
+  margin-right: 0;
   padding: 2px 0;
 
-  .md-datepicker-button.md-icon-button{
+  .md-datepicker-button.md-icon-button {
+    top: -4px;
     margin: 0;
+
+    + .md-datepicker-input-container {
+      margin-left: 4px;
+    }
   }
 
-  .md-datepicker-triangle-button.md-icon-button{
-    top: -1px;
-    right: 5px;
+  .md-datepicker-triangle-button.md-icon-button {
+    top: 6px;
+    right: 6px;
+
     .md-datepicker-expand-triangle {
       border-top-color: $text-secondary;
     }
   }
 
-
   .md-datepicker-input-container {
+    float: left;
+    display: block;
+    width: calc(100% - 44px);
+
+    box-sizing: border-box;
     padding-bottom: 1px;
 
     input {
       font-size: 16px;
+      margin: 0 !important;
+      height: auto !important;
     }
-
   }
 }
 

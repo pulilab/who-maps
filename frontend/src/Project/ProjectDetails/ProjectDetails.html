@@ -71,7 +71,15 @@
         </md-select>
       </md-input-container>
 
-      <md-datepicker ng-model="vm.project.started" flex></md-datepicker>
+      <md-input-container flex="25">
+          <label>Project start date</label>
+          <md-datepicker ng-model="vm.project.started"></md-datepicker>
+      </md-input-container>
+
+      <md-input-container flex="25">
+          <label>Project end date</label>
+          <md-datepicker ng-model="vm.project.ended"></md-datepicker>
+      </md-input-container>
     </div>
 
     <md-input-container class="md-block">
