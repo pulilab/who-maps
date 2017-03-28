@@ -247,6 +247,10 @@
         .md-label {
           display: block;
         }
+
+        md-checkbox + md-input-container {
+          margin-left: 0 !important;
+        }
       }
     }
 
