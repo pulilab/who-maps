@@ -118,4 +118,5 @@ project_structure = {
         "his_bucket": ["a", "b", "c"],
         "hsc_challenges": ["a", "b", "c"],
         "interventions": ["a", "b", "c"],
+        "data_exchanges": ["a", "b", "c"]
 }
