@@ -65,7 +65,7 @@
 
     <h6>What is the current coverage of your project?</h6>
 
-    <div class="input-group" ng-repeat="cov in vm.project.coverage">
+    <div class="input-group" ng-class="{last: $last}" ng-repeat="cov in vm.project.coverage">
       <div layout="column">
 
         <div layout="row">

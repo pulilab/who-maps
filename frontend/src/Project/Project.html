@@ -43,24 +43,24 @@
                         project="vm.project"
                         structure="vm.structure">
                 </interoperability>
+
+                <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
+                    <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
+                    <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                                 current-project="vm.isCurrentProject(p.id)"
+                                 viewer="vm.isViewer(p)"
+                                 member="vm.isMember(p)"
+                                 show-details="true"
+                                 show-logo="true"
+                                 ng-model="p">
+
+                    </projectcomp>
+                </section>
             </div>
             <div class="navigation-area" layout="column">
                 <navigation edit-mode="vm.editMode"></navigation>
             </div>
         </form>
-
-        <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
-            <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
-            <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                         current-project="vm.isCurrentProject(p.id)"
-                         viewer="vm.isViewer(p)"
-                         member="vm.isMember(p)"
-                         show-details="true"
-                         show-logo="true"
-                         ng-model="p">
-
-            </projectcomp>
-        </section>
     </div>
 
     <disclaimer></disclaimer>

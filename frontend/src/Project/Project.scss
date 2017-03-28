@@ -1,19 +1,28 @@
 @import '../variables';
 @import '../mixins';
 
-.new-edit-project {}
+.new-edit-project {
+  min-width: $page-min-width;
+}
 
 .main-section {
-  max-width: $page-min-width;
+  max-width: $page-max-width;
   margin: 0 auto;
 }
 
 .navigation-area {
   position: relative;
-  width: 310px;
+  width: $navigation-width + 30px;
+  min-width: $navigation-width + 30px;
 
   navigation {
-    position:absolute;
+    position: absolute;
+    top: 0;
+    width: $navigation-width;
+
+    @media only screen and (max-width: $page-min-width) {
+      right: 30px;
+    }
   }
 }
 
@@ -59,7 +68,7 @@
 
   &.project-navigation {
     margin-left: 0;
-    width: $navigation-width;
+    width: 100%;
 
     .section-title {
       text-align: center;
@@ -189,16 +198,12 @@
       box-sizing: border-box;
       display: block;
       width: 100%;
-      margin: 20px 0 40px 2px;
+      margin: 20px 0 20px 2px;
       padding: 20px 0 0 20px;
       border-left: 4px solid $color-gray-lighter;
 
       &.last {
-        margin-bottom: 0;
-      }
-
-      + .input-group {
-        margin-top: -40px;
+        margin-bottom: 60px;
       }
 
       .textual-separator {
