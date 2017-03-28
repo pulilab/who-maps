@@ -18,14 +18,9 @@ class ProjectController extends ProjectDefinition {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
-
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.toast = toast;
-    }
-
-    bindFunctions() {
-        this.log = this.log.bind(this);
     }
 
     eventListeners() {
@@ -35,11 +30,7 @@ class ProjectController extends ProjectDefinition {
     }
 
     onInit() {
-        this.bindFunctions();
         this.eventListeners();
-        if (this.inventoryMode) {
-            this.createBlurHandle();
-        }
         this.districtList = [];
         this.dataLoaded = false;
         this.handleStructureLoad();
@@ -365,7 +356,6 @@ class ProjectController extends ProjectDefinition {
     mergeCustomAndDefault(collection) {
         const copy = _.cloneDeep(collection);
         collection.organisation = copy.organisation.id;
-        this.log(copy, collection);
         collection.technology_platforms = this.concatCustom(collection.technology_platforms);
 
         collection.licenses = this.project.licenses;
@@ -378,14 +368,6 @@ class ProjectController extends ProjectDefinition {
         collection.wiki = this.project.wiki;
         collection.repository = this.project.repository;
         collection.mobile_application = this.project.mobile_application;
-    }
-
-    log(...args) {
-        if (DEBUG) {
-            args.forEach(item => {
-                console.log(item);
-            });
-        }
     }
 
     createCoverageArray(collection) {

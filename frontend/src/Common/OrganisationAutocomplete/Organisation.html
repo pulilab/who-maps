@@ -1,0 +1,20 @@
+  <div class="autocomplete-wrapper md-block">
+    <md-autocomplete
+        required
+        md-input-name="organisation"
+        md-no-cache="true"
+        md-selected-item="vm.organisation"
+        md-search-text="vm.searchText"
+        md-items="item in vm.organisationSearch(vm.searchText)"
+        md-item-text="item.name"
+        md-min-length="2"
+        md-floating-label="Organisation name">
+      <md-item-template>
+        <span md-highlight-text="vm.searchText" md-highlight-flags="^i">{{item.name}}</span>
+      </md-item-template>
+
+    </md-autocomplete>
+    <div class="autocomplete-errors" ng-messages="vm.formError">
+      <div ng-message="required">This field is required</div>
+    </div>
+  </div>

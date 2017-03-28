@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import CollapsibleSet from '../CollapsibleSet';
 import ProjectService from '../ProjectService';
-import EditProfileService from '../../Common/EditProfile/EditProfileService';
 
 const wholeCountryName = ' ENTIRE COUNTRY';
 
@@ -11,7 +10,6 @@ class ProjectDetailsController extends CollapsibleSet {
         super($element, $scope, 'project');
         this.ccs = require('../../Common/CustomCountryService');
         this.ns = new ProjectService();
-        this.es = new EditProfileService();
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
     }
@@ -27,11 +25,8 @@ class ProjectDetailsController extends CollapsibleSet {
         this.bindFunctions();
         this.watchers();
         this.getStructureData();
-        this.createBlurHandle();
         this.districtList = [];
         this.users = [];
-        this.team = [];
-        this.viewers = [];
         this.projectList = [];
     }
 
@@ -104,19 +99,6 @@ class ProjectDetailsController extends CollapsibleSet {
             });
     }
 
-    createBlurHandle() {
-
-        this.scope.$$postDigest(() => {
-
-            // document.querySelector('#orgauto')
-            //     .querySelector('input')
-            //     .addEventListener('blur', () => {
-            //         if (!this.latestOrgs.some(org => org.name === this.searchText)) {
-            //             this.addOrganisation(this.searchText);
-            //         }
-            //     });
-        });
-    }
 
     openSimilarProject(project, event) {
         event.preventDefault();
@@ -127,23 +109,6 @@ class ProjectDetailsController extends CollapsibleSet {
             this.state.go('public-dashboard', { appName: project.id });
         }
 
-    }
-
-    organisationSearch(name) {
-        const getOrgsPromise  = this.es.autocompleteOrganization(name);
-        getOrgsPromise.then(data => {
-            this.latestOrgs = data;
-        });
-        return getOrgsPromise;
-    }
-
-    addOrganisation(name) {
-        return this.es.addOrganization(name)
-            .then(response => {
-                this.userProfile.organisation = response;
-                this.project.organisation = response;
-                this.scope.$evalAsync();
-            });
     }
 
 

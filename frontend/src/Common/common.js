@@ -29,6 +29,7 @@ import SubBarComponent from './SubBar/subBarComponent';
 import CountryTopBarComponent from './CountryTopBar/countryTopBarComponent';
 import CustomCountryService from './CustomCountryService';
 import CountryPartners from './CountryPartners/countryPartnersComponent';
+import OrganisationAutocomplete from './OrganisationAutocomplete/organisationComponent';
 
 import EE from './EE';
 
@@ -65,6 +66,7 @@ angular.module(moduleName,
     .component(SubBarComponent.name, SubBarComponent)
     .component(CountryTopBarComponent.name, CountryTopBarComponent)
     .component(CountryPartners.name, CountryPartners)
+    .component(OrganisationAutocomplete.name, OrganisationAutocomplete)
     .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 
