@@ -25,7 +25,7 @@
           </li>
           <li>
             <span layout="row">
-              <md-checkbox md-no-ink aria-label="" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
+              <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
               <md-input-container class="md-block" flex>
                 <label>Specify other</label>
                 <input ng-required="!vm.customLicense" name="license.spectype" ng-model="vm.project.licenses.custom" ng-disabled="!vm.customLicense">
