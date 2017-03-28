@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
 
 from . import views
 
@@ -11,13 +11,9 @@ urlpatterns = [
     url(r"^projects/by-view/list/(?P<country_id>\d+)/$", view=views.ProjectPublicViewSet.as_view({'get': 'list_all'}), name="project-country-list"),
     url(r"^projects/by-view/list/$", view=views.ProjectPublicViewSet.as_view({'get': 'list_all'}), name="project-all-list"),
     url(r"^projects/structure/$", view=views.ProjectPublicViewSet.as_view({'get': 'project_structure'}), name="get-project-structure"),
-    url(r"^projects/(?P<project_id>\d+)/file-list/$", view=views.FileListViewSet.as_view({'get': 'list'}), name="file-list"),
-    url(r"^projects/(?P<project_id>\d+)/files/$", view=views.FilePostViewSet.as_view({'post': 'create'}), name="project-files"),
     url(r"^projects/(?P<project_id>\d+)/version/$", view=views.ProjectVersionViewSet.as_view({'post': 'create'}), name="make-version"),
     url(r"^projects/(?P<project_id>\d+)/coverage/versions/$", view=views.ProjectVersionViewSet.as_view({'get': 'coverage_versions'}), name="get-coverage-versions"),
     url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$", view=views.ProjectVersionViewSet.as_view({'get': 'toolkit_versions'}), name="get-toolkit-versions"),
     url(r"^projects/(?P<pk>\d+)/groups/$", view=views.ProjectGroupViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="project-groups"),
     url(r"^projects/csv-export/$", view=views.CSVExportViewSet.as_view({'post': 'create'}), name="csv-export"),
-    url(r"^files/(?P<pk>\d+)/$", view=views.FileDetailViewSet.as_view({'get': 'retrieve'}), name="file-detail"),
-    url(r"^files/(?P<pk>\d+)/delete/$", view=views.FileDeleteViewSet.as_view({'delete': 'destroy'}), name="file-delete"),
 ]
