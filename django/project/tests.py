@@ -172,6 +172,23 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['platforms'][0]['strategies'], list())
 
+    def test_create_new_project_with_platform_extra_data(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        new_data = {
+            "name": "Test Project93",
+            "platforms": [{
+                "name": "strat1",
+                "strategies": [],
+                "extra": "lol"
+            }]
+        }
+        data.update(new_data)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['platforms'][0]['strategies'], list())
+        self.assertNotIn("extra", response.json()['platforms'][0])
+
     def test_create_new_project_makes_public_id(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)

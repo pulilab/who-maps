@@ -22,7 +22,6 @@ class PlatformSerializer(serializers.Serializer):
 
 
 class ProjectSerializer(serializers.Serializer):
-
     name = serializers.ModelField(model_field=Project()._meta.get_field('name'))
     organisation = serializers.CharField(max_length=256)
     contact_name = serializers.CharField(max_length=256)
