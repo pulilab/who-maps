@@ -112,7 +112,7 @@ class ProjectController extends ProjectDefinition {
         this.convertArraytoStandardCustomObj(data);
         _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
-        this.project.started = this.convertDate(this.project.started);
+        this.project.start_date = this.convertDate(this.project.start_date);
         this.project.implementation_dates = this.convertDate(this.project.implementation_dates);
         this.project.project_end_date = this.convertDate(this.project.project_end_date);
 
@@ -133,33 +133,17 @@ class ProjectController extends ProjectDefinition {
 
 
     convertArraytoStandardCustomObj(data) {
-        const interoperability_standards = {
-            standard: [],
-            custom: void 0
-        };
-        const health_focus_areas = {
-            standard: [],
-            custom: void 0
-        };
-        const technology_platforms = {
-            standard: [],
-            custom: void 0
-        };
+        const keyArray = ['interoperability_standards', 'health_focus_areas', 'licenses'];
 
-        this.structure.interoperability_standards =
-            _.union(this.structure.interoperability_standards, data.interoperability_standards);
-        interoperability_standards.standard = data.interoperability_standards;
-        data.interoperability_standards = interoperability_standards;
-
-        this.structure.health_focus_areas =
-            _.union(this.structure.health_focus_areas, data.health_focus_areas);
-        health_focus_areas.standard = data.health_focus_areas;
-        data.health_focus_areas = health_focus_areas;
-
-        this.structure.technology_platforms =
-            _.union(this.structure.technology_platforms, data.technology_platforms);
-        technology_platforms.standard = data.technology_platforms;
-        data.technology_platforms = technology_platforms;
+        keyArray.forEach(key=> {
+            const scaffold = {
+                standard: [],
+                custom: void 0
+            };
+            this.structure[key] = _.union(this.structure[key], data[key]);
+            scaffold.standard = data[key];
+            data[key] = scaffold;
+        });
     }
 
     mergeNationalLevelWithDistrictCoverage() {
@@ -204,10 +188,6 @@ class ProjectController extends ProjectDefinition {
             }
             return { 'value': '' };
         });
-
-        this.project.pre_assessment = _.map(this.project.pre_assessment, value => {
-            return { value };
-        });
     }
 
     unfoldCoverage() {
@@ -239,7 +219,8 @@ class ProjectController extends ProjectDefinition {
 
 
     createDateFields(processedForm) {
-        processedForm.started = moment(this.project.started).toJSON();
+        processedForm.start_date = moment(this.project.start_date).toJSON();
+        processedForm.end_date = moment(this.project.end_date).toJSON();
         processedForm.implementation_dates = moment(this.project.implementation_dates).toJSON();
     }
 
@@ -251,9 +232,6 @@ class ProjectController extends ProjectDefinition {
         this.createCoverageArray(processedForm);
         this.separateCoverageAndNationalLevelDeployments(processedForm);
         if (!this.editMode) {
-            processedForm.contact_email = 'WIP@wip.com';
-            processedForm.contact_name = 'TEMPORARY';
-            processedForm.implementation_dates = new Date().toJSON();
             this.saveForm(processedForm);
         }
         else {
@@ -356,9 +334,6 @@ class ProjectController extends ProjectDefinition {
     mergeCustomAndDefault(collection) {
         const copy = _.cloneDeep(collection);
         collection.organisation = copy.organisation.id;
-        collection.technology_platforms = this.concatCustom(collection.technology_platforms);
-
-        collection.licenses = this.project.licenses;
 
         collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
         collection.licenses = this.concatCustom(collection.licenses);
@@ -371,6 +346,9 @@ class ProjectController extends ProjectDefinition {
     }
 
     createCoverageArray(collection) {
+        const coverageTypes = this.structure.coverageTypes.map(item=> {
+            return item.replace(' ', '_');
+        });
         const coverage = {};
         _.forEach(collection.coverage, item => {
             let type = void 0;
@@ -383,6 +361,11 @@ class ProjectController extends ProjectDefinition {
             if (!coverage[item.district]) {
                 coverage[item.district] = {};
             }
+
+            coverageTypes.forEach(covType => {
+                coverage[item.district][covType] = 0;
+            });
+
             coverage[item.district][type] = item.number;
             coverage[item.district].district = item.district;
         });
