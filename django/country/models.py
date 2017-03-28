@@ -17,7 +17,7 @@ class Country(NameByIDMixin, ExtendedModel):
     class Meta:
         verbose_name_plural = "Countries"
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.name
 
 

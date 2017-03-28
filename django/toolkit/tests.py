@@ -122,6 +122,19 @@ class ToolkitTests(APITestCase):
         toolkit = Toolkit.objects.get_object_or_none(project=self.project_id)
         self.assertEqual(toolkit.data[0]["domains"][0]["questions"][0]["answers"][0], 2)
 
+    def test_set_score_fail(self):
+        url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
+        data = {
+                "axis": 0,
+                "domain": 0,
+                "question": 0,
+                "answer": 0,
+                "value": "2s"
+            }
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['value'][0], 'A valid integer is required.')
+
     def test_set_score_wrong_index(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
         data = {

@@ -24,7 +24,7 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile)).distinct()
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
-    def by_organisation(self, organisation_id):
+    def by_organisation(self, organisation_id):  # pragma: no cover
         return self.get_queryset().filter(data__organisation=organisation_id)
 
 
@@ -42,7 +42,7 @@ class Project(ExtendedModel):
 
     projects = ProjectManager()
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.name
 
     def is_member(self, user):
