@@ -9,11 +9,14 @@
   background: $color-gray-lightest;
 
   .md-title {
-    margin-bottom: 30px;
+    margin-bottom: 0;
   }
 }
 
 projectcomp {
+
+  display: block;
+  padding-top: 30px;
 
   .show-pointer {
     cursor: pointer !important;
