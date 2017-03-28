@@ -109,6 +109,11 @@
 
           <div class="add-more-item" flex>
             <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showRemove($index, vm.project.coverage)"
+                       ng-click="vm.removeChild($index, 'coverage')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Remove
+            </md-button>
+            <md-button class="md-primary" aria-label="Add more"
                        ng-show="vm.showAddMore($index, vm.project.coverage)"
                        ng-click="vm.addChild('coverage')">
               <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
@@ -126,6 +131,11 @@
         <input ng-model="donor.value" placeholder="Donor's name">
       </md-input-container>
       <div class="add-more-item" flex>
+        <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showRemove($index, vm.project.donors)"
+                       ng-click="vm.removeChild($index, 'donors')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Remove
+        </md-button>
         <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showAddMore($index, vm.project.donors)"
                    ng-click="vm.addChild('donors')">

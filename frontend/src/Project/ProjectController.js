@@ -114,7 +114,7 @@ class ProjectController extends ProjectDefinition {
         this.userProjects = this.cs.projectList;
         this.project.start_date = this.convertDate(this.project.start_date);
         this.project.implementation_dates = this.convertDate(this.project.implementation_dates);
-        this.project.project_end_date = this.convertDate(this.project.project_end_date);
+        this.project.end_date = this.convertDate(this.project.end_date);
 
         this.unfoldCoverage();
         this.assignDefaultCustom();
@@ -196,7 +196,7 @@ class ProjectController extends ProjectDefinition {
         const newCoverage = [];
         _.forEach(this.project.coverage, coverage => {
             _.forEach(coverage, (props, key) => {
-                if (keys.indexOf(key) > -1) {
+                if (keys.indexOf(key) > -1 && props > 0) {
                     newCoverage.push({
                         district: coverage.district,
                         districtChosen: coverage.district,
@@ -204,7 +204,7 @@ class ProjectController extends ProjectDefinition {
                         number: props
                     });
                 }
-                else if (this.coverageKeys.indexOf(key) > -1) {
+                else if (this.coverageKeys.indexOf(key) > -1 && props > 0) {
                     newCoverage.push({
                         district: coverage.district,
                         districtChosen: coverage.district,
@@ -251,6 +251,7 @@ class ProjectController extends ProjectDefinition {
                 if (response && response.success) {
                     // update cached project data with the one from the backend
                     this.cs.updateProject(response.data, this.projectId);
+                    this.confirmationToast();
                 }
                 else {
                     this.handleResponse(response);
@@ -263,25 +264,25 @@ class ProjectController extends ProjectDefinition {
             .then(response => {
                 if (response && response.success) {
                     this.ownershipCheck(response.data);
-                    if (this.inventoryMode) {
-                        this.putGroups().then(this.postSaveActions.bind(this));
-                    }
-                    else {
-                        this.postSaveActions();
-                    }
-
-                    this.toast.show(
-                        this.toast.simple()
-                            .textContent('Project Saved!')
-                            .position('bottom right')
-                            .hideDelay(3000)
-                    );
+                    this.putGroups().then(() => {
+                        this.postSaveActions.bind(this);
+                        this.confirmationToast();
+                    });
                 }
                 else {
                     this.handleResponse(response);
                 }
 
             });
+    }
+
+    confirmationToast() {
+        this.toast.show(
+            this.toast.simple()
+                .textContent('Project Saved!')
+                .position('bottom right')
+                .hideDelay(3000)
+        );
     }
 
     ownershipCheck(project) {
@@ -334,15 +335,11 @@ class ProjectController extends ProjectDefinition {
     mergeCustomAndDefault(collection) {
         const copy = _.cloneDeep(collection);
         collection.organisation = copy.organisation.id;
-
         collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
         collection.licenses = this.concatCustom(collection.licenses);
         collection.health_focus_areas = this.concatCustom(collection.health_focus_areas);
         collection.interoperability_links = _.toArray(collection.interoperability_links);
         collection.donors = this.unfoldObjects(collection.donors);
-        collection.wiki = this.project.wiki;
-        collection.repository = this.project.repository;
-        collection.mobile_application = this.project.mobile_application;
     }
 
     createCoverageArray(collection) {
