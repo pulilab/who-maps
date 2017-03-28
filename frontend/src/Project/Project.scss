@@ -21,7 +21,8 @@
     width: $navigation-width;
 
     @media only screen and (max-width: $page-min-width) {
-      right: 30px;
+      //right: 30px;
+      position: sticky !important;
     }
   }
 }
