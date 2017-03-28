@@ -17,7 +17,6 @@ class ProjectSearch(ExtendedModel):
     location = models.TextField(blank=True)
     project_name = models.TextField(blank=True)
     health_topic = models.TextField(blank=True)
-    technology_platform = models.TextField(blank=True)
     organisation = models.TextField(blank=True)
     contact_name = models.TextField(blank=True)
     contact_email = models.TextField(blank=True)
@@ -43,7 +42,6 @@ class ProjectSearch(ExtendedModel):
             "location",
             "project_name",
             "health_topic",
-            "technology_platform",
             "organisation"
         }
 
@@ -56,15 +54,12 @@ class ProjectSearch(ExtendedModel):
                 q_objects.append(Q(project_name__icontains=query))
             if kwargs.get("health_topic"):
                 q_objects.append(Q(health_topic__icontains=query))
-            if kwargs.get("technology_platform"):
-                q_objects.append(Q(technology_platform__icontains=query))
             if kwargs.get("organisation"):
                 q_objects.append(Q(organisation__icontains=query))
         else:
             q_objects.append(Q(location__icontains=query))
             q_objects.append(Q(project_name__icontains=query))
             q_objects.append(Q(health_topic__icontains=query))
-            q_objects.append(Q(technology_platform__icontains=query))
             q_objects.append(Q(organisation__icontains=query))
             q_objects.append(Q(contact_name__icontains=query))
             q_objects.append(Q(contact_email__icontains=query))
@@ -96,8 +91,7 @@ def update_with_project_data(sender, instance, **kwargs):
     """
     project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
     project_search.location = Country.objects.get(id=instance.data["country"]).name
-    project_search.project_name = instance.data.get("name", "")
-    project_search.technology_platform = ", ".join([x for x in instance.data.get("technology_platforms", "")])
+    project_search.project_name = instance.name
     project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation"))
     project_search.contact_name = instance.data.get("contact_name", "")
     project_search.contact_email = instance.data.get("contact_email", "")
