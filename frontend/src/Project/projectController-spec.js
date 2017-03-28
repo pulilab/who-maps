@@ -158,7 +158,6 @@ describe('ProjectController', () => {
 
     it('fetches all users, team members and viewers if in edit mode', () => {
         sc.editMode = true;
-        spyOn(sc, 'bindFunctions');
         spyOn(sc, 'handleStructureLoad');
         spyOn(sc, 'handleDataLoad');
         spyOn(sc.ns, 'getGroups').and.callFake(() => { return { then: () => {} }; });
