@@ -260,7 +260,7 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         Creates CSV file out of a list of project IDs
         """
         if not request.data or not isinstance(request.data, list):
-            return HttpResponse()
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
         projects = Project.objects.filter(id__in=request.data)
 

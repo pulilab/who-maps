@@ -118,7 +118,8 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "his_bucket")
         self.assertContains(response, "hsc_challenges")
         self.assertContains(response, "interventions")
-        self.assertEqual(len(response.json().keys()), 10)
+        self.assertContains(response, "data_exchanges")
+        self.assertEqual(len(response.json().keys()), 11)
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-crud")
@@ -210,6 +211,14 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
         self.assertEqual(response.json()["platforms"][0]["strategies"][0], "new strat")
+
+    def test_update_project_errors(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(platforms=[{"name": "updated platform"}])
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-crud")
@@ -725,3 +734,18 @@ class PermissionTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("last_version", response.json())
+
+    def test_csv_export_failed(self):
+        url = reverse("csv-export")
+        response = self.test_user_client.post(url, {"data": [1,2]}, format="json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_csv_export_success(self):
+        url = reverse("csv-export")
+        response = self.test_user_client.post(url, [1, 2, Project.objects.get().id], format="json")
+        self.assertEqual(response.status_code, 200)
+        headers = dict(response.items())
+        self.assertEqual(headers['Content-Type'], 'text/csv')
+        self.assertEqual(headers['Content-Disposition'], 'attachment; filename="csv.csv"')
+        self.assertContains(response, "Test Project1")
+        self.assertContains(response, "a@a.com")
