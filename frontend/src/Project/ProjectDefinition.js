@@ -49,7 +49,11 @@ class ProjectDefinition extends Protected {
             wiki: '',
             repository: '',
             mobile_application: '',
-            implementing_partners:[{}]
+            implementing_partners:[{}],
+            data_exchanges: [],
+            his_bucket: [],
+            hsc_challenges: [],
+            interventions: []
         };
     }
 }

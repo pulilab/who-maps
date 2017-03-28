@@ -5,62 +5,45 @@
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
   </div>
 
-    <div class="section-wrapper">
-      <div class="checklist small-margin first">
-        <h6>What interoperability data exchanges does your project use?</h6>
-        <ul>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="x1" class="md-primary">
-              Data exchange label 1
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="x2" class="md-primary">
-              Data exchange label 2
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="x3" class="md-primary">
-              Data exchange label 3
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="x4" class="md-primary">
-              Data exchange label 4
-            </md-checkbox>
-          </li>
-          <li>
-            <md-checkbox md-no-ink aria-label="" ng-model="x5" class="md-primary">
-              Data exchange label 5
-            </md-checkbox>
-          </li>
-        </ul>
-      </div>
+  <div class="section-wrapper">
+    <div class="checklist small-margin first">
+      <h6>What interoperability data exchanges does your project use?</h6>
+      <ul>
+        <li ng-repeat="data_exchange in vm.structure.data_exchanges">
+          <md-checkbox md-no-ink aria-label="data_exchange"
+                       ng-checked="vm.checkboxChecked(data_exchange, 'data_exchanges')"
+                       ng-click="vm.checkboxToggle(data_exchange, 'data_exchanges')"
+                       class="md-primary">
+            {{data_exchange}}
+          </md-checkbox>
+        </li>
+      </ul>
+    </div>
 
-      <h6>Implementing partners</h6>
+    <h6>Implementing partners</h6>
 
-      <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
-        <md-input-container md-no-float class="md-block" flex="50">
-          <input ng-model="partner.value" placeholder="Partner's name">
-        </md-input-container>
-        <div class="add-more-item" flex>
-          <md-button class="md-primary" aria-label="Add more"
+    <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
+      <md-input-container md-no-float class="md-block" flex="50">
+        <input ng-model="partner.value" placeholder="Partner's name">
+      </md-input-container>
+      <div class="add-more-item" flex>
+        <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showAddMore($index, vm.project.implementing_partners)"
                    ng-click="vm.addChild('implementing_partners')">
           <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
         </md-button>
-        </div>
       </div>
+    </div>
 
-      <h6>Government as investor?</h6>
+    <h6>Government as investor?</h6>
 
-      <div layout="row" class="extra-margin">
-        <md-checkbox md-no-ink aria-label="" ng-model="vm.project.government_investor" class="md-primary md-block">
-          Yes
-        </md-checkbox>
-      </div>
+    <div layout="row" class="extra-margin">
+      <md-checkbox md-no-ink aria-label="" ng-model="vm.project.government_investor" class="md-primary md-block">
+        Yes
+      </md-checkbox>
+    </div>
 
-      <h6 >Does your digital health project link to a digital HIS?</h6>
+    <h6 >Does your digital health project link to a digital HIS?</h6>
 
 
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">

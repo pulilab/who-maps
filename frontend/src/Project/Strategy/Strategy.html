@@ -12,15 +12,9 @@
         <div layout="row">
           <md-input-container class="md-block" flex="50">
             <label>Platform</label>
-            <md-select ng-model="project.platform">
-              <md-option value="Platform 1">
-                Platform 1
-              </md-option>
-              <md-option value="Platform 2">
-                Platform 2
-              </md-option>
-              <md-option value="Platform 3">
-                Platform 3
+            <md-select ng-model="platform.name">
+              <md-option value="{{plat}}" ng-repeat="plat in vm.structure.technology_platforms">
+                {{plat}}
               </md-option>
             </md-select>
           </md-input-container>
@@ -28,15 +22,9 @@
         <div layout="row">
           <md-input-container class="md-block" flex="50">
             <label>Strategies (select multiple)</label>
-            <md-select ng-model="project.strategies">
-              <md-option value="Strategy 1">
-                Strategy 1
-              </md-option>
-              <md-option value="Strategy 2">
-                Strategy 2
-              </md-option>
-              <md-option value="Strategy 3">
-                Strategy 3
+            <md-select ng-model="platform.strategies" multiple>
+              <md-option value="{{strategy}}" ng-repeat="strategy in vm.structure.strategies">
+                {{strategy}}
               </md-option>
             </md-select>
           </md-input-container>
@@ -62,15 +50,9 @@
     <div layout="row" class="first">
       <md-input-container class="md-block" flex>
         <label>HIS buckets (select from list)</label>
-        <md-select ng-model="project.strategy.his">
-          <md-option value="Strategy 1">
-            Strategy 1
-          </md-option>
-          <md-option value="Strategy 2">
-            Strategy 2
-          </md-option>
-          <md-option value="Strategy 3">
-            Strategy 3
+        <md-select ng-model="vm.project.his_bucket">
+          <md-option value="{{his}}" ng-repeat="his in vm.structure.his_bucket">
+            {{his}}
           </md-option>
         </md-select>
       </md-input-container>
@@ -79,15 +61,9 @@
     <div layout="row">
       <md-input-container class="md-block" flex>
         <label>HSC challenges (select from list)</label>
-        <md-select ng-model="project.strategy.hsc">
-          <md-option value="Strategy 1">
-            Strategy 1
-          </md-option>
-          <md-option value="Strategy 2">
-            Strategy 2
-          </md-option>
-          <md-option value="Strategy 3">
-            Strategy 3
+        <md-select ng-model="vm.project.hsc_challenges">
+          <md-option value="{{hsc}}" ng-repeat="hsc in vm.structure.hsc_challenges">
+            {{hsc}}
           </md-option>
         </md-select>
       </md-input-container>
@@ -96,67 +72,12 @@
     <div layout="row">
       <md-input-container class="md-block" flex>
         <label>Essential interventions (select from list)</label>
-        <md-select ng-model="project.strategy.interventions">
-          <md-option value="Strategy 1">
-            Strategy 1
-          </md-option>
-          <md-option value="Strategy 2">
-            Strategy 2
-          </md-option>
-          <md-option value="Strategy 3">
-            Strategy 3
+        <md-select ng-model="vm.project.interventions">
+          <md-option value="{{intervention}}" ng-repeat="intervention in vm.structure.interventions">
+            {{intervention}}
           </md-option>
         </md-select>
       </md-input-container>
     </div>
   </div>
-
-
-  <!-- <div class="strat-cont">
-      <ssmenu
-              class="his-buckets"
-              options="vm.structure.strategies"
-              on-close-callback="vm.setStrategy"
-              multiple="true"
-              ng-model="vm.project.strategy"
-              placeholder="HIS Buckets"
-              hint="What is your mHealth project strategy to address the health need?">
-      </ssmenu>
-  </div>
-  <div class="">
-      <ssmenu
-              class="strategies"
-              options="vm.structure.strategies"
-              on-close-callback="vm.setStrategy"
-              multiple="true"
-              ng-model="vm.project.strategy"
-              placeholder="Digital Health strategies"
-              hint="What is your mHealth project strategy to address the health need?">
-      </ssmenu>
-  </div>
-
-  <div class="">
-      <ssmenu
-              class="hsc-challenges"
-              options="vm.structure.strategies"
-              on-close-callback="vm.setStrategy"
-              multiple="true"
-              ng-model="vm.project.strategy"
-              placeholder="HSC challenges"
-              hint="What is your mHealth project strategy to address the health need?">
-      </ssmenu>
-  </div>
-
-  <div class="">
-      <ssmenu
-              class="essential-interventions"
-              options="vm.structure.strategies"
-              on-close-callback="vm.setStrategy"
-              multiple="true"
-              ng-model="vm.project.strategy"
-              placeholder="Essential Interventions"
-              hint="What is your mHealth project strategy to address the health need?">
-      </ssmenu>
-  </div> -->
-
 </div>

@@ -8,7 +8,8 @@ const component = {
     controllerAs: 'vm',
     name: 'strategy',
     bindings: {
-        project: '<'
+        project: '<',
+        structure: '<'
     }
 };
 
