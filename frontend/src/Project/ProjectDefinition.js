@@ -17,8 +17,8 @@ class ProjectDefinition extends Protected {
             country: null,
             countryName: null,
             coverage: [{}],
-            started: void 0,
-            project_end_date: void 0,
+            start_date: void 0,
+            end_date: void 0,
             platforms: [{
                 name: null,
                 strategies: []
@@ -53,7 +53,8 @@ class ProjectDefinition extends Protected {
             data_exchanges: [],
             his_bucket: [],
             hsc_challenges: [],
-            interventions: []
+            interventions: [],
+            government_investor: false
         };
     }
 }
