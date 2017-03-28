@@ -26,7 +26,6 @@ class ProjectDetailsController extends CollapsibleSet {
         this.watchers();
         this.getStructureData();
         this.districtList = [];
-        this.users = [];
         this.projectList = [];
     }
 
