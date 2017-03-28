@@ -1,5 +1,6 @@
 import logging
 
+
 class ExceptionLoggingMiddleware(object):
     """
     This Middleware enables proper exception stacktrace logging under Gunicorn.
