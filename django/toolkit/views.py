@@ -1,14 +1,9 @@
 from django.db import transaction
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view, authentication_classes
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from core.views import TokenAuthMixin, CheckProjectAccessMixin, TeamTokenAuthMixin, get_object_or_400
-from project.permissions import InTeamOrReadOnly
+from core.views import CheckProjectAccessMixin, TeamTokenAuthMixin, get_object_or_400
 
 from .serializers import ScoreSerializer
 from .models import Toolkit
