@@ -53,7 +53,7 @@ class CollapsibleSet {
     }
 
     showRemove(index, collection) {
-        return index !== (collection.length - 1);
+        return collection.length > 1;
     }
 
     collapse() {

@@ -1,5 +1,4 @@
 project_structure = {
-        "countries": [],
         "strategies": [
             "Client education and behavior change communication",
             "Point of care and diagnostics",
@@ -69,20 +68,6 @@ project_structure = {
             "Supply chain management",
             "Financial transactions and incentives"
         ],
-        "pipelines": [
-            "Not part of an accelerator or innovation pipeline",
-            "Ashoka",
-            "Center for Health Market Innovations",
-            "Duke Social Entrepeneurship Accelerator",
-            "Grand Challenges Canada",
-            "Grand Challenges USAID",
-            "GSBI Accelerator",
-            "GSMA Mobile for Development",
-            "iHUB",
-            "IWG mHealth Catalytic Grant Mechanism",
-            "Saving Lives at Birth",
-            "USAID Developmenet Innovation Ventures"
-        ],
         "health_focus_areas": [
             "Child health",
             "Family Planning",
@@ -112,22 +97,26 @@ project_structure = {
             "Other"
         ],
         "interoperability_standards": [
-            "ADX – Aggregate Data Exchange",
+            "ADX - Aggregate Data Exchange",
             "ATNA - Audit Trail and Node Authentication",
             "BPPC - Basic Patient Privacy Consents",
-            "CDA – Clinical Document Architecture",
-            "CSD – Care Services Discovery",
+            "CDA - Clinical Document Architecture",
+            "CSD - Care Services Discovery",
             "DICOM",
             "GS1",
             "HL7 v2",
             "HL7 v3",
             "HL7 FHIR Value Set & Sharing Value Sets (SVS)",
             "mACM - Mobile Alert Communication Management",
-            "MHD – Mobile Access to Health Documents",
+            "MHD - Mobile Access to Health Documents",
             "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
-            "PDQ or PDQm – (Mobile) Patient Demographics Query",
+            "PDQ or PDQm - (Mobile) Patient Demographics Query",
             "SDMX - Statistical Data and Metadata Exchange",
             "XDS - Cross-Enterprise Document Sharing",
             "XUA - Cross-Enterprise User Assertion"
-        ]
+        ],
+        "his_bucket": ["a", "b", "c"],
+        "hsc_challenges": ["a", "b", "c"],
+        "interventions": ["a", "b", "c"],
+        "data_exchanges": ["a", "b", "c"]
 }

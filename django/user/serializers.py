@@ -54,6 +54,7 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
+        fields = '__all__'
 
     @staticmethod
     def get_organisation_name(obj):
@@ -72,6 +73,7 @@ class OrganisationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organisation
+        fields = '__all__'
 
 
 class RegisterWithProfileSerializer(RegisterSerializer):

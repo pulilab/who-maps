@@ -2,7 +2,6 @@ import _ from 'lodash';
 import CollapsibleSet from '../CollapsibleSet';
 import ProjectService from '../ProjectService';
 
-const wholeCountryName = ' ENTIRE COUNTRY';
 
 class ProjectDetailsController extends CollapsibleSet {
 
@@ -26,7 +25,6 @@ class ProjectDetailsController extends CollapsibleSet {
         this.watchers();
         this.getStructureData();
         this.districtList = [];
-        this.users = [];
         this.projectList = [];
     }
 
@@ -66,7 +64,6 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     handleDistrictData(data) {
-        data.unshift(wholeCountryName);
         this.districtList = data;
         this.scope.$evalAsync();
     }

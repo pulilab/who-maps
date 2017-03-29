@@ -169,7 +169,7 @@ class CommonServices extends Protected {
                     if (project) {
                         this.getProjectDetail(project);
                         promiseArray.push(project.detailPromise);
-                        this.getProjectFiles(project);
+                        // this.getProjectFiles(project);
                         promiseArray.push(project.filePromise);
                     }
                 });
@@ -223,7 +223,7 @@ class CommonServices extends Protected {
                 id: _id
             };
             vm.getProjectDetail(project);
-            vm.getProjectFiles(project);
+            // vm.getProjectFiles(project);
             Promise.all([project.detailPromise, project.filePromise])
                 .then(() => {
                     vm.getCountryName(project);

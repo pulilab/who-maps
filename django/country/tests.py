@@ -1,11 +1,14 @@
-import tempfile
-
+from django.contrib.admin import AdminSite
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from allauth.account.models import EmailConfirmation
+from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
+from country.admin import CountryAdmin
 from country.models import Country, PartnerLogo
+from user.models import UserProfile
 
 
 class CountryTests(APITestCase):
@@ -65,3 +68,62 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("partner_logos", response.json().keys())
         self.assertTrue(isinstance(response.json()['partner_logos'], list))
+
+
+class MockRequest:
+    pass
+
+
+class CountryAdminTests(TestCase):
+
+    def setUp(self):
+        self.site = AdminSite()
+        self.request = MockRequest()
+        self.user = User.objects.create(username="alma", password="korte")
+
+    def test_superuser_can_see_every_country(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
+
+    def test_staff_can_see_no_country_if_no_user_assigned_to_country(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = False
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_queryset(self.request).count(), 0)
+
+    def test_staff_only_sees_the_country_he_is_assigned_to(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = False
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        user_profile = UserProfile.objects.create(user=self.user)
+        Country.objects.create(name="Country1", code="CC1", user=user_profile)
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_queryset(self.request).count(), 1)
+        self.assertEqual(ma.get_queryset(self.request)[0].name, "Country1")
+        self.assertEqual(ma.get_queryset(self.request)[0].code, "CC1")
+
+    def test_staff_has_some_readonly_fields(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = False
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.assertEqual(ma.get_readonly_fields(self.request), ('name', 'code', 'user', ))
+
+    def test_superuser_can_change_every_field(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.assertEqual(ma.get_readonly_fields(self.request), ())

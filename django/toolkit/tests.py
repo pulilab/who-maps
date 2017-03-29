@@ -64,28 +64,41 @@ class ToolkitTests(APITestCase):
             "implementation_dates": "2016",
             "health_focus_areas": ["area1", "area2"],
             "geographic_scope": "somewhere",
-            "strategy": ["strat1", "strat2"],   # Can hold 'other' fields
             "country": country.id,
-            "objective": "objective1",
-            "technology_platforms": ["tech1", "tech2"],  # Can hold 'other' fields
+            "platforms": [{
+                "name": "platform1",
+                "strategies": ["strat1", "strat2"]
+            }, {
+                "name": "platform2",
+                "strategies": ["strat1", "strat9"]
+            }],
             "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
-            "application": ["app1", "app2"],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
-            "started": datetime.utcnow(),
-            "donors": ["donor1", "donor2"],  # Should be text instead of ID - no Donors in MVP
-            "reports": ["http://foo.com", "http://bar.com"],
-            "publications": ["http://foo.com", "http://bar.com"],
-            "pipeline": ["pip1", "pip2"],  # Can hold 'other' fields
-            "goals_to_scale": "scale",
-            "anticipated_time": "time",
-            "pre_assessment": [1,0,3,0,4,0],
+            "national_level_deployment": [
+                {"clients": 20000, "health_workers": 0, "facilities": 0},
+            ],
+            "donors": ["donor1", "donor2"],
+            "his_bucket": ["tax1", "tax2"],
+            "hsc_challenges": ["challange1", "challange2"],
+            "interventions": ["int1", "int2", "int3"],
+            "government_investor": True,
+            "implementing_partners": ["partner1", "partner2"],
+            "repository": "http://some.repo",
+            "mobile_application": "app1, app2",
+            "wiki": "http://wiki.org",
+            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
+                                       "http://example.org"],
+            "interoperability_standards": ["CSD - Care Services Discovery"],
+            "data_exchanges": ["de1", "de2"],
+            "start_date": str(datetime.today().date()),
+            "end_date": str(datetime.today().date())
         }
 
         url = reverse("project-crud")
-        response = self.test_user_client.post(url, self.project_data)
+        response = self.test_user_client.post(url, self.project_data, format="json")
         self.project_id = response.json().get("id")
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -93,7 +106,7 @@ class ToolkitTests(APITestCase):
             "team": [self.user_profile_id],
             "viewers": []
         }
-        response = self.test_user_client.put(url, groups)
+        self.test_user_client.put(url, groups)
 
     def test_set_score(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
@@ -101,7 +114,7 @@ class ToolkitTests(APITestCase):
                 "axis": 0,
                 "domain": 0,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 2
             }
         response = self.test_user_client.post(url, data, format="json")
@@ -109,13 +122,26 @@ class ToolkitTests(APITestCase):
         toolkit = Toolkit.objects.get_object_or_none(project=self.project_id)
         self.assertEqual(toolkit.data[0]["domains"][0]["questions"][0]["answers"][0], 2)
 
+    def test_set_score_fail(self):
+        url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
+        data = {
+                "axis": 0,
+                "domain": 0,
+                "question": 0,
+                "answer": 0,
+                "value": "2s"
+            }
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['value'][0], 'A valid integer is required.')
+
     def test_set_score_wrong_index(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
         data = {
                 "axis": 999,
                 "domain": 0,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 2
             }
         response = self.test_user_client.post(url, data, format="json")
@@ -128,7 +154,7 @@ class ToolkitTests(APITestCase):
                 "axis": 0,
                 "domain": 0,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 2
             }
         response = self.test_user_client.post(url, data, format="json")
@@ -141,7 +167,7 @@ class ToolkitTests(APITestCase):
                 "axis": 0,
                 "domain": 0,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 2
             }
         response = self.test_user_client.post(url, data, format="json")
@@ -162,7 +188,7 @@ class ToolkitTests(APITestCase):
                 "axis": 0,
                 "domain": 0,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 2
             }
         response = self.test_user_client.post(url, data, format="json")
@@ -170,7 +196,7 @@ class ToolkitTests(APITestCase):
                 "axis": 0,
                 "domain": 1,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 3
             }
         response = self.test_user_client.post(url, data, format="json")
@@ -194,7 +220,7 @@ class ToolkitTests(APITestCase):
                 "axis": 0,
                 "domain": 0,
                 "question": 0,
-                "answer":0,
+                "answer": 0,
                 "value": 2
             }
         response = self.test_user_client.post(url, data, format="json")
