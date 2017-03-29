@@ -8,6 +8,7 @@ const technology = {
     controllerAs: 'vm',
     name: 'technology',
     bindings: {
+        form: '<',
         project: '<',
         structure: '<'
     }
