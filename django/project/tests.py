@@ -77,9 +77,8 @@ class SetupTests(APITestCase):
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
-            "national_level_deployment": [
+            "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
-            ],
             "donors": ["donor1", "donor2"],
             "his_bucket": ["tax1", "tax2"],
             "hsc_challenges": ["challange1", "challange2"],
@@ -206,7 +205,8 @@ class ProjectTests(SetupTests):
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
+        data.update(name="TestProject98",
+                    platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
@@ -215,15 +215,16 @@ class ProjectTests(SetupTests):
     def test_update_project_errors(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(platforms=[{"name": "updated platform"}])
+        data.update(name="TestProject93", platforms=[{"name": "updated platform"}])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-crud")
-        response = self.test_user_client.post(url, self.project_data)
+        response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['name'][0], 'This field must be unique.')
 
     def test_create_new_project_bad_data(self):
         url = reverse("project-crud")
@@ -239,7 +240,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("name"), "Test Project1")
         self.assertEqual(response.json().get("organisation_name"), self.org.name)
-        self.assertEqual(response.json().get("national_level_deployment")[0]["clients"], 20000)
+        self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
         self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
 
     def test_retrieve_project_list(self):
@@ -516,7 +517,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get('health_focus_areas'), self.project_data['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
-        data.update(health_focus_areas=['area1'])
+        data.update(name="Test Project 39", health_focus_areas=['area1'])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["health_focus_areas"], data['health_focus_areas'])
