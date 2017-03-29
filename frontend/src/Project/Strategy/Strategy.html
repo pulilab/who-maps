@@ -13,7 +13,7 @@
           <md-input-container class="md-block" flex="50">
             <label>Platform</label>
             <md-select ng-model="platform.name">
-              <md-option value="{{plat}}" ng-repeat="plat in vm.structure.technology_platforms">
+              <md-option ng-value="plat" ng-repeat="plat in vm.structure.technology_platforms">
                 {{plat}}
               </md-option>
             </md-select>
@@ -22,8 +22,8 @@
         <div layout="row">
           <md-input-container class="md-block" flex="50">
             <label>Strategies (select multiple)</label>
-            <md-select ng-model="platform.strategies" multiple>
-              <md-option value="{{strategy}}" ng-repeat="strategy in vm.structure.strategies">
+            <md-select ng-model="platform.strategies"  multiple>
+              <md-option ng-value="strategy" ng-repeat="strategy in vm.structure.strategies">
                 {{strategy}}
               </md-option>
             </md-select>

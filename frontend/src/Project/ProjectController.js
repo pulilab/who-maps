@@ -93,14 +93,15 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleDataLoad(data) {
+        data = _.cloneDeep(data);
         this.convertArraytoStandardCustomObj(data);
-        _.merge(this.project, data);
         this.userProjects = this.cs.projectList;
-        this.project.start_date = this.convertDate(this.project.start_date);
-        this.project.implementation_dates = this.convertDate(this.project.implementation_dates);
-        this.project.end_date = this.convertDate(this.project.end_date);
-        this.assignDefaultCustom();
-        this.scope.$evalAsync();
+        data.start_date = this.convertDate(data.start_date);
+        data.implementation_dates = this.convertDate(data.implementation_dates);
+        data.end_date = this.convertDate(data.end_date);
+        this.scope.$evalAsync(() => {
+            this.project = data;
+        });
 
     }
 
@@ -131,15 +132,6 @@ class ProjectController extends ProjectDefinition {
         return parseInt(projectId, 10) === parseInt(this.projectId, 10);
     }
 
-    assignDefaultCustom() {
-        this.project.donors = _.map(this.project.donors, value => {
-            delete value.$$hashKey;
-            if (!_.isEmpty(value)) {
-                return { value };
-            }
-            return { 'value': '' };
-        });
-    }
 
     createDateFields(processedForm) {
         processedForm.start_date = moment(this.project.start_date).toJSON();
