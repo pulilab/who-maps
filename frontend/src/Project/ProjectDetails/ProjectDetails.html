@@ -28,18 +28,25 @@
     </div>
 
     <div layout="row">
-      <organisation-autocomplete flex="50" organisation="vm.project.organisation" form="vm.form"></organisation-autocomplete>
+      <organisation-autocomplete
+          flex="50"
+          organisation="vm.project.organisation"
+          form="vm.form">
+      </organisation-autocomplete>
     </div>
 
     <div layout="row">
       <md-input-container class="md-icon-float md-block" flex="40">
         <label>Project country</label>
         <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
-        <md-select ng-model="vm.project.country">
+        <md-select ng-model="vm.project.country" name="country" required>
           <md-option ng-value="{{country.id}}" ng-repeat=" country in vm.countriesList">
             {{country.prettyName}}
           </md-option>
         </md-select>
+        <div ng-messages="vm.form.country.$error">
+          <div ng-message="required">This is required.</div>
+        </div>
       </md-input-container>
 
       <md-input-container flex="30">
@@ -60,7 +67,16 @@
 
     <md-input-container class="md-block">
       <label>Overview of the digital health implementation</label>
-      <textarea ng-model="vm.project.implementation_overview" md-maxlength="500" rows="1" md-select-on-focus></textarea>
+      <textarea ng-model="vm.project.implementation_overview"
+                md-maxlength="500"
+                rows="1"
+                required
+                name="implementation_overview"
+                md-select-on-focus></textarea>
+      <div ng-messages="vm.form.implementation_overview.$error">
+        <div ng-message="required">This is required.</div>
+        <div ng-message="md-maxlength">This field has to be less than 500 characters long.</div>
+      </div>
     </md-input-container>
 
     <h6>What is the current coverage of your project?</h6>
