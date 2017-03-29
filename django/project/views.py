@@ -1,28 +1,22 @@
+import copy
 import functools
-import json
 import csv
 
 from django.db import transaction
-from django.http import HttpResponse, Http404
-from django.forms.models import model_to_dict
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
-from user.models import UserProfile, Organisation
+from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 
-from .permissions import InTeamOrReadOnly
-from .serializers import ProjectSerializer, ProjectModelSerializer, ProjectGroupListSerializer, \
-    ProjectGroupUpdateSerializer, ProjectFilterSerializer
-from .models import Project, File, CoverageVersion
+from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
+    ProjectGroupUpdateSerializer
+from .models import Project, CoverageVersion
 from .project_data import project_structure
 
 
@@ -124,23 +118,19 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         Creates a project.
         """
         data_serializer = ProjectSerializer(data=request.data)
-        model_serializer = ProjectModelSerializer(data={"name": data_serializer.initial_data["name"]})
-        model_valid = model_serializer.is_valid()
         data_valid = data_serializer.is_valid()
-        if model_valid and data_valid:
-            project = Project.objects.create(name=data_serializer.data["name"], data=data_serializer.data)
+        if data_valid:
+            project_data = copy.copy(data_serializer.validated_data)
+            project_data.pop('name', None)
+            project = Project.objects.create(name=data_serializer.validated_data["name"], data=project_data)
             project.team.add(request.user.userprofile)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
-            data = dict(data_serializer.data)
-            data.update(id=project.id)
+            data = dict(data_serializer.validated_data)
+            data.update(dict(id=project.id))
             return Response(data, status=status.HTTP_201_CREATED)
         else:
-            errors = {
-                "model": model_serializer.errors,
-                "json": data_serializer.errors
-            }
-            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -164,10 +154,9 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
                 data.update(last_version=last_version.version)
                 data.update(last_version_date=last_version.modified)
 
-        data.update(id=project.id)
-        data.update(organisation_name=project.get_organisation().name)
-        data.update(public_id=project.public_id)
-        return Response(project.data)
+        data.update(id=project.id, name=project.name, organisation_name=project.get_organisation().name,
+                    public_id=project.public_id)
+        return Response(data)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -177,86 +166,16 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         self.check_object_permissions(request, project)
-        model_serializer = ProjectModelSerializer(instance=project, data={"name": data_serializer.initial_data["name"]})
-        model_valid = model_serializer.is_valid()
         data_valid = data_serializer.is_valid()
-        if model_valid and data_valid:
-            project.name = data_serializer.validated_data["name"]
-            project.data = data_serializer.validated_data
+        if data_valid:
+            project_data = copy.copy(data_serializer.validated_data)
+            project.name = project_data["name"]
+            project_data.pop('name', None)
+            project.data = project_data
             project.save()
-            return Response(data_serializer.data, status=status.HTTP_200_OK)
+            return Response(data_serializer.validated_data, status=status.HTTP_200_OK)
         else:
-            errors = {
-                "model": model_serializer.errors,
-                "json": data_serializer.errors
-            }
-            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-def create_from_file(request):
-    if request.method == 'GET':
-        return render_to_response(
-            "project/create_from_file.html",
-            context_instance=RequestContext(request))
-    if request.method == 'POST':
-        projects_file = request.FILES.get("file", None)
-        if not projects_file:
-            return render_to_response(
-                "project/create_from_file.html",
-                {"errors": ["Please select a file to upload."]},
-                context_instance=RequestContext(request)
-            )
-        data = StringIO(projects_file.read().decode())
-        try:
-            projects_data = json.loads(data.read())
-        except ValueError as e:
-            return render_to_response(
-                "project/create_from_file.html",
-                {"errors": ["Malformed JSON file: {}".format(e)]},
-                context_instance=RequestContext(request)
-            )
-        else:
-            imported = []
-            failed = []
-            for project_item in projects_data:
-                country = Country.objects.get_object_or_none(name=project_item["country"])
-                if not country:
-                    failed.append("Importing '{}' is failed: No such country: {}"
-                                    .format(project_item["name"], project_item["country"]))
-                    continue
-                project_item["country"] = country.id
-                organisation = Organisation.objects.get_object_or_none(name=project_item["organisation"])
-                if not organisation:
-                    failed.append("Importing '{}' is failed: No such organisation: {}"
-                                    .format(project_item["name"], project_item["organisation"]))
-                    continue
-                project_item["organisation"] = organisation.id
-                owner = project_item.pop("owner")
-                try:
-                    user = User.objects.get(email=owner)
-                except ObjectDoesNotExist:
-                    failed.append("Importing '{}' is failed: No such user: {}"
-                                    .format(project_item["name"], owner))
-                    continue
-                data_serializer = ProjectSerializer(data=project_item)
-                model_serializer = ProjectModelSerializer(data={"name": project_item["name"]})
-                model_valid = model_serializer.is_valid()
-                data_valid = data_serializer.is_valid()
-                if model_valid and data_valid:
-                    project = Project(name=project_item["name"], data=project_item)
-                    project.save()
-                    project.team.add(user.userprofile)
-                    # Add default Toolkit structure for the new project.
-                    Toolkit.objects.create(project_id=project.id, data=toolkit_default)
-                    imported.append(project.name)
-                else:
-                    failed.append("Importing '{}' is failed: {}{}"
-                                    .format(project_item["name"], data_serializer.errors, model_serializer.errors))
-            return render_to_response(
-                "project/create_from_file.html",
-                {"imported": imported, "failed": failed},
-                context_instance=RequestContext(request)
-            )
+            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
@@ -290,7 +209,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
             new_version = last_cov_ver.version + 1
 
         current_cov = project.data["coverage"]
-        current_cov += project.data.get('national_level_deployment', [])
+        current_cov += [project.data.get('national_level_deployment', {})]
 
         new_cov_ver = CoverageVersion(
                             project_id=project_id,
@@ -333,52 +252,6 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(coverage_versions)
 
 
-class FileListViewSet(ViewSet):
-
-    def list(self, request, project_id):
-        files = File.objects.filter(project_id=project_id).values("id", "filename", "type")
-        return Response(files)
-
-
-class FilePostViewSet(TeamTokenAuthMixin, ViewSet):
-
-    def create(self, request, project_id):
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        self.check_object_permissions(self.request, project)
-
-        # Get and store binary files for publications and reports.
-        files = []
-        file_type = None
-        for key, value in request.FILES.items():
-            if "publication" in key:
-                file_type = "publication"
-            elif "report" in key:
-                file_type = "report"
-            instance = File.objects.create(
-                                        project_id=project.id,
-                                        type=file_type,
-                                        filename=value.name,
-                                        data=value.read())
-            files.append(model_to_dict(instance, fields=["id", "type", "filename"]))
-        return Response(files)
-
-
-class FileDetailViewSet(ViewSet):
-
-    def retrieve(self, request, pk):
-        file = get_object_or_400(File, "No such file.", id=pk)
-        return HttpResponse(content=file.data, content_type="application/pdf")
-
-
-class FileDeleteViewSet(TeamTokenAuthMixin, ViewSet):
-
-    def destroy(self, request, pk):
-        file = get_object_or_400(File, "No such file.", id=pk)
-        self.check_object_permissions(self.request, file.project)
-        file.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
 
     def create(self, request):
@@ -386,7 +259,7 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         Creates CSV file out of a list of project IDs
         """
         if not request.data or not isinstance(request.data, list):
-            return HttpResponse()
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
         projects = Project.objects.filter(id__in=request.data)
 

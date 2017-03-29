@@ -2,50 +2,55 @@ from rest_framework import serializers
 from django.core import mail
 from django.template import loader
 from django.conf import settings
+from rest_framework.validators import UniqueValidator
+
 from user.models import UserProfile
 from .models import Project
 
 
-class ProjectModelSerializer(serializers.ModelSerializer):
+class NDPSerializer(serializers.Serializer):
+    clients = serializers.IntegerField(min_value=0, max_value=100000)
+    health_workers = serializers.IntegerField(min_value=0, max_value=100000)
+    facilities = serializers.IntegerField(min_value=0, max_value=100000)
 
-    class Meta:
-        model = Project
-        fields = ("name",)
+
+class CoverageSerializer(NDPSerializer):
+    district = serializers.CharField(max_length=128)
+
+
+class PlatformSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=128, required=True)
+    strategies = serializers.ListField(max_length=64, min_length=0, allow_empty=True)
 
 
 class ProjectSerializer(serializers.Serializer):
-
-    name = serializers.CharField()
-    organisation = serializers.CharField()
-    contact_name = serializers.CharField()
+    name = serializers.CharField(validators=[UniqueValidator(queryset=Project.objects.all())])
+    organisation = serializers.CharField(max_length=256)
+    contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
-    implementation_overview = serializers.CharField(max_length=500)
-    implementing_partners = serializers.CharField(required=False, allow_blank=True)
-    implementation_dates = serializers.CharField()
-    health_focus_areas = serializers.ListField()
-    geographic_scope = serializers.CharField()
-    strategy = serializers.ListField(required=False)   # Can hold 'other' fields
-    country = serializers.IntegerField(required=False)
-    objective = serializers.CharField(required=False, allow_blank=True, max_length=250)
-    technology_platforms = serializers.ListField(required=False)  # Can hold 'other' fields
-    licenses = serializers.ListField(required=False)  # Can hold 'other' fields
-    application = serializers.ListField(required=False)
-    coverage = serializers.ListField(required=False)
-    national_level_deployment = serializers.ListField(required=False)
-    started = serializers.CharField(required=False, allow_blank=True)
-    donors = serializers.ListField(required=False)  # Should be text instead of ID - no Donors in MVP
-    reports = serializers.ListField(required=False)
-    publications = serializers.ListField(required=False)
-    pipeline = serializers.ListField(required=False)  # Can hold 'other' fields
-    goals_to_scale = serializers.CharField(required=False, allow_blank=True)
-    anticipated_time = serializers.CharField(required=False, allow_blank=True)
+    implementation_overview = serializers.CharField(max_length=512)
+    implementing_partners = serializers.ListField(max_length=16, min_length=0)
+    implementation_dates = serializers.CharField(max_length=128)
+    health_focus_areas = serializers.ListField(max_length=64)
+    geographic_scope = serializers.CharField(required=False)
+    country = serializers.IntegerField(min_value=0, max_value=100000)
+    licenses = serializers.ListField(max_length=16, required=False)  # Can hold 'other' fields
+    donors = serializers.ListField(max_length=32)
+    his_bucket = serializers.ListField(max_length=64)
+    hsc_challenges = serializers.ListField(max_length=64)
+    interventions = serializers.ListField(max_length=64)
+    government_investor = serializers.BooleanField()
     repository = serializers.URLField(required=False, allow_blank=True)
-    mobile_application = serializers.CharField(required=False, allow_blank=True)
+    mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
     wiki = serializers.URLField(required=False, allow_blank=True)
-    pre_assessment = serializers.ListField(required=False)
-    links = serializers.ListField(required=False)
-    interoperability_links = serializers.ListField(required=False)
-    interoperability_standards = serializers.ListField(required=False)
+    interoperability_links = serializers.ListField(required=False, max_length=16)
+    interoperability_standards = serializers.ListField(required=False, max_length=16)
+    data_exchanges = serializers.ListField(required=False, max_length=32)
+    coverage = CoverageSerializer(many=True, required=False)
+    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+    national_level_deployment = NDPSerializer(required=False)
+    start_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -125,12 +130,3 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
-
-
-class ProjectFilterSerializer(serializers.Serializer):
-
-    technology_platforms = serializers.ListField(required=False)
-    application = serializers.ListField(required=False)
-    continuum = serializers.ListField(required=False)
-    interventions = serializers.ListField(required=False)
-    constraints = serializers.ListField(required=False)
