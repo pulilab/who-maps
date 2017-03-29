@@ -3,8 +3,19 @@
 
 .section-projectdetails {
 
-  .md-block.number {
-    max-width: 90px;
+  // .md-block.number {
+  //   max-width: 90px;
+  // }
+
+  @media only screen and (max-width: 1280px) {
+    .add-more-item .md-button {
+      padding: 0 !important;
+      min-width: 50px;
+
+      span {
+        display: none;
+      }
+    }
   }
 
   .md-block.district {
