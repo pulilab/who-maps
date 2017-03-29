@@ -43,28 +43,6 @@
                     </md-card>
 
 
-                    <!-- FOLLOWING -->
-                        <!-- <md-card class="dash-stat-card longer longer-follow" layout="column" layout-align="space-between stretch" ng-if="false">
-
-
-                        <md-icon class="material-icons dash-trendicon">visibility</md-icon>
-                        <span class="dash-stat-nr dash-stat-nr-follow">#</span>
-                        <span class="dash-stat-label">Followers</span>
-
-                        <div class="gray gr-follow" ng-if="true" layout="column" layout-align="space-around stretch">
-
-                            <span class="desc">
-                                Push button to follow this project:
-                            </span>
-
-                            <md-button class="md-raised follow-button" ng-click="">
-                                <span class="text">follow#</span>
-                            </md-button>
-
-                        </div>
-
-                    </md-card> -->
-                    <!-- <followers class="hten" trend="'down'" number="87"></followers> -->
                     <donors class="hten" number="vm.projectData.donors.length"></donors>
 
                 </div>
@@ -206,61 +184,61 @@
                             </div>
                         </md-tab>
 
-                        <md-tab label="resources">
-                            <md-content class="dash-res">
+                        <!--<md-tab label="resources">-->
+                            <!--<md-content class="dash-res">-->
 
 
-                                <h3>PROJECT REPORT</h3>
-                                <md-card
-                                    class="resource"
-                                    ng-repeat="report in vm.resources.reports"
-                                    layout="row"
-                                    layout-align="space-around stretch">
+                                <!--<h3>PROJECT REPORT</h3>-->
+                                <!--<md-card-->
+                                    <!--class="resource"-->
+                                    <!--ng-repeat="report in vm.resources.reports"-->
+                                    <!--layout="row"-->
+                                    <!--layout-align="space-around stretch">-->
 
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{report.type === 'file' ? report.filename : report.link}}</h4>
-                                    </div>
-                                    <md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>
-                                    <a ng-href="{{report.link}}" target="_blank" ng-if="report.type === 'link'" layout="column" layout-align="center center">
-                                        <md-icon>launch</md-icon>
-                                    </a>
-                                </md-card>
-
-
-                                <h3>ASSOCIATED JOURNAL ARTICLES</h3>
-                                <md-card
-                                    class="resource"
-                                    ng-repeat="article in vm.resources.articles"
-                                    layout="row"
-                                    layout-align="space-around stretch">
-
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{article.type === 'file' ? article.filename : article.link}}</h4>
-                                    </div>
-                                    <md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>
-                                    <a ng-href="{{article.link}}" target="_blank" ng-if="article.type === 'link'" layout="column" layout-align="center center">
-                                        <md-icon>launch</md-icon>
-                                    </a>
-                                </md-card>
+                                    <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
+                                        <!--<h4>{{report.type === 'file' ? report.filename : report.link}}</h4>-->
+                                    <!--</div>-->
+                                    <!--<md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>-->
+                                    <!--<a ng-href="{{report.link}}" target="_blank" ng-if="report.type === 'link'" layout="column" layout-align="center center">-->
+                                        <!--<md-icon>launch</md-icon>-->
+                                    <!--</a>-->
+                                <!--</md-card>-->
 
 
-                                <h3>ASSOCIATED CHMI LINKS</h3>
-                                <md-card
-                                        class="resource"
-                                        ng-repeat="link in vm.resources.links"
-                                        layout="row"
-                                        layout-align="space-around stretch">
+                                <!--<h3>ASSOCIATED JOURNAL ARTICLES</h3>-->
+                                <!--<md-card-->
+                                    <!--class="resource"-->
+                                    <!--ng-repeat="article in vm.resources.articles"-->
+                                    <!--layout="row"-->
+                                    <!--layout-align="space-around stretch">-->
 
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{link.type === 'file' ? link.filename : link.link}}</h4>
-                                    </div>
-                                    <md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>
-                                    <a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">
-                                        <md-icon>launch</md-icon>
-                                    </a>
-                                </md-card>
-                            </md-content>
-                        </md-tab>
+                                    <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
+                                        <!--<h4>{{article.type === 'file' ? article.filename : article.link}}</h4>-->
+                                    <!--</div>-->
+                                    <!--<md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>-->
+                                    <!--<a ng-href="{{article.link}}" target="_blank" ng-if="article.type === 'link'" layout="column" layout-align="center center">-->
+                                        <!--<md-icon>launch</md-icon>-->
+                                    <!--</a>-->
+                                <!--</md-card>-->
+
+
+                                <!--<h3>ASSOCIATED CHMI LINKS</h3>-->
+                                <!--<md-card-->
+                                        <!--class="resource"-->
+                                        <!--ng-repeat="link in vm.resources.links"-->
+                                        <!--layout="row"-->
+                                        <!--layout-align="space-around stretch">-->
+
+                                    <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
+                                        <!--<h4>{{link.type === 'file' ? link.filename : link.link}}</h4>-->
+                                    <!--</div>-->
+                                    <!--<md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>-->
+                                    <!--<a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">-->
+                                        <!--<md-icon>launch</md-icon>-->
+                                    <!--</a>-->
+                                <!--</md-card>-->
+                            <!--</md-content>-->
+                        <!--</md-tab>-->
 
                         <md-tab label="interoperability">
                             <md-content class="dash-res">
@@ -274,9 +252,9 @@
                                         layout-align="space-around stretch">
 
                                     <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{link}}</h4>
+                                        <h4>{{link.link}}</h4>
                                     </div>
-                                    <a ng-href="{{link}}" target="_blank"  layout="column" layout-align="center center">
+                                    <a ng-href="{{link.link}}" target="_blank"  layout="column" layout-align="center center">
                                         <md-icon>launch</md-icon>
                                     </a>
                                 </md-card>
