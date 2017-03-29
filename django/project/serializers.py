@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.core import mail
 from django.template import loader
 from django.conf import settings
+from rest_framework.validators import UniqueValidator
+
 from user.models import UserProfile
 from .models import Project
 
@@ -22,7 +24,7 @@ class PlatformSerializer(serializers.Serializer):
 
 
 class ProjectSerializer(serializers.Serializer):
-    name = serializers.ModelField(model_field=Project()._meta.get_field('name'))
+    name = serializers.CharField(validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=256)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
@@ -46,7 +48,7 @@ class ProjectSerializer(serializers.Serializer):
     data_exchanges = serializers.ListField(required=False, max_length=32)
     coverage = CoverageSerializer(many=True, required=False)
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
-    national_level_deployment = NDPSerializer(many=True, required=False)
+    national_level_deployment = NDPSerializer(required=False)
     start_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
 
