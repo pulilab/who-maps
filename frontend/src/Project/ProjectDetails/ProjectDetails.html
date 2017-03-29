@@ -65,32 +65,32 @@
 
     <h6>What is the current coverage of your project?</h6>
 
-
     <div class="input-group">
       <div layout="column">
         <div layout="row">
           <label>National level deployment</label>
         </div>
         <div layout="row">
-          <md-input-container class="md-block number" flex>
+          <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
             <input required name="coverage.h" ng-model="vm.project.national_level_deployment.health_workers">
           </md-input-container>
-          <md-input-container class="md-block number" flex>
+          <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
             <input required name="coverage.h" ng-model="vm.project.national_level_deployment.facilities">
           </md-input-container>
-          <md-input-container class="md-block number" flex>
+          <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
             <input required name="coverage.h" ng-model="vm.project.national_level_deployment.clients">
           </md-input-container>
+          <div flex="40"></div>
         </div>
       </div>
     </div>
-    <div class="input-group" ng-repeat="cov in vm.project.coverage">
+    <div class="input-group" ng-class="{last: $last}" ng-repeat="cov in vm.project.coverage">
       <div layout="column">
         <div layout="row">
-          <md-input-container class="md-block district" flex="50">
+          <md-input-container class="md-block district" flex="40">
             <label>District</label>
             <md-select ng-model="cov.district">
               <md-option value="{{district}}" ng-repeat="district in vm.districtList">
@@ -102,24 +102,23 @@
         </div>
 
         <div layout="row">
-          <md-input-container class="md-block number" flex>
+          <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
             <input required name="coverage.h" ng-model="cov.health_workers">
           </md-input-container>
-          <md-input-container class="md-block number" flex>
+          <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
             <input required name="coverage.h" ng-model="cov.facilities">
           </md-input-container>
-          <md-input-container class="md-block number" flex>
+          <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
             <input required name="coverage.h" ng-model="cov.clients">
           </md-input-container>
-
-          <div class="add-more-item" flex>
-            <md-button class="md-primary" aria-label="Add more"
+          <div class="add-more-item" flex="40">
+            <md-button class="md-warn" aria-label="Remove"
                        ng-show="vm.showRemove($index, vm.project.coverage)"
                        ng-click="vm.removeChild($index, 'coverage')">
-              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Remove
+              <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
             </md-button>
             <md-button class="md-primary" aria-label="Add more"
                        ng-show="vm.showAddMore($index, vm.project.coverage)"
