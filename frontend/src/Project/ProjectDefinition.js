@@ -13,7 +13,7 @@ class ProjectDefinition extends Protected {
     initializeDefinition() {
         this.project = {
             name: null,
-            organisation: null,
+            organisation: this.cs.userProfile.organisation,
             country: null,
             countryName: null,
             coverage: [{}],

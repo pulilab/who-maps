@@ -18,9 +18,6 @@ class Protected extends AuthApi {
     }
 
     defaultOnInit() {
-        if (DEBUG) {
-            console.debug(`default protected init function called by ${this.constructor.name}`);
-        }
         this.isLogin = this.retrieveLoginStatus();
         this.userProfileId = this.retrieveProfileId();
         this.user = this.storage.get('user');
@@ -49,9 +46,6 @@ class Protected extends AuthApi {
     }
 
     defaultOnDestroy() {
-        if (DEBUG) {
-            console.debug(`default protected destroy function called by ${this.constructor.name}`);
-        }
         this.isLogin = void 0;
         this.user = void 0;
         this.userType = 0;

@@ -16,6 +16,7 @@ class CommonServices extends Protected {
             throw error;
         }
         this.EE.on('unauthorized', this.handleUnauthorized, this);
+        this.EE.on('logout', this.invalidate, this);
         this.initialize();
     }
 
@@ -92,12 +93,10 @@ class CommonServices extends Protected {
     createLoadingOrder() {
         this.checkLoadPresence('user-profile');
         this.checkLoadPresence('list');
+        this.checkLoadPresence('users-profiles');
     }
 
     loadingProgress(name) {
-        if (DEBUG) {
-            console.debug(_.cloneDeep(this.loadingCheck), name);
-        }
         _.remove(this.loadingCheck, item => {
             return item === name;
         });
@@ -169,8 +168,6 @@ class CommonServices extends Protected {
                     if (project) {
                         this.getProjectDetail(project);
                         promiseArray.push(project.detailPromise);
-                        // this.getProjectFiles(project);
-                        promiseArray.push(project.filePromise);
                     }
                 });
 

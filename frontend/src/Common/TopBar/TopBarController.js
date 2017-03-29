@@ -19,7 +19,9 @@ class TopBarController extends Protected {
         if (this.user) {
             this.cs.loadedPromise.then(() => {
                 self.userProfile = self.cs.userProfile;
-                self.profileDataReady = true;
+                if (self.userProfile) {
+                    self.profileDataReady = true;
+                }
                 self.scope.$evalAsync();
             });
         }

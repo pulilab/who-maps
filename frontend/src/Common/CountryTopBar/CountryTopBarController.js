@@ -34,7 +34,9 @@ class CountryTopBarController extends Protected {
 
     setProfileData() {
         this.userProfile = this.cs.userProfile;
-        this.profileDataReady = true;
+        if (this.userProfile) {
+            this.profileDataReady = true;
+        }
         this.scope.$evalAsync();
     }
 

@@ -61,6 +61,7 @@ describe('CountryTopBarController', () => {
     it('should have a function that set the profile data', ()=> {
         expect(controller.setProfileData).toBeDefined();
         expect(controller.profileDataReady).toBeFalsy();
+        controller.cs.userProfile = true;
         controller.setProfileData();
         expect(controller.profileDataReady).toBeTruthy();
     });

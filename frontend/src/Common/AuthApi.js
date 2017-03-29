@@ -12,7 +12,6 @@ class AuthApi {
         this.storage = new Storage();
         this.retrieveToken();
         this.apiUrl = API;
-        this.updateOnNextRequest = false;
 
         if (module) {
             this.apiUrl += module + '/';
@@ -28,7 +27,6 @@ class AuthApi {
 
     invalidate() {
         this.token = void 0;
-        this.updateOnNextRequest = true;
         this.storage.clear();
     }
 
@@ -178,10 +176,7 @@ class AuthApi {
     }
 
     generateHeaders() {
-        if (this.updateOnNextRequest) {
-            this.retrieveToken(true);
-            this.updateOnNextRequest = false;
-        }
+        this.retrieveToken(true);
         const headers = new Headers();
         if (this.token) {
             headers.append('Authorization', 'Token ' + this.token);

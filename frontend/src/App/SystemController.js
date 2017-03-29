@@ -24,8 +24,8 @@ class SystemController {
     }
 
     eventBindings() {
-        this.EE.on('login', this.handleLogin.bind(this));
-        this.EE.on('unauthorized', this.handleUnauthorized.bind(this));
+        this.EE.once('login', this.handleLogin.bind(this));
+        this.EE.once('unauthorized', this.handleUnauthorized.bind(this));
     }
 
     handleUnauthorized() {
