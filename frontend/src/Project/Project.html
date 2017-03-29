@@ -13,10 +13,11 @@
     </div>
 
     <div class="project-form-wrapper md-block">
-        <form name="vm.newProjectForm" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
+        <form name="vm.form" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
             <div class="main-section" layout="column">
                 <project-details
                         id="project-details"
+                        form="vm.form"
                         project="vm.project"
                         structure="vm.structure"
                         team="vm.team"

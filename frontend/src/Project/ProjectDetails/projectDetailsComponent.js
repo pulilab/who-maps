@@ -7,6 +7,7 @@ const component = {
     controllerAs: 'vm',
     name: 'projectDetails',
     bindings: {
+        form: '<',
         project: '<',
         structure: '<',
         team: '<',

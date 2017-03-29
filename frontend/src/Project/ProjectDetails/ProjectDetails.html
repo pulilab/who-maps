@@ -14,7 +14,7 @@
                ng-model="vm.project.name"
                ng-model-options="{debounce: 200}"
                ng-change="vm.checkName()">
-        <div ng-messages="vm.errorObject.name.$error">
+        <div ng-messages="vm.form.name.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
         </div>
