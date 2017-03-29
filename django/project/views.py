@@ -14,7 +14,6 @@ from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 
-from .permissions import InTeamOrReadOnly
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
 from .models import Project, CoverageVersion
@@ -210,7 +209,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
             new_version = last_cov_ver.version + 1
 
         current_cov = project.data["coverage"]
-        current_cov += project.data.get('national_level_deployment', [])
+        current_cov += [project.data.get('national_level_deployment', {})]
 
         new_cov_ver = CoverageVersion(
                             project_id=project_id,

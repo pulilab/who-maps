@@ -73,9 +73,8 @@ class ProjectTests(APITestCase):
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
-            "national_level_deployment": [
+            "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
-            ],
             "donors": ["donor1", "donor2"],
             "his_bucket": ["tax1", "tax2"],
             "hsc_challenges": ["challange1", "challange2"],
