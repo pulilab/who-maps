@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-COUNTRIES = [{
+COUNTRIES = [
+  {
     "model": "country.country",
     "pk": 33,
     "fields": {
       "created": "2017-03-10T12:47:57.529Z",
       "modified": "2017-03-10T13:25:41.883Z",
-      "name": "afghanistan",
+      "name": "Afghanistan",
       "code": "AF"
     }
   },
@@ -20,7 +21,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:47:58.431Z",
       "modified": "2017-03-10T13:25:42.985Z",
-      "name": "albania",
+      "name": "Albania",
       "code": "AL"
     }
   },
@@ -30,7 +31,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:47:59.139Z",
       "modified": "2017-03-10T13:25:44.408Z",
-      "name": "algeria",
+      "name": "Algeria",
       "code": "DZ"
     }
   },
@@ -40,7 +41,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:48:00.735Z",
       "modified": "2017-03-10T13:25:46.445Z",
-      "name": "angola",
+      "name": "Angola",
       "code": "AO"
     }
   },
@@ -50,7 +51,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:48:01.919Z",
       "modified": "2017-03-10T13:25:48.850Z",
-      "name": "argentina",
+      "name": "Argentina",
       "code": "AR"
     }
   },
@@ -60,7 +61,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:48:04.858Z",
       "modified": "2017-03-10T13:25:52.087Z",
-      "name": "armenia",
+      "name": "Armenia",
       "code": "AM"
     }
   },
@@ -70,7 +71,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:48:05.025Z",
       "modified": "2017-03-10T13:25:52.240Z",
-      "name": "azerbaijan",
+      "name": "Azerbaijan",
       "code": "AZ"
     }
   },
@@ -80,7 +81,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:36.088Z",
       "modified": "2017-03-10T13:25:52.598Z",
-      "name": "bangladesh",
+      "name": "Bangladesh",
       "code": "BD"
     }
   },
@@ -90,7 +91,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:36.627Z",
       "modified": "2017-03-10T13:25:53.353Z",
-      "name": "belarus",
+      "name": "Belarus",
       "code": "BY"
     }
   },
@@ -100,7 +101,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:37.362Z",
       "modified": "2017-03-10T13:25:54.124Z",
-      "name": "benin",
+      "name": "Benin",
       "code": "BJ"
     }
   },
@@ -110,7 +111,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:37.629Z",
       "modified": "2017-03-10T13:25:54.462Z",
-      "name": "bhutan",
+      "name": "Bhutan",
       "code": "BT"
     }
   },
@@ -120,7 +121,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:38.077Z",
       "modified": "2017-03-10T13:25:55.273Z",
-      "name": "bolivia",
+      "name": "Bolivia, Plurinational State of",
       "code": "BO"
     }
   },
@@ -130,7 +131,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:39.131Z",
       "modified": "2017-03-10T13:25:56.509Z",
-      "name": "botswana",
+      "name": "Botswana",
       "code": "BW"
     }
   },
@@ -140,7 +141,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:40.680Z",
       "modified": "2017-03-10T13:25:59.715Z",
-      "name": "brazil",
+      "name": "Brazil",
       "code": "BR"
     }
   },
@@ -150,7 +151,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:45.323Z",
       "modified": "2017-03-10T13:26:05.027Z",
-      "name": "burkina-faso",
+      "name": "Burkina Faso",
       "code": "BF"
     }
   },
@@ -160,7 +161,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:46.534Z",
       "modified": "2017-03-10T13:26:06.243Z",
-      "name": "burundi",
+      "name": "Burundi",
       "code": "BI"
     }
   },
@@ -170,7 +171,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:46.972Z",
       "modified": "2017-03-10T13:26:06.845Z",
-      "name": "c-te-d-ivoire",
+      "name": "Côte d'Ivoire",
       "code": "CI"
     }
   },
@@ -180,7 +181,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:47.630Z",
       "modified": "2017-03-10T13:26:07.692Z",
-      "name": "cameroon",
+      "name": "Cameroon",
       "code": "CM"
     }
   },
@@ -190,7 +191,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:48.188Z",
       "modified": "2017-03-10T13:26:08.338Z",
-      "name": "cape-verde",
+      "name": "Cape Verde",
       "code": "CV"
     }
   },
@@ -200,7 +201,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:48.416Z",
       "modified": "2017-03-10T13:26:08.562Z",
-      "name": "central-african-republic",
+      "name": "Central African Republic",
       "code": "CF"
     }
   },
@@ -210,7 +211,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:48.659Z",
       "modified": "2017-03-10T13:26:08.834Z",
-      "name": "chad",
+      "name": "Chad",
       "code": "TD"
     }
   },
@@ -220,7 +221,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:58:51.466Z",
       "modified": "2017-03-10T13:26:14.816Z",
-      "name": "china",
+      "name": "China",
       "code": "CN"
     }
   },
@@ -230,7 +231,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:02.131Z",
       "modified": "2017-03-10T13:26:27.122Z",
-      "name": "congo-brazzaville",
+      "name": "Congo",
       "code": "CG"
     }
   },
@@ -240,7 +241,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:03.082Z",
       "modified": "2017-03-10T13:26:28.080Z",
-      "name": "congo-kinshasa",
+      "name": "Congo, the Democratic Republic of the",
       "code": "CD"
     }
   },
@@ -250,7 +251,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:05.552Z",
       "modified": "2017-03-10T13:26:30.266Z",
-      "name": "costa-rica",
+      "name": "Costa Rica",
       "code": "CR"
     }
   },
@@ -260,7 +261,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:05.911Z",
       "modified": "2017-03-10T13:26:30.695Z",
-      "name": "djibouti",
+      "name": "Djibouti",
       "code": "DJ"
     }
   },
@@ -270,7 +271,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:06.010Z",
       "modified": "2017-03-10T13:26:30.803Z",
-      "name": "egypt",
+      "name": "Egypt",
       "code": "EG"
     }
   },
@@ -280,7 +281,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:06.221Z",
       "modified": "2017-03-10T13:26:31.248Z",
-      "name": "ethiopia",
+      "name": "Ethiopia",
       "code": "ET"
     }
   },
@@ -290,7 +291,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:06.859Z",
       "modified": "2017-03-10T13:26:31.888Z",
-      "name": "gabon",
+      "name": "Gabon",
       "code": "GA"
     }
   },
@@ -300,7 +301,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:07.046Z",
       "modified": "2017-03-10T13:26:32.103Z",
-      "name": "ghana",
+      "name": "Ghana",
       "code": "GH"
     }
   },
@@ -310,7 +311,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:07.366Z",
       "modified": "2017-03-10T13:26:32.562Z",
-      "name": "guatemala",
+      "name": "Guatemala",
       "code": "GT"
     }
   },
@@ -320,7 +321,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:07.912Z",
       "modified": "2017-03-10T13:26:33.486Z",
-      "name": "guinea",
+      "name": "Guinea",
       "code": "GN"
     }
   },
@@ -330,7 +331,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:08.527Z",
       "modified": "2017-03-10T13:26:34.210Z",
-      "name": "guinea-bissau",
+      "name": "Guinea-Bissau",
       "code": "GW"
     }
   },
@@ -340,7 +341,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:08.833Z",
       "modified": "2017-03-10T13:26:34.611Z",
-      "name": "haiti",
+      "name": "Haiti",
       "code": "HT"
     }
   },
@@ -350,7 +351,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:09.191Z",
       "modified": "2017-03-10T13:26:35.088Z",
-      "name": "honduras",
+      "name": "Honduras",
       "code": "HN"
     }
   },
@@ -360,7 +361,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T12:59:09.983Z",
       "modified": "2017-03-10T13:26:36.356Z",
-      "name": "india",
+      "name": "India",
       "code": "IN"
     }
   },
@@ -370,7 +371,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:28.826Z",
       "modified": "2017-03-10T13:26:38.308Z",
-      "name": "indonesia",
+      "name": "Indonesia",
       "code": "ID"
     }
   },
@@ -380,7 +381,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:29.657Z",
       "modified": "2017-03-10T13:26:39.225Z",
-      "name": "israel",
+      "name": "Israel",
       "code": "IL"
     }
   },
@@ -390,7 +391,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:29.827Z",
       "modified": "2017-03-10T13:26:39.409Z",
-      "name": "jamaica",
+      "name": "Jamaica",
       "code": "JM"
     }
   },
@@ -400,7 +401,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:30.057Z",
       "modified": "2017-03-10T13:26:39.615Z",
-      "name": "kenya",
+      "name": "Kenya",
       "code": "KE"
     }
   },
@@ -410,7 +411,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:30.275Z",
       "modified": "2017-03-10T13:26:40.005Z",
-      "name": "liberia",
+      "name": "Liberia",
       "code": "LR"
     }
   },
@@ -420,7 +421,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:30.788Z",
       "modified": "2017-03-10T13:26:40.676Z",
-      "name": "madagascar",
+      "name": "Madagascar",
       "code": "MG"
     }
   },
@@ -430,7 +431,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:31.378Z",
       "modified": "2017-03-10T13:26:41.319Z",
-      "name": "malawi",
+      "name": "Malawi",
       "code": "MW"
     }
   },
@@ -440,7 +441,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:31.682Z",
       "modified": "2017-03-10T13:26:41.817Z",
-      "name": "malaysia",
+      "name": "Malaysia",
       "code": "MY"
     }
   },
@@ -450,7 +451,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:32.072Z",
       "modified": "2017-03-10T13:26:42.285Z",
-      "name": "maldives",
+      "name": "Maldives",
       "code": "MV"
     }
   },
@@ -460,7 +461,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:32.243Z",
       "modified": "2017-03-10T13:26:42.588Z",
-      "name": "mali",
+      "name": "Mali",
       "code": "ML"
     }
   },
@@ -470,7 +471,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:32.653Z",
       "modified": "2017-03-10T13:26:43.510Z",
-      "name": "mauritania",
+      "name": "Mauritania",
       "code": "MR"
     }
   },
@@ -480,7 +481,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:36.490Z",
       "modified": "2017-03-10T13:26:52.083Z",
-      "name": "mexico",
+      "name": "Mexico",
       "code": "MX"
     }
   },
@@ -490,7 +491,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:50.150Z",
       "modified": "2017-03-10T13:27:25.203Z",
-      "name": "morocco",
+      "name": "Morocco",
       "code": "MA"
     }
   },
@@ -500,7 +501,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:53.504Z",
       "modified": "2017-03-10T13:27:27.231Z",
-      "name": "mozambique",
+      "name": "Mozambique",
       "code": "MZ"
     }
   },
@@ -510,7 +511,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:53.934Z",
       "modified": "2017-03-10T13:27:28.038Z",
-      "name": "myanmar",
+      "name": "Myanmar",
       "code": "MM"
     }
   },
@@ -520,7 +521,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:54.593Z",
       "modified": "2017-03-10T13:27:29.130Z",
-      "name": "namibia",
+      "name": "Namibia",
       "code": "NA"
     }
   },
@@ -530,7 +531,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:56.137Z",
       "modified": "2017-03-10T13:27:30.072Z",
-      "name": "nepal",
+      "name": "Nepal",
       "code": "NP"
     }
   },
@@ -540,7 +541,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:56.836Z",
       "modified": "2017-03-10T13:27:31.279Z",
-      "name": "nicaragua",
+      "name": "Nicaragua",
       "code": "NI"
     }
   },
@@ -550,7 +551,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:57.593Z",
       "modified": "2017-03-10T13:27:32.276Z",
-      "name": "niger",
+      "name": "Niger",
       "code": "NE"
     }
   },
@@ -560,7 +561,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:58.155Z",
       "modified": "2017-03-10T13:27:33.191Z",
-      "name": "nigeria",
+      "name": "Nigeria",
       "code": "NG"
     }
   },
@@ -570,7 +571,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:00:59.162Z",
       "modified": "2017-03-10T13:27:34.788Z",
-      "name": "pakistan",
+      "name": "Pakistan",
       "code": "PK"
     }
   },
@@ -580,7 +581,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:00.472Z",
       "modified": "2017-03-10T13:27:37.547Z",
-      "name": "peru",
+      "name": "Peru",
       "code": "PE"
     }
   },
@@ -590,7 +591,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:03.126Z",
       "modified": "2017-03-10T13:27:40.758Z",
-      "name": "philippines",
+      "name": "Philippines",
       "code": "PH"
     }
   },
@@ -600,7 +601,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:03.869Z",
       "modified": "2017-03-10T13:27:41.512Z",
-      "name": "rwanda",
+      "name": "Rwanda",
       "code": "RW"
     }
   },
@@ -610,7 +611,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:04.158Z",
       "modified": "2017-03-10T13:27:41.884Z",
-      "name": "sierra-leone",
+      "name": "Sierra Leone",
       "code": "SL"
     }
   },
@@ -620,7 +621,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:05.230Z",
       "modified": "2017-03-10T13:27:44.106Z",
-      "name": "south-africa",
+      "name": "South Africa",
       "code": "ZA"
     }
   },
@@ -630,7 +631,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:07.761Z",
       "modified": "2017-03-10T13:27:47.069Z",
-      "name": "south-sudan",
+      "name": "South Sudan",
       "code": "SS"
     }
   },
@@ -640,7 +641,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:08.183Z",
       "modified": "2017-03-10T13:27:47.421Z",
-      "name": "sri-lanka",
+      "name": "Sri Lanka",
       "code": "LK"
     }
   },
@@ -650,7 +651,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:08.380Z",
       "modified": "2017-03-10T13:27:47.829Z",
-      "name": "sudan",
+      "name": "Sudan",
       "code": "SD"
     }
   },
@@ -660,7 +661,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:08.564Z",
       "modified": "2017-03-10T13:27:48.002Z",
-      "name": "swaziland",
+      "name": "Swaziland",
       "code": "SZ"
     }
   },
@@ -670,7 +671,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:08.970Z",
       "modified": "2017-03-10T13:27:48.818Z",
-      "name": "tanzania",
+      "name": "Tanzania, United Republic of",
       "code": "TZ"
     }
   },
@@ -680,7 +681,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:01:09.926Z",
       "modified": "2017-03-10T13:27:49.909Z",
-      "name": "the-gambia",
+      "name": "Gambia",
       "code": "GM"
     }
   },
@@ -690,7 +691,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:05:15.067Z",
       "modified": "2017-03-10T13:27:49.954Z",
-      "name": "togo",
+      "name": "Togo",
       "code": "TG"
     }
   },
@@ -700,7 +701,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:05:54.146Z",
       "modified": "2017-03-10T13:27:50.195Z",
-      "name": "tunisia",
+      "name": "Tunisia",
       "code": "TN"
     }
   },
@@ -710,7 +711,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:05:55.066Z",
       "modified": "2017-03-10T13:27:51.830Z",
-      "name": "turkey",
+      "name": "Turkey",
       "code": "TR"
     }
   },
@@ -720,7 +721,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:05:56.792Z",
       "modified": "2017-03-10T13:27:53.859Z",
-      "name": "turkmenistan",
+      "name": "Turkmenistan",
       "code": "TM"
     }
   },
@@ -730,7 +731,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:05:57.199Z",
       "modified": "2017-03-10T13:27:54.510Z",
-      "name": "uganda",
+      "name": "Uganda",
       "code": "UG"
     }
   },
@@ -740,7 +741,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:06:00.622Z",
       "modified": "2017-03-10T13:27:56.688Z",
-      "name": "ukraine",
+      "name": "Ukraine",
       "code": "UA"
     }
   },
@@ -750,7 +751,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:07.937Z",
       "modified": "2017-03-10T13:28:04.993Z",
-      "name": "united-states-of-america",
+      "name": "United States",
       "code": "US"
     }
   },
@@ -760,7 +761,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:22.144Z",
       "modified": "2017-03-10T13:28:23.157Z",
-      "name": "uruguay",
+      "name": "Uruguay",
       "code": "UY"
     }
   },
@@ -770,7 +771,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:22.846Z",
       "modified": "2017-03-10T13:28:23.757Z",
-      "name": "uzbekistan",
+      "name": "Uzbekistan",
       "code": "UZ"
     }
   },
@@ -780,7 +781,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:23.563Z",
       "modified": "2017-03-10T13:28:26.258Z",
-      "name": "venezuela",
+      "name": "Venezuela, Bolivarian Republic of",
       "code": "VE"
     }
   },
@@ -790,7 +791,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:26.176Z",
       "modified": "2017-03-10T13:28:29.139Z",
-      "name": "vietnam",
+      "name": "Viet Nam",
       "code": "VN"
     }
   },
@@ -800,7 +801,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:27.090Z",
       "modified": "2017-03-10T13:28:30.128Z",
-      "name": "yemen",
+      "name": "Yemen",
       "code": "YE"
     }
   },
@@ -810,7 +811,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:27.500Z",
       "modified": "2017-03-10T13:28:30.314Z",
-      "name": "zambia",
+      "name": "Zambia",
       "code": "ZM"
     }
   },
@@ -820,7 +821,7 @@ COUNTRIES = [{
     "fields": {
       "created": "2017-03-10T13:15:27.793Z",
       "modified": "2017-03-10T13:28:30.746Z",
-      "name": "zimbabwe",
+      "name": "Zimbabwe",
       "code": "ZW"
     }
   }
