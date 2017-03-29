@@ -8,6 +8,7 @@ const component = {
     controllerAs: 'vm',
     name: 'additionalInfo',
     bindings: {
+        form: '<',
         project: '<',
         structure: '<'
     }

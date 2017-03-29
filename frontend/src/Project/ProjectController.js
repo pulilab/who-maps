@@ -36,7 +36,13 @@ class ProjectController extends ProjectDefinition {
 
         this.team = [];
         this.viewers = [];
-        this.team.push(_.find(this.users, { id: this.userProfile.id }));
+        try {
+            this.team.push(_.find(this.users, { id: this.userProfile.id }));
+        }
+        catch (e) {
+            console.error('Auth token expired');
+            this.EE.emit('unauthorized');
+        }
 
         if (this.editMode) {
             this.projectId = this.state.params.appName;
