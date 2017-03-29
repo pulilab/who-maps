@@ -7,4 +7,10 @@
     padding-top: 60px;
   }
 
+  .input-group {
+    &:first-of-type {
+      margin-bottom: 20px !important;
+    }
+  }
+
 }

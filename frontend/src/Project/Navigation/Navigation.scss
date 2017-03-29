@@ -27,6 +27,7 @@
     li {
       z-index: 2;
       position: relative;
+      cursor: pointer;
 
       &.active,
       &:hover,

@@ -52,6 +52,7 @@ ui-view {
 }
 
 .main-content {
+  overflow-x: hidden;
   min-width: $page-min-width !important;
   background-color: $color-page-background;
   // height: auto !important;
