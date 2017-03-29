@@ -152,8 +152,12 @@
 
     <div layout="row" ng-repeat="donor in vm.project.donors">
       <md-input-container md-no-float class="md-block" flex="50">
-        <input ng-model="donor.value" placeholder="Donor's name">
+        <input ng-model="donor.value" placeholder="Donor's name" required name="{{'donor_' + $index}}">
+         <div ng-messages="vm.form['donor_' + $index].$error">
+              <div ng-message="required">This is required.</div>
+            </div>
       </md-input-container>
+
       <div class="add-more-item" flex>
         <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showRemove($index, vm.project.donors)"
