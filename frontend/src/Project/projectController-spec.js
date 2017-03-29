@@ -1,6 +1,4 @@
 import NewProjectController from './ProjectController';
-import _ from 'lodash';
-
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
@@ -49,16 +47,9 @@ describe('ProjectController', () => {
         sc.$onInit();
     });
 
-    it('should have a function that import all the icons ', () => {
-        const a = sc.importIconTemplates();
-        expect(a['icon-axis1']).toBeDefined();
-    });
-
     it('should have a function that handle the server data loading', () => {
-
         sc.handleStructureLoad();
         expect(sc.dataLoaded).toBeTruthy();
-        expect(sc.structure.coverageTypes.length).toBe(3);
         expect(sc.scope.$evalAsync).toHaveBeenCalled();
 
     });
@@ -69,15 +60,10 @@ describe('ProjectController', () => {
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
         spyOn(sc, 'mergeCustomAndDefault');
-        spyOn(sc, 'createCoverageArray');
         spyOn(sc, 'saveForm');
-        spyOn(sc, 'separateCoverageAndNationalLevelDeployments');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
-        expect(sc.createCoverageArray).toHaveBeenCalled();
-        expect(sc.saveForm).toHaveBeenCalled();
-        expect(sc.separateCoverageAndNationalLevelDeployments).toHaveBeenCalled();
     });
 
     it('should have a function that save a new form', () => {
@@ -96,7 +82,6 @@ describe('ProjectController', () => {
     it('should have some utility function', () => {
         expect(sc.concatCustom).toBeDefined();
         expect(sc.unfoldObjects).toBeDefined();
-        expect(sc.createCoverageArray).toBeDefined();
     });
 
     it('should have a function that handle the onInit when is in editMode', () => {
@@ -115,36 +100,14 @@ describe('ProjectController', () => {
     });
 
     it('should have a function that handle the data loaded from the server', () => {
-        spyOn(sc, 'createCoverageKeys');
         spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
         spyOn(sc, 'convertArraytoStandardCustomObj');
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad();
-        expect(sc.createCoverageKeys).toHaveBeenCalled();
         expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
 
     });
 
-    it('should have a function that handles the national level deployment', () => {
-        sc.project.national_level_deployment = [{ clients: 33 }];
-        sc.mergeNationalLevelWithDistrictCoverage();
-        expect(_.filter(sc.project.coverage, item => item.district === ' ENTIRE COUNTRY').length).toBeGreaterThan(0);
-    });
-
-    it('should have a function that separates the national level deployment before saving', () => {
-        const isCoverage = item => item.district !== 'ENTIRE COUNTRY';
-        sc.project.coverage = [
-            { district: 'someDistrict' },
-            { district: 'ENTIRE COUNTRY' }
-        ];
-        sc.separateCoverageAndNationalLevelDeployments(sc.project.coverage);
-        const normalCoverage = _.filter(sc.project.coverage, isCoverage);
-        const nationalLevelCoverage = _.reject(sc.project.coverage, isCoverage);
-        expect(normalCoverage.length).toBe(1);
-        expect(nationalLevelCoverage.length).toBe(1);
-
-
-    });
 
     it('should have a function that handles custom errors', () => {
         sc.newProjectForm = {

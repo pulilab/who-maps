@@ -14,7 +14,7 @@
                ng-model="vm.project.name"
                ng-model-options="{debounce: 200}"
                ng-change="vm.checkName()">
-        <div ng-messages="name.$error">
+        <div ng-messages="vm.errorObject.name.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
         </div>
@@ -65,38 +65,30 @@
 
     <h6>What is the current coverage of your project?</h6>
 
-    <div class="input-group" ng-repeat="cov in vm.project.coverage">
-      <div layout="column">
 
+    <div class="input-group">
+      <div layout="column">
+        <div layout="row">
+          <label>National level deployment</label>
+        </div>
         <div layout="row">
           <md-input-container class="md-block number" flex>
-            <label># Number</label>
-            <input required name="coverage.number" ng-model="cov.number">
+            <label># Health Workers</label>
+            <input required name="coverage.h" ng-model="vm.project.national_level_deployment.health_workers">
           </md-input-container>
-
-          <div class="textual-separator" flex="nogrow">of</div>
-
-          <md-input-container class="md-block type" flex>
-            <label>Type</label>
-            <md-select ng-model="cov.typeChosen">
-              <md-option value="{{type}}" ng-repeat="type in vm.structure.coverageTypes">
-                {{type}}
-              </md-option>
-            </md-select>
+          <md-input-container class="md-block number" flex>
+            <label># Facilities</label>
+            <input required name="coverage.h" ng-model="vm.project.national_level_deployment.facilities">
           </md-input-container>
-
-          <div class="textual-separator" flex="nogrow">or</div>
-
-          <div class="md-block" flex="nogrow">
-            <md-checkbox ng-model="data.othertype" class="md-primary" aria-label="Other type"></md-checkbox>
-          </div>
-
-          <md-input-container class="md-block no-margin" flex>
-            <label>Specify other type</label>
-            <input required name="coverage.spectype" ng-model="project.coverage.spectype" disabled>
+          <md-input-container class="md-block number" flex>
+            <label># Clients</label>
+            <input required name="coverage.h" ng-model="vm.project.national_level_deployment.clients">
           </md-input-container>
         </div>
-
+      </div>
+    </div>
+    <div class="input-group" ng-repeat="cov in vm.project.coverage">
+      <div layout="column">
         <div layout="row">
           <md-input-container class="md-block district" flex="50">
             <label>District</label>
@@ -104,7 +96,23 @@
               <md-option value="{{district}}" ng-repeat="district in vm.districtList">
                 {{district}}
               </md-option>
+              <md-option md-option-empty ng-hide="vm.districtList.length"> Select a country </md-option>
             </md-select>
+          </md-input-container>
+        </div>
+
+        <div layout="row">
+          <md-input-container class="md-block number" flex>
+            <label># Health Workers</label>
+            <input required name="coverage.h" ng-model="cov.health_workers">
+          </md-input-container>
+          <md-input-container class="md-block number" flex>
+            <label># Facilities</label>
+            <input required name="coverage.h" ng-model="cov.facilities">
+          </md-input-container>
+          <md-input-container class="md-block number" flex>
+            <label># Clients</label>
+            <input required name="coverage.h" ng-model="cov.clients">
           </md-input-container>
 
           <div class="add-more-item" flex>
@@ -132,9 +140,9 @@
       </md-input-container>
       <div class="add-more-item" flex>
         <md-button class="md-primary" aria-label="Add more"
-                       ng-show="vm.showRemove($index, vm.project.donors)"
-                       ng-click="vm.removeChild($index, 'donors')">
-              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Remove
+                   ng-show="vm.showRemove($index, vm.project.donors)"
+                   ng-click="vm.removeChild($index, 'donors')">
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Remove
         </md-button>
         <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showAddMore($index, vm.project.donors)"
