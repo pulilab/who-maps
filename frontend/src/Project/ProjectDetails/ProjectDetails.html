@@ -72,9 +72,18 @@
 
     <md-input-container class="md-block">
       <label>Geographic scope</label>
-      <textarea ng-model="vm.project.geographic_scope" md-maxlength="500" name="geographic_scope" rows="1" md-select-on-focus></textarea>
+      <textarea ng-model="vm.project.geographic_scope"
+                md-maxlength="500"
+                name="geographic_scope"
+                rows="1"
+                md-select-on-focus>
+      </textarea>
       <div ng-messages="vm.form.geographic_scope.$error">
-        <div ng-message="custom">The name has to be less than 100 characters long.</div>
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.implementation_overview.customError">
+            {{message}}
+          </div>
+        </div>
       </div>
     </md-input-container>
 
@@ -111,11 +120,11 @@
           </md-input-container>
           <md-input-container class="md-block number" type="number" flex="20">
             <label># Facilities</label>
-            <input ng-model="vm.project.national_level_deployment.facilities">
+            <input type="number" ng-model="vm.project.national_level_deployment.facilities">
           </md-input-container>
           <md-input-container class="md-block number" type="number" flex="20">
             <label># Clients</label>
-            <input  ng-model="vm.project.national_level_deployment.clients">
+            <input type="number" ng-model="vm.project.national_level_deployment.clients">
           </md-input-container>
           <div flex="40"></div>
         </div>
@@ -126,27 +135,33 @@
         <div layout="row">
           <md-input-container class="md-block district" flex="40">
             <label>District</label>
-            <md-select ng-model="cov.district">
+            <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.coverageDistrictRequired(cov)">
               <md-option value="{{district}}" ng-repeat="district in vm.districtList">
                 {{district}}
               </md-option>
               <md-option md-option-empty ng-hide="vm.districtList.length"> Select a country </md-option>
             </md-select>
+            <div ng-messages="vm.form['coverage_' + $index].$error">
+              <div ng-message="required">This is required.</div>
+            </div>
           </md-input-container>
         </div>
 
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
-            <input required  type="number" ng-model="cov.health_workers">
+            <input ng-required="vm.project.national_level_deployment.health_workers == null"
+                   type="number" ng-model="cov.health_workers" >
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
-            <input required type="number" ng-model="cov.facilities">
+            <input ng-required="vm.project.national_level_deployment.facilities == null"
+                   type="number" ng-model="cov.facilities">
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
-            <input required type="number" ng-model="cov.clients">
+            <input ng-required="vm.project.national_level_deployment.clients == null"
+                   type="number" ng-model="cov.clients">
           </md-input-container>
           <div class="add-more-item" flex="40">
             <md-button class="md-warn" aria-label="Remove"

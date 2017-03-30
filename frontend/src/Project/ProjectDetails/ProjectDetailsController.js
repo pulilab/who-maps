@@ -80,20 +80,28 @@ class ProjectDetailsController extends CollapsibleSet {
 
     checkName() {
         const self = this;
-        // this.handleCustomError('name');
-        self.ns.autocompleteProjectName(self.project.name)
-            .then(result => {
-                _.forEach(result, project => {
-                    project.isOwn = _.find(self.projectList, pj => {
-                        return pj.id === project.id;
+        this.handleCustomError('name');
+        if (self.project.name && self.project.name.length > 0) {
+            self.ns.autocompleteProjectName(self.project.name)
+                .then(result => {
+                    _.forEach(result, project => {
+                        project.isOwn = _.find(self.projectList, pj => {
+                            return pj.id === project.id;
+                        });
                     });
+                    self.similarProject = result;
+                    if (result && result[0] && result[0].name.toLowerCase() === self.project.name.toLowerCase()) {
+                        self.setCustomError('name', 'Project name is not unique');
+                    }
+                    self.scope.$evalAsync();
                 });
-                self.similarProject = result;
-                if (result && result[0] && result[0].name.toLowerCase() === self.project.name.toLowerCase()) {
-                    self.setCustomError('name', 'Project name is not unique');
-                }
-                self.scope.$evalAsync();
-            });
+        }
+    }
+
+    coverageDistrictRequired(coverageItem) {
+        return coverageItem.clients
+            || coverageItem.health_workers
+            || coverageItem.facilities;
     }
 
 

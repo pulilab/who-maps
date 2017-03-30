@@ -13,7 +13,6 @@ class NewProjectService extends AuthApi {
         let status = void 0;
         return this.post('projects/', data)
             .then(answer => {
-                console.log(answer)
                 status = answer.status;
                 return answer.json();
             })

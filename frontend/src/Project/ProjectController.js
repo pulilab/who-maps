@@ -100,7 +100,7 @@ class ProjectController extends ProjectDefinition {
 
     handleDataLoad(data) {
         data = _.cloneDeep(data);
-        this.convertArraytoStandardCustomObj(data);
+        this.convertArrayToStandardCustomObj(data);
         this.userProjects = this.cs.projectList;
         data.start_date = this.convertDate(data.start_date);
         data.implementation_dates = this.convertDate(data.implementation_dates);
@@ -120,7 +120,7 @@ class ProjectController extends ProjectDefinition {
     }
 
 
-    convertArraytoStandardCustomObj(data) {
+    convertArrayToStandardCustomObj(data) {
         const keyArray = ['interoperability_standards', 'health_focus_areas', 'licenses'];
 
         keyArray.forEach(key=> {
@@ -134,23 +134,27 @@ class ProjectController extends ProjectDefinition {
         });
     }
 
-    isCurrentProject(projectId) {
-        return parseInt(projectId, 10) === parseInt(this.projectId, 10);
-    }
-
-
     createDateFields(processedForm) {
         processedForm.start_date = moment(this.project.start_date).toJSON();
         processedForm.end_date = moment(this.project.end_date).toJSON();
         processedForm.implementation_dates = moment(this.project.implementation_dates).toJSON();
     }
 
+    addDefaultEmptyKeys(processedForm) {
+        processedForm.coverage = processedForm.coverage.filter(cov => {
+            return Object.keys(cov).length > 1;
+        });
+        processedForm.platforms = processedForm.platforms || null;
+        return processedForm;
+    }
+
 
     save() {
-        if (!this.form.$valid) {
-            const processedForm = _.cloneDeep(this.project);
+        if (this.form.$valid) {
+            let processedForm = _.cloneDeep(this.project);
             this.createDateFields(processedForm);
             this.mergeCustomAndDefault(processedForm);
+            processedForm = this.addDefaultEmptyKeys(processedForm);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }

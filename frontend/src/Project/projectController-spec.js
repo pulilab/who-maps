@@ -62,8 +62,12 @@ describe('ProjectController', () => {
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'saveForm');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
+        sc.form = {
+            $valid: true
+        };
         sc.save();
-        expect(sc.mergeCustomAndDefault).toHaveBeenCalled();
+        sc.form.$valid = false;
+        expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
     });
 
     it('should have a function that save a new form', () => {
@@ -101,22 +105,22 @@ describe('ProjectController', () => {
 
     it('should have a function that handle the data loaded from the server', () => {
         spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
-        spyOn(sc, 'convertArraytoStandardCustomObj');
+        spyOn(sc, 'convertArrayToStandardCustomObj');
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad({});
-        expect(sc.convertArraytoStandardCustomObj).toHaveBeenCalled();
+        expect(sc.convertArrayToStandardCustomObj).toHaveBeenCalled();
 
     });
 
 
     it('should have a function that handles custom errors', () => {
-        sc.newProjectForm = {
+        sc.form = {
             asd: {
                 $setValidity: jasmine.createSpy('innerSet')
             }
         };
         sc.handleCustomError('asd');
-        expect(sc.newProjectForm.asd.$setValidity).toHaveBeenCalled();
+        expect(sc.form.asd.$setValidity).toHaveBeenCalled();
     });
 
     it('fetches all users, team members and viewers if in edit mode', () => {
