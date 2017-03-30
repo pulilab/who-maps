@@ -5,7 +5,11 @@ import NewProjectController from './ProjectController';
 let sc = {};
 
 const $scope = {
-    $evalAsync: jasmine.createSpy('eval'),
+    $evalAsync: jasmine.createSpy('eval').and.callFake(toCall => {
+        if (toCall && typeof toCall === 'function') {
+            toCall();
+        }
+    }),
     $$postDigest: jasmine.createSpy('digest')
 };
 
@@ -33,6 +37,16 @@ const getGroupMock = {
     }
 };
 
+const mockPromiseGenerator = result => {
+    return {
+        then: toCall=> {
+            if (toCall && typeof toCall === 'function') {
+                toCall(result);
+            }
+        }
+    };
+};
+
 const cs = {
     projectStructure: mockData,
     userProfile: {
@@ -40,7 +54,9 @@ const cs = {
     },
     populateProjectStructure: jasmine.createSpy('pps'),
     getProjectData: jasmine.createSpy('gpd').and.returnValue(Promise.resolve()),
-    updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve())
+    updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve()),
+    isViewer: jasmine.createSpy('isViewer').and.returnValue(true),
+    isMember: jasmine.createSpy('isMember').and.returnValue(true)
 };
 
 const upload = {};
@@ -72,26 +88,57 @@ describe('ProjectController', () => {
         document.body.appendChild(e);
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'saveForm');
+        spyOn(sc, 'updateForm');
+        spyOn(sc, 'putGroups');
         spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
         sc.form = {
             $valid: true
         };
         sc.save();
         sc.form.$valid = false;
+        sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
+        expect(sc.saveForm).toHaveBeenCalled();
+        sc.form.$valid = true;
+        sc.editMode = true;
+        sc.save();
+        expect(sc.updateForm).toHaveBeenCalled();
     });
 
     it('should have a function that save a new form', () => {
-        spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve());
+        spyOn(sc, 'handleResponse');
+        spyOn(sc, 'confirmationToast');
+        spyOn(sc, 'ownershipCheck');
+        spyOn(sc, 'postSaveActions');
+        spyOn(sc, 'putGroups').and.returnValue(mockPromiseGenerator({}));
+
+        const spy = spyOn(sc.ns, 'newProject');
+        spy.and.returnValue(mockPromiseGenerator({ success: false }));
         sc.saveForm(sc.project);
         expect(sc.ns.newProject).toHaveBeenCalled();
+        expect(sc.handleResponse).toHaveBeenCalled();
+
+        spy.and.returnValue(mockPromiseGenerator({ success: true }));
+        sc.saveForm(sc.project);
+        expect(sc.ownershipCheck).toHaveBeenCalled();
+        expect(sc.putGroups).toHaveBeenCalled();
+        expect(sc.postSaveActions).toHaveBeenCalled();
+        expect(sc.confirmationToast).toHaveBeenCalled();
     });
 
     it('should have a function that update an existing form', () => {
-        spyOn(sc.ns, 'updateProject').and.returnValue(Promise.resolve({ success: true }));
+        spyOn(sc, 'confirmationToast');
+        spyOn(sc, 'handleResponse');
+        const spy = spyOn(sc.ns, 'updateProject');
+        spy.and.returnValue(mockPromiseGenerator({ success: false }));
         sc.editMode = true;
         sc.updateForm(sc.project);
         expect(sc.ns.updateProject).toHaveBeenCalled();
+        expect(sc.handleResponse).toHaveBeenCalled();
+        spy.and.returnValue(mockPromiseGenerator({ success: true }));
+        sc.updateForm(sc.project);
+        expect(sc.cs.updateProject).toHaveBeenCalled();
+        expect(sc.confirmationToast).toHaveBeenCalled();
     });
 
     it('should have some utility function', () => {
@@ -120,6 +167,40 @@ describe('ProjectController', () => {
         expect(sc.EE.removeListener).toHaveBeenCalledTimes(3);
     });
 
+    it('should have a function that emit a scroll event', () => {
+        spyOn(sc.EE, 'emit');
+        window.location.hash = '#a';
+        sc.automaticScroll('a');
+        sc.automaticScroll('b');
+        expect(sc.EE.emit).toHaveBeenCalledTimes(1);
+    });
+
+    it('should have a function that scroll the view ', () => {
+        spyOn(sc.EE, 'emit');
+        const a = document.createElement('div');
+        const mainElement = document.createElement('div');
+        mainElement.setAttribute('class', 'main-content');
+        mainElement.height = 50000;
+        a.setAttribute('id', 'a');
+        window.document.body.appendChild(a);
+        window.document.body.appendChild(mainElement);
+        sc.scrollToFieldSet('a');
+        expect(sc.EE.emit).toHaveBeenCalled();
+    });
+
+    it('should have a function to change the hash of the page url', ()=> {
+        const hash = 'a';
+        sc.changeHash(hash);
+        expect(window.location.hash).toBe('#' + hash);
+    });
+
+    it('should have functions that returns if the user is member or viewer of the project', ()=> {
+        sc.isViewer({});
+        expect(sc.cs.isViewer).toHaveBeenCalled();
+        sc.isMember();
+        expect(sc.cs.isMember).toHaveBeenCalled();
+    });
+
     it('should have a function that handle the structure loaded from the server', () => {
         sc.handleStructureLoad(mockData);
         expect(sc.dataLoaded).toBe(true);
@@ -136,6 +217,24 @@ describe('ProjectController', () => {
 
     });
 
+    it('should have a function that convert a string to a date', () => {
+        const date =  new Date();
+        const result = sc.convertDate(date.toJSON());
+        expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it('should have a function that convert an array in a custom-standard object', ()=> {
+        const input = {
+            licenses: [1, 2, 3]
+        };
+        sc.structure = {
+            licenses: ['a']
+        };
+        sc.convertArrayToStandardCustomObj(input);
+        expect(input.licenses.standard[0]).toBe(1);
+        expect(sc.structure.licenses).toContain(1);
+
+    });
 
     it('should have a function that handles custom errors', () => {
         sc.form = {

@@ -26,6 +26,7 @@ class ProjectDetailsController extends CollapsibleSet {
         this.getStructureData();
         this.districtList = [];
         this.projectList = [];
+
     }
 
     watchers() {
@@ -33,6 +34,12 @@ class ProjectDetailsController extends CollapsibleSet {
         self.scope.$watch(() => {
             return this.project.country;
         }, self.fetchDistricts);
+
+        self.scope.$watch(() => {
+            return this.project.name;
+        }, name => {
+            self.currentName = self.currentName || name;
+        });
     }
 
     getStructureData() {
@@ -81,13 +88,16 @@ class ProjectDetailsController extends CollapsibleSet {
     checkName() {
         const self = this;
         this.handleCustomError('name');
-        if (self.project.name && self.project.name.length > 0) {
+        if (self.project.name && self.project.name.length > 0 && self.project.name !== self.currentName) {
             self.ns.autocompleteProjectName(self.project.name)
                 .then(result => {
                     _.forEach(result, project => {
                         project.isOwn = _.find(self.projectList, pj => {
                             return pj.id === project.id;
                         });
+                    });
+                    result = result.filter(project => {
+                        return project.name !== self.currentName;
                     });
                     self.similarProject = result;
                     if (result && result[0] && result[0].name.toLowerCase() === self.project.name.toLowerCase()) {
