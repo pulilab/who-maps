@@ -22,6 +22,17 @@ const $state = {
     }
 };
 
+const getGroupMock = {
+    then: (toCall) => {
+        toCall({
+            data: {
+                team: ['a'],
+                viewers: ['b']
+            }
+        });
+    }
+};
+
 const cs = {
     projectStructure: mockData,
     userProfile: {
@@ -90,10 +101,23 @@ describe('ProjectController', () => {
 
     it('should have a function that handle the onInit when is in editMode', () => {
         spyOn(sc, 'handleStructureLoad');
+        spyOn(sc.EE, 'emit');
+        spyOn(sc.ns, 'getGroups').and.returnValue(getGroupMock);
         sc.editMode = true;
         sc.onInit();
         expect(sc.cs.getProjectData).toHaveBeenCalled();
         expect(sc.handleStructureLoad).toHaveBeenCalled();
+        expect(sc.team[0]).toBe('a');
+        sc.userProfile = undefined;
+        sc.onInit();
+        expect(sc.EE.emit).toHaveBeenCalled();
+
+    });
+
+    it('should have a function that handle the on destroy event', () => {
+        spyOn(sc.EE, 'removeListener');
+        sc.$onDestroy();
+        expect(sc.EE.removeListener).toHaveBeenCalledTimes(3);
     });
 
     it('should have a function that handle the structure loaded from the server', () => {
