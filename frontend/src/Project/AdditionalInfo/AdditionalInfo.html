@@ -13,6 +13,11 @@
         <input required name="contact_name" ng-model="vm.project.contact_name">
         <div ng-messages="vm.form.contact_name.$error">
           <div ng-message="required">This is required.</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.contact_name.customError">
+              {{message}}
+            </div>
+          </div>
         </div>
       </md-input-container>
 
@@ -27,6 +32,11 @@
         <div ng-messages="vm.form.contact_email.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="pattern">This should be a valid email address</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.contact_email.customError">
+              {{message}}
+            </div>
+          </div>
         </div>
       </md-input-container>
     </div>

@@ -17,6 +17,11 @@
         <div ng-messages="vm.form.name.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.name.customError">
+              {{message}}
+            </div>
+          </div>
         </div>
       </md-input-container>
       <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="50">
@@ -46,6 +51,11 @@
         </md-select>
         <div ng-messages="vm.form.country.$error">
           <div ng-message="required">This is required.</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.country.customError">
+              {{message}}
+            </div>
+          </div>
         </div>
       </md-input-container>
 
@@ -62,7 +72,10 @@
 
     <md-input-container class="md-block">
       <label>Geographic scope</label>
-      <textarea ng-model="vm.project.geographic_scope" md-maxlength="500" rows="1" md-select-on-focus></textarea>
+      <textarea ng-model="vm.project.geographic_scope" md-maxlength="500" name="geographic_scope" rows="1" md-select-on-focus></textarea>
+      <div ng-messages="vm.form.geographic_scope.$error">
+        <div ng-message="custom">The name has to be less than 100 characters long.</div>
+      </div>
     </md-input-container>
 
     <md-input-container class="md-block">
@@ -76,6 +89,11 @@
       <div ng-messages="vm.form.implementation_overview.$error">
         <div ng-message="required">This is required.</div>
         <div ng-message="md-maxlength">This field has to be less than 500 characters long.</div>
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.implementation_overview.customError">
+            {{message}}
+          </div>
+        </div>
       </div>
     </md-input-container>
 
@@ -89,15 +107,15 @@
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
-            <input  name="coverage.h" type="number" ng-model="vm.project.national_level_deployment.health_workers">
+            <input  type="number" ng-model="vm.project.national_level_deployment.health_workers">
           </md-input-container>
           <md-input-container class="md-block number" type="number" flex="20">
             <label># Facilities</label>
-            <input  name="coverage.h" ng-model="vm.project.national_level_deployment.facilities">
+            <input ng-model="vm.project.national_level_deployment.facilities">
           </md-input-container>
           <md-input-container class="md-block number" type="number" flex="20">
             <label># Clients</label>
-            <input  name="coverage.h" ng-model="vm.project.national_level_deployment.clients">
+            <input  ng-model="vm.project.national_level_deployment.clients">
           </md-input-container>
           <div flex="40"></div>
         </div>
@@ -120,15 +138,15 @@
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
-            <input required name="coverage.h" type="number" ng-model="cov.health_workers">
+            <input required  type="number" ng-model="cov.health_workers">
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
-            <input required name="coverage.h" type="number" ng-model="cov.facilities">
+            <input required type="number" ng-model="cov.facilities">
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
-            <input required name="coverage.h" type="number" ng-model="cov.clients">
+            <input required type="number" ng-model="cov.clients">
           </md-input-container>
           <div class="add-more-item" flex="40">
             <md-button class="md-warn" aria-label="Remove"

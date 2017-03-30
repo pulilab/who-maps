@@ -147,15 +147,17 @@ class ProjectController extends ProjectDefinition {
 
 
     save() {
-        const processedForm = _.cloneDeep(this.project);
-        this.createDateFields(processedForm);
-        this.mergeCustomAndDefault(processedForm);
-        if (!this.editMode) {
-            this.saveForm(processedForm);
-        }
-        else {
-            this.updateForm(processedForm);
-            this.putGroups();
+        if (!this.form.$valid) {
+            const processedForm = _.cloneDeep(this.project);
+            this.createDateFields(processedForm);
+            this.mergeCustomAndDefault(processedForm);
+            if (!this.editMode) {
+                this.saveForm(processedForm);
+            }
+            else {
+                this.updateForm(processedForm);
+                this.putGroups();
+            }
         }
 
     }
@@ -222,10 +224,17 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleResponse(response) {
+        console.log(response.data, this.form);
         _.forEach(response.data, (item, key) => {
-            this.newProjectForm[key].customError = item;
-            this.newProjectForm[key].$setValidity('custom', false);
+            if (this.form[key]) {
+                this.form[key].customError = item;
+                this.form[key].$setValidity('custom', false);
+            }
+            else {
+                console.error('missing name in the form: ', key);
+            }
         });
+        this.scope.$evalAsync();
     }
 
     unfoldObjects(obj) {
@@ -258,13 +267,13 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleCustomError(key) {
-        this.newProjectForm[key].$setValidity('custom', true);
-        this.newProjectForm[key].customError = [];
+        this.form[key].$setValidity('custom', true);
+        this.form[key].customError = [];
     }
 
     setCustomError(key, error) {
-        this.newProjectForm[key].$setValidity('custom', false);
-        this.newProjectForm[key].customError.push(error);
+        this.form[key].$setValidity('custom', false);
+        this.form[key].customError.push(error);
     }
 
 

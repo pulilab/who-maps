@@ -7,7 +7,13 @@
     <div class="section-wrapper">
       <md-input-container class="md-block" flex="50">
         <label>Technology deployment date</label>
-        <md-datepicker ng-model="vm.project.implementation_dates"></md-datepicker>
+        <md-datepicker ng-model="vm.project.implementation_dates" name="implementation_dates" required></md-datepicker>
+        <div ng-messages="vm.implementation_dates.name.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-repeat="message in vm.form.implementation_dates.customError">
+              {{message}}
+            </div>
+        </div>
       </md-input-container>
 
       <div class="checklist">

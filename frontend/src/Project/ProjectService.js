@@ -13,6 +13,7 @@ class NewProjectService extends AuthApi {
         let status = void 0;
         return this.post('projects/', data)
             .then(answer => {
+                console.log(answer)
                 status = answer.status;
                 return answer.json();
             })
@@ -20,6 +21,12 @@ class NewProjectService extends AuthApi {
                 return {
                     success: status < 400,
                     data: json
+                };
+            })
+            .catch(answer => {
+                return {
+                    success: false,
+                    data: answer
                 };
             });
     }
@@ -53,6 +60,12 @@ class NewProjectService extends AuthApi {
                 return {
                     success: status < 400,
                     data: json
+                };
+            })
+            .catch(answer => {
+                return {
+                    success: false,
+                    data: answer
                 };
             });
     }
