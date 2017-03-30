@@ -22,7 +22,7 @@
 
     <h6>Implementing partners</h6>
 
-    <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
+    <div layout="row" ng-class="{last: $last}" ng-repeat="partner in vm.project.implementing_partners">
       <md-input-container md-no-float class="md-block" flex="50">
         <input ng-model="partner.value" placeholder="Partner's name">
       </md-input-container>

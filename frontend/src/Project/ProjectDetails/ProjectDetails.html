@@ -90,7 +90,7 @@
     <div class="input-group" ng-class="{last: $last}" ng-repeat="cov in vm.project.coverage">
       <div layout="column">
         <div layout="row">
-          <md-input-container class="md-block district" flex="40">
+          <md-input-container class="md-block district" flex="50">
             <label>District</label>
             <md-select ng-model="cov.district">
               <md-option value="{{district}}" ng-repeat="district in vm.districtList">
@@ -99,6 +99,7 @@
               <md-option md-option-empty ng-hide="vm.districtList.length"> Select a country </md-option>
             </md-select>
           </md-input-container>
+          <div flex="50"></div>
         </div>
 
         <div layout="row">
@@ -127,7 +128,6 @@
             </md-button>
           </div>
         </div>
-
       </div>
     </div>
 
