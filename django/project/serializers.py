@@ -24,8 +24,8 @@ class PlatformSerializer(serializers.Serializer):
 
 
 class ProjectSerializer(serializers.Serializer):
-    name = serializers.CharField(validators=[UniqueValidator(queryset=Project.objects.all())])
-    organisation = serializers.CharField(max_length=256)
+    name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
+    organisation = serializers.CharField(max_length=128)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
     implementation_overview = serializers.CharField(max_length=512)
