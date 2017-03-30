@@ -184,7 +184,7 @@
 
     <div layout="row" ng-repeat="donor in vm.project.donors">
       <md-input-container md-no-float class="md-block" flex="50">
-        <input ng-model="donor.value" placeholder="Donor's name" required name="{{'donor_' + $index}}">
+        <input ng-model="donor" placeholder="Donor's name" required name="{{'donor_' + $index}}">
         <div ng-messages="vm.form['donor_' + $index].$error">
           <div ng-message="required">This is required.</div>
         </div>

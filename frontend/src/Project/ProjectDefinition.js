@@ -27,7 +27,7 @@ class ProjectDefinition extends Protected {
                 standard: [],
                 custom: void 0
             },
-            donors: [{}],
+            donors: [''],
             application: [],
             reports: [{}],
             publications: [{}],

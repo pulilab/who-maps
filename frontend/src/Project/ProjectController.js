@@ -18,6 +18,7 @@ class ProjectController extends ProjectDefinition {
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.postSaveActions = this.postSaveActions.bind(this);
         this.toast = toast;
     }
 
@@ -190,7 +191,7 @@ class ProjectController extends ProjectDefinition {
                 if (response && response.success) {
                     this.ownershipCheck(response.data);
                     this.putGroups().then(() => {
-                        this.postSaveActions.bind(this);
+                        this.postSaveActions();
                         this.confirmationToast();
                     });
                 }
@@ -228,7 +229,6 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleResponse(response) {
-        console.log(response.data, this.form);
         _.forEach(response.data, (item, key) => {
             if (this.form[key]) {
                 this.form[key].customError = item;
