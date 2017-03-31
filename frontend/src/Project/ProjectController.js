@@ -137,7 +137,8 @@ class ProjectController extends ProjectDefinition {
     convertObjectArrayToStringArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
-            data[key] = data[key].map(value => value);
+            data[key] = data[key].map(value => value.value);
+            data[key] = data[key].filter(item => item);
         });
         return Object.assign({}, data);
     }
@@ -160,6 +161,7 @@ class ProjectController extends ProjectDefinition {
         processedForm.start_date = moment(this.project.start_date).toJSON();
         processedForm.end_date = moment(this.project.end_date).toJSON();
         processedForm.implementation_dates = moment(this.project.implementation_dates).toJSON();
+        return Object.assign({}, processedForm);
     }
 
     addDefaultEmptyKeys(processedForm) {
@@ -167,15 +169,16 @@ class ProjectController extends ProjectDefinition {
             return Object.keys(cov).length > 1;
         });
         processedForm.platforms = processedForm.platforms || null;
-        return processedForm;
+        return Object.assign(processedForm);
     }
 
 
     save() {
         if (this.form.$valid) {
-            let processedForm = _.cloneDeep(this.project);
-            this.createDateFields(processedForm);
-            this.mergeCustomAndDefault(processedForm);
+            let processedForm = Object.assign({}, this.project);
+            processedForm.organisation = processedForm.organisation.id;
+            processedForm = this.createDateFields(processedForm);
+            processedForm = this.mergeCustomAndDefault(processedForm);
             processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.addDefaultEmptyKeys(processedForm);
             if (!this.editMode) {
@@ -263,18 +266,6 @@ class ProjectController extends ProjectDefinition {
         this.scope.$evalAsync();
     }
 
-    unfoldObjects(obj) {
-        return _.chain(obj)
-            .map(item => {
-                item = item.value;
-                return item;
-            })
-            .filter(item => {
-                return !_.isNil(item);
-            })
-            .value();
-    }
-
     concatCustom(obj) {
         const cat = _.concat(obj.custom, obj.standard);
         return _.filter(cat, item => {
@@ -283,13 +274,12 @@ class ProjectController extends ProjectDefinition {
     }
 
     mergeCustomAndDefault(collection) {
-        const copy = _.cloneDeep(collection);
-        collection.organisation = copy.organisation.id;
-        collection.interoperability_standards = this.concatCustom(collection.interoperability_standards);
-        collection.licenses = this.concatCustom(collection.licenses);
-        collection.health_focus_areas = this.concatCustom(collection.health_focus_areas);
-        collection.interoperability_links = _.toArray(collection.interoperability_links);
-        collection.donors = this.unfoldObjects(collection.donors);
+        const self = this;
+        const keyArray = ['interoperability_standards', 'licenses', 'health_focus_areas', 'interoperability_links'];
+        keyArray.forEach(key => {
+            collection[key] = self.concatCustom(collection[key]);
+        });
+        return Object.assign({}, collection);
     }
 
     handleCustomError(key) {

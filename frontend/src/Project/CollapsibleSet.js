@@ -18,7 +18,6 @@ class CollapsibleSet {
         setTimeout(() => {
             this.EE.emit('componentLoaded', this.elementId);
         });
-        window.TEST = this.project;
     }
 
     defaultOnDestroy() {
