@@ -106,6 +106,7 @@ class ProjectController extends ProjectDefinition {
         data.start_date = this.convertDate(data.start_date);
         data.implementation_dates = this.convertDate(data.implementation_dates);
         data.end_date = this.convertDate(data.end_date);
+        data = this.convertStringArrayToObjectArray(data);
         this.scope.$evalAsync(() => {
             this.project = data;
         });
@@ -120,6 +121,26 @@ class ProjectController extends ProjectDefinition {
         return undefined;
     }
 
+    convertStringArrayToObjectArray(data) {
+        const keyArray = ['donors', 'implementing_partners'];
+        keyArray.forEach(key => {
+            data[key] = data[key].map(value => {
+                return { value };
+            });
+            if (data[key].length === 0) {
+                data[key].push({});
+            }
+        });
+        return Object.assign({}, data);
+    }
+
+    convertObjectArrayToStringArray(data) {
+        const keyArray = ['donors', 'implementing_partners'];
+        keyArray.forEach(key => {
+            data[key] = data[key].map(value => value);
+        });
+        return Object.assign({}, data);
+    }
 
     convertArrayToStandardCustomObj(data) {
         const keyArray = ['interoperability_standards', 'health_focus_areas', 'licenses'];
@@ -155,6 +176,7 @@ class ProjectController extends ProjectDefinition {
             let processedForm = _.cloneDeep(this.project);
             this.createDateFields(processedForm);
             this.mergeCustomAndDefault(processedForm);
+            processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.addDefaultEmptyKeys(processedForm);
             if (!this.editMode) {
                 this.saveForm(processedForm);

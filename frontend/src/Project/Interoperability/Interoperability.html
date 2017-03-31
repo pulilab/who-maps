@@ -27,6 +27,11 @@
         <input ng-model="partner.value" placeholder="Partner's name">
       </md-input-container>
       <div class="add-more-item" flex>
+          <md-button class="md-warn" aria-label="Remove"
+                   ng-show="vm.showRemove($index, vm.project.implementing_partners)"
+                   ng-click="vm.removeChild($index, 'implementing_partners')">
+          <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+        </md-button>
         <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showAddMore($index, vm.project.implementing_partners)"
                    ng-click="vm.addChild('implementing_partners')">

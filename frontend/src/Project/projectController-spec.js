@@ -87,6 +87,8 @@ describe('ProjectController', () => {
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
         spyOn(sc, 'mergeCustomAndDefault');
+        spyOn(sc, 'convertObjectArrayToStringArray');
+        spyOn(sc, 'addDefaultEmptyKeys');
         spyOn(sc, 'saveForm');
         spyOn(sc, 'updateForm');
         spyOn(sc, 'putGroups');
@@ -98,6 +100,8 @@ describe('ProjectController', () => {
         sc.form.$valid = false;
         sc.save();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
+        expect(sc.convertObjectArrayToStringArray).toHaveBeenCalled();
+        expect(sc.addDefaultEmptyKeys).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
         sc.form.$valid = true;
         sc.editMode = true;
@@ -211,9 +215,11 @@ describe('ProjectController', () => {
     it('should have a function that handle the data loaded from the server', () => {
         spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
         spyOn(sc, 'convertArrayToStandardCustomObj');
+        spyOn(sc, 'convertStringArrayToObjectArray');
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad({});
         expect(sc.convertArrayToStandardCustomObj).toHaveBeenCalled();
+        expect(sc.convertStringArrayToObjectArray).toHaveBeenCalled();
 
     });
 

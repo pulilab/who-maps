@@ -15,6 +15,7 @@ class CountryTopBarController extends Protected {
 
     onInit() {
         const vm = this;
+        vm.pageLoaded = false;
         this.defaultOnInit();
         this.profileDataReady = false;
         if (this.user) {
@@ -25,6 +26,7 @@ class CountryTopBarController extends Protected {
         this.ccs.getCountryData(subDomain).then(data => {
             this.scope.$evalAsync(() => {
                 vm.countryData = data;
+                vm.pageLoaded = true;
             });
         });
 

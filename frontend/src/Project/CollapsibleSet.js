@@ -42,7 +42,9 @@ class CollapsibleSet {
     }
 
     addChild(childName) {
-        this[this.collectionName][childName].push({});
+        const child = this[this.collectionName][childName];
+        const toAdd = typeof child[0] === 'string' ? '' : {};
+        child.push(toAdd);
     }
     removeChild(index, childName) {
         return this[this.collectionName][childName].splice(index, 1);
