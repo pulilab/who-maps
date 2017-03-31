@@ -41,9 +41,9 @@ class ProjectSerializer(serializers.Serializer):
     hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
     interventions = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
     government_investor = serializers.BooleanField()
-    repository = serializers.URLField(required=False, allow_blank=True)
+    repository = serializers.CharField(max_length=200, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    wiki = serializers.URLField(required=False, allow_blank=True)
+    wiki = serializers.URLField(max_length=200, required=False, allow_blank=True)
     interoperability_links = serializers.ListField(child=serializers.CharField(max_length=64, allow_null=True),
                                                    required=False, max_length=16)
     interoperability_standards = serializers.ListField(child=serializers.CharField(max_length=64),
