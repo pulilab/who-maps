@@ -127,6 +127,36 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
 
+    def test_create_validating_list_fields_invalid_data(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(
+            name="Test Project4",
+            implementing_partners=[{"object": "not good"}],
+            health_focus_areas=[{"object": "not good"}],
+            licenses=[{"object": "not good"}],
+            donors=[{"object": "not good"}],
+            his_bucket=[{"object": "not good"}],
+            hsc_challenges=[{"object": "not good"}],
+            interventions=[{"object": "not good"}],
+            interoperability_links=[{"object": "not good"}],
+            data_exchanges=[{"object": "not good"}],
+            interoperability_standards=[{"object": "not good"}],
+        ))
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(response.json().keys()), 10)
+        self.assertEqual(response.json()['implementing_partners'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['health_focus_areas'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['licenses'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['donors'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interventions'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interoperability_links'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['data_exchanges'][0], 'Not a valid string.')
+
     def test_create_new_project_with_platform_name_missing(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
