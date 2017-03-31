@@ -96,6 +96,11 @@ describe('ProjectController', () => {
         sc.form = {
             $valid: true
         };
+        sc.project = {
+            organisation: {
+                id: 1
+            }
+        };
         sc.save();
         sc.form.$valid = false;
         sc.save();
@@ -147,7 +152,6 @@ describe('ProjectController', () => {
 
     it('should have some utility function', () => {
         expect(sc.concatCustom).toBeDefined();
-        expect(sc.unfoldObjects).toBeDefined();
     });
 
     it('should have a function that handle the onInit when is in editMode', () => {
