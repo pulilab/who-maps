@@ -9,7 +9,6 @@ class CountryPartnersController {
     }
 
     onInit() {
-
     }
 
     computeLogoStyle(logo) {
