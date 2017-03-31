@@ -1,0 +1,62 @@
+<div class="project-section section-additionalinfo" md-whiteframe="2">
+
+  <div class="section-title md-title">
+    4. Additional info
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  </div>
+
+  <div class="section-wrapper">
+
+    <div layout="row" class="first">
+      <md-input-container class="md-block" flex>
+        <label>Contact name</label>
+        <input required name="contact_name" ng-model="vm.project.contact_name">
+        <div ng-messages="vm.form.contact_name.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.contact_name.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </md-input-container>
+
+      <md-input-container class="md-icon-float md-block" flex>
+        <label>Contact email</label>
+        <md-icon><i class="material-icons">&#xE0BE;</i></md-icon>
+        <input required name="contact_email"
+               ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
+               md-minlength="4"
+               md-maxlength="256"
+               ng-model="vm.project.contact_email">
+        <div ng-messages="vm.form.contact_email.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="pattern">This should be a valid email address</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.contact_email.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </md-input-container>
+    </div>
+
+    <div class="checklist small-margin">
+      <h6>Select health focus area(s):</h6>
+      <ul>
+        <li ng-repeat="d in vm.structure.health_focus_areas">
+          <md-checkbox md-no-ink aria-label=""
+                       class="md-primary"
+                       ng-checked="vm.checkboxChecked(d, 'health_focus_areas')"
+                       ng-click="vm.checkboxToggle(d, 'health_focus_areas')"
+                       aria-label="{{ d }}">
+            {{ d }}
+          </md-checkbox>
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+
+</div>

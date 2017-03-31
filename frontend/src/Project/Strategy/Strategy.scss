@@ -1,0 +1,16 @@
+@import '../../variables';
+@import '../../mixins';
+
+.section-strategy {
+
+  .section-wrapper.alt-2 {
+    padding-top: 60px;
+  }
+
+  .input-group {
+    &:first-of-type {
+      margin-bottom: 20px !important;
+    }
+  }
+
+}

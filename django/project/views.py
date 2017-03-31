@@ -6,6 +6,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
@@ -165,6 +166,10 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         """
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        data_serializer.fields.get('name').validators = \
+            [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
+        data_serializer.fields.get('name').validators\
+            .append(UniqueValidator(queryset=Project.objects.all().exclude(id=project.id)))
         self.check_object_permissions(request, project)
         data_valid = data_serializer.is_valid()
         if data_valid:

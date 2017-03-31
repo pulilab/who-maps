@@ -1,6 +1,4 @@
 import DashboardService from './DashboardService.js';
-import AuthApi from '../Common/AuthApi';
-import { StaticUtilities } from '../Utilities';
 import { Protected } from '../Common/';
 import _ from 'lodash';
 
@@ -34,7 +32,6 @@ class DashboardModuleController extends Protected {
 
         if (this.projectId) {
             this.cs.getProjectData(this.projectId).then(data => {
-                this.addResourcesMeta(data);
                 this.timeout(() => {
                     this.fetchProjectData(data);
                 });
@@ -393,56 +390,6 @@ class DashboardModuleController extends Protected {
         this.pi[projectIndex] += 1;
     }
 
-    addResourcesMeta(data) {
-
-        const res = { reports: [], articles: [], links: [] };
-
-        data.reports.forEach(link => {
-            if (_.keys(link).length) {
-                res.reports.push({
-                    type: 'link',
-                    link: link.value
-                });
-            }
-        });
-
-        data.publications.forEach(link => {
-            if (_.keys(link).length) {
-                res.articles.push({
-                    type: 'link',
-                    link: link.value
-                });
-            }
-        });
-
-        data.links.forEach(link => {
-            if (_.keys(link).length) {
-                res.links.push({
-                    type: 'link',
-                    link: link.value
-                });
-            }
-        });
-
-        data.files.forEach(fileObj => {
-            const type = fileObj.type === 'report' ? 'reports' : 'articles';
-            res[type].push({
-                type: 'file',
-                filename: fileObj.filename,
-                id: fileObj.id
-            });
-        });
-
-        this.resources = res;
-    }
-
-    downloadRes(resObj) {
-
-        return new AuthApi('').getBlob(`files/${resObj.id}/`)
-            .then(data => {
-                StaticUtilities.launchDownload(data, resObj.filename);
-            });
-    }
 
     fillImproveArray(data) {
 

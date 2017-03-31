@@ -13,6 +13,7 @@ class EditProfileController extends Protected {
         super();
         this.es = new EditProfileService();
         this.EE = window.EE;
+        this.ccs = require('../CustomCountryService');
         this.scope = $scope;
         this.state = $state;
         this.storage = new Storage();
@@ -29,27 +30,18 @@ class EditProfileController extends Protected {
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleDataLoad();
-        this.createBlurHandle();
-    }
-
-    createBlurHandle() {
-
-        this.scope.$$postDigest(() => {
-
-            document.querySelector('#orgauto')
-                .querySelector('input')
-                .addEventListener('blur', () => {
-                    if (!this.latestOrgs.some(org => org.name === this.searchText)) {
-                        this.addOrganisation(this.searchText);
-                    }
-                });
-        });
     }
 
     handleDataLoad() {
+        const self = this;
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
+        this.ccs.getCountries().then(data => {
+            self.scope.$evalAsync(() => {
+                self.countriesList = data;
+            });
+        });
         if (this.userProfile && this.userProfile.organisation && _.isNull(this.userProfile.organisation.name)) {
             this.userProfile.organisation = null;
         }
@@ -130,21 +122,6 @@ class EditProfileController extends Protected {
     handleCustomError(key) {
         this.editProfileForm[key].$setValidity('custom', true);
         this.editProfileForm[key].customError = [];
-    }
-
-    organisationSearch(name) {
-        const getOrgsPromise  = this.es.autocompleteOrganization(name);
-        getOrgsPromise.then(data => {
-            this.latestOrgs = data;
-        });
-        return getOrgsPromise;
-    }
-
-    addOrganisation(name) {
-        return this.es.addOrganization(name)
-            .then(response => {
-                this.userProfile.organisation = response;
-            });
     }
 
     static editProfileFactory() {

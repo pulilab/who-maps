@@ -1,0 +1,45 @@
+<div class="project-section project-navigation" md-whiteframe="2">
+  <div class="section-title md-title">Navigation</div>
+  <div layout="column" class="stepper">
+    <ul>
+      <li class="project-details active">
+        <a ng-click="vm.scrollTo('project-details')">
+          <span><i class="material-icons">&#xE5C8;</i></span>Project details
+        </a>
+      </li>
+      <li class="strategy">
+        <a ng-click="vm.scrollTo('strategy')">
+          <span><i class="material-icons">&#xE5C8;</i></span>Strategies
+        </a>
+      </li>
+      <li class="technology">
+        <a ng-click="vm.scrollTo('technology')">
+          <span><i class="material-icons">&#xE5C8;</i></span>Technologies
+        </a>
+      </li>
+      <li class="additional-info">
+        <a ng-click="vm.scrollTo('additional-info')">
+          <span><i class="material-icons">&#xE5C8;</i></span>Additional info
+        </a>
+      </li>
+      <li class="interoperability">
+        <a ng-click="vm.scrollTo('interoperability')">
+          <span><i class="material-icons">&#xE5C8;</i></span>Interoperability
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div layout="column" class="edit-buttons">
+    <div layout="row" layout-align="center start" class="primary-buttons">
+      <md-button type="submit" ng-show="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
+      <md-button type="submit" ng-show="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
+    </div>
+    <div layout="row" layout-align="center start" class="primary-buttons">
+      <md-button class="md-primary">Save &amp; add another</md-button>
+    </div>
+    <div layout="row" layout-align="center start" class="secondary-buttons">
+      <md-button ng-show="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
+      <md-button ng-show="vm.editMode" ui-sref="dashboard">Dismiss Changes</md-button>
+    </div>
+  </div>
+</div>

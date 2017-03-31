@@ -1,0 +1,101 @@
+<div class="project-section section-interoperability" md-whiteframe="2">
+
+  <div class="section-title md-title">
+    5. Interoperability
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  </div>
+
+  <div class="section-wrapper">
+    <div class="checklist small-margin first">
+      <h6>What interoperability data exchanges does your project use?</h6>
+      <ul>
+        <li ng-repeat="data_exchange in vm.structure.data_exchanges">
+          <md-checkbox md-no-ink aria-label="data_exchange"
+                       ng-checked="vm.checkboxChecked(data_exchange, 'data_exchanges')"
+                       ng-click="vm.checkboxToggle(data_exchange, 'data_exchanges')"
+                       class="md-primary">
+            {{data_exchange}}
+          </md-checkbox>
+        </li>
+      </ul>
+    </div>
+
+    <h6>Implementing partners</h6>
+
+    <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
+      <md-input-container md-no-float class="md-block" flex="50">
+        <input ng-model="partner.value" placeholder="Partner's name">
+      </md-input-container>
+      <div class="add-more-item" flex>
+          <md-button class="md-warn" aria-label="Remove"
+                   ng-show="vm.showRemove($index, vm.project.implementing_partners)"
+                   ng-click="vm.removeChild($index, 'implementing_partners')">
+          <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+        </md-button>
+        <md-button class="md-primary" aria-label="Add more"
+                   ng-show="vm.showAddMore($index, vm.project.implementing_partners)"
+                   ng-click="vm.addChild('implementing_partners')">
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+        </md-button>
+      </div>
+    </div>
+
+    <h6>Government as investor?</h6>
+
+    <div layout="row" class="extra-margin">
+      <md-checkbox md-no-ink aria-label="governament-investor"
+                   ng-model="vm.project.government_investor"
+                   class="md-primary md-block">
+        Yes
+      </md-checkbox>
+    </div>
+
+    <h6 >Does your digital health project link to a digital HIS?</h6>
+
+
+    <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
+      <md-checkbox md-no-ink aria-label=""
+                   ng-model="vm.project.interoperability_links[$index].selected"
+                   class="md-primary" flex>
+        {{link}}
+      </md-checkbox>
+      <md-input-container class="md-icon-float md-block" flex>
+        <label>Specify URL</label>
+        <md-icon><i class="material-icons">&#xE157;</i></md-icon>
+        <input ng-required="vm.project.interoperability_links[$index].selected"
+               ng-disabled="!vm.project.interoperability_links[$index].selected"
+               name="link.interop1"
+               ng-model="vm.project.interoperability_links[$index].link">
+      </md-input-container>
+    </div>
+
+    <div class="checklist small-top">
+      <h6>What data standards does your digital health project use?</h6>
+      <ul>
+        <li ng-repeat="standard in vm.structure.interoperability_standards">
+          <md-checkbox md-no-ink aria-label="{{standard}}"
+                       ng-checked="vm.checkboxChecked(standard, 'interoperability_standards')"
+                       ng-click="vm.checkboxToggle(standard, 'interoperability_standards')" class="md-primary">
+            {{standard}}
+          </md-checkbox>
+        </li>
+        <li>
+              <span layout="row">
+                <md-checkbox md-no-ink aria-label="other-standard"
+                             ng-model="vm.specifyOtherStandard"
+                             class="md-primary"
+                             flex="nogrow">
+                </md-checkbox>
+                <md-input-container class="md-block" flex>
+                  <label>Specify other</label>
+                  <input ng-disabled="!vm.specifyOtherStandard"
+                         ng-required="vm.specifyOtherStandard"
+                         name="data.c18" ng-model="vm.project.interoperability_standards.custom">
+                </md-input-container>
+              </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>

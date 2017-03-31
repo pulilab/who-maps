@@ -1,0 +1,64 @@
+<div class="project-section section-technology" md-whiteframe="2">
+    <div class="section-title md-title">
+      3. Technologies
+      <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+    </div>
+
+    <div class="section-wrapper">
+      <md-input-container class="md-block" flex="50">
+        <label>Technology deployment date</label>
+        <md-datepicker ng-model="vm.project.implementation_dates" name="implementation_dates" required></md-datepicker>
+        <div ng-messages="vm.implementation_dates.name.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-repeat="message in vm.form.implementation_dates.customError">
+              {{message}}
+            </div>
+        </div>
+      </md-input-container>
+
+      <div class="checklist">
+        <h6>Under what license is the project governed?</h6>
+        <ul>
+          <li ng-repeat="l in vm.structure.licenses">
+            <md-checkbox
+                    ng-checked="vm.checkboxChecked(l, 'licenses')"
+                    ng-click="vm.checkboxToggle(l, 'licenses')"
+                    md-no-ink
+                    aria-label="{{ l }}"
+                    class="md-primary">
+                {{ l }}
+            </md-checkbox>
+          </li>
+          <li>
+            <span layout="row">
+              <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
+              <md-input-container class="md-block" flex>
+                <label>Specify other</label>
+                <input ng-required="vm.customLicense" name="license.spectype" ng-model="vm.project.licenses.custom" ng-disabled="!vm.customLicense">
+              </md-input-container>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <md-input-container class="md-icon-float md-block">
+        <label>Code documentation or download link</label>
+        <md-icon><i class="material-icons">&#xE157;</i></md-icon>
+        <input  name="link.documentation" ng-model="vm.project.repository">
+      </md-input-container>
+
+      <md-input-container class="md-icon-float md-block">
+        <label>Link to the application</label>
+        <md-icon><i class="material-icons">&#xE157;</i></md-icon>
+        <input  name="link.app" ng-model="vm.project.mobile_application">
+      </md-input-container>
+
+      <md-input-container class="md-icon-float md-block">
+        <label>Link to the wiki page</label>
+        <md-icon><i class="material-icons">&#xE157;</i></md-icon>
+        <input  name="link.wiki" ng-model="vm.project.wiki">
+      </md-input-container>
+
+    </div>
+
+</div>

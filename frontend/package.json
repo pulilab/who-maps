@@ -20,6 +20,7 @@
   "devDependencies": {
     "angular-material-source": "git+https://github.com/angular/material.git",
     "babel-core": "^6.23.1",
+    "babel-eslint": "^7.1.1",
     "babel-loader": "^6.4.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-env": "^1.2.1",
@@ -53,6 +54,7 @@
     "loader-utils": "^0.2.14",
     "node-sass": "^4.5.0",
     "null-loader": "^0.1.1",
+    "phantomjs-polyfill-object-assign": "^0.0.2",
     "phantomjs-prebuilt": "^2.1.14",
     "protractor": "^3.1.1",
     "raw-loader": "^0.5.1",
@@ -65,10 +67,10 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
-    "angular": "1.5.0",
+    "angular": "1.5.11",
     "angular-animate": "1.5.0",
     "angular-aria": "1.5.0",
-    "angular-material": "1.0.8",
+    "angular-material": "1.1.0",
     "angular-messages": "1.5.0",
     "angular-mocks": "1.5.5",
     "angular-password": "^1.0.1",

@@ -46,9 +46,9 @@ class CustomCountryService extends SimpleApi {
 
     getCountries() {
         const self = this;
-        return new Promise(resolve=> {
+        return new Promise(resolve => {
             const keys = _.keys(self.countryLib);
-            if (keys > 0) {
+            if (keys.length > 0) {
                 const countryArray = _.values(_.cloneDeep(self.countryLib));
                 resolve(self.stripMapData(countryArray));
             }
@@ -58,6 +58,11 @@ class CustomCountryService extends SimpleApi {
                 });
             }
         });
+    }
+
+    prettyName(name) {
+        const split = name.split('-');
+        return split.join(' ');
     }
 
     getCountriesList() {
@@ -71,6 +76,7 @@ class CustomCountryService extends SimpleApi {
             _.forEach(countries, cn => {
                 cn.code = cn.code.toLocaleLowerCase();
                 cn.flag = self.getCountryFlag(cn.code);
+                cn.prettyName = self.prettyName(cn.name);
                 self.countryLib[cn.code] = self.countryLib[cn.code] ? self.countryLib[cn.code] : {};
                 Object.assign(self.countryLib[cn.code], cn);
             });
@@ -79,6 +85,7 @@ class CustomCountryService extends SimpleApi {
             return _.cloneDeep(self.countryLib);
         });
     }
+
     findCountryById(countryId) {
         const self = this;
         return new Promise(resolve => {
@@ -150,6 +157,7 @@ class CustomCountryService extends SimpleApi {
     }
 
     sendDefaultCountryData(data) {
+        data = data ? data : {};
         const standard = {
             name: 'WHO',
             code: 'who',

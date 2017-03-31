@@ -1,14 +1,5 @@
 import angular from 'angular';
 import ngFileUpload from 'ng-file-upload';
-
-
-import EE from './EE';
-
-if (! window.EE) {
-    EE.initialize();
-}
-
-
 import AuthApi from './AuthApi';
 import SimpleApi from './SimpleApi';
 import Storage from './Storage';
@@ -23,7 +14,6 @@ import LoginComponent from './Login/loginComponent';
 import ResetComponent from './Reset/resetComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
-import NewProjectComponent from './NewProject/newProjectComponent';
 import viewersComponent from './Viewers/viewersComponent';
 import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
@@ -39,6 +29,13 @@ import SubBarComponent from './SubBar/subBarComponent';
 import CountryTopBarComponent from './CountryTopBar/countryTopBarComponent';
 import CustomCountryService from './CustomCountryService';
 import CountryPartners from './CountryPartners/countryPartnersComponent';
+import OrganisationAutocomplete from './OrganisationAutocomplete/organisationComponent';
+
+import EE from './EE';
+
+if (! window.EE) {
+    EE.initialize();
+}
 
 const moduleName = 'Components';
 
@@ -56,7 +53,6 @@ angular.module(moduleName,
     .component(ResetComponent.name, ResetComponent)
     .component(SignupComponent.name, SignupComponent)
     .component(AxisComponent.name, AxisComponent)
-    .component(NewProjectComponent.name, NewProjectComponent)
     .component(viewersComponent.name, viewersComponent)
     .component(followersComponent.name, followersComponent)
     .component(donorsComponent.name, donorsComponent)
@@ -70,6 +66,7 @@ angular.module(moduleName,
     .component(SubBarComponent.name, SubBarComponent)
     .component(CountryTopBarComponent.name, CountryTopBarComponent)
     .component(CountryPartners.name, CountryPartners)
+    .component(OrganisationAutocomplete.name, OrganisationAutocomplete)
     .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 

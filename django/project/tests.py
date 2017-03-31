@@ -127,6 +127,36 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
 
+    def test_create_validating_list_fields_invalid_data(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(
+            name="Test Project4",
+            implementing_partners=[{"object": "not good"}],
+            health_focus_areas=[{"object": "not good"}],
+            licenses=[{"object": "not good"}],
+            donors=[{"object": "not good"}],
+            his_bucket=[{"object": "not good"}],
+            hsc_challenges=[{"object": "not good"}],
+            interventions=[{"object": "not good"}],
+            interoperability_links=[{"object": "not good"}],
+            data_exchanges=[{"object": "not good"}],
+            interoperability_standards=[{"object": "not good"}],
+        ))
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(response.json().keys()), 10)
+        self.assertEqual(response.json()['implementing_partners'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['health_focus_areas'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['licenses'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['donors'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interventions'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interoperability_links'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['data_exchanges'][0], 'Not a valid string.')
+
     def test_create_new_project_with_platform_name_missing(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
@@ -517,7 +547,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get('health_focus_areas'), self.project_data['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
-        data.update(name="Test Project 39", health_focus_areas=['area1'])
+        data.update(health_focus_areas=['area1'])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["health_focus_areas"], data['health_focus_areas'])
@@ -525,6 +555,29 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('health_focus_areas'), data['health_focus_areas'])
+
+    def test_update_project_with_different_invalid_name(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(name="toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["name"][0], 'Ensure this field has no more than 128 characters.')
+
+    def test_update_project_with_new_name_that_collides_with_a_different_project(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name="thisnameisunique")
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Project.objects.count(), 2)
+
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(name="thisnameisunique")
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["name"][0], 'This field must be unique.')
 
     def test_retrieve_project_list_all_has_all_new_fields(self):
         url = reverse("project-all-list")

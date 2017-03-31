@@ -87,6 +87,7 @@ linechart {
 
                 label {
                     font-size: 14px;
+                    transform: translate3d(2px, 10px, 0) scale(0.75);
                     &:select, &:focus {
                         color: $color-primary;
                     }

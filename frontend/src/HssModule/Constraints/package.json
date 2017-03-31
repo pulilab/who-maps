@@ -1,6 +1,0 @@
-{
-  "name": "Constraints",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./constraintsComponent.js"
-}

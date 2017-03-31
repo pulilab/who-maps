@@ -8,32 +8,38 @@ class CountryTopBarController extends Protected {
         this.state = $state;
         this.scope = $scope;
         this.timeout = $timeout;
+        this.cs = require('../CommonServices');
+        this.ccs = require('../CustomCountryService');
         this.$onInit = this.onInit.bind(this);
     }
 
     onInit() {
         const vm = this;
+        vm.pageLoaded = false;
         this.defaultOnInit();
-        self.profileDataReady = false;
-        this.cs = require('../CommonServices');
-        this.ccs = require('../CustomCountryService');
+        this.profileDataReady = false;
         if (this.user) {
-            this.cs.loadedPromise.then(() => {
-                vm.userProfile = vm.cs.userProfile;
-                vm.profileDataReady = true;
-                vm.scope.$evalAsync();
-            });
+            this.cs.loadedPromise.then(vm.setProfileData.bind(vm));
         }
         const subDomain = this.ccs.getSubDomain();
         this.countryFlag = this.ccs.getCountryFlag(subDomain);
         this.ccs.getCountryData(subDomain).then(data => {
             this.scope.$evalAsync(() => {
                 vm.countryData = data;
+                vm.pageLoaded = true;
             });
         });
 
         window.onscroll = this.scrollEventHandler.bind(this);
         document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
+    }
+
+    setProfileData() {
+        this.userProfile = this.cs.userProfile;
+        if (this.userProfile) {
+            this.profileDataReady = true;
+        }
+        this.scope.$evalAsync();
     }
 
     scrollEventHandler(e) {
@@ -60,9 +66,6 @@ class CountryTopBarController extends Protected {
         return this.profileDataReady;
     }
 
-    showSearch() {
-        return this.showFullNavigation;
-    }
     showLogin() {
         return !this.isLogin;
     }

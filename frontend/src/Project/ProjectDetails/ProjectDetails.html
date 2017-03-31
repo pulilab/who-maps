@@ -1,0 +1,244 @@
+<div class="project-section section-projectdetails active" md-whiteframe="2">
+
+  <div class="section-title md-title">
+    1. Project details
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+  </div>
+
+  <div class="section-wrapper">
+
+    <div layout="row" class="first">
+      <md-input-container class="md-block" flex="50">
+        <label>Project name</label>
+        <input md-maxlength="100" required name="name"
+               ng-model="vm.project.name"
+               ng-model-options="{debounce: 200}"
+               ng-change="vm.checkName()">
+        <div ng-messages="vm.form.name.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.name.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </md-input-container>
+      <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="50">
+        <span class="similar-label">Similar Project name(s)</span>
+        <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
+          <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a><span ng-if="!$last">, </span>
+        </div>
+      </div>
+    </div>
+
+    <div layout="row">
+      <organisation-autocomplete
+          flex="50"
+          organisation="vm.project.organisation"
+          form="vm.form">
+      </organisation-autocomplete>
+    </div>
+
+    <div layout="row">
+      <md-input-container class="md-icon-float md-block" flex="40">
+        <label>Project country</label>
+        <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
+        <md-select ng-model="vm.project.country" name="country" required>
+          <md-option ng-value="{{country.id}}" ng-repeat=" country in vm.countriesList">
+            {{country.prettyName}}
+          </md-option>
+        </md-select>
+        <div ng-messages="vm.form.country.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.country.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </md-input-container>
+
+      <md-input-container flex="30">
+        <label>Project start date</label>
+        <md-datepicker ng-model="vm.project.start_date" md-max-date="vm.project.end_date"></md-datepicker>
+      </md-input-container>
+
+      <md-input-container flex="30">
+        <label>Project end date</label>
+        <md-datepicker ng-model="vm.project.end_date" md-min-date="vm.project.start_date"></md-datepicker>
+      </md-input-container>
+    </div>
+
+    <md-input-container class="md-block">
+      <label>Geographic scope</label>
+      <textarea ng-model="vm.project.geographic_scope"
+                md-maxlength="500"
+                name="geographic_scope"
+                rows="1"
+                md-select-on-focus>
+      </textarea>
+      <div ng-messages="vm.form.geographic_scope.$error">
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.implementation_overview.customError">
+            {{message}}
+          </div>
+        </div>
+      </div>
+    </md-input-container>
+
+    <md-input-container class="md-block">
+      <label>Overview of the digital health implementation</label>
+      <textarea ng-model="vm.project.implementation_overview"
+                md-maxlength="500"
+                rows="1"
+                required
+                name="implementation_overview"
+                md-select-on-focus></textarea>
+      <div ng-messages="vm.form.implementation_overview.$error">
+        <div ng-message="required">This is required.</div>
+        <div ng-message="md-maxlength">This field has to be less than 500 characters long.</div>
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.implementation_overview.customError">
+            {{message}}
+          </div>
+        </div>
+      </div>
+    </md-input-container>
+
+    <h6>What is the current coverage of your project?</h6>
+
+    <div class="input-group">
+      <div layout="column">
+        <div layout="row">
+          <label>National level deployment</label>
+        </div>
+        <div layout="row">
+          <md-input-container class="md-block number" flex="20">
+            <label># Health Workers</label>
+            <input  type="number" ng-model="vm.project.national_level_deployment.health_workers">
+          </md-input-container>
+          <md-input-container class="md-block number" type="number" flex="20">
+            <label># Facilities</label>
+            <input type="number" ng-model="vm.project.national_level_deployment.facilities">
+          </md-input-container>
+          <md-input-container class="md-block number" type="number" flex="20">
+            <label># Clients</label>
+            <input type="number" ng-model="vm.project.national_level_deployment.clients">
+          </md-input-container>
+          <div flex="40"></div>
+        </div>
+      </div>
+    </div>
+    <div class="input-group" ng-class="{last: $last}" ng-repeat="cov in vm.project.coverage">
+      <div layout="column">
+        <div layout="row">
+          <md-input-container class="md-block district" flex="40">
+            <label>District</label>
+            <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.coverageDistrictRequired(cov)">
+              <md-option value="{{district}}" ng-repeat="district in vm.districtList">
+                {{district}}
+              </md-option>
+              <md-option md-option-empty ng-hide="vm.districtList.length"> Select a country </md-option>
+            </md-select>
+            <div ng-messages="vm.form['coverage_' + $index].$error">
+              <div ng-message="required">This is required.</div>
+            </div>
+          </md-input-container>
+        </div>
+
+        <div layout="row">
+          <md-input-container class="md-block number" flex="20">
+            <label># Health Workers</label>
+            <input ng-required="vm.project.national_level_deployment.health_workers == null"
+                   type="number" ng-model="cov.health_workers" >
+          </md-input-container>
+          <md-input-container class="md-block number" flex="20">
+            <label># Facilities</label>
+            <input ng-required="vm.project.national_level_deployment.facilities == null"
+                   type="number" ng-model="cov.facilities">
+          </md-input-container>
+          <md-input-container class="md-block number" flex="20">
+            <label># Clients</label>
+            <input ng-required="vm.project.national_level_deployment.clients == null"
+                   type="number" ng-model="cov.clients">
+          </md-input-container>
+          <div class="add-more-item" flex="40">
+            <md-button class="md-warn" aria-label="Remove"
+                       ng-show="vm.showRemove($index, vm.project.coverage)"
+                       ng-click="vm.removeChild($index, 'coverage')">
+              <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+            </md-button>
+            <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showAddMore($index, vm.project.coverage)"
+                       ng-click="vm.addChild('coverage')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+            </md-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h6>Donor</h6>
+
+    <div layout="row" ng-repeat="donor in vm.project.donors">
+      <md-input-container md-no-float class="md-block" flex="50">
+        <input ng-model="donor.value" placeholder="Donor's name" required name="{{'donor_' + $index}}">
+        <div ng-messages="vm.form['donor_' + $index].$error">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+
+      <div class="add-more-item" flex>
+        <md-button class="md-warn" aria-label="Remove"
+                   ng-show="vm.showRemove($index, vm.project.donors)"
+                   ng-click="vm.removeChild($index, 'donors')">
+          <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+        </md-button>
+        <md-button class="md-primary" aria-label="Add more"
+                   ng-show="vm.showAddMore($index, vm.project.donors)"
+                   ng-click="vm.addChild('donors')">
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+        </md-button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-wrapper alt-2">
+    <h6 class="first">Add Team members (Editor role)</h6>
+
+    <div layout="row" class="chipper">
+      <md-contact-chips
+          flex
+          placeholder="Editors of this project"
+          secondary-placeholder="add new team member"
+          ng-model="vm.team"
+          md-contacts="vm.getUsers($query)"
+          md-contact-name="name"
+          md-contact-email="organisation__name"
+          md-require-match="true"
+          md-highlight-flags="i"
+          filter-selected="true">
+      </md-contact-chips>
+    </div>
+
+    <h6>Add Viewers (only Viewer role)</h6>
+
+    <div layout="row" class="chipper">
+      <md-contact-chips
+          flex
+          placeholder="Add viewers"
+          secondary-placeholder="add new viewer"
+          ng-model="vm.viewers"
+          md-contacts="vm.getUsers($query)"
+          md-contact-name="name"
+          md-contact-email="organisation__name"
+          md-require-match="true"
+          md-highlight-flags="i"
+          filter-selected="true">
+      </md-contact-chips>
+    </div>
+  </div>
+</div>

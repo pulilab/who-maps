@@ -31,8 +31,9 @@ class LandingPageModuleController {
                 vm.countryCover = null;
                 if (data.cover) {
                     vm.countryCover = {
-                        background: `url(${data.cover}) 0 -10px`,
-                        'background-size': 'cover'
+                        background: `url(${data.cover}) 0 0`,
+                        'background-size': 'cover',
+                        'background-repeat': 'no-repeat'
                     };
                 }
                 vm.showFooter = data.footer_text && data.footer_title;

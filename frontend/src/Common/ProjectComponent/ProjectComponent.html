@@ -1,4 +1,4 @@
-<md-card md-whiteframe="2" layout="column" layout-align="center" ng-click="vm.cardClick()" ng-class="{'show-pointer' : !vm.showDetails}" >
+<md-card md-whiteframe="2" layout="column" layout-align="start start" ng-click="vm.cardClick()" ng-class="{'show-pointer' : !vm.showDetails}" >
 
     <div class="project-container" layout="row">
 
@@ -13,11 +13,11 @@
             <div ng-show="vm.viewer && !vm.member" ng-class="{'my-eye': vm.viewer}"><md-icon>visibility</md-icon></div>
 
             <div class="upper" layout="row">
-                <div class="basic" flex="flex-grow" layout="column">
-                    <span flex class="name bold">{{vm.ngModel.name}}</span>
+                <div class="basic" flex layout="column">
+                    <span flex class="name">{{vm.ngModel.name}}</span>
                     <span flex class="org-country">{{vm.ngModel.organisation_name}} | {{vm.ngModel.countryName}} {{vm.ngModel.country_name}}</span>
                 </div>
-                <div ng-if="vm.showDetails" class="donors">
+                <div ng-if="vm.showDetails" class="donors" flex="no-grow">
                     <span class="nr">
                         {{vm.ngModel.donors.length}}
                     </span>
@@ -32,16 +32,18 @@
                 </div-->
             </div>
 
-            <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="end center">
+            <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="start center">
                 <div flex class="description">
                     {{vm.ngModel.goals_to_scale}}
                 </div>
 
-                <md-button class="more" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
+                <div class="buttons" layout="row">
+                  <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">Show more </md-button>
 
-                <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Dashboard</md-button>
+                  <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">Dashboard</md-button>
 
-                <md-button class="md-primary md-no-ink" ng-if="vm.member" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project</md-button>
+                  <md-button class="md-primary md-no-ink" ng-if="vm.member" ng-disabled="vm.currentProject" ui-sref="editProject({appName: vm.ngModel.id})">Edit Project</md-button>
+                </div>
             </div>
         </div>
     </div>

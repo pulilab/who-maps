@@ -1,0 +1,71 @@
+<div layout="column" class="new-edit-project" layout-align="start center" >
+  <div class="page-title" ng-hide="vm.editMode">
+    <h1 class="md-display-1 text-center">Add new project sheet</h1>
+    <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
+  </div>
+
+  <div class="page-title" ng-show="vm.editMode">
+    <h1 class="md-display-1 text-center">Edit Project Info</h1>
+  </div>
+
+  <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+  </div>
+
+  <div class="project-form-wrapper md-block">
+    <form name="vm.form" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
+      <div class="main-section" layout="column">
+        <project-details
+            id="project-details"
+            form="vm.form"
+            project="vm.project"
+            structure="vm.structure"
+            team="vm.team"
+            viewers="vm.viewers"
+            users="vm.users"
+            project-list="vm.cs.projectList">
+        </project-details>
+        <strategy id="strategy"
+                  form="vm.form"
+                  project="vm.project"
+                  structure="vm.structure">
+        </strategy>
+        <technology
+            id="technology"
+            project="vm.project"
+            structure="vm.structure">
+        </technology>
+        <additional-info
+            id="additional-info"
+            form="vm.form"
+            project="vm.project"
+            structure="vm.structure">
+        </additional-info>
+        <interoperability
+            id="interoperability"
+            form="vm.form"
+            project="vm.project"
+            structure="vm.structure">
+        </interoperability>
+
+        <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
+          <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
+          <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                       current-project="vm.isCurrentProject(p.id)"
+                       viewer="vm.isViewer(p)"
+                       member="vm.isMember(p)"
+                       show-details="true"
+                       show-logo="true"
+                       ng-model="p">
+
+          </projectcomp>
+        </section>
+      </div>
+      <div class="navigation-area" layout="column">
+        <navigation edit-mode="vm.editMode"></navigation>
+      </div>
+    </form>
+  </div>
+
+  <disclaimer></disclaimer>
+</div>

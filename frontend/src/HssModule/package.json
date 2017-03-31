@@ -1,6 +1,0 @@
-{
-  "name": "HssModule",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./hssModule.js"
-}

@@ -36,8 +36,8 @@ describe('CountryViewModuleController', () => {
 
         vm.$onInit();
         expect(vm.getCountries).toHaveBeenCalled();
-        expect(vm.createFilterCategory.calls.count()).toBe(5);
-        expect(vm.filterArray.length).toEqual(5);
+        expect(vm.createFilterCategory.calls.count()).toBe(1);
+        expect(vm.filterArray.length).toEqual(1);
     });
 
     it('has an extractConstraints fn,', () => {

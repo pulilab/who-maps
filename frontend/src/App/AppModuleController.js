@@ -35,7 +35,7 @@ class AppModuleController extends Protected {
         }
     }
 
-    showSubBar() {
+    computeShowSubBar() {
         return !this.showCountryTopBar
             && this.user && this.user.projects
             && this.user.projects.length !== 0
@@ -47,7 +47,9 @@ class AppModuleController extends Protected {
             return this.state.current.name;
         }, value => {
             this.currentPage = value;
+            // this.fillUserData();
             this.checkUserProfile();
+            this.showSubBar = this.computeShowSubBar();
         });
     }
 

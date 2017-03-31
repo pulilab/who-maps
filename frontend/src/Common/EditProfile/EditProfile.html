@@ -1,135 +1,89 @@
 <div layout="column" layout-align="start center" >
 
-    <div class="page-title">
-        <h1 class="md-display-1 text-center">Edit User profile</h1>
+  <div class="page-title">
+    <h1 class="md-display-1 text-center">Edit User profile</h1>
+  </div>
+
+
+  <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+  </div>
+
+  <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
+    <div class="profile-header md-title">
+      General info
+      <span class="last-update">Last update: {{vm.userProfile.modified}}</span>
     </div>
+    <form name="vm.editProfileForm" ng-submit="vm.save($event)" novalidate>
+      <div layout="column" class="main-form">
+        <md-input-container>
+          <label>My name</label>
+          <input ng-model="vm.userProfile.name" required name="name"  type="text" ng-change="vm.handleCustomError('name')" />
+          <div ng-messages="vm.editProfileForm.name.$error">
+            <div ng-message="required">This is required.</div>
+            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.name.customError">{{error}} </div>
+          </div>
+        </md-input-container>
 
+        <md-input-container >
+          <label>My email address</label>
+          <input ng-model="vm.userProfile.email"
+                 ng-disabled="true" required name="email"
+                 type="email" ng-change="vm.handleCustomError('email')" />
+          <div ng-messages="vm.editProfileForm.email.$error">
+            <div ng-message="email">This must be a valid email</div>
+            <div ng-message="required">This is required.</div>
+            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.email.customError">{{error}} </div>
+          </div>
+        </md-input-container>
 
-    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
-        <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-    </div>
+        <organisation-autocomplete
+            organisation="vm.userProfile.organisation"
+            form="vm.editProfileForm">
+        </organisation-autocomplete>
 
-    <div md-whiteframe="2" class="layout-padding-xl wrapper" layout-fill layout="column" ng-if="vm.dataLoaded">
-        <form name="vm.editProfileForm" ng-submit="vm.save($event)" novalidate>
-            <div layout="column" class="main-form" flex="'50">
-                <div class="profile-header" layout="row" layout-align="start center">
-                    <h4 flex="50">General Info</h4>
-                    <div  flex="50" layout="row" layout-align="end center">
-                        Last Update: {{vm.userProfile.modified}}
-                    </div>
-                </div>
-                <md-input-container >
-                    <label>My name</label>
-                    <input ng-model="vm.userProfile.name" required name="name"  type="text" ng-change="vm.handleCustomError('name')" />
-                    <div ng-messages="vm.editProfileForm.name.$error">
-                        <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in vm.editProfileForm.name.customError">{{error}} </div>
-                    </div>
-                </md-input-container>
-
-                <md-input-container >
-                    <label>My email address</label>
-                    <input ng-model="vm.userProfile.email"
-                           ng-disabled="true" required name="email"
-                           type="email" ng-change="vm.handleCustomError('email')" />
-                    <div ng-messages="vm.editProfileForm.email.$error">
-                        <div ng-message="email">This must be a valid email</div>
-                        <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in vm.editProfileForm.email.customError">{{error}} </div>
-                    </div>
-                </md-input-container>
-
-                <!--<md-input-container>-->
-                <!--<label>Password</label>-->
-                <!--<input ng-model="vm.userProfile.password1" type="password" name="password1"  ng-minlength="6" ng-change="vm.handleCustomError('password1')"/>-->
-                <!--<div ng-messages="editProfileForm.password1.$error" >-->
-                <!--<div ng-message="required">This is required.</div>-->
-                <!--<div ng-message="minlength">This need to be at least 6 chars</div>-->
-                <!--<div ng-message="custom" ng-repeat="error in vm.editProfileForm.password1.customError">{{error}} </div>-->
-                <!--</div>-->
-                <!--</md-input-container>-->
-
-                <!--<md-input-container>-->
-                <!--<label>Password (Again)</label>-->
-                <!--<input ng-model="vm.userProfile.password2"-->
-                <!--type="password"-->
-                <!--name="password2"-->
-                <!--match-password="password1"-->
-                <!--ng-change="vm.handleCustomError('password2')" />-->
-                <!--<div ng-messages="editProfileForm.password2.$error">-->
-                <!--<div ng-message="required">This is required.</div>-->
-                <!--<div ng-message="passwordMatch">Your passwords do not match.</div>-->
-                <!--<div ng-message="custom" ng-repeat="error in vm.editProfileForm.password2.customError">{{error}} </div>-->
-                <!--</div>-->
-                <!--</md-input-container>-->
-
-                <md-autocomplete
-                        required="true"
-                        id="orgauto"
-                        md-input-name="organisation"
-                        md-no-cache="true"
-                        md-selected-item="vm.userProfile.organisation"
-                        md-search-text="vm.searchText"
-                        md-items="item in vm.organisationSearch(vm.searchText)"
-                        md-item-text="item.name"
-                        md-min-length="2"
-                        placeholder="Organisation name">
-                    <md-item-template>
-                        <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
-                    </md-item-template>
-
-                    <!-- <md-not-found>
-                        <a ng-click="vm.addOrganisation(vm.searchText)"><i class="material-icons">add</i> No organisation matching "{{vm.searchText}}" were found. Click here to create a new one!</a>
-                    </md-not-found> -->
-                </md-autocomplete>
-                <div class="autocomplete-errors" ng-messages="vm.editProfileForm.organisation.$error">
-                    <div ng-message="required">This field is required</div>
-                </div>
+        <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
+          <ssmenu
+              ng-disabled="vm.editMode"
+              ng-required="vm.sentForm"
+              name="country"
+              on-close-callback="vm.countryCloseCallback"
+              option-label="name"
+              options="vm.countriesList"
+              ng-model="vm.userProfile.country"
+              placeholder="Select country from list"
+          ></ssmenu>
+          <div ng-messages="vm.editProfileForm.country.$error">
+            <div ng-message="required">This is required.</div>
+            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}} </div>
+          </div>
+        </div>
 
 
 
-                <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
-                    <ssmenu
-                            ng-disabled="vm.editMode"
-                            ng-required="vm.sentForm"
-                            name="country"
-                            on-close-callback="vm.countryCloseCallback"
-                            option-label="name"
-                            options="vm.structure.countries"
-                            ng-model="vm.userProfile.country"
-                            placeholder="Select country from list"
-                    ></ssmenu>
-                    <div ng-messages="vm.editProfileForm.country.$error">
-                        <div ng-message="required">This is required.</div>
-                        <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}} </div>
-                    </div>
-                </div>
+        <div layout="row" class="edit-button">
+          <div flex="50" layout="row" layout-align="start center">
+            <md-button class="md-gray md-raised" ui-sref="dashboard">Dismiss Changes</md-button>
+          </div>
+          <div flex="50" layout="row" layout-align="end center">
+            <md-button type="submit" class="md-primary md-raised">Save Profile</md-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <section md-whiteframe="2" class="my-projects" >
+    <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
+    <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
+                 viewer="vm.isViewer(p)"
+                 member="vm.isMember(p)"
+                 show-details="true"
+                 show-logo="true"
+                 ng-model="p">
 
+    </projectcomp>
 
+  </section>
 
-                <div layout="row" class="edit-button">
-                    <div flex="50" layout="row" layout-align="start center">
-                        <md-button class="md-gray md-raised" ui-sref="dashboard">Dismiss Changes</md-button>
-                    </div>
-                    <div flex="50" layout="row" layout-align="end center">
-                        <md-button type="submit" class="md-primary md-raised">Save Profile</md-button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <section md-whiteframe="2" class="my-projects" >
-        <h5> My projects ({{vm.userProjects.length}})</h5>
-        <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                     viewer="vm.isViewer(p)"
-                     member="vm.isMember(p)"
-                     show-details="true"
-                     show-logo="true"
-                     ng-model="p">
-
-        </projectcomp>
-
-    </section>
-
-    <disclaimer></disclaimer>
+  <disclaimer></disclaimer>
 </div>

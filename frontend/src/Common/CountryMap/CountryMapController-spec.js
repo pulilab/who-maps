@@ -1,6 +1,7 @@
 import CountryMapController from './CountryMapController';
 import d3 from 'd3';
 import angular from 'angular';
+import EE from '../EE';
 import perfMockMap from './mock/perfMockMap.js';
 import { default as countryMapData } from './mock/sierra-leone/topoTest.json';
 
@@ -21,6 +22,11 @@ describe('CountryMapController', () => {
 
     beforeEach(() => {
         vm = CountryMapController.countrymapFactory()(el, scopeMock);
+    });
+
+    afterEach(()=> {
+        EE.initialize();
+        vm.EE = window.EE;
     });
 
     it('is defined', () => {

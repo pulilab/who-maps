@@ -1,0 +1,47 @@
+@import '../../variables';
+@import '../../mixins';
+
+.section-projectdetails {
+
+  // .md-block.number {
+  //   max-width: 90px;
+  // }
+
+  @media only screen and (max-width: 1280px) {
+    .add-more-item .md-button {
+      padding: 0 !important;
+      min-width: 50px;
+
+      span {
+        display: none;
+      }
+    }
+  }
+
+  .md-block.district {
+    max-width: calc(50% + 30px);
+  }
+
+  .similar-project {
+    margin-left: 40px !important;
+
+    .similar-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      transform: translateY(-19px);
+    }
+
+    .ownProject {
+      position: relative;
+      top: -6px;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .similar-link {
+      color: $color-primary;
+      text-decoration: none;
+    }
+  }
+}

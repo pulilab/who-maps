@@ -3,6 +3,7 @@ module.exports = function(config) {
     config.set({
         browsers: ['PhantomJS'],
         files: [
+            './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
             { pattern: 'test-context.js', watched: false }
         ],
         frameworks: ['jasmine'],
@@ -19,7 +20,7 @@ module.exports = function(config) {
             check: {
                 global: {
                     statements: 50,
-                    branches: 30,
+                    branches: 40,
                     functions: 50,
                     lines: 50
                 }

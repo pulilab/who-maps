@@ -14,6 +14,7 @@ import { default as countryView } from '../CountryView/';
 import dashboard from '../Dashboard/';
 import landingPage from '../LandingPage/';
 import mapsToolkit from '../MapsToolkit/';
+import { Project } from '../Project/';
 import { Components, Storage } from '../Common/';
 
 import AppComponent from './appComponent';
@@ -22,7 +23,7 @@ import './app.scss';
 
 
 const moduleName = 'app';
-const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider) => {
     $stateProvider
 
         .state('base', {
@@ -105,7 +106,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project layout-fill layout="column" ></new-project>'
+                    template: '<project layout-fill layout="column" ></project>'
                 }
             }
         })
@@ -114,7 +115,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project edit-mode="true" layout-fill layout="column" ></new-project>'
+                    template: '<project edit-mode="true" layout-fill layout="column" ></project>'
                 }
             }
         })
@@ -123,7 +124,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
             parent: 'app',
             views: {
                 main: {
-                    template: '<new-project inventory-mode="true" ></new-project>'
+                    template: '<project inventory-mode="true" ></project>'
                 }
             }
         })
@@ -168,6 +169,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider) => {
 
     $urlRouterProvider.otherwise('/landing');
     $locationProvider.html5Mode(true);
+    $anchorScrollProvider.disableAutoScrolling();
 };
 
 function handleStateChange(event, toState) {
@@ -206,7 +208,7 @@ const run = ($rootScope, $state) => {
 run.$inject = ['$rootScope', '$state'];
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$anchorScrollProvider'];
 
 angular.module(moduleName,
     [
@@ -215,6 +217,7 @@ angular.module(moduleName,
         ngMessages,
         'ngPassword',
         Components,
+        Project,
         cms,
         countryView,
         dashboard,
