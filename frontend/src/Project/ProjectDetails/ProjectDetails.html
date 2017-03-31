@@ -65,11 +65,10 @@
 
     <h6>What is the current coverage of your project?</h6>
 
+    <h6 class="subtitle"><i class="material-icons">&#xE153;</i> National level deployment</h6>
+
     <div class="input-group">
       <div layout="column">
-        <div layout="row">
-          <label>National level deployment</label>
-        </div>
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
@@ -87,6 +86,9 @@
         </div>
       </div>
     </div>
+
+    <h6 class="subtitle first"><i class="material-icons">&#xE567;</i> District level deployment</h6>
+
     <div class="input-group" ng-class="{last: $last}" ng-repeat="cov in vm.project.coverage">
       <div layout="column">
         <div layout="row">
@@ -101,7 +103,6 @@
           </md-input-container>
           <div flex="50"></div>
         </div>
-
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
