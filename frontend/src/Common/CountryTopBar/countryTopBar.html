@@ -1,10 +1,10 @@
 <md-toolbar class="main-toolbar toolbar-global toolbar-landing" ng-class="vm.isScrolled">
     <div class="md-toolbar-tools">
-        <div class="country-logo" layout-align="" ng-show="vm.pageLoaded">
+        <div class="country-logo" layout-align="" ng-if="vm.pageLoaded">
 
-            <img ng-if="!vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+            <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
 
-            <img ng-if="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
+            <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
 
         </div>
 

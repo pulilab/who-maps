@@ -44,17 +44,34 @@ class CustomCountryService extends SimpleApi {
         });
     }
 
+    abcOrder(collection) {
+        return collection.sort((a, b) => {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
     getCountries() {
         const self = this;
         return new Promise(resolve => {
             const keys = _.keys(self.countryLib);
             if (keys.length > 0) {
-                const countryArray = _.values(_.cloneDeep(self.countryLib));
+                let countryArray = _.values(_.cloneDeep(self.countryLib));
+                countryArray = self.abcOrder(countryArray);
                 resolve(self.stripMapData(countryArray));
             }
             else {
                 self.getCountriesList().then(countries => {
-                    resolve(self.stripMapData(_.values(countries)));
+                    let countryArray = self.stripMapData(_.values(countries));
+                    countryArray = self.abcOrder(countryArray);
+                    resolve(countryArray);
                 });
             }
         });
