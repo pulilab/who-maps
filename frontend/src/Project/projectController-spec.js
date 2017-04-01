@@ -86,6 +86,7 @@ describe('ProjectController', () => {
         const e = document.createElement('div');
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
+        spyOn(sc, 'clearCustomErrors');
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'convertObjectArrayToStringArray');
         spyOn(sc, 'addDefaultEmptyKeys');
@@ -104,6 +105,7 @@ describe('ProjectController', () => {
         sc.save();
         sc.form.$valid = false;
         sc.save();
+        expect(sc.clearCustomErrors).toHaveBeenCalled();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
         expect(sc.convertObjectArrayToStringArray).toHaveBeenCalled();
         expect(sc.addDefaultEmptyKeys).toHaveBeenCalled();
@@ -244,16 +246,6 @@ describe('ProjectController', () => {
         expect(input.licenses.standard[0]).toBe(1);
         expect(sc.structure.licenses).toContain(1);
 
-    });
-
-    it('should have a function that handles custom errors', () => {
-        sc.form = {
-            asd: {
-                $setValidity: jasmine.createSpy('innerSet')
-            }
-        };
-        sc.handleCustomError('asd');
-        expect(sc.form.asd.$setValidity).toHaveBeenCalled();
     });
 
     it('fetches all users, team members and viewers if in edit mode', () => {

@@ -172,8 +172,16 @@ class ProjectController extends ProjectDefinition {
         return Object.assign(processedForm);
     }
 
+    clearCustomErrors() {
+        this.form.forEach(formItem => {
+            formItem.$setValidity('custom', true);
+            formItem.customError = [];
+        });
+    }
+
 
     save() {
+        this.clearCustomErrors();
         if (this.form.$valid) {
             let processedForm = Object.assign({}, this.project);
             processedForm.organisation = processedForm.organisation.id;
@@ -280,16 +288,6 @@ class ProjectController extends ProjectDefinition {
             collection[key] = self.concatCustom(collection[key]);
         });
         return Object.assign({}, collection);
-    }
-
-    handleCustomError(key) {
-        this.form[key].$setValidity('custom', true);
-        this.form[key].customError = [];
-    }
-
-    setCustomError(key, error) {
-        this.form[key].$setValidity('custom', false);
-        this.form[key].customError.push(error);
     }
 
 
