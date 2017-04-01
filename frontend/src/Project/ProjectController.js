@@ -173,9 +173,11 @@ class ProjectController extends ProjectDefinition {
     }
 
     clearCustomErrors() {
-        this.form.forEach(formItem => {
-            formItem.$setValidity('custom', true);
-            formItem.customError = [];
+        _.forEach(this.form, formItem => {
+            if (formItem && formItem.customError && formItem.customError.length > 0) {
+                formItem.$setValidity('custom', true);
+                formItem.customError = [];
+            }
         });
     }
 
