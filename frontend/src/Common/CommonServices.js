@@ -203,12 +203,6 @@ class CommonServices extends Protected {
         });
     }
 
-    getProjectFiles(project) {
-        project.filePromise = this.get(`projects/${project.id}/file-list/`);
-        project.filePromise.then(files => {
-            project.files = files;
-        });
-    }
 
     fetchSingleProjectData(resolve, _id) {
         const vm = this;
@@ -250,7 +244,6 @@ class CommonServices extends Protected {
         const last = _.find(this.projectList, { id });
         project.organisation = _.cloneDeep(last.organisation);
         _.merge(last, project);
-
     }
 
     isViewer(project) {

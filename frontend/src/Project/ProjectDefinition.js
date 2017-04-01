@@ -11,6 +11,9 @@ class ProjectDefinition extends Protected {
     }
 
     initializeDefinition() {
+        if (!this.cs.userProfile) {
+            this.EE.emit('unauthorized');
+        }
         this.project = {
             name: null,
             organisation: this.cs.userProfile.organisation,

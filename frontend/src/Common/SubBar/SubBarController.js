@@ -18,7 +18,7 @@ class SubBarController extends Protected {
         this.eventBinding();
         this.projectId = this.state.params.appName;
         this.currentPage = void 0;
-        this.updateProject = this.updateProject.bind(this);
+        this.navigateToProject = this.navigateToProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
         if (this.user) {
             this.fillUserData();
@@ -86,7 +86,7 @@ class SubBarController extends Protected {
         });
     }
 
-    updateProject(name) {
+    navigateToProject(name) {
         const id = _.filter(this.user.projects, { name })[0].id;
         this.state.go(this.state.current.name, { 'appName': id });
     }
@@ -117,7 +117,7 @@ class SubBarController extends Protected {
                 reload: true
             });
         }
-
+        
         this.scope.$evalAsync();
 
     }

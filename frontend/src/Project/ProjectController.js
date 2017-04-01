@@ -213,6 +213,7 @@ class ProjectController extends ProjectDefinition {
                     // update cached project data with the one from the backend
                     this.cs.updateProject(response.data, this.projectId);
                     this.confirmationToast();
+                    this.EE.emit('refreshProjects');
                 }
                 else {
                     this.handleResponse(response);
