@@ -117,7 +117,6 @@ class SubBarController extends Protected {
                 reload: true
             });
         }
-        
         this.scope.$evalAsync();
 
     }
