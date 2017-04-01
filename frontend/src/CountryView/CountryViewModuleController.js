@@ -139,25 +139,18 @@ class CountryViewModuleController {
     getCountries() {
 
         this.mapService.getCountries().then(data => {
-
-            data.forEach(countryObj  => {
-                if (countryObj.name === 'c-te-d-ivoire') {
-                    countryObj.name = 'cote d\'ivoire';
-                }
-            });
-
-            this.countries = data.sort((a, b) => a.name.localeCompare(b.name));
+            this.countries = data.slice();
             this.countriesLib = {};
-            data.forEach(country => {
+            this.countries.forEach(country => {
                 this.countriesLib[country.id] = country.name;
             });
 
             // console.debug('COUNTRY LIB', this.countriesLib);
-            this.countries2 = _.cloneDeep(this.countries);
-            this.countries2.unshift({ id: false, name: 'Show all countries' });
+            this.countries.unshift({ id: false, name: 'Show all countries' });
+
             if (this.cs.userProfile && this.cs.userProfile.country) {
-                const name = this.cs.userProfile.country.toLowerCase();
-                this.selectedCountry = _.find(this.countries2, { name: this.cs.uglifyCountryName(name) });
+                const name = this.cs.userProfile.country;
+                this.selectedCountry = _.find(this.countries, { name });
                 this.updateCountry(this.selectedCountry);
                 this.scope.$evalAsync();
             }
