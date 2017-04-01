@@ -62,12 +62,16 @@ const cs = {
 
 const upload = {};
 
+const timeout = toCall => {
+    toCall();
+};
+
 const structure = require('./Resources/structure.json');
 
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new NewProjectController($scope, $state, upload, cs, structure);
+        sc = new NewProjectController($scope, $state, upload, cs, structure, timeout);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
