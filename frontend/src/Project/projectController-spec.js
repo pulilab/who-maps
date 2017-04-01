@@ -56,7 +56,8 @@ const cs = {
     getProjectData: jasmine.createSpy('gpd').and.returnValue(Promise.resolve()),
     updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve()),
     isViewer: jasmine.createSpy('isViewer').and.returnValue(true),
-    isMember: jasmine.createSpy('isMember').and.returnValue(true)
+    isMember: jasmine.createSpy('isMember').and.returnValue(true),
+    addProjectToCache: jasmine.createSpy('addProjectToCache')
 };
 
 const upload = {};
@@ -132,6 +133,7 @@ describe('ProjectController', () => {
         spy.and.returnValue(mockPromiseGenerator({ success: true }));
         sc.saveForm(sc.project);
         expect(sc.ownershipCheck).toHaveBeenCalled();
+        expect(sc.cs.addProjectToCache).toHaveBeenCalled();
         expect(sc.putGroups).toHaveBeenCalled();
         expect(sc.postSaveActions).toHaveBeenCalled();
         expect(sc.confirmationToast).toHaveBeenCalled();

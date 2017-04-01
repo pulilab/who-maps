@@ -226,6 +226,7 @@ class ProjectController extends ProjectDefinition {
             .then(response => {
                 if (response && response.success) {
                     this.ownershipCheck(response.data);
+                    this.cs.addProjectToCache(response.data);
                     this.putGroups().then(() => {
                         this.postSaveActions();
                         this.confirmationToast();

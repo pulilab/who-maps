@@ -246,6 +246,12 @@ class CommonServices extends Protected {
         _.merge(last, project);
     }
 
+    addProjectToCache(newProject) {
+        newProject = Object.assign({}, newProject);
+        newProject.organisation = Object.assign({}, this.userProfile.organisation);
+        this.projectList.push(newProject);
+    }
+
     isViewer(project) {
         return this.userProfile && this.userProfile.viewer.indexOf(project.id) > -1 && ! this.isMember(project);
     }
