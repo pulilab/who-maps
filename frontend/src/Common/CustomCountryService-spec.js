@@ -25,6 +25,7 @@ describe('CustomCountryService class', () => {
 
     beforeEach(()=>{
         service = CustomCountryService;
+        service.location = { hostname: 'lol.who.int' };
         service.countryLib = {};
     });
 
@@ -132,9 +133,18 @@ describe('CustomCountryService class', () => {
         expect(result.code).toBe('who');
     });
 
-    it('should have a function that fetch the country details', ()=> {
+    it('should have a function that fetch the country details', () => {
         spyOn(service, 'sendDefaultCountryData');
         spyOn(service, 'get').and.returnValue(Promise.resolve());
         expect(service.getCountryData).toBeDefined();
+    });
+
+    it('should only return 2 char long country codes or who', () => {
+        const subDomain = service.getSubDomain();
+        expect(service.getSubDomain).toBeDefined();
+        expect(subDomain).toEqual('who');
+        service.location = { hostname: 'ol.who.int' };
+        const subDomain2 = service.getSubDomain();
+        expect(subDomain2).toEqual('ol');
     });
 });
