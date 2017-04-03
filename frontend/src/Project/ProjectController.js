@@ -187,7 +187,6 @@ class ProjectController extends ProjectDefinition {
 
 
     save() {
-        window.TESTFORM = Object.assign({}, this.project);
         this.clearCustomErrors();
         if (this.form.$valid) {
             let processedForm = Object.assign({}, this.project);
