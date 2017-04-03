@@ -186,9 +186,8 @@ md-input-container.md-input-focused._md-datepicker-floating-label._md-datepicker
   transform: translate3d(-4px, 2px, 0) scale(0.75);
 }
 
-md-checkbox .md-container {
-  top: 0;
-  transform: none;
+md-input-container.md-input-has-value .md-select-value > span:not(.md-select-icon) {
+  transform: translate3d(0, 0, 0)
 }
 
 .md-button {
