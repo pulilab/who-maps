@@ -41,7 +41,6 @@ class ProjectDetailsController extends CollapsibleSet {
             self.currentName = self.currentName || name;
         });
     }
-
     getStructureData() {
         const self = this;
         this.ccs.getCountries().then(data => {
