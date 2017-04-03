@@ -16,11 +16,17 @@ class CustomCountryService extends SimpleApi {
         this.store = new Storage();
         const savedStore = this.store.get('countryLib');
         this.countryLib = savedStore ? savedStore : {};
+        this.location = window.location;
     }
 
     getSubDomain() {
-        const hostArray = window.location.hostname.split('.');
-        return hostArray.length > 1 ? hostArray.shift() : 'who';
+        const defaultDomain = 'who';
+        const hostArray = this.location.hostname.split('.');
+        const subDomain = hostArray.length > 1 ? hostArray.shift() : defaultDomain;
+        if (subDomain !== defaultDomain && subDomain.length !== 2) {
+            return defaultDomain;
+        }
+        return subDomain;
     }
 
     getCountry(cn) {
