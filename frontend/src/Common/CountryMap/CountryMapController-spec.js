@@ -259,6 +259,12 @@ describe('CountryMapController', () => {
             spyOn(vm, 'makeSvgPannableAndZoomable');
         });
 
+        it('REGRESSION: should not execute if no valid map data arrived', () => {
+            const cName = vm.countryName;
+            vm.preDraw(false);
+            expect(vm.countryName).toBe(cName);
+        })
+
         it('removes older .countrymapcontainer', () => {
             d3.select(vm.el[0]).append('svg')
                 .classed('countrymapcontainer', true)
