@@ -56,6 +56,8 @@ class ProjectController extends ProjectDefinition {
                     this.viewers = groups.data.viewers;
                 });
         }
+
+        this.fillTestForm();
     }
 
     onDestroy() {
@@ -184,6 +186,7 @@ class ProjectController extends ProjectDefinition {
 
 
     save() {
+        window.TESTFORM = Object.assign({}, this.project);
         this.clearCustomErrors();
         if (this.form.$valid) {
             let processedForm = Object.assign({}, this.project);
@@ -205,6 +208,7 @@ class ProjectController extends ProjectDefinition {
         }
 
     }
+
 
     focusInvalidField() {
         this.timeout(()=>{
@@ -252,6 +256,84 @@ class ProjectController extends ProjectDefinition {
             });
     }
 
+    fillTestForm() {
+        const data = {
+            'name': Math.random().toString(36).substr(2, 20),
+            'organisation': {
+                'id': 1,
+                'name': 'Pulilab'
+            },
+            'country': 33,
+            'countryName': null,
+            'coverage': [
+                {
+                }
+            ],
+            'platforms': [
+                {
+                    'name': 'Bamboo',
+                    'strategies': [
+                        'Point of care and diagnostics'
+                    ]
+                }
+            ],
+            'licenses': {
+                'standard': []
+            },
+            'donors': [
+                {
+                    'value': 'dsfdsfdsf'
+                }
+            ],
+            'application': [],
+            'reports': [
+                {}
+            ],
+            'publications': [
+                {}
+            ],
+            'links': [
+                {}
+            ],
+            'contact_name': 'dfadsfdsfsdfas',
+            'contact_email': 'dsf@dsaf.coim',
+            'implementation_overview': 'dsfdsfdsf',
+            'implementation_dates': new Date(),
+            'health_focus_areas': {
+                'standard': []
+            },
+            'geographic_scope': 'dsfds',
+            'interoperability_links': [],
+            'interoperability_standards': {
+                'standard': []
+            },
+            'wiki': '',
+            'repository': '',
+            'mobile_application': '',
+            'implementing_partners': [
+            ],
+            'data_exchanges': [],
+            'his_bucket': [
+                'a'
+            ],
+            'hsc_challenges': [
+                'b'
+            ],
+            'interventions': [],
+            'government_investor': false,
+            'national_level_deployment': {
+                'health_workers': 2,
+                'facilities': 2,
+                'clients': 2
+            }
+        };
+        if (window.location.search.indexOf('test') > -1) {
+            this.scope.$evalAsync(() => {
+                this.project = data;
+            });
+        }
+    }
+
     confirmationToast() {
         this.toast.show(
             this.toast.simple()
@@ -274,8 +356,10 @@ class ProjectController extends ProjectDefinition {
     }
 
     postSaveActions() {
-        const go = 'editProject';
-        this.EE.emit('refreshProjects', { go, appName: this.projectId });
+        this.state.go('editProject', { appName: this.projectId }, {
+            location: 'replace',
+            reload: true
+        });
     }
 
     handleResponse(response) {
