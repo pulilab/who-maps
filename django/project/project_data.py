@@ -1,14 +1,14 @@
 project_structure = {
         "strategies": [
             "Client education and behavior change communication",
-            "Point of care and diagnostics",
             "Client Information Systems",
             "Data Collection and Reporting",
-            "Service Delivery",
-            "Provider training and education",
-            "Human resource management",
-            "Supply management",
             "Financial transactions and incentives"
+            "Human resource management",
+            "Point of care and diagnostics",
+            "Provider training and education",
+            "Service Delivery",
+            "Supply management",
         ],
         "technology_platforms": [
             "Adobe Forms",
