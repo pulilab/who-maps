@@ -79,10 +79,6 @@ class SubBarController extends Protected {
         return base;
     }
 
-    refreshProjectsHandler(data) {
-        this.fillUserData(data);
-    }
-
     navigateToProject(name) {
         const id = _.filter(this.user.projects, { name })[0].id;
         this.state.go(this.state.current.name, { 'appName': id });
