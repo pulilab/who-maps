@@ -117,7 +117,6 @@ class CountryMapController {
         this.initialData = _.cloneDeep(this.data);
         // console.log('DATA arrived', this.data);
         this.dataHere = true;
-        console.log(national);
         if (national) {
             this.nationalCov = Object.assign({}, national);
             if (!_.isNil(this.nationalCov.health_workers)) {
