@@ -55,7 +55,7 @@ class ProjectDetailsController extends CollapsibleSet {
         return this.users.filter(el => {
             if (el && el.name) {
                 return _.includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
-                    _.includes(el.organisation__name.toLowerCase(), criteria.toLowerCase());
+                    _.includes(el.organisation_name.toLowerCase(), criteria.toLowerCase());
             }
             return false;
         });
