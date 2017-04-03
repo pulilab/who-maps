@@ -29,31 +29,31 @@
   md-select {
     &[multiple] {
       .md-select-value {
-        // align-items: flex-end !important;
-        // padding: 2px 2px 6px !important;
 
         .md-select-icon {
+          height: 100%;
+
           &::after {
+            top: calc(100% - 20px);
           }
         }
 
-        > span:first-child {
+        > span {
           display: block;
           min-width: auto;
           max-width: 100%;
           white-space: normal;
 
           .md-text {
-            display: inline-block;
+            display: block;
             width: 100%;
             @include text-truncate();
 
             &:first-child {
-              padding-bottom: 0 !important;
+              padding-top: 5px;
             }
-
             &:last-child {
-              //padding-bottom: 3px;
+              padding-bottom: 3px;
             }
           }
         }
