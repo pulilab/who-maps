@@ -22,7 +22,6 @@ class Protected extends AuthApi {
         this.userProfileId = this.retrieveProfileId();
         this.user = this.storage.get('user');
         this.setUserType();
-        // this.checkLoginStatus();
     }
 
     setUserType() {
@@ -49,12 +48,6 @@ class Protected extends AuthApi {
         this.isLogin = void 0;
         this.user = void 0;
         this.userType = 0;
-    }
-
-    checkLoginStatus() {
-        if (!this.isLogin) {
-            // this.EE.emit('logout');
-        }
     }
 
     systemLogout() {

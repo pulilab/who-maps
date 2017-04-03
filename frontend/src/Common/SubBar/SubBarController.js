@@ -42,7 +42,6 @@ class SubBarController extends Protected {
 
     eventBinding() {
         this.EE.on('projectListUpdated', this.fillUserData, this);
-        this.EE.on('refreshProjects', this.refreshProjectsHandler, this);
     }
 
     createShareDefinition() {
@@ -81,9 +80,7 @@ class SubBarController extends Protected {
     }
 
     refreshProjectsHandler(data) {
-        this.cs.reset().loadedPromise.then(() => {
-            this.fillUserData(data);
-        });
+        this.fillUserData(data);
     }
 
     navigateToProject(name) {
@@ -91,11 +88,13 @@ class SubBarController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData(forcedPath) {
+    fillUserData() {
+        this.user = this.user || this.storage.get('user');
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
+        this.cs.addMember(lastProject);
 
-        if (!forcedPath && this.state.params && this.state.params.appName
+        if (this.state.params && this.state.params.appName
             && this.state.params.appName.length === 0
             && lastProject && lastProject.id) {
             const appName = lastProject.id;
@@ -110,13 +109,6 @@ class SubBarController extends Protected {
             }
         });
 
-
-        if (forcedPath) {
-            this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
-                location: 'replace',
-                reload: true
-            });
-        }
         this.scope.$evalAsync();
 
     }
