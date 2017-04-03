@@ -177,7 +177,10 @@ function handleStateChange(event, toState) {
         console.debug(`Ui route state change ${this} :`, toState.name);
     }
     if (this === 'success') {
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        const mainContent = document.getElementsByClassName('main-content')[0];
+        if (mainContent) {
+            mainContent.scrollTop = 0;
+        }
     }
 }
 

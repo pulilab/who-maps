@@ -168,12 +168,25 @@ class ProjectController extends ProjectDefinition {
         return Object.assign({}, processedForm);
     }
 
-    addDefaultEmptyKeys(processedForm) {
-        processedForm.coverage = processedForm.coverage.filter(cov => {
-            return Object.keys(cov).length > 1;
+    removeEmptyChildObjects(processedForm) {
+        const keyArray = ['coverage', 'platforms'];
+
+        keyArray.forEach(key => {
+            processedForm[key] = processedForm[key].filter(cov => {
+                return Object.keys(cov).length > 1;
+            });
         });
-        processedForm.platforms = processedForm.platforms || null;
-        return Object.assign(processedForm);
+
+        return Object.assign({}, processedForm);
+    }
+
+    removeKeysWithoutValues(processedForm) {
+        _.forEach(processedForm, (value, key) => {
+            if (value === null || value === '') {
+                processedForm[key] = undefined;
+            }
+        });
+        return Object.assign({}, processedForm);
     }
 
     clearCustomErrors() {
@@ -194,7 +207,8 @@ class ProjectController extends ProjectDefinition {
             processedForm = this.createDateFields(processedForm);
             processedForm = this.mergeCustomAndDefault(processedForm);
             processedForm = this.convertObjectArrayToStringArray(processedForm);
-            processedForm = this.addDefaultEmptyKeys(processedForm);
+            processedForm = this.removeEmptyChildObjects(processedForm);
+            processedForm = this.removeKeysWithoutValues(processedForm);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
@@ -230,7 +244,7 @@ class ProjectController extends ProjectDefinition {
                     // update cached project data with the one from the backend
                     this.cs.updateProject(response.data, this.projectId);
                     this.confirmationToast();
-                    this.EE.emit('refreshProjects');
+                    this.postUpdateActions();
                 }
                 else {
                     this.handleResponse(response);
@@ -353,6 +367,10 @@ class ProjectController extends ProjectDefinition {
             const last  = _.last(this.cs.projectList);
             this.projectId = last && last.id ? last.id : null;
         }
+    }
+
+    postUpdateActions() {
+        this.EE.emit('projectListUpdated');
     }
 
     postSaveActions() {

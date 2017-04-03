@@ -94,7 +94,7 @@ describe('ProjectController', () => {
         spyOn(sc, 'clearCustomErrors');
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'convertObjectArrayToStringArray');
-        spyOn(sc, 'addDefaultEmptyKeys');
+        spyOn(sc, 'removeEmptyChildObjects');
         spyOn(sc, 'saveForm');
         spyOn(sc, 'updateForm');
         spyOn(sc, 'putGroups');
@@ -113,7 +113,7 @@ describe('ProjectController', () => {
         expect(sc.clearCustomErrors).toHaveBeenCalled();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
         expect(sc.convertObjectArrayToStringArray).toHaveBeenCalled();
-        expect(sc.addDefaultEmptyKeys).toHaveBeenCalled();
+        expect(sc.removeEmptyChildObjects).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
         sc.form.$valid = true;
         sc.editMode = true;

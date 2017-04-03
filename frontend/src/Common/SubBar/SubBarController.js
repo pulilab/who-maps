@@ -21,7 +21,7 @@ class SubBarController extends Protected {
         this.navigateToProject = this.navigateToProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
         if (this.user) {
-            this.fillUserData();
+            this.getProjectsData();
             this.userProfile = this.cs.userProfile;
             if (this.userProfile) {
                 this.adjustUserType(this.userProfile);
@@ -41,7 +41,7 @@ class SubBarController extends Protected {
     }
 
     eventBinding() {
-        this.EE.on('projectListUpdated', this.fillUserData, this);
+        this.EE.on('projectListUpdated', this.getProjectsData, this);
     }
 
     createShareDefinition() {
@@ -84,10 +84,9 @@ class SubBarController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    fillUserData() {
-        this.user = this.user || this.storage.get('user');
-        this.user.projects = this.cs.projectList;
-        const lastProject = _.last(this.user.projects);
+    getProjectsData() {
+        this.projects = this.cs.projectList.slice();
+        const lastProject = _.last(this.projects);
         this.cs.addMember(lastProject);
 
         if (this.state.params && this.state.params.appName
@@ -99,22 +98,24 @@ class SubBarController extends Protected {
                 location: 'replace'
             });
         }
-        _.forEach(this.user.projects, item => {
+
+        _.forEach(this.projects, item => {
             if (item.id === parseInt(this.state.params.appName, 10)) {
                 this.currentProject = item;
             }
         });
 
-        this.scope.$evalAsync();
+        this.scope.$evalAsync(() => {
+        });
 
     }
 
     goToDashboard() {
-        this.state.go('dashboard', { 'appName': _.last(this.user.projects).id });
+        this.state.go('dashboard', { 'appName': _.last(this.projects).id });
     }
 
     goToEditProject() {
-        this.state.go('editProject', { 'appName': _.last(this.user.projects).id });
+        this.state.go('editProject', { 'appName': _.last(this.projects).id });
     }
 
 
