@@ -16,14 +16,14 @@ describe('ProjectDetailsController', () => {
         expect(controller.getUsers).toBeDefined();
         controller.users = [
             {
-                name: 'Jess', organisation__name: 'Flikli'
+                name: 'Jess', organisation_name: 'Flikli'
             }, {
-                name: 'Nico', organisation__name: 'Pulilab'
+                name: 'Nico', organisation_name: 'Pulilab'
             }, {
-                name: 'Tigest', organisation__name: 'WHO'
+                name: 'Tigest', organisation_name: 'WHO'
             }
         ];
-        expect(controller.getUsers('tig')[0].organisation__name).toBe('WHO');
+        expect(controller.getUsers('tig')[0].organisation_name).toBe('WHO');
         expect(controller.getUsers('E').length).toBe(2);
     });
 });
