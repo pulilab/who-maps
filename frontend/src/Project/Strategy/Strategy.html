@@ -13,7 +13,7 @@
           <md-input-container class="md-block" flex="50">
             <label>Platform</label>
             <md-select ng-model="platform.name" name="{{'platform-name_' + $index }}" required>
-              <md-option ng-value="plat" ng-repeat="plat in vm.structure.technology_platforms">
+              <md-option ng-value="plat" ng-repeat="plat in platform.availablePlatforms">
                 {{plat}}
               </md-option>
             </md-select>
