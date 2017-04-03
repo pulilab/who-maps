@@ -128,7 +128,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
             data = dict(data_serializer.validated_data)
-            data.update(dict(id=project.id))
+            data.update(dict(id=project.id, public_id=project.public_id))
             return Response(data, status=status.HTTP_201_CREATED)
         else:
             return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

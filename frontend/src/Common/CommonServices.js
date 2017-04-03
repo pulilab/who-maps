@@ -47,14 +47,6 @@ class CommonServices extends Protected {
         }
     }
 
-    uglifyCountryName(name) {
-        let nameParts = name.replace(' ', '-').split('-');
-        nameParts = _.map(nameParts, item =>{
-            return _.lowerCase(item);
-        });
-        return nameParts.join('-');
-    }
-
     prettifyCountryName(name) {
         let nameParts = name.replace('-', ' ').split(' ');
         nameParts = _.map(nameParts, item => {
@@ -258,6 +250,12 @@ class CommonServices extends Protected {
 
     isMember(project) {
         return this.userProfile && this.userProfile.member.indexOf(project.id) > -1;
+    }
+
+    addMember(project) {
+        if (!this.isMember(project)) {
+            this.userProfile.member.push(project.id);
+        }
     }
 
     hasProfile() {
