@@ -41,7 +41,7 @@ describe('SubBarController', () => {
     it('should have a function that update the selected project', () => {
         spyOn(ac.state, 'go');
         ac.user = { projects: [{ name: 'asd', id: 1 }] };
-        ac.updateProject('asd');
+        ac.navigateToProject('asd');
         expect(ac.state.go).toHaveBeenCalled();
     });
 

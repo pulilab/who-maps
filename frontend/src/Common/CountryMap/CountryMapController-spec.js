@@ -104,7 +104,7 @@ describe('CountryMapController', () => {
 
     describe('on data arrival', () => {
 
-        const nationalMock = [{ a: 1, b: 2, district: 'shouldGetDeleted' }];
+        const nationalMock = { a: 1, b: 2 };
         const mockLibAfter = { a: 1, b: 2 };
 
         it('stores data & notes that data have arrived', () => {

@@ -8,7 +8,7 @@ import EditProfileService from '../Common/EditProfile/EditProfileService';
 
 class ProjectController extends ProjectDefinition {
 
-    constructor($scope, $state, Upload, CommonService, toast) {
+    constructor($scope, $state, Upload, CommonService, toast, $timeout) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
         this.es = new EditProfileService();
@@ -16,6 +16,7 @@ class ProjectController extends ProjectDefinition {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.postSaveActions = this.postSaveActions.bind(this);
@@ -172,8 +173,18 @@ class ProjectController extends ProjectDefinition {
         return Object.assign(processedForm);
     }
 
+    clearCustomErrors() {
+        _.forEach(this.form, formItem => {
+            if (formItem && formItem.customError && formItem.customError.length > 0) {
+                formItem.$setValidity('custom', true);
+                formItem.customError = [];
+            }
+        });
+    }
+
 
     save() {
+        this.clearCustomErrors();
         if (this.form.$valid) {
             let processedForm = Object.assign({}, this.project);
             processedForm.organisation = processedForm.organisation.id;
@@ -189,7 +200,19 @@ class ProjectController extends ProjectDefinition {
                 this.putGroups();
             }
         }
+        else {
+            this.focusInvalidField();
+        }
 
+    }
+
+    focusInvalidField() {
+        this.timeout(()=>{
+            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+            if (firstInvalid) {
+                firstInvalid.focus();
+            }
+        }, 100);
     }
 
     putGroups() {
@@ -203,6 +226,7 @@ class ProjectController extends ProjectDefinition {
                     // update cached project data with the one from the backend
                     this.cs.updateProject(response.data, this.projectId);
                     this.confirmationToast();
+                    this.EE.emit('refreshProjects');
                 }
                 else {
                     this.handleResponse(response);
@@ -215,6 +239,7 @@ class ProjectController extends ProjectDefinition {
             .then(response => {
                 if (response && response.success) {
                     this.ownershipCheck(response.data);
+                    this.cs.addProjectToCache(response.data);
                     this.putGroups().then(() => {
                         this.postSaveActions();
                         this.confirmationToast();
@@ -254,6 +279,7 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleResponse(response) {
+        const self = this;
         _.forEach(response.data, (item, key) => {
             if (this.form[key]) {
                 this.form[key].customError = item;
@@ -263,7 +289,10 @@ class ProjectController extends ProjectDefinition {
                 console.error('missing name in the form: ', key);
             }
         });
-        this.scope.$evalAsync();
+        this.scope.$evalAsync(()=>{
+            self.focusInvalidField();
+        });
+
     }
 
     concatCustom(obj) {
@@ -282,24 +311,14 @@ class ProjectController extends ProjectDefinition {
         return Object.assign({}, collection);
     }
 
-    handleCustomError(key) {
-        this.form[key].$setValidity('custom', true);
-        this.form[key].customError = [];
-    }
-
-    setCustomError(key, error) {
-        this.form[key].$setValidity('custom', false);
-        this.form[key].customError.push(error);
-    }
-
 
     static newProjectFactory() {
         require('./Project.scss');
         const CommonService =  require('../Common/CommonServices');
-        function newProject($scope, $state, Upload, $mdToast) {
-            return new ProjectController($scope, $state, Upload, CommonService, $mdToast);
+        function newProject($scope, $state, Upload, $mdToast, $timeout) {
+            return new ProjectController($scope, $state, Upload, CommonService, $mdToast, $timeout);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast', '$timeout'];
         return newProject;
     }
 }

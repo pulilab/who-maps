@@ -1,5 +1,4 @@
 import AuthApi  from '../Common/AuthApi';
-import { StaticUtilities } from '../Utilities';
 
 /* global Promise, URL */
 
@@ -69,28 +68,6 @@ class NewProjectService extends AuthApi {
             });
     }
 
-    uploadFile(file, filetype, projectId) {
-        this.retrieveToken(true);
-        const _data = {};
-        _data[filetype] = file;
-        const Authorization = 'Token ' + this.token;
-        return this.upload.upload({
-            url: `api/projects/${projectId}/files/`,
-            headers: { Authorization },
-            data: _data
-        });
-    }
-
-    deleteFile(fileId) {
-        return this.del(`files/${fileId}/delete/`);
-    }
-
-    downloadFile(file) {
-        return this.getBlob(`files/${file.id}/`)
-            .then(data => {
-                StaticUtilities.launchDownload(data, file.filename);
-            });
-    }
 
     autocompleteProjectName(name) {
         const data = {

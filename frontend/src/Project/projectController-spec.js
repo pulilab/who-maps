@@ -56,17 +56,22 @@ const cs = {
     getProjectData: jasmine.createSpy('gpd').and.returnValue(Promise.resolve()),
     updateProject: jasmine.createSpy('updateProject').and.returnValue(Promise.resolve()),
     isViewer: jasmine.createSpy('isViewer').and.returnValue(true),
-    isMember: jasmine.createSpy('isMember').and.returnValue(true)
+    isMember: jasmine.createSpy('isMember').and.returnValue(true),
+    addProjectToCache: jasmine.createSpy('addProjectToCache')
 };
 
 const upload = {};
+
+const timeout = toCall => {
+    toCall();
+};
 
 const structure = require('./Resources/structure.json');
 
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new NewProjectController($scope, $state, upload, cs, structure);
+        sc = new NewProjectController($scope, $state, upload, cs, structure, timeout);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -86,6 +91,7 @@ describe('ProjectController', () => {
         const e = document.createElement('div');
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
+        spyOn(sc, 'clearCustomErrors');
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'convertObjectArrayToStringArray');
         spyOn(sc, 'addDefaultEmptyKeys');
@@ -104,6 +110,7 @@ describe('ProjectController', () => {
         sc.save();
         sc.form.$valid = false;
         sc.save();
+        expect(sc.clearCustomErrors).toHaveBeenCalled();
         expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
         expect(sc.convertObjectArrayToStringArray).toHaveBeenCalled();
         expect(sc.addDefaultEmptyKeys).toHaveBeenCalled();
@@ -130,6 +137,7 @@ describe('ProjectController', () => {
         spy.and.returnValue(mockPromiseGenerator({ success: true }));
         sc.saveForm(sc.project);
         expect(sc.ownershipCheck).toHaveBeenCalled();
+        expect(sc.cs.addProjectToCache).toHaveBeenCalled();
         expect(sc.putGroups).toHaveBeenCalled();
         expect(sc.postSaveActions).toHaveBeenCalled();
         expect(sc.confirmationToast).toHaveBeenCalled();
@@ -244,16 +252,6 @@ describe('ProjectController', () => {
         expect(input.licenses.standard[0]).toBe(1);
         expect(sc.structure.licenses).toContain(1);
 
-    });
-
-    it('should have a function that handles custom errors', () => {
-        sc.form = {
-            asd: {
-                $setValidity: jasmine.createSpy('innerSet')
-            }
-        };
-        sc.handleCustomError('asd');
-        expect(sc.form.asd.$setValidity).toHaveBeenCalled();
     });
 
     it('fetches all users, team members and viewers if in edit mode', () => {
