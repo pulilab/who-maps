@@ -231,6 +231,9 @@ class CountryMapController {
     }
 
     preDraw(countryMapData) {
+        if (!countryMapData) {
+            return;
+        }
         // console.log(JSON.stringify(topoJSON));
         d3.select(this.el[0]).select('.countrymapcontainer').remove();
 
