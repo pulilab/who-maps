@@ -56,8 +56,9 @@ class ProjectController extends ProjectDefinition {
                     this.viewers = groups.data.viewers;
                 });
         }
-
-        this.fillTestForm();
+        if (DEV) {
+            this.fillTestForm();
+        }
     }
 
     onDestroy() {
