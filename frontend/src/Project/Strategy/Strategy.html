@@ -26,6 +26,7 @@
           <md-input-container class="md-block" flex="50">
             <label>Strategies (select multiple)</label>
             <md-select ng-model="platform.strategies"
+                       md-select-separator="empty"
                        name="{{'platform-strategy_' + $index }}"
                        multiple required>
               <md-option ng-value="strategy" ng-repeat="strategy in vm.structure.strategies">
@@ -57,7 +58,7 @@
     <div layout="row" class="first">
       <md-input-container class="md-block" flex>
         <label>HIS buckets (select from list)</label>
-        <md-select ng-model="vm.project.his_bucket" name="his" required multiple>
+        <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his" required multiple>
           <md-option value="{{his}}" ng-repeat="his in vm.structure.his_bucket">
             {{his}}
           </md-option>
@@ -71,7 +72,7 @@
     <div layout="row">
       <md-input-container class="md-block" flex>
         <label>HSC challenges (select from list)</label>
-        <md-select ng-model="vm.project.hsc_challenges" name="hsc" required multiple>
+        <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc" required multiple>
           <md-option value="{{hsc}}" ng-repeat="hsc in vm.structure.hsc_challenges">
             {{hsc}}
           </md-option>
@@ -85,7 +86,7 @@
     <div layout="row">
       <md-input-container class="md-block" flex>
         <label>Essential interventions (select from list)</label>
-        <md-select ng-model="vm.project.interventions" multiple>
+        <md-select ng-model="vm.project.interventions" md-select-separator="empty" multiple>
           <md-option value="{{intervention}}" ng-repeat="intervention in vm.structure.interventions">
             {{intervention}}
           </md-option>

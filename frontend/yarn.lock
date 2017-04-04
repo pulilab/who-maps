@@ -98,9 +98,9 @@ angular-aria@1.5.0:
   version "1.1.3"
   resolved "git+https://github.com/angular/material.git#0c4e89583c711dee6475bb9e5790bf844d14953c"
 
-"angular-material@https://github.com/lordfuoco/material.git#v1.1.p":
+"angular-material@https://github.com/lordfuoco/material.git#p1.1.0":
   version "1.1.0"
-  resolved "https://github.com/lordfuoco/material.git#8ad2c6d8bc4b70fd7f8b9e76d5eaa702c20b8e5c"
+  resolved "https://github.com/lordfuoco/material.git#ed0c1b6cfe18c46a6d2f7842ff971857d3595f9b"
 
 angular-messages@1.5.0:
   version "1.5.0"

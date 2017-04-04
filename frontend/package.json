@@ -70,7 +70,7 @@
     "angular": "1.5.11",
     "angular-animate": "1.5.0",
     "angular-aria": "1.5.0",
-    "angular-material": "https://github.com/lordfuoco/material.git#v1.1.p",
+    "angular-material": "https://github.com/lordfuoco/material.git#p1.1.0",
     "angular-messages": "1.5.0",
     "angular-mocks": "1.5.5",
     "angular-password": "^1.0.1",
