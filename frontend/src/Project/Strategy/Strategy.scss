@@ -13,4 +13,52 @@
     }
   }
 
+  // Multiline md-select
+
+  .section-wrapper .layout-row md-input-container {
+    min-height: auto;
+    margin-bottom: 38px;
+  }
+
+  .add-more-item {
+    > div {
+      height: calc(100% - 38px);
+    }
+  }
+
+  md-select {
+    &[multiple] {
+      .md-select-value {
+
+        .md-select-icon {
+          height: 100%;
+
+          &::after {
+            top: calc(100% - 20px);
+          }
+        }
+
+        > span {
+          display: block;
+          min-width: auto;
+          max-width: 100%;
+          white-space: normal;
+
+          .md-text {
+            display: block;
+            width: 100%;
+            @include text-truncate();
+
+            &:first-child {
+              padding-top: 5px;
+            }
+            &:last-child {
+              padding-bottom: 3px;
+            }
+          }
+        }
+      }
+    }
+  }
+
 }

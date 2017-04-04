@@ -13,6 +13,10 @@
       }
 
       md-checkbox {
+        .md-container {
+          transform: none;
+          top: 0;
+        }
         .md-label {
           margin-right: 20px;
         }

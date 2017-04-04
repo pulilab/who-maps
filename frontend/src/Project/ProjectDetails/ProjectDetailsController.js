@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import CollapsibleSet from '../CollapsibleSet';
 import ProjectService from '../ProjectService';
 
@@ -17,6 +18,7 @@ class ProjectDetailsController extends CollapsibleSet {
         this.fetchDistricts = this.fetchDistricts.bind(this);
         this.getUsers = this.getUsers.bind(this);
         this.checkName = this.checkName.bind(this);
+        this.validateDateRange = this.validateDateRange.bind(this);
     }
 
     onInit() {
@@ -40,6 +42,25 @@ class ProjectDetailsController extends CollapsibleSet {
         }, name => {
             self.currentName = self.currentName || name;
         });
+
+        self.scope.$watchGroup([() => {
+            return this.project.start_date;
+        }, () => {
+            return this.project.end_date;
+        }], self.validateDateRange);
+    }
+
+    validateDateRange([start, end]) {
+        start = moment(start);
+        end = moment(end);
+        if (start.isAfter(end)) {
+            this.setCustomError('start_date', 'Start date can not be later than the end date');
+            this.setCustomError('end_date', 'End date can not be earlier than the start date');
+        }
+        else {
+            this.handleCustomError('start_date');
+            this.handleCustomError('end_date');
+        }
     }
     getStructureData() {
         const self = this;
@@ -80,8 +101,12 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     setCustomError(key, error) {
+        const errors = this.form[key].customError || [];
+        if (errors.indexOf('error') === -1) {
+            errors.push(error);
+        }
         this.form[key].$setValidity('custom', false);
-        this.form[key].customError.push(error);
+        this.form[key].customError = errors;
     }
 
     checkName() {
