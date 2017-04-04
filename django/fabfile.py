@@ -24,7 +24,7 @@ def production():
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
-    env.webpack_options = '-- --live'
+    env.webpack_options = '-live'
 
 def staging():
     """Configure staging"""
@@ -35,7 +35,7 @@ def staging():
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
-    env.webpack_options = '-- --live'
+    env.webpack_options = ''
 
 
 # COMMANDS #
@@ -104,7 +104,7 @@ def deploy():
         # handle frontend
         with cd(env.frontend_root):
             run('yarn')
-            run('yarn dist {}'.format(env.webpack_options))
+            run('yarn dist{}'.format(env.webpack_options))
             run('yarn clean-server-folder')
             run('yarn copy-to-server')
 
