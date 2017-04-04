@@ -190,10 +190,8 @@ if SITE_ID in [3]:
             "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
         }
     }
-    import raven
     RAVEN_CONFIG = {
         'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
-        'release': raven.fetch_git_sha(os.path.dirname(os.pardir))
     }
 
     DEBUG = False
