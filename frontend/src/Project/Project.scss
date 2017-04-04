@@ -150,6 +150,13 @@
       font-size: 12px;
       font-weight: 500;
 
+      &.required {
+        &::after {
+          content: " *";
+          color: $color-red;
+        }
+      }
+
       &.first {
         padding-top: 0;
       }
@@ -268,20 +275,27 @@
         margin: 10px 0;
         padding: 0 40px 0 0;
         width: 33%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
         line-height: 20px;
         height: 48px;
 
         .md-label {
           display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
         }
 
-        md-checkbox + md-input-container {
-          margin-left: 0 !important;
+        .md-container {
+          transform: none;
+          top: 0;
+        }
+
+        md-checkbox {
+          + md-input-container {
+            margin-left: 0 !important;
+          }
         }
       }
     }
