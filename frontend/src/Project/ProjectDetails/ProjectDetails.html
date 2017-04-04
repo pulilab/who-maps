@@ -61,12 +61,36 @@
 
       <md-input-container flex="30">
         <label>Project start date</label>
-        <md-datepicker ng-model="vm.project.start_date" md-max-date="vm.project.end_date"></md-datepicker>
+        <md-datepicker
+            ng-model="vm.project.start_date"
+            md-open-on-focus
+            name="start_date"
+            md-current-view="year">
+        </md-datepicker>
+        <div ng-messages="vm.form.start_date.$error">
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.start_date.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
       </md-input-container>
 
       <md-input-container flex="30">
         <label>Project end date</label>
-        <md-datepicker ng-model="vm.project.end_date" md-min-date="vm.project.start_date"></md-datepicker>
+        <md-datepicker
+            ng-model="vm.project.end_date"
+            md-open-on-focus
+            name="end_date"
+            md-current-view="year">
+        </md-datepicker>
+        <div ng-messages="vm.form.end_date.$error">
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.end_date.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
       </md-input-container>
     </div>
 
@@ -181,7 +205,7 @@
       </div>
     </div>
 
-    <h6>Donor</h6>
+    <h6 class="required">Donor (Add one at least)</h6>
 
     <div layout="row" ng-repeat="donor in vm.project.donors">
       <md-input-container md-no-float class="md-block" flex="50">
