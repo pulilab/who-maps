@@ -176,6 +176,8 @@ ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
@@ -200,6 +202,7 @@ if SITE_ID in [3]:
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
                      '.digitalhealthatlas.com']
 
+    EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 # Mailgun settings
 EMAIL_USE_TLS = True
@@ -207,8 +210,6 @@ EMAIL_HOST = "smtp.mailgun.org"
 EMAIL_HOST_USER = "postmaster@whomaps.pulilab.com"
 EMAIL_HOST_PASSWORD = "5ede15430fbf90989648a0fe12e379cc"
 EMAIL_PORT = 587
-
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 FROM_EMAIL = DEFAULT_FROM_EMAIL
 
