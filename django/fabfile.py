@@ -41,6 +41,8 @@ def staging():
 # COMMANDS #
 
 def deploy():
+    db_up = None
+
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
         # get new stuff from git
@@ -55,7 +57,22 @@ def deploy():
         else:
             options = ""
 
-        run('docker-compose {}restart'.format(options))
+        ps = run('docker-compose ps')
+        running = "".join([l for l in ps.split('\n') if 'Up' in l])
+
+        time.sleep(3)
+
+        if 'django' in running:
+            run('docker-compose {}restart django'.format(options))
+        if 'celery' in running:
+            run('docker-compose {}restart celery'.format(options))
+        if 'nginx' in running:
+            run('docker-compose {}restart nginx'.format(options))
+        if 'postgres' in running:
+            db_up = True
+            run('docker-compose {}restart postgres'.format(options))
+        if 'rabbitmq' in running:
+            run('docker-compose {}restart rabbitmq'.format(options))
 
         time.sleep(5)
 
@@ -63,7 +80,8 @@ def deploy():
         with cd(env.backend_root):
 
             # backup DB
-            _backup_db()
+            if db_up:
+                _backup_db()
             # build
             run('docker-compose {}build'.format(options))
             run('docker-compose {}down'.format(options))
