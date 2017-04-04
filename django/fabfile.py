@@ -1,4 +1,4 @@
-from fabric.api import local, settings, abort, run, cd, env, lcd
+from fabric.api import local, run, cd, env
 import time
 
 # ENVIRONMENTS #
@@ -15,11 +15,21 @@ def dev():
     env.frontend_root = 'frontend'
     env.webpack_options = ''
 
-
 def production():
-    """Configure staging"""
+    """Configure prod"""
     env.hosts = ['whomaps@test.whomaps.pulilab.com']
     env.name = 'production'
+    env.port = 22
+    env.branch = "master"
+    env.project_root = '/home/whomaps/who-maps'
+    env.backend_root = 'django'
+    env.frontend_root = 'frontend'
+    env.webpack_options = '-- --live'
+
+def staging():
+    """Configure staging"""
+    env.hosts = ['whomaps@139.59.148.238']
+    env.name = 'staging'
     env.port = 22
     env.branch = "master"
     env.project_root = '/home/whomaps/who-maps'
@@ -40,7 +50,7 @@ def deploy():
 
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(env.project_root, env.project_root)
-        elif env.name == 'production':
+        elif env.name in ['production', 'staging']:
             options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(env.project_root, env.project_root)
         else:
             options = ""
