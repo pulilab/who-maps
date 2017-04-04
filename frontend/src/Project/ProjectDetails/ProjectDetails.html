@@ -61,12 +61,22 @@
 
       <md-input-container flex="30">
         <label>Project start date</label>
-        <md-datepicker ng-model="vm.project.start_date" md-max-date="vm.project.end_date"></md-datepicker>
+        <md-datepicker
+            ng-model="vm.project.start_date"
+            md-open-on-focus
+            md-current-view="year"
+            md-max-date="vm.project.end_date">
+        </md-datepicker>
       </md-input-container>
 
       <md-input-container flex="30">
         <label>Project end date</label>
-        <md-datepicker ng-model="vm.project.end_date" md-min-date="vm.project.start_date"></md-datepicker>
+        <md-datepicker
+            ng-model="vm.project.end_date"
+            md-open-on-focus
+            md-current-view="year"
+            md-min-date="vm.project.start_date">
+        </md-datepicker>
       </md-input-container>
     </div>
 
