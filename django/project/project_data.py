@@ -3,7 +3,7 @@ project_structure = {
             "Client education and behavior change communication",
             "Client Information Systems",
             "Data Collection and Reporting",
-            "Financial transactions and incentives"
+            "Financial transactions and incentives",
             "Human resource management",
             "Point of care and diagnostics",
             "Provider training and education",
