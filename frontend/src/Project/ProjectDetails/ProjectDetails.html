@@ -64,9 +64,16 @@
         <md-datepicker
             ng-model="vm.project.start_date"
             md-open-on-focus
-            md-current-view="year"
-            md-max-date="vm.project.end_date">
+            name="start_date"
+            md-current-view="year">
         </md-datepicker>
+        <div ng-messages="vm.form.start_date.$error">
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.start_date.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
       </md-input-container>
 
       <md-input-container flex="30">
@@ -74,9 +81,16 @@
         <md-datepicker
             ng-model="vm.project.end_date"
             md-open-on-focus
-            md-current-view="year"
-            md-min-date="vm.project.start_date">
+            name="end_date"
+            md-current-view="year">
         </md-datepicker>
+        <div ng-messages="vm.form.end_date.$error">
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.end_date.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
       </md-input-container>
     </div>
 
