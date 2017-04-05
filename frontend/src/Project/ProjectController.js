@@ -30,6 +30,7 @@ class ProjectController extends ProjectDefinition {
     }
 
     onInit() {
+        const self = this;
         this.eventListeners();
         this.districtList = [];
         this.dataLoaded = false;
@@ -56,6 +57,14 @@ class ProjectController extends ProjectDefinition {
                     this.viewers = groups.data.viewers;
                 });
         }
+        else {
+            this.ccs.findCountryId(this.cs.userProfile.country).then(countryId => {
+                this.scope.$evalAsync(() => {
+                    self.project.country = countryId;
+                });
+            });
+        }
+
         if (DEV) {
             this.fillTestForm();
         }

@@ -84,11 +84,11 @@ describe('CustomCountryService class', () => {
 
     it('should have a function to find a country based on his ID', (done)=> {
         spyOn(service, 'getCountriesList').and.returnValue(Promise.resolve(countries));
-        service.findCountryById(1).then(result => {
+        service.findCountry(1).then(result => {
             expect(result.code).toBe('ug');
         });
         service.countryLib = countries;
-        service.findCountryById(1).then(result => {
+        service.findCountry(1).then(result => {
             expect(result.code).toBe('ug');
             expect(service.getCountriesList).toHaveBeenCalledTimes(1);
             done();
@@ -96,17 +96,17 @@ describe('CustomCountryService class', () => {
     });
 
     it('should have a function to return map data based on a country id', (done) => {
-        spyOn(service, 'findCountryById').and.returnValue(Promise.resolve(countries.ug.id));
+        spyOn(service, 'findCountry').and.returnValue(Promise.resolve(countries.ug.id));
         spyOn(service, 'fetchMapData').and.returnValue(Promise.resolve(countries.ug.mapData));
         service.getCountryMapData(1).then(()=> {
-            expect(service.findCountryById).toHaveBeenCalled();
+            expect(service.findCountry).toHaveBeenCalled();
             expect(service.fetchMapData).toHaveBeenCalled();
             done();
         });
     });
 
     it('should have a function that return the country districts', done => {
-        spyOn(service, 'findCountryById').and.returnValue(Promise.resolve(countries.ug.id));
+        spyOn(service, 'findCountry').and.returnValue(Promise.resolve(countries.ug.id));
         spyOn(service, 'fetchMapData').and.returnValue(Promise.resolve(countries.ug.mapData));
         expect(service.getCountryDistricts).toBeDefined();
         done();

@@ -109,11 +109,17 @@ class CustomCountryService extends SimpleApi {
         });
     }
 
-    findCountryById(countryId) {
+    findCountryId(countryName) {
+        return this.findCountry(countryName).then(country => {
+            return country.id;
+        });
+    }
+
+    findCountry(countryId) {
         const self = this;
         return new Promise(resolve => {
             let country = _.find(self.countryLib, cn => {
-                return cn.id === countryId;
+                return cn.id === countryId || cn.name === countryId;
             });
             if (country && country.code) {
                 resolve(country);
@@ -131,7 +137,7 @@ class CustomCountryService extends SimpleApi {
     }
     getCountryMapData(countryId) {
         const self = this;
-        return self.findCountryById(countryId).then(country => {
+        return self.findCountry(countryId).then(country => {
             return self.fetchMapData(country.code);
         });
     }
@@ -139,7 +145,7 @@ class CustomCountryService extends SimpleApi {
     getCountryDistricts(countryId) {
         const self = this;
         return new Promise(resolve => {
-            self.findCountryById(countryId).then(country => {
+            self.findCountry(countryId).then(country => {
                 if (country.mapData) {
                     resolve(_.cloneDeep(country.districts));
                 }
