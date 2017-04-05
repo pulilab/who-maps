@@ -68,7 +68,7 @@
             md-current-view="year">
         </md-datepicker>
         <div ng-messages="vm.form.start_date.$error">
-          <div ng-message="custom">
+          <div class="custom-error" ng-message="custom">
             <div ng-repeat="message in vm.form.start_date.customError">
               {{message}}
             </div>
@@ -85,7 +85,7 @@
             md-current-view="year">
         </md-datepicker>
         <div ng-messages="vm.form.end_date.$error">
-          <div ng-message="custom">
+          <div class="custom-error" ng-message="custom">
             <div ng-repeat="message in vm.form.end_date.customError">
               {{message}}
             </div>
