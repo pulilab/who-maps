@@ -95,6 +95,7 @@ describe('ProjectController', () => {
         spyOn(sc, 'mergeCustomAndDefault');
         spyOn(sc, 'convertObjectArrayToStringArray');
         spyOn(sc, 'removeEmptyChildObjects');
+        spyOn(sc, 'showToast');
         spyOn(sc, 'saveForm');
         spyOn(sc, 'updateForm');
         spyOn(sc, 'putGroups');
@@ -123,7 +124,7 @@ describe('ProjectController', () => {
 
     it('should have a function that save a new form', () => {
         spyOn(sc, 'handleResponse');
-        spyOn(sc, 'confirmationToast');
+        spyOn(sc, 'showToast');
         spyOn(sc, 'ownershipCheck');
         spyOn(sc, 'postSaveActions');
         spyOn(sc, 'putGroups').and.returnValue(mockPromiseGenerator({}));
@@ -140,11 +141,11 @@ describe('ProjectController', () => {
         expect(sc.cs.addProjectToCache).toHaveBeenCalled();
         expect(sc.putGroups).toHaveBeenCalled();
         expect(sc.postSaveActions).toHaveBeenCalled();
-        expect(sc.confirmationToast).toHaveBeenCalled();
+        expect(sc.showToast).toHaveBeenCalled();
     });
 
     it('should have a function that update an existing form', () => {
-        spyOn(sc, 'confirmationToast');
+        spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
         const spy = spyOn(sc.ns, 'updateProject');
         spy.and.returnValue(mockPromiseGenerator({ success: false }));
@@ -155,7 +156,7 @@ describe('ProjectController', () => {
         spy.and.returnValue(mockPromiseGenerator({ success: true }));
         sc.updateForm(sc.project);
         expect(sc.cs.updateProject).toHaveBeenCalled();
-        expect(sc.confirmationToast).toHaveBeenCalled();
+        expect(sc.showToast).toHaveBeenCalled();
     });
 
     it('should have some utility function', () => {

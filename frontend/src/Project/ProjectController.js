@@ -242,6 +242,7 @@ class ProjectController extends ProjectDefinition {
 
 
     focusInvalidField() {
+        this.showToast('Validation error');
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
@@ -260,7 +261,7 @@ class ProjectController extends ProjectDefinition {
                 if (response && response.success) {
                     // update cached project data with the one from the backend
                     this.cs.updateProject(response.data, this.projectId);
-                    this.confirmationToast();
+                    this.showToast('Project Updated!');
                     this.postUpdateActions();
                 }
                 else {
@@ -277,7 +278,7 @@ class ProjectController extends ProjectDefinition {
                     this.cs.addProjectToCache(response.data);
                     this.putGroups().then(() => {
                         this.postSaveActions();
-                        this.confirmationToast();
+                        this.showToast('Project Saved!');
                     });
                 }
                 else {
@@ -365,10 +366,10 @@ class ProjectController extends ProjectDefinition {
         }
     }
 
-    confirmationToast() {
+    showToast(text) {
         this.toast.show(
             this.toast.simple()
-                .textContent('Project Saved!')
+                .textContent(text)
                 .position('bottom right')
                 .hideDelay(3000)
         );

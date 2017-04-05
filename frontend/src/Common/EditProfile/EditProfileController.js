@@ -9,13 +9,14 @@ import CommonService  from '../CommonServices';
 
 class EditProfileController extends Protected {
 
-    constructor($scope, $state) {
+    constructor($scope, $state, $mdToast) {
         super();
         this.es = new EditProfileService();
         this.EE = window.EE;
         this.ccs = require('../CustomCountryService');
         this.scope = $scope;
         this.state = $state;
+        this.toast = $mdToast;
         this.storage = new Storage();
         this.$onInit = this.initialization.bind(this);
         this.bindFunctions();
@@ -61,6 +62,15 @@ class EditProfileController extends Protected {
         });
     }
 
+    showToast(text) {
+        this.toast.show(
+            this.toast.simple()
+                .textContent(text)
+                .position('bottom right')
+                .hideDelay(3000)
+        );
+    }
+
 
     countryCloseCallback(name) {
         this.userProfile.country = name;
@@ -99,9 +109,13 @@ class EditProfileController extends Protected {
                 }
             });
         }
+        else {
+            this.showToast('Validation error');
+        }
     }
 
     handleSuccessSave(result) {
+        this.showToast('Profile successfully updated');
         this.storage.set('user_profile_id', result.data.id);
         const reset = this.cs.reset();
         this.cs.userProfileId = result.data.id;
@@ -117,6 +131,7 @@ class EditProfileController extends Protected {
             this.editProfileForm[key].customError = item;
             this.editProfileForm[key].$setValidity('custom', false);
         });
+        this.showToast('Ops! Something went wrong');
     }
 
     handleCustomError(key) {
@@ -127,11 +142,11 @@ class EditProfileController extends Protected {
     static editProfileFactory() {
         require('./EditProfile.scss');
 
-        function editProfile($scope, $state) {
-            return new EditProfileController($scope, $state);
+        function editProfile($scope, $state, $mdToast) {
+            return new EditProfileController($scope, $state, $mdToast);
         }
 
-        editProfile.$inject = ['$scope', '$state'];
+        editProfile.$inject = ['$scope', '$state', '$mdToast'];
 
         return editProfile;
     }
