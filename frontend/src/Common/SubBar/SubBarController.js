@@ -80,7 +80,7 @@ class SubBarController extends Protected {
     }
 
     navigateToProject(name) {
-        const id = _.filter(this.user.projects, { name })[0].id;
+        const id = _.filter(this.projects, { name })[0].id;
         this.state.go(this.state.current.name, { 'appName': id });
     }
 

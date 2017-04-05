@@ -228,10 +228,12 @@ describe('ProjectController', () => {
         spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
         spyOn(sc, 'convertArrayToStandardCustomObj');
         spyOn(sc, 'convertStringArrayToObjectArray');
+        spyOn(sc, 'fillEmptyCollectionsWithDefault');
         sc.handleStructureLoad(mockData);
         sc.handleDataLoad({});
         expect(sc.convertArrayToStandardCustomObj).toHaveBeenCalled();
         expect(sc.convertStringArrayToObjectArray).toHaveBeenCalled();
+        expect(sc.fillEmptyCollectionsWithDefault).toHaveBeenCalled();
 
     });
 

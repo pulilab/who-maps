@@ -56,7 +56,6 @@ class AppModuleController extends Protected {
     eventBinding() {
         this.EE.on('unauthorized', this.handleLogoutEvent, this);
         this.EE.on('logout', this.handleLogoutEvent, this);
-        this.EE.on('projectListUpdated', this.fillUserData, this);
     }
 
     checkUserProfile() {
@@ -65,11 +64,11 @@ class AppModuleController extends Protected {
         }
     }
 
-    fillUserData(forcedPath) {
+    fillUserData() {
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
 
-        if (!forcedPath && this.state.params.appName.length === 0 && lastProject && lastProject.id) {
+        if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
             this.state.go(state, { appName }, {
@@ -81,14 +80,6 @@ class AppModuleController extends Protected {
                 this.currentProject = item;
             }
         });
-
-
-        if (forcedPath) {
-            this.state.go(forcedPath.go, { appName: forcedPath.appName }, {
-                location: 'replace',
-                reload: true
-            });
-        }
 
         this.scope.$evalAsync();
 
