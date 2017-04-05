@@ -51,6 +51,9 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     validateDateRange([start, end]) {
+        if (!start || !end) {
+            return;
+        }
         start = moment(start);
         end = moment(end);
         if (start.isAfter(end)) {
