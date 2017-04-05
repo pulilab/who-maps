@@ -51,8 +51,8 @@ class SetupTests(APITestCase):
         response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json().get('id')
 
-        country = Country.objects.create(name="country1")
-        self.country_id = country.id
+        self.country = Country.objects.create(name="country1")
+        self.country_id = self.country.id
 
         self.project_data = {
             "date": datetime.utcnow(),
@@ -272,6 +272,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get("organisation_name"), self.org.name)
         self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
         self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json().get("country"), self.country_id)
+        self.assertEqual(response.json().get("country_name"), self.country.name)
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
