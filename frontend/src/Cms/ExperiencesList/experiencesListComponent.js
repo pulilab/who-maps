@@ -6,7 +6,7 @@ const component = {
     template: _template,
     controller: ExperiencesListController.factory(),
     controllerAs: 'vm',
-    name: 'experiencesList',
+    name: 'cmsExperiencesList',
     bindings: {}
 };
 

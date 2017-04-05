@@ -1,16 +1,30 @@
+import angular from 'angular';
+
 class AddNewContentController {
 
-    constructor() {
+    constructor($mdDialog) {
+        this.dialog = $mdDialog;
+    }
+
+
+    showAddNewContentDialog(event) {
+        this.dialog.show({
+            controller: AddNewContentController.factory(),
+            template: require('./AddNewContentDialog.html'),
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose:true
+        });
     }
 
     static factory() {
         require('./AddNewContent.scss');
 
-        function addNewContent() {
-            return new AddNewContentController();
+        function addNewContent($mdDialog) {
+            return new AddNewContentController($mdDialog);
         }
 
-        addNewContent().$inject = [];
+        addNewContent.$inject = ['$mdDialog'];
         return addNewContent;
     }
 }
