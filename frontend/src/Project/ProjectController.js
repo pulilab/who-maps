@@ -225,6 +225,7 @@ class ProjectController extends ProjectDefinition {
             processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.removeEmptyChildObjects(processedForm);
             processedForm = this.removeKeysWithoutValues(processedForm);
+            processedForm.interoperability_links =  _.toArray(processedForm.interoperability_links);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
@@ -422,13 +423,12 @@ class ProjectController extends ProjectDefinition {
 
     mergeCustomAndDefault(collection) {
         const self = this;
-        const keyArray = ['interoperability_standards', 'licenses', 'health_focus_areas', 'interoperability_links'];
+        const keyArray = ['interoperability_standards', 'licenses', 'health_focus_areas'];
         keyArray.forEach(key => {
             collection[key] = self.concatCustom(collection[key]);
         });
         return Object.assign({}, collection);
     }
-
 
     static newProjectFactory() {
         require('./Project.scss');

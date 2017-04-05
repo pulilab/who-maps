@@ -62,8 +62,7 @@
       <md-input-container class="md-icon-float md-block" flex>
         <label>Specify URL</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-        <input ng-required="vm.project.interoperability_links[$index].selected"
-               ng-disabled="!vm.project.interoperability_links[$index].selected"
+        <input ng-disabled="!vm.project.interoperability_links[$index].selected"
                name="link.interop1"
                ng-model="vm.project.interoperability_links[$index].link">
       </md-input-container>
