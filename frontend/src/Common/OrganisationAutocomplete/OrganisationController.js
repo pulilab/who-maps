@@ -3,9 +3,8 @@ import OrganisationService from './OrganisationService';
 
 export default class OrganisationController {
 
-    constructor($scope, $timeout) {
+    constructor($scope) {
         this.scope = $scope;
-        this.timeout = $timeout;
         this.os = new OrganisationService();
         this.$onInit = this.onInit.bind(this);
         this.addOrganisation = this.addOrganisation.bind(this);
@@ -61,10 +60,10 @@ export default class OrganisationController {
 
     static organisationFactory() {
         require('./Organisation.scss');
-        function organisation($scope, $timeout) {
-            return new OrganisationController($scope, $timeout);
+        function organisation($scope) {
+            return new OrganisationController($scope);
         }
-        organisation.$inject = ['$scope', '$timeout'];
+        organisation.$inject = ['$scope'];
         return organisation;
     }
 }
