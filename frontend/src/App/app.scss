@@ -262,17 +262,20 @@ md-progress-circular .md-spinner-wrapper .md-inner .md-half-circle {
 $checkbox-size-small: 16px;
 
 md-checkbox.small {
-  margin-bottom: 5px;
+  margin-top: 8px;
+  margin-bottom: 4px;
   font-size: $caption-font-size-base;
 
   .md-container,
   .md-icon {
+    top: 0;
+    transform: none;
     width: $checkbox-size-small;
     height: $checkbox-size-small;
   }
   &.md-checked .md-icon:after {
-    top: $checkbox-size-small / 7;
-    left: $checkbox-size-small / 3;
+    top: 0;
+    left: 4px;
     width: $checkbox-size-small / 3;
     height: $checkbox-size-small * 2 / 3;
   }
@@ -303,6 +306,11 @@ md-select {
 ._md-datepicker-floating-label._md-datepicker-has-calendar-icon.md-input-focused > label:not(.md-no-float):not(.md-container-ignore),
 ._md-datepicker-floating-label._md-datepicker-has-calendar-icon.md-input-has-value > label:not(.md-no-float):not(.md-container-ignore) {
   width: 100%;
+}
+
+._md-datepicker-floating-label._md-datepicker-has-calendar-icon .md-input-message-animation {
+  margin-left: 0;
+  padding-top: 0;
 }
 
 .md-datepicker-calendar-pane {
