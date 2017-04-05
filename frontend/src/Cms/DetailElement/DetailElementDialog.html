@@ -1,0 +1,36 @@
+<md-dialog aria-label="detail-dialog">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3>DETAIL ELEMENT MODAL</h3>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <cms-comment-widget></cms-comment-widget>
+      <cms-comment-widget></cms-comment-widget>
+      <cms-comment-widget></cms-comment-widget>
+      <cms-comment-widget></cms-comment-widget>
+      <div class="add new comment area">
+        add new comment WYSIWYG LOOL
+      </div>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <md-button >
+      More on Wikipedia
+    </md-button>
+    <span flex></span>
+    <md-button >
+      Not Useful
+    </md-button>
+    <md-button >
+      Useful
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>
