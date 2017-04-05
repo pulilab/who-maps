@@ -156,7 +156,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
                 data.update(last_version_date=last_version.modified)
 
         data.update(id=project.id, name=project.name, organisation_name=project.get_organisation().name,
-                    public_id=project.public_id)
+                    public_id=project.public_id, country_name=project.country_name)
         return Response(data)
 
     @transaction.atomic
