@@ -1,8 +1,10 @@
   <div class="autocomplete-wrapper md-block">
     <md-autocomplete
         required
+        id="organisation"
         md-input-name="organisation"
         md-no-cache="true"
+        md-select-on-focus
         md-selected-item="vm.organisation"
         md-search-text="vm.searchText"
         md-items="item in vm.organisationSearch(vm.searchText)"
