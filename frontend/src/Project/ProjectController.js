@@ -111,10 +111,17 @@ class ProjectController extends ProjectDefinition {
         data.implementation_dates = this.convertDate(data.implementation_dates);
         data.end_date = this.convertDate(data.end_date);
         data = this.convertStringArrayToObjectArray(data);
+        data = this.fillEmptyCollectionsWithDefault(data);
         this.scope.$evalAsync(() => {
             this.project = data;
         });
 
+    }
+
+    fillEmptyCollectionsWithDefault(data) {
+        data.coverage = data.coverage.length > 0 ? data.coverage : [{}];
+        data.platforms = data.platforms.length > 0 ? data.platforms : [{}];
+        return Object.assign({}, data);
     }
 
     convertDate(date) {
