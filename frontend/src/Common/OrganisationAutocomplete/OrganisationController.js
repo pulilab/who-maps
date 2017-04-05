@@ -26,7 +26,12 @@ export default class OrganisationController {
     }
 
     handleOrganisationBlur() {
-        this.addOrganisation(_.first(this.latestOrgs));
+        const typed = _.first(this.latestOrgs);
+        if (typed) {
+            if(!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
+                this.addOrganisation(typed);
+            }
+        }
     }
 
     organisationSearch(name) {
@@ -37,7 +42,6 @@ export default class OrganisationController {
                 data.splice(0, 0, input);
             }
             this.latestOrgs = data;
-            console.log(data);
         });
         return promise;
     }
