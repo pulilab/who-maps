@@ -14,6 +14,7 @@
     line-height: 16px;
     white-space: nowrap;
     min-width: 160px;
+    opacity: 0.88;
 
     .colorednr {
       color: white;
@@ -182,13 +183,14 @@
   .zoomhandlers {
 
     position: absolute;
-    left: 15px;
-    top: 350px;
+    left: 20px;
+    top: 340px;
 
     md-icon {
       color: $color-gray-light;
       cursor: pointer;
       outline: none;
+      padding: 2px;
     }
   }
 

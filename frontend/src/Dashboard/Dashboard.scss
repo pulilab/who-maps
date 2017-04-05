@@ -201,6 +201,7 @@
                                         }
                                     }
                                     .label {
+
                                         font-size: 12px;
                                         font-weight: 500;
                                         color: $text-secondary;
@@ -236,6 +237,7 @@
                                     padding: 0 10px 0 5px;
 
                                     .dash-overview-tooltip {
+                                      position: relative;
 
                                         img {
                                             display: inline;
@@ -245,10 +247,11 @@
                                         }
 
                                         md-icon {
+                                            float: left;
                                             font-size: 10px;
                                             height: 10px;
                                             width: 10px;
-                                            transform: translate(0px, 1px);
+                                            transform: translate(8px, 6px);
 
                                             &.dash-overw-toolkit-ball1 {
                                                 color: $color-red;

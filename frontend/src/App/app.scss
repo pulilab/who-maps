@@ -89,6 +89,17 @@ md-tooltip {
   padding: 40px 0;
 }
 
+.countrymapcontainer {
+  &:hover {
+    cursor: grab;
+    cursor: -webkit-grab;
+  }
+  &:active {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+  }
+}
+
 
 /* TYPOGRAPY
    ============================= */
