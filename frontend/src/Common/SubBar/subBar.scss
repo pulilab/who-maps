@@ -79,7 +79,8 @@
 
   .md-toolbar-tools {
     // background-color: $color-primary;
-    background-color: #1A237E;
+    background-color: $color-white;
+    box-shadow: inset 0 -2px 0 darken($color-page-background, 4%);
   }
 
   .md-toolbar-tools-bottom {
@@ -94,7 +95,7 @@
 
   .project-selector {
     md-input-container {
-      margin: 6px 0 0 12px !important;
+      margin: 16px 0 0 12px !important;
       padding: 0 !important;
       max-width: 50vw;
 
@@ -114,9 +115,36 @@
 
   .project-submenu {
     margin: 0 10px 0 10px;
-    .md-menu,
-    .md-button {
-      min-width: 80px !important;
+    // .md-menu,
+    // .md-button {
+    //   min-width: 80px !important;
+    // }
+
+    .share-link {
+      margin: 2px 4px 0 0;
+      color: $color-primary !important;
+
+      &:hover {
+        > span,
+        > .material-icons {
+          color: $color-primary !important;
+        }
+      }
+
+      span,
+      .material-icons {
+        margin: 0;
+        padding: 0;
+        line-height: 14px;
+        font-size:14px;
+        color: $color-primary !important;
+      }
+      .material-icons {
+        position: relative;
+        top: 4px;
+        left: 2px;
+        font-size: 20px;
+      }
     }
   }
 
@@ -124,18 +152,31 @@
     .md-button {
       position: relative;
       overflow: visible;
-      margin-right: 10px;
-      padding: 0 12px !important;
-      line-height: 48px;
+      box-sizing: content-box;
+      display: inline-block;
+      min-height: 26px;
+      height: 26px;
+      margin: 12px 10px 0 0;
+      padding: 0 12px 10px !important;
+      line-height: 26px;
+      box-shadow: inset 0 -2px 0 darken($color-page-background, 4%);
       // border-radius: 3px 3px 0 0;
 
+      > span {
+        color: $text-disabled !important;
+      }
+
       &:hover {
-        color: #fff;
-        background-color: $color-primary !important;
+        box-shadow: inset 0 -2px 0 darken($color-page-background, 12%);
+
+        > span {
+          color: $text-primary !important;
+        }
       }
 
       &.active {
         background-color: #fff !important;
+        box-shadow: inset 0 -2px 0 $color-primary;
 
         > span {
           color: $color-primary !important;
@@ -154,18 +195,22 @@
     .info-block {
       float: left;
       height: 48px;
-      padding-left: 15px;
+      padding-left: 20px;
       padding-right: 15px;
-      border-left: 1px solid $color-gray-lighter;
+      // border-left: 1px solid $color-gray-lighter;
 
-        h6 {
-          font-size: 10px;
-          font-weight: 500;
-          height:14px;
-          margin: 9px 0 2px;
-          padding: 0;
-          text-transform: uppercase;
-        }
+      &:last-of-type {
+        padding-right: 0;
+      }
+
+      h6 {
+        font-size: 10px;
+        font-weight: 500;
+        height:14px;
+        margin: 14px 0 2px;
+        padding: 0;
+        text-transform: uppercase;
+      }
 
       > span {
         display: inline-block;
@@ -200,11 +245,14 @@
 
     .contact-button {
       &.md-button {
+        position: relative;
+        top: -4px;
         min-width: 0 !important;
-        margin: 0;
-        padding: 2px 0 0;
+        min-height: auto;
+        margin: 0 0 0 5px;
+        padding: 0;
         font-size: 12px;
-        margin-top: 12px;
+        line-height: 12px;
 
         span,
         .material-icons {
@@ -217,7 +265,9 @@
         }
         .material-icons {
           position: relative;
-          top: -1px;
+          top: 4px;
+          left: 2px;
+          font-size: 16px;
         }
       }
     }
