@@ -249,12 +249,14 @@
                                         class="resource"
                                         ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
                                         layout="row"
-                                        layout-align="space-around stretch">
-                                    <div>category</div>
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{link.link}}</h4>
+                                        layout-align="start center">
+                                    <div flex>
+                                      <div class="res-title">category</div>
+                                      <div class="res-text">
+                                          <h4>{{link.link}}</h4>
+                                      </div>
                                     </div>
-                                    <a ng-href="{{link.link}}" target="_blank"  layout="column" layout-align="center center">
+                                    <a ng-href="{{link.link}}" target="_blank" flex>
                                         <md-icon>launch</md-icon>
                                     </a>
                                 </md-card>
