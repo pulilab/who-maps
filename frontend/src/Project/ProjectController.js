@@ -204,12 +204,15 @@ class ProjectController extends ProjectDefinition {
     }
 
     removeKeysWithoutValues(processedForm) {
-        _.forEach(processedForm, (value, key) => {
-            if (value === null || value === '') {
-                processedForm[key] = undefined;
+        return _.reduce(processedForm, (result, value, key) => {
+            if (value === null || value === '' || _.isPlainObject(value) && _.every(_.values(value), _.isNull)) {
+                result[key] = void 0;
             }
-        });
-        return Object.assign({}, processedForm);
+            else {
+                result[key] = value;
+            }
+            return result;
+        }, {});
     }
 
     clearCustomErrors() {
