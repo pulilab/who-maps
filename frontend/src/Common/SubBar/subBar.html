@@ -1,14 +1,6 @@
 <md-toolbar class="md-medium-tall toolbar-project">
     <div class="md-toolbar-tools">
         <div class="project-mainmenu">
-            <md-button ui-sref="dashboard"  ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
-                Dashboard
-            </md-button>
-
-            <md-button ui-sref="public-dashboard"  ng-if="vm.viewMode" ui-sref-active="active" md-no-ink>
-                Dashboard
-            </md-button>
-
             <md-button ui-sref="editProject" n ng-disabled="!vm.hasProfile()" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
                 <md-tooltip md-autohide>
                     EDIT PROJECT DETAILS
