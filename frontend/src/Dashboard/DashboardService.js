@@ -24,7 +24,9 @@ class DashboardService extends AuthApi {
     }
 
     snapShot(projectId) {
-        return this.post(projectId + '/version/');
+        return this.post(projectId + '/version/').then(data => {
+            return data.json();
+        });
     }
 
     getToolkitData(projectId) {
