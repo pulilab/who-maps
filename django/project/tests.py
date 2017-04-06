@@ -286,6 +286,12 @@ class ProjectTests(SetupTests):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
         response = self.test_user_client.post(url, format="json")
         self.assertEqual(response.status_code, 201)
+        self.assertIn('coverage', response.json())
+        self.assertIn('toolkit', response.json())
+        self.assertIn('last_version', response.json()['coverage'])
+        self.assertIn('last_version_date', response.json()['coverage'])
+        self.assertIn('last_version', response.json()['toolkit'])
+        self.assertIn('last_version_date', response.json()['toolkit'])
 
     def test_make_version_wrong_id(self):
         url = reverse("make-version", kwargs={"project_id": 999})
