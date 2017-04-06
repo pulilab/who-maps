@@ -308,7 +308,6 @@ class DashboardModuleController extends Protected {
         this.service.getCoverageVersions(this.projectId).then(data => {
 
             // console.debug(this.projectData);
-            this.rawCoverageData = data.slice();
             const coverage = this.projectData.coverage.slice();
             coverage.push(Object.assign({}, this.projectData.national_level_deployment));
             data.push({ data: coverage });

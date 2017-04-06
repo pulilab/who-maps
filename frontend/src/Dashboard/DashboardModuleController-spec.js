@@ -198,6 +198,34 @@ describe('DashboardModuleController', () => {
     });
 
     it('REGRESSION: should always factor in NLD in the coverage values for the graph', () => {
+        const apiCall = spyOn(vm.service, 'getCoverageVersions');
+        let result = null;
+        spyOn(vm.EE, 'emit').and.callFake((event, data) => {
+            result = data;
+        });
+        const apiData = [];
+        apiCall.and.returnValue({
+            then: toCall => {
+                toCall(apiData);
+            }
+        });
+        vm.projectData = {
+            coverage: [{
+                facilities: 1,
+                health_workers: 2,
+                clients: 3
+            }],
+            national_level_deployment: {
+                facilities: 10,
+                health_workers: 20,
+                clients: 30
+            }
+        };
+
+        vm.fetchCoverageVersions();
+        expect(result.data[0].axis1).toBe(11);
+        expect(result.data[0].axis2).toBe(22);
+        expect(result.data[0].axis3).toBe(33);
 
     });
 
