@@ -195,4 +195,8 @@ describe('DashboardModuleController', () => {
         expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 0 });
     });
 
+    it('REGRESSION: should always factor in NLD in the coverage values for the graph', () => {
+
+    });
+
 });
