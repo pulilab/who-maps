@@ -1,90 +1,99 @@
 <md-toolbar class="main-toolbar toolbar-global">
-    <div class="md-toolbar-tools">
+  <div class="md-toolbar-tools">
 
-        <md-button
-                   ui-sref="landing"
-                   aria-label="Digital Health Atlas"
-                   class="app-title" md-no-ink>
-            <span>Digital Health Atlas</span>
-        </md-button>
+    <md-button
+        ui-sref="landing"
+        aria-label="Digital Health Atlas"
+        class="app-title" md-no-ink>
+      <span>Digital Health Atlas</span>
+    </md-button>
 
 
 
-        <md-button aria-label="Country Level View"
-                   class="view-selector"
-                   ui-sref="country"
-                   ng-show="vm.showCountryLevelViewButton()"
-                   md-no-ink>
-            <md-icon class="material-icons">public</md-icon>
-            Country View
-        </md-button>
+    <md-button aria-label="Country Level View"
+               class="view-selector"
+               ui-sref="country"
+               ng-show="vm.showCountryLevelViewButton()"
+               md-no-ink>
+      <md-icon class="material-icons">public</md-icon>
+      Country View
+    </md-button>
 
-        <md-button aria-label="Go to my Dashboard"
-                   class="view-selector"
-                   ui-sref="dashboard"
-                   ng-show="vm.showGoToMyDashboardButton()"
-                   md-no-ink>
-            <md-icon class="material-icons ">apps</md-icon>
-            Go to my dashboard
-        </md-button>
+    <md-button aria-label="Go to my Dashboard"
+               class="view-selector"
+               ui-sref="dashboard"
+               ng-show="vm.showGoToMyDashboardButton()"
+               md-no-ink>
+      <md-icon class="material-icons ">apps</md-icon>
+      Go to my dashboard
+    </md-button>
 
-        <span flex ></span>
+    <md-button aria-label="Planning and Guidance"
+               class="view-selector"
+               ui-sref="cms"
 
-        <searchbar compact-mode="true" ng-show="vm.showSearch()"></searchbar>
+               md-no-ink>
+      <md-icon class="material-icons ">import_contacts</md-icon>
+      Planning &amp; Guidance
+    </md-button>
 
-        <md-button class="landing-link"
-                   ui-sref-active="active"
-                   ui-sref="login"
-                   aria-label="Login"
-                   ng-show="vm.showLogin()"
-                   md-no-ink>
-            Login
-        </md-button>
+    <span flex ></span>
 
-        <md-button class="landing-link"
-                   ui-sref-active="active"
-                   ui-sref="signup"
-                   aria-label="Singup"
-                   ng-show="vm.showSignUp()"
-                   md-no-ink >
-            Sign Up
-        </md-button>
+    <searchbar compact-mode="true" ng-show="vm.showSearch()"></searchbar>
 
-        <md-menu md-position-mode="target-right target" ng-if="vm.profileDataReady">
-            <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                <md-icon md-menu-origin class="material-icons ">person</md-icon>
-            </md-button>
+    <md-button class="landing-link"
+               ui-sref-active="active"
+               ui-sref="login"
+               aria-label="Login"
+               ng-show="vm.showLogin()"
+               md-no-ink>
+      Login
+    </md-button>
 
-            <md-menu-content width="4">
+    <md-button class="landing-link"
+               ui-sref-active="active"
+               ui-sref="signup"
+               aria-label="Singup"
+               ng-show="vm.showSignUp()"
+               md-no-ink >
+      Sign Up
+    </md-button>
+
+    <md-menu md-position-mode="target-right target" ng-if="vm.profileDataReady">
+      <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+        <md-icon md-menu-origin class="material-icons ">person</md-icon>
+      </md-button>
+
+      <md-menu-content width="4">
                     <span class="menu-group-title">
                         <span ng-hide ="vm.userProfile.name">{{vm.user.username}} </span>
                         <span ng-show ="vm.userProfile.name">{{vm.userProfile.name}} </span>
                     </span>
-                <md-menu-item>
-                    <md-button>
-                        <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ui-sref="editProfile">
-                        <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="vm.logout()">
-                        <md-icon class="material-icons">exit_to_app</md-icon>Logout
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
+        <md-menu-item>
+          <md-button>
+            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="editProfile">
+            <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="vm.logout()">
+            <md-icon class="material-icons">exit_to_app</md-icon>Logout
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
 
-        <md-button class="add-new-project" ui-sref="newProject"
-                   aria-label="Add new project"
-                   ng-show="vm.showNewProjectButton()"
-                   md-no-ink>
-            <md-icon class="material-icons">add</md-icon>
-            New Project
-        </md-button>
+    <md-button class="add-new-project" ui-sref="newProject"
+               aria-label="Add new project"
+               ng-show="vm.showNewProjectButton()"
+               md-no-ink>
+      <md-icon class="material-icons">add</md-icon>
+      New Project
+    </md-button>
 
-    </div>
+  </div>
 </md-toolbar>

@@ -1,0 +1,17 @@
+@import '../../variables';
+@import '../../mixins';
+
+planning-and-guidance {
+
+  display: block;
+  margin: 0 auto;
+  min-width: $page-min-width;
+  max-width: $page-max-width;
+
+  .wrapper {
+    width: 100%;
+    padding: 0 40px;
+    background-color: $color-white;
+  }
+
+}

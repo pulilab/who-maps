@@ -38,6 +38,10 @@ axis {
             outline: none;
             cursor: pointer;
 
+            .label {
+              padding-left: 10px;
+            }
+
 
             ::after {
                 content: "";
@@ -113,8 +117,8 @@ axis {
 
         .label {
           display: inline-block;
-          line-height: 15px;
-          padding-top: 4px;
+          line-height: 13px;
+          padding-top: 6px;
         }
     }
 
@@ -145,7 +149,7 @@ axis {
         }
 
         &.ps {
-            margin-top: 4px;
+            margin-top: 2px;
             color: $text-secondary;
             font-size: 10px;
         }
