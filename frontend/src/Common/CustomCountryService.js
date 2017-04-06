@@ -52,15 +52,9 @@ class CustomCountryService extends SimpleApi {
 
     abcOrder(collection) {
         return collection.sort((a, b) => {
-            const nameA = a.name.toUpperCase();
-            const nameB = b.name.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
+            a = a.name ? a.name : a;
+            b = b.name ? b.name : b;
+            return a.localeCompare(b);
         });
     }
 
@@ -109,11 +103,17 @@ class CustomCountryService extends SimpleApi {
         });
     }
 
-    findCountryById(countryId) {
+    findCountryId(countryName) {
+        return this.findCountry(countryName).then(country => {
+            return country.id;
+        });
+    }
+
+    findCountry(countryId) {
         const self = this;
         return new Promise(resolve => {
             let country = _.find(self.countryLib, cn => {
-                return cn.id === countryId;
+                return cn.id === countryId || cn.name === countryId;
             });
             if (country && country.code) {
                 resolve(country);
@@ -131,7 +131,7 @@ class CustomCountryService extends SimpleApi {
     }
     getCountryMapData(countryId) {
         const self = this;
-        return self.findCountryById(countryId).then(country => {
+        return self.findCountry(countryId).then(country => {
             return self.fetchMapData(country.code);
         });
     }
@@ -139,13 +139,13 @@ class CustomCountryService extends SimpleApi {
     getCountryDistricts(countryId) {
         const self = this;
         return new Promise(resolve => {
-            self.findCountryById(countryId).then(country => {
+            self.findCountry(countryId).then(country => {
                 if (country.mapData) {
-                    resolve(_.cloneDeep(country.districts));
+                    resolve(_.cloneDeep(self.abcOrder(country.districts)));
                 }
                 else {
                     self.fetchMapData(country.code).then((cn)=> {
-                        resolve(_.cloneDeep(cn.districts));
+                        resolve(_.cloneDeep(self.abcOrder(cn.districts)));
                     });
                 }
             });

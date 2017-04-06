@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import OrganisationService from './OrganisationService';
 
 export default class OrganisationController {
@@ -8,19 +9,29 @@ export default class OrganisationController {
         this.$onInit = this.onInit.bind(this);
         this.addOrganisation = this.addOrganisation.bind(this);
         this.organisationSearch = this.organisationSearch.bind(this);
+        this.handleOrganisationBlur = this.handleOrganisationBlur.bind(this);
     }
 
     onInit() {
-        this.watchers();
+        this.createBlurHandler();
     }
 
-    watchers() {
-        const self = this;
-        this.scope.$watch(() => {
-            return this.organisation;
-        }, self.addOrganisation);
+    createBlurHandler() {
+        this.scope.$$postDigest(() => {
+            document.querySelector('#organisation')
+                .querySelector('input')
+                .addEventListener('blur', this.handleOrganisationBlur);
+        });
     }
 
+    handleOrganisationBlur() {
+        const typed = _.first(this.latestOrgs);
+        if (typed) {
+            if(!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
+                this.addOrganisation(typed);
+            }
+        }
+    }
 
     organisationSearch(name) {
         const promise  = this.os.autocompleteOrganization(name);
@@ -41,6 +52,9 @@ export default class OrganisationController {
                     this.organisation = response;
                     this.scope.$evalAsync();
                 });
+        }
+        else {
+            this.organisation = organisation;
         }
     }
 

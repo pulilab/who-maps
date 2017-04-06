@@ -30,6 +30,7 @@ class ProjectController extends ProjectDefinition {
     }
 
     onInit() {
+        const self = this;
         this.eventListeners();
         this.districtList = [];
         this.dataLoaded = false;
@@ -56,6 +57,14 @@ class ProjectController extends ProjectDefinition {
                     this.viewers = groups.data.viewers;
                 });
         }
+        else {
+            this.ccs.findCountryId(this.cs.userProfile.country).then(countryId => {
+                this.scope.$evalAsync(() => {
+                    self.project.country = countryId;
+                });
+            });
+        }
+
         if (DEV) {
             this.fillTestForm();
         }
@@ -111,10 +120,17 @@ class ProjectController extends ProjectDefinition {
         data.implementation_dates = this.convertDate(data.implementation_dates);
         data.end_date = this.convertDate(data.end_date);
         data = this.convertStringArrayToObjectArray(data);
+        data = this.fillEmptyCollectionsWithDefault(data);
         this.scope.$evalAsync(() => {
             this.project = data;
         });
 
+    }
+
+    fillEmptyCollectionsWithDefault(data) {
+        data.coverage = data.coverage.length > 0 ? data.coverage : [{}];
+        data.platforms = data.platforms.length > 0 ? data.platforms : [{}];
+        return Object.assign({}, data);
     }
 
     convertDate(date) {
@@ -209,6 +225,7 @@ class ProjectController extends ProjectDefinition {
             processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.removeEmptyChildObjects(processedForm);
             processedForm = this.removeKeysWithoutValues(processedForm);
+            processedForm.interoperability_links =  _.toArray(processedForm.interoperability_links);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
@@ -225,6 +242,7 @@ class ProjectController extends ProjectDefinition {
 
 
     focusInvalidField() {
+        this.showToast('Validation error');
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
@@ -243,7 +261,7 @@ class ProjectController extends ProjectDefinition {
                 if (response && response.success) {
                     // update cached project data with the one from the backend
                     this.cs.updateProject(response.data, this.projectId);
-                    this.confirmationToast();
+                    this.showToast('Project Updated!');
                     this.postUpdateActions();
                 }
                 else {
@@ -260,7 +278,7 @@ class ProjectController extends ProjectDefinition {
                     this.cs.addProjectToCache(response.data);
                     this.putGroups().then(() => {
                         this.postSaveActions();
-                        this.confirmationToast();
+                        this.showToast('Project Saved!');
                     });
                 }
                 else {
@@ -348,10 +366,10 @@ class ProjectController extends ProjectDefinition {
         }
     }
 
-    confirmationToast() {
+    showToast(text) {
         this.toast.show(
             this.toast.simple()
-                .textContent('Project Saved!')
+                .textContent(text)
                 .position('bottom right')
                 .hideDelay(3000)
         );
@@ -406,13 +424,12 @@ class ProjectController extends ProjectDefinition {
 
     mergeCustomAndDefault(collection) {
         const self = this;
-        const keyArray = ['interoperability_standards', 'licenses', 'health_focus_areas', 'interoperability_links'];
+        const keyArray = ['interoperability_standards', 'licenses', 'health_focus_areas'];
         keyArray.forEach(key => {
             collection[key] = self.concatCustom(collection[key]);
         });
         return Object.assign({}, collection);
     }
-
 
     static newProjectFactory() {
         require('./Project.scss');

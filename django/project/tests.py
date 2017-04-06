@@ -51,8 +51,8 @@ class SetupTests(APITestCase):
         response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json().get('id')
 
-        country = Country.objects.create(name="country1")
-        self.country_id = country.id
+        self.country = Country.objects.create(name="country1")
+        self.country_id = self.country.id
 
         self.project_data = {
             "date": datetime.utcnow(),
@@ -88,8 +88,9 @@ class SetupTests(APITestCase):
             "repository": "http://some.repo",
             "mobile_application": "app1, app2",
             "wiki": "http://wiki.org",
-            "interoperability_links": [None, "http://blabla.com", None, None, None, None, None, None,
-                                       "http://example.org"],
+            "interoperability_links": [None, {"selected": True, "link": "http://blabla.com"}, None, {"selected": True},
+                                       None, None, None, None,
+                                       {"selected": True, "link": "http://example.org"}],
             "interoperability_standards": ["CSD - Care Services Discovery"],
             "data_exchanges": ["de1", "de2"],
             "start_date": str(datetime.today().date()),
@@ -153,7 +154,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
         self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
         self.assertEqual(response.json()['interventions'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['interoperability_links'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['interoperability_links'][0], {'selected': ['This field is required.']})
         self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
         self.assertEqual(response.json()['data_exchanges'][0], 'Not a valid string.')
 
@@ -272,6 +273,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get("organisation_name"), self.org.name)
         self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
         self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json().get("country"), self.country_id)
+        self.assertEqual(response.json().get("country_name"), self.country.name)
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")

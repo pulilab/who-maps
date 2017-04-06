@@ -184,7 +184,7 @@ function handleStateChange(event, toState) {
     }
 }
 
-const run = ($rootScope, $state) => {
+const run = ($rootScope, $state, $mdToast) => {
     $rootScope.$on('$stateChangeStart', handleStateChange.bind('start'));
     $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
     $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
@@ -196,7 +196,17 @@ const run = ($rootScope, $state) => {
         $rootScope.$evalAsync();
     };
 
+    const showPopUp = () => {
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent('Ops! something went wrong, try again later.')
+                .position('bottom right')
+                .hideDelay(3000)
+        );
+    };
+
     window.addEventListener('xhrmonitor', checkXHR.bind(this));
+    window.addEventListener('xhrFailedRequest', showPopUp.bind(this));
 
     window.EE.on('unauthorized', () => {
         const storage = new Storage();
@@ -208,7 +218,7 @@ const run = ($rootScope, $state) => {
 
 };
 
-run.$inject = ['$rootScope', '$state'];
+run.$inject = ['$rootScope', '$state', '$mdToast'];
 
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$anchorScrollProvider'];

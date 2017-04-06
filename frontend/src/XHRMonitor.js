@@ -147,14 +147,24 @@ const postRequest = (hash) => {
     emitEvent();
 };
 
+const failedRequest = () => {
+    const event = new CustomEvent('xhrFailedRequest');
+    window.dispatchEvent(event);
+};
+
 window.fetch = (...args) => {
     const hash = hashArguments(args);
     preRequest(hash);
     return f.apply(this, args).then((data)=> {
+        const status = '' + data.status;
+        if (status.indexOf('50') > -1) {
+            failedRequest();
+        }
         postRequest(hash);
         return data;
-    }, (data) => {
+    }).catch((data) => {
         postRequest(hash);
+        failedRequest();
         return data;
     });
 };
@@ -173,6 +183,7 @@ XMLHttpRequest.prototype.send = function(value) {
     }, false);
     this.addEventListener('error', function() {
         postRequest(hash);
+        failedRequest();
     }, false);
     this.realSend(value);
 };

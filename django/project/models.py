@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from core.models import ExtendedModel
@@ -44,6 +44,14 @@ class Project(ExtendedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    @property
+    def country_name(self):
+        try:
+            country_id = int(self.data.get('country'))
+        except TypeError:
+            return None
+        return Country.objects.get(id=country_id).name
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()

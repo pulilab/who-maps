@@ -23,6 +23,11 @@ class PlatformSerializer(serializers.Serializer):
     strategies = serializers.ListField(max_length=64, min_length=0, allow_empty=True)
 
 
+class InteroperabilityLinksSerializer(serializers.Serializer):
+    selected = serializers.BooleanField()
+    link = serializers.CharField(required=False, max_length=256)
+
+
 class ProjectSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
@@ -44,8 +49,7 @@ class ProjectSerializer(serializers.Serializer):
     repository = serializers.CharField(max_length=200, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
     wiki = serializers.URLField(max_length=200, required=False, allow_blank=True)
-    interoperability_links = serializers.ListField(child=serializers.CharField(max_length=64, allow_null=True),
-                                                   required=False, max_length=16)
+    interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(child=serializers.CharField(max_length=64),
                                                        required=False, max_length=16)
     data_exchanges = serializers.ListField(child=serializers.CharField(max_length=64), required=False, max_length=32)
