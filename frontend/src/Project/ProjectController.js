@@ -129,8 +129,8 @@ class ProjectController extends ProjectDefinition {
     }
 
     fillEmptyCollectionsWithDefault(data) {
-        data.coverage = data.coverage.length > 0 ? data.coverage : [{}];
-        data.platforms = data.platforms.length > 0 ? data.platforms : [{}];
+        data.coverage = data.coverage ? data.coverage : [{}];
+        data.platforms = data.platforms ? data.platforms : [{}];
         return Object.assign({}, data);
     }
 
