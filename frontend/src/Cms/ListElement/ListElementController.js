@@ -1,6 +1,10 @@
 class ListElementController {
 
     constructor() {
+        this.$onInit = this.onInit.bind(this);
+    }
+
+    onInit() {
     }
 
     static factory() {

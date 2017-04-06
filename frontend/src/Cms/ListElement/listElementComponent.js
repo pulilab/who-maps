@@ -7,7 +7,9 @@ const component = {
     controller: ListElementController.factory(),
     controllerAs: 'vm',
     name: 'cmsListElement',
-    bindings: {}
+    bindings: {
+        experience: '<'
+    }
 };
 
 export default component;

@@ -153,7 +153,13 @@
                                     <div flex layout="row">
                                         <md-icon class="material-icons">device_hub</md-icon>
                                         <span flex>Technology platforms</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.technology_platforms"></md-chips>
+                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
+                                            <md-chip-template>
+                                            <span>
+                                              {{$chip.name}}
+                                            </span>
+                                          </md-chip-template>
+                                        </md-chips>
                                     </div>
 
                                     <div flex layout="row">

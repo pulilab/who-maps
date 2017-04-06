@@ -1,2 +1,14 @@
-<h3>LIST ELEMENT</h3>
-<cms-detail-element></cms-detail-element>
+
+<div ng-if="!vm.experience">
+
+  <h3>LIST ELEMENT (Resource and tips)</h3>
+  <cms-detail-element></cms-detail-element>
+
+</div>
+
+<div ng-if="vm.experience">
+
+  <h3>LIST ELEMENT (Experience)</h3>
+  <cms-detail-element></cms-detail-element>
+
+</div>
