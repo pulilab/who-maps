@@ -150,11 +150,13 @@ describe('DashboardModuleController', () => {
     it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
         vm.projectId = 1;
         vm.service.snapShot = () => {
-            return { then: fn => { fn(); } };
+            return { then: fn => { fn({}); } };
         };
         spyOn(vm.service, 'snapShot').and.callThrough();
+        spyOn(vm.cs, 'patchProject');
         vm.snapShot();
         expect(vm.service.snapShot).toHaveBeenCalledWith(1);
+        expect(vm.cs.patchProject).toHaveBeenCalled();
     });
 
     it('has .prewProject() method, which handles decreasing active project binding indices in community wall', () => {

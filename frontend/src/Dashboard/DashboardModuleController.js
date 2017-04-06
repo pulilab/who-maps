@@ -139,8 +139,11 @@ class DashboardModuleController extends Protected {
     }
 
     snapShot() {
-        this.service.snapShot(this.projectId).then(() => {
-            this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
+        this.service.snapShot(this.projectId).then((newVersion) => {
+            const patch = newVersion.coverage;
+            this.cs.patchProject(patch, this.projectId);
+            this.EE.emit('projectListUpdated');
+            this.state.go('dashboard', { 'app': this.projectId }, { reload: true });
         });
     }
 
@@ -305,6 +308,7 @@ class DashboardModuleController extends Protected {
         this.service.getCoverageVersions(this.projectId).then(data => {
 
             // console.debug(this.projectData);
+            this.rawCoverageData = data.slice();
             const coverage = this.projectData.coverage.slice();
             coverage.push(Object.assign({}, this.projectData.national_level_deployment));
             data.push({ data: coverage });
