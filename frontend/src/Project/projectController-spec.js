@@ -105,9 +105,11 @@ describe('ProjectController', () => {
         e.setAttribute('id', 'npf');
         document.body.appendChild(e);
         spyOn(sc, 'clearCustomErrors');
-        spyOn(sc, 'mergeCustomAndDefault');
-        spyOn(sc, 'convertObjectArrayToStringArray');
-        spyOn(sc, 'removeEmptyChildObjects');
+        spyOn(sc, 'createDateFields').and.returnValue({});
+        spyOn(sc, 'mergeCustomAndDefault').and.returnValue({});
+        spyOn(sc, 'convertObjectArrayToStringArray').and.returnValue({});
+        spyOn(sc, 'removeEmptyChildObjects').and.returnValue({});
+        spyOn(sc, 'removeKeysWithoutValues').and.returnValue({});
         spyOn(sc, 'showToast');
         spyOn(sc, 'saveForm');
         spyOn(sc, 'updateForm');
@@ -119,15 +121,18 @@ describe('ProjectController', () => {
         sc.project = {
             organisation: {
                 id: 1
-            }
+            },
+            interoperability_links: {}
         };
         sc.save();
         sc.form.$valid = false;
         sc.save();
         expect(sc.clearCustomErrors).toHaveBeenCalled();
+        expect(sc.createDateFields).toHaveBeenCalledTimes(1);
         expect(sc.mergeCustomAndDefault).toHaveBeenCalledTimes(1);
         expect(sc.convertObjectArrayToStringArray).toHaveBeenCalled();
         expect(sc.removeEmptyChildObjects).toHaveBeenCalled();
+        expect(sc.removeKeysWithoutValues).toHaveBeenCalled();
         expect(sc.saveForm).toHaveBeenCalled();
         sc.form.$valid = true;
         sc.editMode = true;

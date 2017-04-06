@@ -27,6 +27,7 @@ class ScorecardController extends Protected {
 
     onDestroy() {
         this.defaultOnDestroy();
+        this.EE.removeListener('mapsAxisChange', this.goToAxis, this);
     }
 
     onInit() {
@@ -36,6 +37,7 @@ class ScorecardController extends Protected {
         this.axisId = this.state.params.axisId;
         this.ms = new MapsToolkitService(this.projectId);
         this.ms.getProjectData().then(this.handleProjectData);
+        this.EE.on('mapsAxisChange', this.goToAxis, this);
     }
 
     handleProjectData(data) {
@@ -71,8 +73,8 @@ class ScorecardController extends Protected {
         this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId, domainId });
     }
 
-    goToAxis() {
-        const axisId = this.axisId;
+    goToAxis(id) {
+        const axisId = id || this.axisId;
         this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId });
     }
 
