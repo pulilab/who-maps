@@ -19,6 +19,7 @@ class ProjectDetailsController extends CollapsibleSet {
         this.getUsers = this.getUsers.bind(this);
         this.checkName = this.checkName.bind(this);
         this.validateDateRange = this.validateDateRange.bind(this);
+        this.validateCoverage = this.validateCoverage.bind(this);
     }
 
     onInit() {
@@ -135,12 +136,33 @@ class ProjectDetailsController extends CollapsibleSet {
         }
     }
 
-    coverageDistrictRequired(coverageItem) {
-        return coverageItem.clients
-            || coverageItem.health_workers
-            || coverageItem.facilities;
-    }
+    validateCoverage(current, item) {
+        let nld;
+        if (this.project.national_level_deployment) {
+            nld = [
+                this.project.national_level_deployment.health_workers,
+                this.project.national_level_deployment.facilities,
+                this.project.national_level_deployment.clients
+            ];
+        }
+        else {
+            nld = [null];
+        }
 
+        if (current === 'nld' && this.project.national_level_deployment) {
+            return _.some(nld);
+        }
+        else if (current === 'dld') {
+            return _.some([
+                item.district,
+                item.health_workers,
+                item.facilities,
+                item.clients,
+                _.every(nld, _.isNull)
+            ]);
+        }
+        return false;
+    }
 
     openSimilarProject(project, event) {
         event.preventDefault();
