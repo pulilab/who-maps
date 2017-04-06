@@ -145,6 +145,9 @@ class ProjectController extends ProjectDefinition {
     convertStringArrayToObjectArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
+            if (!data[key]) {
+                return;
+            }
             data[key] = data[key].map(value => {
                 return { value };
             });
@@ -158,6 +161,9 @@ class ProjectController extends ProjectDefinition {
     convertObjectArrayToStringArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
+            if (!data[key]) {
+                return;
+            }
             data[key] = data[key].map(value => value.value);
             data[key] = data[key].filter(item => item);
         });
