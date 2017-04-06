@@ -78,7 +78,6 @@ class ScorecardController extends Protected {
 
     goToNextAxis() {
         const axisId = parseInt(this.axisId, 10) + 1;
-        console.log(axisId);
         this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId });
     }
 
