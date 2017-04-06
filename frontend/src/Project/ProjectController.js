@@ -34,6 +34,7 @@ class ProjectController extends ProjectDefinition {
         this.eventListeners();
         this.districtList = [];
         this.dataLoaded = false;
+        this.isAddAnother = false;
         this.handleStructureLoad();
         this.users = this.cs.usersProfiles;
 
@@ -389,10 +390,29 @@ class ProjectController extends ProjectDefinition {
 
     postUpdateActions() {
         this.EE.emit('projectListUpdated');
+        const addAnother = this.isAddAnother;
+        this.isAddAnother = false;
+        if (addAnother) {
+            const go = {
+                state: 'newProject',
+                appName: this.projectId
+            };
+            this.navigate(go);
+        }
     }
 
     postSaveActions() {
-        this.state.go('editProject', { appName: this.projectId }, {
+        const addAnother = this.isAddAnother;
+        this.isAddAnother = false;
+        const go = {
+            state: addAnother ? 'newProject' : 'editProject',
+            appName: this.projectId
+        };
+        this.navigate(go);
+    }
+
+    navigate(go) {
+        this.state.go(go.state, { appName: go.appName }, {
             location: 'replace',
             reload: true
         });

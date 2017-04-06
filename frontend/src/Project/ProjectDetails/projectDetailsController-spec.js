@@ -5,7 +5,7 @@ import ProjectDetailsController from './ProjectDetailsController';
 let controller = null;
 
 const executeWatch = (observable, toCall) => {
-    if(observable instanceof  Array) {
+    if (observable instanceof  Array) {
         observable = observable.map(obs => {
             return obs();
         });

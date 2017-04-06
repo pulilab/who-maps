@@ -1,4 +1,5 @@
-import NewProjectController from './ProjectController';
+import _ from 'lodash';
+import ProjectController from './ProjectController';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
@@ -23,7 +24,8 @@ const mockData = {
 const $state = {
     params: {
 
-    }
+    },
+    go: jasmine.createSpy('stateGo')
 };
 
 const getGroupMock = {
@@ -62,16 +64,27 @@ const cs = {
 
 const upload = {};
 
+const $mdToast = {
+    show: jasmine.createSpy('showToast'),
+    simple: jasmine.createSpy('simple'),
+    textContent: jasmine.createSpy('textContent'),
+    position: jasmine.createSpy('position'),
+    hideDelay: jasmine.createSpy('hideDelay')
+};
+
+_.forEach($mdToast, func => {
+    func.and.returnValue($mdToast);
+});
+
 const timeout = toCall => {
     toCall();
 };
 
-const structure = require('./Resources/structure.json');
 
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new NewProjectController($scope, $state, upload, cs, structure, timeout);
+        sc = new ProjectController($scope, $state, upload, cs, $mdToast, timeout);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -271,6 +284,50 @@ describe('ProjectController', () => {
         spyOn(sc.ns, 'putGroups');
         sc.putGroups();
         expect(sc.ns.putGroups).toHaveBeenCalled();
+    });
+
+    it('should have a postSave function that handles the route change', () => {
+        spyOn(sc, 'navigate');
+        sc.isAddAnother = true;
+        sc.projectId = 1;
+        const expectation = {
+            state: 'newProject',
+            appName : 1
+        };
+        sc.postSaveActions();
+        expect(sc.navigate).toHaveBeenCalledWith(expectation);
+        sc.isAddAnother = false;
+        expectation.state = 'editProject';
+        sc.postSaveActions();
+        expect(sc.navigate).toHaveBeenCalledWith(expectation);
+    });
+
+    it('should have a postUpdate function that handles the route change and the refresh', () => {
+        spyOn(sc, 'navigate');
+        spyOn(sc.EE, 'emit');
+        sc.isAddAnother = true;
+        sc.projectId = 1;
+        const expectation = {
+            state: 'newProject',
+            appName : 1
+        };
+        sc.postUpdateActions();
+        expect(sc.navigate).toHaveBeenCalledWith(expectation);
+        sc.isAddAnother = false;
+        sc.postUpdateActions();
+        expect(sc.navigate).toHaveBeenCalledTimes(1);
+        expect(sc.EE.emit).toHaveBeenCalledTimes(2);
+    });
+
+    it('should have a function that open a simple toast', () => {
+        sc.showToast('a');
+        expect(sc.toast.show).toHaveBeenCalled();
+        expect(sc.toast.simple).toHaveBeenCalled();
+    });
+
+    it('should have a function that issue a state change', () => {
+        sc.navigate({});
+        expect(sc.state.go).toHaveBeenCalled();
     });
 
 });
