@@ -27,7 +27,7 @@ export default class OrganisationController {
     handleOrganisationBlur() {
         const typed = _.first(this.latestOrgs);
         if (typed) {
-            if(!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
+            if (!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
                 this.addOrganisation(typed);
             }
         }

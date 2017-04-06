@@ -35,7 +35,7 @@
       <md-button type="submit" ng-show="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
     </div>
     <div layout="row" layout-align="center start" class="primary-buttons">
-      <md-button class="md-primary">Save &amp; add another</md-button>
+      <md-button type="submit" ng-click="vm.setAddAnother()" class="md-primary">Save &amp; add another</md-button>
     </div>
     <div layout="row" layout-align="center start" class="secondary-buttons">
       <md-button ng-show="!vm.editMode" ui-sref="dashboard">Cancel process</md-button>
