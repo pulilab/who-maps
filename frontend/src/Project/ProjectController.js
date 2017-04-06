@@ -129,8 +129,8 @@ class ProjectController extends ProjectDefinition {
     }
 
     fillEmptyCollectionsWithDefault(data) {
-        data.coverage = data.coverage.length > 0 ? data.coverage : [{}];
-        data.platforms = data.platforms.length > 0 ? data.platforms : [{}];
+        data.coverage = data.coverage ? data.coverage : [{}];
+        data.platforms = data.platforms ? data.platforms : [{}];
         return Object.assign({}, data);
     }
 
@@ -145,6 +145,9 @@ class ProjectController extends ProjectDefinition {
     convertStringArrayToObjectArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
+            if (!data[key]) {
+                return;
+            }
             data[key] = data[key].map(value => {
                 return { value };
             });
@@ -158,6 +161,9 @@ class ProjectController extends ProjectDefinition {
     convertObjectArrayToStringArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
+            if (!data[key]) {
+                return;
+            }
             data[key] = data[key].map(value => value.value);
             data[key] = data[key].filter(item => item);
         });
@@ -198,12 +204,15 @@ class ProjectController extends ProjectDefinition {
     }
 
     removeKeysWithoutValues(processedForm) {
-        _.forEach(processedForm, (value, key) => {
-            if (value === null || value === '') {
-                processedForm[key] = undefined;
+        return _.reduce(processedForm, (result, value, key) => {
+            if (value === null || value === '' || _.isPlainObject(value) && _.every(_.values(value), _.isNull)) {
+                result[key] = void 0;
             }
-        });
-        return Object.assign({}, processedForm);
+            else {
+                result[key] = value;
+            }
+            return result;
+        }, {});
     }
 
     clearCustomErrors() {
