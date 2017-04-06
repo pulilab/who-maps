@@ -285,11 +285,12 @@
             }
 
             .dash-tech {
+              padding-bottom: 20px;
 
                 .upper {
 
-                    padding: 0px 25px;
-                    height: 120px;
+                    padding: 10px 25px 0;
+                    // height: 120px;
 
                     div {
                         &:not(:last-child) {
@@ -297,25 +298,22 @@
                         }
 
                         md-icon {
-
                             font-size: 24px;
                             width: 24px;
                             height: 24px;
                             color: $text-primary;
+                            margin-right: 5px;
                         }
                         span {
-
                             font-size: 14px;
                             color: $text-primary;
                             font-weight: 500;
-                            padding-left: 5px;
-                            margin-top: auto;
-                            margin-bottom: auto;
+                            margin: 10px 0 0;
                         }
 
                         md-chips {
 
-                            padding-top: 10px;
+                            margin: 2px 0 8px;
 
                             md-chips-wrap {
                                 box-shadow: none;
@@ -341,19 +339,24 @@
 
                     background-color: $color-gray-lightest;
                     padding: 20px 25px;
-                    height: 253px;
+                    min-height: 253px;
                     border-bottom-left-radius: 3px;
                     border-bottom-right-radius: 3px;
 
                     span {
                         display: block;
+                        margin-top: 10px;
+                        margin-bottom: 5px;
+                        font-size: 14px;
                         font-weight: 500;
                     }
 
                     a {
                         display: block;
+                        margin-bottom: 20px;
+                        font-size: 14px;
                         color: $color-primary;
-                        margin-bottom: 17px;
+                        @include text-truncate();
                     }
                 }
             }

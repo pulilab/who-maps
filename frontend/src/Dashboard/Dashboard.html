@@ -150,9 +150,11 @@
                                     class="upper"
                                     layout="column">
 
-                                    <div flex layout="row">
-                                        <md-icon class="material-icons">device_hub</md-icon>
-                                        <span flex>Technology platforms</span>
+                                    <div layout="row" layout-align="start start">
+
+                                        <span flex>
+                                          <md-icon class="material-icons">device_hub</md-icon>
+                                          Technology platforms</span>
                                         <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
                                             <md-chip-template>
                                             <span>
@@ -162,9 +164,11 @@
                                         </md-chips>
                                     </div>
 
-                                    <div flex layout="row">
-                                        <md-icon class="material-icons">playlist_add_check</md-icon>
-                                        <span flex>License</span>
+                                    <div layout="row">
+
+                                        <span flex>
+                                          <md-icon class="material-icons">playlist_add_check</md-icon>
+                                          License</span>
                                         <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
                                     </div>
 
@@ -178,13 +182,13 @@
 
                                 <div class="lower">
 
-                                    <span>Code documentations & download:</span><br>
+                                    <span>Code documentations & download:</span>
                                     <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
 
-                                    <span>Download applications:</span><br>
+                                    <span>Download applications:</span>
                                     <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
-                                    <span>Link to wiki page:</span><br>
+                                    <span>Link to wiki page:</span>
                                     <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
                                 </div>
                             </div>
