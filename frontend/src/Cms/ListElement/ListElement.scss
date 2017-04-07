@@ -1,2 +1,129 @@
 @import '../../variables';
 @import '../../mixins';
+
+.cms-list-element {
+  position: relative;
+  background-color: $color-white;
+
+  .cover-img {
+    padding: 15px;
+    min-width: 120px;
+    max-width: 120px;
+    border-right: 1px solid $color-gray-lighter;
+
+    img {
+      float: left;
+      display: inline-block;
+      margin: 0;
+      width: 120px;
+      height: auto;
+    }
+
+    .no-cover {
+      position: relative;
+      display: inline-block;
+      width: 120px;
+      height: 170px;
+      background-color: $color-gray-lightest;
+
+      &::after {
+        content: "insert_photo";
+        @include md-icon($font-size: 48px);
+        color: #BDBDBD;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .excerpt {
+    position: relative;
+    padding: 30px;
+
+    h3 {
+      margin: 0 0 20px;
+      color: $color-primary;
+      padding-right: 180px;
+    }
+
+    h6 {
+      position: absolute;
+      top: 0;
+      right: 30px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: #BDBDBD;
+      white-space: nowrap;
+    }
+
+    p {
+      color: $text-secondary;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-height: 20px;
+      height: auto;
+      max-height: 60px;
+    }
+  }
+
+  &.experience {
+
+    .avatar-img {
+      padding: 30px;
+
+      > span {
+        position: relative;
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        border-radius: 80px;
+        background-color: #BDBDBD;
+
+        img {
+          position: relative;
+          z-index: 100;
+          width: 80px;
+          height: 80px;
+        }
+
+        &::before {
+          content: "account_circle";
+          @include md-icon($font-size: 48px);
+          color: $color-white;
+          z-index: 1;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    .excerpt {
+      padding-left: 0;
+
+      h3 {
+        margin-bottom: 10px;
+        color: $text-primary;
+      }
+
+      small.time {
+        color: $text-secondary;
+      }
+
+      p {
+        -webkit-line-clamp: 2;
+        max-height: 40px;
+        color: $text-primary;
+      }
+    }
+  }
+
+}

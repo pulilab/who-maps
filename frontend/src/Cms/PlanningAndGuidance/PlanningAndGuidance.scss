@@ -2,9 +2,9 @@
 @import '../../mixins';
 
 planning-and-guidance {
-
   display: block;
   margin: 0 auto;
+  padding: 0 30px;
   min-width: $page-min-width;
   max-width: $page-max-width;
 
@@ -31,6 +31,7 @@ planning-and-guidance {
 
       &:hover {
         color: $text-primary;
+        box-shadow: inset 0 -2px 0 darken(#EAEAEA, 10%);
       }
 
       &.active {
@@ -52,6 +53,15 @@ planning-and-guidance {
 
     .cms-list {
       padding: 40px;
+
+      cms-list-element {
+        display: block;
+        margin-top: 20px;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
     }
 
     .cms-aside {

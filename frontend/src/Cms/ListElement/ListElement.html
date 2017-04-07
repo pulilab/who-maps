@@ -1,17 +1,30 @@
 
-<div ng-if="!vm.experience" md-whiteframe="2" class="cms-list-element">
+<div ng-if="!vm.experience" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
 
-  <div class="cover-img"></div>
+  <div class="cover-img">
+    <!-- TODO: need an ifelse to be add whether the cms item has a cover image or not! -->
+    <span class="no-cover"></span>
+    <!-- <img src="./images/sample-cover.jpg" alt="cover"> -->
+  </div>
   <div class="excerpt">
-    <h3></h3>
-    <p></p>
-    <!-- <cms-detail-element></cms-detail-element> -->
+    <h3 class="md-title">CMS List Element Title</h3>
+    <h6>Category name</h6>
+    <p class="md-body-1">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Nec dubitamus multa iter quae et nos invenerat. Me non paenitet nullum festiviorem excogitasse ad hoc.Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.</p>
+    <cms-detail-element></cms-detail-element>
   </div>
 </div>
 
-<div ng-if="vm.experience" md-whiteframe="2" class="cms-list-element experience">
+<div ng-if="vm.experience" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
 
-  <h3>LIST ELEMENT (Experience)</h3>
-  <cms-detail-element></cms-detail-element>
+  <div class="avatar-img">
+    <span><!-- <img src="./images/sample-avatar.jpg" alt="avatar"> --></span>
+  </div>
+  <div class="excerpt">
+    <h3 class="md-title">Username</h3>
+    <h6>Category name</h6>
+    <small class="time">3:26 pm — 4 May, 2015</small>
+    <p class="md-body-1">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Nec dubitamus multa iter quae et nos invenerat. Me non paenitet nullum festiviorem excogitasse ad hoc.</p>
+    <cms-detail-element></cms-detail-element>
+  </div>
 
 </div>
