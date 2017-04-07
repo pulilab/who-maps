@@ -196,6 +196,9 @@ class ProjectController extends ProjectDefinition {
 
         keyArray.forEach(key => {
             processedForm[key] = processedForm[key].filter(cov => {
+                if (cov.hasOwnProperty('available')) {
+                    delete cov.available;
+                }
                 return Object.keys(cov).length > 1;
             });
         });
