@@ -94,8 +94,8 @@
         }
 
         &::before {
-          content: "account_circle";
-          @include md-icon($font-size: 48px);
+          content: "person";
+          @include md-icon($font-size: 40px);
           color: $color-white;
           z-index: 1;
           position: absolute;

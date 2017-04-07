@@ -53,14 +53,21 @@ planning-and-guidance {
 
     .cms-list {
       padding: 40px;
+      text-align: center;
 
       cms-list-element {
         display: block;
         margin-top: 20px;
+        text-align: left;
 
         &:first-child {
           margin-top: 0;
         }
+      }
+
+      .show-more {
+        min-width: 160px;
+        margin: 40px auto 0;
       }
     }
 
@@ -69,6 +76,18 @@ planning-and-guidance {
       padding: 40px;
       background-color: #EEEEEE;
       border-left: 1px solid #E0E0E0;
+
+      .add-new-content {
+        .md-button.add-new {
+          margin-top: 0;
+          padding-left: 15px;
+          padding-right: 20px;
+        }
+      }
+
+      .search-content {
+        padding: 20px 0;
+      }
     }
   }
 
