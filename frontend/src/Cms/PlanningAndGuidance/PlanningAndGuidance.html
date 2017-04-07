@@ -28,10 +28,7 @@
 
       <div class="cms-aside" flex>
         <div class="add-new-content md-block">
-          <md-button class="md-primary md-raised add-new">
-            <md-icon class="material-icons">add</md-icon>
-            Add new content
-          </md-button>
+          <cms-add-new-content></cms-add-new-content>
         </div>
         <div class="search-content md-block">
           <md-input-container md-no-float class="md-block">
@@ -39,22 +36,13 @@
             <input type="text" placeholder="Search">
           </md-input-container>
         </div>
-        <div class="filter-content"></div>
+        <div class="filter-content">
+          <h5 class="md-subhead">Apply filters to list:</h5>
+        </div>
       </div>
     </div>
   </div>
 
   <disclaimer></disclaimer>
-
-</div>
-
-<div layout="row">
-
-  <div class="left-bar" layout="column" flex="20">
-    <cms-add-new-content></cms-add-new-content>
-    SEARCH AND FILTER
-  </div>
-
-
 
 </div>

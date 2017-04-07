@@ -86,7 +86,13 @@ planning-and-guidance {
       }
 
       .search-content {
-        padding: 20px 0;
+        padding: 20px 0 0;
+      }
+
+      .filter-content {
+        h5 {
+          font-weight: 500;
+        }
       }
     }
   }
