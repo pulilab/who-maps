@@ -86,15 +86,14 @@ project_structure = {
             "Water, Sanitation, and Hygiene"
         ],
         "interoperability_links": [
-            "Yes, links to a client registry.",
-            "Yes, links to digital HMIS.",
-            "Yes, links to a health worker registry.",
-            "Yes, links to eLMIS.",
-            "Yes, links to digital laboratory information system.",
-            "Yes, links to a facility registry.",
-            "Yes, links to a Shared Health Record.",
-            "Yes, links to a Terminology Service.",
-            "Other"
+            {"pre": "Yes, links to a ", "name": "client registry"},
+            {"pre": "Yes, links to ", "name": "digital HMIS"},
+            {"pre": "Yes, links to a ", "name": "health worker registry"},
+            {"pre": "Yes, links to ", "name": "eLMIS"},
+            {"pre": "Yes, links to ", "name": "digital laboratory information system"},
+            {"pre": "Yes, links to a ", "name": "facility registry"},
+            {"pre": "Yes, links to a ", "name": "Shared Health Record"},
+            {"pre": "Yes, links to a ", "name": "Terminology Service"},
         ],
         "interoperability_standards": [
             "ADX - Aggregate Data Exchange",

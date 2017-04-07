@@ -137,5 +137,22 @@ describe('CollapsibleSet class', () => {
         expect(result).toBeTruthy();
     });
 
+    it('should have a function that remove already selected platforms', () => {
+        const options = ['a', 'b', 'c'];
+        const platforms = [
+            {
+                name: 'a',
+                availablePlatforms: []
+            },
+            {
+                name: 'b',
+                availablePlatforms: []
+            }
+        ];
+        controller.setAvailableOptions(platforms, options, 'name');
+        expect(platforms[0].available).toEqual(['a', 'c']);
+
+    });
+
 
 });

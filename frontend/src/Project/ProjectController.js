@@ -129,8 +129,8 @@ class ProjectController extends ProjectDefinition {
     }
 
     fillEmptyCollectionsWithDefault(data) {
-        data.coverage = data.coverage ? data.coverage : [{}];
-        data.platforms = data.platforms ? data.platforms : [{}];
+        data.coverage = _.isEmpty(data.coverage) ? [{}] : data.coverage;
+        data.platforms = _.isEmpty(data.platforms) ? [{}] : data.platforms;
         return Object.assign({}, data);
     }
 
@@ -235,7 +235,6 @@ class ProjectController extends ProjectDefinition {
             processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.removeEmptyChildObjects(processedForm);
             processedForm = this.removeKeysWithoutValues(processedForm);
-            processedForm.interoperability_links =  _.toArray(processedForm.interoperability_links);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }

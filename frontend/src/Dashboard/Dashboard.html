@@ -258,15 +258,16 @@
                                 <md-card
                                         class="resource"
                                         ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
+                                        ng-if="link.selected"
                                         layout="row"
                                         layout-align="start center">
                                     <div flex>
-                                      <div class="res-title">category</div>
+                                      <div class="res-title">{{link.name}}</div>
                                       <div class="res-text">
                                           <h4>{{link.link}}</h4>
                                       </div>
                                     </div>
-                                    <a ng-href="{{link.link}}" target="_blank" flex>
+                                    <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
                                         <md-icon>launch</md-icon>
                                     </a>
                                 </md-card>

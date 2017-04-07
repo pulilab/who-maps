@@ -24,7 +24,8 @@ class PlatformSerializer(serializers.Serializer):
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
-    selected = serializers.BooleanField()
+    name = serializers.CharField(max_length=64)
+    selected = serializers.BooleanField(required=False)
     link = serializers.CharField(required=False, max_length=256)
 
 
