@@ -49,6 +49,22 @@ class ProjectDetailsController extends CollapsibleSet {
         }, () => {
             return this.project.end_date;
         }], self.validateDateRange);
+
+        self.scope.$watchGroup([() => {
+            return this.project.coverage;
+        }, () => {
+            return this.districtList;
+        }], ([coverage, districts]) => {
+            self.setAvailableOptions(coverage, districts);
+        }, true);
+
+        self.scope.$watchGroup([() => {
+            return this.project.coverage;
+        }, () => {
+            return this.districtList;
+        }], ([coverage, districts]) => {
+            self.setAvailableOptions(coverage, districts);
+        }, true);
     }
 
     validateDateRange([start, end]) {

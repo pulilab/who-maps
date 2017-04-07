@@ -6,7 +6,7 @@ class StrategyController extends CollapsibleSet {
         super($element, $scope, 'project');
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
-        this.setPlatformAvailableOptions = this.setPlatformAvailableOptions.bind(this);
+        this.setAvailableOptions = this.setAvailableOptions.bind(this);
     }
 
     onInit() {
@@ -18,25 +18,9 @@ class StrategyController extends CollapsibleSet {
         const self = this;
         self.scope.$watch(() => {
             return this.project.platforms;
-        }, self.setPlatformAvailableOptions, true);
-
-    }
-
-    setPlatformAvailableOptions(platforms) {
-        const self = this;
-        const used = platforms.map(platform => platform.name).filter(name => name);
-        platforms.forEach(platform => {
-            const availablePlatforms = self.structure.technology_platforms.filter(p => {
-                return used.indexOf(p) === -1;
-            });
-            if (platform.name) {
-                availablePlatforms.push(platform.name);
-            }
-            availablePlatforms.sort((a, b) => {
-                return a.localeCompare(b);
-            });
-            platform.availablePlatforms = availablePlatforms;
-        });
+        }, (platform) => {
+            self.setAvailableOptions(platform, self.structure.technology_platforms);
+        }, true);
     }
 
 
