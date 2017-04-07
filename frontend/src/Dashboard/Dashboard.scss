@@ -285,11 +285,10 @@
             }
 
             .dash-tech {
-              padding-bottom: 20px;
 
                 .upper {
 
-                    padding: 10px 25px 0;
+                    padding: 10px 25px;
                     // height: 120px;
 
                     div {
@@ -308,7 +307,7 @@
                             font-size: 14px;
                             color: $text-primary;
                             font-weight: 500;
-                            margin: 10px 0 0;
+                            margin: 10px 0;
                         }
 
                         md-chips {
@@ -339,7 +338,7 @@
 
                     background-color: $color-gray-lightest;
                     padding: 20px 25px;
-                    min-height: 253px;
+                    min-height: 283px;
                     border-bottom-left-radius: 3px;
                     border-bottom-right-radius: 3px;
 
@@ -356,6 +355,7 @@
                         margin-bottom: 20px;
                         font-size: 14px;
                         color: $color-primary;
+                        text-decoration: none;
                         @include text-truncate();
                     }
                 }

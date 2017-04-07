@@ -39,38 +39,39 @@
             <div class="info-block">
                 <h6>Contact Person</h6>
                 <span>{{vm.currentProject.contact_name}}</span>
+                <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
+                    <md-icon class="material-icons">
+                        mail_outline
+                    </md-icon>
+                    EMAIL
+                </md-button>
             </div>
-            <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
-                <md-icon class="material-icons">
-                    mail_outline
-                </md-icon>
-                EMAIL
-            </md-button>
+
         </div>
     </div>
     <div class="md-toolbar-tools">
         <div class="project-mainmenu">
             <md-button ui-sref="editProject" n ng-disabled="!vm.hasProfile()" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide>
+                <md-tooltip md-autohide md-direction="top">
                     EDIT PROJECT DETAILS
                 </md-tooltip>
                 Edit Project
             </md-button>
 
             <md-button ui-sref="inventory"  ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'Y'" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide>
+                <md-tooltip md-autohide md-direction="top">
                     INVENTORY PROJECT CREATION
                 </md-tooltip>
                 Inventory
             </md-button>
             <md-button ui-sref="#"  ng-show="vm.userType !== 0" ng-disabled="!vm.hasProfile()" ng-if="false" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide>
+                <md-tooltip md-autohide md-direction="top">
                     TIPS AND RESOURCES
                 </md-tooltip>
                 Improve Project
             </md-button>
             <md-button ui-sref="maps" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide>
+                <md-tooltip md-autohide md-direction="top">
                     GO TO MAPS TOOLKIT
                 </md-tooltip>
                 <span ng-show="vm.userType === 3"> Update Score </span>
@@ -78,7 +79,7 @@
             </md-button>
 
             <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide>
+                <md-tooltip md-autohide md-direction="top">
                     SHOW SCORE SUMMARY
                 </md-tooltip>
                 Summary Score
@@ -89,9 +90,9 @@
         <div flex></div>
         <div class="project-submenu" layout="row">
             <md-menu md-offset="15" md-position-mode="target-right target">
-                <md-button ng-click="vm.openMenu($mdOpenMenu, $event)"  class="" aria-label="Share" md-no-ink>
+                <md-button ng-click="vm.openMenu($mdOpenMenu, $event)"  class="share-link" aria-label="Share" md-no-ink>
                     <md-icon class="material-icons">share</md-icon>
-                    Share
+                    Share Public Link
                 </md-button>
                 <md-menu-content class="share-url">
                     <md-menu-item>
