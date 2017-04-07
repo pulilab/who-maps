@@ -18,11 +18,27 @@
 
       <div class="cms-list" flex="grow">
         <cms-list-element></cms-list-element>
+        <cms-list-element></cms-list-element>
+        <cms-list-element experience="true"></cms-list-element>
+
+        <md-button class="md-primary md-raised show-more">
+          Show more...
+        </md-button>
       </div>
 
       <div class="cms-aside" flex>
-        <div class="add-new-content"></div>
-        <div class="search-content"></div>
+        <div class="add-new-content md-block">
+          <md-button class="md-primary md-raised add-new">
+            <md-icon class="material-icons">add</md-icon>
+            Add new content
+          </md-button>
+        </div>
+        <div class="search-content md-block">
+          <md-input-container md-no-float class="md-block">
+            <md-icon class="material-icons">search</md-icon>
+            <input type="text" placeholder="Search">
+          </md-input-container>
+        </div>
         <div class="filter-content"></div>
       </div>
     </div>
