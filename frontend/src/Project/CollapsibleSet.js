@@ -90,7 +90,7 @@ class CollapsibleSet {
     }
 
     setAvailableOptions(category, options, fieldName) {
-        const used = category.map(cat => cat.name || cat.district).filter(name => name);
+        const used = category.map(cat => cat[fieldName]).filter(name => name);
         category.forEach(item => {
             const available = options.filter(p => {
                 return used.indexOf(p) === -1;

@@ -60,11 +60,13 @@ describe('ProjectDetailsController', () => {
         controller.project = {};
         spyOn(controller, 'fetchDistricts');
         spyOn(controller, 'validateDateRange');
+        spyOn(controller, 'setAvailableOptions');
         controller.watchers();
         expect(controller.scope.$watch).toHaveBeenCalled();
         expect(controller.scope.$watchGroup).toHaveBeenCalled();
         expect(controller.fetchDistricts).toHaveBeenCalled();
         expect(controller.validateDateRange).toHaveBeenCalled();
+        expect(controller.setAvailableOptions).toHaveBeenCalled();
     });
     it('should have a function that validates a date range', () => {
         spyOn(controller, 'setCustomError');
