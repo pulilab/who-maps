@@ -1,12 +1,15 @@
 
-<div ng-if="!vm.experience">
+<div ng-if="!vm.experience" md-whiteframe="2" class="cms-list-element">
 
-  <h3>LIST ELEMENT (Resource and tips)</h3>
-  <cms-detail-element></cms-detail-element>
-
+  <div class="cover-img"></div>
+  <div class="excerpt">
+    <h3></h3>
+    <p></p>
+    <!-- <cms-detail-element></cms-detail-element> -->
+  </div>
 </div>
 
-<div ng-if="vm.experience">
+<div ng-if="vm.experience" md-whiteframe="2" class="cms-list-element experience">
 
   <h3>LIST ELEMENT (Experience)</h3>
   <cms-detail-element></cms-detail-element>
