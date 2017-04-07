@@ -13,7 +13,6 @@
     position: relative;
 
     .littleheader {
-
       position: absolute;
       left: 20px;
       top: 12px;
@@ -319,26 +318,29 @@
       }
 
       .exports {
-        position: absolute;
-        right: 205px;
+        .md-button {
+          float: right;
+          margin-top: 12px;
+        }
       }
 
       .starry {
-        position: absolute;
-        top: 15px;
-        right: 25px;
+        min-width: 220px;
         font-size: 12px;
         color: $text-secondary;
         padding-top: 20px;
 
-        md-icon {
-          position: relative;
-          top: -1px;
+        > span {
+          float: right;
+          display: inline-block;
           margin-left: 20px;
-          margin-right: 3px;
+        }
+
+        md-icon {
           font-size: 14px;
           height: 14px;
           width: 14px;
+          transform: translate(5px, 3px);
         }
       }
     }

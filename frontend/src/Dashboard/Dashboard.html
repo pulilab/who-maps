@@ -71,10 +71,10 @@
                                         <span>Not started yet</span>
                                     </div>
                                     <div class="dash-overview-tooltip">
-                                        <span>P - Progress</span>
+                                        <span><countrychart-tooltip>P</countrychart-tooltip> - Progress</span>
                                     </div>
                                     <div class="dash-overview-tooltip">
-                                        <span>S - Score</span>
+                                        <span><b>S</b> - Score</span>
                                     </div>
                                     <div class="dash-overview-tooltip">
                                         <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
@@ -150,9 +150,11 @@
                                     class="upper"
                                     layout="column">
 
-                                    <div flex layout="row">
-                                        <md-icon class="material-icons">device_hub</md-icon>
-                                        <span flex>Technology platforms</span>
+                                    <div layout="row" layout-align="start start">
+
+                                        <span flex>
+                                          <md-icon class="material-icons">device_hub</md-icon>
+                                          Technology platforms</span>
                                         <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
                                             <md-chip-template>
                                             <span>
@@ -162,9 +164,11 @@
                                         </md-chips>
                                     </div>
 
-                                    <div flex layout="row">
-                                        <md-icon class="material-icons">playlist_add_check</md-icon>
-                                        <span flex>License</span>
+                                    <div layout="row">
+
+                                        <span flex>
+                                          <md-icon class="material-icons">playlist_add_check</md-icon>
+                                          License</span>
                                         <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
                                     </div>
 
@@ -178,13 +182,13 @@
 
                                 <div class="lower">
 
-                                    <span>Code documentations & download:</span><br>
+                                    <span>Code documentations & download:</span>
                                     <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
 
-                                    <span>Download applications:</span><br>
+                                    <span>Download applications:</span>
                                     <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
-                                    <span>Link to wiki page:</span><br>
+                                    <span>Link to wiki page:</span>
                                     <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
                                 </div>
                             </div>
@@ -254,13 +258,16 @@
                                 <md-card
                                         class="resource"
                                         ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
+                                        ng-if="link.selected"
                                         layout="row"
-                                        layout-align="space-around stretch">
-
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{link.link}}</h4>
+                                        layout-align="start center">
+                                    <div flex>
+                                      <div class="res-title">{{link.name}}</div>
+                                      <div class="res-text">
+                                          <h4>{{link.link}}</h4>
+                                      </div>
                                     </div>
-                                    <a ng-href="{{link.link}}" target="_blank"  layout="column" layout-align="center center">
+                                    <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
                                         <md-icon>launch</md-icon>
                                     </a>
                                 </md-card>
@@ -334,114 +341,14 @@
     </div>
 
     <!-- LOWER PART -->
-    <!-- <div layout="row" class="dashrow dashrow-lower">
+
+   <!-- <div layout="row" class="dashrow dashrow-lower">
 
         <div flex class="dashsection dashsection-left dash-cardholder" layout="column">
 
             <div class="dash-subhead">IMPROVE PROJECT</div>
 
-            <md-card flex class="dash-improve">
-
-                <md-card-header class="unselectable" ng-class="'axis' + (vm.improveArray[vm.improveNr].axis + 1)" layout="row" layout-align="space-between center">
-
-                    <img ng-src="src/Dashboard/img/icon-domain-{{vm.improveNr + 1}}.svg" />
-
-                    <h4 flex>You've scored {{vm.improveArray[vm.improveNr].percentage}}% in <span class="domain-name">{{vm.improveArray[vm.improveNr].name}}</span> domain!</h4>
-
-                    <ssmenu
-                        searchable="false"
-                        placeholder="Go to domain"
-                        class="small"
-                        multiple="false"
-
-                    ></ssmenu>
-                    <md-icon ng-click="vm.improveNr = (15 + vm.improveNr) % 16">chevron_left</md-icon>
-                    <md-icon ng-click="vm.improveNr = (17 + vm.improveNr) % 16">chevron_right</md-icon>
-                </md-card-header>
-
-                <md-tabs md-border-bottom md-dynamic-height >
-                    <md-tab label="LESSONS & TIPS">
-                        <md-content>
-
-                            <div class="subhead" layout="row" layout-align="space-between">
-                                <p>Here you can find some tips and lessons to improve your result.<br> For more info visit <a ui-sref="#">Planning & Guidance</a> section.</p>
-                                <img src="./Img/book.svg">
-                            </div>
-
-
-                            <md-card layout="row" ng-repeat="item in vm.pgArray">
-
-                                <img ng-src="">
-                                <div flex class="txt" layout="column" layout-align="space-around stretch">
-                                    <h5>{{item.title}}</h5>
-                                    <p class="desc text-truncate">{{item.description}}</p>
-                                    <p class="comm"><md-icon>comments</md-icon> COMMENTS ({{item.commentNr}})</p>
-                                </div>
-                            </md-card>
-
-
-                        </md-content>
-                    </md-tab>
-
-                    <md-tab label="EXPERIENCES">
-                        Experiences content
-                    </md-tab>
-
-                    <md-tab label="RESOURCES">
-                        Resources content
-                    </md-tab>
-
-                </md-tabs>
-
-            </md-card>
-
-        </div>
-
-        <div flex="40" class="dashsection dash-cardholder" layout="column">
-            <div class="dash-subhead">COMMUNITY WALL</div>
-            <md-card class="dash-community" flex layout="column" ng-init="vm.pi=[0,0,0]">
-
-                <md-tooltip md-direction="top">
-                    The "Community wall" feature is not available in this version of the software.
-                </md-tooltip>
-
-                <div flex class="project-cont">
-                    <div layout="row" class="header">
-                        <span flex="grow">PROJECTS LIKE ME</span>
-                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === 0" ng-click="vm.prewProject(0)">chevron_left</md-icon>
-                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[0] === vm.commProjects[0].length - 1" ng-click="vm.nextProject(0)">chevron_right</md-icon>
-                    </div>
-                    <projectcomp
-                        show-details="true"
-                        ng-model="vm.commProjects[0][vm.pi[0]]">
-                    </projectcomp>
-                </div>
-
-                <div flex class="project-cont">
-                    <div layout="row" class="header">
-                        <span flex="grow">PROJECTS I'M FOLLOWING</span>
-                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === 0" ng-click="vm.prewProject(1)">chevron_left</md-icon>
-                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[1] === vm.commProjects[1].length - 1" ng-click="vm.nextProject(1)">chevron_right</md-icon>
-                    </div>
-                    <projectcomp
-                        show-details="true"
-                        ng-model="vm.commProjects[1][vm.pi[1]]">
-                    </projectcomp>
-                </div>
-
-                <div flex class="project-cont">
-                    <div layout="row" class="header">
-                        <span flex="grow">PROJECTS I'VE FOUNDED</span>
-                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === 0" ng-click="vm.prewProject(2)">chevron_left</md-icon>
-                        <md-icon class="material-icons unselectable" ng-disabled="vm.pi[2] === vm.commProjects[2].length - 1" ng-click="vm.nextProject(2)">chevron_right</md-icon>
-                    </div>
-                    <projectcomp
-                        show-details="true"
-                        ng-model="vm.commProjects[1][vm.pi[2]]">
-                    </projectcomp>
-                </div>
-
-            </md-card>
+            <cms-dashboard-widget></cms-dashboard-widget>
         </div>
 
     </div> -->

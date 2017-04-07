@@ -52,12 +52,12 @@
 
     <h6 >Does your digital health project link to a digital HIS?</h6>
 
-
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
-      <md-checkbox md-no-ink aria-label=""
+      <md-checkbox ng-init="vm.project.interoperability_links[$index].name = link.name"
+                   md-no-ink aria-label=""
                    ng-model="vm.project.interoperability_links[$index].selected"
                    class="md-primary" flex>
-        {{link}}
+        {{link.pre}}{{link.name}}.
       </md-checkbox>
       <md-input-container class="md-icon-float md-block" flex>
         <label>Specify URL</label>

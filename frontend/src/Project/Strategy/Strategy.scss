@@ -47,6 +47,7 @@
           .md-text {
             display: block;
             width: 100%;
+            padding-bottom: 5px;
             @include text-truncate();
 
             &:first-child {

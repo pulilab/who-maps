@@ -88,6 +88,22 @@ class CollapsibleSet {
         const field = this.findField(key);
         return field.indexOf(t) > -1;
     }
+
+    setAvailableOptions(category, options, fieldName) {
+        const used = category.map(cat => cat[fieldName]).filter(name => name);
+        category.forEach(item => {
+            const available = options.filter(p => {
+                return used.indexOf(p) === -1;
+            });
+            if (item[fieldName]) {
+                available.push(item[fieldName]);
+            }
+            available.sort((a, b) => {
+                return a.localeCompare(b);
+            });
+            item.available = available;
+        });
+    }
 }
 
 export default CollapsibleSet;
