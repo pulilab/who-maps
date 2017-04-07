@@ -89,22 +89,20 @@ class CollapsibleSet {
         return field.indexOf(t) > -1;
     }
 
-    setAvailableOptions(category, options) {
+    setAvailableOptions(category, options, fieldName) {
         const used = category.map(cat => cat.name || cat.district).filter(name => name);
         category.forEach(item => {
             const available = options.filter(p => {
                 return used.indexOf(p) === -1;
             });
-            var lol = item.name || item.district;
-            if (lol) {
-                available.push(lol);
+            if (item[fieldName]) {
+                available.push(item[fieldName]);
             }
             available.sort((a, b) => {
                 return a.localeCompare(b);
             });
             item.available = available;
         });
-        console.log(category)
     }
 }
 

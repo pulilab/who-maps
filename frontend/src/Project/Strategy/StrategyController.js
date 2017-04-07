@@ -19,7 +19,7 @@ class StrategyController extends CollapsibleSet {
         self.scope.$watch(() => {
             return this.project.platforms;
         }, (platform) => {
-            self.setAvailableOptions(platform, self.structure.technology_platforms);
+            self.setAvailableOptions(platform, self.structure.technology_platforms, 'name');
         }, true);
     }
 
