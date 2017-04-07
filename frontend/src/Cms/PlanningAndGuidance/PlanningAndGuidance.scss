@@ -93,6 +93,37 @@ planning-and-guidance {
         h5 {
           font-weight: 500;
         }
+
+        .filter-list {
+          .group-title {
+            font-weight: 500;
+          }
+
+          dt {
+            i {
+              position: relative;
+              top: 9px;
+              left: 5px;
+              cursor: pointer;
+
+              &.toggled {
+                transform: rotate(180deg);
+              }
+            }
+          }
+
+          dd {}
+
+          .domains {
+            overflow: hidden;
+            display: block;
+            height: 0;
+
+            &.show {
+              height: auto;
+            }
+          }
+        }
       }
     }
   }
