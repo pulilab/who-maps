@@ -41,15 +41,11 @@ class TopBarController extends Protected {
     }
 
     showCountryLevelViewButton() {
-        return this.state.current.name !== 'country' && this.isLogin;
+        return this.isLogin;
     }
 
     showGoToMyDashboardButton() {
-        if (this.showSubBar) {
-            return false;
-        }
-        return this.userType !== 0
-            && (this.viewMode || this.state.current.name !== 'dashboard');
+        return this.userType !== 0;
     }
 
     showSearch() {

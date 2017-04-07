@@ -231,6 +231,12 @@ class CommonServices extends Protected {
         });
     }
 
+    patchProject(patch, id) {
+        id = parseInt(id, 10);
+        const project = _.find(this.projectList, { id });
+        Object.assign(project, patch);
+    }
+
     updateProject(project, projectId) {
         const id = parseInt(projectId, 10);
         const last = _.find(this.projectList, { id });

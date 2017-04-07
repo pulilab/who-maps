@@ -235,7 +235,17 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
                             version=new_version,
                             data=current_toolkit)
         new_toolkit_ver.save()
-        return Response(status=status.HTTP_201_CREATED)
+        data = {
+            "coverage": {
+                "last_version": new_cov_ver.version,
+                "last_version_date": new_cov_ver.modified
+            },
+            "toolkit": {
+                "last_version": new_toolkit_ver.version,
+                "last_version_date": new_toolkit_ver.modified
+            }
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
 
     def toolkit_versions(self, request, project_id):
         """

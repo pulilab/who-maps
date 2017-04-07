@@ -248,7 +248,6 @@ class LinechartController {
 
     // Ng-options change
     axisChange(newAxis) {
-
         this.chosenData = this.data[newAxis].data;
         this.chosenLabels = this.data[newAxis].labels;
 
