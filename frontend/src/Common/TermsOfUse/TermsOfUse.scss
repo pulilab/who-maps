@@ -14,12 +14,10 @@ terms-of-use {
     overflow-x: hidden;
     overflow-y: scroll;
 
-    .title {
+    .md-title {
       height:55px;
       width:100%;
       border-bottom: 2px solid $color-gray-lightest;
-      color: $color-gray-light;
-      font-size:18px;
       line-height: 55px;
       padding-left:20px;
 
@@ -31,7 +29,6 @@ terms-of-use {
     .side-menu {
       height: calc( 100% - 55px );
       border-right: 2px solid $color-gray-lightest;
-      margin-left:20px;
       padding-top:20px;
 
 
@@ -39,6 +36,7 @@ terms-of-use {
         font-weight: 500;
         color: $color-gray-light;
         font-size:14px;
+        padding-left: 20px;
         height:32px;
         line-height: 32px;
         text-transform: uppercase;
@@ -47,6 +45,7 @@ terms-of-use {
 
         &.active {
           color: $color-black;
+          border-left: 2px solid $color-primary;
         }
       }
     }
