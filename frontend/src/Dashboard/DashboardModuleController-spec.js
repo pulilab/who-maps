@@ -153,10 +153,10 @@ describe('DashboardModuleController', () => {
             return { then: fn => { fn({}); } };
         };
         spyOn(vm.service, 'snapShot').and.callThrough();
-        spyOn(vm.cs, 'patchProject');
+        spyOn(vm.cs, 'updateProject');
         vm.snapShot();
         expect(vm.service.snapShot).toHaveBeenCalledWith(1);
-        expect(vm.cs.patchProject).toHaveBeenCalled();
+        expect(vm.cs.updateProject).toHaveBeenCalled();
     });
 
     it('has .prewProject() method, which handles decreasing active project binding indices in community wall', () => {
