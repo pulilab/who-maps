@@ -19,7 +19,7 @@ class SystemController {
         this.scope.$watch(() => {
             return this.state.current.name;
         }, value => {
-            this.showCountryTopBar = value === 'landing';
+            this.showCountryTopBar = ['landing', 'terms-of-use'].indexOf(value) > -1;
         });
     }
 
