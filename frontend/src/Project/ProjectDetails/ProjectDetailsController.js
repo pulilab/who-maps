@@ -19,6 +19,7 @@ class ProjectDetailsController extends CollapsibleSet {
         this.getUsers = this.getUsers.bind(this);
         this.checkName = this.checkName.bind(this);
         this.validateDateRange = this.validateDateRange.bind(this);
+        this.validateCoverage = this.validateCoverage.bind(this);
     }
 
     onInit() {
@@ -28,7 +29,6 @@ class ProjectDetailsController extends CollapsibleSet {
         this.getStructureData();
         this.districtList = [];
         this.projectList = [];
-
     }
 
     watchers() {
@@ -48,6 +48,20 @@ class ProjectDetailsController extends CollapsibleSet {
         }, () => {
             return this.project.end_date;
         }], self.validateDateRange);
+
+        self.scope.$watch(()=>{
+            return this.project.coverage;
+        }, () => {
+            self.observeCoverage = {};
+        }, true);
+
+        self.scope.$watchGroup([() => {
+            return this.observeCoverage;
+        }, () => {
+            return this.districtList;
+        }], ([, districts]) => {
+            self.setAvailableOptions(self.project.coverage, districts, 'district');
+        });
     }
 
     validateDateRange([start, end]) {
@@ -94,6 +108,11 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     handleDistrictData(data) {
+        this.project.coverage.forEach(cov => {
+            if (data.indexOf(cov.district) === -1) {
+                cov.district = undefined;
+            }
+        });
         this.districtList = data;
         this.scope.$evalAsync();
     }
@@ -135,12 +154,33 @@ class ProjectDetailsController extends CollapsibleSet {
         }
     }
 
-    coverageDistrictRequired(coverageItem) {
-        return coverageItem.clients
-            || coverageItem.health_workers
-            || coverageItem.facilities;
-    }
+    validateCoverage(current, item) {
+        let nld;
+        if (this.project.national_level_deployment) {
+            nld = [
+                this.project.national_level_deployment.health_workers,
+                this.project.national_level_deployment.facilities,
+                this.project.national_level_deployment.clients
+            ];
+        }
+        else {
+            nld = [null];
+        }
 
+        if (current === 'nld' && this.project.national_level_deployment) {
+            return _.some(nld);
+        }
+        else if (current === 'dld') {
+            return _.some([
+                item.district,
+                item.health_workers,
+                item.facilities,
+                item.clients,
+                _.every(nld, _.isNull)
+            ]);
+        }
+        return false;
+    }
 
     openSimilarProject(project, event) {
         event.preventDefault();

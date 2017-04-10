@@ -47,6 +47,10 @@ class NavigationController {
         this.EE.emit('projectScrollTo', hash);
     }
 
+    setAddAnother() {
+        this.isAddAnother = true;
+    }
+
     static navigationFactory() {
         require('./Navigation.scss');
         function navigation($element) {

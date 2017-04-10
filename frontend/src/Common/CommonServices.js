@@ -47,13 +47,6 @@ class CommonServices extends Protected {
         }
     }
 
-    prettifyCountryName(name) {
-        let nameParts = name.replace('-', ' ').split(' ');
-        nameParts = _.map(nameParts, item => {
-            return _.capitalize(item);
-        });
-        return nameParts.join(' ');
-    }
 
     reset() {
         this.initialize();
@@ -98,32 +91,22 @@ class CommonServices extends Protected {
         }
     }
 
-    getCountryName(project) {
+    findCountryName(project) {
         const country = _.find(this.projectStructure.countries, { id: project.country });
         if (country) {
-            project.countryName = this.prettifyCountryName(country.name);
+            project.countryName = country.name;
         }
     }
 
     mergeOperations() {
         _.forEach(this.projectList, project => {
-            this.getCountryName(project);
+            this.findCountryName(project);
             project.organisation = {
                 id: project.organisation,
                 name: project.organisation_name
             };
         });
         this.projectList = _.sortBy(this.projectList, ['id']);
-        _.forEach(this.projectStructure.countries, country => {
-            try {
-                country.name = this.prettifyCountryName(country.name);
-            }
-            catch (e) {
-                console.debug('the object was already parsed');
-            }
-            Object.freeze(country);
-        });
-
     }
 
     retrieveUserProfile() {
@@ -206,10 +189,9 @@ class CommonServices extends Protected {
                 id: _id
             };
             vm.getProjectDetail(project);
-            // vm.getProjectFiles(project);
-            Promise.all([project.detailPromise, project.filePromise])
+            Promise.all([project.detailPromise])
                 .then(() => {
-                    vm.getCountryName(project);
+                    vm.findCountryName(project);
                     vm.publicProject[_id] = project;
                     resolve(project);
                 });
@@ -231,11 +213,10 @@ class CommonServices extends Protected {
         });
     }
 
-    updateProject(project, projectId) {
-        const id = parseInt(projectId, 10);
+    updateProject(project, id) {
+        id = parseInt(id, 10);
         const last = _.find(this.projectList, { id });
-        project.organisation = _.cloneDeep(last.organisation);
-        _.merge(last, project);
+        Object.assign(last, project);
     }
 
     addProjectToCache(newProject) {

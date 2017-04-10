@@ -24,7 +24,8 @@ class PlatformSerializer(serializers.Serializer):
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
-    selected = serializers.BooleanField()
+    name = serializers.CharField(max_length=64)
+    selected = serializers.BooleanField(required=False)
     link = serializers.CharField(required=False, max_length=256)
 
 
@@ -35,16 +36,16 @@ class ProjectSerializer(serializers.Serializer):
     contact_email = serializers.EmailField()
     implementation_overview = serializers.CharField(max_length=512)
     implementing_partners = serializers.ListField(child=serializers.CharField(max_length=64),
-                                                  max_length=16, min_length=0)
+                                                  max_length=16, min_length=0, required=False)
     implementation_dates = serializers.CharField(max_length=128)
-    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
+    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
     geographic_scope = serializers.CharField(required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     licenses = serializers.ListField(child=serializers.CharField(max_length=64), max_length=16, required=False)  # Can hold 'other' fields
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
     his_bucket = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
     hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
-    interventions = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
+    interventions = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
     government_investor = serializers.BooleanField()
     repository = serializers.CharField(max_length=200, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)

@@ -132,37 +132,15 @@
 
     <h6>What is the current coverage of your project?</h6>
 
-    <h6 class="subtitle"><i class="material-icons">&#xE153;</i> National level deployment</h6>
+    <h6 class="subtitle"><i class="material-icons">&#xE567;</i> District level deployment</h6>
 
-    <div class="input-group">
-      <div layout="column">
-        <div layout="row">
-          <md-input-container class="md-block number" flex="20">
-            <label># Health Workers</label>
-            <input  type="number" min="0" ng-model="vm.project.national_level_deployment.health_workers">
-          </md-input-container>
-          <md-input-container class="md-block number" flex="20">
-            <label># Facilities</label>
-            <input type="number" min="0" ng-model="vm.project.national_level_deployment.facilities">
-          </md-input-container>
-          <md-input-container class="md-block number" flex="20">
-            <label># Clients</label>
-            <input type="number" min="0" ng-model="vm.project.national_level_deployment.clients">
-          </md-input-container>
-          <div flex="40"></div>
-        </div>
-      </div>
-    </div>
-
-    <h6 class="subtitle first"><i class="material-icons">&#xE567;</i> District level deployment</h6>
-
-    <div class="input-group" ng-class="{last: $last}" ng-repeat="cov in vm.project.coverage">
+    <div class="input-group" ng-repeat="cov in vm.project.coverage">
       <div layout="column">
         <div layout="row">
           <md-input-container class="md-block district" flex="50">
             <label>District</label>
-            <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.coverageDistrictRequired(cov)">
-              <md-option value="{{district}}" ng-repeat="district in vm.districtList">
+            <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.validateCoverage('dld', cov)">
+              <md-option value="{{district}}" ng-repeat="district in cov.available">
                 {{district}}
               </md-option>
               <md-option md-option-empty ng-hide="vm.districtList.length"> Select a country </md-option>
@@ -176,17 +154,17 @@
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
-            <input ng-required="vm.project.national_level_deployment.health_workers == null"
+            <input ng-required="vm.validateCoverage('dld', cov)"
                    type="number" min="0" ng-model="cov.health_workers" >
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
-            <input ng-required="vm.project.national_level_deployment.facilities == null"
+            <input ng-required="vm.validateCoverage('dld', cov)"
                    type="number" min="0" ng-model="cov.facilities">
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
-            <input ng-required="vm.project.national_level_deployment.clients == null"
+            <input ng-required="vm.validateCoverage('dld', cov)"
                    type="number" min="0" ng-model="cov.clients">
           </md-input-container>
           <div class="add-more-item" flex="40">
@@ -205,7 +183,29 @@
       </div>
     </div>
 
-    <h6 class="required">Donor (Add one at least)</h6>
+    <h6 class="subtitle first"><i class="material-icons">&#xE153;</i> National level deployment</h6>
+
+    <div class="input-group" ng-class="{last: $last}" >
+      <div layout="column">
+        <div layout="row">
+          <md-input-container class="md-block number" flex="20">
+            <label># Health Workers</label>
+            <input type="number" min="0" ng-required="vm.validateCoverage('nld', null)" ng-model="vm.project.national_level_deployment.health_workers">
+          </md-input-container>
+          <md-input-container class="md-block number" flex="20">
+            <label># Facilities</label>
+            <input type="number" min="0" ng-required="vm.validateCoverage('nld', null)" ng-model="vm.project.national_level_deployment.facilities">
+          </md-input-container>
+          <md-input-container class="md-block number" flex="20">
+            <label># Clients</label>
+            <input type="number" min="0" ng-required="vm.validateCoverage('nld', null)" ng-model="vm.project.national_level_deployment.clients">
+          </md-input-container>
+          <div flex="40"></div>
+        </div>
+      </div>
+    </div>
+
+    <h6 class="required">Donors (Add one at least)</h6>
 
     <div layout="row" ng-repeat="donor in vm.project.donors">
       <md-input-container md-no-float class="md-block" flex="50">

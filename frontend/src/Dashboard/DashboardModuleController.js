@@ -139,8 +139,11 @@ class DashboardModuleController extends Protected {
     }
 
     snapShot() {
-        this.service.snapShot(this.projectId).then(() => {
-            this.state.go('dashboard', { 'axisId': this.projectId }, { reload: true });
+        this.service.snapShot(this.projectId).then((newVersion) => {
+            const patch = newVersion.coverage;
+            this.cs.updateProject(patch, this.projectId);
+            this.EE.emit('projectListUpdated');
+            this.state.go('dashboard', { 'app': this.projectId }, { reload: true });
         });
     }
 
@@ -305,8 +308,10 @@ class DashboardModuleController extends Protected {
         this.service.getCoverageVersions(this.projectId).then(data => {
 
             // console.debug(this.projectData);
+            const coverage = this.projectData.coverage.slice();
+            coverage.push(Object.assign({}, this.projectData.national_level_deployment));
+            data.push({ data: coverage });
 
-            data.push({ data: this.projectData.coverage });
 
             const today = new Date();
             const year = today.getFullYear();
@@ -342,24 +347,6 @@ class DashboardModuleController extends Protected {
 
                 return ret;
             }, { labels: [], data: [] });
-
-            _.forOwn((this.projectData.national_level_deployment || [{}]) [0], (value, key) => {
-
-                if (key === 'district') {
-                    return;
-                }
-
-                if (historyChartData.labels.indexOf(key.replace('_', ' ')) >= 0) {
-                    const i = historyChartData.labels.indexOf(key.replace('_', ' '));
-                    historyChartData.data[0]['axis' + (i + 1)] += value;
-                }
-                else {
-                    const i = historyChartData.labels.length;
-                    historyChartData.labels.push(key);
-                    historyChartData.data[0]['axis' + (i + 1)] = value;
-                }
-            });
-
             this.EE.emit('coverage chart data', historyChartData);
         });
     }

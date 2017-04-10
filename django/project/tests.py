@@ -88,9 +88,9 @@ class SetupTests(APITestCase):
             "repository": "http://some.repo",
             "mobile_application": "app1, app2",
             "wiki": "http://wiki.org",
-            "interoperability_links": [None, {"selected": True, "link": "http://blabla.com"}, None, {"selected": True},
-                                       None, None, None, None,
-                                       {"selected": True, "link": "http://example.org"}],
+            "interoperability_links": [{"name": "link1", "selected": True, "link": "http://blabla.com"},
+                                       {"name": "link2", "selected": True},
+                                       {"name": "link3", "selected": True, "link": "http://example.org"}],
             "interoperability_standards": ["CSD - Care Services Discovery"],
             "data_exchanges": ["de1", "de2"],
             "start_date": str(datetime.today().date()),
@@ -154,7 +154,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
         self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
         self.assertEqual(response.json()['interventions'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['interoperability_links'][0], {'selected': ['This field is required.']})
+        self.assertEqual(response.json()['interoperability_links'][0], {'name': ['This field is required.']})
         self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
         self.assertEqual(response.json()['data_exchanges'][0], 'Not a valid string.')
 
@@ -286,6 +286,12 @@ class ProjectTests(SetupTests):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
         response = self.test_user_client.post(url, format="json")
         self.assertEqual(response.status_code, 201)
+        self.assertIn('coverage', response.json())
+        self.assertIn('toolkit', response.json())
+        self.assertIn('last_version', response.json()['coverage'])
+        self.assertIn('last_version_date', response.json()['coverage'])
+        self.assertIn('last_version', response.json()['toolkit'])
+        self.assertIn('last_version_date', response.json()['toolkit'])
 
     def test_make_version_wrong_id(self):
         url = reverse("make-version", kwargs={"project_id": 999})

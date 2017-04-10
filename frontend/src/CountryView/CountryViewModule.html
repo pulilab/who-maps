@@ -66,7 +66,7 @@
                                         ng-model="vm.selectedCountry"
                                         ng-change="vm.updateCountry(vm.selectedCountry)">
 
-                                    <md-option ng-repeat="country in vm.countries2 track by $index" ng-value="{{country}}">{{country.name}}</md-option>
+                                    <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
                                 </md-select>
                             </md-input-container>

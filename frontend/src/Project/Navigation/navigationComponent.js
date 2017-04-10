@@ -7,7 +7,8 @@ const component = {
     controllerAs: 'vm',
     name: 'navigation',
     bindings: {
-        editMode: '<'
+        editMode: '<',
+        isAddAnother: '='
     }
 };
 

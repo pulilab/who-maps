@@ -150,11 +150,13 @@ describe('DashboardModuleController', () => {
     it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
         vm.projectId = 1;
         vm.service.snapShot = () => {
-            return { then: fn => { fn(); } };
+            return { then: fn => { fn({}); } };
         };
         spyOn(vm.service, 'snapShot').and.callThrough();
+        spyOn(vm.cs, 'updateProject');
         vm.snapShot();
         expect(vm.service.snapShot).toHaveBeenCalledWith(1);
+        expect(vm.cs.updateProject).toHaveBeenCalled();
     });
 
     it('has .prewProject() method, which handles decreasing active project binding indices in community wall', () => {
@@ -193,6 +195,38 @@ describe('DashboardModuleController', () => {
     it('should have a function that handle a change axis event', () => {
         vm.handleChangeAxis(1);
         expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 0 });
+    });
+
+    it('REGRESSION: should always factor in NLD in the coverage values for the graph', () => {
+        const apiCall = spyOn(vm.service, 'getCoverageVersions');
+        let result = null;
+        spyOn(vm.EE, 'emit').and.callFake((event, data) => {
+            result = data;
+        });
+        const apiData = [];
+        apiCall.and.returnValue({
+            then: toCall => {
+                toCall(apiData);
+            }
+        });
+        vm.projectData = {
+            coverage: [{
+                facilities: 1,
+                health_workers: 2,
+                clients: 3
+            }],
+            national_level_deployment: {
+                facilities: 10,
+                health_workers: 20,
+                clients: 30
+            }
+        };
+
+        vm.fetchCoverageVersions();
+        expect(result.data[0].axis1).toBe(11);
+        expect(result.data[0].axis2).toBe(22);
+        expect(result.data[0].axis3).toBe(33);
+
     });
 
 });

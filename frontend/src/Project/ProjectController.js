@@ -34,6 +34,7 @@ class ProjectController extends ProjectDefinition {
         this.eventListeners();
         this.districtList = [];
         this.dataLoaded = false;
+        this.isAddAnother = false;
         this.handleStructureLoad();
         this.users = this.cs.usersProfiles;
 
@@ -128,8 +129,8 @@ class ProjectController extends ProjectDefinition {
     }
 
     fillEmptyCollectionsWithDefault(data) {
-        data.coverage = data.coverage.length > 0 ? data.coverage : [{}];
-        data.platforms = data.platforms.length > 0 ? data.platforms : [{}];
+        data.coverage = _.isEmpty(data.coverage) ? [{}] : data.coverage;
+        data.platforms = _.isEmpty(data.platforms) ? [{}] : data.platforms;
         return Object.assign({}, data);
     }
 
@@ -144,6 +145,9 @@ class ProjectController extends ProjectDefinition {
     convertStringArrayToObjectArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
+            if (!data[key]) {
+                return;
+            }
             data[key] = data[key].map(value => {
                 return { value };
             });
@@ -157,6 +161,9 @@ class ProjectController extends ProjectDefinition {
     convertObjectArrayToStringArray(data) {
         const keyArray = ['donors', 'implementing_partners'];
         keyArray.forEach(key => {
+            if (!data[key]) {
+                return;
+            }
             data[key] = data[key].map(value => value.value);
             data[key] = data[key].filter(item => item);
         });
@@ -189,6 +196,9 @@ class ProjectController extends ProjectDefinition {
 
         keyArray.forEach(key => {
             processedForm[key] = processedForm[key].filter(cov => {
+                if (cov.hasOwnProperty('available')) {
+                    delete cov.available;
+                }
                 return Object.keys(cov).length > 1;
             });
         });
@@ -197,12 +207,15 @@ class ProjectController extends ProjectDefinition {
     }
 
     removeKeysWithoutValues(processedForm) {
-        _.forEach(processedForm, (value, key) => {
-            if (value === null || value === '') {
-                processedForm[key] = undefined;
+        return _.reduce(processedForm, (result, value, key) => {
+            if (value === null || value === '' || _.isPlainObject(value) && _.every(_.values(value), _.isNull)) {
+                result[key] = void 0;
             }
-        });
-        return Object.assign({}, processedForm);
+            else {
+                result[key] = value;
+            }
+            return result;
+        }, {});
     }
 
     clearCustomErrors() {
@@ -225,7 +238,6 @@ class ProjectController extends ProjectDefinition {
             processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.removeEmptyChildObjects(processedForm);
             processedForm = this.removeKeysWithoutValues(processedForm);
-            processedForm.interoperability_links =  _.toArray(processedForm.interoperability_links);
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
@@ -389,10 +401,29 @@ class ProjectController extends ProjectDefinition {
 
     postUpdateActions() {
         this.EE.emit('projectListUpdated');
+        const addAnother = this.isAddAnother;
+        this.isAddAnother = false;
+        if (addAnother) {
+            const go = {
+                state: 'newProject',
+                appName: this.projectId
+            };
+            this.navigate(go);
+        }
     }
 
     postSaveActions() {
-        this.state.go('editProject', { appName: this.projectId }, {
+        const addAnother = this.isAddAnother;
+        this.isAddAnother = false;
+        const go = {
+            state: addAnother ? 'newProject' : 'editProject',
+            appName: this.projectId
+        };
+        this.navigate(go);
+    }
+
+    navigate(go) {
+        this.state.go(go.state, { appName: go.appName }, {
             location: 'replace',
             reload: true
         });
