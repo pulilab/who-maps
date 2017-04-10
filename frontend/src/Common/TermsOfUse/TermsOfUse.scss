@@ -1,6 +1,70 @@
 @import '../../variables';
 @import '../../mixins';
 
+.landing-wrapper {
+
+  max-width: $page-max-width !important;
+  margin: 70px auto 0;
+
+  h2 {
+    font-size: rem(6.000);
+  }
+
+  .bg-hero {
+    min-height: 720px;
+    background: $color-primary url("./images/hero-bg-image.jpg") 0 0 no-repeat;
+    background-size: cover;
+
+    // TODO
+    &.logged-in {
+      background-image: url("./images/bg-welcome-2.jpg");
+    }
+
+    // Crossbrowser fixes
+    .browser-microsoft_edge & {
+      background-position: 0 0;
+    }
+  }
+
+  .welcome {
+    margin: 0;
+    padding: 30px 60px 20px;
+    width: calc( 45% - 100px );
+    background-color: rgba(250,140,0,.87);
+
+    .search-project {
+      padding-right: 45px;
+    }
+
+    .welcome-text {
+      padding-right: 70px;
+    }
+
+    searchbar {
+      z-index: 900 !important;
+      padding-top: 10px;
+    }
+
+    h2, h5 {
+      color: $color-white;
+      word-wrap: break-word;
+    }
+
+    // trim welcome text
+    h5.md-headline {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      line-height: 32px;
+      height: auto;
+      max-height: 160px;
+    }
+  }
+}  
+
+/*
 terms-of-use {
   position: relative;
 
@@ -78,3 +142,4 @@ terms-of-use {
 
 
 }
+*/
