@@ -7,10 +7,22 @@
   <div md-whiteframe="2" class="wrapper" layout-fill layout="column">
     <div class="cms-tabs">
       <ul>
-        <li class="active">Show all</li>
-        <li>Lessons &amp; Tips</li>
-        <li>Resources</li>
-        <li>Experiences</li>
+        <li ng-click="vm.activate('all')"
+            ng-class="{active: vm.active === 'all'}">
+          Show all
+        </li>
+        <li ng-click="vm.activate('lessons')"
+            ng-class="{active: vm.active === 'lessons'}">
+          Lessons &amp; Tips
+        </li>
+        <li ng-click="vm.activate('resources')"
+            ng-class="{active: vm.active === 'resources'}">
+          Resources
+        </li>
+        <li ng-click="vm.activate('experiences')"
+            ng-class="{active: vm.active === 'experiences'}">
+          Experiences
+        </li>
       </ul>
     </div>
 
@@ -40,136 +52,29 @@
           <h5 class="md-subhead">Apply filters to list:</h5>
 
           <dl class="filter-list">
-            <dt>
-              <md-checkbox class="md-primary small group-title" ng-model="filter.group1" aria-label="Groundwork">
-                Groundwork (3)
+            <dt ng-repeat-start="filterGroup in vm.filters">
+              <md-checkbox
+                  class="md-primary small group-title"
+                  ng-change="vm.toggleAll(filterGroup)"
+                  ng-model="filterGroup.selected" aria-label="Groundwork">
+                {{filterGroup.name}} ({{filterGroup.checkboxes.length}})
               </md-checkbox>
-              <i class="material-icons toggled">arrow_drop_down</i>
+              <i class="material-icons"
+                  ng-click="vm.toggleFilterGroup(filterGroup)"
+                  ng-class="{toggled: filterGroup.open}">
+                arrow_drop_down
+              </i>
             </dt>
-            <span class="domains show">
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group1.i1" aria-label="Parameters of Scale">
-                  Parameters of Scale
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group1.i2" aria-label="Contextual environment">
-                  Contextual environment
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group1.i3" aria-label="Scientific basis">
-                  Scientific basis
-                </md-checkbox>
-              </dd>
-            </span>
-
-            <dt>
-              <md-checkbox class="md-primary small group-title" ng-model="filter.group2" aria-label="Groundwork">
-                Partnership (2)
-              </md-checkbox>
-              <i class="material-icons" class="toggled">arrow_drop_down</i>
-            </dt>
-            <span class="domains">
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group2.i1" aria-label="Strategic Engangement">
-                  Strategic Engangement
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group2.i2" aria-label="Partnership Sustainability">
-                  Partnership Sustainability
-                </md-checkbox>
-              </dd>
-            </span>
-
-            <dt>
-              <md-checkbox class="md-primary small group-title" ng-model="filter.group3" aria-label="Financial Health ">
-                Financial Health (2)
-              </md-checkbox>
-              <i class="material-icons" class="toggled">arrow_drop_down</i>
-            </dt>
-            <span class="domains">
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group3.i1" aria-label="Financial Management">
-                  Financial Management
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group3.i2" aria-label="Financial Model">
-                  Financial Model
-                </md-checkbox>
-              </dd>
-            </span>
-
-            <dt>
-              <md-checkbox class="md-primary small group-title" ng-model="filter.group4" aria-label="Technology & Architecture">
-                Technology &amp; Architecture (3)
-              </md-checkbox>
-              <i class="material-icons" class="toggled">arrow_drop_down</i>
-            </dt>
-            <span class="domains">
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group4.i1" aria-label="Data">
-                  Data
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group4.i2" aria-label="Interoperability">
-                  Interoperability
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group4.i3" aria-label="Adaptibility">
-                  Adaptibility
-                </md-checkbox>
-              </dd>
-            </span>
-
-            <dt>
-              <md-checkbox class="md-primary small group-title" ng-model="filter.group5" aria-label="Operations">
-                Operations (4)
-              </md-checkbox>
-              <i class="material-icons" class="toggled">arrow_drop_down</i>
-            </dt>
-            <span class="domains">
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group5.i1" aria-label="Personnel">
-                  Personnel
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group5.i2" aria-label="Training and Support">
-                  Training and Support
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group5.i3" aria-label="Outreach and Sensitization">
-                  Outreach and Sensitization
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group5.i4" aria-label="Contingency Planning">
-                  Contingency Planning
-                </md-checkbox>
-              </dd>
-            </span>
-
-            <dt>
-              <md-checkbox class="md-primary small group-title" ng-model="filter.group6" aria-label="Monitoring & Evaluation">
-                Monitoring &amp; Evaluation (2)
-              </md-checkbox>
-              <i class="material-icons" class="toggled">arrow_drop_down</i>
-            </dt>
-            <span class="domains">
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group6.i1" aria-label="Process Monitoring">
-                  Process Monitoring
-                </md-checkbox>
-              </dd>
-              <dd>
-                <md-checkbox class="md-primary small" ng-model="filter.group6.i2" aria-label="Evaluation Research">
-                  Evaluation Research
+            <span
+                class="domains"
+                ng-repeat-end
+                ng-class="{show: filterGroup.open}">
+              <dd ng-repeat="checkbox in filterGroup.checkboxes">
+                <md-checkbox
+                    class="md-primary small"
+                    ng-model="checkbox.selected"
+                    aria-label="{{checkbox.name}}">
+                  {{checkbox.name}}
                 </md-checkbox>
               </dd>
             </span>

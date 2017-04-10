@@ -27,6 +27,7 @@ planning-and-guidance {
       text-transform: uppercase;
       color: $text-disabled;
       cursor: pointer;
+      outline:none;
       transition: $swift-ease-out;
 
       &:hover {
