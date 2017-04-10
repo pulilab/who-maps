@@ -1,21 +1,37 @@
-<h3>CMS DASHBOARD WIDGET</h3>
+<div md-whiteframe="2" class="cms-widget-wrapper" layout="row"  layout-align="start stretch">
 
-<div layout="row">
-  <div layout="column" flex>
-    <h4>Lesson and tips</h4>
-    <cms-list-element></cms-list-element>
-    <cms-list-element></cms-list-element>
-  </div>
-  <div layout="column" flex>
-    <h4>Resources</h4>
-    <cms-list-element></cms-list-element>
-  </div>
-  <div layout="column" flex>
-    <h4>Experiences</h4>
-    <cms-list-element experience="true"></cms-list-element>
-    <cms-list-element experience="true"></cms-list-element>
-    <cms-list-element experience="true"></cms-list-element>
+  <div class="cms-widget-header" class="md-block">
+
   </div>
 
+  <div layout="row" layout-margin="10" layout-wrap>
+    <div class="category-column" layout="column" flex>
+      <div md-whiteframe="2" class="category-header lessons-tips" layout="row"  layout-align="start center">
+        <h4>Lessons and Tips</h4>
+      </div>
+      <cms-list-element></cms-list-element>
+      <cms-list-element></cms-list-element>
+      <cms-list-element></cms-list-element>
+      <md-button md-no-ink class="md-primary md-small goto-cms">More Lessons &amp; Tips</md-button>
+    </div>
+    <div class="category-column" layout="column" flex>
+      <div md-whiteframe="2" class="category-header resources" layout="row"  layout-align="start center">
+        <h4>Resources</h4>
+      </div>
+      <cms-list-element></cms-list-element>
+      <cms-list-element></cms-list-element>
+      <cms-list-element></cms-list-element>
+      <md-button md-no-ink class="md-primary md-small goto-cms">More Resources</md-button>
+    </div>
+    <div class="category-column" layout="column" flex>
+      <div md-whiteframe="2" class="category-header experiences" layout="row"  layout-align="start center">
+        <h4>Experiences</h4>
+      </div>
+      <cms-list-element experience="true"></cms-list-element>
+      <cms-list-element experience="true"></cms-list-element>
+
+      <md-button md-no-ink class="md-primary md-small goto-cms">More Experiences</md-button>
+    </div>
+  </div>
 
 </div>

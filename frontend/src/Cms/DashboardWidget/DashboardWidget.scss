@@ -1,2 +1,124 @@
 @import '../../variables';
 @import '../../mixins';
+
+cms-dashboard-widget {
+}
+
+.cms-widget-wrapper {
+  background-color: $color-gray-lightest;
+
+  .category-column {}
+
+  .category-header {
+    margin-bottom: 5px;
+    background-color: $color-white;
+    background-repeat: no-repeat;
+
+    h4 {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-left: 12px;
+    }
+
+    &.lessons-tips {
+      background-image: url('./images/illustration-1.svg');
+      background-size: 134px 109px;
+      background-position: 98% 2px;
+    }
+    &.resources {
+      background-image: url('./images/illustration-2.svg');
+      background-size: 194px 95px;
+      background-position: 106% -2px;
+    }
+    &.experiences {
+      background-image: url('./images/illustration-3.svg');
+      background-size: 147px 82px;
+      background-position: 106% -15px;
+    }
+  }
+
+  .md-button.goto-cms {
+    margin: 15px auto 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  // Resize cms-list-element
+  .cms-list-element {
+    margin: 5px 0;
+
+    .cover-img {
+      padding: 12px;
+      min-width: 60px;
+      max-width: 60px;
+
+      img {
+        width: 60px;
+      }
+
+      .no-cover {
+        width: 60px;
+        height: 85px;
+
+        &::after {
+          font-size: 24px;
+        }
+      }
+    }
+
+    .excerpt {
+      padding: 12px;
+
+      h3.md-title {
+        font-size: 14px;
+        line-height: 20px;
+        margin-bottom: 10px;
+      }
+
+      h6 {
+        display: none;
+      }
+
+      p.md-body-1 {
+        font-size: 12px;
+        line-height: 16px;
+        min-height: 48px;
+        margin-bottom: 0;
+      }
+    }
+
+    cms-detail-element {
+      margin-bottom: 10px;
+
+      .md-button {
+        color: $text-secondary;
+
+        &:first-of-type {
+          display: none;
+        }
+      }
+    }
+
+    &.experience {
+      .avatar-img {
+        padding: 12px;
+
+        > span {
+          width: 48px;
+          height: 48px;
+          border-radius: 48px;
+
+          img {
+            width: 48px;
+            height: 48px;
+          }
+
+          &::before {
+            @include md-icon($font-size: 24px);
+          }
+        }
+      }
+    }
+  }
+}
