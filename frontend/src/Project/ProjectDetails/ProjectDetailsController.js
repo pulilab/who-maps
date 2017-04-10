@@ -29,7 +29,6 @@ class ProjectDetailsController extends CollapsibleSet {
         this.getStructureData();
         this.districtList = [];
         this.projectList = [];
-
     }
 
     watchers() {
@@ -63,7 +62,6 @@ class ProjectDetailsController extends CollapsibleSet {
         }], ([, districts]) => {
             self.setAvailableOptions(self.project.coverage, districts, 'district');
         });
-
     }
 
     validateDateRange([start, end]) {
@@ -110,6 +108,11 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     handleDistrictData(data) {
+        this.project.coverage.forEach(cov => {
+            if (data.indexOf(cov.district) === -1) {
+                cov.district = undefined;
+            }
+        });
         this.districtList = data;
         this.scope.$evalAsync();
     }

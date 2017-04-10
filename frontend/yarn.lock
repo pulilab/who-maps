@@ -98,9 +98,9 @@ angular-aria@1.5.0:
   version "1.1.3"
   resolved "git+https://github.com/angular/material.git#0c4e89583c711dee6475bb9e5790bf844d14953c"
 
-"angular-material@https://github.com/pulilab/material.git#p1.1.1":
+"angular-material@https://github.com/pulilab/material.git#p1.1.2":
   version "1.1.0"
-  resolved "https://github.com/pulilab/material.git#67f50de664abc5cc62d727f79bc680f2e4fc4fc9"
+  resolved "https://github.com/pulilab/material.git#82bfd456b4007e35fceaec74d2e82655617d6f2b"
 
 angular-messages@1.5.0:
   version "1.5.0"
