@@ -86,7 +86,55 @@ planning-and-guidance {
       }
 
       .search-content {
-        padding: 20px 0;
+        padding: 20px 0 0;
+      }
+
+      .filter-content {
+        h5 {
+          font-weight: 500;
+        }
+
+        .filter-list {
+          .group-title {
+            font-weight: 500;
+          }
+
+          dt {
+            i {
+              position: relative;
+              top: 4px;
+              float: left;
+              margin-right: 10px;
+              position: relative;
+              cursor: pointer;
+              color: $color-gray;
+              transition: $swift-ease-out;
+
+              &:hover {
+                color: $text-primary;
+              }
+
+              &.toggled {
+                color: $text-primary;
+                transform: rotate(180deg);
+              }
+            }
+          }
+
+          dd {
+            margin-left: 60px;
+          }
+
+          .domains {
+            overflow: hidden;
+            display: block;
+            height: 0;
+
+            &.show {
+              height: auto;
+            }
+          }
+        }
       }
     }
   }
