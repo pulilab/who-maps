@@ -1,6 +1,4 @@
 <div layout="column" layout-align="start center" ng-style="vm.style">
-
-
     <div md-whiteframe="2" class="tou-wrapper" layout="row" layout-wrap>
 
         <div class="md-title" flex="100">
@@ -246,6 +244,7 @@
 
         </md-content>
     </div>
-
-    <disclaimer></disclaimer>
 </div>
+
+<country-partners ng-if="vm.showFooter" footer-title="vm.countryData.footer_title" footer-text="vm.countryData.footer_text" partners="vm.countryData.partner_logos"></country-partners>
+<disclaimer></disclaimer>
