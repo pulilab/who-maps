@@ -1,30 +1,64 @@
 import angular from 'angular';
 
-class AddNewContentController {
 
-    constructor($mdDialog) {
+class AddNewContentDialog {
+    constructor($scope, $mdDialog, content) {
+        this.scope = $scope;
         this.dialog = $mdDialog;
+        this.newContent = content;
+    }
+
+    cancel() {
+        this.dialog.cancel();
+    }
+
+    submit() {
+        this.dialog.hide(this.newContent);
     }
 
 
+    static factory(content) {
+
+        function addNewContent($scope, $mdDialog) {
+            return new AddNewContentDialog($scope, $mdDialog, content);
+        }
+
+        addNewContent.$inject = ['$scope', '$mdDialog'];
+        return addNewContent;
+    }
+}
+
+class AddNewContentController {
+
+    constructor($scope, $mdDialog) {
+        this.scope = $scope;
+        this.dialog = $mdDialog;
+        this.newContent = 'A dummy text placeholder ( will remove it, it is inside the JS ;) )';
+    }
+
     showAddNewContentDialog(event) {
+        const self = this;
         this.dialog.show({
-            controller: AddNewContentController.factory(),
+            controller: AddNewContentDialog.factory(self.newContent),
+            controllerAs: 'vm',
             template: require('./AddNewContentDialog.html'),
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose:true
+        }).then(answer => {
+            console.debug(answer);
         });
     }
+
 
     static factory() {
         require('./AddNewContent.scss');
 
-        function addNewContent($mdDialog) {
-            return new AddNewContentController($mdDialog);
+        function addNewContent($scope, $mdDialog) {
+            return new AddNewContentController($scope, $mdDialog);
         }
 
-        addNewContent.$inject = ['$mdDialog'];
+        addNewContent.$inject = ['$scope', '$mdDialog'];
         return addNewContent;
     }
 }

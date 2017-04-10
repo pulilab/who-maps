@@ -11,16 +11,16 @@
 
   <md-dialog-content>
     <div class="md-dialog-content">
-
+      <trix-component value="vm.newContent"></trix-component>
     </div>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <md-button >
+    <md-button  ng-click="vm.cancel()">
       cancel
     </md-button>
     <span flex></span>
-    <md-button >
+    <md-button ng-click="vm.submit()">
      submit
     </md-button>
 

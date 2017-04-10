@@ -1,0 +1,28 @@
+@import '../../variables';
+@import '../../mixins';
+@import '../../../node_modules/trix/dist/trix.css';
+
+
+trix-toolbar {
+  .button_row {
+    justify-content: flex-start;
+  }
+}
+
+.block_tools {
+
+  .heading-1 {
+    display: none;
+  }
+  .quote {
+    display: none;
+  }
+  .code {
+    display: none;
+  }
+
+  .nesting-level {
+    display: none;
+  }
+
+}
