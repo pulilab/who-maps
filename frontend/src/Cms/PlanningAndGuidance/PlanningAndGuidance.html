@@ -4,7 +4,7 @@
     <h1 class="md-display-1 text-center">Planning &amp; Guidance</h1>
   </div>
 
-  <div md-whiteframe="2" class="wrapper" layout-fill layout="column">
+  <div md-whiteframe="2" class="wrapper" layout="column">
     <div class="cms-tabs">
       <ul>
         <li ng-click="vm.activate('all')"
@@ -28,7 +28,23 @@
 
     <div class="wrapper-inner" layout="row">
 
-      <div class="cms-list" flex="grow">
+      <div class="cms-list show-all" flex="grow">
+
+        <div class="cms-intro">
+          <div class="intro-lessonstips" layout="row" layout-align="start center">
+            <div flex="50"><p>Harnesses the collective experiences of projects vetted through the IWG mHealth catalytic programme and implementers in the field to offer suggestions and considerations.</p></div>
+            <div flex="50"></div>
+          </div>
+          <div class="intro-resources" layout="row" layout-align="start center">
+            <div flex="50"><p>Specific examples demonstrating how different implementers have approached and addressed some of the major challenges to scaling up. </p></div>
+            <div flex="50"></div>
+          </div>
+          <div class="intro-experiences" layout="row" layout-align="start center">
+            <div flex="50"><p>Specific examples demonstrating how different implementers have approached and addressed some of the major challenges to scaling up. This includes experiences from a variety of projects.</p></div>
+            <div flex="50"></div>
+          </div>
+        </div>
+
         <cms-list-element ng-repeat="item in vm.toShow" item="item"></cms-list-element>
 
         <md-button class="md-primary md-raised show-more">
