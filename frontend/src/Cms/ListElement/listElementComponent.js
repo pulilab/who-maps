@@ -8,7 +8,7 @@ const component = {
     controllerAs: 'vm',
     name: 'cmsListElement',
     bindings: {
-        experience: '<'
+        item: '<'
     }
 };
 

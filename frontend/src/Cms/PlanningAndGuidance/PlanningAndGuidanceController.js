@@ -1,12 +1,34 @@
+import _ from 'lodash';
+
 class PlanningAndGuidanceController {
 
-    constructor() {
+    constructor($scope) {
+        this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.applyFilters = this.applyFilters.bind(this);
+        this.extractDomainSelection = this.extractDomainSelection.bind(this);
     }
 
     onInit() {
-        this.active = 'all';
+        this.activate('all');
         this.createFilters();
+        const mockData = require('../resources/mockData');
+        this.lessons = mockData.lessons;
+        this.resources = mockData.resources;
+        this.experiences = mockData.experiences;
+        this.all = [].concat(this.lessons, this.resources, this.experiences);
+        this.watchers();
+    }
+
+    watchers() {
+        const self = this;
+        this.scope.$watch(self.extractDomainSelection, self.applyFilters, true);
+    }
+
+    extractDomainSelection() {
+        return _.flatMap(this.filters, filter => {
+            return filter.checkboxes;
+        });
     }
 
     createFilters() {
@@ -23,8 +45,28 @@ class PlanningAndGuidanceController {
         });
     }
 
+    applyFilters(filters) {
+        const selected = filters.map(filter => {
+            if (filter.selected) {
+                return filter.name;
+            }
+            return null;
+        }).filter(filter => filter);
+        if (selected.length > 0) {
+            this.toShow = this[this.active].filter(item => {
+                return selected.indexOf(item.domain) > -1;
+            });
+        }
+        else {
+            this.toShow = this[this.active];
+        }
+    }
+
     activate(name) {
-        this.active = name;
+        this.scope.$evalAsync(() => {
+            this.active = name;
+            this.applyFilters(this.extractDomainSelection());
+        });
     }
 
     toggleFilterGroup(group) {
@@ -42,10 +84,10 @@ class PlanningAndGuidanceController {
 
     static factory() {
         require('./PlanningAndGuidance.scss');
-        function planningAndGuidance() {
-            return new PlanningAndGuidanceController();
+        function planningAndGuidance($scope) {
+            return new PlanningAndGuidanceController($scope);
         }
-        planningAndGuidance().$inject = [];
+        planningAndGuidance().$inject = ['$scope'];
         return planningAndGuidance;
     }
 }

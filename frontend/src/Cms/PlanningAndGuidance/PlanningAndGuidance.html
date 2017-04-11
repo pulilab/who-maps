@@ -29,9 +29,7 @@
     <div class="wrapper-inner" layout="row">
 
       <div class="cms-list" flex="grow">
-        <cms-list-element></cms-list-element>
-        <cms-list-element></cms-list-element>
-        <cms-list-element experience="true"></cms-list-element>
+        <cms-list-element ng-repeat="item in vm.toShow" item="item"></cms-list-element>
 
         <md-button class="md-primary md-raised show-more">
           Show more...

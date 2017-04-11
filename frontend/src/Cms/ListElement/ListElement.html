@@ -1,30 +1,31 @@
 
-<div ng-if="!vm.experience" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
+<div ng-if="vm.item.type !== 'experiences'" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
 
   <div class="cover-img">
-    <!-- TODO: need an ifelse to be add whether the cms item has a cover image or not! -->
-    <span class="no-cover"></span>
-    <!-- <img src="./images/sample-cover.jpg" alt="cover"> -->
+
+    <span class="no-cover" ng-hide="vm.item.cover"></span>
+    <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">
   </div>
   <div class="excerpt">
-    <h3 class="md-title">CMS List Element Title</h3>
-    <h6>Category name</h6>
-    <p class="md-body-1">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Nec dubitamus multa iter quae et nos invenerat. Me non paenitet nullum festiviorem excogitasse ad hoc.Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.</p>
-    <cms-detail-element></cms-detail-element>
+    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h6>{{vm.item.type}}</h6>
+    <p class="md-body-1">{{vm.item.body}}</p>
+    <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 </div>
 
-<div ng-if="vm.experience" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
+<div ng-if="vm.item.type === 'experiences'" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
 
   <div class="avatar-img">
-    <span><!-- <img src="./images/sample-avatar.jpg" alt="avatar"> --></span>
+    <span ng-hide="vm.item.avatar"></span>
+     <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
   </div>
   <div class="excerpt">
-    <h3 class="md-title">Username</h3>
-    <h6>Category name</h6>
-    <small class="time">3:26 pm — 4 May, 2015</small>
-    <p class="md-body-1">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh. Nec dubitamus multa iter quae et nos invenerat. Me non paenitet nullum festiviorem excogitasse ad hoc.</p>
-    <cms-detail-element></cms-detail-element>
+    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h6>{{vm.item.type}}</h6>
+    <small class="time">{{vm.prettifyDate(vm.item)}}</small>
+    <p class="md-body-1">{{vm.item.body}}</p>
+    <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 
 </div>

@@ -4,10 +4,18 @@ import PlanningAndGuidanceController from './PlanningAndGuidanceController';
 
 let controller = null;
 
+const callInner = toCall => {
+    toCall();
+};
+
+const scope = {
+    $evalAsync: jasmine.createSpy('evalAsync').and.callFake(callInner)
+};
+
 describe('PlanningAndGuidanceController', () => {
 
     beforeEach(()=> {
-        controller = PlanningAndGuidanceController.factory()();
+        controller = PlanningAndGuidanceController.factory()(scope);
     });
 
     it('should have a factory  function', () => {
@@ -17,9 +25,11 @@ describe('PlanningAndGuidanceController', () => {
     });
     it('should have an on init function', ()=> {
         spyOn(controller, 'createFilters');
+        spyOn(controller, 'watchers');
         controller.onInit();
         expect(controller.active).toBe('all');
         expect(controller.createFilters).toHaveBeenCalled();
+        expect(controller.watchers).toHaveBeenCalled();
     });
 
     it('should have a function that create a filter object for the UI', () => {

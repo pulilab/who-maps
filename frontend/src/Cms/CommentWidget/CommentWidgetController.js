@@ -1,6 +1,9 @@
+import { prettifyDate } from '../utilities';
+
 class CommentWidgetController {
 
     constructor() {
+        this.prettifyDate = prettifyDate;
     }
 
     static factory() {

@@ -1,6 +1,14 @@
 class DashboardWidgetController {
 
     constructor() {
+        this.$onInit = this.onInit.bind(this);
+    }
+
+    onInit() {
+        const mockData = require('../resources/mockData');
+        this.lessons = mockData.lessons;
+        this.resources = mockData.resources;
+        this.experiences = mockData.experiences;
     }
 
     static factory() {

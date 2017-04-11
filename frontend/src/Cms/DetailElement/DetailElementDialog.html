@@ -3,34 +3,31 @@
     <div class="md-toolbar-tools">
       <h3>DETAIL ELEMENT MODAL</h3>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="cancel()">
-        <md-icon aria-label="Close dialog"></md-icon>
+      <md-button class="md-icon-button" ng-click="vm.cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
 
   <md-dialog-content>
     <div class="md-dialog-content">
-      <cms-comment-widget></cms-comment-widget>
-      <cms-comment-widget></cms-comment-widget>
-      <cms-comment-widget></cms-comment-widget>
-      <cms-comment-widget></cms-comment-widget>
-      <div class="add new comment area">
-        add new comment WYSIWYG LOOL
+      <div class="content">
+        {{vm.content.text}}
+      </div>
+      <!-- ZOLI PLEASE CHANGE THE MARKUP AND CLASSES AS MUCH AS YOU WANT -->
+      <!-- BUT DON'T REMOVE THE JS LIKE NG-REPEAT AND CUSTOM COMPONENT  -->
+
+      <h3>Comments</h3>
+
+      <cms-comment-widget comment="comment" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
+
+      <div class="add-new-comment">
+        <h3>Add new comment</h3>
+        <trix-component></trix-component>
       </div>
     </div>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <md-button >
-      More on Wikipedia
-    </md-button>
-    <span flex></span>
-    <md-button >
-      Not Useful
-    </md-button>
-    <md-button >
-      Useful
-    </md-button>
   </md-dialog-actions>
 </md-dialog>

@@ -7,7 +7,9 @@ const component = {
     controller: CommentWidgetController.factory(),
     controllerAs: 'vm',
     name: 'cmsCommentWidget',
-    bindings: {}
+    bindings: {
+        comment: '<'
+    }
 };
 
 export default component;

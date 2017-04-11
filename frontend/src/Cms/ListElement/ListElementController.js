@@ -1,7 +1,10 @@
+import { prettifyDate } from '../utilities';
+
 class ListElementController {
 
     constructor() {
         this.$onInit = this.onInit.bind(this);
+        this.prettifyDate = prettifyDate;
     }
 
     onInit() {
