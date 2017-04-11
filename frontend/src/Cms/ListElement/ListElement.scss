@@ -86,13 +86,6 @@
         border-radius: 80px;
         background-color: #BDBDBD;
 
-        img {
-          position: relative;
-          z-index: 100;
-          width: 80px;
-          height: 80px;
-        }
-
         &::before {
           content: "person";
           @include md-icon($font-size: 40px);
@@ -103,6 +96,14 @@
           left: 50%;
           transform: translate(-50%, -50%);
         }
+      }
+
+      img {
+        position: relative;
+        z-index: 100;
+        width: 80px;
+        height: 80px;
+        border-radius: 80px;
       }
     }
 

@@ -74,6 +74,7 @@ cms-dashboard-widget {
         font-size: 14px;
         line-height: 20px;
         margin-bottom: 10px;
+        padding: 0;
       }
 
       h6 {
@@ -81,9 +82,10 @@ cms-dashboard-widget {
       }
 
       p.md-body-1 {
+        -webkit-line-clamp: 2;
         font-size: 12px;
         line-height: 16px;
-        min-height: 48px;
+        min-height: 32px;
         margin-bottom: 0;
       }
     }
@@ -116,14 +118,14 @@ cms-dashboard-widget {
           height: 48px;
           border-radius: 48px;
 
-          img {
-            width: 48px;
-            height: 48px;
-          }
-
           &::before {
             @include md-icon($font-size: 24px);
           }
+        }
+
+        img {
+          width: 48px;
+          height: 48px;
         }
       }
 
