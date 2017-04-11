@@ -27,18 +27,18 @@ class PlanningAndGuidanceController {
 
     extractDomainSelection() {
         return _.flatMap(this.filters, filter => {
-            return filter.checkboxes;
+            return filter.domains;
         });
     }
 
     createFilters() {
-        const rawFilters = require('../resources/filters');
-        this.filters = rawFilters.map(({ name, checkboxes }) => {
+        const rawFilters = require('../resources/domains');
+        this.filters = rawFilters.map(({ name, domains }) => {
             return {
                 name,
                 open: false,
                 selected: false,
-                checkboxes: checkboxes.map(checkbox => {
+                domains: domains.map(checkbox => {
                     return { name: checkbox, selected: false };
                 })
             };
@@ -74,7 +74,7 @@ class PlanningAndGuidanceController {
     }
 
     toggleAll(group) {
-        group.checkboxes.forEach(checkbox => {
+        group.domains.forEach(checkbox => {
             checkbox.selected = group.selected;
         });
         if (group.selected) {

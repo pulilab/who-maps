@@ -1,7 +1,15 @@
-<div md-whiteframe="2" class="cms-widget-wrapper" layout="row"  layout-align="start stretch">
+<div md-whiteframe="2" class="cms-widget-wrapper" layout="column"  layout-align="start stretch">
 
-  <div class="cms-widget-header" class="md-block">
-
+  <div class="cms-widget-header" ng-class="vm.axisColor" layout="row" class="md-block">
+    <div class="domain-icon" ng-class="vm.domainIcon"></div>
+    <div class="domain-score" > {{vm.domainScore}}% </div>
+    <div class="domain-name" > {{vm.currentDomain}}</div>
+    <div class="domain-selector">
+      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain'">
+        <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
+            <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
+      </md-select>
+    </div>
   </div>
 
   <div layout="row" layout-margin="10" layout-wrap>

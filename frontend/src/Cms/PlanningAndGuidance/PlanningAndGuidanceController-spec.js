@@ -34,12 +34,12 @@ describe('PlanningAndGuidanceController', () => {
 
     it('should have a function that create a filter object for the UI', () => {
         controller.createFilters();
-        const rawFilter = require('../resources/filters');
+        const rawFilter = require('../resources/domains');
         expect(controller.filters[0].name).toBe(rawFilter[0].name);
         expect(controller.filters[0].open).toBeFalsy();
         expect(controller.filters[0].selected).toBeFalsy();
-        expect(controller.filters[0].checkboxes[0].name).toBe(rawFilter[0].checkboxes[0]);
-        expect(controller.filters[0].checkboxes[0].open).toBeFalsy();
+        expect(controller.filters[0].domains[0].name).toBe(rawFilter[0].domains[0]);
+        expect(controller.filters[0].domains[0].open).toBeFalsy();
 
     });
 
@@ -61,17 +61,17 @@ describe('PlanningAndGuidanceController', () => {
         const group = {
             selected: true,
             open: false,
-            checkboxes: [{
+            domains: [{
                 selected: false
             }]
         };
         controller.toggleAll(group);
         expect(group.open).toBeTruthy();
-        expect(group.checkboxes[0].selected).toBeTruthy();
+        expect(group.domains[0].selected).toBeTruthy();
 
         group.selected = false;
         controller.toggleAll(group);
         expect(group.open).toBeTruthy();
-        expect(group.checkboxes[0].selected).toBeFalsy();
+        expect(group.domains[0].selected).toBeFalsy();
     });
 });
