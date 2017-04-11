@@ -166,7 +166,6 @@ class DashboardModuleController extends Protected {
     }
 
     fetchToolkitVersions() {
-
         this.service.getToolkitVersions(this.projectId).then(data => {
 
             this.currentVersion = data.length;
@@ -251,14 +250,14 @@ class DashboardModuleController extends Protected {
                 'Technology & Architecture': {
                     labels: [
                         'Data',
-                        'Interoperabilty',
+                        'Interoperability',
                         'Adaptability'
                     ],
                     data: []
                 },
                 'Operations': {
                     labels: [
-                        'Personell',
+                        'Personnel',
                         'Training & support',
                         'Outreach & sanitization',
                         'Contingency planning'

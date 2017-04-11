@@ -1,7 +1,7 @@
 export default [
     {
         name: 'Groundwork',
-        checkboxes: [
+        domains: [
             'Parameters of Scale',
             'Contextual environment',
             'Scientific basis'
@@ -9,21 +9,21 @@ export default [
     },
     {
         name: 'Partnership',
-        checkboxes: [
+        domains: [
             'Strategic Engagement',
             'Partnership Sustainability'
         ]
     },
     {
         name: 'Financial Health',
-        checkboxes: [
+        domains: [
             'Financial Management',
             'Financial Model'
         ]
     },
     {
         name: 'Technology & Architecture',
-        checkboxes: [
+        domains: [
             'Data',
             'Interoperability',
             'Adaptability'
@@ -31,7 +31,7 @@ export default [
     },
     {
         name: 'Operations',
-        checkboxes: [
+        domains: [
             'Personnel',
             'Training and Support',
             'Outreach and Sensitization',
@@ -40,7 +40,7 @@ export default [
     },
     {
         name: 'Monitoring & Evaluation',
-        checkboxes: [
+        domains: [
             'Process Monitoring',
             'Evaluation Research'
         ]

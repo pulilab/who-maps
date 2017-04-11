@@ -70,8 +70,8 @@
               <md-checkbox
                   class="md-primary small group-title"
                   ng-change="vm.toggleAll(filterGroup)"
-                  ng-model="filterGroup.selected" aria-label="Groundwork">
-                {{filterGroup.name}} ({{filterGroup.checkboxes.length}})
+                  ng-model="filterGroup.selected" aria-label="{{filterGroup.name}}">
+                {{filterGroup.name}} ({{filterGroup.domains.length}})
               </md-checkbox>
               <i class="material-icons"
                   ng-click="vm.toggleFilterGroup(filterGroup)"
@@ -83,7 +83,7 @@
                 class="domains"
                 ng-repeat-end
                 ng-class="{show: filterGroup.open}">
-              <dd ng-repeat="checkbox in filterGroup.checkboxes">
+              <dd ng-repeat="checkbox in filterGroup.domains">
                 <md-checkbox
                     class="md-primary small"
                     ng-model="checkbox.selected"
