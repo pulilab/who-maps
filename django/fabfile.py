@@ -31,7 +31,7 @@ def staging():
     env.hosts = ['whomaps@139.59.148.238']
     env.name = 'staging'
     env.port = 22
-    env.branch = "master"
+    env.branch = "tags/2.0-rc1"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -46,6 +46,7 @@ def deploy():
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
         # get new stuff from git
+        run('git fetch')
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(10)
