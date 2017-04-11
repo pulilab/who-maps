@@ -29,6 +29,14 @@
     left: 50%;
   }
 
+  // Subpages (terms of use, contact etc)
+  &.page-terms-of-use {
+    // hide toolkit link
+    .md-toolbar-tools-bottom {
+      display: none;
+    }
+  }
+
   .md-toolbar-tools {
     height: auto !important;
     max-height: 120px !important; /* 160 */

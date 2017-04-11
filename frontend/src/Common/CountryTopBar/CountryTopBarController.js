@@ -15,7 +15,8 @@ class CountryTopBarController extends Protected {
 
     onInit() {
         const vm = this;
-        vm.pageLoaded = false;
+        this.pageLoaded = false;
+        this.watchers();
         this.defaultOnInit();
         this.profileDataReady = false;
         if (this.user) {
@@ -32,6 +33,16 @@ class CountryTopBarController extends Protected {
 
         window.onscroll = this.scrollEventHandler.bind(this);
         document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
+    }
+
+    watchers() {
+        const self = this;
+        this.scope.$watch(() => {
+            return this.state.current.name;
+        }, stateName => {
+            stateName = stateName.replace(/ /g, '-');
+            self.pageClass = `page-${stateName}`;
+        });
     }
 
     setProfileData() {
