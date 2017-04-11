@@ -53,8 +53,68 @@ planning-and-guidance {
     }
 
     .cms-list {
-      padding: 40px;
+      padding: 0 40px 40px;
       text-align: center;
+
+      &.show-all {
+        padding-top: 20px;
+      }
+
+      &.lessonstips .intro-lessonstips,
+      &.resources .intro-resources,
+      &.experiences .intro-experiences {
+        display: flex;
+      }
+
+      .cms-intro {
+        position: relative;
+        top: 20px;
+        display: block;
+        font-size: 18px;
+        line-height: 26px;
+        text-align: left;
+
+        > div {
+          display: none;
+          padding-left: 40px;
+          > div {
+            position: relative;
+            &:last-child {
+              height: 180px;
+              background-repeat: no-repeat;
+            }
+            p {
+              position: relative;
+              top: -10px;
+              margin: 0;
+            }
+          }
+        }
+
+        .intro-lessonstips {
+          > div:last-child {
+            background-image: url('./images/illustration-1.svg');
+            background-size: 249px 201px;
+            background-position: 60% 10px;
+          }
+        }
+
+        .intro-resources {
+          > div:last-child {
+            background-image: url('./images/illustration-2.svg');
+            background-size: 375px 196px;
+            background-position: 60% 18px;
+          }
+        }
+
+        .intro-experiences {
+          > div:last-child {
+            background-image: url('./images/illustration-3.svg');
+            background-size: 329px 182px;
+            background-position: 60% 14px;
+          }
+        }
+      }
 
       cms-list-element {
         display: block;
