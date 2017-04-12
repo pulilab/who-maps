@@ -12,10 +12,14 @@ const scope = {
     $evalAsync: jasmine.createSpy('evalAsync').and.callFake(callInner)
 };
 
+const state = {
+    go: jasmine.createSpy('go')
+};
+
 describe('PlanningAndGuidanceController', () => {
 
     beforeEach(()=> {
-        controller = PlanningAndGuidanceController.factory()(scope);
+        controller = PlanningAndGuidanceController.factory()(scope, state);
     });
 
     it('should have a factory  function', () => {
@@ -27,7 +31,6 @@ describe('PlanningAndGuidanceController', () => {
         spyOn(controller, 'createFilters');
         spyOn(controller, 'watchers');
         controller.onInit();
-        expect(controller.active).toBe('all');
         expect(controller.createFilters).toHaveBeenCalled();
         expect(controller.watchers).toHaveBeenCalled();
     });
@@ -44,6 +47,7 @@ describe('PlanningAndGuidanceController', () => {
     });
 
     it('should have a function that activate the tabs', () => {
+
         controller.activate('LOL');
         expect(controller.active).toBe('LOL');
     });
