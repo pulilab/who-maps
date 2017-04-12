@@ -5,7 +5,6 @@ class TrixComponentController {
     constructor($scope) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
         this.$postLink = this.postLink.bind(this);
         this.updateValue = this.updateValue.bind(this);
     }
@@ -14,14 +13,12 @@ class TrixComponentController {
         require('./TrixComponent.scss');
         require('trix');
     }
-    onDestroy() {
-
-    }
 
     postLink() {
         const self = this;
         setTimeout(() => {
             self.editorInstance = window.document.getElementById('trixEditor');
+            self.editorInstance.setAttribute('placeholder', self.placeholder);
             self.editorInstance.editor.loadHTML(self.value);
             self.editorInstance.addEventListener('trix-change', self.updateValue);
         });
