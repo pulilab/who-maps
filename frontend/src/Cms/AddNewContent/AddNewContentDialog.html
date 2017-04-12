@@ -11,7 +11,32 @@
 
   <md-dialog-content>
     <div class="md-dialog-content">
-      <trix-component value="vm.newContent"></trix-component>
+      <div layout="column">
+        <md-input-container>
+          <md-select ng-model="vm.type" required placeholder="Select a type">
+            <md-option value="lessons">Lessons &amp; Tips</md-option>
+            <md-option value="resources">Resources</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container>
+          <md-select aria-label="domain-selector" ng-model="vm.domain" class="" placeholder="Select a domain">
+            <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
+              <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
+            </md-optgroup>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container>
+          <label> Add a title</label>
+          <input type="text" ng-model="vm.title" />
+        </md-input-container>
+
+
+      </div>
+
+
+
+      <trix-component value="vm.newContent" placeholder="Add content"></trix-component>
     </div>
   </md-dialog-content>
 
@@ -21,7 +46,7 @@
     </md-button>
     <span flex></span>
     <md-button ng-click="vm.submit()">
-     submit
+      submit
     </md-button>
 
   </md-dialog-actions>

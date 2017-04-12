@@ -1,1 +1,18 @@
 <h3>EXPERIENCES LIST</h3>
+
+<div layout="row">
+  <div class="experiences-list" layout="column">
+    <cms-list-element item="item" ng-repeat="item in vm.experiences"></cms-list-element>
+    <md-button ui-sref="cms({'#': 'experiences'})">Show more</md-button>
+  </div>
+
+  <div class="add-experience">
+    <trix-component placeholder="Add new experience"></trix-component>
+    <md-button>
+      <md-icon>comment</md-icon>
+      add experience
+    </md-button>
+  </div>
+
+
+</div>

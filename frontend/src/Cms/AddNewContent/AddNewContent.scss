@@ -1,2 +1,7 @@
 @import '../../variables';
 @import '../../mixins';
+
+
+.md-select-menu-container {
+  z-index: 90000 !important;
+}

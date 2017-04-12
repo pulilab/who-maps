@@ -6,6 +6,7 @@ class AddNewContentDialog {
         this.scope = $scope;
         this.dialog = $mdDialog;
         this.newContent = content;
+        this.axes = require('../resources/domains');
     }
 
     cancel() {
@@ -33,7 +34,7 @@ class AddNewContentController {
     constructor($scope, $mdDialog) {
         this.scope = $scope;
         this.dialog = $mdDialog;
-        this.newContent = 'A dummy text placeholder ( will remove it, it is inside the JS ;) )';
+        this.newContent = null;
     }
 
     showAddNewContentDialog(event) {
