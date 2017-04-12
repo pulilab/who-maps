@@ -33,6 +33,7 @@ const experiences =  [
 ];
 
 let seq = 0;
+let commentSeq = 0;
 
 const randomString = size => {
     const text = [];
@@ -63,11 +64,14 @@ const addRandomStuff = (item) => {
     item.comments = [];
     for (let i = 0; i <= randInteger; i++) {
         const comment = {
+            id: commentSeq,
             text: randomString(150),
+            reported: Math.random() < 0.5,
             date: randomDate(),
             username: randomString(10)
         };
         item.comments.push(comment);
+        commentSeq += 1;
     }
     seq += 1;
 };

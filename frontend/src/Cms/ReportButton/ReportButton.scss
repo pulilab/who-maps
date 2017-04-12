@@ -4,6 +4,7 @@
 // available (mutually exclusive) statuses : close - active - reported
 
 .close {
+
   .warning-zone {
     display: none;
   }
@@ -11,8 +12,11 @@
 
 .active {
 
-  .flag-button md-icon {
-    color: lightcoral;
+  .flag-button {
+
+    md-icon {
+      color: lightcoral;
+    }
   }
 
   .warning-zone {
@@ -21,8 +25,12 @@
 }
 
 .reported {
-  .flag-button md-icon {
-    color: red;
+
+  .flag-button {
+
+    md-icon {
+      color: red;
+    }
   }
   .warning-zone {
     display: none;

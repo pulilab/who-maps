@@ -9,7 +9,8 @@ const component = {
     name: 'cmsReportButton',
     bindings: {
         itemId: '<',
-        type: '<'
+        type: '<',
+        category: '@'
     }
 };
 
