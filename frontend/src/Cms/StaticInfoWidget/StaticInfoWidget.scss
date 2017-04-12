@@ -18,12 +18,12 @@ cms-static-info-widget {
     }
 
     &:last-child {
-      padding-left: 60px;
+      padding-left: 20px;
       padding-right: 300px;
       background-repeat: no-repeat;
       background-image: url('./images/illustration.svg');
-      background-size: 260px 299px;
-      background-position: 98% 15px;
+      background-size: auto 100%;
+      background-position: 98% 20px;
     }
   }
 
