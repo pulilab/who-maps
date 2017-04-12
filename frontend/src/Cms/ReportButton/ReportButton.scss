@@ -1,0 +1,30 @@
+@import '../../variables';
+@import '../../mixins';
+
+// available (mutually exclusive) statuses : close - active - reported
+
+.close {
+  .warning-zone {
+    display: none;
+  }
+}
+
+.active {
+
+  .flag-button md-icon {
+    color: lightcoral;
+  }
+
+  .warning-zone {
+    display: block;
+  }
+}
+
+.reported {
+  .flag-button md-icon {
+    color: red;
+  }
+  .warning-zone {
+    display: none;
+  }
+}

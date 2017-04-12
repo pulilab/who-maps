@@ -9,6 +9,7 @@ import detailElement from './DetailElement/detailElementComponent';
 import experiencesList from './ExperiencesList/experiencesListComponent';
 import listElement from './ListElement/listElementComponent';
 import staticInfoWidget from './StaticInfoWidget/staticInfoWidgetComponent';
+import reportButton from './ReportButton/reportButtonComponent';
 
 const moduleName = 'cms';
 const su = new StaticUtilities('Cms');
@@ -41,6 +42,7 @@ angular.module(moduleName, [uiRoute])
     .component(detailElement.name, detailElement)
     .component(experiencesList.name, experiencesList)
     .component(listElement.name, listElement)
+    .component(reportButton.name, reportButton)
     .component(staticInfoWidget.name, staticInfoWidget)
     .config(config);
 

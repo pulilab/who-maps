@@ -1,0 +1,16 @@
+<div class="report-button-wrapper" ng-class="vm.reportStatus">
+  <md-button class="flag-button" ng-click="vm.openReport()">
+    <md-icon>flag</md-icon>
+  </md-button>
+  <div class="warning-zone">
+    <p>Are you sure blah blah and blah blah blah.</p>
+    <div layout="row">
+      <md-button ng-click="vm.doReport()">
+        Sure
+      </md-button>
+      <md-button ng-click="vm.closeReport()">
+        Not sure
+      </md-button>
+    </div>
+  </div>
+</div>
