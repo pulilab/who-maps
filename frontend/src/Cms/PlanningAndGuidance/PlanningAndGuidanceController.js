@@ -2,15 +2,16 @@ import _ from 'lodash';
 
 class PlanningAndGuidanceController {
 
-    constructor($scope) {
+    constructor($scope, $state) {
         this.scope = $scope;
+        this.state = $state;
         this.$onInit = this.onInit.bind(this);
+        this.$postLink = this.postLink.bind(this);
         this.applyFilters = this.applyFilters.bind(this);
         this.extractDomainSelection = this.extractDomainSelection.bind(this);
     }
 
     onInit() {
-        this.activate('all');
         this.createFilters();
         const mockData = require('../resources/mockData');
         this.lessons = mockData.lessons;
@@ -18,6 +19,23 @@ class PlanningAndGuidanceController {
         this.experiences = mockData.experiences;
         this.all = [].concat(this.lessons, this.resources, this.experiences);
         this.watchers();
+    }
+
+    postLink() {
+        this.checkHash();
+    }
+
+    checkHash() {
+        setTimeout(() => {
+            const hash = window.location.hash;
+            if (!hash || ['#all', '#lessons', '#experiences', '#resources'].indexOf(hash) === -1) {
+                this.activate('all');
+            }
+            else {
+                this.activate();
+            }
+        }, 100);
+
     }
 
     watchers() {
@@ -63,9 +81,14 @@ class PlanningAndGuidanceController {
     }
 
     activate(name) {
+        const newName = name || window.location.hash.replace('#', '');
         this.scope.$evalAsync(() => {
-            this.active = name;
+            this.active = newName;
             this.applyFilters(this.extractDomainSelection());
+            if (name) {
+                // Frye the current hash if present and add the new one
+                this.state.go('cms', { '#': name }, { location: 'replace', reloadOnSearch: false});
+            }
         });
     }
 
@@ -84,10 +107,10 @@ class PlanningAndGuidanceController {
 
     static factory() {
         require('./PlanningAndGuidance.scss');
-        function planningAndGuidance($scope) {
-            return new PlanningAndGuidanceController($scope);
+        function planningAndGuidance($scope, $state) {
+            return new PlanningAndGuidanceController($scope, $state);
         }
-        planningAndGuidance().$inject = ['$scope'];
+        planningAndGuidance().$inject = ['$scope', '$state'];
         return planningAndGuidance;
     }
 }

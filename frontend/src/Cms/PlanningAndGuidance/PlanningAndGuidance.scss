@@ -56,11 +56,11 @@ planning-and-guidance {
       padding: 0 40px 40px;
       text-align: center;
 
-      &.show-all {
+      &.all {
         padding-top: 20px;
       }
 
-      &.lessonstips .intro-lessonstips,
+      &.lessons .intro-lessons,
       &.resources .intro-resources,
       &.experiences .intro-experiences {
         display: flex;
@@ -91,7 +91,7 @@ planning-and-guidance {
           }
         }
 
-        .intro-lessonstips {
+        .intro-lessons {
           > div:last-child {
             background-image: url('./images/illustration-1.svg');
             background-size: 249px 201px;
