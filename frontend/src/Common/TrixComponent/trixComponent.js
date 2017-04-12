@@ -8,7 +8,8 @@ const component = {
     controllerAs: 'vm',
     name: 'trixComponent',
     bindings: {
-        value: '=?'
+        value: '=?',
+        placeholder: '@?'
     }
 };
 
