@@ -13,7 +13,11 @@
     <div class="md-dialog-content">
       <cms-report-button item="vm.content"></cms-report-button>
       <div class="content">
-        {{vm.content.text}}
+        {{vm.content.name}}
+        <img ng-src="{{vm.content.cover}}" ng-if="vm.content.type !== 'experiences'" />
+        <img ng-src="{{vm.content.avatar}}" ng-if="vm.content.type === 'experiences'" />
+
+        {{vm.content.body}}
       </div>
       <!-- ZOLI PLEASE CHANGE THE MARKUP AND CLASSES AS MUCH AS YOU WANT -->
       <!-- BUT DON'T REMOVE THE JS LIKE NG-REPEAT AND CUSTOM COMPONENT  -->
