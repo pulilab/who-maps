@@ -11,6 +11,7 @@
 
   <md-dialog-content>
     <div class="md-dialog-content">
+      <cms-report-button item="vm.content"></cms-report-button>
       <div class="content">
         {{vm.content.text}}
       </div>
@@ -19,7 +20,7 @@
 
       <h3>Comments</h3>
 
-      <cms-comment-widget comment="comment" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
+      <cms-comment-widget comment="comment" type="vm.content.type" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
 
       <div class="add-new-comment">
         <h3>Add new comment</h3>

@@ -32,6 +32,7 @@ const experiences =  [
     }
 ];
 
+
 const randomString = size => {
     const text = [];
     const possible = 'abcdefghijklmnopqrstuvwxyz';
@@ -52,6 +53,7 @@ const randomDate = () => {
 
 const addRandomStuff = (item) => {
     const randInteger = Math.floor(Math.random() * 10);
+    item.reported = Math.random() < 0.5;
     item.name = randomString(40);
     item.body = randomString(350);
     item.cover = Math.random() <= 0.65 ? 'https://unsplash.it/120/170/' : null;
@@ -60,6 +62,7 @@ const addRandomStuff = (item) => {
     for (let i = 0; i <= randInteger; i++) {
         const comment = {
             text: randomString(150),
+            reported: Math.random() < 0.5,
             date: randomDate(),
             username: randomString(10)
         };

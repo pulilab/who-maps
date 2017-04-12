@@ -8,7 +8,8 @@ const component = {
     controllerAs: 'vm',
     name: 'cmsCommentWidget',
     bindings: {
-        comment: '<'
+        comment: '<',
+        type: '<'
     }
 };
 
