@@ -4,6 +4,14 @@ class CommentWidgetController {
 
     constructor() {
         this.prettifyDate = prettifyDate;
+        this.$onInit = this.onInit.bind(this);
+    }
+    onInit() {
+        this.expanded = false;
+    }
+
+    readMore() {
+        this.expanded = !this.expanded;
     }
 
     static factory() {
