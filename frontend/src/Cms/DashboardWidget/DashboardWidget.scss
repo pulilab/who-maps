@@ -7,6 +7,137 @@ cms-dashboard-widget {
 .cms-widget-wrapper {
   background-color: $color-gray-lightest;
 
+  .cms-widget-header {
+    width: 100%;
+    height: 40px;
+    color: $color-white;
+    box-shadow: inset 0 -2px 5px rgba(0,0,0,.2);
+
+    &.groundwork {
+      background-color: $color-axis1;
+    }
+    &.partnership {
+      background-color: $color-axis2;
+    }
+    &.financial-health {
+      background-color: $color-axis3;
+    }
+    &.technology-and-architecture {
+      background-color: $color-axis4;
+    }
+    &.operations {
+      background-color: $color-axis5;
+    }
+    &.monitoring-and-evaluation {
+      background-color: $color-axis6;
+    }
+
+    .domain-icon {
+      max-width: 40px;
+      height: 40px;
+      margin-left: 6px;
+      margin-right: 2px;
+      background-repeat: no-repeat;
+      background-size: 80% 80%;
+      background-position: center center;
+
+      &.parameters-of-scale {
+        background-image: url('./images/icon-domain-1.svg');
+      }
+      &.contextual-environment {
+        background-image: url('./images/icon-domain-2.svg');
+      }
+      &.scientific-basis {
+        background-image: url('./images/icon-domain-3.svg');
+      }
+      &.strategic-engagement {
+        background-image: url('./images/icon-domain-4.svg');
+      }
+      &.partnership-sustainability {
+        background-image: url('./images/icon-domain-5.svg');
+      }
+      &.financial-management {
+        background-image: url('./images/icon-domain-6.svg');
+      }
+      &.financial-model {
+        background-image: url('./images/icon-domain-7.svg');
+      }
+      &.data {
+        background-image: url('./images/icon-domain-8.svg');
+      }
+      &.interoperability {
+        background-image: url('./images/icon-domain-9.svg');
+      }
+      &.adaptability {
+        background-image: url('./images/icon-domain-10.svg');
+      }
+      &.personnel {
+        background-image: url('./images/icon-domain-11.svg');
+      }
+      &.training-and-support {
+        background-image: url('./images/icon-domain-12.svg');
+      }
+      &.outreach-and-sensitization {
+        background-image: url('./images/icon-domain-13.svg');
+      }
+      &.contingency-planning {
+        background-image: url('./images/icon-domain-14.svg');
+      }
+      &.process-monitoring {
+        background-image: url('./images/icon-domain-15.svg');
+      }
+      &.evaluation-research {
+        background-image: url('./images/icon-domain-16.svg');
+      }
+    }
+
+    .domain-score {
+      font-size: 14px;
+      line-height: 40px;
+      font-weight: 500;
+    }
+
+    .domain-selector {
+      max-width: 125px;
+      margin: 7px 30px 0 0;
+
+
+      md-select {
+        margin: 0;
+        height: auto;
+
+        md-select-value {
+          padding: 0 !important;
+          font-size: 14px;
+          color: $color-white !important;
+          border-bottom-width: 0 !important;
+
+          .md-select-icon {
+            margin: 0 !important;
+          }
+        }
+      }
+    }
+
+    .domain-arrows {
+      max-width: 95px;
+      padding-right: 15px;
+
+      .md-button {
+        float: left;
+        margin: 0;
+        padding: 0;
+        max-width: 40px;
+        min-width: 40px;
+        height: 40px;
+
+        md-icon {
+          color: $color-white !important;
+        }
+      }
+    }
+  }
+
   .category-column {}
 
   .category-header {
