@@ -56,8 +56,6 @@ const addRandomStuff = (item) => {
     item.reported = Math.random() < 0.5;
     item.name = randomString(40);
     item.body = randomString(350);
-    item.cover = Math.random() <= 0.65 ? 'https://unsplash.it/120/170/' : null;
-    item.avatar = Math.random() <= 0.65 ? 'https://unsplash.it/80/' : null;
     item.comments = [];
     for (let i = 0; i <= randInteger; i++) {
         const comment = {
@@ -73,15 +71,18 @@ const addRandomStuff = (item) => {
 experiences.forEach(item => {
     addRandomStuff(item);
     item.date = randomDate();
+    item.avatar = Math.random() <= 0.65 ? 'https://unsplash.it/80/' : null;
     item.type = 'experiences';
 });
 resources.forEach(item => {
     addRandomStuff(item);
     item.type = 'resources';
+    item.cover = Math.random() <= 0.65 ? 'https://unsplash.it/120/170/' : null;
 });
 lessons.forEach(item => {
     addRandomStuff(item);
     item.type = 'lessons';
+    item.cover = Math.random() <= 0.65 ? 'https://unsplash.it/120/170/' : null;
 });
 
 export default {

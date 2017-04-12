@@ -10,14 +10,30 @@
   </md-toolbar>
 
   <md-dialog-content>
-    <div class="md-dialog-content">
+    <div class="md-dialog-content" ng-class="vm.content.type">
       <cms-report-button item="vm.content"></cms-report-button>
       <div class="content">
-        {{vm.content.name}}
-        <img ng-src="{{vm.content.cover}}" ng-if="vm.content.type !== 'experiences'" />
-        <img ng-src="{{vm.content.avatar}}" ng-if="vm.content.type === 'experiences'" />
 
-        {{vm.content.body}}
+        <div class="created">
+          {{vm.prettifyDate(vm.content)}}
+        </div>
+
+        <div class="name">
+          {{vm.content.name}}
+        </div>
+        <div class="avatar">
+          <img ng-src="{{vm.content.avatar}}" ng-if="vm.content.avatar" />
+          <span class="no-avatar" ng-if="!vm.content.avatar"></span>
+        </div>
+        <div class="cover">
+          <img ng-src="{{vm.content.cover}}" ng-if="vm.content.cover" />
+          <span class="no-cover" ng-if="!vm.content.cover"></span>
+        </div>
+
+        <div class="body">
+          {{vm.content.body}}
+        </div>
+
       </div>
       <!-- ZOLI PLEASE CHANGE THE MARKUP AND CLASSES AS MUCH AS YOU WANT -->
       <!-- BUT DON'T REMOVE THE JS LIKE NG-REPEAT AND CUSTOM COMPONENT  -->

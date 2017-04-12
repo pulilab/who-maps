@@ -1,10 +1,14 @@
 import angular from 'angular';
 
+import { prettifyDate } from '../utilities';
+
 class DetailElementDialog {
     constructor($scope, $mdDialog, content) {
         this.scope = $scope;
         this.dialog = $mdDialog;
+        this.prettifyDate = prettifyDate;
         this.content = content;
+        console.log(this.content)
     }
 
     cancel() {
