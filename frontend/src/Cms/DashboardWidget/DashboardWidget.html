@@ -7,8 +7,17 @@
     <div class="domain-selector">
       <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain'">
         <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
-            <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
+          <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
+        </md-optgroup>
       </md-select>
+    </div>
+    <div class="domain-arrows">
+      <md-button ng-click="vm.prevDomain()">
+        <md-icon>keyboard_arrow_left</md-icon>
+      </md-button>
+      <md-button ng-click="vm.nextDomain()">
+        <md-icon>keyboard_arrow_right</md-icon>
+      </md-button>
     </div>
   </div>
 

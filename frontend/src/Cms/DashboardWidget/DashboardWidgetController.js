@@ -13,12 +13,12 @@ class DashboardWidgetController {
         this.lessons = mockData.lessons;
         this.resources = mockData.resources;
         this.experiences = mockData.experiences;
-        const domains = _.flatMap(this.axes, axis => {
+        this.domains = _.flatMap(this.axes, axis => {
             return axis.domains;
         });
 
         this.watchers();
-        this.currentDomain = domains[Math.floor(Math.random() * domains.length)];
+        this.currentDomain = this.domains[Math.floor(Math.random() * this.domains.length)];
     }
 
 
@@ -41,19 +41,36 @@ class DashboardWidgetController {
         this.domainIcon = this.normalizeName(domain);
         if (scores) {
             const domainScores = _.flatMap(scores, score => {
-                return score.domains;
-            }).map(dom => {
-                const domainNameParts = dom.domain.split(':');
-                dom.name = domainNameParts.pop().toLowerCase().trim();
-                return dom;
+                return score.domains.map(dom => {
+                    const domainNameParts = dom.domain.split(':');
+                    dom.name = domainNameParts.pop().toLowerCase().trim();
+                    return dom;
+                });
             });
-
             const selectedDomain = domainScores.find(score => {
                 return score.name === domain.toLowerCase();
             });
 
             this.domainScore = (selectedDomain.domain_sum * 100) / selectedDomain.domain_max;
         }
+    }
+
+    nextDomain() {
+        let next = this.domains.indexOf(this.currentDomain) + 1;
+        if (next > this.domains.length - 1) {
+            next = 0;
+        }
+        this.currentDomain = this.domains[next];
+
+    }
+
+    prevDomain() {
+        let prev = this.domains.indexOf(this.currentDomain) - 1;
+        if (prev === -1) {
+            prev = this.domains.length - 1;
+        }
+        this.currentDomain = this.domains[prev];
+
     }
 
     normalizeName(name) {
