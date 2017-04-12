@@ -8,9 +8,7 @@ const component = {
     controllerAs: 'vm',
     name: 'cmsReportButton',
     bindings: {
-        itemId: '<',
-        type: '<',
-        category: '@'
+        item: '<'
     }
 };
 
