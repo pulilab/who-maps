@@ -237,8 +237,10 @@ cms-dashboard-widget {
       position: relative;
 
       .md-title {
-        max-width: 65%;
-        @include text-truncate();
+        // max-width: 100%;
+        // @include text-truncate();
+        margin-bottom: 0 !important;
+        margin-top: 5px;
       }
 
       .avatar-img {
@@ -261,9 +263,9 @@ cms-dashboard-widget {
       }
 
       .time {
-        position: absolute;
-        top: 18px;
-        right: 12px;
+        // position: absolute;
+        // top: 18px;
+        // right: 12px;
         font-size: 10px;
       }
     }
