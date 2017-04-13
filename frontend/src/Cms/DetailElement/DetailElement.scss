@@ -11,3 +11,23 @@ cms-detail-element {
     }
   }
 }
+
+.detail-dialog {
+
+  .md-toolbar-tools {
+    .md-title {
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    .md-icon-button {}
+  }
+
+  .md-dialog-content {
+    .content {}
+
+    .name {}
+
+    .created {}
+  }
+
+}
