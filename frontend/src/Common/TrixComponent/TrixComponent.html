@@ -1,2 +1,9 @@
-<input id="hiddenSpy" type="hidden" name="content">
-<trix-editor id="trixEditor" input="hiddenSpy"></trix-editor>
+<div>
+  <div class="trix-wrapper">
+    <input id="hiddenSpy" type="hidden" name="content">
+    <trix-editor id="trixEditor" input="hiddenSpy"></trix-editor>
+  </div>
+  <span class="char-counter">{{vm.charCounter}}</span>
+  <span class="char-separator"> | </span>
+  <span class="char-limit">{{vm.charLimit}}</span>
+</div>

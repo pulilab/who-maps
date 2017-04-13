@@ -1,4 +1,4 @@
-class DashboardWidgetController {
+class ExperienceListController {
 
     constructor() {
         this.$onInit = this.onInit.bind(this);
@@ -13,18 +13,16 @@ class DashboardWidgetController {
         this.experiences = mockData.experiences.filter(exp => {
             return exp.domain === domain;
         });
-
-        console.log(this);
     }
 
     static factory() {
         require('./ExperiencesList.scss');
         function experienceListController() {
-            return new DashboardWidgetController();
+            return new ExperienceListController();
         }
         experienceListController().$inject = [];
         return experienceListController;
     }
 }
 
-export default DashboardWidgetController;
+export default ExperienceListController;

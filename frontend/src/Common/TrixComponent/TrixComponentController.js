@@ -12,6 +12,7 @@ class TrixComponentController {
     onInit() {
         require('./TrixComponent.scss');
         require('trix');
+        this.charCounter = 0;
     }
 
     postLink() {
@@ -25,7 +26,9 @@ class TrixComponentController {
     }
 
     updateValue() {
+        const rawString = this.editorInstance.editor.getDocument().toString();
         this.scope.$evalAsync(() => {
+            this.charCounter = rawString.length - 1;
             this.value = this.editorInstance.editor.element.value;
         });
     }

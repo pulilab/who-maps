@@ -9,7 +9,8 @@ const component = {
     name: 'trixComponent',
     bindings: {
         value: '=?',
-        placeholder: '@?'
+        placeholder: '@?',
+        charLimit: '<?'
     }
 };
 

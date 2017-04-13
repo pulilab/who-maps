@@ -68,14 +68,14 @@
       <!-- BUT DON'T REMOVE THE JS LIKE NG-REPEAT AND CUSTOM COMPONENT  -->
 
       <div class="comment-wrapper">
-        <h3>Comments</h3>
+        <h3>Comments ({{vm.content.comments.length}})</h3>
 
         <cms-comment-widget comment="comment" type="vm.content.type" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
       </div>
 
       <div class="add-new-comment">
         <h3>Add new comment</h3>
-        <trix-component></trix-component>
+        <trix-component placeholder="Start typing here..." char-limit="2500"></trix-component>
       </div>
     </div>
   </md-dialog-content>
