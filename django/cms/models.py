@@ -5,7 +5,50 @@ from core.models import ExtendedModel
 from user.models import UserProfile
 
 
-class Post(ExtendedModel):
+class StateManager(models.QuerySet):
+
+    def normal(self):
+        return self.filter(state=State.NORMAL)
+
+    def flagged(self):
+        return self.filter(state=State.FLAGGED)
+
+    def banned(self):
+        return self.filter(state=State.BANNED)
+
+
+class State(ExtendedModel):
+    NORMAL = 1
+    FLAGGED = 2
+    BANNED = 3
+
+    STATE_CHOICES = (
+        (1, "Resources"),
+        (2, "Lessons & Tips"),
+        (3, "Experiences"),
+    )
+
+    state = models.IntegerField(choices=STATE_CHOICES, default=NORMAL)
+
+    objects = StateManager.as_manager()
+
+    class Meta:
+        abstract = True
+
+    def flag(self):
+        self.state = self.FLAGGED
+        self.save()
+
+    def ban(self):
+        self.state = self.BANNED
+        self.save()
+
+    def normalize(self):
+        self.state = self.NORMAL
+        self.save()
+
+
+class Post(State):
     RESOURCE = 1
     LESSON = 2
     EXPERIENCE = 3
@@ -37,10 +80,10 @@ class Post(ExtendedModel):
 
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
-    body = models.TextField(max_length=512)
+    body = models.TextField(max_length=2048)
     type = models.IntegerField(choices=TYPE_CHOICES)
     domain = models.IntegerField(choices=DOMAIN_CHOICES)
-    cover = models.ImageField()
+    cover = models.ImageField(null=True, blank=True)
     author = models.ForeignKey(UserProfile)
 
     def __str__(self):
@@ -52,21 +95,10 @@ class Post(ExtendedModel):
         super(Post, self).save(*args, **kwargs)
 
 
-class Comment(ExtendedModel):
-    NORMAL = 1
-    FLAGGED = 2
-    BANNED = 3
-
-    STATE_CHOICES = (
-        (1, "Resources"),
-        (2, "Lessons & Tips"),
-        (3, "Experiences"),
-    )
-
+class Comment(State):
     text = models.TextField(max_length=512)
     user = models.ForeignKey(UserProfile)
     post = models.ForeignKey(Post, related_name='comments')
-    state = models.IntegerField(choices=STATE_CHOICES, default=NORMAL)
 
     def __str__(self):
         return self.text
