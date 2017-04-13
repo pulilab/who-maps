@@ -87,7 +87,7 @@ class PlanningAndGuidanceController {
             this.applyFilters(this.extractDomainSelection());
             if (name) {
                 // Frye the current hash if present and add the new one
-                this.state.go('cms', { '#': name }, { location: 'replace', reloadOnSearch: false});
+                this.state.go('cms', { '#': name }, { location: 'replace', reloadOnSearch: false });
             }
         });
     }

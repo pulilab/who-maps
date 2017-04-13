@@ -14,7 +14,7 @@
       <div class="content">
 
         <!-- Lessons & tips / Resources -->
-        <div class="cms-content-wrapper" layout="column">
+        <div class="cms-content-wrapper" ng-if="vm.content.type !== 'experiences'" layout="column">
           <div class="name md-display-1">
             {{vm.content.name}}
           </div>
@@ -38,7 +38,7 @@
         <!-- /end -->
 
         <!-- Experiences -->
-        <div class="cms-content-wrapper experiences" layout="column">
+        <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 'experiences'" layout="column">
           <div layout="row">
             <div class="avatar">
               <img ng-src="{{vm.content.avatar}}" ng-if="vm.content.avatar" />
