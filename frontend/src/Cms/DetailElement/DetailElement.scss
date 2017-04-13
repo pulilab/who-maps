@@ -15,6 +15,8 @@ cms-detail-element {
 .detail-dialog {
 
   .md-toolbar-tools {
+    padding: 0 20px;
+
     .md-title {
       font-weight: 500;
       text-transform: uppercase;
@@ -23,11 +25,47 @@ cms-detail-element {
   }
 
   .md-dialog-content {
-    .content {}
+    padding: 0;
 
-    .name {}
+    .content {
+      padding: 40px;
 
-    .created {}
+      .cms-content-wrapper {
+
+        &.experiences {
+          .name {}
+
+          .created {}
+          
+          .avatar {
+            img {}
+            .no-avatar {}
+          }
+        }
+
+        .name {}
+
+        .created {}
+
+        .cover {
+          img {}
+          .no-cover {}
+        }
+
+        .body {
+          p {}
+
+          ul {
+            li {}
+          }
+
+          ol {
+            li {}
+          }
+
+          a {}
+        }
+      }
+    }
   }
-
 }
