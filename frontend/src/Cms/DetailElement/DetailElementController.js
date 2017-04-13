@@ -8,7 +8,6 @@ class DetailElementDialog {
         this.dialog = $mdDialog;
         this.prettifyDate = prettifyDate;
         this.content = content;
-        console.log(this.content)
     }
 
     cancel() {
