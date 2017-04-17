@@ -11,10 +11,17 @@ const $scope = {
     }
 };
 
-describe('SubBarController', () => {
+describe('TrixComponentController', () => {
 
     beforeEach(() => {
         controller = TrixComponentController.factory()($scope);
+        controller.editorInstance = {
+            editor: {
+                getDocument: jasmine.createSpy('getDocument').and.returnValue({
+                    toString: jasmine.createSpy('toString').and.returnValue('some string')
+                })
+            }
+        };
     });
 
     afterEach(() => {
@@ -29,12 +36,8 @@ describe('SubBarController', () => {
         expect(controller.postLink).toBeDefined();
     });
     it('should have a Fn. that update the bound value', () => {
-        controller.editorInstance = {
-            editor: {
-                element: {
-                    value: 1
-                }
-            }
+        controller.editorInstance.editor.element = {
+            value: 1
         };
         controller.updateValue();
         expect(controller.value).toBe(1);
