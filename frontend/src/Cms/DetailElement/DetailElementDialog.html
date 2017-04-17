@@ -15,13 +15,15 @@
 
         <!-- Lessons & tips / Resources -->
         <div class="cms-content-wrapper" ng-if="vm.content.type !== 'experiences'" layout="column">
-          <div class="name md-display-1">
-            {{vm.content.name}}
-          </div>
+          <div class="content-header">
+            <div class="name md-display-1">
+              {{vm.content.name}}
+            </div>
 
-          <div class="created">
-            {{vm.prettifyDate(vm.content)}}
-            <cms-report-button item="vm.content"></cms-report-button>
+            <div class="created">
+              {{vm.prettifyDate(vm.content)}} <span>|</span>
+              <cms-report-button item="vm.content"></cms-report-button>
+            </div>
           </div>
 
           <div layout="row">
@@ -39,7 +41,7 @@
 
         <!-- Experiences -->
         <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 'experiences'" layout="column">
-          <div layout="row">
+          <div class="comment-header" layout="row">
             <div class="avatar">
               <img ng-src="{{vm.content.avatar}}" ng-if="vm.content.avatar" />
               <span class="no-avatar" ng-if="!vm.content.avatar"></span>
@@ -51,7 +53,7 @@
               </div>
 
               <div class="created">
-                {{vm.prettifyDate(vm.content)}}
+                {{vm.prettifyDate(vm.content)}} <span>|</span>
                 <cms-report-button item="vm.content"></cms-report-button>
               </div>
             </div>
@@ -68,18 +70,18 @@
       <!-- BUT DON'T REMOVE THE JS LIKE NG-REPEAT AND CUSTOM COMPONENT  -->
 
       <div class="comment-wrapper">
-        <h3>Comments</h3>
+        <h3 class="md-title">Comments</h3>
 
         <cms-comment-widget comment="comment" type="vm.content.type" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
       </div>
 
       <div class="add-new-comment">
-        <h3>Add new comment</h3>
+        <h3 class="md-title">Add new comment</h3>
         <trix-component></trix-component>
       </div>
     </div>
   </md-dialog-content>
 
-  <md-dialog-actions layout="row">
-  </md-dialog-actions>
+  <!-- <md-dialog-actions layout="row">
+  </md-dialog-actions> -->
 </md-dialog>

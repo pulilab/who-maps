@@ -13,6 +13,8 @@ cms-detail-element {
 }
 
 .detail-dialog {
+  min-width: 540px;
+  max-width: 720px;
 
   .md-toolbar-tools {
     padding: 0 20px;
@@ -32,28 +34,66 @@ cms-detail-element {
 
       .cms-content-wrapper {
 
-        &.experiences {
-          .name {}
+        .content-header {
+          margin: 0 0 30px;
+        }
 
-          .created {}
-          
-          .avatar {
-            img {}
-            .no-avatar {}
+        .created {
+          position: relative;
+          display: block;
+          margin: 0;
+          padding: 0;
+          color: $text-disabled;
+
+          > span {
+            display: inline-block;
+            padding: 0 7px;
           }
         }
 
-        .name {}
-
-        .created {}
+        .name {
+          margin-bottom: 20px;
+          color: $color-primary;
+        }
 
         .cover {
-          img {}
-          .no-cover {}
+          margin-right: 30px;
+          padding-top: 5px;
+
+          img {
+            float: left;
+            display: inline-block;
+            margin: 0;
+            width: 120px;
+            height: auto;
+          }
+
+          .no-cover {
+            position: relative;
+            display: inline-block;
+            width: 120px;
+            height: 170px;
+            background-color: $color-gray-lightest;
+
+            &::after {
+              content: "insert_photo";
+              @include md-icon($font-size: 48px);
+              color: #BDBDBD;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
         }
 
         .body {
-          p {}
+          line-height: 24px;
+          padding-right: 20px;
+
+          p {
+            margin-bottom: 20px;
+          }
 
           ul {
             li {}
@@ -65,6 +105,72 @@ cms-detail-element {
 
           a {}
         }
+
+        &.experiences {
+          .comment-header {
+            position: relative;
+            margin-bottom: 24px;
+          }
+
+          .name {
+            font-size: 20px;
+            font-weight: 500;
+            color: $text-primary;
+          }
+
+          .avatar {
+            margin-right: 24px;
+
+            img {
+              position: relative;
+              z-index: 100;
+              width: 80px;
+              height: 80px;
+              border-radius: 80px;
+            }
+
+            .no-avatar {
+              position: relative;
+              display: inline-block;
+              width: 80px;
+              height: 80px;
+              overflow: hidden;
+              border-radius: 80px;
+              background-color: #BDBDBD;
+
+              &::before {
+                content: "person";
+                @include md-icon($font-size: 40px);
+                color: $color-white;
+                z-index: 1;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .comment-wrapper {
+      padding: 40px;
+      background-color: #ECEFF1;
+      box-shadow: inset 0 1px 0 rgba(0,0,0,.12);
+
+      > h3.md-title {
+        margin: 0 0 40px;
+        color: $color-primary;
+      }
+    }
+
+    .add-new-comment {
+      padding: 40px 40px 80px;
+
+      > h3.md-title {
+        margin: 0 0 40px;
+        color: $color-primary;
       }
     }
   }

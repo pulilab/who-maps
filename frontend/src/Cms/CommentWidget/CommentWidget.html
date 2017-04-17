@@ -1,20 +1,23 @@
 <div md-whiteframe="2" class="comment" ng-class="{'expanded': vm.expanded}" layout="row" layout-align="start start">
-  <cms-report-button item="vm.comment"></cms-report-button>
   <div class="avatar-img">
-    <span ng-hide="vm.item.avatar"></span>
+    <span ng-hide="vm.item.avatar" class="no-avatar"></span>
     <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
   </div>
   <div class="excerpt">
     <h3 class="md-title">{{vm.comment.username}}</h3>
     <div class="comment-info">
-      Report button
-      <small class="time">{{vm.prettifyDate(vm.comment)}}</small>
+      <small class="time">
+        {{vm.prettifyDate(vm.comment)}} <span>|</span>
+        <cms-report-button item="vm.comment"></cms-report-button>
+      </small>
     </div>
-    <div class="comment-text">{{vm.comment.text}}</div>
-    <md-button ng-click="vm.readMore()">
-      <span ng-hide="vm.expanded">Read More</span>
-      <span ng-show="vm.expanded">Read less</span>
-    </md-button>
+    <div class="comment-text">
+      {{vm.comment.text}}
+      <md-button ng-click="vm.readMore()" class="read-more">
+        <span ng-hide="vm.expanded">Read More</span>
+        <span ng-show="vm.expanded">Read less</span>
+      </md-button>
+    </div>
   </div>
 
 </div>

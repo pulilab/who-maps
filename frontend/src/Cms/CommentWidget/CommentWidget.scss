@@ -2,5 +2,122 @@
 @import '../../mixins';
 
 .comment {
-  
+  background-color: $color-white;
+  margin-bottom: 20px;
+  padding: 20px 45px 20px 15px;
+
+  .avatar-img {
+    margin-right: 15px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+    }
+
+    .no-avatar {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 50px;
+      background-color: #BDBDBD;
+
+      &::before {
+        content: "person";
+        @include md-icon($font-size: 24px);
+        color: $color-white;
+        z-index: 1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .excerpt {
+    .md-title {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    .comment-info {
+      display: block;
+      margin-bottom: 15px;
+
+      .time {
+        position: relative;
+        display: block;
+        color: $text-disabled;
+
+        > span {
+          display: inline-block;
+          padding: 0 7px;
+        }
+
+        .flag-button {
+          top: 3px;
+          left: -8px;
+          min-height: 24px;
+          max-height: 24px;
+          line-height: 24px;
+
+          md-icon {
+            font-size: 16px;
+          }
+
+          .report-text::after {
+            top: -2px;
+            font-size: 12px;
+          }
+        }
+      }
+
+      .active {
+        .warning-zone {
+          height: 24px;
+          padding: 0 8px;
+
+          .warning-text {
+            line-height: 24px;
+          }
+
+          .warning-actions {
+            .md-button {
+              float: right;
+              margin: 0;
+              padding: 0;
+              min-width: auto;
+              width: auto;
+              min-height: 24px;
+              max-height: 24px;
+              margin: 0 5px 0 10px;
+              font-size: 12px;
+              line-height: 24px;
+
+              md-icon {
+                position: relative;
+                top: 2px;
+                left: 2px;
+                font-size: 16px;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .comment-text {
+      font-size: 14px;
+      line-height: 20px;
+
+      .read-more {
+        // TODO
+        // needs funcionality to be added
+        display: none;
+      }
+    }
+  }
 }
