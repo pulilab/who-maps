@@ -7,7 +7,17 @@
     <h3 class="md-title">{{vm.comment.username}}</h3>
     <div class="comment-info">
       <small class="time">
-        {{vm.prettifyDate(vm.comment)}} <span>|</span>
+        {{vm.prettifyDate(vm.comment)}}
+        <span>|</span>
+        <!-- visible if user is able to edit -->
+        <md-button class="edit-button" md-no-ink ng-click="">
+          <md-icon>create</md-icon> Edit
+        </md-button>
+        <md-button class="edit-button" md-no-ink ng-click="">
+          <md-icon>clear</md-icon> Delete
+        </md-button>
+        <span>|</span>
+        <!-- / -->
         <cms-report-button item="vm.comment"></cms-report-button>
       </small>
     </div>
