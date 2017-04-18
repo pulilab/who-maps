@@ -30,7 +30,7 @@ cms-detail-element {
     padding: 0;
 
     .content {
-      padding: 40px;
+      padding: 40px 40px 60px;
 
       .cms-content-wrapper {
 
@@ -79,7 +79,7 @@ cms-detail-element {
         }
 
         .name {
-          margin-bottom: 20px;
+          margin: 10px 0 20px;
           color: $color-primary;
         }
 
