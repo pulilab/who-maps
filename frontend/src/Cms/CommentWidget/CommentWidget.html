@@ -13,10 +13,10 @@
     </div>
     <div class="comment-text">
       {{vm.comment.text}}
-      <md-button ng-click="vm.readMore()" class="read-more">
-        <span ng-hide="vm.expanded">Read More</span>
+      <span ng-click="vm.readMore()" ng-show="vm.comment.text.length > 100" class="read-more">
+        <span ng-hide="vm.expanded">Read more</span>
         <span ng-show="vm.expanded">Read less</span>
-      </md-button>
+      </span>
     </div>
   </div>
 
