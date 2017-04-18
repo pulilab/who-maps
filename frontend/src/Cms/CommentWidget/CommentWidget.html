@@ -23,9 +23,9 @@
     </div>
     <div class="comment-text">
       <span class="comment-text-wrapper">{{vm.comment.text}}</span>
-      <span ng-click="vm.readMore()" ng-show="vm.comment.text.length > 100" class="read-more">
-        <span ng-hide="vm.expanded"><span>... </span>Read more</span>
-        <span ng-show="vm.expanded">Read less</span>
+      <span ng-click="vm.readMore()" ng-show="vm.comment.text.length > 200" class="read-more">
+        <span ng-hide="vm.expanded">Read more...</span>
+        <span ng-show="vm.expanded">...Read less</span>
       </span>
     </div>
   </div>
