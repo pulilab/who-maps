@@ -6,7 +6,22 @@
 trix-toolbar {
   .button_row {
     justify-content: flex-start;
+
+    .button_group {
+      margin-right: 10px;
+    }
+
+    button.strike {
+      display: none;
+    }
   }
+}
+
+trix-editor {
+  // set max height
+  // 20 rows
+  max-height: 380px;
+  overflow-y: auto;
 }
 
 .block_tools {
@@ -25,4 +40,11 @@ trix-toolbar {
     display: none;
   }
 
+}
+
+.counter-wrapper {
+  margin: 10px 0;
+  font-size: 12px;
+  color: $text-disabled;
+  text-align: right;
 }

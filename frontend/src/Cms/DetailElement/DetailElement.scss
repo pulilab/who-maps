@@ -12,6 +12,45 @@ cms-detail-element {
   }
 }
 
+.new-content-dialog {
+  md-toolbar {
+    background-color: #CD9923;
+
+    .md-toolbar-tools .md-button .material-icons {
+      color: #F4EAD2 !important;
+    }
+
+    .md-toolbar-tools .md-button .material-icons:hover {
+      color: #fff !important;
+    }
+  }
+
+  md-dialog-content {
+    md-input-container {
+      min-height: 48px;
+
+      &:nth-of-type(1),
+      &:nth-of-type(2) {
+        width: 66%;
+      }
+    }
+
+    .trix-wrapper {
+      margin-top: 20px;
+    }
+  }
+
+  md-dialog-actions {
+    padding: 20px;
+    background-color: $color-gray-lightest;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,.12);
+
+    .md-button {
+      margin: 0;
+    }
+  }
+}
+
 .detail-dialog {
   min-width: 720px;
   max-width: 720px;
@@ -187,8 +226,23 @@ cms-detail-element {
       box-shadow: inset 0 1px 0 rgba(0,0,0,.12);
 
       > h3.md-title {
+        display: inline-block;
         margin: 0 0 40px;
         color: $color-primary;
+      }
+
+      a.goto-comment {
+        float: right;
+        margin: 2px 0 0;
+        color: $color-primary;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+
+        md-icon {
+          color: $color-primary;
+        }
       }
     }
 
@@ -199,6 +253,7 @@ cms-detail-element {
         margin: 0 0 40px;
         color: $color-primary;
       }
+
     }
   }
 }

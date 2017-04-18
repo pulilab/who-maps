@@ -82,10 +82,15 @@
       <div class="comment-wrapper">
         <h3 class="md-title">Comments ({{vm.content.comments.length}})</h3>
 
+        <a href="#add-new-comment" class="goto-comment">
+          <md-icon aria-label="Go to Add comment">comment</md-icon>
+          Add comment
+        </a>
+
         <cms-comment-widget comment="comment" type="vm.content.type" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
       </div>
 
-      <div class="add-new-comment">
+      <div class="add-new-comment" id="add-new-comment">
         <h3 class="md-title">Add new comment</h3>
         <trix-component placeholder="Start typing here..." char-limit="2500"></trix-component>
       </div>

@@ -1,7 +1,7 @@
-<md-dialog aria-label="add-new-content">
+<md-dialog aria-label="add-new-content" class="detail-dialog new-content-dialog">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h3>Add new content modal</h3>
+      <h3 class="md-title">Add new content</h3>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="vm.cancel()">
         <md-icon  aria-label="Close dialog">close</md-icon>
@@ -11,43 +11,39 @@
 
   <md-dialog-content>
     <div class="md-dialog-content">
-      <div layout="column">
-        <md-input-container>
-          <md-select ng-model="vm.type" required placeholder="Select a type">
-            <md-option value="lessons">Lessons &amp; Tips</md-option>
-            <md-option value="resources">Resources</md-option>
-          </md-select>
-        </md-input-container>
-        <md-input-container>
-          <md-select aria-label="domain-selector" ng-model="vm.domain" class="" placeholder="Select a domain">
-            <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
-              <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
-            </md-optgroup>
-          </md-select>
-        </md-input-container>
+      <div class="content">
+        <div layout="column">
+          <md-input-container>
+            <md-select ng-model="vm.type" required placeholder="Select a type">
+              <md-option value="lessons">Lessons &amp; Tips</md-option>
+              <md-option value="resources">Resources</md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container>
+            <md-select aria-label="domain-selector" ng-model="vm.domain" class="" placeholder="Select a domain">
+              <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
+                <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
+              </md-optgroup>
+            </md-select>
+          </md-input-container>
 
-        <md-input-container>
-          <label> Add a title</label>
-          <input type="text" ng-model="vm.title" />
-        </md-input-container>
-
-
+          <md-input-container>
+            <label>Add a title</label>
+            <input type="text" ng-model="vm.title" />
+          </md-input-container>
+        </div>
+        <trix-component value="vm.newContent" placeholder="Add content" char-limit="2500"></trix-component>
       </div>
-
-
-
-      <trix-component value="vm.newContent" placeholder="Add content" char-limit="2500"></trix-component>
     </div>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <md-button  ng-click="vm.cancel()">
-      cancel
+    <md-button ng-click="vm.cancel()">
+      Cancel
     </md-button>
     <span flex></span>
-    <md-button ng-click="vm.submit()">
-      submit
+    <md-button class="md-primary md-raised" ng-click="vm.submit()">
+      Submit
     </md-button>
-
   </md-dialog-actions>
 </md-dialog>
