@@ -49,6 +49,33 @@ cms-detail-element {
             display: inline-block;
             padding: 0 7px;
           }
+
+          .edit-button {
+            position: relative;
+            top: 1px;
+            left: -4px;
+            min-width: auto;
+            width: auto;
+            margin: 0 0 0 4px;
+            padding: 0;
+            line-height: 20px;
+            background-color: transparent !important;
+
+            md-icon {
+              float: left;
+              font-size: 20px;
+              color: $text-disabled;
+            }
+
+            &:first-of-type {
+              margin-right: 4px;
+            }
+
+            &:hover,
+            &:hover md-icon {
+              color: $color-gray;
+            }
+          }
         }
 
         .name {
