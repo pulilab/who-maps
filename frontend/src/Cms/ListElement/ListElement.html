@@ -1,5 +1,5 @@
 
-<div ng-if="vm.item.type !== 'experiences'" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
+<div ng-if="vm.item.type !== 3" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
 
   <div class="cover-img">
 
@@ -8,13 +8,13 @@
   </div>
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
-    <h6>{{vm.item.type}}</h6>
+    <h6>{{vm.itemType()}}</h6>
     <p class="md-body-1" ng-bind-html="vm.item.body"></p>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 </div>
 
-<div ng-if="vm.item.type === 'experiences'" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
+<div ng-if="vm.item.type === 3" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
 
   <div class="avatar-img">
     <span ng-hide="vm.item.avatar"></span>
@@ -22,9 +22,9 @@
   </div>
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
-    <h6>{{vm.item.type}}</h6>
+    <h6>{{vm.itemType}}</h6>
     <small class="time">{{vm.prettifyDate(vm.item)}}</small>
-    <p class="md-body-1">{{vm.item.body}}</p>
+    <p class="md-body-1"  ng-bind-html="vm.item.body"></p>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 

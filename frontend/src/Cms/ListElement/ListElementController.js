@@ -10,6 +10,14 @@ class ListElementController {
     onInit() {
     }
 
+    itemType() {
+        if (this.item) {
+            const typeLib = ['Lessons & Tips', 'Resources', 'Experiences'];
+            return typeLib[this.item.type - 1];
+        }
+        return '';
+    }
+
     static factory() {
         require('./ListElement.scss');
         function listElement() {
