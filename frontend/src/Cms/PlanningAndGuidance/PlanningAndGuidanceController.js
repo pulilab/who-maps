@@ -19,6 +19,8 @@ class PlanningAndGuidanceController {
         this.experiences = mockData.experiences;
         this.all = [].concat(this.lessons, this.resources, this.experiences);
         this.watchers();
+        this.showLimit = 10;
+        this.showAllFlag = false;
     }
 
     postLink() {
@@ -38,9 +40,25 @@ class PlanningAndGuidanceController {
 
     }
 
+    toggleShowAll() {
+        this.showAllFlag = !this.showAllFlag;
+    }
+
     watchers() {
         const self = this;
         this.scope.$watch(self.extractDomainSelection, self.applyFilters, true);
+        this.scope.$watchGroup([() => {
+            return this.toShow;
+        }, ()=> {
+            return this.showAllFlag;
+        }], ([toShow, showAllFlag]) => {
+            if (toShow && showAllFlag) {
+                this.showLimit = toShow.length;
+            }
+            else {
+                this.showLimit = 10;
+            }
+        });
     }
 
     extractDomainSelection() {
@@ -78,6 +96,15 @@ class PlanningAndGuidanceController {
         else {
             this.toShow = this[this.active];
         }
+    }
+
+    clearFilters() {
+        this.filters.forEach(filter => {
+            filter.selected = false;
+            filter.domains.forEach(domain => {
+                domain.selected = false;
+            });
+        });
     }
 
     activate(name) {

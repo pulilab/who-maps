@@ -22,6 +22,12 @@ const experiences =  [
         domain: 'Data'
     },
     {
+        domain: 'Data'
+    },
+    {
+        domain: 'Data'
+    },
+    {
         domain: 'Adaptability'
     },
     {

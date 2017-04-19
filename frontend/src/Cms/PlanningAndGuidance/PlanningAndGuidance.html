@@ -45,10 +45,16 @@
           </div>
         </div>
 
-        <cms-list-element ng-repeat="item in vm.toShow" item="item"></cms-list-element>
-
-        <md-button class="md-primary md-raised show-more">
-          Show more...
+        <cms-list-element ng-repeat="item in vm.toShow | limitTo : vm.showLimit" item="item"></cms-list-element>
+        <div class="no-result" ng-show="vm.toShow.length === 0">
+          NO RESULT EDIT ME
+        </div>
+        <md-button
+          class="md-primary md-raised show-more"
+          ng-show="vm.toShow.length >= vm.showLimit"
+          ng-click="vm.toggleShowAll()">
+            <span ng-hide="vm.showAllFlag"> Show more... </span>
+            <span ng-show="vm.showAllFlag"> Show less... </span>
         </md-button>
       </div>
 
@@ -61,6 +67,9 @@
             <md-icon class="material-icons">search</md-icon>
             <input type="text" placeholder="Search">
           </md-input-container>
+          <md-button class="clear-filters" ng-click="vm.clearFilters()">
+            Clear filters
+          </md-button>
         </div>
         <div class="filter-content">
           <h5 class="md-subhead">Apply filters to list:</h5>
@@ -68,26 +77,26 @@
           <dl class="filter-list">
             <dt ng-repeat-start="filterGroup in vm.filters">
               <md-checkbox
-                  class="md-primary small group-title"
-                  ng-change="vm.toggleAll(filterGroup)"
-                  ng-model="filterGroup.selected" aria-label="{{filterGroup.name}}">
+                class="md-primary small group-title"
+                ng-change="vm.toggleAll(filterGroup)"
+                ng-model="filterGroup.selected" aria-label="{{filterGroup.name}}">
                 {{filterGroup.name}} ({{filterGroup.domains.length}})
               </md-checkbox>
               <i class="material-icons"
-                  ng-click="vm.toggleFilterGroup(filterGroup)"
-                  ng-class="{toggled: filterGroup.open}">
+                 ng-click="vm.toggleFilterGroup(filterGroup)"
+                 ng-class="{toggled: filterGroup.open}">
                 arrow_drop_down
               </i>
             </dt>
             <span
-                class="domains"
-                ng-repeat-end
-                ng-class="{show: filterGroup.open}">
+              class="domains"
+              ng-repeat-end
+              ng-class="{show: filterGroup.open}">
               <dd ng-repeat="checkbox in filterGroup.domains">
                 <md-checkbox
-                    class="md-primary small"
-                    ng-model="checkbox.selected"
-                    aria-label="{{checkbox.name}}">
+                  class="md-primary small"
+                  ng-model="checkbox.selected"
+                  aria-label="{{checkbox.name}}">
                   {{checkbox.name}}
                 </md-checkbox>
               </dd>
