@@ -10,7 +10,8 @@ const component = {
     bindings: {
         value: '=?',
         placeholder: '@?',
-        charLimit: '<?'
+        charLimit: '<?',
+        valid: '='
     }
 };
 
