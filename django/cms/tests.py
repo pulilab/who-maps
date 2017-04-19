@@ -1,5 +1,7 @@
 import tempfile
+from io import BytesIO
 
+from PIL import Image
 from allauth.account.models import EmailConfirmation
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -382,3 +384,54 @@ class CmsApiTest(APITestCase):
 
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.json()['detail'], "Comment flagged.")
+
+    def test_flagged_comment_doesnt_show(self):
+        self.test_flag_comment()
+
+        comment = Comment.objects.create(text="Comment 2",
+                                         user_id=self.user_profile_id,
+                                         post=Post.objects.get(id=self.post_id))
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(len(response.json()['comments']), 1)
+        self.assertEqual(response.json()['comments'][0]['text'], comment.text)
+
+        Comment.objects.flagged()[0].normalize()
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(len(response.json()['comments']), 2)
+        self.assertEqual(response.json()['comments'][0]['text'], "Comment 1")
+        self.assertEqual(response.json()['comments'][1]['text'], comment.text)
+
+    def test_cover_upload(self):
+        cover = BytesIO()
+        image = Image.new('RGBA', size=(100, 100))
+        image.save(cover, 'png')
+        cover.name = 'test.png'
+        cover.seek(0)
+
+        self.post_data = {
+            "name": "Test Post 1",
+            "body": "<strong>TEST</strong>",
+            "type": Post.RESOURCE,
+            "domain": 1,
+            "author": self.user_profile_id,
+            "cover": cover
+        }
+
+        url = reverse("post-list")
+        response = self.test_user_client.post(url, self.post_data, format='multipart')
+        self.post_id = response.json().get("id")
+        self.assertEqual(response.json()['name'], self.post_data['name'])
+        self.assertEqual(response.json()['body'], self.post_data['body'])
+        self.assertEqual(response.json()['type'], self.post_data['type'])
+        self.assertEqual(response.json()['domain'], self.post_data['domain'])
+        self.assertEqual(response.json()['author'], self.post_data['author'])
+        self.assertTrue(response.json()['created'])
+        self.assertTrue(response.json()['modified'])
+        self.assertEqual(response.json()['comments'], [])
+        self.assertIn(cover.name, response.json()['cover'])
