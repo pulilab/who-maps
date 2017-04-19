@@ -42,8 +42,7 @@
               <span class="no-cover" ng-if="!vm.content.cover"></span>
             </div>
 
-            <div class="body">
-              {{vm.content.body}}
+            <div class="body"  ng-bind-html="vm.content.body">
             </div>
           </div>
         </div>

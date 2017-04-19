@@ -12,19 +12,34 @@ class PlanningAndGuidanceController {
     }
 
     onInit() {
+        this.cs = require('../CmsService');
         this.createFilters();
-        const mockData = require('../resources/mockData');
-        this.lessons = mockData.lessons;
-        this.resources = mockData.resources;
-        this.experiences = mockData.experiences;
-        this.all = [].concat(this.lessons, this.resources, this.experiences);
-        this.watchers();
+        this.lessons = [];
+        this.resources = [];
+        this.experiences = [];
+        this.all = [];
         this.showLimit = 10;
         this.showAllFlag = false;
+
+        this.getData();
+        this.watchers();
     }
 
     postLink() {
         this.checkHash();
+    }
+
+    getData() {
+        this.cs.getData().then(data => {
+            this.scope.$evalAsync(() => {
+                this.lessons = data.filter(item => item.type === 1);
+                this.resources = data.filter(item => item.type === 2);
+                this.experiences = data.filter(item => item.type === 3);
+                this.all = [...this.lessons, ...this.resources, ...this.experiences];
+                this.activate();
+                console.log(this.all);
+            });
+        });
     }
 
     checkHash() {

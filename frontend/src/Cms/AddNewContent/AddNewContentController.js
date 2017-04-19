@@ -2,12 +2,17 @@ import angular from 'angular';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, content) {
+    constructor($scope, $mdDialog, body) {
         this.scope = $scope;
+        this.cs = require('../CmsService');
         this.dialog = $mdDialog;
         this.newContent = {
-            content,
-            valid: false
+            type: null,
+            domain: null,
+            name: null,
+            cover: null,
+            body,
+            textValid: false
         };
         this.axes = require('../resources/domains');
     }
@@ -17,7 +22,9 @@ class AddNewContentDialog {
     }
 
     submit() {
-        this.dialog.hide(this.newContent);
+        console.log(this.newContent);
+        this.cs.addContent(this.newContent);
+        // this.dialog.hide(this.newContent);
     }
 
 
