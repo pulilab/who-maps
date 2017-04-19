@@ -9,8 +9,8 @@
 
   <div class="add-experience" flex="60">
     <h3 class="md-title">Share your own experience</h3>
-    <trix-component placeholder="Add new experience" char-limit="10"></trix-component>
-    <md-button class="md-primary md-raised">
+    <trix-component placeholder="Add new experience" value="vm.newExperience.value" valid="vm.newExperience.valid" char-limit="2500"></trix-component>
+    <md-button class="md-primary md-raised" ng-disabled="!vm.newExperience.valid">
       Add experience
     </md-button>
   </div>

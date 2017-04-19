@@ -13,6 +13,10 @@ class ExperienceListController {
         this.experiences = mockData.experiences.filter(exp => {
             return exp.domain === domain;
         });
+        this.newExperience = {
+            value: null,
+            valid: false
+        };
     }
 
     static factory() {
