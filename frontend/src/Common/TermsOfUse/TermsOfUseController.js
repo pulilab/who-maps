@@ -2,9 +2,10 @@ import { CommonServices, CustomCountryService } from '../../Common/';
 
 class TermOfUseController {
 
-    constructor($scope) {
+    constructor($scope, $window) {
         this.EE = window.EE;
         this.scope = $scope;
+        this.window = $window;
         this.ccs = CustomCountryService;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -28,6 +29,10 @@ class TermOfUseController {
         });
     }
 
+    goBack() {
+        this.window.history.back();
+    }
+
     onDestroy() {
     }
 
@@ -38,11 +43,11 @@ class TermOfUseController {
     static termOfUseFactory() {
         require('./TermsOfUse.scss');
 
-        function termOfUseController($scope) {
-            return new TermOfUseController($scope);
+        function termOfUseController($scope, $window) {
+            return new TermOfUseController($scope, $window);
         }
 
-        termOfUseController.$inject = ['$scope'];
+        termOfUseController.$inject = ['$scope', '$window'];
 
         return termOfUseController;
     }

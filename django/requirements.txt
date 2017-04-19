@@ -21,3 +21,5 @@ pycrypto
 celery==3.1.23
 django-celery-email==1.1.4
 raven
+pytest-testmon
+pytest-watch
