@@ -34,22 +34,21 @@
             <input type="text" ng-model="vm.title" />
           </md-input-container>
         </div>
+
         <trix-component value="vm.newContent.value" valid="vm.newContent.valid" placeholder="Add content" char-limit="2500"></trix-component>
-        <div class="file-upload" layout="row">
-          <label>
-            <md-icon>insert_photo</md-icon>
-            Upload cover image
-          </label>
-          <div class="md-button" ngf-select ng-model="vm.cover" ngf-pattern="'image/*'"
-               ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
-            Select File
-          </div>
+
+        <div class="file-upload" layout="row" layout-align="start center">
           <div class="selected-file-thumbnail">
-            <img ngf-thumbnail="vm.cover" ngf-size="{width: 20, height: 20, quality: 0.9}">
+            <img ngf-thumbnail="vm.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
           </div>
-          <span>
-            Maximum file size -10 mb
-          </span>
+          <div class="md-button md-gray" ngf-select ng-model="vm.cover" ngf-pattern="'image/*'"
+               ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
+            <md-icon>insert_photo</md-icon>
+            Add cover image
+          </div>
+          <div>
+            <small>Maximum file size: 10MB</small>
+          </div>
         </div>
       </div>
     </div>
