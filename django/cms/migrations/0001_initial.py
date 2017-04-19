@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('state', models.IntegerField(choices=[(1, 'Resources'), (2, 'Lessons & Tips'), (3, 'Experiences')], default=1)),
-                ('text', models.TextField(max_length=512)),
+                ('text', models.TextField(max_length=5000)),
             ],
             options={
                 'abstract': False,
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('state', models.IntegerField(choices=[(1, 'Resources'), (2, 'Lessons & Tips'), (3, 'Experiences')], default=1)),
                 ('name', models.CharField(max_length=128)),
                 ('slug', models.SlugField(unique=True)),
-                ('body', models.TextField(max_length=2048)),
+                ('body', models.TextField(max_length=5000)),
                 ('type', models.IntegerField(choices=[(1, 'Resources'), (2, 'Lessons & Tips'), (3, 'Experiences')])),
                 ('domain', models.IntegerField(choices=[(1, 'Parameters of Scale'), (2, 'Contextual Environment'), (3, 'Scientific Basis'), (4, 'Strategic Engagement'), (5, 'Partnership Sustainability'), (6, 'Financial Management'), (7, 'Financial Model'), (8, 'Data'), (9, 'Interoperability'), (10, 'Adaptability'), (11, 'Personnel'), (12, 'Training and Support'), (13, 'Outreach and Sensitization'), (14, 'Contingency Planning'), (15, 'Process Monitoring'), (16, 'Evaluation Research')])),
                 ('cover', models.ImageField(blank=True, null=True, upload_to='')),
