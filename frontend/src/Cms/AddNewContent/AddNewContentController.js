@@ -5,7 +5,10 @@ class AddNewContentDialog {
     constructor($scope, $mdDialog, content) {
         this.scope = $scope;
         this.dialog = $mdDialog;
-        this.newContent = content;
+        this.newContent = {
+            content,
+            valid: false
+        };
         this.axes = require('../resources/domains');
     }
 

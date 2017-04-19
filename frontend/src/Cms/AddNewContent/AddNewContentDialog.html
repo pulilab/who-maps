@@ -14,13 +14,15 @@
       <div class="content">
         <div layout="column">
           <md-input-container>
-            <md-select ng-model="vm.type" required placeholder="Select a type">
+            <label>Select a type</label>
+            <md-select ng-model="vm.type" required >
               <md-option value="lessons">Lessons &amp; Tips</md-option>
               <md-option value="resources">Resources</md-option>
             </md-select>
           </md-input-container>
           <md-input-container>
-            <md-select aria-label="domain-selector" ng-model="vm.domain" class="" placeholder="Select a domain">
+            <label>Select a domain</label>
+            <md-select aria-label="domain-selector" ng-model="vm.domain" class="">
               <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
                 <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
               </md-optgroup>
@@ -32,7 +34,23 @@
             <input type="text" ng-model="vm.title" />
           </md-input-container>
         </div>
-        <trix-component value="vm.newContent" placeholder="Add content" char-limit="2500"></trix-component>
+        <trix-component value="vm.newContent.value" valid="vm.newContent.valid" placeholder="Add content" char-limit="2500"></trix-component>
+        <div class="file-upload" layout="row">
+          <label>
+            <md-icon>insert_photo</md-icon>
+            Upload cover image
+          </label>
+          <div class="md-button" ngf-select ng-model="vm.cover" ngf-pattern="'image/*'"
+               ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
+            Select File
+          </div>
+          <div class="selected-file-thumbnail">
+            <img ngf-thumbnail="vm.cover" ngf-size="{width: 20, height: 20, quality: 0.9}">
+          </div>
+          <span>
+            Maximum file size -10 mb
+          </span>
+        </div>
       </div>
     </div>
   </md-dialog-content>
