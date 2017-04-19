@@ -120,9 +120,8 @@
       <div class="add-new-comment" id="add-new-comment">
         <h3 class="md-title">Add new comment</h3>
         <trix-component placeholder="Start typing here..." valid="vm.newComment.valid" value="vm.newComment.text" char-limit="2500"></trix-component>
-        <md-button ng-click="vm.addComment()" ng-disabled="!vm.newComment.valid" class="md-primary md-raised">
-          <md-icon class="material-icons">add</md-icon>
-          Add new comment
+        <md-button ng-click="vm.addComment()" ng-disabled="!vm.newComment.valid" class="md-primary md-raised add-comment">
+          Add  comment
         </md-button>
       </div>
     </div>

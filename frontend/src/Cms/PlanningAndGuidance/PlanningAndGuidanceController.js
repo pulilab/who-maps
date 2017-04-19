@@ -125,7 +125,7 @@ class PlanningAndGuidanceController {
     }
 
     activate(name) {
-        const newName = name || window.location.hash.replace('#', '');
+        const newName = name || window.location.hash.replace('#', '') || 'all';
         this.scope.$evalAsync(() => {
             this.active = newName;
             this.applyFilters(this.extractDomainSelection());
