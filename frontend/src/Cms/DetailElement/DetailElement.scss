@@ -212,6 +212,11 @@ cms-detail-element {
         color: $color-primary;
       }
 
+      .md-button.add-comment {
+        margin: 20px 0 0;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
     }
   }
 }
