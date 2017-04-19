@@ -8,6 +8,10 @@ class DetailElementDialog {
         this.dialog = $mdDialog;
         this.prettifyDate = prettifyDate;
         this.content = content;
+        this.newComment = {
+            valid: true,
+            value: null
+        };
     }
 
     cancel() {
