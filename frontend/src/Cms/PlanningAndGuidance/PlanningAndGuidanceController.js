@@ -20,7 +20,6 @@ class PlanningAndGuidanceController {
         this.all = [];
         this.showLimit = 10;
         this.showAllFlag = false;
-
         this.getData();
         this.watchers();
     }
@@ -32,12 +31,7 @@ class PlanningAndGuidanceController {
     getData() {
         this.cs.getData().then(data => {
             this.scope.$evalAsync(() => {
-                this.lessons = data.filter(item => item.type === 1);
-                this.resources = data.filter(item => item.type === 2);
-                this.experiences = data.filter(item => item.type === 3);
-                this.all = [...this.lessons, ...this.resources, ...this.experiences];
-                this.activate();
-                console.log(this.all);
+                this.all = data;
             });
         });
     }
@@ -73,6 +67,14 @@ class PlanningAndGuidanceController {
             else {
                 this.showLimit = 10;
             }
+        });
+        this.scope.$watchCollection(() => {
+            return this.all;
+        }, data => {
+            this.lessons = data.filter(item => item.type === 1);
+            this.resources = data.filter(item => item.type === 2);
+            this.experiences = data.filter(item => item.type === 3);
+            this.activate();
         });
     }
 

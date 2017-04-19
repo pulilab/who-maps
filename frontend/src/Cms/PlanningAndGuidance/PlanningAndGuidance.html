@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <cms-list-element ng-repeat="item in vm.toShow | limitTo : vm.showLimit" item="item"></cms-list-element>
+        <cms-list-element ng-repeat="item in vm.toShow | limitTo : vm.showLimit | orderBy: item.id" item="item"></cms-list-element>
         <div class="no-result" ng-show="vm.toShow.length === 0">
           NO RESULT EDIT ME
         </div>
