@@ -1,13 +1,43 @@
 import { prettifyDate } from '../utilities';
+import { Storage } from '../../Common/';
 
 class CommentWidgetController {
 
-    constructor() {
+    constructor($scope) {
+        this.scope = $scope;
         this.prettifyDate = prettifyDate;
         this.$onInit = this.onInit.bind(this);
+        this.storage = new Storage();
+        this.userId = this.storage.get('user_profile_id');
     }
     onInit() {
         this.expanded = false;
+        this.editMode = false;
+        this.cs = require('../CmsService');
+    }
+
+    isAuthor() {
+        return this.userId === this.comment.user;
+    }
+
+    delete() {
+        this.cs.deleteComment(this.comment);
+    }
+
+    edit() {
+        this.editMode = !this.editMode;
+        if (this.editMode) {
+            this.modified = Object.assign({}, this.comment);
+        }
+    }
+
+    update() {
+        this.cs.updateComment(this.modified).then(() => {
+            this.scope.$evalAsync(() => {
+                this.comment = Object.assign({}, this.modified);
+                this.editMode = false;
+            });
+        });
     }
 
     readMore() {
@@ -16,10 +46,10 @@ class CommentWidgetController {
 
     static factory() {
         require('./CommentWidget.scss');
-        function commentWidget() {
-            return new CommentWidgetController();
+        function commentWidget($scope) {
+            return new CommentWidgetController($scope);
         }
-        commentWidget().$inject = [];
+        commentWidget().$inject = ['$scope'];
         return commentWidget;
     }
 }
