@@ -1,4 +1,5 @@
 import { AuthApi } from '../Common/';
+import _ from 'lodash';
 
 /* global Promise, Symbol */
 
@@ -19,7 +20,7 @@ class CmsService extends AuthApi {
     getData() {
         return new Promise(res => {
             const now = Date.now();
-            if (now - this.lastUpdate > 30) {
+            if (now - this.lastUpdate > 60) {
                 this.fetchData().then(value => {
                     res(value);
                 });
@@ -38,21 +39,75 @@ class CmsService extends AuthApi {
         });
     }
 
-    addContent(resource) {
-        resource.author = this.storage.get('user_profile_id');
-        this.post('cms/', resource).then(response => {
-            console.log(response);
-            this.cmsData.push(response);
-            return response;
+    findContent({ id }) {
+        return _.findIndex(this.cmsData, item => {
+            return item.id === id;
         });
     }
 
+    addContent(resource) {
+        resource.author = this.storage.get('user_profile_id');
+        return this.post('cms/', resource).then(response => {
+            return response.json();
+        }).then(data => {
+            this.cmsData.push(data);
+            return data;
+        });
+    }
+
+    updateContent(resource) {
+        return this.put(`cms/${resource.id}/`, resource).then(response => {
+            return response.json();
+        }).then(data => {
+            const index = this.findContent(resource);
+            this.cmsData.splice(index, 1, data);
+            return data;
+        });
+    }
+
+    deleteContent({ id }) {
+        return this.del(`cms/${id}/`).then(() => {
+            const index = this.findContent({ id });
+            this.cmsData.splice(index, 1);
+        });
+    }
+
+    findComment({ id }) {
+        const resourceItem = this.cmsData.find(res => {
+            return res.comments.some(comment => comment.id === id);
+        });
+        const index = _.findIndex(resourceItem.comments, item => {
+            return item.id === id;
+        });
+        return { resourceItem, index };
+    }
+
     addComment(comment, resource) {
-        this.post('comment', comment).then(response => {
-            console.log(response);
+        comment.user = this.storage.get('user_profile_id');
+        comment.post = resource.id;
+        return this.post('comment/', comment).then(response => {
+            return response.json();
+        }).then(data => {
             const item = this.cmsData.find(res => res.id === resource.id);
-            item.comments.push(response);
+            item.comments.push(data);
             return item;
+        });
+    }
+
+    updateComment(comment) {
+        return this.put(`comment/${comment.id}/`, comment).then(response => {
+            return response.json();
+        }).then(data => {
+            const r = this.findComment(comment);
+            r.resourceItem.comments.splice(r.index, 1, data);
+            return data;
+        });
+    }
+
+    deleteComment({ id }) {
+        return this.del(`comment/${id}/`).then(() => {
+            const r = this.findComment({ id });
+            r.resourceItem.comments.splice(r.index, 1);
         });
     }
 
