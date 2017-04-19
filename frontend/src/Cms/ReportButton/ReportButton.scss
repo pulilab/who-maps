@@ -77,6 +77,7 @@ cms-report-button {
 
     .warning-text {
       @include text-truncate();
+      font-weight: 500;
       line-height: 36px;
       color: #fff;
     }
