@@ -14,6 +14,17 @@ class TrixComponentController {
         require('trix');
         this.charCounter = 0;
         this.valid = false;
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watch(() => {
+            return this.value;
+        }, value => {
+            if (value === false) {
+                this.editorInstance.editor.loadHTML('');
+            }
+        });
     }
 
     postLink() {
