@@ -22,9 +22,8 @@ class AddNewContentDialog {
     }
 
     submit() {
-        console.log(this.newContent);
         this.cs.addContent(this.newContent);
-        // this.dialog.hide(this.newContent);
+        this.dialog.hide(this.newContent);
     }
 
 
@@ -56,8 +55,6 @@ class AddNewContentController {
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose:true
-        }).then(answer => {
-            console.debug(answer);
         });
     }
 
