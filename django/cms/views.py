@@ -9,6 +9,9 @@ from cms.serializers import CmsSerializer, CommentSerializer
 class FlagMixin(object):
 
     def partial_update(self, request, *args, **kwargs):
+        """
+        PATCH endpoint used for flagging content (eg: post, comment)
+        """
         instance = self.get_object()
         instance.flag()
         return Response(dict(detail="Comment flagged."), status=status.HTTP_202_ACCEPTED)
