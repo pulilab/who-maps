@@ -1,18 +1,17 @@
-<h3>EXPERIENCES LIST</h3>
-
-<div layout="row">
-  <div class="experiences-list" layout="column">
+<div md-whiteframe="2" class="cms-experience-list" layout="row" layout-align="start stretch">
+  <div class="experiences-list" flex="40">
+    <h3 class="md-title">Learn from others' experiences</h3>
     <cms-list-element item="item" ng-repeat="item in vm.experiences"></cms-list-element>
-    <md-button ui-sref="cms({'#': 'experiences'})">Show more</md-button>
-  </div>
-
-  <div class="add-experience">
-    <trix-component placeholder="Add new experience" char-limit="10"></trix-component>
-    <md-button>
-      <md-icon>comment</md-icon>
-      add experience
+    <md-button ui-sref="cms({'#': 'experiences'})" class="md-primary md-raised">
+      Show more
     </md-button>
   </div>
 
-
+  <div class="add-experience" flex="60">
+    <h3 class="md-title">Share your own experience</h3>
+    <trix-component placeholder="Add new experience" char-limit="10"></trix-component>
+    <md-button class="md-primary md-raised">
+      Add experience
+    </md-button>
+  </div>
 </div>

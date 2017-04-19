@@ -1,2 +1,35 @@
 @import '../../variables';
 @import '../../mixins';
+
+.cms-experience-list {
+  display: block;
+  margin-top: 20px;
+  padding: 0 60px;
+  background-color: #fff;
+
+  > div {
+    padding: 40px 0 60px;
+
+    &:first-child {
+      border-right: 1px solid $color-gray-lighter;
+    }
+
+    &:last-child {
+      padding-left: 60px;
+    }
+  }
+
+  h3.md-title {
+    margin: 20px 0 40px;
+    color: $color-primary;
+  }
+
+  .md-button {
+    margin: 0;
+    min-width: 140px;
+  }
+
+  .trix-wrapper {
+    margin: 20px 0;
+  }
+}
