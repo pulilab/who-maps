@@ -215,30 +215,19 @@ class CmsApiTest(APITestCase):
         self.test_create()
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
-        self.test_user_client.delete(url)
+        response = self.test_user_client.delete(url)
 
+        self.assertEqual(response.status_code, 204)
         self.assertEqual(Post.objects.filter(id=self.post_id).count(), 0)
 
     def test_partial_update(self):
         self.test_create()
 
-        self.new_data = {
-            "name": "Test Post Updated",
-        }
-
         url = reverse("post-detail", kwargs={"pk": self.post_id})
-        response = self.test_user_client.patch(url, self.new_data, format="json")
+        response = self.test_user_client.patch(url)
 
-        self.assertEqual(response.json()['id'], self.post_id)
-        self.assertNotEqual(response.json()['name'], self.post_data['name'])
-        self.assertEqual(response.json()['name'], self.new_data['name'])
-        self.assertEqual(response.json()['body'], self.post_data['body'])
-        self.assertEqual(response.json()['type'], self.post_data['type'])
-        self.assertEqual(response.json()['domain'], self.post_data['domain'])
-        self.assertEqual(response.json()['author'], self.post_data['author'])
-        self.assertTrue(response.json()['created'])
-        self.assertTrue(response.json()['modified'])
-        self.assertEqual(response.json()['comments'], [])
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.json()['detail'], "Comment flagged.")
 
     def test_list(self):
         self.test_create()
@@ -329,4 +318,67 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['comments'][0]['text'], comment.text)
 
     def test_comment_api_list_not_allowed(self):
-        pass
+        url = reverse("comment-list")
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json()['detail'], 'Method "GET" not allowed.')
+
+    def test_add_comment(self):
+        self.test_create()
+
+        self.comment_data = {
+            "text": "Comment 1",
+            "user": self.user_profile_id,
+            "post": self.post_id
+        }
+
+        url = reverse("comment-list")
+        response = self.test_user_client.post(url, self.comment_data, format="json")
+        self.comment_id = response.json()['id']
+
+        self.assertEqual(response.json()['text'], self.comment_data['text'])
+        self.assertEqual(response.json()['user'], self.comment_data['user'])
+        self.assertEqual(response.json()['post'], self.comment_data['post'])
+        self.assertEqual(response.json()['state'], Comment.NORMAL)
+        self.assertTrue(response.json()['id'])
+        self.assertTrue(response.json()['created'])
+        self.assertTrue(response.json()['modified'])
+
+    def test_delete_comment(self):
+        self.test_add_comment()
+
+        url = reverse("comment-detail", kwargs={"pk": self.comment_id})
+        response = self.test_user_client.delete(url)
+
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(Comment.objects.all().count(), 0)
+
+    def test_update_comment(self):
+        self.test_add_comment()
+
+        self.comment_data = {
+            "text": "Comment Updated",
+            "user": self.user_profile_id,
+            "post": self.post_id
+        }
+
+        url = reverse("comment-detail", kwargs={"pk": self.comment_id})
+        response = self.test_user_client.put(url, self.comment_data, format="json")
+
+        self.assertEqual(response.json()['text'], self.comment_data['text'])
+        self.assertEqual(response.json()['user'], self.comment_data['user'])
+        self.assertEqual(response.json()['post'], self.comment_data['post'])
+        self.assertEqual(response.json()['state'], Comment.NORMAL)
+        self.assertTrue(response.json()['id'])
+        self.assertTrue(response.json()['created'])
+        self.assertTrue(response.json()['modified'])
+
+    def test_flag_comment(self):
+        self.test_add_comment()
+
+        url = reverse("comment-detail", kwargs={"pk": self.comment_id})
+        response = self.test_user_client.patch(url)
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.json()['detail'], "Comment flagged.")
