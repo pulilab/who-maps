@@ -2,11 +2,11 @@
 
   <div class="cms-widget-header" ng-class="vm.axisColor" layout="row">
     <div class="domain-icon" ng-class="vm.domainIcon" flex></div>
-    <div class="domain-score" flex>You've scored {{vm.domainScore}}% in {{vm.currentDomain}} domain!</div>
+    <div class="domain-score" flex>You've scored {{vm.domainScore}}% in {{vm.currentDomain.name}} domain!</div>
     <div class="domain-selector" flex>
       <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain'" class="">
         <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
-          <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain}}</md-option>
+          <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain.name}}</md-option>
         </md-optgroup>
       </md-select>
     </div>

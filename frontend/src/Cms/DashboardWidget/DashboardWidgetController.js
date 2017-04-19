@@ -8,29 +8,51 @@ class DashboardWidgetController {
     }
 
     onInit() {
-        const mockData = require('../resources/mockData');
+        this.cs = require('../CmsService');
         this.axes = require('../resources/domains');
-        this.lessons = mockData.lessons;
-        this.resources = mockData.resources;
-        this.experiences = mockData.experiences;
         this.domains = _.flatMap(this.axes, axis => {
             return axis.domains;
         });
-
+        this.lessons = [];
+        this.resources = [];
+        this.experiences = [];
+        this.all = [];
+        this.getData();
         this.watchers();
         this.currentDomain = this.domains[Math.floor(Math.random() * this.domains.length)];
     }
 
+    getData() {
+        this.cs.getData().then(data => {
+            this.scope.$evalAsync(() => {
+                this.all = data;
+            });
+        });
+    }
+
 
     watchers() {
-        const self = this;
         this.scope.$watchGroup([() => {
             return this.currentDomain;
         }, () => {
             return this.scores;
         }], ([domain, scores]) => {
-            self.setDomainVariables(domain, scores);
+            this.setDomainVariables(domain, scores);
+            this.splitType(this.all);
         });
+
+        this.scope.$watchCollection(() => {
+            return this.all;
+        }, data => {
+            this.splitType(data);
+        });
+    }
+
+    splitType(data) {
+        const id = this.currentDomain.id;
+        this.lessons = data.filter(item => item.type === 1 && item.domain === id);
+        this.resources = data.filter(item => item.type === 2 && item.domain === id);
+        this.experiences = data.filter(item => item.type === 3 && item.domain === id);
     }
 
     setDomainVariables(domain, scores) {
@@ -38,7 +60,7 @@ class DashboardWidgetController {
             return ax.domains.indexOf(domain) > -1;
         });
         this.axisColor = this.normalizeName(axis.name);
-        this.domainIcon = this.normalizeName(domain);
+        this.domainIcon = this.normalizeName(domain.name);
         if (scores) {
             const domainScores = _.flatMap(scores, score => {
                 return score.domains.map(dom => {
@@ -48,7 +70,7 @@ class DashboardWidgetController {
                 });
             });
             const selectedDomain = domainScores.find(score => {
-                return score.name === domain.toLowerCase();
+                return score.name === domain.name.toLowerCase();
             });
 
             this.domainScore = (selectedDomain.domain_sum * 100) / selectedDomain.domain_max;
