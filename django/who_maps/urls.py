@@ -28,5 +28,6 @@ urlpatterns = [
     url(r"^api/", include("toolkit.urls")),
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
+    url(r"^api/", include("cms.urls")),
     url(r'^api/docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION))
 ]
