@@ -14,7 +14,7 @@
       <div class="content">
 
         <!-- Lessons & tips / Resources -->
-        <div class="cms-content-wrapper" ng-if="vm.content.type !== 'experiences'" layout="column">
+        <div class="cms-content-wrapper" ng-if="vm.content.type !== 3" layout="column">
           <div class="content-header">
             <div class="name md-display-1">
               {{vm.content.name}}
@@ -24,13 +24,15 @@
               {{vm.prettifyDate(vm.content)}}
               <span>|</span>
               <!-- visible if user is able to edit -->
-              <md-button class="edit-button" md-no-ink ng-click="">
-                <md-icon>create</md-icon> Edit
-              </md-button>
-              <md-button class="edit-button" md-no-ink ng-click="">
-                <md-icon>clear</md-icon> Delete
-              </md-button>
-              <span>|</span>
+              <span ng-show="vm.isAuthor()">
+                <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
+                  <md-icon>create</md-icon> Edit
+                </md-button>
+                <md-button class="edit-button" md-no-ink ng-click="vm.delete()">
+                  <md-icon>clear</md-icon> Delete
+                </md-button>
+                <span>|</span>
+              </span>
               <!-- / -->
               <cms-report-button item="vm.content"></cms-report-button>
             </div>
@@ -42,14 +44,22 @@
               <span class="no-cover" ng-if="!vm.content.cover"></span>
             </div>
 
-            <div class="body"  ng-bind-html="vm.content.body">
+            <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.content.body"></div>
+            <div class="body" ng-if="vm.editMode">
+              <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
+              <md-button ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+                <md-icon>create</md-icon> Save
+              </md-button>
+              <md-button ng-click="vm.edit()" >
+                <md-icon>create</md-icon> Cancel
+              </md-button>
             </div>
           </div>
         </div>
         <!-- /end -->
 
         <!-- Experiences -->
-        <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 'experiences'" layout="column">
+        <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 3" layout="column">
           <div class="comment-header" layout="row">
             <div class="avatar">
               <img ng-src="{{vm.content.avatar}}" ng-if="vm.content.avatar" />
@@ -65,21 +75,30 @@
                 {{vm.prettifyDate(vm.content)}}
                 <span>|</span>
                 <!-- visible if user is able to edit -->
-                <md-button class="edit-button" md-no-ink ng-click="">
-                  <md-icon>create</md-icon> Edit
-                </md-button>
-                <md-button class="edit-button" md-no-ink ng-click="">
-                  <md-icon>clear</md-icon> Delete
-                </md-button>
-                <span>|</span>
+                <span ng-show="vm.isAuthor()">
+                  <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
+                    <md-icon>create</md-icon> Edit
+                  </md-button>
+                  <md-button class="edit-button" md-no-ink ng-click="vm.delete()">
+                    <md-icon>clear</md-icon> Delete
+                  </md-button>
+                  <span>|</span>
+                </span>
                 <!-- / -->
                 <cms-report-button item="vm.content"></cms-report-button>
               </div>
             </div>
           </div>
 
-          <div class="body">
-            {{vm.content.body}}
+          <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.content.body"></div>
+          <div class="body" ng-if="vm.editMode">
+            <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
+            <md-button ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+              <md-icon>create</md-icon> Save
+            </md-button>
+             <md-button ng-click="vm.edit()" >
+                <md-icon>create</md-icon> Cancel
+              </md-button>
           </div>
         </div>
         <!-- /end -->
@@ -100,8 +119,8 @@
 
       <div class="add-new-comment" id="add-new-comment">
         <h3 class="md-title">Add new comment</h3>
-        <trix-component placeholder="Start typing here..." valid="vm.newComment.valid" value="vm.newComment.value" char-limit="2500"></trix-component>
-        <md-button ng-click="" ng-disabled="!vm.newComment.valid" class="md-primary md-raised">
+        <trix-component placeholder="Start typing here..." valid="vm.newComment.valid" value="vm.newComment.text" char-limit="2500"></trix-component>
+        <md-button ng-click="vm.addComment()" ng-disabled="!vm.newComment.valid" class="md-primary md-raised">
           <md-icon class="material-icons">add</md-icon>
           Add new comment
         </md-button>

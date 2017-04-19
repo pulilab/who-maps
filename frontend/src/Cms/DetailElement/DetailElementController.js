@@ -1,16 +1,21 @@
 import angular from 'angular';
 
 import { prettifyDate } from '../utilities';
+import { Storage } from '../../Common/';
 
 class DetailElementDialog {
     constructor($scope, $mdDialog, content) {
         this.scope = $scope;
+        this.storage = new Storage();
         this.dialog = $mdDialog;
         this.prettifyDate = prettifyDate;
         this.content = content;
+        this.cs = require('../CmsService');
+        this.userId = this.storage.get('user_profile_id');
+        this.editMode = false;
         this.newComment = {
             valid: true,
-            value: null
+            text: null
         };
     }
 
@@ -18,6 +23,39 @@ class DetailElementDialog {
         this.dialog.cancel();
     }
 
+    edit() {
+        this.editMode = !this.editMode;
+        if (this.editMode) {
+            this.modified = Object.assign({}, this.content);
+        }
+    }
+
+    update() {
+        this.cs.updateContent(this.modified).then(() => {
+            this.scope.$evalAsync(() => {
+                this.content = Object.assign({}, this.modified);
+                this.editMode = false;
+            });
+        });
+    }
+
+    delete() {
+        this.cs.deleteContent(this.content).then(() => {
+            this.dialog.cancel();
+        });
+    }
+
+    isAuthor() {
+        return this.userId === this.content.author;
+    }
+
+    addComment() {
+        this.cs.addComment(this.newComment, this.content).then(() => {
+            this.scope.$evalAsync(() => {
+                this.newComment.text = false;
+            });
+        });
+    }
 
     static factory(content) {
 
