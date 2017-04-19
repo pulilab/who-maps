@@ -80,7 +80,7 @@ class Post(State):
 
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
-    body = models.TextField(max_length=2048)
+    body = models.TextField(max_length=5000)
     type = models.IntegerField(choices=TYPE_CHOICES)
     domain = models.IntegerField(choices=DOMAIN_CHOICES)
     cover = models.ImageField(null=True, blank=True)
@@ -96,7 +96,7 @@ class Post(State):
 
 
 class Comment(State):
-    text = models.TextField(max_length=512)
+    text = models.TextField(max_length=5000)
     user = models.ForeignKey(UserProfile)
     post = models.ForeignKey(Post, related_name='comments')
 
