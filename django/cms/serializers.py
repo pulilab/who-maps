@@ -21,6 +21,6 @@ class CmsSerializer(ModelSerializer):
 
     @staticmethod
     def get_comments(post):
-        comments = Comment.objects.filter(post=post).showable()
+        comments = Comment.objects.filter(post=post).showable().order_by('-id')
         serializer = CommentSerializer(instance=comments, many=True)
         return serializer.data

@@ -256,16 +256,16 @@ class CmsApiTest(APITestCase):
         url = reverse("post-list")
         response = self.test_user_client.get(url)
         self.assertEqual(len(response.json()), Post.objects.all().count())
-        self.assertEqual(response.json()[0]['name'], "Test Post 1")
-        self.assertEqual(response.json()[1]['id'], self.post.id)
-        self.assertEqual(response.json()[1]['name'], self.post_data['name'])
-        self.assertEqual(response.json()[1]['body'], self.post_data['body'])
-        self.assertEqual(response.json()[1]['type'], self.post_data['type'])
-        self.assertEqual(response.json()[1]['domain'], self.post_data['domain'])
-        self.assertEqual(response.json()[1]['author'], self.post_data['author_id'])
-        self.assertTrue(response.json()[1]['created'])
-        self.assertTrue(response.json()[1]['modified'])
-        self.assertEqual(response.json()[1]['comments'], [])
+        self.assertEqual(response.json()[1]['name'], "Test Post 1")
+        self.assertEqual(response.json()[0]['id'], self.post.id)
+        self.assertEqual(response.json()[0]['name'], self.post_data['name'])
+        self.assertEqual(response.json()[0]['body'], self.post_data['body'])
+        self.assertEqual(response.json()[0]['type'], self.post_data['type'])
+        self.assertEqual(response.json()[0]['domain'], self.post_data['domain'])
+        self.assertEqual(response.json()[0]['author'], self.post_data['author_id'])
+        self.assertTrue(response.json()[0]['created'])
+        self.assertTrue(response.json()[0]['modified'])
+        self.assertEqual(response.json()[0]['comments'], [])
 
     def test_list_with_states(self):
         self.post_data = {
@@ -409,8 +409,8 @@ class CmsApiTest(APITestCase):
         response = self.test_user_client.get(url)
 
         self.assertEqual(len(response.json()['comments']), 2)
-        self.assertEqual(response.json()['comments'][0]['text'], "Comment 1")
-        self.assertEqual(response.json()['comments'][1]['text'], comment.text)
+        self.assertEqual(response.json()['comments'][1]['text'], "Comment 1")
+        self.assertEqual(response.json()['comments'][0]['text'], comment.text)
 
         Comment.objects.flagged()[0].normalize()
 
@@ -418,8 +418,8 @@ class CmsApiTest(APITestCase):
         response = self.test_user_client.get(url)
 
         self.assertEqual(len(response.json()['comments']), 2)
-        self.assertEqual(response.json()['comments'][0]['text'], "Comment 1")
-        self.assertEqual(response.json()['comments'][1]['text'], comment.text)
+        self.assertEqual(response.json()['comments'][1]['text'], "Comment 1")
+        self.assertEqual(response.json()['comments'][0]['text'], comment.text)
 
     def test_banned_comment_doesnt_show(self):
         self.test_add_comment()
@@ -432,8 +432,8 @@ class CmsApiTest(APITestCase):
         response = self.test_user_client.get(url)
 
         self.assertEqual(len(response.json()['comments']), 2)
-        self.assertEqual(response.json()['comments'][0]['text'], "Comment 1")
-        self.assertEqual(response.json()['comments'][1]['text'], comment.text)
+        self.assertEqual(response.json()['comments'][1]['text'], "Comment 1")
+        self.assertEqual(response.json()['comments'][0]['text'], comment.text)
 
         Comment.objects.showable()[0].ban()
 

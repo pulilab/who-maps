@@ -18,12 +18,12 @@ class FlagMixin(object):
 
 
 class CmsViewSet(FlagMixin, ModelViewSet):
-    queryset = Post.objects.showable()
+    queryset = Post.objects.showable().order_by('-id')
     serializer_class = CmsSerializer
     permission_classes = ()
 
 
 class CommentViewSet(FlagMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
                      mixins.DestroyModelMixin, GenericViewSet):
-    queryset = Comment.objects.showable()
+    queryset = Comment.objects.showable().order_by('-id')
     serializer_class = CommentSerializer
