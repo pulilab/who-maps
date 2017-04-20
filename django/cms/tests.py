@@ -178,6 +178,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['type'], self.post_data['type'])
         self.assertEqual(response.json()['domain'], self.post_data['domain'])
         self.assertEqual(response.json()['author'], self.post_data['author'])
+        self.assertEqual(response.json()['state'], Post.NORMAL)
         self.assertTrue(response.json()['created'])
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
@@ -231,7 +232,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Post.objects.filter(id=self.post_id).count(), 0)
 
-    def test_partial_update(self):
+    def test_flag_post(self):
         self.test_create()
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -410,7 +411,9 @@ class CmsApiTest(APITestCase):
 
         self.assertEqual(len(response.json()['comments']), 2)
         self.assertEqual(response.json()['comments'][1]['text'], "Comment 1")
+        self.assertEqual(response.json()['comments'][1]['state'], Comment.FLAGGED)
         self.assertEqual(response.json()['comments'][0]['text'], comment.text)
+        self.assertEqual(response.json()['comments'][0]['state'], Comment.NORMAL)
 
         Comment.objects.flagged()[0].normalize()
 
@@ -419,7 +422,9 @@ class CmsApiTest(APITestCase):
 
         self.assertEqual(len(response.json()['comments']), 2)
         self.assertEqual(response.json()['comments'][1]['text'], "Comment 1")
+        self.assertEqual(response.json()['comments'][1]['state'], Comment.NORMAL)
         self.assertEqual(response.json()['comments'][0]['text'], comment.text)
+        self.assertEqual(response.json()['comments'][0]['state'], Comment.NORMAL)
 
     def test_banned_comment_doesnt_show(self):
         self.test_add_comment()
@@ -442,6 +447,7 @@ class CmsApiTest(APITestCase):
 
         self.assertEqual(len(response.json()['comments']), 1)
         self.assertEqual(response.json()['comments'][0]['text'], comment.text)
+        self.assertEqual(response.json()['comments'][0]['state'], Comment.NORMAL)
 
     def test_cover_upload(self):
         cover = BytesIO()
