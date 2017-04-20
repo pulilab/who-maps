@@ -66,14 +66,16 @@
           <cms-add-new-content></cms-add-new-content>
         </div>
         <div class="search-content md-block">
-          <md-input-container md-no-float class="md-block">
+          <md-input-container md-no-float class="cms-search md-block">
             <md-icon class="material-icons">search</md-icon>
             <input type="text" ng-model="vm.searchText" ng-change="vm.search()" placeholder="Search">
+            <md-button class="clear-search md-icon-button" aria-label="clear" ng-click="vm.clearSearch()">
+              <md-icon>clear</md-icon>
+            </md-button>
           </md-input-container>
-           <md-button class="clear-search md-icon-button" aria-label="clear" ng-click="vm.clearSearch()">
-            <md-icon>cancel</md-icon>
-          </md-button>
-          </md-button>
+
+
+
           <!--<md-button class="clear-filters" ng-click="vm.clearFilters()">-->
             <!--Clear filters-->
           <!--</md-button>-->

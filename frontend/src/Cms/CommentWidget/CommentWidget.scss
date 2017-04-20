@@ -51,7 +51,7 @@
         display: block;
         color: $text-disabled;
 
-        > span {
+        .sep {
           display: inline-block;
           padding: 0 7px;
         }
@@ -59,10 +59,10 @@
         .edit-button {
           position: relative;
           top: 4px;
-          left: -4px;
+          left: 0;
           min-width: auto;
           width: auto;
-          margin: 0 0 0 2px;
+          margin: 0 2px 0 0;
           padding: 0;
           font-size: 12px;
           line-height: 16px;
@@ -72,10 +72,6 @@
             float: left;
             font-size: 16px;
             color: $text-disabled;
-          }
-
-          &:first-of-type {
-            margin-right: 4px;
           }
 
           &:hover,
