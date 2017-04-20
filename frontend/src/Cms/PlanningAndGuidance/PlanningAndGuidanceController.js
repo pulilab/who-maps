@@ -9,6 +9,7 @@ class PlanningAndGuidanceController {
         this.$postLink = this.postLink.bind(this);
         this.applyFilters = this.applyFilters.bind(this);
         this.extractDomainSelection = this.extractDomainSelection.bind(this);
+        this.applyLimitOrSearch = this.applyLimitOrSearch.bind(this);
     }
 
     onInit() {
@@ -21,6 +22,7 @@ class PlanningAndGuidanceController {
         this.showLimit = 10;
         this.showAllFlag = false;
         this.getData();
+        this.searchText = null;
         this.watchers();
     }
 
@@ -31,6 +33,7 @@ class PlanningAndGuidanceController {
     getData() {
         this.cs.getData().then(data => {
             this.scope.$evalAsync(() => {
+                data.forEach(item => { item.searchOccurrences = 0; });
                 this.all = data;
             });
         });
@@ -54,28 +57,52 @@ class PlanningAndGuidanceController {
     }
 
     watchers() {
-        const self = this;
-        this.scope.$watch(self.extractDomainSelection, self.applyFilters, true);
-        this.scope.$watchGroup([() => {
-            return this.toShow;
-        }, ()=> {
-            return this.showAllFlag;
-        }], ([toShow, showAllFlag]) => {
-            if (toShow && showAllFlag) {
-                this.showLimit = toShow.length;
-            }
-            else {
-                this.showLimit = 10;
-            }
-        });
-        this.scope.$watchCollection(() => {
-            return this.all;
-        }, data => {
+        this.scope.$watch(this.extractDomainSelection, this.applyFilters, true);
+        this.scope.$watchGroup([s => s.vm.toShow, s => s.vm.showAllFlag, s => s.vm.searchText], this.applyLimitOrSearch);
+        this.scope.$watchCollection(s => s.vm.all, data => {
             this.lessons = data.filter(item => item.type === 1);
             this.resources = data.filter(item => item.type === 2);
             this.experiences = data.filter(item => item.type === 3);
             this.activate();
         });
+    }
+
+    stripHtml(text) {
+        const regex = /(<([^>]+)>)/ig;
+        return text.replace(regex, '');
+    }
+
+    applyLimitOrSearch([toShow, showAllFlag, searchText]) {
+        if (toShow && showAllFlag) {
+            this.showLimit = toShow.length;
+        }
+        else {
+            this.showLimit = 10;
+        }
+        if (searchText && searchText !== this.prevSearchText) {
+            this.prevSearchText = searchText;
+            const slice = this.toShow.slice();
+            searchText = searchText.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            const regex = new RegExp(searchText, 'ig');
+            slice.forEach(item => {
+                const strip = this.stripHtml(item.body);
+                const match = strip.match(regex);
+                item.searchOccurrences = match ? match.length : 0;
+            });
+            this.scope.$evalAsync(() => {
+                this.toShow = slice;
+            });
+        }
+        else if (this.toShow && !searchText && searchText !== this.prevSearchText) {
+            this.prevSearchText = searchText;
+            const slice = this.toShow.slice();
+            slice.forEach(item => {
+                item.searchOccurrences =  0;
+            });
+            this.scope.$evalAsync(() => {
+                this.toShow = slice;
+            });
+        }
     }
 
     extractDomainSelection() {
@@ -91,8 +118,8 @@ class PlanningAndGuidanceController {
                 name,
                 open: false,
                 selected: false,
-                domains: domains.map(checkbox => {
-                    return { name: checkbox, selected: false };
+                domains: domains.map((domain) => {
+                    return { name: domain.name, id: domain.id, selected: false };
                 })
             };
         });
@@ -101,7 +128,7 @@ class PlanningAndGuidanceController {
     applyFilters(filters) {
         const selected = filters.map(filter => {
             if (filter.selected) {
-                return filter.name;
+                return filter.id;
             }
             return null;
         }).filter(filter => filter);
@@ -122,6 +149,9 @@ class PlanningAndGuidanceController {
                 domain.selected = false;
             });
         });
+    }
+    clearSearch() {
+        this.searchText = null;
     }
 
     activate(name) {

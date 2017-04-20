@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <cms-list-element ng-repeat="item in vm.toShow | limitTo : vm.showLimit | orderBy: item.id" item="item"></cms-list-element>
+        <cms-list-element ng-repeat="item in vm.toShow | orderBy: ['searchOccurrences', 'id'] : true| limitTo : vm.showLimit" item="item"></cms-list-element>
         <div class="no-result" ng-show="vm.toShow.length === 0">
           NO RESULT EDIT ME
         </div>
@@ -65,11 +65,15 @@
         <div class="search-content md-block">
           <md-input-container md-no-float class="md-block">
             <md-icon class="material-icons">search</md-icon>
-            <input type="text" placeholder="Search">
+            <input type="text" ng-model="vm.searchText" ng-change="vm.search()" placeholder="Search">
           </md-input-container>
-          <md-button class="clear-filters" ng-click="vm.clearFilters()">
-            Clear filters
+           <md-button class="clear-search md-icon-button" aria-label="clear" ng-click="vm.clearSearch()">
+            <md-icon>cancel</md-icon>
           </md-button>
+          </md-button>
+          <!--<md-button class="clear-filters" ng-click="vm.clearFilters()">-->
+            <!--Clear filters-->
+          <!--</md-button>-->
         </div>
         <div class="filter-content">
           <h5 class="md-subhead">Apply filters to list:</h5>
