@@ -2,10 +2,11 @@ import angular from 'angular';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, body) {
+    constructor($scope, $mdDialog, Upload, body) {
         this.scope = $scope;
         this.cs = require('../CmsService');
         this.dialog = $mdDialog;
+        this.upload = Upload;
         this.newContent = {
             type: null,
             domain: null,
@@ -15,25 +16,30 @@ class AddNewContentDialog {
             textValid: false
         };
         this.axes = require('../resources/domains');
+        this.uploadInProgress = false;
     }
 
     cancel() {
         this.dialog.cancel();
     }
 
+    disableSubmit() {
+        return !this.newContent.textValid && this.uploadInProgress;
+    }
+
     submit() {
-        this.cs.addContent(this.newContent);
+        this.cs.addContent(this.newContent, this.upload);
         this.dialog.hide(this.newContent);
     }
 
 
     static factory(content) {
 
-        function addNewContent($scope, $mdDialog) {
-            return new AddNewContentDialog($scope, $mdDialog, content);
+        function addNewContent($scope, $mdDialog, Upload) {
+            return new AddNewContentDialog($scope, $mdDialog, Upload, content);
         }
 
-        addNewContent.$inject = ['$scope', '$mdDialog'];
+        addNewContent.$inject = ['$scope', '$mdDialog', 'Upload'];
         return addNewContent;
     }
 }

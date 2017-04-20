@@ -12,7 +12,6 @@ class DetailElementDialog {
         this.itemType = itemType;
         this.content = content;
         this.cs = require('../CmsService');
-        this.userId = this.storage.get('user_profile_id');
         this.editMode = false;
         this.newComment = {
             valid: true,
@@ -47,7 +46,7 @@ class DetailElementDialog {
     }
 
     isAuthor() {
-        return this.userId === this.content.author;
+        return this.cs.currentUserId === this.content.author;
     }
 
     addComment() {

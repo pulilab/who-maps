@@ -37,9 +37,9 @@
         <trix-component value="vm.newContent.body" valid="vm.newContent.textValid" placeholder="Add content" char-limit="2500"></trix-component>
         <div class="file-upload" layout="row" layout-align="start center">
           <div class="selected-file-thumbnail">
-            <img ngf-thumbnail="vm.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
+            <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
           </div>
-          <div class="md-button md-gray" ngf-select ng-model="vm.cover" ngf-pattern="'image/*'"
+          <div class="md-button md-gray" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
                ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
             <md-icon>insert_photo</md-icon>
             Add cover image
@@ -57,7 +57,7 @@
       Cancel
     </md-button>
     <span flex></span>
-    <md-button ng-disabled="!vm.newContent.textValid" class="md-primary md-raised" ng-click="vm.submit()">
+    <md-button ng-disabled="vm.disableSubmit()" class="md-primary md-raised" ng-click="vm.submit()">
       Submit
     </md-button>
   </md-dialog-actions>

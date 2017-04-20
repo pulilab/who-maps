@@ -15,6 +15,17 @@ class CmsService extends AuthApi {
         }
         this.cmsData = [];
         this.lastUpdate = new Date(1970, 1, 1).getTime();
+        this.commonServices = require('../Common/CommonServices');
+        this.currentUserId = this.commonServices.userProfile.id;
+        this.currentUserName = this.commonServices.userProfile.name;
+        this.users = this.commonServices.usersProfiles.map(({ id, name }) => {
+            return { id, name };
+        });
+    }
+
+    getNameFromId({ user }) {
+        const result = this.users.find(u => u.id === user);
+        return result ? result.name : '';
     }
 
     getData() {
@@ -45,13 +56,29 @@ class CmsService extends AuthApi {
         });
     }
 
-    addContent(resource) {
-        resource.author = this.storage.get('user_profile_id');
-        return this.post('cms/', resource).then(response => {
-            return response.json();
-        }).then(data => {
-            this.cmsData.push(data);
-            return data;
+    addContent(content, uploadService) {
+        content.author = this.currentUserId;
+        if (!content.cover) {
+            delete content.cover;
+        }
+        return new Promise(res => {
+            if (uploadService) {
+                uploadService.upload({
+                    url: '/api/cms/',
+                    data: content
+                }).then(({ data }) => {
+                    this.cmsData.push(data);
+                    res(data);
+                });
+            }
+            else {
+                this.post('cms/', content).then(response => {
+                    return response.json();
+                }).then(data=> {
+                    this.cmsData.push(data);
+                    res(data);
+                });
+            }
         });
     }
 
@@ -83,7 +110,7 @@ class CmsService extends AuthApi {
     }
 
     addComment(comment, resource) {
-        comment.user = this.storage.get('user_profile_id');
+        comment.user = this.currentUserId;
         comment.post = resource.id;
         return this.post('comment/', comment).then(response => {
             return response.json();

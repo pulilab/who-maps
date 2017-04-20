@@ -8,7 +8,7 @@ class CommentWidgetController {
         this.prettifyDate = prettifyDate;
         this.$onInit = this.onInit.bind(this);
         this.storage = new Storage();
-        this.userId = this.storage.get('user_profile_id');
+
     }
     onInit() {
         this.expanded = false;
@@ -18,6 +18,10 @@ class CommentWidgetController {
 
     isAuthor() {
         return this.userId === this.comment.user;
+    }
+
+    getUsername() {
+        return this.cs.getNameFromId(this.comment);
     }
 
     delete() {
