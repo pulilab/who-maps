@@ -40,6 +40,7 @@
 
   .excerpt {
     position: relative;
+    width: 100%;
     padding: 30px;
 
     h3 {
@@ -60,7 +61,7 @@
     }
 
     p {
-      color: $text-secondary;
+      color: $text-primary;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -122,7 +123,7 @@
       p {
         -webkit-line-clamp: 2;
         max-height: 40px;
-        color: $text-primary;
+        // color: $text-primary;
       }
     }
   }

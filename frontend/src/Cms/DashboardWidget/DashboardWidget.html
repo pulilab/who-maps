@@ -26,7 +26,7 @@
         <h4>Lessons and Tips</h4>
       </div>
       <cms-list-element ng-repeat="item in vm.lessons" item="item"></cms-list-element>
-      <div ng-show="vm.lessons.length === 0">Empty list</div>
+      <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.lessons.length === 0" class="empty-card">No lessons have been added yet...</div>
       <md-button md-no-ink ui-sref="cms({'#': 'lessons'})" class="md-primary md-small goto-cms">More Lessons &amp; Tips</md-button>
     </div>
     <div class="category-column" layout="column" flex>
@@ -34,7 +34,7 @@
         <h4>Resources</h4>
       </div>
       <cms-list-element ng-repeat="item in vm.resources" item="item"></cms-list-element>
-      <div ng-show="vm.resources.length === 0">Empty list</div>
+      <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.resources.length === 0" class="empty-card">No resources have been added yet...</div>
       <md-button md-no-ink ui-sref="cms({'#': 'resources'})" class="md-primary md-small goto-cms">More Resources</md-button>
     </div>
     <div class="category-column" layout="column" flex>
@@ -42,7 +42,7 @@
         <h4>Experiences</h4>
       </div>
       <cms-list-element ng-repeat="item in vm.experiences" item="item"></cms-list-element>
-      <div ng-show="vm.experiences.length === 0">Empty list</div>
+      <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.experiences.length === 0" class="empty-card">No experiences have been added yet...</div>
       <md-button md-no-ink ui-sref="cms({'#': 'experiences'})" class="md-primary md-small goto-cms">More Experiences</md-button>
     </div>
   </div>

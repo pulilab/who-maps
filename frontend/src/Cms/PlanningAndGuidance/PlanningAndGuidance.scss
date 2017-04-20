@@ -126,6 +126,22 @@ planning-and-guidance {
         }
       }
 
+      .empty-card {
+        margin-top: 20px;
+        padding: 40px;
+        text-align: left;
+        color: $text-disabled;
+        background-color: #fff;
+
+        .material-icons {
+          font-size: 48px;
+        }
+
+        > span:last-child {
+          padding: 0 20px;
+        }
+      }
+
       .show-more {
         min-width: 160px;
         margin: 40px auto 0;

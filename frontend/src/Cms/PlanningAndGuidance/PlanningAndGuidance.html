@@ -46,8 +46,11 @@
         </div>
 
         <cms-list-element ng-repeat="item in vm.toShow | limitTo : vm.showLimit | orderBy: item.id" item="item"></cms-list-element>
-        <div class="no-result" ng-show="vm.toShow.length === 0">
-          NO RESULT EDIT ME
+        <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.toShow.length === 0" class="empty-card">
+          <span>
+            <i class="material-icons">sentiment_dissatisfied</i>
+          </span>
+          <span>No content has been added yet...</span>
         </div>
         <md-button
           class="md-primary md-raised show-more"
@@ -67,9 +70,9 @@
             <md-icon class="material-icons">search</md-icon>
             <input type="text" placeholder="Search">
           </md-input-container>
-          <md-button class="clear-filters" ng-click="vm.clearFilters()">
+          <!-- <md-button class="clear-filters" ng-click="vm.clearFilters()">
             Clear filters
-          </md-button>
+          </md-button> -->
         </div>
         <div class="filter-content">
           <h5 class="md-subhead">Apply filters to list:</h5>
