@@ -41,7 +41,7 @@ describe('PlanningAndGuidanceController', () => {
         expect(controller.filters[0].name).toBe(rawFilter[0].name);
         expect(controller.filters[0].open).toBeFalsy();
         expect(controller.filters[0].selected).toBeFalsy();
-        expect(controller.filters[0].domains[0].name).toBe(rawFilter[0].domains[0]);
+        expect(controller.filters[0].domains[0].name).toBe(rawFilter[0].domains[0].name);
         expect(controller.filters[0].domains[0].open).toBeFalsy();
 
     });
