@@ -16,7 +16,6 @@ class AddNewContentDialog {
             textValid: false
         };
         this.axes = require('../resources/domains');
-        this.uploadInProgress = false;
     }
 
     cancel() {
@@ -24,7 +23,7 @@ class AddNewContentDialog {
     }
 
     disableSubmit() {
-        return !this.newContent.textValid && this.uploadInProgress;
+        return !this.newContent.textValid;
     }
 
     submit() {
