@@ -1,3 +1,4 @@
+from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
 from cms.models import Post, Comment
@@ -11,8 +12,15 @@ class CommentSerializer(ModelSerializer):
 
 
 class CmsSerializer(ModelSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ('id', 'name', 'body', 'type', 'domain', 'author', 'comments', 'created', 'modified')
+        fields = ('id', 'name', 'slug', 'body', 'type', 'domain', 'cover', 'author', 'comments', 'created', 'modified')
+        read_only_fields = ('slug',)
+
+    @staticmethod
+    def get_comments(post):
+        comments = Comment.objects.filter(post=post).normal()
+        serializer = CommentSerializer(instance=comments, many=True)
+        return serializer.data

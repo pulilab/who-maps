@@ -1,21 +1,14 @@
-import { prettifyDate } from '../utilities';
+import { prettifyDate, itemType } from '../utilities';
 
 class ListElementController {
 
     constructor() {
         this.$onInit = this.onInit.bind(this);
         this.prettifyDate = prettifyDate;
+        this.itemType = itemType;
     }
 
     onInit() {
-    }
-
-    itemType() {
-        if (this.item) {
-            const typeLib = ['Lessons & Tips', 'Resources', 'Experiences'];
-            return typeLib[this.item.type - 1];
-        }
-        return '';
     }
 
     static factory() {

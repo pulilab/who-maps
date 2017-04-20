@@ -5,7 +5,16 @@ const prettifyDate = ({ date }) => {
     return moment(date).format('h:m a - d MMM, YYYY');
 };
 
+const itemType = (item) => {
+    if (item) {
+        const typeLib = ['Lessons & Tips', 'Resources', 'Experiences'];
+        return typeLib[item.type - 1];
+    }
+    return '';
+};
+
 
 export default {
-    prettifyDate
+    prettifyDate,
+    itemType
 };

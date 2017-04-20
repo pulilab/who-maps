@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import { prettifyDate } from '../utilities';
+import { prettifyDate, itemType } from '../utilities';
 import { Storage } from '../../Common/';
 
 class DetailElementDialog {
@@ -9,6 +9,7 @@ class DetailElementDialog {
         this.storage = new Storage();
         this.dialog = $mdDialog;
         this.prettifyDate = prettifyDate;
+        this.itemType = itemType;
         this.content = content;
         this.cs = require('../CmsService');
         this.userId = this.storage.get('user_profile_id');

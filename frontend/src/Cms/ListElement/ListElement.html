@@ -8,7 +8,7 @@
   </div>
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
-    <h6>{{vm.itemType()}}</h6>
+    <h6>{{vm.itemType(vm.item)}}</h6>
     <p class="md-body-1" ng-bind-html="vm.item.body"></p>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
