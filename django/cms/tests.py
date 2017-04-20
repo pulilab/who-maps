@@ -501,3 +501,6 @@ class CmsApiTest(APITestCase):
         self.assertEqual(Post.objects.all().first().name, Post.objects.all().last().name)
         self.assertNotEqual(Post.objects.all().first().id, Post.objects.all().last().id)
         self.assertNotEqual(Post.objects.all().first().slug, Post.objects.all().last().slug)
+
+        self.assertEqual(Post.objects.all().first().slug, 'test-post-1')
+        self.assertEqual(Post.objects.all().last().slug, 'test-post-2')
