@@ -2,8 +2,9 @@
 
 class TrixComponentController {
 
-    constructor($scope) {
+    constructor($scope, $element) {
         this.scope = $scope;
+        this.element = $element;
         this.$onInit = this.onInit.bind(this);
         this.$postLink = this.postLink.bind(this);
         this.updateValue = this.updateValue.bind(this);
@@ -29,11 +30,11 @@ class TrixComponentController {
 
     postLink() {
         const self = this;
-        setTimeout(() => {
-            self.editorInstance = window.document.getElementById('trixEditor');
-            self.editorInstance.setAttribute('placeholder', self.placeholder);
+        this.editorInstance = this.element[0].querySelector('trix-editor');
+        this.editorInstance.setAttribute('placeholder', this.placeholder);
+        this.editorInstance.addEventListener('trix-change', this.updateValue);
+        this.editorInstance.addEventListener('trix-initialize', () => {
             self.editorInstance.editor.loadHTML(self.value);
-            self.editorInstance.addEventListener('trix-change', self.updateValue);
         });
     }
 
@@ -48,11 +49,11 @@ class TrixComponentController {
     }
 
     static factory() {
-        function controller($scope) {
-            return new TrixComponentController($scope);
+        function controller($scope, $element) {
+            return new TrixComponentController($scope, $element);
         }
 
-        controller.$inject = ['$scope'];
+        controller.$inject = ['$scope', '$element'];
 
         return controller;
     }
