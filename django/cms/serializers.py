@@ -16,7 +16,8 @@ class CmsSerializer(ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'name', 'body', 'type', 'domain', 'cover', 'author', 'comments', 'created', 'modified')
+        fields = ('id', 'name', 'slug', 'body', 'type', 'domain', 'cover', 'author', 'comments', 'created', 'modified')
+        read_only_fields = ('slug',)
 
     @staticmethod
     def get_comments(post):
