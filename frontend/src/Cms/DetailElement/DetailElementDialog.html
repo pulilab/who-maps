@@ -22,7 +22,7 @@
 
             <div class="created">
               {{vm.prettifyDate(vm.content)}}
-              <span>|</span>
+              <span class="sep">|</span>
               <!-- visible if user is able to edit -->
               <span ng-show="vm.isAuthor()">
                 <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
@@ -31,7 +31,7 @@
                 <md-button class="edit-button" md-no-ink ng-click="vm.delete()">
                   <md-icon>clear</md-icon> Delete
                 </md-button>
-                <span>|</span>
+                <span class="sep">|</span>
               </span>
               <!-- / -->
               <cms-report-button item="vm.content"></cms-report-button>
@@ -45,13 +45,13 @@
             </div>
 
             <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.content.body"></div>
-            <div class="body" ng-if="vm.editMode">
+            <div class="body edit-mode" ng-if="vm.editMode">
               <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
-              <md-button ng-click="vm.update()" ng-disabled="!vm.modified.valid">
-                <md-icon>create</md-icon> Save
+              <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+                <md-icon>done</md-icon> Save
               </md-button>
-              <md-button ng-click="vm.edit()" >
-                <md-icon>create</md-icon> Cancel
+              <md-button ng-click="vm.edit()">
+                <md-icon>undo</md-icon> Cancel
               </md-button>
             </div>
           </div>
@@ -66,14 +66,14 @@
               <span class="no-avatar" ng-if="!vm.content.avatar"></span>
             </div>
 
-            <div>
+            <div class="comment-info">
               <div class="name md-display-1">
                 {{vm.content.name}}
               </div>
 
               <div class="created">
                 {{vm.prettifyDate(vm.content)}}
-                <span>|</span>
+                <span class="sep">|</span>
                 <!-- visible if user is able to edit -->
                 <span ng-show="vm.isAuthor()">
                   <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
@@ -82,7 +82,7 @@
                   <md-button class="edit-button" md-no-ink ng-click="vm.delete()">
                     <md-icon>clear</md-icon> Delete
                   </md-button>
-                  <span>|</span>
+                  <span class="sep">|</span>
                 </span>
                 <!-- / -->
                 <cms-report-button item="vm.content"></cms-report-button>
@@ -91,20 +91,18 @@
           </div>
 
           <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.content.body"></div>
-          <div class="body" ng-if="vm.editMode">
+          <div class="body edit-mode" ng-if="vm.editMode">
             <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
-            <md-button ng-click="vm.update()" ng-disabled="!vm.modified.valid">
-              <md-icon>create</md-icon> Save
+            <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+              <md-icon>done</md-icon> Save
             </md-button>
              <md-button ng-click="vm.edit()" >
-                <md-icon>create</md-icon> Cancel
+                <md-icon>undo</md-icon> Cancel
               </md-button>
           </div>
         </div>
         <!-- /end -->
-
       </div>
-
 
       <div class="comment-wrapper" ng-show="vm.content.comments.length > 0">
         <h3 class="md-title">Comments ({{vm.content.comments.length}})</h3>
