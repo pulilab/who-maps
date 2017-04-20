@@ -421,7 +421,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['comments'][0]['text'], "Comment 1")
         self.assertEqual(response.json()['comments'][1]['text'], comment.text)
 
-    def test_banned_comment_desont_show(self):
+    def test_banned_comment_doesnt_show(self):
         self.test_add_comment()
 
         comment = Comment.objects.create(text="Comment 2",
