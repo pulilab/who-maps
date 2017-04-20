@@ -17,6 +17,9 @@ class StateManager(models.QuerySet):
     def banned(self):
         return self.filter(state=State.BANNED)
 
+    def showable(self):
+        return self.exclude(state=State.BANNED)
+
 
 class State(ExtendedModel):
     NORMAL = 1
