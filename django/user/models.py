@@ -33,5 +33,5 @@ class UserProfile(ExtendedModel):
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
 
-    def __str__(self):  # pragma: no cover
-        return self.name
+    def __str__(self):
+        return self.name if self.name else ""

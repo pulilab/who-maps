@@ -49,7 +49,7 @@ class Project(ExtendedModel):
     def country_name(self):
         try:
             country_id = int(self.data.get('country'))
-        except TypeError:
+        except TypeError:  # pragma: no cover
             return None
         return Country.objects.get(id=country_id).name
 

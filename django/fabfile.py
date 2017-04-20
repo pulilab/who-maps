@@ -146,7 +146,11 @@ def _import_geodata():
 
 
 def test(app=""):
-    local("docker exec -it whomaps_django_1 py.test {} --cov".format(app))
+    local("docker-compose exec django ptw -- {} -s --testmon".format(app))
+
+
+def cov():
+    local("docker-compose exec django py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc")
 
 
 def migrate():
