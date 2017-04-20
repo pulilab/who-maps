@@ -1,7 +1,8 @@
 <div md-whiteframe="2" class="cms-experience-list" layout="row" layout-align="start stretch">
   <div class="experiences-list" flex="40">
     <h3 class="md-title">Learn from others' experiences</h3>
-    <cms-list-element item="item" ng-repeat="item in vm.experiences"></cms-list-element>
+    <div ng-show="vm.experiences.length === 0">Empty list</div>
+    <cms-list-element item="item" ng-repeat="item in vm.experiences | limitTo:2"></cms-list-element>
     <md-button ui-sref="cms({'#': 'experiences'})" class="md-primary md-raised">
       Show more
     </md-button>

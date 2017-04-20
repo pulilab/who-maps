@@ -24,15 +24,12 @@
     color: $color-primary;
   }
 
-  .md-button {
-    margin: 0;
+  cms-list-element + .md-button,
+  .add-experience .md-button {
+    margin: 10px 0 0;
     padding-left: 20px;
     padding-right: 20px;
     min-width: 140px;
-  }
-
-  cms-list-element + .md-button {
-    margin-top: 20px;
   }
 
   .trix-wrapper {
@@ -67,6 +64,17 @@
         min-height: 32px;
         margin-bottom: 10px;
       }
+
+      cms-detail-element {
+        margin-bottom: 10px;
+
+        .md-button {
+          margin: 0;
+          &:first-of-type {
+            display: none;
+          }
+        }
+      }
     }
 
     &.experience {
@@ -92,7 +100,7 @@
       }
 
       .time {
-        font-size: 10px;
+        font-size: 12px;
       }
     }
   }
