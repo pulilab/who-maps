@@ -185,6 +185,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['type'], self.post_data['type'])
         self.assertEqual(response.json()['domain'], self.post_data['domain'])
         self.assertEqual(response.json()['author'], self.post_data['author'])
+        self.assertTrue(response.json()['slug'])
         self.assertTrue(response.json()['created'])
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
@@ -435,3 +436,33 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
         self.assertIn(cover.name, response.json()['cover'])
+
+    def test_two_posts_with_same_name(self):
+        self.test_create()
+
+        self.post_data = {
+            "name": "Test Post 1",
+            "body": "<strong>TEST</strong>",
+            "type": Post.RESOURCE,
+            "domain": 1,
+            "author": self.user_profile_id
+        }
+
+        url = reverse("post-list")
+        response = self.test_user_client.post(url, self.post_data, format="json")
+
+        self.post_id = response.json().get("id")
+
+        self.assertEqual(response.json()['name'], self.post_data['name'])
+        self.assertEqual(response.json()['body'], self.post_data['body'])
+        self.assertEqual(response.json()['type'], self.post_data['type'])
+        self.assertEqual(response.json()['domain'], self.post_data['domain'])
+        self.assertEqual(response.json()['author'], self.post_data['author'])
+        self.assertTrue(response.json()['slug'])
+        self.assertTrue(response.json()['created'])
+        self.assertTrue(response.json()['modified'])
+        self.assertEqual(response.json()['comments'], [])
+
+        self.assertEqual(Post.objects.all().first().name, Post.objects.all().last().name)
+        self.assertNotEqual(Post.objects.all().first().id, Post.objects.all().last().id)
+        self.assertNotEqual(Post.objects.all().first().slug, Post.objects.all().last().slug)
