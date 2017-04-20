@@ -1,3 +1,4 @@
+import itertools
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -92,6 +93,12 @@ class Post(State):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+
+        for counter in itertools.count(1):
+            if not Post.objects.filter(slug=self.slug).exists():
+                break
+            self.slug = '%s-%d' % (self.slug, counter)
+
         super(Post, self).save(*args, **kwargs)
 
 
