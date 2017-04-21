@@ -14,6 +14,10 @@ trix-toolbar {
     button.strike {
       display: none;
     }
+
+    button.icon::before {
+      background-size: auto 90%;
+    }
   }
 }
 

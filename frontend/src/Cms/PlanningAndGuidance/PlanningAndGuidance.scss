@@ -168,6 +168,10 @@ planning-and-guidance {
 
         .cms-search {
           position: relative;
+
+          md-icon {
+            top: 5px;
+          }
         }
 
         .clear-search {
@@ -179,6 +183,7 @@ planning-and-guidance {
           width: 24px !important;
           min-height: 24px !important;
           height: 24px !important;
+
           md-icon {
             font-size: 20px;
             line-height: 24px;
