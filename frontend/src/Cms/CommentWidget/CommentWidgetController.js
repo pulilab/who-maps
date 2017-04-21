@@ -17,7 +17,7 @@ class CommentWidgetController {
     }
 
     isAuthor() {
-        return this.userId === this.comment.user;
+        return this.cs.currentUserId === this.comment.user;
     }
 
     getUsername() {

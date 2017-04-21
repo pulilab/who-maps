@@ -91,6 +91,10 @@ class CmsService extends AuthApi {
     }
 
     updateContent(resource) {
+        resource = Object.assign({}, resource);
+        if (resource.cover && typeof resource.cover === 'string') {
+            delete resource.cover;
+        }
         return this.put(`cms/${resource.id}/`, resource).then(response => {
             return response.json();
         }).then(data => {
