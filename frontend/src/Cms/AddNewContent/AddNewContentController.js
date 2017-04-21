@@ -2,11 +2,12 @@ import angular from 'angular';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, Upload, body) {
+    constructor($scope, $mdDialog, Upload, toast, body) {
         this.scope = $scope;
         this.cs = require('../CmsService');
         this.dialog = $mdDialog;
         this.upload = Upload;
+        this.toast = toast;
         this.newContent = {
             type: null,
             domain: null,
@@ -27,18 +28,33 @@ class AddNewContentDialog {
     }
 
     submit() {
-        this.cs.addContent(this.newContent, this.upload);
-        this.dialog.hide(this.newContent);
+        if (this.form.$valid) {
+            this.cs.addContent(this.newContent, this.upload);
+            this.dialog.hide(this.newContent);
+        }
+        else {
+            this.showToast('Validation error');
+        }
+    }
+
+    showToast(text) {
+        this.toast.show(
+          this.toast.simple()
+            .parent(window.document.querySelector('md-dialog'))
+            .textContent(text)
+            .position('bottom right')
+            .hideDelay(3000)
+        );
     }
 
 
     static factory(content) {
 
-        function addNewContent($scope, $mdDialog, Upload) {
-            return new AddNewContentDialog($scope, $mdDialog, Upload, content);
+        function addNewContent($scope, $mdDialog, Upload, $mdToast) {
+            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, content);
         }
 
-        addNewContent.$inject = ['$scope', '$mdDialog', 'Upload'];
+        addNewContent.$inject = ['$scope', '$mdDialog', 'Upload', '$mdToast'];
         return addNewContent;
     }
 }

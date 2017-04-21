@@ -9,56 +9,72 @@
     </div>
   </md-toolbar>
 
-  <md-dialog-content>
-    <div class="md-dialog-content">
-      <div class="content">
-        <div layout="column">
-          <md-input-container>
-            <label>Select a type</label>
-            <md-select ng-model="vm.newContent.type" required >
-              <md-option ng-value="1">Lessons &amp; Tips</md-option>
-              <md-option ng-value="2">Resources</md-option>
-            </md-select>
-          </md-input-container>
-          <md-input-container>
-            <label>Select a domain</label>
-            <md-select aria-label="domain-selector" ng-model="vm.newContent.domain" class="">
-              <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
-                <md-option ng-value="domain.id" ng-repeat="domain in axis.domains track by domain.id">{{domain.name}}</md-option>
-              </md-optgroup>
-            </md-select>
-          </md-input-container>
+  <form name="vm.form" ng-submit="vm.submit($event)" novalidate>
+    <md-dialog-content>
+      <div class="md-dialog-content">
 
-          <md-input-container>
-            <label>Add a title</label>
-            <input type="text" ng-model="vm.newContent.name" />
-          </md-input-container>
-        </div>
-        <trix-component value="vm.newContent.body" valid="vm.newContent.textValid" placeholder="Add content" char-limit="2500"></trix-component>
-        <div class="file-upload" layout="row" layout-align="start center">
-          <div class="selected-file-thumbnail">
-            <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
+        <div class="content">
+          <div layout="column">
+            <md-input-container>
+              <label>Select a type</label>
+              <md-select ng-model="vm.newContent.type" required name="type">
+                <md-option ng-value="1">Lessons &amp; Tips</md-option>
+                <md-option ng-value="2">Resources</md-option>
+              </md-select>
+              <div ng-messages="vm.form.type.$error">
+                <div ng-message="required">This is required.</div>
+              </div>
+            </md-input-container>
+            <md-input-container>
+              <label>Select a domain</label>
+              <md-select aria-label="domain-selector" name="domain" ng-model="vm.newContent.domain" required class="">
+                <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
+                  <md-option ng-value="domain.id" ng-repeat="domain in axis.domains track by domain.id">{{domain.name}}</md-option>
+                </md-optgroup>
+              </md-select>
+              <div ng-messages="vm.form.domain.$error">
+                <div ng-message="required">This is required.</div>
+              </div>
+            </md-input-container>
+
+            <md-input-container>
+              <label>Add a title</label>
+              <input type="text" ng-model="vm.newContent.name"  name="name" required md-maxlength="120" />
+              <div ng-messages="vm.form.name.$error">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">The name has to be less than 120 characters long.</div>
+              </div>
+            </md-input-container>
           </div>
-          <div class="md-button md-gray" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
-               ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
-            <md-icon>insert_photo</md-icon>
-            Add cover image
-          </div>
-          <div>
-            <small>Maximum file size: 10MB</small>
+
+          <trix-component value="vm.newContent.body" valid="vm.newContent.textValid" placeholder="Add content" char-limit="2500" required></trix-component>
+
+          <div class="file-upload" layout="row" layout-align="start center">
+            <div class="selected-file-thumbnail">
+              <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
+            </div>
+            <div class="md-button md-gray" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
+                 ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
+              <md-icon>insert_photo</md-icon>
+              Add cover image
+            </div>
+            <div>
+              <small>Maximum file size: 10MB</small>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </md-dialog-content>
+    </md-dialog-content>
 
-  <md-dialog-actions layout="row">
-    <md-button ng-click="vm.cancel()">
-      Cancel
-    </md-button>
-    <span flex></span>
-    <md-button ng-disabled="vm.disableSubmit()" class="md-primary md-raised" ng-click="vm.submit()">
-      Submit
-    </md-button>
-  </md-dialog-actions>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="vm.cancel()">
+        Cancel
+      </md-button>
+      <span flex></span>
+      <md-button  class="md-primary md-raised" type="submit">
+        Submit
+      </md-button>
+    </md-dialog-actions>
+  </form>
+
 </md-dialog>
