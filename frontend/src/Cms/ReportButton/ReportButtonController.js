@@ -6,7 +6,8 @@ class ReportButtonController {
     }
 
     onInit() {
-        this.reportStatus = this.item.reported ? 'reported' : 'close';
+        this.cs = require('../CmsService');
+        this.reportStatus = this.item.state === 2 ? 'reported' : 'close';
     }
 
     openReport() {
@@ -18,6 +19,12 @@ class ReportButtonController {
     }
 
     doReport() {
+        if (this.item.user) {
+            this.cs.reportComment(this.item);
+        }
+        else {
+            this.cs.reportContent(this.item);
+        }
         this.reportStatus = 'reported';
     }
 

@@ -119,6 +119,16 @@ class AuthApi {
             .then(this.responseProcessing.bind(this));
     }
 
+    patch(endpoint, _data) {
+        const data = this.cleanDoubleDollar(_data);
+        this.retrieveToken();
+        const request = this.generateRequest();
+        request.method = 'PATCH';
+        request.body = JSON.stringify(data);
+        return fetch(this.apiUrl + endpoint, request)
+            .then(this.responseProcessing.bind(this));
+    }
+
     postFormData(endpoint, data) {
         this.retrieveToken();
         const request = this.generateRequest();

@@ -11,6 +11,7 @@ class DetailElementDialog {
         this.prettifyDate = prettifyDate;
         this.itemType = itemType;
         this.content = content;
+        console.log(content);
         this.cs = require('../CmsService');
         this.editMode = false;
         this.newComment = {

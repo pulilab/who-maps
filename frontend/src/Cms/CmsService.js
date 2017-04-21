@@ -106,6 +106,16 @@ class CmsService extends AuthApi {
         });
     }
 
+    reportContent(resource) {
+        return this.patch(`cms/${resource.id}/`).then(response => {
+            return response.json();
+        }).then((message) => {
+            const index = this.findContentIndex(resource);
+            this.cmsData.splice(index, 1, resource);
+            return message;
+        });
+    }
+
     findComment({ id }) {
         const resourceItem = this.cmsData.find(res => {
             return res.comments.some(comment => comment.id === id);
@@ -142,6 +152,16 @@ class CmsService extends AuthApi {
         return this.del(`comment/${id}/`).then(() => {
             const r = this.findComment({ id });
             r.resourceItem.comments.splice(r.index, 1);
+        });
+    }
+
+    reportComment(item) {
+        return this.patch(`comment/${item.id}/`).then(response => {
+            return response.json();
+        }).then((message) => {
+            const r = this.findComment({ id: item.id });
+            r.resourceItem.comments.splice(r.index, 1, item);
+            return message;
         });
     }
 
