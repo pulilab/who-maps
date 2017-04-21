@@ -2,21 +2,14 @@ import angular from 'angular';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, Upload, toast, body) {
+    constructor($scope, $mdDialog, Upload, toast, content) {
         this.scope = $scope;
         this.cs = require('../CmsService');
         this.dialog = $mdDialog;
         this.upload = Upload;
         this.toast = toast;
         this.showTrixError = false;
-        this.newContent = {
-            type: null,
-            domain: null,
-            name: null,
-            cover: null,
-            body,
-            textValid: false
-        };
+        this.newContent = content;
         this.axes = require('../resources/domains');
     }
 
@@ -24,13 +17,14 @@ class AddNewContentDialog {
         this.dialog.cancel();
     }
 
-    disableSubmit() {
-        return !this.newContent.textValid;
-    }
-
     submit() {
         if (this.form.$valid) {
-            this.cs.addContent(this.newContent, this.upload);
+            if (this.newContent.id) {
+                this.cs.updateContent(this.newContent, this.upload);
+            }
+            else {
+                this.cs.addContent(this.newContent, this.upload);
+            }
             this.dialog.hide(this.newContent);
         }
         else {
@@ -68,13 +62,12 @@ class AddNewContentController {
     constructor($scope, $mdDialog) {
         this.scope = $scope;
         this.dialog = $mdDialog;
-        this.newContent = null;
     }
 
     showAddNewContentDialog(event) {
-        const self = this;
+        const content = this.toEdit ? Object.assign({}, this.toEdit) : {};
         this.dialog.show({
-            controller: AddNewContentDialog.factory(self.newContent),
+            controller: AddNewContentDialog.factory(content),
             controllerAs: 'vm',
             template: require('./AddNewContentDialog.html'),
             parent: angular.element(document.body),

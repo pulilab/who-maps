@@ -66,6 +66,8 @@
     .selected-file-thumbnail {
       img {
         float: left;
+        height: 36px;
+        width: auto;
         margin: 0 20px 0 0;
         border-radius: 2px;
         box-shadow: 2px 3px 5px rgba(0,0,0,.14);

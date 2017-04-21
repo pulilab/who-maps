@@ -7,7 +7,9 @@ const component = {
     controller: AddNewContentController.factory(),
     controllerAs: 'vm',
     name: 'cmsAddNewContent',
-    bindings: {}
+    bindings: {
+        toEdit: '<?'
+    }
 };
 
 export default component;

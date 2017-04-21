@@ -1,4 +1,7 @@
-<md-button ng-click="vm.showAddNewContentDialog($event)" class="md-primary md-raised add-new">
+<md-button ng-click="vm.showAddNewContentDialog($event)" ng-hide="vm.toEdit" class="md-primary md-raised add-new">
   <md-icon class="material-icons">add</md-icon>
   Add new content
+</md-button>
+<md-button class="edit-button" md-no-ink ng-show="vm.toEdit" ng-click="vm.showAddNewContentDialog($event)">
+  <md-icon>create</md-icon> Edit
 </md-button>

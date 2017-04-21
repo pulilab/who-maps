@@ -25,9 +25,7 @@
               <span class="sep">|</span>
               <!-- visible if user is able to edit -->
               <span ng-show="vm.isAuthor()">
-                <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
-                  <md-icon>create</md-icon> Edit
-                </md-button>
+                <cms-add-new-content to-edit="vm.content"></cms-add-new-content>
                 <md-button class="edit-button" md-no-ink ng-click="vm.delete()">
                   <md-icon>clear</md-icon> Delete
                 </md-button>

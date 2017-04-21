@@ -1,7 +1,8 @@
 <md-dialog aria-label="add-new-content" class="detail-dialog new-content-dialog">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h3 class="md-title">Add new content</h3>
+      <h3 class="md-title" ng-hide="vm.newContent.id">Add new content</h3>
+      <h3 class="md-title" ng-show="vm.newContent.id">Edit content</h3>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="vm.cancel()">
         <md-icon  aria-label="Close dialog">close</md-icon>

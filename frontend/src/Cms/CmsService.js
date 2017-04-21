@@ -90,18 +90,35 @@ class CmsService extends AuthApi {
         });
     }
 
-    updateContent(resource) {
+    updateContent(resource, uploadService) {
         resource = Object.assign({}, resource);
         if (resource.cover && typeof resource.cover === 'string') {
             delete resource.cover;
         }
-        return this.put(`cms/${resource.id}/`, resource).then(response => {
-            return response.json();
-        }).then(data => {
-            const index = this.findContentIndex(resource);
-            this.cmsData.splice(index, 1, data);
-            return data;
+        return new Promise(res => {
+            if (uploadService && resource.cover) {
+                uploadService.upload({
+                    url: `/api/cms/${resource.id}`,
+                    method: 'PUT',
+                    headers: { Authorization: 'Token ' + this.token },
+                    data: resource
+                }).then(({ data }) => {
+                    const index = this.findContentIndex(resource);
+                    this.cmsData.splice(index, 1, data);
+                    res(data);
+                });
+            }
+            else {
+                this.put(`cms/${resource.id}/`, resource).then(response => {
+                    return response.json();
+                }).then(data => {
+                    const index = this.findContentIndex(resource);
+                    this.cmsData.splice(index, 1, data);
+                    res(data);
+                });
+            }
         });
+
     }
 
     deleteContent({ id }) {
