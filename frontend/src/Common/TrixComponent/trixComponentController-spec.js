@@ -11,10 +11,14 @@ const $scope = {
     }
 };
 
+const element = [
+    window.document.createElement('div')
+];
+
 describe('TrixComponentController', () => {
 
     beforeEach(() => {
-        controller = TrixComponentController.factory()($scope);
+        controller = TrixComponentController.factory()($scope, element);
         controller.editorInstance = {
             editor: {
                 getDocument: jasmine.createSpy('getDocument').and.returnValue({

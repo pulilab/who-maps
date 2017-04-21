@@ -15,7 +15,9 @@ class TrixComponentController {
         require('trix');
         this.charCounter = 0;
         this.valid = false;
+        this.showError = false;
         this.watchers();
+        this.required = this.element[0].hasAttribute('required');
     }
 
     watchers() {
@@ -38,12 +40,16 @@ class TrixComponentController {
         });
     }
 
+    blur() {
+        this.showError = !this.valid;
+    }
+
     updateValue() {
         const rawString = this.editorInstance.editor.getDocument().toString();
         this.scope.$evalAsync(() => {
             this.charCounter = rawString.length - 1;
-            this.valid = this.charLimit ?
-              this.charCounter < this.charLimit && this.charCounter > 0 : this.charCounter > 0;
+            this.valid = this.charLimit ? this.charCounter < this.charLimit : true;
+            this.valid = this.valid && this.charCounter > 0;
             this.value = this.editorInstance.editor.element.value;
         });
     }
