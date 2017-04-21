@@ -13,9 +13,13 @@ class CmsService extends AuthApi {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
+        this.commonServices = require('../Common/CommonServices');
+        this.init();
+    }
+
+    init() {
         this.cmsData = [];
         this.lastUpdate = new Date(1970, 1, 1).getTime();
-        this.commonServices = require('../Common/CommonServices');
         if (this.commonServices.userProfile) {
             this.currentUserId = this.commonServices.userProfile.id;
             this.currentUserName = this.commonServices.userProfile.name;
@@ -53,7 +57,7 @@ class CmsService extends AuthApi {
         });
     }
 
-    findContent({ id }) {
+    findContentIndex({ id }) {
         return _.findIndex(this.cmsData, item => {
             return item.id === id;
         });
@@ -89,7 +93,7 @@ class CmsService extends AuthApi {
         return this.put(`cms/${resource.id}/`, resource).then(response => {
             return response.json();
         }).then(data => {
-            const index = this.findContent(resource);
+            const index = this.findContentIndex(resource);
             this.cmsData.splice(index, 1, data);
             return data;
         });
@@ -97,7 +101,7 @@ class CmsService extends AuthApi {
 
     deleteContent({ id }) {
         return this.del(`cms/${id}/`).then(() => {
-            const index = this.findContent({ id });
+            const index = this.findContentIndex({ id });
             this.cmsData.splice(index, 1);
         });
     }
