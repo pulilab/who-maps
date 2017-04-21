@@ -1,4 +1,5 @@
 import utilities from './utilities';
+import moment from 'moment';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
@@ -9,8 +10,9 @@ describe('CMS Utilities', () => {
         const objWithDate = {
             date: new Date('2017-01-01')
         };
+        const expectedString = moment(objWithDate.date).format('h:m a - d MMM, YYYY');
         const result = utilities.prettifyDate(objWithDate);
-        expect(result).toBe('1:0 am - 0 Jan, 2017');
+        expect(result).toBe(expectedString);
     });
 
     it('should have an itemType Fn.', () => {
