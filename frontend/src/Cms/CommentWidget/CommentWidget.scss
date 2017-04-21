@@ -151,6 +151,7 @@
       }
 
       .read-more {
+        float: left;
         display: inline-block;
         margin-top: 15px;
         cursor: pointer;
@@ -164,7 +165,7 @@
     display: block !important;
     overflow: visible !important;
     height: auto !important;
-    max-height: auto !important;
-    margin-bottom: 15px;
+    max-height: none !important;
+    // margin-bottom: 15px;
   }
 }
