@@ -11,7 +11,8 @@ const component = {
         value: '=?',
         placeholder: '@?',
         charLimit: '<?',
-        valid: '='
+        valid: '=',
+        showError: '<?'
     }
 };
 

@@ -8,6 +8,7 @@ class AddNewContentDialog {
         this.dialog = $mdDialog;
         this.upload = Upload;
         this.toast = toast;
+        this.showTrixError = false;
         this.newContent = {
             type: null,
             domain: null,
@@ -33,6 +34,9 @@ class AddNewContentDialog {
             this.dialog.hide(this.newContent);
         }
         else {
+            if (!this.newContent.textValid) {
+                this.showTrixError = true;
+            }
             this.showToast('Validation error');
         }
     }
