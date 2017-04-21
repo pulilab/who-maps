@@ -1,10 +1,14 @@
 var webpack = require('webpack');
 module.exports = function(config) {
     config.set({
-        browsers: ['PhantomJS'],
+        browsers: ['HeadlessChrome'],
+        customLaunchers: {
+            HeadlessChrome: {
+                base: 'ChromeCanary',
+                flags: ['--disable-web-security', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
+            }
+        },
         files: [
-            './node_modules/phantomjs-polyfill-find/find-polyfill.js',
-            './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
             { pattern: 'test-context.js', watched: false }
         ],
         frameworks: ['jasmine'],
@@ -75,7 +79,7 @@ module.exports = function(config) {
             require('karma-jasmine'),
             require('karma-coverage'),
             require('karma-sourcemap-loader'),
-            require('karma-phantomjs-launcher')
+            require('karma-chrome-launcher')
         ]
     });
 };
