@@ -1,10 +1,16 @@
 var webpack = require('webpack');
 module.exports = function(config) {
+
+    var browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
     config.set({
-        browsers: ['HeadlessChrome'],
+        browsers: browsers,
         customLaunchers: {
             HeadlessChrome: {
                 base: 'Chrome',
+                flags: ['--disable-web-security', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
+            },
+            HeadlessCanary: {
+                base: 'ChromeCanary',
                 flags: ['--disable-web-security', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
             }
         },

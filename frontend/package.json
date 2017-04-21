@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start",
+    "test_ci": "cross-env BROWSER_ENV=chrome karma start --single-run",
     "dev": "yarn serve",
     "serve": "node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline",
     "sitebuild": "webpack-dev-server --progress --colors --hot --inline --host='0.0.0.0' --port='9000'",
