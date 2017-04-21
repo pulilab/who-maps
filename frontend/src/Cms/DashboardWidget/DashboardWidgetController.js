@@ -104,7 +104,7 @@ class DashboardWidgetController {
         function dashboardWidgetController($scope) {
             return new DashboardWidgetController($scope);
         }
-        dashboardWidgetController().$inject = ['$scope'];
+        dashboardWidgetController.$inject = ['$scope'];
         return dashboardWidgetController;
     }
 }

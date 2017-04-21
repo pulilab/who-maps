@@ -16,7 +16,7 @@ class ListElementController {
         function listElement() {
             return new ListElementController();
         }
-        listElement().$inject = [];
+        listElement.$inject = [];
         return listElement;
     }
 }

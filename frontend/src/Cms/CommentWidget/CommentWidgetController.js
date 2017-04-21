@@ -53,7 +53,7 @@ class CommentWidgetController {
         function commentWidget($scope) {
             return new CommentWidgetController($scope);
         }
-        commentWidget().$inject = ['$scope'];
+        commentWidget.$inject = ['$scope'];
         return commentWidget;
     }
 }

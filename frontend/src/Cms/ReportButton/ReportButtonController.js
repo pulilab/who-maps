@@ -33,7 +33,7 @@ class ReportButtonController {
         function reportButton() {
             return new ReportButtonController();
         }
-        reportButton().$inject = [];
+        reportButton.$inject = [];
         return reportButton;
     }
 }

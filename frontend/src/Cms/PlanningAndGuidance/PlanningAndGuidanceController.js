@@ -184,7 +184,7 @@ class PlanningAndGuidanceController {
         function planningAndGuidance($scope, $state) {
             return new PlanningAndGuidanceController($scope, $state);
         }
-        planningAndGuidance().$inject = ['$scope', '$state'];
+        planningAndGuidance.$inject = ['$scope', '$state'];
         return planningAndGuidance;
     }
 }

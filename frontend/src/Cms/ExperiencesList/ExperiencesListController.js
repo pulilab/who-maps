@@ -51,7 +51,7 @@ class ExperienceListController {
         function experienceListController($scope) {
             return new ExperienceListController($scope);
         }
-        experienceListController().$inject = ['$scope'];
+        experienceListController.$inject = ['$scope'];
         return experienceListController;
     }
 }

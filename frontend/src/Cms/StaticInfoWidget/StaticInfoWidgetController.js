@@ -8,7 +8,7 @@ class StaticInfoWidgetController {
         function staticInfoWidgetController() {
             return new StaticInfoWidgetController();
         }
-        staticInfoWidgetController().$inject = [];
+        staticInfoWidgetController.$inject = [];
         return staticInfoWidgetController;
     }
 }
