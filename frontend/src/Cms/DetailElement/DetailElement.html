@@ -1,1 +1,9 @@
-<md-button ng-click="vm.showDetailDialog($event)">DETAIL BUTTON (READ MORE)</md-button>
+<md-button ng-click="vm.showDetailDialog($event)" class="md-primary md-small">
+  <md-icon class="material-icons">comment</md-icon>
+  Add comment ({{vm.item.comments.length}})
+</md-button>
+
+<md-button ng-click="vm.showDetailDialog($event)" class="md-primary md-small">
+  <md-icon class="material-icons">launch</md-icon>
+  Read more
+</md-button>

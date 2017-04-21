@@ -7,7 +7,9 @@ const component = {
     controller: DashboardWidgetController.factory(),
     controllerAs: 'vm',
     name: 'cmsDashboardWidget',
-    bindings: {}
+    bindings: {
+        scores: '<'
+    }
 };
 
 export default component;

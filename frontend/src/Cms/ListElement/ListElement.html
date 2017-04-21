@@ -1,17 +1,31 @@
 
-<div ng-if="!vm.experience" md-whiteframe="2" class="cms-list-element">
+<div ng-if="vm.item.type !== 3" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
 
-  <div class="cover-img"></div>
+  <div class="cover-img">
+
+    <span class="no-cover" ng-hide="vm.item.cover"></span>
+    <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">
+  </div>
   <div class="excerpt">
-    <h3></h3>
-    <p></p>
-    <!-- <cms-detail-element></cms-detail-element> -->
+    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h6>{{vm.itemType(vm.item)}}</h6>
+    <p class="md-body-1" ng-bind-html="vm.item.body"></p>
+    <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 </div>
 
-<div ng-if="vm.experience" md-whiteframe="2" class="cms-list-element experience">
+<div ng-if="vm.item.type === 3" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
 
-  <h3>LIST ELEMENT (Experience)</h3>
-  <cms-detail-element></cms-detail-element>
+  <div class="avatar-img">
+    <span ng-hide="vm.item.avatar"></span>
+    <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
+  </div>
+  <div class="excerpt">
+    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h6>{{vm.itemType}}</h6>
+    <small class="time">{{vm.prettifyDate(vm.item)}}</small>
+    <p class="md-body-1"  ng-bind-html="vm.item.body"></p>
+    <cms-detail-element item="vm.item"></cms-detail-element>
+  </div>
 
 </div>

@@ -1,2 +1,171 @@
 @import '../../variables';
 @import '../../mixins';
+
+.comment {
+  background-color: $color-white;
+  margin-bottom: 20px;
+  padding: 20px 45px 30px 15px;
+
+  .avatar-img {
+    margin-right: 15px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+    }
+
+    .no-avatar {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 50px;
+      background-color: #BDBDBD;
+
+      &::before {
+        content: "person";
+        @include md-icon($font-size: 24px);
+        color: $color-white;
+        z-index: 1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .excerpt {
+    width: 100%;
+    .md-title {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    .comment-info {
+      display: block;
+      margin: 5px 0 10px;
+
+      .time {
+        position: relative;
+        display: block;
+        color: $text-disabled;
+
+        .sep {
+          display: inline-block;
+          padding: 0 7px;
+        }
+
+        .edit-button {
+          position: relative;
+          top: 4px;
+          left: 0;
+          min-width: auto;
+          width: auto;
+          margin: 0 2px 0 0;
+          padding: 0;
+          font-size: 12px;
+          line-height: 16px;
+          background-color: transparent !important;
+
+          md-icon {
+            float: left;
+            font-size: 16px;
+            color: $text-disabled;
+          }
+
+          &:hover,
+          &:hover md-icon {
+            color: $color-gray;
+          }
+        }
+
+        .flag-button {
+          top: 2px;
+          left: -8px;
+          min-height: 24px;
+          max-height: 24px;
+          line-height: 24px;
+
+          md-icon {
+            font-size: 16px;
+          }
+
+          .report-text::after {
+            top: -2px;
+            font-size: 12px;
+          }
+        }
+      }
+
+      .active {
+        .warning-zone {
+          height: 24px;
+          padding: 0 8px;
+
+          .warning-text {
+            line-height: 24px;
+          }
+
+          .warning-actions {
+            .md-button {
+              float: right;
+              margin: 0;
+              padding: 0;
+              min-width: auto;
+              width: auto;
+              min-height: 24px;
+              max-height: 24px;
+              margin: 0 5px 0 10px;
+              font-size: 12px;
+              line-height: 24px;
+
+              md-icon {
+                position: relative;
+                top: 2px;
+                left: 2px;
+                font-size: 16px;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .comment-text {
+      font-size: 14px;
+      line-height: 20px;
+
+      .comment-text-wrapper {
+        // display: inline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-height: 20px;
+        height: auto;
+        max-height: 60px;
+      }
+
+      .read-more {
+        float: left;
+        display: inline-block;
+        margin-top: 15px;
+        cursor: pointer;
+        color: $color-primary;
+        outline: none;
+      }
+    }
+  }
+
+  &.expanded .comment-text-wrapper {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    // margin-bottom: 15px;
+  }
+}

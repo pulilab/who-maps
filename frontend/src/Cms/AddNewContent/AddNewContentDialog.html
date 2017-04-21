@@ -1,28 +1,80 @@
-<md-dialog aria-label="add-new-content">
+<md-dialog aria-label="add-new-content" class="detail-dialog new-content-dialog">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h3>Add new content modal</h3>
+      <h3 class="md-title">Add new content</h3>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="cancel()">
-        <md-icon  aria-label="Close dialog"></md-icon>
+      <md-button class="md-icon-button" ng-click="vm.cancel()">
+        <md-icon  aria-label="Close dialog">close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
 
-  <md-dialog-content>
-    <div class="md-dialog-content">
+  <form name="vm.form" ng-submit="vm.submit($event)" novalidate>
+    <md-dialog-content>
+      <div class="md-dialog-content">
 
-    </div>
-  </md-dialog-content>
+        <div class="content">
+          <div layout="column">
+            <md-input-container>
+              <label>Select a type</label>
+              <md-select ng-model="vm.newContent.type" required name="type">
+                <md-option ng-value="1">Lessons &amp; Tips</md-option>
+                <md-option ng-value="2">Resources</md-option>
+              </md-select>
+              <div ng-messages="vm.form.type.$error">
+                <div ng-message="required">This is required.</div>
+              </div>
+            </md-input-container>
+            <md-input-container>
+              <label>Select a domain</label>
+              <md-select aria-label="domain-selector" name="domain" ng-model="vm.newContent.domain" required class="">
+                <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
+                  <md-option ng-value="domain.id" ng-repeat="domain in axis.domains track by domain.id">{{domain.name}}</md-option>
+                </md-optgroup>
+              </md-select>
+              <div ng-messages="vm.form.domain.$error">
+                <div ng-message="required">This is required.</div>
+              </div>
+            </md-input-container>
 
-  <md-dialog-actions layout="row">
-    <md-button >
-      cancel
-    </md-button>
-    <span flex></span>
-    <md-button >
-     submit
-    </md-button>
+            <md-input-container>
+              <label>Add a title</label>
+              <input type="text" ng-model="vm.newContent.name"  name="name" required md-maxlength="120" />
+              <div ng-messages="vm.form.name.$error">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">The name has to be less than 120 characters long.</div>
+              </div>
+            </md-input-container>
+          </div>
 
-  </md-dialog-actions>
+          <trix-component value="vm.newContent.body" show-error="vm.showTrixError" valid="vm.newContent.textValid" placeholder="Add content" char-limit="2500" required></trix-component>
+
+          <div class="file-upload" layout="row" layout-align="start center">
+            <div class="selected-file-thumbnail">
+              <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
+            </div>
+            <div class="md-button md-gray" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
+                 ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100">
+              <md-icon>insert_photo</md-icon>
+              Add cover image
+            </div>
+            <div>
+              <small>Maximum file size: 10MB</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="vm.cancel()">
+        Cancel
+      </md-button>
+      <span flex></span>
+      <md-button  class="md-primary md-raised" type="submit">
+        Submit
+      </md-button>
+    </md-dialog-actions>
+  </form>
+
 </md-dialog>

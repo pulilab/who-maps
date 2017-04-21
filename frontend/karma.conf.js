@@ -3,6 +3,7 @@ module.exports = function(config) {
     config.set({
         browsers: ['PhantomJS'],
         files: [
+            './node_modules/phantomjs-polyfill-find/find-polyfill.js',
             './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
             { pattern: 'test-context.js', watched: false }
         ],

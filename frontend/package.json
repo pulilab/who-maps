@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start",
+    "dev": "yarn serve",
     "serve": "node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline",
     "sitebuild": "webpack-dev-server --progress --colors --hot --inline --host='0.0.0.0' --port='9000'",
     "dist": "cross-env NODE_ENV=production webpack",
@@ -55,6 +56,7 @@
     "loader-utils": "^0.2.14",
     "node-sass": "^4.5.0",
     "null-loader": "^0.1.1",
+    "phantomjs-polyfill-find": "ptim/phantomjs-polyfill-find",
     "phantomjs-polyfill-object-assign": "^0.0.2",
     "phantomjs-prebuilt": "^2.1.14",
     "protractor": "^3.1.1",
@@ -94,6 +96,7 @@
     "raven-js": "^3.0.5",
     "svg-pan-zoom": "^3.2.6",
     "topojson": "^2.2.0",
+    "trix": "^0.10.1",
     "whatwg-fetch": "^0.11.0"
   }
 }

@@ -7,7 +7,9 @@ const component = {
     controller: DetailElementController.factory(),
     controllerAs: 'vm',
     name: 'cmsDetailElement',
-    bindings: {}
+    bindings: {
+        item: '<'
+    }
 };
 
 export default component;

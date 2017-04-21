@@ -4,41 +4,118 @@
     <h1 class="md-display-1 text-center">Planning &amp; Guidance</h1>
   </div>
 
-  <div md-whiteframe="2" class="wrapper" layout-fill layout="column">
+  <div md-whiteframe="2" class="wrapper" layout="column">
     <div class="cms-tabs">
       <ul>
-        <li class="active">Show all</li>
-        <li>Lessons &amp; Tips</li>
-        <li>Resources</li>
-        <li>Experiences</li>
+        <li ng-click="vm.activate('all')"
+            ng-class="{active: vm.active === 'all'}">
+          Show all
+        </li>
+        <li ng-click="vm.activate('lessons')"
+            ng-class="{active: vm.active === 'lessons'}">
+          Lessons &amp; Tips
+        </li>
+        <li ng-click="vm.activate('resources')"
+            ng-class="{active: vm.active === 'resources'}">
+          Resources
+        </li>
+        <li ng-click="vm.activate('experiences')"
+            ng-class="{active: vm.active === 'experiences'}">
+          Experiences
+        </li>
       </ul>
     </div>
 
     <div class="wrapper-inner" layout="row">
 
-      <div class="cms-list" flex="grow">
-        <cms-list-element></cms-list-element>
+      <div class="cms-list" ng-class="vm.active" flex="grow">
+
+        <div class="cms-intro">
+          <div class="intro-lessons" layout="row" layout-align="start center">
+            <div flex="50"><p>Harnesses the collective experiences of projects vetted through the IWG mHealth catalytic programme and implementers in the field to offer suggestions and considerations.</p></div>
+            <div flex="50"></div>
+          </div>
+          <div class="intro-resources" layout="row" layout-align="start center">
+            <div flex="50"><p>Specific examples demonstrating how different implementers have approached and addressed some of the major challenges to scaling up. </p></div>
+            <div flex="50"></div>
+          </div>
+          <div class="intro-experiences" layout="row" layout-align="start center">
+            <div flex="50"><p>Specific examples demonstrating how different implementers have approached and addressed some of the major challenges to scaling up. This includes experiences from a variety of projects.</p></div>
+            <div flex="50"></div>
+          </div>
+        </div>
+
+        <cms-list-element ng-repeat="item in vm.toShow | orderBy: ['searchOccurrences', 'id'] : true| limitTo : vm.showLimit" item="item"></cms-list-element>
+        <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.toShow.length === 0" class="empty-card">
+          <span>
+            <i class="material-icons">sentiment_dissatisfied</i>
+          </span>
+          <span>No content has been added yet...</span>
+        </div>
+        <md-button
+          class="md-primary md-raised show-more"
+          ng-show="vm.toShow.length >= vm.showLimit"
+          ng-click="vm.toggleShowAll()">
+            <span ng-hide="vm.showAllFlag"> Show more... </span>
+            <span ng-show="vm.showAllFlag"> Show less... </span>
+        </md-button>
       </div>
 
       <div class="cms-aside" flex>
-        <div class="add-new-content"></div>
-        <div class="search-content"></div>
-        <div class="filter-content"></div>
+        <div class="add-new-content md-block">
+          <cms-add-new-content></cms-add-new-content>
+        </div>
+        <div class="search-content md-block">
+          <md-input-container md-no-float class="cms-search md-block">
+            <md-icon class="material-icons">search</md-icon>
+            <input type="text" ng-model="vm.searchText" ng-change="vm.search()" placeholder="Search">
+            <md-button class="clear-search md-icon-button" aria-label="clear" ng-click="vm.clearSearch()">
+              <md-icon>clear</md-icon>
+            </md-button>
+          </md-input-container>
+
+
+
+          <!--<md-button class="clear-filters" ng-click="vm.clearFilters()">-->
+            <!--Clear filters-->
+          <!--</md-button>-->
+        </div>
+        <div class="filter-content">
+          <h5 class="md-subhead">Apply filters to list:</h5>
+
+          <dl class="filter-list">
+            <dt ng-repeat-start="filterGroup in vm.filters">
+              <md-checkbox
+                class="md-primary small group-title"
+                ng-change="vm.toggleAll(filterGroup)"
+                ng-model="filterGroup.selected" aria-label="{{filterGroup.name}}">
+                {{filterGroup.name}} ({{filterGroup.domains.length}})
+              </md-checkbox>
+              <i class="material-icons"
+                 ng-click="vm.toggleFilterGroup(filterGroup)"
+                 ng-class="{toggled: filterGroup.open}">
+                arrow_drop_down
+              </i>
+            </dt>
+            <span
+              class="domains"
+              ng-repeat-end
+              ng-class="{show: filterGroup.open}">
+              <dd ng-repeat="checkbox in filterGroup.domains">
+                <md-checkbox
+                  class="md-primary small"
+                  ng-model="checkbox.selected"
+                  aria-label="{{checkbox.name}}">
+                  {{checkbox.name}}
+                </md-checkbox>
+              </dd>
+            </span>
+          </dl>
+        </div>
       </div>
     </div>
   </div>
 
   <disclaimer></disclaimer>
-
-</div>
-
-<div layout="row">
-
-  <div class="left-bar" layout="column" flex="20">
-    <cms-add-new-content></cms-add-new-content>
-    SEARCH AND FILTER
-  </div>
-
-
 
 </div>

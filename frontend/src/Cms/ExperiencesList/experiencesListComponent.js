@@ -7,7 +7,10 @@ const component = {
     controller: ExperiencesListController.factory(),
     controllerAs: 'vm',
     name: 'cmsExperiencesList',
-    bindings: {}
+    bindings: {
+        domainId: '<',
+        axisId: '<'
+    }
 };
 
 export default component;
