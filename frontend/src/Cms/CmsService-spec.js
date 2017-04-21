@@ -65,7 +65,7 @@ describe('CmsService', () => {
         spyOn(service, 'get').and.returnValue(prom([1]));
         service.fetchData();
         expect(service.cmsData.length).toBe(1);
-        expect(service.lastUpdate).toBeCloseTo(Date.now());
+        expect((Date.now() - service.lastUpdate < 100)).toBeTruthy();
     });
 
     it('should have a Fn. that return the index from an id', () => {
