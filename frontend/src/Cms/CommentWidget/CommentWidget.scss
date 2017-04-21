@@ -38,13 +38,14 @@
   }
 
   .excerpt {
+    width: 100%;
     .md-title {
       font-size: 14px;
       margin: 5px 0;
     }
     .comment-info {
       display: block;
-      margin-bottom: 10px;
+      margin: 5px 0 10px;
 
       .time {
         position: relative;
@@ -101,7 +102,6 @@
       .active {
         .warning-zone {
           height: 24px;
-          margin-top: 6px;
           padding: 0 8px;
 
           .warning-text {
