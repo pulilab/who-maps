@@ -4,7 +4,7 @@ module.exports = function(config) {
         browsers: ['HeadlessChrome'],
         customLaunchers: {
             HeadlessChrome: {
-                base: 'ChromeCanary',
+                base: 'Chrome',
                 flags: ['--disable-web-security', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
             }
         },
