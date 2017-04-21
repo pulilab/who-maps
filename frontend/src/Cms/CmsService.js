@@ -16,11 +16,14 @@ class CmsService extends AuthApi {
         this.cmsData = [];
         this.lastUpdate = new Date(1970, 1, 1).getTime();
         this.commonServices = require('../Common/CommonServices');
-        this.currentUserId = this.commonServices.userProfile.id;
-        this.currentUserName = this.commonServices.userProfile.name;
-        this.users = this.commonServices.usersProfiles.map(({ id, name }) => {
-            return { id, name };
-        });
+        if (this.commonServices.userProfile) {
+            this.currentUserId = this.commonServices.userProfile.id;
+            this.currentUserName = this.commonServices.userProfile.name;
+
+            this.users = this.commonServices.usersProfiles.map(({ id, name }) => {
+                return { id, name };
+            });
+        }
     }
 
     getNameFromId({ user }) {
