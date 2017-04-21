@@ -7,7 +7,6 @@ class ExperienceListController {
 
     onInit() {
         this.cs = require('../CmsService');
-        this.commonServices = require('../../Common/CommonServices');
         this.domains = require('../resources/domains');
         const axisId = parseInt(this.axisId, 10);
         const domainId = parseInt(this.domainId, 10);
@@ -21,7 +20,7 @@ class ExperienceListController {
         this.newExperience = {
             body: null,
             valid: false,
-            name: this.commonServices.userProfile.name,
+            name: this.cs.currentUserName,
             domain: this.domain.id,
             type: 3
         };

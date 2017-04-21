@@ -13,8 +13,26 @@ class CmsService extends AuthApi {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
+        this.commonServices = require('../Common/CommonServices');
+        this.init();
+    }
+
+    init() {
         this.cmsData = [];
         this.lastUpdate = new Date(1970, 1, 1).getTime();
+        if (this.commonServices.userProfile) {
+            this.currentUserId = this.commonServices.userProfile.id;
+            this.currentUserName = this.commonServices.userProfile.name;
+
+            this.users = this.commonServices.usersProfiles.map(({ id, name }) => {
+                return { id, name };
+            });
+        }
+    }
+
+    getNameFromId({ user }) {
+        const result = this.users.find(u => u.id === user);
+        return result ? result.name : '';
     }
 
     getData() {
@@ -39,19 +57,35 @@ class CmsService extends AuthApi {
         });
     }
 
-    findContent({ id }) {
+    findContentIndex({ id }) {
         return _.findIndex(this.cmsData, item => {
             return item.id === id;
         });
     }
 
-    addContent(resource) {
-        resource.author = this.storage.get('user_profile_id');
-        return this.post('cms/', resource).then(response => {
-            return response.json();
-        }).then(data => {
-            this.cmsData.push(data);
-            return data;
+    addContent(content, uploadService) {
+        content.author = this.currentUserId;
+        if (!content.cover) {
+            delete content.cover;
+        }
+        return new Promise(res => {
+            if (uploadService) {
+                uploadService.upload({
+                    url: '/api/cms/',
+                    data: content
+                }).then(({ data }) => {
+                    this.cmsData.push(data);
+                    res(data);
+                });
+            }
+            else {
+                this.post('cms/', content).then(response => {
+                    return response.json();
+                }).then(data=> {
+                    this.cmsData.push(data);
+                    res(data);
+                });
+            }
         });
     }
 
@@ -59,7 +93,7 @@ class CmsService extends AuthApi {
         return this.put(`cms/${resource.id}/`, resource).then(response => {
             return response.json();
         }).then(data => {
-            const index = this.findContent(resource);
+            const index = this.findContentIndex(resource);
             this.cmsData.splice(index, 1, data);
             return data;
         });
@@ -67,7 +101,7 @@ class CmsService extends AuthApi {
 
     deleteContent({ id }) {
         return this.del(`cms/${id}/`).then(() => {
-            const index = this.findContent({ id });
+            const index = this.findContentIndex({ id });
             this.cmsData.splice(index, 1);
         });
     }
@@ -83,7 +117,7 @@ class CmsService extends AuthApi {
     }
 
     addComment(comment, resource) {
-        comment.user = this.storage.get('user_profile_id');
+        comment.user = this.currentUserId;
         comment.post = resource.id;
         return this.post('comment/', comment).then(response => {
             return response.json();

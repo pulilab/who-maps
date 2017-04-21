@@ -17,6 +17,9 @@ class StateManager(models.QuerySet):
     def banned(self):
         return self.filter(state=State.BANNED)
 
+    def showable(self):
+        return self.exclude(state=State.BANNED)
+
 
 class State(ExtendedModel):
     NORMAL = 1
@@ -97,7 +100,8 @@ class Post(State):
         for counter in itertools.count(1):
             if not Post.objects.filter(slug=self.slug).exists():
                 break
-            self.slug = '%s-%d' % (self.slug, counter)
+
+            self.slug = '%s--%d' % (self.slug.rsplit('--', 1)[0], counter)
 
         super(Post, self).save(*args, **kwargs)
 

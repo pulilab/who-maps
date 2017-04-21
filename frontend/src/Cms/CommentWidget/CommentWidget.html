@@ -4,7 +4,7 @@
     <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
   </div>
   <div class="excerpt">
-    <h3 class="md-title">{{vm.comment.username}}</h3>
+    <h3 class="md-title">{{vm.getUsername()}}</h3>
     <div class="comment-info">
       <small class="time">
         {{vm.prettifyDate(vm.comment)}}

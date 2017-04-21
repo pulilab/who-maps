@@ -16,11 +16,11 @@ class CmsSerializer(ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'name', 'slug', 'body', 'type', 'domain', 'cover', 'author', 'comments', 'created', 'modified')
-        read_only_fields = ('slug',)
+        fields = '__all__'
+        read_only_fields = ('slug', 'state')
 
     @staticmethod
     def get_comments(post):
-        comments = Comment.objects.filter(post=post).normal()
+        comments = Comment.objects.filter(post=post).showable().order_by('-id')
         serializer = CommentSerializer(instance=comments, many=True)
         return serializer.data
