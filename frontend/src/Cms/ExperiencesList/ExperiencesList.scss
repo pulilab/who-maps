@@ -24,7 +24,12 @@
     color: $color-primary;
   }
 
+  .empty-card {
+    margin-bottom: 30px;
+  }
+
   cms-list-element + .md-button,
+  .empty-card + .md-button,
   .add-experience .md-button {
     margin: 10px 0 0;
     padding-left: 20px;
