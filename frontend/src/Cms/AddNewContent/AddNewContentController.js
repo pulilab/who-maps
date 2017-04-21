@@ -3,14 +3,16 @@ import angular from 'angular';
 
 class AddNewContentDialog {
     constructor($scope, $mdDialog, Upload, toast, content) {
-        this.scope = $scope;
         this.cs = require('../CmsService');
+        this.axes = require('../resources/domains');
+        this.scope = $scope;
         this.dialog = $mdDialog;
         this.upload = Upload;
         this.toast = toast;
         this.showTrixError = false;
+        this.disableSubmit = false;
         this.newContent = content;
-        this.axes = require('../resources/domains');
+
     }
 
     cancel() {
@@ -33,6 +35,14 @@ class AddNewContentDialog {
             }
             this.showToast('Validation error');
         }
+    }
+
+    beforeImageSelect() {
+        this.disableSubmit = true;
+    }
+
+    imageSelected() {
+        this.disableSubmit = false;
     }
 
     showToast(text) {
@@ -90,3 +100,4 @@ class AddNewContentController {
 }
 
 export default AddNewContentController;
+export { AddNewContentDialog };
