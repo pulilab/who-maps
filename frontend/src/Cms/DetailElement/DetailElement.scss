@@ -118,11 +118,29 @@ cms-detail-element {
           }
 
           ul {
-            li {}
-          }
+            padding-left: 0;
+            margin-left: 0;
+            margin: 20px 0;
+            list-style: none;
 
-          ol {
-            li {}
+            li {
+              position: relative;
+              padding-left: 25px;
+              margin: 10px 40px 10px 20px;
+              font-size: 14px;
+              line-height: 20px;
+
+              &::before {
+                content: "";
+                display: block;
+                width: 8px;
+                height: 8px;
+                background-color: #A53D00;
+                position: absolute;
+                top: 6px;
+                left: 0;
+              }
+            }
           }
 
           a {
