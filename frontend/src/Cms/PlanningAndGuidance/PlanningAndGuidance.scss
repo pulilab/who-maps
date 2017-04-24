@@ -211,6 +211,7 @@ planning-and-guidance {
               cursor: pointer;
               color: $color-gray;
               outline: none;
+              transform: rotate(-90deg);
               transition: $swift-ease-out;
 
               &:hover {
@@ -219,7 +220,7 @@ planning-and-guidance {
 
               &.toggled {
                 color: $text-primary;
-                transform: rotate(180deg);
+                transform: rotate(0deg);
               }
             }
           }
