@@ -59,11 +59,12 @@ class PlanningAndGuidanceController {
     watchers() {
         this.scope.$watch(this.extractDomainSelection, this.applyFilters, true);
         this.scope.$watchGroup([s => s.vm.toShow, s => s.vm.showAllFlag, s => s.vm.searchText], this.applyLimitOrSearch);
-        this.scope.$watchCollection(s => s.vm.all, data => {
+        this.scope.$watchCollection(s => s.vm.all, (data, oldData)=> {
+            const goTo = data.length - oldData.length === 1 ? data.slice(-1)[0].type : null;
             this.lessons = data.filter(item => item.type === 1);
             this.resources = data.filter(item => item.type === 2);
             this.experiences = data.filter(item => item.type === 3);
-            this.activate();
+            this.activate(goTo);
         });
     }
 
@@ -155,6 +156,9 @@ class PlanningAndGuidanceController {
     }
 
     activate(name) {
+        if (typeof name === 'number') {
+            name = [null, 'lessons', 'resources'][name];
+        }
         const newName = name || window.location.hash.replace('#', '') || 'all';
         this.scope.$evalAsync(() => {
             this.active = newName;
