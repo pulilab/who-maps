@@ -30,11 +30,11 @@
     </div>
     <div class="comment-text" ng-if="vm.editMode">
       <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.text" char-limit="2500"></trix-component>
-      <md-button ng-click="vm.update()" ng-disabled="!vm.modified.valid">
-        <md-icon>create</md-icon> Save
+      <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+        <md-icon>done</md-icon> Save
       </md-button>
-      <md-button ng-click="vm.edit()" >
-        <md-icon>create</md-icon> Cancel
+      <md-button ng-click="vm.edit()">
+        <md-icon>undo</md-icon> Cancel
       </md-button>
     </div>
   </div>

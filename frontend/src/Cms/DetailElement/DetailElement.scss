@@ -43,7 +43,8 @@ cms-detail-element {
 
           .sep {
             display: inline-block;
-            padding: 0 7px;
+            width: 20px;
+            text-align: center;
           }
 
           .edit-button {
@@ -52,20 +53,17 @@ cms-detail-element {
             left: 0;
             min-width: auto;
             width: auto;
-            margin: 0;
+            margin: 0 10px 0 0;
             padding: 0;
             line-height: 20px;
             background-color: transparent !important;
+            transition: $swift-ease-out;
 
             md-icon {
               float: left;
               font-size: 20px;
               color: $text-disabled;
-            }
-
-            &:first-of-type {}
-            &:last-of-type {
-              margin: 0 7px;
+              transition: $swift-ease-out;
             }
 
             &:hover,

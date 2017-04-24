@@ -54,7 +54,8 @@
 
         .sep {
           display: inline-block;
-          padding: 0 7px;
+          width: 12px;
+          text-align: center;
         }
 
         .edit-button {
@@ -63,16 +64,18 @@
           left: 0;
           min-width: auto;
           width: auto;
-          margin: 0 2px 0 0;
+          margin: 0 6px 0 0;
           padding: 0;
           font-size: 12px;
           line-height: 16px;
           background-color: transparent !important;
+          transition: $swift-ease-out;
 
           md-icon {
             float: left;
             font-size: 16px;
             color: $text-disabled;
+            transition: $swift-ease-out;
           }
 
           &:hover,
@@ -83,10 +86,10 @@
 
         .flag-button {
           top: 2px;
-          left: -8px;
           min-height: 24px;
           max-height: 24px;
           line-height: 24px;
+          margin: 0;
 
           md-icon {
             font-size: 16px;
@@ -172,5 +175,22 @@
     height: auto !important;
     max-height: none !important;
     // margin-bottom: 15px;
+  }
+
+  .trix-wrapper {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  trix-component {
+    + .md-button {
+      margin: 0 20px 0 0;
+      padding: 0 12px;
+      min-width: 120px;
+
+      &:first-of-type {
+        padding-left: 6px;
+      }
+    }
   }
 }
