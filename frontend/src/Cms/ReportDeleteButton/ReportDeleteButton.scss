@@ -82,7 +82,7 @@ cms-report-delete-button {
     .warning-zone {
       z-index: 100;
       position: absolute;
-      top: 0;
+      top: -1px;
       left: 0;
       display: block;
       width: 100%;
@@ -109,7 +109,6 @@ cms-report-delete-button {
           margin: 0 0 0 15px;
           padding: 0 4px;
           font-size: 14px;
-          line-height: 20px;
           color: #fff;
           background-color: transparent !important;
 
