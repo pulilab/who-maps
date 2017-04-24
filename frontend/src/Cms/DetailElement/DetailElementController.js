@@ -19,6 +19,10 @@ class DetailElementDialog {
         };
     }
 
+    scrollToAddNewComment()  {
+        window.document.querySelector('#add-new-comment').scrollIntoView();
+    }
+
     cancel() {
         this.dialog.cancel();
     }

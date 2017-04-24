@@ -38,7 +38,9 @@
 
           <div layout="row">
             <div class="cover">
-              <img ng-src="{{vm.content.cover}}" ng-if="vm.content.cover" />
+              <a href="{{vm.content.cover}}" target="_blank">
+                <img ng-src="{{vm.content.cover}}"  ng-if="vm.content.cover" />
+              </a>
               <span class="no-cover" ng-if="!vm.content.cover"></span>
             </div>
 
@@ -94,9 +96,9 @@
             <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
               <md-icon>done</md-icon> Save
             </md-button>
-             <md-button ng-click="vm.edit()" >
-                <md-icon>undo</md-icon> Cancel
-              </md-button>
+            <md-button ng-click="vm.edit()" >
+              <md-icon>undo</md-icon> Cancel
+            </md-button>
           </div>
         </div>
         <!-- /end -->
@@ -105,7 +107,7 @@
       <div class="comment-wrapper" ng-show="vm.content.comments.length > 0">
         <h3 class="md-title">Comments ({{vm.content.comments.length}})</h3>
 
-        <a href="#add-new-comment" class="goto-comment">
+        <a ng-click="vm.scrollToAddNewComment()" class="goto-comment">
           <md-icon aria-label="Go to Add comment">comment</md-icon>
           Add comment
         </a>
