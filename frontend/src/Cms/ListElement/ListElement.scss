@@ -60,6 +60,97 @@
       white-space: nowrap;
     }
 
+    .axis-domain {
+      position: relative;
+      font-size: 14px;
+      color: $text-disabled;
+
+      &:before {
+        content: "";
+        position: relative;
+        top: -2px;
+        float: left;
+        display: block;
+        margin-right: 8px;
+        width: 24px;
+        height: 24px;
+        background-repeat: no-repeat;
+        background-size: 80% 80%;
+        background-position: center center;
+        border-radius: 2px;
+      }
+
+      // Axis colour
+      &.axis-groundwork::before {
+        background-color: $color-axis1;
+      }
+      &.axis-partnership::before {
+        background-color: $color-axis2;
+      }
+      &.axis-financial_health::before {
+        background-color: $color-axis3;
+      }
+      &.axis-technology_and_architecture::before {
+        background-color: $color-axis4;
+      }
+      &.axis-operations::before {
+        background-color: $color-axis5;
+      }
+      &.monitoring_and_evaluation::before {
+        background-color: $color-axis6;
+      }
+
+      // Domian icon
+      &.domain-parameters-of-scale::before {
+        background-image: url('./images/icon-domain-1.svg');
+      }
+      &.domain-contextual-environment::before {
+        background-image: url('./images/icon-domain-2.svg');
+      }
+      &.domain-scientific-basis::before {
+        background-image: url('./images/icon-domain-3.svg');
+      }
+      &.domain-strategic-engagement::before {
+        background-image: url('./images/icon-domain-4.svg');
+      }
+      &.domain-partnership-sustainability::before {
+        background-image: url('./images/icon-domain-5.svg');
+      }
+      &.domain-financial-management::before {
+        background-image: url('./images/icon-domain-6.svg');
+      }
+      &.domain-financial-model::before {
+        background-image: url('./images/icon-domain-7.svg');
+      }
+      &.domain-data::before {
+        background-image: url('./images/icon-domain-8.svg');
+      }
+      &.domain-interoperability::before {
+        background-image: url('./images/icon-domain-9.svg');
+      }
+      &.domain-adaptability::before {
+        background-image: url('./images/icon-domain-10.svg');
+      }
+      &.domain-personnel::before {
+        background-image: url('./images/icon-domain-11.svg');
+      }
+      &.domain-training-and-support::before {
+        background-image: url('./images/icon-domain-12.svg');
+      }
+      &.domain-outreach-and-sensitization::before {
+        background-image: url('./images/icon-domain-13.svg');
+      }
+      &.domain-contingency-planning::before {
+        background-image: url('./images/icon-domain-14.svg');
+      }
+      &.domain-process-monitoring::before {
+        background-image: url('./images/icon-domain-15.svg');
+      }
+      &.domain-evaluation-research::before {
+        background-image: url('./images/icon-domain-16.svg');
+      }
+    }
+
     p {
       color: $text-primary;
       overflow: hidden;
