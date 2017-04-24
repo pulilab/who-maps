@@ -12,6 +12,7 @@ class DetailElementDialog {
         this.itemType = itemType;
         this.content = content;
         this.cs = require('../CmsService');
+        this.global = null;
         this.cs.getData().then(values => {
             this.global = values;
         });
@@ -97,8 +98,13 @@ class DetailElementController {
     onInit() {
     }
 
+    scrollToAddNewComment(scrollToComment)  {
+        if (scrollToComment) {
+            window.document.querySelector('#add-new-comment').scrollIntoView();
+        }
+    }
 
-    showDetailDialog(event) {
+    showDetailDialog(event, scrollToComment) {
         const self = this;
         this.dialog.show({
             controller: DetailElementDialog.factory(self.item),
@@ -106,7 +112,8 @@ class DetailElementController {
             template: require('./DetailElementDialog.html'),
             parent: angular.element(document.body),
             targetEvent: event,
-            clickOutsideToClose:true
+            clickOutsideToClose:true,
+            onComplete: () => self.scrollToAddNewComment(scrollToComment)
         });
     }
 
