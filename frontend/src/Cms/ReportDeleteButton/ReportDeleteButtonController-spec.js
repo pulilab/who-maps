@@ -1,11 +1,11 @@
-import ReportButtonController from './ReportButtonController';
+import ReportButtonController from './ReportDeleteButtonController';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 
 
-describe('ReportButtonController', () => {
+describe('ReportDeleteButtonController', () => {
 
     beforeEach(()=> {
         controller = ReportButtonController.factory()();

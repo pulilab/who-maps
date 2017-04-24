@@ -12,11 +12,32 @@ class DetailElementDialog {
         this.itemType = itemType;
         this.content = content;
         this.cs = require('../CmsService');
+        this.cs.getData().then(values => {
+            this.all = values;
+        });
         this.editMode = false;
         this.newComment = {
             valid: true,
             text: null
         };
+        this.checkExistence = this.checkExistence.bind(this);
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watchCollection(s => s.vm.all, this.checkExistence);
+
+    }
+
+    checkExistence(data) {
+        if (data && data instanceof Array) {
+            const contentExist = data.some(item => {
+                return item.id === this.content.id;
+            });
+            if (!contentExist) {
+                this.dialog.cancel();
+            }
+        }
     }
 
     scrollToAddNewComment()  {
@@ -40,12 +61,6 @@ class DetailElementDialog {
                 this.content = Object.assign({}, this.modified);
                 this.editMode = false;
             });
-        });
-    }
-
-    delete() {
-        this.cs.deleteContent(this.content).then(() => {
-            this.dialog.cancel();
         });
     }
 

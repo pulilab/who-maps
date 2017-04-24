@@ -14,13 +14,11 @@
           <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
             <md-icon>create</md-icon> Edit
           </md-button>
-          <md-button class="edit-button" md-no-ink ng-click="vm.delete()">
-            <md-icon>clear</md-icon> Delete
-          </md-button>
+          <cms-report-delete-button type="delete" item="vm.comment"></cms-report-delete-button>
           <span class="sep">|</span>
         </span>
         <!-- / -->
-        <cms-report-button item="vm.comment"></cms-report-button>
+        <cms-report-delete-button item="vm.comment"></cms-report-delete-button>
       </small>
     </div>
     <div class="comment-text" ng-if="!vm.editMode">

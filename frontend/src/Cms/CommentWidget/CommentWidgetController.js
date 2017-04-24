@@ -24,10 +24,6 @@ class CommentWidgetController {
         return this.cs.getNameFromId(this.comment);
     }
 
-    delete() {
-        this.cs.deleteComment(this.comment);
-    }
-
     edit() {
         this.editMode = !this.editMode;
         if (this.editMode) {

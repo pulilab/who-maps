@@ -54,7 +54,7 @@ describe('CmsService', () => {
             expect(data.length).toBe(1);
         });
 
-        service.lastUpdate = Date.now() - 120;
+        service.lastUpdate = Date.now() - 120000;
         service.getData().then(data => {
             expect(service.fetchData).toHaveBeenCalledTimes(1);
             expect(data.length).toBe(1);

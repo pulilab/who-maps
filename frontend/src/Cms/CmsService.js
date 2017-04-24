@@ -1,10 +1,12 @@
 import { AuthApi } from '../Common/';
 import _ from 'lodash';
+import angular from 'angular';
 
 /* global Promise, Symbol */
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
+const DATA_EXPIRATION_IN_MILLISECONDS = 6000;
 
 class CmsService extends AuthApi {
     constructor(enforcer) {
@@ -38,9 +40,9 @@ class CmsService extends AuthApi {
     getData() {
         return new Promise(res => {
             const now = Date.now();
-            if (now - this.lastUpdate > 60) {
-                this.fetchData().then(value => {
-                    res(value);
+            if (now - this.lastUpdate > DATA_EXPIRATION_IN_MILLISECONDS) {
+                this.fetchData().then(() => {
+                    res(this.cmsData);
                 });
             }
             else {
@@ -51,7 +53,8 @@ class CmsService extends AuthApi {
 
     fetchData() {
         return this.get('cms/').then(data => {
-            this.cmsData = data;
+            // using angualr method to not lose the dirty checking.
+            angular.copy(data, this.cmsData);
             this.lastUpdate = Date.now();
             return data;
         });

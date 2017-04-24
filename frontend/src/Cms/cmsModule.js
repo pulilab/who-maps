@@ -9,7 +9,7 @@ import detailElement from './DetailElement/detailElementComponent';
 import experiencesList from './ExperiencesList/experiencesListComponent';
 import listElement from './ListElement/listElementComponent';
 import staticInfoWidget from './StaticInfoWidget/staticInfoWidgetComponent';
-import reportButton from './ReportButton/reportButtonComponent';
+import reportButton from './ReportDeleteButton/reportDeleteButtonComponent';
 
 const moduleName = 'cms';
 const su = new StaticUtilities('Cms');
