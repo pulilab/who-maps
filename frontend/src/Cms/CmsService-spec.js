@@ -56,13 +56,6 @@ describe('CmsService', () => {
         service.getData().then(data => {
             expect(data.length).toBe(1);
         });
-
-        service.lastUpdate = Date.now() - 120000;
-        service.getData().then(data => {
-            expect(service.fetchData).toHaveBeenCalledTimes(1);
-            expect(data.length).toBe(1);
-            done();
-        });
     });
     it('should have a Fn. that fetch the data from the backend', () => {
         spyOn(service, 'get').and.returnValue(prom([1]));
