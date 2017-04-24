@@ -100,7 +100,7 @@ class CmsService extends AuthApi {
         return new Promise(res => {
             if (uploadService && resource.cover) {
                 uploadService.upload({
-                    url: `/api/cms/${resource.id}`,
+                    url: `/api/cms/${resource.id}/`,
                     method: 'PUT',
                     headers: { Authorization: 'Token ' + this.token },
                     data: resource
