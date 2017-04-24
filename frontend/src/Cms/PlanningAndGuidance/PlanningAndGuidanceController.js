@@ -86,7 +86,8 @@ class PlanningAndGuidanceController {
             const regex = new RegExp(searchText, 'ig');
             slice.forEach(item => {
                 const strip = this.stripHtml(item.body);
-                const match = strip.match(regex);
+                const name = item.name;
+                const match = name.match(regex) || strip.match(regex);
                 item.searchOccurrences = match ? match.length : 0;
             });
             this.scope.$evalAsync(() => {
