@@ -55,6 +55,7 @@ describe('CmsService', () => {
         service.cmsData = [1];
         service.getData().then(data => {
             expect(data.length).toBe(1);
+            done();
         });
     });
     it('should have a Fn. that fetch the data from the backend', () => {
