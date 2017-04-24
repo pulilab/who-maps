@@ -62,6 +62,8 @@
 
     .axis-domain {
       position: relative;
+      display: block;
+      margin-bottom: 20px;
       font-size: 14px;
       color: $text-disabled;
 
@@ -100,7 +102,7 @@
         background-color: $color-axis6;
       }
 
-      // Domian icon
+      // Domain icon
       &.domain-parameters-of-scale::before {
         background-image: url('./images/icon-domain-1.svg');
       }
