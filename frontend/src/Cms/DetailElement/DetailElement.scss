@@ -126,7 +126,7 @@ cms-detail-element {
             li {
               position: relative;
               padding-left: 25px;
-              margin: 10px 40px 10px 20px;
+              margin: 0 40px 10px 20px;
               font-size: 14px;
               line-height: 20px;
 
@@ -140,6 +140,21 @@ cms-detail-element {
                 top: 6px;
                 left: 0;
               }
+            }
+          }
+
+          ol {
+            padding-left: 0;
+            margin-left: 0;
+            margin: 10px 0;
+
+
+            li {
+              position: relative;
+              padding-left: 15px;
+              margin: 0 40px 10px 40px;
+              font-size: 14px;
+              line-height: 20px;
             }
           }
 
