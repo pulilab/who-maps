@@ -1,4 +1,5 @@
 import moment from 'moment';
+import _ from 'lodash';
 
 const prettifyDate = ({ date }) => {
     // 3:26 pm — 4 May, 2015
@@ -72,8 +73,8 @@ const getDomain = id => {
 
 const axisAndDomainName = domainId => {
     const domain = getDomain(domainId);
-    const axis = axes.find(axis => {
-        return axis.domains.some(dom => {
+    const axis = axes.find(ax => {
+        return ax.domains.some(dom => {
             return dom.id === domain.id;
         });
     });
