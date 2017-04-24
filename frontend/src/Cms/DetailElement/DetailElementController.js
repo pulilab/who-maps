@@ -13,7 +13,7 @@ class DetailElementDialog {
         this.content = content;
         this.cs = require('../CmsService');
         this.cs.getData().then(values => {
-            this.all = values;
+            this.global = values;
         });
         this.editMode = false;
         this.newComment = {
@@ -25,7 +25,7 @@ class DetailElementDialog {
     }
 
     watchers() {
-        this.scope.$watchCollection(s => s.vm.all, this.checkExistence);
+        this.scope.$watchCollection(s => s.vm.global, this.checkExistence);
 
     }
 

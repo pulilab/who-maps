@@ -6,7 +6,7 @@ import angular from 'angular';
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
-const DATA_EXPIRATION_IN_MILLISECONDS = 6000;
+const DATA_EXPIRATION_IN_MILLISECONDS = Infinity;
 
 class CmsService extends AuthApi {
     constructor(enforcer) {
@@ -40,7 +40,7 @@ class CmsService extends AuthApi {
     getData() {
         return new Promise(res => {
             const now = Date.now();
-            if (now - this.lastUpdate > DATA_EXPIRATION_IN_MILLISECONDS) {
+            if (this.cmsData.length === 0) {
                 this.fetchData().then(() => {
                     res(this.cmsData);
                 });
