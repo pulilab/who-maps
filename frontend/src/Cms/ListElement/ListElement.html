@@ -9,11 +9,14 @@
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
+    <span ng-class="vm.axisAndDomainClass()">{{vm.showAxisAndDomain()}}</span>
     <p class="md-body-1" ng-bind-html="vm.item.body"></p>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 </div>
 
+
+<!-- EXPERIENCES -->
 <div ng-if="vm.item.type === 3" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
 
   <div class="avatar-img">

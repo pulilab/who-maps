@@ -45,8 +45,8 @@ const levenshtein = (a, b) => {
             }
             else {
                 val = Math.min(row[j - 1] + 1,
-              Math.min(prev + 1,
-                       row[j] + 1));
+                  Math.min(prev + 1,
+                    row[j] + 1));
             }
             row[j - 1] = prev;
             prev = val;
@@ -55,10 +55,37 @@ const levenshtein = (a, b) => {
     }
     return row[a.length];
 };
+const axes = require('./resources/domains');
 
+const getAxisName = index => {
+    return axes[index].name;
+};
+
+const getDomain = id => {
+    const domains = _.flatMap(axes, axis => {
+        return axis.domains;
+    });
+    return domains.find(domain => {
+        return domain.id === id;
+    });
+};
+
+const axisAndDomainName = domainId => {
+    const domain = getDomain(domainId);
+    const axis = axes.find(axis => {
+        return axis.domains.some(dom => {
+            return dom.id === domain.id;
+        });
+    });
+    return {
+        axisName: axis.name, domainName: domain.name
+    };
+};
 
 export default {
     prettifyDate,
     itemType,
-    levenshtein
+    levenshtein,
+    getAxisName,
+    axisAndDomainName
 };

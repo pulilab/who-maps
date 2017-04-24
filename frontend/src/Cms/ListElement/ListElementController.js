@@ -1,4 +1,4 @@
-import { prettifyDate, itemType } from '../utilities';
+import { prettifyDate, itemType, axisAndDomainName } from '../utilities';
 
 class ListElementController {
 
@@ -9,6 +9,18 @@ class ListElementController {
     }
 
     onInit() {
+    }
+
+    showAxisAndDomain() {
+        const result = axisAndDomainName(this.item.domain);
+        return `${result.axisName} - ${result.domainName}`;
+    }
+
+    axisAndDomainClass() {
+        const result = axisAndDomainName(this.item.domain);
+        result.domainName = result.domainName.split(' ').join('-').toLowerCase();
+        result.axisName = result.axisName.split(' ').join('-').toLowerCase();
+        return `axis-${result.axisName} domain-${result.domainName}`;
     }
 
     static factory() {
