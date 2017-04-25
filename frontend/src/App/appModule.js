@@ -202,30 +202,36 @@ const run = ($rootScope, $state, $mdToast, $mdDialog) => {
         );
     };
 
+    let processingAuth = false;
     const handleAuthProblem = () => {
-        const storage = new Storage();
-        const token = storage.get('token');
-        storage.clear();
-        singletonCollection.forEach(purgeFunction => {
-            if (purgeFunction) {
-                purgeFunction();
-            }
-        });
-        const mainUi = window.document.querySelector('ui-view');
-        mainUi.style.display = 'none';
-        const message = token ? 'Your authorization token has expired' : 'You need to be logged in to view this content';
-        const dialog = $mdDialog.show(
-          $mdDialog.alert()
-            .clickOutsideToClose(false)
-            .title('Auth problem')
-            .textContent(message)
-            .ariaLabel('Auth problem dialog')
-            .ok('Understand')
-        );
-        dialog.then(() => {
-            mainUi.style.display = '';
-            $state.go('landing');
-        });
+        if (!processingAuth) {
+            processingAuth = true;
+            const storage = new Storage();
+            const token = storage.get('token');
+            storage.clear();
+            singletonCollection.forEach(purgeFunction => {
+                if (purgeFunction) {
+                    purgeFunction();
+                }
+            });
+            const mainUi = window.document.querySelector('ui-view');
+            mainUi.style.display = 'none';
+            const message = token ? 'Your authorization token has expired' :
+              'You need to be logged in to view this content';
+            const dialog = $mdDialog.show(
+              $mdDialog.alert()
+                .clickOutsideToClose(false)
+                .title('Auth problem')
+                .textContent(message)
+                .ariaLabel('Auth problem dialog')
+                .ok('Understand')
+            );
+            dialog.then(() => {
+                mainUi.style.display = '';
+                $state.go('landing');
+                processingAuth = false;
+            });
+        }
     };
     window.addEventListener('xhrmonitor', checkXHR.bind(this));
     window.addEventListener('xhrFailedRequest', showPopUp.bind(this));
