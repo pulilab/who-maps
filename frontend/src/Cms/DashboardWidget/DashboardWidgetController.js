@@ -73,7 +73,7 @@ class DashboardWidgetController {
                 return score.name === domain.name.toLowerCase();
             });
 
-            this.domainScore = (selectedDomain.domain_sum * 100) / selectedDomain.domain_max;
+            this.domainScore = Math.round((selectedDomain.domain_sum * 100) / selectedDomain.domain_max);
         }
     }
 
