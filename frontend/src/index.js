@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'whatwg-fetch';
 import './XHRMonitor';
 import { StaticUtilities } from './Utilities';
-import { EE } from './Common/';
+import EE from './Common/EE';
 
 EE.initialize();
 

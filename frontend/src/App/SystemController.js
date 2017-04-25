@@ -25,17 +25,6 @@ class SystemController {
 
     eventBindings() {
         this.EE.once('login', this.handleLogin.bind(this));
-        this.EE.once('unauthorized', this.handleUnauthorized.bind(this));
-    }
-
-    handleUnauthorized() {
-        this.storage.clear();
-        const rs = this.cs.reset();
-        rs.loadedPromise.then(() => {
-            this.state.go('landing', { appName: null });
-        }, () => {
-            console.error('failed unauthorized handling ');
-        });
     }
 
     handleLogin() {

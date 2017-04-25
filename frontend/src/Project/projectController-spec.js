@@ -183,7 +183,6 @@ describe('ProjectController', () => {
 
     it('should have a function that handle the onInit when is in editMode', () => {
         spyOn(sc, 'handleStructureLoad');
-        spyOn(sc.EE, 'emit');
         spyOn(sc.ns, 'getGroups').and.returnValue(getGroupMock);
         sc.editMode = true;
         sc.onInit();
@@ -192,8 +191,6 @@ describe('ProjectController', () => {
         expect(sc.team[0]).toBe('a');
         sc.userProfile = undefined;
         sc.onInit();
-        expect(sc.EE.emit).toHaveBeenCalled();
-
     });
 
     it('should have a function that handle the on destroy event', () => {

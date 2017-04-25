@@ -85,7 +85,7 @@ class CustomCountryService extends SimpleApi {
     getCountriesList() {
         const self = this;
         if (!this.countryListPromise
-            || this.countryListPromise.promiseDone) {
+          || this.countryListPromise.promiseDone) {
             this.countryListPromise = this.get('countries/');
             this.countryListPromise.promiseDone = false;
         }
@@ -237,9 +237,15 @@ class CustomCountryService extends SimpleApi {
 
     }
 
+    purge() {
+        this[singleton] = undefined;
+    }
+
     static customCountryServiceFactory() {
         if (!this[singleton]) {
             this[singleton] = new CustomCountryService(singletonEnforcer);
+            const event = new CustomEvent('singletonRegistered', { detail: this[singleton].purge.bind(this) });
+            window.dispatchEvent(event);
         }
         return this[singleton];
     }

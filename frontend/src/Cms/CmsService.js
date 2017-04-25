@@ -15,11 +15,11 @@ class CmsService extends AuthApi {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
-        this.commonServices = require('../Common/CommonServices');
         this.init();
     }
 
     init() {
+        this.commonServices = require('../Common/CommonServices');
         this.cmsData = [];
         this.lastUpdate = new Date(1970, 1, 1).getTime();
         if (this.commonServices.userProfile) {
@@ -74,7 +74,7 @@ class CmsService extends AuthApi {
             if (uploadService) {
                 uploadService.upload({
                     url: '/api/cms/',
-                    headers: { Authorization: 'Token ' + this.token },
+                    // headers: { Authorization: 'Token ' + this.token },
                     data: content
                 }).then(({ data }) => {
                     this.cmsData.push(data);
@@ -189,9 +189,15 @@ class CmsService extends AuthApi {
         });
     }
 
+    purge() {
+        this[singleton] = undefined;
+    }
+
     static factory() {
         if (!this[singleton]) {
             this[singleton] = new CmsService(singletonEnforcer);
+            const event = new CustomEvent('singletonRegistered', { detail: this[singleton].purge.bind(this) });
+            window.dispatchEvent(event);
         }
         return this[singleton];
     }

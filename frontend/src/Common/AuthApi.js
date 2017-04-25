@@ -21,13 +21,6 @@ class AuthApi {
         this.prePost = false;
         this.prePut = false;
         this.preDelete = false;
-        this.EE.on('logout', this.invalidate, this);
-        this.EE.on('unauthorized', this.invalidate, this);
-    }
-
-    invalidate() {
-        this.token = void 0;
-        this.storage.clear();
     }
 
     cleanDoubleDollar(items) {
@@ -61,9 +54,6 @@ class AuthApi {
     }
 
     responseProcessing(response) {
-        if (response.status === 401) {
-            this.EE.emit('unauthorized');
-        }
         return response.ok ? response : response.json().then(Promise.reject.bind(Promise));
     }
 

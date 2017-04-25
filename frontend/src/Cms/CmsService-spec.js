@@ -44,6 +44,7 @@ describe('CmsService', () => {
     });
 
     it('should have a function that return a user name from an object with a user param', () => {
+        service.users = [user];
         let result = service.getNameFromId(user);
         expect(result).toBe(user.name);
         result = service.getNameFromId({ user: 99 });
