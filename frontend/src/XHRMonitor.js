@@ -152,6 +152,11 @@ const failedRequest = () => {
     window.dispatchEvent(event);
 };
 
+const authProblem = () => {
+    const event = new CustomEvent('xhrAuthProblem');
+    window.dispatchEvent(event);
+};
+
 window.fetch = (...args) => {
     const hash = hashArguments(args);
     preRequest(hash);
@@ -159,6 +164,9 @@ window.fetch = (...args) => {
         const status = '' + data.status;
         if (status.indexOf('50') > -1) {
             failedRequest();
+        }
+        if (status === '401') {
+            authProblem();
         }
         postRequest(hash);
         return data;
@@ -178,11 +186,13 @@ XMLHttpRequest.prototype.send = function(value) {
         preRequest(hash);
     }, false);
 
-    this.addEventListener('load', function() {
+    this.addEventListener('load', function(evt) {
+        if (evt.target.status === 401) {
+            authProblem();
+        }
         postRequest(hash);
     }, false);
     this.addEventListener('error', function() {
-        postRequest(hash);
         failedRequest();
     }, false);
     this.realSend(value);

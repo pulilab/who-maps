@@ -19,4 +19,4 @@ angular.module(moduleName, [])
     .component(technology.name, technology);
 
 
-export { moduleName as Project };
+export default moduleName;

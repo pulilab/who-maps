@@ -45,7 +45,6 @@ class ProjectController extends ProjectDefinition {
         }
         catch (e) {
             console.error('Auth token expired');
-            this.EE.emit('unauthorized');
         }
 
         if (this.editMode) {

@@ -19,6 +19,7 @@ class EditProfileController extends Protected {
         this.toast = $mdToast;
         this.storage = new Storage();
         this.$onInit = this.initialization.bind(this);
+        this.$onDestroy = this.defaultOnDestroy.bind(this);
         this.bindFunctions();
     }
 
