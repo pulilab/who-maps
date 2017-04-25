@@ -4297,7 +4297,7 @@ karma-jasmine@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.0.tgz#22e4c06bf9a182e5294d1f705e3733811b810acf"
 
-karma-phantomjs-launcher@^1.0.0, karma-phantomjs-launcher@^1.0.2:
+karma-phantomjs-launcher@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/karma-phantomjs-launcher/-/karma-phantomjs-launcher-1.0.2.tgz#19e1041498fd75563ed86730a22c1fe579fa8fb1"
   dependencies:
@@ -5441,15 +5441,7 @@ pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
 
-phantomjs-polyfill-find@ptim/phantomjs-polyfill-find:
-  version "0.0.1"
-  resolved "https://codeload.github.com/ptim/phantomjs-polyfill-find/tar.gz/026b69dcabe743265f5214775e42f8d1e8aabedc"
-
-phantomjs-polyfill-object-assign@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/phantomjs-polyfill-object-assign/-/phantomjs-polyfill-object-assign-0.0.2.tgz#8329a5c7f79e02252fa7efc36b6ed055d682ed91"
-
-phantomjs-prebuilt@^2.1.14, phantomjs-prebuilt@^2.1.7:
+phantomjs-prebuilt@^2.1.7:
   version "2.1.14"
   resolved "https://registry.yarnpkg.com/phantomjs-prebuilt/-/phantomjs-prebuilt-2.1.14.tgz#d53d311fcfb7d1d08ddb24014558f1188c516da0"
   dependencies:
@@ -7249,9 +7241,9 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-trix@^0.10.1:
+"trix@https://github.com/pulilab/trix.git#0.10.1-puli":
   version "0.10.1"
-  resolved "https://registry.yarnpkg.com/trix/-/trix-0.10.1.tgz#4dff2956fa868b840a826380b4145a94e75604c0"
+  resolved "https://github.com/pulilab/trix.git#23161e04b89efa76e58e984a402cf6650f00609f"
 
 tryit@^1.0.1:
   version "1.0.3"

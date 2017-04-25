@@ -94,7 +94,7 @@
     "raven-js": "^3.0.5",
     "svg-pan-zoom": "^3.2.6",
     "topojson": "^2.2.0",
-    "trix": "^0.10.1",
+    "trix": "https://github.com/pulilab/trix.git#0.10.1-puli",
     "whatwg-fetch": "^0.11.0"
   }
 }
