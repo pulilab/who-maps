@@ -74,7 +74,7 @@ class CmsService extends AuthApi {
             if (uploadService) {
                 uploadService.upload({
                     url: '/api/cms/',
-                    // headers: { Authorization: 'Token ' + this.token },
+                    headers: { Authorization: 'Token ' + this.token },
                     data: content
                 }).then(({ data }) => {
                     this.cmsData.push(data);

@@ -80,15 +80,6 @@ class AppModuleController extends Protected {
         this.EE.on('logout', this.handleLogoutEvent, this);
     }
 
-    checkUserProfile() {
-        if (!this.userProfile.name && this.isLogin) {
-            setTimeout(() => {
-                this.state.go('editProfile');
-            }, 10);
-
-        }
-    }
-
     fillUserData() {
         this.user.projects = this.cs.projectList;
         const lastProject = _.last(this.user.projects);
