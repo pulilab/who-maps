@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "karma start",
+    "test": "karma start & yarn serve_coverage",
+    "serve_coverage": "cd coverage/html/ && browser-sync start -s -f **/*.*",
     "test_ci": "cross-env BROWSER_ENV=chrome karma start --single-run",
     "dev": "yarn serve",
     "serve": "node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline",
