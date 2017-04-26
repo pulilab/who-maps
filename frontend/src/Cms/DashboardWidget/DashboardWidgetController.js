@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { normalizeName } from '../utilities';
 
 class DashboardWidgetController {
 
@@ -23,7 +24,7 @@ class DashboardWidgetController {
     }
 
     getData() {
-        this.cs.getData().then(data => {
+        return this.cs.getData().then(data => {
             this.scope.$evalAsync(() => {
                 this.all = data;
             });
@@ -37,8 +38,10 @@ class DashboardWidgetController {
         }, () => {
             return this.scores;
         }], ([domain, scores]) => {
-            this.setDomainVariables(domain, scores);
-            this.splitType(this.all);
+            if (domain) {
+                this.setDomainVariables(domain, scores);
+                this.splitType(this.all);
+            }
         });
 
         this.scope.$watchCollection(() => {
@@ -49,18 +52,22 @@ class DashboardWidgetController {
     }
 
     splitType(data) {
-        const id = this.currentDomain.id;
-        this.lessons = data.filter(item => item.type === 1 && item.domain === id);
-        this.resources = data.filter(item => item.type === 2 && item.domain === id);
-        this.experiences = data.filter(item => item.type === 3 && item.domain === id);
+        if (this.currentDomain && this.currentDomain.id) {
+            const id = this.currentDomain.id;
+            this.lessons = data.filter(item => item.type === 1 && item.domain === id);
+            this.resources = data.filter(item => item.type === 2 && item.domain === id);
+            this.experiences = data.filter(item => item.type === 3 && item.domain === id);
+        }
     }
 
     setDomainVariables(domain, scores) {
         const axis = this.axes.find(ax => {
-            return ax.domains.indexOf(domain) > -1;
+            return ax.domains.some(d => {
+                return d.id === domain.id;
+            });
         });
-        this.axisColor = this.normalizeName(axis.name);
-        this.domainIcon = this.normalizeName(domain.name);
+        this.axisColor = normalizeName(axis.name);
+        this.domainIcon = normalizeName(domain.name);
         if (scores) {
             const domainScores = _.flatMap(scores, score => {
                 return score.domains.map(dom => {
@@ -78,7 +85,7 @@ class DashboardWidgetController {
     }
 
     nextDomain() {
-        let next = this.domains.indexOf(this.currentDomain) + 1;
+        let next = _.findIndex(this.domains, d => d.id === this.currentDomain.id) + 1;
         if (next > this.domains.length - 1) {
             next = 0;
         }
@@ -87,16 +94,12 @@ class DashboardWidgetController {
     }
 
     prevDomain() {
-        let prev = this.domains.indexOf(this.currentDomain) - 1;
+        let prev = _.findIndex(this.domains, d => d.id === this.currentDomain.id) - 1;
         if (prev === -1) {
             prev = this.domains.length - 1;
         }
         this.currentDomain = this.domains[prev];
 
-    }
-
-    normalizeName(name) {
-        return name.toLowerCase().replace('&', 'and').replace(/ /g, '-');
     }
 
     static factory() {
