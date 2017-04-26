@@ -10,7 +10,7 @@
     <h3 class="md-title">{{vm.item.name}}</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
     <span class="axis-domain" ng-class="vm.axisAndDomainClass()">in <b>{{vm.showAxisAndDomain()}}</b></span>
-    <p class="md-body-1" ng-bind-html="vm.item.body"></p>
+    <div class="body" ng-bind-html="vm.item.body"></div>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 </div>
@@ -25,9 +25,9 @@
   </div>
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
-    <h6>{{vm.itemType}}</h6>
+    <h6>{{vm.itemType(vm.item)}}</h6>
     <small class="time">{{vm.prettifyDate(vm.item)}}</small>
-    <p class="md-body-1"  ng-bind-html="vm.item.body"></p>
+    <div class="body" ng-bind-html="vm.item.body"></div>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 

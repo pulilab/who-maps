@@ -227,11 +227,11 @@ cms-dashboard-widget {
         display: none;
       }
 
-      p.md-body-1 {
+      .body {
         -webkit-line-clamp: 2;
         font-size: 12px;
         line-height: 16px;
-        min-height: 32px;
+        max-height: 32px;
         margin-bottom: 0;
       }
     }

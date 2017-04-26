@@ -153,16 +153,18 @@
       }
     }
 
-    p {
+     .body {
       color: $text-primary;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
+      font-size: 14px;
       line-height: 20px;
       height: auto;
       max-height: 60px;
+      margin: 12px 0;
     }
 
     ul, ol {
