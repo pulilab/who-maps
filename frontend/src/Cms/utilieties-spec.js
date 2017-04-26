@@ -57,6 +57,6 @@ describe('CMS Utilities', () => {
     it('should have a fn that normalize a name', () => {
         const test = 'a & b';
         expect(utilities.normalizeName(test)).toBe('a-and-b');
-    })
+    });
 
 });
