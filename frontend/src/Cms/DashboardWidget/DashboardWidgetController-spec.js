@@ -1,25 +1,16 @@
 import DashboardWidgetController from './DashboardWidgetController';
 import { scores } from '../resources/mockData';
+import { $scope } from '../../testUtilities';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 
-const scope = {
-    $watchGroup: jasmine.createSpy('watchGroup').and.callFake((toCallArray, action) => {
-        toCallArray = toCallArray.map(call => {
-            return call();
-        });
-        action(toCallArray);
-    }),
-    $watchCollection: jasmine.createSpy('$watchCollection').and.callFake((toCall, action) =>  action(toCall())),
-    $evalAsync: jasmine.createSpy('evalAsync').and.callFake(toCall => toCall())
-};
 
 describe('DashboardWidgetController', () => {
 
     beforeEach(()=> {
-        controller = DashboardWidgetController.factory()(scope);
+        controller = DashboardWidgetController.factory()($scope(controller));
     });
 
     it('should have an onInit function', () => {

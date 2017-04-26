@@ -1,19 +1,14 @@
 import CommentWidgetController from './CommentWidgetController';
+import { $scope } from '../../testUtilities';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 
-const scope = {
-    $evalAsync: jasmine.createSpy('$evalAsync').and.callFake(toCall => {
-        toCall();
-    })
-};
-
 describe('CommentWidgetController', () => {
 
     beforeEach(()=> {
-        controller = CommentWidgetController.factory()(scope);
+        controller = CommentWidgetController.factory()($scope(controller));
         controller.$onInit();
     });
 

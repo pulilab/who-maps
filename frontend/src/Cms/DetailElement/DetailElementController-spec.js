@@ -1,35 +1,16 @@
 import DetailElementController from './DetailElementController';
 import { DetailElementDialog } from './DetailElementController';
+import { dialog, $scope } from '../../testUtilities';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 
-const dialog = {
-    cancel: jasmine.createSpy('cancel'),
-    hide: jasmine.createSpy('hide'),
-    show: jasmine.createSpy('show').and.callFake((config) => {
-        config.onComplete();
-    })
-};
-
-const scope = {
-    $watchGroup: jasmine.createSpy('watchGroup').and.callFake((toCallArray, action) => {
-        toCallArray = toCallArray.map(call => {
-            return call();
-        });
-        action(toCallArray);
-    }),
-    $watchCollection: jasmine.createSpy('$watchCollection').and.callFake((toCall, action) =>  action(toCall({
-        vm: controller
-    }))),
-    $evalAsync: jasmine.createSpy('evalAsync').and.callFake(toCall => toCall())
-};
-
 describe('DetailElementController', () => {
 
     beforeEach(()=> {
         controller = DetailElementController.factory()(dialog);
+        controller.scope = $scope(controller);
     });
 
     it('should have a scroll-to-comment fn', () => {
@@ -58,7 +39,7 @@ describe('DetailElementController', () => {
 describe('DetailElementDialogController', () => {
 
     beforeEach(()=> {
-        controller = DetailElementDialog.factory({ id: 1 })(scope, dialog);
+        controller = DetailElementDialog.factory({ id: 1 })($scope(controller), dialog);
     });
 
     it('should have an init function', () => {
@@ -151,7 +132,7 @@ describe('DetailElementDialogController', () => {
 
     it('should have a factory function', () => {
         expect(DetailElementDialog.factory).toBeDefined();
-        const onSpot = DetailElementDialog.factory()(scope);
+        const onSpot = DetailElementDialog.factory()($scope(controller));
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
 });
