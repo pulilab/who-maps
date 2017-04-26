@@ -62,13 +62,15 @@
 
     .axis-domain {
       position: relative;
+      display: block;
+      margin-bottom: 20px;
       font-size: 14px;
       color: $text-disabled;
 
       &:before {
         content: "";
         position: relative;
-        top: -2px;
+        top: -4px;
         float: left;
         display: block;
         margin-right: 8px;
@@ -100,7 +102,7 @@
         background-color: $color-axis6;
       }
 
-      // Domian icon
+      // Domain icon
       &.domain-parameters-of-scale::before {
         background-image: url('./images/icon-domain-1.svg');
       }
@@ -161,6 +163,10 @@
       line-height: 20px;
       height: auto;
       max-height: 60px;
+    }
+
+    ul, ol {
+      padding-left: 20px;
     }
   }
 

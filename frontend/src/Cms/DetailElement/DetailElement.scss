@@ -118,11 +118,44 @@ cms-detail-element {
           }
 
           ul {
-            li {}
+            padding-left: 0;
+            margin-left: 0;
+            margin: 20px 0;
+            list-style: none;
+
+            li {
+              position: relative;
+              padding-left: 25px;
+              margin: 0 40px 10px 30px;
+              font-size: 14px;
+              line-height: 20px;
+
+              &::before {
+                content: "";
+                display: block;
+                width: 8px;
+                height: 8px;
+                background-color: #A53D00;
+                position: absolute;
+                top: 6px;
+                left: -5px;
+              }
+            }
           }
 
           ol {
-            li {}
+            padding-left: 0;
+            margin-left: 0;
+            margin: 10px 0;
+
+
+            li {
+              position: relative;
+              padding-left: 15px;
+              margin: 0 40px 10px 40px;
+              font-size: 14px;
+              line-height: 20px;
+            }
           }
 
           a {
