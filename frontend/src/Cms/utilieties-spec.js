@@ -3,7 +3,7 @@ import moment from 'moment';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
-
+const axes = require('./resources/domains');
 describe('CMS Utilities', () => {
 
     it('should have a prettifyDate fn', () => {
@@ -30,9 +30,28 @@ describe('CMS Utilities', () => {
     });
 
     it('should have a levenshtein Fn.', () => {
-        const result = utilities.levenshtein('lol', 'l');
+        let result = utilities.levenshtein('lol', 'l');
         expect(result).toBe(2);
+        result = utilities.levenshtein('lol', '');
+        expect(result).toBe(3);
+        result = utilities.levenshtein('', 'l');
+        expect(result).toBe(1);
     });
 
+    it('should have a fn that return an Axis name', () => {
+
+        expect(utilities.getAxisName(0)).toBe(axes[0].name);
+    });
+    it('should have a fn that return a domain from his id', () => {
+        const domain = axes[0].domains[0];
+        expect(utilities.getDomain(domain.id).name).toBe(domain.name);
+
+    });
+    it('should have a fn that return an axis and a domainName from a domain id', ()  => {
+        const domain = axes[0].domains[0];
+        const r = utilities.axisAndDomainName(domain.id);
+        expect(r.axisName).toBe(axes[0].name);
+        expect(r.domainName).toBe(domain.name);
+    });
 
 });
