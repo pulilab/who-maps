@@ -42,4 +42,13 @@ describe('TopBarController', () => {
         ac.openMenu(spy, {});
         expect(spy).toHaveBeenCalled();
     });
+
+    it('should have a function that return show or hide Planning-And-Guidance button', () => {
+        ac.isLogin = false;
+        let result = ac.showPlanningAndGuidanceButton();
+        expect(result).toBeFalsy();
+        ac.isLogin = true;
+        result = ac.showPlanningAndGuidanceButton();
+        expect(result).toBeTruthy();
+    });
 });

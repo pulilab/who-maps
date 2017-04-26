@@ -15,8 +15,6 @@ class CommonServices extends Protected {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
-        this.EE.on('unauthorized', this.handleUnauthorized, this);
-        this.EE.on('logout', this.invalidate, this);
         this.initialize();
     }
 
@@ -53,10 +51,6 @@ class CommonServices extends Protected {
         return this;
     }
 
-    handleUnauthorized() {
-        this.storage.clear();
-        this.initialize();
-    }
 
     loadData() {
         if (this.userProfileId) {
@@ -248,9 +242,15 @@ class CommonServices extends Protected {
         return contentHeight + 'px';
     }
 
+    purge() {
+        this[singleton] = undefined;
+    }
+
     static commonServiceFactory() {
         if (!this[singleton]) {
             this[singleton] = new CommonServices(singletonEnforcer);
+            const event = new CustomEvent('singletonRegistered', { detail: this[singleton].purge.bind(this) });
+            window.dispatchEvent(event);
         }
         return this[singleton];
     }

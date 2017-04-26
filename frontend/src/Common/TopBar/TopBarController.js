@@ -44,6 +44,10 @@ class TopBarController extends Protected {
         return this.isLogin;
     }
 
+    showPlanningAndGuidanceButton() {
+        return this.isLogin;
+    }
+
     showGoToMyDashboardButton() {
         return this.userType !== 0;
     }

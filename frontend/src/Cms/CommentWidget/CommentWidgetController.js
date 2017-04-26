@@ -32,7 +32,7 @@ class CommentWidgetController {
     }
 
     update() {
-        this.cs.updateComment(this.modified).then(() => {
+        return this.cs.updateComment(this.modified).then(() => {
             this.scope.$evalAsync(() => {
                 this.comment = Object.assign({}, this.modified);
                 this.editMode = false;

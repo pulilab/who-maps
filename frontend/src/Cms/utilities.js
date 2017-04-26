@@ -88,5 +88,6 @@ export default {
     itemType,
     levenshtein,
     getAxisName,
+    getDomain,
     axisAndDomainName
 };
