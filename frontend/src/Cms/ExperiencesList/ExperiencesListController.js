@@ -8,15 +8,11 @@ class ExperienceListController {
     onInit() {
         this.cs = require('../CmsService');
         this.domains = require('../resources/domains');
-        const axisId = parseInt(this.axisId, 10);
-        const domainId = parseInt(this.domainId, 10);
-        this.domain = this.domains[axisId].domains[domainId];
+        const axisIndex = parseInt(this.axisId, 10);
+        const domainIndex = parseInt(this.domainId, 10);
+        this.domain = this.domains[axisIndex].domains[domainIndex];
         this.data = [];
-        this.cs.getData().then(data => {
-            this.data = data;
-        });
-
-
+        this.getData();
         this.newExperience = {
             body: null,
             valid: false,
@@ -26,6 +22,12 @@ class ExperienceListController {
         };
 
         this.watchers();
+    }
+
+    getData() {
+        return this.cs.getData().then(data => {
+            this.data = data;
+        });
     }
 
     watchers() {
@@ -39,7 +41,7 @@ class ExperienceListController {
     }
 
     saveExperience() {
-        this.cs.addContent(this.newExperience).then(() => {
+        return this.cs.addContent(this.newExperience).then(() => {
             this.scope.$evalAsync(() => {
                 this.newExperience.body = false;
             });

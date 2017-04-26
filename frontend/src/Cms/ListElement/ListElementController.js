@@ -1,4 +1,4 @@
-import { prettifyDate, itemType, axisAndDomainName } from '../utilities';
+import { prettifyDate, itemType, axisAndDomainName, normalizeName } from '../utilities';
 
 class ListElementController {
 
@@ -18,8 +18,8 @@ class ListElementController {
 
     axisAndDomainClass() {
         const result = axisAndDomainName(this.item.domain);
-        result.domainName = result.domainName.split(' ').join('-').toLowerCase();
-        result.axisName = result.axisName.split(' ').join('-').toLowerCase();
+        result.domainName = normalizeName(result.domainName);
+        result.axisName = normalizeName(result.axisName);
         return `axis-${result.axisName} domain-${result.domainName}`;
     }
 

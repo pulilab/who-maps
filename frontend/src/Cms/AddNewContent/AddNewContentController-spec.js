@@ -1,25 +1,9 @@
 import AddNewContentController from './AddNewContentController';
 import { AddNewContentDialog } from './AddNewContentController';
-
+import { dialog, $scope, toast } from '../../testUtilities';
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
-
-const scope = {};
-const dialog = {
-    cancel: jasmine.createSpy('cancel'),
-    hide: jasmine.createSpy('hide')
-};
-
-const toast = {};
-
-toast.show = jasmine.createSpy('showToast').and.returnValue(toast);
-toast.simple = jasmine.createSpy('simple').and.returnValue(toast);
-toast.parent = jasmine.createSpy('parent').and.returnValue(toast);
-toast.position = jasmine.createSpy('position').and.returnValue(toast);
-toast.textContent = jasmine.createSpy('textContent').and.returnValue(toast);
-toast.hideDelay = jasmine.createSpy('hideDelay').and.returnValue(toast);
-
 
 const cs = {
     updateContent: jasmine.createSpy('updateContent').and.returnValue(Promise.resolve()),
@@ -46,7 +30,7 @@ describe('AddNewContentController', () => {
 
 describe('AddNewContentDialog', () => {
     beforeEach(()=> {
-        controller = AddNewContentDialog.factory()(scope, dialog, upload, toast);
+        controller = AddNewContentDialog.factory()($scope(controller), dialog, upload, toast);
         controller.cs = cs;
     });
 

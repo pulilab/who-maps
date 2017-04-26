@@ -73,7 +73,7 @@ describe('CmsService', () => {
         expect(service.currentUserId).toBe(1);
         expect(service.currentUserName).toBe('Aldo');
         expect(service.users[0].id).toBe(user.id);
-    })
+    });
 
     it('should have a function that return a user name from an object with a user param', () => {
         service.users = [user];
@@ -106,9 +106,6 @@ describe('CmsService', () => {
 
     it('should have a function to add content', (done) => {
         const item = { id: 99 };
-        const response = {
-            json: jasmine.createSpy('json').and.returnValue(Promise.resolve(item))
-        };
         spyOn(service, 'post').and.returnValue(Promise.resolve(response));
         const upService = {
             upload: jasmine.createSpy('upload').and.returnValue(Promise.resolve({ data: item }))
@@ -174,7 +171,7 @@ describe('CmsService', () => {
 
     it('should have a find comment fn.', () => {
         service.cmsData = cmsDataWithComments();
-        const r = service.findComment({ id: 1});
+        const r = service.findComment({ id: 1 });
         expect(r.index).toBe(0);
         expect(r.resourceItem.id).toBe(1);
     });
@@ -182,7 +179,7 @@ describe('CmsService', () => {
     it('should have an addComment fn,', (done) => {
         spyOn(service, 'post').and.returnValue(Promise.resolve(response({ id: 3 })));
         service.cmsData = cmsDataWithComments();
-        service.addComment({ id: 3}, { id: 1}).then(() => {
+        service.addComment({ id: 3 }, { id: 1 }).then(() => {
             expect(service.post).toHaveBeenCalled();
             expect(service.cmsData[0].comments[2].id).toBe(3);
             done();
@@ -213,7 +210,7 @@ describe('CmsService', () => {
     it('should have a report comment fn', (done) => {
         spyOn(service, 'patch').and.returnValue(Promise.resolve(response({})));
         service.cmsData = cmsDataWithComments();
-        service.reportComment({id: 1, state: 2}).then(() => {
+        service.reportComment({ id: 1, state: 2 }).then(() => {
             expect(service.patch).toHaveBeenCalled();
             expect(service.cmsData[0].comments[0].state).toBe(2);
             done();

@@ -83,11 +83,16 @@ const axisAndDomainName = domainId => {
     };
 };
 
+const normalizeName = (name) => {
+    return name.toLowerCase().replace('&', 'and').replace(/ /g, '-');
+};
+
 export default {
     prettifyDate,
     itemType,
     levenshtein,
     getAxisName,
     getDomain,
-    axisAndDomainName
+    axisAndDomainName,
+    normalizeName
 };

@@ -11,18 +11,26 @@ class DetailElementDialog {
         this.prettifyDate = prettifyDate;
         this.itemType = itemType;
         this.content = content;
+        this.checkExistence = this.checkExistence.bind(this);
+        this.init();
+    }
+
+    init() {
         this.cs = require('../CmsService');
         this.global = null;
-        this.cs.getData().then(values => {
-            this.global = values;
-        });
+        this.getData();
         this.editMode = false;
         this.newComment = {
             valid: true,
             text: null
         };
-        this.checkExistence = this.checkExistence.bind(this);
         this.watchers();
+    }
+
+    getData() {
+        return this.cs.getData().then(values => {
+            this.global = values;
+        });
     }
 
     watchers() {
@@ -57,7 +65,7 @@ class DetailElementDialog {
     }
 
     update() {
-        this.cs.updateContent(this.modified).then(() => {
+        return this.cs.updateContent(this.modified).then(() => {
             this.scope.$evalAsync(() => {
                 this.content = Object.assign({}, this.modified);
                 this.editMode = false;
@@ -70,7 +78,7 @@ class DetailElementDialog {
     }
 
     addComment() {
-        this.cs.addComment(this.newComment, this.content).then(() => {
+        return this.cs.addComment(this.newComment, this.content).then(() => {
             this.scope.$evalAsync(() => {
                 this.newComment.text = false;
             });
@@ -92,10 +100,6 @@ class DetailElementController {
 
     constructor($mdDialog) {
         this.dialog = $mdDialog;
-        this.$onInit = this.onInit.bind(this);
-    }
-
-    onInit() {
     }
 
     scrollToAddNewComment(scrollToComment)  {
@@ -130,3 +134,4 @@ class DetailElementController {
 }
 
 export default DetailElementController;
+export { DetailElementDialog };
