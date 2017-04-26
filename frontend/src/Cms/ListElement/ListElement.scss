@@ -62,13 +62,15 @@
 
     .axis-domain {
       position: relative;
+      display: block;
+      margin-bottom: 20px;
       font-size: 14px;
       color: $text-disabled;
 
       &:before {
         content: "";
         position: relative;
-        top: -2px;
+        top: -4px;
         float: left;
         display: block;
         margin-right: 8px;
@@ -87,20 +89,20 @@
       &.axis-partnership::before {
         background-color: $color-axis2;
       }
-      &.axis-financial_health::before {
+      &.axis-financial-health::before {
         background-color: $color-axis3;
       }
-      &.axis-technology_and_architecture::before {
+      &.axis-technology-and-architecture::before {
         background-color: $color-axis4;
       }
       &.axis-operations::before {
         background-color: $color-axis5;
       }
-      &.monitoring_and_evaluation::before {
+      &.monitoring-and-evaluation::before {
         background-color: $color-axis6;
       }
 
-      // Domian icon
+      // Domain icon
       &.domain-parameters-of-scale::before {
         background-image: url('./images/icon-domain-1.svg');
       }
@@ -161,6 +163,10 @@
       line-height: 20px;
       height: auto;
       max-height: 60px;
+    }
+
+    ul, ol {
+      padding-left: 20px;
     }
   }
 
