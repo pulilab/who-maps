@@ -50,12 +50,12 @@ class ProjectController extends ProjectDefinition {
         if (this.editMode) {
             this.projectId = this.state.params.appName;
             this.cs.getProjectData(this.projectId)
-                .then(this.handleDataLoad.bind(this));
+              .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
-                .then(groups => {
-                    this.team = groups.data.team;
-                    this.viewers = groups.data.viewers;
-                });
+              .then(groups => {
+                  this.team = groups.data.team;
+                  this.viewers = groups.data.viewers;
+              });
         }
         else {
             this.ccs.findCountryId(this.cs.userProfile.country).then(countryId => {
@@ -190,15 +190,25 @@ class ProjectController extends ProjectDefinition {
         return Object.assign({}, processedForm);
     }
 
+    deleteUndefinedAndDoubleDollarKeys(item) {
+        const output = {};
+        Object.keys(item).forEach(key => {
+            if (item[key] !== undefined && key !== '$$hashKey') {
+                output[key] = item[key];
+            }
+        });
+        return output;
+    }
+
     removeEmptyChildObjects(processedForm) {
         const keyArray = ['coverage', 'platforms'];
-
         keyArray.forEach(key => {
-            processedForm[key] = processedForm[key].filter(cov => {
-                if (cov.hasOwnProperty('available')) {
-                    delete cov.available;
+            processedForm[key] = processedForm[key].filter(itm => {
+                itm = this.deleteUndefinedAndDoubleDollarKeys(itm);
+                if (itm.hasOwnProperty('available')) {
+                    delete itm.available;
                 }
-                return Object.keys(cov).length > 1;
+                return Object.keys(itm).length > 0;
             });
         });
 
@@ -268,35 +278,35 @@ class ProjectController extends ProjectDefinition {
 
     updateForm(processedForm) {
         this.ns.updateProject(processedForm, this.projectId)
-            .then(response => {
-                if (response && response.success) {
-                    // update cached project data with the one from the backend
-                    this.cs.updateProject(response.data, this.projectId);
-                    this.showToast('Project Updated!');
-                    this.postUpdateActions();
-                }
-                else {
-                    this.handleResponse(response);
-                }
-            });
+          .then(response => {
+              if (response && response.success) {
+                  // update cached project data with the one from the backend
+                  this.cs.updateProject(response.data, this.projectId);
+                  this.showToast('Project Updated!');
+                  this.postUpdateActions();
+              }
+              else {
+                  this.handleResponse(response);
+              }
+          });
     }
 
     saveForm(processedForm) {
         this.ns.newProject(processedForm)
-            .then(response => {
-                if (response && response.success) {
-                    this.ownershipCheck(response.data);
-                    this.cs.addProjectToCache(response.data);
-                    this.putGroups().then(() => {
-                        this.postSaveActions();
-                        this.showToast('Project Saved!');
-                    });
-                }
-                else {
-                    this.handleResponse(response);
-                }
+          .then(response => {
+              if (response && response.success) {
+                  this.ownershipCheck(response.data);
+                  this.cs.addProjectToCache(response.data);
+                  this.putGroups().then(() => {
+                      this.postSaveActions();
+                      this.showToast('Project Saved!');
+                  });
+              }
+              else {
+                  this.handleResponse(response);
+              }
 
-            });
+          });
     }
 
     fillTestForm() {
@@ -379,10 +389,10 @@ class ProjectController extends ProjectDefinition {
 
     showToast(text) {
         this.toast.show(
-            this.toast.simple()
-                .textContent(text)
-                .position('bottom right')
-                .hideDelay(3000)
+          this.toast.simple()
+            .textContent(text)
+            .position('bottom right')
+            .hideDelay(3000)
         );
     }
 

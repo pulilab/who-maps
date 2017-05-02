@@ -332,4 +332,37 @@ describe('ProjectController', () => {
         expect(sc.state.go).toHaveBeenCalled();
     });
 
+    it('should have a function that remove empty objects', () => {
+        spyOn(sc, 'deleteUndefinedAndDoubleDollarKeys').and.callThrough();
+        const form = {
+            coverage: [
+                {
+                },
+                {
+                    b: undefined
+                }
+            ],
+            platforms: [
+                {
+                    d: 'something',
+                    available: true
+                }
+            ]
+        };
+        const result = sc.removeEmptyChildObjects(form);
+        expect(result.coverage.length).toBe(0);
+        expect(result.platforms.length).toBe(1);
+        expect(sc.deleteUndefinedAndDoubleDollarKeys).toHaveBeenCalled();
+    });
+
+    it('REGRESSION: it should have a function that clear undefined object keys', () => {
+        expect(sc.deleteUndefinedAndDoubleDollarKeys).toBeDefined();
+        const itm = {
+            a: 'a',
+            b: undefined
+        };
+        const result = sc.deleteUndefinedAndDoubleDollarKeys(itm);
+        expect(result.hasOwnProperty('b')).toBe(false);
+    });
+
 });
