@@ -34,8 +34,8 @@ class CountryViewModuleController {
         this.getCountries();
         this.lastFilter = null;
         this.filterArray = [
-            this.createFilterCategory('technology_platforms',
-                this.cs.projectStructure.technology_platforms)
+            this.createFilterCategory('platforms',
+              this.cs.projectStructure.technology_platforms)
         ];
     }
 
@@ -85,55 +85,34 @@ class CountryViewModuleController {
         const filters = {};
         _.forEach(this.filterArray, category => {
             filters[category.name] = _.chain(category.items)
-                .map(value => {
-                    return value.value ? value.name : false;
-                })
-                .filter()
-                .value();
+              .map(value => {
+                  return value.value ? value.name : false;
+              })
+              .filter()
+              .value();
         });
-        if (_.flattenDeep(_.toArray(filters)).length > 0) {
-            filters.provisonalArray = _.cloneDeep(this.countryProjects);
-            this.generalFilter(filters, 'technology_platforms');
-            this.projectsData = _.uniqBy(filters.provisonalArray, 'id');
+        if (_.flattenDeep(_.toArray(filters)).length > 0 && this.countryProjects && this.countryProjects.length > 0) {
+            let provisionalArray = this.countryProjects.slice();
+            provisionalArray = this.filterByPlatforms(provisionalArray, filters);
+            this.projectsData = _.uniqBy(provisionalArray, 'id');
         }
         else {
             this.projectsData = this.countryProjects;
         }
 
         this.EE.emit('projectFiltered', this.projectsData);
-
     }
 
-    constraintsFilter(filters) {
-        const localArray = [];
-        const constraintFilter = [];
-
-        _.forEach(filters.provisonalArray, project => {
-
-            _.forEach(this.cs.hssStructure.taxonomies, (t, key) => {
-                const inter = _.intersection(t.values, project.constraints);
-                if (inter.length > 0) {
-                    constraintFilter.push(key);
+    filterByPlatforms(projects, filters) {
+        if (filters.platforms && filters.platforms.length > 0) {
+            return projects.filter(p => {
+                if (p.platforms && p.platforms.length > 0) {
+                    return p.platforms.some(plat => filters.platforms.indexOf(plat.name) > -1);
                 }
+                return false;
             });
-
-            const inter = _.intersection(filters.constraints, constraintFilter);
-            if (inter.length === filters.constraints.length) {
-                localArray.push(project);
-            }
-        });
-        filters.provisonalArray = localArray;
-    }
-
-    generalFilter(filters, name) {
-        const localArray = [];
-        _.forEach(filters.provisonalArray, project => {
-            const inter = _.intersection(project[name], filters[name]);
-            if (inter.length === filters[name].length) {
-                localArray.push(project);
-            }
-        });
-        filters.provisonalArray = localArray;
+        }
+        return projects;
     }
 
     getCountries() {
