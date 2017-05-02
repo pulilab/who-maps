@@ -47,11 +47,9 @@ describe('CountryViewModuleController', () => {
     });
 
     it('has a concatenateApplications fn.', () => {
-        const ret = vm.concatenateApplications(
-            {
-                'first': { 'subApplications': { 'a': 1, 'b': 2 } },
-                'second': { 'subApplications': { 'c': 3, 'd': 4 } }
-            }
+        const ret = vm.concatenateApplications({
+            'first': { 'subApplications': { 'a': 1, 'b': 2 } },
+            'second': { 'subApplications': { 'c': 3, 'd': 4 } } }
         );
         expect(ret).toContain(1);
         expect(ret).toContain(2);
@@ -61,11 +59,11 @@ describe('CountryViewModuleController', () => {
 
     it('has a createFilterCategory fn.', () => {
         const ret = vm.createFilterCategory(
-            'filtername',
-            { 'key': 1.1, 'key2': 1.2, 'key3': 2.0 },
-            'key',
-            null,
-            a => a++
+          'filtername',
+          { 'key': 1.1, 'key2': 1.2, 'key3': 2.0 },
+          'key',
+          null,
+          a => a++
         );
         expect(ret.name).toBe('filtername');
         expect(Array.isArray(ret.items)).toBe(true);
@@ -114,16 +112,23 @@ describe('CountryViewModuleController', () => {
         expect(vm.fetchDistrictProjects).toHaveBeenCalledWith('id');
     });
 
-    it('has generalFilter fn.', () => {
+    it('has a filterByPlatforms Fn.', () => {
         const filters = {
-            'continuum':['Identify target populations'],
-            'interventions':[],
-            'technology_platforms':[],
-            'applications':[],
-            'constraints':[]
+            'platforms': ['Bamboo']
         };
-        vm.generalFilter(filters, 'continuum');
-        expect(Array.isArray(filters.provisonalArray)).toBe(true);
+        const projects = [
+            {
+                id: 1,
+                platforms:  [
+                    { name: 'Bamboo' }
+                ]
+            },
+            {
+                id:2,
+                platforms: undefined
+            }];
+        const result = vm.filterByPlatforms(projects, filters);
+        expect(result.length).toBe(1);
     });
 
     it('has filterClv fn.', () => {
@@ -158,30 +163,22 @@ describe('CountryViewModuleController', () => {
             }
         ];
         spyOn(vm.EE, 'emit');
-        spyOn(vm, 'generalFilter');
-        spyOn(vm, 'constraintsFilter');
-
+        spyOn(vm, 'filterByPlatforms');
+        vm.countryProjects = [{
+            id: 1,
+            platforms:  [
+                { name: 'Bamboo' }
+            ]
+        }];
         vm.filterClv();
+        expect(vm.filterByPlatforms).toHaveBeenCalled();
         expect(vm.EE.emit).toHaveBeenCalledWith('projectFiltered', vm.projectsData);
     });
 
-    it('has constraintsFilter fn.', () => {
-        const filters = {
-            'continuum':['Identify target populations'],
-            'interventions':[],
-            'technology_platforms':[],
-            'applications':[],
-            'constraints':[]
-        };
-        vm.constraintsFilter(filters);
-
-        expect(Array.isArray(filters.provisonalArray));
-
-    });
 
     it('has a print implementing_partners fn', () => {
         const result = vm.printImplementingPartners({ implementing_partners: [1, 2] });
         expect(result).toBe('1, 2');
-    })
+    });
 
 });
