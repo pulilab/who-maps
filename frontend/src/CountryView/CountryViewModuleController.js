@@ -244,6 +244,13 @@ class CountryViewModuleController {
         this.projectsData = this.filter('orderBy')(this.projectsData, orderKey);
     }
 
+    printImplementingPartners({ implementing_partners }) {
+        if (implementing_partners.length > 0) {
+            return implementing_partners.join(', ').trim();
+        }
+        return '';
+    }
+
     static countryControllerFactory() {
         function countryController($scope, $filter, $state) {
             const CommonService = require('../Common/CommonServices');

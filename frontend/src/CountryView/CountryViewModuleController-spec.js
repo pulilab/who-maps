@@ -179,4 +179,9 @@ describe('CountryViewModuleController', () => {
 
     });
 
+    it('has a print implementing_partners fn', () => {
+        const result = vm.printImplementingPartners({ implementing_partners: [1, 2] });
+        expect(result).toBe('1, 2');
+    })
+
 });
