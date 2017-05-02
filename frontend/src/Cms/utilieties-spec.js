@@ -1,5 +1,5 @@
 import utilities from './utilities';
-import moment from 'moment';
+import * as mom from 'moment';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
@@ -7,11 +7,14 @@ const axes = require('./resources/domains');
 describe('CMS Utilities', () => {
 
     it('should have a prettifyDate fn', () => {
+        spyOn(mom, 'default').and.callThrough();
         const objWithDate = {
-            date: new Date('2017-01-01')
+            created: new Date('2017-01-01')
         };
-        const expectedString = moment(objWithDate.date).format('h:m a - d MMM, YYYY');
+        const expectedString = mom.default(objWithDate.created).format('h:mm a - d MMM, YYYY');
         const result = utilities.prettifyDate(objWithDate);
+        // ensure that a date is passed down to moment to prevent it to default to current date
+        expect(mom.default).toHaveBeenCalledWith(objWithDate.created);
         expect(result).toBe(expectedString);
     });
 
