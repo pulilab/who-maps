@@ -134,29 +134,11 @@ describe('CountryViewModuleController', () => {
     it('has filterClv fn.', () => {
         vm.filterArray = [
             {
-                'name': 'continuum',
+                'name': 'platforms',
                 'items': [
                     {
-                        'name': 'Identify target populations',
+                        'name': 'Bamboo',
                         'value': true
-                    },
-                    {
-                        'name': 'Health promotion and intervention',
-                        'value': false
-                    }
-                ],
-                'open': false
-            },
-            {
-                'name': 'constraints',
-                'items': [
-                    {
-                        'name': 'Availability',
-                        'value': false
-                    },
-                    {
-                        'name': 'Utilization',
-                        'value': false
                     }
                 ],
                 'open': false
