@@ -3,10 +3,7 @@ import TopBarBehaviour  from '../TopBarBheaviour';
 class TopBarController extends TopBarBehaviour {
 
     constructor($state, $scope) {
-        super();
-        this.EE = window.EE;
-        this.state = $state;
-        this.scope = $scope;
+        super($state, $scope);
         this.$onInit = this.onInit.bind(this);
     }
 
