@@ -49,8 +49,10 @@ export default class OrganisationController {
         if (organisation && organisation.manual) {
             this.os.addOrganization(organisation.name)
                 .then(response => {
-                    this.organisation = response;
-                    this.scope.$evalAsync();
+                    this.scope.$evalAsync(() => {
+                        this.organisation = response;
+                        Object.assign(this.latestOrgs[0], response);
+                    });
                 });
         }
         else {
