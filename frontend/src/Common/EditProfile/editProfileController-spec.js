@@ -55,7 +55,7 @@ describe('EditProfileController', () => {
                 name: 'a'
             }
         };
-        sc.handleSuccessSave(callResponse, { id: 1}).then(() => {
+        sc.handleSuccessSave(callResponse, { id: 1 }).then(() => {
             expect(sc.showToast).toHaveBeenCalled();
             expect(sc.storage.set).toHaveBeenCalled();
         });
