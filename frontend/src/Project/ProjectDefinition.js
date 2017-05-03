@@ -54,7 +54,7 @@ class ProjectDefinition extends Protected {
             his_bucket: [],
             hsc_challenges: [],
             interventions: [],
-            government_investor: false
+            government_investor: null
         };
     }
 }
