@@ -192,14 +192,14 @@ class CountryMapController {
             'Border Malawi - Mozambique': 'Malawi'
         };
         this.countryName = dictionary[this.countryName]
-            ? dictionary[this.countryName] : this.countryName;
+          ? dictionary[this.countryName] : this.countryName;
     }
 
     calculateScale(topoJSON) {
         let ret = Math.max.apply(null,
-                topoJSON.transform.scale.map(nr => {
-                    return 1 / nr;
-                })) * 10;
+            topoJSON.transform.scale.map(nr => {
+                return 1 / nr;
+            })) * 10;
 
         // console.log(ret);
 
@@ -244,8 +244,8 @@ class CountryMapController {
 
         const geoData = this.makeGeoFromTopo(topoJSON);
         const outer = d3.select(this.el[0])
-            .append('div')
-            .attr('class', 'countrymapcontainer');
+          .append('div')
+          .attr('class', 'countrymapcontainer');
 
         const width = outer[0][0].offsetWidth;
         const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
@@ -256,8 +256,8 @@ class CountryMapController {
         const element = d3.select(inMemoryElement);
 
         element.attr('class', 'countrymap')
-            .attr('width', width)
-            .attr('height', height);
+          .attr('width', width)
+          .attr('height', height);
 
         this.drawDistricts(element, geoData, countryMapData);
 
@@ -273,9 +273,12 @@ class CountryMapController {
     }
 
     drawDistricts(element, geoData, countryMapData) {
+        console.log(arguments);
         const self = this;
         const projection = d3.geo.mercator()
-            .scale(this.calculateScale(countryMapData.mapData));
+          .scale(this.calculateScale(countryMapData.mapData));
+
+        const path = d3.geo.path().projection(projection);
 
         for (let i = 0; i < geoData.features.length; i += 1) {
 
@@ -283,46 +286,47 @@ class CountryMapController {
             const gotData = typeof this.data.data[districtsName] === 'object';
 
             element
-                .append('path')
-                .datum({
-                    type: geoData.type,
-                    geocoding: geoData.geocoding,
-                    features: [geoData.features[i]]
-                })
-                .attr('d', d3.geo.path().projection(projection))
-                .classed('d3district', true)
-                .classed('d3district-data', gotData)
-                .on('mouseover', () => {
-                    if (!this.big) {
-                        this.activeDistrict = {
-                            name: districtsName,
-                            data: this.data.data[districtsName]
-                        };
-                        this.scope.$evalAsync();
-                    }
-                })
-                .attr('data-justtocatchdomelement', function setDictrictActiveIfHoveredLonger() {
-                    // this bound as DOM iteratee (current district)
-                    if (!self.big) {
-                        return '';
-                    }
-                    d3.select(this).on('mouseover', () => {
+              .append('path')
+              .datum({
+                  type: geoData.type,
+                  geocoding: geoData.geocoding,
+                  features: [geoData.features[i]]
+              })
+              .attr('d', path)
+              .classed('d3district', true)
+              .classed('d3district-data', gotData)
+              .classed(`name-${districtsName}`, true)
+              .on('mouseover', () => {
+                  if (!this.big) {
+                      this.activeDistrict = {
+                          name: districtsName,
+                          data: this.data.data[districtsName]
+                      };
+                      this.scope.$evalAsync();
+                  }
+              })
+              .attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
+                  // this bound as DOM iteratee (current district)
+                  if (!self.big) {
+                      return '';
+                  }
+                  d3.select(this).on('mouseover', () => {
 
-                        window.setTimeout((e) => {
+                      window.setTimeout((e) => {
 
-                            const stillHovered = (e.parentElement.querySelector(':hover') === e);
+                          const stillHovered = (e.parentElement.querySelector(':hover') === e);
 
-                            if (stillHovered) {
-                                self.activeDistrict = {
-                                    name: districtsName,
-                                    data: self.data.data[districtsName]
-                                };
-                                self.scope.$evalAsync();
-                            }
-                        }, 1000, this);
-                    });
-                    return '';
-                });
+                          if (stillHovered) {
+                              self.activeDistrict = {
+                                  name: districtsName,
+                                  data: self.data.data[districtsName]
+                              };
+                              self.scope.$evalAsync();
+                          }
+                      }, 1000, this);
+                  });
+                  return '';
+              });
         }
 
     }
