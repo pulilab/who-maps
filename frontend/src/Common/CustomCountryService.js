@@ -111,6 +111,10 @@ class CustomCountryService extends SimpleApi {
 
     findCountry(countryId) {
         const self = this;
+        if (!countryId) {
+            console.error('No country Id passed to findCountry fn');
+            return Promise.reject();
+        }
         return new Promise(resolve => {
             let country = _.find(self.countryLib, cn => {
                 return cn.id === countryId || cn.name === countryId;
