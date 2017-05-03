@@ -342,13 +342,13 @@
 
     <!-- LOWER PART -->
 
-    <div layout="row" class="dashrow dashrow-lower">
+    <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData">
 
         <div flex class="dashsection dash-cardholder" layout="column">
 
             <div class="dash-subhead">IMPROVE PROJECT</div>
 
-            <cms-dashboard-widget scores="vm.rawToolkitData"></cms-dashboard-widget>
+            <cms-dashboard-widget scores="vm.rawToolkitData" ></cms-dashboard-widget>
         </div>
 
     </div>

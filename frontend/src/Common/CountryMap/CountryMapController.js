@@ -273,7 +273,6 @@ class CountryMapController {
     }
 
     drawDistricts(element, geoData, countryMapData) {
-        console.log(arguments);
         const self = this;
         const projection = d3.geo.mercator()
           .scale(this.calculateScale(countryMapData.mapData));
