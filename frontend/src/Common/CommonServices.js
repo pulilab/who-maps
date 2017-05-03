@@ -197,7 +197,7 @@ class CommonServices extends Protected {
         return new Promise((resolve) => {
             const id = parseInt(_id, 10);
             const last = _.find(this.projectList, { id });
-            if (last) {
+            if (last && last.country) {
                 resolve(last);
             }
             else {
