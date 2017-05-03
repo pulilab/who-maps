@@ -1,14 +1,11 @@
-import Protected  from '../Protected';
+import TopBarBehaviour  from '../TopBarBheaviour';
 
-class CountryTopBarController extends Protected {
+class CountryTopBarController extends TopBarBehaviour {
 
     constructor($state, $scope, $timeout) {
-        super();
+        super($state, $scope);
         this.EE = window.EE;
-        this.state = $state;
-        this.scope = $scope;
         this.timeout = $timeout;
-        this.cs = require('../CommonServices');
         this.ccs = require('../CustomCountryService');
         this.$onInit = this.onInit.bind(this);
     }
@@ -17,8 +14,7 @@ class CountryTopBarController extends Protected {
         const vm = this;
         this.pageLoaded = false;
         this.watchers();
-        this.defaultOnInit();
-        this.profileDataReady = false;
+        this.commonInit();
         if (this.user) {
             this.cs.loadedPromise.then(vm.setProfileData.bind(vm));
         }
@@ -58,31 +54,6 @@ class CountryTopBarController extends Protected {
         vm.timeout(() => {
             vm.isScrolled = e.target.scrollTop > 100 ? 'scrolled-down' : 'not-scrolled';
         });
-    }
-
-
-    hasProfile() {
-        return this.cs.hasProfile();
-    }
-
-    showNewProjectButton() {
-        return this.profileDataReady && this.userProfile.account_type === 'I' && this.hasProfile();
-    }
-
-    showCountryLevelViewButton() {
-        return this.isLogin;
-    }
-
-    showGoToMyDashboardButton() {
-        return this.profileDataReady;
-    }
-
-    showLogin() {
-        return !this.isLogin;
-    }
-
-    showSignUp() {
-        return !this.isLogin;
     }
 
     static countryTopBarControllerFactory() {
