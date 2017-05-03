@@ -16,17 +16,24 @@ const mockData = {
     }]
 };
 
-const $state = {
-    params: {
 
+const cs = {
+    loadedPromise: Promise.resolve(),
+    reset: () => {
+        return cs;
     }
+};
+
+const $state = {
+    params: {},
+    go: jasmine.createSpy('go')
 };
 
 
 describe('EditProfileController', () => {
 
     beforeEach(() => {
-        sc = EditProfileController.newProjectFactory()($scope, $state);
+        sc = EditProfileController.editProfileFactory()($scope, $state);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -36,5 +43,25 @@ describe('EditProfileController', () => {
             populateProjectStructure: jasmine.createSpy('pps'),
             getProjectData: jasmine.createSpy('gpd')
         };
+    });
+
+    it('should redirect to the dashboard if is the first save -no profile id -', (done) => {
+        sc.cs = cs;
+        spyOn(sc, 'showToast');
+        spyOn(sc.storage, 'set');
+        const callResponse = {
+            data: {
+                id: 1,
+                name: 'a'
+            }
+        };
+        sc.handleSuccessSave(callResponse, { id: 1}).then(() => {
+            expect(sc.showToast).toHaveBeenCalled();
+            expect(sc.storage.set).toHaveBeenCalled();
+        });
+        sc.handleSuccessSave(callResponse, {}).then(() => {
+            expect(sc.state.go).toHaveBeenCalledTimes(1);
+            done();
+        });
     });
 });

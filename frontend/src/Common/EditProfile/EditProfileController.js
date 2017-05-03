@@ -103,7 +103,7 @@ class EditProfileController extends Protected {
                 this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
                 if (result.success) {
-                    this.handleSuccessSave(result);
+                    this.handleSuccessSave(result, profile);
                 }
                 else {
                     this.handleResponse(result.data);
@@ -115,15 +115,18 @@ class EditProfileController extends Protected {
         }
     }
 
-    handleSuccessSave(result) {
+    handleSuccessSave(result, profile) {
         this.showToast('Profile successfully updated');
         this.storage.set('user_profile_id', result.data.id);
         const reset = this.cs.reset();
         this.cs.userProfileId = result.data.id;
-        reset.loadedPromise.then(()=> {
+        return reset.loadedPromise.then(()=> {
             this.userProfile = this.cs.userProfile;
             this.EE.emit('profileUpdated');
             this.scope.$evalAsync();
+            if (!profile.id) {
+                this.state.go('dashboard');
+            }
         });
     }
 
