@@ -52,8 +52,7 @@ project_structure = {
             "Non protective free and open source software (e.g. Apache)",
             "Protective free and open source software",
             "Freemium",
-            "Proprietary",
-            "Other (to be justified)"
+            "Proprietary"
         ],
         "applications": [
             "Client education and behavior change communication",
