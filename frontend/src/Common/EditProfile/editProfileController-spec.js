@@ -45,7 +45,7 @@ describe('EditProfileController', () => {
         };
     });
 
-    it('should redirect to the dashboard if is the first save -no profile id -', (done) => {
+    it('should redirect to the dashboard if is the first save -no profile name -', (done) => {
         sc.cs = cs;
         spyOn(sc, 'showToast');
         spyOn(sc.storage, 'set');
@@ -55,13 +55,17 @@ describe('EditProfileController', () => {
                 name: 'a'
             }
         };
-        sc.handleSuccessSave(callResponse, { id: 1}).then(() => {
+        sc.rawName = 'aaaa';
+        sc.handleSuccessSave(callResponse).then(() => {
             expect(sc.showToast).toHaveBeenCalled();
             expect(sc.storage.set).toHaveBeenCalled();
+            sc.rawName = undefined;
+            sc.handleSuccessSave(callResponse).then(() => {
+                expect(sc.state.go).toHaveBeenCalledTimes(1);
+                done();
+            });
         });
-        sc.handleSuccessSave(callResponse, {}).then(() => {
-            expect(sc.state.go).toHaveBeenCalledTimes(1);
-            done();
-        });
+
+
     });
 });

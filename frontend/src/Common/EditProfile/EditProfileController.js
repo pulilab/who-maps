@@ -39,6 +39,7 @@ class EditProfileController extends Protected {
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
         this.userProfile = this.cs.userProfile;
+        this.rawName = this.cs.userProfile.name;
         this.ccs.getCountries().then(data => {
             self.scope.$evalAsync(() => {
                 self.countriesList = data;
@@ -103,7 +104,7 @@ class EditProfileController extends Protected {
                 this.es.updateProfile(profile) : this.es.createProfile(profile);
             request.then(result => {
                 if (result.success) {
-                    this.handleSuccessSave(result, profile);
+                    this.handleSuccessSave(result);
                 }
                 else {
                     this.handleResponse(result.data);
@@ -115,7 +116,7 @@ class EditProfileController extends Protected {
         }
     }
 
-    handleSuccessSave(result, profile) {
+    handleSuccessSave(result) {
         this.showToast('Profile successfully updated');
         this.storage.set('user_profile_id', result.data.id);
         const reset = this.cs.reset();
@@ -124,7 +125,7 @@ class EditProfileController extends Protected {
             this.userProfile = this.cs.userProfile;
             this.EE.emit('profileUpdated');
             this.scope.$evalAsync();
-            if (!profile.id) {
+            if (!this.rawName) {
                 this.state.go('dashboard');
             }
         });
