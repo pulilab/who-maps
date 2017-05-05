@@ -30,6 +30,14 @@ class PartnerLogo(ExtendedModel):
         return self.image.url if self.image else None
 
 
+class CountryFieldManager(models.Manager):
+    def get_schema(self, country_id):
+        return self.get_queryset().filter(country_id=country_id, schema=True, enabled=True)
+
+    def get_answers(self, country_id, project_id):
+        return self.get_queryset().filter(country_id=country_id, project_id=project_id, schema=False)
+
+
 class CountryField(models.Model):
     TEXT = 1
     NUMBER = 2
@@ -47,6 +55,7 @@ class CountryField(models.Model):
     answer = models.TextField(max_length=2000, blank=True)
     project = models.ForeignKey('project.Project', null=True)
     enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
+    objects = CountryFieldManager()
 
     def __str__(self):
         return ""
