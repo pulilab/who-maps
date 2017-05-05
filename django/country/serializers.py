@@ -48,25 +48,11 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
         return value
 
 
-class CountryFieldsCreateSerializer(serializers.Serializer):
+class CountryFieldsWriteSerializer(serializers.Serializer):
     fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
 
     def create(self, validated_data):
         return [CountryField.objects.create(**field) for field in validated_data['fields']]
-
-    def to_representation(self, instances):
-        return {"fields": [instance.to_representation() for instance in instances]}
-
-
-class CountryFieldsUpdateSerializer(serializers.Serializer):
-    fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
-
-    # def create(self, validated_data):
-    #     return [CountryField.objects.create(**field) for field in validated_data['fields']]
-    #
-    def to_representation(self, instances):
-        # return {"fields": [instance.to_representation() for instance in instances]}
-        return {}
 
     def update(self, instances, validated_data):
         updated_fields = validated_data['fields']
@@ -76,3 +62,6 @@ class CountryFieldsUpdateSerializer(serializers.Serializer):
                     instance.answer = updated_field['answer']
                     instance.save()
         return instances
+
+    def to_representation(self, instances):
+        return {"fields": [instance.to_representation() for instance in instances]}

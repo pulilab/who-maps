@@ -11,6 +11,5 @@ urlpatterns = router.urls
 urlpatterns += [
     url(r"^countries/$", view=views.CountryListAPIView.as_view(), name="country-list"),
     url(r"^country-fields/(?P<country_id>\d+)/$", view=views.CountryFieldsListView.as_view(), name="country-fields-list"),
-    url(r"^country-fields/(?P<country_id>\d+)/(?P<project_id>\d+)/$", view=views.CountryFieldsUpdateView.as_view(), name="country-fields-update"),
-    url(r"^country-fields/$", view=views.CountryFieldsCreateView.as_view(), name="country-fields-create"),
+    url(r"^country-fields/(?P<country_id>\d+)/(?P<project_id>\d+)/$", view=views.CountryFieldsCreateUpdateView.as_view(), name="country-fields"),
 ]
