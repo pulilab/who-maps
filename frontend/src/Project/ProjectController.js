@@ -20,6 +20,7 @@ class ProjectController extends ProjectDefinition {
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.postSaveActions = this.postSaveActions.bind(this);
+        this.getCountryFields = this.getCountryFields.bind(this);
         this.toast = toast;
     }
 
@@ -67,6 +68,22 @@ class ProjectController extends ProjectDefinition {
 
         if (DEV) {
             this.fillTestForm();
+        }
+
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
+    }
+
+    getCountryFields(country) {
+        if (country) {
+            this.ccs.getCountryFields(country).then(res => {
+                this.scope.$evalAsync(() => {
+                    this.countryFields = res;
+                });
+            });
         }
     }
 
