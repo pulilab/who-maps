@@ -27,7 +27,7 @@ class CountryFieldsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountryField
-        fields = ("country", "type", "question")
+        fields = ("id", "country", "type", "question")
 
 
 class CountryFieldsSerializer(serializers.ModelSerializer):
