@@ -34,8 +34,9 @@ class CountryFieldsCreateUpdateView(generics.CreateAPIView):
 
     def put(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        country_id = self.kwargs.get('country_id')
         project_id = self.kwargs.get('project_id')
-        instances = queryset.filter(project_id=project_id)
+        instances = queryset.filter(country_id=country_id, project_id=project_id)
 
         # May raise a permission denied
         self.check_object_permissions(self.request, instances[0])
@@ -45,4 +46,3 @@ class CountryFieldsCreateUpdateView(generics.CreateAPIView):
         serializer.save()
 
         return Response(serializer.data)
-
