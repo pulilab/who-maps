@@ -9,7 +9,6 @@ class CountryFieldInline(admin.TabularInline):
     max_num = 0
     can_delete = False
     fields = ('type', 'question', 'enabled')
-    # fields = ('type', 'question', 'enabled', 'answer')
     readonly_fields = ('type', 'question')
 
     def get_queryset(self, request):
