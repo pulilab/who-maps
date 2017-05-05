@@ -13,7 +13,7 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
-from country.models import Country
+from country.models import Country, CountryField
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
@@ -155,8 +155,20 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
                 data.update(last_version=last_version.version)
                 data.update(last_version_date=last_version.modified)
 
+        schema = CountryField.objects.get_schema(project.country.id)
+        answers = CountryField.objects.get_answers(country_id=project.country.id, project_id=project.id)
+        objects = []
+
+        for field in schema:
+            found = answers.filter(question=field.question, type=field.type).first()
+            if found:
+                objects.append(found)
+
+        if schema:
+            data.update(fields=[field.to_representation() for field in objects])
+
         data.update(id=project.id, name=project.name, organisation_name=project.get_organisation().name,
-                    public_id=project.public_id, country_name=project.country_name)
+                    public_id=project.public_id, country_name=project.country.name)
         return Response(data)
 
     @transaction.atomic
