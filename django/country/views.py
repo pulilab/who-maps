@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .models import Country, CountryField
 from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsCreateSerializer, CountryFieldsUpdateSerializer
+    CountryFieldsWriteSerializer
 
 
 class CountryListAPIView(generics.ListAPIView):
@@ -22,24 +22,20 @@ class CountryFieldsListView(generics.ListAPIView):
     serializer_class = CountryFieldsListSerializer
 
     def get_queryset(self):
-        return CountryField.objects.filter(project=None, enabled=True)
+        country_id = self.kwargs.get('country_id')
+        return CountryField.objects.filter(country_id=country_id, project=None, enabled=True)
 
 
-class CountryFieldsCreateView(generics.CreateAPIView):
-    serializer_class = CountryFieldsCreateSerializer
-
-
-class CountryFieldsUpdateView(generics.GenericAPIView):
-    serializer_class = CountryFieldsUpdateSerializer
+class CountryFieldsCreateUpdateView(generics.CreateAPIView):
+    serializer_class = CountryFieldsWriteSerializer
 
     def get_queryset(self):
         return CountryField.objects.filter(enabled=True)
 
     def put(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        country_id = self.kwargs.get('country_id')
         project_id = self.kwargs.get('project_id')
-        instances = queryset.filter(country_id=country_id, project_id=project_id)
+        instances = queryset.filter(project_id=project_id)
 
         # May raise a permission denied
         self.check_object_permissions(self.request, instances[0])
@@ -49,3 +45,4 @@ class CountryFieldsUpdateView(generics.GenericAPIView):
         serializer.save()
 
         return Response(serializer.data)
+
