@@ -1,31 +1,19 @@
-import _ from 'lodash';
 import ProjectController from './ProjectController';
+import { $state, $scope, toast } from '../testUtilities';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
-let sc = {};
-
-const $scope = {
-    $evalAsync: jasmine.createSpy('eval').and.callFake(toCall => {
-        if (toCall && typeof toCall === 'function') {
-            toCall();
-        }
-    }),
-    $$postDigest: jasmine.createSpy('digest')
+let sc = {
+    project: {}
 };
 
+const scope = $scope(sc);
+console.warn(scope);
 const mockData = {
     countries: [{
         id: 1,
         name: 'asd'
     }]
-};
-
-const $state = {
-    params: {
-
-    },
-    go: jasmine.createSpy('stateGo')
 };
 
 const getGroupMock = {
@@ -64,18 +52,6 @@ const cs = {
 
 const upload = {};
 
-const $mdToast = {
-    show: jasmine.createSpy('showToast'),
-    simple: jasmine.createSpy('simple'),
-    textContent: jasmine.createSpy('textContent'),
-    position: jasmine.createSpy('position'),
-    hideDelay: jasmine.createSpy('hideDelay')
-};
-
-_.forEach($mdToast, func => {
-    func.and.returnValue($mdToast);
-});
-
 const timeout = toCall => {
     toCall();
 };
@@ -84,7 +60,7 @@ const timeout = toCall => {
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new ProjectController($scope, $state, upload, cs, $mdToast, timeout);
+        sc = new ProjectController(scope, $state, upload, cs, toast, timeout);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')

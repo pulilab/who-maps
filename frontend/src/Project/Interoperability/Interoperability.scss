@@ -2,7 +2,6 @@
 @import '../../mixins';
 
 .section-interoperability {
-  margin-bottom: 0;
 
   .section-wrapper {
     > .layout-row {
@@ -31,24 +30,3 @@
 }
 
 
-.radio-error-messages {
-  opacity: 0;
-  color: rgb(221, 44, 0);
-  font-size: 12px;
-  height: 14px;
-  line-height: 14px;
-  padding-left: 2px;
-  padding-right: 5px;
-  padding-top: 5px;
-  transition-delay: 0s;
-  transition-duration: 0.3s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
-
-}
-
-.ng-submitted {
-  .radio-error-messages {
-    opacity: 1;
-  }
-}

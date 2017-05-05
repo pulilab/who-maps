@@ -10,6 +10,11 @@ const dialog = {
     })
 };
 
+const $state = {
+    params: {},
+    go: jasmine.createSpy('stateGo')
+};
+
 const $scope = (controller) =>  {
     return {
         $watchGroup: jasmine.createSpy('watchGroup').and.callFake((toCallArray, action) => {
@@ -21,7 +26,14 @@ const $scope = (controller) =>  {
         $watchCollection: jasmine.createSpy('$watchCollection').and.callFake((toCall, action) => action(toCall({
             vm: controller
         }))),
-        $evalAsync: jasmine.createSpy('evalAsync').and.callFake(toCall => toCall())
+        $watch: jasmine.createSpy('$watch').and.callFake((toCall, action) => action(toCall({
+            vm: controller
+        }))),
+        $evalAsync: jasmine.createSpy('evalAsync').and.callFake(toCall => {
+            if (toCall) {
+                toCall();
+            }
+        })
     };
 };
 
@@ -36,6 +48,7 @@ toast.hideDelay = jasmine.createSpy('hideDelay').and.returnValue(toast);
 
 export {
     dialog,
+    $state,
     $scope,
     toast
 };

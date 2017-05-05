@@ -8,7 +8,8 @@ const component = {
     name: 'navigation',
     bindings: {
         editMode: '<',
-        isAddAnother: '='
+        isAddAnother: '=',
+        showCountryFields: '<'
     }
 };
 
