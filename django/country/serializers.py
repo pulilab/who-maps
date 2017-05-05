@@ -53,6 +53,7 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
     def validate_answer(value):
         if not value:
             raise ValidationError("Answer can't be empty")
+        return value
 
 
 class CountryFieldsWriteSerializer(serializers.Serializer):
