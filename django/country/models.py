@@ -28,3 +28,34 @@ class PartnerLogo(ExtendedModel):
     @property
     def image_url(self):
         return self.image.url if self.image else None
+
+
+class CountryField(models.Model):
+    TEXT = 1
+    NUMBER = 2
+    YESNO = 3
+
+    TYPE_CHOICES = (
+        (TEXT, "Text field"),
+        (NUMBER, "Numeric field"),
+        (YESNO, "Yes - no field"),
+    )
+
+    country = models.ForeignKey(Country)
+    type = models.IntegerField(choices=TYPE_CHOICES)
+    question = models.CharField(max_length=256, blank=False)
+    answer = models.TextField(max_length=2000, blank=True)
+    project = models.ForeignKey('project.Project', null=True)
+    enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
+
+    def __str__(self):
+        return ""
+
+    def to_representation(self):
+        return {
+            "country": self.country.id,
+            "type": self.type,
+            "question": self.question,
+            "answer": self.answer,
+            "project": self.project.id
+        }
