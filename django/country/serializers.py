@@ -57,14 +57,5 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
                                                      "question": field["question"], "type": field["type"]},
         )[0] for field in validated_data['fields']]
 
-    def update(self, instances, validated_data):
-        updated_fields = validated_data['fields']
-        for updated_field in updated_fields:
-            for instance in instances:
-                if instance.question == updated_field['question'] and instance.type == updated_field['type']:
-                    instance.answer = updated_field['answer']
-                    instance.save()
-        return instances
-
     def to_representation(self, instances):
         return {"fields": [instance.to_representation() for instance in instances]}
