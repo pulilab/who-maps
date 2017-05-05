@@ -55,6 +55,8 @@ class CountryField(models.Model):
     answer = models.TextField(max_length=2000, blank=True)
     project = models.ForeignKey('project.Project', null=True)
     enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
+    schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
+
     objects = CountryFieldManager()
 
     def __str__(self):
