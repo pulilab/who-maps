@@ -1,5 +1,4 @@
-from rest_framework import generics, mixins, viewsets, status
-from rest_framework.response import Response
+from rest_framework import generics, mixins, viewsets
 
 from .models import Country, CountryField
 from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
@@ -22,8 +21,7 @@ class CountryFieldsListView(generics.ListAPIView):
     serializer_class = CountryFieldsListSerializer
 
     def get_queryset(self):
-        country_id = self.kwargs.get('country_id')
-        return CountryField.objects.filter(country_id=country_id, project=None, enabled=True)
+        return CountryField.objects.get_schema(self.kwargs.get('country_id'))
 
 
 class CountryFieldsCreateUpdateView(generics.CreateAPIView):
