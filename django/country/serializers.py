@@ -38,14 +38,21 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if "project" not in attrs:
-            raise ValidationError("Project cannot be null")
+            raise ValidationError("Project ID needs to be specified")
+        if "answer" not in attrs:
+            raise ValidationError("Answer can't be empty")
         return attrs
 
     @staticmethod
     def validate_project(value):
         if not value:
-            raise ValidationError("Project cannot be null")
+            raise ValidationError("Project ID needs to be specified")
         return value
+
+    @staticmethod
+    def validate_answer(value):
+        if not value:
+            raise ValidationError("Answer can't be empty")
 
 
 class CountryFieldsWriteSerializer(serializers.Serializer):
