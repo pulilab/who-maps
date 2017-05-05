@@ -6,6 +6,7 @@ import navigation from './Navigation/navigationComponent';
 import projectDetails from './ProjectDetails/projectDetailsComponent';
 import strategy from './Strategy/strategyComponent';
 import technology from './Technology/technologyComponent';
+import countryFields from './CountryFields/countryFieldsComponent';
 
 const moduleName = 'Project';
 
@@ -16,6 +17,7 @@ angular.module(moduleName, [])
     .component(navigation.name, navigation)
     .component(projectDetails.name, projectDetails)
     .component(strategy.name, strategy)
+    .component(countryFields.name, countryFields)
     .component(technology.name, technology);
 
 
