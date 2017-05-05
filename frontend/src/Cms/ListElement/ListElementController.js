@@ -3,12 +3,8 @@ import { prettifyDate, itemType, axisAndDomainName, normalizeName } from '../uti
 class ListElementController {
 
     constructor() {
-        this.$onInit = this.onInit.bind(this);
         this.prettifyDate = prettifyDate;
         this.itemType = itemType;
-    }
-
-    onInit() {
     }
 
     showAxisAndDomain() {
