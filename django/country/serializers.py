@@ -27,7 +27,7 @@ class CountryFieldsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountryField
-        fields = ("country", "type", "question")
+        fields = ("id", "country", "type", "question")
 
 
 class CountryFieldsSerializer(serializers.ModelSerializer):
@@ -48,31 +48,14 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
         return value
 
 
-class CountryFieldsCreateSerializer(serializers.Serializer):
+class CountryFieldsWriteSerializer(serializers.Serializer):
     fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
 
     def create(self, validated_data):
-        return [CountryField.objects.create(**field) for field in validated_data['fields']]
+        return [CountryField.objects.update_or_create(
+            defaults={"answer": field["answer"]}, **{"country": field["country"], "project": field["project"],
+                                                     "question": field["question"], "type": field["type"]},
+        )[0] for field in validated_data['fields']]
 
     def to_representation(self, instances):
         return {"fields": [instance.to_representation() for instance in instances]}
-
-
-class CountryFieldsUpdateSerializer(serializers.Serializer):
-    fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
-
-    # def create(self, validated_data):
-    #     return [CountryField.objects.create(**field) for field in validated_data['fields']]
-    #
-    def to_representation(self, instances):
-        # return {"fields": [instance.to_representation() for instance in instances]}
-        return {}
-
-    def update(self, instances, validated_data):
-        updated_fields = validated_data['fields']
-        for updated_field in updated_fields:
-            for instance in instances:
-                if instance.question == updated_field['question'] and instance.type == updated_field['type']:
-                    instance.answer = updated_field['answer']
-                    instance.save()
-        return instances
