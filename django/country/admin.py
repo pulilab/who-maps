@@ -13,7 +13,7 @@ class CountryFieldInline(admin.TabularInline):
 
     def get_queryset(self, request):
         qs = super(CountryFieldInline, self).get_queryset(request)
-        qs = qs.filter(project=None)
+        qs = qs.filter(schema=True)
         return qs
 
 
@@ -22,7 +22,7 @@ class AddCountryFieldInline(admin.TabularInline):
     verbose_name_plural = "Add additional country fields"
     extra = 0
     can_delete = False
-    fields = ('type', 'question', 'enabled')
+    fields = ('type', 'question')
 
     def get_queryset(self, request):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
