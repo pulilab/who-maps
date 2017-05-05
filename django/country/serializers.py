@@ -62,7 +62,8 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
     def create(self, validated_data):
         return [CountryField.objects.update_or_create(
             defaults={"answer": field["answer"]}, **{"country": field["country"], "project": field["project"],
-                                                     "question": field["question"], "type": field["type"]},
+                                                     "question": field["question"], "type": field["type"],
+                                                     "schema": False},
         )[0] for field in validated_data['fields']]
 
     def to_representation(self, instances):
