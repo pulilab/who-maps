@@ -157,18 +157,16 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
 
         schema = CountryField.objects.get_schema(project.country.id)
         answers = CountryField.objects.get_answers(country_id=project.country.id, project_id=project.id)
-        objects = []
+        country_fields = []
 
         for field in schema:
             found = answers.filter(question=field.question, type=field.type).first()
             if found:
-                objects.append(found)
-
-        if schema:
-            data.update(fields=[field.to_representation() for field in objects])
+                country_fields.append(found)
 
         data.update(id=project.id, name=project.name, organisation_name=project.get_organisation().name,
-                    public_id=project.public_id, country_name=project.country.name)
+                    public_id=project.public_id, country_name=project.country.name,
+                    fields=[field.to_representation() for field in country_fields])
         return Response(data)
 
     @transaction.atomic
