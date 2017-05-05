@@ -12,9 +12,7 @@ class CountryFieldInline(admin.TabularInline):
     readonly_fields = ('type', 'question')
 
     def get_queryset(self, request):
-        qs = super(CountryFieldInline, self).get_queryset(request)
-        qs = qs.filter(schema=True)
-        return qs
+        return super(CountryFieldInline, self).get_queryset(request).filter(schema=True)
 
 
 class AddCountryFieldInline(admin.TabularInline):
