@@ -49,12 +49,6 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
             raise ValidationError("Project ID needs to be specified")
         return value
 
-    @staticmethod
-    def validate_answer(value):
-        if not value:
-            raise ValidationError("Answer can't be empty")
-        return value
-
 
 class CountryFieldsWriteSerializer(serializers.Serializer):
     fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
