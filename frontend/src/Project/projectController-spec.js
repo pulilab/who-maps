@@ -27,15 +27,6 @@ const getGroupMock = {
     }
 };
 
-const mockPromiseGenerator = result => {
-    return {
-        then: toCall=> {
-            if (toCall && typeof toCall === 'function') {
-                toCall(result);
-            }
-        }
-    };
-};
 
 const cs = {
     projectStructure: mockData,
@@ -116,41 +107,43 @@ describe('ProjectController', () => {
         expect(sc.updateForm).toHaveBeenCalled();
     });
 
-    it('should have a function that save a new form', () => {
+    it('should have a function that save a new form', async (done) => {
         spyOn(sc, 'handleResponse');
         spyOn(sc, 'showToast');
         spyOn(sc, 'ownershipCheck');
         spyOn(sc, 'postSaveActions');
-        spyOn(sc, 'putGroups').and.returnValue(mockPromiseGenerator({}));
+        spyOn(sc, 'putGroups').and.returnValue(Promise.resolve({}));
 
         const spy = spyOn(sc.ns, 'newProject');
-        spy.and.returnValue(mockPromiseGenerator({ success: false }));
-        sc.saveForm(sc.project);
+        spy.and.returnValue(Promise.resolve({ success: false }));
+        await sc.saveForm(sc.project);
         expect(sc.ns.newProject).toHaveBeenCalled();
         expect(sc.handleResponse).toHaveBeenCalled();
 
-        spy.and.returnValue(mockPromiseGenerator({ success: true }));
-        sc.saveForm(sc.project);
+        spy.and.returnValue(Promise.resolve({ success: true }));
+        await sc.saveForm(sc.project);
         expect(sc.ownershipCheck).toHaveBeenCalled();
         expect(sc.cs.addProjectToCache).toHaveBeenCalled();
         expect(sc.putGroups).toHaveBeenCalled();
         expect(sc.postSaveActions).toHaveBeenCalled();
         expect(sc.showToast).toHaveBeenCalled();
+        done();
     });
 
-    it('should have a function that update an existing form', () => {
+    it('should have a function that update an existing form', async (done) => {
         spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
         const spy = spyOn(sc.ns, 'updateProject');
-        spy.and.returnValue(mockPromiseGenerator({ success: false }));
+        spy.and.returnValue(Promise.resolve({ success: false }));
         sc.editMode = true;
-        sc.updateForm(sc.project);
+        await sc.updateForm(sc.project);
         expect(sc.ns.updateProject).toHaveBeenCalled();
         expect(sc.handleResponse).toHaveBeenCalled();
-        spy.and.returnValue(mockPromiseGenerator({ success: true }));
-        sc.updateForm(sc.project);
+        spy.and.returnValue(Promise.resolve({ success: true }));
+        await sc.updateForm(sc.project);
         expect(sc.cs.updateProject).toHaveBeenCalled();
         expect(sc.showToast).toHaveBeenCalled();
+        done();
     });
 
     it('should have some utility function', () => {
