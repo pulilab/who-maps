@@ -163,6 +163,7 @@ class ProjectController extends ProjectDefinition {
             this.project = data;
             if (data.fields && data.fields.length > 0) {
                 this.countryFields = this.convertCountryFieldsAnswer(data);
+                window.TE = this.countryFields;
                 this.showCountryFields = true;
             }
         });
@@ -319,6 +320,7 @@ class ProjectController extends ProjectDefinition {
 
     async saveCountryFields({ country, id }) {
         const toSave = this.countryFields.map(f => {
+            f = Object.assign({}, f);
             f.answer = f.type === 3 ? JSON.stringify(f.answer) : f.answer;
             f.project = id;
             return f;
