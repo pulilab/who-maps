@@ -77,8 +77,12 @@ class ProjectController extends ProjectDefinition {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
     }
 
-    getCountryFields(country) {
-        if (country) {
+    getCountryFields(country, oldValue) {
+        // this is ugly like this otherwise the coverage reporter fails
+        if (!country) {
+            return;
+        }
+        if ((oldValue && country !== oldValue) || this.editMode === undefined) {
             this.ccs.getCountryFields(country).then(res => {
                 this.scope.$evalAsync(() => {
                     this.countryFields = res;
@@ -129,6 +133,19 @@ class ProjectController extends ProjectDefinition {
         this.structure = this.cs.projectStructure;
         this.scope.$evalAsync();
     }
+    convertCountryFieldsAnswer({ fields }) {
+        return fields.map(f => {
+            switch (f.type) {
+            case 2:
+                f.answer = parseInt(f.answer, 10);
+                break;
+            case 3:
+                f.answer = f.answer === 'true';
+                break;
+            }
+            return f;
+        });
+    }
 
     handleDataLoad(data) {
         data = _.cloneDeep(data);
@@ -139,8 +156,15 @@ class ProjectController extends ProjectDefinition {
         data.end_date = this.convertDate(data.end_date);
         data = this.convertStringArrayToObjectArray(data);
         data = this.fillEmptyCollectionsWithDefault(data);
+        if (!data.fields || data.fields.length === 0) {
+            this.getCountryFields(data.country, -1);
+        }
         this.scope.$evalAsync(() => {
             this.project = data;
+            if (data.fields && data.fields.length > 0) {
+                this.countryFields = this.convertCountryFieldsAnswer(data);
+                this.showCountryFields = true;
+            }
         });
 
     }
@@ -295,13 +319,11 @@ class ProjectController extends ProjectDefinition {
 
     async saveCountryFields({ country, id }) {
         const toSave = this.countryFields.map(f => {
-            return {
-                ...f,
-                country_id: country,
-                project_id: id
-            };
+            f.answer = f.type === 3 ? JSON.stringify(f.answer) : f.answer;
+            f.project = id;
+            return f;
         });
-        console.log(toSave);
+        this.ns.saveCountryFields(toSave, country, id);
     }
 
     async updateForm(processedForm) {
