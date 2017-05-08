@@ -226,7 +226,7 @@ describe('ProjectController', () => {
         spyOn(sc, 'convertArrayToStandardCustomObj').and.returnValue(result);
         spyOn(sc, 'convertStringArrayToObjectArray').and.returnValue(result);
         spyOn(sc, 'fillEmptyCollectionsWithDefault').and.returnValue(result);
-        spyOn(sc, 'convertCountryFields');
+        spyOn(sc, 'convertCountryFieldsAnswer');
         spyOn(sc, 'getCountryFields');
 
         sc.handleStructureLoad(mockData);
@@ -234,13 +234,27 @@ describe('ProjectController', () => {
         expect(sc.convertArrayToStandardCustomObj).toHaveBeenCalled();
         expect(sc.convertStringArrayToObjectArray).toHaveBeenCalled();
         expect(sc.fillEmptyCollectionsWithDefault).toHaveBeenCalled();
-        expect(sc.getCountryFields).toHaveBeenCalled();
 
 
         result.fields.push({});
         sc.handleDataLoad(result);
-        expect(sc.convertCountryFields).toHaveBeenCalled();
+        expect(sc.convertCountryFieldsAnswer).toHaveBeenCalled();
+        expect(sc.getCountryFields).toHaveBeenCalledTimes(1);
 
+    });
+
+    it('should have a function to convertIncomingCountry fields', () => {
+        const data = {
+            fields: [
+                { type: 1, answer: 'a' },
+                { type: 2, answer: '3' },
+                { type: 3, answer: 'true' }
+            ]
+        };
+        const result = sc.convertCountryFieldsAnswer(data);
+        expect(result[0].answer).toBe('a');
+        expect(result[1].answer).toBe(3);
+        expect(result[2].answer).toBe(true);
     });
 
     it('should have a function that convert a string to a date', () => {

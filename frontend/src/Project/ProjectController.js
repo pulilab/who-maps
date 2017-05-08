@@ -78,8 +78,11 @@ class ProjectController extends ProjectDefinition {
     }
 
     getCountryFields(country, oldValue) {
-        console.log(country, oldValue, this.editMode);
-        if (country && ((oldValue && country !== oldValue) || this.editMode === undefined)) {
+        // this is ugly like this otherwise the coverage reporter fails
+        if (!country) {
+            return;
+        }
+        if ((oldValue && country !== oldValue) || this.editMode === undefined) {
             this.ccs.getCountryFields(country).then(res => {
                 this.scope.$evalAsync(() => {
                     this.countryFields = res;
@@ -130,7 +133,7 @@ class ProjectController extends ProjectDefinition {
         this.structure = this.cs.projectStructure;
         this.scope.$evalAsync();
     }
-    convertCountryFields({ fields }) {
+    convertCountryFieldsAnswer({ fields }) {
         return fields.map(f => {
             switch (f.type) {
             case 2:
@@ -159,7 +162,7 @@ class ProjectController extends ProjectDefinition {
         this.scope.$evalAsync(() => {
             this.project = data;
             if (data.fields && data.fields.length > 0) {
-                this.countryFields = this.convertCountryFields(data);
+                this.countryFields = this.convertCountryFieldsAnswer(data);
                 this.showCountryFields = true;
             }
         });
