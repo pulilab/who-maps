@@ -26,6 +26,3 @@ class CountryFieldsListView(generics.ListAPIView):
 
 class CountryFieldsCreateUpdateView(generics.CreateAPIView):
     serializer_class = CountryFieldsWriteSerializer
-
-    def get_queryset(self):
-        return CountryField.objects.filter(enabled=True)
