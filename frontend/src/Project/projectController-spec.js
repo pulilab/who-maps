@@ -107,32 +107,42 @@ describe('ProjectController', () => {
         expect(sc.updateForm).toHaveBeenCalled();
     });
 
-    it('should have a function that save a new form', async (done) => {
-        spyOn(sc, 'handleResponse');
-        spyOn(sc, 'showToast');
-        spyOn(sc, 'ownershipCheck');
-        spyOn(sc, 'postSaveActions');
-        spyOn(sc, 'putGroups').and.returnValue(Promise.resolve({}));
+    describe('save new form function', () => {
+        it('should try to save and call handleResponse if the saving fails', async (done) => {
+            spyOn(sc, 'handleResponse');
+            spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve({ success: false }));
+            await sc.saveForm(sc.project);
+            expect(sc.ns.newProject).toHaveBeenCalled();
+            expect(sc.handleResponse).toHaveBeenCalled();
+            done();
 
-        const spy = spyOn(sc.ns, 'newProject');
-        spy.and.returnValue(Promise.resolve({ success: false }));
-        await sc.saveForm(sc.project);
-        expect(sc.ns.newProject).toHaveBeenCalled();
-        expect(sc.handleResponse).toHaveBeenCalled();
+        });
 
-        spy.and.returnValue(Promise.resolve({ success: true }));
-        await sc.saveForm(sc.project);
-        expect(sc.ownershipCheck).toHaveBeenCalled();
-        expect(sc.cs.addProjectToCache).toHaveBeenCalled();
-        expect(sc.putGroups).toHaveBeenCalled();
-        expect(sc.postSaveActions).toHaveBeenCalled();
-        expect(sc.showToast).toHaveBeenCalled();
-        done();
+        it('should call the appropiate function after saving succeed', async (done) => {
+            spyOn(sc, 'showToast');
+            spyOn(sc, 'ownershipCheck');
+            spyOn(sc, 'postSaveActions');
+            spyOn(sc, 'putGroups').and.returnValue(Promise.resolve({}));
+            spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
+
+
+            spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve({ success: true }));
+            await sc.saveForm(sc.project);
+            expect(sc.ownershipCheck).toHaveBeenCalled();
+            expect(sc.cs.addProjectToCache).toHaveBeenCalled();
+            expect(sc.putGroups).toHaveBeenCalled();
+            expect(sc.postSaveActions).toHaveBeenCalled();
+            expect(sc.showToast).toHaveBeenCalled();
+            done();
+        });
     });
+
 
     it('should have a function that update an existing form', async (done) => {
         spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
+        spyOn(sc, 'putGroups').and.returnValue(Promise.resolve());
+        spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
         const spy = spyOn(sc.ns, 'updateProject');
         spy.and.returnValue(Promise.resolve({ success: false }));
         sc.editMode = true;

@@ -1,9 +1,9 @@
-var webpack = require('webpack');
-module.exports = function(config) {
+const webpack = require('webpack');
+module.exports = config =>{
 
-    var browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
+    const browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
     config.set({
-        browsers: browsers,
+        browsers,
         customLaunchers: {
             HeadlessChrome: {
                 base: 'Chrome',
@@ -22,13 +22,16 @@ module.exports = function(config) {
         preprocessors: {
             'test-context.js': ['webpack', 'sourcemap']
         },
-        coverageReporter: {
-            reporters: [
-                { type: 'lcov', subdir: '.' },
-                { type: 'text-summary' },
-                { type: 'html',  subdir: 'html' }
-            ],
-            check: {
+        coverageIstanbulReporter: {
+            reports: ['html', 'text-summary'],
+            'report-config': {
+
+                html: {
+                    subdir: 'html'
+                }
+            },
+            fixWebpackSourcePaths: true,
+            thresholds: {
                 global: {
                     statements: 50,
                     branches: 40,
@@ -37,7 +40,7 @@ module.exports = function(config) {
                 }
             }
         },
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress', 'coverage-istanbul'],
         webpack: {
             devtool: 'inline-source-map',
             module: {
@@ -45,11 +48,13 @@ module.exports = function(config) {
                     {
                         test: /\.js$/,
                         exclude: /node_modules/,
-                        loader: 'babel-loader'
+                        use: {
+                            loader: 'babel-loader'
+                        }
                     },
                     {
                         test: /^((?!-spec).)*.js$/,
-                        enforce: 'pre',
+                        enforce: 'post',
                         exclude: /(node_modules|bower_components)/,
                         loader: 'istanbul-instrumenter-loader',
                         query: {
@@ -83,7 +88,7 @@ module.exports = function(config) {
         plugins: [
             require('karma-webpack'),
             require('karma-jasmine'),
-            require('karma-coverage'),
+            require('karma-coverage-istanbul-reporter'),
             require('karma-sourcemap-loader'),
             require('karma-chrome-launcher')
         ]

@@ -9,7 +9,6 @@ const production = process.env.NODE_ENV === 'production';
 const live = process.env.LIVE_FLAG === 'live';
 const debug = process.env.DEBUG_MODE === 'debug';
 
-console.log(production)
 
 const PATH = {
     build: path.resolve(__dirname, 'builds')

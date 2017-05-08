@@ -270,7 +270,6 @@ class ProjectController extends ProjectDefinition {
             }
             else {
                 this.updateForm(processedForm);
-                this.putGroups();
             }
         }
         else {
@@ -290,17 +289,26 @@ class ProjectController extends ProjectDefinition {
         }, 100);
     }
 
-    async putGroups() {
+    putGroups() {
         return this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
-    saveCountryFields() {
-        console.log(this.countryFields);
+    async saveCountryFields({ country, id }) {
+        const toSave = this.countryFields.map(f => {
+            return {
+                ...f,
+                country_id: country,
+                project_id: id
+            };
+        });
+        console.log(toSave);
     }
 
     async updateForm(processedForm) {
-        const response = await this.ns.updateProject(processedForm, this.projectId);op
+        const response = await this.ns.updateProject(processedForm, this.projectId);
         if (response && response.success) {
+            // generate a single promise from multiple promise and wait for them to be done.
+            await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
             // update cached project data with the one from the backend
             this.cs.updateProject(response.data, this.projectId);
             this.showToast('Project Updated!');
@@ -315,12 +323,13 @@ class ProjectController extends ProjectDefinition {
     async saveForm(processedForm) {
         const response = await this.ns.newProject(processedForm);
         if (response && response.success) {
+            await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
+
             this.ownershipCheck(response.data);
             this.cs.addProjectToCache(response.data);
-            this.putGroups().then(() => {
-                this.postSaveActions();
-                this.showToast('Project Saved!');
-            });
+            this.postSaveActions();
+            this.showToast('Project Saved!');
+
         }
         else {
             this.handleResponse(response);

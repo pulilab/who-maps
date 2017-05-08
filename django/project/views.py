@@ -188,6 +188,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
             project_data.pop('name', None)
             project.data = project_data
             project.save()
+            data_serializer.validated_data.update(dict(id=project.id, public_id=project.public_id))
             return Response(data_serializer.validated_data, status=status.HTTP_200_OK)
         else:
             return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
