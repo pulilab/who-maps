@@ -27,7 +27,7 @@
         <input ng-model="partner.value" placeholder="Partner's name">
       </md-input-container>
       <div class="add-more-item" flex>
-          <md-button class="md-warn" aria-label="Remove"
+        <md-button class="md-warn" aria-label="Remove"
                    ng-show="vm.showRemove($index, vm.project.implementing_partners)"
                    ng-click="vm.removeChild($index, 'implementing_partners')">
           <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
@@ -40,14 +40,24 @@
       </div>
     </div>
 
-    <h6>Government as investor?</h6>
+    <h6>Government as investor? *</h6>
 
     <div layout="row" class="extra-margin">
-      <md-checkbox md-no-ink aria-label="governament-investor"
-                   ng-model="vm.project.government_investor"
-                   class="md-primary md-block">
-        Yes
-      </md-checkbox>
+      <div layout="column">
+        <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="true" class="md-primary" layout="row">
+          <md-radio-button ng-value="true" aria-label="government-investor-yes">
+            Yes
+          </md-radio-button>
+          <md-radio-button ng-value="false" aria-label="government-investor-no">
+            No
+          </md-radio-button>
+        </md-radio-group>
+        <div class="radio-error-messages">
+          <div ng-messages="vm.form.government_investor.$error">
+            <div ng-message="required">This is required.</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <h6 >Does your digital health project link to a digital HIS?</h6>

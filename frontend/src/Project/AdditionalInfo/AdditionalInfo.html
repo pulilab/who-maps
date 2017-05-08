@@ -53,7 +53,15 @@
             {{ d }}
           </md-checkbox>
         </li>
-
+        <li>
+            <span layout="row">
+              <md-checkbox md-no-ink aria-label="custom-health-focus-area" ng-model="vm.customHealthFocusArea" class="md-primary" flex="nogrow"></md-checkbox>
+              <md-input-container class="md-block" flex>
+                <label>Specify other</label>
+                <input ng-required="vm.customHealthFocusArea" name="heathFocusArea.spectype" ng-model="vm.project.health_focus_areas.custom" ng-disabled="!vm.customHealthFocusArea">
+              </md-input-container>
+            </span>
+        </li>
       </ul>
     </div>
 

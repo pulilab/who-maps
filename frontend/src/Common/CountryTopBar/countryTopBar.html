@@ -12,9 +12,9 @@
 
         <span flex ></span>
 
-        <div class="current-country row" ng-if="vm.countryData.logo">
+        <div class="current-country row" ng-if="vm.countryData.name">
             <div class="country-flag" >
-              <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
+                <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
             </div>
             <div class="country-name">{{vm.countryData.name}}</div>
         </div>
@@ -56,6 +56,34 @@
             Dashboard
         </md-button>
 
+        <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
+            <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+                <md-icon md-menu-origin class="material-icons ">person</md-icon>
+            </md-button>
+
+            <md-menu-content width="4">
+                    <span class="menu-group-title">
+                        <span ng-hide ="vm.userProfile.name">{{vm.user.username}} </span>
+                        <span ng-show ="vm.userProfile.name">{{vm.userProfile.name}} </span>
+                    </span>
+                <md-menu-item>
+                    <md-button>
+                        <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ui-sref="editProfile">
+                        <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="vm.logout()">
+                        <md-icon class="material-icons">exit_to_app</md-icon>Logout
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+
         <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
                    aria-label="Add new project"
                    ng-show="vm.showNewProjectButton()"
@@ -67,9 +95,12 @@
     <div class="md-toolbar-tools-bottom">
         <h3>Get MAPS Toolkit now!</h3>
         <div class="dl-note">
-          <p>A new toolkit has been launched to help mHealth implementers<br> to successfully and sustainably scale-up their innovations.</p>
+            <p>A new toolkit has been launched to help mHealth implementers<br> to successfully and sustainably scale-up their innovations.</p>
         </div>
         <md-button class="dl-maps-link md-raised md-primary"
+                   href="/static/documents/maps_toolkit_eng.pdf"
+                   download="Maps Toolkit.pdf"
+                   target="_blank"
                    aria-label="Download MAPS Toolkit">
             <md-icon class="material-icons">cloud_download</md-icon>
             Download Pdf

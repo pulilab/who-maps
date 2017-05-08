@@ -32,9 +32,7 @@ class DashboardModuleController extends Protected {
 
         if (this.projectId) {
             this.cs.getProjectData(this.projectId).then(data => {
-                this.timeout(() => {
-                    this.fetchProjectData(data);
-                });
+                this.fetchProjectData(data);
             });
             if (this.userType !== 0) {
                 this.fetchAxisData();
@@ -384,19 +382,14 @@ class DashboardModuleController extends Protected {
 
         data.forEach((axisObj, i) => {
             axisObj.domains.forEach((domainObj, j) => {
-                ret.push(
-                    {
-                        id: counter,
-                        name: domainObj.domain
-                            .split(':')[1]
-                            .trim()
-                            .toLowerCase(),
-                        axis: +i,
-                        domain: +j,
-                        completion: domainObj.domain_completion,
-                        percentage: Math.round(domainObj.domain_percentage)
-                    }
-                );
+                ret.push({
+                    id: counter,
+                    name: domainObj.domain.split(':')[1].trim().toLowerCase(),
+                    axis: +i,
+                    domain: +j,
+                    completion: domainObj.domain_completion,
+                    percentage: Math.round(domainObj.domain_percentage)
+                });
                 counter += 1;
             });
         });
@@ -411,7 +404,7 @@ class DashboardModuleController extends Protected {
             return Math.floor(Math.random() * 16);
         }
         return data.filter(dom => dom.completion > 0)
-                .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
+            .reduce((res, act) => act.percentage < res.percentage ? act : res, { percentage: 200 }).id - 1;
     }
 
     static dashboardControllerFactory() {
