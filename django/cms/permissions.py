@@ -1,5 +1,7 @@
 from rest_framework import permissions
 
+from cms.models import Post
+
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -20,3 +22,19 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             owner = getattr(obj, 'author', False)
 
         return owner == request.user.userprofile
+
+
+class OnlyAdminForLessons(permissions.BasePermission):
+    """
+    Object-level permission to only allow admins to CRUD lessons.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        if obj.type == Post.LESSON:
+            return request.user.is_superuser
+        return True
