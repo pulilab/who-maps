@@ -1,8 +1,9 @@
 import angular from 'angular';
+import  Protected from '../../Common/Protected';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, Upload, toast, content) {
+    constructor($scope, $mdDialog, Upload, toast, content, isSuperUser) {
         this.cs = require('../CmsService');
         this.axes = require('../resources/domains');
         this.scope = $scope;
@@ -12,7 +13,7 @@ class AddNewContentDialog {
         this.showTrixError = false;
         this.disableSubmit = false;
         this.newContent = content;
-
+        this.isSuperUser = isSuperUser;
     }
 
     cancel() {
@@ -56,10 +57,10 @@ class AddNewContentDialog {
     }
 
 
-    static factory(content) {
+    static factory(content, isSuperUser) {
 
         function addNewContent($scope, $mdDialog, Upload, $mdToast) {
-            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, content);
+            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, content, isSuperUser);
         }
 
         addNewContent.$inject = ['$scope', '$mdDialog', 'Upload', '$mdToast'];
@@ -67,17 +68,24 @@ class AddNewContentDialog {
     }
 }
 
-class AddNewContentController {
+class AddNewContentController extends Protected {
 
     constructor($scope, $mdDialog) {
+        super();
         this.scope = $scope;
         this.dialog = $mdDialog;
+        this.defaultOnInit();
     }
 
     showAddNewContentDialog(event) {
         const content = this.toEdit ? Object.assign({}, this.toEdit) : {};
+
+        if (!this.isSuperUser && !this.toEdit) {
+            content.type = 2;
+        }
+
         this.dialog.show({
-            controller: AddNewContentDialog.factory(content),
+            controller: AddNewContentDialog.factory(content, this.isSuperUser),
             controllerAs: 'vm',
             template: require('./AddNewContentDialog.html'),
             parent: angular.element(document.body),

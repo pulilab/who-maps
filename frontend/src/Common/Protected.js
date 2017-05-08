@@ -19,6 +19,7 @@ class Protected extends AuthApi {
 
     defaultOnInit() {
         this.isLogin = this.retrieveLoginStatus();
+        this.isSuperUser = this.retrieveSuperUserStatus();
         this.userProfileId = this.retrieveProfileId();
         this.user = this.storage.get('user');
         this.setUserType();
@@ -62,6 +63,16 @@ class Protected extends AuthApi {
 
     retrieveProfileId() {
         return this.storage.get('user_profile_id');
+    }
+    retrieveSuperUserStatus() {
+        const flag = this.storage.get('is_superuser');
+        try {
+            return JSON.parse(flag);
+        }
+        catch (e) {
+            console.error(e);
+            return false;
+        }
     }
 }
 

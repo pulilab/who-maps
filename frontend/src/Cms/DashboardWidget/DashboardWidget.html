@@ -23,11 +23,11 @@
   <div layout="row" layout-margin="10" layout-wrap>
     <div class="category-column" layout="column" flex>
       <div md-whiteframe="2" class="category-header lessons-tips" layout="row"  layout-align="start center">
-        <h4>Lessons and Tips</h4>
+        <h4>Tips and Considerations</h4>
       </div>
       <cms-list-element ng-repeat="item in vm.lessons | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
       <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.lessons.length === 0" class="empty-card">No lessons have been added yet...</div>
-      <md-button md-no-ink ui-sref="cms({'#': 'lessons'})" class="md-primary md-small goto-cms">More Lessons &amp; Tips</md-button>
+      <md-button md-no-ink ui-sref="cms({'#': 'lessons'})" class="md-primary md-small goto-cms">More Tips &amp; Considerations</md-button>
     </div>
     <div class="category-column" layout="column" flex>
       <div md-whiteframe="2" class="category-header resources" layout="row"  layout-align="start center">

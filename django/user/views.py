@@ -42,6 +42,7 @@ class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
             user_profile = UserProfile.objects.get_object_or_none(user=authtoken.user)
             response.data.update(user_profile_id=user_profile.id if user_profile else None)
             response.data.update(account_type=user_profile.account_type if user_profile else None)
+            response.data.update(is_superuser=user_profile.user.is_superuser)
         return response
 
 

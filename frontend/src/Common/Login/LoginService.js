@@ -24,6 +24,7 @@ class LoginService extends SimpleApi {
         if (json && json.token) {
             this.storage.set('token', json.token);
             this.storage.set('user_profile_id', json.user_profile_id);
+            this.storage.set('is_superuser', json.is_superuser);
             return Promise.resolve(true);
         }
         return Promise.reject(json);
