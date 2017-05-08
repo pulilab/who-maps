@@ -8,7 +8,6 @@ let sc = {
 };
 
 const scope = $scope(sc);
-console.warn(scope);
 const mockData = {
     countries: [{
         id: 1,
@@ -220,15 +219,27 @@ describe('ProjectController', () => {
     });
 
     it('should have a function that handle the data loaded from the server', () => {
+        const result = {
+            fields: []
+        };
         spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
-        spyOn(sc, 'convertArrayToStandardCustomObj');
-        spyOn(sc, 'convertStringArrayToObjectArray');
-        spyOn(sc, 'fillEmptyCollectionsWithDefault');
+        spyOn(sc, 'convertArrayToStandardCustomObj').and.returnValue(result);
+        spyOn(sc, 'convertStringArrayToObjectArray').and.returnValue(result);
+        spyOn(sc, 'fillEmptyCollectionsWithDefault').and.returnValue(result);
+        spyOn(sc, 'convertCountryFields');
+        spyOn(sc, 'getCountryFields');
+
         sc.handleStructureLoad(mockData);
-        sc.handleDataLoad({});
+        sc.handleDataLoad(result);
         expect(sc.convertArrayToStandardCustomObj).toHaveBeenCalled();
         expect(sc.convertStringArrayToObjectArray).toHaveBeenCalled();
         expect(sc.fillEmptyCollectionsWithDefault).toHaveBeenCalled();
+        expect(sc.getCountryFields).toHaveBeenCalled();
+
+
+        result.fields.push({});
+        sc.handleDataLoad(result);
+        expect(sc.convertCountryFields).toHaveBeenCalled();
 
     });
 

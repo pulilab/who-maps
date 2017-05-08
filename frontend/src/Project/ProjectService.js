@@ -10,33 +10,31 @@ class NewProjectService extends AuthApi {
 
     async newProject(data) {
         let status = void 0;
-        return this.post('projects/', data)
-            .then(answer => {
-                status = answer.status;
-                return answer.json();
-            })
-            .then(json => {
-                return {
-                    success: status < 400,
-                    data: json
-                };
-            })
-            .catch(answer => {
-                return {
-                    success: false,
-                    data: answer
-                };
-            });
+        try {
+            const answer = await this.post('projects/', data);
+            status = answer.status;
+            const json = await answer.json();
+            return {
+                success: status < 400,
+                data: json
+            };
+        }
+        catch (answer) {
+            return {
+                success: false,
+                data: answer
+            };
+        }
     }
 
     getGroups(projectId) {
         return this.get(`projects/${projectId}/groups/`)
-            .then(answer => {
-                return {
-                    success: answer.status < 400,
-                    data: answer
-                };
-            });
+          .then(answer => {
+              return {
+                  success: answer.status < 400,
+                  data: answer
+              };
+          });
     }
 
     putGroups(projectId, team, viewers) {
@@ -47,25 +45,27 @@ class NewProjectService extends AuthApi {
         return this.put(`projects/${projectId}/groups/`, ret);
     }
 
+    saveCountryFields(fields, country_id, project_id) {
+        return this.post(`country-fields/${country_id}/${project_id}/`, { fields });
+    }
+
     async updateProject(data, id) {
         let status = void 0;
-        return this.put(`projects/${id}/`, data)
-            .then(answer => {
-                status = answer.status;
-                return answer.json();
-            })
-            .then(json => {
-                return {
-                    success: status < 400,
-                    data: json
-                };
-            })
-            .catch(answer => {
-                return {
-                    success: false,
-                    data: answer
-                };
-            });
+        try {
+            const answer = await this.put(`projects/${id}/`, data);
+            status = answer.status;
+            const json = await answer.json();
+            return {
+                success: status < 400,
+                data: json
+            };
+        }
+        catch (answer) {
+            return {
+                success: false,
+                data: answer
+            };
+        }
     }
 
 
@@ -79,9 +79,9 @@ class NewProjectService extends AuthApi {
             technology_platform: false
         };
         return this.post('search/projects/', data)
-            .then(results => {
-                return results.json();
-            });
+          .then(results => {
+              return results.json();
+          });
     }
 }
 
