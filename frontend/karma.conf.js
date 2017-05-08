@@ -1,9 +1,9 @@
-const webpack = require('webpack');
-module.exports = config =>{
+var webpack = require('webpack');
+module.exports = function(config) {
 
-    const browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
+    var browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
     config.set({
-        browsers,
+        browsers: browsers,
         customLaunchers: {
             HeadlessChrome: {
                 base: 'Chrome',
@@ -20,17 +20,15 @@ module.exports = config =>{
         frameworks: ['jasmine'],
         logLevel: config.LOG_INFO,
         preprocessors: {
-            'test-context.js': 'webpack'
+            'test-context.js': ['webpack', 'sourcemap']
         },
-        coverageIstanbulReporter: {
-            reports: ['html', 'text-summary'],
-            fixWebpackSourcePaths: true,
-            'report-config': {
-                html: {
-                    subdir: 'html'
-                }
-            },
-            thresholds: {
+        coverageReporter: {
+            reporters: [
+                { type: 'lcov', subdir: '.' },
+                { type: 'text-summary' },
+                { type: 'html',  subdir: 'html' }
+            ],
+            check: {
                 global: {
                     statements: 50,
                     branches: 40,
@@ -39,7 +37,7 @@ module.exports = config =>{
                 }
             }
         },
-        reporters: ['progress', 'coverage-istanbul'],
+        reporters: ['progress', 'coverage'],
         webpack: {
             devtool: 'inline-source-map',
             module: {
@@ -47,19 +45,15 @@ module.exports = config =>{
                     {
                         test: /\.js$/,
                         exclude: /node_modules/,
-                        use: {
-                            loader: 'babel-loader',
-                        }
+                        loader: 'babel-loader'
                     },
                     {
                         test: /^((?!-spec).)*.js$/,
                         enforce: 'pre',
                         exclude: /(node_modules|bower_components)/,
-                        use: {
-                            loader: 'istanbul-instrumenter-loader',
-                            query: {
-                                esModules: true
-                            }
+                        loader: 'istanbul-instrumenter-loader',
+                        query: {
+                            esModules: true
                         }
                     },
                     {
@@ -90,7 +84,7 @@ module.exports = config =>{
         plugins: [
             require('karma-webpack'),
             require('karma-jasmine'),
-            require('karma-coverage-istanbul-reporter'),
+            require('karma-coverage'),
             require('karma-sourcemap-loader'),
             require('karma-chrome-launcher')
         ]
