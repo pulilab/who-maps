@@ -38,13 +38,21 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if "project" not in attrs:
-            raise ValidationError("Project cannot be null")
+            raise ValidationError("Project ID needs to be specified")
+        if "answer" not in attrs:
+            raise ValidationError("Answer can't be empty")
         return attrs
 
     @staticmethod
     def validate_project(value):
         if not value:
-            raise ValidationError("Project cannot be null")
+            raise ValidationError("Project ID needs to be specified")
+        return value
+
+    @staticmethod
+    def validate_answer(value):
+        if not value:
+            raise ValidationError("Answer can't be empty")
         return value
 
 
@@ -54,7 +62,8 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
     def create(self, validated_data):
         return [CountryField.objects.update_or_create(
             defaults={"answer": field["answer"]}, **{"country": field["country"], "project": field["project"],
-                                                     "question": field["question"], "type": field["type"]},
+                                                     "question": field["question"], "type": field["type"],
+                                                     "schema": False},
         )[0] for field in validated_data['fields']]
 
     def to_representation(self, instances):

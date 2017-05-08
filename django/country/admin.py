@@ -9,13 +9,10 @@ class CountryFieldInline(admin.TabularInline):
     max_num = 0
     can_delete = False
     fields = ('type', 'question', 'enabled')
-    # fields = ('type', 'question', 'enabled', 'answer')
     readonly_fields = ('type', 'question')
 
     def get_queryset(self, request):
-        qs = super(CountryFieldInline, self).get_queryset(request)
-        qs = qs.filter(project=None)
-        return qs
+        return super(CountryFieldInline, self).get_queryset(request).filter(schema=True)
 
 
 class AddCountryFieldInline(admin.TabularInline):
@@ -23,7 +20,7 @@ class AddCountryFieldInline(admin.TabularInline):
     verbose_name_plural = "Add additional country fields"
     extra = 0
     can_delete = False
-    fields = ('type', 'question', 'enabled')
+    fields = ('type', 'question')
 
     def get_queryset(self, request):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
