@@ -35,7 +35,7 @@ class CountryFieldManager(models.Manager):
         return self.get_queryset().filter(country_id=country_id, schema=True, enabled=True)
 
     def get_answers(self, country_id, project_id):
-        return self.get_queryset().filter(country_id=country_id, project_id=project_id, schema=False)
+        return self.get_queryset().filter(country_id=country_id, project_id=project_id, enabled=True, schema=False)
 
 
 class CountryField(models.Model):
