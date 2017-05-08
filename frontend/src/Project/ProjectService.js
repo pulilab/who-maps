@@ -8,7 +8,7 @@ class NewProjectService extends AuthApi {
         this.upload = _upload;
     }
 
-    newProject(data) {
+    async newProject(data) {
         let status = void 0;
         return this.post('projects/', data)
             .then(answer => {
@@ -47,7 +47,7 @@ class NewProjectService extends AuthApi {
         return this.put(`projects/${projectId}/groups/`, ret);
     }
 
-    updateProject(data, id) {
+    async updateProject(data, id) {
         let status = void 0;
         return this.put(`projects/${id}/`, data)
             .then(answer => {

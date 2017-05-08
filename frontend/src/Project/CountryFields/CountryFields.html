@@ -14,7 +14,7 @@
           ng-if="field.type === 1"
           class="md-block string-field">
           <label>{{field.question}}</label>
-          <input type="text" ng-required="true" name="custom{{$index}}" ng-model="vm.values[$index]">
+          <input type="text" ng-required="true" name="custom{{$index}}" ng-model="field.answer">
           <div ng-messages="vm.form['custom' + $index].$error">
             <div ng-message="required">This is required.</div>
           </div>
@@ -26,11 +26,7 @@
           ng-if="field.type === 2"
           class="md-block number-field">
           <label>{{field.question}}</label>
-          <input
-            type="number"
-            ng-required="true"
-            name="custom{{$index}}"
-            ng-model="vm.values[$index]">
+          <input type="number" ng-required="true" name="custom{{$index}}" ng-model="field.answer">
           <div ng-messages="vm.form['custom' + $index].$error">
             <div ng-message="required">This is required.</div>
           </div>
@@ -41,7 +37,7 @@
         <div ng-if="field.type === 3">
           <label>{{field.question}}</label>
           <md-radio-group
-            ng-model="vm.values[$index]"
+            ng-model="field.answer"
             name="custom{{$index}}"
             md-no-ink
             required

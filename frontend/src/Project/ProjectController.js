@@ -82,6 +82,7 @@ class ProjectController extends ProjectDefinition {
             this.ccs.getCountryFields(country).then(res => {
                 this.scope.$evalAsync(() => {
                     this.countryFields = res;
+                    this.showCountryFields = res && res.length > 0;
                 });
             });
         }
@@ -289,41 +290,42 @@ class ProjectController extends ProjectDefinition {
         }, 100);
     }
 
-    putGroups() {
+    async putGroups() {
         return this.ns.putGroups(this.projectId, this.team, this.viewers);
     }
 
-    updateForm(processedForm) {
-        this.ns.updateProject(processedForm, this.projectId)
-          .then(response => {
-              if (response && response.success) {
-                  // update cached project data with the one from the backend
-                  this.cs.updateProject(response.data, this.projectId);
-                  this.showToast('Project Updated!');
-                  this.postUpdateActions();
-              }
-              else {
-                  this.handleResponse(response);
-              }
-          });
+    saveCountryFields() {
+        console.log(this.countryFields);
     }
 
-    saveForm(processedForm) {
-        this.ns.newProject(processedForm)
-          .then(response => {
-              if (response && response.success) {
-                  this.ownershipCheck(response.data);
-                  this.cs.addProjectToCache(response.data);
-                  this.putGroups().then(() => {
-                      this.postSaveActions();
-                      this.showToast('Project Saved!');
-                  });
-              }
-              else {
-                  this.handleResponse(response);
-              }
+    async updateForm(processedForm) {
+        const response = await this.ns.updateProject(processedForm, this.projectId);op
+        if (response && response.success) {
+            // update cached project data with the one from the backend
+            this.cs.updateProject(response.data, this.projectId);
+            this.showToast('Project Updated!');
+            this.postUpdateActions();
+        }
+        else {
+            this.handleResponse(response);
+        }
 
-          });
+    }
+
+    async saveForm(processedForm) {
+        const response = await this.ns.newProject(processedForm);
+        if (response && response.success) {
+            this.ownershipCheck(response.data);
+            this.cs.addProjectToCache(response.data);
+            this.putGroups().then(() => {
+                this.postSaveActions();
+                this.showToast('Project Saved!');
+            });
+        }
+        else {
+            this.handleResponse(response);
+        }
+
     }
 
     fillTestForm() {
