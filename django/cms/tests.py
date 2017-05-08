@@ -492,7 +492,6 @@ class CmsApiTest(APITestCase):
 
         url = reverse("post-list")
         response = self.test_user_client.post(url, self.post_data, format="json")
-
         self.post_id = response.json().get("id")
 
         self.assertEqual(response.json()['name'], self.post_data['name'])
@@ -827,3 +826,103 @@ class PermissionTest(APITestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.status_text, 'Forbidden')
         self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+    def test_only_admins_can_create_lessons_with_no_admin(self):
+        self.post_data = {
+            "name": "Test Post 1",
+            "body": "<strong>TEST</strong>",
+            "type": Post.LESSON,
+            "domain": 1,
+            "author": self.user_profile_id
+        }
+
+        url = reverse("post-list")
+        response = self.test_user_client.post(url, self.post_data, format="json")
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_text, 'Forbidden')
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+    def test_only_admins_can_create_lessons_with_superuser(self):
+        self.post_data = {
+            "name": "Test Post 1",
+            "body": "<strong>TEST</strong>",
+            "type": Post.LESSON,
+            "domain": 1,
+            "author": self.user_profile_id
+        }
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("post-list")
+        response = self.test_user_client.post(url, self.post_data, format="json")
+        self.post_id = response.json()['id']
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_text, 'Created')
+        self.assertEqual(response.json()['name'], self.post_data['name'])
+
+    def test_only_admins_can_update_lessons_with_no_admin(self):
+        self.test_only_admins_can_create_lessons_with_superuser()
+
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        user.is_superuser = False
+        user.save()
+
+        self.post_data = {
+            "name": "Test Post 1 Updated",
+            "body": "<strong>TEST</strong>",
+            "type": Post.LESSON,
+            "domain": 1,
+            "author": self.user_profile_id
+        }
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.put(url, self.post_data, format="json")
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_text, 'Forbidden')
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+    def test_only_admins_can_update_lessons_with_superuser(self):
+        self.test_only_admins_can_create_lessons_with_superuser()
+
+        self.post_data = {
+            "name": "Test Post 1 Updated",
+            "body": "<strong>TEST</strong>",
+            "type": Post.LESSON,
+            "domain": 1,
+            "author": self.user_profile_id
+        }
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.put(url, self.post_data, format="json")
+        self.post_id = response.json()['id']
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_text, 'OK')
+        self.assertEqual(response.json()['name'], self.post_data['name'])
+
+    def test_only_admins_can_delete_lessons_with_no_admin(self):
+        self.test_only_admins_can_create_lessons_with_superuser()
+
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        user.is_superuser = False
+        user.save()
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.delete(url)
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_text, 'Forbidden')
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+    def test_only_admins_can_delete_lessons_with_superuser(self):
+        self.test_only_admins_can_create_lessons_with_superuser()
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.delete(url)
+
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_text, 'No Content')
