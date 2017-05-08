@@ -7,7 +7,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from country.models import Country
+from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 from .models import Project
 
@@ -812,3 +812,38 @@ class PermissionTests(SetupTests):
         self.assertEqual(headers['Content-Disposition'], 'attachment; filename="csv.csv"')
         self.assertContains(response, "Test Project1")
         self.assertContains(response, "a@a.com")
+
+    def test_retrieve_project_with_country_fields(self):
+        CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
+        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?", answer="a1", schema=False)
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("organisation_name"), self.org.name)
+        self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
+        self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json().get("country"), self.country_id)
+        self.assertEqual(response.json().get("country_name"), self.country.name)
+
+        self.assertEqual(response.json()['fields'][0]['country'], cf1.country.id)
+        self.assertEqual(response.json()['fields'][0]['project'], cf1.project.id)
+        self.assertEqual(response.json()['fields'][0]['type'], cf1.type)
+        self.assertEqual(response.json()['fields'][0]['question'], cf1.question)
+        self.assertEqual(response.json()['fields'][0]['answer'], cf1.answer)
+
+    def test_retrieve_project_with_country_fields_without_schema(self):
+        CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?", answer="a1", schema=False)
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertEqual(response.json().get("organisation_name"), self.org.name)
+        self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
+        self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json().get("country"), self.country_id)
+        self.assertEqual(response.json().get("country_name"), self.country.name)
+
+        self.assertEqual(len(response.json()['fields']), 0)
