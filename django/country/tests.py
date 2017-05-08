@@ -7,12 +7,12 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo
+from country.models import Country, PartnerLogo, CountryField
+from project.models import Project
 from user.models import UserProfile
 
 
 class CountryTests(APITestCase):
-
     def setUp(self):
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -41,6 +41,9 @@ class CountryTests(APITestCase):
 
         self.country = Country.objects.create(name="country1", code="CC")
         PartnerLogo.objects.create(country=self.country)
+
+        CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
+        CountryField.objects.create(country=self.country, type=1, question="q1?", answer="a1", schema=False)
 
     def test_get_countries(self):
         url = reverse("country-list")
