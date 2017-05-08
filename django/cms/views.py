@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from cms.models import Post, Comment
-from cms.permissions import IsOwnerOrReadOnly
+from cms.permissions import IsOwnerOrReadOnly, OnlyAdminForLessons
 from cms.serializers import CmsSerializer, CommentSerializer
 
 
@@ -22,7 +22,14 @@ class FlagMixin(object):
 class CmsViewSet(FlagMixin, ModelViewSet):
     queryset = Post.objects.showable().order_by('-id')
     serializer_class = CmsSerializer
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly, OnlyAdminForLessons)
+
+    def perform_create(self, serializer):
+        obj = Post()
+        for key, value in serializer.validated_data.items():
+            setattr(obj, key, value)
+        self.check_object_permissions(self.request, obj)
+        super(CmsViewSet, self).perform_create(serializer)
 
 
 class CommentViewSet(FlagMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
