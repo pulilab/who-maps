@@ -20,17 +20,16 @@ module.exports = config =>{
         frameworks: ['jasmine'],
         logLevel: config.LOG_INFO,
         preprocessors: {
-            'test-context.js': ['webpack', 'sourcemap']
+            'test-context.js': 'webpack'
         },
         coverageIstanbulReporter: {
             reports: ['html', 'text-summary'],
+            fixWebpackSourcePaths: true,
             'report-config': {
-
                 html: {
                     subdir: 'html'
                 }
             },
-            fixWebpackSourcePaths: true,
             thresholds: {
                 global: {
                     statements: 50,
@@ -49,16 +48,18 @@ module.exports = config =>{
                         test: /\.js$/,
                         exclude: /node_modules/,
                         use: {
-                            loader: 'babel-loader'
+                            loader: 'babel-loader',
                         }
                     },
                     {
                         test: /^((?!-spec).)*.js$/,
-                        enforce: 'post',
+                        enforce: 'pre',
                         exclude: /(node_modules|bower_components)/,
-                        loader: 'istanbul-instrumenter-loader',
-                        query: {
-                            esModules: true
+                        use: {
+                            loader: 'istanbul-instrumenter-loader',
+                            query: {
+                                esModules: true
+                            }
                         }
                     },
                     {
@@ -78,7 +79,8 @@ module.exports = config =>{
                 new webpack.DefinePlugin({
                     API: '"/api/"',
                     DEV: false,
-                    DEBUG: false
+                    DEBUG: false,
+                    LIVE: false
                 })
             ]
         },
