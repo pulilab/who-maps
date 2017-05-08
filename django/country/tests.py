@@ -127,3 +127,27 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         self.assertEqual(ma.get_readonly_fields(self.request), ())
+
+    def test_country_field_inlines(self):
+        user_profile = UserProfile.objects.create(user=self.user)
+        country = Country.objects.create(name="Country1", code="CC1", user=user_profile)
+        CountryField.objects.create(country=country, type=1, question="q1?", schema=True)
+        CountryField.objects.create(country=country, type=1, question="q2?", schema=False)
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        formsets_and_inlines = list(ma.get_formsets_with_inlines(self.request))
+        countryfield_formset_and_inline = formsets_and_inlines[-1]
+        countryfield_inline = countryfield_formset_and_inline[1]
+
+        addcountryfield_formset_and_inline = formsets_and_inlines[1]
+        addcountryfield_inline = addcountryfield_formset_and_inline[1]
+
+        self.assertEqual(countryfield_inline.get_readonly_fields(self.request), ('type', 'question'))
+        self.assertEqual(countryfield_inline.get_queryset(self.request).count(), 1)
+
+        self.assertEqual(addcountryfield_inline.get_readonly_fields(self.request), ())
+        self.assertEqual(addcountryfield_inline.get_queryset(self.request).count(), 0)
