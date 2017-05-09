@@ -163,7 +163,6 @@ class ProjectController extends ProjectDefinition {
             this.project = data;
             if (data.fields && data.fields.length > 0) {
                 this.countryFields = this.convertCountryFieldsAnswer(data);
-                window.TE = this.countryFields;
                 this.showCountryFields = true;
             }
         });
