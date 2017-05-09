@@ -164,7 +164,8 @@
       &.logged-out {}
 
       &.logged-in {
-        padding: 40px 100px 340px;
+        // padding: 40px 100px 340px;
+        padding: 40px 100px 100px;
         background-color: $color-gray-lightest;
       }
 

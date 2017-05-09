@@ -8,4 +8,17 @@
   .generic-container {
     width: 100%;
   }
+
+  .yesno-field {
+    label {
+      display: block;
+      margin: 0 0 10px;
+      padding: 10px 0 0 2px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    md-radio-group {
+      margin-bottom: 20px;
+    }
+  }
 }

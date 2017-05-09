@@ -34,7 +34,9 @@
 
 
         <!-- RADIO BUTTON-->
-        <div ng-if="field.type === 3">
+        <div
+          ng-if="field.type === 3"
+          class="yesno-field">
           <label>{{field.question}}</label>
           <md-radio-group
             ng-model="field.answer"
