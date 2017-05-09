@@ -152,7 +152,8 @@ REST_FRAMEWORK = {
 # django-allauth and rest-auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
+    'core.auth.EmailBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods
     'allauth.account.auth_backends.AuthenticationBackend',
 )
