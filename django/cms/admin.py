@@ -25,6 +25,16 @@ class StateFilter(SimpleListFilter):
                 }, []),
                 'display': title,
             }
+
+    def queryset(self, request, queryset):
+        if self.value() and int(self.value()) in (State.NORMAL, State.BANNED, State.FLAGGED):
+            return queryset.filter(state=self.value())
+        elif self.value() is not None and int(self.value()) == 0:
+            return queryset
+        else:
+            return queryset.filter(state=State.FLAGGED)
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'domain', 'state', 'modified', 'author')
