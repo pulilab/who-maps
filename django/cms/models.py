@@ -27,9 +27,9 @@ class State(ExtendedModel):
     BANNED = 3
 
     STATE_CHOICES = (
-        (1, "Resources"),
-        (2, "Lessons & Tips"),
-        (3, "Experiences"),
+        (NORMAL, "Normal"),
+        (FLAGGED, "Flagged"),
+        (BANNED, "Banned"),
     )
 
     state = models.IntegerField(choices=STATE_CHOICES, default=NORMAL)
