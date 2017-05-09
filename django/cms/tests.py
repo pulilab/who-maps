@@ -15,7 +15,7 @@ from user.models import UserProfile, Organisation
 
 class CmsTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username="test@who.who", password="secure1234")
+        self.user = User.objects.create(username="test@who.who", email="test@who.who", password="secure1234")
         self.userprofile = UserProfile.objects.create(name="Test User1", user=self.user)
 
         self.post_data = {
@@ -29,7 +29,7 @@ class CmsTest(TestCase):
         self.post = Post.objects.create(**self.post_data)
 
         self.assertEqual(self.post.__str__(), self.post_data['name'])
-        self.assertEqual(self.post.author.__str__(), "Test User1")
+        self.assertEqual(self.post.author.__str__(), "Test User1 <test@who.who>")
 
     def test_comments(self):
         self.assertEqual(self.post.comments.all().count(), 0)
