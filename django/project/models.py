@@ -46,12 +46,12 @@ class Project(ExtendedModel):
         return self.name
 
     @property
-    def country_name(self):
+    def country(self):
         try:
             country_id = int(self.data.get('country'))
         except TypeError:  # pragma: no cover
             return None
-        return Country.objects.get(id=country_id).name
+        return Country.objects.get(id=country_id)
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()

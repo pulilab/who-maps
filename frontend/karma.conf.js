@@ -73,7 +73,8 @@ module.exports = function(config) {
                 new webpack.DefinePlugin({
                     API: '"/api/"',
                     DEV: false,
-                    DEBUG: false
+                    DEBUG: false,
+                    LIVE: false
                 })
             ]
         },

@@ -241,6 +241,12 @@ class CustomCountryService extends SimpleApi {
 
     }
 
+    getCountryFields(id) {
+        return this.get(`country-fields/${id}/`).then(response => {
+            return response;
+        });
+    }
+
     purge() {
         this[singleton] = undefined;
     }

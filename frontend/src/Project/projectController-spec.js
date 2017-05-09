@@ -1,31 +1,18 @@
-import _ from 'lodash';
 import ProjectController from './ProjectController';
+import { $state, $scope, toast } from '../testUtilities';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
-let sc = {};
-
-const $scope = {
-    $evalAsync: jasmine.createSpy('eval').and.callFake(toCall => {
-        if (toCall && typeof toCall === 'function') {
-            toCall();
-        }
-    }),
-    $$postDigest: jasmine.createSpy('digest')
+let sc = {
+    project: {}
 };
 
+const scope = $scope(sc);
 const mockData = {
     countries: [{
         id: 1,
         name: 'asd'
     }]
-};
-
-const $state = {
-    params: {
-
-    },
-    go: jasmine.createSpy('stateGo')
 };
 
 const getGroupMock = {
@@ -39,15 +26,6 @@ const getGroupMock = {
     }
 };
 
-const mockPromiseGenerator = result => {
-    return {
-        then: toCall=> {
-            if (toCall && typeof toCall === 'function') {
-                toCall(result);
-            }
-        }
-    };
-};
 
 const cs = {
     projectStructure: mockData,
@@ -64,18 +42,6 @@ const cs = {
 
 const upload = {};
 
-const $mdToast = {
-    show: jasmine.createSpy('showToast'),
-    simple: jasmine.createSpy('simple'),
-    textContent: jasmine.createSpy('textContent'),
-    position: jasmine.createSpy('position'),
-    hideDelay: jasmine.createSpy('hideDelay')
-};
-
-_.forEach($mdToast, func => {
-    func.and.returnValue($mdToast);
-});
-
 const timeout = toCall => {
     toCall();
 };
@@ -84,7 +50,7 @@ const timeout = toCall => {
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new ProjectController($scope, $state, upload, cs, $mdToast, timeout);
+        sc = new ProjectController(scope, $state, upload, cs, toast, timeout);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -140,41 +106,53 @@ describe('ProjectController', () => {
         expect(sc.updateForm).toHaveBeenCalled();
     });
 
-    it('should have a function that save a new form', () => {
-        spyOn(sc, 'handleResponse');
-        spyOn(sc, 'showToast');
-        spyOn(sc, 'ownershipCheck');
-        spyOn(sc, 'postSaveActions');
-        spyOn(sc, 'putGroups').and.returnValue(mockPromiseGenerator({}));
+    describe('save new form function', () => {
+        it('should try to save and call handleResponse if the saving fails', async (done) => {
+            spyOn(sc, 'handleResponse');
+            spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve({ success: false }));
+            await sc.saveForm(sc.project);
+            expect(sc.ns.newProject).toHaveBeenCalled();
+            expect(sc.handleResponse).toHaveBeenCalled();
+            done();
 
-        const spy = spyOn(sc.ns, 'newProject');
-        spy.and.returnValue(mockPromiseGenerator({ success: false }));
-        sc.saveForm(sc.project);
-        expect(sc.ns.newProject).toHaveBeenCalled();
-        expect(sc.handleResponse).toHaveBeenCalled();
+        });
 
-        spy.and.returnValue(mockPromiseGenerator({ success: true }));
-        sc.saveForm(sc.project);
-        expect(sc.ownershipCheck).toHaveBeenCalled();
-        expect(sc.cs.addProjectToCache).toHaveBeenCalled();
-        expect(sc.putGroups).toHaveBeenCalled();
-        expect(sc.postSaveActions).toHaveBeenCalled();
-        expect(sc.showToast).toHaveBeenCalled();
+        it('should call the appropiate function after saving succeed', async (done) => {
+            spyOn(sc, 'showToast');
+            spyOn(sc, 'ownershipCheck');
+            spyOn(sc, 'postSaveActions');
+            spyOn(sc, 'putGroups').and.returnValue(Promise.resolve({}));
+            spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
+
+
+            spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve({ success: true }));
+            await sc.saveForm(sc.project);
+            expect(sc.ownershipCheck).toHaveBeenCalled();
+            expect(sc.cs.addProjectToCache).toHaveBeenCalled();
+            expect(sc.putGroups).toHaveBeenCalled();
+            expect(sc.postSaveActions).toHaveBeenCalled();
+            expect(sc.showToast).toHaveBeenCalled();
+            done();
+        });
     });
 
-    it('should have a function that update an existing form', () => {
+
+    it('should have a function that update an existing form', async (done) => {
         spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
+        spyOn(sc, 'putGroups').and.returnValue(Promise.resolve());
+        spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
         const spy = spyOn(sc.ns, 'updateProject');
-        spy.and.returnValue(mockPromiseGenerator({ success: false }));
+        spy.and.returnValue(Promise.resolve({ success: false }));
         sc.editMode = true;
-        sc.updateForm(sc.project);
+        await sc.updateForm(sc.project);
         expect(sc.ns.updateProject).toHaveBeenCalled();
         expect(sc.handleResponse).toHaveBeenCalled();
-        spy.and.returnValue(mockPromiseGenerator({ success: true }));
-        sc.updateForm(sc.project);
+        spy.and.returnValue(Promise.resolve({ success: true }));
+        await sc.updateForm(sc.project);
         expect(sc.cs.updateProject).toHaveBeenCalled();
         expect(sc.showToast).toHaveBeenCalled();
+        done();
     });
 
     it('should have some utility function', () => {
@@ -241,16 +219,42 @@ describe('ProjectController', () => {
     });
 
     it('should have a function that handle the data loaded from the server', () => {
+        const result = {
+            fields: []
+        };
         spyOn(sc.ccs, 'getCountryDistricts').and.returnValue(Promise.resolve({}));
-        spyOn(sc, 'convertArrayToStandardCustomObj');
-        spyOn(sc, 'convertStringArrayToObjectArray');
-        spyOn(sc, 'fillEmptyCollectionsWithDefault');
+        spyOn(sc, 'convertArrayToStandardCustomObj').and.returnValue(result);
+        spyOn(sc, 'convertStringArrayToObjectArray').and.returnValue(result);
+        spyOn(sc, 'fillEmptyCollectionsWithDefault').and.returnValue(result);
+        spyOn(sc, 'convertCountryFieldsAnswer');
+        spyOn(sc, 'getCountryFields');
+
         sc.handleStructureLoad(mockData);
-        sc.handleDataLoad({});
+        sc.handleDataLoad(result);
         expect(sc.convertArrayToStandardCustomObj).toHaveBeenCalled();
         expect(sc.convertStringArrayToObjectArray).toHaveBeenCalled();
         expect(sc.fillEmptyCollectionsWithDefault).toHaveBeenCalled();
 
+
+        result.fields.push({});
+        sc.handleDataLoad(result);
+        expect(sc.convertCountryFieldsAnswer).toHaveBeenCalled();
+        expect(sc.getCountryFields).toHaveBeenCalledTimes(1);
+
+    });
+
+    it('should have a function to convertIncomingCountry fields', () => {
+        const data = {
+            fields: [
+                { type: 1, answer: 'a' },
+                { type: 2, answer: '3' },
+                { type: 3, answer: 'true' }
+            ]
+        };
+        const result = sc.convertCountryFieldsAnswer(data);
+        expect(result[0].answer).toBe('a');
+        expect(result[1].answer).toBe(3);
+        expect(result[2].answer).toBe(true);
     });
 
     it('should have a function that convert a string to a date', () => {

@@ -1,4 +1,3 @@
-import * as utils from '../utilities';
 import ListElementController from './ListElementController';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */

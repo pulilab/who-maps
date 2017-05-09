@@ -1,6 +1,8 @@
 from rest_framework import generics, mixins, viewsets
-from .models import Country
-from .serializers import CountryListSerializer, LandingPageSerializer
+
+from .models import Country, CountryField
+from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
+    CountryFieldsWriteSerializer
 
 
 class CountryListAPIView(generics.ListAPIView):
@@ -13,3 +15,14 @@ class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin,
     queryset = Country.objects.all()
     serializer_class = LandingPageSerializer
     lookup_field = "code"
+
+
+class CountryFieldsListView(generics.ListAPIView):
+    serializer_class = CountryFieldsListSerializer
+
+    def get_queryset(self):
+        return CountryField.objects.get_schema(self.kwargs.get('country_id'))
+
+
+class CountryFieldsCreateUpdateView(generics.CreateAPIView):
+    serializer_class = CountryFieldsWriteSerializer
