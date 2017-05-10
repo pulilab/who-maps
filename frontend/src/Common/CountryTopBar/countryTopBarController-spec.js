@@ -1,27 +1,14 @@
 import { default as CountryTopBarController } from './CountryTopBarController';
 import { EE } from '../common';
+import { $state, $scope, $timeout } from '../../testUtilities';
 
 EE.initialize();
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let controller = {};
-const $state = {
-    go: () => {},
-    current: {
-        name: 'mock'
-    }
-};
 
-
-const $scope = {
-    $watch: () => {},
-    $evalAsync: ()=>{}
-};
-
-const $timeout = toCall => {
-    return toCall();
-};
+const scope = $scope(controller);
 
 const boundFunctions = {};
 
@@ -35,13 +22,26 @@ describe('CountryTopBarController', () => {
 
     beforeEach(() => {
         boundFunctions.onInit = spyOn(CountryTopBarController.prototype, 'onInit').and.callThrough();
-        controller = CountryTopBarController.countryTopBarControllerFactory()($state, $scope, $timeout);
+        controller = CountryTopBarController.countryTopBarControllerFactory()($state, scope, $timeout);
+        controller.state.current ={ name:  'something'};
     });
 
     it('should have an init function', () => {
         expect(controller.onInit).toBeDefined();
         controller.$onInit();
         expect(boundFunctions.onInit).toHaveBeenCalled();
+    });
+
+    it('should call setProfile data if the user is present', () => {
+        controller.cs = {};
+        controller.cs.loadedPromise = {
+            then: toCall => toCall()
+        };
+        spyOn(controller, 'setProfileData');
+        spyOn(controller, 'commonInit');
+        controller.user = true;
+        controller.onInit();
+        expect(controller.setProfileData).toHaveBeenCalled();
     });
 
     it('should get the country data', ()=> {
