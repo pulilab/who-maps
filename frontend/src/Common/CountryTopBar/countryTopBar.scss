@@ -38,6 +38,7 @@
   }
 
   .md-toolbar-tools {
+    position: relative;
     height: auto !important;
     max-height: 120px !important; /* 160 */
     padding: 35px 40px !important;
@@ -62,6 +63,20 @@
           height: 30px;
         }
       }
+    }
+
+    .supported-by {
+      position: absolute;
+      top: 0;
+      right: 14px;
+      content: "";
+      display: inline-block;
+      width: 231px;
+      height: 24px;
+      background-image: url("./images/supported-by-dha.svg");
+      background-size: 231px 24px;
+      background-repeat: no-repeat;
+      transition: $swift-ease-out;
     }
 
     .md-button {
@@ -212,6 +227,10 @@
 
           &.no-country {}
         }
+      }
+
+      .supported-by {
+        top: -24px;
       }
     }
 
