@@ -46,9 +46,15 @@ toast.position = jasmine.createSpy('position').and.returnValue(toast);
 toast.textContent = jasmine.createSpy('textContent').and.returnValue(toast);
 toast.hideDelay = jasmine.createSpy('hideDelay').and.returnValue(toast);
 
+
+const $timeout = toCall => {
+    return toCall();
+};
+
 export {
     dialog,
     $state,
     $scope,
-    toast
+    toast,
+    $timeout
 };
