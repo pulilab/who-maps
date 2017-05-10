@@ -24,6 +24,8 @@ class CountryTopBarController extends TopBarBehaviour {
             this.scope.$evalAsync(() => {
                 vm.countryData = data;
                 vm.pageLoaded = true;
+                vm.showCountryNameAndFlag = vm.countryData && vm.countryData.name && vm.countryData.name !== 'WHO';
+                vm.logoClass = vm.showCountryNameAndFlag ? 'has-country-logo' : '';
             });
         });
 
@@ -55,6 +57,7 @@ class CountryTopBarController extends TopBarBehaviour {
             vm.isScrolled = e.target.scrollTop > 100 ? 'scrolled-down' : 'not-scrolled';
         });
     }
+
 
     static countryTopBarControllerFactory() {
         require('./countryTopBar.scss');

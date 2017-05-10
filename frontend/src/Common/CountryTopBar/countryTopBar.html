@@ -1,4 +1,4 @@
-<md-toolbar class="main-toolbar toolbar-global toolbar-landing" ng-class="[vm.isScrolled, vm.pageClass]">
+<md-toolbar class="main-toolbar toolbar-global toolbar-landing" ng-class="[vm.isScrolled, vm.pageClass, vm.logoClass]">
     <div class="md-toolbar-tools">
         <div class="country-logo" layout-align="" ng-if="vm.pageLoaded">
 
@@ -8,11 +8,15 @@
 
         </div>
 
+        <div class="supported-by" ng-show="vm.showCountryNameAndFlag">
+
+        </div>
+
 
 
         <span flex ></span>
 
-        <div class="current-country row" ng-if="vm.countryData.name">
+        <div class="current-country row" ng-if="vm.showCountryNameAndFlag">
             <div class="country-flag" >
                 <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
             </div>
