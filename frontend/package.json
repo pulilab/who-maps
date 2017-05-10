@@ -69,7 +69,7 @@
     "wdio-jasmine-framework": "^0.2.5",
     "webdriverio": "^4.2.11",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.1"
+    "webpack-dev-server": "^2.4.3"
   },
   "dependencies": {
     "angular": "1.5.11",
