@@ -1,6 +1,16 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
-from cms.models import Post, State
+from cms.models import Post, State, Comment
+
+
+def ban(modeladmin, request, queryset):
+    queryset.update(state=State.BANNED)
+ban.short_description = "Ban selected items"
+
+
+def normalize(modeladmin, request, queryset):
+    queryset.update(state=State.NORMAL)
+normalize.short_description = "Mark selected items as normal"
 
 
 class StateFilter(SimpleListFilter):
@@ -37,16 +47,23 @@ class StateFilter(SimpleListFilter):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'domain', 'state', 'modified', 'author')
+    list_display = ('body', 'name', 'type', 'domain', 'state', 'modified', 'author')
     list_filter = (StateFilter, 'type')
     search_fields = ('name', 'body', 'author__name', 'author__user__email')
     ordering = ('name',)
+    actions = (ban, normalize)
+
+    def has_add_permission(self, request):
+        return False
+
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('text', 'user', 'state', 'modified')
     list_filter = (StateFilter,)
     search_fields = ('text', 'user__name', 'user__user__email')
     ordering = ('text',)
+    actions = (ban, normalize)
 
     def has_add_permission(self, request):
         return False
