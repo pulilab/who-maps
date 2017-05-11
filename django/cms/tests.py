@@ -5,11 +5,12 @@ from PIL import Image
 from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.core import urlresolvers
+from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
-from cms.admin import PostAdmin
+from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
 from country.models import Country
 from user.models import UserProfile, Organisation
@@ -976,3 +977,37 @@ class CmsAdminTests(TestCase):
         self.assertEqual(posts.count(), 2)
         self.assertEqual(posts[0].name, "Test1")
         self.assertEqual(posts[1].name, "Test2")
+
+    def test_comment_admin_and_actions(self):
+        ma = CommentAdmin(Comment, self.site)
+        self.password = 'mypassword'
+
+        self.admin = User.objects.create_superuser('myuser', 'myemail@test.com', self.password)
+
+        self.client = Client()
+        self.request.user = self.admin
+
+        self.assertFalse(ma.has_add_permission(self.request))
+
+        post = Post.objects.create(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
+        Comment.objects.create(post=post, text="test comment 1", user=self.userprofile, state=State.FLAGGED)
+        Comment.objects.create(post=post, text="test comment 2", user=self.userprofile, state=State.FLAGGED)
+        Comment.objects.create(post=post, text="test comment 3", user=self.userprofile, state=State.NORMAL)
+
+        self.assertEqual(Comment.objects.flagged().count(), 2)
+        self.assertEqual(Comment.objects.banned().count(), 0)
+
+        change_url = urlresolvers.reverse('admin:cms_comment_changelist')
+        data = {'action': 'ban', '_selected_action': Comment.objects.filter(state=State.FLAGGED).values_list('pk', flat=True)}
+        self.client.login(username=self.admin.email, password=self.password)
+        response = self.client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Comment.objects.flagged().count(), 0)
+        self.assertEqual(Comment.objects.banned().count(), 2)
+        self.assertEqual(Comment.objects.normal().count(), 1)
+
+        # can't call the other action with normalize now, because the default queryset is showing the flagged posts only
+        ma.actions[1](ma, self.request, Comment.objects.filter(state=State.BANNED))
+        self.assertEqual(Comment.objects.flagged().count(), 0)
+        self.assertEqual(Comment.objects.banned().count(), 0)
+        self.assertEqual(Comment.objects.normal().count(), 3)
