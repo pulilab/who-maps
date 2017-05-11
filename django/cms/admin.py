@@ -41,6 +41,12 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = (StateFilter, 'type')
     search_fields = ('name', 'body', 'author__name', 'author__user__email')
     ordering = ('name',)
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('text', 'user', 'state', 'modified')
+    list_filter = (StateFilter,)
+    search_fields = ('text', 'user__name', 'user__user__email')
+    ordering = ('text',)
 
     def has_add_permission(self, request):
         return False
