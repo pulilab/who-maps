@@ -90,6 +90,10 @@ class Post(State):
     cover = models.ImageField(null=True, blank=True)
     author = models.ForeignKey(UserProfile)
 
+    class Meta:
+        verbose_name = "Planning & Guidance post"
+        verbose_name_plural = "Planning & Guidance posts"
+
     def __str__(self):
         return self.name
 
