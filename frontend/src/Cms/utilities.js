@@ -8,7 +8,7 @@ const prettifyDate = ({ created }) => {
 
 const itemType = (item) => {
     if (item) {
-        const typeLib = ['Tips & Considerations', 'Resources', 'Experiences'];
+        const typeLib = ['Resources', 'Tips & Considerations', 'Experiences'];
         return typeLib[item.type - 1];
     }
     return '';

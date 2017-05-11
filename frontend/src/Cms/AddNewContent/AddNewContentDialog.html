@@ -19,8 +19,8 @@
             <md-input-container>
               <label>Select a type</label>
               <md-select ng-model="vm.newContent.type" required name="type" ng-disabled="!vm.isSuperUser">
-                <md-option ng-value="1" >Tips &amp; Considerations</md-option>
-                <md-option ng-value="2">Resources</md-option>
+                <md-option ng-value="1">Resources</md-option>
+                <md-option ng-value="2" >Tips &amp; Considerations</md-option>
               </md-select>
               <div ng-messages="vm.form.type.$error">
                 <div ng-message="required">This is required.</div>
