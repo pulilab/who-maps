@@ -44,6 +44,7 @@ class StateFilter(SimpleListFilter):
         else:
             return queryset.filter(state=State.FLAGGED)
 
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('body', 'name', 'type', 'domain', 'state', 'modified', 'author')
