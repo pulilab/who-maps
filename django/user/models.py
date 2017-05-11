@@ -34,4 +34,4 @@ class UserProfile(ExtendedModel):
     country = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return self.name if self.name else ""
+        return "{} <{}>".format(self.name, self.user.email) if self.name else ""
