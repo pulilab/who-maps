@@ -19,7 +19,7 @@ describe('CMS Utilities', () => {
     });
 
     it('should have an itemType Fn.', () => {
-        const types = [null, 'Tips & Considerations', 'Resources', 'Experiences'];
+        const types = [null, 'Resources', 'Tips & Considerations', 'Experiences'];
         for (let i = 1; i < 4; i += 1) {
             const item = {
                 type: i

@@ -54,8 +54,8 @@ class DashboardWidgetController {
     splitType(data) {
         if (this.currentDomain && this.currentDomain.id) {
             const id = this.currentDomain.id;
-            this.lessons = data.filter(item => item.type === 1 && item.domain === id);
-            this.resources = data.filter(item => item.type === 2 && item.domain === id);
+            this.resources = data.filter(item => item.type === 1 && item.domain === id);
+            this.lessons = data.filter(item => item.type === 2 && item.domain === id);
             this.experiences = data.filter(item => item.type === 3 && item.domain === id);
         }
     }

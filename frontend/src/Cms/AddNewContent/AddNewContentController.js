@@ -81,7 +81,7 @@ class AddNewContentController extends Protected {
         const content = this.toEdit ? Object.assign({}, this.toEdit) : {};
 
         if (!this.isSuperUser && !this.toEdit) {
-            content.type = 2;
+            content.type = 1;
         }
 
         this.dialog.show({
