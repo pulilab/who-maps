@@ -27,9 +27,9 @@ class State(ExtendedModel):
     BANNED = 3
 
     STATE_CHOICES = (
-        (1, "Resources"),
-        (2, "Lessons & Tips"),
-        (3, "Experiences"),
+        (NORMAL, "Normal"),
+        (FLAGGED, "Flagged"),
+        (BANNED, "Banned"),
     )
 
     state = models.IntegerField(choices=STATE_CHOICES, default=NORMAL)
@@ -89,6 +89,10 @@ class Post(State):
     domain = models.IntegerField(choices=DOMAIN_CHOICES)
     cover = models.ImageField(null=True, blank=True)
     author = models.ForeignKey(UserProfile)
+
+    class Meta:
+        verbose_name = "Planning & Guidance post"
+        verbose_name_plural = "Planning & Guidance posts"
 
     def __str__(self):
         return self.name
