@@ -216,7 +216,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog) => {
             });
             const mainUi = window.document.querySelector('ui-view');
             mainUi.style.display = 'none';
-            const message = token ? 'Your authorization token has expired' :
+            const message = token ? 'You session has expired, please login again.' :
               'You need to be logged in to view this content';
             const dialog = $mdDialog.show(
               $mdDialog.alert()
