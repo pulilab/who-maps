@@ -1,10 +1,5 @@
-from allauth.account.models import EmailAddress, EmailConfirmation
-from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
-from rest_framework.authtoken.models import Token
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
-from django.contrib.sites.models import Site
-
 from cms.models import Post, State, Comment
 
 
@@ -72,11 +67,3 @@ class CommentAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
-
-admin.site.unregister(EmailAddress)
-admin.site.unregister(EmailConfirmation)
-admin.site.unregister(SocialAccount)
-admin.site.unregister(SocialToken)
-admin.site.unregister(SocialApp)
-admin.site.unregister(Site)
-admin.site.unregister(Token)
