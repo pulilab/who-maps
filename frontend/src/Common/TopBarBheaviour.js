@@ -73,6 +73,13 @@ class TopBar extends Protected {
     }
 
     openMenu($mdOpenMenu, event) {
+        const leftOver = window.document.querySelector('.md-open-menu-container.md-leave');
+        if (leftOver) {
+            leftOver.style.top = null;
+            leftOver.style.right = null;
+            leftOver.style.left = null;
+            leftOver.style.bottom = null;
+        }
         $mdOpenMenu(event);
     }
 
