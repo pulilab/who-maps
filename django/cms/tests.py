@@ -5,7 +5,7 @@ from PIL import Image
 from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
-from django.core import urlresolvers
+from django.core import urlresolvers, mail
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
@@ -513,6 +513,25 @@ class CmsApiTest(APITestCase):
 
         self.assertEqual(Post.objects.all().first().slug, 'test-post-1')
         self.assertEqual(Post.objects.all().last().slug, 'test-post-1--1')
+
+    def test_flag_post_sends_email(self):
+        self.test_create()
+        self.password = 'mypassword'
+        self.admin = User.objects.create_superuser('myuser', 'f@pulilab.com', self.password)
+
+        url = reverse("post-detail", kwargs={"pk": self.post_id})
+        response = self.test_user_client.patch(url)
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.json()['detail'], "Content flagged.")
+
+        outgoing_email = mail.outbox[-1].message()
+        outgoing_email_text = mail.outbox[-1].message().as_string()
+
+        self.assertTrue('Content has been flagged.' in outgoing_email.values())
+        self.assertTrue('f@pulilab.com' in outgoing_email.values())
+        self.assertTrue('Content has been flagged as inappropriate. Please take action.' in outgoing_email_text)
+        self.assertTrue('/admin/cms/post/{}/change/'.format(self.post_id) in outgoing_email_text)
 
 
 class PermissionTest(APITestCase):

@@ -1,4 +1,7 @@
+from django.conf import settings
+from django.core import mail, urlresolvers
 from django.contrib import admin
+from django.template import loader
 from country.models import Country, PartnerLogo, CountryField
 
 
@@ -50,3 +53,22 @@ class CountryAdmin(admin.ModelAdmin):
         if request.user.is_staff and not request.user.is_superuser:
             fields += ('name', 'code', 'user', )
         return fields
+
+    def save_model(self, request, obj, form, change):
+        super(CountryAdmin, self).save_model(request, obj, form, change)
+        if change and 'user' in form.changed_data and obj.user:
+            self._notify_user(obj)
+
+    @staticmethod
+    def _notify_user(country):
+        html_template = loader.get_template("email/country_admin.html")
+        change_url = urlresolvers.reverse('admin:country_country_change', args=(country.id,))
+        html_message = html_template.render({'change_url': change_url, 'country_name': country.name})
+
+        mail.send_mail(
+            subject="You have been selected as the Country Admin for {}".format(country.name),
+            message="",
+            from_email=settings.FROM_EMAIL,
+            recipient_list=[country.user.user.email],
+            html_message=html_message,
+            fail_silently=True)

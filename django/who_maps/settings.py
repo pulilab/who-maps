@@ -168,7 +168,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 import datetime
-EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=1)
+EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -179,6 +179,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Celery settings
 BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'

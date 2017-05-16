@@ -1,5 +1,6 @@
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from django.core import mail
 from django.core.urlresolvers import reverse
 from allauth.account.models import EmailConfirmation
 from django.test import TestCase
@@ -325,7 +326,7 @@ class CountryAdminTests(TestCase):
     def setUp(self):
         self.site = AdminSite()
         self.request = MockRequest()
-        self.user = User.objects.create(username="alma", password="korte")
+        self.user = User.objects.create(username="alma", password="korte", email="test@test.com")
 
     def test_superuser_can_see_every_country(self):
         ma = CountryAdmin(Country, self.site)
@@ -397,3 +398,26 @@ class CountryAdminTests(TestCase):
 
         self.assertEqual(addcountryfield_inline.get_readonly_fields(self.request), ())
         self.assertEqual(addcountryfield_inline.get_queryset(self.request).count(), 0)
+
+    def test_assign_user_will_send_email(self):
+        user_profile = UserProfile.objects.create(user=self.user)
+        country = Country.objects.create(name="Country1", code="CC1")
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        class MockForm:
+            changed_data = ['user']
+
+        country.user = user_profile
+        ma.save_model(self.request, country, MockForm(), True)
+
+        outgoing_email = mail.outbox[-1].message()
+        outgoing_email_text = mail.outbox[-1].message().as_string()
+
+        self.assertTrue("You have been selected as the Country Admin for {}".format(country.name) in outgoing_email.values())
+        self.assertTrue("test@test.com" in outgoing_email.values())
+        self.assertTrue('You have been selected as the Country Admin' in outgoing_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_email_text)
