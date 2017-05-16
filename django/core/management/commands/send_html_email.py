@@ -1,7 +1,3 @@
-import os
-import shutil
-import json
-
 from django.core import mail
 from django.core.management.base import BaseCommand
 from django.conf import settings
