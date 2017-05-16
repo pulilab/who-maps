@@ -23,7 +23,7 @@ describe('CountryTopBarController', () => {
     beforeEach(() => {
         boundFunctions.onInit = spyOn(CountryTopBarController.prototype, 'onInit').and.callThrough();
         controller = CountryTopBarController.countryTopBarControllerFactory()($state, scope, $timeout);
-        controller.state.current ={ name:  'something'};
+        controller.state.current = { name:  'something' };
     });
 
     it('should have an init function', () => {
