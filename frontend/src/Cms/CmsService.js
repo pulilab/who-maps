@@ -135,6 +135,7 @@ class CmsService extends AuthApi {
             return response.json();
         }).then((message) => {
             const index = this.findContentIndex(resource);
+            resource.state = 2;
             this.cmsData.splice(index, 1, resource);
             return message;
         });
@@ -180,13 +181,15 @@ class CmsService extends AuthApi {
     }
 
     reportComment(item) {
-        return this.patch(`comment/${item.id}/`).then(response => {
-            return response.json();
-        }).then((message) => {
-            const r = this.findComment({ id: item.id });
-            r.resourceItem.comments.splice(r.index, 1, item);
-            return message;
-        });
+        return this.patch(`comment/${item.id}/`)
+          .then(response => {
+              return response.json();
+          }).then((message) => {
+              const r = this.findComment({ id: item.id });
+              item.state = 2;
+              r.resourceItem.comments.splice(r.index, 1, item);
+              return message;
+          });
     }
 
     purge() {
