@@ -91,32 +91,20 @@ class SearchbarController {
     }
 
     checkboxChecks(filter) {
-        if (filter.name === 'all' && filter.value) {
-            this.filters = _.map(this.filters, (f) => {
-                if (f.name !== 'all') {
-                    f.value = false;
-                }
-                return f;
-            });
-        }
-        else if (filter.name !== 'all' && filter.value) {
-            this.filters = _.map(this.filters, (f) => {
-                if (f.name === 'all') {
-                    f.value = false;
-                }
-                return f;
-            });
-        }
-        else if (!filter.value && _.every(this.filters, (f) => {
-            return !f.value;
-        })) {
-            this.filters = _.map(this.filters, (f) => {
-                if (f.name === 'all') {
-                    f.value = true;
-                }
-                return f;
-            });
-        }
+        this.filters = _.map(this.filters, (f) => {
+            if (filter.name === 'all' && filter.value && f.name !== 'all') {
+                f.value = false;
+            }
+            else if (filter.name !== 'all' && filter.value && f.name === 'all') {
+                f.value = false;
+            }
+            else if (!filter.value && _.every(this.filters, (ff) => {
+                return !ff.value;
+            })) {
+                f.value = true;
+            }
+            return f;
+        });
 
         this.search(this.searchStr);
     }
