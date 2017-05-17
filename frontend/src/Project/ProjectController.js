@@ -313,8 +313,9 @@ class ProjectController extends ProjectDefinition {
         }, 100);
     }
 
-    putGroups() {
-        return this.ns.putGroups(this.projectId, this.team, this.viewers);
+    putGroups(project) {
+        const id = project && project.id ? project.id : this.projectId;
+        return this.ns.putGroups(id, this.team, this.viewers);
     }
 
     async saveCountryFields({ country, id }) {
@@ -346,7 +347,7 @@ class ProjectController extends ProjectDefinition {
     async saveForm(processedForm) {
         const response = await this.ns.newProject(processedForm);
         if (response && response.success) {
-            await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
+            await Promise.all([this.putGroups(response.data), this.saveCountryFields(response.data)]);
 
             this.ownershipCheck(response.data);
             this.cs.addProjectToCache(response.data);
