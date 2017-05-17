@@ -34,9 +34,9 @@
 
     <div layout="row">
       <organisation-autocomplete
-          flex="50"
-          organisation="vm.project.organisation"
-          form="vm.form">
+        flex="50"
+        organisation="vm.project.organisation"
+        form="vm.form">
       </organisation-autocomplete>
     </div>
 
@@ -62,10 +62,10 @@
       <md-input-container flex="30">
         <label>Project start date</label>
         <md-datepicker
-            ng-model="vm.project.start_date"
-            md-open-on-focus
-            name="start_date"
-            md-current-view="year">
+          ng-model="vm.project.start_date"
+          md-open-on-focus
+          name="start_date"
+          md-current-view="year">
         </md-datepicker>
         <div ng-messages="vm.form.start_date.$error">
           <div class="custom-error" ng-message="custom">
@@ -79,10 +79,10 @@
       <md-input-container flex="30">
         <label>Project end date</label>
         <md-datepicker
-            ng-model="vm.project.end_date"
-            md-open-on-focus
-            name="end_date"
-            md-current-view="year">
+          ng-model="vm.project.end_date"
+          md-open-on-focus
+          name="end_date"
+          md-current-view="year">
         </md-datepicker>
         <div ng-messages="vm.form.end_date.$error">
           <div class="custom-error" ng-message="custom">
@@ -147,6 +147,11 @@
             </md-select>
             <div ng-messages="vm.form['coverage_' + $index].$error">
               <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['coverage_' + $index].customError">
+                  {{message}}
+                </div>
+              </div>
             </div>
           </md-input-container>
           <div flex="50"></div>
@@ -154,18 +159,42 @@
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
-            <input ng-required="vm.validateCoverage('dld', cov)"
+            <input ng-required="vm.validateCoverage('dld', cov)" name="{{'coverage_' + $index}}.health_workers"
                    type="number" min="0" ng-model="cov.health_workers" >
+            <div ng-messages="vm.form['coverage_' + $index + '.health_workers'].$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['coverage_' + $index + '.health_workers'].customError">
+                  {{message}}
+                </div>
+              </div>
+            </div>
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
-            <input ng-required="vm.validateCoverage('dld', cov)"
+            <input ng-required="vm.validateCoverage('dld', cov)" name="{{'coverage_' + $index}}.facilities"
                    type="number" min="0" ng-model="cov.facilities">
+            <div ng-messages="vm.form['coverage_' + $index + '.facilities'].$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['coverage_' + $index + '.facilities'].customError">
+                  {{message}}
+                </div>
+              </div>
+            </div>
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
-            <input ng-required="vm.validateCoverage('dld', cov)"
+            <input ng-required="vm.validateCoverage('dld', cov)" name="{{'coverage_' + $index}}.clients"
                    type="number" min="0" ng-model="cov.clients">
+            <div ng-messages="vm.form['coverage_' + $index + '.clients'].$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['coverage_' + $index + '.clients'].customError">
+                  {{message}}
+                </div>
+              </div>
+            </div>
           </md-input-container>
           <div class="add-more-item" flex="40">
             <md-button class="md-warn" aria-label="Remove"
@@ -207,11 +236,23 @@
 
     <h6 class="required">Donors (Add one at least)</h6>
 
+    <md-input-container class="error-placeholder">
+      <input  name="donors" ng-model="vm.hiddenFields" aria-label="hidden">
+      <div ng-messages="vm.form.donors.$error">
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.donors.customError">
+            {{message}}
+          </div>
+        </div>
+      </div>
+    </md-input-container>
+
     <div layout="row" ng-repeat="donor in vm.project.donors">
       <md-input-container md-no-float class="md-block" flex="50">
-        <input ng-model="donor.value" placeholder="Donor's name" required name="{{'donor_' + $index}}">
+        <input ng-model="donor.value" placeholder="Donor's name" md-maxlength="64" required name="{{'donor_' + $index}}">
         <div ng-messages="vm.form['donor_' + $index].$error">
           <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">This field has to be less than 64 characters long.</div>
         </div>
       </md-input-container>
 
@@ -236,16 +277,16 @@
 
     <div layout="row" class="chipper">
       <md-contact-chips
-          flex
-          placeholder="Editors of this project"
-          secondary-placeholder="add new team member"
-          ng-model="vm.team"
-          md-contacts="vm.getUsers($query)"
-          md-contact-name="name"
-          md-contact-email="organisation__name"
-          md-require-match="true"
-          md-highlight-flags="i"
-          filter-selected="true">
+        flex
+        placeholder="Editors of this project"
+        secondary-placeholder="add new team member"
+        ng-model="vm.team"
+        md-contacts="vm.getUsers($query)"
+        md-contact-name="name"
+        md-contact-email="organisation__name"
+        md-require-match="true"
+        md-highlight-flags="i"
+        filter-selected="true">
       </md-contact-chips>
     </div>
 
@@ -253,16 +294,16 @@
 
     <div layout="row" class="chipper">
       <md-contact-chips
-          flex
-          placeholder="Add viewers"
-          secondary-placeholder="add new viewer"
-          ng-model="vm.viewers"
-          md-contacts="vm.getUsers($query)"
-          md-contact-name="name"
-          md-contact-email="organisation__name"
-          md-require-match="true"
-          md-highlight-flags="i"
-          filter-selected="true">
+        flex
+        placeholder="Add viewers"
+        secondary-placeholder="add new viewer"
+        ng-model="vm.viewers"
+        md-contacts="vm.getUsers($query)"
+        md-contact-name="name"
+        md-contact-email="organisation__name"
+        md-require-match="true"
+        md-highlight-flags="i"
+        filter-selected="true">
       </md-contact-chips>
     </div>
   </div>

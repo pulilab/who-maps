@@ -8,6 +8,16 @@
   <div class="section-wrapper">
     <div class="checklist small-margin first">
       <h6>What interoperability data exchanges does your project use?</h6>
+      <md-input-container class="error-placeholder">
+        <input  name="data_exchanges" ng-model="vm.hiddenFields" aria-label="hidden">
+        <div ng-messages="vm.form.data_exchanges.$error">
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.data_exchanges.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </md-input-container>
       <ul>
         <li ng-repeat="data_exchange in vm.structure.data_exchanges">
           <md-checkbox md-no-ink aria-label="data_exchange"
@@ -21,10 +31,19 @@
     </div>
 
     <h6>Implementing partners</h6>
-
+    <md-input-container class="error-placeholder">
+      <input  name="implementing_partners" ng-model="vm.hiddenFields" aria-label="hidden">
+      <div ng-messages="vm.form.implementing_partners.$error">
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.implementing_partners.customError">
+            {{message}}
+          </div>
+        </div>
+      </div>
+    </md-input-container>
     <div layout="row" ng-class="{last: $last}" ng-repeat="partner in vm.project.implementing_partners">
       <md-input-container md-no-float class="md-block" flex="50">
-        <input ng-model="partner.value" placeholder="Partner's name">
+        <input ng-model="partner.value" placeholder="Partner's name" md-maxlength="64">
       </md-input-container>
       <div class="add-more-item" flex>
         <md-button class="md-warn" aria-label="Remove"
@@ -39,6 +58,7 @@
         </md-button>
       </div>
     </div>
+
 
     <h6>Government as investor? *</h6>
 
@@ -61,7 +81,16 @@
     </div>
 
     <h6 >Does your digital health project link to a digital HIS?</h6>
-
+    <md-input-container class="error-placeholder">
+      <input  name="interoperability_links" ng-model="vm.hiddenFields" aria-label="hidden">
+      <div ng-messages="vm.form.interoperability_links.$error">
+        <div ng-message="custom">
+          <div ng-repeat="message in vm.form.interoperability_links.customError">
+            {{message}}
+          </div>
+        </div>
+      </div>
+    </md-input-container>
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
       <md-checkbox ng-init="vm.project.interoperability_links[$index].name = link.name"
                    md-no-ink aria-label=""
@@ -74,12 +103,23 @@
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
         <input ng-disabled="!vm.project.interoperability_links[$index].selected"
                name="link.interop1"
+               md-maxlength="200"
                ng-model="vm.project.interoperability_links[$index].link">
       </md-input-container>
     </div>
 
-    <div class="checklist small-top">
+    <div class="checklist small-top" >
       <h6>What data standards does your digital health project use?</h6>
+      <md-input-container class="error-placeholder">
+        <input  name="interoperability_standards" ng-model="vm.hiddenFields" aria-label="hidden">
+        <div ng-messages="vm.form.interoperability_standards.$error">
+          <div ng-message="custom">
+            <div ng-repeat="message in vm.form.interoperability_standards.customError">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </md-input-container>
       <ul>
         <li ng-repeat="standard in vm.structure.interoperability_standards">
           <md-checkbox md-no-ink aria-label="{{standard}}"
@@ -99,11 +139,14 @@
                   <label>Specify other</label>
                   <input ng-disabled="!vm.specifyOtherStandard"
                          ng-required="vm.specifyOtherStandard"
-                         name="data.c18" ng-model="vm.project.interoperability_standards.custom">
+                         md-maxlength="64"
+                         name="data.c18"
+                         ng-model="vm.project.interoperability_standards.custom">
                 </md-input-container>
               </span>
         </li>
       </ul>
+
     </div>
   </div>
 

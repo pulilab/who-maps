@@ -12,13 +12,18 @@
         <div layout="row">
           <md-input-container class="md-block" flex="50">
             <label>Platform</label>
-            <md-select ng-model="platform.name" name="{{'platform-name_' + $index }}" required>
+            <md-select ng-model="platform.name" name="{{'platforms_'+ $index + '.name' }}" required >
               <md-option ng-value="plat" ng-repeat="plat in platform.available">
                 {{plat}}
               </md-option>
             </md-select>
-            <div ng-messages="vm.form['platform-name_' + $index].$error">
+            <div ng-messages="vm.form['platforms_' + $index + '.name'].$error">
               <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['platforms_' + $index + '.name'].customError">
+                  {{message}}
+                </div>
+              </div>
             </div>
           </md-input-container>
         </div>
@@ -27,14 +32,20 @@
             <label>Strategies (select multiple)</label>
             <md-select ng-model="platform.strategies"
                        md-select-separator="empty"
-                       name="{{'platform-strategy_' + $index }}"
-                       multiple required>
+                       required
+                       name="{{'platforms_'+ $index + '.strategies' }}"
+                       multiple>
               <md-option ng-value="strategy" ng-repeat="strategy in vm.structure.strategies">
                 {{strategy}}
               </md-option>
             </md-select>
-            <div ng-messages="vm.form['platform-strategy_' + $index].$error">
+            <div ng-messages="vm.form['platforms_' + $index + '.strategies'].$error">
               <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['platforms_' + $index + '.strategies'].customError">
+                  {{message}}
+                </div>
+              </div>
             </div>
           </md-input-container>
           <div class="add-more-item" flex>
@@ -79,9 +90,9 @@
             {{hsc}}
           </md-option>
         </md-select>
-         <div ng-messages="vm.form.hsc.$error">
-              <div ng-message="required">This is required.</div>
-            </div>
+        <div ng-messages="vm.form.hsc.$error">
+          <div ng-message="required">This is required.</div>
+        </div>
       </md-input-container>
     </div>
 

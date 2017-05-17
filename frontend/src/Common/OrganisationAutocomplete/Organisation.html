@@ -4,6 +4,7 @@
         id="organisation"
         md-input-name="organisation"
         md-no-cache="true"
+        md-input-maxlength="100"
         md-selected-item="vm.organisation"
         md-search-text="vm.searchText"
         md-items="item in vm.organisationSearch(vm.searchText)"
@@ -17,5 +18,6 @@
     </md-autocomplete>
     <div class="autocomplete-errors" ng-messages="vm.form.organisation.$error">
       <div ng-message="required">This field is required</div>
+      <div ng-message="maxlength">This field has to be less than 100 characters long.</div>
     </div>
   </div>

@@ -291,7 +291,7 @@ describe('ProjectController', () => {
         sc.putGroups();
         expect(sc.ns.putGroups).toHaveBeenCalled();
         spy.calls.reset();
-        sc.putGroups({ id: 1});
+        sc.putGroups({ id: 1 });
         expect(sc.ns.putGroups).toHaveBeenCalledWith(1, [undefined], []);
     });
 

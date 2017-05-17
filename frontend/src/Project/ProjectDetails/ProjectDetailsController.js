@@ -173,9 +173,9 @@ class ProjectDetailsController extends CollapsibleSet {
         else if (current === 'dld') {
             return _.some([
                 item.district,
-                item.health_workers,
-                item.facilities,
-                item.clients,
+                !_.isNull(item.health_workers),
+                !_.isNull(item.facilities),
+                !_.isNull(item.clients),
                 _.every(nld, _.isNull)
             ]);
         }

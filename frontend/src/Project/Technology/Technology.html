@@ -8,11 +8,11 @@
     <md-input-container class="md-block" flex="50">
       <label>Technology deployment date</label>
       <md-datepicker
-          ng-model="vm.project.implementation_dates"
-          md-open-on-focus
-          name="implementation_dates"
-          md-current-view="year"
-          required>
+        ng-model="vm.project.implementation_dates"
+        md-open-on-focus
+        name="implementation_dates"
+        md-current-view="year"
+        required>
       </md-datepicker>
       <div ng-messages="vm.implementation_dates.name.$error">
         <div ng-message="required">This is required.</div>
@@ -27,11 +27,11 @@
       <ul>
         <li ng-repeat="l in vm.structure.licenses">
           <md-checkbox
-              ng-checked="vm.checkboxChecked(l, 'licenses')"
-              ng-click="vm.checkboxToggle(l, 'licenses')"
-              md-no-ink
-              aria-label="{{ l }}"
-              class="md-primary">
+            ng-checked="vm.checkboxChecked(l, 'licenses')"
+            ng-click="vm.checkboxToggle(l, 'licenses')"
+            md-no-ink
+            aria-label="{{ l }}"
+            class="md-primary">
             {{ l }}
           </md-checkbox>
         </li>
@@ -40,7 +40,11 @@
               <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
               <md-input-container class="md-block" flex>
                 <label>Specify other</label>
-                <input ng-required="vm.customLicense" name="license.spectype" ng-model="vm.project.licenses.custom" ng-disabled="!vm.customLicense">
+                <input ng-required="vm.customLicense"
+                       md-maxlength="64"
+                       name="licenses"
+                       ng-model="vm.project.licenses.custom"
+                       ng-disabled="!vm.customLicense">
               </md-input-container>
             </span>
         </li>
@@ -50,19 +54,22 @@
     <md-input-container class="md-icon-float md-block">
       <label>Code documentation or download link</label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="link.documentation" ng-model="vm.project.repository">
+      <input  name="link.documentation" ng-model="vm.project.repository"
+              md-maxlength="200">
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
       <label>Link to the application</label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="link.app" ng-model="vm.project.mobile_application">
+      <input  name="link.app" ng-model="vm.project.mobile_application"
+              md-maxlength="200">
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
       <label>Link to the wiki page</label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="link.wiki" ng-model="vm.project.wiki">
+      <input  name="link.wiki" ng-model="vm.project.wiki"
+              md-maxlength="200">
     </md-input-container>
 
   </div>
