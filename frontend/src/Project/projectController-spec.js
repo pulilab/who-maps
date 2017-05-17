@@ -287,9 +287,12 @@ describe('ProjectController', () => {
 
 
     it('has a function, that saves team members and users to the API', () => {
-        spyOn(sc.ns, 'putGroups');
+        const spy = spyOn(sc.ns, 'putGroups');
         sc.putGroups();
         expect(sc.ns.putGroups).toHaveBeenCalled();
+        spy.calls.reset();
+        sc.putGroups({ id: 1});
+        expect(sc.ns.putGroups).toHaveBeenCalledWith(1, [undefined], []);
     });
 
     it('should have a postSave function that handles the route change', () => {
