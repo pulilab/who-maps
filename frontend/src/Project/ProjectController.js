@@ -74,7 +74,7 @@ class ProjectController extends ProjectDefinition {
 
     watchers() {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
-        this.scope.$watch(s => s.vm.form, form => window.FORM = form);
+        // this.scope.$watch(s => s.vm.form, form => window.FORM = form);
     }
 
     getCountryFields(country, oldValue) {
