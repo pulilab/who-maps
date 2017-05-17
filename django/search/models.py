@@ -44,8 +44,8 @@ class ProjectSearch(ExtendedModel):
             "technology_platform",
             "organisation"
         }
-
-        intersect = selectable_fields & set(kwargs.keys())
+        query_keys = set([k for k, v in kwargs.items() if v is True])
+        intersect = selectable_fields & query_keys
 
         if intersect:
             if kwargs.get("location"):
