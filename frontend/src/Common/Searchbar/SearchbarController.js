@@ -98,14 +98,16 @@ class SearchbarController {
                 }
                 return f;
             });
-        } else if (filter.name !== 'all' && filter.value) {
+        }
+        else if (filter.name !== 'all' && filter.value) {
             this.filters = _.map(this.filters, (f) => {
                 if (f.name === 'all') {
                     f.value = false;
                 }
                 return f;
             });
-        } else if (!filter.value && _.every(this.filters, (f) => {
+        }
+        else if (!filter.value && _.every(this.filters, (f) => {
             return !f.value;
         })) {
             this.filters = _.map(this.filters, (f) => {
