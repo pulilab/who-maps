@@ -31,7 +31,7 @@ def staging():
     env.hosts = ['whomaps@139.59.148.238']
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/2.0-rc3"
+    env.branch = "tags/2.0-rc4"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -150,7 +150,7 @@ def test(app=""):
 
 
 def cov():
-    local("docker-compose exec django py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc")
+    local("docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc")
 
 
 def migrate():

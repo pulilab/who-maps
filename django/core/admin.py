@@ -1,9 +1,11 @@
 from allauth.account.models import EmailAddress, EmailConfirmation
 from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.contrib.auth.forms import AuthenticationForm
 from rest_framework.authtoken.models import Token
 
 from user.models import UserProfile
@@ -42,6 +44,20 @@ class CustomUserAdmin(UserAdmin):
         form = super(CustomUserAdmin, self).get_form(request, obj, **kwargs)
         return form
 
+
+class CustomAuthenticationForm(AuthenticationForm):
+    def __init__(self, request=None, *args, **kwargs):  # pragma: no cover
+        self.request = request
+        self.user_cache = None
+        super(AuthenticationForm, self).__init__(*args, **kwargs)
+
+        UserModel = get_user_model()
+        self.username_field = UserModel._meta.get_field(UserModel.USERNAME_FIELD)
+        if self.fields['username'].label is None:
+            self.fields['username'].label = "Email"
+
+
+admin.site.login_form = CustomAuthenticationForm
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(EmailAddress)

@@ -34,7 +34,7 @@ dependencies:
 
 test:
   pre:
-    - cd django && py.test --cov --cov-report html --cov-report term-missing --cov-config .coveragerc
+    - cd django && py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
     - cd frontend && yarn test_ci
     # - docker build ./django
     # - docker-compose up -d
