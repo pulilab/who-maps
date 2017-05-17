@@ -90,6 +90,25 @@ class SearchbarController {
         this.resultNr = 0;
     }
 
+    checkboxChecks(filter) {
+        this.filters = _.map(this.filters, (f) => {
+            if (filter.name === 'all' && filter.value && f.name !== 'all') {
+                f.value = false;
+            }
+            else if (filter.name !== 'all' && filter.value && f.name === 'all') {
+                f.value = false;
+            }
+            else if (!filter.value && _.every(this.filters, (ff) => {
+                return !ff.value;
+            })) {
+                f.value = true;
+            }
+            return f;
+        });
+
+        this.search(this.searchStr);
+    }
+
     static searchbarFactory() {
         require('./Searchbar.scss');
         const filters = require('./Resource/filters.json');

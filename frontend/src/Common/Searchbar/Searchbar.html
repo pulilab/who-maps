@@ -31,7 +31,7 @@
           <div>
               <div layout="row" layout-wrap flex>
                   <div ng-repeat="filter in vm.filters" flex="33">
-                      <md-checkbox class="md-primary small" ng-model="filter.value" ng-change="vm.search(vm.searchStr)">
+                      <md-checkbox class="md-primary small" ng-model="filter.value" ng-change="vm.checkboxChecks(filter)">
                           {{filter.displayName}}
                       </md-checkbox>
                   </div>

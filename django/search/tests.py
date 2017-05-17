@@ -9,7 +9,6 @@ from rest_framework.test import APITestCase
 from country.models import Country
 from project.models import Project
 from project.tests import SetupTests
-from user.models import Organisation
 
 
 class SearchTests(SetupTests):
@@ -27,7 +26,7 @@ class SearchTests(SetupTests):
         project_data2 = copy.deepcopy(self.project_data)
         project_data2.update(name="phrase3 phrase5")
         project_data2.update(country=country.id)
-        response = self.test_user_client.post(url, project_data2, format="json")
+        self.test_user_client.post(url, project_data2, format="json")
 
     def test_search_two_fields(self):
         url = reverse("search-project")
@@ -55,6 +54,16 @@ class SearchTests(SetupTests):
         data = {
             "query": "org1",
             "organisation": True,
+        }
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+
+    def test_search_platform(self):
+        url = reverse("search-project")
+        data = {
+            "query": "platform",
+            "technology_platform": True,
         }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)

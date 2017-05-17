@@ -16,7 +16,6 @@ class ProjectSearch(ExtendedModel):
     project = models.ForeignKey(Project)
     location = models.TextField(blank=True)
     project_name = models.TextField(blank=True)
-    health_topic = models.TextField(blank=True)
     organisation = models.TextField(blank=True)
     contact_name = models.TextField(blank=True)
     contact_email = models.TextField(blank=True)
@@ -28,6 +27,7 @@ class ProjectSearch(ExtendedModel):
     repository = models.TextField(blank=True)
     mobile_application = models.TextField(blank=True)
     wiki = models.TextField(blank=True)
+    platforms = models.TextField(blank=True)
 
     @classmethod
     def search(cls, **kwargs):
@@ -41,32 +41,32 @@ class ProjectSearch(ExtendedModel):
         selectable_fields = {
             "location",
             "project_name",
-            "health_topic",
+            "technology_platform",
             "organisation"
         }
-
-        intersect = selectable_fields & kwargs.keys()
+        query_keys = set([k for k, v in kwargs.items() if v is True])
+        intersect = selectable_fields & query_keys
 
         if intersect:
             if kwargs.get("location"):
                 q_objects.append(Q(location__icontains=query))
             if kwargs.get("project_name"):
                 q_objects.append(Q(project_name__icontains=query))
-            if kwargs.get("health_topic"):
-                q_objects.append(Q(health_topic__icontains=query))
+            if kwargs.get("technology_platform"):
+                q_objects.append(Q(platforms__icontains=query))
             if kwargs.get("organisation"):
                 q_objects.append(Q(organisation__icontains=query))
         else:
             q_objects.append(Q(location__icontains=query))
             q_objects.append(Q(project_name__icontains=query))
-            q_objects.append(Q(health_topic__icontains=query))
+            q_objects.append(Q(platforms__icontains=query))
             q_objects.append(Q(organisation__icontains=query))
             q_objects.append(Q(contact_name__icontains=query))
             q_objects.append(Q(contact_email__icontains=query))
             q_objects.append(Q(implementation_overview__icontains=query))
             q_objects.append(Q(implementing_partners__icontains=query))
-            q_objects.append(Q(geographic_scope__icontains=query))
             q_objects.append(Q(implementation_dates__icontains=query))
+            q_objects.append(Q(geographic_scope__icontains=query))
             q_objects.append(Q(health_focus_areas__icontains=query))
             q_objects.append(Q(repository__icontains=query))
             q_objects.append(Q(mobile_application__icontains=query))
@@ -96,11 +96,12 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.contact_name = instance.data.get("contact_name", "")
     project_search.contact_email = instance.data.get("contact_email", "")
     project_search.implementation_overview = instance.data.get("implementation_overview", "")
-    project_search.implementing_partners = instance.data.get("implementing_partners", "")
+    project_search.implementing_partners = ", ".join([x for x in instance.data.get("implementing_partners", "")])
     project_search.implementation_dates = instance.data.get("implementation_dates", "")
     project_search.health_focus_areas = ", ".join([x for x in instance.data.get("health_focus_areas", "")])
     project_search.geographic_scope = instance.data.get("geographic_scope", "")
     project_search.repository = instance.data.get("repository", "")
     project_search.mobile_application = instance.data.get("mobile_application", "")
     project_search.wiki = instance.data.get("wiki", "")
+    project_search.platforms = ", ".join([x.get('name', '') for x in instance.data.get("platforms", "")])
     project_search.save()
