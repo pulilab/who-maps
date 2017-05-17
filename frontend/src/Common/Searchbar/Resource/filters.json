@@ -1,17 +1,12 @@
 [
   {
-    "name": "location",
-    "displayName": "Location",
-    "value": false
-  },
-  {
     "name": "project_name",
     "displayName": "Project name",
     "value": true
   },
   {
-    "name": "health_topic",
-    "displayName": "Health topic",
+    "name": "location",
+    "displayName": "Location",
     "value": false
   },
   {
@@ -22,6 +17,11 @@
   {
     "name": "organisation",
     "displayName": "Organization",
+    "value": false
+  },
+  {
+    "name": "all",
+    "displayName": "Search in all",
     "value": false
   }
 ]
