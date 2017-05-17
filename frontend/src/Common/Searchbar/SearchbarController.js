@@ -90,6 +90,35 @@ class SearchbarController {
         this.resultNr = 0;
     }
 
+    checkboxChecks(filter) {
+        if (filter.name === 'all' && filter.value) {
+            this.filters = _.map(this.filters, (f) => {
+                if (f.name !== 'all') {
+                    f.value = false;
+                }
+                return f;
+            });
+        } else if (filter.name !== 'all' && filter.value) {
+            this.filters = _.map(this.filters, (f) => {
+                if (f.name === 'all') {
+                    f.value = false;
+                }
+                return f;
+            });
+        } else if (!filter.value && _.every(this.filters, (f) => {
+            return !f.value;
+        })) {
+            this.filters = _.map(this.filters, (f) => {
+                if (f.name === 'all') {
+                    f.value = true;
+                }
+                return f;
+            });
+        }
+
+        this.search(this.searchStr);
+    }
+
     static searchbarFactory() {
         require('./Searchbar.scss');
         const filters = require('./Resource/filters.json');
