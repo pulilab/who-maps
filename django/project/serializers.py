@@ -36,7 +36,7 @@ class ProjectSerializer(serializers.Serializer):
     contact_email = serializers.EmailField()
     implementation_overview = serializers.CharField(max_length=512)
     implementing_partners = serializers.ListField(child=serializers.CharField(max_length=64),
-                                                  max_length=16, min_length=0, required=False)
+                                                  max_length=50, min_length=0, required=False)
     implementation_dates = serializers.CharField(max_length=128)
     health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
     geographic_scope = serializers.CharField(required=False)
@@ -52,7 +52,7 @@ class ProjectSerializer(serializers.Serializer):
     wiki = serializers.URLField(max_length=200, required=False, allow_blank=True)
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(child=serializers.CharField(max_length=64),
-                                                       required=False, max_length=16)
+                                                       required=False, max_length=50)
     data_exchanges = serializers.ListField(child=serializers.CharField(max_length=64), required=False, max_length=32)
     coverage = CoverageSerializer(many=True, required=False)
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
