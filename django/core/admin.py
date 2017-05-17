@@ -46,7 +46,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, request=None, *args, **kwargs):  # pragma: no cover
         self.request = request
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
