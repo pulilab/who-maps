@@ -69,12 +69,12 @@ class ProjectController extends ProjectDefinition {
         if (DEV) {
             this.fillTestForm();
         }
-
         this.watchers();
     }
 
     watchers() {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
+        // this.scope.$watch(s => s.vm.form, form => window.FORM = form);
     }
 
     getCountryFields(country, oldValue) {
@@ -313,8 +313,9 @@ class ProjectController extends ProjectDefinition {
         }, 100);
     }
 
-    putGroups() {
-        return this.ns.putGroups(this.projectId, this.team, this.viewers);
+    putGroups(project) {
+        const id = project && project.id ? project.id : this.projectId;
+        return this.ns.putGroups(id, this.team, this.viewers);
     }
 
     async saveCountryFields({ country, id }) {
@@ -346,7 +347,7 @@ class ProjectController extends ProjectDefinition {
     async saveForm(processedForm) {
         const response = await this.ns.newProject(processedForm);
         if (response && response.success) {
-            await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
+            await Promise.all([this.putGroups(response.data), this.saveCountryFields(response.data)]);
 
             this.ownershipCheck(response.data);
             this.cs.addProjectToCache(response.data);
@@ -489,19 +490,40 @@ class ProjectController extends ProjectDefinition {
         });
     }
 
+    addErrorArray(errors, key) {
+        this.form[key].customError = errors;
+        this.form[key].$setValidity('custom', false);
+    }
+
     handleResponse(response) {
-        const self = this;
         _.forEach(response.data, (item, key) => {
-            if (this.form[key]) {
-                this.form[key].customError = item;
-                this.form[key].$setValidity('custom', false);
+            try {
+                if (item && item[0] && _.isPlainObject(item[0])) {
+                    _.forEach(item, (obj, index) => {
+                        _.forEach(obj, (errors, subKey) => {
+                            const fieldName = `${key}_${index}.${subKey}`;
+                            this.addErrorArray(errors, fieldName);
+                        });
+
+                    });
+                }
+                else {
+                    this.addErrorArray(item, key);
+                }
             }
-            else {
-                console.error('missing name in the form: ', key);
+            catch (e) {
+                console.error(e);
             }
         });
+
+        // _.forEach(this.form, (value, key) => {
+        //     if (this.form[key] && this.form[key].$setValidity) {
+        //         this.form[key].customError = ['test error'];
+        //         this.form[key].$setValidity('custom', false);
+        //     }
+        // });
         this.scope.$evalAsync(()=>{
-            self.focusInvalidField();
+            this.focusInvalidField();
         });
 
     }

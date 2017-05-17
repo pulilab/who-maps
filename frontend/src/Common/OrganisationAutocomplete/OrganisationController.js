@@ -46,7 +46,7 @@ export default class OrganisationController {
     }
 
     addOrganisation(organisation) {
-        if (organisation && organisation.manual) {
+        if (organisation && organisation.manual && organisation.name.length < 101) {
             this.os.addOrganization(organisation.name)
                 .then(response => {
                     this.scope.$evalAsync(() => {
