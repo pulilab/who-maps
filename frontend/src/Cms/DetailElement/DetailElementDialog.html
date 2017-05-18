@@ -42,7 +42,7 @@
               <span class="no-cover" ng-if="!vm.content.cover"></span>
             </div>
 
-            <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.content.body"></div>
+            <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.postProcessHtml(vm.content.body)"></div>
             <div class="body edit-mode" ng-if="vm.editMode">
               <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
               <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
@@ -86,7 +86,7 @@
             </div>
           </div>
 
-          <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.content.body"></div>
+          <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.postProcessHtml(vm.content.body)"></div>
           <div class="body edit-mode" ng-if="vm.editMode">
             <trix-component placeholder="Start typing here..." valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
             <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">

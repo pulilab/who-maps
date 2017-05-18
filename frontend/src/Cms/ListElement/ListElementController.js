@@ -1,9 +1,10 @@
-import { prettifyDate, itemType, axisAndDomainName, normalizeName } from '../utilities';
+import { prettifyDate, itemType, axisAndDomainName, normalizeName, postProcessHtml } from '../utilities';
 
 class ListElementController {
 
     constructor() {
         this.prettifyDate = prettifyDate;
+        this.postProcessHtml = postProcessHtml;
         this.itemType = itemType;
     }
 

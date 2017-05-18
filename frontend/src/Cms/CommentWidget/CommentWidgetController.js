@@ -1,4 +1,4 @@
-import { prettifyDate } from '../utilities';
+import { prettifyDate, postProcessHtml } from '../utilities';
 import { Storage } from '../../Common/';
 
 class CommentWidgetController {
@@ -6,6 +6,7 @@ class CommentWidgetController {
     constructor($scope) {
         this.scope = $scope;
         this.prettifyDate = prettifyDate;
+        this.postProcessHtml = postProcessHtml;
         this.$onInit = this.onInit.bind(this);
         this.storage = new Storage();
 

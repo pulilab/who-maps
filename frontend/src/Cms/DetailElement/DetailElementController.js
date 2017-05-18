@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import { prettifyDate, itemType } from '../utilities';
+import { prettifyDate, itemType, postProcessHtml } from '../utilities';
 import { Storage } from '../../Common/';
 
 class DetailElementDialog {
@@ -9,6 +9,7 @@ class DetailElementDialog {
         this.storage = new Storage();
         this.dialog = $mdDialog;
         this.prettifyDate = prettifyDate;
+        this.postProcessHtml = postProcessHtml;
         this.itemType = itemType;
         this.content = content;
         this.checkExistence = this.checkExistence.bind(this);

@@ -61,5 +61,17 @@ describe('CMS Utilities', () => {
         const test = 'a & b';
         expect(utilities.normalizeName(test)).toBe('a-and-b');
     });
+    it('should have a fn that add target="_blank" to every valid <a> tag', () => {
+        let result = utilities.postProcessHtml('<div></div>');
+        expect(result).toBe('<div></div>');
+        result = utilities.postProcessHtml('<a></a>');
+        expect(result).toBe('<a target="_blank"></a>');
+        result = utilities.postProcessHtml('<a ></a>');
+        expect(result).toBe('<a target="_blank"></a>');
+        result = utilities.postProcessHtml('<a >test</a>');
+        expect(result).toBe('<a target="_blank">test</a>');
+        result = utilities.postProcessHtml('<a> LOL');
+        expect(result).toBe('<a> LOL');
+    });
 
 });

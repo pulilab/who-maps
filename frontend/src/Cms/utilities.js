@@ -87,6 +87,12 @@ const normalizeName = (name) => {
     return name.toLowerCase().replace('&', 'and').replace(/ /g, '-');
 };
 
+const postProcessHtml = (html) => {
+    return html.replace(/<a(.+?<\/a>)/g, (match, groupOne) => {
+        return `<a target="_blank"${groupOne.trim()}`;
+    });
+};
+
 export default {
     prettifyDate,
     itemType,
@@ -94,5 +100,6 @@ export default {
     getAxisName,
     getDomain,
     axisAndDomainName,
-    normalizeName
+    normalizeName,
+    postProcessHtml
 };
