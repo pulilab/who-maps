@@ -155,6 +155,7 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     validateCoverage(current, item) {
+
         let nld;
         if (this.project.national_level_deployment) {
             nld = [
@@ -173,9 +174,9 @@ class ProjectDetailsController extends CollapsibleSet {
         else if (current === 'dld') {
             return _.some([
                 item.district,
-                !_.isNull(item.health_workers),
-                !_.isNull(item.facilities),
-                !_.isNull(item.clients),
+                !_.isNil(item.health_workers),
+                !_.isNil(item.facilities),
+                !_.isNil(item.clients),
                 _.every(nld, _.isNull)
             ]);
         }
