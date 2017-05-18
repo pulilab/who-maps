@@ -14,7 +14,8 @@ class LandingPageModuleController {
         this.$anchorScroll = $anchorScroll;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-
+        this.addEventListeners = this.addEventListeners.bind(this);
+        this.removeEventListeners = this.removeEventListeners.bind(this);
     }
 
     onInit() {
@@ -39,10 +40,26 @@ class LandingPageModuleController {
                 vm.showFooter = data.footer_text && data.footer_title;
             });
         });
+        this.addEventListeners();
     }
 
     onDestroy() {
         this.isLogin = void 0;
+        this.removeEventListeners();
+    }
+
+    addEventListeners() {
+        this.EE.on('logout', this.handleLogout, this);
+    }
+
+    handleLogout() {
+        this.scope.$evalAsync(() => {
+            this.isLogin = false;
+        });
+    }
+
+    removeEventListeners() {
+        this.EE.removeListener('logout', this.handleLogout, this);
     }
 
     scrollTo(idString) {

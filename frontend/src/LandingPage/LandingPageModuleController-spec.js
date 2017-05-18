@@ -16,10 +16,15 @@ const $location = {
     }
 };
 
+const eeSpy = {
+    on: jasmine.createSpy('on'),
+    removeListener: jasmine.createSpy('remove')
+};
 
 describe('LandingPageModuleController', () => {
     beforeEach(() => {
         landing = LandingPageModuleController.landingControllerFactory()($scope, $location, $anchorScroll);
+        landing.EE = eeSpy;
     });
 
     it('should have an onInit function', () => {
