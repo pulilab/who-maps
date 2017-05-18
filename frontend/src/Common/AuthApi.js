@@ -10,7 +10,6 @@ class AuthApi {
     constructor(module) {
         this.EE = window.EE;
         this.storage = new Storage();
-        this.retrieveToken();
         this.apiUrl = API;
 
         if (module) {
@@ -42,15 +41,14 @@ class AuthApi {
         if (this.preGet) {
             this.preGet();
         }
-        this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this))
-            .then(response => response.json())
-            .then((json) =>{
-                return this.cleanDoubleDollar(json);
-            });
+          .then(this.responseProcessing.bind(this))
+          .then(response => response.json())
+          .then((json) =>{
+              return this.cleanDoubleDollar(json);
+          });
     }
 
     responseProcessing(response) {
@@ -61,26 +59,24 @@ class AuthApi {
         if (this.preGet) {
             this.preGet();
         }
-        this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'GET';
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this))
-            .then(response => response.blob())
-            .then(blob => {
-                return blob;
-            });
+          .then(this.responseProcessing.bind(this))
+          .then(response => response.blob())
+          .then(blob => {
+              return blob;
+          });
     }
 
     del(endpoint) {
         if (this.preDelete) {
             this.preDelete();
         }
-        this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'DELETE';
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this));
+          .then(this.responseProcessing.bind(this));
     }
 
     post(endpoint, _data) {
@@ -88,12 +84,11 @@ class AuthApi {
         if (this.prePost) {
             this.prePost();
         }
-        this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'POST';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this));
+          .then(this.responseProcessing.bind(this));
     }
 
     put(endpoint, _data) {
@@ -101,26 +96,23 @@ class AuthApi {
         if (this.prePut) {
             this.prePut();
         }
-        this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'PUT';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this));
+          .then(this.responseProcessing.bind(this));
     }
 
     patch(endpoint, _data) {
         const data = this.cleanDoubleDollar(_data);
-        this.retrieveToken();
         const request = this.generateRequest();
         request.method = 'PATCH';
         request.body = JSON.stringify(data);
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this));
+          .then(this.responseProcessing.bind(this));
     }
 
     postFormData(endpoint, data) {
-        this.retrieveToken();
         const request = this.generateRequest();
         const body = new FormData();
         let performRequest = true;
@@ -145,7 +137,7 @@ class AuthApi {
         request.method = 'POST';
         request.body = body;
         return fetch(this.apiUrl + endpoint, request)
-            .then(this.responseProcessing.bind(this));
+          .then(this.responseProcessing.bind(this));
     }
 
     postSingleFormData(endpoint, name, value) {
@@ -161,10 +153,8 @@ class AuthApi {
         return data;
     }
 
-    retrieveToken(update) {
-        if (update || !this.token) {
-            this.token = this.storage.get('token');
-        }
+    retrieveToken() {
+        return this.storage.get('token');
     }
 
     generateRequest() {
@@ -176,10 +166,11 @@ class AuthApi {
     }
 
     generateHeaders() {
-        this.retrieveToken(true);
+        const token = this.retrieveToken();
+        console.log(token);
         const headers = new Headers();
-        if (this.token) {
-            headers.append('Authorization', 'Token ' + this.token);
+        if (token) {
+            headers.append('Authorization', 'Token ' + token);
         }
         headers.append('content-type', 'application/json');
         return headers;
