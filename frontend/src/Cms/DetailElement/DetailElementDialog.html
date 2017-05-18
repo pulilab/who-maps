@@ -22,15 +22,18 @@
 
             <div class="created">
               {{vm.prettifyDate(vm.content)}}
-              <span class="sep">|</span>
+
               <!-- visible if user is able to edit -->
               <span ng-show="vm.isAuthor()">
+                <span class="sep">|</span>
                 <cms-add-new-content to-edit="vm.content"></cms-add-new-content>
                 <cms-report-delete-button type="delete" item="vm.content"></cms-report-delete-button>
-                <span class="sep">|</span>
               </span>
               <!-- / -->
-              <cms-report-delete-button type="report" item="vm.content"></cms-report-delete-button>
+              <span ng-if="vm.content.type === 1">
+                <span class="sep">|</span>
+                <cms-report-delete-button type="report"  item="vm.content"></cms-report-delete-button>
+              </span>
             </div>
           </div>
 
