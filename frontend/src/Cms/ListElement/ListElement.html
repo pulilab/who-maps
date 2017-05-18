@@ -26,7 +26,10 @@
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
-    <small class="time">{{vm.prettifyDate(vm.item)}}</small>
+    <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
+      in <b>{{vm.showAxisAndDomain()}}</b>
+      at <span class="time">{{vm.prettifyDate(vm.item)}}</span>
+    </span>
     <div class="body" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
