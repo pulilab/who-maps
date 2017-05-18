@@ -219,15 +219,51 @@
         <div layout="row">
           <md-input-container class="md-block number" flex="20">
             <label># Health Workers</label>
-            <input type="number" min="0" ng-required="vm.validateCoverage('nld', null)" ng-model="vm.project.national_level_deployment.health_workers">
+            <input type="number"
+                   min="0"
+                   name="national_level_deployment.health_workers"
+                   ng-required="vm.validateCoverage('nld', null)"
+                   ng-model="vm.project.national_level_deployment.health_workers">
+            <div ng-messages="vm.form['national_level_deployment.health_workers'].$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['national_level_deployment.health_workers'].customError">
+                  {{message}}
+                </div>
+              </div>
+            </div>
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Facilities</label>
-            <input type="number" min="0" ng-required="vm.validateCoverage('nld', null)" ng-model="vm.project.national_level_deployment.facilities">
+            <input type="number"
+                   min="0"
+                   name="national_level_deployment.facilities"
+                   ng-required="vm.validateCoverage('nld', null)"
+                   ng-model="vm.project.national_level_deployment.facilities">
+             <div ng-messages="vm.form['national_level_deployment.facilities'].$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['national_level_deployment.facilities'].customError">
+                  {{message}}
+                </div>
+              </div>
+            </div>
           </md-input-container>
           <md-input-container class="md-block number" flex="20">
             <label># Clients</label>
-            <input type="number" min="0" ng-required="vm.validateCoverage('nld', null)" ng-model="vm.project.national_level_deployment.clients">
+            <input type="number"
+                   min="0"
+                   name="national_level_deployment.clients"
+                   ng-required="vm.validateCoverage('nld', null)"
+                   ng-model="vm.project.national_level_deployment.clients">
+             <div ng-messages="vm.form['national_level_deployment.clients'].$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom">
+                <div ng-repeat="message in vm.form['national_level_deployment.clients'].customError">
+                  {{message}}
+                </div>
+              </div>
+            </div>
           </md-input-container>
           <div flex="40"></div>
         </div>

@@ -498,7 +498,12 @@ class ProjectController extends ProjectDefinition {
     handleResponse(response) {
         _.forEach(response.data, (item, key) => {
             try {
-                if (item && item[0] && _.isPlainObject(item[0])) {
+                if (item && _.isPlainObject(item)) {
+                    _.forEach(item, (errors, subKey) => {
+                        this.addErrorArray(errors, `${key}.${subKey}`);
+                    });
+                }
+                else if (item && item[0] && _.isPlainObject(item[0])) {
                     _.forEach(item, (obj, index) => {
                         _.forEach(obj, (errors, subKey) => {
                             const fieldName = `${key}_${index}.${subKey}`;
@@ -516,12 +521,6 @@ class ProjectController extends ProjectDefinition {
             }
         });
 
-        // _.forEach(this.form, (value, key) => {
-        //     if (this.form[key] && this.form[key].$setValidity) {
-        //         this.form[key].customError = ['test error'];
-        //         this.form[key].$setValidity('custom', false);
-        //     }
-        // });
         this.scope.$evalAsync(()=>{
             this.focusInvalidField();
         });
