@@ -22,18 +22,13 @@ class CmsService extends AuthApi {
         this.commonServices = require('../Common/CommonServices');
         this.cmsData = [];
         this.lastUpdate = new Date(1970, 1, 1).getTime();
-        if (this.commonServices.userProfile) {
-            this.currentUserId = this.commonServices.userProfile.id;
-            this.currentUserName = this.commonServices.userProfile.name;
-
-            this.users = this.commonServices.usersProfiles.map(({ id, name }) => {
-                return { id, name };
-            });
-        }
     }
 
     getNameFromId({ user }) {
-        const result = this.users.find(u => u.id === user);
+        const users = this.commonServices.usersProfiles.map(({ id, name }) => {
+            return { id, name };
+        });
+        const result = users.find(u => u.id === user);
         return result ? result.name : '';
     }
 
@@ -66,7 +61,7 @@ class CmsService extends AuthApi {
     }
 
     addContent(content, uploadService) {
-        content.author = this.currentUserId;
+        content.author = this.commonServices.userProfile.id;
         if (!content.cover) {
             delete content.cover;
         }
@@ -74,7 +69,7 @@ class CmsService extends AuthApi {
             if (uploadService) {
                 uploadService.upload({
                     url: '/api/cms/',
-                    headers: { Authorization: 'Token ' + this.token },
+                    headers: { Authorization: 'Token ' + this.retrieveToken() },
                     data: content
                 }).then(({ data }) => {
                     this.cmsData.push(data);
@@ -102,7 +97,7 @@ class CmsService extends AuthApi {
                 uploadService.upload({
                     url: `/api/cms/${resource.id}/`,
                     method: 'PUT',
-                    headers: { Authorization: 'Token ' + this.token },
+                    headers: { Authorization: 'Token ' + this.retrieveToken() },
                     data: resource
                 }).then(({ data }) => {
                     const index = this.findContentIndex(resource);
@@ -152,7 +147,7 @@ class CmsService extends AuthApi {
     }
 
     addComment(comment, resource) {
-        comment.user = this.currentUserId;
+        comment.user = this.commonServices.userProfile.id;
         comment.post = resource.id;
         return this.post('comment/', comment).then(response => {
             return response.json();
