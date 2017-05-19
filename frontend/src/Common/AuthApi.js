@@ -167,7 +167,6 @@ class AuthApi {
 
     generateHeaders() {
         const token = this.retrieveToken();
-        console.log(token);
         const headers = new Headers();
         if (token) {
             headers.append('Authorization', 'Token ' + token);
