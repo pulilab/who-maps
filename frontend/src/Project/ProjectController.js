@@ -325,7 +325,7 @@ class ProjectController extends ProjectDefinition {
             f.project = id;
             return f;
         });
-        this.ns.saveCountryFields(toSave, country, id);
+        return this.ns.saveCountryFields(toSave, country, id);
     }
 
     async updateForm(processedForm) {
@@ -347,8 +347,11 @@ class ProjectController extends ProjectDefinition {
     async saveForm(processedForm) {
         const response = await this.ns.newProject(processedForm);
         if (response && response.success) {
-            await Promise.all([this.putGroups(response.data), this.saveCountryFields(response.data)]);
-
+            const [{}, countryFieldResult] = await Promise.all([
+                this.putGroups(response.data),
+                this.saveCountryFields(response.data)
+            ]);
+            response.data.fields = countryFieldResult.fields.slice();
             this.ownershipCheck(response.data);
             this.cs.addProjectToCache(response.data);
             this.postSaveActions();

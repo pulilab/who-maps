@@ -37,16 +37,18 @@ class NewProjectService extends AuthApi {
           });
     }
 
-    putGroups(projectId, team, viewers) {
+    async putGroups(projectId, team, viewers) {
         const ret = {
             team: team.map(el => el.id),
             viewers: viewers.map(el => el.id)
         };
-        return this.put(`projects/${projectId}/groups/`, ret);
+        const r = await this.put(`projects/${projectId}/groups/`, ret);
+        return r.json();
     }
 
-    saveCountryFields(fields, country_id, project_id) {
-        return this.post(`country-fields/${country_id}/${project_id}/`, { fields });
+    async saveCountryFields(fields, country_id, project_id) {
+        const r = await this.post(`country-fields/${country_id}/${project_id}/`, { fields });
+        return r.json();
     }
 
     async updateProject(data, id) {
