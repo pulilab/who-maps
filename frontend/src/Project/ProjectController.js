@@ -345,23 +345,27 @@ class ProjectController extends ProjectDefinition {
     }
 
     async saveForm(processedForm) {
-        const response = await this.ns.newProject(processedForm);
-        if (response && response.success) {
-            const [{}, countryFieldResult] = await Promise.all([
-                this.putGroups(response.data),
-                this.saveCountryFields(response.data)
-            ]);
-            response.data.fields = countryFieldResult.fields.slice();
-            this.ownershipCheck(response.data);
-            this.cs.addProjectToCache(response.data);
-            this.postSaveActions();
-            this.showToast('Project Saved!');
+        try {
+            const response = await this.ns.newProject(processedForm);
+            if (response && response.success) {
+                const [{}, countryFieldResult] = await Promise.all([
+                    this.putGroups(response.data),
+                    this.saveCountryFields(response.data)
+                ]);
+                response.data.fields = countryFieldResult.fields ? countryFieldResult.fields.slice() : null;
+                this.ownershipCheck(response.data);
+                this.cs.addProjectToCache(response.data);
+                this.postSaveActions();
+                this.showToast('Project Saved!');
 
+            }
+            else {
+                this.handleResponse(response);
+            }
         }
-        else {
-            this.handleResponse(response);
+        catch (e) {
+            console.error(e);
         }
-
     }
 
     fillTestForm() {

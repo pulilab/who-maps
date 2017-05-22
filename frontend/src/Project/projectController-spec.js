@@ -117,7 +117,7 @@ describe('ProjectController', () => {
 
         });
 
-        it('should call the appropiate function after saving succeed', async (done) => {
+        it('should call the appropriate function after saving succeed', async (done) => {
             spyOn(sc, 'showToast');
             spyOn(sc, 'ownershipCheck');
             spyOn(sc, 'postSaveActions');
@@ -125,7 +125,7 @@ describe('ProjectController', () => {
             spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
 
 
-            spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve({ success: true }));
+            spyOn(sc.ns, 'newProject').and.returnValue(Promise.resolve({ success: true, data: {} }));
             await sc.saveForm(sc.project);
             expect(sc.ownershipCheck).toHaveBeenCalled();
             expect(sc.cs.addProjectToCache).toHaveBeenCalled();
