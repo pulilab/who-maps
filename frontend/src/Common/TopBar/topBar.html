@@ -11,6 +11,7 @@
 
 
     <md-button aria-label="Country Level View"
+               title="Country Level View"
                class="view-selector"
                ui-sref="country"
                ng-show="vm.showCountryLevelViewButton()"
@@ -20,6 +21,7 @@
     </md-button>
 
     <md-button aria-label="Go to my Dashboard"
+               title="Go to my Dashboard"
                class="view-selector"
                ui-sref="dashboard"
                ng-show="vm.showGoToMyDashboardButton()"
@@ -29,6 +31,7 @@
     </md-button>
 
     <md-button aria-label="Planning and Guidance"
+               title="Planning and Guidance"
                class="view-selector"
                ui-sref="cms"
                ng-show="vm.showPlanningAndGuidanceButton()"
@@ -40,6 +43,7 @@
     <thematic
       axis="vm.axis"
       domain="vm.domain"
+      buttontitle="Thematic overview"
       buttonclass="'md-primary'"
       buttonicon="toc"
       buttontext="Thematic overview">

@@ -22,6 +22,14 @@
 
     .md-toolbar-tools {
       padding-right: 12px;
+
+      @media only screen and (max-width: 1240px) {
+        .md-button {
+          &:not(.app-title) > span {
+            display: none;
+          }
+        }
+      }
     }
   }
 
@@ -48,7 +56,12 @@
     }
 
     .add-new-project {
+      display: block;
       margin-right: 18px !important;
+
+      > span {
+        display: inline-block !important;
+      }
     }
   }
 

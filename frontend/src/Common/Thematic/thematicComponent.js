@@ -11,6 +11,7 @@ const thematicComponent = {
         'domain': '<',
         'buttonclass': '@',
         'buttontext': '@',
+        'buttontitle': '@',
         'buttonicon': '@'
     }
 };
