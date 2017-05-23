@@ -5,6 +5,9 @@ class TopBarController extends TopBarBehaviour {
     constructor($state, $scope) {
         super($state, $scope);
         this.$onInit = this.onInit.bind(this);
+        this.axis = 0;
+        this.domain = 0;
+        this.setAxisDomain = this.setAxisDomain.bind(this);
     }
 
     onInit() {
@@ -19,6 +22,16 @@ class TopBarController extends TopBarBehaviour {
                 self.scope.$evalAsync();
             });
         }
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.state.params, this.setAxisDomain);
+    }
+
+    setAxisDomain(params) {
+        this.axis = params.axisId ? parseInt(params.axisId, 10) : 0;
+        this.domain = params.domainId ? parseInt(params.domainId, 10) : 0;
     }
 
     static topBarControllerFactory() {

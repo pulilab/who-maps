@@ -24,9 +24,6 @@ const config = ($stateProvider, $compileProvider) => {
                         },
                         'axisFooter': () => {
                             return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
-                        },
-                        'thematic': () => {
-                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
                         }
                     }
                 }
@@ -41,9 +38,6 @@ const config = ($stateProvider, $compileProvider) => {
                     resolve: {
                         'scorecard': () => {
                             return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
-                        },
-                        'thematic': () => {
-                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
                         },
                         'axisFooter': () => {
                             return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
@@ -61,9 +55,6 @@ const config = ($stateProvider, $compileProvider) => {
                     resolve: {
                         'scorecard': () => {
                             return su.lazyLoader($compileProvider, 'Scorecard/scorecardComponent.js');
-                        },
-                        'thematic': () => {
-                            return su.lazyLoader($compileProvider, 'Thematic/thematicComponent.js');
                         },
                         'axisFooter': () => {
                             return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');

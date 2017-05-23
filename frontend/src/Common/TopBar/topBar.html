@@ -2,9 +2,9 @@
   <div class="md-toolbar-tools">
 
     <md-button
-        ui-sref="landing"
-        aria-label="Digital Health Atlas"
-        class="app-title" md-no-ink>
+      ui-sref="landing"
+      aria-label="Digital Health Atlas"
+      class="app-title" md-no-ink>
       <span>Digital Health Atlas</span>
     </md-button>
 
@@ -19,14 +19,14 @@
       Country View
     </md-button>
 
-        <md-button aria-label="Go to my Dashboard"
-                   class="view-selector"
-                   ui-sref="dashboard"
-                   ng-show="vm.showGoToMyDashboardButton()"
-                   md-no-ink>
-            <md-icon class="material-icons ">apps</md-icon>
-            Dashboard
-        </md-button>
+    <md-button aria-label="Go to my Dashboard"
+               class="view-selector"
+               ui-sref="dashboard"
+               ng-show="vm.showGoToMyDashboardButton()"
+               md-no-ink>
+      <md-icon class="material-icons ">apps</md-icon>
+      Dashboard
+    </md-button>
 
     <md-button aria-label="Planning and Guidance"
                class="view-selector"
@@ -36,6 +36,14 @@
       <md-icon class="material-icons ">import_contacts</md-icon>
       Planning &amp; Guidance
     </md-button>
+
+    <thematic
+      axis="vm.axis"
+      domain="vm.domain"
+      buttonclass="'md-primary'"
+      buttonicon="toc"
+      buttontext="Thematic overview">
+    </thematic>
 
     <span flex ></span>
 

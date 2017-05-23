@@ -1,17 +1,12 @@
 import { default as TopBarController } from './TopBarController';
 import { EE } from '../common';
+import { $scope, $state } from '../../testUtilities';
 
 EE.initialize();
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let ac = {};
-const $state = {
-    go: () => {},
-    current: {
-        name: 'mock'
-    }
-};
 
 const mockData = {
     countries: [{
@@ -20,14 +15,13 @@ const mockData = {
     }]
 };
 
-const $scope = {
-    $watch: () => {}
-};
+const scope = $scope(ac);
 
 describe('TopBarController', () => {
 
     beforeEach(() => {
-        ac = TopBarController.topBarControllerFactory()($state, $scope);
+        ac = TopBarController.topBarControllerFactory()($state, scope);
+        ac.scope = $scope(ac);
         ac.cs = {
             projectList: [],
             projectStructure: mockData,
@@ -37,18 +31,26 @@ describe('TopBarController', () => {
         };
     });
 
-    it('should have a function to open a modal menu', () => {
-        const spy = jasmine.createSpy('menuOpener');
-        ac.openMenu(spy, {});
-        expect(spy).toHaveBeenCalled();
+    it('should have a watcher function', () => {
+        spyOn(ac, 'setAxisDomain');
+        ac.state = $state;
+        ac.watchers();
+        expect(ac.setAxisDomain).toHaveBeenCalled();
     });
 
-    it('should have a function that return show or hide Planning-And-Guidance button', () => {
-        ac.isLogin = false;
-        let result = ac.showPlanningAndGuidanceButton();
-        expect(result).toBeFalsy();
-        ac.isLogin = true;
-        result = ac.showPlanningAndGuidanceButton();
-        expect(result).toBeTruthy();
+    it('should have a function that set domain and axis when appropriate', () => {
+        const params = {
+            axisId: null,
+            domainId: null
+        };
+        ac.setAxisDomain(params);
+        expect(ac.axis).toBe(0);
+        expect(ac.domain).toBe(0);
+        params.axisId = 1;
+        params.domainId = 2;
+
+        ac.setAxisDomain(params);
+        expect(ac.axis).toBe(1);
+        expect(ac.domain).toBe(2);
     });
 });

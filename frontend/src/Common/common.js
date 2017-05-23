@@ -31,6 +31,7 @@ import CustomCountryService from './CustomCountryService';
 import CountryPartners from './CountryPartners/countryPartnersComponent';
 import OrganisationAutocomplete from './OrganisationAutocomplete/organisationComponent';
 import TrixComponent from './TrixComponent/trixComponent';
+import Thematic from './Thematic/thematicComponent';
 
 import EE from './EE';
 
@@ -69,6 +70,7 @@ angular.module(moduleName,
     .component(CountryPartners.name, CountryPartners)
     .component(OrganisationAutocomplete.name, OrganisationAutocomplete)
     .component(TrixComponent.name, TrixComponent)
+    .component(Thematic.name, Thematic)
     .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 
