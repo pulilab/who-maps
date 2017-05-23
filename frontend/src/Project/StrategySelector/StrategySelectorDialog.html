@@ -1,0 +1,61 @@
+<md-dialog aria-label="add-new-content" class="detail-dialog strategy-selector-dialog">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3 class="md-title" > Add strategies to {{vm.platformName}}
+      </h3>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="vm.cancel()">
+        <md-icon  aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+
+      <div class="content">
+        <div layout="column">
+          <div class="main-group" ng-class="{open: group.open, closed: !group.open}" ng-repeat="group in vm.availableStrategies">
+            <div class="header" layout="row"  ng-click="vm.toggle(group)">
+              <h3>{{group.name}}</h3>
+              <span flex></span>
+              <span>{{group.selected}} item(s) selected</span>
+            </div>
+            <div class="body">
+              <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
+                <div class="header" ng-click="vm.toggle(subGroup)">
+                  <h4>{{subGroup.name}}</h4>
+                </div>
+                <div class="body">
+                  <ul>
+                    <li ng-repeat="strategy in subGroup.strategies">
+
+                      <md-checkbox
+                        ng-checked="vm.strategyChecked(strategy)"
+                        ng-click="vm.strategyToggle(strategy)"
+                        md-no-ink
+                        aria-label="{{strategy}}"
+                        class="md-primary">
+                        {{strategy}}
+                      </md-checkbox>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <md-button ng-click="vm.cancel()">
+      Cancel
+    </md-button>
+    <span flex></span>
+    <md-button  class="md-primary md-raised" ng-click="vm.addSelected()">
+      Add selected
+    </md-button>
+  </md-dialog-actions>
+
+</md-dialog>

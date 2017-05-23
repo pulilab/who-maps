@@ -1,0 +1,29 @@
+@import '../../variables';
+@import '../../mixins';
+
+
+.header {
+    cursor: pointer;
+    outline: none;
+  }
+
+.main-group {
+
+  &.closed {
+    .body {
+      display: none;
+    }
+  }
+
+}
+
+
+.sub-group {
+
+  &.closed {
+    .body {
+      display: none;
+    }
+  }
+
+}

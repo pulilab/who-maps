@@ -28,26 +28,31 @@
           </md-input-container>
         </div>
         <div layout="row">
-          <md-input-container class="md-block" flex="50">
-            <label>Strategies (select multiple)</label>
-            <md-select ng-model="platform.strategies"
-                       md-select-separator="empty"
-                       required
-                       name="{{'platforms_'+ $index + '.strategies' }}"
-                       multiple>
-              <md-option ng-value="strategy" ng-repeat="strategy in vm.structure.strategies">
-                {{strategy}}
-              </md-option>
-            </md-select>
-            <div ng-messages="vm.form['platforms_' + $index + '.strategies'].$error">
-              <div ng-message="required">This is required.</div>
-              <div ng-message="custom">
-                <div ng-repeat="message in vm.form['platforms_' + $index + '.strategies'].customError">
-                  {{message}}
-                </div>
-              </div>
-            </div>
-          </md-input-container>
+          <!--<md-input-container class="md-block" flex="50">-->
+            <!--<label>Strategies (select multiple)</label>-->
+            <!--<md-select ng-model="platform.strategies"-->
+                       <!--md-select-separator="empty"-->
+                       <!--required-->
+                       <!--name="{{'platforms_'+ $index + '.strategies' }}"-->
+                       <!--multiple>-->
+              <!--<md-option ng-value="strategy" ng-repeat="strategy in vm.structure.strategies">-->
+                <!--{{strategy}}-->
+              <!--</md-option>-->
+            <!--</md-select>-->
+            <!--<div ng-messages="vm.form['platforms_' + $index + '.strategies'].$error">-->
+              <!--<div ng-message="required">This is required.</div>-->
+              <!--<div ng-message="custom">-->
+                <!--<div ng-repeat="message in vm.form['platforms_' + $index + '.strategies'].customError">-->
+                  <!--{{message}}-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</md-input-container>-->
+          <strategy-selector
+            strategies="platform.strategies"
+            available-strategies="vm.structure.strategies"
+            platform-name="platform.name">
+          </strategy-selector>
           <div class="add-more-item" flex>
             <div layout="row" layout-align="start end">
               <md-button class="md-primary" aria-label="Add more"
