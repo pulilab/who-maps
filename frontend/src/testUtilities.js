@@ -51,10 +51,15 @@ const $timeout = toCall => {
     return toCall();
 };
 
+const $interpolate = jasmine.createSpy('interpolate').and.returnValue(() => {});
+const $anchorScroll = jasmine.createSpy('$anchorScroll').and.callFake(a => a);
+
 export {
     dialog,
     $state,
     $scope,
+    $interpolate,
+    $anchorScroll,
     toast,
     $timeout
 };

@@ -1,34 +1,49 @@
-import _ from 'lodash';
 
 class SkeletonController {
 
-    constructor($scope, $interpolate, $anchorScroll) {
+    constructor($scope, $interpolate, $anchorScroll, data, axis, domain, icons) {
         this.scope = $scope;
-        const parent = $scope.$parent.vm;
         this.interpolate = $interpolate;
-        this.axis = +parent.axis;
-        this.domain = +parent.domain;
-        this.data = _.cloneDeep(parent.data);
-        this.text = parent.text;
-        this.icons = parent.icons;
+        this.axis = axis;
+        this.domain = domain;
+        this.data = data;
+        this.icons = icons;
         this.scroll = $anchorScroll;
 
-        this.domainActivationSetter(+this.axis, +this.domain, true);
-
+        this.domainActivationSetter(this.axis, this.domain, true);
+        this.images = this.importImages();
         this.templates = this.importHtmlTemplates();
 
-        this.data = this.data.map((axis, aInd) => {
-            axis.expand = (aInd - 2) === this.axis;
-            return axis;
+
+        this.data.forEach((a, aInd) => {
+            a.expand = (aInd - 2) === this.axis;
+            return a;
         });
     }
 
+    importImages() {
+        // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const templates = {};
+        const templateRequire = require.context('./images/', true, /\.svg$/);
+        templateRequire.keys().forEach((item) => {
+            const key = item.split('.')[1].replace('/', '');
+            templates[key] = templateRequire(item);
+        });
+        return templates;
+    }
+
+
     importHtmlTemplates() {
         // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
+        const scope = {
+            vm: {
+                images: this.images
+            }
+        };
         const templates = {};
         const templateRequire = require.context('./static/', true, /\.html$/);
         templateRequire.keys().forEach((item) => {
-            templates[item.slice(2)] = this.interpolate(templateRequire(item))(this.scope);
+            templates[item.slice(2)] = this.interpolate(templateRequire(item))(scope);
         });
         return templates;
     }
@@ -52,9 +67,9 @@ class SkeletonController {
         this.data[axisId + 2].domains[domainId].active = state;
     }
 
-    static skeletonFactory() {
+    static skeletonFactory(data, axis, domain, icons) {
         const skeleton = ($scope, $interpolate, $anchorScroll) => {
-            return new SkeletonController($scope, $interpolate, $anchorScroll);
+            return new SkeletonController($scope, $interpolate, $anchorScroll, data, axis, domain, icons);
         };
         skeleton.$inject = ['$scope', '$interpolate', '$anchorScroll'];
         return skeleton;

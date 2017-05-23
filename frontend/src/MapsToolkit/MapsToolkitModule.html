@@ -10,13 +10,6 @@
                 <md-icon>insert_chart</md-icon>
                 Scorecard
             </md-button>
-            <thematic
-                    axis="vm.state.params.axisId"
-                    domain="0"
-                    buttonclass="'md-primary'"
-                    buttonicon="'toc'"
-                    buttontext="'Overview'">
-            </thematic>
         </div>
     </div>
 
@@ -33,8 +26,8 @@
                 <thematic
                         axis="vm.state.params.axisId"
                         domain="vm.state.params.domainId"
-                        buttonclass="'md-primary'"
-                        buttontext="'View instructions'">
+                        buttonclass="md-primary"
+                        buttontext="View instructions">
                 </thematic>
             </div>
             <section ng-repeat="question in vm.data.questions" >

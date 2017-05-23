@@ -1,28 +1,16 @@
 import SkeletonController from './SkeletonController.js';
+import { $scope, $interpolate, $anchorScroll } from '../../testUtilities';
 import mock from './mockStructure.js';
 import _ from 'lodash';
 
 /* global define, it, describe, expect, beforeEach, spyOn, Promise, jasmine */
-
-const $scopeMock = {
-    $parent: {
-        vm: {
-            axis: 0,
-            domain: 0,
-            data: mock,
-            text: 'Doesnt have any significance now, not at all, why is it even here, huhh?',
-            icons: [] // This neither...
-        }
-    }
-};
-const $interpolate = jasmine.createSpy('interpolate').and.returnValue(() => {});
-const $anchorScroll =  a => a;
 let vm;
+const scope = $scope(vm);
 
 describe('SkeletonController', () => {
 
     beforeEach(() => {
-        vm = new SkeletonController.skeletonFactory()($scopeMock, $interpolate, $anchorScroll);
+        vm = new SkeletonController.skeletonFactory(mock, 0, 0)(scope, $interpolate, $anchorScroll);
     });
 
     it('is defined', () => {
