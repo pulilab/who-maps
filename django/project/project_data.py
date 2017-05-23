@@ -1,14 +1,41 @@
 project_structure = {
         "strategies": [
-            "Client education and behavior change communication",
-            "Client Information Systems",
-            "Data Collection and Reporting",
-            "Financial transactions and incentives",
-            "Human resource management",
-            "Point of care and diagnostics",
-            "Provider training and education",
-            "Service Delivery",
-            "Supply management",
+            {
+                "name": "Client",
+                "subGroups": [
+                    {
+                        "name": "Targeted client communication",
+                        "strategies": [
+                            "Targeted health event alerts to specific population groups",
+                            "Targeted health information based on health or demographic characteristics "
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Provider",
+                "subGroups": [
+                    {
+                        "name": "Client health records",
+                        "strategies": [
+                            "Track client's health and services within a longitudinal care plan",
+                            "Manage client's structured records"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "System",
+                "subGroups": [
+                    {
+                        "name": "Data collection management and use",
+                        "strategies": [
+                            "Routine health indicator data collection and management",
+                            "Non routine data collection and management"
+                        ]
+                    }
+                ]
+            }
         ],
         "technology_platforms": [
             "Adobe Forms",
