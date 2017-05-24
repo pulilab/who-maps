@@ -1,12 +1,9 @@
 import StrategySelectorController from './StrategySelectorController';
 import { StrategySelectorDialog } from './StrategySelectorController';
-import { dialog, $scope, toast } from '../../testUtilities';
+import { dialog, $scope } from '../../testUtilities';
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
-
-
-const upload = {};
 
 describe('StrategySelectorController', () => {
 
