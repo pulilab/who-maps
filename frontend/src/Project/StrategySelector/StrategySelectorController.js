@@ -75,19 +75,37 @@ class StrategySelectorController extends Protected {
         this.scope = $scope;
         this.dialog = $mdDialog;
         this.defaultOnInit();
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.modalOpen, (newValue, oldValue) => {
+            if (!oldValue && newValue) {
+                this.openDialog();
+            }
+        });
     }
 
     showStrategySelector(event) {
+        event.preventDefault();
+        this.modalOpen = true;
+    }
+
+    openDialog() {
         this.dialog.show({
             controller: StrategySelectorDialog.factory(this.platformName, this.availableStrategies, this.strategies),
             controllerAs: 'vm',
             template: require('./StrategySelectorDialog.html'),
             parent: angular.element(document.body),
-            targetEvent: event,
             clickOutsideToClose:true
         }).then(strategies => {
             this.scope.$evalAsync(() => {
+                this.modalOpen = false;
                 this.strategies = strategies;
+            });
+        }).catch(()=> {
+            this.scope.$evalAsync(() => {
+                this.modalOpen = false;
             });
         });
     }

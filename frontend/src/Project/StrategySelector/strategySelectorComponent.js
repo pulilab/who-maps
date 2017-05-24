@@ -10,7 +10,8 @@ const component = {
     bindings: {
         availableStrategies: '<',
         strategies: '=',
-        platformName: '<'
+        platformName: '<',
+        modalOpen: '=?'
     }
 };
 

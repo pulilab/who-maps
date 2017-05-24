@@ -3,17 +3,17 @@ import { StrategySelectorDialog } from './StrategySelectorController';
 import { dialog, $scope } from '../../testUtilities';
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
-let controller = null;
+let controller = {};
 
 describe('StrategySelectorController', () => {
 
     beforeEach(()=> {
-        controller = StrategySelectorController.factory()();
+        controller = StrategySelectorController.factory()($scope(controller));
     });
 
     it('should have a factory  function', () => {
         expect(StrategySelectorController.factory).toBeDefined();
-        const onSpot = StrategySelectorController.factory()();
+        const onSpot = StrategySelectorController.factory()($scope(controller));
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
 

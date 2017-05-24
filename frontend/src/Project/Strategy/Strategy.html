@@ -12,7 +12,7 @@
         <div layout="row">
           <md-input-container class="md-block" flex="50">
             <label>Platform</label>
-            <md-select ng-model="platform.name" name="{{'platforms_'+ $index + '.name' }}" required >
+            <md-select ng-model="platform.name" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.name' }}" required >
               <md-option ng-value="plat" ng-repeat="plat in platform.available">
                 {{plat}}
               </md-option>
@@ -28,27 +28,9 @@
           </md-input-container>
         </div>
         <div layout="row">
-          <!--<md-input-container class="md-block" flex="50">-->
-            <!--<label>Strategies (select multiple)</label>-->
-            <!--<md-select ng-model="platform.strategies"-->
-                       <!--md-select-separator="empty"-->
-                       <!--required-->
-                       <!--name="{{'platforms_'+ $index + '.strategies' }}"-->
-                       <!--multiple>-->
-              <!--<md-option ng-value="strategy" ng-repeat="strategy in vm.structure.strategies">-->
-                <!--{{strategy}}-->
-              <!--</md-option>-->
-            <!--</md-select>-->
-            <!--<div ng-messages="vm.form['platforms_' + $index + '.strategies'].$error">-->
-              <!--<div ng-message="required">This is required.</div>-->
-              <!--<div ng-message="custom">-->
-                <!--<div ng-repeat="message in vm.form['platforms_' + $index + '.strategies'].customError">-->
-                  <!--{{message}}-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</md-input-container>-->
           <strategy-selector
+            ng-show="platform.name"
+            modal-open="platform.strategySelectorOpen"
             strategies="platform.strategies"
             available-strategies="vm.structure.strategies"
             platform-name="platform.name">
