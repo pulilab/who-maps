@@ -7,8 +7,8 @@ class StrategySelectorDialog {
         this.scope = $scope;
         this.dialog = $mdDialog;
         this.platformName = platformName;
-        this.availableStrategies = availableStrategies;
-        this.strategies = strategies.slice();
+        this.availableStrategies = availableStrategies || [];
+        this.strategies = strategies ? strategies.slice() : [];
         this.watchers();
         this.setSelected = this.setSelected.bind(this);
     }

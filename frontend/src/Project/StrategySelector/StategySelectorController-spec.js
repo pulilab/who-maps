@@ -26,12 +26,12 @@ describe('StrategySelectorController', () => {
 
 describe('StrategySelectorDialog', () => {
     beforeEach(()=> {
-        controller = StrategySelectorDialog.factory()($scope(controller), dialog, upload, toast);
+        controller = StrategySelectorDialog.factory()($scope(controller), dialog);
     });
 
     it('should have a factory  function', () => {
         expect(StrategySelectorDialog.factory).toBeDefined();
-        const onSpot = StrategySelectorDialog.factory()();
+        const onSpot = StrategySelectorDialog.factory()($scope(controller));
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
 
