@@ -1,5 +1,6 @@
 
 
+
 project_structure = {
         "strategies": [
             {
@@ -295,7 +296,19 @@ project_structure = {
             "Textit",
             "Usahidi",
             "USSD",
-            "Voice"
+            "Voice",
+            "HAPI FHIR",
+            "OpenLIS",
+            "OpenHMIS",
+            "GNU Health",
+            "OpenLMIS",
+            "OpenHIM",
+            "HEARTH",
+            "Mirth",
+            "MOTECH",
+            "ResourceMap",
+            "GeoNode"
+
         ],
         "licenses": [
             "Public domain",
@@ -336,9 +349,9 @@ project_structure = {
         ],
         "interoperability_links": [
             {"pre": "Yes, links to a ", "name": "client registry"},
-            {"pre": "Yes, links to ", "name": "digital HMIS"},
+            {"pre": "Yes, links to ", "name": "Health Management Information System"},
             {"pre": "Yes, links to a ", "name": "health worker registry"},
-            {"pre": "Yes, links to ", "name": "eLMIS"},
+            {"pre": "Yes, links to ", "name": "Logistics Management and Supply Chain Information System (LMIS)"},
             {"pre": "Yes, links to ", "name": "digital laboratory information system"},
             {"pre": "Yes, links to a ", "name": "facility registry"},
             {"pre": "Yes, links to a ", "name": "Shared Health Record"},
@@ -354,16 +367,54 @@ project_structure = {
             "GS1",
             "HL7 v2",
             "HL7 v3",
-            "HL7 FHIR Value Set & Sharing Value Sets (SVS)",
             "mACM - Mobile Alert Communication Management",
             "MHD - Mobile Access to Health Documents",
             "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
             "PDQ or PDQm - (Mobile) Patient Demographics Query",
             "SDMX - Statistical Data and Metadata Exchange",
             "XDS - Cross-Enterprise Document Sharing",
-            "XUA - Cross-Enterprise User Assertion"
+            "XUA - Cross-Enterprise User Assertion",
+            "HL7 FHIR",
+            "SVS - Sharing Value Sets",
+            "mACM - Mobile Alert Communication Management",
+            "GML Geography Markup Language",
+            "XForms",
+            "SNOMED",
+            "ICD-10",
+            "ISO 3166",
+            "ISCO 08",
+            "ISCO 88",
+            "LOINC",
+            "RxNORM",
+            "CIEL"
+
         ],
-        "his_bucket": ["a", "b", "c"],
+        "his_bucket": [
+            "Census, population information & data warehouse",
+            "Civil Registration and Vital Statistics",
+            "Client applications",
+            "Client communication system",
+            "Clinical terminology and classifications",
+            "Community Information System",
+            "EHR and health information repositories",
+            "Electronic Medical Record",
+            "Emergency response system",
+            "Facility Management Information System",
+            "Geographic Information Systems",
+            "Health finance and insurance",
+            "Health Management Information System",
+            "Human Resource Information System",
+            "Identification registries and directories",
+            "Knowledge Management",
+            "Laboratory and Diagnostic System",
+            "Learning and Training System",
+            "Logistics Management Information System",
+            "Pharmacy System",
+            "Public health and disease surveillance",
+            "Research information system",
+            "Data interchange interoperability and accessibility",
+            "Environmental monitoring systems",
+        ],
         "hsc_challenges": ["a", "b", "c"],
         "interventions": ["a", "b", "c"],
         "data_exchanges": ["a", "b", "c"]
