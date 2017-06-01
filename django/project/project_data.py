@@ -415,7 +415,67 @@ project_structure = {
             "Data interchange interoperability and accessibility",
             "Environmental monitoring systems",
         ],
-        "hsc_challenges": ["a", "b", "c"],
+        "hsc_challenges": [
+            {
+                "name": "Information",
+                "challenges": [
+                    "Lack of population denominator",
+                    "Delayed reporting of events",
+                    "Lack of quality/reliable data",
+                    "Communication roadblocks",
+                    "Lack of access to information or data",
+                    "Insufficient utilization of data and information",
+                    "Lack of unique identifiers"
+                ]
+            },
+{
+                "name": "Availability",
+                "challenges": [
+                    "Insufficient supply of commodities",
+                    "Insufficient supply of services",
+                    "Insufficient supply of equipment",
+                    "Insufficient supply of qualified health workers",
+                ]
+            },
+{
+                "name": "Quality",
+                "challenges": [
+                    "Poor patient experience",
+                    "Insufficient health worker competence",
+                    "Low quality of health commodities",
+                    "Insufficient continuity of care",
+                    "Insufficient supportive supervision",
+                    "Poor adherence to guidelines"
+                ]
+            },
+{
+                "name": "Acceptability",
+                "challenges": [
+                    "Lack of alignment with local norms",
+                    "Not addressing individual beliefs and practices",
+                ]
+            },
+{
+                "name": "Utilization",
+                "challenges": [
+                    "Low demand for services",
+                    "Geographic inaccessibility",
+                    "Low adherence to treatments",
+                    "Loss to follow-up",
+                ]
+            },
+{
+                "name": "Efficiency",
+                "challenges": [
+                    "Inadequate workflow management",
+                    "Lack of inappropriate referrals",
+                    "Poor planning and coordination",
+                    "Delayed provision of care",
+                    "Inadequate access to transportation",
+                    "Inadequate prioritization of clients",
+                ]
+            }
+        ],
         "interventions": ["a", "b", "c"],
         "data_exchanges": ["a", "b", "c"]
 }
