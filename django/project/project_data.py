@@ -428,7 +428,7 @@ project_structure = {
                     "Lack of unique identifiers"
                 ]
             },
-{
+            {
                 "name": "Availability",
                 "challenges": [
                     "Insufficient supply of commodities",
@@ -437,7 +437,7 @@ project_structure = {
                     "Insufficient supply of qualified health workers",
                 ]
             },
-{
+            {
                 "name": "Quality",
                 "challenges": [
                     "Poor patient experience",
@@ -448,14 +448,14 @@ project_structure = {
                     "Poor adherence to guidelines"
                 ]
             },
-{
+            {
                 "name": "Acceptability",
                 "challenges": [
                     "Lack of alignment with local norms",
                     "Not addressing individual beliefs and practices",
                 ]
             },
-{
+            {
                 "name": "Utilization",
                 "challenges": [
                     "Low demand for services",
@@ -464,7 +464,7 @@ project_structure = {
                     "Loss to follow-up",
                 ]
             },
-{
+            {
                 "name": "Efficiency",
                 "challenges": [
                     "Inadequate workflow management",
