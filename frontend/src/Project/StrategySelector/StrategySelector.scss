@@ -1,28 +1,43 @@
 @import '../../variables';
 @import '../../mixins';
 
+.strategy-selector-dialog {
 
-.header {
-    cursor: pointer;
-    outline: none;
-  }
+  min-width: 720px;
+  max-width: 1280px;
 
-.main-group {
+  md-dialog-actions {
+    padding: 20px;
+    background-color: $color-gray-lightest;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,.12);
 
-  &.closed {
-    .body {
-      display: none;
+    .md-button {
+      margin: 0;
+      padding-left: 20px;
+      padding-right: 20px;
     }
   }
 
-}
+  .header {
+      cursor: pointer;
+      outline: none;
+    }
 
+  .main-group {
 
-.sub-group {
+    &.closed {
+      .body {
+        display: none;
+      }
+    }
+  }
 
-  &.closed {
-    .body {
-      display: none;
+  .sub-group {
+
+    &.closed {
+      .body {
+        display: none;
+      }
     }
   }
 

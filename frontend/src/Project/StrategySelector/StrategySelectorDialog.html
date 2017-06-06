@@ -5,47 +5,43 @@
       </h3>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="vm.cancel()">
-        <md-icon  aria-label="Close dialog">close</md-icon>
+        <md-icon aria-label="Close dialog">close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
 
   <md-dialog-content>
-    <div class="md-dialog-content">
-
-      <div class="content">
-        <div layout="column">
-          <div class="main-group" ng-class="{open: group.open, closed: !group.open}" ng-repeat="group in vm.availableStrategies">
-            <div class="header" layout="row"  ng-click="vm.toggle(group)">
-              <h3>{{group.name}}</h3>
-              <span flex></span>
-              <span>{{group.selected}} item(s) selected</span>
+    <div layout="row">
+      <div class="main-group" ng-class="{open: group.open, closed: !group.open}" ng-repeat="group in vm.availableStrategies">
+        <div class="header" layout="row"  ng-click="vm.toggle(group)">
+          <h3>{{group.name}}</h3>
+          <span flex></span>
+          <span>{{group.selected}} item(s) selected</span>
+        </div>
+        <div class="body">
+          <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
+            <div class="header" ng-click="vm.toggle(subGroup)">
+              <h4>{{subGroup.name}}</h4>
             </div>
             <div class="body">
-              <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
-                <div class="header" ng-click="vm.toggle(subGroup)">
-                  <h4>{{subGroup.name}}</h4>
-                </div>
-                <div class="body">
-                  <ul>
-                    <li ng-repeat="strategy in subGroup.strategies">
+              <ul>
+                <li ng-repeat="strategy in subGroup.strategies">
 
-                      <md-checkbox
-                        ng-checked="vm.strategyChecked(strategy)"
-                        ng-click="vm.strategyToggle(strategy)"
-                        md-no-ink
-                        aria-label="{{strategy}}"
-                        class="md-primary">
-                        {{strategy}}
-                      </md-checkbox>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                  <md-checkbox
+                    ng-checked="vm.strategyChecked(strategy)"
+                    ng-click="vm.strategyToggle(strategy)"
+                    md-no-ink
+                    aria-label="{{strategy}}"
+                    class="md-primary">
+                    {{strategy}}
+                  </md-checkbox>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
