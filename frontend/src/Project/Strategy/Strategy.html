@@ -28,11 +28,14 @@
           </md-input-container>
         </div>
         <div layout="row">
-          <strategy-selector
-            strategies="platform.strategies"
-            available-strategies="vm.structure.strategies"
-            platform-name="platform.name">
-          </strategy-selector>
+          <dialog-multi-selector
+            ng-show="platform.name"
+            selection="platform.strategies"
+            button-name="strategies"
+            elements="vm.structure.strategies"
+            collection-name="strategies"
+            dialog-name="platform.name">
+          </dialog-multi-selector>
           <div class="add-more-item" flex>
             <div layout="row" layout-align="start end">
               <md-button class="md-primary" aria-label="Add more"
@@ -82,14 +85,13 @@
     </div>
 
     <div layout="row">
-      <md-input-container class="md-block" flex>
-        <label>Essential interventions (select from list)</label>
-        <md-select ng-model="vm.project.interventions" md-select-separator="empty" multiple>
-          <md-option value="{{intervention}}" ng-repeat="intervention in vm.structure.interventions">
-            {{intervention}}
-          </md-option>
-        </md-select>
-      </md-input-container>
+      <label>Essential interventions</label>
+      <dialog-multi-selector
+        selection="vm.project.interventions"
+        button-name="interventions"
+        elements="vm.structure.interventions"
+        collection-name="interventions">
+      </dialog-multi-selector>
     </div>
   </div>
 </div>

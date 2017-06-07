@@ -7,7 +7,7 @@ import projectDetails from './ProjectDetails/projectDetailsComponent';
 import strategy from './Strategy/strategyComponent';
 import technology from './Technology/technologyComponent';
 import countryFields from './CountryFields/countryFieldsComponent';
-import strategySelector from './StrategySelector/strategySelectorComponent';
+import dialogMultiSelection from './DialogMultiSelector/dialogMultiSelectorComponent';
 
 const moduleName = 'Project';
 
@@ -19,7 +19,7 @@ angular.module(moduleName, [])
     .component(projectDetails.name, projectDetails)
     .component(strategy.name, strategy)
     .component(countryFields.name, countryFields)
-    .component(strategySelector.name, strategySelector)
+    .component(dialogMultiSelection.name, dialogMultiSelection)
     .component(technology.name, technology);
 
 

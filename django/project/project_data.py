@@ -376,7 +376,6 @@ project_structure = {
             "XUA - Cross-Enterprise User Assertion",
             "HL7 FHIR",
             "SVS - Sharing Value Sets",
-            "mACM - Mobile Alert Communication Management",
             "GML Geography Markup Language",
             "XForms",
             "SNOMED",

@@ -2,27 +2,29 @@ import angular from 'angular';
 import  Protected from '../../Common/Protected';
 
 
-class StrategySelectorDialog {
-    constructor($scope, $mdDialog, platformName, availableStrategies, strategies) {
+class DialogMultiSelectorDialog {
+    constructor($scope, $mdDialog, buttonName, elements, selection, collectionName, dialogName) {
         this.scope = $scope;
         this.dialog = $mdDialog;
-        this.platformName = platformName;
-        this.availableStrategies = availableStrategies || [];
-        this.strategies = strategies ? strategies.slice() : [];
+        this.buttonName = buttonName;
+        this.dialogName = dialogName;
+        this.elements = elements || [];
+        this.selection = selection ? selection.slice() : [];
+        this.collectionName = collectionName;
         this.watchers();
         this.setSelected = this.setSelected.bind(this);
     }
 
     watchers() {
-        this.scope.$watchCollection(s => s.vm.strategies, this.setSelected.bind(this));
+        this.scope.$watchCollection(s => s.vm.selection, this.setSelected.bind(this));
     }
 
-    setSelected(strategies) {
-        this.availableStrategies.forEach(group => {
+    setSelected(selection) {
+        this.elements.forEach(group => {
             group.selected = 0;
             group.subGroups.forEach(subGroup => {
-                subGroup.strategies.forEach(strategy => {
-                    if (strategies.indexOf(strategy) > -1) {
+                subGroup[this.collectionName].forEach(item => {
+                    if (selection.indexOf(item) > -1) {
                         group.selected += 1;
                     }
                 });
@@ -35,7 +37,7 @@ class StrategySelectorDialog {
     }
 
     addSelected() {
-        this.dialog.hide(this.strategies);
+        this.dialog.hide(this.selection);
     }
 
     toggle(item) {
@@ -44,23 +46,24 @@ class StrategySelectorDialog {
         });
     }
 
-    strategyChecked(strategy) {
-        return this.strategies.indexOf(strategy) > -1;
+    itemChecked(strategy) {
+        return this.selection.indexOf(strategy) > -1;
     }
-    strategyToggle(strategy) {
-        const index =  this.strategies.indexOf(strategy);
+    itemToggle(strategy) {
+        const index =  this.selection.indexOf(strategy);
         if (index !== -1) {
-            this.strategies.splice(index, 1);
+            this.selection.splice(index, 1);
         }
         else {
-            this.strategies.push(strategy);
+            this.selection.push(strategy);
         }
         return false;
     }
 
-    static factory(platformName, availableStrategies, strategies) {
+    static factory(buttonName, elements, strategies, collectionName, dialogName) {
         function strategySelector($scope, $mdDialog) {
-            return new StrategySelectorDialog($scope, $mdDialog, platformName, availableStrategies, strategies);
+            return new DialogMultiSelectorDialog($scope, $mdDialog, buttonName,
+              elements, strategies, collectionName, dialogName);
         }
 
         strategySelector.$inject = ['$scope', '$mdDialog'];
@@ -68,7 +71,7 @@ class StrategySelectorDialog {
     }
 }
 
-class StrategySelectorController extends Protected {
+class DialogMultiSelector extends Protected {
 
     constructor($scope, $mdDialog) {
         super();
@@ -93,15 +96,16 @@ class StrategySelectorController extends Protected {
 
     openDialog() {
         this.dialog.show({
-            controller: StrategySelectorDialog.factory(this.platformName, this.availableStrategies, this.strategies),
+            controller: DialogMultiSelectorDialog.factory(this.buttonName, this.elements,
+              this.selection, this.collectionName, this.dialogName),
             controllerAs: 'vm',
-            template: require('./StrategySelectorDialog.html'),
+            template: require('./DialogMultiSelectorDialog.html'),
             parent: angular.element(document.body),
             clickOutsideToClose:true
-        }).then(strategies => {
+        }).then(selection => {
             this.scope.$evalAsync(() => {
                 this.modalOpen = false;
-                this.strategies = strategies;
+                this.selection = selection;
             });
         }).catch(()=> {
             this.scope.$evalAsync(() => {
@@ -112,9 +116,9 @@ class StrategySelectorController extends Protected {
 
 
     static factory() {
-        require('./StrategySelector.scss');
+        require('./DialogMultiSelector.scss');
         function addNewContent($scope, $mdDialog) {
-            return new StrategySelectorController($scope, $mdDialog);
+            return new DialogMultiSelector($scope, $mdDialog);
         }
 
         addNewContent.$inject = ['$scope', '$mdDialog'];
@@ -122,5 +126,5 @@ class StrategySelectorController extends Protected {
     }
 }
 
-export default StrategySelectorController;
-export { StrategySelectorDialog };
+export default DialogMultiSelector;
+export { DialogMultiSelectorDialog };

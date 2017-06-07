@@ -1,7 +1,7 @@
 <md-dialog aria-label="add-new-content" class="detail-dialog strategy-selector-dialog">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h3 class="md-title" > Add strategies to {{vm.platformName}}
+      <h3 class="md-title" > Add {{vm.buttonName}} <span ng-show="vm.dialogName">to {{vm.dialogName}}</span>
       </h3>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="vm.cancel()">
@@ -12,7 +12,7 @@
 
   <md-dialog-content>
     <div layout="row">
-      <div class="main-group" ng-repeat="group in vm.availableStrategies">
+      <div class="main-group" ng-repeat="group in vm.elements">
         <div class="header" layout="row">
           <h3>{{group.name}}</h3>
           <span flex></span>
@@ -25,15 +25,15 @@
             </div>
             <div class="body">
               <ul>
-                <li ng-repeat="strategy in subGroup.strategies">
+                <li ng-repeat="item in subGroup[vm.collectionName]">
 
                   <md-checkbox
-                    ng-checked="vm.strategyChecked(strategy)"
-                    ng-click="vm.strategyToggle(strategy)"
+                    ng-checked="vm.itemChecked(item)"
+                    ng-click="vm.itemToggle(item)"
                     md-no-ink
-                    aria-label="{{strategy}}"
+                    aria-label="{{item}}"
                     class="md-primary">
-                    {{strategy}}
+                    {{item}}
                   </md-checkbox>
                 </li>
               </ul>
