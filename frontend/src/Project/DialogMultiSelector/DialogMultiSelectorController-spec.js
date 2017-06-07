@@ -56,32 +56,35 @@ describe('DialogMultiSelectorDialog', () => {
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
 
-    it('should have a watcher function', () => {
-        spyOn(controller, 'setSelected');
-        controller.watchers();
-        expect(controller.setSelected).toHaveBeenCalled();
-    });
 
-    it('should have a fn that set selected group based on input', () => {
+    it('should have a fn that set toggle all group', () => {
         controller.elements = [
             {
                 'name': 'Client',
                 'subGroups': [
-                    {
-                        'name': 'Targeted client communication',
-                        'strategies': [
-                            'Transmit targeted health event alerts to specific population group(s)',
-                            'a',
-                            'Transmit targeted alerts and reminders to a client'
-                        ]
-                    }
+                    {},
+                    {},
+                    {}
+                ]
+            },
+          {
+                'name': 'Provider',
+                'subGroups': [
+                    {},
+                    {},
+                    {}
                 ]
             }
         ];
-        controller.collectionName = 'strategies';
-        expect(controller.elements[0].selected).toBe(undefined);
-        controller.setSelected(['a']);
-        expect(controller.elements[0].selected).toBe(1);
+        controller.toggleAll(controller.elements[0]);
+        expect(controller.elements[0].allOpen).toBe(true);
+        controller.elements[0].subGroups.forEach(sub => {
+            expect(sub.open).toBe(true);
+        });
+        expect(controller.elements[1].allOpen).toBeFalsy();
+        controller.elements[1].subGroups.forEach(sub => {
+            expect(sub.open).toBeFalsy();
+        });
     });
 
     it('should have a cancel function', () => {

@@ -11,25 +11,17 @@ class DialogMultiSelectorDialog {
         this.elements = elements || [];
         this.selection = selection ? selection.slice() : [];
         this.collectionName = collectionName;
-        this.watchers();
-        this.setSelected = this.setSelected.bind(this);
-    }
-
-    watchers() {
-        this.scope.$watchCollection(s => s.vm.selection, this.setSelected.bind(this));
-    }
-
-    setSelected(selection) {
+        this.toggleAll = this.toggleAll.bind(this);
         this.elements.forEach(group => {
-            group.selected = 0;
-            group.subGroups.forEach(subGroup => {
-                subGroup[this.collectionName].forEach(item => {
-                    if (selection.indexOf(item) > -1) {
-                        group.selected += 1;
-                    }
-                });
-            });
+            this.toggleAll(group, true);
         });
+    }
+
+    toggleAll(group, reset) {
+        group.subGroups.forEach(sub => {
+            sub.open = reset ? false : !group.allOpen;
+        });
+        group.allOpen = reset ? false : !group.allOpen;
     }
 
     cancel() {
