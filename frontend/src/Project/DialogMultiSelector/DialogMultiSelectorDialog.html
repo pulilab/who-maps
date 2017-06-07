@@ -1,7 +1,8 @@
 <md-dialog aria-label="add-new-content" class="detail-dialog strategy-selector-dialog">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h3 class="md-title" > Add {{vm.buttonName}} <span ng-show="vm.dialogName">to {{vm.dialogName}}</span>
+      <h3 class="md-title" >
+        Add {{vm.buttonName}} <span ng-show="vm.dialogName">to {{vm.dialogName}}</span>
       </h3>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="vm.cancel()">
@@ -10,14 +11,11 @@
     </div>
   </md-toolbar>
 
-  <md-dialog-content>
-    <div layout="row">
-      <div class="main-group" ng-repeat="group in vm.elements">
-        <div class="header" layout="row">
-          <h3>{{group.name}}</h3>
-          <span flex></span>
-          <span>{{group.selected}} item(s) selected</span>
-
+  <md-dialog-content layout="row"  layout-align="start stretch">
+    <div class="main-group" ng-repeat="group in vm.elements">
+        <div class="header" layout="row" layout-align="start center" layout-wrap  ng-click="vm.toggle(group)">
+          <h4 flex="auto">{{group.name}}</h4>
+          <small>{{group.selected}} item(s)</small>
         </div>
         <div class="body">
           <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
@@ -42,7 +40,6 @@
           </div>
         </div>
       </div>
-    </div>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
