@@ -17,6 +17,12 @@ describe('DialogMultiSelector', () => {
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
 
+    it('should have a watcher function', () => {
+        spyOn(controller, 'openDialog');
+        controller.watchers();
+        expect(controller.openDialog).toHaveBeenCalled();
+    });
+
 
 });
 
