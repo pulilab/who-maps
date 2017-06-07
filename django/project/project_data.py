@@ -475,6 +475,46 @@ project_structure = {
                 ]
             }
         ],
-        "interventions": ["a", "b", "c"],
+        "interventions": [
+            {
+                "name": "Group 1",
+                "subGroups": [
+                    {
+                        "name": "Sub 1",
+                        "interventions": [
+                            "1",
+                            "2",
+                            "3"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Group 2",
+                "subGroups": [
+                    {
+                        "name": "Sub 1.2",
+                        "interventions": [
+                            "1",
+                            "2",
+                            "3"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Group 3",
+                "subGroups": [
+                    {
+                        "name": "Sub 1.3",
+                        "interventions": [
+                            "1",
+                            "2",
+                            "3"
+                        ]
+                    }
+                ]
+            }
+        ],
         "data_exchanges": ["a", "b", "c"]
 }
