@@ -1,6 +1,3 @@
-
-
-
 project_structure = {
         "strategies": [
             {
@@ -560,19 +557,19 @@ project_structure = {
                 "oral health treatment"
             ]},
             {"name": "Unintentional Injuries", "interventions": [
-                "road traffic injuries prevention",
-                "poisonings",
+                "Road traffic injuries prevention",
+                "Poisonings",
                 "Fall-related injuries",
-                "burn-related injuries",
-                "drowning"
+                "Burn-related injuries",
+                "Drowning"
             ]},
             {"name": "Interpersonal Violence", "interventions": [
-                "prevention strategies"
+                "Prevention Strategies"
             ]},
             {"name": "Water Supply, Sanitation, and Hygiene Promotion", "interventions": [
-                "safer water",
-                "hand washing",
-                "hygiene education"
+                "Safer Water",
+                "Hand Washing",
+                "Hygiene Education"
             ]},
             {"name": "Indoor Air Pollution", "interventions": [
                 "Source of pollution",
@@ -609,8 +606,8 @@ project_structure = {
                 "Population-wide measures"
             ]},
             {"name": "Illicit drug use", "interventions": [
-                "voluntary treatment",
-                "involuntary treatment"
+                "Voluntary Treatment",
+                "Involuntary Treatment"
             ]},
             {"name": "Learning and Developmental Disabilities", "interventions": [
                 "Primary prevention to control the underlying cause or condition",
