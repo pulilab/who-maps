@@ -13,7 +13,10 @@ const component = {
         dialogName: '<',
         modalOpen: '=?',
         buttonName: '@',
-        collectionName: '@'
+        collectionName: '@',
+        name: '<',
+        formElement: '<',
+        isRequired: '<'
     }
 };
 

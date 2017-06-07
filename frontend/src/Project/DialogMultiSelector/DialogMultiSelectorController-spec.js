@@ -67,7 +67,7 @@ describe('DialogMultiSelectorDialog', () => {
                     {}
                 ]
             },
-          {
+            {
                 'name': 'Provider',
                 'subGroups': [
                     {},

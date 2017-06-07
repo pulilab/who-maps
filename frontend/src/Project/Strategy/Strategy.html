@@ -43,10 +43,15 @@
             ng-show="platform.name"
             selection="platform.strategies"
             button-name="strategies"
+            is-required="true"
             elements="vm.structure.strategies"
             collection-name="strategies"
+            name="'platforms_'+ $index + '.strategies'"
+            form-element="vm.form['platforms_'+ $index + '.strategies']"
             dialog-name="platform.name">
           </dialog-multi-selector>
+        </div>
+        <div layout="row">
           <div class="add-more-item" flex>
             <div layout="row" layout-align="start end">
               <md-button class="md-primary" aria-label="Add more"
@@ -101,6 +106,8 @@
         selection="vm.project.interventions"
         button-name="interventions"
         elements="vm.structure.interventions"
+        name="'interventions'"
+        form-element="vm.form.interventions"
         collection-name="interventions">
       </dialog-multi-selector>
     </div>

@@ -1,6 +1,26 @@
 @import '../../variables';
 @import '../../mixins';
 
+.hidden-input {
+  display: none !important;
+  border: 0 !important;
+}
+
+.custom-error {
+  color: rgb(221,44,0);
+  font-size: 12px;
+  line-height: 14px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  opacity: 1;
+  margin-top: 0;
+  padding-top: 5px;
+}
+
+.no-border {
+  border: 0;
+}
+
 .strategy-selector-dialog {
 
   &.detail-dialog {
@@ -72,6 +92,7 @@
       outline: none;
     }
   }
+
 
   .body {
     max-height: 100%;
