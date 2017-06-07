@@ -1,0 +1,57 @@
+<md-dialog aria-label="add-new-content" class="detail-dialog strategy-selector-dialog">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3 class="md-title" >
+        Add {{vm.buttonName}} <span ng-show="vm.dialogName">to {{vm.dialogName}}</span>
+      </h3>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="vm.cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content layout="row"  layout-align="start stretch">
+    <div class="main-group" ng-repeat="group in vm.elements">
+        <div class="header" layout="row" layout-align="start center" layout-wrap  ng-click="vm.toggle(group)">
+          <h4 flex="auto">{{group.name}}</h4>
+          <small ng-hide="group.allOpen" ng-click="vm.toggleAll(group)">Open all</small>
+          <small ng-show="group.allOpen" ng-click="vm.toggleAll(group)">Close all</small>
+        </div>
+        <div class="body">
+          <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
+            <div class="sub-header" ng-click="vm.toggle(subGroup)">
+              <i class="material-icons">chevron_right</i>
+              <h6>{{subGroup.name}}</h6>
+            </div>
+            <div class="sub-body">
+              <ul>
+                <li ng-repeat="item in subGroup[vm.collectionName]">
+
+                  <md-checkbox
+                    ng-checked="vm.itemChecked(item)"
+                    ng-click="vm.itemToggle(item)"
+                    md-no-ink
+                    aria-label="{{item}}"
+                    class="md-primary small">
+                    {{item}}
+                  </md-checkbox>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <md-button ng-click="vm.cancel()">
+      Cancel
+    </md-button>
+    <span flex></span>
+    <md-button  class="md-primary md-raised" ng-click="vm.addSelected()">
+      Add selected
+    </md-button>
+  </md-dialog-actions>
+
+</md-dialog>

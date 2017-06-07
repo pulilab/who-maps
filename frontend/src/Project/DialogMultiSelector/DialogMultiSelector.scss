@@ -1,0 +1,174 @@
+@import '../../variables';
+@import '../../mixins';
+
+.hidden-input {
+  display: none !important;
+  border: 0 !important;
+}
+
+.custom-error {
+  color: rgb(221,44,0);
+  font-size: 12px;
+  line-height: 14px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  opacity: 1;
+  margin-top: 0;
+  padding-top: 5px;
+}
+
+.no-border {
+  border: 0;
+}
+
+.strategy-selector-dialog {
+
+  &.detail-dialog {
+    min-width: 720px;
+    width: 80vw;
+    max-width: 1280px;
+  }
+
+  md-dialog-actions {
+    padding: 20px;
+    background-color: $color-gray-lightest;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,.12);
+
+    .md-button {
+      margin: 0;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  md-dialog-content {
+    overflow: hidden;
+
+    > div {
+      position: relative;
+      background-color: $color-white;
+    }
+  }
+
+  .main-group {
+    position: relative !important;
+    width: 33.3333333%;
+    padding-top: 48px;
+    overflow: hidden;
+    box-shadow: -3px 0px 7px rgba(0,0,0,.2);
+
+    // &.closed {
+    //   .body {
+    //     display: none;
+    //   }
+    // }
+  }
+
+  .header {
+    z-index: 10500;
+    position: fixed;
+    top: 56px;
+    overflow: hidden;
+    width: 33.3333333%;
+    height: 48px;
+    outline: none;
+    background-color: #B0BEC5;
+    box-shadow: -3px 0px 7px rgba(0,0,0,.2);
+
+    h4 {
+      font-size: 16px;
+      margin: 0;
+      padding: 0  0 0 20px;
+      color: $color-white;
+      text-transform: uppercase;
+    }
+
+    small {
+      padding: 0 20px 0 0;
+      font-size: 12px;
+      color: $color-white;
+      text-align: right;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+
+
+  .body {
+    max-height: 100%;
+    overflow: auto;
+    background-color: $color-white;
+
+    &::-webkit-scrollbar:vertical {
+      width: 16px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border: 5px solid white;
+    }
+  }
+
+  .sub-group {
+
+    .sub-header {
+      display: block;
+      padding: 10px 20px;
+      cursor: pointer;
+      outline: none;
+      border-bottom: 1px solid $color-gray-lighter;
+
+      i {
+        position: relative;
+        left: -5px;
+        float: left;
+        font-size: 20px;
+        color: $color-gray;
+      }
+
+      h6 {
+        display: inline;
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: $color-gray;
+      }
+
+      h6, i {
+        transition: $swift-ease-out;
+      }
+
+      &:hover {
+        h6, i {
+          color: $text-primary;
+        }
+      }
+    }
+
+    .sub-body {
+      ul {
+        list-style: none;
+        margin: 10px 0 20px;
+      }
+      li {
+        padding: 0 15px 5px 0;
+      }
+    }
+
+    &.open {
+      .sub-header {
+        h6, i {
+          color: $text-primary;
+        }
+        i {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    &.closed {
+      .sub-body {
+        display: none;
+      }
+    }
+  }
+
+}

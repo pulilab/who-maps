@@ -81,9 +81,11 @@ class SetupTests(APITestCase):
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
             "donors": ["donor1", "donor2"],
             "his_bucket": ["tax1", "tax2"],
-            "hsc_challenges": ["challange1", "challange2"],
+            "hsc_challenges": [{"name": "Availability", "challenges": ["challenge1", "challenge2"]},
+                               {"name": "List1", "challenges": ["challenge3", "challenge4"]}],
             "interventions": ["int1", "int2", "int3"],
-            "government_investor": True,
+            "government_approved": True,
+            "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
             "mobile_application": "app1, app2",
@@ -92,7 +94,6 @@ class SetupTests(APITestCase):
                                        {"name": "link2", "selected": True},
                                        {"name": "link3", "selected": True, "link": "http://example.org"}],
             "interoperability_standards": ["CSD - Care Services Discovery"],
-            "data_exchanges": ["de1", "de2"],
             "start_date": str(datetime.today().date()),
             "end_date": str(datetime.today().date())
         }
@@ -118,8 +119,7 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "his_bucket")
         self.assertContains(response, "hsc_challenges")
         self.assertContains(response, "interventions")
-        self.assertContains(response, "data_exchanges")
-        self.assertEqual(len(response.json().keys()), 11)
+        self.assertEqual(len(response.json().keys()), 10)
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-crud")
@@ -141,22 +141,21 @@ class ProjectTests(SetupTests):
             hsc_challenges=[{"object": "not good"}],
             interventions=[{"object": "not good"}],
             interoperability_links=[{"object": "not good"}],
-            data_exchanges=[{"object": "not good"}],
             interoperability_standards=[{"object": "not good"}],
         ))
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(len(response.json().keys()), 10)
+        self.assertEqual(len(response.json().keys()), 9)
         self.assertEqual(response.json()['implementing_partners'][0], 'Not a valid string.')
         self.assertEqual(response.json()['health_focus_areas'][0], 'Not a valid string.')
         self.assertEqual(response.json()['licenses'][0], 'Not a valid string.')
         self.assertEqual(response.json()['donors'][0], 'Not a valid string.')
         self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['hsc_challenges'][0], {'name': ['This field is required.'],
+                                                                'challenges': ['This field is required.']})
         self.assertEqual(response.json()['interventions'][0], 'Not a valid string.')
         self.assertEqual(response.json()['interoperability_links'][0], {'name': ['This field is required.']})
         self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['data_exchanges'][0], 'Not a valid string.')
 
     def test_create_new_project_with_platform_name_missing(self):
         url = reverse("project-crud")
@@ -275,6 +274,14 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
         self.assertEqual(response.json().get("country"), self.country_id)
         self.assertEqual(response.json().get("country_name"), self.country.name)
+
+    def test_retrieve_project_government_details(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertTrue(response.json().get("government_approved"))
+        self.assertTrue(response.json().get("government_investor") in [0, 1, 2])
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")

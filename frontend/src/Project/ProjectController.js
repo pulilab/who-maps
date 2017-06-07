@@ -547,6 +547,12 @@ class ProjectController extends ProjectDefinition {
         keyArray.forEach(key => {
             collection[key] = self.concatCustom(collection[key]);
         });
+
+        collection.platforms.forEach(p => {
+            if (p.custom) {
+                p.name = p.custom;
+            }
+        });
         return Object.assign({}, collection);
     }
 
