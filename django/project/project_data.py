@@ -476,45 +476,42 @@ project_structure = {
             }
         ],
         "interventions": [
-            {
-                "name": "Group 1",
-                "subGroups": [
-                    {
-                        "name": "Sub 1",
-                        "interventions": [
-                            "1",
-                            "2",
-                            "3"
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Group 2",
-                "subGroups": [
-                    {
-                        "name": "Sub 1.2",
-                        "interventions": [
-                            "1",
-                            "2",
-                            "3"
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Group 3",
-                "subGroups": [
-                    {
-                        "name": "Sub 1.3",
-                        "interventions": [
-                            "1",
-                            "2",
-                            "3"
-                        ]
-                    }
-                ]
-            }
-        ],
-        "data_exchanges": ["a", "b", "c"]
+            {"name": "Contraceptives", "interventions": []},
+            {"name": "TB", "interventions": []},
+            {"name": "Sexually Transmitted Infections", "interventions": []},
+            {"name": "HIV/AIDS Prevention and Treatment", "interventions": []},
+            {"name": "Diarrheal Diseases", "interventions": []},
+            {"name": "Vaccine-Preventable Diseases", "interventions": []},
+            {"name": "Malaria", "interventions": []},
+            {"name": "Tropical Diseases", "interventions": []},
+            {"name": "Helminth Infections and Schistosomiasis", "interventions": []},
+            {"name": "Acute Respiratory Infections in Children", "interventions": []},
+            {"name": "Maternal and Perinatal Conditions", "interventions": []},
+            {"name": "Pregnancy Care", "interventions": []},
+            {"name": "Newborn Survival", "interventions": []},
+            {"name": "Stunting, Wasting, and Micronutrient Deficiency Disorders", "interventions": []},
+            {"name": "Integrated Management of the Sick Child", "interventions": []},
+            {"name": "Cancer Control", "interventions": []},
+            {"name": "Diabetes", "interventions": []},
+            {"name": "Mental disorders", "interventions": []},
+            {"name": "Oral Health", "interventions": []},
+            {"name": "Unintentional Injuries", "interventions": []},
+            {"name": "Interpersonal Violence", "interventions": []},
+            {"name": "Water Supply, Sanitation, and Hygiene Promotion", "interventions": []},
+            {"name": "Indoor Air Pollution", "interventions": []},
+            {"name": "Air and Water Pollution", "interventions": []},
+            {"name": "Diet and Lifestyle Changes to prevent chronic disease", "interventions": []},
+            {"name": "Risk from High Blood Pressure, Cholesterol, and Bodyweight", "interventions": []},
+            {"name": "Tobacco Addiction", "interventions": []},
+            {"name": "Alcohol", "interventions": []},
+            {"name": "Illicit drug use", "interventions": []},
+            {"name": "Learning and Developmental Disabilities", "interventions": []},
+            {"name": "Loss of Vision and Hearing", "interventions": []},
+            {"name": "Interventions for Musculoskeletal Conditions", "interventions": []},
+            {"name": "Pain Control", "interventions": []},
+            {"name": "Health of Adolescents and Youth", "interventions": []},
+            {"name": "Occupational Health", "interventions": []},
+            {"name": "Natural Disaster Mitigation and Relief", "interventions": []},
+            {"name": "Emergency Medical Services", "interventions": []}
+        ]
 }
