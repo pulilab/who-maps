@@ -307,9 +307,7 @@ project_structure = {
             "Mirth",
             "MOTECH",
             "ResourceMap",
-            "GeoNode",
-            "Other"
-
+            "GeoNode"
         ],
         "licenses": [
             "Public domain",
