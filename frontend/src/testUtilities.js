@@ -7,6 +7,14 @@ const dialog = {
         if (config.onComplete) {
             config.onComplete();
         }
+        return {
+            then: fn => {
+                fn();
+                return {
+                    catch: fn2 => fn2()
+                };
+            }
+        };
     })
 };
 

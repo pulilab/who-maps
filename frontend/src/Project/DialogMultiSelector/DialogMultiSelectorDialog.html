@@ -15,11 +15,13 @@
     <div class="main-group" ng-repeat="group in vm.elements">
         <div class="header" layout="row" layout-align="start center" layout-wrap  ng-click="vm.toggle(group)">
           <h4 flex="auto">{{group.name}}</h4>
-          <small>{{group.selected}} item(s)</small>
+          <small ng-hide="group.allOpen" ng-click="vm.toggleAll(group)">Open all</small>
+          <small ng-show="group.allOpen" ng-click="vm.toggleAll(group)">Close all</small>
         </div>
         <div class="body">
           <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
             <div class="sub-header" ng-click="vm.toggle(subGroup)">
+              <i class="material-icons">chevron_right</i>
               <h6>{{subGroup.name}}</h6>
             </div>
             <div class="sub-body">
@@ -31,7 +33,7 @@
                     ng-click="vm.itemToggle(item)"
                     md-no-ink
                     aria-label="{{item}}"
-                    class="md-primary">
+                    class="md-primary small">
                     {{item}}
                   </md-checkbox>
                 </li>
