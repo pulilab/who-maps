@@ -20,7 +20,16 @@ class StrategyController extends CollapsibleSet {
             return this.project.platforms;
         }, (platform) => {
             self.setAvailableOptions(platform, self.structure.technology_platforms, 'name');
+            self.addOtherOption(platform);
         }, true);
+    }
+
+    addOtherOption(platform) {
+        platform.forEach(p => {
+            if (p.available.indexOf('Other') === -1) {
+                p.available.push('Other');
+            }
+        });
     }
 
     static strategyControllerFactory() {

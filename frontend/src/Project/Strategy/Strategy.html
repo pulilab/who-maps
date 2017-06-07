@@ -27,6 +27,17 @@
             </div>
           </md-input-container>
         </div>
+        <div layout="row" ng-if="platform.name === 'Other'">
+          <md-input-container class="md-block" flex="50">
+            <label>Specify software name</label>
+            <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
+            ng-required="true">
+            <div ng-messages="vm.form.platform_custom.$error">
+              <div ng-message="required">This is required.</div>
+            </div>
+          </md-input-container>
+
+        </div>
         <div layout="row">
           <dialog-multi-selector
             ng-show="platform.name"
