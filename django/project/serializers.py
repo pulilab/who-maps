@@ -20,7 +20,8 @@ class CoverageSerializer(NDPSerializer):
 
 class PlatformSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128, required=True)
-    strategies = serializers.ListField(max_length=64, min_length=0, allow_empty=True)
+    strategies = serializers.ListField(child=serializers.CharField(max_length=128),
+                                       max_length=64, min_length=0, allow_empty=True)
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
@@ -29,36 +30,51 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     link = serializers.CharField(required=False, max_length=256)
 
 
+class HSCChallengeSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=64)
+    challenges = serializers.ListField(child=serializers.CharField(max_length=128),
+                                       max_length=64, min_length=0, allow_empty=True)
+
+
 class ProjectSerializer(serializers.Serializer):
+    # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
+    country = serializers.IntegerField(min_value=0, max_value=100000)
+    geographic_scope = serializers.CharField(required=False)
+    implementation_overview = serializers.CharField(max_length=512)
+    start_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
-    implementation_overview = serializers.CharField(max_length=512)
+
+    # SECTION 2 Implementation Overview
+    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
+    interventions = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
+    hsc_challenges = HSCChallengeSerializer(many=True, required=True, allow_empty=False)
+    his_bucket = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
+    coverage = CoverageSerializer(many=True, required=False)
+    national_level_deployment = NDPSerializer(required=False)
+    government_approved = serializers.BooleanField()
+    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'),
+                                                           (1, 'Yes, they are contributing in-kind people or time'),
+                                                           (2, 'Yes, there is a financial contribution through MOH budget')])
     implementing_partners = serializers.ListField(child=serializers.CharField(max_length=64),
                                                   max_length=50, min_length=0, required=False)
-    implementation_dates = serializers.CharField(max_length=128)
-    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
-    geographic_scope = serializers.CharField(required=False)
-    country = serializers.IntegerField(min_value=0, max_value=100000)
-    licenses = serializers.ListField(child=serializers.CharField(max_length=64), max_length=16, required=False)  # Can hold 'other' fields
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
-    his_bucket = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
-    hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
-    interventions = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
-    government_investor = serializers.BooleanField()
+
+    # SECTION 3 Technology Overview
+    implementation_dates = serializers.CharField(max_length=128)
+    licenses = serializers.ListField(child=serializers.CharField(max_length=64), max_length=16, required=False)
     repository = serializers.CharField(max_length=200, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
     wiki = serializers.URLField(max_length=200, required=False, allow_blank=True)
+
+    # SECTION 4 Interoperability & Standards
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(child=serializers.CharField(max_length=64),
                                                        required=False, max_length=50)
-    data_exchanges = serializers.ListField(child=serializers.CharField(max_length=64), required=False, max_length=32)
-    coverage = CoverageSerializer(many=True, required=False)
-    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
-    national_level_deployment = NDPSerializer(required=False)
-    start_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
 
 
 class GroupSerializer(serializers.ModelSerializer):
