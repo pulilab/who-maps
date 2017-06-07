@@ -12,8 +12,8 @@
 
   <md-dialog-content>
     <div layout="row">
-      <div class="main-group" ng-class="{open: group.open, closed: !group.open}" ng-repeat="group in vm.availableStrategies">
-        <div class="header" layout="row"  ng-click="vm.toggle(group)">
+      <div class="main-group" ng-repeat="group in vm.availableStrategies">
+        <div class="header" layout="row">
           <h3>{{group.name}}</h3>
           <span flex></span>
           <span>{{group.selected}} item(s) selected</span>
