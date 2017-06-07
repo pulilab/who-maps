@@ -37,11 +37,11 @@
     overflow: hidden;
     box-shadow: -3px 0px 7px rgba(0,0,0,.2);
 
-    &.closed {
-      .body {
-        display: none;
-      }
-    }
+    // &.closed {
+    //   .body {
+    //     display: none;
+    //   }
+    // }
   }
 
   .header {
@@ -51,10 +51,9 @@
     overflow: hidden;
     width: 33.3333333%;
     height: 48px;
-    cursor: pointer;
     outline: none;
     background-color: #B0BEC5;
-    box-shadow: -2px 0px 5px rgba(0,0,0,.2);
+    box-shadow: -3px 0px 7px rgba(0,0,0,.2);
 
     h4 {
       font-size: 16px;
@@ -69,6 +68,8 @@
       font-size: 12px;
       color: $color-white;
       text-align: right;
+      cursor: pointer;
+      outline: none;
     }
   }
 
@@ -86,6 +87,62 @@
   }
 
   .sub-group {
+
+    .sub-header {
+      display: block;
+      padding: 10px 20px;
+      cursor: pointer;
+      outline: none;
+      border-bottom: 1px solid $color-gray-lighter;
+
+      i {
+        position: relative;
+        left: -5px;
+        float: left;
+        font-size: 20px;
+        color: $color-gray;
+      }
+
+      h6 {
+        display: inline;
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: $color-gray;
+      }
+
+      h6, i {
+        transition: $swift-ease-out;
+      }
+
+      &:hover {
+        h6, i {
+          color: $text-primary;
+        }
+      }
+    }
+
+    .sub-body {
+      ul {
+        list-style: none;
+        margin: 10px 0 20px;
+      }
+      li {
+        padding: 0 15px 5px 0;
+      }
+    }
+
+    &.open {
+      .sub-header {
+        h6, i {
+          color: $text-primary;
+        }
+        i {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
     &.closed {
       .sub-body {
         display: none;
