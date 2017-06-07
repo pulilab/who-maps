@@ -89,7 +89,7 @@ class DialogMultiSelector extends Protected {
         });
     }
 
-    showStrategySelector(event) {
+    showModal(event) {
         event.preventDefault();
         this.modalOpen = true;
     }
