@@ -275,6 +275,14 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json().get("country"), self.country_id)
         self.assertEqual(response.json().get("country_name"), self.country.name)
 
+    def test_retrieve_project_government_details(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get("name"), "Test Project1")
+        self.assertTrue(response.json().get("government_approved"))
+        self.assertTrue(response.json().get("government_investor") in [0, 1, 2])
+
     def test_retrieve_project_list(self):
         url = reverse("project-list")
         response = self.test_user_client.get(url)
