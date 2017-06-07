@@ -493,25 +493,124 @@ project_structure = {
             {"name": "Integrated Management of the Sick Child", "interventions": []},
             {"name": "Cancer Control", "interventions": []},
             {"name": "Diabetes", "interventions": []},
-            {"name": "Mental disorders", "interventions": []},
-            {"name": "Oral Health", "interventions": []},
-            {"name": "Unintentional Injuries", "interventions": []},
-            {"name": "Interpersonal Violence", "interventions": []},
-            {"name": "Water Supply, Sanitation, and Hygiene Promotion", "interventions": []},
-            {"name": "Indoor Air Pollution", "interventions": []},
-            {"name": "Air and Water Pollution", "interventions": []},
-            {"name": "Diet and Lifestyle Changes to prevent chronic disease", "interventions": []},
-            {"name": "Risk from High Blood Pressure, Cholesterol, and Bodyweight", "interventions": []},
-            {"name": "Tobacco Addiction", "interventions": []},
-            {"name": "Alcohol", "interventions": []},
-            {"name": "Illicit drug use", "interventions": []},
-            {"name": "Learning and Developmental Disabilities", "interventions": []},
-            {"name": "Loss of Vision and Hearing", "interventions": []},
-            {"name": "Interventions for Musculoskeletal Conditions", "interventions": []},
-            {"name": "Pain Control", "interventions": []},
-            {"name": "Health of Adolescents and Youth", "interventions": []},
-            {"name": "Occupational Health", "interventions": []},
-            {"name": "Natural Disaster Mitigation and Relief", "interventions": []},
-            {"name": "Emergency Medical Services", "interventions": []}
+            {"name": "Mental disorders", "interventions": [
+                "mental health screening",
+                "mental health management and treatment"
+            ]},
+            {"name": "Oral Health", "interventions": [
+                "oral health education and promotion",
+                "oral health treatment"
+            ]},
+            {"name": "Unintentional Injuries", "interventions": [
+                "road traffic injuries prevention",
+                "poisonings",
+                "Fall-related injuries",
+                "burn-related injuries",
+                "drowning"
+            ]},
+            {"name": "Interpersonal Violence", "interventions": [
+                "prevention strategies"
+            ]},
+            {"name": "Water Supply, Sanitation, and Hygiene Promotion", "interventions": [
+                "safer water",
+                "hand washing",
+                "hygiene education"
+            ]},
+            {"name": "Indoor Air Pollution", "interventions": [
+                "Source of pollution",
+                "Improve living environment",
+                "User behaviors"
+            ]},
+            {"name": "Air and Water Pollution", "interventions": [
+                "Interventions to Reduce Air Pollution",
+                "Interventions to Reduce Water Pollution",
+            ]},
+            {"name": "Diet and Lifestyle Changes to prevent chronic disease", "interventions": [
+                "Avoid smoking",
+                "Pursue physical activity",
+                "Avoid overweight",
+                "Educational Interventions",
+                "Worksite Interventions",
+                "Interventions by Health Care Providers",
+                "Promote Walking and Bicycle Riding",
+                "Promoting Healthy Food Choices"
+            ]},
+            {"name": "Risk from High Blood Pressure, Cholesterol, and Bodyweight", "interventions": [
+                "Interventions to Reduce Bodyweight",
+                "Healthy diet (low sodium, high potassium",
+                "Physical activity",
+                "Medications to lower blood pressure"
+            ]},
+            {"name": "Tobacco Addiction", "interventions": [
+                "smoking cessation treatment",
+                "reducing exposure to passive tobacco smoke",
+                "preventing initiation among youths and young adults"
+            ]},
+            {"name": "Alcohol", "interventions": [
+                "Education sessions and psychosocial counseling",
+                "Population-wide measures"
+            ]},
+            {"name": "Illicit drug use", "interventions": [
+                "voluntary treatment",
+                "involuntary treatment"
+            ]},
+            {"name": "Learning and Developmental Disabilities", "interventions": [
+                "Primary prevention to control the underlying cause or condition",
+                "Preventing an existing illness or injury from progressing to long-term disability",
+                "Rehabilitation and special educational services"
+            ]},
+            {"name": "Loss of Vision and Hearing", "interventions": [
+                "Childhood Blindness",
+                "Cataract",
+                "Trachoma",
+                "Onchocerciasis",
+                "Hearing loss screening programs",
+                "Hearing loss education",
+                "Hearing loss surgery",
+                "Hearing loss medications",
+                "Hearing loss assistive devices"
+            ]},
+            {"name": "Interventions for Musculoskeletal Conditions", "interventions": [
+                "Preventive strategies",
+                "Screening",
+                "Symptomatic treatments",
+                "Rheumitoid Arthritis",
+                "Osteoporosis"
+            ]},
+            {"name": "Pain Control", "interventions": [
+                "Opioid treatment",
+                "Non-Opioid treatments and strategies"
+            ]},
+            {"name": "Health of Adolescents and Youth", "interventions": [
+                "School - Based Health and Nutrition Programs",
+                "Youth Friendly Facilities",
+                "Life - skills and health and sexuality education",
+                "Peer education",
+                "Mass media and community mobilization",
+                "Youth development programs",
+                "Social marketing",
+                "Workplace and private sector programs"
+            ]},
+            {"name": "Occupational Health", "interventions": [
+                "Strategies for Improving Working Conditions",
+                "Improvement of Access to Health Care",
+                "Surveillance and Reporting"
+            ]},
+            {"name": "Natural Disaster Mitigation and Relief", "interventions": [
+                "Assessment of the Health Situation",
+                "Mass Casualties Treatment",
+                "Strengthened Surveillance, Prevention, and Control of CommunicableDiseases",
+                "Environmental Health",
+                "Transparent Management of Donations and Supplies",
+                "Coordination of the Humanitarian Health Effort",
+                "Emergency Preparedness of the Health Sector",
+                "Prevention and Mitigation"
+            ]},
+            {"name": "Emergency Medical Services", "interventions": [
+                "Paramedics",
+                "Lay response",
+                "Transportation and communication systems",
+                "Ambulatory systems"
+            ]}
         ]
 }
