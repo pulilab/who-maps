@@ -11,11 +11,14 @@
     </div>
   </md-toolbar>
 
-  <md-dialog-content layout="row"  layout-align="start stretch">
-    <div class="main-group"  ng-class="{open: group.open, closed: !group.open}" ng-repeat="group in vm.availableStrategies">
-        <div class="header" layout="row" layout-align="start center" layout-wrap  ng-click="vm.toggle(group)">
-          <h4 flex="auto">{{group.name}}</h4>
-          <small>{{group.selected}} item(s)</small>
+  <md-dialog-content>
+    <div layout="row">
+      <div class="main-group" ng-repeat="group in vm.availableStrategies">
+        <div class="header" layout="row">
+          <h3>{{group.name}}</h3>
+          <span flex></span>
+          <span>{{group.selected}} item(s) selected</span>
+
         </div>
         <div class="body">
           <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >

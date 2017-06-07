@@ -23,13 +23,6 @@ class StrategyController extends CollapsibleSet {
         }, true);
     }
 
-    platformSelected(p) {
-        if (p.name && (!p.strategies || p.strategies.length === 0)) {
-            console.log('fire in the hole');
-            p.strategySelectorOpen = true;
-        }
-    }
-
     static strategyControllerFactory() {
         require('./Strategy.scss');
         function strategyController($scope, $element) {
