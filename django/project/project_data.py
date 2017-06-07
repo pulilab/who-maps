@@ -476,45 +476,198 @@ project_structure = {
             }
         ],
         "interventions": [
-            {
-                "name": "Group 1",
-                "subGroups": [
-                    {
-                        "name": "Sub 1",
-                        "interventions": [
-                            "1",
-                            "2",
-                            "3"
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Group 2",
-                "subGroups": [
-                    {
-                        "name": "Sub 1.2",
-                        "interventions": [
-                            "1",
-                            "2",
-                            "3"
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Group 3",
-                "subGroups": [
-                    {
-                        "name": "Sub 1.3",
-                        "interventions": [
-                            "1",
-                            "2",
-                            "3"
-                        ]
-                    }
-                ]
-            }
-        ],
-        "data_exchanges": ["a", "b", "c"]
+            {"name": "Contraceptives", "interventions": ['Counseling', 'Permanent and Long-Term Methods',
+                                                         'Temporary Methods', 'Emergency Contraception', 'Social Marketing']},
+            {"name": "TB", "interventions": ['preventing infection',
+                                             'stopping progression from infection to active disease',
+                                             'treating active disease']},
+            {"name": "Sexually Transmitted Infections", "interventions": ['Preventing Acquisition',
+                                                                          'Preventing Transmission',
+                                                                          'Preventing Complications']},
+            {"name": "HIV/AIDS Prevention and Treatment", "interventions": ['HIV testing and diagnosis',
+                                                                            'Palliative Care',
+                                                                            'Prevention, Treatment of opportunistic infections',
+                                                                            'Antiretroviral therapy',
+                                                                            'Prevention']},
+            {"name": "Diarrheal Diseases", "interventions": ['Breastfeeding promotion',
+                                                             'Water supply and sanitation improvement',
+                                                             'Oral rehydration therapy',
+                                                             'Zinc']},
+            {"name": "Vaccine-Preventable Diseases", "interventions": ['national immunization program',
+                                                                       'fixed facility',
+                                                                       'campaign',
+                                                                       'mobile',
+                                                                       'outreach']},
+            {"name": "Malaria", "interventions": ['Prompt access to effective treatment',
+                                                  'Provision of Insecticide treated nets',
+                                                  'Prevention and control of malaria in pregnant women',
+                                                  'Epidemic and emergency response',
+                                                  'Malaria vaccine',
+                                                  'Malaria prophylaxis treatment',
+                                                  'Residual spraying']},
+            {"name": "Tropical Diseases", "interventions": ['Chagas Disease', 'Lymphatic Filariasis', 'Onchocerciasis',
+                                                            'Leprosy', 'Dengue', 'Leishmaniasis', 'African Trypanosomiasis']},
+            {"name": "Helminth Infections and Schistosomiasis", "interventions": ['Anthelmintic Drug Treatment',
+                                                                                  'Improved Sanitation',
+                                                                                  'Health Education']},
+            {"name": "Acute Respiratory Infections in Children", "interventions": ['vaccines', 'case management']},
+            {"name": "Maternal and Perinatal Conditions", "interventions": ['Fertility behavior change',
+                                                                            'Nutritional Interventions',
+                                                                            'Routine prenatal care at the primary level',
+                                                                            'Delivery care at the primary level',
+                                                                            'postpartum care',
+                                                                            'postabortion care',
+                                                                            'CEmOC package at the secondary level',
+                                                                            'mental health screening']},
+            {"name": "Pregnancy Care", "interventions": ['birth preparedness', 'male involvement', 'Immunizations',
+                                                         'Malaria prevention', 'Micronutrients', 'Hypertension and NCD screening']},
+            {"name": "Newborn Survival", "interventions": ['Family - Prepregnancy health and nutrition',
+                                                           'Family - Counseling and preparation for newborn care and breastfeeding',
+                                                           'Family - Emergency preparedness',
+                                                           'Outreach - Prenatal care package',
+                                                           'Family - Clean delivery at community level',
+                                                           'Family - Simple early newborn care at community level',
+                                                           'Family - Healthy home care including breastfeeding promotion, hygienic cord and skin care, thermal care, promotion of demand for quality care',
+                                                           'Family - extra care of small babies and case management of pneumonia',
+                                                           'Outreach - Postnatal care to support healthy practices',
+                                                           'Outreach - Early detection and referral of complications',
+                                                           'Clinical - Skilled obstetric and immediate newborn care including resuscitation',
+                                                           'Clinical - Emergency obstetric care to manage complications such as obstructed labor and hemorrhage',
+                                                           'Clinical - Emergency newborn care for illness, especially sepsis management',
+                                                           'Clinical - Extra care of very low birth weight babies including kangaroo mother care']},
+            {"name": "Stunting, Wasting, and Micronutrient Deficiency Disorders", "interventions": ['Promotion of Optimal Feeding of Infants and Young Children',
+                                                                                                    'Vitamin A deficiency',
+                                                                                                    'Iron deficiency',
+                                                                                                    'Zinc deficiency',
+                                                                                                    'Growth monitoring and counselling']},
+            {"name": "Integrated Management of the Sick Child", "interventions": ['Integrated Intervention focused on ARI, diarrhea, malaria , and malnutrition',
+                                                                                  'Integrated community interventions to improve nutrition, including breastfeeding promotion and complementary feeding; insecticide-impregnated bednets; anthelmintic treatment; vaccinations; and micronutrient supplementation.']},
+            {"name": "Cancer Control", "interventions": ['Immunizations (e.g., HBV, HPV)',
+                                                         'Tobacco Control',
+                                                         'Alcohol Control',
+                                                         'Dietary and Related Interventions',
+                                                         'Pharmacological Interventions',
+                                                         'Cancer Screening',
+                                                         'Cancer Treatment and Palliative Care']},
+            {"name": "Diabetes", "interventions": ['prevention', 'screening', 'management']},
+            {"name": "Mental disorders", "interventions": [
+                "mental health screening",
+                "mental health management and treatment"
+            ]},
+            {"name": "Oral Health", "interventions": [
+                "oral health education and promotion",
+                "oral health treatment"
+            ]},
+            {"name": "Unintentional Injuries", "interventions": [
+                "road traffic injuries prevention",
+                "poisonings",
+                "Fall-related injuries",
+                "burn-related injuries",
+                "drowning"
+            ]},
+            {"name": "Interpersonal Violence", "interventions": [
+                "prevention strategies"
+            ]},
+            {"name": "Water Supply, Sanitation, and Hygiene Promotion", "interventions": [
+                "safer water",
+                "hand washing",
+                "hygiene education"
+            ]},
+            {"name": "Indoor Air Pollution", "interventions": [
+                "Source of pollution",
+                "Improve living environment",
+                "User behaviors"
+            ]},
+            {"name": "Air and Water Pollution", "interventions": [
+                "Interventions to Reduce Air Pollution",
+                "Interventions to Reduce Water Pollution",
+            ]},
+            {"name": "Diet and Lifestyle Changes to prevent chronic disease", "interventions": [
+                "Avoid smoking",
+                "Pursue physical activity",
+                "Avoid overweight",
+                "Educational Interventions",
+                "Worksite Interventions",
+                "Interventions by Health Care Providers",
+                "Promote Walking and Bicycle Riding",
+                "Promoting Healthy Food Choices"
+            ]},
+            {"name": "Risk from High Blood Pressure, Cholesterol, and Bodyweight", "interventions": [
+                "Interventions to Reduce Bodyweight",
+                "Healthy diet (low sodium, high potassium",
+                "Physical activity",
+                "Medications to lower blood pressure"
+            ]},
+            {"name": "Tobacco Addiction", "interventions": [
+                "smoking cessation treatment",
+                "reducing exposure to passive tobacco smoke",
+                "preventing initiation among youths and young adults"
+            ]},
+            {"name": "Alcohol", "interventions": [
+                "Education sessions and psychosocial counseling",
+                "Population-wide measures"
+            ]},
+            {"name": "Illicit drug use", "interventions": [
+                "voluntary treatment",
+                "involuntary treatment"
+            ]},
+            {"name": "Learning and Developmental Disabilities", "interventions": [
+                "Primary prevention to control the underlying cause or condition",
+                "Preventing an existing illness or injury from progressing to long-term disability",
+                "Rehabilitation and special educational services"
+            ]},
+            {"name": "Loss of Vision and Hearing", "interventions": [
+                "Childhood Blindness",
+                "Cataract",
+                "Trachoma",
+                "Onchocerciasis",
+                "Hearing loss screening programs",
+                "Hearing loss education",
+                "Hearing loss surgery",
+                "Hearing loss medications",
+                "Hearing loss assistive devices"
+            ]},
+            {"name": "Interventions for Musculoskeletal Conditions", "interventions": [
+                "Preventive strategies",
+                "Screening",
+                "Symptomatic treatments",
+                "Rheumitoid Arthritis",
+                "Osteoporosis"
+            ]},
+            {"name": "Pain Control", "interventions": [
+                "Opioid treatment",
+                "Non-Opioid treatments and strategies"
+            ]},
+            {"name": "Health of Adolescents and Youth", "interventions": [
+                "School - Based Health and Nutrition Programs",
+                "Youth Friendly Facilities",
+                "Life - skills and health and sexuality education",
+                "Peer education",
+                "Mass media and community mobilization",
+                "Youth development programs",
+                "Social marketing",
+                "Workplace and private sector programs"
+            ]},
+            {"name": "Occupational Health", "interventions": [
+                "Strategies for Improving Working Conditions",
+                "Improvement of Access to Health Care",
+                "Surveillance and Reporting"
+            ]},
+            {"name": "Natural Disaster Mitigation and Relief", "interventions": [
+                "Assessment of the Health Situation",
+                "Mass Casualties Treatment",
+                "Strengthened Surveillance, Prevention, and Control of CommunicableDiseases",
+                "Environmental Health",
+                "Transparent Management of Donations and Supplies",
+                "Coordination of the Humanitarian Health Effort",
+                "Emergency Preparedness of the Health Sector",
+                "Prevention and Mitigation"
+            ]},
+            {"name": "Emergency Medical Services", "interventions": [
+                "Paramedics",
+                "Lay response",
+                "Transportation and communication systems",
+                "Ambulatory systems"
+            ]}
+        ]
 }
