@@ -34,7 +34,7 @@ class TopBar extends Protected {
     }
 
     showNewProjectButton() {
-        return this.profileDataReady && this.userProfile.account_type === 'I' && this.hasProfile();
+        return this.profileDataReady && this.hasProfile();
     }
 
     showPlanningAndGuidanceButton() {
