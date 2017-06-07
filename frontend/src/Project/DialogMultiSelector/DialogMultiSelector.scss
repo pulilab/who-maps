@@ -3,8 +3,11 @@
 
 .strategy-selector-dialog {
 
-  min-width: 720px;
-  max-width: 1280px;
+  &.detail-dialog {
+    min-width: 720px;
+    width: 80vw;
+    max-width: 1280px;
+  }
 
   md-dialog-actions {
     padding: 20px;
@@ -18,12 +21,21 @@
     }
   }
 
-  .header {
-      cursor: pointer;
-      outline: none;
+  md-dialog-content {
+    overflow: hidden;
+
+    > div {
+      position: relative;
+      background-color: $color-white;
     }
+  }
 
   .main-group {
+    position: relative !important;
+    width: 33.3333333%;
+    padding-top: 48px;
+    overflow: hidden;
+    box-shadow: -3px 0px 7px rgba(0,0,0,.2);
 
     &.closed {
       .body {
@@ -32,10 +44,50 @@
     }
   }
 
-  .sub-group {
+  .header {
+    z-index: 10500;
+    position: fixed;
+    top: 56px;
+    overflow: hidden;
+    width: 33.3333333%;
+    height: 48px;
+    cursor: pointer;
+    outline: none;
+    background-color: #B0BEC5;
+    box-shadow: -2px 0px 5px rgba(0,0,0,.2);
 
+    h4 {
+      font-size: 16px;
+      margin: 0;
+      padding: 0  0 0 20px;
+      color: $color-white;
+      text-transform: uppercase;
+    }
+
+    small {
+      padding: 0 20px 0 0;
+      font-size: 12px;
+      color: $color-white;
+      text-align: right;
+    }
+  }
+
+  .body {
+    max-height: 100%;
+    overflow: auto;
+    background-color: $color-white;
+
+    &::-webkit-scrollbar:vertical {
+      width: 16px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border: 5px solid white;
+    }
+  }
+
+  .sub-group {
     &.closed {
-      .body {
+      .sub-body {
         display: none;
       }
     }

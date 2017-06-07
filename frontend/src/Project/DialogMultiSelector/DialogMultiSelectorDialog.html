@@ -17,13 +17,14 @@
           <h3>{{group.name}}</h3>
           <span flex></span>
           <span>{{group.selected}} item(s) selected</span>
+
         </div>
         <div class="body">
           <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
-            <div class="header" ng-click="vm.toggle(subGroup)">
-              <h4>{{subGroup.name}}</h4>
+            <div class="sub-header" ng-click="vm.toggle(subGroup)">
+              <h6>{{subGroup.name}}</h6>
             </div>
-            <div class="body">
+            <div class="sub-body">
               <ul>
                 <li ng-repeat="item in subGroup[vm.collectionName]">
 
