@@ -60,10 +60,10 @@ class DialogMultiSelectorDialog {
         return false;
     }
 
-    static factory(buttonName, elements, strategies, collectionName, dialogName) {
+    static factory(buttonName, elements, selection, collectionName, dialogName) {
         function strategySelector($scope, $mdDialog) {
             return new DialogMultiSelectorDialog($scope, $mdDialog, buttonName,
-              elements, strategies, collectionName, dialogName);
+              elements, selection, collectionName, dialogName);
         }
 
         strategySelector.$inject = ['$scope', '$mdDialog'];
