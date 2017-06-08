@@ -424,15 +424,16 @@ class ProjectController extends ProjectDefinition {
             'mobile_application': '',
             'implementing_partners': [
             ],
-            'data_exchanges': [],
             'his_bucket': [
-                'a'
+                'Client applications'
             ],
             'hsc_challenges': [
-                'b'
+                'Delayed reporting of events',
+                'Lack of population denominator'
             ],
             'interventions': [],
-            'government_investor': false,
+            'government_approved': false,
+            'government_investor': 0,
             'national_level_deployment': {
                 'health_workers': 2,
                 'facilities': 2,
