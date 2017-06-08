@@ -1,6 +1,5 @@
 import angular from 'angular';
 import newProjectComponent from './projectComponent';
-import additionalInfo from './AdditionalInfo/additionalInfoComponent';
 import interoperability from './Interoperability/interoperabilityComponent';
 import navigation from './Navigation/navigationComponent';
 import projectDetails from './ProjectDetails/projectDetailsComponent';
@@ -13,7 +12,6 @@ const moduleName = 'Project';
 
 angular.module(moduleName, [])
     .component(newProjectComponent.name, newProjectComponent)
-    .component(additionalInfo.name, additionalInfo)
     .component(interoperability.name, interoperability)
     .component(navigation.name, navigation)
     .component(projectDetails.name, projectDetails)
