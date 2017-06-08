@@ -15,11 +15,9 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
     bindFunctions() {
-        this.fetchDistricts = this.fetchDistricts.bind(this);
         this.getUsers = this.getUsers.bind(this);
         this.checkName = this.checkName.bind(this);
         this.validateDateRange = this.validateDateRange.bind(this);
-        this.validateCoverage = this.validateCoverage.bind(this);
     }
 
     onInit() {
@@ -27,16 +25,11 @@ class ProjectDetailsController extends CollapsibleSet {
         this.bindFunctions();
         this.watchers();
         this.getStructureData();
-        this.districtList = [];
         this.projectList = [];
     }
 
     watchers() {
         const self = this;
-        self.scope.$watch(() => {
-            return this.project.country;
-        }, self.fetchDistricts);
-
         self.scope.$watch(() => {
             return this.project.name;
         }, name => {
@@ -48,20 +41,6 @@ class ProjectDetailsController extends CollapsibleSet {
         }, () => {
             return this.project.end_date;
         }], self.validateDateRange);
-
-        self.scope.$watch(()=>{
-            return this.project.coverage;
-        }, () => {
-            self.observeCoverage = {};
-        }, true);
-
-        self.scope.$watchGroup([() => {
-            return this.observeCoverage;
-        }, () => {
-            return this.districtList;
-        }], ([, districts]) => {
-            self.setAvailableOptions(self.project.coverage, districts, 'district');
-        });
     }
 
     validateDateRange([start, end]) {
@@ -79,6 +58,7 @@ class ProjectDetailsController extends CollapsibleSet {
             this.handleCustomError('end_date');
         }
     }
+
     getStructureData() {
         const self = this;
         this.ccs.getCountries().then(data => {
@@ -96,25 +76,6 @@ class ProjectDetailsController extends CollapsibleSet {
             }
             return false;
         });
-    }
-
-
-    fetchDistricts(country) {
-        const self = this;
-        if (country) {
-            self.ccs.getCountryDistricts(country)
-                .then(self.handleDistrictData.bind(self));
-        }
-    }
-
-    handleDistrictData(data) {
-        this.project.coverage.forEach(cov => {
-            if (data.indexOf(cov.district) === -1) {
-                cov.district = undefined;
-            }
-        });
-        this.districtList = data;
-        this.scope.$evalAsync();
     }
 
     handleCustomError(key) {
@@ -152,35 +113,6 @@ class ProjectDetailsController extends CollapsibleSet {
                     self.scope.$evalAsync();
                 });
         }
-    }
-
-    validateCoverage(current, item) {
-
-        let nld;
-        if (this.project.national_level_deployment) {
-            nld = [
-                this.project.national_level_deployment.health_workers,
-                this.project.national_level_deployment.facilities,
-                this.project.national_level_deployment.clients
-            ];
-        }
-        else {
-            nld = [null];
-        }
-
-        if (current === 'nld' && this.project.national_level_deployment) {
-            return _.some(nld);
-        }
-        else if (current === 'dld') {
-            return _.some([
-                item.district,
-                !_.isNil(item.health_workers),
-                !_.isNil(item.facilities),
-                !_.isNil(item.clients),
-                _.every(nld, _.isNull)
-            ]);
-        }
-        return false;
     }
 
     openSimilarProject(project, event) {
