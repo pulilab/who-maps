@@ -14,7 +14,7 @@
           ng-if="field.type === 1"
           class="md-block string-field">
           <label>{{field.question}}</label>
-          <input type="text" ng-required="true" name="custom{{$index}}" ng-model="field.answer">
+          <input type="text" ng-required="true" md-maxlength="1000" name="custom{{$index}}" ng-model="field.answer">
           <div ng-messages="vm.form['custom' + $index].$error">
             <div ng-message="required">This is required.</div>
           </div>
