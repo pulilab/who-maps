@@ -4,22 +4,17 @@
     <ul>
       <li class="project-details active">
         <a ng-click="vm.scrollTo('project-details')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Project details
+          <span><i class="material-icons">&#xE5C8;</i></span>General
         </a>
       </li>
       <li class="strategy">
         <a ng-click="vm.scrollTo('strategy')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Strategies
+          <span><i class="material-icons">&#xE5C8;</i></span>Implementation
         </a>
       </li>
       <li class="technology">
         <a ng-click="vm.scrollTo('technology')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Technologies
-        </a>
-      </li>
-      <li class="additional-info">
-        <a ng-click="vm.scrollTo('additional-info')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Additional info
+          <span><i class="material-icons">&#xE5C8;</i></span>Technology
         </a>
       </li>
       <li class="interoperability">
@@ -36,8 +31,7 @@
   </div>
   <div layout="column" class="edit-buttons">
     <div layout="row" layout-align="center start" class="primary-buttons">
-      <md-button type="submit" ng-show="!vm.editMode" class="md-primary md-raised">Add new project</md-button>
-      <md-button type="submit" ng-show="vm.editMode" class="md-primary md-raised">Save Project info</md-button>
+      <md-button type="submit" class="md-primary md-raised">Save project</md-button>
     </div>
     <div layout="row" layout-align="center start" class="primary-buttons">
       <md-button type="submit" ng-click="vm.setAddAnother()" class="md-primary">Save &amp; add another</md-button>
