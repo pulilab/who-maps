@@ -30,12 +30,6 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     link = serializers.CharField(required=False, max_length=256)
 
 
-class HSCChallengeSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=64)
-    challenges = serializers.ListField(child=serializers.CharField(max_length=128),
-                                       max_length=64, min_length=0, allow_empty=True)
-
-
 class ProjectSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
@@ -52,7 +46,8 @@ class ProjectSerializer(serializers.Serializer):
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
     health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
     interventions = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64, required=False)
-    hsc_challenges = HSCChallengeSerializer(many=True, required=True, allow_empty=False)
+    hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=128),
+                                           max_length=64, min_length=0, allow_empty=True)
     his_bucket = serializers.ListField(child=serializers.CharField(max_length=64), max_length=64)
     coverage = CoverageSerializer(many=True, required=False)
     national_level_deployment = NDPSerializer(required=False)

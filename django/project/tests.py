@@ -81,8 +81,7 @@ class SetupTests(APITestCase):
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
             "donors": ["donor1", "donor2"],
             "his_bucket": ["tax1", "tax2"],
-            "hsc_challenges": [{"name": "Availability", "challenges": ["challenge1", "challenge2"]},
-                               {"name": "List1", "challenges": ["challenge3", "challenge4"]}],
+            "hsc_challenges": ["challenge1", "challenge2"],
             "interventions": ["int1", "int2", "int3"],
             "government_approved": True,
             "government_investor": 0,
@@ -151,8 +150,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['licenses'][0], 'Not a valid string.')
         self.assertEqual(response.json()['donors'][0], 'Not a valid string.')
         self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['hsc_challenges'][0], {'name': ['This field is required.'],
-                                                                'challenges': ['This field is required.']})
+        self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
         self.assertEqual(response.json()['interventions'][0], 'Not a valid string.')
         self.assertEqual(response.json()['interoperability_links'][0], {'name': ['This field is required.']})
         self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
