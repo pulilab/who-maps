@@ -15,6 +15,7 @@ class DialogMultiSelectorDialog {
         this.elements.forEach(group => {
             this.toggleAll(group, true);
         });
+        this.dialogClass = 'column-' + this.elements.length;
     }
 
     toggleAll(group, reset) {
