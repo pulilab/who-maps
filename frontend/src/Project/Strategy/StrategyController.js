@@ -9,6 +9,7 @@ class StrategyController extends CollapsibleSet {
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
         this.setAvailableOptions = this.setAvailableOptions.bind(this);
+        this.mapInterventions = this.mapInterventions.bind(this);
     }
 
     onInit() {
@@ -17,6 +18,7 @@ class StrategyController extends CollapsibleSet {
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.watchers();
+        this.interventions = this.mapInterventions();
     }
 
     watchers() {
@@ -53,6 +55,13 @@ class StrategyController extends CollapsibleSet {
                 p.available.push('Other');
             }
         });
+    }
+
+    mapInterventions() {
+        return [{
+            name: '',
+            subGroups: this.structure.interventions
+        }];
     }
 
     validateCoverage(current, item) {
