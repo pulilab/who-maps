@@ -5,9 +5,9 @@
     <li ng-repeat="item in vm.selection">{{item}}</li>
   </ul>
   <md-button ng-show="vm.selection.length > 0" class="edit-button" md-no-ink ng-click="vm.showModal($event)">
-    <md-icon>create</md-icon> Edit
+    <md-icon>create</md-icon> Edit {{vm.buttonName}}
   </md-button>
-  <md-button class="add-button" ng-hide="vm.strategies.length > 0" md-no-ink ng-click="vm.showModal($event)">
+  <md-button class="add-button" ng-hide="vm.elements.length === 0 || vm.selection.length > 0" md-no-ink ng-click="vm.showModal($event)">
     <md-icon>playlist_add_check</md-icon> Add {{vm.buttonName}}
   </md-button>
   <md-input-container class="no-border">
