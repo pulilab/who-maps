@@ -1,4 +1,12 @@
 @import '../../variables';
 @import '../../mixins';
 
-.section-technology {}
+.section-technology {
+  .section-wrapper {
+    md-input-container {
+      &:first-child {
+        width: 50%;
+      }
+    }
+  }
+}

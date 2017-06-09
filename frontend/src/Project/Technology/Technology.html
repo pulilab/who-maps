@@ -5,7 +5,7 @@
   </div>
 
   <div class="section-wrapper">
-    <md-input-container class="md-block" flex="50">
+    <md-input-container class="md-block first">
       <label>Technology deployment date</label>
       <md-datepicker
         ng-model="vm.project.implementation_dates"
@@ -36,17 +36,17 @@
           </md-checkbox>
         </li>
         <li>
-            <span layout="row">
-              <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
-              <md-input-container class="md-block" flex>
-                <label>Specify other</label>
-                <input ng-required="vm.customLicense"
-                       md-maxlength="64"
-                       name="licenses"
-                       ng-model="vm.project.licenses.custom"
-                       ng-disabled="!vm.customLicense">
-              </md-input-container>
-            </span>
+          <span layout="row">
+            <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
+            <md-input-container class="md-block" flex>
+              <label>Specify other</label>
+              <input ng-required="vm.customLicense"
+                     md-maxlength="64"
+                     name="licenses"
+                     ng-model="vm.project.licenses.custom"
+                     ng-disabled="!vm.customLicense">
+            </md-input-container>
+          </span>
         </li>
       </ul>
     </div>

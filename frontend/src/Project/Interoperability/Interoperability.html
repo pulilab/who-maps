@@ -7,8 +7,9 @@
 
   <div class="section-wrapper">
 
-    <h6 >Does your digital health project link to a digital HIS?</h6>
-    <md-input-container class="error-placeholder">
+    <h6>Does your digital health project link to a digital HIS?</h6>
+
+    <md-input-container class="md-block error-placeholder">
       <input  name="interoperability_links" ng-model="vm.hiddenFields" aria-label="hidden">
       <div ng-messages="vm.form.interoperability_links.$error">
         <div ng-message="custom">
@@ -18,12 +19,13 @@
         </div>
       </div>
     </md-input-container>
+
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
       <md-checkbox ng-init="vm.project.interoperability_links[$index].name = link.name"
                    md-no-ink aria-label=""
                    ng-model="vm.project.interoperability_links[$index].selected"
                    class="md-primary" flex>
-        {{link.pre}}{{link.name}}.
+        {{link.pre}}{{link.name}}
       </md-checkbox>
       <md-input-container class="md-icon-float md-block" flex>
         <label>Specify URL</label>
@@ -56,25 +58,24 @@
           </md-checkbox>
         </li>
         <li>
-              <span layout="row">
-                <md-checkbox md-no-ink aria-label="other-standard"
-                             ng-model="vm.specifyOtherStandard"
-                             class="md-primary"
-                             flex="nogrow">
-                </md-checkbox>
-                <md-input-container class="md-block" flex>
-                  <label>Specify other</label>
-                  <input ng-disabled="!vm.specifyOtherStandard"
-                         ng-required="vm.specifyOtherStandard"
-                         md-maxlength="64"
-                         name="data.c18"
-                         ng-model="vm.project.interoperability_standards.custom">
-                </md-input-container>
-              </span>
+          <span layout="row">
+            <md-checkbox md-no-ink aria-label="other-standard"
+                         ng-model="vm.specifyOtherStandard"
+                         class="md-primary"
+                         flex="nogrow">
+            </md-checkbox>
+            <md-input-container class="md-block" flex>
+              <label>Specify other</label>
+              <input ng-disabled="!vm.specifyOtherStandard"
+                     ng-required="vm.specifyOtherStandard"
+                     md-maxlength="64"
+                     name="data.c18"
+                     ng-model="vm.project.interoperability_standards.custom">
+            </md-input-container>
+          </span>
         </li>
       </ul>
 
     </div>
   </div>
-
 </div>
