@@ -6,9 +6,8 @@
   </div>
 
   <div class="section-wrapper">
-
     <div layout="row" class="first">
-      <md-input-container class="md-block" flex="50">
+      <md-input-container flex="60">
         <label>Project name</label>
         <input md-maxlength="100" required name="name"
                ng-model="vm.project.name"
@@ -24,7 +23,7 @@
           </div>
         </div>
       </md-input-container>
-      <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="50">
+      <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="40">
         <span class="similar-label">Similar Project name(s)</span>
         <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
           <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a><span ng-if="!$last">, </span>
@@ -34,14 +33,14 @@
 
     <div layout="row">
       <organisation-autocomplete
-        flex="50"
+        flex="60"
         organisation="vm.project.organisation"
         form="vm.form">
       </organisation-autocomplete>
     </div>
 
     <div layout="row">
-      <md-input-container class="md-icon-float md-block" flex="40">
+      <md-input-container class="md-icon-float" flex="60">
         <label>Project country</label>
         <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
         <md-select ng-model="vm.project.country" name="country" required>
@@ -77,7 +76,7 @@
       </div>
     </md-input-container>
 
-  <md-input-container class="md-block">
+    <md-input-container class="md-block">
       <label>Overview of the digital health implementation</label>
       <textarea ng-model="vm.project.implementation_overview"
                 md-maxlength="500"
@@ -96,7 +95,8 @@
       </div>
     </md-input-container>
 
-      <md-input-container>
+    <div layout="row">
+      <md-input-container flex>
         <label>Project start date</label>
         <md-datepicker
           ng-model="vm.project.start_date"
@@ -111,9 +111,9 @@
             </div>
           </div>
         </div>
-      </md-input-container>
+        </md-input-container>
 
-      <md-input-container>
+        <md-input-container flex>
         <label>Project end date</label>
         <md-datepicker
           ng-model="vm.project.end_date"
@@ -129,9 +129,10 @@
           </div>
         </div>
       </md-input-container>
+    </div>
 
-          <div layout="row" class="first">
-      <md-input-container class="md-block" flex>
+    <div layout="row">
+      <md-input-container flex>
         <label>Contact name</label>
         <input required name="contact_name" ng-model="vm.project.contact_name"
         md-maxlength="250">
@@ -146,9 +147,8 @@
         </div>
       </md-input-container>
 
-      <md-input-container class="md-icon-float md-block" flex>
+      <md-input-container flex>
         <label>Contact email</label>
-        <md-icon><i class="material-icons">&#xE0BE;</i></md-icon>
         <input required name="contact_email"
                ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
                md-minlength="4"
