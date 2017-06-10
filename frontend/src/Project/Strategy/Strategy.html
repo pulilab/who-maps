@@ -7,10 +7,10 @@
   <div class="section-wrapper">
     <h6 class="first">Add one or more Software and related Digital Health Interventions (DHI):</h6>
 
-    <div class="input-group" ng-class="{last: $last}" ng-repeat="platform in vm.project.platforms">
-      <div layout="column" >
+    <div class="input-group" ng-repeat="platform in vm.project.platforms">
+      <div layout="column">
         <div layout="row">
-          <md-input-container class="md-block" flex="50">
+          <md-input-container flex="50">
             <label>Software (select from list)</label>
             <md-select ng-model="platform.name" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.name' }}" required >
               <md-option ng-value="plat" ng-repeat="plat in platform.available">
@@ -28,7 +28,7 @@
           </md-input-container>
         </div>
         <div layout="row" ng-if="platform.name === 'Other'">
-          <md-input-container class="md-block" flex="50">
+          <md-input-container flex="50">
             <label>Specify software name</label>
             <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
             ng-required="true">
@@ -71,8 +71,8 @@
     </div>
   </div>
 
-<div class="section-wrapper">
-    <div class="checklist small-margin">
+  <div class="section-wrapper">
+    <div class="checklist no-margin">
       <h6>Select health focus area(s):</h6>
       <ul>
         <li ng-repeat="d in vm.structure.health_focus_areas">
@@ -87,7 +87,7 @@
         <li>
             <span layout="row">
               <md-checkbox md-no-ink aria-label="custom-health-focus-area" ng-model="vm.customHealthFocusArea" class="md-primary" flex="nogrow"></md-checkbox>
-              <md-input-container class="md-block" flex>
+              <md-input-container flex>
                 <label>Specify other</label>
                 <input ng-required="vm.customHealthFocusArea"
                        name="heathFocusArea.spectype"
@@ -99,12 +99,12 @@
         </li>
       </ul>
     </div>
-</div>
+  </div>
 
   <div class="section-wrapper">
 
-    <div layout="row">
-      <label>Essential interventions</label>
+    <div class="essential md-block">
+      <h6>Essential interventions</h6>
       <dialog-multi-selector
         selection="vm.project.interventions"
         button-name="essential interventions"
@@ -115,9 +115,8 @@
       </dialog-multi-selector>
     </div>
 
-
     <div layout="row">
-      <md-input-container class="md-block" flex>
+      <md-input-container flex>
         <label>HSC challenges (select from list)</label>
         <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc" required multiple>
           <md-optgroup label="{{hsc.name}}" ng-repeat="hsc in vm.structure.hsc_challenges">
@@ -132,8 +131,8 @@
       </md-input-container>
     </div>
 
-          <div layout="row">
-      <md-input-container class="md-block" flex>
+    <div layout="row" class="extra-margin">
+      <md-input-container flex>
         <label>HIS buckets (select from list)</label>
         <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his" required multiple>
           <md-option value="{{his}}" ng-repeat="his in vm.structure.his_bucket">
@@ -153,7 +152,7 @@
     <div class="input-group" ng-repeat="cov in vm.project.coverage">
       <div layout="column">
         <div layout="row">
-          <md-input-container class="md-block district" flex="50">
+          <md-input-container class="district" flex="50">
             <label>District</label>
             <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.validateCoverage('dld', cov)">
               <md-option value="{{district}}" ng-repeat="district in cov.available">
@@ -173,7 +172,7 @@
           <div flex="50"></div>
         </div>
         <div layout="row">
-          <md-input-container class="md-block number" flex="20">
+          <md-input-container class="number" flex="20">
             <label># Health Workers</label>
             <input ng-required="vm.validateCoverage('dld', cov)" name="{{'coverage_' + $index}}.health_workers"
                    type="number" min="0" ng-model="cov.health_workers" >
@@ -186,7 +185,7 @@
               </div>
             </div>
           </md-input-container>
-          <md-input-container class="md-block number" flex="20">
+          <md-input-container class="number" flex="20">
             <label># Facilities</label>
             <input ng-required="vm.validateCoverage('dld', cov)" name="{{'coverage_' + $index}}.facilities"
                    type="number" min="0" ng-model="cov.facilities">
@@ -199,7 +198,7 @@
               </div>
             </div>
           </md-input-container>
-          <md-input-container class="md-block number" flex="20">
+          <md-input-container class="number" flex="20">
             <label># Clients</label>
             <input ng-required="vm.validateCoverage('dld', cov)" name="{{'coverage_' + $index}}.clients"
                    type="number" min="0" ng-model="cov.clients">
@@ -230,10 +229,9 @@
 
     <h6 class="subtitle first"><i class="material-icons">&#xE153;</i> National level deployment</h6>
 
-    <div class="input-group" ng-class="{last: $last}" >
-      <div layout="column">
-        <div layout="row">
-          <md-input-container class="md-block number" flex="20">
+    <div class="input-group last">
+      <div layout="row">
+          <md-input-container class="number" flex="20">
             <label># Health Workers</label>
             <input type="number"
                    min="0"
@@ -249,7 +247,7 @@
               </div>
             </div>
           </md-input-container>
-          <md-input-container class="md-block number" flex="20">
+          <md-input-container class="number" flex="20">
             <label># Facilities</label>
             <input type="number"
                    min="0"
@@ -265,7 +263,7 @@
               </div>
             </div>
           </md-input-container>
-          <md-input-container class="md-block number" flex="20">
+          <md-input-container class="number" flex="20">
             <label># Clients</label>
             <input type="number"
                    min="0"
@@ -283,10 +281,9 @@
           </md-input-container>
           <div flex="40"></div>
         </div>
-      </div>
     </div>
 
-    <h6>Has the government approved the project? *</h6>
+    <h6 class="required extra-margin">Has the government approved the project?</h6>
 
     <div layout="row" class="extra-margin">
       <div layout="column">
@@ -306,11 +303,11 @@
       </div>
     </div>
 
-    <h6>Has the government financially invested in the project? *</h6>
+    <h6 class="required extra-margin">Has the government financially invested in the project?</h6>
 
     <div layout="row" class="extra-margin">
       <div layout="column">
-        <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="true" class="md-primary" layout="row">
+        <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="true" class="md-primary" layout="column">
           <md-radio-button ng-value="0" aria-label="government-investor-no">
             No, they have not yet contributed
           </md-radio-button>
@@ -330,6 +327,7 @@
     </div>
 
     <h6>Implementing partners</h6>
+
     <md-input-container class="error-placeholder">
       <input  name="implementing_partners" ng-model="vm.hiddenFields" aria-label="hidden">
       <div ng-messages="vm.form.implementing_partners.$error">
@@ -340,8 +338,9 @@
         </div>
       </div>
     </md-input-container>
-    <div layout="row" ng-class="{last: $last}" ng-repeat="partner in vm.project.implementing_partners">
-      <md-input-container md-no-float class="md-block" flex="50">
+
+    <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
+      <md-input-container md-no-float flex="50">
         <input ng-model="partner.value" placeholder="Partner's name" md-maxlength="64">
       </md-input-container>
       <div class="add-more-item" flex>
@@ -371,8 +370,8 @@
       </div>
     </md-input-container>
 
-    <div layout="row" ng-repeat="donor in vm.project.donors">
-      <md-input-container md-no-float class="md-block" flex="50">
+    <div layout="row" ng-repeat="donor in vm.project.donors" ng-class="{last: $last}" class="extra-margin">
+      <md-input-container md-no-float flex="50">
         <input ng-model="donor.value" placeholder="Donor's name" md-maxlength="64" required name="{{'donor_' + $index}}">
         <div ng-messages="vm.form['donor_' + $index].$error">
           <div ng-message="required">This is required.</div>

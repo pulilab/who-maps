@@ -142,11 +142,6 @@
       box-shadow: inset 0 1px 0 0 rgba(0,0,0,.12);
     }
 
-    &.alt-2 {
-      background-color: #FFF4D9;
-      box-shadow: inset 0 1px 0 0 rgba(0,0,0,.12);
-    }
-
     md-input-container {
       margin-bottom: 30px;
 
@@ -175,6 +170,10 @@
 
       &.first {
         padding-top: 0;
+      }
+
+      &.extra-margin {
+        margin: 0 0 20px;
       }
 
       &.subtitle {
@@ -239,7 +238,7 @@
       box-sizing: border-box;
       display: block;
       width: 100%;
-      margin: 20px 0 20px 2px;
+      margin: 20px 0 20px 4px;
       padding: 20px 0 0 20px;
       border-left: 4px solid $color-gray-lighter;
 
@@ -265,7 +264,11 @@
       }
 
       &.small-top {
-        margin-top: 30px;
+        margin-top: 20px;
+      }
+
+      &.no-margin {
+        margin: 0;
       }
 
       &.first {
@@ -325,6 +328,23 @@
       }
     }
 
+    .strategy-selector {
+      ul.selected-strategies {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          display: block;
+        }
+      }
+
+      .md-button {
+        float: left;
+        margin: 10px 20px 0 0;
+      }
+    }
+
     .hint {
       position: absolute;
       left: 2px;
@@ -337,7 +357,6 @@
 
   }
 }
-
 
 .radio-error-messages {
   opacity: 0;
