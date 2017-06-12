@@ -8,66 +8,60 @@
     <h6 class="first">Add one or more Software and related Digital Health Interventions (DHI):</h6>
 
     <div class="input-group" ng-repeat="platform in vm.project.platforms">
-      <div layout="column">
-        <div layout="row">
-          <md-input-container flex="50">
-            <label>Software (select from list)</label>
-            <md-select ng-model="platform.name" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.name' }}" required >
-              <md-option ng-value="plat" ng-repeat="plat in platform.available">
-                {{plat}}
-              </md-option>
-            </md-select>
-            <div ng-messages="vm.form['platforms_' + $index + '.name'].$error">
-              <div ng-message="required">This is required.</div>
-              <div ng-message="custom">
-                <div ng-repeat="message in vm.form['platforms_' + $index + '.name'].customError">
-                  {{message}}
-                </div>
+      <div layout="row">
+        <md-input-container flex="30">
+          <label>Software (select from list)</label>
+          <md-select ng-model="platform.name" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.name' }}" required >
+            <md-option ng-value="plat" ng-repeat="plat in platform.available">
+              {{plat}}
+            </md-option>
+          </md-select>
+          <div ng-messages="vm.form['platforms_' + $index + '.name'].$error">
+            <div ng-message="required">This is required.</div>
+            <div ng-message="custom">
+              <div ng-repeat="message in vm.form['platforms_' + $index + '.name'].customError">
+                {{message}}
               </div>
             </div>
-          </md-input-container>
-        </div>
-        <div layout="row" ng-if="platform.name === 'Other'">
-          <md-input-container flex="50">
-            <label>Specify software name</label>
-            <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
-            ng-required="true">
-            <div ng-messages="vm.form.platform_custom.$error">
-              <div ng-message="required">This is required.</div>
-            </div>
-          </md-input-container>
+          </div>
+        </md-input-container>
 
-        </div>
-        <div layout="row">
-          <dialog-multi-selector
-            ng-show="platform.name"
-            selection="platform.strategies"
-            button-name="digital health interventions"
-            is-required="true"
-            elements="vm.structure.strategies"
-            collection-name="strategies"
-            name="'platforms_'+ $index + '.strategies'"
-            form-element="vm.form['platforms_'+ $index + '.strategies']"
-            dialog-name="platform.name">
-          </dialog-multi-selector>
-        </div>
-        <div layout="row">
-          <div class="add-more-item" flex>
-            <div layout="row" layout-align="start end">
-              <md-button class="md-primary" aria-label="Add more"
-                         ng-show="vm.showAddMore($index, vm.project.platforms)"
-                         ng-click="vm.addChild('platforms')">
-                <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
-              </md-button>
-              <md-button class="md-warn" aria-label="Remove"
-                         ng-show="vm.showRemove($index, vm.project.platforms)"
-                         ng-click="vm.removeChild($index, 'platforms')">
-                <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
-              </md-button>
-            </div>
+        <md-input-container flex="30" ng-if="platform.name === 'Other'">
+          <label>Specify software name</label>
+          <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
+          ng-required="true">
+          <div ng-messages="vm.form.platform_custom.$error">
+            <div ng-message="required">This is required.</div>
+          </div>
+        </md-input-container>
+
+        <div class="add-more-item" flex="40">
+          <div layout="row" layout-align="start end">
+            <md-button class="md-primary" aria-label="Add more"
+                       ng-show="vm.showAddMore($index, vm.project.platforms)"
+                       ng-click="vm.addChild('platforms')">
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+            </md-button>
+            <md-button class="md-warn" aria-label="Remove"
+                       ng-show="vm.showRemove($index, vm.project.platforms)"
+                       ng-click="vm.removeChild($index, 'platforms')">
+              <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+            </md-button>
           </div>
         </div>
       </div>
+
+      <dialog-multi-selector
+        ng-show="platform.name"
+        selection="platform.strategies"
+        button-name="digital health interventions"
+        is-required="true"
+        elements="vm.structure.strategies"
+        collection-name="strategies"
+        name="'platforms_'+ $index + '.strategies'"
+        form-element="vm.form['platforms_'+ $index + '.strategies']"
+        dialog-name="platform.name">
+      </dialog-multi-selector>
     </div>
   </div>
 

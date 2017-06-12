@@ -1,6 +1,10 @@
 @import '../../variables';
 @import '../../mixins';
 
+dialog-multi-selector {
+  display: block;
+}
+
 .hidden-input {
   display: none !important;
   border: 0 !important;
@@ -17,8 +21,65 @@
   padding-top: 5px;
 }
 
-.no-border {
-  border: 0;
+.dms-error {
+  min-height: 36px;
+  max-height: 36px;
+  margin: 0 0 20px 20px !important;
+  padding: 2px 0 0 !important;
+}
+
+.strategy-selector {
+
+  ul.selected-strategies {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    @include clearfix();
+
+    li {
+      position: relative;
+      box-sizing: border-box;
+      display: block;
+      margin: 0 0 20px;
+      padding: 0 40px 0 26px;
+      font-size: 16px;
+      line-height: 24px;
+      // float: left;
+      // width: 50%;
+      // height: 24px;
+
+      span {
+        // display: block;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+        // display: -webkit-box;
+        // -webkit-box-orient: vertical;
+        // -webkit-line-clamp: 1;
+      }
+
+      i {
+        position: absolute;
+        top: 3px;
+        left: 0;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .add-button,
+  .edit-button {
+    position: relative;
+    margin: 0 20px 20px 0;
+    padding: 0 12px;
+  }
+
+  .edit-button {
+    color: $color-gray;
+    i {
+      color: $color-gray;
+    }
+  }
 }
 
 .strategy-selector-dialog {

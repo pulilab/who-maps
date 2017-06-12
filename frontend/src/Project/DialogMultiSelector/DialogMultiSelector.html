@@ -1,17 +1,21 @@
-<div class="strategy-selector">
+<div class="strategy-selector md-block">
+
   <ul class="selected-strategies">
-    <li ng-repeat="item in vm.selection">{{item}}</li>
+    <li ng-repeat="item in vm.selection">
+      <i class="material-icons">done</i>
+      <span>{{item}}</span>
+    </li>
   </ul>
 
-  <md-button ng-show="vm.selection.length > 0" class="edit-button md-gray" md-no-ink ng-click="vm.showModal($event)">
-    <md-icon>create</md-icon> Edit {{vm.buttonName}}
+  <md-button ng-show="vm.selection.length > 0" class="edit-button" md-no-ink ng-click="vm.showModal($event)">
+    <md-icon>create</md-icon> Edit list <!-- {{vm.buttonName}} -->
   </md-button>
 
   <md-button class="add-button md-primary" ng-hide="vm.elements.length === 0 || vm.selection.length > 0" md-no-ink ng-click="vm.showModal($event)">
     <md-icon>playlist_add_check</md-icon> Add {{vm.buttonName}}
   </md-button>
 
-  <md-input-container class="no-border">
+  <md-input-container class="dms-error">
     <input name="{{vm.name}}" ng-model="vm.selection" ng-required="vm.isRequired" aria-label="vm.name" class="hidden-input">
     <div ng-messages="vm.formElement.$error" class="custom-error">
       <div ng-message="required">This is required.</div>
@@ -22,4 +26,5 @@
       </div>
     </div>
   </md-input-container>
+
 </div>
