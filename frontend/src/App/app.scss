@@ -340,7 +340,7 @@ md-select {
 
 md-datepicker {
   margin-right: 0;
-  padding: 2px 0;
+  padding: 0;
 
   .md-datepicker-button.md-icon-button {
     top: -4px;
@@ -365,9 +365,8 @@ md-datepicker {
     float: left;
     display: block;
     width: calc(100% - 44px);
-
     box-sizing: border-box;
-    padding-bottom: 1px;
+    padding-bottom: 0;
 
     input {
       font-size: 16px;

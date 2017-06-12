@@ -200,8 +200,17 @@
       }
 
       &.extra-margin,
-      &.chipper {
+      &.chipper,
+      &.last {
         margin-bottom: 40px;
+      }
+
+      &.no-float {
+        margin-top: 0 !important;
+
+        md-input-container {
+          min-height: auto;
+        }
       }
 
       + .layout-row {

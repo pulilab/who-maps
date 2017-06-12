@@ -339,7 +339,7 @@
       </div>
     </md-input-container>
 
-    <div layout="row" ng-repeat="partner in vm.project.implementing_partners">
+    <div layout="row" ng-repeat="partner in vm.project.implementing_partners" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
         <input ng-model="partner.value" placeholder="Partner's name" md-maxlength="64">
       </md-input-container>
@@ -370,7 +370,7 @@
       </div>
     </md-input-container>
 
-    <div layout="row" ng-repeat="donor in vm.project.donors" ng-class="{last: $last}" class="extra-margin">
+    <div layout="row" ng-repeat="donor in vm.project.donors" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
         <input ng-model="donor.value" placeholder="Donor's name" md-maxlength="64" required name="{{'donor_' + $index}}">
         <div ng-messages="vm.form['donor_' + $index].$error">
