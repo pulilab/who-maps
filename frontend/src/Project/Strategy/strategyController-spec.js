@@ -19,6 +19,9 @@ const $scope = {
     $watch: jasmine.createSpy('watch').and.callFake(executeWatch),
     $watchGroup: jasmine.createSpy('watchGroup').and.callFake(executeWatch)
 };
+const structure = {
+    interventions: []
+};
 
 describe('StrategyController', () => {
 
@@ -29,6 +32,7 @@ describe('StrategyController', () => {
     it('should have an on init function', () => {
         spyOn(controller, 'watchers');
         spyOn(controller, 'defaultOnInit');
+        controller.structure = structure;
         controller.onInit();
         expect(controller.watchers).toHaveBeenCalled();
         expect(controller.defaultOnInit).toHaveBeenCalled();
