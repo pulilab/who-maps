@@ -7,7 +7,7 @@
   <div class="section-wrapper">
     <h6 class="first required">Add one or more Software and related Digital Health Interventions (DHI):</h6>
 
-    <div class="input-group" ng-repeat="platform in vm.project.platforms">
+    <div class="software-dhi input-group" ng-repeat="platform in vm.project.platforms">
       <div layout="row">
         <md-input-container flex="30">
           <label>Software (select from list)</label>
@@ -54,7 +54,7 @@
       <dialog-multi-selector
         ng-show="platform.name"
         selection="platform.strategies"
-        button-name="digital health interventions"
+        button-name="Digital Health Interventions"
         is-required="true"
         show-title="true"
         elements="vm.structure.strategies"
@@ -102,7 +102,7 @@
       <h6 class="required">Essential interventions</h6>
       <dialog-multi-selector
         selection="vm.project.interventions"
-        button-name="essential interventions"
+        button-name="Essential Interventions"
         elements="vm.interventions"
         name="'interventions'"
         form-element="vm.form.interventions"
