@@ -57,21 +57,21 @@
       position: relative;
       display: block;
       padding: 0 20px 0 70px;
-      height: 52px;
-      line-height: 52px;
+      height: 62px;
+      line-height: 62px;
       color: #B0BEC5;
       text-decoration: none;
       transition: $swift-ease-out;
 
       @media only screen and (max-height: 720px) {
-        height: 42px;
-        line-height: 42px;
+        height: 48px;
+        line-height: 48px;
       }
     }
 
     span {
       position: absolute;
-      top: 10px;
+      top: 15px;
       left: 30px;
       box-sizing: border-box;
       display: inline-block;
@@ -83,7 +83,7 @@
       transition: $swift-ease-out;
 
       @media only screen and (max-height: 720px) {
-        top: 5px;
+        top: 8px;
       }
 
       i {

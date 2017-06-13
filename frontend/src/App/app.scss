@@ -195,7 +195,7 @@ md-input-container.md-input-has-value.md-icon-float label:not(.md-no-float) {
 }
 
 md-input-container.md-input-focused._md-datepicker-floating-label._md-datepicker-has-calendar-icon > label:not(.md-no-float), md-input-container.md-input-has-placeholder._md-datepicker-floating-label._md-datepicker-has-calendar-icon > label:not(.md-no-float), md-input-container.md-input-has-value._md-datepicker-floating-label._md-datepicker-has-calendar-icon> label:not(.md-no-float) {
-  transform: translate3d(0, 2px, 0) scale(0.75);
+  transform: translate3d(-40px, 0, 0) scale(0.75) !important;
 }
 
 md-input-container.md-input-has-value .md-select-value > span:not(.md-select-icon) {
@@ -331,11 +331,16 @@ md-select {
   }
 }
 
-.md-datepicker-open {}
+.md-datepicker-open {
+  overflow: visible;
+  label {
+    opacity: 0;
+  }
+}
 
 md-datepicker {
   margin-right: 0;
-  padding: 2px 0;
+  padding: 0;
 
   .md-datepicker-button.md-icon-button {
     top: -4px;
@@ -360,9 +365,8 @@ md-datepicker {
     float: left;
     display: block;
     width: calc(100% - 44px);
-
     box-sizing: border-box;
-    padding-bottom: 1px;
+    padding-bottom: 0;
 
     input {
       font-size: 16px;

@@ -123,5 +123,42 @@ describe('DialogMultiSelectorDialog', () => {
         expect(controller.selection.length).toBe(1);
     });
 
+    it('should have a fn that set open and open all accordingly to the selected items', () => {
+        const ele = [
+            {
+                name: 'a',
+                subGroups: [
+                    {
+                        name: 'b',
+                        items: ['a', 'b']
+                    },
+                    {
+                        name: 'c',
+                        items: ['ee', 'dd']
+                    }
+                ]
+            },
+            {
+                name: 'aa',
+                subGroups: [
+                    {
+                        name: 'bb',
+                        items: ['aa', 'bb']
+                    },
+                    {
+                        name: 'cc',
+                        items: ['eee', 'ddd']
+                    }
+                ]
+            }
+        ];
+        controller.collectionName = 'items';
+        controller.selection = ['a', 'ee'];
+        controller.openSelected(ele);
+        expect(ele[0].allOpen).toBe(true);
+        expect(ele[0].subGroups[0].open).toBe(true);
+        expect(ele[0].subGroups[1].open).toBe(true);
+    });
+
 
 });

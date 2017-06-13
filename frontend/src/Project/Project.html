@@ -1,6 +1,6 @@
 <div layout="column" class="new-edit-project" layout-align="start center" >
   <div class="page-title" ng-hide="vm.editMode">
-    <h1 class="md-display-1 text-center">Add new project sheet</h1>
+    <h1 class="md-display-1 text-center">Add new Digital Health project</h1>
     <h6 class="md-subhead text-center">Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</h6>
   </div>
 
@@ -15,8 +15,8 @@
   <div class="project-form-wrapper md-block">
     <form name="vm.form" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
       <div class="main-section" layout="column">
-        <project-details
-          id="project-details"
+        <general-overview
+          id="general-overview"
           form="vm.form"
           project="vm.project"
           structure="vm.structure"
@@ -24,23 +24,18 @@
           viewers="vm.viewers"
           users="vm.users"
           project-list="vm.cs.projectList">
-        </project-details>
-        <strategy id="strategy"
-                  form="vm.form"
-                  project="vm.project"
-                  structure="vm.structure">
-        </strategy>
+        </general-overview>
+        <implementation-overview
+          id="implementation-overview"
+          form="vm.form"
+          project="vm.project"
+          structure="vm.structure">
+        </implementation-overview>
         <technology
           id="technology"
           project="vm.project"
           structure="vm.structure">
         </technology>
-        <additional-info
-          id="additional-info"
-          form="vm.form"
-          project="vm.project"
-          structure="vm.structure">
-        </additional-info>
         <interoperability
           id="interoperability"
           form="vm.form"

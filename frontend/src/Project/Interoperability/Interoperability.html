@@ -1,87 +1,15 @@
 <div class="project-section section-interoperability" md-whiteframe="2">
 
   <div class="section-title md-title">
-    5. Interoperability
+    4. Interoperability
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
   </div>
 
   <div class="section-wrapper">
-    <div class="checklist small-margin first">
-      <h6>What interoperability data exchanges does your project use?</h6>
-      <md-input-container class="error-placeholder">
-        <input  name="data_exchanges" ng-model="vm.hiddenFields" aria-label="hidden">
-        <div ng-messages="vm.form.data_exchanges.$error">
-          <div ng-message="custom">
-            <div ng-repeat="message in vm.form.data_exchanges.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
-      <ul>
-        <li ng-repeat="data_exchange in vm.structure.data_exchanges">
-          <md-checkbox md-no-ink aria-label="data_exchange"
-                       ng-checked="vm.checkboxChecked(data_exchange, 'data_exchanges')"
-                       ng-click="vm.checkboxToggle(data_exchange, 'data_exchanges')"
-                       class="md-primary">
-            {{data_exchange}}
-          </md-checkbox>
-        </li>
-      </ul>
-    </div>
 
-    <h6>Implementing partners</h6>
-    <md-input-container class="error-placeholder">
-      <input  name="implementing_partners" ng-model="vm.hiddenFields" aria-label="hidden">
-      <div ng-messages="vm.form.implementing_partners.$error">
-        <div ng-message="custom">
-          <div ng-repeat="message in vm.form.implementing_partners.customError">
-            {{message}}
-          </div>
-        </div>
-      </div>
-    </md-input-container>
-    <div layout="row" ng-class="{last: $last}" ng-repeat="partner in vm.project.implementing_partners">
-      <md-input-container md-no-float class="md-block" flex="50">
-        <input ng-model="partner.value" placeholder="Partner's name" md-maxlength="64">
-      </md-input-container>
-      <div class="add-more-item" flex>
-        <md-button class="md-warn" aria-label="Remove"
-                   ng-show="vm.showRemove($index, vm.project.implementing_partners)"
-                   ng-click="vm.removeChild($index, 'implementing_partners')">
-          <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
-        </md-button>
-        <md-button class="md-primary" aria-label="Add more"
-                   ng-show="vm.showAddMore($index, vm.project.implementing_partners)"
-                   ng-click="vm.addChild('implementing_partners')">
-          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
-        </md-button>
-      </div>
-    </div>
+    <h6>Does your digital health project link to a digital HIS?</h6>
 
-
-    <h6>Government as investor? *</h6>
-
-    <div layout="row" class="extra-margin">
-      <div layout="column">
-        <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="true" class="md-primary" layout="row">
-          <md-radio-button ng-value="true" aria-label="government-investor-yes">
-            Yes
-          </md-radio-button>
-          <md-radio-button ng-value="false" aria-label="government-investor-no">
-            No
-          </md-radio-button>
-        </md-radio-group>
-        <div class="radio-error-messages">
-          <div ng-messages="vm.form.government_investor.$error">
-            <div ng-message="required">This is required.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h6 >Does your digital health project link to a digital HIS?</h6>
-    <md-input-container class="error-placeholder">
+    <md-input-container class="md-block error-placeholder">
       <input  name="interoperability_links" ng-model="vm.hiddenFields" aria-label="hidden">
       <div ng-messages="vm.form.interoperability_links.$error">
         <div ng-message="custom">
@@ -91,12 +19,13 @@
         </div>
       </div>
     </md-input-container>
+
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
       <md-checkbox ng-init="vm.project.interoperability_links[$index].name = link.name"
                    md-no-ink aria-label=""
                    ng-model="vm.project.interoperability_links[$index].selected"
                    class="md-primary" flex>
-        {{link.pre}}{{link.name}}.
+        {{link.pre}}{{link.name}}
       </md-checkbox>
       <md-input-container class="md-icon-float md-block" flex>
         <label>Specify URL</label>
@@ -129,25 +58,24 @@
           </md-checkbox>
         </li>
         <li>
-              <span layout="row">
-                <md-checkbox md-no-ink aria-label="other-standard"
-                             ng-model="vm.specifyOtherStandard"
-                             class="md-primary"
-                             flex="nogrow">
-                </md-checkbox>
-                <md-input-container class="md-block" flex>
-                  <label>Specify other</label>
-                  <input ng-disabled="!vm.specifyOtherStandard"
-                         ng-required="vm.specifyOtherStandard"
-                         md-maxlength="64"
-                         name="data.c18"
-                         ng-model="vm.project.interoperability_standards.custom">
-                </md-input-container>
-              </span>
+          <span layout="row">
+            <md-checkbox md-no-ink aria-label="other-standard"
+                         ng-model="vm.specifyOtherStandard"
+                         class="md-primary"
+                         flex="nogrow">
+            </md-checkbox>
+            <md-input-container class="md-block" flex>
+              <label>Specify other</label>
+              <input ng-disabled="!vm.specifyOtherStandard"
+                     ng-required="vm.specifyOtherStandard"
+                     md-maxlength="64"
+                     name="data.c18"
+                     ng-model="vm.project.interoperability_standards.custom">
+            </md-input-container>
+          </span>
         </li>
       </ul>
 
     </div>
   </div>
-
 </div>
