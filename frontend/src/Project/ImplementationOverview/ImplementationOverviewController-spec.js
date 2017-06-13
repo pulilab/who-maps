@@ -1,4 +1,4 @@
-import StrategyController from './StrategyController';
+import ImplementationOverviewController from './ImplementationOverviewController';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 const executeWatch = (observable, toCall) => {
@@ -23,10 +23,10 @@ const structure = {
     interventions: []
 };
 
-describe('StrategyController', () => {
+describe('ImplementationOverview', () => {
 
     beforeEach(()=> {
-        controller = StrategyController.strategyControllerFactory()($scope, $element);
+        controller = ImplementationOverviewController.factory()($scope, $element);
     });
 
     it('should have an on init function', () => {

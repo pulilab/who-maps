@@ -1,7 +1,7 @@
 import CollapsibleSet from '../CollapsibleSet';
 import _ from 'lodash';
 
-class StrategyController extends CollapsibleSet {
+class ImplementationOverview extends CollapsibleSet {
 
     constructor($scope, $element) {
         super($element, $scope, 'project');
@@ -126,14 +126,14 @@ class StrategyController extends CollapsibleSet {
     }
 
 
-    static strategyControllerFactory() {
-        require('./Strategy.scss');
-        function strategyController($scope, $element) {
-            return new StrategyController($scope, $element);
+    static factory() {
+        require('./ImplementationOverview.scss');
+        function implementation($scope, $element) {
+            return new ImplementationOverview($scope, $element);
         }
-        strategyController.$inject = ['$scope', '$element'];
-        return strategyController;
+        implementation.$inject = ['$scope', '$element'];
+        return implementation;
     }
 }
 
-export default StrategyController;
+export default ImplementationOverview;
