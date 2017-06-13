@@ -9,7 +9,7 @@
 
     <div class="software-dhi input-group" ng-repeat="platform in vm.project.platforms">
       <div layout="row">
-        <md-input-container flex="30">
+        <md-input-container flex="33">
           <label>Software (select from list)</label>
           <md-select ng-model="platform.name" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.name' }}" required >
             <md-option ng-value="plat" ng-repeat="plat in platform.available">
@@ -26,7 +26,7 @@
           </div>
         </md-input-container>
 
-        <md-input-container flex="30" ng-if="platform.name === 'Other'">
+        <md-input-container flex="33" ng-if="platform.name === 'Other'">
           <label>Specify software name</label>
           <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
           ng-required="true">
@@ -35,7 +35,7 @@
           </div>
         </md-input-container>
 
-        <div class="add-more-item" flex="40">
+        <div class="add-more-item" flex="33">
           <div layout="row" layout-align="start end">
             <md-button class="md-primary" aria-label="Add more"
                        ng-show="vm.showAddMore($index, vm.project.platforms)"
@@ -99,7 +99,7 @@
   <div class="section-wrapper">
 
     <div class="essential md-block">
-      <h6 class="required">Essential interventions</h6>
+      <h6>Essential interventions</h6>
       <dialog-multi-selector
         selection="vm.project.interventions"
         button-name="Essential Interventions"
