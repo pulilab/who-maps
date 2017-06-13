@@ -18,8 +18,7 @@ class StrategyController extends CollapsibleSet {
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.watchers();
-        // this.interventions = this.mapInterventions();
-        this.interventions = this.structure.interventions;
+        this.interventions = this.mapInterventions();
     }
 
     watchers() {
