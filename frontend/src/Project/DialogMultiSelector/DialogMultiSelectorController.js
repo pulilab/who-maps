@@ -12,17 +12,30 @@ class DialogMultiSelectorDialog {
         this.selection = selection ? selection.slice() : [];
         this.collectionName = collectionName;
         this.toggleAll = this.toggleAll.bind(this);
-        this.elements.forEach(group => {
-            this.toggleAll(group, true);
-        });
+        this.openSelected = this.openSelected.bind(this);
+
         this.dialogClass = 'column-' + this.elements.length;
+        this.openSelected(this.elements);
     }
 
-    toggleAll(group, reset) {
+    openSelected(elements) {
+        for (const e of elements) {
+            e.allOpen = true;
+            for (const s of e.subGroups) {
+                s.open = false;
+                for (const item of s[this.collectionName]) {
+                    s.open = s.open || this.itemChecked(item);
+                }
+                e.allOpen = e.allOpen && s.open;
+            }
+        }
+    }
+
+    toggleAll(group) {
         group.subGroups.forEach(sub => {
-            sub.open = reset ? false : !group.allOpen;
+            sub.open = !group.allOpen;
         });
-        group.allOpen = reset ? false : !group.allOpen;
+        group.allOpen = !group.allOpen;
     }
 
     cancel() {
@@ -39,16 +52,16 @@ class DialogMultiSelectorDialog {
         });
     }
 
-    itemChecked(strategy) {
-        return this.selection.indexOf(strategy) > -1;
+    itemChecked(item) {
+        return this.selection.indexOf(item) > -1;
     }
-    itemToggle(strategy) {
-        const index =  this.selection.indexOf(strategy);
+    itemToggle(item) {
+        const index =  this.selection.indexOf(item);
         if (index !== -1) {
             this.selection.splice(index, 1);
         }
         else {
-            this.selection.push(strategy);
+            this.selection.push(item);
         }
         return false;
     }
