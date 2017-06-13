@@ -5,7 +5,7 @@
   </div>
 
   <div class="section-wrapper">
-    <h6 class="first">Add one or more Software and related Digital Health Interventions (DHI):</h6>
+    <h6 class="first required">Add one or more Software and related Digital Health Interventions (DHI):</h6>
 
     <div class="input-group" ng-repeat="platform in vm.project.platforms">
       <div layout="row">
@@ -98,7 +98,7 @@
   <div class="section-wrapper">
 
     <div class="essential md-block">
-      <h6>Essential interventions</h6>
+      <h6 class="required">Essential interventions</h6>
       <dialog-multi-selector
         selection="vm.project.interventions"
         button-name="essential interventions"
