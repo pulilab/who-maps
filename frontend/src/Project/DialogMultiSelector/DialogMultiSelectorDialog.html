@@ -14,7 +14,10 @@
   <md-dialog-content layout="row"  layout-align="start stretch">
     <div class="main-group" ng-repeat="group in vm.elements">
         <div class="header" layout="row" layout-align="start center" layout-wrap  ng-click="vm.toggle(group)">
-          <h4 flex="auto">{{group.name}}</h4>
+
+          <h4 flex="auto" ng-show="group.name">{{group.name}}</h4>
+          <h4 flex="auto" ng-hide="group.name">Select from list:</h4>
+
           <small ng-hide="group.allOpen" ng-click="vm.toggleAll(group)">Open all</small>
           <small ng-show="group.allOpen" ng-click="vm.toggleAll(group)">Close all</small>
         </div>
