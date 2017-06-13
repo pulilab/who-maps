@@ -171,10 +171,13 @@ describe('ProjectController', () => {
         sc.onInit();
     });
 
-    it('should have a function that handle the on destroy event', () => {
-        spyOn(sc.EE, 'removeListener');
-        sc.$onDestroy();
-        expect(sc.EE.removeListener).toHaveBeenCalledTimes(3);
+    it('should have a function that add an event handler if is not already present', () => {
+        let a = 0;
+        sc.registerEventIfNotPresent('a', () => { a += 1; });
+        expect(sc.EE.listeners('a', true)).toBe(true);
+        sc.registerEventIfNotPresent('a', () => { a += 1; });
+        sc.EE.emit('a');
+        expect(a).toBe(1);
     });
 
     it('should have a function that emit a scroll event', () => {
