@@ -16,7 +16,8 @@ const component = {
         collectionName: '@',
         name: '<',
         formElement: '<',
-        isRequired: '<'
+        isRequired: '<',
+        showTitle: '<'
     }
 };
 
