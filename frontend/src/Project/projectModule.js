@@ -2,7 +2,7 @@ import angular from 'angular';
 import newProjectComponent from './projectComponent';
 import interoperability from './Interoperability/interoperabilityComponent';
 import navigation from './Navigation/navigationComponent';
-import projectDetails from './ProjectDetails/projectDetailsComponent';
+import projectDetails from './GeneralOverview/generalOverviewComponent';
 import strategy from './Strategy/strategyComponent';
 import technology from './Technology/technologyComponent';
 import countryFields from './CountryFields/countryFieldsComponent';

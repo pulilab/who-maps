@@ -1,4 +1,4 @@
-import ProjectDetailsController from './ProjectDetailsController';
+import GeneralOverviewController from './GeneralOverviewController';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
@@ -22,10 +22,10 @@ const $scope = {
 };
 const $element = {};
 
-describe('ProjectDetailsController', () => {
+describe('GeneralOverviewController', () => {
 
     beforeEach(()=> {
-        controller = ProjectDetailsController.projectDetailFactory()($scope, $element);
+        controller = GeneralOverviewController.factory()($scope, $element);
     });
 
     it('has a function, that parses all users, and returns if they contain the string (#1 fn param)', () => {
