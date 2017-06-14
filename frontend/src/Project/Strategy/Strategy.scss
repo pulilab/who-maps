@@ -61,18 +61,14 @@
             box-sizing: border-box;
             display: block;
             width: 100%;
-            padding-top: 12px;
+            padding-top: 17px;
             padding-bottom: 3px;
             padding-left: 26px;
             @include text-truncate();
 
-            &:first-child {
-              margin-top: 5px;
-            }
-
             &:before {
               position: absolute;
-              top: 13px;
+              top: 18px;
               left: 0;
               content: "done";
               font-family: 'Material Icons';
