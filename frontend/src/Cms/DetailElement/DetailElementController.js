@@ -75,7 +75,7 @@ class DetailElementDialog {
     }
 
     isAuthor() {
-        return this.cs.currentUserId === this.content.author;
+        return this.cs.commonServices.userProfileId === this.content.author;
     }
 
     addComment() {

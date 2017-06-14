@@ -112,13 +112,15 @@ describe('DetailElementDialogController', () => {
     });
 
     it('should have a function that return true if the user is the author ', () => {
-        controller.cs.currentUserId = 1;
+        controller.cs.commonServices = {
+            userProfileId: 1
+        };
         controller.content = {
             author: 1
         };
         expect(controller.isAuthor()).toBe(true);
 
-        controller.cs.currentUserId = 2;
+        controller.cs.commonServices.userProfileId = 2;
         expect(controller.isAuthor()).toBe(false);
     });
 
