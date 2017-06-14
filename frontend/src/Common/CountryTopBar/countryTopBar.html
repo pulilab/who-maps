@@ -4,9 +4,8 @@
 
             <a ui-sref="landing">
                 <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+                <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
             </a>
-
-            <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
 
         </div>
 
