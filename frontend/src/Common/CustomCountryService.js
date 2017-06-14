@@ -190,7 +190,8 @@ class CustomCountryService extends SimpleApi {
             code: 'who',
             logo: false,
             cover: '',
-            cover_text: 'This Digital Health Atlas aims to strengthen the value and impact of' +
+            cover_text: 'The Digital Health Atlas is a technology registry that ' +
+            'aims to strengthen the value and impact of' +
             ' digital health investments, improve coordination,' +
             ' and facilitate institutionalization and scale.',
             footer_title: 'customizable footer title',

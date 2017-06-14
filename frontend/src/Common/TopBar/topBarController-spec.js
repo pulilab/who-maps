@@ -53,4 +53,13 @@ describe('TopBarController', () => {
         expect(ac.axis).toBe(1);
         expect(ac.domain).toBe(2);
     });
+
+    it('should have a show thematic overview button function', () => {
+        ac.isLogin = true;
+        let result = ac.showThematic();
+        expect(result).toBeTruthy();
+        ac.isLogin = false;
+        result = ac.showThematic();
+        expect(result).toBeFalsy();
+    });
 });
