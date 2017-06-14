@@ -1,11 +1,11 @@
-import _template from './ProjectDetails.html';
-import ProjectDetailsController from './ProjectDetailsController';
+import _template from './GeneralOverview.html';
+import ProjectDetailsController from './GeneralOverviewController';
 
 const component = {
     template: _template,
-    controller: ProjectDetailsController.projectDetailFactory(),
+    controller: ProjectDetailsController.factory(),
     controllerAs: 'vm',
-    name: 'projectDetails',
+    name: 'generalOverview',
     bindings: {
         form: '<',
         project: '<',

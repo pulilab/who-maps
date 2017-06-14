@@ -4,7 +4,7 @@ import CollapsibleSet from '../CollapsibleSet';
 import ProjectService from '../ProjectService';
 
 
-class ProjectDetailsController extends CollapsibleSet {
+class GeneralOverviewController extends CollapsibleSet {
 
     constructor($scope, $element) {
         super($element, $scope, 'project');
@@ -127,14 +127,14 @@ class ProjectDetailsController extends CollapsibleSet {
     }
 
 
-    static projectDetailFactory() {
-        require('./ProjectDetails.scss');
-        function projectDetail($scope, $element) {
-            return new ProjectDetailsController($scope, $element);
+    static factory() {
+        require('./GeneralOverview.scss');
+        function generalOverview($scope, $element) {
+            return new GeneralOverviewController($scope, $element);
         }
-        projectDetail.$inject = ['$scope', '$element'];
-        return projectDetail;
+        generalOverview.$inject = ['$scope', '$element'];
+        return generalOverview;
     }
 }
 
-export default ProjectDetailsController;
+export default GeneralOverviewController;

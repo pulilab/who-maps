@@ -18,16 +18,23 @@ class ProjectController extends ProjectDefinition {
         this.state = $state;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
         this.postSaveActions = this.postSaveActions.bind(this);
         this.getCountryFields = this.getCountryFields.bind(this);
+        this.registerEventIfNotPresent = this.registerEventIfNotPresent.bind(this);
         this.toast = toast;
     }
 
     eventListeners() {
-        this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
-        this.EE.on('componentLoaded', this.automaticScroll, this);
-        this.EE.on('activateFieldSet', this.changeHash, this);
+
+        this.registerEventIfNotPresent('projectScrollTo', this.scrollToFieldSet);
+        this.registerEventIfNotPresent('componentLoaded', this.automaticScroll);
+        this.registerEventIfNotPresent('activateFieldSet', this.changeHash);
+    }
+
+    registerEventIfNotPresent(eventName, handler) {
+        if (!this.EE.listeners(eventName, true)) {
+            this.EE.on(eventName, handler, this);
+        }
     }
 
     onInit() {
@@ -74,7 +81,6 @@ class ProjectController extends ProjectDefinition {
 
     watchers() {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
-        // this.scope.$watch(s => s.vm.form, form => window.FORM = form);
     }
 
     getCountryFields(country, oldValue) {
@@ -90,12 +96,6 @@ class ProjectController extends ProjectDefinition {
                 });
             });
         }
-    }
-
-    onDestroy() {
-        this.EE.removeListener('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeListener('componentLoaded', this.automaticScroll);
-        this.EE.removeListener('activateFieldSet', this.changeHash);
     }
 
     automaticScroll(fieldSet) {
