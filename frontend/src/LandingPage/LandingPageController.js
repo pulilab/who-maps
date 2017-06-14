@@ -30,6 +30,7 @@ class LandingPageModuleController {
             vm.scope.$evalAsync(() => {
                 vm.countryData = data;
                 vm.countryCover = null;
+                vm.countryData.partners = data.default_partners.concat(data.partner_logos);
                 if (data.cover) {
                     vm.countryCover = {
                         background: `url(${data.cover}) 0 0`,
