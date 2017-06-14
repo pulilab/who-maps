@@ -2,7 +2,9 @@
     <div class="md-toolbar-tools">
         <div class="country-logo" layout-align="" ng-if="vm.pageLoaded">
 
-            <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+            <a ui-sref="landing">
+                <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+            </a>
 
             <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
 
