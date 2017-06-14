@@ -34,6 +34,10 @@ class TopBarController extends TopBarBehaviour {
         this.domain = params.domainId ? parseInt(params.domainId, 10) : 0;
     }
 
+    showThematic() {
+        return this.isLogin;
+    }
+
     static topBarControllerFactory() {
         require('./topBar.scss');
         function topBarController($state, $scope) {
