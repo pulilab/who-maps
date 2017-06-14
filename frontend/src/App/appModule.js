@@ -42,16 +42,10 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           url: '/app/:appName',
           template: '<app layout="column" layout-fill></app>',
           resolve: {
-              data: ['$q', ($q) => {
-                  const def = $q.defer();
+              data: () => {
                   const cs = require('../Common/CommonServices');
-                  cs.loadedPromise
-                    .then(() => {
-                        def.resolve();
-                    });
-
-                  return def.promise;
-              }]
+                  return cs.loadedPromise;
+              }
           }
 
       })
@@ -59,16 +53,10 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           url: '/public/:appName',
           template: '<app layout="column" view-mode="true"></app>',
           resolve: {
-              project: ['$q', ($q) => {
-                  const def = $q.defer();
+              project: () => {
                   const cs = require('../Common/CommonServices');
-                  cs.loadedPromise
-                    .then(() => {
-                        def.resolve();
-                    });
-
-                  return def.promise;
-              }]
+                  return cs.loadedPromise;
+              }
           }
 
       })
