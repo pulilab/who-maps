@@ -34,7 +34,7 @@ class CountryViewModuleController {
         this.getCountries();
         this.lastFilter = null;
         this.filterArray = [
-            this.createFilterCategory('platforms',
+            this.createFilterCategory('software',
               this.cs.projectStructure.technology_platforms)
         ];
     }
@@ -73,6 +73,7 @@ class CountryViewModuleController {
                 base.items = _.uniqBy(base.items, unique);
             }
         }
+        console.log(base);
         return base;
     }
 
