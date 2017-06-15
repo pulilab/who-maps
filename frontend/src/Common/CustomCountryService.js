@@ -190,16 +190,15 @@ class CustomCountryService extends SimpleApi {
             code: 'who',
             logo: false,
             cover: '',
-            cover_text: 'The Digital Health Atlas is a technology registry that ' +
-            'aims to strengthen the value and impact of' +
-            ' digital health investments, improve coordination,' +
-            ' and facilitate institutionalization and scale.',
-            footer_title: 'customizable footer title',
-            footer_text: '(Editable preset text) Lorem ipsum dolor sit amet, consectetur ' +
-            'adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.' +
-            'Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili.' +
-            'Quisque ut dolor gravida, placerat libero vel, euismod. Fictum, ' +
-            'deserunt mollit anim laborum astutumque!',
+            cover_text: 'The Digital Health Atlas is a WHO global technology registry platform aiming to ' +
+            'strengthen the value and impact of digital health investments, ' +
+            'improve coordination, and facilitate institutionalization and scale.',
+            footer_title: '',
+            permanent_footer: 'The DHA is led by WHO RHR/HRP, for the Health Data Collaborative Working Group' +
+            ' on Digital Health and Interoperability, with support from USAID, OPAL, UN Foundation, JHU-GMI,' +
+            ' developed as a global good software in response to the proliferation of uncoordinated ' +
+            'duplicative investments into digital health.',
+            footer_text: '',
             default_partners: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
                 'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg'],
             partner_logos: []
