@@ -51,4 +51,38 @@ describe('ImplementationOverview', () => {
         expect(controller.fetchDistricts).toHaveBeenCalled();
         expect(controller.setAvailableOptions).toHaveBeenCalled();
     });
+
+    it('should have a mapping fn for interventions', () => {
+        const interventions = [
+            {
+                name: 'a',
+                subGroups: [
+                    {
+                        name: 'b',
+                        items: ['a', 'b']
+                    },
+                    {
+                        name: 'c',
+                        items: ['ee', 'dd']
+                    }
+                ]
+            },
+            {
+                name: 'aa',
+                subGroups: [
+                    {
+                        name: 'bb',
+                        items: ['aa', 'bb']
+                    },
+                    {
+                        name: 'cc',
+                        items: ['eee', 'ddd']
+                    }
+                ]
+            }
+        ];
+        const r = controller.mapInterventions(interventions);
+        expect(r[0].subGroups[0].name).toBe('b');
+        expect(r[0].subGroups[0].class).toBe('group-1');
+    });
 });

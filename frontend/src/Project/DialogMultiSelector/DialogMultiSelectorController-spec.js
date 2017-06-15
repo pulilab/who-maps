@@ -160,5 +160,17 @@ describe('DialogMultiSelectorDialog', () => {
         expect(ele[0].subGroups[1].open).toBe(true);
     });
 
+    it('should have a fn that return the correct class string for a subGroup', () => {
+        const subGroup = {
+            open: false,
+            class: 'a'
+        };
+        let r = controller.subGroupClass(subGroup);
+        expect(r).toBe('closed a');
+        subGroup.open = true;
+        subGroup.class = 'b';
+        r = controller.subGroupClass(subGroup);
+        expect(r).toBe('open b');
+    });
 
 });
