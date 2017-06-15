@@ -73,7 +73,6 @@ class CountryViewModuleController {
                 base.items = _.uniqBy(base.items, unique);
             }
         }
-        console.log(base);
         return base;
     }
 
