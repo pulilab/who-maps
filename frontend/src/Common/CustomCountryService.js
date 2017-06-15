@@ -190,7 +190,8 @@ class CustomCountryService extends SimpleApi {
             code: 'who',
             logo: false,
             cover: '',
-            cover_text: 'This Digital Health Atlas aims to strengthen the value and impact of' +
+            cover_text: 'The Digital Health Atlas is a technology registry that ' +
+            'aims to strengthen the value and impact of' +
             ' digital health investments, improve coordination,' +
             ' and facilitate institutionalization and scale.',
             footer_title: 'customizable footer title',
@@ -199,10 +200,9 @@ class CustomCountryService extends SimpleApi {
             'Curabitur est gravida et libero vitae dictum. Ab illo tempore, ab est sed immemorabili.' +
             'Quisque ut dolor gravida, placerat libero vel, euismod. Fictum, ' +
             'deserunt mollit anim laborum astutumque!',
-            partner_logos: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg']
+            default_partners: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
+                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg'],
+            partner_logos: []
         };
         _.forEach(standard, (standardValue, key) => {
             const value = data[key];
@@ -222,7 +222,7 @@ class CustomCountryService extends SimpleApi {
             }
             self.getCountry(subDomain).then(country=> {
                 if (country && country.logo) {
-                    resolve(Object.assign({}, country));
+                    resolve(Object.assign({}, self.sendDefaultCountryData(country)));
                 }
                 else {
                     if (!self.countyDataPromise || self.countyDataPromise.promiseDone) {

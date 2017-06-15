@@ -35,7 +35,6 @@ class DashboardModuleController extends Protected {
                 this.fetchProjectData(data);
             });
             if (this.userType !== 0) {
-                this.fetchAxisData();
                 this.fetchToolkitData();
             }
         }
@@ -145,19 +144,12 @@ class DashboardModuleController extends Protected {
         });
     }
 
-    fetchAxisData() {
-
-        this.service.getAxisData().then(data => {
-            this.axisData = data;
-            this.fillImproveArray(data);
-            // console.debug('Axisdata', data);
-        });
-    }
-
     fetchToolkitData() {
 
         this.service.getToolkitData(this.projectId).then(data => {
             // console.debug('RAW Toolkit data', data);
+            this.axisData = data;
+            this.fillImproveArray(data);
             this.rawToolkitData = data;
             this.fetchToolkitVersions();
         });

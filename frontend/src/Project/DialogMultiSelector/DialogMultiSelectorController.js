@@ -66,6 +66,12 @@ class DialogMultiSelectorDialog {
         return false;
     }
 
+    subGroupClass(subGroup) {
+        const status = subGroup.open ? 'open' : 'closed';
+
+        return `${status} ${subGroup.class}`;
+    }
+
     static factory(buttonName, elements, selection, collectionName, dialogName) {
         function strategySelector($scope, $mdDialog) {
             return new DialogMultiSelectorDialog($scope, $mdDialog, buttonName,

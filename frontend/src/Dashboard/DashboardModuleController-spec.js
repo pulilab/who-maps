@@ -85,16 +85,6 @@ describe('DashboardModuleController', () => {
         expect(vm.fetchCoverageVersions).toHaveBeenCalled();
     });
 
-    it('\'s .fetchCountryMap method fetches from the right endpoint', () => {
-        spyOn(vm, 'fillImproveArray');
-        vm.service.getAxisData = () => {
-            return { then: (fn) => { fn('adat'); } };
-        };
-        spyOn(vm.service, 'getAxisData').and.callThrough();
-        vm.fetchAxisData();
-        expect(vm.service.getAxisData).toHaveBeenCalled();
-        expect(vm.axisData).toBe('adat');
-    });
 
     it('\'s .fetchToolkitData method fetches from the right endpoint, calls .fetchToolkitVersions', () => {
         vm.service.getToolkitData = () => {
@@ -102,10 +92,12 @@ describe('DashboardModuleController', () => {
         };
         spyOn(vm.service, 'getToolkitData').and.callThrough();
         spyOn(vm, 'fetchToolkitVersions');
+        spyOn(vm, 'fillImproveArray');
 
         vm.fetchToolkitData();
         expect(vm.service.getToolkitData).toHaveBeenCalled();
         expect(vm.fetchToolkitVersions).toHaveBeenCalled();
+        expect(vm.fillImproveArray).toHaveBeenCalled();
     });
 
     it('\'s .fetchCountryMap fn. calls the service with the id given, then emits', () => {

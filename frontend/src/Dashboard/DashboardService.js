@@ -6,15 +6,6 @@ class DashboardService extends AuthApi {
         super('projects');
         this.projectId = _projectId;
     }
-
-    getAxisData() {
-        return this.get(this.projectId + '/toolkit/data/')
-            .then(data => {
-                // console.debug(data);
-                return data;
-            });
-    }
-
     getProjectData(projectId) {
         return this.get(projectId)
             .then(data => {
@@ -31,7 +22,6 @@ class DashboardService extends AuthApi {
 
     getToolkitData(projectId) {
         return this.get(projectId + '/toolkit/data/').then(data => {
-            // console.debug(data);
             return data;
         });
     }

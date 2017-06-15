@@ -36,10 +36,6 @@ class ProjectDefinition extends Protected {
             contact_email: null,
             implementation_overview: null,
             implementation_dates: null,
-            health_focus_areas: {
-                standard: [],
-                custom: void 0
-            },
             geographic_scope: null,
             interoperability_links: [],
             interoperability_standards: {

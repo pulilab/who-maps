@@ -34,7 +34,7 @@ class CountryViewModuleController {
         this.getCountries();
         this.lastFilter = null;
         this.filterArray = [
-            this.createFilterCategory('platforms',
+            this.createFilterCategory('software',
               this.cs.projectStructure.technology_platforms)
         ];
     }
