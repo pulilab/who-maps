@@ -18,7 +18,8 @@ class ImplementationOverview extends CollapsibleSet {
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.watchers();
-        this.interventions = this.mapInterventions();
+        // this.interventions = this.mapInterventions();
+        this.interventions = this.structure.interventions;
     }
 
     watchers() {
