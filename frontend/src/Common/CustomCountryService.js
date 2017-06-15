@@ -199,8 +199,8 @@ class CustomCountryService extends SimpleApi {
             ' developed as a global good software in response to the proliferation of uncoordinated ' +
             'duplicative investments into digital health.',
             footer_text: '',
-            default_partners: ['https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg',
-                'https://pbs.twimg.com/media/C2XXpKRUsAAXHWt.jpg'],
+            default_partners: ['/static/partners/logo-hdc.png',
+                '/static/partners/logo-hrp-new.png'],
             partner_logos: []
         };
         _.forEach(standard, (standardValue, key) => {
