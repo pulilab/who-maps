@@ -57,16 +57,33 @@
           white-space: normal;
 
           .md-text {
+            position: relative;
+            box-sizing: border-box;
             display: block;
             width: 100%;
-            padding-bottom: 5px;
+            padding-top: 17px;
+            padding-bottom: 3px;
+            padding-left: 26px;
             @include text-truncate();
 
-            &:first-child {
-              padding-top: 5px;
-            }
-            &:last-child {
-              padding-bottom: 3px;
+            &:before {
+              position: absolute;
+              top: 18px;
+              left: 0;
+              content: "done";
+              font-family: 'Material Icons';
+              font-weight: normal;
+              font-style: normal;
+              font-size: 18px;
+              line-height: 1;
+              letter-spacing: normal;
+              text-transform: none;
+              display: inline-block;
+              white-space: nowrap;
+              word-wrap: normal;
+              direction: ltr;
+              -webkit-font-feature-settings: 'liga';
+              -webkit-font-smoothing: antialiased;
             }
           }
         }

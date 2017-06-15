@@ -2,9 +2,10 @@
     <div class="md-toolbar-tools">
         <div class="country-logo" layout-align="" ng-if="vm.pageLoaded">
 
-            <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
-
-            <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
+            <a ui-sref="landing">
+                <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+                <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
+            </a>
 
         </div>
 
@@ -95,7 +96,7 @@
     <div class="md-toolbar-tools-bottom">
         <h3>Get MAPS Toolkit now!</h3>
         <div class="dl-note">
-            <p>A new toolkit has been launched to help mHealth implementers<br> to successfully and sustainably scale-up their innovations.</p>
+            <p>A new World Health Organisation has been launched to help implementers<br> successfully and sustainably scale-up digital health systems.</p>
         </div>
         <md-button class="dl-maps-link md-raised md-primary"
                    href="/static/documents/maps_toolkit_eng.pdf"

@@ -55,6 +55,7 @@ describe('TopBar', () => {
         result = controller.showCountryLevelViewButton();
         expect(result).toBeFalsy();
     });
+
     it('should have a show a Login and Signup buttons function', () => {
         controller.isLogin = true;
         const result = {

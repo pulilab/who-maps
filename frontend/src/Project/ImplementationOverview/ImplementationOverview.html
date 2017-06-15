@@ -110,9 +110,9 @@
       </dialog-multi-selector>
     </div>
 
-    <div layout="row">
+    <div layout="row" class="extra-margin-double">
       <md-input-container flex>
-        <label>HSC challenges (select from list)</label>
+        <label>What are the Health System Challenges (HSC) your project addresses?</label>
         <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc" required multiple>
           <md-optgroup label="{{hsc.name}}" ng-repeat="hsc in vm.structure.hsc_challenges">
               <md-option value="{{challenge}}" ng-repeat="challenge in hsc.challenges">
@@ -126,9 +126,9 @@
       </md-input-container>
     </div>
 
-    <div layout="row" class="extra-margin">
+    <div layout="row" class="first extra-margin-double">
       <md-input-container flex>
-        <label>HIS buckets (select from list)</label>
+        <label>What part of the Health Information System (HIS) does this project support?</label>
         <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his" required multiple>
           <md-option value="{{his}}" ng-repeat="his in vm.structure.his_bucket">
             {{his}}
