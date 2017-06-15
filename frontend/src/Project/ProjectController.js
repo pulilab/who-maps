@@ -212,7 +212,7 @@ class ProjectController extends ProjectDefinition {
     }
 
     convertArrayToStandardCustomObj(data) {
-        const keyArray = ['interoperability_standards', 'health_focus_areas', 'licenses'];
+        const keyArray = ['interoperability_standards', 'licenses'];
 
         keyArray.forEach(key=> {
             const scaffold = {
@@ -411,9 +411,6 @@ class ProjectController extends ProjectDefinition {
             'contact_email': 'dsf@dsaf.coim',
             'implementation_overview': 'dsfdsfdsf',
             'implementation_dates': new Date(),
-            'health_focus_areas': {
-                'standard': []
-            },
             'geographic_scope': 'dsfds',
             'interoperability_links': [],
             'interoperability_standards': {
@@ -544,7 +541,7 @@ class ProjectController extends ProjectDefinition {
 
     mergeCustomAndDefault(collection) {
         const self = this;
-        const keyArray = ['interoperability_standards', 'licenses', 'health_focus_areas'];
+        const keyArray = ['interoperability_standards', 'licenses'];
         keyArray.forEach(key => {
             collection[key] = self.concatCustom(collection[key]);
         });

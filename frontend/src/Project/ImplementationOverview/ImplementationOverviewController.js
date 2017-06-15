@@ -18,7 +18,7 @@ class ImplementationOverview extends CollapsibleSet {
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.watchers();
-        this.interventions = this.mapInterventions();
+        this.interventions = this.mapInterventions(this.structure.interventions);
     }
 
     watchers() {
@@ -57,11 +57,20 @@ class ImplementationOverview extends CollapsibleSet {
         });
     }
 
-    mapInterventions() {
-        return [{
+    mapInterventions(interventions) {
+        const intervention = {
             name: '',
-            subGroups: this.structure.interventions
-        }];
+            subGroups: []
+        };
+        let color = 0;
+        for (const grandparent of interventions) {
+            color += 1;
+            for (const parent of grandparent.subGroups) {
+                parent.class = `group-${color}`;
+                intervention.subGroups.push(parent);
+            }
+        }
+        return [intervention];
     }
 
     validateCoverage(current, item) {

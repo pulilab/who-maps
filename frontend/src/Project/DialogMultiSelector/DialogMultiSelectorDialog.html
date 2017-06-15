@@ -22,7 +22,7 @@
           <small ng-show="group.allOpen" ng-click="vm.toggleAll(group)">Close all</small>
         </div>
         <div class="body">
-          <div class="sub-group" ng-class="{open: subGroup.open, closed: !subGroup.open}" ng-repeat="subGroup in group.subGroups" >
+          <div class="sub-group" ng-class="vm.subGroupClass(subGroup)" ng-repeat="subGroup in group.subGroups" >
             <div class="sub-header" ng-click="vm.toggle(subGroup)">
               <i class="material-icons">chevron_right</i>
               <h6>{{subGroup.name}}</h6>
