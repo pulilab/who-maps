@@ -9,7 +9,8 @@ const countryPartnersComponent = {
     bindings: {
         footerText: '<',
         footerTitle: '<',
-        partners: '<'
+        partners: '<',
+        permanentFooter: '<'
     }
 };
 
