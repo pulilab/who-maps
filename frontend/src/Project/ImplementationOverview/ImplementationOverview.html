@@ -67,36 +67,6 @@
   </div>
 
   <div class="section-wrapper">
-    <div class="checklist no-margin">
-      <h6>Select health focus area(s):</h6>
-      <ul>
-        <li ng-repeat="d in vm.structure.health_focus_areas">
-          <md-checkbox md-no-ink aria-label=""
-                       class="md-primary"
-                       ng-checked="vm.checkboxChecked(d, 'health_focus_areas')"
-                       ng-click="vm.checkboxToggle(d, 'health_focus_areas')"
-                       aria-label="{{ d }}">
-            {{ d }}
-          </md-checkbox>
-        </li>
-        <li>
-            <span layout="row">
-              <md-checkbox md-no-ink aria-label="custom-health-focus-area" ng-model="vm.customHealthFocusArea" class="md-primary" flex="nogrow"></md-checkbox>
-              <md-input-container flex>
-                <label>Specify other</label>
-                <input ng-required="vm.customHealthFocusArea"
-                       name="heathFocusArea.spectype"
-                       ng-model="vm.project.health_focus_areas.custom"
-                       ng-disabled="!vm.customHealthFocusArea"
-                       md-maxlength="64">
-              </md-input-container>
-            </span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section-wrapper">
 
     <div class="essential md-block">
       <h6>Essential interventions</h6>
