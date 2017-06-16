@@ -109,7 +109,6 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "strategies")
-        self.assertContains(response, "health_focus_areas")
         self.assertContains(response, "technology_platforms")
         self.assertContains(response, "licenses")
         self.assertContains(response, "applications")
@@ -118,7 +117,7 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "his_bucket")
         self.assertContains(response, "hsc_challenges")
         self.assertContains(response, "interventions")
-        self.assertEqual(len(response.json().keys()), 10)
+        self.assertEqual(len(response.json().keys()), 9)
 
     def test_create_new_project_basic_data(self):
         url = reverse("project-crud")
