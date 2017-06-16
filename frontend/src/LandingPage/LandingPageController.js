@@ -38,7 +38,6 @@ class LandingPageModuleController {
                         'background-repeat': 'no-repeat'
                     };
                 }
-                vm.showFooter = data.footer_text && data.footer_title;
             });
         });
         this.addEventListeners();

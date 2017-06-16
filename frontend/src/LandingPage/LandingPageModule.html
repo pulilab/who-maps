@@ -13,13 +13,13 @@
   <div layout="row" class="content-wrapper">
 
     <div class="what-is-aside" flex=40>
-      <h5 class="md-headline">What is Digital Health Atlas?</h5>
+      <h5 class="md-headline">Why use the Digital Health Atlas?</h5>
       <div class="md-block dha-feature" layout="row" layout-align="start start">
         <div class="img-wrapper" flex=auto>
           <img src="./images/screenshot-1.png" alt="">
         </div>
         <div flex=grow>
-          <p>Digital Health Atlas offers technologists, implementers, financial investors, and governments a platform of tools and guidance to improve the use of digital system and interventions for health.</p>
+          <p>This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.</p>
         </div>
       </div>
       <div class="md-block dha-feature" layout="row" layout-align="start start">
@@ -27,7 +27,7 @@
           <img src="./images/screenshot-2.png" alt="">
         </div>
         <div flex=grow>
-          <p>Using metrics from the WHO mHealth Assessment and Planning for Scale (MAPS) Toolkit, the DHA allows implementers to assess the maturity of digital health deployments, gain personalized guidance, and benefit from implementation experiences and other resources. </p>
+          <p>The Digital Health Atlas (DHA) offers governments, technologists, implementers, and donors a platform of tools and guidance to improve the use of, and planning coordination for digital information systems for health.</p>
         </div>
       </div>
       <div class="md-block dha-feature" layout="row" layout-align="start start">
@@ -35,7 +35,7 @@
           <img src="./images/screenshot-3.png" alt="">
         </div>
         <div flex=grow>
-          <p>This interactive technology registry also helps to curate the range of digital health implementations around the world. This will enable a global community of implementers, governments, and financial investors to map, monitor, and foster the growth and impact of digital health investments within countries.</p>
+          <p>The DHA facilitates implementers to assess the maturity of their digital health implementations, gain personalized guidance, benefit from other’s implementation experiences, and gain access to global resources from leading technical institutions.</p>
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@
 </div>
 
 <country-partners
-  ng-if="vm.showFooter"
+  permanent-footer="vm.countryData.permanent_footer"
   footer-title="vm.countryData.footer_title"
   footer-text="vm.countryData.footer_text"
   partners="vm.countryData.partners">
