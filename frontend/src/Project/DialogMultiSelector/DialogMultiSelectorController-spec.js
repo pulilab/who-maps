@@ -19,11 +19,13 @@ describe('DialogMultiSelector', () => {
 
     it('should have a watcher function', () => {
         spyOn(controller, 'openDialog');
+        spyOn(controller, 'checkDuplicates');
         controller.scope.$watch = (feed, action) => {
             action(true, false);
         };
         controller.watchers();
         expect(controller.openDialog).toHaveBeenCalled();
+        expect(controller.checkDuplicates).toHaveBeenCalled();
     });
 
     it('should have a showModal Fn', () => {
@@ -39,6 +41,33 @@ describe('DialogMultiSelector', () => {
     it('should have a openDialog fn', () => {
         controller.openDialog();
         expect(controller.dialog.show).toHaveBeenCalled();
+    });
+
+    it('should have a fn. that checks duplicates in the elements passed to the component', () => {
+        const ele = [
+            {
+                name: 'a',
+                subGroups: [
+                    {
+                        name: 'b',
+                        items: ['a', 'b']
+                    }
+                ]
+            },
+            {
+                name: 'aa',
+                subGroups: [
+                    {
+                        name: 'bb',
+                        items: ['a', 'bb']
+                    }
+                ]
+            }
+        ];
+        spyOn(console, 'error');
+        controller.collectionName = 'items';
+        controller.checkDuplicates(ele);
+        expect(window.console.error).toHaveBeenCalled();
     });
 
 

@@ -105,17 +105,23 @@ class DialogMultiSelector extends Protected {
     }
 
     checkDuplicates(elements) {
+        if (!elements || !elements.length) {
+            console.error('No element to select from were provided to this dialog');
+            return;
+        }
         const flat = [];
+        const flatWitPath = [];
         for (const e of elements) {
             for (const group of e.subGroups) {
                 for (const item of group[this.collectionName]) {
-                    const currentItem = `${e.name} => ${group.name} => ${item}`;
-                    const index = flat.indexOf(currentItem);
+                    const itemWithPath = `${e.name} => ${group.name} => ${item}`;
+                    const index = flat.indexOf(item);
                     if (index === -1) {
-                        flat.push(currentItem);
+                        flat.push(item);
+                        flatWitPath.push(itemWithPath);
                     }
                     else {
-                        console.error(`Dupes in elements collection: ${currentItem} / ${flat[index]} `);
+                        console.error(`Dupes in elements collection: ${itemWithPath} / ${flatWitPath[index]} `);
                     }
                 }
             }
