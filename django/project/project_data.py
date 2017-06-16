@@ -343,12 +343,12 @@ project_structure = {
         "Water, Sanitation, and Hygiene"
     ],
     "interoperability_links": [
-        {"pre": "Yes, links to a ", "name": "client registry"},
-        {"pre": "Yes, links to ", "name": "Health Management Information System"},
-        {"pre": "Yes, links to a ", "name": "health worker registry"},
+        {"pre": "Yes, links to a ", "name": "Client Registry"},
+        {"pre": "Yes, links to ", "name": "Health Management Information System (HMIS)"},
+        {"pre": "Yes, links to a ", "name": "Health Worker Registry"},
         {"pre": "Yes, links to ", "name": "Logistics Management and Supply Chain Information System (LMIS)"},
-        {"pre": "Yes, links to ", "name": "digital laboratory information system"},
-        {"pre": "Yes, links to a ", "name": "facility registry"},
+        {"pre": "Yes, links to ", "name": "Laboratory Information System"},
+        {"pre": "Yes, links to a ", "name": "Facility Registry"},
         {"pre": "Yes, links to a ", "name": "Shared Health Record"},
         {"pre": "Yes, links to a ", "name": "Terminology Service"},
     ],
