@@ -16,11 +16,21 @@ class CountryViewModuleController {
         this.service = new CountryService();
         this.pdfStorage = PDFExportStorage.factory();
         this.$onInit = this.onInit.bind(this);
+        this.generateFilters = this.generateFilters.bind(this);
+        this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
+        this.flatGrandparentParent = this.flatGrandparentParent.bind(this);
     }
 
 
     onInit() {
-        this.header = {
+        this.header = this.generateHeader();
+        this.getCountries();
+        this.filters = this.generateFilters();
+        this.lastFilter = null;
+    }
+
+    generateHeader() {
+        return {
             name: { up: false, down: false },
             country: { up: false, down: false },
             organisation_name: { up: false, down: false },
@@ -31,89 +41,92 @@ class CountryViewModuleController {
             geographic_scope: { up: false, down: false },
             health_focus_area: { up: false, down: false }
         };
-        this.getCountries();
-        this.lastFilter = null;
-        this.filterArray = [
-            this.createFilterCategory('software',
-              this.cs.projectStructure.technology_platforms)
-        ];
     }
 
-    extractConstraints(collection) {
-        const result = [];
-        _.forEach(collection, (tax, key) => {
-            result.push(key);
+    prepareFiltersCheckboxes(structureName, parsingFunction, parentName, childName) {
+        let structure = this.cs.projectStructure[structureName];
+        if (parsingFunction) {
+            structure = parsingFunction(structure, parentName, childName);
+        }
+        return structure.map(s => {
+            return {
+                value: false,
+                name: s
+            };
         });
-        return result;
     }
 
-    concatenateApplications(collection) {
-        let result = [];
-        _.forEach(collection, application => {
-            result = _.concat(result, _.toArray(application.subApplications));
-        });
-        return result;
-    }
-
-    createFilterCategory(name, collection, unique, subItem, preParse) {
-        const base = { name, items: [], open: false };
-
-        if (preParse) {
-            collection = preParse(collection);
-        }
-
-        if (collection) {
-            _.forEach(collection, item => {
-                base.items.push({
-                    name: subItem ? item[subItem] : item,
-                    value: false
-                });
-            });
-            if (unique) {
-                base.items = _.uniqBy(base.items, unique);
-            }
-        }
-        return base;
-    }
-
-    replaceLodash(item) {
-        return item ? item.replace('_', ' ') : '';
-
-    }
-
-    filterClv() {
-        const filters = {};
-        _.forEach(this.filterArray, category => {
-            filters[category.name] = _.chain(category.items)
-              .map(value => {
-                  return value.value ? value.name : false;
-              })
-              .filter()
-              .value();
-        });
-        if (_.flattenDeep(_.toArray(filters)).length > 0 && this.countryProjects && this.countryProjects.length > 0) {
-            let provisionalArray = this.countryProjects.slice();
-            provisionalArray = this.filterByPlatforms(provisionalArray, filters);
-            this.projectsData = _.uniqBy(provisionalArray, 'id');
-        }
-        else {
-            this.projectsData = this.countryProjects;
-        }
-
-        this.EE.emit('projectFiltered', this.projectsData);
-    }
-
-    filterByPlatforms(projects, filters) {
-        if (filters.platforms && filters.platforms.length > 0) {
-            return projects.filter(p => {
-                if (p.platforms && p.platforms.length > 0) {
-                    return p.platforms.some(plat => filters.platforms.indexOf(plat.name) > -1);
+    generateFilters() {
+        const flatGp = this.flatGrandparentParent;
+        const flatP = this.flatParent;
+        const digitalHealthInterventions = {
+            name: 'Digital Health Interventions',
+            filterMappingFn: p => {
+                let r = [];
+                for (const plat of p) {
+                    r = r.concat(plat.strategies);
                 }
-                return false;
-            });
-        }
-        return projects;
+                return r;
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('strategies', flatGp, 'subGroups', 'strategies')
+        };
+
+        const healthInterventions = {
+            name: 'Health Focus Areas',
+            filterMappingFn: p => {
+                return p.interventions;
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('interventions', flatGp, 'subGroups', 'interventions')
+        };
+        const healthInformationSystems = {
+            name: 'Health Information Systems',
+            filterMappingFn: p => {
+                return p.his_bucket;
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('his_bucket')
+        };
+
+        const healthSystemChallenges = {
+            name: 'Health System Challenges',
+            filterMappingFn: p => {
+                return p.hsc_challenges;
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('hsc_challenges', flatP, 'challenges')
+        };
+
+        const software = {
+            name: 'Software',
+            filterMappingFn: p => {
+                return p.platforms.map(plat => plat.name);
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('technology_platforms')
+        };
+
+        return [digitalHealthInterventions, healthInterventions,
+            healthInformationSystems, healthSystemChallenges, software];
     }
+
+    flatGrandparentParent(collection, parentName, childName) {
+        let result = [];
+        for (const grandpa of collection) {
+            result = result.concat(this.flatParent(grandpa[parentName], childName));
+        }
+        return Array.from(new Set(result));
+    }
+
+    flatParent(collection, childName) {
+        let result = [];
+        for (const item of collection) {
+            result = result.concat(item[childName]);
+        }
+        return result;
+    }
+
 
     getCountries() {
 

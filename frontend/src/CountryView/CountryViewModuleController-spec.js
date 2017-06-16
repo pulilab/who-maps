@@ -32,48 +32,12 @@ describe('CountryViewModuleController', () => {
 
     it('has onInit fn. which gets countries, and generates filterArray', () => {
         spyOn(vm, 'getCountries');
-        spyOn(vm, 'createFilterCategory').and.returnValue(1);
-
+        spyOn(vm, 'generateFilters');
         vm.$onInit();
         expect(vm.getCountries).toHaveBeenCalled();
-        expect(vm.createFilterCategory.calls.count()).toBe(1);
-        expect(vm.filterArray.length).toEqual(1);
+        expect(vm.generateFilters).toHaveBeenCalled();
     });
 
-    it('has an extractConstraints fn,', () => {
-        const ret = vm.extractConstraints({ 'key': 'value', 'key2': 'value2' });
-        expect(ret).toContain('key');
-        expect(ret).toContain('key2');
-    });
-
-    it('has a concatenateApplications fn.', () => {
-        const ret = vm.concatenateApplications({
-            'first': { 'subApplications': { 'a': 1, 'b': 2 } },
-            'second': { 'subApplications': { 'c': 3, 'd': 4 } } }
-        );
-        expect(ret).toContain(1);
-        expect(ret).toContain(2);
-        expect(ret).toContain(3);
-        expect(ret).toContain(4);
-    });
-
-    it('has a createFilterCategory fn.', () => {
-        const ret = vm.createFilterCategory(
-          'filtername',
-          { 'key': 1.1, 'key2': 1.2, 'key3': 2.0 },
-          'key',
-          null,
-          a => a++
-        );
-        expect(ret.name).toBe('filtername');
-        expect(Array.isArray(ret.items)).toBe(true);
-        expect(ret.open).toBe(false);
-    });
-
-    it('has a replaceLodash fn.', () => {
-        expect(vm.replaceLodash()).toBe('');
-        expect(vm.replaceLodash('a_b')).toBe('a b');
-    });
 
     it('has the commonservices\' isViewer and isMember fn.s', () => {
         spyOn(vm.cs, 'isViewer');
@@ -110,51 +74,6 @@ describe('CountryViewModuleController', () => {
         expect(vm.EE.emit).toHaveBeenCalledWith('country Changed');
         expect(vm.fetchCountryMap).toHaveBeenCalledWith('id');
         expect(vm.fetchDistrictProjects).toHaveBeenCalledWith('id');
-    });
-
-    it('has a filterByPlatforms Fn.', () => {
-        const filters = {
-            'platforms': ['Bamboo']
-        };
-        const projects = [
-            {
-                id: 1,
-                platforms:  [
-                    { name: 'Bamboo' }
-                ]
-            },
-            {
-                id:2,
-                platforms: undefined
-            }];
-        const result = vm.filterByPlatforms(projects, filters);
-        expect(result.length).toBe(1);
-    });
-
-    it('has filterClv fn.', () => {
-        vm.filterArray = [
-            {
-                'name': 'platforms',
-                'items': [
-                    {
-                        'name': 'Bamboo',
-                        'value': true
-                    }
-                ],
-                'open': false
-            }
-        ];
-        spyOn(vm.EE, 'emit');
-        spyOn(vm, 'filterByPlatforms');
-        vm.countryProjects = [{
-            id: 1,
-            platforms:  [
-                { name: 'Bamboo' }
-            ]
-        }];
-        vm.filterClv();
-        expect(vm.filterByPlatforms).toHaveBeenCalled();
-        expect(vm.EE.emit).toHaveBeenCalledWith('projectFiltered', vm.projectsData);
     });
 
 

@@ -188,14 +188,14 @@
                         Apply filters to map:
                     </div>
 
-                    <div class="list-headers" ng-repeat="header in vm.filterArray">
+                    <div class="list-headers" ng-repeat="header in vm.filters">
                         <div class="header" ng-click="header.open = !header.open">
                             <md-icon ng-hide="header.open" >expand_more</md-icon>
                             <md-icon ng-show="header.open" >expand_less</md-icon>
-                            {{vm.replaceLodash(header.name)}} ({{header.items.length}})
+                            {{header.name}} ({{header.items.length}})
                         </div>
                         <div class="list-item" ng-repeat="item in header.items  | orderBy: 'name' " ng-show="header.open">
-                            <md-checkbox class="md-primary" ng-model="item.value" aria-label="item.name" ng-change="vm.filterClv()">
+                            <md-checkbox class="md-primary" ng-model="item.value" aria-label="item.name">
                                 {{item.name}}
                             </md-checkbox>
                         </div>
