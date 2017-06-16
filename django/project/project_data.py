@@ -229,8 +229,7 @@ project_structure = {
                     "strategies": [
                         "Parse unstructured data into structured data",
                         "Merge, de-duplicate and curate coded/standardized datasets or terminologies",
-                        "Classify disease codes",
-                        "Identify and record cause of death"
+                        "Classify disease codes"
                     ]
                 },
                 {
