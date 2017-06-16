@@ -325,23 +325,6 @@ project_structure = {
         "Supply chain management",
         "Financial transactions and incentives"
     ],
-    "health_focus_areas": [
-        "Child health",
-        "Family Planning",
-        "HIV/AIDS",
-        "Infectious Diseases",
-        "Malaria and other vector-borne diseases",
-        "Maternal health",
-        "Newborn heath",
-        "Non Communicable Diseases",
-        "Nutrition/Food Security",
-        "Parasitic diseases",
-        "Primary Care",
-        "Sexual and Reproductive Health",
-        "Tuberculosis",
-        "Violence",
-        "Water, Sanitation, and Hygiene"
-    ],
     "interoperability_links": [
         {"pre": "Yes, links to a ", "name": "Client Registry"},
         {"pre": "Yes, links to ", "name": "Health Management Information System (HMIS)"},
