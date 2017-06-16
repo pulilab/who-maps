@@ -39,11 +39,11 @@
 
                     <div class="headercont" layout="row">
                         <div class="exports" flex="grow">
-                          <md-button class="md-primary" ng-click="vm.exportCSV()">
+                          <md-button class="md-primary" ng-show="vm.projectsData && vm.projectsData.length > 0" ng-click="vm.exportCSV()">
                               <md-icon>file_download</md-icon>
                               Export (CSV)
                           </md-button>
-                            <md-button class="md-primary" ng-click="vm.exportPDF()">
+                            <md-button class="md-primary" ng-show="vm.projectsData && vm.projectsData.length > 0" ng-click="vm.exportPDF()">
                                 <md-icon>file_download</md-icon>
                                 Export (PDF)
                             </md-button>
