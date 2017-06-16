@@ -98,13 +98,6 @@ project_structure = {
                     ]
                 },
                 {
-                    "name": "Provider work planning and scheduling",
-                    "strategies": [
-                        "Schedule client appointments based on clinical care plan",
-                        "Schedule health worker activities"
-                    ]
-                },
-                {
                     "name": "Provider to provider communication",
                     "strategies": [
                         "Health worker to health worker telemedicine for patient case management ",
@@ -596,7 +589,7 @@ project_structure = {
                                                       "Alcohol: Population-wide measures"
                                                       ]},
                 {"name": "Illicit drug use", "interventions": ["Illicit drug: Prevention including education",
-                                                               "Illicit drug: Involuntary Treatment",
+                                                               "Illicit drug: Voluntary Treatment",
                                                                "Illicit drug: Involuntary Treatment"
                 ]}
             ]
