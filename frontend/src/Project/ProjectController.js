@@ -445,12 +445,18 @@ class ProjectController extends ProjectDefinition {
     }
 
     showToast(text) {
-        this.toast.show(
-          this.toast.simple()
-            .textContent(text)
-            .position('bottom right')
-            .hideDelay(3000)
-        );
+        const toast = {
+            template:
+              `<md-toast id="custom-toast">
+                <div class="md-toast-content">
+                  <span>${text}</span>
+                </div>
+              </md-toast>`,
+            autoWrap: false,
+            hideDelay: 3000
+        };
+
+        this.toast.show(toast);
     }
 
     ownershipCheck(project) {

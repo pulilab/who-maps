@@ -1,6 +1,19 @@
 @import '../variables';
 @import '../mixins';
 
+#custom-toast {
+  width:100%;
+
+  .md-toast-content {
+    background: $color-red;
+    width:auto;
+    min-width: 20%;
+    max-width: 35%;
+    margin:auto;
+    text-align: center;
+  }
+}
+
 .new-edit-project {
   min-width: $page-min-width;
 
