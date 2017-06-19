@@ -37,11 +37,11 @@
             </td>
             <td>
                 <h6>Implementing partners</h6>
-                <span>{{project.implementing_partners}}</span>
+                <span>{{project.implementing_partners.join(', ')}}</span>
             </td>
             <td>
-                <h6>mHealth interventions</h6>
-                <span>{{project.health_focus_areas.join(', ')}}</span>
+                <h6>Digital Health Interventions</h6>
+                <span>{{project.interventions.join(', ')}}</span>
             </td>
             <td>
                 <h6>Point of contact</h6>
