@@ -1,11 +1,10 @@
 import CountryViewModuleController from './CountryViewModuleController';
+import { $scope, EE } from '../testUtilities';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
 
 let vm = {};
-const scope = {
-    $evalAsync: () => {}
-};
+
 
 const csMock = {
     hssStructure: {
@@ -18,61 +17,83 @@ const csMock = {
     isMember: () => {}
 };
 
-const EE = {
-    emit: () => {}
-};
 
 describe('CountryViewModuleController', () => {
 
     beforeEach(() => {
+        const scope = $scope(vm);
         vm = CountryViewModuleController.countryControllerFactory()(scope);
         vm.cs = csMock;
         vm.EE = EE;
     });
 
-    it('has onInit fn. which gets countries, and generates filterArray', () => {
+    it('has onInit fn. which gets countries and setup the watcher', () => {
         spyOn(vm, 'getCountries');
-        spyOn(vm, 'createFilterCategory').and.returnValue(1);
-
+        spyOn(vm, 'watchers');
         vm.$onInit();
         expect(vm.getCountries).toHaveBeenCalled();
-        expect(vm.createFilterCategory.calls.count()).toBe(1);
-        expect(vm.filterArray.length).toEqual(1);
+        expect(vm.watchers).toHaveBeenCalled();
     });
 
-    it('has an extractConstraints fn,', () => {
-        const ret = vm.extractConstraints({ 'key': 'value', 'key2': 'value2' });
-        expect(ret).toContain('key');
-        expect(ret).toContain('key2');
+    it('should have a watcher function', () => {
+        spyOn(vm, 'applyFilters');
+        spyOn(vm, 'generateFilters');
+        vm.watchers();
+        expect(vm.applyFilters).toHaveBeenCalled();
+        expect(vm.generateFilters).toHaveBeenCalled();
     });
 
-    it('has a concatenateApplications fn.', () => {
-        const ret = vm.concatenateApplications({
-            'first': { 'subApplications': { 'a': 1, 'b': 2 } },
-            'second': { 'subApplications': { 'c': 3, 'd': 4 } } }
-        );
-        expect(ret).toContain(1);
-        expect(ret).toContain(2);
-        expect(ret).toContain(3);
-        expect(ret).toContain(4);
-    });
+    describe('apply filters function', () => {
 
-    it('has a createFilterCategory fn.', () => {
-        const ret = vm.createFilterCategory(
-          'filtername',
-          { 'key': 1.1, 'key2': 1.2, 'key3': 2.0 },
-          'key',
-          null,
-          a => a++
-        );
-        expect(ret.name).toBe('filtername');
-        expect(Array.isArray(ret.items)).toBe(true);
-        expect(ret.open).toBe(false);
-    });
+        let filters = [];
+        let oldValues = [];
+        const filterMappingFn = jasmine.createSpy('filterMappingFn').and.returnValue([]);
 
-    it('has a replaceLodash fn.', () => {
-        expect(vm.replaceLodash()).toBe('');
-        expect(vm.replaceLodash('a_b')).toBe('a b');
+        beforeEach(() => {
+            filters = [
+                {
+                    open: true,
+                    filterMappingFn,
+                    items: [{ value: true, name: 'a' }]
+                },
+                {
+                    open: true,
+                    filterMappingFn,
+                    items: [{ value: true, name: 'b' }]
+                }
+            ];
+            oldValues = filters.slice();
+        });
+
+
+        it('should not run if the only change is on the open - close ', ()  => {
+            oldValues[0].open = false;
+            vm.applyFilters(filters, oldValues);
+            expect(vm.scope.$evalAsync).not.toHaveBeenCalled();
+        });
+
+        it('should call the mappingFilter fn on the filter object', () => {
+            vm.countryProjects = [{}];
+            vm.applyFilters(filters, oldValues);
+            expect(filterMappingFn).toHaveBeenCalled();
+        });
+        it('should show only project that contain one or more enabled filters', () => {
+            vm.countryProjects = [{}];
+            filters[0].filterMappingFn = () => ['a'];
+            vm.applyFilters(filters, oldValues);
+            expect(vm.projectsData[0]).toBe(vm.countryProjects[0]);
+        });
+        it('emit projectsUpdated event only if the filters actually modified the shown content', () => {
+            vm.EE.emit.calls.reset();
+            vm.countryProjects = [{}];
+            filters[0].filterMappingFn = () => ['a'];
+            vm.applyFilters(filters, oldValues);
+            expect(vm.EE.emit).toHaveBeenCalledWith('projectsUpdated', vm.projectsData);
+
+            vm.applyFilters(filters, oldValues);
+            expect(vm.EE.emit).toHaveBeenCalledTimes(1);
+        });
+
     });
 
     it('has the commonservices\' isViewer and isMember fn.s', () => {
@@ -101,7 +122,6 @@ describe('CountryViewModuleController', () => {
 
     it('has changeMapTo fn.', () => {
         const countryMock = { id: 'id' };
-        spyOn(vm.EE, 'emit');
         spyOn(vm, 'fetchCountryMap');
         spyOn(vm, 'fetchDistrictProjects');
 
@@ -110,51 +130,6 @@ describe('CountryViewModuleController', () => {
         expect(vm.EE.emit).toHaveBeenCalledWith('country Changed');
         expect(vm.fetchCountryMap).toHaveBeenCalledWith('id');
         expect(vm.fetchDistrictProjects).toHaveBeenCalledWith('id');
-    });
-
-    it('has a filterByPlatforms Fn.', () => {
-        const filters = {
-            'platforms': ['Bamboo']
-        };
-        const projects = [
-            {
-                id: 1,
-                platforms:  [
-                    { name: 'Bamboo' }
-                ]
-            },
-            {
-                id:2,
-                platforms: undefined
-            }];
-        const result = vm.filterByPlatforms(projects, filters);
-        expect(result.length).toBe(1);
-    });
-
-    it('has filterClv fn.', () => {
-        vm.filterArray = [
-            {
-                'name': 'platforms',
-                'items': [
-                    {
-                        'name': 'Bamboo',
-                        'value': true
-                    }
-                ],
-                'open': false
-            }
-        ];
-        spyOn(vm.EE, 'emit');
-        spyOn(vm, 'filterByPlatforms');
-        vm.countryProjects = [{
-            id: 1,
-            platforms:  [
-                { name: 'Bamboo' }
-            ]
-        }];
-        vm.filterClv();
-        expect(vm.filterByPlatforms).toHaveBeenCalled();
-        expect(vm.EE.emit).toHaveBeenCalledWith('projectFiltered', vm.projectsData);
     });
 
 
