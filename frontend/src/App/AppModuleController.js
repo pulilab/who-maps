@@ -21,6 +21,7 @@ class AppModuleController extends Protected {
         this.projectId = this.state.params.appName;
         this.currentPage = this.state.current.name;
         this.showCountryTopBar = false;
+
         if (this.user) {
             this.fillUserData();
             this.userProfile = this.cs.userProfile;
@@ -50,10 +51,19 @@ class AppModuleController extends Protected {
         });
     }
 
+    checkOwnership(state, cs) {
+        const root = state.current.parent;
+        const id = state.params.appName ? parseInt(state.params.appName, 10) : false;
+        const isMemberOrViewer = cs.isMember({ id }) || cs.isViewer({ id });
+        if (id !== false && !isMemberOrViewer && root === 'app') {
+            state.go('public-dashboard', { appName: id });
+        }
+    }
+
     showToast() {
         this.dialog.show(
           this.dialog.simple()
-            .textContent('You can\'t access this area without a filling your profile')
+            .textContent('You can\'t access this area without filling your profile')
             .position('bottom right')
             .hideDelay(3000)
         );
@@ -96,8 +106,8 @@ class AppModuleController extends Protected {
                 this.currentProject = item;
             }
         });
-
         this.scope.$evalAsync();
+        this.checkOwnership(this.state, this.cs);
 
     }
 
