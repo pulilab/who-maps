@@ -49,7 +49,7 @@ class ProjectDefinition extends Protected {
             data_exchanges: [],
             his_bucket: [],
             hsc_challenges: [],
-            interventions: [],
+            health_focus_areas: [],
             government_investor: null
         };
     }

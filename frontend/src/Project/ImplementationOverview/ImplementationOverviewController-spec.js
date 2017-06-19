@@ -20,7 +20,7 @@ const $scope = {
     $watchGroup: jasmine.createSpy('watchGroup').and.callFake(executeWatch)
 };
 const structure = {
-    interventions: []
+    health_focus_areas: []
 };
 
 describe('ImplementationOverview', () => {
@@ -53,7 +53,7 @@ describe('ImplementationOverview', () => {
     });
 
     it('should have a mapping fn for interventions', () => {
-        const interventions = [
+        const health_focus_areas = [
             {
                 name: 'a',
                 subGroups: [
@@ -81,7 +81,7 @@ describe('ImplementationOverview', () => {
                 ]
             }
         ];
-        const r = controller.mapInterventions(interventions);
+        const r = controller.mapHealthFocusAreas(health_focus_areas);
         expect(r[0].subGroups[0].name).toBe('b');
         expect(r[0].subGroups[0].class).toBe('group-1');
     });

@@ -428,7 +428,7 @@ class ProjectController extends ProjectDefinition {
                 'Delayed reporting of events',
                 'Lack of population denominator'
             ],
-            'interventions': [],
+            'health_focus_areas': [],
             'government_approved': false,
             'government_investor': 0,
             'national_level_deployment': {
