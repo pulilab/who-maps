@@ -91,6 +91,9 @@ class CountryMapController {
     }
 
     handleUpdatedProjects(projects) {
+        if (!this.data) {
+            return;
+        }
         const provisionalDistrictObject = {};
         _.forEach(this.initialData.data, (district, key) => {
             const newProjectArray = [];
