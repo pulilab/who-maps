@@ -446,7 +446,7 @@ project_structure = {
             ]
         }
     ],
-    "interventions": [
+    "health_focus_areas": [
         {
             "name": "Red Group",
             "subGroups": [
