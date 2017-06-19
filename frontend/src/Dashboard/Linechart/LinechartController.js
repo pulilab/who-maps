@@ -213,16 +213,6 @@ class LinechartController {
                     });
             }
         });
-
-        // Label events to trigger classes, that opaques lines via css
-        // timeout is sometimes needed, because the labels arent in the DOM yet after redraw
-        if (d3.select(this.el[0]).select('.labelhov' + labels.length).empty()) {
-            this.timeout(labelHoverFn.bind(this), 250);
-        }
-        else {
-            labelHoverFn.bind(this)();
-        }
-
         function labelHoverFn() {
 
             for (let i = 1; i <= labels.length; i += 1) {
@@ -235,6 +225,15 @@ class LinechartController {
                         element.classed('activelabel' + i, false);
                     });
             }
+        }
+
+        // Label events to trigger classes, that opaques lines via css
+        // timeout is sometimes needed, because the labels arent in the DOM yet after redraw
+        if (d3.select(this.el[0]).select('.labelhov' + labels.length).empty()) {
+            this.timeout(labelHoverFn.bind(this), 250);
+        }
+        else {
+            labelHoverFn.bind(this)();
         }
 
         // Redraw on window size change
