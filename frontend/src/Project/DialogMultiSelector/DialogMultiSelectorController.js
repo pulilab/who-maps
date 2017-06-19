@@ -1,5 +1,5 @@
 import angular from 'angular';
-import  Protected from '../../Common/Protected';
+import Protected from '../../Common/Protected';
 
 
 class DialogMultiSelectorDialog {
@@ -13,7 +13,6 @@ class DialogMultiSelectorDialog {
         this.collectionName = collectionName;
         this.toggleAll = this.toggleAll.bind(this);
         this.openSelected = this.openSelected.bind(this);
-
         this.dialogClass = 'column-' + this.elements.length;
         this.openSelected(this.elements);
     }
@@ -90,6 +89,8 @@ class DialogMultiSelector extends Protected {
         this.scope = $scope;
         this.dialog = $mdDialog;
         this.defaultOnInit();
+        this.checkDuplicates = this.checkDuplicates.bind(this);
+
         this.watchers();
     }
 
@@ -99,6 +100,32 @@ class DialogMultiSelector extends Protected {
                 this.openDialog();
             }
         });
+
+        this.scope.$watch(s => s.vm.elements, this.checkDuplicates);
+    }
+
+    checkDuplicates(elements) {
+        if (!elements || !elements.length) {
+            console.error('No element to select from were provided to this dialog');
+            return;
+        }
+        const flat = [];
+        const flatWitPath = [];
+        for (const e of elements) {
+            for (const group of e.subGroups) {
+                for (const item of group[this.collectionName]) {
+                    const itemWithPath = `${e.name} => ${group.name} => ${item}`;
+                    const index = flat.indexOf(item);
+                    if (index === -1) {
+                        flat.push(item);
+                        flatWitPath.push(itemWithPath);
+                    }
+                    else {
+                        console.error(`Dupes in elements collection: ${itemWithPath} / ${flatWitPath[index]} `);
+                    }
+                }
+            }
+        }
     }
 
     showModal(event) {
