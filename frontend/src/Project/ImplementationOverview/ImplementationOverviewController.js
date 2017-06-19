@@ -9,7 +9,7 @@ class ImplementationOverview extends CollapsibleSet {
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
         this.setAvailableOptions = this.setAvailableOptions.bind(this);
-        this.mapInterventions = this.mapInterventions.bind(this);
+        this.mapHealthFocusAreas = this.mapHealthFocusAreas.bind(this);
     }
 
     onInit() {
@@ -18,7 +18,7 @@ class ImplementationOverview extends CollapsibleSet {
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.watchers();
-        this.interventions = this.mapInterventions(this.structure.interventions);
+        this.health_focus_areas = this.mapHealthFocusAreas(this.structure.health_focus_areas);
     }
 
     watchers() {
@@ -57,13 +57,13 @@ class ImplementationOverview extends CollapsibleSet {
         });
     }
 
-    mapInterventions(interventions) {
+    mapHealthFocusAreas(healthFocusAreas) {
         const intervention = {
             name: '',
             subGroups: []
         };
         let color = 0;
-        for (const grandparent of interventions) {
+        for (const grandparent of healthFocusAreas) {
             color += 1;
             for (const parent of grandparent.subGroups) {
                 parent.class = `group-${color}`;

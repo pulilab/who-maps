@@ -116,10 +116,10 @@
                                 <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
                                 <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
                             </div>
-                            <div flex="20" ng-click="vm.orderTable('interventions')">
-                                Digital Health Interventions
-                                <md-icon ng-show="vm.header.interventions.up" >expand_more</md-icon>
-                                <md-icon ng-show="vm.header.interventions.down" >expand_less</md-icon>
+                            <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
+                                Health Focus Areas
+                                <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
                             </div>
                         </div>
 
@@ -153,7 +153,7 @@
                             <div flex="30">{{project.implementation_overview}}</div>
                             <div flex="20">{{vm.printImplementingPartners(project)}}</div>
                             <div flex="20">{{project.geographic_scope}}</div>
-                            <div flex="20">{{project.interventions.join(', ')}}</div>
+                            <div flex="20">{{project.health_focus_areas.join(', ')}}</div>
 
                         </div>
                         <div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>

@@ -84,7 +84,7 @@ class CountryViewModuleController {
             implementation_overview: { up: false, down: false },
             implementing_partners: { up: false, down: false },
             geographic_scope: { up: false, down: false },
-            interventions: { up: false, down: false },
+            health_focus_areas: { up: false, down: false }
         };
     }
 
@@ -99,6 +99,7 @@ class CountryViewModuleController {
             else {
                 inner = item[mapper];
             }
+            inner = inner ? inner : [];
             for (const s of inner) {
                 structure.add(s);
             }
@@ -133,10 +134,10 @@ class CountryViewModuleController {
         const healthInterventions = {
             name: 'Health Focus Areas',
             filterMappingFn: p => {
-                return Array.isArray(p.interventions) ? p.interventions : [];
+                return Array.isArray(p.health_focus_areas) ? p.health_focus_areas : [];
             },
             open: false,
-            items: this.prepareFiltersCheckboxes('interventions')
+            items: this.prepareFiltersCheckboxes('health_focus_areas')
         };
         const healthInformationSystems = {
             name: 'Health Information Systems',
