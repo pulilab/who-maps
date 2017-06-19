@@ -16,11 +16,66 @@ class CountryViewModuleController {
         this.service = new CountryService();
         this.pdfStorage = PDFExportStorage.factory();
         this.$onInit = this.onInit.bind(this);
+        this.generateFilters = this.generateFilters.bind(this);
+        this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
+        this.flatGrandparentParent = this.flatGrandparentParent.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.applyFilters = this.applyFilters.bind(this);
     }
 
 
     onInit() {
-        this.header = {
+        this.header = this.generateHeader();
+        this.getCountries();
+        this.lastFilter = null;
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watchCollection(s => s.vm.countryProjects, this.generateFilters);
+        this.scope.$watch(s => s.vm.filters, this.applyFilters, true);
+    }
+
+    applyFilters(filters, oldValue) {
+        if (!filters || !oldValue) {
+            return;
+        }
+        const oldOpen = oldValue.map(c => c.open);
+        const newOpen = filters.map(c => c.open);
+        if (oldOpen.every((v, i) => v === newOpen[i]) && Array.isArray(this.countryProjects)) {
+            //  this was not triggered by an open-close of the filter but by an actual selection, so we can filter here
+            const filtered = [];
+            for (const cat of filters) {
+                const selected = cat.items.filter(i => i.value).map(s => s.name);
+                const inArray = inp => {
+                    return selected.indexOf(inp) > -1;
+                };
+                if (selected && selected.length > 0) {
+                    for (const p of this.countryProjects) {
+                        const inProject = cat.filterMappingFn(p);
+                        if (inProject.some(inArray)) {
+                            filtered.push(p);
+                        }
+                    }
+                }
+            }
+            this.scope.$evalAsync(() => {
+                const oldLength = Array.isArray(this.projectsData) ? this.projectsData.length : 0;
+                if (filtered && filtered.length > 0) {
+                    this.projectsData = filtered;
+                }
+                else {
+                    this.projectsData = this.countryProjects;
+                }
+                if (this.projectsData.length !== oldLength) {
+                    this.EE.emit('projectsUpdated', this.projectsData);
+                }
+            });
+        }
+    }
+
+    generateHeader() {
+        return {
             name: { up: false, down: false },
             country: { up: false, down: false },
             organisation_name: { up: false, down: false },
@@ -29,91 +84,109 @@ class CountryViewModuleController {
             implementation_overview: { up: false, down: false },
             implementing_partners: { up: false, down: false },
             geographic_scope: { up: false, down: false },
-            health_focus_area: { up: false, down: false }
+            interventions: { up: false, down: false },
         };
-        this.getCountries();
-        this.lastFilter = null;
-        this.filterArray = [
-            this.createFilterCategory('software',
-              this.cs.projectStructure.technology_platforms)
-        ];
     }
 
-    extractConstraints(collection) {
-        const result = [];
-        _.forEach(collection, (tax, key) => {
-            result.push(key);
-        });
-        return result;
-    }
-
-    concatenateApplications(collection) {
-        let result = [];
-        _.forEach(collection, application => {
-            result = _.concat(result, _.toArray(application.subApplications));
-        });
-        return result;
-    }
-
-    createFilterCategory(name, collection, unique, subItem, preParse) {
-        const base = { name, items: [], open: false };
-
-        if (preParse) {
-            collection = preParse(collection);
-        }
-
-        if (collection) {
-            _.forEach(collection, item => {
-                base.items.push({
-                    name: subItem ? item[subItem] : item,
-                    value: false
-                });
-            });
-            if (unique) {
-                base.items = _.uniqBy(base.items, unique);
+    prepareFiltersCheckboxes(mapper) {
+        // Set guarantee uniqueness;
+        let structure = new Set();
+        for (const item of this.countryProjects) {
+            let inner = [];
+            if (mapper instanceof Function) {
+                inner = mapper(item);
+            }
+            else {
+                inner = item[mapper];
+            }
+            for (const s of inner) {
+                structure.add(s);
             }
         }
-        return base;
-    }
-
-    replaceLodash(item) {
-        return item ? item.replace('_', ' ') : '';
-
-    }
-
-    filterClv() {
-        const filters = {};
-        _.forEach(this.filterArray, category => {
-            filters[category.name] = _.chain(category.items)
-              .map(value => {
-                  return value.value ? value.name : false;
-              })
-              .filter()
-              .value();
+        structure = Array.from(structure);
+        return structure.map(s => {
+            return {
+                value: false,
+                name: s
+            };
         });
-        if (_.flattenDeep(_.toArray(filters)).length > 0 && this.countryProjects && this.countryProjects.length > 0) {
-            let provisionalArray = this.countryProjects.slice();
-            provisionalArray = this.filterByPlatforms(provisionalArray, filters);
-            this.projectsData = _.uniqBy(provisionalArray, 'id');
-        }
-        else {
-            this.projectsData = this.countryProjects;
-        }
-
-        this.EE.emit('projectFiltered', this.projectsData);
     }
 
-    filterByPlatforms(projects, filters) {
-        if (filters.platforms && filters.platforms.length > 0) {
-            return projects.filter(p => {
-                if (p.platforms && p.platforms.length > 0) {
-                    return p.platforms.some(plat => filters.platforms.indexOf(plat.name) > -1);
-                }
-                return false;
-            });
+    generateFilters(countryProjects) {
+        if (!countryProjects || !Array.isArray(countryProjects)) {
+            return;
         }
-        return projects;
+        const extractStrategies = p => {
+            let r = [];
+            for (const plat of p.platforms) {
+                r = r.concat(plat.strategies);
+            }
+            return r;
+        };
+        const digitalHealthInterventions = {
+            name: 'Digital Health Interventions',
+            filterMappingFn: extractStrategies,
+            open: false,
+            items: this.prepareFiltersCheckboxes(extractStrategies)
+        };
+
+        const healthInterventions = {
+            name: 'Health Focus Areas',
+            filterMappingFn: p => {
+                return Array.isArray(p.interventions) ? p.interventions : [];
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('interventions')
+        };
+        const healthInformationSystems = {
+            name: 'Health Information Systems',
+            filterMappingFn: p => {
+                return Array.isArray(p.his_bucket) ? p.his_bucket : [];
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('his_bucket')
+        };
+
+        const healthSystemChallenges = {
+            name: 'Health System Challenges',
+            filterMappingFn: p => {
+                return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('hsc_challenges')
+        };
+
+        const extractSoftware = p => {
+            return p.platforms.map(plat => plat.name);
+        };
+
+        const software = {
+            name: 'Software',
+            filterMappingFn: extractSoftware,
+            open: false,
+            items: this.prepareFiltersCheckboxes(extractSoftware)
+        };
+
+        this.filters = [digitalHealthInterventions, healthInterventions,
+            healthInformationSystems, healthSystemChallenges, software];
     }
+
+    flatGrandparentParent(collection, parentName, childName) {
+        let result = [];
+        for (const grandpa of collection) {
+            result = result.concat(this.flatParent(grandpa[parentName], childName));
+        }
+        return Array.from(new Set(result));
+    }
+
+    flatParent(collection, childName) {
+        let result = [];
+        for (const item of collection) {
+            result = result.concat(item[childName]);
+        }
+        return result;
+    }
+
 
     getCountries() {
 
@@ -151,7 +224,7 @@ class CountryViewModuleController {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
             this.countryProjects = _.cloneDeep(data);
-            this.EE.emit('all country projects', data);
+            this.EE.emit('projectsUpdated', data);
         });
     }
 

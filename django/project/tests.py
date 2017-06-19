@@ -801,7 +801,7 @@ class PermissionTests(SetupTests):
     def test_csv_export_failed(self):
         url = reverse("csv-export")
         response = self.test_user_client.post(url, {"data": [1,2]}, format="json")
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_csv_export_success(self):
         url = reverse("csv-export")

@@ -62,6 +62,10 @@ const $timeout = toCall => {
 const $interpolate = jasmine.createSpy('interpolate').and.returnValue(() => {});
 const $anchorScroll = jasmine.createSpy('$anchorScroll').and.callFake(a => a);
 
+const EE = {
+    emit: jasmine.createSpy('EE')
+};
+
 export {
     dialog,
     $state,
@@ -69,5 +73,6 @@ export {
     $interpolate,
     $anchorScroll,
     toast,
-    $timeout
+    $timeout,
+    EE
 };

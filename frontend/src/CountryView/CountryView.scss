@@ -124,15 +124,19 @@
 
             .list-item {
               margin-left:25px;
-              margin-bottom: 5px;
+              margin-bottom: 10px;
 
               md-checkbox {
                 margin:0;
                 font-size: 12px;
                 font-weight: 300;
                 color: $color-black;
-                height: 17px;
                 min-height: 17px;
+
+                .md-container {
+                  top: 0;
+                  transform: none;
+                }
 
                 .md-icon {
                   width: 17px;
