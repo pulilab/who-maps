@@ -27,16 +27,19 @@ class CountryViewModuleController {
     onInit() {
         this.header = this.generateHeader();
         this.getCountries();
-        this.filters = this.generateFilters();
         this.lastFilter = null;
         this.watchers();
     }
 
     watchers() {
+        this.scope.$watchCollection(s => s.vm.countryProjects, this.generateFilters);
         this.scope.$watch(s => s.vm.filters, this.applyFilters, true);
     }
 
     applyFilters(filters, oldValue) {
+        if (!filters || !oldValue) {
+            return;
+        }
         const oldOpen = oldValue.map(c => c.open);
         const newOpen = filters.map(c => c.open);
         if (oldOpen.every((v, i) => v === newOpen[i]) && Array.isArray(this.countryProjects)) {
@@ -85,11 +88,22 @@ class CountryViewModuleController {
         };
     }
 
-    prepareFiltersCheckboxes(structureName, parsingFunction, parentName, childName) {
-        let structure = this.cs.projectStructure[structureName];
-        if (parsingFunction) {
-            structure = parsingFunction(structure, parentName, childName);
+    prepareFiltersCheckboxes(mapper) {
+        // Set guarantee uniqueness;
+        let structure = new Set();
+        for (const item of this.countryProjects) {
+            let inner = [];
+            if (mapper instanceof Function) {
+                inner = mapper(item);
+            }
+            else {
+                inner = item[mapper];
+            }
+            for (const s of inner) {
+                structure.add(s);
+            }
         }
+        structure = Array.from(structure);
         return structure.map(s => {
             return {
                 value: false,
@@ -98,20 +112,22 @@ class CountryViewModuleController {
         });
     }
 
-    generateFilters() {
-        const flatGp = this.flatGrandparentParent;
-        const flatP = this.flatParent;
+    generateFilters(countryProjects) {
+        if (!countryProjects || !Array.isArray(countryProjects)) {
+            return;
+        }
+        const extractStrategies = p => {
+            let r = [];
+            for (const plat of p.platforms) {
+                r = r.concat(plat.strategies);
+            }
+            return r;
+        };
         const digitalHealthInterventions = {
             name: 'Digital Health Interventions',
-            filterMappingFn: p => {
-                let r = [];
-                for (const plat of p.platforms) {
-                    r = r.concat(plat.strategies);
-                }
-                return r;
-            },
+            filterMappingFn: extractStrategies,
             open: false,
-            items: this.prepareFiltersCheckboxes('strategies', flatGp, 'subGroups', 'strategies')
+            items: this.prepareFiltersCheckboxes(extractStrategies)
         };
 
         const healthInterventions = {
@@ -120,7 +136,7 @@ class CountryViewModuleController {
                 return Array.isArray(p.interventions) ? p.interventions : [];
             },
             open: false,
-            items: this.prepareFiltersCheckboxes('interventions', flatGp, 'subGroups', 'interventions')
+            items: this.prepareFiltersCheckboxes('interventions')
         };
         const healthInformationSystems = {
             name: 'Health Information Systems',
@@ -137,19 +153,21 @@ class CountryViewModuleController {
                 return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];
             },
             open: false,
-            items: this.prepareFiltersCheckboxes('hsc_challenges', flatP, 'challenges')
+            items: this.prepareFiltersCheckboxes('hsc_challenges')
+        };
+
+        const extractSoftware = p => {
+            return p.platforms.map(plat => plat.name);
         };
 
         const software = {
             name: 'Software',
-            filterMappingFn: p => {
-                return p.platforms.map(plat => plat.name);
-            },
+            filterMappingFn: extractSoftware,
             open: false,
-            items: this.prepareFiltersCheckboxes('technology_platforms')
+            items: this.prepareFiltersCheckboxes(extractSoftware)
         };
 
-        return [digitalHealthInterventions, healthInterventions,
+        this.filters = [digitalHealthInterventions, healthInterventions,
             healthInformationSystems, healthSystemChallenges, software];
     }
 

@@ -27,20 +27,20 @@ describe('CountryViewModuleController', () => {
         vm.EE = EE;
     });
 
-    it('has onInit fn. which gets countries, and generates filterArray', () => {
+    it('has onInit fn. which gets countries and setup the watcher', () => {
         spyOn(vm, 'getCountries');
-        spyOn(vm, 'generateFilters');
         spyOn(vm, 'watchers');
         vm.$onInit();
         expect(vm.getCountries).toHaveBeenCalled();
-        expect(vm.generateFilters).toHaveBeenCalled();
         expect(vm.watchers).toHaveBeenCalled();
     });
 
     it('should have a watcher function', () => {
         spyOn(vm, 'applyFilters');
+        spyOn(vm, 'generateFilters');
         vm.watchers();
         expect(vm.applyFilters).toHaveBeenCalled();
+        expect(vm.generateFilters).toHaveBeenCalled();
     });
 
     describe('apply filters function', () => {
