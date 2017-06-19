@@ -86,6 +86,8 @@ class ProjectPublicViewSet(ViewSet):
             "implementing_partners": p.data.get('implementing_partners'),
             "implementation_dates": p.data.get('implementation_dates'),
             "health_focus_areas": p.data.get('health_focus_areas'),
+            "hsc_challenges": p.data.get('hsc_challenges'),
+            "his_bucket": p.data.get('his_bucket'),
             "geographic_scope": p.data.get('geographic_scope'),
             "platforms": p.data.get('platforms'),
         }], projects, [])
