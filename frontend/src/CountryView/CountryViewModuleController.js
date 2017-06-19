@@ -84,7 +84,7 @@ class CountryViewModuleController {
             implementation_overview: { up: false, down: false },
             implementing_partners: { up: false, down: false },
             geographic_scope: { up: false, down: false },
-            interventions: { up: false, down: false }
+            health_focus_areas: { up: false, down: false }
         };
     }
 
