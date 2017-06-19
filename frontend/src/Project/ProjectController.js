@@ -335,7 +335,7 @@ class ProjectController extends ProjectDefinition {
             await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
             // update cached project data with the one from the backend
             this.cs.updateProject(response.data, this.projectId);
-            this.showToast('Project Updated!');
+            this.showToast('Project Updated');
             this.postUpdateActions();
         }
         else {
@@ -356,7 +356,7 @@ class ProjectController extends ProjectDefinition {
                 this.ownershipCheck(response.data);
                 this.cs.addProjectToCache(response.data);
                 this.postSaveActions();
-                this.showToast('Project Saved!');
+                this.showToast('Project Saved');
 
             }
             else {

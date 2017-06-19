@@ -12,12 +12,12 @@
 
   .bg-hero {
     min-height: 720px;
-    background: $color-primary url("./images/hero-bg-image.jpg") 0 0 no-repeat;
+    background: $color-primary url("./images/bg-welcome-map.jpg") 0 0 no-repeat;
     background-size: cover;
 
     // TODO
     &.logged-in {
-      background-image: url("./images/bg-welcome-2.jpg");
+      background-image: url("./images/bg-welcome-map.jpg");
     }
 
     // Crossbrowser fixes
