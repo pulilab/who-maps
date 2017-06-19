@@ -57,7 +57,7 @@ class CountryViewModuleController {
                 }
             }
             this.scope.$evalAsync(() => {
-                const oldLength = this.projectsData.length;
+                const oldLength = Array.isArray(this.projectsData) ? this.projectsData.length : 0;
                 if (filtered && filtered.length > 0) {
                     this.projectsData = filtered;
                 }

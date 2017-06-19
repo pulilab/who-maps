@@ -1,11 +1,10 @@
 import CountryViewModuleController from './CountryViewModuleController';
+import { $scope, EE } from '../testUtilities';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
 
 let vm = {};
-const scope = {
-    $evalAsync: () => {}
-};
+
 
 const csMock = {
     hssStructure: {
@@ -18,13 +17,11 @@ const csMock = {
     isMember: () => {}
 };
 
-const EE = {
-    emit: () => {}
-};
 
 describe('CountryViewModuleController', () => {
 
     beforeEach(() => {
+        const scope = $scope(vm);
         vm = CountryViewModuleController.countryControllerFactory()(scope);
         vm.cs = csMock;
         vm.EE = EE;
@@ -33,11 +30,71 @@ describe('CountryViewModuleController', () => {
     it('has onInit fn. which gets countries, and generates filterArray', () => {
         spyOn(vm, 'getCountries');
         spyOn(vm, 'generateFilters');
+        spyOn(vm, 'watchers');
         vm.$onInit();
         expect(vm.getCountries).toHaveBeenCalled();
         expect(vm.generateFilters).toHaveBeenCalled();
+        expect(vm.watchers).toHaveBeenCalled();
     });
 
+    it('should have a watcher function', () => {
+        spyOn(vm, 'applyFilters');
+        vm.watchers();
+        expect(vm.applyFilters).toHaveBeenCalled();
+    });
+
+    describe('apply filters function', () => {
+
+        let filters = [];
+        let oldValues = [];
+        const filterMappingFn = jasmine.createSpy('filterMappingFn').and.returnValue([]);
+
+        beforeEach(() => {
+            filters = [
+                {
+                    open: true,
+                    filterMappingFn,
+                    items: [{ value: true, name: 'a' }]
+                },
+                {
+                    open: true,
+                    filterMappingFn,
+                    items: [{ value: true, name: 'b' }]
+                }
+            ];
+            oldValues = filters.slice();
+        });
+
+
+        it('should not run if the only change is on the open - close ', ()  => {
+            oldValues[0].open = false;
+            vm.applyFilters(filters, oldValues);
+            expect(vm.scope.$evalAsync).not.toHaveBeenCalled();
+        });
+
+        it('should call the mappingFilter fn on the filter object', () => {
+            vm.countryProjects = [{}];
+            vm.applyFilters(filters, oldValues);
+            expect(filterMappingFn).toHaveBeenCalled();
+        });
+        it('should show only project that contain one or more enabled filters', () => {
+            vm.countryProjects = [{}];
+            filters[0].filterMappingFn = () => ['a'];
+            vm.applyFilters(filters, oldValues);
+            expect(vm.projectsData[0]).toBe(vm.countryProjects[0]);
+        });
+        it('emit projectsUpdated event only if the filters actually modified the shown content', () => {
+            vm.EE.emit.calls.reset();
+            vm.countryProjects = [{}];
+            filters[0].filterMappingFn = () => ['a'];
+            vm.applyFilters(filters, oldValues);
+            expect(vm.EE.emit).toHaveBeenCalledWith('projectsUpdated', vm.projectsData);
+
+            vm.applyFilters(filters, oldValues);
+            expect(vm.EE.emit).toHaveBeenCalledTimes(1);
+        });
+
+    });
 
     it('has the commonservices\' isViewer and isMember fn.s', () => {
         spyOn(vm.cs, 'isViewer');
@@ -65,7 +122,6 @@ describe('CountryViewModuleController', () => {
 
     it('has changeMapTo fn.', () => {
         const countryMock = { id: 'id' };
-        spyOn(vm.EE, 'emit');
         spyOn(vm, 'fetchCountryMap');
         spyOn(vm, 'fetchDistrictProjects');
 
