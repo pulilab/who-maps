@@ -54,9 +54,7 @@ class AppModuleController extends Protected {
     checkOwnership(state, cs) {
         const root = state.current.parent;
         const id = state.params.appName ? parseInt(state.params.appName, 10) : false;
-        console.log(id);
         const isMemberOrViewer = cs.isMember({ id }) || cs.isViewer({ id });
-        console.log(isMemberOrViewer);
         if (id !== false && !isMemberOrViewer && root === 'app') {
             state.go('public-dashboard', { appName: id });
         }
@@ -108,7 +106,6 @@ class AppModuleController extends Protected {
                 this.currentProject = item;
             }
         });
-        console.log(this.currentProject);
         this.scope.$evalAsync();
         this.checkOwnership(this.state, this.cs);
 
