@@ -19,6 +19,8 @@ class CountryViewModuleController {
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
         this.flatGrandparentParent = this.flatGrandparentParent.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.applyFilters = this.applyFilters.bind(this);
     }
 
 
@@ -27,6 +29,46 @@ class CountryViewModuleController {
         this.getCountries();
         this.filters = this.generateFilters();
         this.lastFilter = null;
+        this.watchers();
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.filters, this.applyFilters, true);
+    }
+
+    applyFilters(filters, oldValue) {
+        const oldOpen = oldValue.map(c => c.open);
+        const newOpen = filters.map(c => c.open);
+        if (oldOpen.every((v, i) => v === newOpen[i]) && Array.isArray(this.countryProjects)) {
+            //  this was not triggered by an open-close of the filter but by an actual selection, so we can filter here
+            const filtered = [];
+            for (const cat of filters) {
+                const selected = cat.items.filter(i => i.value).map(s => s.name);
+                const inArray = inp => {
+                    return selected.indexOf(inp) > -1;
+                };
+                if (selected && selected.length > 0) {
+                    for (const p of this.countryProjects) {
+                        const inProject = cat.filterMappingFn(p);
+                        if (inProject.some(inArray)) {
+                            filtered.push(p);
+                        }
+                    }
+                }
+            }
+            this.scope.$evalAsync(() => {
+                const oldLength = this.projectsData.length;
+                if (filtered && filtered.length > 0) {
+                    this.projectsData = filtered;
+                }
+                else {
+                    this.projectsData = this.countryProjects;
+                }
+                if (this.projectsData.length !== oldLength) {
+                    this.EE.emit('projectsUpdated', this.projectsData);
+                }
+            });
+        }
     }
 
     generateHeader() {
@@ -63,7 +105,7 @@ class CountryViewModuleController {
             name: 'Digital Health Interventions',
             filterMappingFn: p => {
                 let r = [];
-                for (const plat of p) {
+                for (const plat of p.platforms) {
                     r = r.concat(plat.strategies);
                 }
                 return r;
@@ -75,7 +117,7 @@ class CountryViewModuleController {
         const healthInterventions = {
             name: 'Health Focus Areas',
             filterMappingFn: p => {
-                return p.interventions;
+                return Array.isArray(p.interventions) ? p.interventions : [];
             },
             open: false,
             items: this.prepareFiltersCheckboxes('interventions', flatGp, 'subGroups', 'interventions')
@@ -83,7 +125,7 @@ class CountryViewModuleController {
         const healthInformationSystems = {
             name: 'Health Information Systems',
             filterMappingFn: p => {
-                return p.his_bucket;
+                return Array.isArray(p.his_bucket) ? p.his_bucket : [];
             },
             open: false,
             items: this.prepareFiltersCheckboxes('his_bucket')
@@ -92,7 +134,7 @@ class CountryViewModuleController {
         const healthSystemChallenges = {
             name: 'Health System Challenges',
             filterMappingFn: p => {
-                return p.hsc_challenges;
+                return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];
             },
             open: false,
             items: this.prepareFiltersCheckboxes('hsc_challenges', flatP, 'challenges')
@@ -164,7 +206,7 @@ class CountryViewModuleController {
             // console.debug('PROJECTS in ' + countryObj.name, data);
             this.projectsData = data;
             this.countryProjects = _.cloneDeep(data);
-            this.EE.emit('all country projects', data);
+            this.EE.emit('projectsUpdated', data);
         });
     }
 
