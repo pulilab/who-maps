@@ -137,7 +137,8 @@
                                     {{project.name}}
                                 </div>
                                 <div layout="column" class="links">
-                                    <span ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ng-hide="vm.isMember(project) || vm.isViewer(project)" ui-sref="public-dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ng-show="vm.isMember(project) || vm.isViewer(project)" ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
                                 </div>
                             </div>
                             <div flex="20" class="cap">
