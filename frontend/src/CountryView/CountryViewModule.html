@@ -13,12 +13,12 @@
                     <md-card md-whiteframe="2" class="countrychoser">
                         <md-input-container>
                             <md-select
-                                    class="no-border"
-                                    md-container-class="country-chooser topalign"
-                                    ng-model-options="{trackBy: '$value.id'}"
-                                    placeholder='Select a country'
-                                    ng-model="vm.selectedCountry"
-                                    ng-change="vm.updateCountry(vm.selectedCountry)">
+                              class="no-border"
+                              md-container-class="country-chooser topalign"
+                              ng-model-options="{trackBy: '$value.id'}"
+                              placeholder='Select a country'
+                              ng-model="vm.selectedCountry"
+                              ng-change="vm.updateCountry(vm.selectedCountry)">
 
                                 <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
@@ -39,10 +39,10 @@
 
                     <div class="headercont" layout="row">
                         <div class="exports" flex="grow">
-                          <md-button class="md-primary" ng-show="vm.projectsData && vm.projectsData.length > 0" ng-click="vm.exportCSV()">
-                              <md-icon>file_download</md-icon>
-                              Export (CSV)
-                          </md-button>
+                            <md-button class="md-primary" ng-show="vm.projectsData && vm.projectsData.length > 0" ng-click="vm.exportCSV()">
+                                <md-icon>file_download</md-icon>
+                                Export (CSV)
+                            </md-button>
                             <md-button class="md-primary" ng-show="vm.projectsData && vm.projectsData.length > 0" ng-click="vm.exportPDF()">
                                 <md-icon>file_download</md-icon>
                                 Export (PDF)
@@ -59,12 +59,12 @@
                         <md-card md-whiteframe="2" class="countrychoser" flex="nogrow">
                             <md-input-container>
                                 <md-select
-                                        class="no-border"
-                                        md-container-class="country-chooser topalign"
-                                        ng-model-options="{trackBy: '$value.id'}"
-                                        placeholder='Select a country'
-                                        ng-model="vm.selectedCountry"
-                                        ng-change="vm.updateCountry(vm.selectedCountry)">
+                                  class="no-border"
+                                  md-container-class="country-chooser topalign"
+                                  ng-model-options="{trackBy: '$value.id'}"
+                                  placeholder='Select a country'
+                                  ng-model="vm.selectedCountry"
+                                  ng-change="vm.updateCountry(vm.selectedCountry)">
 
                                     <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
@@ -97,7 +97,7 @@
                                 <md-icon ng-show="vm.header.donors.down" >expand_less</md-icon>
                             </div>
                             <div flex="20" ng-click="vm.orderTable('contact_name')">
-                                Point of Contact
+                                Contact Name
                                 <md-icon ng-show="vm.header.contact_name.up" >expand_more</md-icon>
                                 <md-icon ng-show="vm.header.contact_name.down" >expand_less</md-icon>
                             </div>
@@ -112,23 +112,23 @@
                                 <md-icon ng-show="vm.header.implementing_partners.down" >expand_less</md-icon>
                             </div>
                             <div flex="20" ng-click="vm.orderTable('geographic_scope')">
-                                Geographical coverage
+                                Geographic scope
                                 <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
                                 <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
                             </div>
-                            <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
-                                mHealth interventions
-                                <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
-                                <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
+                            <div flex="20" ng-click="vm.orderTable('interventions')">
+                                Digital Health Interventions
+                                <md-icon ng-show="vm.header.interventions.up" >expand_more</md-icon>
+                                <md-icon ng-show="vm.header.interventions.down" >expand_less</md-icon>
                             </div>
                         </div>
 
                         <div
-                                class="projectrow"
-                                layout="row"
-                                layout-padding
-                                ng-repeat="project in vm.projectsData track by $index"
-                                ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
+                          class="projectrow"
+                          layout="row"
+                          layout-padding
+                          ng-repeat="project in vm.projectsData track by $index"
+                          ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
 
                             <div flex="35" class="projectlink" layout="row">
                                 <div flex class="name">
@@ -145,15 +145,15 @@
                             </div>
                             <div flex="20">{{project.organisation_name}}</div>
                             <div flex="20">
-								<span ng-repeat="donor in project.donors">
+								                <span ng-repeat="donor in project.donors">
                                     {{donor}}{{$last ? '' : ', '}}
-								</span>
+								                </span>
                             </div>
                             <div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
                             <div flex="30">{{project.implementation_overview}}</div>
                             <div flex="20">{{vm.printImplementingPartners(project)}}</div>
                             <div flex="20">{{project.geographic_scope}}</div>
-                            <div flex="20">{{project.health_focus_areas.join(', ')}}</div>
+                            <div flex="20">{{project.interventions.join(', ')}}</div>
 
                         </div>
                         <div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>
