@@ -297,9 +297,11 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             p.data.get('implementation_dates'),
             Organisation.get_name_by_id(p.data.get('organisation')),
             ", ".join(p.data.get('donors')),
-            p.data.get('implementing_partners'),
+            ", ".join(p.data.get('implementing_partners', [])),
             " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
-            p.data.get('implementation_overview')
+            p.data.get('implementation_overview'),
+            p.data.get('geographic_scope'),
+            ", ".join(p.data.get('health_focus_areas', []))
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
@@ -309,8 +311,8 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
 
         # HEADER
         writer.writerow(['Name', 'Country', 'Date', 'Organisation Name', 'Donors', "Implementing Partners",
-                         "mHealth Interventions", "Point of Contact",
-                         "Overview of digital health implementation", "Geographical coverage"])
+                        "Point of Contact", "Overview of digital health implementation", "Geographical scope",
+                         "Health Focus Areas"])
 
         # PROJECTS
         [writer.writerow([field for field in project]) for project in results]
