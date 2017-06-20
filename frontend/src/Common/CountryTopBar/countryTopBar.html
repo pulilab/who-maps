@@ -14,7 +14,7 @@
         <span flex ></span>
 
         <div class="current-country row" ng-if="vm.showCountryNameAndFlag">
-            <div class="country-flag" >
+            <div class="country-flag">
                 <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
             </div>
             <div class="country-name">{{vm.countryData.name}}</div>
@@ -63,10 +63,10 @@
             </md-button>
 
             <md-menu-content width="4">
-                    <span class="menu-group-title">
-                        <span ng-hide ="vm.userProfile.name">{{vm.user.username}} </span>
-                        <span ng-show ="vm.userProfile.name">{{vm.userProfile.name}} </span>
-                    </span>
+                <span class="menu-group-title">
+                    <span ng-hide ="vm.userProfile.name">{{vm.user.username}} </span>
+                    <span ng-show ="vm.userProfile.name">{{vm.userProfile.name}} </span>
+                </span>
                 <md-menu-item>
                     <md-button>
                         <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
