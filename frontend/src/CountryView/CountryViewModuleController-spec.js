@@ -88,7 +88,7 @@ describe('CountryViewModuleController', () => {
             vm.countryProjects = [{}];
             filters[0].filterMappingFn = () => ['a'];
             vm.applyFilters(filters, oldValues);
-            expect(vm.EE.emit).toHaveBeenCalledWith('projectsUpdated', vm.projectsData);
+            expect(vm.EE.emit).toHaveBeenCalled();
 
             vm.applyFilters(filters, oldValues);
             expect(vm.EE.emit).toHaveBeenCalledTimes(1);
