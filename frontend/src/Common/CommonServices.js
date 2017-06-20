@@ -118,6 +118,12 @@ class CommonServices extends Protected {
         });
     }
 
+    async retrieveMemberAndViewer() {
+        const userProfile = await this.get(`userprofiles/${this.userProfileId}/`);
+        this.userProfile.member = userProfile.member;
+        this.userProfile.viewer = userProfile.viewer;
+    }
+
     getUsersProfiles() {
         const vm = this;
         vm.get('userprofiles/').then(data => {
@@ -131,38 +137,38 @@ class CommonServices extends Protected {
     populateProjectList() {
         const promiseArray = [];
         this.get('projects/member-of/')
-            .then((projects) => {
-                this.projectList = projects;
-                _.forEach(projects, project => {
-                    if (project) {
-                        this.getProjectDetail(project);
-                        promiseArray.push(project.detailPromise);
-                    }
-                });
+          .then((projects) => {
+              this.projectList = projects;
+              _.forEach(projects, project => {
+                  if (project) {
+                      this.getProjectDetail(project);
+                      promiseArray.push(project.detailPromise);
+                  }
+              });
 
-                Promise.all(promiseArray)
-                    .then(() => {
-                        this.loadingProgress('list');
-                    }, () => {
-                        this.promiseReject();
-                    });
-            }, () => {
-                // if the user has no user profile the loading should still go on!
-                console.warn('the user has no user profile');
-                this.loadingProgress('list');
-            });
+              Promise.all(promiseArray)
+                .then(() => {
+                    this.loadingProgress('list');
+                }, () => {
+                    this.promiseReject();
+                });
+          }, () => {
+              // if the user has no user profile the loading should still go on!
+              console.warn('the user has no user profile');
+              this.loadingProgress('list');
+          });
     }
 
     populateProjectStructure() {
         this.get('projects/structure/')
-            .then(structure => {
-                this.projectStructure = structure;
-                this.loadingProgress('structure');
-            })
-            .catch(() => {
-                this.loadingProgress('structure');
-                this.promiseReject();
-            });
+          .then(structure => {
+              this.projectStructure = structure;
+              this.loadingProgress('structure');
+          })
+          .catch(() => {
+              this.loadingProgress('structure');
+              this.promiseReject();
+          });
     }
 
     getProjectDetail(project) {
@@ -184,11 +190,11 @@ class CommonServices extends Protected {
             };
             vm.getProjectDetail(project);
             Promise.all([project.detailPromise])
-                .then(() => {
-                    vm.findCountryName(project);
-                    vm.publicProject[_id] = project;
-                    resolve(project);
-                });
+              .then(() => {
+                  vm.findCountryName(project);
+                  vm.publicProject[_id] = project;
+                  resolve(project);
+              });
         }
     }
 
@@ -207,15 +213,22 @@ class CommonServices extends Protected {
         });
     }
 
-    updateProject(project, id) {
-        id = parseInt(id, 10);
+    updateProject(project, unsavedProject) {
+        const id = parseInt(unsavedProject.id, 10);
+        project.organisation = {
+            id: unsavedProject.organisation,
+            name: unsavedProject.organisation_name
+        };
         const last = _.find(this.projectList, { id });
         Object.assign(last, project);
     }
 
-    addProjectToCache(newProject) {
+    addProjectToCache(newProject, unsavedProject) {
         newProject = Object.assign({}, newProject);
-        newProject.organisation = Object.assign({}, this.userProfile.organisation);
+        newProject.organisation = {
+            id: unsavedProject.organisation,
+            name: unsavedProject.organisation_name
+        };
         this.projectList.push(newProject);
     }
 

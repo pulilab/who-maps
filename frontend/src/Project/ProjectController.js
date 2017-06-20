@@ -283,6 +283,7 @@ class ProjectController extends ProjectDefinition {
         this.clearCustomErrors();
         if (this.form.$valid) {
             let processedForm = Object.assign({}, this.project);
+            processedForm.organisation_name = processedForm.organisation.name;
             processedForm.organisation = processedForm.organisation.id;
             processedForm = this.createDateFields(processedForm);
             processedForm = this.mergeCustomAndDefault(processedForm);
@@ -313,9 +314,10 @@ class ProjectController extends ProjectDefinition {
         }, 100);
     }
 
-    putGroups(project) {
+    async putGroups(project) {
         const id = project && project.id ? project.id : this.projectId;
-        return this.ns.putGroups(id, this.team, this.viewers);
+        await this.ns.putGroups(id, this.team, this.viewers);
+        return this.cs.retrieveMemberAndViewer();
     }
 
     async saveCountryFields({ country, id }) {
@@ -334,7 +336,7 @@ class ProjectController extends ProjectDefinition {
             // generate a single promise from multiple promise and wait for them to be done.
             await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
             // update cached project data with the one from the backend
-            this.cs.updateProject(response.data, this.projectId);
+            this.cs.updateProject(response.data, processedForm);
             this.showToast('Project Updated');
             this.postUpdateActions();
         }
@@ -348,13 +350,14 @@ class ProjectController extends ProjectDefinition {
         try {
             const response = await this.ns.newProject(processedForm);
             if (response && response.success) {
-                const [{}, countryFieldResult] = await Promise.all([
+                // eslint-disable-next-line no-unused-vars
+                const [putGroupResult, countryFieldResult] = await Promise.all([
                     this.putGroups(response.data),
                     this.saveCountryFields(response.data)
                 ]);
                 response.data.fields = countryFieldResult.fields ? countryFieldResult.fields.slice() : null;
+                this.cs.addProjectToCache(response.data, processedForm);
                 this.ownershipCheck(response.data);
-                this.cs.addProjectToCache(response.data);
                 this.postSaveActions();
                 this.showToast('Project Saved');
 
