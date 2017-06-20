@@ -61,9 +61,6 @@ class CountryMapController {
 
     setGlobal() {
         this.isGlobalOrNational = true;
-        if (this.allProjects.length === 0) {
-            return;
-        }
         const districts = document.getElementsByClassName('d3district');
         Array.prototype.forEach.call(districts, distr => {
             distr.classList.add('global');
@@ -77,16 +74,15 @@ class CountryMapController {
         });
     }
 
-    handleFilteredProject(projects) {
+    handleFilteredProject({ projects, nationalProjects }) {
+        console.log(this.isGlobalOrNational)
         this.handleUpdatedProjects(projects);
-        this.allProjects = projects;
+        this.allProjects = nationalProjects;
         if (this.isGlobalOrNational) {
-            if (this.allProjects.length > 0) {
-                this.setGlobal();
-            }
-            else {
-                this.setTotal();
-            }
+            this.setGlobal();
+        }
+        else {
+            this.setTotal();
         }
     }
 

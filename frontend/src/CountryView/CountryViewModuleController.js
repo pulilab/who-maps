@@ -18,7 +18,6 @@ class CountryViewModuleController {
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
-        this.flatGrandparentParent = this.flatGrandparentParent.bind(this);
         this.watchers = this.watchers.bind(this);
         this.applyFilters = this.applyFilters.bind(this);
     }
@@ -69,7 +68,9 @@ class CountryViewModuleController {
                     this.projectsData = this.countryProjects;
                 }
                 if (this.projectsData.length !== oldLength) {
-                    this.EE.emit('projectsUpdated', this.projectsData);
+                    const projects = this.projectsData;
+                    const nationalProjects = this.updateListOfNationalCovProjects(projects, this.districtProjects);
+                    this.EE.emit('projectFiltered', { projects, nationalProjects });
                 }
             });
         }
@@ -173,23 +174,6 @@ class CountryViewModuleController {
             healthInformationSystems, healthSystemChallenges, software];
     }
 
-    flatGrandparentParent(collection, parentName, childName) {
-        let result = [];
-        for (const grandpa of collection) {
-            result = result.concat(this.flatParent(grandpa[parentName], childName));
-        }
-        return Array.from(new Set(result));
-    }
-
-    flatParent(collection, childName) {
-        let result = [];
-        for (const item of collection) {
-            result = result.concat(item[childName]);
-        }
-        return result;
-    }
-
-
     getCountries() {
 
         this.mapService.getCountries().then(data => {
@@ -218,14 +202,27 @@ class CountryViewModuleController {
         return this.cs.isMember(project);
     }
 
+    updateListOfNationalCovProjects(allProjects, districtProjects) {
+        let districtsIds = [];
+        for (const d in districtProjects) {
+            districtsIds = districtsIds.concat(districtProjects[d]);
+        }
+        districtsIds = Array.from(new Set(districtsIds));
+        districtsIds = districtsIds.map(d =>  d.id);
+        return allProjects.filter(p => districtsIds.indexOf(p.id) === -1);
+    }
+
 
     getProjects(countryObj) {
         // console.debug('Selected:', countryObj);
-        this.service.getProjects(countryObj.id).then(data => {
+        this.service.getProjects(countryObj.id).then(projects => {
             // console.debug('PROJECTS in ' + countryObj.name, data);
-            this.projectsData = data;
-            this.countryProjects = _.cloneDeep(data);
-            this.EE.emit('projectsUpdated', data);
+            this.projectsData = projects;
+            this.countryProjects = _.cloneDeep(projects);
+            const nationalProjects = this.updateListOfNationalCovProjects(projects, this.districtProjects);
+            this.EE.emit('projectsUpdated', projects);
+            this.EE.emit('all country projects', nationalProjects);
+
         });
     }
 
@@ -247,6 +244,7 @@ class CountryViewModuleController {
     fetchDistrictProjects(countryId) {
         this.service.getDistrictProjects(countryId).then(data => {
             // console.debug('getDistrictProjects:', data);
+            this.districtProjects = data;
             this.EE.emit('mapdataArrived', data);
         });
     }
