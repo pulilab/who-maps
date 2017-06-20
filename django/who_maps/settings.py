@@ -205,6 +205,15 @@ if SITE_ID in [3]:
 
     EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_expiring_authtoken.authentication.ExpiringTokenAuthentication',
+        ),
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        )
+    }
+
 # Mailgun settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.mailgun.org"
