@@ -29,6 +29,7 @@ class CountryViewModuleController {
         this.getCountries();
         this.lastFilter = null;
         this.watchers();
+        this.showAllCountries = { id: false, name: 'Show all countries' };
     }
 
     watchers() {
@@ -199,7 +200,6 @@ class CountryViewModuleController {
             });
 
             // console.debug('COUNTRY LIB', this.countriesLib);
-            this.countries.unshift({ id: false, name: 'Show all countries' });
 
             if (this.cs.userProfile && this.cs.userProfile.country) {
                 const name = this.cs.userProfile.country;
