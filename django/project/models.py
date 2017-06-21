@@ -14,6 +14,12 @@ from user.models import UserProfile, Organisation
 class ProjectManager(models.Manager):
     use_in_migrations = True
 
+    @staticmethod
+    def make_public_id(country_id):
+        project_country = Country.objects.filter(id=country_id).first()
+        if project_country:
+            return project_country.code + str(uuid.uuid1()).split('-')[0]
+
     def owner_of(self, user):
         return self.get_queryset().filter(team=user.userprofile)
 
@@ -26,6 +32,10 @@ class ProjectManager(models.Manager):
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
         return self.get_queryset().filter(data__organisation=organisation_id)
+
+    def create(self, **kwargs):
+        kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
+        return super(ProjectManager, self).create(**kwargs)
 
 
 class Project(ExtendedModel):
@@ -74,21 +84,6 @@ class Project(ExtendedModel):
             if key in d:
                 d.pop(key, None)
         return d
-
-    def make_public_id(self):
-        if not self.public_id:
-            if self.data.get('country'):
-                project_country = Country.objects.filter(id=self.data['country']).first()
-                if project_country:
-                    self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0] + 'x' + str(self.id)
-                    return True
-        return False
-
-
-@receiver(post_save, sender=Project)
-def update_with_public_id(sender, instance, **kwargs):
-    if instance.make_public_id():
-        instance.save()
 
 
 class CoverageVersion(ExtendedModel):
