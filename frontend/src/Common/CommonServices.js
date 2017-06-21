@@ -122,6 +122,10 @@ class CommonServices extends Protected {
         const userProfile = await this.get(`userprofiles/${this.userProfileId}/`);
         this.userProfile.member = userProfile.member;
         this.userProfile.viewer = userProfile.viewer;
+        return {
+            member: userProfile.member,
+            viewer: userProfile.viewer
+        };
     }
 
     getUsersProfiles() {
