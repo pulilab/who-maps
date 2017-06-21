@@ -28,6 +28,7 @@ class ProjectSearch(ExtendedModel):
     mobile_application = models.TextField(blank=True)
     wiki = models.TextField(blank=True)
     platforms = models.TextField(blank=True)
+    public_id = models.TextField(blank=True)
 
     @classmethod
     def search(cls, **kwargs):
@@ -71,6 +72,7 @@ class ProjectSearch(ExtendedModel):
             q_objects.append(Q(repository__icontains=query))
             q_objects.append(Q(mobile_application__icontains=query))
             q_objects.append(Q(wiki__icontains=query))
+            q_objects.append(Q(public_id__icontains=query))
 
         filter_exp = functools.reduce(operator.or_, q_objects)
 
@@ -104,4 +106,5 @@ def update_with_project_data(sender, instance, **kwargs):
     project_search.mobile_application = instance.data.get("mobile_application", "")
     project_search.wiki = instance.data.get("wiki", "")
     project_search.platforms = ", ".join([x.get('name', '') for x in instance.data.get("platforms", "")])
+    project_search.public_id = instance.public_id
     project_search.save()
