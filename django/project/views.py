@@ -294,6 +294,7 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
 
         results = [[
             p.name,
+            p.public_id,
             Country.get_name_by_id(p.data.get('country')),
             p.data.get('implementation_dates'),
             p.data.get('start_date'),
@@ -324,7 +325,7 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         writer = csv.writer(response)
 
         # HEADER
-        writer.writerow(['Name', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name',
+        writer.writerow(['Name', 'UUID', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name',
                          'Donors', "Implementing Partners", "Point of Contact",
                          "Overview of digital health implementation", "Geographical scope",
                          "Health Focus Areas", "Software", 'Health System Challenges',
