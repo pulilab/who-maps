@@ -13,10 +13,12 @@ class ExperienceListController {
         this.domain = this.domains[axisIndex].domains[domainIndex];
         this.data = [];
         this.getData();
+        const name = this.cs.commonServices && this.cs.commonServices.userProfile ?
+          this.cs.commonServices.userProfile.name : '';
         this.newExperience = {
             body: null,
             valid: false,
-            name: this.cs.commonServices.userProfile.name,
+            name,
             domain: this.domain.id,
             type: 3
         };
