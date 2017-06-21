@@ -140,6 +140,7 @@ describe('ProjectController', () => {
     it('should have a function that update an existing form', async (done) => {
         spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
+        spyOn(sc, 'postUpdateActions');
         spyOn(sc, 'putGroups').and.returnValue(Promise.resolve());
         spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
         const spy = spyOn(sc.ns, 'updateProject');
@@ -152,6 +153,7 @@ describe('ProjectController', () => {
         await sc.updateForm(sc.project);
         expect(sc.cs.updateProject).toHaveBeenCalled();
         expect(sc.showToast).toHaveBeenCalled();
+        expect(sc.postUpdateActions).toHaveBeenCalled();
         done();
     });
 
@@ -306,11 +308,11 @@ describe('ProjectController', () => {
             state: 'newProject',
             appName : 1
         };
-        sc.postSaveActions();
+        sc.postSaveActions({ member: [1] });
         expect(sc.navigate).toHaveBeenCalledWith(expectation);
         sc.isAddAnother = false;
         expectation.state = 'editProject';
-        sc.postSaveActions();
+        sc.postSaveActions({ member: [1] });
         expect(sc.navigate).toHaveBeenCalledWith(expectation);
     });
 
@@ -323,10 +325,10 @@ describe('ProjectController', () => {
             state: 'newProject',
             appName : 1
         };
-        sc.postUpdateActions();
+        sc.postUpdateActions({ member: [1] });
         expect(sc.navigate).toHaveBeenCalledWith(expectation);
         sc.isAddAnother = false;
-        sc.postUpdateActions();
+        sc.postUpdateActions({ member: [1] });
         expect(sc.navigate).toHaveBeenCalledTimes(1);
         expect(sc.EE.emit).toHaveBeenCalledTimes(2);
     });

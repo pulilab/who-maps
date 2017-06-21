@@ -334,11 +334,11 @@ class ProjectController extends ProjectDefinition {
         const response = await this.ns.updateProject(processedForm, this.projectId);
         if (response && response.success) {
             // generate a single promise from multiple promise and wait for them to be done.
-            await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
+            const [putGroupResult] = await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
             // update cached project data with the one from the backend
             this.cs.updateProject(response.data, processedForm);
             this.showToast('Project Updated');
-            this.postUpdateActions();
+            this.postUpdateActions(putGroupResult);
         }
         else {
             this.handleResponse(response);
@@ -358,7 +358,7 @@ class ProjectController extends ProjectDefinition {
                 response.data.fields = countryFieldResult.fields ? countryFieldResult.fields.slice() : null;
                 this.cs.addProjectToCache(response.data, processedForm);
                 this.ownershipCheck(response.data);
-                this.postSaveActions();
+                this.postSaveActions(putGroupResult);
                 this.showToast('Project Saved');
 
             }
@@ -474,26 +474,29 @@ class ProjectController extends ProjectDefinition {
         }
     }
 
-    postUpdateActions() {
+    postUpdateActions(putGroupResult) {
         this.EE.emit('projectListUpdated');
         const addAnother = this.isAddAnother;
         this.isAddAnother = false;
-        if (addAnother) {
+        const isMember = putGroupResult.member.indexOf(parseInt(this.projectId, 10)) > -1;
+        if (addAnother || !isMember) {
             const go = {
-                state: 'newProject',
+                state: isMember ? 'newProject' : 'dashboard',
                 appName: this.projectId
             };
             this.navigate(go);
         }
     }
 
-    postSaveActions() {
+    postSaveActions(putGroupResult) {
         const addAnother = this.isAddAnother;
         this.isAddAnother = false;
         const go = {
             state: addAnother ? 'newProject' : 'editProject',
             appName: this.projectId
         };
+        const isMember = putGroupResult.member.indexOf(parseInt(this.projectId, 10)) > -1;
+        go.state = isMember ? go.state : 'dashboard';
         this.navigate(go);
     }
 
