@@ -87,9 +87,6 @@ class SubBarController extends Protected {
     getProjectsData() {
         this.projects = this.cs.projectList.slice();
         const lastProject = _.last(this.projects);
-        if (lastProject) {
-            this.cs.addMember(lastProject);
-        }
 
         if (this.state.params && this.state.params.appName
             && this.state.params.appName.length === 0
