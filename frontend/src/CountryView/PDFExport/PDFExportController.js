@@ -138,7 +138,7 @@ class PDFExportController {
                                 { text: 'Implementing partners:', style: 'subHeader' },
                                 project.implementing_partners || ''],
                             [
-                                { text: 'mHealth interventions:', style: 'subHeader' },
+                                { text: 'Health Focus Area:', style: 'subHeader' },
                                 project.health_focus_areas.join(', ')
                             ],
                             [
