@@ -16,7 +16,7 @@ class ExperienceListController {
         this.newExperience = {
             body: null,
             valid: false,
-            name: this.cs.currentUserName,
+            name: this.cs.commonServices.userProfile.name,
             domain: this.domain.id,
             type: 3
         };
