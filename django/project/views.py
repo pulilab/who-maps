@@ -296,13 +296,26 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             p.name,
             Country.get_name_by_id(p.data.get('country')),
             p.data.get('implementation_dates'),
+            p.data.get('start_date'),
+            p.data.get('end_date'),
             Organisation.get_name_by_id(p.data.get('organisation')),
             ", ".join(p.data.get('donors')),
             ", ".join(p.data.get('implementing_partners', [])),
             " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
             p.data.get('implementation_overview'),
             p.data.get('geographic_scope'),
-            ", ".join(p.data.get('health_focus_areas', []))
+            ", ".join(p.data.get('health_focus_areas', [])),
+            ", ".join([s['name'] for s in p.data.get('platforms', [])]),
+            ", ".join(p.data.get('hsc_challenges', [])),
+            ", ".join(p.data.get('his_bucket', [])),
+            "Yes" if p.data.get('government_approved') else "No",
+            p.data.get('government_investor'),
+            ", ".join(p.data.get('licenses', [])),
+            p.data.get('repository'),
+            p.data.get('mobile_application'),
+            p.data.get('wiki'),
+            ", ".join(p.data.get('interoperability_standards', [])),
+
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
@@ -311,9 +324,12 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         writer = csv.writer(response)
 
         # HEADER
-        writer.writerow(['Name', 'Country', 'Date', 'Organisation Name', 'Donors', "Implementing Partners",
-                        "Point of Contact", "Overview of digital health implementation", "Geographical scope",
-                         "Health Focus Areas"])
+        writer.writerow(['Name', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name',
+                         'Donors', "Implementing Partners", "Point of Contact",
+                         "Overview of digital health implementation", "Geographical scope",
+                         "Health Focus Areas", "Software", 'Health System Challenges',
+                         'Health Information System Support', 'Government Approved', 'Government Investor',
+                         'Licenses', 'Repository', 'Mobile Application', 'Wiki', 'Interoperability Standards'])
 
         # PROJECTS
         [writer.writerow([field for field in project]) for project in results]
