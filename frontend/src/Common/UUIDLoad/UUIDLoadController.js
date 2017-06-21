@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import SearchbarService from '../Searchbar/SearchbarService';
+
 
 class UUIDLoadController {
 
@@ -6,6 +7,7 @@ class UUIDLoadController {
         this.EE = window.EE;
         this.state = $state;
         this.cs = CommonServices;
+         this.ss = new SearchbarService();
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
     }
@@ -14,6 +16,7 @@ class UUIDLoadController {
         this.style = {
             height: this.cs.calculateHeight()
         };
+        this.errorMessage = false;
 
         const reset = this.cs.reset();
         reset.loadedPromise.then(this.handleProjectLoad.bind(this));
@@ -22,24 +25,30 @@ class UUIDLoadController {
     onDestroy() {
     }
 
-    handleProjectLoad() {
-        let appName = _.chain(this.state.params.projectUUID)
-            .split('/')
-            .last()
-            .split('x')
-            .last()
-            .value();
-        appName = _.parseInt(appName, 10);
+    async handleProjectLoad() {
+        const uuid =  this.state.params.projectUUID;
+        const filters = {
+            all: true
+        };
+
+        const search = await this.ss.searchProject(uuid, filters);
+        const project = search.slice().pop();
+        const id = project && project.id ? project.id : false;
 
         let state = 'public-dashboard';
 
+        if (id === false) {
+            this.errorMessage = true;
+            return;
+        }
+
         if (this.cs && this.cs.userProfile) {
-            if (this.cs.userProfile.member.indexOf(appName) > -1
-                || this.cs.userProfile.viewer.indexOf(appName) > -1) {
+            if (this.cs.userProfile.member.indexOf(id) > -1
+              || this.cs.userProfile.viewer.indexOf(id) > -1) {
                 state = 'dashboard';
             }
         }
-        this.state.go(state, { appName });
+        this.state.go(state, { appName: id });
     }
 
     static uuidLoadFactory() {
