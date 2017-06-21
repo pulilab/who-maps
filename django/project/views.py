@@ -125,7 +125,7 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         if data_valid:
             project_data = copy.copy(data_serializer.validated_data)
             project_data.pop('name', None)
-            project = Project.objects.create(name=data_serializer.validated_data["name"], data=project_data)
+            project = Project.projects.create(name=data_serializer.validated_data["name"], data=project_data)
             project.team.add(request.user.userprofile)
             # Add default Toolkit structure for the new project.
             Toolkit.objects.create(project_id=project.id, data=toolkit_default)
