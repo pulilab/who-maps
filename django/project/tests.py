@@ -223,7 +223,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['public_id'].endswith(str(project_id)))
+        self.assertTrue(response.json()['public_id'])
 
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
