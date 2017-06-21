@@ -186,7 +186,7 @@ BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
 # PRODUCTION SETTINGS
-if SITE_ID in [3]:
+if SITE_ID in [3,4]:
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
