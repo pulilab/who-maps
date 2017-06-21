@@ -75,7 +75,6 @@ class CountryMapController {
     }
 
     handleFilteredProject({ projects, nationalProjects }) {
-        console.log(this.isGlobalOrNational)
         this.handleUpdatedProjects(projects);
         this.allProjects = nationalProjects;
         if (this.isGlobalOrNational) {
