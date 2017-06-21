@@ -7,7 +7,7 @@ class UUIDLoadController {
         this.EE = window.EE;
         this.state = $state;
         this.cs = CommonServices;
-         this.ss = new SearchbarService();
+        this.ss = new SearchbarService();
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
     }
