@@ -22,5 +22,13 @@
       "domain": "digitalhealthatlas.org",
       "name": "production"
     }
+  },
+  {
+    "model": "sites.site",
+    "pk": 4,
+    "fields": {
+      "domain": "qa.whomaps.pulilab.com",
+      "name": "staging"
+    }
   }
 ]

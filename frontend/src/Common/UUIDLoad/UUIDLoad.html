@@ -2,9 +2,15 @@
 
     <div >
         <md-content layout="column" layout-align="center center">
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-            <div>
-                Loading project
+            <div ng-hide="vm.errorMessage">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <div>
+                    Loading project
+                </div>
+            </div>
+
+            <div ng-show="vm.errorMessage">
+                Project not found or server not available
             </div>
 
         </md-content>

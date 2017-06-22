@@ -33,17 +33,19 @@ describe('UUID Project load Components controller', () => {
         expect(typeof ulc).toBe('object');
     });
 
-    it('should have a function that can transform an UUID in a projectID', () => {
+    it('should have a function that can transform an UUID in a projectID', async (done) => {
         expect(ulc.handleProjectLoad).toBeDefined();
         ulc.cs.userProfile = cs.userProfile;
+        spyOn(ulc.ss, 'searchProject').and.returnValue([{ id:1 }]);
 
-        ulc.handleProjectLoad();
+        await ulc.handleProjectLoad();
 
         expect(ulc.state.go).toHaveBeenCalledWith('public-dashboard', { appName: 1 });
 
         ulc.cs.userProfile.member.push(1);
-        ulc.handleProjectLoad();
+        await ulc.handleProjectLoad();
         expect(ulc.state.go).toHaveBeenCalledWith('dashboard', { appName: 1 });
+        done();
     });
 
 });
