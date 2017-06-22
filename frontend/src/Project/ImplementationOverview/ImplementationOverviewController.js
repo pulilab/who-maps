@@ -22,30 +22,31 @@ class ImplementationOverview extends CollapsibleSet {
     }
 
     watchers() {
-        const self = this;
-        self.scope.$watch(() => {
+        this.scope.$watch(() => {
             return this.project.platforms;
         }, (platform) => {
-            self.setAvailableOptions(platform, self.structure.technology_platforms, 'name');
-            self.addOtherOption(platform);
+            this.setAvailableOptions(platform, this.structure.technology_platforms, 'name');
+            this.addOtherOption(platform);
         }, true);
 
-        self.scope.$watch(() => {
+        this.scope.$watch(() => {
             return this.project.country;
-        }, self.fetchDistricts);
+        }, this.fetchDistricts);
 
-        self.scope.$watch(()=>{
+        this.scope.$watch(()=>{
             return this.project.coverage;
-        }, () => {
-            self.observeCoverage = {};
+        }, (coverage) => {
+            this.observeCoverage = {};
+            this.clearDistrict(coverage);
         }, true);
 
-        self.scope.$watchGroup([() => {
+        this.scope.$watchGroup([() => {
             return this.observeCoverage;
         }, () => {
             return this.districtList;
         }], ([, districts]) => {
-            self.setAvailableOptions(self.project.coverage, districts, 'district');
+            this.setAvailableOptions(this.project.coverage, districts, 'district');
+            this.addClearOption(this.project.coverage);
         });
     }
 
@@ -55,6 +56,25 @@ class ImplementationOverview extends CollapsibleSet {
                 p.available.push('Other');
             }
         });
+    }
+
+    addClearOption(districts) {
+        districts.forEach(p => {
+            if (p.available.indexOf('Clear selection') === -1) {
+                p.available.unshift('Clear selection');
+            }
+        });
+    }
+
+    clearDistrict(coverage) {
+        for (const cov of coverage) {
+            if (cov.district === 'Clear selection') {
+                cov.district = undefined;
+                cov.health_workers = undefined;
+                cov.facilities = undefined;
+                cov.clients = undefined;
+            }
+        }
     }
 
     mapHealthFocusAreas(healthFocusAreas) {
@@ -106,7 +126,7 @@ class ImplementationOverview extends CollapsibleSet {
         const self = this;
         if (country) {
             self.ccs.getCountryDistricts(country)
-                .then(self.handleDistrictData.bind(self));
+              .then(self.handleDistrictData.bind(self));
         }
     }
 
