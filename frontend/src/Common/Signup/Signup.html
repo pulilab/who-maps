@@ -12,7 +12,7 @@
                     <md-radio-group ng-model="vm.register.account_type">
                         <md-radio-button value="I" ng-selected="true" class="md-primary">
                           <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
-                          Implementer
+                          Implementer or Technologist
                         </md-radio-button>
                         <p class="md-small">How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation. </p>
                         <md-radio-button value="D" class="md-primary">
@@ -89,7 +89,7 @@
 
 <div ng-if="vm.landingPage" class="landing-page" ng-style="vm.style" >
     <h2 class="md-display-3">Sign up</h2>
-    <h5 class="md-headline" id="scroll-to-head">Whether you are an implementer, government, or financial investor, sign up below.</h5>
+    <h5 class="md-headline" id="scroll-to-head">Whether you are an implementer, government, or financial investor, or technologist, sign up below.</h5>
 
     <form name="signupForm" ng-submit="vm.signup(signupForm)"  novalidate ng-hide="vm.registered" >
         <div layout="column" class="role-form" ng-class="{'hidden' : vm.hideMainForm}">
@@ -97,7 +97,7 @@
             <md-radio-group ng-model="vm.register.role">
                 <md-radio-button value="1" ng-selected="true" class="md-primary">
                     <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
-                    I'm an <b>Implementer</b>
+                    I'm an <b>Implementer</b> or <b>Technologist</b>
                 </md-radio-button>
                 <p>How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation. </p>
                 <md-radio-button value="2" class="md-primary">
