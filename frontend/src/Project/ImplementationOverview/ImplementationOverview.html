@@ -98,7 +98,7 @@
 
     <div layout="row" class="first extra-margin-double">
       <md-input-container flex>
-        <label>What part of the Health Information System (HIS) does this project support?</label>
+        <label>What part(s) of the Health Information System (HIS) does this project support?</label>
         <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his" required multiple>
           <md-option value="{{his}}" ng-repeat="his in vm.structure.his_bucket">
             {{his}}

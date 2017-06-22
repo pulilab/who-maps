@@ -111,9 +111,9 @@
             </div>
           </div>
         </div>
-        </md-input-container>
+      </md-input-container>
 
-        <md-input-container flex>
+      <md-input-container flex>
         <label>Project end date</label>
         <md-datepicker
           ng-model="vm.project.end_date"
@@ -135,7 +135,7 @@
       <md-input-container flex>
         <label>Contact name</label>
         <input required name="contact_name" ng-model="vm.project.contact_name"
-        md-maxlength="250">
+               md-maxlength="250">
         <div ng-messages="vm.form.contact_name.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength"><div ng-message="md-maxlength">This has to be less than 250 characters long.</div></div>
@@ -170,36 +170,47 @@
   <div class="section-wrapper alt">
     <h6 class="first">Add Team members (Editor role)</h6>
 
-    <div layout="row" class="chipper">
-      <md-contact-chips
-        flex
-        placeholder="Editors of this project"
-        secondary-placeholder="add new team member"
-        ng-model="vm.team"
-        md-contacts="vm.getUsers($query)"
-        md-contact-name="name"
-        md-contact-email="organisation__name"
-        md-require-match="true"
-        md-highlight-flags="i"
-        filter-selected="true">
-      </md-contact-chips>
+    <div class="chipper">
+      <div layout="row">
+        <md-contact-chips
+          flex
+          placeholder="Editors of this project"
+          secondary-placeholder="add new team member"
+          ng-model="vm.team"
+          md-contacts="vm.getUsers($query)"
+          md-contact-name="name"
+          md-contact-email="organisation__name"
+          md-require-match="true"
+          md-highlight-flags="i"
+          filter-selected="true">
+        </md-contact-chips>
+      </div>
+      <div layout="row" class="suggestion">
+        <span>Note: if you wish to add members who are not already registered, they will need to be registered before you may add them</span>
+      </div>
     </div>
+
 
     <h6>Add Viewers (only Viewer role)</h6>
 
-    <div layout="row" class="chipper">
-      <md-contact-chips
-        flex
-        placeholder="Add viewers"
-        secondary-placeholder="add new viewer"
-        ng-model="vm.viewers"
-        md-contacts="vm.getUsers($query)"
-        md-contact-name="name"
-        md-contact-email="organisation__name"
-        md-require-match="true"
-        md-highlight-flags="i"
-        filter-selected="true">
-      </md-contact-chips>
+    <div class="chipper">
+      <div layout="row" >
+        <md-contact-chips
+          flex
+          placeholder="Add viewers"
+          secondary-placeholder="add new viewer"
+          ng-model="vm.viewers"
+          md-contacts="vm.getUsers($query)"
+          md-contact-name="name"
+          md-contact-email="organisation__name"
+          md-require-match="true"
+          md-highlight-flags="i"
+          filter-selected="true">
+        </md-contact-chips>
+      </div>
+      <div layout="row" class="suggestion">
+        <span>Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them</span>
+      </div>
     </div>
   </div>
 </div>

@@ -45,11 +45,15 @@ describe('ImplementationOverview', () => {
         controller.structure.technology_platform = [];
         spyOn(controller, 'fetchDistricts');
         spyOn(controller, 'setAvailableOptions');
+        spyOn(controller, 'clearDistrict');
+        spyOn(controller, 'addClearOption');
         controller.watchers();
         expect(controller.scope.$watch).toHaveBeenCalled();
         expect(controller.scope.$watchGroup).toHaveBeenCalled();
         expect(controller.fetchDistricts).toHaveBeenCalled();
         expect(controller.setAvailableOptions).toHaveBeenCalled();
+        expect(controller.clearDistrict).toHaveBeenCalled();
+        expect(controller.addClearOption).toHaveBeenCalled();
     });
 
     it('should have a mapping fn for interventions', () => {

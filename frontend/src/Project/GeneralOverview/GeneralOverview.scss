@@ -14,6 +14,11 @@
     }
   }
 
+  .chipper {
+    margin-bottom: 40px;
+  }
+
+
   .md-block.district {
     max-width: calc(50% + 30px);
   }
@@ -45,5 +50,11 @@
     .custom-error {
       margin-left: 40px !important;
     }
+  }
+
+  .suggestion {
+    margin-top: 5px !important;
+    color: $color-gray;
+    font-size: 12px;
   }
 }
