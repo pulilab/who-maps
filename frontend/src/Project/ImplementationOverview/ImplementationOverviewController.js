@@ -60,7 +60,8 @@ class ImplementationOverview extends CollapsibleSet {
 
     addClearOption(districts) {
         districts.forEach(p => {
-            if (p.available.indexOf('Clear selection') === -1) {
+            console.log(p);
+            if (p.available.indexOf('Clear selection') === -1 && p.district !== undefined) {
                 p.available.unshift('Clear selection');
             }
         });
