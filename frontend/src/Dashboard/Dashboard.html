@@ -1,357 +1,359 @@
 <div id="dashcontainer" layout="column">
 
-    <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty = !(vm.state.params.appName)">
+  <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty = !(vm.state.params.appName)">
 
-        <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
+    <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
 
-        <div flex class="dashsection dashsection-left" layout="row">
+    <div flex class="dashsection dashsection-left" layout="row">
 
-            <div ng-show="vm.showEmpty" flex class="dashsection dash-cardholder">
+      <div ng-show="vm.showEmpty" flex class="dashsection dash-cardholder">
 
-                <div class="dash-subhead">PROJECT DETAILS</div>
+        <div class="dash-subhead">PROJECT DETAILS</div>
 
-                <md-card md-whiteframe="2" flex class="dash-emptyleft">
-                    <div class="emptychild" layout="column" layout-align="start center">
-                        <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">add new project</md-button>
-                        <p>to include your project in the inventory and begin tracking your performance</p>
-                    </div>
-                </md-card>
-            </div>
+        <md-card md-whiteframe="2" flex class="dash-emptyleft">
+          <div class="emptychild" layout="column" layout-align="start center">
+            <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">add new project</md-button>
+            <p>to include your project in the inventory and begin tracking your performance</p>
+          </div>
+        </md-card>
+      </div>
 
-            <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-hide="vm.showEmpty">
+      <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-hide="vm.showEmpty">
 
-                <div class="dash-subhead">STATISTICS</div>
+        <div class="dash-subhead">STATISTICS</div>
 
-                <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
+        <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
 
-                    <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
+          <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
 
-                        <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
-                        <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
-                        <span class="dash-stat-label">Version</span>
+            <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
+            <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
+            <span class="dash-stat-label">Version</span>
 
-                        <div class="gray" ng-if="vm.userType === 3" layout="column" layout-align="space-around stretch">
+            <div class="gray" ng-if="vm.userType === 3" layout="column" layout-align="space-around stretch">
                             <span class="desc">
                                 Push to save your current stats as a new version:
                             </span>
-                            <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
-                                <span class="text plus">+</span>
-                                <span class="text">snapshot</span>
-                            </md-button>
-                        </div>
-
-                    </md-card>
-
-
-                    <donors class="hten" number="vm.projectData.donors.length"></donors>
-
-                </div>
+              <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
+                <span class="text plus">+</span>
+                <span class="text">snapshot</span>
+              </md-button>
             </div>
 
-            <div flex class="dashsection dash-cardholder" layout="column" ng-hide="vm.showEmpty">
+          </md-card>
 
-                <div class="dash-subhead">PROJECT DETAILS</div>
-                <md-card md-whiteframe="2" flex>
 
-                    <md-tabs md-border-bottom md-dynamic-height>
+          <donors class="hten" number="vm.projectData.donors.length"></donors>
 
-                        <md-tab label="overview">
+        </div>
+      </div>
 
-                            <div class="dash-cardcontent" layout="column" ng-if="vm.userType > 1">
+      <div flex class="dashsection dash-cardholder" layout="column" ng-hide="vm.showEmpty">
 
-                                <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
+        <div class="dash-subhead">PROJECT DETAILS</div>
+        <md-card md-whiteframe="2" flex>
 
-                                <div layout="row" class="dash-overview-tooltips">
-                                    <div class="dash-overview-tooltip">
-                                        <img src="../Common/Axis/images/flag-started.svg" />
-                                        <span>Already started</span>
-                                    </div>
-                                    <div class="dash-overview-tooltip">
-                                        <img src="../Common/Axis/images/flag-notstarted.svg" />
-                                        <span>Not started yet</span>
-                                    </div>
-                                    <div class="dash-overview-tooltip">
-                                        <span><countrychart-tooltip>P</countrychart-tooltip> - Progress</span>
-                                    </div>
-                                    <div class="dash-overview-tooltip">
-                                        <span><b>S</b> - Score</span>
-                                    </div>
-                                    <div class="dash-overview-tooltip">
-                                        <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
-                                        <span>0-49%</span>
-                                    </div>
-                                    <div class="dash-overview-tooltip">
-                                        <md-icon class="material-icons dash-overw-toolkit-ball2">fiber_manual_record</md-icon>
-                                        <span>50-99%</span>
-                                    </div>
-                                    <div class="dash-overview-tooltip">
-                                        <md-icon class="material-icons dash-overw-toolkit-ball3">fiber_manual_record</md-icon>
-                                        <span>100%</span>
-                                    </div>
-                                </div>
-                            </div>
+          <md-tabs md-border-bottom md-dynamic-height>
 
-                            <div class="dash-cardcontent infoview" layout="column" ng-if="vm.userType < 2" layout="column" layout-align="space-between stretch">
-                                <div layout="row" layout-align="start center" class="roww">
-                                    <div flex="25" class='label'>NAME</div>
-                                    <div class="data">{{vm.projectData.name}}</div>
-                                </div>
+            <md-tab label="overview">
 
-                                <div layout="row" layout-align="start center" class="roww">
-                                    <div flex="25" class='label'>LOCATION</div>
-                                    <div class="data">{{vm.projectData.country_name}}</div>
-                                </div>
+              <div class="dash-cardcontent" layout="column" ng-if="vm.userType > 1">
 
-                                <div layout="row" layout-align="start center" class="roww">
-                                    <div flex="25" class='label'>ORGANISATION</div>
-                                    <div class="data">{{vm.projectData.organisation_name}}</div>
-                                </div>
+                <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
 
-                                <div layout="row" layout-align="start center" class="roww borderless">
-                                    <div flex="25" class='label'>CONTACT</div>
-                                    <div class="data">
-                                        {{vm.projectData.contact_name}}
-                                        <a ng-href="mailto:{{vm.projectData.contact_email + '?subject=Request for approval'}}">
-                                            Request to be part of this project
-                                        </a>
-                                    </div>
-                                </div>
+                <div layout="row" class="dash-overview-tooltips">
+                  <div class="dash-overview-tooltip">
+                    <img src="../Common/Axis/images/flag-started.svg" />
+                    <span>Already started</span>
+                  </div>
+                  <div class="dash-overview-tooltip">
+                    <img src="../Common/Axis/images/flag-notstarted.svg" />
+                    <span>Not started yet</span>
+                  </div>
+                  <div class="dash-overview-tooltip">
+                    <span><countrychart-tooltip>P</countrychart-tooltip> - Progress</span>
+                  </div>
+                  <div class="dash-overview-tooltip">
+                    <span><b>S</b> - Score</span>
+                  </div>
+                  <div class="dash-overview-tooltip">
+                    <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
+                    <span>0-49%</span>
+                  </div>
+                  <div class="dash-overview-tooltip">
+                    <md-icon class="material-icons dash-overw-toolkit-ball2">fiber_manual_record</md-icon>
+                    <span>50-99%</span>
+                  </div>
+                  <div class="dash-overview-tooltip">
+                    <md-icon class="material-icons dash-overw-toolkit-ball3">fiber_manual_record</md-icon>
+                    <span>100%</span>
+                  </div>
+                </div>
+              </div>
 
-                                <div flex class="gray">
-                                    <div class='label labelobj'>OBJECTIVES</div>
-                                    <div class="data data2">{{vm.projectData.goals_to_scale}}</div>
-                                </div>
+              <div class="dash-cardcontent infoview" layout="column" ng-if="vm.userType < 2" layout="column" layout-align="space-between stretch">
+                <div layout="row" layout-align="start center" class="roww">
+                  <div flex="25" class='label'>NAME</div>
+                  <div class="data">{{vm.projectData.name}}</div>
+                </div>
 
-                            </div>
+                <div layout="row" layout-align="start center" class="roww">
+                  <div flex="25" class='label'>LOCATION</div>
+                  <div class="data">{{vm.projectData.country_name}}</div>
+                </div>
 
-                        </md-tab>
+                <div layout="row" layout-align="start center" class="roww">
+                  <div flex="25" class='label'>ORGANISATION</div>
+                  <div class="data">{{vm.projectData.organisation_name}}</div>
+                </div>
 
-                        <md-tab label="axis" ng-if="vm.userType > 1">
-                            <div>
-                                <linechart
-                                    showdotted="(vm.userType === 3)">
-                                </linechart>
-                            </div>
-                        </md-tab>
+                <div layout="row" layout-align="start center" class="roww borderless">
+                  <div flex="25" class='label'>CONTACT</div>
+                  <div class="data">
+                    {{vm.projectData.contact_name}}
+                    <a ng-href="mailto:{{vm.projectData.contact_email + '?subject=Request for approval'}}">
+                      Request to be part of this project
+                    </a>
+                  </div>
+                </div>
 
-                        <md-tab label="domains" ng-if="vm.userType > 1">
-                            <div>
-                                <linechart
-                                    showdotted="(vm.userType === 3)"
-                                    datachooser="true"
-                                ></linechart>
-                            </div>
-                        </md-tab>
+                <div flex class="gray">
+                  <div class='label labelobj'>OBJECTIVES</div>
+                  <div class="data data2">{{vm.projectData.goals_to_scale}}</div>
+                </div>
 
-                        <md-tab label="technology">
+              </div>
 
-                            <div class="dash-tech">
-                                <div
-                                    class="upper"
-                                    layout="column">
+            </md-tab>
 
-                                    <div layout="row" layout-align="start start">
+            <md-tab label="axis" ng-if="vm.userType > 1">
+              <div>
+                <linechart
+                  showdotted="(vm.userType === 3)">
+                </linechart>
+              </div>
+            </md-tab>
+
+            <md-tab label="domains" ng-if="vm.userType > 1">
+              <div>
+                <linechart
+                  showdotted="(vm.userType === 3)"
+                  datachooser="true"
+                ></linechart>
+              </div>
+            </md-tab>
+
+            <md-tab label="technology">
+
+              <div class="dash-tech">
+                <div
+                  class="upper"
+                  layout="column">
+
+                  <div layout="row" layout-align="start start">
 
                                         <span flex>
                                           <md-icon class="material-icons">device_hub</md-icon>
                                           Technology platforms</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
-                                            <md-chip-template>
+                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
+                      <md-chip-template>
                                             <span>
                                               {{$chip.name}}
                                             </span>
-                                          </md-chip-template>
-                                        </md-chips>
-                                    </div>
+                      </md-chip-template>
+                    </md-chips>
+                  </div>
 
-                                    <div layout="row">
+                  <div layout="row">
 
                                         <span flex>
                                           <md-icon class="material-icons">playlist_add_check</md-icon>
                                           License</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
-                                    </div>
+                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
+                  </div>
 
-                                    <!-- <div flex layout="row">
-                                        <md-icon class="material-icons">speaker_phone</md-icon>
-                                        <span flex>Digital tools</span>
-                                        <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
-                                        <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
-                                    </div> -->
-                                </div>
+                  <!-- <div flex layout="row">
+                      <md-icon class="material-icons">speaker_phone</md-icon>
+                      <span flex>Digital tools</span>
+                      <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
+                      <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
+                  </div> -->
+                </div>
 
-                                <div class="lower">
+                <div class="lower">
 
-                                    <span>Code documentations & download:</span>
-                                    <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
+                  <span>Code documentations & download:</span>
+                  <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
 
-                                    <span>Download applications:</span>
-                                    <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
+                  <span>Download applications:</span>
+                  <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
-                                    <span>Link to wiki page:</span>
-                                    <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
-                                </div>
-                            </div>
-                        </md-tab>
+                  <span>Link to wiki page:</span>
+                  <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
+                </div>
+              </div>
+            </md-tab>
 
-                        <!--<md-tab label="resources">-->
-                            <!--<md-content class="dash-res">-->
-
-
-                                <!--<h3>PROJECT REPORT</h3>-->
-                                <!--<md-card-->
-                                    <!--class="resource"-->
-                                    <!--ng-repeat="report in vm.resources.reports"-->
-                                    <!--layout="row"-->
-                                    <!--layout-align="space-around stretch">-->
-
-                                    <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-                                        <!--<h4>{{report.type === 'file' ? report.filename : report.link}}</h4>-->
-                                    <!--</div>-->
-                                    <!--<md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>-->
-                                    <!--<a ng-href="{{report.link}}" target="_blank" ng-if="report.type === 'link'" layout="column" layout-align="center center">-->
-                                        <!--<md-icon>launch</md-icon>-->
-                                    <!--</a>-->
-                                <!--</md-card>-->
+            <!--<md-tab label="resources">-->
+            <!--<md-content class="dash-res">-->
 
 
-                                <!--<h3>ASSOCIATED JOURNAL ARTICLES</h3>-->
-                                <!--<md-card-->
-                                    <!--class="resource"-->
-                                    <!--ng-repeat="article in vm.resources.articles"-->
-                                    <!--layout="row"-->
-                                    <!--layout-align="space-around stretch">-->
+            <!--<h3>PROJECT REPORT</h3>-->
+            <!--<md-card-->
+            <!--class="resource"-->
+            <!--ng-repeat="report in vm.resources.reports"-->
+            <!--layout="row"-->
+            <!--layout-align="space-around stretch">-->
 
-                                    <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-                                        <!--<h4>{{article.type === 'file' ? article.filename : article.link}}</h4>-->
-                                    <!--</div>-->
-                                    <!--<md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>-->
-                                    <!--<a ng-href="{{article.link}}" target="_blank" ng-if="article.type === 'link'" layout="column" layout-align="center center">-->
-                                        <!--<md-icon>launch</md-icon>-->
-                                    <!--</a>-->
-                                <!--</md-card>-->
-
-
-                                <!--<h3>ASSOCIATED CHMI LINKS</h3>-->
-                                <!--<md-card-->
-                                        <!--class="resource"-->
-                                        <!--ng-repeat="link in vm.resources.links"-->
-                                        <!--layout="row"-->
-                                        <!--layout-align="space-around stretch">-->
-
-                                    <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-                                        <!--<h4>{{link.type === 'file' ? link.filename : link.link}}</h4>-->
-                                    <!--</div>-->
-                                    <!--<md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>-->
-                                    <!--<a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">-->
-                                        <!--<md-icon>launch</md-icon>-->
-                                    <!--</a>-->
-                                <!--</md-card>-->
-                            <!--</md-content>-->
-                        <!--</md-tab>-->
-
-                        <md-tab label="interoperability">
-                            <md-content class="dash-res">
+            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
+            <!--<h4>{{report.type === 'file' ? report.filename : report.link}}</h4>-->
+            <!--</div>-->
+            <!--<md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>-->
+            <!--<a ng-href="{{report.link}}" target="_blank" ng-if="report.type === 'link'" layout="column" layout-align="center center">-->
+            <!--<md-icon>launch</md-icon>-->
+            <!--</a>-->
+            <!--</md-card>-->
 
 
-                                <h3>Health Information System Links</h3>
-                                <md-card
-                                        class="resource"
-                                        ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
-                                        ng-if="link.selected"
-                                        layout="row"
-                                        layout-align="start center">
-                                    <div flex>
-                                      <div class="res-title">{{link.name}}</div>
-                                      <div class="res-text">
-                                          <h4>{{link.link}}</h4>
-                                      </div>
-                                    </div>
-                                    <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
-                                        <md-icon>launch</md-icon>
-                                    </a>
-                                </md-card>
+            <!--<h3>ASSOCIATED JOURNAL ARTICLES</h3>-->
+            <!--<md-card-->
+            <!--class="resource"-->
+            <!--ng-repeat="article in vm.resources.articles"-->
+            <!--layout="row"-->
+            <!--layout-align="space-around stretch">-->
+
+            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
+            <!--<h4>{{article.type === 'file' ? article.filename : article.link}}</h4>-->
+            <!--</div>-->
+            <!--<md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>-->
+            <!--<a ng-href="{{article.link}}" target="_blank" ng-if="article.type === 'link'" layout="column" layout-align="center center">-->
+            <!--<md-icon>launch</md-icon>-->
+            <!--</a>-->
+            <!--</md-card>-->
 
 
-                                <h3>Health Information Exchange Standards</h3>
-                                <md-card
-                                        class="resource"
-                                        ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
-                                        layout="row"
-                                        layout-align="space-around stretch">
+            <!--<h3>ASSOCIATED CHMI LINKS</h3>-->
+            <!--<md-card-->
+            <!--class="resource"-->
+            <!--ng-repeat="link in vm.resources.links"-->
+            <!--layout="row"-->
+            <!--layout-align="space-around stretch">-->
 
-                                    <div flex class="res-text" layout="column" layout-align="space-around start">
-                                        <h4>{{standard}}</h4>
-                                    </div>
-                                </md-card>
+            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
+            <!--<h4>{{link.type === 'file' ? link.filename : link.link}}</h4>-->
+            <!--</div>-->
+            <!--<md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>-->
+            <!--<a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">-->
+            <!--<md-icon>launch</md-icon>-->
+            <!--</a>-->
+            <!--</md-card>-->
+            <!--</md-content>-->
+            <!--</md-tab>-->
+
+            <md-tab label="interoperability">
+              <md-content class="dash-res">
 
 
-                            </md-content>
-                        </md-tab>
-
-                    </md-tabs>
-
+                <h3>Health Information System Links</h3>
+                <md-card
+                  class="resource"
+                  ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
+                  ng-if="link.selected"
+                  layout="row"
+                  layout-align="start center">
+                  <div flex>
+                    <div class="res-title">{{link.name}}</div>
+                    <div class="res-text">
+                      <h4>{{link.link}}</h4>
+                    </div>
+                  </div>
+                  <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
+                    <md-icon>launch</md-icon>
+                  </a>
                 </md-card>
-            </div>
 
-        </div>
 
-        <div flex="40" class="dashsection dash-cardholder" layout="column">
-            <div class="dash-subhead">PROJECT PERFORMANCE</div>
-            <md-card md-whiteframe="2" flex class="dash-perf">
+                <h3>Health Information Exchange Standards</h3>
+                <md-card
+                  class="resource"
+                  ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
+                  layout="row"
+                  layout-align="space-around stretch">
 
-                <div flex class="emptyright" layout="column" ng-show="vm.showEmpty">
-                    <p class="afteri">
-                        <md-icon class="material-icons unselectable">info</md-icon>
-                        What will you find here?
-                    </p>
-                    <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
-                </div>
+                  <div flex class="res-text" layout="column" layout-align="space-around start">
+                    <h4>{{standard}}</h4>
+                  </div>
+                </md-card>
 
-                <md-tabs ng-hide="vm.showEmpty" ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
 
-                    <md-tab label="geographical view">
-                        <countrymap
-                            flex
-                            big="false"
-                            data="vm.perfMockMap">
-                        </countrymap>
-                    </md-tab>
+              </md-content>
+            </md-tab>
 
-                    <md-tab label="historical view">
+          </md-tabs>
 
-                        <linechart
-                            showdotted="(vm.userType === 3)"
-                            datachooser="false"
-                            notpercentage="true"
-                        ></linechart>
-
-                    </md-tab>
-
-                </md-tabs>
-
-                <div flex ng-if="vm.userType === 0" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
-                    <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
-                    <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
-                </div>
-
-            </md-card>
-        </div>
+        </md-card>
+      </div>
 
     </div>
 
-    <!-- LOWER PART -->
+    <div flex="40" class="dashsection dash-cardholder" layout="column">
+      <div class="dash-subhead">PROJECT PERFORMANCE</div>
+      <md-card md-whiteframe="2" flex class="dash-perf">
 
-    <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData">
-
-        <div flex class="dashsection dash-cardholder" layout="column">
-
-            <div class="dash-subhead">IMPROVE PROJECT</div>
-
-            <cms-dashboard-widget scores="vm.rawToolkitData" ></cms-dashboard-widget>
+        <div flex class="emptyright" layout="column" ng-show="vm.showEmpty">
+          <p class="afteri">
+            <md-icon class="material-icons unselectable">info</md-icon>
+            What will you find here?
+          </p>
+          <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
         </div>
 
+        <md-tabs ng-hide="vm.showEmpty" ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
+
+          <md-tab label="geographical view">
+            <countrymap
+              flex
+              big="false"
+              district-level-coverage="vm.districtProjects"
+              national-level-coverage="vm.nationalLevelCoverage"
+              map-data="vm.mapData">
+            </countrymap>
+          </md-tab>
+
+          <md-tab label="historical view">
+
+            <linechart
+              showdotted="(vm.userType === 3)"
+              datachooser="false"
+              notpercentage="true"
+            ></linechart>
+
+          </md-tab>
+
+        </md-tabs>
+
+        <div flex ng-if="vm.userType === 0" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
+          <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
+          <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
+        </div>
+
+      </md-card>
     </div>
+
+  </div>
+
+  <!-- LOWER PART -->
+
+  <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData">
+
+    <div flex class="dashsection dash-cardholder" layout="column">
+
+      <div class="dash-subhead">IMPROVE PROJECT</div>
+
+      <cms-dashboard-widget scores="vm.rawToolkitData" ></cms-dashboard-widget>
+    </div>
+
+  </div>
 
 </div>
 
