@@ -29,7 +29,7 @@
 
       &::after {
         content: "info";
-        @include md-icon($font-size: 48px);
+        @include md-icon($font-size: 64px);
         color: #BDBDBD;
         position: absolute;
         top: 50%;
