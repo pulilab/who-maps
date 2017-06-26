@@ -193,7 +193,8 @@ cms-dashboard-widget {
   .cms-list-element {
     margin: 5px 0;
 
-    .cover-img {
+    .cover-img,
+    .avatar-img {
       padding: 12px;
       min-width: 60px;
       max-width: 60px;
@@ -204,10 +205,10 @@ cms-dashboard-widget {
 
       .no-cover {
         width: 60px;
-        height: 85px;
+        height: 60px;
 
         &::after {
-          font-size: 24px;
+          font-size: 32px;
         }
       }
     }
@@ -218,12 +219,12 @@ cms-dashboard-widget {
       h3.md-title {
         font-size: 14px;
         line-height: 20px;
-        margin-bottom: 10px;
+        margin-bottom: 0;
         padding: 0;
       }
 
       h6,
-      .axis-domain {
+      .metadata {
         display: none;
       }
 
@@ -232,7 +233,7 @@ cms-dashboard-widget {
         font-size: 12px;
         line-height: 16px;
         max-height: 32px;
-        margin-bottom: 0;
+        margin: 8px 0 0;
       }
     }
 
@@ -249,40 +250,7 @@ cms-dashboard-widget {
     }
 
     &.experience {
-      position: relative;
 
-      .md-title {
-        // max-width: 100%;
-        // @include text-truncate();
-        margin-bottom: 0 !important;
-        margin-top: 5px;
-      }
-
-      .avatar-img {
-        padding: 12px;
-
-        > span {
-          width: 48px;
-          height: 48px;
-          border-radius: 48px;
-
-          &::before {
-            @include md-icon($font-size: 24px);
-          }
-        }
-
-        img {
-          width: 48px;
-          height: 48px;
-        }
-      }
-
-      .time {
-        // position: absolute;
-        // top: 18px;
-        // right: 12px;
-        font-size: 10px;
-      }
     }
   }
 }
