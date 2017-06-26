@@ -32,6 +32,11 @@ class PDFExportController {
 
     }
 
+    printDate(dateString) {
+        const mom = moment(dateString);
+        return mom.format('Do MMM, YYYY');
+    }
+
     makePDF() {
 
 
@@ -112,7 +117,6 @@ class PDFExportController {
         };
 
         _.forEach(this.projectList, (project, index)  => {
-
             const country = project.country_name.replace('-', ' ').toUpperCase();
 
             docDefinition.content.push({
@@ -131,7 +135,7 @@ class PDFExportController {
                             this.isAllCountry ? country :  { text: `UUID: ${project.uuid || ''}`, style: 'subHeader' }
                         ],
                         [
-                            [{ text: 'Date of: ', style: 'subHeader' }, project.implementation_dates || ''],
+                            [{ text: 'Date of: ', style: 'subHeader' }, this.printDate(project.implementation_dates)],
                             [{ text: 'Organisation name: ', style: 'subHeader' }, project.organisation_name || ''],
                             [{ text: 'Donors:', style: 'subHeader' },  project.donors.join(', ')],
                             [
@@ -139,7 +143,7 @@ class PDFExportController {
                                 project.implementing_partners || ''],
                             [
                                 { text: 'Health Focus Area:', style: 'subHeader' },
-                                project.health_focus_areas.join(', ')
+                                project.health_focus_areas ? project.health_focus_areas.join(', ') : ''
                             ],
                             [
                                 { text: 'Point of contact:', style: 'subHeader' },
