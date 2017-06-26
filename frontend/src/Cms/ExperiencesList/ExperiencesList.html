@@ -10,8 +10,19 @@
 
   <div class="add-experience" flex="60">
     <h3 class="md-title">Share your own experience</h3>
+
+    <div layout="row">
+      <md-input-container>
+        <label> What is your experience about (title)</label>
+        <input type="text" ng-model="vm.newExperience.name"  name="name" required md-maxlength="120" />
+        <div ng-messages="vm.form.name.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">The name has to be less than 120 characters long.</div>
+        </div>
+      </md-input-container>
+    </div>
     <trix-component placeholder="Add new experience" value="vm.newExperience.body" valid="vm.newExperience.valid" char-limit="2500"></trix-component>
-    <md-button class="md-primary md-raised" ng-disabled="!vm.newExperience.valid" ng-click="vm.saveExperience()">
+    <md-button class="md-primary md-raised" ng-disabled="vm.disableAddButton(vm.newExperience)" ng-click="vm.saveExperience()">
       Add experience
     </md-button>
   </div>

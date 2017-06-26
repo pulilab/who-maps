@@ -13,12 +13,10 @@ class ExperienceListController {
         this.domain = this.domains[axisIndex].domains[domainIndex];
         this.data = [];
         this.getData();
-        const name = this.cs.commonServices && this.cs.commonServices.userProfile ?
-          this.cs.commonServices.userProfile.name : '';
         this.newExperience = {
             body: null,
             valid: false,
-            name,
+            name: null,
             domain: this.domain.id,
             type: 3
         };
@@ -48,6 +46,10 @@ class ExperienceListController {
                 this.newExperience.body = false;
             });
         });
+    }
+
+    disableAddButton(experience) {
+        return !experience.valid || !experience.name || experience.name.length > 120;
     }
 
     static factory() {
