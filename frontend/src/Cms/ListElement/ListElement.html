@@ -2,35 +2,50 @@
 <div ng-if="vm.item.type !== 3" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
 
   <div class="cover-img">
-
+    <!-- TODO: Nico!
+    Please add 'type-1' & 'type-2' class to 'no-cover' -->
     <span class="no-cover" ng-hide="vm.item.cover"></span>
     <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">
   </div>
   <div class="excerpt">
     <h3 class="md-title">{{vm.item.name}}</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
-    <span class="axis-domain" ng-class="vm.axisAndDomainClass()">in <b>{{vm.showAxisAndDomain()}}</b></span>
     <div class="body" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
+    <div class="metadata" layout="column">
+      <span class="author">
+        <i class="material-icons">account_box</i>
+        <!-- TODO: Nico! -->
+        by (Author name) at {{vm.prettifyDate(vm.item)}}
+      </span>
+      <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
+        in {{vm.showAxisAndDomain()}}
+      </span>
+    </div>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 </div>
 
 
 <!-- EXPERIENCES -->
-<div ng-if="vm.item.type === 3" md-whiteframe="2" class="cms-list-element experience" layout="row"  layout-align="start start">
+<div ng-if="vm.item.type === 3" md-whiteframe="2" class="cms-list-element experience" layout="row" layout-align="start stretch">
 
   <div class="avatar-img">
-    <span ng-hide="vm.item.avatar"></span>
-    <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
+    <span class="no-cover"></span>
   </div>
   <div class="excerpt">
-    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h3 class="md-title">This is the title</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
-    <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
-      in <b>{{vm.showAxisAndDomain()}}</b>
-      at <span class="time">{{vm.prettifyDate(vm.item)}}</span>
-    </span>
     <div class="body" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
+    <div class="metadata" layout="column">
+      <span class="author">
+        <i class="material-icons">account_box</i>
+        <!-- TODO: Nico! -->
+        by (Author name) at {{vm.prettifyDate(vm.item)}}
+      </span>
+      <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
+        in {{vm.showAxisAndDomain()}}
+      </span>
+    </div>
     <cms-detail-element item="vm.item"></cms-detail-element>
   </div>
 
