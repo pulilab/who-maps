@@ -41,17 +41,22 @@
   }
 
   .cms-list-element {
-    margin: 0 60px 20px 0;
-    padding-bottom: 20px;
+    margin: 0 60px 24px 0;
+    padding-bottom: 24px;
     box-shadow: none;
     border-bottom: 1px solid $color-gray-lighter;
+
+    .cover-img,
+    .avatar-img {
+      display: none;
+    }
 
     .excerpt {
       padding: 0;
 
       h3.md-title {
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 18px;
+        line-height: 27px;
         margin-bottom: 0 !important;
         margin-top: 5px;
         padding: 0;
@@ -61,10 +66,10 @@
         display: none;
       }
 
-      p.md-body-1 {
+      .body {
         -webkit-line-clamp: 2;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 16px;
+        line-height: 24px;
         min-height: 40px;
         margin-bottom: 10px;
       }
@@ -79,33 +84,14 @@
           }
         }
       }
-    }
 
-    &.experience {
-      position: relative;
-
-      .avatar-img {
-        padding: 0 12px 0 0;
-
-        > span {
-          width: 48px;
-          height: 48px;
-          border-radius: 48px;
-
-          &::before {
-            @include md-icon($font-size: 24px);
-          }
-        }
-
-        img {
-          width: 48px;
-          height: 48px;
+      .metadata {
+        .axis-domain {
+          display: none;
         }
       }
-
-      .time {
-        font-size: 12px;
-      }
     }
+
+    &.experience {}
   }
 }
