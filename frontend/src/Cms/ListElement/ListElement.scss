@@ -60,13 +60,16 @@
 
     h6 {
       position: absolute;
-      top: 10px;
+      top: 5px;
       right: 30px;
+      padding: 3px 7px;
       font-size: 12px;
       font-weight: 500;
       text-transform: uppercase;
-      color: #BDBDBD;
+      background-color: #BDBDBD;
+      color: $color-white;
       white-space: nowrap;
+      border-radius: 3px;
     }
 
     .metadata {

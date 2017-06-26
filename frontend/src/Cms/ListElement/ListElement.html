@@ -14,7 +14,8 @@
     <div class="metadata" layout="column">
       <span class="author">
         <i class="material-icons">account_box</i>
-        <!-- TODO: Nico! -->
+        <!-- TODO: Nico!
+        Add Author endpoint & Please remove time, only date's needed -->
         by (Author name) at {{vm.prettifyDate(vm.item)}}
       </span>
       <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
@@ -33,13 +34,16 @@
     <span class="no-cover"></span>
   </div>
   <div class="excerpt">
+    <!-- TODO: Nico!
+    Add Title endpoint -->
     <h3 class="md-title">This is the title</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
     <div class="body" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
     <div class="metadata" layout="column">
       <span class="author">
         <i class="material-icons">account_box</i>
-        <!-- TODO: Nico! -->
+        <!-- TODO: Nico!
+        Add Author endpoint & Please remove time, only date's needed -->
         by (Author name) at {{vm.prettifyDate(vm.item)}}
       </span>
       <span class="axis-domain" ng-class="vm.axisAndDomainClass()">

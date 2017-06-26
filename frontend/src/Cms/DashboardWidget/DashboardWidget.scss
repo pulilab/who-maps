@@ -195,7 +195,7 @@ cms-dashboard-widget {
 
     .cover-img,
     .avatar-img {
-      padding: 12px;
+      padding: 10px;
       min-width: 60px;
       max-width: 60px;
 
@@ -214,7 +214,7 @@ cms-dashboard-widget {
     }
 
     .excerpt {
-      padding: 12px;
+      padding: 10px;
 
       h3.md-title {
         font-size: 14px;
@@ -241,7 +241,9 @@ cms-dashboard-widget {
       margin-bottom: 10px;
 
       .md-button {
-        color: $text-secondary;
+        md-icon {
+          color: $color-primary !important;
+        }
 
         &:first-of-type {
           display: none;

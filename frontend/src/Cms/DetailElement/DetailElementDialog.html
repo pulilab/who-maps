@@ -22,7 +22,7 @@
 
             <div class="created">
               <!-- TODO: Nico!
-              Please remove time, only date's needed -->
+              Add Author endpoint & Please remove time, only date's needed -->
               by (Author name) at {{vm.prettifyDate(vm.content)}}
 
               <!-- visible if user is able to edit -->
@@ -64,14 +64,16 @@
         <!-- Experiences -->
         <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 3" layout="column">
           <div class="content-header">
+            <!-- TODO: Nico!
+            Add Title endpoint -->
             <div class="name md-display-1">
-              {{vm.content.name}}
+              This is the title
             </div>
 
             <div class="created">
               <!-- TODO: Nico!
-              Please remove time, only date's needed -->
-              by (Author name) at {{vm.prettifyDate(vm.content)}}
+              Add Author endpoint & Please remove time, only date's needed -->
+              by {{vm.content.name}} at {{vm.prettifyDate(vm.content)}}
 
               <span class="sep">|</span>
               <!-- visible if user is able to edit -->
@@ -101,7 +103,7 @@
           </div>
         </div>
         <!-- /end -->
-        
+
       </div>
 
       <div class="comment-wrapper" ng-show="vm.content.comments.length > 0">
