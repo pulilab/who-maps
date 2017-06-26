@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 const prettifyDate = ({ created }) => {
     // 3:26 pm — 4 May, 2015
-    return moment(created).format('h:mm a - d MMM, YYYY');
+    return moment(created).format('d MMM, YYYY');
 };
 
 const itemType = (item) => {
