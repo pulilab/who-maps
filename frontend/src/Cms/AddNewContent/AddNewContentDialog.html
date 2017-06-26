@@ -2,8 +2,7 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h3 class="md-title" ng-hide="vm.newContent.id">Add new
-        <span ng-show="vm.isSuperUser">content</span>
-        <span ng-hide="vm.isSuperUser">Resource</span>
+        <span >content</span>
       </h3>
       <h3 class="md-title" ng-show="vm.newContent.id">Edit content</h3>
       <span flex></span>
@@ -19,11 +18,12 @@
 
         <div class="content">
           <div layout="column">
-            <md-input-container ng-if="vm.isSuperUser">
+            <md-input-container >
               <label>Select a type</label>
               <md-select ng-model="vm.newContent.type" required name="type" >
                 <md-option ng-value="1">Resources</md-option>
-                <md-option ng-value="2" >Tips &amp; Considerations</md-option>
+                <md-option ng-value="2" ng-if="vm.isSuperUser" >Tips &amp; Considerations</md-option>
+                <md-option ng-value="3" >Experiences</md-option>
               </md-select>
               <div ng-messages="vm.form.type.$error">
                 <div ng-message="required">This is required.</div>
@@ -53,7 +53,7 @@
 
           <trix-component value="vm.newContent.body" show-error="vm.showTrixError" valid="vm.newContent.textValid" placeholder="Add content" char-limit="2500" required></trix-component>
 
-          <div class="file-upload" layout="row" layout-align="start center">
+          <div class="file-upload" layout="row" layout-align="start center" ng-if="vm.newContent.type !== 3">
             <div class="selected-file-thumbnail">
               <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
             </div>

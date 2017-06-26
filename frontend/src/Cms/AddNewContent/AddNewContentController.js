@@ -80,10 +80,6 @@ class AddNewContentController extends Protected {
     showAddNewContentDialog(event) {
         const content = this.toEdit ? Object.assign({}, this.toEdit) : {};
 
-        if (!this.isSuperUser && !this.toEdit) {
-            content.type = 1;
-        }
-
         this.dialog.show({
             controller: AddNewContentDialog.factory(content, this.isSuperUser),
             controllerAs: 'vm',
