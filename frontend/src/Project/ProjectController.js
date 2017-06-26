@@ -159,6 +159,7 @@ class ProjectController extends ProjectDefinition {
         if (!data.fields || data.fields.length === 0) {
             this.getCountryFields(data.country, -1);
         }
+        data.coverageType = this.setCoverageType(data.coverage, data.national_level_deployment);
         this.scope.$evalAsync(() => {
             this.project = data;
             if (data.fields && data.fields.length > 0) {
@@ -167,6 +168,20 @@ class ProjectController extends ProjectDefinition {
             }
         });
 
+    }
+
+    setCoverageType(cov, nat) {
+        let ret = null;
+        if (nat && (nat.clients || nat.facilities || nat.health_workers)) {
+            ret = 2;
+        }
+        else if (cov && cov.length > 1) {
+            ret = 1;
+        }
+        else if (cov && Array.isArray(cov) && cov[0] && cov[0].district) {
+            ret = 1;
+        }
+        return ret;
     }
 
     fillEmptyCollectionsWithDefault(data) {
@@ -282,6 +297,8 @@ class ProjectController extends ProjectDefinition {
     save() {
         this.clearCustomErrors();
         if (this.form.$valid) {
+            // we do this on the original project object to force the ui to update
+            this.checkCoverageType(this.project);
             let processedForm = Object.assign({}, this.project);
             processedForm.organisation_name = processedForm.organisation.name;
             processedForm.organisation = processedForm.organisation.id;
@@ -290,6 +307,7 @@ class ProjectController extends ProjectDefinition {
             processedForm = this.convertObjectArrayToStringArray(processedForm);
             processedForm = this.removeEmptyChildObjects(processedForm);
             processedForm = this.removeKeysWithoutValues(processedForm);
+            processedForm.coverageType = undefined;
             if (!this.editMode) {
                 this.saveForm(processedForm);
             }
@@ -301,6 +319,15 @@ class ProjectController extends ProjectDefinition {
             this.focusInvalidField();
         }
 
+    }
+
+    checkCoverageType(processedForm) {
+        if (processedForm.coverageType === 2) {
+            processedForm.coverage = [{}];
+        }
+        else if (processedForm.coverageType === 1) {
+            processedForm.national_level_deployment = undefined;
+        }
     }
 
 
@@ -443,6 +470,7 @@ class ProjectController extends ProjectDefinition {
         if (window.location.search.indexOf('test') > -1) {
             this.scope.$evalAsync(() => {
                 this.project = data;
+
             });
         }
     }
