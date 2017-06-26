@@ -11,7 +11,7 @@ describe('CMS Utilities', () => {
         const objWithDate = {
             created: new Date('2017-01-01')
         };
-        const expectedString = mom.default(objWithDate.created).format('h:mm a - d MMM, YYYY');
+        const expectedString = mom.default(objWithDate.created).format('d MMM, YYYY');
         const result = utilities.prettifyDate(objWithDate);
         // ensure that a date is passed down to moment to prevent it to default to current date
         expect(mom.default).toHaveBeenCalledWith(objWithDate.created);
