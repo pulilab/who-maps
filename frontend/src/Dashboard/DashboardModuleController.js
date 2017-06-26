@@ -138,7 +138,7 @@ class DashboardModuleController extends Protected {
     snapShot() {
         this.service.snapShot(this.projectId).then((newVersion) => {
             const patch = newVersion.coverage;
-            this.cs.updateProject(patch, this.projectId);
+            this.cs.updateProject(patch, this.projectData);
             this.EE.emit('projectListUpdated');
             this.state.go('dashboard', { 'app': this.projectId }, { reload: true });
         });
