@@ -25,7 +25,12 @@
                         </md-input-container>
                     </md-card>
 
-                    <countrymap big="true"></countrymap>
+                    <countrymap
+                      big="true"
+                      district-level-coverage="vm.districtProjects"
+                      national-level-coverage="vm.nationalLevelCoverage"
+                      map-data="vm.mapData">
+                    </countrymap>
 
                 </div>
 

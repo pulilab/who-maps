@@ -18,6 +18,7 @@ class CountryViewModuleController {
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
+        this.fetchDistrictProjects = this.fetchDistrictProjects.bind(this);
         this.watchers = this.watchers.bind(this);
         this.applyFilters = this.applyFilters.bind(this);
     }
@@ -68,9 +69,8 @@ class CountryViewModuleController {
                     this.projectsData = this.countryProjects;
                 }
                 if (this.projectsData.length !== oldLength) {
-                    const projects = this.projectsData;
-                    const nationalProjects = this.updateListOfNationalCovProjects(projects, this.districtProjects);
-                    this.EE.emit('projectFiltered', { projects, nationalProjects });
+                    this.nationalLevelCoverage = this.filterNLDProjects(this.projectsData);
+                    this.districtProjects = this.filterDLDProjects(this.projectsData);
                 }
             });
         }
@@ -174,24 +174,23 @@ class CountryViewModuleController {
             healthInformationSystems, healthSystemChallenges, software];
     }
 
-    getCountries() {
+    async getCountries() {
 
-        this.mapService.getCountries().then(data => {
-            this.countries = data.slice();
-            this.countriesLib = {};
-            this.countries.forEach(country => {
-                this.countriesLib[country.id] = country.name;
-            });
-
-            // console.debug('COUNTRY LIB', this.countriesLib);
-
-            if (this.cs.userProfile && this.cs.userProfile.country) {
-                const name = this.cs.userProfile.country;
-                this.selectedCountry = _.find(this.countries, { name });
-                this.updateCountry(this.selectedCountry);
-                this.scope.$evalAsync();
-            }
+        const countries =  await this.mapService.getCountries();
+        this.countries = countries.slice();
+        this.countriesLib = {};
+        this.countries.forEach(country => {
+            this.countriesLib[country.id] = country.name;
         });
+
+        // console.debug('COUNTRY LIB', this.countriesLib);
+
+        if (this.cs.userProfile && this.cs.userProfile.country) {
+            const name = this.cs.userProfile.country;
+            this.selectedCountry = _.find(this.countries, { name });
+            this.updateCountry(this.selectedCountry);
+            this.scope.$evalAsync();
+        }
     }
 
     isViewer(project) {
@@ -202,56 +201,71 @@ class CountryViewModuleController {
         return this.cs.isMember(project);
     }
 
-    updateListOfNationalCovProjects(allProjects, districtProjects) {
+    filterNLDProjects(allProjects) {
         let districtsIds = [];
-        for (const d in districtProjects) {
-            districtsIds = districtsIds.concat(districtProjects[d]);
+        for (const d in this.countryDistrictProjects) {
+            districtsIds = districtsIds.concat(this.countryDistrictProjects[d]);
         }
         districtsIds = Array.from(new Set(districtsIds));
         districtsIds = districtsIds.map(d =>  d.id);
         return allProjects.filter(p => districtsIds.indexOf(p.id) === -1);
     }
 
+    filterDLDProjects(allProjects) {
+        const newDistrictCoverage = {};
+        const projectsId = allProjects.map(p=> p.id);
+        for (const d in this.countryDistrictProjects) {
+            const districtProjects =
+              this.countryDistrictProjects[d].filter(p => projectsId.indexOf(p.id) > -1);
+            if (districtProjects && districtProjects.length > 0) {
+                newDistrictCoverage[d] = districtProjects;
+            }
+        }
+        return newDistrictCoverage;
+    }
 
-    getProjects(countryObj) {
+
+    async getProjects(countryObj) {
         // console.debug('Selected:', countryObj);
-        this.service.getProjects(countryObj.id).then(projects => {
-            // console.debug('PROJECTS in ' + countryObj.name, data);
-            this.projectsData = projects;
-            this.countryProjects = _.cloneDeep(projects);
-            const nationalProjects = this.updateListOfNationalCovProjects(projects, this.districtProjects);
-            this.EE.emit('projectsUpdated', projects);
-            this.EE.emit('all country projects', nationalProjects);
+        const projects = await this.service.getProjects(countryObj.id);
+        // console.debug('PROJECTS in ' + countryObj.name, data);
+        this.projectsData = projects;
+        this.countryProjects = _.cloneDeep(projects);
+        this.nationalLevelCoverage  = this.filterNLDProjects(projects, this.districtProjects);
 
-        });
     }
 
     updateCountry(countryObj) {
         if (countryObj.name !== 'Show all countries') {
-            this.changeMapTo(countryObj);
+            return this.changeMapTo(countryObj);
         }
-        this.getProjects(countryObj);
+
+        return this.getProjects(countryObj);
+
     }
 
-    changeMapTo(countryObj) {
-        // console.log('chosen country:', countryObj);
-        this.EE.emit('country Changed');
+    async changeMapTo(countryObj) {
+        // this avoid double drawing the map
+        this.mapData = undefined;
+        this.districtProjects = undefined;
         this.fetchCountryMap(countryObj.id);
-        this.fetchDistrictProjects(countryObj.id);
+        await this.fetchDistrictProjects(countryObj.id);
+        return this.getProjects(countryObj);
     }
 
     // For map TAB
-    fetchDistrictProjects(countryId) {
-        this.service.getDistrictProjects(countryId).then(data => {
-            // console.debug('getDistrictProjects:', data);
-            this.districtProjects = data;
-            this.EE.emit('mapdataArrived', data);
+    async fetchDistrictProjects(countryId) {
+        const districtProjects = await this.service.getDistrictProjects(countryId);
+        this.scope.$evalAsync(() => {
+            this.districtProjects = districtProjects;
+            this.countryDistrictProjects = _.cloneDeep(districtProjects);
         });
     }
 
-    fetchCountryMap(id) {
-        this.mapService.getCountryMapData(id).then(data => {
-            this.EE.emit('topoArrived', data);
+    async fetchCountryMap(id) {
+        const mapData =  await this.mapService.getCountryMapData(id);
+        this.scope.$evalAsync(() => {
+            this.mapData = mapData;
         });
     }
 
