@@ -8,6 +8,10 @@ class ListElementController {
         this.itemType = itemType;
     }
 
+    typeClass(item) {
+        return `type-${item.type}`;
+    }
+
     showAxisAndDomain() {
         const result = axisAndDomainName(this.item.domain);
         return `${result.axisName} - ${result.domainName}`;

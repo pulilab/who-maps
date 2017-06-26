@@ -21,9 +21,8 @@
             </div>
 
             <div class="created">
-              <!-- TODO: Nico!
-              Add Author endpoint & Please remove time, only date's needed -->
-              by (Author name) at {{vm.prettifyDate(vm.content)}}
+
+              by {{vm.content.author_name}} at {{vm.prettifyDate(vm.content)}}
 
               <!-- visible if user is able to edit -->
               <span ng-show="vm.isAuthor()">
@@ -64,16 +63,14 @@
         <!-- Experiences -->
         <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 3" layout="column">
           <div class="content-header">
-            <!-- TODO: Nico!
-            Add Title endpoint -->
             <div class="name md-display-1">
-              This is the title
+              {{vm.content.name}}
             </div>
 
             <div class="created">
               <!-- TODO: Nico!
               Add Author endpoint & Please remove time, only date's needed -->
-              by {{vm.content.name}} at {{vm.prettifyDate(vm.content)}}
+              by {{vm.content.author_name}} at {{vm.prettifyDate(vm.content)}}
 
               <span class="sep">|</span>
               <!-- visible if user is able to edit -->

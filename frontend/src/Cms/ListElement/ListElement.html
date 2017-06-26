@@ -4,7 +4,7 @@
   <div class="cover-img">
     <!-- TODO: Nico!
     Please add 'type-1' & 'type-2' class to 'no-cover' -->
-    <span class="no-cover" ng-hide="vm.item.cover"></span>
+    <span class="no-cover" ng-class="vm.typeClass(vm.item)" ng-hide="vm.item.cover"></span>
     <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">
   </div>
   <div class="excerpt">
@@ -14,9 +14,7 @@
     <div class="metadata" layout="column">
       <span class="author">
         <i class="material-icons">account_box</i>
-        <!-- TODO: Nico!
-        Add Author endpoint & Please remove time, only date's needed -->
-        by (Author name) at {{vm.prettifyDate(vm.item)}}
+        by {{vm.content.author_name}} at {{vm.prettifyDate(vm.item)}}
       </span>
       <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
         in {{vm.showAxisAndDomain()}}
@@ -34,17 +32,14 @@
     <span class="no-cover"></span>
   </div>
   <div class="excerpt">
-    <!-- TODO: Nico!
-    Add Title endpoint -->
-    <h3 class="md-title">This is the title</h3>
+
+    <h3 class="md-title">{{vm.item.name}}</h3>
     <h6>{{vm.itemType(vm.item)}}</h6>
     <div class="body" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
     <div class="metadata" layout="column">
       <span class="author">
         <i class="material-icons">account_box</i>
-        <!-- TODO: Nico!
-        Add Author endpoint & Please remove time, only date's needed -->
-        by (Author name) at {{vm.prettifyDate(vm.item)}}
+        by {{vm.content.author_name}} at {{vm.prettifyDate(vm.item)}}
       </span>
       <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
         in {{vm.showAxisAndDomain()}}
