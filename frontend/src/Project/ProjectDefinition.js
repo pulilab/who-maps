@@ -17,6 +17,7 @@ class ProjectDefinition extends Protected {
             country: null,
             countryName: null,
             coverage: [{}],
+            coverageType: undefined,
             start_date: void 0,
             end_date: void 0,
             platforms: [{
