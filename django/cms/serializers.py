@@ -13,6 +13,7 @@ class CommentSerializer(ModelSerializer):
 
 class CmsSerializer(ModelSerializer):
     comments = SerializerMethodField()
+    author_name = SerializerMethodField()
 
     class Meta:
         model = Post
@@ -24,3 +25,7 @@ class CmsSerializer(ModelSerializer):
         comments = Comment.objects.filter(post=post).showable().order_by('-id')
         serializer = CommentSerializer(instance=comments, many=True)
         return serializer.data
+
+    @staticmethod
+    def get_author_name(post):
+        return post.author.name

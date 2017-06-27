@@ -181,6 +181,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['type'], self.post_data['type'])
         self.assertEqual(response.json()['domain'], self.post_data['domain'])
         self.assertEqual(response.json()['author'], self.post_data['author'])
+        self.assertEqual(response.json()['author_name'], "Test Name")
         self.assertEqual(response.json()['state'], Post.NORMAL)
         self.assertTrue(response.json()['created'])
         self.assertTrue(response.json()['modified'])
