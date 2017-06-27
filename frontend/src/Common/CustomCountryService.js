@@ -196,11 +196,10 @@ class CustomCountryService extends SimpleApi {
             footer_title: '',
             permanent_footer: 'The DHA is led by WHO RHR/HRP, for the Health Data Collaborative Working Group' +
             ' on Digital Health and Interoperability, with support from USAID, OPAL, UN Foundation, JHU-GMI,' +
-            ' developed as a global good software in response to the proliferation of uncoordinated ' +
+            'mPowering, developed as a global good software in response to the proliferation of uncoordinated ' +
             'duplicative investments into digital health.',
             footer_text: '',
-            default_partners: ['/static/partners/logo-hdc.png',
-                '/static/partners/logo-hrp-new.png'],
+            default_partners: ['/static/partners/logo-hrp-new.png', '/static/partners/who-logo.png'],
             partner_logos: []
         };
         _.forEach(standard, (standardValue, key) => {
