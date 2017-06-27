@@ -199,8 +199,7 @@ class CustomCountryService extends SimpleApi {
             'mPowering, developed as a global good software in response to the proliferation of uncoordinated ' +
             'duplicative investments into digital health.',
             footer_text: '',
-            default_partners: ['/static/partners/logo-hdc.png',
-                '/static/partners/logo-hrp-new.png'],
+            default_partners: ['/static/partners/logo-hrp-new.png', '/static/partners/who-logo.png'],
             partner_logos: []
         };
         _.forEach(standard, (standardValue, key) => {
