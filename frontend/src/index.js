@@ -10,7 +10,7 @@ EE.initialize();
 
 if (LIVE) {
     const Raven = require('raven-js');
-    Raven.config('http://cea32567f8aa4eefa4d2051848d37dea@sentry.vidzor.com/12')
+    Raven.config('https://cea32567f8aa4eefa4d2051848d37dea@sentry.vidzor.com/12')
         .install();
 
     window.onunhandledrejection = (event) => {
