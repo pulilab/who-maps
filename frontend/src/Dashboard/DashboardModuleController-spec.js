@@ -118,6 +118,12 @@ describe('DashboardModuleController', () => {
         };
         spyOn(vm.service, 'snapShot').and.callThrough();
         spyOn(vm.cs, 'updateProject');
+        vm.projectData = {
+            organisation: {
+                id: 1,
+                name: 'test'
+            }
+        };
         vm.snapShot();
         expect(vm.service.snapShot).toHaveBeenCalledWith(1);
         expect(vm.cs.updateProject).toHaveBeenCalled();
