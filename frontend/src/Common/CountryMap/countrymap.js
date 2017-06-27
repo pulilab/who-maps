@@ -7,7 +7,10 @@ const coutrymap = {
     template: _template,
     name: 'countrymap',
     bindings: {
-        big: '='
+        big: '<',
+        districtLevelCoverage: '<',
+        nationalLevelCoverage: '<',
+        mapData: '<'
     }
 };
 

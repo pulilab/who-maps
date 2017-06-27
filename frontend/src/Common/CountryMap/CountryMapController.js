@@ -13,7 +13,7 @@ class CountryMapController {
         this.EE = window.EE;
         this.tooltipOver = false;
         this.preventMouseOut = false;
-
+        this.handleData = this.handleData.bind(this);
         this.$onInit = this.onInit;
         this.$onDestroy = this.onDestroy;
     }
@@ -23,31 +23,35 @@ class CountryMapController {
         this.showPlaceholder = !this.big;
         this.cs = require('../../Common/CommonServices');
         this.svgPanZoom = svgPanZoom;
-        this.nationalCov = {};
         this.covLib = {};
-        this.allProjects = {};
+        this.watchers();
 
-        this.EE.removeListener('country Changed');
-        this.EE.removeListener('all country projects');
-
-        if (this.big) {
-            this.EE.on('country Changed', this.mapChanged, this);
-            this.EE.on('projectsUpdated', this.handleUpdatedProjects, this);
-            this.EE.on('all country projects', (data) => {
-                this.allProjects = data;
-                this.scope.$evalAsync();
-            });
-            this.EE.on('projectFiltered', this.handleFilteredProject, this);
-        }
-        else {
-            this.EE.once('country Changed', this.mapChanged, this);
-        }
     }
 
     onDestroy() {
-        // this.svgZoom.destroy();
         this.data = false;
         this.countryMapData = false;
+    }
+
+    watchers() {
+        this.scope.$watchCollection(s => [s.vm.districtLevelCoverage, s.vm.mapData], this.handleData);
+    }
+
+    handleData([districtCoverage, map]) {
+        if (districtCoverage && map) {
+            this.showPlaceholder = true;
+            this.preDraw(map);
+            this.boundNrs = _.reduce(districtCoverage, (ret, value, key) => {
+
+                if (key === 'date') { return ret; }
+
+                _.forOwn(value, (val, k) => {
+                    ret[k] = (ret[k] || 0) + val;
+                });
+
+                return ret;
+            }, {});
+        }
     }
 
     saveClass(key, index, boundNrs) {
@@ -60,7 +64,7 @@ class CountryMapController {
     }
 
     setGlobal() {
-        this.isGlobalOrNational = true;
+        this.showNationalLevelCoverage = true;
         const districts = document.getElementsByClassName('d3district');
         Array.prototype.forEach.call(districts, distr => {
             distr.classList.add('global');
@@ -68,99 +72,13 @@ class CountryMapController {
     }
 
     setTotal() {
+        this.showNationalLevelCoverage = false;
         const districts = document.getElementsByClassName('d3district');
         Array.prototype.forEach.call(districts, distr => {
             distr.classList.remove('global');
         });
     }
 
-    handleFilteredProject({ projects, nationalProjects }) {
-        this.handleUpdatedProjects(projects);
-        this.allProjects = nationalProjects;
-        if (this.isGlobalOrNational) {
-            this.setGlobal();
-        }
-        else {
-            this.setTotal();
-        }
-    }
-
-    handleUpdatedProjects(projects) {
-        if (!this.data) {
-            return;
-        }
-        const provisionalDistrictObject = {};
-        _.forEach(this.initialData.data, (district, key) => {
-            const newProjectArray = [];
-            _.forEach(district, project => {
-                const exist = _.find(projects, item => {
-                    return item.id === project.id;
-                });
-                if (exist) {
-                    newProjectArray.push(project);
-                }
-            });
-            if (newProjectArray.length > 0) {
-                provisionalDistrictObject[key] = newProjectArray;
-            }
-        });
-        this.data.data = provisionalDistrictObject;
-        this.activeDistrict = void 0;
-        this.preDraw(this.countryMapData);
-    }
-
-    dataArrived(data, national) {
-
-        this.data = this.big ? { data } : data;
-        this.initialData = _.cloneDeep(this.data);
-        // console.log('DATA arrived', this.data);
-        this.dataHere = true;
-        if (national) {
-            this.nationalCov = Object.assign({}, national);
-            if (!_.isNil(this.nationalCov.health_workers)) {
-                this.nationalCov['Health workers'] = '' + this.nationalCov.health_workers;
-                delete this.nationalCov.health_workers;
-            }
-        }
-        this.scope.$evalAsync();
-
-        // console.warn('National data arrived to the mapCTRL:', this.nationalCov);
-
-        // Aggregates the values of districts to show them all
-        this.boundNrs = _.reduce(this.data.data, (ret, value, key) => {
-
-            if (key === 'date') { return ret; }
-
-            _.forOwn(value, (val, k) => {
-                ret[k] = (ret[k] || 0) + val;
-            });
-
-            return ret;
-        }, {});
-
-
-        if (this.mapHere) {
-            // console.debug('data arrived, map was here, starts drawing', data);
-            this.preDraw(this.countryMapData);
-        }
-        else {
-            // console.debug('data arrived, waiting for map', data);
-        }
-    }
-
-    mapArrived(data) {
-
-        this.countryMapData = data;
-        this.mapHere = true;
-
-        if (this.dataHere) {
-            // console.debug('map arrived, data was here, so it starts drawing', data);
-            this.preDraw(this.countryMapData);
-        }
-        else {
-            // console.debug('map arrived, waiting for data');
-        }
-    }
 
     isViewer(project) {
         return this.cs.isViewer(project);
@@ -170,12 +88,6 @@ class CountryMapController {
         return this.cs.isMember(project);
     }
 
-    mapChanged() {
-
-        this.showPlaceholder = true;
-        this.EE.once('topoArrived', this.mapArrived, this);
-        this.EE.once('mapdataArrived', this.dataArrived, this);
-    }
 
     makeGeoFromTopo(topo) {
         // console.warn('TOPO', topo);
@@ -229,9 +141,6 @@ class CountryMapController {
     }
 
     preDraw(countryMapData) {
-        if (!countryMapData) {
-            return;
-        }
         // console.log(JSON.stringify(topoJSON));
         d3.select(this.el[0]).select('.countrymapcontainer').remove();
 
@@ -266,12 +175,11 @@ class CountryMapController {
         this.makeSvgPannableAndZoomable(element.node());
 
         this.showPlaceholder = false;
-        this.dataHere = false;
-        this.mapHere = false;
     }
 
     drawDistricts(element, geoData, countryMapData) {
         const self = this;
+
         const projection = d3.geo.mercator()
           .scale(this.calculateScale(countryMapData.mapData));
 
@@ -280,7 +188,7 @@ class CountryMapController {
         for (let i = 0; i < geoData.features.length; i += 1) {
 
             const districtsName = countryMapData.districts[i];
-            const gotData = typeof this.data.data[districtsName] === 'object';
+            const gotData = typeof this.districtLevelCoverage[districtsName] === 'object';
 
             element
               .append('path')
@@ -291,13 +199,14 @@ class CountryMapController {
               })
               .attr('d', path)
               .classed('d3district', true)
+              .classed('global', this.showNationalLevelCoverage)
               .classed('d3district-data', gotData)
               .classed(`name-${districtsName}`, true)
               .on('mouseover', () => {
                   if (!this.big) {
                       this.activeDistrict = {
                           name: districtsName,
-                          data: this.data.data[districtsName]
+                          data: this.districtLevelCoverage[districtsName]
                       };
                       this.scope.$evalAsync();
                   }
@@ -316,7 +225,7 @@ class CountryMapController {
                           if (stillHovered) {
                               self.activeDistrict = {
                                   name: districtsName,
-                                  data: self.data.data[districtsName]
+                                  data: self.districtLevelCoverage[districtsName]
                               };
                               self.scope.$evalAsync();
                           }

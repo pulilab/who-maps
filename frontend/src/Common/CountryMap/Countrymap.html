@@ -45,7 +45,7 @@
                     <div flex
                          class="coverage-data"
                          layout="row"
-                         ng-repeat="(key, datum) in vm.nationalCov"
+                         ng-repeat="(key, datum) in vm.nationalLevelCoverage"
                          ng-init="vm.saveClass(key, $index, vm.boundNrs)">
 
                         <div flex class="cap lh">{{key}}</div>
@@ -59,7 +59,7 @@
     </div>
 
     <!-- for CLV -->
-    <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="vm.big" ng-hide="!vm.countryMapData">
+    <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="vm.big" ng-hide="!vm.mapData">
 
         <div class="countrychart-tooltip-header bold">
             {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
@@ -97,7 +97,7 @@
                         layout="column"
                         layout-align="space-around start"
                         class="projectcont"
-                        ng-repeat="project in vm.allProjects | limitTo:5"
+                        ng-repeat="project in vm.nationalLevelCoverage | limitTo:5"
                         ng-init="member = vm.isMember(project); viewer = vm.isViewer(project)"
                         ui-sref="dashboard({ appName: project.id })">
 

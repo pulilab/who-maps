@@ -102,38 +102,32 @@ class DashboardModuleController extends Protected {
 
     fetchProjectData(data) {
         // console.debug('ProjectData', data);
-        this.EE.emit('country Changed');
         this.projectData = data;
         if (this.userType !== 0) {
             this.fetchCountryMap(data.country);
-            this.parseMapData(data.coverage, data.national_level_deployment);
+            this.scope.$evalAsync(() => {
+                this.districtProjects = this.parseCoverage(data);
+                this.nationalLevelCoverage = data.national_level_deployment;
+            });
             this.fetchCoverageVersions();
         }
     }
 
-    parseMapData(coverage, national) {
-        const ret = { labels: [], data: {} };
-        coverage.forEach(el => {
-            if (ret.labels.indexOf(el.district) < 0) {
-                ret.labels.push(el.district);
-            }
-        });
-
-        coverage.forEach(distObj => {
-
-            ret.data[distObj.district] = {};
-
-            _.forOwn(distObj, (val, key) => {
-
-                if (key === 'district') { return; }
-                const formattedKey = key.replace('_', ' ');
-                ret.data[distObj.district][formattedKey] = val;
-            });
-        });
-
-        this.EE.emit('mapdataArrived', ret, national);
-        this.perfMockMap = ret;
+    parseCoverage(data) {
+        if (!data || !Array.isArray(data.coverage)) {
+            return {};
+        }
+        const cov = {};
+        for (const d of data.coverage) {
+            cov[d.district] = {
+                clients: d.clients,
+                health_workers: d.health_workers,
+                facilities: d.facilities
+            };
+        }
+        return cov;
     }
+
 
     snapShot() {
         this.service.snapShot(this.projectId).then((newVersion) => {
@@ -286,10 +280,8 @@ class DashboardModuleController extends Protected {
         });
     }
 
-    fetchCountryMap(id) {
-        this.mapService.getCountryMapData(id).then(data => {
-            this.EE.emit('topoArrived', data);
-        });
+    async fetchCountryMap(id) {
+        this.mapData = await this.mapService.getCountryMapData(id);
     }
 
     fetchCoverageVersions() {

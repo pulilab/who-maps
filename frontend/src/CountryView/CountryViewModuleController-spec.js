@@ -83,15 +83,16 @@ describe('CountryViewModuleController', () => {
             vm.applyFilters(filters, oldValues);
             expect(vm.projectsData[0]).toBe(vm.countryProjects[0]);
         });
-        it('emit projectsUpdated event only if the filters actually modified the shown content', () => {
-            vm.EE.emit.calls.reset();
+        it('update the coverages only if the filters actually modified the shown content', () => {
+            spyOn(vm, 'filterNLDProjects');
+            spyOn(vm, 'filterDLDProjects');
             vm.countryProjects = [{}];
             filters[0].filterMappingFn = () => ['a'];
             vm.applyFilters(filters, oldValues);
-            expect(vm.EE.emit).toHaveBeenCalled();
 
             vm.applyFilters(filters, oldValues);
-            expect(vm.EE.emit).toHaveBeenCalledTimes(1);
+            expect(vm.filterNLDProjects).toHaveBeenCalledTimes(1);
+            expect(vm.filterDLDProjects).toHaveBeenCalledTimes(1);
         });
 
     });
@@ -111,13 +112,11 @@ describe('CountryViewModuleController', () => {
 
         const countryObj = { name: 'aa' };
         vm.updateCountry(countryObj);
-        expect(vm.changeMapTo).toHaveBeenCalledWith(countryObj);
-        expect(vm.getProjects).toHaveBeenCalledWith(countryObj);
 
         countryObj.name = 'Show all countries';
         vm.updateCountry(countryObj);
         expect(vm.changeMapTo.calls.count()).toBe(1);
-        expect(vm.getProjects.calls.count()).toBe(2);
+        expect(vm.getProjects.calls.count()).toBe(1);
     });
 
     it('has changeMapTo fn.', () => {
@@ -127,7 +126,6 @@ describe('CountryViewModuleController', () => {
 
         vm.changeMapTo(countryMock);
 
-        expect(vm.EE.emit).toHaveBeenCalledWith('country Changed');
         expect(vm.fetchCountryMap).toHaveBeenCalledWith('id');
         expect(vm.fetchDistrictProjects).toHaveBeenCalledWith('id');
     });

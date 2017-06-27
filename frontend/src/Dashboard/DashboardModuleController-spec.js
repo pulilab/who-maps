@@ -1,4 +1,5 @@
 import { default as DashboardModuleController } from './DashboardModuleController';
+import { $scope } from '../testUtilities';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise */
 let vm = {};
@@ -52,8 +53,9 @@ window.setTimeout = (fn) => { fn(); };
 describe('DashboardModuleController', () => {
 
     beforeEach(() => {
+        const scope = $scope(vm);
         spyOn(window.EE, 'on').and.callThrough();
-        vm = DashboardModuleController.dashboardControllerFactory()({}, state, window.setTimeout, csMock);
+        vm = DashboardModuleController.dashboardControllerFactory()(scope, state, window.setTimeout, csMock);
         vm.$onInit();
         vm.userType = 3;
     });
@@ -73,7 +75,6 @@ describe('DashboardModuleController', () => {
 
         // vm.projectId = 1;
         spyOn(vm, 'fetchCountryMap');
-        spyOn(vm, 'parseMapData');
         spyOn(vm, 'fetchCoverageVersions');
 
         const mock = { country: 1, coverage: 2 };
@@ -81,7 +82,6 @@ describe('DashboardModuleController', () => {
 
         expect(vm.projectData).toBe(mock);
         expect(vm.fetchCountryMap).toHaveBeenCalledWith(mock.country);
-        expect(vm.parseMapData).toHaveBeenCalledWith(mock.coverage, undefined);
         expect(vm.fetchCoverageVersions).toHaveBeenCalled();
     });
 
@@ -104,40 +104,12 @@ describe('DashboardModuleController', () => {
         vm.mapService.getCountryMapData = () => {
             return { then: (fn) => { fn('adat'); } };
         };
-        spyOn(vm.EE, 'emit');
         spyOn(vm.mapService, 'getCountryMapData').and.callThrough();
         vm.fetchCountryMap('aaa');
 
         expect(vm.mapService.getCountryMapData).toHaveBeenCalled();
-        expect(vm.EE.emit).toHaveBeenCalledWith('topoArrived', 'adat');
     });
 
-    it('parseMapData fn. parses coverage data, emits EE with it', () => {
-        const mock = [
-            {
-                'district': 'Pujehun District',
-                'clients': 100,
-                'health_workers': 10,
-                'facilities': 1
-            }, {
-                'district': 'Bonthe District',
-                'clients': 100,
-                'health_workers': 20,
-                'facilities': 1
-            }, {
-                'district': 'Moyamba District',
-                'Superdoc': 1
-            }
-        ];
-        spyOn(vm.EE, 'emit');
-        vm.parseMapData(mock);
-        expect(vm.EE.emit).toHaveBeenCalled();
-
-        expect(vm.perfMockMap.labels.length).toBe(3);
-        vm.perfMockMap.labels.forEach((key) => {
-            expect(typeof vm.perfMockMap.data[key]).toBe('object');
-        });
-    });
 
     it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
         vm.projectId = 1;
