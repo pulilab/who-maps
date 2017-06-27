@@ -132,7 +132,11 @@ class DashboardModuleController extends Protected {
     snapShot() {
         this.service.snapShot(this.projectId).then((newVersion) => {
             const patch = newVersion.coverage;
-            this.cs.updateProject(patch, this.projectData);
+            const project = _.cloneDeep(this.projectData);
+            //  the update project function expect a backend like object not the same that we store in the frontend
+            project.organisation_name = project.organisation.name;
+            project.organisation = project.organisation.id;
+            this.cs.updateProject(patch, project);
             this.EE.emit('projectListUpdated');
             this.state.go('dashboard', { 'app': this.projectId }, { reload: true });
         });
