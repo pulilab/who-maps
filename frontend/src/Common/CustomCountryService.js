@@ -170,7 +170,6 @@ class CustomCountryService extends SimpleApi {
                         country.districts = _.map(data.objects[subKey].geometries, object => {
                             return object.properties['name:en'] || object.properties.name;
                         });
-                        this.store.set('countryLib', self.countryLib);
                         resolve(Object.assign({}, country));
                     });
                 }
