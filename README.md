@@ -1,74 +1,7 @@
-## Setting up the backend on Mac
+## Command to run
 
-1, Follow instructions here to install Docker:
-
-https://docs.docker.com/mac/step_one/
-
-"Step 3: Verify your installation" is not needed.
-
-
-2, Create a VirtualBox VM for running the images:
-
-```bash
-$ docker-machine create --driver virtualbox who-maps
-```
-
-
-3, Connect your shell to the VM:
-
-```bash
-$ eval "$(docker-machine env who-maps)"
-```
-
-
-4, Build the containers:
-
-```bash
-$ cd your/project/root
-$ docker-compose build
-```
-
-
-5, Run the containers:
-
-```bash
-$ docker-compose up
-```
-
-It also can be run with option "-d" so that it starts detached mode (in the background):
-
-```bash
-$ docker-compose up -d
-```
-
-6, Initialize the database:
-
-```bash
-$ docker exec -it whomaps_django_1 python manage.py migrate
-```
-
-7, Check for the IP of the VM:
-
-```bash
-$ docker-machine ip who-maps
-```
-
-8, Open a browser on the given IP and load the application:
-
-```bash
-$ open http://192.168.99.100
-```
-
-You're done!
-
-Useful commands for managing the VM and the containers:
-
-```bash
-$ docker-machine ls
-$ docker-machine start who-maps
-$ docker-machine stop who-maps
-$ docker ps
-```
+`fab up` - start all backend instances in daemon mode
+`fab down` - stop all backend instances and make backup of db
 
 ## Project structure
 _(this section needs to be discussed)_
@@ -93,12 +26,12 @@ HTML files that will be served by Django (for e.g. the ones that needs to be fil
 
 `django/templates/`
 
-And can be accessed at any given URL but a backend developer is needed to set routing first.
+## How to add new maps
+UPDATED ON 2017.06.29 -- you don't need geodata_import.py or any other python script from now
 
-Angular apps should go to:
-
-`nginx/site/app/`
-
-And can be accessed like:
-
-http://192.168.99.100/app/app.js
+1. Add new country code + name from [here](https://github.com/hjnilsson/country-flags) to the DB
+2. Add new country flag as static to `nginx/site/static/flags/<CC>.png` (check one for appropriate size)
+3. Download the map from [MAPZEN](https://mapzen.com/data/borders/)
+4. Untar the map file, choose which admin level(s) [it's usually admin level 4] you need, then use topojson to convert it from geojson `geo2topo -p -o <country>.json admin_level_x.geojson`
+5. Go to [MAPSHAPER](http://mapshaper.org/) and load the topojson, select `Simplify` and move the slider until you simplify the map well enough to still see all the borders.
+6. Export from mapshaper and move the new file to `nginx/site/static/country-geodata/`
