@@ -1,7 +1,9 @@
 ## Command to run
 
-`fab up` - start all backend instances in daemon mode
-`fab down` - stop all backend instances and make backup of db
+`fab up` - start all backend instances in daemon mode  
+`fab down` - stop all backend instances and make backup of db  
+`fab migrate` - to run new migrations  
+`docker-compose build` - if there were new django requirements
 
 ## Project structure
 _(this section needs to be discussed)_
@@ -12,19 +14,10 @@ Static files (png, css, etc.) should go to:
 
 And can be accessed like:
 
-http://192.168.99.100/static/css/some.css
+http://localhost/static/css/some.css
 
-Static HTML files that are not served by backend, should go to:
-
-`nginx/site/html/`
-
-And can be accessed like:
-
-http://192.168.99.100/html/footer.html
-
-HTML files that will be served by Django (for e.g. the ones that needs to be filled with some initial content from the database) should go here:
-
-`django/templates/`
+http://localhost -- the backend
+http://localhost/admin -- backend admin
 
 ## How to add new maps
 UPDATED ON 2017.06.29 -- you don't need geodata_import.py or any other python script from now
