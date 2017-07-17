@@ -35,7 +35,7 @@
 }
 
 .main-section {
-  max-width: $page-max-width;
+  max-width: $page-max-width - $navigation-width;
   margin: 0 auto;
 }
 

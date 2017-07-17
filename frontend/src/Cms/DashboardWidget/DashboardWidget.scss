@@ -214,13 +214,15 @@ cms-dashboard-widget {
     }
 
     .excerpt {
+      width: calc(100% - 100px);
       padding: 10px;
 
       h3.md-title {
         font-size: 14px;
         line-height: 20px;
         margin-bottom: 0;
-        padding: 0;
+        padding: 0 10px 0 0;
+        @include text-truncate();
       }
 
       h6,
@@ -233,6 +235,7 @@ cms-dashboard-widget {
         font-size: 12px;
         line-height: 16px;
         max-height: 32px;
+        min-height: 32px;
         margin: 8px 0 0;
       }
     }
