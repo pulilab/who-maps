@@ -83,7 +83,7 @@ class Post(State):
     )
 
     name = models.CharField(max_length=128)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=140)
     body = models.TextField(max_length=5000)
     type = models.IntegerField(choices=TYPE_CHOICES)
     domain = models.IntegerField(choices=DOMAIN_CHOICES)
