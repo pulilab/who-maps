@@ -76,6 +76,7 @@ cms-detail-element {
         .name {
           margin: 10px 0 20px;
           color: $color-primary;
+          word-break: break-all;
         }
 
         .cover {

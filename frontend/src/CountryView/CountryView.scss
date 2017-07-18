@@ -1,15 +1,17 @@
 @import "../variables.scss";
 
 #clv-container {
-
   margin: 0 auto 0 auto;
-  padding: 20px 30px 0 30px;
-  max-width: 1440px;
+  padding: 30px 30px 0 30px;
+  max-width: $page-max-width;
   min-height: calc(100vh - 48px);
   justify-content: space-between;
 
-  .rel {
+  md-card {
+    margin: 0;
+  }
 
+  .rel {
     position: relative;
 
     .littleheader {

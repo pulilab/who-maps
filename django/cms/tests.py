@@ -63,6 +63,16 @@ class CmsTest(TestCase):
     def test_slug(self):
         self.assertEqual(self.post.slug, 'test-post-1')
 
+        post_data = {}
+        post_data.update(self.post_data)
+        post_data['name'] = 'a'*128
+        post = Post.objects.create(**post_data)
+        self.assertEqual(post.slug, 'a'*128)
+
+        # Slug ads extra chars to the end to keep the uniqueness - overflow check here
+        post = Post.objects.create(**post_data)
+        self.assertEqual(post.slug, ('a' * 128)+'--1')
+
     def test_states(self):
         self.assertEqual(Post.objects.normal().count(), 1)
         self.assertEqual(Post.objects.showable().count(), 1)

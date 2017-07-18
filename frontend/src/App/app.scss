@@ -116,7 +116,7 @@ md-tooltip {
 
   .md-subhead {
     margin: -20px auto 50px;
-    max-width: 80%;
+    max-width: $page-min-width;
     color: $color-gray;
   }
 }
