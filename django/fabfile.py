@@ -57,7 +57,7 @@ def deploy():
             options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(env.project_root, env.project_root)
         elif env.name == 'production':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.prod.yml ".format(env.project_root, env.project_root)
-            run('mv {}/nginx/conf.d/production.conf.disabled {}/nginx/conf.d/production.conf')
+            run('mv ~/who-maps/nginx/conf.d/production.conf.disabled ~/who-maps/nginx/conf.d/production.conf')
         else:
             options = ""
 
