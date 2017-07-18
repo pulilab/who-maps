@@ -14,7 +14,7 @@
     <div class="metadata" layout="column">
       <span class="author">
         <i class="material-icons">account_box</i>
-        by {{vm.content.author_name}} at {{vm.prettifyDate(vm.item)}}
+        by {{vm.item.author_name}} at {{vm.prettifyDate(vm.item)}}
       </span>
       <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
         in {{vm.showAxisAndDomain()}}
@@ -39,7 +39,7 @@
     <div class="metadata" layout="column">
       <span class="author">
         <i class="material-icons">account_box</i>
-        by {{vm.content.author_name}} at {{vm.prettifyDate(vm.item)}}
+        by {{vm.item.author_name}} at {{vm.prettifyDate(vm.item)}}
       </span>
       <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
         in {{vm.showAxisAndDomain()}}
