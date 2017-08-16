@@ -317,6 +317,64 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'][0]['question'], self.country_fields_data['fields'][0]['question'])
         self.assertEqual(response.json()['fields'][0]['answer'], self.country_fields_data['fields'][0]['answer'])
 
+    def test_country_export(self):
+
+        country = Country.objects.create(name='country111', code='C2')
+        project_data = {
+            'contact_email': 'foo@gmail.com',
+            'contact_name': 'foo',
+            'country': country.id,
+            'platforms': [
+                {
+                    'name': 'OpenSRP',
+                    'strategies': [
+                        'Transmit untargeted health promotion content to entire population',
+                        "Track client's health and services within a longitudinal care plan",
+                        'Transmit prescriptions orders'
+                    ]
+                },
+                {
+                    'name': 'Bamboo',
+                    'strategies': [
+                        'Guide through process algorithms according to clinical protocol',
+                        'Monitor status of health equipment'
+                    ]
+                }
+            ]
+        }
+
+        expected_data = {
+            'country': 'country111',
+            'platforms': [
+                {
+                    'name': 'OpenSRP',
+                    'strategies': [
+                        'Transmit untargeted health promotion content to entire population',
+                        "Track client's health and services within a longitudinal care plan",
+                        'Transmit prescriptions orders'
+                    ],
+                    'owners': [
+                        {'name': 'foo', 'email': 'foo@gmail.com'}
+                    ]
+                },
+                {
+                    'name': 'Bamboo',
+                    'strategies': [
+                        'Guide through process algorithms according to clinical protocol',
+                        'Monitor status of health equipment'
+                    ],
+                    'owners': [
+                        {'name': 'foo', 'email': 'foo@gmail.com'}
+                    ]
+                }
+            ]
+        }
+        project = Project.objects.create(name='proj1', data=project_data)
+        response = self.client.get(reverse('country-export'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[-1], expected_data)
+
 
 class MockRequest:
     pass
