@@ -70,7 +70,8 @@ class GeneralOverviewController extends CollapsibleSet {
 
     getUsers(criteria) {
         return this.users.filter(el => {
-            if (el && el.name) {
+            // Avoid to search user that have no proper profile.
+            if (el && el.name && el.organisation_name) {
                 return _.includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
                     _.includes(el.organisation_name.toLowerCase(), criteria.toLowerCase());
             }
