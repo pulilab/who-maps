@@ -12,12 +12,20 @@ class LoginService extends SimpleApi {
 
     login(data) {
         return this.post('', data)
-        .then(answer => {
-            return answer.json();
-        })
-        .then(json => {
-            return this.processLoginJson(json);
-        });
+          .then(answer => {
+              return answer.json();
+          })
+          .then(json => {
+              return this.processLoginJson(json);
+          })
+          .catch(error => {
+              if (!error.non_field_errors) {
+                  error = {
+                      non_field_errors: ['Security error']
+                  };
+              }
+              return this.processLoginJson(error);
+          });
     }
 
     processLoginJson(json) {
