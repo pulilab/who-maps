@@ -12,19 +12,24 @@ class SignupService extends SimpleApi {
     signup(data) {
         let status = void 0;
         return this.post('registration/', data)
-        .then(answer => {
-            status = answer.status;
-            return answer.json();
-        })
-        .then(json => {
-            return {
-                success: status < 400,
-                data: json
-            };
-        })
-        .catch(error => {
-            console.warn('Error in signup: ', error);
-        });
+          .then(answer => {
+              status = answer.status;
+              return answer.json();
+          })
+          .then(json => {
+              return {
+                  success: status < 400,
+                  data: json
+              };
+          })
+          .catch(error => {
+              if (!error.non_field_errors) {
+                  error = {
+                      non_field_errors: ['Security error']
+                  };
+              }
+              return Promise.reject(error);
+          });
     }
 }
 
