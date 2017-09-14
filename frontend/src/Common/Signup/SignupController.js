@@ -34,8 +34,23 @@ class SignupController {
                 if (result) {
                     this.processRegistrationResult(result, signupForm);
                 }
-            });
+            }, this.handleDataError.bind(this, signupForm));
         }
+    }
+
+    handleDataError(signupForm, data) {
+        this.inProgress = false;
+        _.forEach(data, (item, key) => {
+            if (signupForm[key]) {
+                signupForm[key].customError = item;
+                signupForm[key].$setValidity('custom', false);
+
+            }
+            else {
+                signupForm[key] = item;
+            }
+        });
+        this.scope.$evalAsync();
     }
 
     scrollTo(idString) {
