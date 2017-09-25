@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
-from .models import Project
+from .models import Project, DigitalStrategy, InteroperabilityStandard, TechnologyPlatform
 
 
 class SetupTests(APITestCase):
@@ -611,6 +611,20 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("implementing_partners", response.json())
+
+    def test_digitalstrategies_str(self):
+        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
+        ds2 = DigitalStrategy.objects.create(name='ds2', group='Client', parent=ds1)
+        self.assertEqual(str(ds1), '[Client] ds1')
+        self.assertEqual(str(ds2), '[Client] [ds1] ds2')
+
+    def test_interop_str(self):
+        io = InteroperabilityStandard.objects.create(name='io')
+        self.assertEqual(str(io), 'io')
+
+    def test_platforms_str(self):
+        tp = TechnologyPlatform.objects.create(name='tp')
+        self.assertEqual(str(tp), 'tp')
 
 
 class PermissionTests(SetupTests):

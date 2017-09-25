@@ -98,3 +98,31 @@ class File(ExtendedModel):
     filename = models.CharField(max_length=255)
     data = models.BinaryField()
 
+
+class InteroperabilityStandard(ExtendedModel):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class TechnologyPlatform(ExtendedModel):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class DigitalStrategy(ExtendedModel):
+    GROUP_CHOICES = (
+        ('Client', 'Client'),
+        ('Provider', 'Provider'),
+        ('System', 'System'),
+    )
+    group = models.CharField(max_length=255, choices=GROUP_CHOICES)
+    parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        parent = ' [{}]'.format(self.parent.name) if self.parent else ''
+        return '[{}]{} {}'.format(self.group, parent, self.name)

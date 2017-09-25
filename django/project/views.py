@@ -17,7 +17,7 @@ from country.models import Country, CountryField
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
-from .models import Project, CoverageVersion
+from .models import Project, CoverageVersion, InteroperabilityStandard, TechnologyPlatform, DigitalStrategy
 from .project_data import project_structure
 
 
@@ -96,6 +96,32 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
+        project_structure['interoperability_standards'] = [x.name for x in InteroperabilityStandard.objects.all()]
+        project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
+        strategies = []
+
+        system = {'name': 'System', 'subGroups': []}
+        system_parents = DigitalStrategy.objects.filter(group='System', parent=None)
+        for parent in system_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(system)
+
+        client = {'name': 'Client', 'subGroups': []}
+        client_parents = DigitalStrategy.objects.filter(group='Client', parent=None)
+        for parent in client_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(client)
+
+        provider = {'name': 'Provider', 'subGroups': []}
+        provider_parents = DigitalStrategy.objects.filter(group='Provider', parent=None)
+        for parent in provider_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(provider)
+
+        project_structure['strategies'] = strategies
         return Response(project_structure)
 
 
