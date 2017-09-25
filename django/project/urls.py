@@ -11,6 +11,7 @@ urlpatterns = [
     url(r"^projects/by-view/list/(?P<country_id>\d+)/$", view=views.ProjectPublicViewSet.as_view({'get': 'list_all'}), name="project-country-list"),
     url(r"^projects/by-view/list/$", view=views.ProjectPublicViewSet.as_view({'get': 'list_all'}), name="project-all-list"),
     url(r"^projects/structure/$", view=views.ProjectPublicViewSet.as_view({'get': 'project_structure'}), name="get-project-structure"),
+    url(r"^projects/structure/export/$", view=views.ProjectPublicViewSet.as_view({'get': 'project_structure_export'}), name="get-project-structure-export"),
     url(r"^projects/(?P<project_id>\d+)/version/$", view=views.ProjectVersionViewSet.as_view({'post': 'create'}), name="make-version"),
     url(r"^projects/(?P<project_id>\d+)/coverage/versions/$", view=views.ProjectVersionViewSet.as_view({'get': 'coverage_versions'}), name="get-coverage-versions"),
     url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$", view=views.ProjectVersionViewSet.as_view({'get': 'toolkit_versions'}), name="get-toolkit-versions"),

@@ -124,6 +124,15 @@ class ProjectPublicViewSet(ViewSet):
         project_structure['strategies'] = strategies
         return Response(project_structure)
 
+    @staticmethod
+    def project_structure_export(request):
+        project_structure_export = {}
+        project_structure_export['interoperability_standards'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityStandard.objects.all()]
+        project_structure_export['technology_platforms'] = [{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()]
+        project_structure_export['digital_strategies'] = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
+
+        return Response(project_structure_export)
+
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
 

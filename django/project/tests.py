@@ -866,6 +866,17 @@ class PermissionTests(SetupTests):
 
         self.assertEqual(len(response.json()['fields']), 0)
 
+    def test_project_structure_export(self):
+        url = reverse("get-project-structure-export")
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(len(response.data['interoperability_standards']), 28)
+        self.assertEqual(response.data['interoperability_standards'][0], {'id': 1, 'name': 'ADX - Aggregate Data Exchange'})
+        self.assertEqual(len(response.data['technology_platforms']), 46)
+        self.assertEqual(response.data['technology_platforms'][0], {'id': 1, 'name': 'Adobe Forms'})
+        self.assertEqual(len(response.data['digital_strategies']), 111)
+        self.assertEqual(response.data['digital_strategies'][0], {'id': 1, 'name': 'Targeted client communication'})
+
 
 class TestSoftDelete(APITestCase):
 
