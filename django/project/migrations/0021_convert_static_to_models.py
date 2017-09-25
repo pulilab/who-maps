@@ -339,18 +339,18 @@ interoperability_standards = [
 def convert_static(apps, schema_editor):
     TechnologyPlatform = apps.get_model('project', 'TechnologyPlatform')
     for platform in technology_platforms:
-        TechnologyPlatform.objects.create(name=platform)
+        TechnologyPlatform.all_objects.create(name=platform)
 
     InteroperabilityStandard = apps.get_model('project', 'InteroperabilityStandard')
     for interop in interoperability_standards:
-        InteroperabilityStandard.objects.create(name=interop)
+        InteroperabilityStandard.all_objects.create(name=interop)
 
     DigitalStrategy = apps.get_model('project', 'DigitalStrategy')
     for group in digital_strategies:
         for parent in group['subGroups']:
-            item = DigitalStrategy.objects.create(group=group['name'], name=parent['name'])
+            item = DigitalStrategy.all_objects.create(group=group['name'], name=parent['name'])
             for strat in parent['strategies']:
-                DigitalStrategy.objects.create(group=group['name'], name=strat, parent=item)
+                DigitalStrategy.all_objects.create(group=group['name'], name=strat, parent=item)
 
 
 class Migration(migrations.Migration):

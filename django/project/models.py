@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from core.models import ExtendedModel
+from core.models import ExtendedModel, SoftDeleteMixin
 from country.models import Country
 from user.models import UserProfile, Organisation
 
@@ -99,21 +99,21 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class InteroperabilityStandard(ExtendedModel):
+class InteroperabilityStandard(SoftDeleteMixin, ExtendedModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 
-class TechnologyPlatform(ExtendedModel):
+class TechnologyPlatform(SoftDeleteMixin, ExtendedModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 
-class DigitalStrategy(ExtendedModel):
+class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),

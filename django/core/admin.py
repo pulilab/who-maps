@@ -57,6 +57,17 @@ class CustomAuthenticationForm(AuthenticationForm):
             self.fields['username'].label = "Email"
 
 
+class AllObjectsAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        return self.model.all_objects.all()
+
+    def get_list_display(self, request):
+        list_display = list(super(AllObjectsAdmin, self).get_list_display(request))
+        if 'is_active' in list_display:
+            return list_display
+        return list_display + ['is_active']
+
+
 admin.site.login_form = CustomAuthenticationForm
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)

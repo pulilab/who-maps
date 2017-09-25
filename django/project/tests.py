@@ -3,6 +3,9 @@ from datetime import datetime
 
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.contrib.admin.sites import AdminSite
+from django.contrib.admin.options import ModelAdmin
+from django.test import TestCase
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
@@ -10,6 +13,7 @@ from rest_framework.test import APITestCase
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityStandard, TechnologyPlatform
+from .admin import DigitalStrategyAdmin
 
 
 class SetupTests(APITestCase):
@@ -861,3 +865,52 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json().get("country_name"), self.country.name)
 
         self.assertEqual(len(response.json()['fields']), 0)
+
+
+class TestSoftDelete(APITestCase):
+
+    def test_on_instance_delete(self):
+        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
+        self.assertEqual(ds1.is_active, True)
+
+        ds1.delete()
+        self.assertEqual(ds1.is_active, False)
+
+    def test_queryset_delete(self):
+        total_count = DigitalStrategy.objects.all().count()
+        self.assertEqual(total_count, 111)
+
+        active_count = DigitalStrategy.objects.filter(is_active=True).count()
+        self.assertEqual(active_count, 111)
+
+        is_active_false_count = DigitalStrategy.all_objects.filter(is_active=False).count()
+        self.assertEqual(is_active_false_count, 0)
+
+        DigitalStrategy.objects.all().delete()
+
+        active_count = DigitalStrategy.objects.filter(is_active=True).count()
+        self.assertEqual(active_count, 0)
+
+        active_count = DigitalStrategy.objects.all().count()
+        self.assertEqual(active_count, 0)
+
+        is_active_false_count = DigitalStrategy.all_objects.filter(is_active=False).count()
+        self.assertEqual(is_active_false_count, 111)
+
+
+class MockRequest:
+    GET = {}
+
+
+class TestAdmin(TestCase):
+
+    def setUp(self):
+        self.request = MockRequest()
+        self.site = AdminSite()
+
+    def test_admin(self):
+        admin = DigitalStrategyAdmin(DigitalStrategy, self.site)
+        self.assertEqual(admin.get_queryset(self.request).count(), DigitalStrategy.all_objects.all().count())
+        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
+        admin.list_display = ['__str__', 'is_active']
+        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])

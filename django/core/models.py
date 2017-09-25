@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import QuerySet
+from django.db.models.query_utils import Q
 
 
 class GetObjectOrNoneManager(models.Manager):
@@ -41,3 +43,33 @@ class NameByIDMixin(object):
 
         obj = cls.objects.get_object_or_none(id=id)
         return obj.name if obj else ""
+
+
+class ActiveQuerySet(QuerySet):
+    def __init__(self, *args, **kwargs):
+        super(ActiveQuerySet, self).__init__(*args, **kwargs)
+
+        if self.model:
+            self.add_intial_q()
+
+    def delete(self):
+        self.update(is_active=False)
+
+    def add_intial_q(self):
+        self.query.add_q(Q(is_active=True))
+
+
+class SoftDeleteMixin(models.Model):
+    is_active = models.BooleanField(default=True)
+
+    # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
+    #            as a default queryset
+    all_objects = QuerySet.as_manager()
+    objects = ActiveQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
+
+    def delete(self, *args, **kwargs):
+        self.is_active = False
+        self.save()
