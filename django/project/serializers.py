@@ -20,7 +20,7 @@ class CoverageSerializer(NDPSerializer):
 
 class PlatformSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128, required=True)
-    strategies = serializers.ListField(child=serializers.CharField(max_length=128),
+    strategies = serializers.ListField(child=serializers.CharField(max_length=512),
                                        max_length=64, min_length=0, allow_empty=True)
 
 
@@ -44,7 +44,7 @@ class ProjectSerializer(serializers.Serializer):
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
-    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=128), max_length=64, required=False)
+    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=512), max_length=64, required=False)
     hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=128),
                                            max_length=64, min_length=0, allow_empty=True)
     his_bucket = serializers.ListField(child=serializers.CharField(max_length=128), max_length=64)

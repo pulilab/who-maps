@@ -239,6 +239,27 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
         self.assertEqual(response.json()["platforms"][0]["strategies"][0], "new strat")
 
+    def test_update_project_platform_biggies(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(name="TestProject98",
+                    platforms=[{"name": "updated platform", "strategies": ["Transmit targeted health information \
+                                                                            and promotion content to a client based \
+                                                                            on a clinical care plan or \
+                                                                            health/demographic characteristics"]}])
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
+        self.assertEqual(response.json()["platforms"][0]["strategies"][0], data["platforms"][0]["strategies"][0])
+
+    def test_update_project_healthfocus_biggies(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(health_focus_areas=["a"*511])
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["health_focus_areas"][0], data["health_focus_areas"][0])
+
     def test_update_project_errors(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
