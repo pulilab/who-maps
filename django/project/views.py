@@ -17,7 +17,7 @@ from country.models import Country, CountryField
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
-from .models import Project, CoverageVersion, InteroperabilityStandard, TechnologyPlatform, DigitalStrategy
+from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy
 from .project_data import project_structure
 
 
@@ -96,7 +96,7 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
-        project_structure['interoperability_standards'] = [x.name for x in InteroperabilityStandard.objects.all()]
+        project_structure['interoperability_links'] = [x.name for x in InteroperabilityLink.objects.all()]
         project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
         strategies = []
 
@@ -127,7 +127,7 @@ class ProjectPublicViewSet(ViewSet):
     @staticmethod
     def project_structure_export(request):
         project_structure_export = {}
-        project_structure_export['interoperability_standards'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityStandard.objects.all()]
+        project_structure_export['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()]
         project_structure_export['technology_platforms'] = [{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()]
         project_structure_export['digital_strategies'] = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
 

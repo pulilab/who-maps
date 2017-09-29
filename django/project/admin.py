@@ -1,15 +1,15 @@
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from .models import TechnologyPlatform, InteroperabilityStandard, DigitalStrategy
+from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy
 
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = ['name',]
 
 
-class InteroperabilityStandardAdmin(AllObjectsAdmin):
-    list_display = ['name',]
+class InteroperabilityLinkAdmin(AllObjectsAdmin):
+    list_display = ['pre', 'name',]
 
 
 class DigitalStrategyAdmin(AllObjectsAdmin):
@@ -17,5 +17,5 @@ class DigitalStrategyAdmin(AllObjectsAdmin):
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
-admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
+admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)

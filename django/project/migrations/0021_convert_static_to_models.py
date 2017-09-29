@@ -304,35 +304,15 @@ technology_platforms = [
     "GeoNode"
 ]
 
-interoperability_standards = [
-    "ADX - Aggregate Data Exchange",
-    "ATNA - Audit Trail and Node Authentication",
-    "BPPC - Basic Patient Privacy Consents",
-    "CDA - Clinical Document Architecture",
-    "CSD - Care Services Discovery",
-    "DICOM",
-    "GS1",
-    "HL7 v2",
-    "HL7 v3",
-    "mACM - Mobile Alert Communication Management",
-    "MHD - Mobile Access to Health Documents",
-    "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
-    "PDQ or PDQm - (Mobile) Patient Demographics Query",
-    "SDMX - Statistical Data and Metadata Exchange",
-    "XDS - Cross-Enterprise Document Sharing",
-    "XUA - Cross-Enterprise User Assertion",
-    "HL7 FHIR",
-    "SVS - Sharing Value Sets",
-    "GML Geography Markup Language",
-    "XForms",
-    "SNOMED",
-    "ICD-10",
-    "ISO 3166",
-    "ISCO 08",
-    "ISCO 88",
-    "LOINC",
-    "RxNORM",
-    "CIEL"
+interoperability_links = [
+    {"pre": "Yes, links to a ", "name": "Client Registry"},
+    {"pre": "Yes, links to ", "name": "Health Management Information System (HMIS)"},
+    {"pre": "Yes, links to a ", "name": "Health Worker Registry"},
+    {"pre": "Yes, links to ", "name": "Logistics Management and Supply Chain Information System (LMIS)"},
+    {"pre": "Yes, links to ", "name": "Laboratory Information System"},
+    {"pre": "Yes, links to a ", "name": "Facility Registry"},
+    {"pre": "Yes, links to a ", "name": "Shared Health Record"},
+    {"pre": "Yes, links to a ", "name": "Terminology Service"},
 ]
 
 
@@ -341,9 +321,9 @@ def convert_static(apps, schema_editor):
     for platform in technology_platforms:
         TechnologyPlatform.all_objects.create(name=platform)
 
-    InteroperabilityStandard = apps.get_model('project', 'InteroperabilityStandard')
-    for interop in interoperability_standards:
-        InteroperabilityStandard.all_objects.create(name=interop)
+    InteroperabilityLink = apps.get_model('project', 'InteroperabilityLink')
+    for interop in interoperability_links:
+        InteroperabilityLink.all_objects.create(pre=interop['pre'], name=interop['name'])
 
     DigitalStrategy = apps.get_model('project', 'DigitalStrategy')
     for group in digital_strategies:
@@ -356,7 +336,7 @@ def convert_static(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0020_digitalstrategy_interoperabilitystandard_technologyplatform'),
+        ('project', '0020_digitalstrategy_interoperabilitylink_technologyplatform'),
     ]
 
     operations = [

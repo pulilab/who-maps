@@ -99,7 +99,8 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class InteroperabilityStandard(SoftDeleteMixin, ExtendedModel):
+class InteroperabilityLink(SoftDeleteMixin, ExtendedModel):
+    pre = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
 
     def __str__(self):
