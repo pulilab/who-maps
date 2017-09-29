@@ -96,7 +96,7 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
-        project_structure['interoperability_links'] = [x.name for x in InteroperabilityLink.objects.all()]
+        project_structure['interoperability_links'] = [{'pre': x.pre, 'name': x.name} for x in InteroperabilityLink.objects.all()]
         project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
         strategies = []
 
