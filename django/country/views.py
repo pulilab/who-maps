@@ -40,6 +40,7 @@ class CountryExportView(APIView):
         for country in Country.objects.all():
             country_data = {'country': country.name}
             country_data['platforms'] = []
+            country_data['interoperability_links'] = []
             for project in Project.projects.filter(data__country=country.id):
                 owners_data = [{'name': project.data['contact_name'], 'email': project.data['contact_email']}]
                 # get platforms and strategies
@@ -55,7 +56,8 @@ class CountryExportView(APIView):
                     country_data['platforms'].append(platform_data)
                 # get interop links
                 link_names = [x['name'] for x in project.data['interoperability_links']]
-                country_data['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.filter(name__in=link_names)]
+                links = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.filter(name__in=link_names)]
+                country_data['interoperability_links'].extend(links)
             data.append(country_data)
 
         return Response(data)
