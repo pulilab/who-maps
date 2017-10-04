@@ -4,7 +4,7 @@ from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from project.models import Project
+from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .models import Country, CountryField
 from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
     CountryFieldsWriteSerializer
@@ -42,13 +42,20 @@ class CountryExportView(APIView):
             country_data['platforms'] = []
             for project in Project.projects.filter(data__country=country.id):
                 owners_data = [{'name': project.data['contact_name'], 'email': project.data['contact_email']}]
+                # get platforms and strategies
                 for platform in project.data['platforms']:
+                    platform_id = TechnologyPlatform.objects.get(name=platform['name']).id
+                    strategies = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.filter(name__in=platform['strategies'])]
                     platform_data = {
+                        'id': platform_id,
                         'name': platform['name'],
-                        'strategies': platform['strategies'],
+                        'strategies': strategies,
                         'owners': deepcopy(owners_data),
                     }
                     country_data['platforms'].append(platform_data)
+                # get interop links
+                link_names = [x['name'] for x in project.data['interoperability_links']]
+                country_data['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.filter(name__in=link_names)]
             data.append(country_data)
 
         return Response(data)

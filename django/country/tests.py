@@ -340,31 +340,64 @@ class CountryTests(APITestCase):
                         'Monitor status of health equipment'
                     ]
                 }
+            ],
+            'interoperability_links': [
+                {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
+                {"name": "Health Management Information System (HMIS)", "selected": True},
+                {"name": "Health Worker Registry", "selected": True, "link": "http://example.org"},
             ]
         }
 
         expected_data = {
             'country': 'country111',
+            'interoperability_links': [
+                {"id": 1, "name": "Client Registry"},
+                {"id": 2, "name": "Health Management Information System (HMIS)"},
+                {"id": 3, "name": "Health Worker Registry"},
+            ],
             'platforms': [
                 {
+                    'id': 24,
                     'name': 'OpenSRP',
                     'strategies': [
-                        'Transmit untargeted health promotion content to entire population',
-                        "Track client's health and services within a longitudinal care plan",
-                        'Transmit prescriptions orders'
+                        {
+                            'id': 6,
+                            'name': 'Transmit untargeted health promotion content to entire population'
+                        },
+                        {
+                            'id': 31,
+                            'name': "Track client's health and services within a longitudinal care plan"
+                        },
+                        {
+                            'id': 72,
+                            'name': 'Transmit prescriptions orders'
+                        }
                     ],
                     'owners': [
-                        {'name': 'foo', 'email': 'foo@gmail.com'}
+                        {
+                            'name': 'foo',
+                            'email': 'foo@gmail.com'
+                        }
                     ]
                 },
                 {
+                    'id': 2,
                     'name': 'Bamboo',
                     'strategies': [
-                        'Guide through process algorithms according to clinical protocol',
-                        'Monitor status of health equipment'
+                        {
+                            'id': 35,
+                            'name': 'Guide through process algorithms according to clinical protocol'
+                        },
+                        {
+                            'id': 76,
+                            'name': 'Monitor status of health equipment'
+                        }
                     ],
                     'owners': [
-                        {'name': 'foo', 'email': 'foo@gmail.com'}
+                        {
+                            'name': 'foo',
+                            'email': 'foo@gmail.com'
+                        }
                     ]
                 }
             ]
