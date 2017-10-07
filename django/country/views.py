@@ -39,25 +39,28 @@ class CountryExportView(APIView):
         data = []
         for country in Country.objects.all():
             country_data = {'country': country.name}
-            country_data['platforms'] = []
-            country_data['interoperability_links'] = []
+            country_data['platforms'] = {}
+            country_data['interoperability_links'] = {}
             for project in Project.projects.filter(data__country=country.id):
-                owners_data = [{'name': project.data['contact_name'], 'email': project.data['contact_email']}]
-                # get platforms and strategies
+                # get platforms
                 for platform in project.data['platforms']:
-                    platform_id = TechnologyPlatform.objects.get(name=platform['name']).id
-                    strategies = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.filter(name__in=platform['strategies'])]
-                    platform_data = {
-                        'id': platform_id,
-                        'name': platform['name'],
-                        'strategies': strategies,
-                        'owners': deepcopy(owners_data),
-                    }
-                    country_data['platforms'].append(platform_data)
+                    platform_id = str(TechnologyPlatform.objects.get(name=platform['name']).id)
+                    if platform_id not in country_data['platforms']:
+                        country_data['platforms'][platform_id] = {
+                            'name': platform['name'],
+                            'strategies': {},
+                            'owners': {},
+                        }
+                    # get strategies
+                    strategies = {str(x.id):x.name for x in DigitalStrategy.objects.filter(name__in=platform['strategies'])}
+                    country_data['platforms'][platform_id]['strategies'].update(strategies)
+                    # get owners
+                    owners_data = {project.data['contact_email']: project.data['contact_name']}
+                    country_data['platforms'][platform_id]['owners'].update(owners_data)
                 # get interop links
                 link_names = [x['name'] for x in project.data['interoperability_links']]
-                links = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.filter(name__in=link_names)]
-                country_data['interoperability_links'].extend(links)
+                links = {str(x.id):x.name for x in InteroperabilityLink.objects.filter(name__in=link_names)}
+                country_data['interoperability_links'].update(links)
             data.append(country_data)
 
         return Response(data)

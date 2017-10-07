@@ -320,9 +320,9 @@ class CountryTests(APITestCase):
     def test_country_export(self):
 
         country = Country.objects.create(name='country111', code='C2')
-        project_data = {
-            'contact_email': 'foo@gmail.com',
-            'contact_name': 'foo',
+        project_data1 = {
+            'contact_email': 'foo1@gmail.com',
+            'contact_name': 'foo1',
             'country': country.id,
             'platforms': [
                 {
@@ -330,6 +330,24 @@ class CountryTests(APITestCase):
                     'strategies': [
                         'Transmit untargeted health promotion content to entire population',
                         "Track client's health and services within a longitudinal care plan",
+                        'Transmit prescriptions orders'
+                    ]
+                },
+            ],
+            'interoperability_links': [
+                {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
+                {"name": "Health Worker Registry", "selected": True, "link": "http://example.org"},
+            ]
+        }
+        project_data2 = {
+            'contact_email': 'foo2@gmail.com',
+            'contact_name': 'foo2',
+            'country': country.id,
+            'platforms': [
+                {
+                    'name': 'OpenSRP',
+                    'strategies': [
+                        'Transmit untargeted health promotion content to entire population',
                         'Transmit prescriptions orders'
                     ]
                 },
@@ -344,65 +362,43 @@ class CountryTests(APITestCase):
             'interoperability_links': [
                 {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
                 {"name": "Health Management Information System (HMIS)", "selected": True},
-                {"name": "Health Worker Registry", "selected": True, "link": "http://example.org"},
             ]
         }
 
         expected_data = {
             'country': 'country111',
-            'interoperability_links': [
-                {"id": 1, "name": "Client Registry"},
-                {"id": 2, "name": "Health Management Information System (HMIS)"},
-                {"id": 3, "name": "Health Worker Registry"},
-            ],
-            'platforms': [
-                {
-                    'id': 24,
+            'interoperability_links': {
+                '1': "Client Registry",
+                '2': "Health Management Information System (HMIS)",
+                '3': "Health Worker Registry",
+            },
+            'platforms': {
+                '24': {
                     'name': 'OpenSRP',
-                    'strategies': [
-                        {
-                            'id': 6,
-                            'name': 'Transmit untargeted health promotion content to entire population'
-                        },
-                        {
-                            'id': 31,
-                            'name': "Track client's health and services within a longitudinal care plan"
-                        },
-                        {
-                            'id': 72,
-                            'name': 'Transmit prescriptions orders'
-                        }
-                    ],
-                    'owners': [
-                        {
-                            'name': 'foo',
-                            'email': 'foo@gmail.com'
-                        }
-                    ]
+                    'strategies': {
+                        '6': 'Transmit untargeted health promotion content to entire population',
+                        '31': "Track client's health and services within a longitudinal care plan",
+                        '72': 'Transmit prescriptions orders',
+                    },
+                    'owners': {
+                        'foo1@gmail.com': 'foo1',
+                        'foo2@gmail.com': 'foo2',
+                    }
                 },
-                {
-                    'id': 2,
+                '2': {
                     'name': 'Bamboo',
-                    'strategies': [
-                        {
-                            'id': 35,
-                            'name': 'Guide through process algorithms according to clinical protocol'
-                        },
-                        {
-                            'id': 76,
-                            'name': 'Monitor status of health equipment'
-                        }
-                    ],
-                    'owners': [
-                        {
-                            'name': 'foo',
-                            'email': 'foo@gmail.com'
-                        }
-                    ]
+                    'strategies': {
+                        '35': 'Guide through process algorithms according to clinical protocol',
+                        '76': 'Monitor status of health equipment',
+                    },
+                    'owners': {
+                        'foo2@gmail.com': 'foo2',
+                    }
                 }
-            ]
+            }
         }
-        project = Project.objects.create(name='proj1', data=project_data)
+        Project.objects.create(name='proj1', data=project_data1)
+        Project.objects.create(name='proj2', data=project_data2)
         response = self.client.get(reverse('country-export'))
 
         self.assertEqual(response.status_code, 200)
