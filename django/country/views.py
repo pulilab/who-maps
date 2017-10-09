@@ -38,7 +38,7 @@ class CountryExportView(APIView):
     def get(self, request, *args, **kwargs):
         data = []
         for country in Country.objects.all():
-            country_data = {'country': country.name}
+            country_data = {'country': country.name, 'country_code': country.code}
             country_data['platforms'] = {}
             country_data['interoperability_links'] = {}
             for project in Project.projects.filter(data__country=country.id):

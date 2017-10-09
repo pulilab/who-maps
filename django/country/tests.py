@@ -367,6 +367,7 @@ class CountryTests(APITestCase):
 
         expected_data = {
             'country': 'country111',
+            'country_code': 'C2',
             'interoperability_links': {
                 '1': "Client Registry",
                 '2': "Health Management Information System (HMIS)",
