@@ -1,16 +1,22 @@
 import _ from 'lodash';
-import LoginService from './LoginService';
 import CommonServices from '../CommonServices';
+import * as UserModule from '../../store/modules/user';
 
 class LoginModuleController {
 
-    constructor($scope) {
-        this.ls = new LoginService();
+    constructor($scope, $ngRedux) {
         this.EE = window.EE;
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.handleDataError = this.handleDataError.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
+    }
+
+    mapState(state) {
+        return {
+            userModel: state.user
+        };
     }
 
     onInit() {
@@ -25,25 +31,27 @@ class LoginModuleController {
 
     onDestroy() {
         this.user = void 0;
+        this.unsubscribe();
     }
 
-    login() {
-        const vm = this;
-        if (vm.loginForm.$valid) {
-            vm.ls.login(vm.user)
-                .then(result => {
-                    if (result) {
-                        const user = _.cloneDeep(vm.user);
-                        user.password = void 0;
-                        vm.ls.storeUser(user);
-                        vm.EE.emit('login');
-                    }
-                }, vm.handleDataError);
+    async  login() {
+        if (this.loginForm.$valid) {
+            try {
+                await this.doLogin(this.user);
+            }
+            catch (e) {
+                this.handleDataError(e);
+            }
         }
     }
 
     handleDataError(data) {
         const vm = this;
+        if (!data) {
+            data = {
+                non_field_errors: ['Security error']
+            };
+        }
         _.forEach(data, (item, key) => {
             if (vm.loginForm[key]) {
                 vm.loginForm[key].customError = item;
@@ -66,11 +74,11 @@ class LoginModuleController {
     static loginFactory() {
         require('./Login.scss');
 
-        function loginController($scope) {
-            return new LoginModuleController($scope);
+        function loginController($scope, $ngRedux) {
+            return new LoginModuleController($scope, $ngRedux);
         }
 
-        loginController.$inject = ['$scope'];
+        loginController.$inject = ['$scope', '$ngRedux'];
 
         return loginController;
     }
