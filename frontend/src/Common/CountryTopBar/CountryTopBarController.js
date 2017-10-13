@@ -2,8 +2,8 @@ import TopBarBehaviour  from '../TopBarBheaviour';
 
 class CountryTopBarController extends TopBarBehaviour {
 
-    constructor($state, $scope, $timeout) {
-        super($state, $scope);
+    constructor($state, $scope, $timeout, $ngRedux) {
+        super($state, $scope, $ngRedux);
         this.EE = window.EE;
         this.timeout = $timeout;
         this.ccs = require('../CustomCountryService');
@@ -61,11 +61,11 @@ class CountryTopBarController extends TopBarBehaviour {
 
     static countryTopBarControllerFactory() {
         require('./countryTopBar.scss');
-        function countryTopBarController($state, $scope, $timeout) {
-            return new CountryTopBarController($state, $scope, $timeout);
+        function countryTopBarController($state, $scope, $timeout, $ngRedux) {
+            return new CountryTopBarController($state, $scope, $timeout, $ngRedux);
         }
 
-        countryTopBarController.$inject = ['$state', '$scope', '$timeout'];
+        countryTopBarController.$inject = ['$state', '$scope', '$timeout', '$ngRedux'];
 
         return countryTopBarController;
     }

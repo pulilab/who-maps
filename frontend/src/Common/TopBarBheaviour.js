@@ -1,61 +1,69 @@
-import Protected  from './Protected';
+import * as UserModule from '../store/modules/user';
 
-class TopBar extends Protected {
+class TopBar {
 
-    constructor($state, $scope) {
-        super();
+    constructor($state, $scope, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.commonInit = this.commonInit.bind(this);
+        this.commonOnDestroy = this.commonOnDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     commonInit() {
-        this.defaultOnInit();
-        this.cs = require('./CommonServices');
-        this.profileDataReady = false;
         this.writeUserRole = this.writeUserRole.bind(this);
     }
 
+    commonOnDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            userModel: state.user
+        };
+    }
+
     hasProfile() {
-        return this.cs.hasProfile();
+        return this.userModel.profile;
     }
 
     showCountryLevelViewButton() {
-        return this.isLogin && this.hasProfile();
+        return this.hasProfile();
     }
 
     showGoToMyDashboardButton() {
-        return this.profileDataReady && this.hasProfile();
+        return this.hasProfile();
     }
 
     showPersonaMenu() {
-        return this.profileDataReady && this.hasProfile();
+        return this.hasProfile();
     }
 
     showNewProjectButton() {
-        return this.profileDataReady && this.hasProfile();
+        return this.hasProfile();
     }
 
     showPlanningAndGuidanceButton() {
-        return this.isLogin;
+        return this.userModel;
     }
 
 
     showSearch() {
-        return this.isLogin;
+        return this.userModel;
     }
     showLogin() {
-        return this.state.current.name !== 'login' && !this.isLogin;
+        return this.state.current.name !== 'login' && !this.hasProfile();
     }
 
     showSignUp() {
-        return this.state.current.name !== 'signup' && !this.isLogin;
+        return this.state.current.name !== 'signup' && !this.hasProfile();
     }
 
     writeUserRole() {
         let type = null;
-        switch (this.userProfile.account_type) {
+        switch (this.userModel.profile.account_type) {
         case 'I':
             type = 'Implementer';
             break;
@@ -84,8 +92,7 @@ class TopBar extends Protected {
     }
 
     logout() {
-        this.isLogin = false;
-        this.EE.emit('logout');
+       this.doLogout();
     }
 }
 
