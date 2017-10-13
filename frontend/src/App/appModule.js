@@ -6,6 +6,11 @@ import uiRoute from 'angular-ui-router';
 import ngMessages from 'angular-messages';
 import 'angular-password';
 import angularMd from 'angular-material';
+import ngRedux from 'ng-redux';
+import { reducers, middleware } from '../store/index';
+import * as ProjectsModule from '../store/modules/projects';
+import * as UserModule from '../store/modules/user';
+import axios from '../plugins/axios';
 
 import _appTemplate from './app.html';
 import Storage from '../Common/Storage';
@@ -19,17 +24,19 @@ window.addEventListener('singletonRegistered', evt => {
 });
 
 
-const moduleName = 'app';
-
-const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider, $ngReduxProvider) => {
     $stateProvider
-
       .state('base', {
           url: '',
           template: _appTemplate,
           controller: 'systemController',
           controllerAs: 'vm',
-          abstract: true
+          abstract: true,
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(UserModule.getProfile());
+              }]
+          }
       })
 
       .state('share', {
@@ -38,14 +45,16 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           controllerAs: 'vm'
       })
 
-      .state(moduleName, {
+      .state('app', {
           url: '/app/:appName',
           template: '<app layout="column" layout-fill></app>',
           resolve: {
-              data: () => {
-                  const cs = require('../Common/CommonServices');
-                  return cs.loadedPromise;
-              }
+              data: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(ProjectsModule.loadUserProjects());
+              }],
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(UserModule.getProfile());
+              }]
           }
 
       })
@@ -156,6 +165,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
     $urlRouterProvider.otherwise('/landing');
     $locationProvider.html5Mode(true);
     $anchorScrollProvider.disableAutoScrolling();
+    $ngReduxProvider.createStoreWith(reducers, middleware, [window.__REDUX_DEVTOOLS_EXTENSION__()]);
 };
 
 function handleStateChange(event, toState) {
@@ -170,17 +180,23 @@ function handleStateChange(event, toState) {
     }
 }
 
-const run = ($rootScope, $state, $mdToast, $mdDialog) => {
+const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout) => {
     $rootScope.$on('$stateChangeStart', handleStateChange.bind('start'));
     $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
     $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
+
+    const storage = new Storage();
+    const tkn = storage.get('token');
+    if (tkn) {
+        axios.setAuthToken(tkn);
+    }
 
     const checkXHR = (event) => {
         $rootScope.progress = event.detail.progression;
         $rootScope.showLoading = $rootScope.progress !== 100;
         $rootScope.$evalAsync();
-    };
 
+    };
     const showPopUp = () => {
         $mdToast.show(
           $mdToast.simple()
@@ -188,13 +204,12 @@ const run = ($rootScope, $state, $mdToast, $mdDialog) => {
             .position('bottom right')
             .hideDelay(3000)
         );
-    };
 
+    };
     let processingAuth = false;
     const handleAuthProblem = () => {
         if (!processingAuth) {
             processingAuth = true;
-            const storage = new Storage();
             const token = storage.get('token');
             storage.clear();
             singletonCollection.forEach(purgeFunction => {
@@ -224,22 +239,27 @@ const run = ($rootScope, $state, $mdToast, $mdDialog) => {
     window.addEventListener('xhrmonitor', checkXHR.bind(this));
     window.addEventListener('xhrFailedRequest', showPopUp.bind(this));
     window.addEventListener('xhrAuthProblem', handleAuthProblem.bind(this));
+    $ngRedux.subscribe(() => {
+        $timeout(() => {$rootScope.$apply(() => {});}, 100);
+    });
 };
 
-run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog'];
+run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux', '$timeout'];
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$anchorScrollProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
+    '$anchorScrollProvider', '$ngReduxProvider'];
 
 const AppComponent = require('./appComponent');
 const SystemController = require('./SystemController');
 
-angular.module(moduleName,
+angular.module('app',
     [
         uiRoute,
         angularMd,
         ngMessages,
         'ngPassword',
+        ngRedux,
         require('../Common/').Components,
         require('../Project/'),
         require('../Cms/'),
@@ -255,4 +275,4 @@ angular.module(moduleName,
   .run(run);
 
 
-export default moduleName;
+export default 'app';
