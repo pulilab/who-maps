@@ -1,17 +1,14 @@
 import _ from 'lodash';
 
-import EditProfileService from './EditProfileService';
-import Protected from '../Protected';
 import Storage from '../Storage';
 import CommonService  from '../CommonServices';
+import * as UserModule from '../../store/modules/user';
 
 /* global DEV, Promise */
 
-class EditProfileController extends Protected {
+class EditProfileController  {
 
-    constructor($scope, $state, $mdToast) {
-        super();
-        this.es = new EditProfileService();
+    constructor($scope, $state, $mdToast, $ngRedux) {
         this.EE = window.EE;
         this.ccs = require('../CustomCountryService');
         this.scope = $scope;
@@ -19,12 +16,23 @@ class EditProfileController extends Protected {
         this.toast = $mdToast;
         this.storage = new Storage();
         this.$onInit = this.initialization.bind(this);
-        this.$onDestroy = this.defaultOnDestroy.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.bindFunctions();
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     bindFunctions() {
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
+    }
+
+    mapState(state) {
+        return {
+            userProfile: state.user.profile
+        };
+    }
+
+    onDestroy() {
+        this.unsubscribe();
     }
 
     initialization() {
@@ -38,22 +46,12 @@ class EditProfileController extends Protected {
         const self = this;
         this.userProjects = this.cs.projectList;
         this.structure = this.cs.projectStructure;
-        this.userProfile = this.cs.userProfile;
-        this.rawName = this.cs.userProfile.name;
+        this.rawName = this.userProfile.name;
         this.ccs.getCountries().then(data => {
             self.scope.$evalAsync(() => {
                 self.countriesList = data;
             });
         });
-        if (this.userProfile && this.userProfile.organisation && _.isNull(this.userProfile.organisation.name)) {
-            this.userProfile.organisation = null;
-        }
-        if (!this.userProfile || !this.userProfile.email) {
-            const user = this.storage.get('user');
-            this.userProfile = {
-                email: user.username
-            };
-        }
         this.dataLoaded = true;
         this.scope.$watch(() => {
             return this.userProfile;
@@ -66,16 +64,16 @@ class EditProfileController extends Protected {
 
     showToast(text) {
         this.toast.show(
-            this.toast.simple()
-                .textContent(text)
-                .position('bottom right')
-                .hideDelay(3000)
+          this.toast.simple()
+            .textContent(text)
+            .position('bottom right')
+            .hideDelay(3000)
         );
     }
 
 
     countryCloseCallback(name) {
-        this.userProfile.country = name;
+        this.setCountry(name);
         this.handleCustomError('country');
     }
 
@@ -95,40 +93,20 @@ class EditProfileController extends Protected {
     }
 
 
-    save() {
+    async save() {
         this.sentForm = true;
         if (this.editProfileForm.$valid && this.userProfile.organisation) {
-            const profile = _.cloneDeep(this.userProfile);
-            profile.organisation = this.userProfile.organisation.id;
-            const request = profile.id ?
-                this.es.updateProfile(profile) : this.es.createProfile(profile);
-            request.then(result => {
-                if (result.success) {
-                    this.handleSuccessSave(result);
-                }
-                else {
-                    this.handleResponse(result.data);
-                }
-            });
+            try {
+                await this.saveProfile();
+            }
+            catch (data) {
+                this.handleResponse(data);
+            }
+
         }
         else {
             this.showToast('Validation error');
         }
-    }
-
-    handleSuccessSave(result) {
-        this.showToast('Profile successfully updated');
-        this.storage.set('user_profile_id', result.data.id);
-        const reset = this.cs.reset();
-        this.cs.userProfileId = result.data.id;
-        return reset.loadedPromise.then(()=> {
-            this.userProfile = this.cs.userProfile;
-            this.EE.emit('profileUpdated');
-            this.scope.$evalAsync();
-            if (!this.rawName) {
-                this.state.go('dashboard');
-            }
-        });
     }
 
     handleResponse(response) {
@@ -147,11 +125,11 @@ class EditProfileController extends Protected {
     static editProfileFactory() {
         require('./EditProfile.scss');
 
-        function editProfile($scope, $state, $mdToast) {
-            return new EditProfileController($scope, $state, $mdToast);
+        function editProfile($scope, $state, $mdToast, $ngRedux) {
+            return new EditProfileController($scope, $state, $mdToast, $ngRedux);
         }
 
-        editProfile.$inject = ['$scope', '$state', '$mdToast'];
+        editProfile.$inject = ['$scope', '$state', '$mdToast', '$ngRedux'];
 
         return editProfile;
     }
