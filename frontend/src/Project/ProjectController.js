@@ -2,7 +2,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './ProjectService';
 import ProjectDefinition from './ProjectDefinition';
-import EditProfileService from '../Common/EditProfile/EditProfileService';
 
 /* global DEV, DEBUG, Promise */
 
@@ -11,7 +10,6 @@ class ProjectController extends ProjectDefinition {
     constructor($scope, $state, Upload, CommonService, toast, $timeout) {
         super(CommonService);
         this.ns = new NewProjectService(Upload);
-        this.es = new EditProfileService();
         this.ccs = require('../Common/CustomCountryService');
         this.EE = window.EE;
         this.scope = $scope;
