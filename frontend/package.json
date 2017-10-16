@@ -81,7 +81,7 @@
     "angular-password": "^1.0.1",
     "angular-route": "1.5.5",
     "angular-sanitize": "1.5.5",
-    "angular-ui-router": "^0.2.18",
+    "angular-ui-router": "^1.0.3",
     "axios": "^0.16.2",
     "babel-polyfill": "^6.23.0",
     "babel-runtime": "^6.23.0",
