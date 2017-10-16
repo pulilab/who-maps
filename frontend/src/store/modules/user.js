@@ -1,3 +1,4 @@
+/* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 import { Storage } from '../../Common/';
 
@@ -46,6 +47,24 @@ export function getProfile() {
             let { data } = await axios.get(`/api/userprofiles/${profileId}/`);
             data = handleProfile(data);
             dispatch({ type: 'SET_PROFILE', profile: data });
+        }
+    };
+}
+
+export function doSignup({ account_type, password1, password2, email }) {
+    return async dispatch => {
+        try {
+            const { data } = await axios.post('/api/rest-auth/registration/',
+              { account_type, password1, password2, email });
+            // TODO: FIX this when backend is ready
+            data.token = data.key;
+            data.is_superuser = false;
+            storeData(data, email);
+            dispatch({ type: 'SET_USER', user: data });
+            return Promise.resolve();
+        }
+        catch ({ response }) {
+            return Promise.reject(response.data);
         }
     };
 }
