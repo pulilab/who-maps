@@ -105,7 +105,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               main: {
                   template: '<project layout-fill layout="column" ></project>'
               }
-          }
+          },
+          profileRequired: true
       })
       .state('editProject', {
           url: '/edit-project',
@@ -114,7 +115,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               main: {
                   template: '<project edit-mode="true" layout-fill layout="column" ></project>'
               }
-          }
+          },
+          profileRequired: true
       })
       .state('inventory', {
           url: '/inventory',
@@ -123,7 +125,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               main: {
                   template: '<project inventory-mode="true" ></project>'
               }
-          }
+          },
+          profileRequired: true
       })
       .state('editProfile', {
           url: '/edit-profile',

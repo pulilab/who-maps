@@ -29,7 +29,8 @@ function config($stateProvider, $compileProvider) {
                 'main': () => {
                     return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
                 }
-            }
+            },
+            profileRequired: true
         });
 }
 

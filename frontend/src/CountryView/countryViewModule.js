@@ -11,7 +11,6 @@ function config($stateProvider, $compileProvider) {
       .state(moduleName, {
           url: '/country',
           parent: 'app',
-          profileRequired: true,
           views: {
               main: {
                   template: '<country-view></country-view>'
@@ -21,7 +20,8 @@ function config($stateProvider, $compileProvider) {
               'country': () => {
                   return su.lazyLoader($compileProvider, 'countryViewComponent');
               }
-          }
+          },
+          profileRequired: true
       })
       .state('pdf-export', {
           url: '/pdf-export',
