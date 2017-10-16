@@ -46,12 +46,12 @@ class TopBar {
     }
 
     showPlanningAndGuidanceButton() {
-        return this.userModel;
+        return this.userModel.profile;
     }
 
 
     showSearch() {
-        return this.userModel;
+        return this.userModel.profile;
     }
     showLogin() {
         return this.state.current.name !== 'login' && !this.hasProfile();
@@ -92,7 +92,7 @@ class TopBar {
     }
 
     logout() {
-       this.doLogout();
+        this.doLogout();
     }
 }
 
