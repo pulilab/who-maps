@@ -1,12 +1,12 @@
 import { Storage } from '../Common/';
-import SignupService from '../Common/Signup/SignupService';
 import { CustomCountryService } from '../Common/';
+import * as ProjectModule from '../store/modules/projects';
+import * as UserModule from '../store/modules/user';
 
 class LandingPageModuleController {
 
-    constructor($scope, $location, $anchorScroll) {
+    constructor($scope, $location, $anchorScroll, $ngRedux) {
         this.storage = new Storage();
-        this.ss = new SignupService();
         this.ccs = CustomCountryService;
         this.scope = $scope;
         this.EE = window.EE;
@@ -14,17 +14,24 @@ class LandingPageModuleController {
         this.$anchorScroll = $anchorScroll;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.addEventListeners = this.addEventListeners.bind(this);
-        this.removeEventListeners = this.removeEventListeners.bind(this);
+        this.unsubscribeUsers = $ngRedux.connect(this.mapUsers, UserModule)(this);
+        this.unsubscribeProjects = $ngRedux.connect(this.mapProjects, ProjectModule)(this);
+    }
+
+    mapUsers(state) {
+        return {
+            user: state.user
+        };
+    }
+
+    mapProjects(state) {
+        return {
+            projects: state.projects
+        };
     }
 
     onInit() {
         const vm = this;
-        this.isLogin = this.storage.get('login');
-        if (this.isLogin) {
-            const commonService = require('../Common/CommonServices');
-            this.projectList = commonService.projectList;
-        }
         const subDomain = this.ccs.getSubDomain();
         this.ccs.getCountryData(subDomain).then(data => {
             vm.scope.$evalAsync(() => {
@@ -40,26 +47,11 @@ class LandingPageModuleController {
                 }
             });
         });
-        this.addEventListeners();
     }
 
     onDestroy() {
-        this.isLogin = void 0;
-        this.removeEventListeners();
-    }
-
-    addEventListeners() {
-        this.EE.on('logout', this.handleLogout, this);
-    }
-
-    handleLogout() {
-        this.scope.$evalAsync(() => {
-            this.isLogin = false;
-        });
-    }
-
-    removeEventListeners() {
-        this.EE.removeListener('logout', this.handleLogout, this);
+        this.unsubscribeUsers();
+        this.unsubscribeProjects();
     }
 
     scrollTo(idString) {
@@ -68,12 +60,12 @@ class LandingPageModuleController {
     }
 
     static landingControllerFactory() {
-        function landingController($scope, $location, $anchorScroll) {
+        function landingController($scope, $location, $anchorScroll, $ngRedux) {
             require('./landingPage.scss');
-            return new LandingPageModuleController($scope, $location, $anchorScroll);
+            return new LandingPageModuleController($scope, $location, $anchorScroll, $ngRedux);
         }
 
-        landingController.$inject = ['$scope', '$location', '$anchorScroll'];
+        landingController.$inject = ['$scope', '$location', '$anchorScroll', '$ngRedux'];
 
         return landingController;
     }
