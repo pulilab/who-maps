@@ -4,9 +4,10 @@ import * as UserModule from '../../store/modules/user';
 
 class LoginModuleController {
 
-    constructor($scope, $ngRedux) {
+    constructor($scope, $state, $ngRedux) {
         this.EE = window.EE;
         this.scope = $scope;
+        this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.handleDataError = this.handleDataError.bind(this);
@@ -38,6 +39,7 @@ class LoginModuleController {
         if (this.loginForm.$valid) {
             try {
                 await this.doLogin(this.user);
+                this.state.go('dashboard');
             }
             catch (e) {
                 this.handleDataError(e);
@@ -74,11 +76,11 @@ class LoginModuleController {
     static loginFactory() {
         require('./Login.scss');
 
-        function loginController($scope, $ngRedux) {
-            return new LoginModuleController($scope, $ngRedux);
+        function loginController($scope, $state, $ngRedux) {
+            return new LoginModuleController($scope, $state, $ngRedux);
         }
 
-        loginController.$inject = ['$scope', '$ngRedux'];
+        loginController.$inject = ['$scope', '$state', '$ngRedux'];
 
         return loginController;
     }
