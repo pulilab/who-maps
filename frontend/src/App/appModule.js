@@ -55,8 +55,10 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               user: ['$ngRedux', ($ngRedux) => {
                   return $ngRedux.dispatch(UserModule.getProfile());
               }]
+          },
+          params: {
+              appName: null
           }
-
       })
       .state('public', {
           url: '/public/:appName',
@@ -168,11 +170,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
     $ngReduxProvider.createStoreWith(reducers, middleware, [window.__REDUX_DEVTOOLS_EXTENSION__()]);
 };
 
-function handleStateChange(event, toState) {
-    if (DEBUG) {
-        console.debug(`Ui route state change ${this} :`, toState.name);
-    }
-    if (this === 'success') {
+function handleStateChange(type) {
+    if (type === 'success') {
         const mainContent = document.getElementsByClassName('main-content')[0];
         if (mainContent) {
             mainContent.scrollTop = 0;
@@ -180,16 +179,45 @@ function handleStateChange(event, toState) {
     }
 }
 
-const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout) => {
-    $rootScope.$on('$stateChangeStart', handleStateChange.bind('start'));
-    $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
-    $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
+function checkProfile(profile, t) {
+    if (!profile || !profile.name || !profile.country || !profile.organisation_id) {
+        console.log('You can not navigate to that area without a user profile');
+        return t.router.stateService.target('editProfile');
+    }
+    return Promise.resolve();
+}
 
+const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions) => {
     const storage = new Storage();
     const tkn = storage.get('token');
     if (tkn) {
         axios.setAuthToken(tkn);
     }
+
+    $transitions.onStart({}, () => {
+        handleStateChange('start');
+        return Promise.resolve();
+    });
+
+    $transitions.onSuccess({}, () => {
+        handleStateChange('success');
+        return Promise.resolve();
+    });
+
+    $transitions.onError({}, () => {
+        handleStateChange('error');
+        return Promise.resolve();
+    });
+
+    $transitions.onFinish({}, (t) => {
+        const to = t.to();
+        if (to && to.profileRequired) {
+            const state = $ngRedux.getState();
+            return checkProfile(state.user.profile, t);
+        }
+        return Promise.resolve();
+    });
+
 
     const checkXHR = (event) => {
         $rootScope.progress = event.detail.progression;
@@ -244,7 +272,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout) => {
     });
 };
 
-run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux', '$timeout'];
+run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux', '$timeout', '$transitions'];
 
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
