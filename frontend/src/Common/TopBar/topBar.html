@@ -72,7 +72,7 @@
       Sign Up
     </md-button>
 
-    <md-menu md-position-mode="target-right target">
+    <md-menu md-position-mode="target-right target" ng-if="vm.userModel.profile">
       <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
         <md-icon md-menu-origin class="material-icons ">person</md-icon>
       </md-button>
