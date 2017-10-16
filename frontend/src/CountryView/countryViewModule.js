@@ -20,8 +20,7 @@ function config($stateProvider, $compileProvider) {
               'country': () => {
                   return su.lazyLoader($compileProvider, 'countryViewComponent');
               }
-          },
-          profileRequired: true
+          }
       })
       .state('pdf-export', {
           url: '/pdf-export',

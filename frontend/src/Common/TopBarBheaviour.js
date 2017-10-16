@@ -26,19 +26,20 @@ class TopBar {
     }
 
     hasProfile() {
-        return this.userModel.profile;
+        const p = this.userModel.profile;
+        return p.country && p.organisation && p.name;
     }
 
     showCountryLevelViewButton() {
-        return this.hasProfile();
+        return this.userModel;
     }
 
     showGoToMyDashboardButton() {
-        return this.hasProfile();
+        return this.userModel;
     }
 
     showPersonaMenu() {
-        return this.hasProfile();
+        return this.userModel;
     }
 
     showNewProjectButton() {
@@ -46,19 +47,19 @@ class TopBar {
     }
 
     showPlanningAndGuidanceButton() {
-        return this.userModel.profile;
+        return this.hasProfile();
     }
 
 
     showSearch() {
-        return this.userModel.profile;
+        return this.userModel;
     }
     showLogin() {
-        return this.state.current.name !== 'login' && !this.hasProfile();
+        return this.state.current.name !== 'login' && !this.userModel;
     }
 
     showSignUp() {
-        return this.state.current.name !== 'signup' && !this.hasProfile();
+        return this.state.current.name !== 'signup' && !this.userModel;
     }
 
     writeUserRole() {

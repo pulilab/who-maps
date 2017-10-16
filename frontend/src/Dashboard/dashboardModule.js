@@ -24,9 +24,7 @@ function config($stateProvider, $compileProvider) {
               'linechart': () => {
                   return su.lazyLoader($compileProvider, 'Linechart/linechart');
               }
-          },
-          profileRequired: true
-
+          }
       })
       .state('public-dashboard', {
           url: '/dashboard',
