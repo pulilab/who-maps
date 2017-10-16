@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import { StaticUtilities } from '../Utilities';
+import * as CmsModule from '../store/modules/cms';
 /* global Promise */
 
 const moduleName = 'dashboard';
@@ -23,7 +24,10 @@ function config($stateProvider, $compileProvider) {
               },
               'linechart': () => {
                   return su.lazyLoader($compileProvider, 'Linechart/linechart');
-              }
+              },
+              cms: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(CmsModule.getCmsData());
+              }]
           }
       })
       .state('public-dashboard', {
