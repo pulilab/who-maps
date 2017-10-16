@@ -16,18 +16,18 @@ const su = new StaticUtilities('Cms');
 
 function config($stateProvider, $compileProvider) {
     $stateProvider
-        .state(moduleName,
+      .state(moduleName,
         {
             url: '/cms',
             parent: 'app',
             views: {
                 main: {
-                    template: '<planning-and-guidance></planning-and-guidance>',
-                    resolve: {
-                        'main': () => {
-                            return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
-                        }
-                    }
+                    template: '<planning-and-guidance></planning-and-guidance>'
+                }
+            },
+            resolve: {
+                'main': () => {
+                    return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
                 }
             }
         });
@@ -36,14 +36,14 @@ function config($stateProvider, $compileProvider) {
 config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .component(addNewContent.name, addNewContent)
-    .component(commentWidget.name, commentWidget)
-    .component(dashboardWidget.name, dashboardWidget)
-    .component(detailElement.name, detailElement)
-    .component(experiencesList.name, experiencesList)
-    .component(listElement.name, listElement)
-    .component(reportButton.name, reportButton)
-    .component(staticInfoWidget.name, staticInfoWidget)
-    .config(config);
+  .component(addNewContent.name, addNewContent)
+  .component(commentWidget.name, commentWidget)
+  .component(dashboardWidget.name, dashboardWidget)
+  .component(detailElement.name, detailElement)
+  .component(experiencesList.name, experiencesList)
+  .component(listElement.name, listElement)
+  .component(reportButton.name, reportButton)
+  .component(staticInfoWidget.name, staticInfoWidget)
+  .config(config);
 
 export default moduleName;
