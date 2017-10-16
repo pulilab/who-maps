@@ -5,10 +5,13 @@ import axios from '../../plugins/axios';
 
 
 export function loadUserProjects() {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         try {
-            const { data } = await axios.get('/api/projects/member-of/');
-            dispatch({ type: 'SET_PROJECT_LIST', projects: data });
+            const state = getState();
+            if (state.user.profile) {
+                const { data } = await axios.get('/api/projects/member-of/');
+                dispatch({ type: 'SET_PROJECT_LIST', projects: data });
+            }
             return Promise.resolve();
         }
         catch ({ response }) {
