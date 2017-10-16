@@ -2,9 +2,10 @@ import angular from 'angular';
 
 import { prettifyDate, itemType, postProcessHtml } from '../utilities';
 import { Storage } from '../../Common/';
+import * as CmsModule from '../../store/modules/cms';
 
 class DetailElementDialog {
-    constructor($scope, $mdDialog, content) {
+    constructor($scope, $mdDialog, content, $ngRedux) {
         this.scope = $scope;
         this.storage = new Storage();
         this.dialog = $mdDialog;
@@ -13,13 +14,12 @@ class DetailElementDialog {
         this.itemType = itemType;
         this.content = content;
         this.checkExistence = this.checkExistence.bind(this);
+        this.unsubrscibeData = $ngRedux.connect(this.mapState, CmsModule)(this);
         this.init();
     }
 
     init() {
         this.cs = require('../CmsService');
-        this.global = null;
-        this.getData();
         this.editMode = false;
         this.newComment = {
             valid: true,
@@ -28,10 +28,12 @@ class DetailElementDialog {
         this.watchers();
     }
 
-    getData() {
-        return this.cs.getData().then(values => {
-            this.global = values;
-        });
+
+    mapState(state) {
+        return {
+            global: state.cms.data,
+            userProfile: state.user.profile
+        };
     }
 
     watchers() {
@@ -41,10 +43,13 @@ class DetailElementDialog {
 
     checkExistence(data) {
         if (data && data instanceof Array) {
-            const contentExist = data.some(item => {
+            const contentExist = data.find(item => {
                 return item.id === this.content.id;
             });
-            if (!contentExist) {
+            if (contentExist) {
+                this.content = contentExist;
+            }
+            else {
                 this.dialog.cancel();
             }
         }
@@ -65,34 +70,27 @@ class DetailElementDialog {
         }
     }
 
-    update() {
-        return this.cs.updateContent(this.modified).then(() => {
-            this.scope.$evalAsync(() => {
-                this.content = Object.assign({}, this.modified);
-                this.editMode = false;
-            });
-        });
+    async update() {
+        await this.updateContent(this.modified);
+        this.editMode = false;
     }
 
     isAuthor() {
-        return this.cs.commonServices.userProfileId === this.content.author;
+        return this.userProfile.id === this.content.author;
     }
 
-    addComment() {
-        return this.cs.addComment(this.newComment, this.content).then(() => {
-            this.scope.$evalAsync(() => {
-                this.newComment.text = false;
-            });
-        });
+    async addComment() {
+        await this.addNewComment(this.newComment, this.content);
+        this.newComment.text = false;
     }
 
     static factory(content) {
 
-        function detailElement($scope, $mdDialog) {
-            return new DetailElementDialog($scope, $mdDialog, content);
+        function detailElement($scope, $mdDialog, $ngRedux) {
+            return new DetailElementDialog($scope, $mdDialog, content, $ngRedux);
         }
 
-        detailElement.$inject = ['$scope', '$mdDialog'];
+        detailElement.$inject = ['$scope', '$mdDialog', '$ngRedux'];
         return detailElement;
     }
 }
