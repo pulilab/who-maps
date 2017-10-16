@@ -1,6 +1,8 @@
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import { StaticUtilities } from '../Utilities';
+import * as SystemModule from '../store/modules/system';
+import * as CmsModule from '../store/modules/cms';
 
 import addNewContent from './AddNewContent/addNewContentComponent';
 import commentWidget from './CommentWidget/commentWidgetComponent';
@@ -28,7 +30,13 @@ function config($stateProvider, $compileProvider) {
             resolve: {
                 'main': () => {
                     return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
-                }
+                },
+                system: ['$ngRedux', ($ngRedux) => {
+                    return $ngRedux.dispatch(SystemModule.getUserProfiles());
+                }],
+                cms: ['$ngRedux', ($ngRedux) => {
+                    return $ngRedux.dispatch(CmsModule.getCmsData());
+                }]
             },
             profileRequired: true
         });
