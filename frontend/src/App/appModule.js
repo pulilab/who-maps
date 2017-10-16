@@ -23,6 +23,7 @@ window.addEventListener('singletonRegistered', evt => {
     singletonCollection.push(evt.detail);
 });
 
+const storage = new Storage();
 
 const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider, $ngReduxProvider) => {
     $stateProvider
@@ -170,7 +171,13 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
     $urlRouterProvider.otherwise('/landing');
     $locationProvider.html5Mode(true);
     $anchorScrollProvider.disableAutoScrolling();
-    $ngReduxProvider.createStoreWith(reducers, middleware, [window.__REDUX_DEVTOOLS_EXTENSION__()]);
+
+    const initialState = {
+        user: {
+            token: storage.get('token') || undefined
+        }
+    };
+    $ngReduxProvider.createStoreWith(reducers, middleware, [window.__REDUX_DEVTOOLS_EXTENSION__()], initialState);
 };
 
 function handleStateChange(type) {
@@ -191,7 +198,6 @@ function checkProfile(profile, t) {
 }
 
 const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions) => {
-    const storage = new Storage();
     const tkn = storage.get('token');
     if (tkn) {
         axios.setAuthToken(tkn);
