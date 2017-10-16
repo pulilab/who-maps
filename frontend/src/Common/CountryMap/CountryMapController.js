@@ -151,8 +151,8 @@ class CountryMapController {
 
         const geoData = this.makeGeoFromTopo(topoJSON);
         const outer = d3.select(this.el[0])
-          .append('div')
-          .attr('class', 'countrymapcontainer');
+            .append('div')
+            .attr('class', 'countrymapcontainer');
 
         const width = outer[0][0].offsetWidth;
         const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
@@ -210,48 +210,48 @@ class CountryMapController {
             const gotData = typeof this.districtLevelCoverage[districtsName] === 'object';
 
             element
-            .append('path')
-            .datum({
-                type: geoData.type,
-                geocoding: geoData.geocoding,
-                features: [feature]
-            })
-            .attr('d', path)
-            .classed('d3district', true)
-            .classed('global', this.showNationalLevelCoverage)
-            .classed('d3district-data', gotData)
-            .classed(`name-${districtsName}`, true)
-            .on('mouseover', () => {
-                if (!this.big) {
-                    this.activeDistrict = {
-                        name: districtsName,
-                        data: this.districtLevelCoverage[districtsName]
-                    };
-                    this.scope.$evalAsync();
-                }
-            })
-            .attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
-                // this bound as DOM iteratee (current district)
-                if (!self.big) {
+                .append('path')
+                .datum({
+                    type: geoData.type,
+                    geocoding: geoData.geocoding,
+                    features: [feature]
+                })
+                .attr('d', path)
+                .classed('d3district', true)
+                .classed('global', this.showNationalLevelCoverage)
+                .classed('d3district-data', gotData)
+                .classed(`name-${districtsName}`, true)
+                .on('mouseover', () => {
+                    if (!this.big) {
+                        this.activeDistrict = {
+                            name: districtsName,
+                            data: this.districtLevelCoverage[districtsName]
+                        };
+                        this.scope.$evalAsync();
+                    }
+                })
+                .attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
+                    // this bound as DOM iteratee (current district)
+                    if (!self.big) {
+                        return '';
+                    }
+                    d3.select(this).on('mouseover', () => {
+
+                        window.setTimeout((e) => {
+
+                            const stillHovered = (e.parentElement.querySelector(':hover') === e);
+
+                            if (stillHovered) {
+                                self.activeDistrict = {
+                                    name: districtsName,
+                                    data: self.districtLevelCoverage[districtsName]
+                                };
+                                self.scope.$evalAsync();
+                            }
+                        }, 1000, this);
+                    });
                     return '';
-                }
-                d3.select(this).on('mouseover', () => {
-
-                    window.setTimeout((e) => {
-
-                        const stillHovered = (e.parentElement.querySelector(':hover') === e);
-
-                        if (stillHovered) {
-                            self.activeDistrict = {
-                                name: districtsName,
-                                data: self.districtLevelCoverage[districtsName]
-                            };
-                            self.scope.$evalAsync();
-                        }
-                    }, 1000, this);
                 });
-                return '';
-            });
         });
 
     }
