@@ -27,19 +27,19 @@ class TopBar {
 
     hasProfile() {
         const p = this.userModel.profile;
-        return p.country && p.organisation && p.name;
+        return p && p.country && p.organisation && p.name;
     }
 
     showCountryLevelViewButton() {
-        return this.userModel;
+        return this.userModel.token;
     }
 
     showGoToMyDashboardButton() {
-        return this.userModel;
+        return this.userModel.token;
     }
 
     showPersonaMenu() {
-        return this.userModel;
+        return this.userModel.token;
     }
 
     showNewProjectButton() {
@@ -52,31 +52,33 @@ class TopBar {
 
 
     showSearch() {
-        return this.userModel;
+        return this.userModel.token;
     }
     showLogin() {
-        return this.state.current.name !== 'login' && !this.userModel;
+        return this.state.current.name !== 'login' && !this.userModel.token;
     }
 
     showSignUp() {
-        return this.state.current.name !== 'signup' && !this.userModel;
+        return this.state.current.name !== 'signup' && !this.userModel.token;
     }
 
     writeUserRole() {
         let type = null;
-        switch (this.userModel.profile.account_type) {
-        case 'I':
-            type = 'Implementer';
-            break;
-        case 'G':
-            type = 'Government';
-            break;
-        case 'D':
-            type = 'Financial Investor';
-            break;
-        case 'Y':
-            type = 'Inventory';
-            break;
+        if (this.userModel && this.userModel.profile) {
+            switch (this.userModel.profile.account_type) {
+            case 'I':
+                type = 'Implementer';
+                break;
+            case 'G':
+                type = 'Government';
+                break;
+            case 'D':
+                type = 'Financial Investor';
+                break;
+            case 'Y':
+                type = 'Inventory';
+                break;
+            }
         }
         return type;
     }
@@ -94,6 +96,7 @@ class TopBar {
 
     logout() {
         this.doLogout();
+        this.state.go('landing');
     }
 }
 
