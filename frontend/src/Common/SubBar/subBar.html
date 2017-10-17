@@ -51,7 +51,7 @@
     </div>
     <div class="md-toolbar-tools">
         <div class="project-mainmenu">
-            <md-button ui-sref="editProject" n ng-disabled="!vm.hasProfile()" ng-if="vm.userType === 3" ui-sref-active="active" md-no-ink>
+            <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'I'" ui-sref-active="active" md-no-ink>
                 <md-tooltip md-autohide md-direction="top">
                     EDIT PROJECT DETAILS
                 </md-tooltip>
@@ -64,18 +64,18 @@
                 </md-tooltip>
                 Inventory
             </md-button>
-            <md-button ui-sref="#"  ng-show="vm.userType !== 0" ng-disabled="!vm.hasProfile()" ng-if="false" ui-sref-active="active" md-no-ink>
+            <md-button ui-sref="#"  ng-show="vm.userType !== 'G'" ng-disabled="!vm.hasProfile()" ng-if="false" ui-sref-active="active" md-no-ink>
                 <md-tooltip md-autohide md-direction="top">
                     TIPS AND RESOURCES
                 </md-tooltip>
                 Improve Project
             </md-button>
-            <md-button ui-sref="maps" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
+            <md-button ui-sref="maps" ng-show="vm.userType !== 'G'" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
                 <md-tooltip md-autohide md-direction="top">
                     GO TO MAPS TOOLKIT
                 </md-tooltip>
-                <span ng-show="vm.userType === 3"> Update Score </span>
-                <span ng-hide="vm.userType === 3"> Visualize Score </span>
+                <span ng-show="vm.userProfile.account_type === 'I'"> Update Score </span>
+                <span ng-hide="vm.userProfile.account_type === 'I'"> Visualize Score </span>
             </md-button>
 
             <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>

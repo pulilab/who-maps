@@ -1,41 +1,47 @@
 import _ from 'lodash';
-import Protected  from '../Protected';
 import Clipboard from 'clipboard';
+import * as ProjectModule from '../../store/modules/projects';
 
-class SubBarController extends Protected {
+class SubBarController {
 
-    constructor($state, $scope) {
-        super();
+    constructor($state, $scope, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, ProjectModule)(this);
+    }
+
+    mapState(state) {
+        return {
+            projects: state.projects,
+            userProfile: state.user.profile
+        };
     }
 
     onInit() {
-        this.defaultOnInit();
         this.cs = require('../CommonServices');
         this.eventBinding();
         this.projectId = this.state.params.appName;
         this.currentPage = void 0;
         this.navigateToProject = this.navigateToProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
-        if (this.user) {
-            this.getProjectsData();
-            this.userProfile = this.cs.userProfile;
-            if (this.userProfile) {
-                this.adjustUserType(this.userProfile);
-            }
-        }
         if (this.viewMode) {
             this.cs.getProjectData(this.projectId)
-                .then(project => {
-                    this.currentProject = project;
-                    this.createShareDefinition();
-                    this.scope.$evalAsync();
-                });
+              .then(project => {
+                  this.currentProject = project;
+                  this.createShareDefinition();
+                  this.scope.$evalAsync();
+              });
         }
-        else if (this.currentProject) {
+
+        this.projects.forEach(item => {
+            if (item.id === parseInt(this.state.params.appName, 10)) {
+                this.currentProject = item;
+            }
+        });
+
+        if (this.currentProject) {
             this.createShareDefinition();
         }
     }
@@ -58,7 +64,7 @@ class SubBarController extends Protected {
     }
 
     hasProfile() {
-        return this.cs.hasProfile();
+        return this.userProfile.country;
     }
 
     iconFunction(item) {
@@ -85,19 +91,17 @@ class SubBarController extends Protected {
     }
 
     getProjectsData() {
-        this.projects = this.cs.projectList.slice();
         const lastProject = _.last(this.projects);
 
         if (this.state.params && this.state.params.appName
-            && this.state.params.appName.length === 0
-            && lastProject && lastProject.id) {
+          && this.state.params.appName.length === 0
+          && lastProject && lastProject.id) {
             const appName = lastProject.id;
             const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
             this.state.go(state, { appName }, {
                 location: 'replace'
             });
         }
-
         _.forEach(this.projects, item => {
             if (item.id === parseInt(this.state.params.appName, 10)) {
                 this.currentProject = item;
@@ -124,11 +128,11 @@ class SubBarController extends Protected {
 
     static subBarControllerFactory() {
         require('./subBar.scss');
-        function subBarController($state, $scope) {
-            return new SubBarController($state, $scope);
+        function subBarController($state, $scope, $ngRedux) {
+            return new SubBarController($state, $scope, $ngRedux);
         }
 
-        subBarController.$inject = ['$state', '$scope'];
+        subBarController.$inject = ['$state', '$scope', '$ngRedux'];
 
         return subBarController;
     }
