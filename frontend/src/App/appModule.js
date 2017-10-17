@@ -59,7 +59,12 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               }]
           },
           params: {
-              appName: null
+              appName: {
+                  value: ['$ngRedux', ($ngRedux) => {
+                      const state = $ngRedux.getState();
+                      return state && state.projects && state.projects[0] ? '' + state.projects[0].id : null;
+                  }]
+              }
           }
       })
       .state('public', {
