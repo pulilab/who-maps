@@ -1,15 +1,14 @@
-import SearchbarService from '../Searchbar/SearchbarService';
-
+import * as SystemModule from '../../store/modules/system';
 
 class UUIDLoadController {
 
-    constructor($state, CommonServices) {
+    constructor($state, $ngRedux, CommonServices) {
         this.EE = window.EE;
         this.state = $state;
         this.cs = CommonServices;
-        this.ss = new SearchbarService();
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
     }
 
     onInit() {
@@ -23,6 +22,13 @@ class UUIDLoadController {
     }
 
     onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            search: state.system.projectSearch
+        };
     }
 
     async handleProjectLoad() {
@@ -30,9 +36,8 @@ class UUIDLoadController {
         const filters = {
             all: true
         };
-
-        const search = await this.ss.searchProject(uuid, filters);
-        const project = search.slice().pop();
+        await this.searchProjects(uuid, filters);
+        const project = this.search.slice().pop();
         const id = project && project.id ? project.id : false;
 
         let state = 'public-dashboard';
@@ -54,11 +59,11 @@ class UUIDLoadController {
     static uuidLoadFactory() {
         require('./UUIDLoad.scss');
         const CommonServices = require('../CommonServices');
-        function uuidLoadController($state) {
-            return new UUIDLoadController($state, CommonServices);
+        function uuidLoadController($state, $ngRedux) {
+            return new UUIDLoadController($state, $ngRedux, CommonServices);
         }
 
-        uuidLoadController.$inject = ['$state'];
+        uuidLoadController.$inject = ['$state', '$ngRedux'];
 
         return uuidLoadController;
     }
