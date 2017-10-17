@@ -9,6 +9,7 @@ class SubBarController {
         this.state = $state;
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, ProjectModule)(this);
     }
 
@@ -46,6 +47,10 @@ class SubBarController {
         }
     }
 
+    onDestroy() {
+        this.unsubscribe();
+    }
+
     eventBinding() {
         this.EE.on('projectListUpdated', this.getProjectsData, this);
     }
@@ -64,7 +69,7 @@ class SubBarController {
     }
 
     hasProfile() {
-        return this.userProfile.country;
+        return  this.userProfile && this.userProfile.country;
     }
 
     iconFunction(item) {
