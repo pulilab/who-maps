@@ -5,6 +5,7 @@ import ngSanitize from 'angular-sanitize';
 import uiRoute from 'angular-ui-router';
 import { Components } from '../Common/';
 import { StaticUtilities } from '../Utilities';
+import * as CmsModule from '../store/modules/cms';
 
 const su = new StaticUtilities('MapsToolkit');
 
@@ -15,6 +16,10 @@ const config = ($stateProvider, $compileProvider) => {
       .state(moduleName, {
           url: '/maps/:axisId/:domainId',
           parent: 'app',
+          params: {
+              axisId: '1',
+              domainId: '1'
+          },
           views: {
               main: {
                   template: '<maps-toolkit layout="column" layout-fill></maps-toolkit>'
@@ -26,7 +31,10 @@ const config = ($stateProvider, $compileProvider) => {
               },
               'axisFooter': () => {
                   return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
-              }
+              },
+              cms: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(CmsModule.getCmsData());
+              }]
           }
       })
       .state('scorecard', {

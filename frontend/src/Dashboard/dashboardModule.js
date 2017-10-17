@@ -2,6 +2,7 @@ import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import { StaticUtilities } from '../Utilities';
 import * as CmsModule from '../store/modules/cms';
+import * as ProjectModule from '../store/modules/projects';
 /* global Promise */
 
 const moduleName = 'dashboard';
@@ -27,6 +28,9 @@ function config($stateProvider, $compileProvider) {
               },
               cms: ['$ngRedux', ($ngRedux) => {
                   return $ngRedux.dispatch(CmsModule.getCmsData());
+              }],
+              projects: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(ProjectModule.loadUserProjects());
               }]
           }
       })
