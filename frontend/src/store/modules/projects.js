@@ -23,10 +23,10 @@ export function loadUserProjects() {
 
 // Reducers
 
-export default function projects(state = {}, action) {
+export default function projects(state = [], action) {
     switch (action.type) {
     case 'SET_PROJECT_LIST':
-        return Object.assign(state, {}, action.projects);
+        return action.projects.slice();
     default:
         return state;
 
