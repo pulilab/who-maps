@@ -1,20 +1,28 @@
 import _ from 'lodash';
-import { Protected } from '../Common/';
+import * as SystemModule from '../store/modules/system';
 
-class AppModuleController extends Protected {
 
-    constructor($state, $scope, $rootScope, $mdToast) {
-        super();
+class AppModuleController {
+
+    constructor($state, $scope, $rootScope, $mdToast, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.dialog = $mdToast;
         this.rootScope = $rootScope;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+        this.unsubrscibe = $ngRedux.connect(this.mapState, SystemModule)(this);
+    }
+
+    mapState(state) {
+        return {
+            user: state.user,
+            projects: state.projects
+        };
     }
 
     onInit() {
-        this.defaultOnInit();
         this.cs = require('../Common/CommonServices');
         this.watchers();
         this.eventBinding();
@@ -22,13 +30,6 @@ class AppModuleController extends Protected {
         this.currentPage = this.state.current.name;
         this.showCountryTopBar = false;
 
-        if (this.user) {
-            this.fillUserData();
-            this.userProfile = this.cs.userProfile;
-            if (this.userProfile) {
-                this.adjustUserType(this.userProfile);
-            }
-        }
         if (this.viewMode) {
             this.cs.getProjectData(this.projectId)
               .then(project => {
@@ -36,19 +37,10 @@ class AppModuleController extends Protected {
                   this.scope.$evalAsync();
               });
         }
-        const profileNeeded = ['cms', 'editProject', 'newProject'];
-        this.rootScope.$on('$stateChangeStart', (evt, toState) => {
-            if (profileNeeded.indexOf(toState.name) > -1 && this.userProfile && !this.userProfile.name) {
-                evt.preventDefault();
-                this.showToast();
-            }
-        });
-        this.rootScope.$on('$viewContentLoaded', () => {
-            if (profileNeeded.indexOf(this.state.current.name) > -1
-              && this.userProfile && !this.userProfile.name) {
-                this.state.go('editProfile');
-            }
-        });
+    }
+
+    onDestroy()  {
+        this.unsubrscibe();
     }
 
     checkOwnership(state, cs) {
@@ -60,19 +52,10 @@ class AppModuleController extends Protected {
         }
     }
 
-    showToast() {
-        this.dialog.show(
-          this.dialog.simple()
-            .textContent('You can\'t access this area without filling your profile')
-            .position('bottom right')
-            .hideDelay(3000)
-        );
-    }
-
     computeShowSubBar() {
         return !this.showCountryTopBar
-          && this.user && this.user.projects
-          && this.user.projects.length !== 0
+          && this.user && this.projects
+          && this.projects.length !== 0
           && this.state.current.name !== 'newProject';
     }
 
@@ -121,11 +104,11 @@ class AppModuleController extends Protected {
 
     static appControllerFactory() {
 
-        function appController($state, $scope, $rootScope, $mdToast) {
-            return new AppModuleController($state, $scope, $rootScope, $mdToast);
+        function appController($state, $scope, $rootScope, $mdToast, $ngRedux) {
+            return new AppModuleController($state, $scope, $rootScope, $mdToast, $ngRedux);
         }
 
-        appController.$inject = ['$state', '$scope', '$rootScope', '$mdToast'];
+        appController.$inject = ['$state', '$scope', '$rootScope', '$mdToast', '$ngRedux'];
 
         return appController;
     }
