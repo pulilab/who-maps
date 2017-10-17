@@ -14,12 +14,11 @@ class DetailElementDialog {
         this.itemType = itemType;
         this.content = content;
         this.checkExistence = this.checkExistence.bind(this);
-        this.unsubrscibeData = $ngRedux.connect(this.mapState, CmsModule)(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
         this.init();
     }
 
     init() {
-        this.cs = require('../CmsService');
         this.editMode = false;
         this.newComment = {
             valid: true,
@@ -71,7 +70,7 @@ class DetailElementDialog {
     }
 
     async update() {
-        await this.updateContent(this.modified);
+        await this.saveOrUpdateContent(this.modified);
         this.editMode = false;
     }
 

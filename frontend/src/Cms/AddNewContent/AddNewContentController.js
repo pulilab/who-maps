@@ -1,10 +1,10 @@
 import angular from 'angular';
 import  Protected from '../../Common/Protected';
+import * as CmsModule from '../../store/modules/cms';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, Upload, toast, content, isSuperUser) {
-        this.cs = require('../CmsService');
+    constructor($scope, $mdDialog, Upload, toast, content, isSuperUser, $ngRedux) {
         this.axes = require('../resources/domains');
         this.scope = $scope;
         this.dialog = $mdDialog;
@@ -14,20 +14,23 @@ class AddNewContentDialog {
         this.disableSubmit = false;
         this.newContent = content;
         this.isSuperUser = isSuperUser;
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+    }
+
+    mapState(state) {
+        return {
+            global: state.cms.data,
+            userProfile: state.user.profile
+        };
     }
 
     cancel() {
         this.dialog.cancel();
     }
 
-    submit() {
+    async submit() {
         if (this.form.$valid) {
-            if (this.newContent.id) {
-                this.cs.updateContent(this.newContent, this.upload);
-            }
-            else {
-                this.cs.addContent(this.newContent, this.upload);
-            }
+            this.saveOrUpdateContent(this.newContent);
             this.dialog.hide(this.newContent);
         }
         else {
@@ -59,11 +62,11 @@ class AddNewContentDialog {
 
     static factory(content, isSuperUser) {
 
-        function addNewContent($scope, $mdDialog, Upload, $mdToast) {
-            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, content, isSuperUser);
+        function addNewContent($scope, $mdDialog, Upload, $mdToast, $ngRedux) {
+            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, content, isSuperUser, $ngRedux);
         }
 
-        addNewContent.$inject = ['$scope', '$mdDialog', 'Upload', '$mdToast'];
+        addNewContent.$inject = ['$scope', '$mdDialog', 'Upload', '$mdToast', '$ngRedux'];
         return addNewContent;
     }
 }

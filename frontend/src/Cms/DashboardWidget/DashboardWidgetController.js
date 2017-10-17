@@ -7,7 +7,7 @@ class DashboardWidgetController {
     constructor($scope, $ngRedux) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
-        this.unsubrscibeData = $ngRedux.connect(this.mapState, CmsModule)(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     onInit() {

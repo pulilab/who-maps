@@ -12,7 +12,7 @@ class PlanningAndGuidanceController {
         this.applyFilters = this.applyFilters.bind(this);
         this.extractDomainSelection = this.extractDomainSelection.bind(this);
         this.applyLimitOrSearch = this.applyLimitOrSearch.bind(this);
-        this.unsubrscibeData = $ngRedux.connect(this.mapState, CmsModule)(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     onInit() {
@@ -26,7 +26,7 @@ class PlanningAndGuidanceController {
         this.watchers();
     }
     onDestroy() {
-        this.unsubrscibeData();
+        this.unsubscribe();
     }
 
     mapState(state) {

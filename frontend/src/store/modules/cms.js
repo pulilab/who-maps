@@ -15,20 +15,74 @@ export function getCmsData() {
     };
 }
 
-export function updateContent(resource) {
-    return async (dispatch, getState) => {
+function addContent(resource) {
+    return async (dispatch) => {
+        const { data } = await axios.post('/api/cms/', resource);
+        data.searchOccurrences = 0;
+        dispatch({ type: 'ADD_CMS_ENTRY', item: data });
+    };
+}
+
+function updateContent(resource, id) {
+    return async (dispatch) => {
+        const { data } = await axios.put(`/api/cms/${id}/`, resource);
+        data.searchOccurrences = 0;
+        dispatch({ type: 'UPDATE_CMS_ENTRY', item: data });
+    };
+}
+
+export function saveOrUpdateContent(resource) {
+    return (dispatch, getState) => {
         resource = Object.assign({}, resource);
-        if (resource.cover && typeof resource.cover === 'string') {
+        resource.author = getState().user.profile.id;
+        const id = resource.id || false;
+        if (resource.cover && resource.cover.type.indexOf('image') === -1) {
             delete resource.cover;
         }
         if (resource.cover) {
-            console.log(resource);
-            // const { data } = await axios.put({);
+            const formData = new FormData();
+            for (const key in resource) {
+                formData.append(key, resource[key]);
+            }
+            resource = formData;
+        }
+
+        if (id) {
+            dispatch(updateContent(resource, id));
         }
         else {
-            const { data } = await axios.put(`/api/cms/${resource.id}/`, resource);
-            dispatch({ type: 'UPDATE_CMS_ENTRY', item: data });
+            dispatch(addContent(resource));
         }
+    };
+}
+
+export function deleteContent({ id }) {
+    return async dispatch => {
+        await axios.delete(`/api/cms/${id}/`);
+        dispatch({ type: 'DELETE_CMS_ENTRY', id });
+    };
+}
+
+export function reportContent(resource) {
+    return async dispatch => {
+        await axios.patch(`/api/cms/${resource.id}/`);
+        resource.state = 2;
+        dispatch({ type: 'UPDATE_CMS_ENTRY', item: resource });
+    };
+}
+
+export function reportComment(resource) {
+    return async dispatch => {
+        await axios.patch(`/api/comment/${resource.id}/`);
+        resource.state = 2;
+        dispatch({ type: 'UPDATE_COMMENT', item: resource });
+    };
+}
+
+export function deleteComment(comment) {
+    return async dispatch => {
+        await axios.delete(`/api/comment/${comment.id}/`);
+        dispatch({ type: 'DELETE_COMMENT', comment });
     };
 }
 
@@ -38,6 +92,13 @@ export function addNewComment(comment, { id }) {
         comment.user = getState().user.profile.id;
         const { data } = await axios.post('/api/comment/', comment);
         dispatch({ type: 'ADD_COMMENT', comment: data });
+    };
+}
+export function updateComment(comment) {
+    return async (dispatch) => {
+        const { data } = await axios.put(`/api/comment/${comment.id}/`, comment);
+        data.searchOccurrences = 0;
+        dispatch({ type: 'UPDATE_COMMENT', comment: data });
     };
 }
 
@@ -51,10 +112,23 @@ export default function cms(state = {}, action) {
         c.data = action.data;
         return Object.assign(state, {}, c);
     }
+    case 'ADD_CMS_ENTRY': {
+        const current = c.data.slice();
+        current.push(action.item);
+        c.data = current;
+        return Object.assign(state, {}, c);
+    }
     case 'UPDATE_CMS_ENTRY': {
-        const current = c.data.slice3();
+        const current = c.data.slice();
         const index = findIndex(current, i => i.id === action.item.id);
         current.splice(index, 1, action.item);
+        c.data = current;
+        return Object.assign(state, {}, c);
+    }
+    case 'DELETE_CMS_ENTRY': {
+        const current = c.data.slice();
+        const index = findIndex(current, i => i.id === action.id);
+        current.splice(index, 1);
         c.data = current;
         return Object.assign(state, {}, c);
     }
@@ -63,7 +137,27 @@ export default function cms(state = {}, action) {
         const index = findIndex(current, i => i.id === action.comment.post);
         const item = current[index];
         item.comments.push(action.comment);
-        current.splice(index, 1, action.item);
+        current.splice(index, 1, item);
+        c.data = current;
+        return Object.assign(state, {}, c);
+    }
+    case 'UPDATE_COMMENT': {
+        const current = c.data.slice();
+        const index = findIndex(current, i => i.id === action.comment.post);
+        const item = current[index];
+        const commentIndex = findIndex(item.comments, com => com.id === action.comment.id);
+        item.comments.splice(commentIndex, 1, action.comment);
+        current.splice(index, 1, item);
+        c.data = current;
+        return Object.assign(state, {}, c);
+    }
+    case 'DELETE_COMMENT': {
+        const current = c.data.slice();
+        const index = findIndex(current, i => i.id === action.comment.post);
+        const item = current[index];
+        const commentIndex = findIndex(item.comments, com => com.id === action.comment.id);
+        item.comments.splice(commentIndex, 1);
+        current.splice(index, 1, item);
         c.data = current;
         return Object.assign(state, {}, c);
     }
