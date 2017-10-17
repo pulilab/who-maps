@@ -144,7 +144,7 @@ angular-sanitize@1.5.5:
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.5.5.tgz#44a492348adf8cb5541725e75cb50685c664b1a6"
 
-angular-ui-router@^1.0.8:
+angular-ui-router@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.3.tgz#bf2494caae95c37cf01af3761d89747cfed2db45"
   dependencies:
