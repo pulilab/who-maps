@@ -10,6 +10,7 @@ import ngRedux from 'ng-redux';
 import { reducers, middleware } from '../store/index';
 import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
+import * as SystemModule from '../store/modules/system';
 import axios from '../plugins/axios';
 
 import _appTemplate from './app.html';
@@ -50,11 +51,11 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           url: '/app/:appName',
           template: '<app layout="column" layout-fill></app>',
           resolve: {
-              data: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(ProjectsModule.loadUserProjects());
-              }],
-              user: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(UserModule.getProfile());
+              data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(UserModule.getProfile());
+                  const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
+                  const profiles = $ngRedux.dispatch(SystemModule.getUserProfiles());
+                  return Promise.all([projects, profiles]);
               }]
           },
           params: {
