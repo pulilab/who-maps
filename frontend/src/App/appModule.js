@@ -209,6 +209,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         axios.setAuthToken(tkn);
     }
 
+
     $transitions.onStart({}, () => {
         handleStateChange('start');
         return Promise.resolve();
@@ -233,13 +234,6 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         return Promise.resolve();
     });
 
-
-    const checkXHR = (event) => {
-        $rootScope.progress = event.detail.progression;
-        $rootScope.showLoading = $rootScope.progress !== 100;
-        $rootScope.$evalAsync();
-
-    };
     const showPopUp = () => {
         $mdToast.show(
           $mdToast.simple()
@@ -249,17 +243,13 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         );
 
     };
+
     let processingAuth = false;
     const handleAuthProblem = async () => {
         if (!processingAuth) {
             processingAuth = true;
             const token = storage.get('token');
             storage.clear();
-            singletonCollection.forEach(purgeFunction => {
-                if (purgeFunction) {
-                    purgeFunction();
-                }
-            });
             const mainUi = window.document.querySelector('ui-view');
             mainUi.style.display = 'none';
             const message = token ? 'You session has expired, please login again.' :
@@ -278,9 +268,10 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
             processingAuth = false;
         }
     };
-    window.addEventListener('xhrmonitor', checkXHR.bind(this));
-    window.addEventListener('xhrFailedRequest', showPopUp.bind(this));
-    window.addEventListener('xhrAuthProblem', handleAuthProblem.bind(this));
+
+    axios.setShowPopUp(showPopUp.bind(this));
+    axios.setHandleAuthProblem(handleAuthProblem.bind(this));
+
     $ngRedux.subscribe(() => {
         $timeout(() => {$rootScope.$apply(() => {});}, 100);
     });
