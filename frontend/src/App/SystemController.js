@@ -8,6 +8,7 @@ class SystemController {
         this.scope = $scope;
         this.watchers();
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
+        this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
     }
 
@@ -15,6 +16,9 @@ class SystemController {
         return {
             userProfile: state.user.profile
         };
+    }
+
+    onInit() {
     }
 
     onDestroy() {
