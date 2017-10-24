@@ -21,8 +21,8 @@ class SearchbarController {
 
     mapState(state) {
         return {
-            viewer: state.user.profile.viewer,
-            member: state.user.profile.member,
+            viewer: state.user.profile ? state.user.profile.viewer : [],
+            member: state.user.profile ? state.user.profile.member : [],
             userProjects: state.projects,
             projects: state.system.projectSearch
         };
