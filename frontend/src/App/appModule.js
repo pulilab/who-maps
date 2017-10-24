@@ -250,7 +250,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     };
     let processingAuth = false;
-    const handleAuthProblem = () => {
+    const handleAuthProblem = async () => {
         if (!processingAuth) {
             processingAuth = true;
             const token = storage.get('token');
@@ -264,7 +264,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
             mainUi.style.display = 'none';
             const message = token ? 'You session has expired, please login again.' :
               'You need to be logged in to view this content';
-            const dialog = $mdDialog.show(
+            await $mdDialog.show(
               $mdDialog.alert()
                 .clickOutsideToClose(false)
                 .title('Auth problem')
@@ -272,11 +272,10 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
                 .ariaLabel('Auth problem dialog')
                 .ok('Understand')
             );
-            dialog.then(() => {
-                mainUi.style.display = '';
-                $state.go('landing');
-                processingAuth = false;
-            });
+            mainUi.style.display = '';
+            $state.go('landing');
+            $ngRedux.dispatch(UserModule.doLogout());
+            processingAuth = false;
         }
     };
     window.addEventListener('xhrmonitor', checkXHR.bind(this));
