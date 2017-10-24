@@ -93,6 +93,19 @@ module.exports = {
                 ]
             },
             {
+                test: /\.css$/,
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' }
+                ]
+            },
+            {
+                test: /\.vue/,
+                use: [
+                    { loader: 'vue-loader' },
+                ]
+            },
+            {
                 test: /\.html/,
                 loader: 'html-loader?minimize=false'
             },

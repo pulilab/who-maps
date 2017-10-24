@@ -66,6 +66,8 @@
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.2",
     "stylelint-webpack-plugin": "^0.7.0",
+    "vue-loader": "^13.3.0",
+    "vue-template-compiler": "^2.5.2",
     "wdio-jasmine-framework": "^0.2.5",
     "webdriverio": "^4.2.11",
     "webpack": "^2.2.1",
@@ -103,6 +105,8 @@
     "svg-pan-zoom": "^3.2.6",
     "topojson": "^2.2.0",
     "trix": "https://github.com/pulilab/trix.git#0.10.1-puli",
+    "vue": "^2.5.2",
+    "vue-top-progress": "^0.6.0",
     "whatwg-fetch": "^0.11.0"
   }
 }
