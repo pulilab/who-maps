@@ -145,8 +145,9 @@ def _serialize_project(project, data):
         if found:
             country_fields.append(found)
     org_name = project.get_organisation().name if project.get_organisation() else ''
+    approved = project.approval.approved if hasattr(project, 'approval') else None
     data.update(id=project.id, name=project.name, organisation_name=org_name,
-                public_id=project.public_id, country_name=project.country.name,
+                public_id=project.public_id, country_name=project.country.name, approved=approved,
                 fields=[field.to_representation() for field in country_fields])
     return data
 
