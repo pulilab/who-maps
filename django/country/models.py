@@ -13,6 +13,7 @@ class Country(NameByIDMixin, ExtendedModel):
     footer_text = models.CharField(max_length=128, blank=True, null=True)
     user = models.ForeignKey(UserProfile, help_text="User who can update the country", null=True, blank=True,
                              related_name="country_admin")
+    project_approval = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Countries"

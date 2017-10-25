@@ -53,6 +53,7 @@ class CountryTests(APITestCase):
         self.assertIn("name", response.json()[0].keys())
         self.assertIn("code", response.json()[0].keys())
         self.assertIn("id", response.json()[0].keys())
+        self.assertIn("project_approval", response.json()[0].keys())
 
     def test_retrieve_landing_detail(self):
         url = reverse("country-detail", kwargs={"code": self.country.code})
@@ -422,7 +423,7 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
 
     def test_staff_can_see_no_country_if_no_user_assigned_to_country(self):
@@ -431,7 +432,7 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 0)
 
     def test_staff_only_sees_the_country_he_is_assigned_to(self):
@@ -442,7 +443,7 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
         user_profile = UserProfile.objects.create(user=self.user)
         Country.objects.create(name="Country1", code="CC1", user=user_profile)
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 1)
         self.assertEqual(ma.get_queryset(self.request)[0].name, "Country1")
         self.assertEqual(ma.get_queryset(self.request)[0].code, "CC1")

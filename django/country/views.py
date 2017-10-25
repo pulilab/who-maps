@@ -11,7 +11,7 @@ from .serializers import CountryListSerializer, LandingPageSerializer, CountryFi
 
 
 class CountryListAPIView(generics.ListAPIView):
-    queryset = Country.objects.values('id', 'name', 'code')
+    queryset = Country.objects.values('id', 'name', 'code','project_approval',)
     serializer_class = CountryListSerializer
 
 

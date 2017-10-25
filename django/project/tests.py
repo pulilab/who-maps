@@ -12,8 +12,9 @@ from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
-from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform
+from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, ProjectDraft
 from .admin import DigitalStrategyAdmin
+from .tasks import send_project_approval_digest
 
 
 class SetupTests(APITestCase):
@@ -102,6 +103,7 @@ class SetupTests(APITestCase):
 
         url = reverse("project-crud")
         response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201)
         self.project_id = response.json().get("id")
 
 
@@ -650,6 +652,103 @@ class ProjectTests(SetupTests):
     def test_platforms_str(self):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
+
+
+class ProjectDraftTests(SetupTests):
+
+    def setUp(self):
+        # Published without draft in SetupsTests
+        super(ProjectDraftTests, self).setUp()
+
+        # Draft without published
+        self.project_draft_data = {
+            'name': 'Draft Proj 1',
+            'country': self.country_id,
+            'project': None
+        }
+
+        url = reverse("project-draft-crud")
+        response = self.test_user_client.post(url, self.project_draft_data, format="json")
+        self.project_draft_id = response.json().get("id")
+
+        # Published and its dfraft
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name='Proj 2')
+        response = self.test_user_client.post(url, data, format="json")
+        self.project_pub_id = response.json().get("id")
+
+        self.project_draft_pub_data = {
+            'name': 'Draft Proj 2',
+            'country': self.country_id,
+            'project': self.project_pub_id,
+        }
+
+        url = reverse("project-draft-crud")
+        response = self.test_user_client.post(url, self.project_draft_pub_data, format="json")
+        self.project_draft_pub_id = response.json().get("id")
+
+    def test_create_new_draft_project_basic_data(self):
+        url = reverse("project-draft-crud")
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(name='Draft Proj 3')
+        response = self.test_user_client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, 201)
+
+    def test_retrieve_draft_project(self):
+        url = reverse("project-draft-detail", kwargs={"pk": self.project_draft_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']['name'], 'Draft Proj 1')
+        self.assertEqual(response.json()['published'], None)
+
+    def test_retireve_published_project(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['name'], 'Test Project1')
+        self.assertEqual(response.json()['draft'], None)
+
+    def test_retireve_published_project_with_draft(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_pub_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']['name'], 'Draft Proj 2')
+        self.assertEqual(response.json()['published']['name'], 'Proj 2')
+
+    def test_update_draft_project(self):
+        url = reverse("project-draft-detail", kwargs={"pk": self.project_draft_id})
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(name="TestProject98",
+                    platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
+        self.assertEqual(response.json()["platforms"][0]["strategies"][0], "new strat")
+
+    def test_project_draft_merged_list(self):
+        url = reverse("project-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]["draft"]["name"], "Draft Proj 2")
+        self.assertEqual(response.json()[0]["published"]["name"], "Proj 2")
+        self.assertEqual(response.json()[1]["draft"], None)
+        self.assertEqual(response.json()[1]["published"]["name"], "Test Project1")
+        self.assertEqual(response.json()[2]["draft"]["name"], "Draft Proj 1")
+        self.assertEqual(response.json()[2]["published"], None)
+
+    def test_delete_draft_after_publish(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name='Draft Proj 3', project=self.project_id, project_draft=self.project_draft_id)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(ProjectDraft.objects.filter(id=self.project_draft_id).exists(), False)
+
+    def test_project_approval_email(self):
+        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+        send_project_approval_digest()
+        self.assertIn('admin/project/projectapproval/add', mail.outbox[1].message().as_string())
 
 
 class PermissionTests(SetupTests):

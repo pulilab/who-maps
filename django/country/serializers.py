@@ -8,7 +8,7 @@ class CountryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = ("id", "name", "code")
+        fields = ("id", "name", "code", "project_approval",)
 
 
 class LandingPageSerializer(serializers.ModelSerializer):
