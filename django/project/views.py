@@ -16,8 +16,9 @@ from toolkit.toolkit_data import toolkit_default
 from country.models import Country, CountryField
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
-    ProjectGroupUpdateSerializer
-from .models import Project, CoverageVersion
+    ProjectGroupUpdateSerializer, ProjectDraftSerializer
+from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
+    ProjectDraft
 from .project_data import project_structure
 
 
@@ -96,7 +97,58 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
+        project_structure['interoperability_links'] = [{'pre': x.pre, 'name': x.name} for x in InteroperabilityLink.objects.all()]
+        project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
+        strategies = []
+
+        system = {'name': 'System', 'subGroups': []}
+        system_parents = DigitalStrategy.objects.filter(group='System', parent=None)
+        for parent in system_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(system)
+
+        client = {'name': 'Client', 'subGroups': []}
+        client_parents = DigitalStrategy.objects.filter(group='Client', parent=None)
+        for parent in client_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(client)
+
+        provider = {'name': 'Provider', 'subGroups': []}
+        provider_parents = DigitalStrategy.objects.filter(group='Provider', parent=None)
+        for parent in provider_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(provider)
+
+        project_structure['strategies'] = strategies
         return Response(project_structure)
+
+    @staticmethod
+    def project_structure_export(request):
+        project_structure_export = {}
+        project_structure_export['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()]
+        project_structure_export['technology_platforms'] = [{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()]
+        project_structure_export['digital_strategies'] = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
+
+        return Response(project_structure_export)
+
+
+def _serialize_project(project, data):
+    schema = CountryField.objects.get_schema(project.country.id)
+    answers = CountryField.objects.get_answers(country_id=project.country.id, project_id=project.id)
+    country_fields = []
+
+    for field in schema:
+        found = answers.filter(question=field.question, type=field.type).first()
+        if found:
+            country_fields.append(found)
+    org_name = project.get_organisation().name if project.get_organisation() else ''
+    data.update(id=project.id, name=project.name, organisation_name=org_name,
+                public_id=project.public_id, country_name=project.country.name,
+                fields=[field.to_representation() for field in country_fields])
+    return data
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
@@ -105,48 +157,38 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         """
         Retrieves list of projects user's projects.
         """
-        return Response(Project.projects.member_of(request.user).values("id", "name"))
+        data = []
+        projects = Project.projects.member_of(request.user)
+        project_drafts = ProjectDraft.projects.member_of(request.user).filter(project__isnull=True)
+
+        for project in projects:
+            published = _serialize_project(project, project.data)
+            draft = _serialize_project(project.project_draft, project.project_draft.data) if hasattr(project, 'project_draft') else None
+            data.append({'published': published, 'draft': draft})
+
+        for project_draft in project_drafts:
+            draft = _serialize_project(project_draft, project_draft.data)
+            data.append({'published': None, 'draft': draft})
+
+        return Response(data)
 
 
-class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
+class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
 
     def get_permissions(self):
         if self.action == "retrieve":
             return []  # Retrieve needs a bit more complex filtering based on user permission
         else:
-            return super(ProjectCRUDViewSet, self).get_permissions()
+            return super(ProjectBaseViewSet, self).get_permissions()
 
-    def create(self, request, *args, **kwargs):
-        """
-        Creates a project.
-        """
-        data_serializer = ProjectSerializer(data=request.data)
-        data_valid = data_serializer.is_valid()
-        if data_valid:
-            project_data = copy.copy(data_serializer.validated_data)
-            project_data.pop('name', None)
-            project = Project.projects.create(name=data_serializer.validated_data["name"], data=project_data)
-            project.team.add(request.user.userprofile)
-            # Add default Toolkit structure for the new project.
-            Toolkit.objects.create(project_id=project.id, data=toolkit_default)
-            data = dict(data_serializer.validated_data)
-            data.update(dict(id=project.id, public_id=project.public_id, country_name=project.country.name))
-            return Response(data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, *args, **kwargs):
-        """
-        Retrieves a project.
-        """
+    def _get_permission_based_data(self, project):
         is_member = False
-        project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
-
-        if not request.user.is_authenticated():  # ANON
+        if not self.request.user.is_authenticated():  # ANON
             data = project.get_anon_data()
         else:
-            is_member = project.is_member(request.user)
-            if is_member:  # MEMBER
+            is_member = project.is_member(self.request.user)
+            is_admin = project.is_admin(self.request.user)
+            if is_member or is_admin:  # MEMBER or Country Admin
                 data = project.get_member_data()
             else:  # LOGGED IN
                 data = project.get_non_member_data()
@@ -157,19 +199,71 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
                 data.update(last_version=last_version.version)
                 data.update(last_version_date=last_version.modified)
 
-        schema = CountryField.objects.get_schema(project.country.id)
-        answers = CountryField.objects.get_answers(country_id=project.country.id, project_id=project.id)
-        country_fields = []
+        return data
 
-        for field in schema:
-            found = answers.filter(question=field.question, type=field.type).first()
-            if found:
-                country_fields.append(found)
+    def _get_project_data(self, project, project_draft):
+        project_data = None
+        project_draft_data = None
+        # Published project
+        if project:
+            project_data_permission = self._get_permission_based_data(project)
+            project_data = _serialize_project(project, project_data_permission)
+        # Draft project
+        if project_draft:
+            project_draft_data = _serialize_project(project_draft, project_draft.get_member_data())
+        return Response({'draft': project_draft_data, 'published': project_data})
 
-        data.update(id=project.id, name=project.name, organisation_name=project.get_organisation().name,
-                    public_id=project.public_id, country_name=project.country.name,
-                    fields=[field.to_representation() for field in country_fields])
-        return Response(data)
+    def _create_project(self, klass, data_serializer, **kwargs):
+        project_data = copy.copy(data_serializer.validated_data)
+        project_data.pop('name', None)
+        project = klass.projects.create(name=data_serializer.validated_data["name"], data=project_data, **kwargs)
+        project.team.add(self.request.user.userprofile)
+        data = dict(data_serializer.validated_data)
+        country_name = project.country.name if project.country else None
+        data.update(dict(id=project.id, public_id=project.public_id, country_name=country_name))
+        return project, data
+
+    def _update_project(self, project, data_serializer):
+        data_serializer.fields.get('name').validators = \
+            [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
+        data_serializer.fields.get('name').validators\
+            .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
+        self.check_object_permissions(self.request, project)
+        data_serializer.is_valid(raise_exception=True)
+
+        project_data = copy.copy(data_serializer.validated_data)
+        project.name = project_data["name"]
+        project_data.pop('name', None)
+        project.data = project_data
+        project.save()
+        country_name = project.country.name if project.country else None
+        data_serializer.validated_data.update(dict(id=project.id, public_id=project.public_id,
+                                                   country_name=country_name))
+        return data_serializer.validated_data
+
+
+class ProjectCRUDViewSet(ProjectBaseViewSet):
+
+    def create(self, request, *args, **kwargs):
+        """
+        Creates a project.
+        """
+        data_serializer = ProjectSerializer(data=request.data)
+        data_serializer.is_valid(raise_exception=True)
+        project, data = self._create_project(Project, data_serializer)
+        # Add default Toolkit structure for the new project.
+        Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+        # Remove project draft
+        ProjectDraft.objects.filter(id=data_serializer.validated_data.get('project_draft', None)).delete()
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves a project.
+        """
+        project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
+        project_draft = project.project_draft if hasattr(project, 'project_draft') else None
+        return self._get_project_data(project, project_draft)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -178,23 +272,38 @@ class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
         """
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
-        data_serializer.fields.get('name').validators = \
-            [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
-        data_serializer.fields.get('name').validators\
-            .append(UniqueValidator(queryset=Project.objects.all().exclude(id=project.id)))
-        self.check_object_permissions(request, project)
-        data_valid = data_serializer.is_valid()
-        if data_valid:
-            project_data = copy.copy(data_serializer.validated_data)
-            project.name = project_data["name"]
-            project_data.pop('name', None)
-            project.data = project_data
-            project.save()
-            data_serializer.validated_data.update(dict(id=project.id, public_id=project.public_id,
-                                                       country_name=project.country.name))
-            return Response(data_serializer.validated_data, status=status.HTTP_200_OK)
-        else:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = self._update_project(project, data_serializer)
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class ProjectDraftCRUDViewSet(ProjectBaseViewSet):
+
+    def create(self, request, *args, **kwargs):
+        """
+        Creates a draft project.
+        """
+        data_serializer = ProjectDraftSerializer(data=request.data)
+        data_serializer.is_valid(raise_exception=True)
+        _, data = self._create_project(ProjectDraft, data_serializer, project_id=data_serializer.validated_data["project"])
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves a draft project.
+        """
+        project_draft = get_object_or_400(ProjectDraft, "No such project", id=kwargs.get("pk"))
+        project = project_draft.project if hasattr(project_draft, 'project') else None
+        return self._get_project_data(project, project_draft)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        """
+        Updates a draft project.
+        """
+        data_serializer = ProjectDraftSerializer(data=request.data)
+        project = get_object_or_400(ProjectDraft, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        data = self._update_project(project, data_serializer)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):

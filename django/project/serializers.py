@@ -30,7 +30,7 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     link = serializers.CharField(required=False, max_length=256)
 
 
-class ProjectSerializer(serializers.Serializer):
+class ProjectBaseSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
@@ -69,6 +69,42 @@ class ProjectSerializer(serializers.Serializer):
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(child=serializers.CharField(max_length=64),
                                                        required=False, max_length=50)
+
+
+class ProjectDraftSerializer(ProjectBaseSerializer):
+    """
+    Override fields that are not required for draft project.
+    """
+    project = serializers.IntegerField(required=False, allow_null=True)
+    # SECTION 1 General Overview
+    organisation = serializers.CharField(max_length=128, required=False)
+    country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
+    implementation_overview = serializers.CharField(max_length=512, required=False)
+    contact_name = serializers.CharField(max_length=256, required=False)
+    contact_email = serializers.EmailField(required=False)
+
+    # SECTION 2 Implementation Overview
+    platforms = PlatformSerializer(many=True, required=False)
+    hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=128),
+                                           max_length=64, min_length=0, allow_empty=True, required=False)
+    his_bucket = serializers.ListField(child=serializers.CharField(max_length=128), max_length=64, required=False)
+    government_approved = serializers.BooleanField(required=False)
+    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'),
+                                                           (1, 'Yes, they are contributing in-kind people or time'),
+                                                           (2, 'Yes, there is a financial contribution through MOH budget')], required=False)
+    donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32, required=False)
+
+    # SECTION 3 Technology Overview
+    implementation_dates = serializers.CharField(max_length=128, required=False)
+
+
+class ProjectSerializer(ProjectBaseSerializer):
+    approved = serializers.SerializerMethodField()
+    # Draft project
+    project_draft = serializers.IntegerField(required=False, allow_null=True)
+
+    def get_approved(obj):
+        return obj.approval.approved if obj.approval else None
 
 
 class GroupSerializer(serializers.ModelSerializer):

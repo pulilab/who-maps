@@ -53,6 +53,7 @@ class CountryTests(APITestCase):
         self.assertIn("name", response.json()[0].keys())
         self.assertIn("code", response.json()[0].keys())
         self.assertIn("id", response.json()[0].keys())
+        self.assertIn("project_approval", response.json()[0].keys())
 
     def test_retrieve_landing_detail(self):
         url = reverse("country-detail", kwargs={"code": self.country.code})
@@ -317,6 +318,94 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'][0]['question'], self.country_fields_data['fields'][0]['question'])
         self.assertEqual(response.json()['fields'][0]['answer'], self.country_fields_data['fields'][0]['answer'])
 
+    def test_country_export(self):
+
+        country = Country.objects.create(name='country111', code='C2')
+        project_data1 = {
+            'contact_email': 'foo1@gmail.com',
+            'contact_name': 'foo1',
+            'country': country.id,
+            'platforms': [
+                {
+                    'name': 'OpenSRP',
+                    'strategies': [
+                        'Transmit untargeted health promotion content to entire population',
+                        "Track client's health and services within a longitudinal care plan",
+                        'Transmit prescriptions orders'
+                    ]
+                },
+            ],
+            'interoperability_links': [
+                {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
+                {"name": "Health Worker Registry", "selected": True, "link": "http://example.org"},
+            ]
+        }
+        project_data2 = {
+            'contact_email': 'foo2@gmail.com',
+            'contact_name': 'foo2',
+            'country': country.id,
+            'platforms': [
+                {
+                    'name': 'OpenSRP',
+                    'strategies': [
+                        'Transmit untargeted health promotion content to entire population',
+                        'Transmit prescriptions orders'
+                    ]
+                },
+                {
+                    'name': 'Bamboo',
+                    'strategies': [
+                        'Guide through process algorithms according to clinical protocol',
+                        'Monitor status of health equipment'
+                    ]
+                }
+            ],
+            'interoperability_links': [
+                {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
+                {"name": "Health Management Information System (HMIS)", "selected": True},
+            ]
+        }
+
+        expected_data = {
+            'country': 'country111',
+            'country_code': 'C2',
+            'interoperability_links': {
+                '1': "Client Registry",
+                '2': "Health Management Information System (HMIS)",
+                '3': "Health Worker Registry",
+            },
+            'platforms': {
+                '24': {
+                    'name': 'OpenSRP',
+                    'strategies': {
+                        '6': 'Transmit untargeted health promotion content to entire population',
+                        '31': "Track client's health and services within a longitudinal care plan",
+                        '72': 'Transmit prescriptions orders',
+                    },
+                    'owners': {
+                        'foo1@gmail.com': 'foo1',
+                        'foo2@gmail.com': 'foo2',
+                    }
+                },
+                '2': {
+                    'name': 'Bamboo',
+                    'strategies': {
+                        '35': 'Guide through process algorithms according to clinical protocol',
+                        '76': 'Monitor status of health equipment',
+                    },
+                    'owners': {
+                        'foo2@gmail.com': 'foo2',
+                    }
+                }
+            }
+        }
+        Project.objects.create(name='proj1', data=project_data1)
+        Project.objects.create(name='proj2', data=project_data2)
+        response = self.client.get(reverse('country-export'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[-1], expected_data)
+
 
 class MockRequest:
     pass
@@ -334,7 +423,7 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
 
     def test_staff_can_see_no_country_if_no_user_assigned_to_country(self):
@@ -343,7 +432,7 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 0)
 
     def test_staff_only_sees_the_country_he_is_assigned_to(self):
@@ -354,7 +443,7 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
         user_profile = UserProfile.objects.create(user=self.user)
         Country.objects.create(name="Country1", code="CC1", user=user_profile)
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 1)
         self.assertEqual(ma.get_queryset(self.request)[0].name, "Country1")
         self.assertEqual(ma.get_queryset(self.request)[0].code, "CC1")

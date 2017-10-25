@@ -37,7 +37,7 @@ class PartnerLogoInline(admin.TabularInline):
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code')
+    list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
     inlines = (PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
 

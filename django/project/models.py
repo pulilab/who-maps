@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from core.models import ExtendedModel
+from core.models import ExtendedModel, SoftDeleteMixin
 from country.models import Country
 from user.models import UserProfile, Organisation
 
@@ -38,15 +38,15 @@ class ProjectManager(models.Manager):
         return super(ProjectManager, self).create(**kwargs)
 
 
-class Project(ExtendedModel):
+class ProjectBase(ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date",
                                "started", "application", "last_version")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255, unique=True)
     data = JSONField()
-    team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
-    viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
+    team = models.ManyToManyField(UserProfile, related_name="%(class)s_team", blank=True)
+    viewers = models.ManyToManyField(UserProfile, related_name="%(class)s_viewers", blank=True)
     public_id = models.CharField(max_length=64, default="",
                                  help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
@@ -65,6 +65,9 @@ class Project(ExtendedModel):
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
+
+    def is_admin(self, user):
+        return self.country.user == user
 
     def get_member_data(self):
         return self.data
@@ -85,6 +88,30 @@ class Project(ExtendedModel):
                 d.pop(key, None)
         return d
 
+    class Meta:
+        abstract = True
+
+
+class Project(ProjectBase):
+    pass
+
+
+class ProjectDraft(ProjectBase):
+    project = models.OneToOneField(
+            'Project',
+            on_delete=models.CASCADE,
+            related_name='project_draft',
+            blank=True,
+            null=True
+        )
+
+
+class ProjectApproval(ExtendedModel):
+    project = models.ForeignKey('Project', related_name='approval')
+    user = models.ForeignKey(UserProfile)
+    approved = models.BooleanField()
+    reason = models.TextField(blank=True, null=True)
+
 
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project)
@@ -98,3 +125,32 @@ class File(ExtendedModel):
     filename = models.CharField(max_length=255)
     data = models.BinaryField()
 
+
+class InteroperabilityLink(SoftDeleteMixin, ExtendedModel):
+    pre = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class TechnologyPlatform(SoftDeleteMixin, ExtendedModel):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
+    GROUP_CHOICES = (
+        ('Client', 'Client'),
+        ('Provider', 'Provider'),
+        ('System', 'System'),
+    )
+    group = models.CharField(max_length=255, choices=GROUP_CHOICES)
+    parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        parent = ' [{}]'.format(self.parent.name) if self.parent else ''
+        return '[{}]{} {}'.format(self.group, parent, self.name)
