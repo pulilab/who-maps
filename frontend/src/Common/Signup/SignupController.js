@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import CommonServices from '../CommonServices';
 import * as UserModule from '../../store/modules/user';
 class SignupController {
 
@@ -27,7 +26,7 @@ class SignupController {
         };
 
         this.style = {
-            height: CommonServices.calculateHeight()
+            height: 300
         };
     }
 

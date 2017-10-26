@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import CommonServices from '../CommonServices';
 import * as UserModule from '../../store/modules/user';
 
 class LoginModuleController {
@@ -26,7 +25,7 @@ class LoginModuleController {
             password: ''
         };
         this.style = {
-            height: CommonServices.calculateHeight()
+            height: 300
         };
     }
 

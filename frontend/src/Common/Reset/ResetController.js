@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import ResetService from './ResetService';
-import CommonServices from '../CommonServices';
 
 class ResetModuleController {
 
@@ -16,7 +15,7 @@ class ResetModuleController {
         this.email = '';
         this.sent = false;
         this.style = {
-            height: CommonServices.calculateHeight()
+            height: 300
         };
     }
 

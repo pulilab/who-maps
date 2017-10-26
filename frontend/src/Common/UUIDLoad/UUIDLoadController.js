@@ -2,10 +2,9 @@ import * as SystemModule from '../../store/modules/system';
 
 class UUIDLoadController {
 
-    constructor($state, $ngRedux, CommonServices) {
+    constructor($state, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
-        this.cs = CommonServices;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
@@ -13,12 +12,9 @@ class UUIDLoadController {
 
     onInit() {
         this.style = {
-            height: this.cs.calculateHeight()
+            height: 300
         };
         this.errorMessage = false;
-
-        const reset = this.cs.reset();
-        reset.loadedPromise.then(this.handleProjectLoad.bind(this));
     }
 
     onDestroy() {
@@ -47,20 +43,19 @@ class UUIDLoadController {
             return;
         }
 
-        if (this.cs && this.cs.userProfile) {
-            if (this.cs.userProfile.member.indexOf(id) > -1
-              || this.cs.userProfile.viewer.indexOf(id) > -1) {
-                state = 'dashboard';
-            }
-        }
+        // if (this.cs && this.cs.userProfile) {
+        //     if (this.cs.userProfile.member.indexOf(id) > -1
+        //       || this.cs.userProfile.viewer.indexOf(id) > -1) {
+        //         state = 'dashboard';
+        //     }
+        // }
         this.state.go(state, { appName: id });
     }
 
     static uuidLoadFactory() {
         require('./UUIDLoad.scss');
-        const CommonServices = require('../CommonServices');
         function uuidLoadController($state, $ngRedux) {
-            return new UUIDLoadController($state, $ngRedux, CommonServices);
+            return new UUIDLoadController($state, $ngRedux);
         }
 
         uuidLoadController.$inject = ['$state', '$ngRedux'];
