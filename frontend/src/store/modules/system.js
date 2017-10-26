@@ -1,6 +1,13 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 
+
+// GETTERS
+
+export const userProfiles  = state => {
+    return state.profiles ? state.profiles.slice() : [];
+};
+
 // ACTIONS
 
 export function getUserProfiles() {

@@ -5,6 +5,13 @@ import { Storage } from '../../Common/';
 
 const storage = new Storage();
 
+// GETTERS
+
+export const profile = state => {
+    return Object.assign({}, state.user.profile);
+};
+
+
 // ACTIONS
 
 const storeData = (data, email) => {
@@ -90,9 +97,9 @@ export function saveProfile() {
         const id = state.user.user_profile_id || storage.get('user_profile_id');
         const url = id ? `/api/userprofiles/${id}/` : '/api/userprofiles/';
         const action = id ? 'put' : 'post';
-        const profile = Object.assign({}, state.user.profile);
-        profile.organisation = profile.organisation.id;
-        let { data } = await axios[action](url, profile);
+        const p = Object.assign({}, state.user.profile);
+        p.organisation = p.organisation.id;
+        let { data } = await axios[action](url, p);
         data = handleProfile(data);
         dispatch({ type: 'SET_PROFILE', profile: data });
     };
@@ -111,17 +118,21 @@ export function doLogout() {
 export default function user(state = {}, action) {
     const u = Object.assign(state, {});
     switch (action.type) {
-    case 'SET_USER':
+    case 'SET_USER': {
         return Object.assign(state, {}, action.user);
-    case 'SET_PROFILE':
+    }
+    case 'SET_PROFILE': {
         u.profile = u.profile ? u.profile : {};
         u.profile = Object.assign(u.profile, {}, action.profile);
         return Object.assign({}, u);
-    case 'UNSET_USER':
+    }
+    case 'UNSET_USER': {
         return {};
-    case 'SET_COUNTRY':
+    }
+    case 'SET_COUNTRY': {
         u.profile.country = action.country;
         return Object.assign({}, u);
+    }
     default:
         return state;
 
