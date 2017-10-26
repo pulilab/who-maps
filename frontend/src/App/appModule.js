@@ -62,7 +62,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               appName: {
                   value: ['$ngRedux', ($ngRedux) => {
                       const state = $ngRedux.getState();
-                      return state && state.projects && state.projects[0] ? '' + state.projects[0].id : null;
+                      const projects = state ? ProjectsModule.getPublishedProjects(state) : null;
+                      return projects && projects[0] ? '' + projects[0].id : null;
                   }]
               }
           }
@@ -70,13 +71,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
       .state('public', {
           url: '/public/:appName',
           template: '<app layout="column" view-mode="true"></app>',
-          resolve: {
-              project: () => {
-                  const cs = require('../Common/CommonServices');
-                  return cs.loadedPromise;
-              }
-          }
-
+          resolve: {}
       })
       .state('login', {
           url: '/login',
@@ -113,6 +108,11 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
                   template: '<project layout-fill layout="column" ></project>'
               }
           },
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+              }]
+          },
           profileRequired: true
       })
       .state('editProject', {
@@ -123,6 +123,11 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
                   template: '<project edit-mode="true" layout-fill layout="column" ></project>'
               }
           },
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+              }]
+          },
           profileRequired: true
       })
       .state('inventory', {
@@ -132,6 +137,11 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               main: {
                   template: '<project inventory-mode="true" ></project>'
               }
+          },
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+              }]
           },
           profileRequired: true
       })
@@ -227,6 +237,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     $transitions.onFinish({}, (t) => {
         const to = t.to();
+        $ngRedux.dispatch(ProjectsModule.setCurrentProject(t.params().appName));
         if (to && to.profileRequired) {
             const state = $ngRedux.getState();
             return checkProfile(state.user.profile, t);
