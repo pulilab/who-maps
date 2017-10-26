@@ -34,7 +34,7 @@ class DashboardWidgetController {
         }, () => {
             return this.scores;
         }], ([domain, scores]) => {
-            if (domain) {
+            if (domain && scores && scores.length > 0) {
                 this.setDomainVariables(domain, scores);
                 this.splitType(this.all);
             }
