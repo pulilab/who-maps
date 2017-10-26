@@ -26,7 +26,7 @@ class LandingPageModuleController {
 
     mapProjects(state) {
         return {
-            projects: state.projects
+            projects: ProjectModule.getPublishedProjects(state)
         };
     }
 
