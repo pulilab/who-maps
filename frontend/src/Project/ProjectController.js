@@ -1,14 +1,15 @@
 import _ from 'lodash';
 import moment from 'moment';
 import NewProjectService from './ProjectService';
-import ProjectDefinition from './ProjectDefinition';
+import * as ProjectModule from '../store/modules/projects';
+import * as SystemModule from '../store/modules/system';
+import * as UserModule from '../store/modules/user';
 
 /* global DEV, DEBUG, Promise */
 
-class ProjectController extends ProjectDefinition {
+class ProjectController  {
 
-    constructor($scope, $state, Upload, CommonService, toast, $timeout) {
-        super(CommonService);
+    constructor($scope, $state, Upload, toast, $timeout, $ngRedux) {
         this.ns = new NewProjectService(Upload);
         this.ccs = require('../Common/CustomCountryService');
         this.EE = window.EE;
@@ -20,6 +21,18 @@ class ProjectController extends ProjectDefinition {
         this.getCountryFields = this.getCountryFields.bind(this);
         this.registerEventIfNotPresent = this.registerEventIfNotPresent.bind(this);
         this.toast = toast;
+        this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
+    }
+
+    mapData(state) {
+        return {
+            project: ProjectModule.getCurrentProjectForEditing(state),
+            structure: ProjectModule.getProjectStructure(state),
+            users: SystemModule.userProfiles(state),
+            userProfile: UserModule.profile(state),
+            projectId: ProjectModule.getCurrentProject(state),
+            userProjects: ProjectModule.getPublishedProjects(state)
+        };
     }
 
     eventListeners() {
@@ -39,10 +52,7 @@ class ProjectController extends ProjectDefinition {
         const self = this;
         this.eventListeners();
         this.districtList = [];
-        this.dataLoaded = false;
         this.isAddAnother = false;
-        this.handleStructureLoad();
-        this.users = this.cs.usersProfiles;
 
         this.team = [];
         this.viewers = [];
@@ -54,9 +64,6 @@ class ProjectController extends ProjectDefinition {
         }
 
         if (this.editMode) {
-            this.projectId = this.state.params.appName;
-            this.cs.getProjectData(this.projectId)
-              .then(this.handleDataLoad.bind(this));
             this.ns.getGroups(this.state.params.appName)
               .then(groups => {
                   this.team = groups.data.team;
@@ -126,11 +133,6 @@ class ProjectController extends ProjectDefinition {
         return this.cs.isMember(project);
     }
 
-    handleStructureLoad() {
-        this.dataLoaded = true;
-        this.structure = this.cs.projectStructure;
-        this.scope.$evalAsync();
-    }
     convertCountryFieldsAnswer({ fields }) {
         return fields.map(f => {
             switch (f.type) {
@@ -146,70 +148,16 @@ class ProjectController extends ProjectDefinition {
     }
 
     handleDataLoad(data) {
-        data = _.cloneDeep(data);
-        this.convertArrayToStandardCustomObj(data);
-        this.userProjects = this.cs.projectList;
-        data.start_date = this.convertDate(data.start_date);
-        data.implementation_dates = this.convertDate(data.implementation_dates);
-        data.end_date = this.convertDate(data.end_date);
-        data = this.convertStringArrayToObjectArray(data);
-        data = this.fillEmptyCollectionsWithDefault(data);
         if (!data.fields || data.fields.length === 0) {
             this.getCountryFields(data.country, -1);
         }
-        data.coverageType = this.setCoverageType(data.coverage, data.national_level_deployment);
         this.scope.$evalAsync(() => {
             this.project = data;
             if (data.fields && data.fields.length > 0) {
                 this.countryFields = this.convertCountryFieldsAnswer(data);
-                this.showCountryFields = true;
             }
         });
 
-    }
-
-    setCoverageType(cov, nat) {
-        let ret = null;
-        if (nat && (nat.clients || nat.facilities || nat.health_workers)) {
-            ret = 2;
-        }
-        else if (cov && cov.length > 1) {
-            ret = 1;
-        }
-        else if (cov && Array.isArray(cov) && cov[0] && cov[0].district) {
-            ret = 1;
-        }
-        return ret;
-    }
-
-    fillEmptyCollectionsWithDefault(data) {
-        data.coverage = _.isEmpty(data.coverage) ? [{}] : data.coverage;
-        data.platforms = _.isEmpty(data.platforms) ? [{}] : data.platforms;
-        return Object.assign({}, data);
-    }
-
-    convertDate(date) {
-        const dateFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
-        if (date) {
-            return moment(date, dateFormat).toDate();
-        }
-        return undefined;
-    }
-
-    convertStringArrayToObjectArray(data) {
-        const keyArray = ['donors', 'implementing_partners'];
-        keyArray.forEach(key => {
-            if (!data[key]) {
-                return;
-            }
-            data[key] = data[key].map(value => {
-                return { value };
-            });
-            if (data[key].length === 0) {
-                data[key].push({});
-            }
-        });
-        return Object.assign({}, data);
     }
 
     convertObjectArrayToStringArray(data) {
@@ -224,19 +172,6 @@ class ProjectController extends ProjectDefinition {
         return Object.assign({}, data);
     }
 
-    convertArrayToStandardCustomObj(data) {
-        const keyArray = ['interoperability_standards', 'licenses'];
-
-        keyArray.forEach(key=> {
-            const scaffold = {
-                standard: [],
-                custom: void 0
-            };
-            this.structure[key] = _.union(this.structure[key], data[key]);
-            scaffold.standard = data[key];
-            data[key] = scaffold;
-        });
-    }
 
     createDateFields(processedForm) {
         processedForm.start_date = moment(this.project.start_date).toJSON();
@@ -594,11 +529,10 @@ class ProjectController extends ProjectDefinition {
 
     static newProjectFactory() {
         require('./Project.scss');
-        const CommonService =  require('../Common/CommonServices');
-        function newProject($scope, $state, Upload, $mdToast, $timeout) {
-            return new ProjectController($scope, $state, Upload, CommonService, $mdToast, $timeout);
+        function newProject($scope, $state, Upload, $mdToast, $timeout, $ngRedux) {
+            return new ProjectController($scope, $state, Upload, $mdToast, $timeout, $ngRedux);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast', '$timeout'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast', '$timeout', '$ngRedux'];
         return newProject;
     }
 }

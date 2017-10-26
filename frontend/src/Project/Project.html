@@ -8,12 +8,12 @@
     <h1 class="md-display-1 text-center">Edit Project Info</h1>
   </div>
 
-  <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
-    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-  </div>
+  <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">-->
+    <!--<md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>-->
+  <!--</div>-->
 
   <div class="project-form-wrapper md-block">
-    <form name="vm.form" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
+    <form name="vm.form" ng-submit="vm.save($event)" layout="row" id="npf" novalidate>
       <div class="main-section" layout="column">
         <general-overview
           id="general-overview"

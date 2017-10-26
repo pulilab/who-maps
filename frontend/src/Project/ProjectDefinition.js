@@ -1,13 +1,11 @@
-import Protected from '../Common/Protected';
+import * as ProjectModule from '../store/modules/projects';
 
-class ProjectDefinition extends Protected {
+class ProjectDefinition {
 
-    constructor(CommonService) {
-        super();
-        this.cs = CommonService;
+    constructor($ngRedux) {
         this.userProfile = this.cs.userProfile;
         this.initializeDefinition();
-
+        this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
     }
 
     initializeDefinition() {
