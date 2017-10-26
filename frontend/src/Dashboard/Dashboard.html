@@ -24,13 +24,13 @@
 
         <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
 
-          <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
+          <md-card md-whiteframe="2" class="dash-stat-card" ng-class="vm.profile.account_type === 'I' ? 'longer' : 'shorter'">
 
             <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
             <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
             <span class="dash-stat-label">Version</span>
 
-            <div class="gray" ng-if="vm.userType === 3" layout="column" layout-align="space-around stretch">
+            <div class="gray" ng-if="vm.profile.account_type === 'I'" layout="column" layout-align="space-around stretch">
                             <span class="desc">
                                 Push to save your current stats as a new version:
                             </span>
@@ -57,7 +57,7 @@
 
             <md-tab label="overview">
 
-              <div class="dash-cardcontent" layout="column" ng-if="vm.userType > 1">
+              <div class="dash-cardcontent" layout="column" ng-if="vm.profile">
 
                 <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
 
@@ -91,7 +91,7 @@
                 </div>
               </div>
 
-              <div class="dash-cardcontent infoview" layout="column" ng-if="vm.userType < 2" layout="column" layout-align="space-between stretch">
+              <div class="dash-cardcontent infoview" layout="column" ng-if="vm.viewMode" layout="column" layout-align="space-between stretch">
                 <div layout="row" layout-align="start center" class="roww">
                   <div flex="25" class='label'>NAME</div>
                   <div class="data">{{vm.projectData.name}}</div>
@@ -126,18 +126,18 @@
 
             </md-tab>
 
-            <md-tab label="axis" ng-if="vm.userType > 1">
+            <md-tab label="axis" ng-if="vm.profile">
               <div>
                 <linechart
-                  showdotted="(vm.userType === 3)">
+                  showdotted="(vm.profile.account_type === 'I')">
                 </linechart>
               </div>
             </md-tab>
 
-            <md-tab label="domains" ng-if="vm.userType > 1">
+            <md-tab label="domains" ng-if="vm.profile">
               <div>
                 <linechart
-                  showdotted="(vm.userType === 3)"
+                  showdotted="(vm.profile.account_type === 'I')"
                   datachooser="true"
                 ></linechart>
               </div>
@@ -308,7 +308,7 @@
           <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
         </div>
 
-        <md-tabs ng-hide="vm.showEmpty" ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
+        <md-tabs ng-hide="vm.showEmpty" ng-if="vm.profile" md-border-bottom md-dynamic-height class="perf-tab">
 
           <md-tab label="geographical view">
             <countrymap
@@ -323,7 +323,7 @@
           <md-tab label="historical view">
 
             <linechart
-              showdotted="(vm.userType === 3)"
+              showdotted="(vm.profile.account_type === 'I')"
               datachooser="false"
               notpercentage="true"
             ></linechart>
@@ -332,7 +332,7 @@
 
         </md-tabs>
 
-        <div flex ng-if="vm.userType === 0" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
+        <div flex ng-if="!vm.profile" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
           <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
           <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
         </div>
