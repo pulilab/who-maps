@@ -86,7 +86,7 @@ class CollapsibleSet {
             return false;
         }
         const field = this.findField(key);
-        return field.indexOf(t) > -1;
+        return field && field.length ? field.indexOf(t) > -1 : false;
     }
 
     setAvailableOptions(category, options, fieldName) {
