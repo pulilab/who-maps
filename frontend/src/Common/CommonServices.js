@@ -15,7 +15,6 @@ class CommonServices extends Protected {
             const error = { error: 'Cannot construct singleton' };
             throw error;
         }
-        this.initialize();
     }
 
     initialize() {
