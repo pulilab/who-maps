@@ -23,20 +23,19 @@ class AppModuleController {
     }
 
     onInit() {
-        this.cs = require('../Common/CommonServices');
         this.watchers();
         this.eventBinding();
         this.projectId = this.state.params.appName;
         this.currentPage = this.state.current.name;
         this.showCountryTopBar = false;
 
-        if (this.viewMode) {
-            this.cs.getProjectData(this.projectId)
-              .then(project => {
-                  this.currentProject = project;
-                  this.scope.$evalAsync();
-              });
-        }
+        // if (this.viewMode) {
+        //     this.cs.getProjectData(this.projectId)
+        //       .then(project => {
+        //           this.currentProject = project;
+        //           this.scope.$evalAsync();
+        //       });
+        // }
     }
 
     onDestroy()  {
