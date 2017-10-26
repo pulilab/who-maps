@@ -27,7 +27,7 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(viewers=user.userprofile)
 
     def member_of(self, user):
-        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile)).distinct()
+        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile)).distinct().order_by('id')
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
@@ -107,7 +107,7 @@ class ProjectDraft(ProjectBase):
 
 
 class ProjectApproval(ExtendedModel):
-    project = models.ForeignKey('Project', related_name='approval')
+    project = models.OneToOneField('Project', related_name='approval')
     user = models.ForeignKey(UserProfile)
     approved = models.BooleanField()
     reason = models.TextField(blank=True, null=True)
