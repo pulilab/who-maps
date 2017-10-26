@@ -11,36 +11,30 @@ class SubBarController {
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, ProjectModule)(this);
+        this.navigateToProject = this.navigateToProject.bind(this);
+        this.iconFunction = this.iconFunction.bind(this);
     }
 
     mapState(state) {
         return {
-            projects: state.projects,
-            userProfile: state.user.profile
+            projects: ProjectModule.getPublishedProjects(state),
+            userProfile: state.user.profile,
+            currentProject: ProjectModule.getCurrentProject(state)
         };
     }
 
     onInit() {
         this.cs = require('../CommonServices');
         this.eventBinding();
-        this.projectId = this.state.params.appName;
-        this.currentPage = void 0;
-        this.navigateToProject = this.navigateToProject.bind(this);
-        this.iconFunction = this.iconFunction.bind(this);
-        if (this.viewMode) {
-            this.cs.getProjectData(this.projectId)
-              .then(project => {
-                  this.currentProject = project;
-                  this.createShareDefinition();
-                  this.scope.$evalAsync();
-              });
-        }
+        // if (this.viewMode) {
+        //     this.cs.getProjectData(this.projectId)
+        //       .then(project => {
+        //           this.currentProject = project;
+        //           this.createShareDefinition();
+        //           this.scope.$evalAsync();
+        //       });
+        // }
 
-        this.projects.forEach(item => {
-            if (item.id === parseInt(this.state.params.appName, 10)) {
-                this.currentProject = item;
-            }
-        });
 
         if (this.currentProject) {
             this.createShareDefinition();
