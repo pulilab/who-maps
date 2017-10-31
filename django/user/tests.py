@@ -204,7 +204,8 @@ class UserProfileTests(APITestCase):
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
-            "country": "test_country"}
+            "country": "test_country",
+            "language": "en"}
         response = self.client.put(url, data)
 
     def test_obtain_user_profile_returns_id(self):
@@ -336,3 +337,18 @@ class UserProfileTests(APITestCase):
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['account_type'], UserProfile.GOVERNMENT)
+
+    def test_language_switcher(self):
+        url = reverse("language-switcher", kwargs={"language_code": 'fr'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserProfile.objects.get(id=self.user_profile_id).language, 'fr')
+
+    def test_login_for_language(self):
+        # Log in.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)

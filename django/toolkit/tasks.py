@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core import mail
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 from celery.utils.log import get_task_logger
 
 from project.models import Project
@@ -28,7 +29,7 @@ def send_daily_toolkit_digest():
             html_message = html_template.render({"project_id": project.id})
             for profile in project.team.all():
                 mail.send_mail(
-                    subject="MAPS Toolkit updated!",
+                    subject=_("MAPS Toolkit updated!"),
                     message="",
                     from_email=settings.FROM_EMAIL,
                     recipient_list=[profile.user.email],

@@ -1,12 +1,14 @@
+from django.utils.translation import ugettext_lazy as _
+
 
 toolkit_default = [
     {
-        "axis": "AXIS 1. GROUNDWORK",
+        "axis": str(_("AXIS 1. GROUNDWORK")),
         "axis_score": 0,
         "axis_completion": 0,
         "domains": [
             {
-                "domain": "DOMAIN 1: PARAMETERS OF SCALE",
+                "domain": str(_("DOMAIN 1: PARAMETERS OF SCALE")),
                 "domain_max": 2,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -21,7 +23,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 2: CONTEXTUAL ENVIRONMENT",
+                "domain": str(_("DOMAIN 2: CONTEXTUAL ENVIRONMENT")),
                 "domain_max": 22,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -48,7 +50,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 3: SCIENTIFIC BASIS",
+                "domain": str(_("DOMAIN 3: SCIENTIFIC BASIS")),
                 "domain_max": 30,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -77,12 +79,12 @@ toolkit_default = [
         ]
     },
     {
-        "axis": "AXIS 2. PARTNERSHIPS",
+        "axis": str(_("AXIS 2. PARTNERSHIPS")),
         "axis_score": 0,
         "axis_completion": 0,
         "domains": [
             {
-                "domain": "DOMAIN 4: STRATEGIC ENGAGEMENT",
+                "domain": str(_("DOMAIN 4: STRATEGIC ENGAGEMENT")),
                 "domain_max": 48,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -109,7 +111,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 5: PARTNERSHIP SUSTAINABILITY",
+                "domain": str(_("DOMAIN 5: PARTNERSHIP SUSTAINABILITY")),
                 "domain_max": 50,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -150,12 +152,12 @@ toolkit_default = [
         ]
     },
     {
-        "axis": "AXIS 3. FINANCIAL HEALTH",
+        "axis": str(_("AXIS 3. FINANCIAL HEALTH")),
         "axis_score": 0,
         "axis_completion": 0,
         "domains": [
             {
-                "domain": "DOMAIN 6: FINANCIAL MANAGEMENT",
+                "domain": str(_("DOMAIN 6: FINANCIAL MANAGEMENT")),
                 "domain_max": 45,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -187,7 +189,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 7: FINANCIAL MODEL",
+                "domain": str(_("DOMAIN 7: FINANCIAL MODEL")),
                 "domain_max": 36,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -216,12 +218,12 @@ toolkit_default = [
         ]
     },
     {
-        "axis": "AXIS 4. TECHNOLOGY & ARCHITECTURE",
+        "axis": str(_("AXIS 4. TECHNOLOGY & ARCHITECTURE")),
         "axis_score": 0,
         "axis_completion": 0,
         "domains": [
             {
-                "domain": "DOMAIN 8: DATA",
+                "domain": str(_("DOMAIN 8: DATA")),
                 "domain_max": 43,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -253,7 +255,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 9: INTEROPERABILITY",
+                "domain": str(_("DOMAIN 9: INTEROPERABILITY")),
                 "domain_max": 18,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -274,7 +276,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 10: ADAPTABILITY",
+                "domain": str(_("DOMAIN 10: ADAPTABILITY")),
                 "domain_max": 30,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -303,12 +305,12 @@ toolkit_default = [
         ]
     },
     {
-        "axis": "AXIS 5. OPERATIONS",
+        "axis": str(_("AXIS 5. OPERATIONS")),
         "axis_score": 0,
         "axis_completion": 0,
         "domains": [
             {
-                "domain": "DOMAIN 11: PERSONNEL",
+                "domain": str(_("DOMAIN 11: PERSONNEL")),
                 "domain_max": 33,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -329,7 +331,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 12: TRAINING AND SUPPORT",
+                "domain": str(_("DOMAIN 12: TRAINING AND SUPPORT")),
                 "domain_max": 45,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -362,7 +364,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 13: OUTREACH AND SENSITIZATION",
+                "domain": str(_("DOMAIN 13: OUTREACH AND SENSITIZATION")),
                 "domain_max": 15,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -383,7 +385,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 14: CONTINGENCY PLANNING",
+                "domain": str(_("DOMAIN 14: CONTINGENCY PLANNING")),
                 "domain_max": 18,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -406,12 +408,12 @@ toolkit_default = [
         ]
     },
     {
-        "axis": "AXIS 6. MONITORING & EVALUATION",
+        "axis": str(_("AXIS 6. MONITORING & EVALUATION")),
         "axis_score": 0,
         "axis_completion": 0,
         "domains": [
             {
-                "domain": "DOMAIN 15: PROCESS MONITORING",
+                "domain": str(_("DOMAIN 15: PROCESS MONITORING")),
                 "domain_max": 25,
                 "domain_sum": 0,
                 "domain_percentage": 0,
@@ -438,7 +440,7 @@ toolkit_default = [
                 ]
             },
             {
-                "domain": "DOMAIN 16: EVALUATION RESEARCH",
+                "domain": str(_("DOMAIN 16: EVALUATION RESEARCH")),
                 "domain_max": 66,
                 "domain_sum": 0,
                 "domain_percentage": 0,

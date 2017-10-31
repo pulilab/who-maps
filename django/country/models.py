@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from core.models import NameByIDMixin, ExtendedModel
 from user.models import UserProfile
 
@@ -11,11 +13,11 @@ class Country(NameByIDMixin, ExtendedModel):
     cover_text = models.TextField(blank=True, null=True)
     footer_title = models.CharField(max_length=128, blank=True, null=True)
     footer_text = models.CharField(max_length=128, blank=True, null=True)
-    user = models.ForeignKey(UserProfile, help_text="User who can update the country", null=True, blank=True,
+    user = models.ForeignKey(UserProfile, help_text=_("User who can update the country"), null=True, blank=True,
                              related_name="country_admin")
 
     class Meta:
-        verbose_name_plural = "Countries"
+        verbose_name_plural = _("Countries")
 
     def __str__(self):  # pragma: no cover
         return self.name
@@ -44,9 +46,9 @@ class CountryField(models.Model):
     YESNO = 3
 
     TYPE_CHOICES = (
-        (TEXT, "Text field"),
-        (NUMBER, "Numeric field"),
-        (YESNO, "Yes - no field"),
+        (TEXT, _("Text field")),
+        (NUMBER, _("Numeric field")),
+        (YESNO, _("Yes - no field")),
     )
 
     country = models.ForeignKey(Country)
@@ -54,8 +56,8 @@ class CountryField(models.Model):
     question = models.CharField(max_length=256, blank=False)
     answer = models.TextField(max_length=2000, blank=True)
     project = models.ForeignKey('project.Project', null=True)
-    enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
-    schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
+    enabled = models.BooleanField(default=True, help_text=_("This field will show up on the project page if enabled"))
+    schema = models.BooleanField(default=True, help_text=_("Determines if this is treated as the schema for country"))
 
     objects = CountryFieldManager()
 

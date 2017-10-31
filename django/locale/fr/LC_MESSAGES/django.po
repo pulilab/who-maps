@@ -1,0 +1,2325 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-31 11:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: cms/models.py:31
+msgid "Normal"
+msgstr ""
+
+#: cms/models.py:32
+msgid "Flagged"
+msgstr ""
+
+#: cms/models.py:33
+msgid "Banned"
+msgstr ""
+
+#: cms/models.py:62
+msgid "Resources"
+msgstr ""
+
+#: cms/models.py:63
+msgid "Lessons & Tips"
+msgstr ""
+
+#: cms/models.py:64
+msgid "Experiences"
+msgstr ""
+
+#: cms/models.py:68
+msgid "Parameters of Scale"
+msgstr ""
+
+#: cms/models.py:69
+msgid "Contextual Environment"
+msgstr ""
+
+#: cms/models.py:70
+msgid "Scientific Basis"
+msgstr ""
+
+#: cms/models.py:71
+msgid "Strategic Engagement"
+msgstr ""
+
+#: cms/models.py:72
+msgid "Partnership Sustainability"
+msgstr ""
+
+#: cms/models.py:73
+msgid "Financial Management"
+msgstr ""
+
+#: cms/models.py:74
+msgid "Financial Model"
+msgstr ""
+
+#: cms/models.py:75
+msgid "Data"
+msgstr ""
+
+#: cms/models.py:76
+msgid "Interoperability"
+msgstr ""
+
+#: cms/models.py:77
+msgid "Adaptability"
+msgstr ""
+
+#: cms/models.py:78
+msgid "Personnel"
+msgstr ""
+
+#: cms/models.py:79
+msgid "Training and Support"
+msgstr ""
+
+#: cms/models.py:80
+msgid "Outreach and Sensitization"
+msgstr ""
+
+#: cms/models.py:81
+msgid "Contingency Planning"
+msgstr ""
+
+#: cms/models.py:82
+msgid "Process Monitoring"
+msgstr ""
+
+#: cms/models.py:83
+msgid "Evaluation Research"
+msgstr ""
+
+#: cms/models.py:95
+msgid "Planning & Guidance post"
+msgstr ""
+
+#: cms/models.py:96
+msgid "Planning & Guidance posts"
+msgstr ""
+
+#: cms/views.py:38
+msgid "Content has been flagged."
+msgstr ""
+
+#: country/models.py:16
+msgid "User who can update the country"
+msgstr ""
+
+#: country/models.py:20
+msgid "Countries"
+msgstr ""
+
+#: country/models.py:49
+msgid "Text field"
+msgstr ""
+
+#: country/models.py:50
+msgid "Numeric field"
+msgstr ""
+
+#: country/models.py:51
+msgid "Yes - no field"
+msgstr ""
+
+#: country/models.py:59
+msgid "This field will show up on the project page if enabled"
+msgstr ""
+
+#: country/models.py:60
+msgid "Determines if this is treated as the schema for country"
+msgstr ""
+
+#: project/project_data.py:7
+msgid "Client"
+msgstr ""
+
+#: project/project_data.py:10
+msgid "Targeted client communication"
+msgstr ""
+
+#: project/project_data.py:12
+msgid "Transmit targeted health event alerts to specific population group(s)"
+msgstr ""
+
+#: project/project_data.py:13
+msgid ""
+"Transmit targeted health information and promotion content to a client based "
+"on a clinical care plan or health/demographic characteristics"
+msgstr ""
+
+#: project/project_data.py:14
+msgid "Transmit targeted alerts and reminders to a client"
+msgstr ""
+
+#: project/project_data.py:18
+msgid "Untargeted client communication"
+msgstr ""
+
+#: project/project_data.py:20
+msgid "Transmit untargeted health promotion content to entire population"
+msgstr ""
+
+#: project/project_data.py:21
+msgid "Transmit untargeted health event alerts to entire population"
+msgstr ""
+
+#: project/project_data.py:25
+msgid "Client to client communication"
+msgstr ""
+
+#: project/project_data.py:27
+msgid "Peer group for clients"
+msgstr ""
+
+#: project/project_data.py:31
+msgid "Client to provider telemedicine"
+msgstr ""
+
+#: project/project_data.py:33
+msgid "Consultations between remote client and health worker or helpline"
+msgstr ""
+
+#: project/project_data.py:34
+msgid "Remote monitoring of client health or diagnostic data by provider"
+msgstr ""
+
+#: project/project_data.py:35
+msgid ""
+"Transmission of medical data (e.g. images, notes, and videos) from client to "
+"provider"
+msgstr ""
+
+#: project/project_data.py:39
+msgid "Citizen based reporting"
+msgstr ""
+
+#: project/project_data.py:41
+msgid "Reporting of health system feedback by clients"
+msgstr ""
+
+#: project/project_data.py:42
+msgid "Reporting of public health events by clients"
+msgstr ""
+
+#: project/project_data.py:46
+msgid "On demand information services to clients"
+msgstr ""
+
+#: project/project_data.py:48
+msgid "Client look-up of health information"
+msgstr ""
+
+#: project/project_data.py:52
+msgid "Client financial transactions"
+msgstr ""
+
+#: project/project_data.py:54
+msgid "Transmit or manage out of pocket payments by client"
+msgstr ""
+
+#: project/project_data.py:55
+msgid "Transmit or manage vouchers to client for health services"
+msgstr ""
+
+#: project/project_data.py:56
+msgid "Transmit or manage incentives to clients for health services"
+msgstr ""
+
+#: project/project_data.py:60
+msgid "Personal health tracking"
+msgstr ""
+
+#: project/project_data.py:62
+msgid "Access by client to own medical records"
+msgstr ""
+
+#: project/project_data.py:63
+msgid "Self monitoring of health or diagnostic data by client"
+msgstr ""
+
+#: project/project_data.py:64
+msgid "Active data capture by client"
+msgstr ""
+
+#: project/project_data.py:70
+msgid "Provider"
+msgstr ""
+
+#: project/project_data.py:73
+msgid "Client identification and registration"
+msgstr ""
+
+#: project/project_data.py:75
+msgid "Verify client unique identity"
+msgstr ""
+
+#: project/project_data.py:76
+msgid "Enroll client for health services/clinical care plan"
+msgstr ""
+
+#: project/project_data.py:80
+msgid "Client health records"
+msgstr ""
+
+#: project/project_data.py:82
+msgid "Track client's health and services within a longitudinal care plan"
+msgstr ""
+
+#: project/project_data.py:83
+msgid "Manage client's structured records"
+msgstr ""
+
+#: project/project_data.py:84
+msgid ""
+"Manage client's unstructured clinical records (e.g. notes, images, documents)"
+msgstr ""
+
+#: project/project_data.py:88
+msgid "Provider based decision support"
+msgstr ""
+
+#: project/project_data.py:90
+msgid "Guide through process algorithms according to clinical protocol"
+msgstr ""
+
+#: project/project_data.py:91
+msgid "Provide checklist according to clinical protocol"
+msgstr ""
+
+#: project/project_data.py:92
+msgid "Screen clients by risk or other health status"
+msgstr ""
+
+#: project/project_data.py:96 project/project_data.py:318
+msgid "Provider work planning and scheduling"
+msgstr ""
+
+#: project/project_data.py:98
+msgid "Schedule client appointments based on clinical care plan"
+msgstr ""
+
+#: project/project_data.py:99
+msgid "Schedule health worker activities"
+msgstr ""
+
+#: project/project_data.py:103
+msgid "Provider to provider communication"
+msgstr ""
+
+#: project/project_data.py:105
+msgid ""
+"Health worker to health worker telemedicine for patient case management "
+msgstr ""
+
+#: project/project_data.py:106
+msgid "Health worker peer group"
+msgstr ""
+
+#: project/project_data.py:110
+msgid "Referral coordination"
+msgstr ""
+
+#: project/project_data.py:112
+msgid "Coordinate emergency response and transport"
+msgstr ""
+
+#: project/project_data.py:113
+msgid "Manage referrals between points of service within health sector "
+msgstr ""
+
+#: project/project_data.py:114
+msgid ""
+"Manage referrals between health and other sectors (social services, police, "
+"justice, economic support schemes)"
+msgstr ""
+
+#: project/project_data.py:118
+msgid "Targeted provider communication"
+msgstr ""
+
+#: project/project_data.py:120
+msgid "Transmit routine news and updates to health workers"
+msgstr ""
+
+#: project/project_data.py:121
+msgid "Transmit non-routine public health event alerts to health workers"
+msgstr ""
+
+#: project/project_data.py:122
+msgid "Transmit clinical care workflow alerts to health worker"
+msgstr ""
+
+#: project/project_data.py:123
+msgid "Provide supervisory and performance feedback"
+msgstr ""
+
+#: project/project_data.py:127
+msgid "HW training"
+msgstr ""
+
+#: project/project_data.py:129
+msgid "Provide training content to health workers "
+msgstr ""
+
+#: project/project_data.py:130
+msgid "Record health worker training information"
+msgstr ""
+
+#: project/project_data.py:131
+msgid "Manage health worker license and registration"
+msgstr ""
+
+#: project/project_data.py:132
+msgid "Assess health worker capacity "
+msgstr ""
+
+#: project/project_data.py:137
+msgid "HR management"
+msgstr ""
+
+#: project/project_data.py:139
+msgid "List health workforce cadres and related information"
+msgstr ""
+
+#: project/project_data.py:140
+msgid "Monitor health worker performance"
+msgstr ""
+
+#: project/project_data.py:146
+msgid "System"
+msgstr ""
+
+#: project/project_data.py:149
+msgid "Commodity assessment and reporting"
+msgstr ""
+
+#: project/project_data.py:151
+msgid "Report counterfeit or substandard drugs by clients"
+msgstr ""
+
+#: project/project_data.py:152
+msgid "Report adverse drug interactions"
+msgstr ""
+
+#: project/project_data.py:153
+msgid "Register licensed drugs and health commodities"
+msgstr ""
+
+#: project/project_data.py:157
+msgid "Data collection management and use"
+msgstr ""
+
+#: project/project_data.py:159
+msgid "Routine health indicator data collection and management"
+msgstr ""
+
+#: project/project_data.py:160
+msgid "Non routine data collection and management"
+msgstr ""
+
+#: project/project_data.py:161
+msgid "Data storage and aggregation"
+msgstr ""
+
+#: project/project_data.py:162
+msgid "Data synthesis and presentations/visualizations of data"
+msgstr ""
+
+#: project/project_data.py:163
+msgid ""
+"Automated analysis of data to generate new information or predictions on "
+"future events"
+msgstr ""
+
+#: project/project_data.py:167
+msgid "Prescription management"
+msgstr ""
+
+#: project/project_data.py:169
+msgid "Transmit prescriptions orders"
+msgstr ""
+
+#: project/project_data.py:170
+msgid "Track status of prescription orders"
+msgstr ""
+
+#: project/project_data.py:171
+msgid "Track consumption of health commodities"
+msgstr ""
+
+#: project/project_data.py:176
+msgid "Equipment and asset management"
+msgstr ""
+
+#: project/project_data.py:178
+msgid "Monitor status of health equipment"
+msgstr ""
+
+#: project/project_data.py:179
+msgid "Track regulation and licensing of medical equipment"
+msgstr ""
+
+#: project/project_data.py:183
+msgid "Provider financial transactions"
+msgstr ""
+
+#: project/project_data.py:185
+msgid "Transmit or manage routine payroll payment to health workers"
+msgstr ""
+
+#: project/project_data.py:186
+msgid "Transmit or manage incentives to health workers"
+msgstr ""
+
+#: project/project_data.py:190
+msgid "Insurance"
+msgstr ""
+
+#: project/project_data.py:192
+msgid "Register and verify client insurance membership"
+msgstr ""
+
+#: project/project_data.py:193
+msgid "Track insurance billing and claims submission"
+msgstr ""
+
+#: project/project_data.py:194
+msgid "Track and manage insurance reimbursement"
+msgstr ""
+
+#: project/project_data.py:198
+msgid "Laboratory and diagnostics management"
+msgstr ""
+
+#: project/project_data.py:200
+msgid "Transmit diagnostics result, or availability of result, to clients"
+msgstr ""
+
+#: project/project_data.py:201
+msgid "Transmit diagnostic orders"
+msgstr ""
+
+#: project/project_data.py:202
+msgid "Track biological specimens "
+msgstr ""
+
+#: project/project_data.py:206
+msgid "CRVS"
+msgstr ""
+
+#: project/project_data.py:208
+msgid "Notify birth event to health system"
+msgstr ""
+
+#: project/project_data.py:209
+msgid "Register birth event within health system"
+msgstr ""
+
+#: project/project_data.py:210
+msgid "Certify birth event within health system"
+msgstr ""
+
+#: project/project_data.py:211
+msgid "Notify death event to health system"
+msgstr ""
+
+#: project/project_data.py:212
+msgid "Register death event within health system"
+msgstr ""
+
+#: project/project_data.py:213
+msgid "Certify death event within health system"
+msgstr ""
+
+#: project/project_data.py:217
+msgid "Public health event notification"
+msgstr ""
+
+#: project/project_data.py:219
+msgid "Notification of public health events from point of diagnosis"
+msgstr ""
+
+#: project/project_data.py:223
+msgid "Data coding"
+msgstr ""
+
+#: project/project_data.py:225
+msgid "Parse unstructured data into structured data"
+msgstr ""
+
+#: project/project_data.py:226
+msgid ""
+"Merge, de-duplicate and curate coded/standardized datasets or terminologies"
+msgstr ""
+
+#: project/project_data.py:227
+msgid "Classify disease codes"
+msgstr ""
+
+#: project/project_data.py:231
+msgid "Facility management"
+msgstr ""
+
+#: project/project_data.py:233
+msgid "List health facilities and related information"
+msgstr ""
+
+#: project/project_data.py:234
+msgid "Assess health facilities"
+msgstr ""
+
+#: project/project_data.py:238
+msgid "Budget and expenditure management"
+msgstr ""
+
+#: project/project_data.py:240
+msgid "Manage budget and expenditures"
+msgstr ""
+
+#: project/project_data.py:244
+msgid "Location mapping"
+msgstr ""
+
+#: project/project_data.py:246
+msgid "Map location of health facilities"
+msgstr ""
+
+#: project/project_data.py:247
+msgid "Map location of health event"
+msgstr ""
+
+#: project/project_data.py:248
+msgid "Demarcate of catchment area"
+msgstr ""
+
+#: project/project_data.py:249
+msgid "Map location of health workers"
+msgstr ""
+
+#: project/project_data.py:256
+msgid "Adobe Forms"
+msgstr ""
+
+#: project/project_data.py:257
+msgid "Bamboo"
+msgstr ""
+
+#: project/project_data.py:258
+msgid "Capatricy"
+msgstr ""
+
+#: project/project_data.py:259
+msgid "Commcare"
+msgstr ""
+
+#: project/project_data.py:260
+msgid "Crowd Map"
+msgstr ""
+
+#: project/project_data.py:261
+msgid "Data Winners"
+msgstr ""
+
+#: project/project_data.py:262
+msgid "DHIS2"
+msgstr ""
+
+#: project/project_data.py:263
+msgid "emocha"
+msgstr ""
+
+#: project/project_data.py:264
+msgid "Enketo"
+msgstr ""
+
+#: project/project_data.py:265
+msgid "Epi Collect"
+msgstr ""
+
+#: project/project_data.py:266
+msgid "FormHub"
+msgstr ""
+
+#: project/project_data.py:267
+msgid "Frontline SMS"
+msgstr ""
+
+#: project/project_data.py:268
+msgid "iFormBuilder"
+msgstr ""
+
+#: project/project_data.py:269
+msgid "IVR"
+msgstr ""
+
+#: project/project_data.py:270
+msgid "Kobo"
+msgstr ""
+
+#: project/project_data.py:271
+msgid "Kookoo"
+msgstr ""
+
+#: project/project_data.py:272
+msgid "Kujua"
+msgstr ""
+
+#: project/project_data.py:273
+msgid "Magpi"
+msgstr ""
+
+#: project/project_data.py:274
+msgid "Motech"
+msgstr ""
+
+#: project/project_data.py:275
+msgid "Muvuku"
+msgstr ""
+
+#: project/project_data.py:276
+msgid "ODK"
+msgstr ""
+
+#: project/project_data.py:277
+msgid "Ona"
+msgstr ""
+
+#: project/project_data.py:278
+msgid "OpenMRS"
+msgstr ""
+
+#: project/project_data.py:279
+msgid "OpenSRP"
+msgstr ""
+
+#: project/project_data.py:280
+msgid "OpenXData"
+msgstr ""
+
+#: project/project_data.py:281
+msgid "Pendragon"
+msgstr ""
+
+#: project/project_data.py:282
+msgid "REDcap"
+msgstr ""
+
+#: project/project_data.py:283
+msgid "RapidSMS"
+msgstr ""
+
+#: project/project_data.py:284
+msgid "RapidPro"
+msgstr ""
+
+#: project/project_data.py:285
+msgid "SMS"
+msgstr ""
+
+#: project/project_data.py:286
+msgid "Survey CTO"
+msgstr ""
+
+#: project/project_data.py:287
+msgid "Textit"
+msgstr ""
+
+#: project/project_data.py:288
+msgid "Usahidi"
+msgstr ""
+
+#: project/project_data.py:289
+msgid "USSD"
+msgstr ""
+
+#: project/project_data.py:290
+msgid "Voice"
+msgstr ""
+
+#: project/project_data.py:291
+msgid "HAPI FHIR"
+msgstr ""
+
+#: project/project_data.py:292
+msgid "OpenLIS"
+msgstr ""
+
+#: project/project_data.py:293
+msgid "OpenHMIS"
+msgstr ""
+
+#: project/project_data.py:294
+msgid "GNU Health"
+msgstr ""
+
+#: project/project_data.py:295
+msgid "OpenLMIS"
+msgstr ""
+
+#: project/project_data.py:296
+msgid "OpenHIM"
+msgstr ""
+
+#: project/project_data.py:297
+msgid "HEARTH"
+msgstr ""
+
+#: project/project_data.py:298
+msgid "Mirth"
+msgstr ""
+
+#: project/project_data.py:299
+msgid "MOTECH"
+msgstr ""
+
+#: project/project_data.py:300
+msgid "ResourceMap"
+msgstr ""
+
+#: project/project_data.py:301
+msgid "GeoNode"
+msgstr ""
+
+#: project/project_data.py:304
+msgid "Public domain"
+msgstr ""
+
+#: project/project_data.py:305
+msgid "Non protective free and open source software (e.g. Apache)"
+msgstr ""
+
+#: project/project_data.py:306
+msgid "Protective free and open source software"
+msgstr ""
+
+#: project/project_data.py:307
+msgid "Freemium"
+msgstr ""
+
+#: project/project_data.py:308
+msgid "Proprietary"
+msgstr ""
+
+#: project/project_data.py:311
+msgid "Client education and behavior change communication"
+msgstr ""
+
+#: project/project_data.py:312
+msgid "Sensors point-of-care diagnostics"
+msgstr ""
+
+#: project/project_data.py:313
+msgid "Registries and vital events tracking"
+msgstr ""
+
+#: project/project_data.py:314
+msgid "Data collection and reporting"
+msgstr ""
+
+#: project/project_data.py:315
+msgid "Electronic health records"
+msgstr ""
+
+#: project/project_data.py:316
+msgid "Electronic decision support (e.g. protocols, algorithms, checklists)"
+msgstr ""
+
+#: project/project_data.py:317
+msgid "Provider-to-provider communication (e.g. user group, consultations)"
+msgstr ""
+
+#: project/project_data.py:319
+msgid "Human resource management"
+msgstr ""
+
+#: project/project_data.py:320
+msgid "Supply chain management"
+msgstr ""
+
+#: project/project_data.py:321
+msgid "Financial transactions and incentives"
+msgstr ""
+
+#: project/project_data.py:324 project/project_data.py:326
+#: project/project_data.py:329 project/project_data.py:330
+#: project/project_data.py:331
+msgid "Yes, links to a "
+msgstr ""
+
+#: project/project_data.py:324
+msgid "Client Registry"
+msgstr ""
+
+#: project/project_data.py:325 project/project_data.py:327
+#: project/project_data.py:328
+msgid "Yes, links to "
+msgstr ""
+
+#: project/project_data.py:325
+msgid "Health Management Information System (HMIS)"
+msgstr ""
+
+#: project/project_data.py:326
+msgid "Health Worker Registry"
+msgstr ""
+
+#: project/project_data.py:327
+msgid "Logistics Management and Supply Chain Information System (LMIS)"
+msgstr ""
+
+#: project/project_data.py:328
+msgid "Laboratory Information System"
+msgstr ""
+
+#: project/project_data.py:329
+msgid "Facility Registry"
+msgstr ""
+
+#: project/project_data.py:330
+msgid "Shared Health Record"
+msgstr ""
+
+#: project/project_data.py:331
+msgid "Terminology Service"
+msgstr ""
+
+#: project/project_data.py:334
+msgid "ADX - Aggregate Data Exchange"
+msgstr ""
+
+#: project/project_data.py:335
+msgid "ATNA - Audit Trail and Node Authentication"
+msgstr ""
+
+#: project/project_data.py:336
+msgid "BPPC - Basic Patient Privacy Consents"
+msgstr ""
+
+#: project/project_data.py:337
+msgid "CDA - Clinical Document Architecture"
+msgstr ""
+
+#: project/project_data.py:338
+msgid "CSD - Care Services Discovery"
+msgstr ""
+
+#: project/project_data.py:339
+msgid "DICOM"
+msgstr ""
+
+#: project/project_data.py:340
+msgid "GS1"
+msgstr ""
+
+#: project/project_data.py:341
+msgid "HL7 v2"
+msgstr ""
+
+#: project/project_data.py:342
+msgid "HL7 v3"
+msgstr ""
+
+#: project/project_data.py:343
+msgid "mACM - Mobile Alert Communication Management"
+msgstr ""
+
+#: project/project_data.py:344
+msgid "MHD - Mobile Access to Health Documents"
+msgstr ""
+
+#: project/project_data.py:345
+msgid "PIX or PIXm - (Mobile) Patient Identifier Cross Reference"
+msgstr ""
+
+#: project/project_data.py:346
+msgid "PDQ or PDQm - (Mobile) Patient Demographics Query"
+msgstr ""
+
+#: project/project_data.py:347
+msgid "SDMX - Statistical Data and Metadata Exchange"
+msgstr ""
+
+#: project/project_data.py:348
+msgid "XDS - Cross-Enterprise Document Sharing"
+msgstr ""
+
+#: project/project_data.py:349
+msgid "XUA - Cross-Enterprise User Assertion"
+msgstr ""
+
+#: project/project_data.py:350
+msgid "HL7 FHIR"
+msgstr ""
+
+#: project/project_data.py:351
+msgid "SVS - Sharing Value Sets"
+msgstr ""
+
+#: project/project_data.py:352
+msgid "GML Geography Markup Language"
+msgstr ""
+
+#: project/project_data.py:353
+msgid "XForms"
+msgstr ""
+
+#: project/project_data.py:354
+msgid "SNOMED"
+msgstr ""
+
+#: project/project_data.py:355
+msgid "ICD-10"
+msgstr ""
+
+#: project/project_data.py:356
+msgid "ISO 3166"
+msgstr ""
+
+#: project/project_data.py:357
+msgid "ISCO 08"
+msgstr ""
+
+#: project/project_data.py:358
+msgid "ISCO 88"
+msgstr ""
+
+#: project/project_data.py:359
+msgid "LOINC"
+msgstr ""
+
+#: project/project_data.py:360
+msgid "RxNORM"
+msgstr ""
+
+#: project/project_data.py:361
+msgid "CIEL"
+msgstr ""
+
+#: project/project_data.py:365
+msgid "Census, population information & data warehouse"
+msgstr ""
+
+#: project/project_data.py:366
+msgid "Civil Registration and Vital Statistics"
+msgstr ""
+
+#: project/project_data.py:367
+msgid "Client applications"
+msgstr ""
+
+#: project/project_data.py:368
+msgid "Client communication system"
+msgstr ""
+
+#: project/project_data.py:369
+msgid "Clinical terminology and classifications"
+msgstr ""
+
+#: project/project_data.py:370
+msgid "Community Information System"
+msgstr ""
+
+#: project/project_data.py:371
+msgid "EHR and health information repositories"
+msgstr ""
+
+#: project/project_data.py:372
+msgid "Electronic Medical Record"
+msgstr ""
+
+#: project/project_data.py:373
+msgid "Emergency response system"
+msgstr ""
+
+#: project/project_data.py:374
+msgid "Facility Management Information System"
+msgstr ""
+
+#: project/project_data.py:375
+msgid "Geographic Information Systems"
+msgstr ""
+
+#: project/project_data.py:376
+msgid "Health finance and insurance"
+msgstr ""
+
+#: project/project_data.py:377
+msgid "Health Management Information System"
+msgstr ""
+
+#: project/project_data.py:378
+msgid "Human Resource Information System"
+msgstr ""
+
+#: project/project_data.py:379
+msgid "Identification registries and directories"
+msgstr ""
+
+#: project/project_data.py:380
+msgid "Knowledge Management"
+msgstr ""
+
+#: project/project_data.py:381
+msgid "Laboratory and Diagnostic System"
+msgstr ""
+
+#: project/project_data.py:382
+msgid "Learning and Training System"
+msgstr ""
+
+#: project/project_data.py:383
+msgid "Logistics Management Information System"
+msgstr ""
+
+#: project/project_data.py:384
+msgid "Pharmacy System"
+msgstr ""
+
+#: project/project_data.py:385
+msgid "Public health and disease surveillance"
+msgstr ""
+
+#: project/project_data.py:386
+msgid "Research information system"
+msgstr ""
+
+#: project/project_data.py:387
+msgid "Data interchange interoperability and accessibility"
+msgstr ""
+
+#: project/project_data.py:388
+msgid "Environmental monitoring systems"
+msgstr ""
+
+#: project/project_data.py:392
+msgid "Information"
+msgstr ""
+
+#: project/project_data.py:394
+msgid "Lack of population denominator"
+msgstr ""
+
+#: project/project_data.py:395
+msgid "Delayed reporting of events"
+msgstr ""
+
+#: project/project_data.py:396
+msgid "Lack of quality/reliable data"
+msgstr ""
+
+#: project/project_data.py:397
+msgid "Communication roadblocks"
+msgstr ""
+
+#: project/project_data.py:398
+msgid "Lack of access to information or data"
+msgstr ""
+
+#: project/project_data.py:399
+msgid "Insufficient utilization of data and information"
+msgstr ""
+
+#: project/project_data.py:400
+msgid "Lack of unique identifiers"
+msgstr ""
+
+#: project/project_data.py:404
+msgid "Availability"
+msgstr ""
+
+#: project/project_data.py:406
+msgid "Insufficient supply of commodities"
+msgstr ""
+
+#: project/project_data.py:407
+msgid "Insufficient supply of services"
+msgstr ""
+
+#: project/project_data.py:408
+msgid "Insufficient supply of equipment"
+msgstr ""
+
+#: project/project_data.py:409
+msgid "Insufficient supply of qualified health workers"
+msgstr ""
+
+#: project/project_data.py:413
+msgid "Quality"
+msgstr ""
+
+#: project/project_data.py:415
+msgid "Poor patient experience"
+msgstr ""
+
+#: project/project_data.py:416
+msgid "Insufficient health worker competence"
+msgstr ""
+
+#: project/project_data.py:417
+msgid "Low quality of health commodities"
+msgstr ""
+
+#: project/project_data.py:418
+msgid "Insufficient continuity of care"
+msgstr ""
+
+#: project/project_data.py:419
+msgid "Insufficient supportive supervision"
+msgstr ""
+
+#: project/project_data.py:420
+msgid "Poor adherence to guidelines"
+msgstr ""
+
+#: project/project_data.py:424
+msgid "Acceptability"
+msgstr ""
+
+#: project/project_data.py:426
+msgid "Lack of alignment with local norms"
+msgstr ""
+
+#: project/project_data.py:427
+msgid "Not addressing individual beliefs and practices"
+msgstr ""
+
+#: project/project_data.py:431
+msgid "Utilization"
+msgstr ""
+
+#: project/project_data.py:433
+msgid "Low demand for services"
+msgstr ""
+
+#: project/project_data.py:434
+msgid "Geographic inaccessibility"
+msgstr ""
+
+#: project/project_data.py:435
+msgid "Low adherence to treatments"
+msgstr ""
+
+#: project/project_data.py:436
+msgid "Loss to follow-up"
+msgstr ""
+
+#: project/project_data.py:440
+msgid "Efficiency"
+msgstr ""
+
+#: project/project_data.py:442
+msgid "Inadequate workflow management"
+msgstr ""
+
+#: project/project_data.py:443
+msgid "Lack of inappropriate referrals"
+msgstr ""
+
+#: project/project_data.py:444
+msgid "Poor planning and coordination"
+msgstr ""
+
+#: project/project_data.py:445
+msgid "Delayed provision of care"
+msgstr ""
+
+#: project/project_data.py:446
+msgid "Inadequate access to transportation"
+msgstr ""
+
+#: project/project_data.py:447
+msgid "Inadequate prioritization of clients"
+msgstr ""
+
+#: project/project_data.py:453
+msgid "Red Group"
+msgstr ""
+
+#: project/project_data.py:455
+msgid "TB"
+msgstr ""
+
+#: project/project_data.py:455
+msgid "TB: preventing infection"
+msgstr ""
+
+#: project/project_data.py:456
+msgid "TB: stopping progression from infection to active disease"
+msgstr ""
+
+#: project/project_data.py:457
+msgid "TB: treating active disease"
+msgstr ""
+
+#: project/project_data.py:458
+msgid "Sexually Transmitted Infections"
+msgstr ""
+
+#: project/project_data.py:458
+msgid "STI: Preventing Acquisition"
+msgstr ""
+
+#: project/project_data.py:459
+msgid "STI: Preventing Transmission"
+msgstr ""
+
+#: project/project_data.py:460
+msgid "STI: Preventing Complications"
+msgstr ""
+
+#: project/project_data.py:461
+msgid "HIV/AIDS Prevention and Treatment"
+msgstr ""
+
+#: project/project_data.py:461
+msgid "HIV: testing and diagnosis"
+msgstr ""
+
+#: project/project_data.py:462
+msgid "HIV: Palliative Care"
+msgstr ""
+
+#: project/project_data.py:463
+msgid "HIV: Prevention, Treatment of opportunistic infections"
+msgstr ""
+
+#: project/project_data.py:464
+msgid "HIV: Antiretroviral therapy"
+msgstr ""
+
+#: project/project_data.py:465
+msgid "HIV: Prevention"
+msgstr ""
+
+#: project/project_data.py:466
+msgid "Diarrheal Diseases"
+msgstr ""
+
+#: project/project_data.py:466
+msgid "Diarrheal Dis: Breastfeeding promotion"
+msgstr ""
+
+#: project/project_data.py:467
+msgid "Diarrheal Dis: Water supply and sanitation improvement"
+msgstr ""
+
+#: project/project_data.py:468
+msgid "Diarrheal Dis: Oral rehydration therapy"
+msgstr ""
+
+#: project/project_data.py:469
+msgid "Diarrheal Dis: Zinc"
+msgstr ""
+
+#: project/project_data.py:470
+msgid "Vaccine-Preventable Diseases"
+msgstr ""
+
+#: project/project_data.py:470
+msgid "Vaccine: national immunization program"
+msgstr ""
+
+#: project/project_data.py:471
+msgid "Vaccine: fixed facility"
+msgstr ""
+
+#: project/project_data.py:472
+msgid "Vaccine: campaign"
+msgstr ""
+
+#: project/project_data.py:473
+msgid "Vaccine: mobile"
+msgstr ""
+
+#: project/project_data.py:474
+msgid "Vaccine: outreach"
+msgstr ""
+
+#: project/project_data.py:475
+msgid "Malaria"
+msgstr ""
+
+#: project/project_data.py:475
+msgid "Malaria: Prompt access to effective treatment"
+msgstr ""
+
+#: project/project_data.py:476
+msgid "Malaria: Provision of Insecticide treated nets"
+msgstr ""
+
+#: project/project_data.py:477
+msgid "Malaria: Prevention and control of malaria in pregnant women"
+msgstr ""
+
+#: project/project_data.py:478
+msgid "Malaria: Epidemic and emergency response"
+msgstr ""
+
+#: project/project_data.py:479
+msgid "Malaria: Malaria vaccine"
+msgstr ""
+
+#: project/project_data.py:480
+msgid "Malaria: Malaria prophylaxis treatment"
+msgstr ""
+
+#: project/project_data.py:481
+msgid "Malaria: Residual spraying"
+msgstr ""
+
+#: project/project_data.py:482
+msgid "Tropical Diseases"
+msgstr ""
+
+#: project/project_data.py:482
+msgid "Chagas Disease"
+msgstr ""
+
+#: project/project_data.py:483
+msgid "Lymphatic Filariasis"
+msgstr ""
+
+#: project/project_data.py:484
+msgid "Onchocerciasis"
+msgstr ""
+
+#: project/project_data.py:485
+msgid "Leprosy"
+msgstr ""
+
+#: project/project_data.py:485
+msgid "Dengue"
+msgstr ""
+
+#: project/project_data.py:485
+msgid "Leishmaniasis"
+msgstr ""
+
+#: project/project_data.py:485
+msgid "African Trypanosomiasis"
+msgstr ""
+
+#: project/project_data.py:486
+msgid "Helminth Infections and Schistosomiasis"
+msgstr ""
+
+#: project/project_data.py:486
+msgid "health_focus_areas"
+msgstr ""
+
+#: project/project_data.py:486
+msgid "Helminth: Anthelmintic Drug Treatment"
+msgstr ""
+
+#: project/project_data.py:487
+msgid "Helminth: Improved Sanitation"
+msgstr ""
+
+#: project/project_data.py:488
+msgid "Helminth: Health Education"
+msgstr ""
+
+#: project/project_data.py:489
+msgid "Acute Respiratory Infections in Children"
+msgstr ""
+
+#: project/project_data.py:489
+msgid "ARI: vaccines"
+msgstr ""
+
+#: project/project_data.py:490
+msgid "ARI: case management"
+msgstr ""
+
+#: project/project_data.py:491
+msgid "Pregnancy, Maternal and Perinatal Conditions"
+msgstr ""
+
+#: project/project_data.py:491
+msgid "Pregnancy: Fertility behaviour change"
+msgstr ""
+
+#: project/project_data.py:492
+msgid "Pregnancy: Infertility"
+msgstr ""
+
+#: project/project_data.py:493
+msgid "Pregnancy: Preconception care"
+msgstr ""
+
+#: project/project_data.py:494
+msgid "Pregnancy: Miscarriage"
+msgstr ""
+
+#: project/project_data.py:495
+msgid "Pregnancy: Abortion care"
+msgstr ""
+
+#: project/project_data.py:496
+msgid "Pregnancy: Male involvement"
+msgstr ""
+
+#: project/project_data.py:497
+msgid "Pregnancy: Immunizations"
+msgstr ""
+
+#: project/project_data.py:498
+msgid "Pregnancy: Malaria prevention"
+msgstr ""
+
+#: project/project_data.py:500
+msgid "Maternal: Fertility behavior change"
+msgstr ""
+
+#: project/project_data.py:501
+msgid "Maternal: Nutritional Interventions"
+msgstr ""
+
+#: project/project_data.py:502
+msgid "Maternal: Routine prenatal care at the primary level"
+msgstr ""
+
+#: project/project_data.py:503
+msgid "Maternal: Delivery care at the primary level"
+msgstr ""
+
+#: project/project_data.py:504
+msgid "Maternal: Postpartum care"
+msgstr ""
+
+#: project/project_data.py:505
+msgid "Maternal: Postabortion care"
+msgstr ""
+
+#: project/project_data.py:506
+msgid "Maternal: CEmOC package at the secondary level"
+msgstr ""
+
+#: project/project_data.py:507
+msgid "Maternal: Mental health screening"
+msgstr ""
+
+#: project/project_data.py:508
+msgid "Newborn"
+msgstr ""
+
+#: project/project_data.py:508
+msgid "Newborn: Prepregnancy health and nutrition"
+msgstr ""
+
+#: project/project_data.py:509
+msgid "Newborn: Counseling and preparation for newborn care and breastfeeding"
+msgstr ""
+
+#: project/project_data.py:510
+msgid "Newborn: Emergency preparedness"
+msgstr ""
+
+#: project/project_data.py:511
+msgid "Newborn: Clean delivery at community level"
+msgstr ""
+
+#: project/project_data.py:512
+msgid "Newborn: Simple early newborn care at community level"
+msgstr ""
+
+#: project/project_data.py:513
+msgid ""
+"Newborn: Healthy home care including breastfeeding promotion, hygienic cord "
+"and skin care, thermal care, promotion of demand for quality care Newborn: "
+"Extra care of small babies and case management of pneumonia"
+msgstr ""
+
+#: project/project_data.py:514
+msgid "Newborn: Prenatal care package"
+msgstr ""
+
+#: project/project_data.py:515
+msgid "Newborn: Postnatal care to support healthy practices"
+msgstr ""
+
+#: project/project_data.py:516
+msgid "Newborn: Early detection and referral of complications"
+msgstr ""
+
+#: project/project_data.py:517
+msgid ""
+"Newborn: Skilled obstetric and immediate newborn care including resuscitation"
+msgstr ""
+
+#: project/project_data.py:518
+msgid ""
+"Newborn: Emergency obstetric care to manage complications such as obstructed "
+"labor and hemorrhage"
+msgstr ""
+
+#: project/project_data.py:519
+msgid ""
+"Newborn: Emergency newborn care for illness, especially sepsis management"
+msgstr ""
+
+#: project/project_data.py:520
+msgid ""
+"Newborn: Extra care of very low birth weight babies including kangaroo "
+"mother care"
+msgstr ""
+
+#: project/project_data.py:521
+msgid "Stunting, Wasting, and Micronutrient Deficiency Disorders"
+msgstr ""
+
+#: project/project_data.py:521
+msgid "Nutrition: Promotion of Optimal Feeding of Infants and Young Children"
+msgstr ""
+
+#: project/project_data.py:522
+msgid "Nutrition: Vitamin A deficiency"
+msgstr ""
+
+#: project/project_data.py:523
+msgid "Nutrition: Iron deficiency"
+msgstr ""
+
+#: project/project_data.py:524
+msgid "Nutrition: Zinc deficiency"
+msgstr ""
+
+#: project/project_data.py:525
+msgid "Nutrition: Growth monitoring and counselling"
+msgstr ""
+
+#: project/project_data.py:526
+msgid "Cancer Control"
+msgstr ""
+
+#: project/project_data.py:526
+msgid "Cancer: Immunizations (e.g., HBV, HPV)"
+msgstr ""
+
+#: project/project_data.py:527
+msgid "Cancer: Tobacco Control"
+msgstr ""
+
+#: project/project_data.py:528
+msgid "Cancer: Alcohol Control"
+msgstr ""
+
+#: project/project_data.py:529
+msgid "Cancer: Dietary and Related Interventions"
+msgstr ""
+
+#: project/project_data.py:530
+msgid "Cancer: Pharmacological Interventions"
+msgstr ""
+
+#: project/project_data.py:531
+msgid "Cancer: Cancer Screening"
+msgstr ""
+
+#: project/project_data.py:532
+msgid "Cancer: Cancer Treatment and Palliative Care"
+msgstr ""
+
+#: project/project_data.py:536
+msgid "Blue group"
+msgstr ""
+
+#: project/project_data.py:538
+msgid "Diabetes"
+msgstr ""
+
+#: project/project_data.py:538
+msgid "Diabetes: prevention"
+msgstr ""
+
+#: project/project_data.py:539
+msgid "Diabetes: screening"
+msgstr ""
+
+#: project/project_data.py:540
+msgid "Diabetes: management"
+msgstr ""
+
+#: project/project_data.py:541
+msgid "Mental disorders"
+msgstr ""
+
+#: project/project_data.py:541
+msgid "Mental health screening"
+msgstr ""
+
+#: project/project_data.py:542
+msgid "Mental health management and treatment"
+msgstr ""
+
+#: project/project_data.py:544
+msgid "Neurological Disorders"
+msgstr ""
+
+#: project/project_data.py:544
+msgid "Neurological Disorder Interventions"
+msgstr ""
+
+#: project/project_data.py:545
+msgid "Cardiovascular disease"
+msgstr ""
+
+#: project/project_data.py:545
+msgid "CVD Prevention"
+msgstr ""
+
+#: project/project_data.py:546
+msgid "CVD Treatment"
+msgstr ""
+
+#: project/project_data.py:547
+msgid "Long-Term Management of Existing Vascular Disease"
+msgstr ""
+
+#: project/project_data.py:548
+msgid "Respiratory Diseases of Adults"
+msgstr ""
+
+#: project/project_data.py:548
+msgid "Interventions for asthma"
+msgstr ""
+
+#: project/project_data.py:549
+msgid "Interventions for COPD"
+msgstr ""
+
+#: project/project_data.py:550
+msgid "Interventions for pneumonia and influenza"
+msgstr ""
+
+#: project/project_data.py:551
+msgid "Diseases of the Kidney and the Urinary System"
+msgstr ""
+
+#: project/project_data.py:551
+msgid "Hypertension interventions"
+msgstr ""
+
+#: project/project_data.py:552
+msgid "Kidney and urinary tract Screening"
+msgstr ""
+
+#: project/project_data.py:553
+msgid "Skin disease"
+msgstr ""
+
+#: project/project_data.py:553
+msgid "Skin disease Interventions"
+msgstr ""
+
+#: project/project_data.py:554
+msgid "Oral Health"
+msgstr ""
+
+#: project/project_data.py:554
+msgid "Oral health education and promotion"
+msgstr ""
+
+#: project/project_data.py:555
+msgid "Oral health treatment"
+msgstr ""
+
+#: project/project_data.py:556
+msgid "Unintentional Injuries"
+msgstr ""
+
+#: project/project_data.py:556
+msgid "Road traffic injuries prevention"
+msgstr ""
+
+#: project/project_data.py:557
+msgid "Poisonings"
+msgstr ""
+
+#: project/project_data.py:558
+msgid "Fall-related injuries"
+msgstr ""
+
+#: project/project_data.py:559
+msgid "Burn-related injuries"
+msgstr ""
+
+#: project/project_data.py:560
+msgid "Drowning"
+msgstr ""
+
+#: project/project_data.py:561
+msgid "Interpersonal Violence"
+msgstr ""
+
+#: project/project_data.py:561
+msgid "Interpersonal violence: Prevention Strategies"
+msgstr ""
+
+#: project/project_data.py:562
+msgid "Interpersonal violence: Interventions"
+msgstr ""
+
+#: project/project_data.py:566
+msgid "Green group"
+msgstr ""
+
+#: project/project_data.py:568
+msgid "Water Supply, Sanitation, and Hygiene Promotion"
+msgstr ""
+
+#: project/project_data.py:568
+msgid "WASH: Safer Water"
+msgstr ""
+
+#: project/project_data.py:569
+msgid "WASH: Hand Washing"
+msgstr ""
+
+#: project/project_data.py:570
+msgid "WASH: Hygiene Education"
+msgstr ""
+
+#: project/project_data.py:572
+msgid "Indoor Air Pollution"
+msgstr ""
+
+#: project/project_data.py:572
+msgid "Indoor pollution: Source of pollution"
+msgstr ""
+
+#: project/project_data.py:573
+msgid "Indoor pollution: Improve living environment"
+msgstr ""
+
+#: project/project_data.py:574
+msgid "Indoor pollution: User behaviors"
+msgstr ""
+
+#: project/project_data.py:575
+msgid "Outdoor Air and Water Pollution"
+msgstr ""
+
+#: project/project_data.py:575
+msgid "Outdoor: Interventions to Reduce Air Pollution"
+msgstr ""
+
+#: project/project_data.py:576
+msgid "Outdoor: Interventions to Reduce Water Pollution"
+msgstr ""
+
+#: project/project_data.py:577
+msgid "Diet and Lifestyle Changes to prevent chronic disease"
+msgstr ""
+
+#: project/project_data.py:577
+msgid "Lifestyle: Avoid smoking"
+msgstr ""
+
+#: project/project_data.py:578
+msgid "Lifestyle: Pursue physical activity"
+msgstr ""
+
+#: project/project_data.py:579
+msgid "Lifestyle: Avoid overweight"
+msgstr ""
+
+#: project/project_data.py:580
+msgid "Lifestyle: Educational Interventions"
+msgstr ""
+
+#: project/project_data.py:581
+msgid "Lifestyle: Worksite Interventions"
+msgstr ""
+
+#: project/project_data.py:582
+msgid "Lifestyle: Interventions by Health Care Providers"
+msgstr ""
+
+#: project/project_data.py:583
+msgid "Lifestyle: Promote Walking and Bicycle Riding"
+msgstr ""
+
+#: project/project_data.py:584
+msgid "Lifestyle: Promoting Healthy Food Choices"
+msgstr ""
+
+#: project/project_data.py:585
+msgid "Risk from High Blood Pressure, Cholesterol, and Bodyweight"
+msgstr ""
+
+#: project/project_data.py:585
+msgid "Risk: Interventions to Reduce Bodyweight"
+msgstr ""
+
+#: project/project_data.py:586
+msgid "Risk: Healthy diet (low sodium, high potassium"
+msgstr ""
+
+#: project/project_data.py:587
+msgid "Risk: Physical activity"
+msgstr ""
+
+#: project/project_data.py:588
+msgid "Risk: Medications to lower blood pressure"
+msgstr ""
+
+#: project/project_data.py:589
+msgid "Tobacco Addiction"
+msgstr ""
+
+#: project/project_data.py:589
+msgid "Tobacco: Smoking cessation treatment"
+msgstr ""
+
+#: project/project_data.py:590
+msgid "Tobacco: Reducing exposure to passive tobacco smoke"
+msgstr ""
+
+#: project/project_data.py:591
+msgid "Tobacco: Preventing initiation among youths and young adults"
+msgstr ""
+
+#: project/project_data.py:593
+msgid "Alcohol"
+msgstr ""
+
+#: project/project_data.py:593
+msgid "Alcohol: Education sessions and psychosocial counseling"
+msgstr ""
+
+#: project/project_data.py:594
+msgid "Alcohol: Population-wide measures"
+msgstr ""
+
+#: project/project_data.py:596
+msgid "Illicit drug use"
+msgstr ""
+
+#: project/project_data.py:596
+msgid "Illicit drug: Prevention including education"
+msgstr ""
+
+#: project/project_data.py:597
+msgid "Illicit drug: Voluntary Treatment"
+msgstr ""
+
+#: project/project_data.py:598
+msgid "Illicit drug: Involuntary Treatment"
+msgstr ""
+
+#: project/project_data.py:603
+msgid "Orange Group"
+msgstr ""
+
+#: project/project_data.py:605
+msgid "Learning and Developmental Disabilities"
+msgstr ""
+
+#: project/project_data.py:605
+msgid ""
+"Learning Disability: Primary prevention to control the underlying cause or "
+"condition"
+msgstr ""
+
+#: project/project_data.py:606
+msgid ""
+"Learning Disability: Preventing an existing illness or injury from "
+"progressing to long-term disability"
+msgstr ""
+
+#: project/project_data.py:607
+msgid "Learning Disability: Rehabilitation and special educational services"
+msgstr ""
+
+#: project/project_data.py:608
+msgid "Loss of Vision and Hearing"
+msgstr ""
+
+#: project/project_data.py:608
+msgid "Childhood Blindness"
+msgstr ""
+
+#: project/project_data.py:609
+msgid "Cataract interventions"
+msgstr ""
+
+#: project/project_data.py:610
+msgid "Trachoma interventions"
+msgstr ""
+
+#: project/project_data.py:611
+msgid "Onchocerciasis interventions"
+msgstr ""
+
+#: project/project_data.py:612
+msgid "Hearing loss screening programs"
+msgstr ""
+
+#: project/project_data.py:613
+msgid "Hearing loss education"
+msgstr ""
+
+#: project/project_data.py:614
+msgid "Hearing loss surgery"
+msgstr ""
+
+#: project/project_data.py:615
+msgid "Hearing loss medications"
+msgstr ""
+
+#: project/project_data.py:616
+msgid "Hearing loss assistive devices"
+msgstr ""
+
+#: project/project_data.py:617
+msgid "Interventions for Musculoskeletal Conditions"
+msgstr ""
+
+#: project/project_data.py:617
+msgid "Musculoskeletal: Preventive strategies"
+msgstr ""
+
+#: project/project_data.py:618
+msgid "Musculoskeletal: Screening"
+msgstr ""
+
+#: project/project_data.py:619
+msgid "Musculoskeletal: Symptomatic treatments"
+msgstr ""
+
+#: project/project_data.py:620
+msgid "Musculoskeletal: Rheumitoid Arthritis"
+msgstr ""
+
+#: project/project_data.py:621
+msgid "Musculoskeletal: Osteoporosis"
+msgstr ""
+
+#: project/project_data.py:622
+msgid "Pain Control"
+msgstr ""
+
+#: project/project_data.py:622
+msgid "Pain: Opioid treatment"
+msgstr ""
+
+#: project/project_data.py:623
+msgid "Pain: Non-Opioid treatments and strategies"
+msgstr ""
+
+#: project/project_data.py:627
+msgid "Group bordeaux"
+msgstr ""
+
+#: project/project_data.py:629
+msgid "Contraceptives"
+msgstr ""
+
+#: project/project_data.py:629
+msgid "Counseling"
+msgstr ""
+
+#: project/project_data.py:630
+msgid "Permanent and Long-Term Methods"
+msgstr ""
+
+#: project/project_data.py:631
+msgid "Temporary Methods"
+msgstr ""
+
+#: project/project_data.py:631
+msgid "Emergency Contraception"
+msgstr ""
+
+#: project/project_data.py:632
+msgid "Social Marketing"
+msgstr ""
+
+#: project/project_data.py:633
+msgid "Health of Adolescents and Youth"
+msgstr ""
+
+#: project/project_data.py:633
+msgid "School - Based Health and Nutrition Programs"
+msgstr ""
+
+#: project/project_data.py:634
+msgid "Youth Friendly Facilities"
+msgstr ""
+
+#: project/project_data.py:635
+msgid "Life - skills and health and sexuality education"
+msgstr ""
+
+#: project/project_data.py:636
+msgid "Peer education"
+msgstr ""
+
+#: project/project_data.py:637
+msgid "Mass media and community mobilization"
+msgstr ""
+
+#: project/project_data.py:638
+msgid "Youth development programs"
+msgstr ""
+
+#: project/project_data.py:639
+msgid "Social marketing"
+msgstr ""
+
+#: project/project_data.py:640
+msgid "Workplace and private sector programs"
+msgstr ""
+
+#: project/project_data.py:642
+msgid ""
+"Integrated Management of the Sick Child (integrated approaches to diarrhea, "
+"malaria, pneumonia, measles, other severe infections, and malnutrition)"
+msgstr ""
+
+#: project/project_data.py:643
+msgid ""
+"IMNCI: Improve Health Worker Performance (assess signs and symptoms, "
+"classify illness, and provide appropriate treatment and education)"
+msgstr ""
+
+#: project/project_data.py:644
+msgid ""
+"IMNCI: Improve Health Systems (improve drug availability, effective "
+"supervision, referral services, and health information systems)"
+msgstr ""
+
+#: project/project_data.py:645
+msgid ""
+"IMNCI: Improve Family and Community Practices (prevent illness, home "
+"treatment of infections, improve care-seeking practices and compliance with "
+"treatment)"
+msgstr ""
+
+#: project/project_data.py:646
+msgid "Occupational Health"
+msgstr ""
+
+#: project/project_data.py:646
+msgid "Occupational: Strategies for Improving Working Conditions"
+msgstr ""
+
+#: project/project_data.py:647
+msgid "Occupational: Improvement of Access to Health Care"
+msgstr ""
+
+#: project/project_data.py:648
+msgid "Occupational: Surveillance and Reporting"
+msgstr ""
+
+#: project/project_data.py:649
+msgid "Natural Disaster Mitigation and Relief"
+msgstr ""
+
+#: project/project_data.py:649
+msgid "Disaster: Assessment of the Health Situation"
+msgstr ""
+
+#: project/project_data.py:650
+msgid "Disaster: Mass Casualties Treatment"
+msgstr ""
+
+#: project/project_data.py:651
+msgid ""
+"Disaster: Strengthened Surveillance, Prevention, and Control of "
+"CommunicableDiseases"
+msgstr ""
+
+#: project/project_data.py:652
+msgid "Disaster: Environmental Health"
+msgstr ""
+
+#: project/project_data.py:653
+msgid "Disaster: Transparent Management of Donations and Supplies"
+msgstr ""
+
+#: project/project_data.py:654
+msgid "Disaster: Coordination of the Humanitarian Health Effort"
+msgstr ""
+
+#: project/project_data.py:655
+msgid "Disaster: Emergency Preparedness of the Health Sector"
+msgstr ""
+
+#: project/project_data.py:656
+msgid "Disaster: Prevention and Mitigation"
+msgstr ""
+
+#: project/project_data.py:657
+msgid "Emergency Medical Services"
+msgstr ""
+
+#: project/project_data.py:657
+msgid "EMS: Paramedics"
+msgstr ""
+
+#: project/project_data.py:658
+msgid "EMS: Lay response"
+msgstr ""
+
+#: project/project_data.py:659
+msgid "EMS: Transportation and communication systems"
+msgstr ""
+
+#: project/project_data.py:660
+msgid "EMS: Ambulatory systems"
+msgstr ""
+
+#: project/project_data.py:499
+msgid "Pregnancy: Hypertension and NCD screening"
+msgstr ""
+
+#: project/serializers.py:55
+msgid "No, they have not yet contributed"
+msgstr ""
+
+#: project/serializers.py:56
+msgid "Yes, they are contributing in-kind people or time"
+msgstr ""
+
+#: project/serializers.py:57
+msgid "Yes, there is a financial contribution through MOH budget"
+msgstr ""
+
+#: project/serializers.py:133 project/serializers.py:146
+msgid "You were added to a project!"
+msgstr ""
+
+#: toolkit/tasks.py:32
+msgid "MAPS Toolkit updated!"
+msgstr ""
+
+#: toolkit/toolkit_data.py:6
+msgid "AXIS 1. GROUNDWORK"
+msgstr ""
+
+#: toolkit/toolkit_data.py:11
+msgid "DOMAIN 1: PARAMETERS OF SCALE"
+msgstr ""
+
+#: toolkit/toolkit_data.py:26
+msgid "DOMAIN 2: CONTEXTUAL ENVIRONMENT"
+msgstr ""
+
+#: toolkit/toolkit_data.py:53
+msgid "DOMAIN 3: SCIENTIFIC BASIS"
+msgstr ""
+
+#: toolkit/toolkit_data.py:82
+msgid "AXIS 2. PARTNERSHIPS"
+msgstr ""
+
+#: toolkit/toolkit_data.py:87
+msgid "DOMAIN 4: STRATEGIC ENGAGEMENT"
+msgstr ""
+
+#: toolkit/toolkit_data.py:114
+msgid "DOMAIN 5: PARTNERSHIP SUSTAINABILITY"
+msgstr ""
+
+#: toolkit/toolkit_data.py:155
+msgid "AXIS 3. FINANCIAL HEALTH"
+msgstr ""
+
+#: toolkit/toolkit_data.py:160
+msgid "DOMAIN 6: FINANCIAL MANAGEMENT"
+msgstr ""
+
+#: toolkit/toolkit_data.py:192
+msgid "DOMAIN 7: FINANCIAL MODEL"
+msgstr ""
+
+#: toolkit/toolkit_data.py:221
+msgid "AXIS 4. TECHNOLOGY & ARCHITECTURE"
+msgstr ""
+
+#: toolkit/toolkit_data.py:226
+msgid "DOMAIN 8: DATA"
+msgstr ""
+
+#: toolkit/toolkit_data.py:258
+msgid "DOMAIN 9: INTEROPERABILITY"
+msgstr ""
+
+#: toolkit/toolkit_data.py:279
+msgid "DOMAIN 10: ADAPTABILITY"
+msgstr ""
+
+#: toolkit/toolkit_data.py:308
+msgid "AXIS 5. OPERATIONS"
+msgstr ""
+
+#: toolkit/toolkit_data.py:313
+msgid "DOMAIN 11: PERSONNEL"
+msgstr ""
+
+#: toolkit/toolkit_data.py:334
+msgid "DOMAIN 12: TRAINING AND SUPPORT"
+msgstr ""
+
+#: toolkit/toolkit_data.py:367
+msgid "DOMAIN 13: OUTREACH AND SENSITIZATION"
+msgstr ""
+
+#: toolkit/toolkit_data.py:388
+msgid "DOMAIN 14: CONTINGENCY PLANNING"
+msgstr ""
+
+#: toolkit/toolkit_data.py:411
+msgid "AXIS 6. MONITORING & EVALUATION"
+msgstr ""
+
+#: toolkit/toolkit_data.py:416
+msgid "DOMAIN 15: PROCESS MONITORING"
+msgstr ""
+
+#: toolkit/toolkit_data.py:443
+msgid "DOMAIN 16: EVALUATION RESEARCH"
+msgstr ""
+
+#: user/models.py:21
+msgid "Implementer"
+msgstr ""
+
+#: user/models.py:22
+msgid "Financial Investor"
+msgstr ""
+
+#: user/models.py:23
+msgid "Government"
+msgstr ""
+
+#: user/models.py:24
+msgid "Inventory User"
+msgstr ""
+
+#: who_maps/settings.py:136
+msgid "English"
+msgstr ""
+
+#: who_maps/settings.py:137
+msgid "French"
+msgstr ""

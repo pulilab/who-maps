@@ -1,660 +1,665 @@
+from django.utils.translation import ugettext_lazy as ugettext_lazy
+
+
+_ = lambda x: str(ugettext_lazy(x))
+
 project_structure = {
     "strategies": [
         {
-            "name": "Client",
+            "name": _("Client"),
             "subGroups": [
                 {
-                    "name": "Targeted client communication",
+                    "name": _("Targeted client communication"),
                     "strategies": [
-                        "Transmit targeted health event alerts to specific population group(s)",
-                        "Transmit targeted health information and promotion content to a client based on a clinical care plan or health/demographic characteristics",
-                        "Transmit targeted alerts and reminders to a client"
+                        _("Transmit targeted health event alerts to specific population group(s)"),
+                        _("Transmit targeted health information and promotion content to a client based on a clinical care plan or health/demographic characteristics"),
+                        _("Transmit targeted alerts and reminders to a client")
                     ]
                 },
                 {
-                    "name": "Untargeted client communication",
+                    "name": _("Untargeted client communication"),
                     "strategies": [
-                        "Transmit untargeted health promotion content to entire population",
-                        "Transmit untargeted health event alerts to entire population"
+                        _("Transmit untargeted health promotion content to entire population"),
+                        _("Transmit untargeted health event alerts to entire population")
                     ]
                 },
                 {
-                    "name": "Client to client communication",
+                    "name": _("Client to client communication"),
                     "strategies": [
-                        "Peer group for clients"
+                        _("Peer group for clients")
                     ]
                 },
                 {
-                    "name": "Client to provider telemedicine",
+                    "name": _("Client to provider telemedicine"),
                     "strategies": [
-                        "Consultations between remote client and health worker or helpline",
-                        "Remote monitoring of client health or diagnostic data by provider",
-                        "Transmission of medical data (e.g. images, notes, and videos) from client to provider"
+                        _("Consultations between remote client and health worker or helpline"),
+                        _("Remote monitoring of client health or diagnostic data by provider"),
+                        _("Transmission of medical data (e.g. images, notes, and videos) from client to provider")
                     ]
                 },
                 {
-                    "name": "Citizen based reporting",
+                    "name": _("Citizen based reporting"),
                     "strategies": [
-                        "Reporting of health system feedback by clients",
-                        "Reporting of public health events by clients"
+                        _("Reporting of health system feedback by clients"),
+                        _("Reporting of public health events by clients")
                     ]
                 },
                 {
-                    "name": "On demand information services to clients",
+                    "name": _("On demand information services to clients"),
                     "strategies": [
-                        "Client look-up of health information",
+                        _("Client look-up of health information"),
                     ]
                 },
                 {
-                    "name": "Client financial transactions",
+                    "name": _("Client financial transactions"),
                     "strategies": [
-                        "Transmit or manage out of pocket payments by client",
-                        "Transmit or manage vouchers to client for health services",
-                        "Transmit or manage incentives to clients for health services"
+                        _("Transmit or manage out of pocket payments by client"),
+                        _("Transmit or manage vouchers to client for health services"),
+                        _("Transmit or manage incentives to clients for health services")
                     ]
                 },
                 {
-                    "name": "Personal health tracking",
+                    "name": _("Personal health tracking"),
                     "strategies": [
-                        "Access by client to own medical records",
-                        "Self monitoring of health or diagnostic data by client",
-                        "Active data capture by client"
+                        _("Access by client to own medical records"),
+                        _("Self monitoring of health or diagnostic data by client"),
+                        _("Active data capture by client")
                     ]
                 }
             ]
         },
         {
-            "name": "Provider",
+            "name": _("Provider"),
             "subGroups": [
                 {
-                    "name": "Client identification and registration",
+                    "name": _("Client identification and registration"),
                     "strategies": [
-                        "Verify client unique identity",
-                        "Enroll client for health services/clinical care plan"
+                        _("Verify client unique identity"),
+                        _("Enroll client for health services/clinical care plan")
                     ]
                 },
                 {
-                    "name": "Client health records",
+                    "name": _("Client health records"),
                     "strategies": [
-                        "Track client's health and services within a longitudinal care plan",
-                        "Manage client's structured records",
-                        "Manage client's unstructured clinical records (e.g. notes, images, documents)"
+                        _("Track client's health and services within a longitudinal care plan"),
+                        _("Manage client's structured records"),
+                        _("Manage client's unstructured clinical records (e.g. notes, images, documents)")
                     ]
                 },
                 {
-                    "name": "Provider based decision support",
+                    "name": _("Provider based decision support"),
                     "strategies": [
-                        "Guide through process algorithms according to clinical protocol",
-                        "Provide checklist according to clinical protocol",
-                        "Screen clients by risk or other health status"
+                        _("Guide through process algorithms according to clinical protocol"),
+                        _("Provide checklist according to clinical protocol"),
+                        _("Screen clients by risk or other health status")
                     ]
                 },
                 {
-                    "name": "Provider work planning and scheduling",
+                    "name": _("Provider work planning and scheduling"),
                     "strategies": [
-                        "Schedule client appointments based on clinical care plan",
-                        "Schedule health worker activities"
+                        _("Schedule client appointments based on clinical care plan"),
+                        _("Schedule health worker activities")
                     ]
                 },
                 {
-                    "name": "Provider to provider communication",
+                    "name": _("Provider to provider communication"),
                     "strategies": [
-                        "Health worker to health worker telemedicine for patient case management ",
-                        "Health worker peer group"
+                        _("Health worker to health worker telemedicine for patient case management "),
+                        _("Health worker peer group")
                     ]
                 },
                 {
-                    "name": "Referral coordination",
+                    "name": _("Referral coordination"),
                     "strategies": [
-                        "Coordinate emergency response and transport",
-                        "Manage referrals between points of service within health sector ",
-                        "Manage referrals between health and other sectors (social services, police, justice, economic support schemes)"
+                        _("Coordinate emergency response and transport"),
+                        _("Manage referrals between points of service within health sector "),
+                        _("Manage referrals between health and other sectors (social services, police, justice, economic support schemes)")
                     ]
                 },
                 {
-                    "name": "Targeted provider communication",
+                    "name": _("Targeted provider communication"),
                     "strategies": [
-                        "Transmit routine news and updates to health workers",
-                        "Transmit non-routine public health event alerts to health workers",
-                        "Transmit clinical care workflow alerts to health worker",
-                        "Provide supervisory and performance feedback"
+                        _("Transmit routine news and updates to health workers"),
+                        _("Transmit non-routine public health event alerts to health workers"),
+                        _("Transmit clinical care workflow alerts to health worker"),
+                        _("Provide supervisory and performance feedback")
                     ]
                 },
                 {
-                    "name": "HW training",
+                    "name": _("HW training"),
                     "strategies": [
-                        "Provide training content to health workers ",
-                        "Record health worker training information",
-                        "Manage health worker license and registration",
-                        "Assess health worker capacity "
+                        _("Provide training content to health workers "),
+                        _("Record health worker training information"),
+                        _("Manage health worker license and registration"),
+                        _("Assess health worker capacity ")
 
                     ]
                 },
                 {
-                    "name": "HR management",
+                    "name": _("HR management"),
                     "strategies": [
-                        "List health workforce cadres and related information",
-                        "Monitor health worker performance",
+                        _("List health workforce cadres and related information"),
+                        _("Monitor health worker performance"),
                     ]
                 }
             ]
         },
         {
-            "name": "System",
+            "name": _("System"),
             "subGroups": [
                 {
-                    "name": "Commodity assessment and reporting",
+                    "name": _("Commodity assessment and reporting"),
                     "strategies": [
-                        "Report counterfeit or substandard drugs by clients",
-                        "Report adverse drug interactions",
-                        "Register licensed drugs and health commodities"
+                        _("Report counterfeit or substandard drugs by clients"),
+                        _("Report adverse drug interactions"),
+                        _("Register licensed drugs and health commodities")
                     ]
                 },
                 {
-                    "name": "Data collection management and use",
+                    "name": _("Data collection management and use"),
                     "strategies": [
-                        "Routine health indicator data collection and management",
-                        "Non routine data collection and management",
-                        "Data storage and aggregation",
-                        "Data synthesis and presentations/visualizations of data",
-                        "Automated analysis of data to generate new information or predictions on future events"
+                        _("Routine health indicator data collection and management"),
+                        _("Non routine data collection and management"),
+                        _("Data storage and aggregation"),
+                        _("Data synthesis and presentations/visualizations of data"),
+                        _("Automated analysis of data to generate new information or predictions on future events")
                     ]
                 },
                 {
-                    "name": "Prescription management",
+                    "name": _("Prescription management"),
                     "strategies": [
-                        "Transmit prescriptions orders",
-                        "Track status of prescription orders",
-                        "Track consumption of health commodities"
+                        _("Transmit prescriptions orders"),
+                        _("Track status of prescription orders"),
+                        _("Track consumption of health commodities")
 
                     ]
                 },
                 {
-                    "name": "Equipment and asset management",
+                    "name": _("Equipment and asset management"),
                     "strategies": [
-                        "Monitor status of health equipment",
-                        "Track regulation and licensing of medical equipment",
+                        _("Monitor status of health equipment"),
+                        _("Track regulation and licensing of medical equipment"),
                     ]
                 },
                 {
-                    "name": "Provider financial transactions",
+                    "name": _("Provider financial transactions"),
                     "strategies": [
-                        "Transmit or manage routine payroll payment to health workers",
-                        "Transmit or manage incentives to health workers"
+                        _("Transmit or manage routine payroll payment to health workers"),
+                        _("Transmit or manage incentives to health workers")
                     ]
                 },
                 {
-                    "name": "Insurance",
+                    "name": _("Insurance"),
                     "strategies": [
-                        "Register and verify client insurance membership",
-                        "Track insurance billing and claims submission",
-                        "Track and manage insurance reimbursement"
+                        _("Register and verify client insurance membership"),
+                        _("Track insurance billing and claims submission"),
+                        _("Track and manage insurance reimbursement")
                     ]
                 },
                 {
-                    "name": "Laboratory and diagnostics management",
+                    "name": _("Laboratory and diagnostics management"),
                     "strategies": [
-                        "Transmit diagnostics result, or availability of result, to clients",
-                        "Transmit diagnostic orders",
-                        "Track biological specimens "
+                        _("Transmit diagnostics result, or availability of result, to clients"),
+                        _("Transmit diagnostic orders"),
+                        _("Track biological specimens ")
                     ]
                 },
                 {
-                    "name": "CRVS",
+                    "name": _("CRVS"),
                     "strategies": [
-                        "Notify birth event to health system",
-                        "Register birth event within health system",
-                        "Certify birth event within health system",
-                        "Notify death event to health system",
-                        "Register death event within health system",
-                        "Certify death event within health system"
+                        _("Notify birth event to health system"),
+                        _("Register birth event within health system"),
+                        _("Certify birth event within health system"),
+                        _("Notify death event to health system"),
+                        _("Register death event within health system"),
+                        _("Certify death event within health system")
                     ]
                 },
                 {
-                    "name": "Public health event notification",
+                    "name": _("Public health event notification"),
                     "strategies": [
-                        "Notification of public health events from point of diagnosis",
+                        _("Notification of public health events from point of diagnosis"),
                     ]
                 },
                 {
-                    "name": "Data coding",
+                    "name": _("Data coding"),
                     "strategies": [
-                        "Parse unstructured data into structured data",
-                        "Merge, de-duplicate and curate coded/standardized datasets or terminologies",
-                        "Classify disease codes"
+                        _("Parse unstructured data into structured data"),
+                        _("Merge, de-duplicate and curate coded/standardized datasets or terminologies"),
+                        _("Classify disease codes")
                     ]
                 },
                 {
-                    "name": "Facility management",
+                    "name": _("Facility management"),
                     "strategies": [
-                        "List health facilities and related information",
-                        "Assess health facilities"
+                        _("List health facilities and related information"),
+                        _("Assess health facilities")
                     ]
                 },
                 {
-                    "name": "Budget and expenditure management",
+                    "name": _("Budget and expenditure management"),
                     "strategies": [
-                        "Manage budget and expenditures"
+                        _("Manage budget and expenditures")
                     ]
                 },
                 {
-                    "name": "Location mapping",
+                    "name": _("Location mapping"),
                     "strategies": [
-                        "Map location of health facilities",
-                        "Map location of health event",
-                        "Demarcate of catchment area",
-                        "Map location of health workers"
+                        _("Map location of health facilities"),
+                        _("Map location of health event"),
+                        _("Demarcate of catchment area"),
+                        _("Map location of health workers")
                     ]
                 }
             ]
         }
     ],
     "technology_platforms": [
-        "Adobe Forms",
-        "Bamboo",
-        "Capatricy",
-        "Commcare",
-        "Crowd Map",
-        "Data Winners",
-        "DHIS2",
-        "emocha",
-        "Enketo",
-        "Epi Collect",
-        "FormHub",
-        "Frontline SMS",
-        "iFormBuilder",
-        "IVR",
-        "Kobo",
-        "Kookoo",
-        "Kujua",
-        "Magpi",
-        "Motech",
-        "Muvuku",
-        "ODK",
-        "Ona",
-        "OpenMRS",
-        "OpenSRP",
-        "OpenXData",
-        "Pendragon",
-        "REDcap",
-        "RapidSMS",
-        "RapidPro",
-        "SMS",
-        "Survey CTO",
-        "Textit",
-        "Usahidi",
-        "USSD",
-        "Voice",
-        "HAPI FHIR",
-        "OpenLIS",
-        "OpenHMIS",
-        "GNU Health",
-        "OpenLMIS",
-        "OpenHIM",
-        "HEARTH",
-        "Mirth",
-        "MOTECH",
-        "ResourceMap",
-        "GeoNode"
+        _("Adobe Forms"),
+        _("Bamboo"),
+        _("Capatricy"),
+        _("Commcare"),
+        _("Crowd Map"),
+        _("Data Winners"),
+        _("DHIS2"),
+        _("emocha"),
+        _("Enketo"),
+        _("Epi Collect"),
+        _("FormHub"),
+        _("Frontline SMS"),
+        _("iFormBuilder"),
+        _("IVR"),
+        _("Kobo"),
+        _("Kookoo"),
+        _("Kujua"),
+        _("Magpi"),
+        _("Motech"),
+        _("Muvuku"),
+        _("ODK"),
+        _("Ona"),
+        _("OpenMRS"),
+        _("OpenSRP"),
+        _("OpenXData"),
+        _("Pendragon"),
+        _("REDcap"),
+        _("RapidSMS"),
+        _("RapidPro"),
+        _("SMS"),
+        _("Survey CTO"),
+        _("Textit"),
+        _("Usahidi"),
+        _("USSD"),
+        _("Voice"),
+        _("HAPI FHIR"),
+        _("OpenLIS"),
+        _("OpenHMIS"),
+        _("GNU Health"),
+        _("OpenLMIS"),
+        _("OpenHIM"),
+        _("HEARTH"),
+        _("Mirth"),
+        _("MOTECH"),
+        _("ResourceMap"),
+        _("GeoNode")
     ],
     "licenses": [
-        "Public domain",
-        "Non protective free and open source software (e.g. Apache)",
-        "Protective free and open source software",
-        "Freemium",
-        "Proprietary"
+        _("Public domain"),
+        _("Non protective free and open source software (e.g. Apache)"),
+        _("Protective free and open source software"),
+        _("Freemium"),
+        _("Proprietary")
     ],
     "applications": [
-        "Client education and behavior change communication",
-        "Sensors point-of-care diagnostics",
-        "Registries and vital events tracking",
-        "Data collection and reporting",
-        "Electronic health records",
-        "Electronic decision support (e.g. protocols, algorithms, checklists)",
-        "Provider-to-provider communication (e.g. user group, consultations)",
-        "Provider work planning and scheduling",
-        "Human resource management",
-        "Supply chain management",
-        "Financial transactions and incentives"
+        _("Client education and behavior change communication"),
+        _("Sensors point-of-care diagnostics"),
+        _("Registries and vital events tracking"),
+        _("Data collection and reporting"),
+        _("Electronic health records"),
+        _("Electronic decision support (e.g. protocols, algorithms, checklists)"),
+        _("Provider-to-provider communication (e.g. user group, consultations)"),
+        _("Provider work planning and scheduling"),
+        _("Human resource management"),
+        _("Supply chain management"),
+        _("Financial transactions and incentives")
     ],
     "interoperability_links": [
-        {"pre": "Yes, links to a ", "name": "Client Registry"},
-        {"pre": "Yes, links to ", "name": "Health Management Information System (HMIS)"},
-        {"pre": "Yes, links to a ", "name": "Health Worker Registry"},
-        {"pre": "Yes, links to ", "name": "Logistics Management and Supply Chain Information System (LMIS)"},
-        {"pre": "Yes, links to ", "name": "Laboratory Information System"},
-        {"pre": "Yes, links to a ", "name": "Facility Registry"},
-        {"pre": "Yes, links to a ", "name": "Shared Health Record"},
-        {"pre": "Yes, links to a ", "name": "Terminology Service"},
+        {"pre": _("Yes, links to a "), "name": _("Client Registry")},
+        {"pre": _("Yes, links to "), "name": _("Health Management Information System (HMIS)")},
+        {"pre": _("Yes, links to a "), "name": _("Health Worker Registry")},
+        {"pre": _("Yes, links to "), "name": _("Logistics Management and Supply Chain Information System (LMIS)")},
+        {"pre": _("Yes, links to "), "name": _("Laboratory Information System")},
+        {"pre": _("Yes, links to a "), "name": _("Facility Registry")},
+        {"pre": _("Yes, links to a "), "name": _("Shared Health Record")},
+        {"pre": _("Yes, links to a "), "name": _("Terminology Service")},
     ],
     "interoperability_standards": [
-        "ADX - Aggregate Data Exchange",
-        "ATNA - Audit Trail and Node Authentication",
-        "BPPC - Basic Patient Privacy Consents",
-        "CDA - Clinical Document Architecture",
-        "CSD - Care Services Discovery",
-        "DICOM",
-        "GS1",
-        "HL7 v2",
-        "HL7 v3",
-        "mACM - Mobile Alert Communication Management",
-        "MHD - Mobile Access to Health Documents",
-        "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
-        "PDQ or PDQm - (Mobile) Patient Demographics Query",
-        "SDMX - Statistical Data and Metadata Exchange",
-        "XDS - Cross-Enterprise Document Sharing",
-        "XUA - Cross-Enterprise User Assertion",
-        "HL7 FHIR",
-        "SVS - Sharing Value Sets",
-        "GML Geography Markup Language",
-        "XForms",
-        "SNOMED",
-        "ICD-10",
-        "ISO 3166",
-        "ISCO 08",
-        "ISCO 88",
-        "LOINC",
-        "RxNORM",
-        "CIEL"
+        _("ADX - Aggregate Data Exchange"),
+        _("ATNA - Audit Trail and Node Authentication"),
+        _("BPPC - Basic Patient Privacy Consents"),
+        _("CDA - Clinical Document Architecture"),
+        _("CSD - Care Services Discovery"),
+        _("DICOM"),
+        _("GS1"),
+        _("HL7 v2"),
+        _("HL7 v3"),
+        _("mACM - Mobile Alert Communication Management"),
+        _("MHD - Mobile Access to Health Documents"),
+        _("PIX or PIXm - (Mobile) Patient Identifier Cross Reference"),
+        _("PDQ or PDQm - (Mobile) Patient Demographics Query"),
+        _("SDMX - Statistical Data and Metadata Exchange"),
+        _("XDS - Cross-Enterprise Document Sharing"),
+        _("XUA - Cross-Enterprise User Assertion"),
+        _("HL7 FHIR"),
+        _("SVS - Sharing Value Sets"),
+        _("GML Geography Markup Language"),
+        _("XForms"),
+        _("SNOMED"),
+        _("ICD-10"),
+        _("ISO 3166"),
+        _("ISCO 08"),
+        _("ISCO 88"),
+        _("LOINC"),
+        _("RxNORM"),
+        _("CIEL")
 
     ],
     "his_bucket": [
-        "Census, population information & data warehouse",
-        "Civil Registration and Vital Statistics",
-        "Client applications",
-        "Client communication system",
-        "Clinical terminology and classifications",
-        "Community Information System",
-        "EHR and health information repositories",
-        "Electronic Medical Record",
-        "Emergency response system",
-        "Facility Management Information System",
-        "Geographic Information Systems",
-        "Health finance and insurance",
-        "Health Management Information System",
-        "Human Resource Information System",
-        "Identification registries and directories",
-        "Knowledge Management",
-        "Laboratory and Diagnostic System",
-        "Learning and Training System",
-        "Logistics Management Information System",
-        "Pharmacy System",
-        "Public health and disease surveillance",
-        "Research information system",
-        "Data interchange interoperability and accessibility",
-        "Environmental monitoring systems",
+        _("Census, population information & data warehouse"),
+        _("Civil Registration and Vital Statistics"),
+        _("Client applications"),
+        _("Client communication system"),
+        _("Clinical terminology and classifications"),
+        _("Community Information System"),
+        _("EHR and health information repositories"),
+        _("Electronic Medical Record"),
+        _("Emergency response system"),
+        _("Facility Management Information System"),
+        _("Geographic Information Systems"),
+        _("Health finance and insurance"),
+        _("Health Management Information System"),
+        _("Human Resource Information System"),
+        _("Identification registries and directories"),
+        _("Knowledge Management"),
+        _("Laboratory and Diagnostic System"),
+        _("Learning and Training System"),
+        _("Logistics Management Information System"),
+        _("Pharmacy System"),
+        _("Public health and disease surveillance"),
+        _("Research information system"),
+        _("Data interchange interoperability and accessibility"),
+        _("Environmental monitoring systems"),
     ],
     "hsc_challenges": [
         {
-            "name": "Information",
+            "name": _("Information"),
             "challenges": [
-                "Lack of population denominator",
-                "Delayed reporting of events",
-                "Lack of quality/reliable data",
-                "Communication roadblocks",
-                "Lack of access to information or data",
-                "Insufficient utilization of data and information",
-                "Lack of unique identifiers"
+                _("Lack of population denominator"),
+                _("Delayed reporting of events"),
+                _("Lack of quality/reliable data"),
+                _("Communication roadblocks"),
+                _("Lack of access to information or data"),
+                _("Insufficient utilization of data and information"),
+                _("Lack of unique identifiers")
             ]
         },
         {
-            "name": "Availability",
+            "name": _("Availability"),
             "challenges": [
-                "Insufficient supply of commodities",
-                "Insufficient supply of services",
-                "Insufficient supply of equipment",
-                "Insufficient supply of qualified health workers",
+                _("Insufficient supply of commodities"),
+                _("Insufficient supply of services"),
+                _("Insufficient supply of equipment"),
+                _("Insufficient supply of qualified health workers"),
             ]
         },
         {
-            "name": "Quality",
+            "name": _("Quality"),
             "challenges": [
-                "Poor patient experience",
-                "Insufficient health worker competence",
-                "Low quality of health commodities",
-                "Insufficient continuity of care",
-                "Insufficient supportive supervision",
-                "Poor adherence to guidelines"
+                _("Poor patient experience"),
+                _("Insufficient health worker competence"),
+                _("Low quality of health commodities"),
+                _("Insufficient continuity of care"),
+                _("Insufficient supportive supervision"),
+                _("Poor adherence to guidelines")
             ]
         },
         {
-            "name": "Acceptability",
+            "name": _("Acceptability"),
             "challenges": [
-                "Lack of alignment with local norms",
-                "Not addressing individual beliefs and practices",
+                _("Lack of alignment with local norms"),
+                _("Not addressing individual beliefs and practices"),
             ]
         },
         {
-            "name": "Utilization",
+            "name": _("Utilization"),
             "challenges": [
-                "Low demand for services",
-                "Geographic inaccessibility",
-                "Low adherence to treatments",
-                "Loss to follow-up",
+                _("Low demand for services"),
+                _("Geographic inaccessibility"),
+                _("Low adherence to treatments"),
+                _("Loss to follow-up"),
             ]
         },
         {
-            "name": "Efficiency",
+            "name": _("Efficiency"),
             "challenges": [
-                "Inadequate workflow management",
-                "Lack of inappropriate referrals",
-                "Poor planning and coordination",
-                "Delayed provision of care",
-                "Inadequate access to transportation",
-                "Inadequate prioritization of clients",
+                _("Inadequate workflow management"),
+                _("Lack of inappropriate referrals"),
+                _("Poor planning and coordination"),
+                _("Delayed provision of care"),
+                _("Inadequate access to transportation"),
+                _("Inadequate prioritization of clients"),
             ]
         }
     ],
     "health_focus_areas": [
         {
-            "name": "Red Group",
+            "name": _("Red Group"),
             "subGroups": [
-                {"name": "TB", "health_focus_areas": ["TB: preventing infection",
-                                                      "TB: stopping progression from infection to active disease",
-                                                      "TB: treating active disease"]},
-                {"name": "Sexually Transmitted Infections", "health_focus_areas": ["STI: Preventing Acquisition",
-                                                                                   "STI: Preventing Transmission",
-                                                                                   "STI: Preventing Complications"]},
-                {"name": "HIV/AIDS Prevention and Treatment", "health_focus_areas": ["HIV: testing and diagnosis",
-                                                                                     "HIV: Palliative Care",
-                                                                                     "HIV: Prevention, Treatment of opportunistic infections",
-                                                                                     "HIV: Antiretroviral therapy",
-                                                                                     "HIV: Prevention"]},
-                {"name": "Diarrheal Diseases", "health_focus_areas": ["Diarrheal Dis: Breastfeeding promotion",
-                                                                      "Diarrheal Dis: Water supply and sanitation improvement",
-                                                                      "Diarrheal Dis: Oral rehydration therapy",
-                                                                      "Diarrheal Dis: Zinc"]},
-                {"name": "Vaccine-Preventable Diseases", "health_focus_areas": ["Vaccine: national immunization program",
-                                                                                "Vaccine: fixed facility",
-                                                                                "Vaccine: campaign",
-                                                                                "Vaccine: mobile",
-                                                                                "Vaccine: outreach"]},
-                {"name": "Malaria", "health_focus_areas": ["Malaria: Prompt access to effective treatment",
-                                                           "Malaria: Provision of Insecticide treated nets",
-                                                           "Malaria: Prevention and control of malaria in pregnant women",
-                                                           "Malaria: Epidemic and emergency response",
-                                                           "Malaria: Malaria vaccine",
-                                                           "Malaria: Malaria prophylaxis treatment",
-                                                           "Malaria: Residual spraying"]},
-                {"name": "Tropical Diseases", "health_focus_areas": ["Chagas Disease",
-                                                                     "Lymphatic Filariasis",
-                                                                     "Onchocerciasis",
-                                                                     "Leprosy", "Dengue", "Leishmaniasis", "African Trypanosomiasis"]},
-                {"name": "Helminth Infections and Schistosomiasis", "health_focus_areas": ["Helminth: Anthelmintic Drug Treatment",
-                                                                                           "Helminth: Improved Sanitation",
-                                                                                           "Helminth: Health Education"]},
-                {"name": "Acute Respiratory Infections in Children", "health_focus_areas": ["ARI: vaccines",
-                                                                                            "ARI: case management"]},
-                {"name": "Pregnancy, Maternal and Perinatal Conditions", "health_focus_areas": [ "Pregnancy: Fertility behaviour change",
-                                                                                                 "Pregnancy: Infertility",
-                                                                                                 "Pregnancy: Preconception care",
-                                                                                                 "Pregnancy: Miscarriage",
-                                                                                                 "Pregnancy: Abortion care",
-                                                                                                 "Pregnancy: Male involvement",
-                                                                                                 "Pregnancy: Immunizations",
-                                                                                                 "Pregnancy: Malaria prevention",
-                                                                                                 "Pregnancy: Hypertension and NCD screening"
-                                                                                                 "Maternal: Fertility behavior change",
-                                                                                                 "Maternal: Nutritional Interventions",
-                                                                                                 "Maternal: Routine prenatal care at the primary level",
-                                                                                                 "Maternal: Delivery care at the primary level",
-                                                                                                 "Maternal: Postpartum care",
-                                                                                                 "Maternal: Postabortion care",
-                                                                                                 "Maternal: CEmOC package at the secondary level",
-                                                                                                 "Maternal: Mental health screening"]},
-                {"name": "Newborn", "health_focus_areas": ["Newborn: Prepregnancy health and nutrition",
-                                                           "Newborn: Counseling and preparation for newborn care and breastfeeding",
-                                                           "Newborn: Emergency preparedness",
-                                                           "Newborn: Clean delivery at community level",
-                                                           "Newborn: Simple early newborn care at community level",
-                                                           "Newborn: Healthy home care including breastfeeding promotion, hygienic cord and skin care, thermal care, promotion of demand for quality care Newborn: Extra care of small babies and case management of pneumonia",
-                                                           "Newborn: Prenatal care package",
-                                                           "Newborn: Postnatal care to support healthy practices",
-                                                           "Newborn: Early detection and referral of complications",
-                                                           "Newborn: Skilled obstetric and immediate newborn care including resuscitation",
-                                                           "Newborn: Emergency obstetric care to manage complications such as obstructed labor and hemorrhage",
-                                                           "Newborn: Emergency newborn care for illness, especially sepsis management",
-                                                           "Newborn: Extra care of very low birth weight babies including kangaroo mother care"]},
-                {"name": "Stunting, Wasting, and Micronutrient Deficiency Disorders", "health_focus_areas": ["Nutrition: Promotion of Optimal Feeding of Infants and Young Children",
-                                                                                                             "Nutrition: Vitamin A deficiency",
-                                                                                                             "Nutrition: Iron deficiency",
-                                                                                                             "Nutrition: Zinc deficiency",
-                                                                                                             "Nutrition: Growth monitoring and counselling"]},
-                {"name": "Cancer Control", "health_focus_areas": ["Cancer: Immunizations (e.g., HBV, HPV)",
-                                                                  "Cancer: Tobacco Control",
-                                                                  "Cancer: Alcohol Control",
-                                                                  "Cancer: Dietary and Related Interventions",
-                                                                  "Cancer: Pharmacological Interventions",
-                                                                  "Cancer: Cancer Screening",
-                                                                  "Cancer: Cancer Treatment and Palliative Care"]},
+                {"name": _("TB"), "health_focus_areas": [_("TB: preventing infection"),
+                                                      _("TB: stopping progression from infection to active disease"),
+                                                      _("TB: treating active disease")]},
+                {"name": _("Sexually Transmitted Infections"), "health_focus_areas": [_("STI: Preventing Acquisition"),
+                                                                                   _("STI: Preventing Transmission"),
+                                                                                   _("STI: Preventing Complications")]},
+                {"name": _("HIV/AIDS Prevention and Treatment"), "health_focus_areas": [_("HIV: testing and diagnosis"),
+                                                                                     _("HIV: Palliative Care"),
+                                                                                     _("HIV: Prevention, Treatment of opportunistic infections"),
+                                                                                     _("HIV: Antiretroviral therapy"),
+                                                                                     _("HIV: Prevention")]},
+                {"name": _("Diarrheal Diseases"), "health_focus_areas": [_("Diarrheal Dis: Breastfeeding promotion"),
+                                                                      _("Diarrheal Dis: Water supply and sanitation improvement"),
+                                                                      _("Diarrheal Dis: Oral rehydration therapy"),
+                                                                      _("Diarrheal Dis: Zinc")]},
+                {"name": _("Vaccine-Preventable Diseases"), "health_focus_areas": [_("Vaccine: national immunization program"),
+                                                                                _("Vaccine: fixed facility"),
+                                                                                _("Vaccine: campaign"),
+                                                                                _("Vaccine: mobile"),
+                                                                                _("Vaccine: outreach")]},
+                {"name": _("Malaria"), "health_focus_areas": [_("Malaria: Prompt access to effective treatment"),
+                                                           _("Malaria: Provision of Insecticide treated nets"),
+                                                           _("Malaria: Prevention and control of malaria in pregnant women"),
+                                                           _("Malaria: Epidemic and emergency response"),
+                                                           _("Malaria: Malaria vaccine"),
+                                                           _("Malaria: Malaria prophylaxis treatment"),
+                                                           _("Malaria: Residual spraying")]},
+                {"name": _("Tropical Diseases"), "health_focus_areas": [_("Chagas Disease"),
+                                                                     _("Lymphatic Filariasis"),
+                                                                     _("Onchocerciasis"),
+                                                                     _("Leprosy"), _("Dengue"), _("Leishmaniasis"), _("African Trypanosomiasis")]},
+                {"name": _("Helminth Infections and Schistosomiasis"), _("health_focus_areas"): [_("Helminth: Anthelmintic Drug Treatment"),
+                                                                                           _("Helminth: Improved Sanitation"),
+                                                                                           _("Helminth: Health Education")]},
+                {"name": _("Acute Respiratory Infections in Children"), "health_focus_areas": [_("ARI: vaccines"),
+                                                                                            _("ARI: case management")]},
+                {"name": _("Pregnancy, Maternal and Perinatal Conditions"), "health_focus_areas": [ _("Pregnancy: Fertility behaviour change"),
+                                                                                                 _("Pregnancy: Infertility"),
+                                                                                                 _("Pregnancy: Preconception care"),
+                                                                                                 _("Pregnancy: Miscarriage"),
+                                                                                                 _("Pregnancy: Abortion care"),
+                                                                                                 _("Pregnancy: Male involvement"),
+                                                                                                 _("Pregnancy: Immunizations"),
+                                                                                                 _("Pregnancy: Malaria prevention"),
+                                                                                                 _("Pregnancy: Hypertension and NCD screening"),
+                                                                                                 _("Maternal: Fertility behavior change"),
+                                                                                                 _("Maternal: Nutritional Interventions"),
+                                                                                                 _("Maternal: Routine prenatal care at the primary level"),
+                                                                                                 _("Maternal: Delivery care at the primary level"),
+                                                                                                 _("Maternal: Postpartum care"),
+                                                                                                 _("Maternal: Postabortion care"),
+                                                                                                 _("Maternal: CEmOC package at the secondary level"),
+                                                                                                 _("Maternal: Mental health screening")]},
+                {"name": _("Newborn"), "health_focus_areas": [_("Newborn: Prepregnancy health and nutrition"),
+                                                           _("Newborn: Counseling and preparation for newborn care and breastfeeding"),
+                                                           _("Newborn: Emergency preparedness"),
+                                                           _("Newborn: Clean delivery at community level"),
+                                                           _("Newborn: Simple early newborn care at community level"),
+                                                           _("Newborn: Healthy home care including breastfeeding promotion, hygienic cord and skin care, thermal care, promotion of demand for quality care Newborn: Extra care of small babies and case management of pneumonia"),
+                                                           _("Newborn: Prenatal care package"),
+                                                           _("Newborn: Postnatal care to support healthy practices"),
+                                                           _("Newborn: Early detection and referral of complications"),
+                                                           _("Newborn: Skilled obstetric and immediate newborn care including resuscitation"),
+                                                           _("Newborn: Emergency obstetric care to manage complications such as obstructed labor and hemorrhage"),
+                                                           _("Newborn: Emergency newborn care for illness, especially sepsis management"),
+                                                           _("Newborn: Extra care of very low birth weight babies including kangaroo mother care")]},
+                {"name": _("Stunting, Wasting, and Micronutrient Deficiency Disorders"), "health_focus_areas": [_("Nutrition: Promotion of Optimal Feeding of Infants and Young Children"),
+                                                                                                             _("Nutrition: Vitamin A deficiency"),
+                                                                                                             _("Nutrition: Iron deficiency"),
+                                                                                                             _("Nutrition: Zinc deficiency"),
+                                                                                                             _("Nutrition: Growth monitoring and counselling")]},
+                {"name": _("Cancer Control"), "health_focus_areas": [_("Cancer: Immunizations (e.g., HBV, HPV)"),
+                                                                  _("Cancer: Tobacco Control"),
+                                                                  _("Cancer: Alcohol Control"),
+                                                                  _("Cancer: Dietary and Related Interventions"),
+                                                                  _("Cancer: Pharmacological Interventions"),
+                                                                  _("Cancer: Cancer Screening"),
+                                                                  _("Cancer: Cancer Treatment and Palliative Care")]},
             ]
         },
         {
-            "name": "Blue group",
+            "name": _("Blue group"),
             "subGroups": [
-                {"name": "Diabetes", "health_focus_areas": ["Diabetes: prevention",
-                                                            "Diabetes: screening",
-                                                            "Diabetes: management"]},
-                {"name": "Mental disorders", "health_focus_areas": ["Mental health screening",
-                                                                    "Mental health management and treatment"
+                {"name": _("Diabetes"), "health_focus_areas": [_("Diabetes: prevention"),
+                                                            _("Diabetes: screening"),
+                                                            _("Diabetes: management")]},
+                {"name": _("Mental disorders"), "health_focus_areas": [_("Mental health screening"),
+                                                                    _("Mental health management and treatment")
                                                                     ]},
-                {"name": "Neurological Disorders", "health_focus_areas": ["Neurological Disorder Interventions"]},
-                {"name": "Cardiovascular disease", "health_focus_areas": ["CVD Prevention",
-                                                                          "CVD Treatment",
-                                                                          "Long-Term Management of Existing Vascular Disease"]},
-                {"name": "Respiratory Diseases of Adults", "health_focus_areas": ["Interventions for asthma",
-                                                                                  "Interventions for COPD",
-                                                                                  "Interventions for pneumonia and influenza"]},
-                {"name": "Diseases of the Kidney and the Urinary System", "health_focus_areas": ["Hypertension interventions",
-                                                                                                 "Kidney and urinary tract Screening"]},
-                {"name": "Skin disease", "health_focus_areas": ["Skin disease Interventions"]},
-                {"name": "Oral Health", "health_focus_areas": ["Oral health education and promotion",
-                                                               "Oral health treatment"]},
-                {"name": "Unintentional Injuries", "health_focus_areas": ["Road traffic injuries prevention",
-                                                                          "Poisonings",
-                                                                          "Fall-related injuries",
-                                                                          "Burn-related injuries",
-                                                                          "Drowning"]},
-                {"name": "Interpersonal Violence", "health_focus_areas": ["Interpersonal violence: Prevention Strategies"
-                                                                          "Interpersonal violence: Interventions"]},
+                {"name": _("Neurological Disorders"), "health_focus_areas": [_("Neurological Disorder Interventions")]},
+                {"name": _("Cardiovascular disease"), "health_focus_areas": [_("CVD Prevention"),
+                                                                          _("CVD Treatment"),
+                                                                          _("Long-Term Management of Existing Vascular Disease")]},
+                {"name": _("Respiratory Diseases of Adults"), "health_focus_areas": [_("Interventions for asthma"),
+                                                                                  _("Interventions for COPD"),
+                                                                                  _("Interventions for pneumonia and influenza")]},
+                {"name": _("Diseases of the Kidney and the Urinary System"), "health_focus_areas": [_("Hypertension interventions"),
+                                                                                                 _("Kidney and urinary tract Screening")]},
+                {"name": _("Skin disease"), "health_focus_areas": [_("Skin disease Interventions")]},
+                {"name": _("Oral Health"), "health_focus_areas": [_("Oral health education and promotion"),
+                                                               _("Oral health treatment")]},
+                {"name": _("Unintentional Injuries"), "health_focus_areas": [_("Road traffic injuries prevention"),
+                                                                          _("Poisonings"),
+                                                                          _("Fall-related injuries"),
+                                                                          _("Burn-related injuries"),
+                                                                          _("Drowning")]},
+                {"name": _("Interpersonal Violence"), "health_focus_areas": [_("Interpersonal violence: Prevention Strategies"),
+                                                                          _("Interpersonal violence: Interventions")]},
             ]
         },
         {
-            "name": "Green group",
+            "name": _("Green group"),
             "subGroups": [
-                {"name": "Water Supply, Sanitation, and Hygiene Promotion", "health_focus_areas": ["WASH: Safer Water",
-                                                                                                   "WASH: Hand Washing",
-                                                                                                   "WASH: Hygiene Education"
+                {"name": _("Water Supply, Sanitation, and Hygiene Promotion"), "health_focus_areas": [_("WASH: Safer Water"),
+                                                                                                   _("WASH: Hand Washing"),
+                                                                                                   _("WASH: Hygiene Education")
                                                                                                    ]},
-                {"name": "Indoor Air Pollution", "health_focus_areas": ["Indoor pollution: Source of pollution",
-                                                                        "Indoor pollution: Improve living environment",
-                                                                        "Indoor pollution: User behaviors"]},
-                {"name": "Outdoor Air and Water Pollution", "health_focus_areas": ["Outdoor: Interventions to Reduce Air Pollution",
-                                                                                   "Outdoor: Interventions to Reduce Water Pollution"]},
-                {"name": "Diet and Lifestyle Changes to prevent chronic disease", "health_focus_areas": ["Lifestyle: Avoid smoking",
-                                                                                                         "Lifestyle: Pursue physical activity",
-                                                                                                         "Lifestyle: Avoid overweight",
-                                                                                                         "Lifestyle: Educational Interventions",
-                                                                                                         "Lifestyle: Worksite Interventions",
-                                                                                                         "Lifestyle: Interventions by Health Care Providers",
-                                                                                                         "Lifestyle: Promote Walking and Bicycle Riding",
-                                                                                                         "Lifestyle: Promoting Healthy Food Choices"]},
-                {"name": "Risk from High Blood Pressure, Cholesterol, and Bodyweight", "health_focus_areas": ["Risk: Interventions to Reduce Bodyweight",
-                                                                                                              "Risk: Healthy diet (low sodium, high potassium",
-                                                                                                              "Risk: Physical activity",
-                                                                                                              "Risk: Medications to lower blood pressure"]},
-                {"name": "Tobacco Addiction", "health_focus_areas": ["Tobacco: Smoking cessation treatment",
-                                                                     "Tobacco: Reducing exposure to passive tobacco smoke",
-                                                                     "Tobacco: Preventing initiation among youths and young adults"
+                {"name": _("Indoor Air Pollution"), "health_focus_areas": [_("Indoor pollution: Source of pollution"),
+                                                                        _("Indoor pollution: Improve living environment"),
+                                                                        _("Indoor pollution: User behaviors")]},
+                {"name": _("Outdoor Air and Water Pollution"), "health_focus_areas": [_("Outdoor: Interventions to Reduce Air Pollution"),
+                                                                                   _("Outdoor: Interventions to Reduce Water Pollution")]},
+                {"name": _("Diet and Lifestyle Changes to prevent chronic disease"), "health_focus_areas": [_("Lifestyle: Avoid smoking"),
+                                                                                                         _("Lifestyle: Pursue physical activity"),
+                                                                                                         _("Lifestyle: Avoid overweight"),
+                                                                                                         _("Lifestyle: Educational Interventions"),
+                                                                                                         _("Lifestyle: Worksite Interventions"),
+                                                                                                         _("Lifestyle: Interventions by Health Care Providers"),
+                                                                                                         _("Lifestyle: Promote Walking and Bicycle Riding"),
+                                                                                                         _("Lifestyle: Promoting Healthy Food Choices")]},
+                {"name": _("Risk from High Blood Pressure, Cholesterol, and Bodyweight"), "health_focus_areas": [_("Risk: Interventions to Reduce Bodyweight"),
+                                                                                                              _("Risk: Healthy diet (low sodium, high potassium"),
+                                                                                                              _("Risk: Physical activity"),
+                                                                                                              _("Risk: Medications to lower blood pressure")]},
+                {"name": _("Tobacco Addiction"), "health_focus_areas": [_("Tobacco: Smoking cessation treatment"),
+                                                                     _("Tobacco: Reducing exposure to passive tobacco smoke"),
+                                                                     _("Tobacco: Preventing initiation among youths and young adults")
                                                                      ]},
-                {"name": "Alcohol", "health_focus_areas": ["Alcohol: Education sessions and psychosocial counseling",
-                                                           "Alcohol: Population-wide measures"
+                {"name": _("Alcohol"), "health_focus_areas": [_("Alcohol: Education sessions and psychosocial counseling"),
+                                                           _("Alcohol: Population-wide measures")
                                                            ]},
-                {"name": "Illicit drug use", "health_focus_areas": ["Illicit drug: Prevention including education",
-                                                                    "Illicit drug: Voluntary Treatment",
-                                                                    "Illicit drug: Involuntary Treatment"
+                {"name": _("Illicit drug use"), "health_focus_areas": [_("Illicit drug: Prevention including education"),
+                                                                    _("Illicit drug: Voluntary Treatment"),
+                                                                    _("Illicit drug: Involuntary Treatment")
                                                                     ]}
             ]
         },
         {
-            "name": "Orange Group",
+            "name": _("Orange Group"),
             "subGroups": [
-                {"name": "Learning and Developmental Disabilities", "health_focus_areas": ["Learning Disability: Primary prevention to control the underlying cause or condition",
-                                                                                           "Learning Disability: Preventing an existing illness or injury from progressing to long-term disability",
-                                                                                           "Learning Disability: Rehabilitation and special educational services"]},
-                {"name": "Loss of Vision and Hearing", "health_focus_areas": ["Childhood Blindness",
-                                                                              "Cataract interventions",
-                                                                              "Trachoma interventions",
-                                                                              "Onchocerciasis interventions",
-                                                                              "Hearing loss screening programs",
-                                                                              "Hearing loss education",
-                                                                              "Hearing loss surgery",
-                                                                              "Hearing loss medications",
-                                                                              "Hearing loss assistive devices"]},
-                {"name": "Interventions for Musculoskeletal Conditions", "health_focus_areas": ["Musculoskeletal: Preventive strategies",
-                                                                                                "Musculoskeletal: Screening",
-                                                                                                "Musculoskeletal: Symptomatic treatments",
-                                                                                                "Musculoskeletal: Rheumitoid Arthritis",
-                                                                                                "Musculoskeletal: Osteoporosis"]},
-                {"name": "Pain Control", "health_focus_areas": ["Pain: Opioid treatment",
-                                                                "Pain: Non-Opioid treatments and strategies"]},
+                {"name": _("Learning and Developmental Disabilities"), "health_focus_areas": [_("Learning Disability: Primary prevention to control the underlying cause or condition"),
+                                                                                           _("Learning Disability: Preventing an existing illness or injury from progressing to long-term disability"),
+                                                                                           _("Learning Disability: Rehabilitation and special educational services")]},
+                {"name": _("Loss of Vision and Hearing"), "health_focus_areas": [_("Childhood Blindness"),
+                                                                              _("Cataract interventions"),
+                                                                              _("Trachoma interventions"),
+                                                                              _("Onchocerciasis interventions"),
+                                                                              _("Hearing loss screening programs"),
+                                                                              _("Hearing loss education"),
+                                                                              _("Hearing loss surgery"),
+                                                                              _("Hearing loss medications"),
+                                                                              _("Hearing loss assistive devices")]},
+                {"name": _("Interventions for Musculoskeletal Conditions"), "health_focus_areas": [_("Musculoskeletal: Preventive strategies"),
+                                                                                                _("Musculoskeletal: Screening"),
+                                                                                                _("Musculoskeletal: Symptomatic treatments"),
+                                                                                                _("Musculoskeletal: Rheumitoid Arthritis"),
+                                                                                                _("Musculoskeletal: Osteoporosis")]},
+                {"name": _("Pain Control"), "health_focus_areas": [_("Pain: Opioid treatment"),
+                                                                _("Pain: Non-Opioid treatments and strategies")]},
             ]
         },
         {
-            "name": "Group bordeaux",
+            "name": _("Group bordeaux"),
             "subGroups": [
-                {"name": "Contraceptives", "health_focus_areas": ["Counseling",
-                                                                  "Permanent and Long-Term Methods",
-                                                                  "Temporary Methods", "Emergency Contraception",
-                                                                  "Social Marketing"]},
-                {"name": "Health of Adolescents and Youth", "health_focus_areas": ["School - Based Health and Nutrition Programs",
-                                                                                   "Youth Friendly Facilities",
-                                                                                   "Life - skills and health and sexuality education",
-                                                                                   "Peer education",
-                                                                                   "Mass media and community mobilization",
-                                                                                   "Youth development programs",
-                                                                                   "Social marketing",
-                                                                                   "Workplace and private sector programs"
+                {"name": _("Contraceptives"), "health_focus_areas": [_("Counseling"),
+                                                                  _("Permanent and Long-Term Methods"),
+                                                                  _("Temporary Methods"), _("Emergency Contraception"),
+                                                                  _("Social Marketing")]},
+                {"name": _("Health of Adolescents and Youth"), "health_focus_areas": [_("School - Based Health and Nutrition Programs"),
+                                                                                   _("Youth Friendly Facilities"),
+                                                                                   _("Life - skills and health and sexuality education"),
+                                                                                   _("Peer education"),
+                                                                                   _("Mass media and community mobilization"),
+                                                                                   _("Youth development programs"),
+                                                                                   _("Social marketing"),
+                                                                                   _("Workplace and private sector programs")
                                                                                    ]},
-                {"name": "Integrated Management of the Sick Child (integrated approaches to diarrhea, malaria, pneumonia, measles, other severe infections, and malnutrition)",
-                 "health_focus_areas": ["IMNCI: Improve Health Worker Performance (assess signs and symptoms, classify illness, and provide appropriate treatment and education)",
-                                        "IMNCI: Improve Health Systems (improve drug availability, effective supervision, referral services, and health information systems)",
-                                        "IMNCI: Improve Family and Community Practices (prevent illness, home treatment of infections, improve care-seeking practices and compliance with treatment)"]},
-                {"name": "Occupational Health", "health_focus_areas": ["Occupational: Strategies for Improving Working Conditions",
-                                                                       "Occupational: Improvement of Access to Health Care",
-                                                                       "Occupational: Surveillance and Reporting"]},
-                {"name": "Natural Disaster Mitigation and Relief", "health_focus_areas": ["Disaster: Assessment of the Health Situation",
-                                                                                          "Disaster: Mass Casualties Treatment",
-                                                                                          "Disaster: Strengthened Surveillance, Prevention, and Control of CommunicableDiseases",
-                                                                                          "Disaster: Environmental Health",
-                                                                                          "Disaster: Transparent Management of Donations and Supplies",
-                                                                                          "Disaster: Coordination of the Humanitarian Health Effort",
-                                                                                          "Disaster: Emergency Preparedness of the Health Sector",
-                                                                                          "Disaster: Prevention and Mitigation"]},
-                {"name": "Emergency Medical Services", "health_focus_areas": ["EMS: Paramedics",
-                                                                              "EMS: Lay response",
-                                                                              "EMS: Transportation and communication systems",
-                                                                              "EMS: Ambulatory systems"]}
+                {"name": _("Integrated Management of the Sick Child (integrated approaches to diarrhea, malaria, pneumonia, measles, other severe infections, and malnutrition)"),
+                 "health_focus_areas": [_("IMNCI: Improve Health Worker Performance (assess signs and symptoms, classify illness, and provide appropriate treatment and education)"),
+                                        _("IMNCI: Improve Health Systems (improve drug availability, effective supervision, referral services, and health information systems)"),
+                                        _("IMNCI: Improve Family and Community Practices (prevent illness, home treatment of infections, improve care-seeking practices and compliance with treatment)")]},
+                {"name": _("Occupational Health"), "health_focus_areas": [_("Occupational: Strategies for Improving Working Conditions"),
+                                                                       _("Occupational: Improvement of Access to Health Care"),
+                                                                       _("Occupational: Surveillance and Reporting")]},
+                {"name": _("Natural Disaster Mitigation and Relief"), "health_focus_areas": [_("Disaster: Assessment of the Health Situation"),
+                                                                                          _("Disaster: Mass Casualties Treatment"),
+                                                                                          _("Disaster: Strengthened Surveillance, Prevention, and Control of CommunicableDiseases"),
+                                                                                          _("Disaster: Environmental Health"),
+                                                                                          _("Disaster: Transparent Management of Donations and Supplies"),
+                                                                                          _("Disaster: Coordination of the Humanitarian Health Effort"),
+                                                                                          _("Disaster: Emergency Preparedness of the Health Sector"),
+                                                                                          _("Disaster: Prevention and Mitigation")]},
+                {"name": _("Emergency Medical Services"), "health_focus_areas": [_("EMS: Paramedics"),
+                                                                              _("EMS: Lay response"),
+                                                                              _("EMS: Transportation and communication systems"),
+                                                                              _("EMS: Ambulatory systems")]}
             ]
         }
     ]
