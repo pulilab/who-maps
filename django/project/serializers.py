@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.core import mail
 from django.template import loader
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.validators import UniqueValidator
 
 from user.models import UserProfile
@@ -51,9 +52,9 @@ class ProjectSerializer(serializers.Serializer):
     coverage = CoverageSerializer(many=True, required=False)
     national_level_deployment = NDPSerializer(required=False)
     government_approved = serializers.BooleanField()
-    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'),
-                                                           (1, 'Yes, they are contributing in-kind people or time'),
-                                                           (2, 'Yes, there is a financial contribution through MOH budget')])
+    government_investor = serializers.ChoiceField(choices=[(0, _('No, they have not yet contributed')),
+                                                           (1, _('Yes, they are contributing in-kind people or time')),
+                                                           (2, _('Yes, there is a financial contribution through MOH budget'))])
     implementing_partners = serializers.ListField(child=serializers.CharField(max_length=64),
                                                   max_length=50, min_length=0, required=False)
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
@@ -129,7 +130,7 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
                                         "role": "team member"})
         for profile in new_team_members:
             mail.send_mail(
-                subject="You were added to a project!",
+                subject=_("You were added to a project!"),
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],
@@ -142,7 +143,7 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
                                         "role": "viewer"})
         for profile in new_viewers:
             mail.send_mail(
-                subject="You were added to a project!",
+                subject=_("You were added to a project!"),
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],

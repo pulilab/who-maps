@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail, urlresolvers
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import mixins, status
 from rest_framework.permissions import IsAuthenticated
@@ -34,7 +35,7 @@ class FlagMixin(object):
         admins = User.objects.filter(is_superuser=True)
         if admins:
             mail.send_mail(
-                subject="Content has been flagged.",
+                subject=_("Content has been flagged."),
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[admin.email for admin in admins],

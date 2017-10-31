@@ -1,6 +1,7 @@
 import itertools
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel
 from user.models import UserProfile
@@ -27,9 +28,9 @@ class State(ExtendedModel):
     BANNED = 3
 
     STATE_CHOICES = (
-        (NORMAL, "Normal"),
-        (FLAGGED, "Flagged"),
-        (BANNED, "Banned"),
+        (NORMAL, _("Normal")),
+        (FLAGGED, _("Flagged")),
+        (BANNED, _("Banned")),
     )
 
     state = models.IntegerField(choices=STATE_CHOICES, default=NORMAL)
@@ -58,28 +59,28 @@ class Post(State):
     EXPERIENCE = 3
 
     TYPE_CHOICES = (
-        (RESOURCE, "Resources"),
-        (LESSON, "Lessons & Tips"),
-        (EXPERIENCE, "Experiences"),
+        (RESOURCE, _("Resources")),
+        (LESSON, _("Lessons & Tips")),
+        (EXPERIENCE, _("Experiences")),
     )
 
     DOMAIN_CHOICES = (
-        (1, "Parameters of Scale"),
-        (2, "Contextual Environment"),
-        (3, "Scientific Basis"),
-        (4, "Strategic Engagement"),
-        (5, "Partnership Sustainability"),
-        (6, "Financial Management"),
-        (7, "Financial Model"),
-        (8, "Data"),
-        (9, "Interoperability"),
-        (10, "Adaptability"),
-        (11, "Personnel"),
-        (12, "Training and Support"),
-        (13, "Outreach and Sensitization"),
-        (14, "Contingency Planning"),
-        (15, "Process Monitoring"),
-        (16, "Evaluation Research"),
+        (1, _("Parameters of Scale")),
+        (2, _("Contextual Environment")),
+        (3, _("Scientific Basis")),
+        (4, _("Strategic Engagement")),
+        (5, _("Partnership Sustainability")),
+        (6, _("Financial Management")),
+        (7, _("Financial Model")),
+        (8, _("Data")),
+        (9, _("Interoperability")),
+        (10, _("Adaptability")),
+        (11, _("Personnel")),
+        (12, _("Training and Support")),
+        (13, _("Outreach and Sensitization")),
+        (14, _("Contingency Planning")),
+        (15, _("Process Monitoring")),
+        (16, _("Evaluation Research")),
     )
 
     name = models.CharField(max_length=128)
@@ -91,8 +92,8 @@ class Post(State):
     author = models.ForeignKey(UserProfile)
 
     class Meta:
-        verbose_name = "Planning & Guidance post"
-        verbose_name_plural = "Planning & Guidance posts"
+        verbose_name = _("Planning & Guidance post")
+        verbose_name_plural = _("Planning & Guidance posts")
 
     def __str__(self):
         return self.name

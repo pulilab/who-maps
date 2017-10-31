@@ -3,6 +3,8 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_auth.models import TokenModel
 from rest_framework_expiring_authtoken.views import ObtainExpiringAuthToken
+from rest_framework.views import APIView
+from django.utils.translation import activate
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileWithGroupsSerializer
@@ -59,3 +61,13 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.filter(name__contains=search_term)
         else:
             return Organisation.objects.all()
+
+
+class LanguageSwitcher(APIView):
+
+    def get(self, request, language_code, **kwargs):
+        profile = request.user.userprofile
+        profile.language = language_code
+        profile.save()
+        activate(language_code)
+        return Response()
