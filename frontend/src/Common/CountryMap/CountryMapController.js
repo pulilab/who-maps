@@ -172,7 +172,7 @@ class CountryMapController {
             return element.node();
         });
 
-        this.drawDistricNames(countryMapData, element);
+        // this.drawDistricNames(countryMapData, element);
         this.makeSvgPannableAndZoomable(element.node());
 
         this.showPlaceholder = false;
