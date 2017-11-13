@@ -4,8 +4,18 @@ import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil';
 import union from 'lodash/union';
+import concat from 'lodash/concat';
+import isPlainObject from 'lodash/isPlainObject';
+import isNull from 'lodash/isNull';
+import reduce from 'lodash/reduce';
+import values from 'lodash/values';
 import { axisData, domainData } from '../static_data/charts_static';
+import { project_definition } from '../static_data/project_definition';
+
+const fieldsWithCustomValue =  ['interoperability_standards', 'licenses'];
+const fieldsToConvertToObjectArray = ['donors', 'implementing_partners'];
 
 const getTodayString = () => {
     const today = new Date();
@@ -17,21 +27,37 @@ const getTodayString = () => {
 
 };
 
-function convertArrayToStandardCustomObj(data, structure) {
+function convertArrayToStandardCustomObj(data) {
     data = cloneDeep(data);
-    // structure = cloneDeep(structure);
-    const keyArray = ['interoperability_standards', 'licenses'];
-
-    keyArray.forEach(key=> {
+    fieldsWithCustomValue.forEach(key=> {
         const scaffold = {
             standard: [],
             custom: void 0
         };
-        structure[key] = union(structure[key], data[key]);
         scaffold.standard = data[key];
         data[key] = scaffold;
     });
     return data;
+}
+
+function concatCustom(obj) {
+    const cat = concat(obj.custom, obj.standard);
+    return cat.filter(item => {
+        return !isNil(item) && !isEmpty(item);
+    });
+}
+
+function mergeCustomAndDefault(collection) {
+    fieldsWithCustomValue.forEach(key => {
+        collection[key] = concatCustom(collection[key]);
+    });
+
+    collection.platforms.forEach(p => {
+        if (p.custom) {
+            p.name = p.custom;
+        }
+    });
+    return Object.assign({}, collection);
 }
 
 function convertDate(date) {
@@ -43,8 +69,7 @@ function convertDate(date) {
 }
 
 function convertStringArrayToObjectArray(data) {
-    const keyArray = ['donors', 'implementing_partners'];
-    keyArray.forEach(key => {
+    fieldsToConvertToObjectArray.forEach(key => {
         if (!data[key]) {
             return;
         }
@@ -54,6 +79,17 @@ function convertStringArrayToObjectArray(data) {
         if (data[key].length === 0) {
             data[key].push({});
         }
+    });
+    return Object.assign({}, data);
+}
+
+function convertObjectArrayToStringArray(data) {
+    fieldsToConvertToObjectArray.forEach(key => {
+        if (!data[key]) {
+            return;
+        }
+        data[key] = data[key].map(value => value.value);
+        data[key] = data[key].filter(item => item);
     });
     return Object.assign({}, data);
 }
@@ -78,12 +114,64 @@ function setCoverageType(cov, nat) {
     return ret;
 }
 
+function createDateFields(processedForm) {
+    processedForm.start_date = moment(processedForm.start_date).toJSON();
+    processedForm.end_date = moment(processedForm.end_date).toJSON();
+    processedForm.implementation_dates = moment(processedForm.implementation_dates).toJSON();
+    return Object.assign({}, processedForm);
+}
+
+function deleteUndefinedAndDoubleDollarKeys(item) {
+    const output = {};
+    Object.keys(item).forEach(key => {
+        if (item[key] !== undefined && key !== '$$hashKey') {
+            output[key] = item[key];
+        }
+    });
+    return output;
+}
+
+function removeEmptyChildObjects(processedForm) {
+    const keyArray = ['coverage', 'platforms'];
+    keyArray.forEach(key => {
+        processedForm[key] = processedForm[key].filter(itm => {
+            itm = deleteUndefinedAndDoubleDollarKeys(itm);
+            if (itm.hasOwnProperty('available')) {
+                delete itm.available;
+            }
+            return Object.keys(itm).length > 0;
+        });
+    });
+
+    return Object.assign({}, processedForm);
+}
+
+function removeKeysWithoutValues(processedForm) {
+    return reduce(processedForm, (result, value, key) => {
+        if (value === null || value === '' || isPlainObject(value) &&  values(value).every(isNull)) {
+            result[key] = void 0;
+        }
+        else {
+            result[key] = value;
+        }
+        return result;
+    }, {});
+}
+
 
 // GETTERS
 
 export const getPublishedProjects = state => {
-    const list =  state.projects.list ? state.projects.list.map(p => p.published) : [];
-    return sortBy(list, 'id');
+    if (state.projects.list) {
+        const list = state.projects.list.map(p => {
+            p = Object.assign({}, p.published);
+            p.isMember = state.user.profile.member.indexOf(p.id) > -1;
+            p.isViewer = state.user.profile.viewer.indexOf(p.id) > -1;
+            return p;
+        });
+        return sortBy(list, 'id');
+    }
+    return [];
 };
 
 export const getCurrentProject = state => {
@@ -93,19 +181,35 @@ export const getCurrentProject = state => {
 
 export const getCurrentProjectForEditing = state => {
     let data = getCurrentProject(state);
-    data = convertArrayToStandardCustomObj(data, state.projects.structure);
+    data = convertArrayToStandardCustomObj(data);
     data.start_date = convertDate(data.start_date);
     data.implementation_dates = convertDate(data.implementation_dates);
     data.end_date = convertDate(data.end_date);
     data = convertStringArrayToObjectArray(data);
     data = fillEmptyCollectionsWithDefault(data);
+    data.organisation = {
+        id: data.organisation,
+        name: data.organisation_name
+    };
+    data.isMember = state.user.profile.member.indexOf(data.id) > -1;
+    data.isViewer = state.user.profile.viewer.indexOf(data.id) > -1;
 
     data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
-    return cloneDeep(data);
+    return Object.assign({}, project_definition, data);
 };
+
+export const getVanillaProjectStructure = state => {
+    return cloneDeep(project_definition);
+};
+
 export const getProjectStructure = state => {
-    const project = state.projects.structure;
-    return cloneDeep(project);
+    const structure = state.projects.structure;
+    const currentProject = getCurrentProject(state);
+    fieldsWithCustomValue.forEach(item => {
+        structure[item] = union(structure[item], currentProject[item]);
+    });
+    console.log(structure);
+    return cloneDeep(structure);
 };
 
 export const getToolkitData = state => {
@@ -243,19 +347,21 @@ export function loadProjectDetails() {
     return async (dispatch, getState) => {
         try {
             const projectId = getState().projects.currentProject;
-            const dataPromise = axios.get(`/api/projects/${projectId}/toolkit/data/`);
-            const toolkitVersionsPromise = axios.get(`/api/projects/${projectId}/toolkit/versions/`);
-            const coverageVersionsPromise = axios.get(`/api/projects/${projectId}/coverage/versions/`);
-            const [toolkitData, toolkitVersions, coverageVersions] =
-              await Promise.all([dataPromise, toolkitVersionsPromise, coverageVersionsPromise]);
-            dispatch({
-                type: 'SET_PROJECT_INFO',
-                info: {
-                    toolkitData: toolkitData.data,
-                    toolkitVersions: toolkitVersions.data,
-                    coverageVersions: coverageVersions.data
-                }
-            });
+            if (projectId) {
+                const dataPromise = axios.get(`/api/projects/${projectId}/toolkit/data/`);
+                const toolkitVersionsPromise = axios.get(`/api/projects/${projectId}/toolkit/versions/`);
+                const coverageVersionsPromise = axios.get(`/api/projects/${projectId}/coverage/versions/`);
+                const [toolkitData, toolkitVersions, coverageVersions] =
+                  await Promise.all([dataPromise, toolkitVersionsPromise, coverageVersionsPromise]);
+                dispatch({
+                    type: 'SET_PROJECT_INFO',
+                    info: {
+                        toolkitData: toolkitData.data,
+                        toolkitVersions: toolkitVersions.data,
+                        coverageVersions: coverageVersions.data
+                    }
+                });
+            }
             return Promise.resolve();
         }
         catch (error) {
@@ -286,6 +392,66 @@ export function loadProjectStructure() {
         await dispatch({ type: 'SET_PROJECT_STRUCTURE', structure: data });
     };
 }
+
+export function saveProject(processedForm) {
+    return async (dispatch, getState) => {
+        processedForm = cloneDeep(processedForm);
+        processedForm.organisation_name = processedForm.organisation.name;
+        processedForm.organisation = processedForm.organisation.id;
+        processedForm = createDateFields(processedForm);
+        processedForm = mergeCustomAndDefault(processedForm);
+        processedForm = convertObjectArrayToStringArray(processedForm);
+        processedForm = removeEmptyChildObjects(processedForm);
+        processedForm = removeKeysWithoutValues(processedForm);
+        processedForm.coverageType = undefined;
+        const method = processedForm.id ? 'put' : 'post';
+        const { data } = axios[method](`/api/projects/${processedForm.id}/`, processedForm);
+        console.log(data);
+    };
+
+}
+
+
+ // async updateForm(processedForm) {
+ //        const response = await this.ns.updateProject(processedForm, this.projectId);
+ //        if (response && response.success) {
+ //            // generate a single promise from multiple promise and wait for them to be done.
+ //            const [putGroupResult] = await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
+ //            // update cached project data with the one from the backend
+ //            this.cs.updateProject(response.data, processedForm);
+ //            this.showToast('Project Updated');
+ //            this.postUpdateActions(putGroupResult);
+ //        }
+ //        else {
+ //            this.handleResponse(response);
+ //        }
+ //
+ //    }
+ //
+ //    async saveForm(processedForm) {
+ //        try {
+ //            const response = await this.ns.newProject(processedForm);
+ //            if (response && response.success) {
+ //                // eslint-disable-next-line no-unused-vars
+ //                const [putGroupResult, countryFieldResult] = await Promise.all([
+ //                    this.putGroups(response.data),
+ //                    this.saveCountryFields(response.data)
+ //                ]);
+ //                response.data.fields = countryFieldResult.fields ? countryFieldResult.fields.slice() : null;
+ //                this.cs.addProjectToCache(response.data, processedForm);
+ //                this.ownershipCheck(response.data);
+ //                this.postSaveActions(putGroupResult);
+ //                this.showToast('Project Saved');
+ //
+ //            }
+ //            else {
+ //                this.handleResponse(response);
+ //            }
+ //        }
+ //        catch (e) {
+ //            console.error(e);
+ //        }
+ //    }
 
 
 // Reducers

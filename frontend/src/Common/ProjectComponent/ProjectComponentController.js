@@ -1,10 +1,7 @@
-import _ from 'lodash';
-
 class ProjectComponentController {
 
-    constructor($state, CommonServices) {
+    constructor($state) {
         this.state = $state;
-        this.cs = CommonServices;
         this.$onInit = this.initialization.bind(this);
     }
 
@@ -22,13 +19,6 @@ class ProjectComponentController {
         if (!this.ngModel.followersTrend) {
             this.ngModel.followersTrend = 'up';
         }
-        if (this.ngModel.country
-            && this.cs.projectStructure.countries
-            && this.cs.projectStructure.countries[this.ngModel.country]) {
-            this.ngModel.countryName = _.find(this.cs.projectStructure.countries, (item) => {
-                return item.id === this.ngModel.country;
-            }).name;
-        }
     }
 
     cardClick() {
@@ -44,8 +34,7 @@ class ProjectComponentController {
     static projectComponentFactory() {
         require('./ProjectComponent.scss');
         function projectCp($state) {
-            const CommonServices = require('../CommonServices');
-            return new ProjectComponentController($state, CommonServices);
+            return new ProjectComponentController($state);
         }
 
         projectCp.$inject = ['$state'];

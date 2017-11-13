@@ -36,7 +36,7 @@ class UUIDLoadController {
         const project = this.search.slice().pop();
         const id = project && project.id ? project.id : false;
 
-        let state = 'public-dashboard';
+        const state = 'public-dashboard';
 
         if (id === false) {
             this.errorMessage = true;

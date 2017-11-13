@@ -220,7 +220,9 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     }
 
 
-    $transitions.onStart({}, () => {
+    $transitions.onStart({}, (t) => {
+        const options = t.options();
+        console.log(options);
         handleStateChange('start');
         return Promise.resolve();
     });

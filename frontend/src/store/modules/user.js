@@ -11,7 +11,6 @@ export const profile = state => {
     return Object.assign({}, state.user.profile);
 };
 
-
 // ACTIONS
 
 const storeData = (data, email) => {

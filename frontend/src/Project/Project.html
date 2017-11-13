@@ -54,8 +54,8 @@
           <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
           <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
                        current-project="vm.isCurrentProject(p.id)"
-                       viewer="vm.isViewer(p)"
-                       member="vm.isMember(p)"
+                       viewer="p.isViewer"
+                       member="p.isMember"
                        show-details="true"
                        show-logo="true"
                        ng-model="p">

@@ -9,24 +9,27 @@ import * as UserModule from '../store/modules/user';
 
 class ProjectController  {
 
-    constructor($scope, $state, Upload, toast, $timeout, $ngRedux) {
+    constructor($scope, $state, Upload, toast, $timeout, $ngRedux, $location) {
         this.ns = new NewProjectService(Upload);
         this.ccs = require('../Common/CustomCountryService');
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.location = $location;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
         this.postSaveActions = this.postSaveActions.bind(this);
         this.getCountryFields = this.getCountryFields.bind(this);
         this.registerEventIfNotPresent = this.registerEventIfNotPresent.bind(this);
         this.toast = toast;
+        this.mapData = this.mapData.bind(this);
         this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
     }
 
     mapData(state) {
+        const newProject = this.state.current.name === 'newProject';
         return {
-            project: ProjectModule.getCurrentProjectForEditing(state),
+            project: newProject ? ProjectModule.getVanillaProjectStructure() : ProjectModule.getCurrentProjectForEditing(state),
             structure: ProjectModule.getProjectStructure(state),
             users: SystemModule.userProfiles(state),
             userProfile: UserModule.profile(state),
@@ -120,17 +123,9 @@ class ProjectController  {
     }
 
     changeHash(hash) {
-        const l = window.location;
-        const url = `${l.protocol}//${l.host}${l.pathname}#${hash}`;
-        history.replaceState({}, '', url);
-    }
-
-    isViewer(project) {
-        return this.cs.isViewer(project);
-    }
-
-    isMember(project) {
-        return this.cs.isMember(project);
+        console.log(hash, this.state);
+        this.location.hash(hash);
+        // history.replaceState({}, '', url);
     }
 
     convertCountryFieldsAnswer({ fields }) {
@@ -160,63 +155,6 @@ class ProjectController  {
 
     }
 
-    convertObjectArrayToStringArray(data) {
-        const keyArray = ['donors', 'implementing_partners'];
-        keyArray.forEach(key => {
-            if (!data[key]) {
-                return;
-            }
-            data[key] = data[key].map(value => value.value);
-            data[key] = data[key].filter(item => item);
-        });
-        return Object.assign({}, data);
-    }
-
-
-    createDateFields(processedForm) {
-        processedForm.start_date = moment(this.project.start_date).toJSON();
-        processedForm.end_date = moment(this.project.end_date).toJSON();
-        processedForm.implementation_dates = moment(this.project.implementation_dates).toJSON();
-        return Object.assign({}, processedForm);
-    }
-
-    deleteUndefinedAndDoubleDollarKeys(item) {
-        const output = {};
-        Object.keys(item).forEach(key => {
-            if (item[key] !== undefined && key !== '$$hashKey') {
-                output[key] = item[key];
-            }
-        });
-        return output;
-    }
-
-    removeEmptyChildObjects(processedForm) {
-        const keyArray = ['coverage', 'platforms'];
-        keyArray.forEach(key => {
-            processedForm[key] = processedForm[key].filter(itm => {
-                itm = this.deleteUndefinedAndDoubleDollarKeys(itm);
-                if (itm.hasOwnProperty('available')) {
-                    delete itm.available;
-                }
-                return Object.keys(itm).length > 0;
-            });
-        });
-
-        return Object.assign({}, processedForm);
-    }
-
-    removeKeysWithoutValues(processedForm) {
-        return _.reduce(processedForm, (result, value, key) => {
-            if (value === null || value === '' || _.isPlainObject(value) && _.every(_.values(value), _.isNull)) {
-                result[key] = void 0;
-            }
-            else {
-                result[key] = value;
-            }
-            return result;
-        }, {});
-    }
-
     clearCustomErrors() {
         _.forEach(this.form, formItem => {
             if (formItem && formItem.customError && formItem.customError.length > 0) {
@@ -230,37 +168,12 @@ class ProjectController  {
     save() {
         this.clearCustomErrors();
         if (this.form.$valid) {
-            // we do this on the original project object to force the ui to update
-            this.checkCoverageType(this.project);
-            let processedForm = Object.assign({}, this.project);
-            processedForm.organisation_name = processedForm.organisation.name;
-            processedForm.organisation = processedForm.organisation.id;
-            processedForm = this.createDateFields(processedForm);
-            processedForm = this.mergeCustomAndDefault(processedForm);
-            processedForm = this.convertObjectArrayToStringArray(processedForm);
-            processedForm = this.removeEmptyChildObjects(processedForm);
-            processedForm = this.removeKeysWithoutValues(processedForm);
-            processedForm.coverageType = undefined;
-            if (!this.editMode) {
-                this.saveForm(processedForm);
-            }
-            else {
-                this.updateForm(processedForm);
-            }
+            this.saveProject(this.project);
         }
         else {
             this.focusInvalidField();
         }
 
-    }
-
-    checkCoverageType(processedForm) {
-        if (processedForm.coverageType === 2) {
-            processedForm.coverage = [{}];
-        }
-        else if (processedForm.coverageType === 1) {
-            processedForm.national_level_deployment = undefined;
-        }
     }
 
 
@@ -288,47 +201,6 @@ class ProjectController  {
             return f;
         });
         return this.ns.saveCountryFields(toSave, country, id);
-    }
-
-    async updateForm(processedForm) {
-        const response = await this.ns.updateProject(processedForm, this.projectId);
-        if (response && response.success) {
-            // generate a single promise from multiple promise and wait for them to be done.
-            const [putGroupResult] = await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
-            // update cached project data with the one from the backend
-            this.cs.updateProject(response.data, processedForm);
-            this.showToast('Project Updated');
-            this.postUpdateActions(putGroupResult);
-        }
-        else {
-            this.handleResponse(response);
-        }
-
-    }
-
-    async saveForm(processedForm) {
-        try {
-            const response = await this.ns.newProject(processedForm);
-            if (response && response.success) {
-                // eslint-disable-next-line no-unused-vars
-                const [putGroupResult, countryFieldResult] = await Promise.all([
-                    this.putGroups(response.data),
-                    this.saveCountryFields(response.data)
-                ]);
-                response.data.fields = countryFieldResult.fields ? countryFieldResult.fields.slice() : null;
-                this.cs.addProjectToCache(response.data, processedForm);
-                this.ownershipCheck(response.data);
-                this.postSaveActions(putGroupResult);
-                this.showToast('Project Saved');
-
-            }
-            else {
-                this.handleResponse(response);
-            }
-        }
-        catch (e) {
-            console.error(e);
-        }
     }
 
     fillTestForm() {
@@ -505,34 +377,12 @@ class ProjectController  {
 
     }
 
-    concatCustom(obj) {
-        const cat = _.concat(obj.custom, obj.standard);
-        return _.filter(cat, item => {
-            return !_.isNil(item) && !_.isEmpty(item);
-        });
-    }
-
-    mergeCustomAndDefault(collection) {
-        const self = this;
-        const keyArray = ['interoperability_standards', 'licenses'];
-        keyArray.forEach(key => {
-            collection[key] = self.concatCustom(collection[key]);
-        });
-
-        collection.platforms.forEach(p => {
-            if (p.custom) {
-                p.name = p.custom;
-            }
-        });
-        return Object.assign({}, collection);
-    }
-
     static newProjectFactory() {
         require('./Project.scss');
-        function newProject($scope, $state, Upload, $mdToast, $timeout, $ngRedux) {
-            return new ProjectController($scope, $state, Upload, $mdToast, $timeout, $ngRedux);
+        function newProject($scope, $state, Upload, $mdToast, $timeout, $ngRedux, $location) {
+            return new ProjectController($scope, $state, Upload, $mdToast, $timeout, $ngRedux, $location);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast', '$timeout', '$ngRedux'];
+        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast', '$timeout', '$ngRedux', '$location'];
         return newProject;
     }
 }
