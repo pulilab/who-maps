@@ -199,7 +199,7 @@ class CustomCountryService extends SimpleApi {
             'duplicative investments into digital health.',
             footer_text: '',
             default_partners: ['/static/partners/logo-hrp-new.png', '/static/partners/who-logo.png',
-                '/static/partners/logo-digital_square.png', '/static/partners/logo-path.png'],
+                '/static/partners/logo-digital_square.png', '/static/partners/logo-path-color.png'],
             partner_logos: []
         };
         _.forEach(standard, (standardValue, key) => {
