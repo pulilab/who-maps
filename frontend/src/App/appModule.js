@@ -108,6 +108,13 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
                   template: '<project layout-fill layout="column" ></project>'
               }
           },
+          reload: false,
+          params: {
+              '#': {
+                  dynamic: true,
+                  value: 'general-overview'
+              }
+          },
           resolve: {
               user: ['$ngRedux', ($ngRedux) => {
                   return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -221,8 +228,6 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
 
     $transitions.onStart({}, (t) => {
-        const options = t.options();
-        console.log(options);
         handleStateChange('start');
         return Promise.resolve();
     });

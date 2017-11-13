@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import moment from 'moment';
 import NewProjectService from './ProjectService';
 import * as ProjectModule from '../store/modules/projects';
 import * as SystemModule from '../store/modules/system';
@@ -29,7 +28,8 @@ class ProjectController  {
     mapData(state) {
         const newProject = this.state.current.name === 'newProject';
         return {
-            project: newProject ? ProjectModule.getVanillaProjectStructure() : ProjectModule.getCurrentProjectForEditing(state),
+            project: newProject ? ProjectModule.getVanillaProjectStructure() :
+              ProjectModule.getCurrentProjectForEditing(state),
             structure: ProjectModule.getProjectStructure(state),
             users: SystemModule.userProfiles(state),
             userProfile: UserModule.profile(state),
@@ -123,9 +123,10 @@ class ProjectController  {
     }
 
     changeHash(hash) {
-        console.log(hash, this.state);
-        this.location.hash(hash);
-        // history.replaceState({}, '', url);
+        // const l = window.location;
+        // const url = `${l.protocol}//${l.host}${l.pathname}#${hash}`;
+        // window.history.replaceState({}, '', url);
+        this.state.go(this.state.current.name, { '#': hash }, { reload: false, notify: false, reloadState:false });
     }
 
     convertCountryFieldsAnswer({ fields }) {

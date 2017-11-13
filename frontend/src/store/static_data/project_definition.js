@@ -2,7 +2,7 @@ export const project_definition = {
     name: null,
     organisation: {
         id: undefined,
-        name: null
+        name: ''
     },
     country: null,
     countryName: null,

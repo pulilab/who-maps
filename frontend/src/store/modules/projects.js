@@ -208,7 +208,6 @@ export const getProjectStructure = state => {
     fieldsWithCustomValue.forEach(item => {
         structure[item] = union(structure[item], currentProject[item]);
     });
-    console.log(structure);
     return cloneDeep(structure);
 };
 
