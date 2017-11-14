@@ -1,6 +1,5 @@
 import forEach from 'lodash/forEach';
 import isPlainObject from 'lodash/isPlainObject';
-
 import * as ProjectModule from '../store/modules/projects';
 import * as SystemModule from '../store/modules/system';
 import * as UserModule from '../store/modules/user';
