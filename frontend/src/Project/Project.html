@@ -43,7 +43,7 @@
           structure="vm.structure">
         </interoperability>
         <country-fields
-          ng-show="vm.showCountryFields"
+          ng-show="vm.countryFields && vm.countryFields.length > 0"
           id="country-fields"
           form="vm.form"
           project="vm.project"
@@ -64,7 +64,7 @@
         </section>
       </div>
       <div class="navigation-area" layout="column">
-        <navigation edit-mode="vm.editMode" is-add-another="vm.isAddAnother" show-country-fields="vm.showCountryFields"></navigation>
+        <navigation edit-mode="vm.editMode" is-add-another="vm.isAddAnother" show-country-fields="vm.countryFields && vm.countryFields.length > 0"></navigation>
       </div>
     </form>
   </div>
