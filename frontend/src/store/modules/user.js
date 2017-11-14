@@ -118,7 +118,6 @@ export function updateTeamViewers(team, viewer) {
         const originalViewer = getState().user.profile.viewer;
         const newTeam = union(originalTeam, team);
         const newViewer = union(originalViewer, viewer);
-        console.log(newTeam, newViewer, team, viewer)
         if (newTeam.length !== originalTeam.length || newViewer.length !== originalViewer.length) {
             dispatch({ type: 'UPDATE_TEAM_VIEWER', member: newTeam, viewer: newViewer });
         }
