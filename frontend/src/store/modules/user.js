@@ -1,5 +1,6 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
+import union from 'lodash/union';
 import { Storage } from '../../Common/';
 
 
@@ -7,7 +8,7 @@ const storage = new Storage();
 
 // GETTERS
 
-export const profile = state => {
+export const getProfile = state => {
     return Object.assign({}, state.user.profile);
 };
 
@@ -44,7 +45,7 @@ export function setCountry(country) {
 }
 
 
-export function getProfile() {
+export function loadProfile() {
     return async (dispatch, getState) => {
         const state = getState();
         if (storage.get('login') && !state.user.profile) {
@@ -81,7 +82,7 @@ export function doLogin({ username, password }) {
             const { data } = await axios.post('/api/api-token-auth/', { username, password });
             storeData(data, username);
             dispatch({ type: 'SET_USER', user: data });
-            await dispatch(getProfile());
+            await dispatch(loadProfile());
             return Promise.resolve();
         }
         catch ({ response }) {
@@ -111,6 +112,20 @@ export function doLogout() {
     };
 }
 
+export function updateTeamViewers(team, viewer) {
+    return (dispatch, getState) => {
+        const originalTeam = getState().user.profile.member;
+        const originalViewer = getState().user.profile.viewer;
+        const newTeam = union(originalTeam, team);
+        const newViewer = union(originalViewer, viewer);
+        console.log(newTeam, newViewer, team, viewer)
+        if (newTeam.length !== originalTeam.length || newViewer.length !== originalViewer.length) {
+            dispatch({ type: 'UPDATE_TEAM_VIEWER', member: newTeam, viewer: newViewer });
+        }
+
+    };
+}
+
 
 // Reducers
 
@@ -123,6 +138,13 @@ export default function user(state = {}, action) {
     case 'SET_PROFILE': {
         u.profile = u.profile ? u.profile : {};
         u.profile = Object.assign(u.profile, {}, action.profile);
+        return Object.assign({}, u);
+    }
+    case 'UPDATE_TEAM_VIEWER': {
+        const profile = u.profile || {};
+        profile.member = action.member;
+        profile.viewer = action.viewer;
+        u.profile = profile;
         return Object.assign({}, u);
     }
     case 'UNSET_USER': {

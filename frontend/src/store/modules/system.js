@@ -4,13 +4,13 @@ import axios from '../../plugins/axios';
 
 // GETTERS
 
-export const userProfiles  = state => {
-    return state.profiles ? state.profiles.slice() : [];
+export const getUserProfiles  = state => {
+    return state.system.profiles ? state.system.profiles.slice() : [];
 };
 
 // ACTIONS
 
-export function getUserProfiles() {
+export function loadUserProfiles() {
     return async dispatch => {
         const { data } = await axios.get('/api/userprofiles/');
         dispatch({ type: 'SET_USER_PROFILES', profiles: data });

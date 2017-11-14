@@ -32,7 +32,7 @@ function config($stateProvider, $compileProvider) {
                     return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
                 },
                 system: ['$ngRedux', ($ngRedux) => {
-                    return $ngRedux.dispatch(SystemModule.getUserProfiles());
+                    return $ngRedux.dispatch(SystemModule.loadUserProfiles());
                 }],
                 cms: ['$ngRedux', ($ngRedux) => {
                     return $ngRedux.dispatch(CmsModule.getCmsData());
