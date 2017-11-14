@@ -540,7 +540,7 @@ class CmsApiTest(APITestCase):
         outgoing_email_text = mail.outbox[-1].message().as_string()
 
         self.assertTrue('Content has been flagged.' in outgoing_email.values())
-        self.assertTrue('f@pulilab.com' in outgoing_email.values())
+        self.assertTrue('path_user@dhatlas.org, f@pulilab.com' in outgoing_email.values())
         self.assertTrue('Content has been flagged as inappropriate. Please take action.' in outgoing_email_text)
         self.assertTrue('/admin/cms/post/{}/change/'.format(self.post_id) in outgoing_email_text)
 

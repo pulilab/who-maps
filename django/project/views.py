@@ -17,7 +17,7 @@ from country.models import Country, CountryField
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
-from .models import Project, CoverageVersion
+from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy
 from .project_data import project_structure
 
 
@@ -96,7 +96,42 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
+        project_structure['interoperability_links'] = [{'pre': x.pre, 'name': x.name} for x in InteroperabilityLink.objects.all()]
+        project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
+        strategies = []
+
+        system = {'name': 'System', 'subGroups': []}
+        system_parents = DigitalStrategy.objects.filter(group='System', parent=None)
+        for parent in system_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(system)
+
+        client = {'name': 'Client', 'subGroups': []}
+        client_parents = DigitalStrategy.objects.filter(group='Client', parent=None)
+        for parent in client_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(client)
+
+        provider = {'name': 'Provider', 'subGroups': []}
+        provider_parents = DigitalStrategy.objects.filter(group='Provider', parent=None)
+        for parent in provider_parents.all():
+            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
+            system['subGroups'].append(sub)
+        strategies.append(provider)
+
+        project_structure['strategies'] = strategies
         return Response(project_structure)
+
+    @staticmethod
+    def project_structure_export(request):
+        project_structure_export = {}
+        project_structure_export['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()]
+        project_structure_export['technology_platforms'] = [{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()]
+        project_structure_export['digital_strategies'] = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
+
+        return Response(project_structure_export)
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
