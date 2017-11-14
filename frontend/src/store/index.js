@@ -4,13 +4,15 @@ import user  from './modules/user';
 import projects  from './modules/projects';
 import system  from './modules/system';
 import cms  from './modules/cms';
+import countries  from './modules/countries';
 
 
 const reducers = combineReducers({
     user,
     projects,
     system,
-    cms
+    cms,
+    countries
 });
 
 const middleware = [thunk];
