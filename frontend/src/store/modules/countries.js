@@ -21,6 +21,17 @@ export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry);
 };
 
+export const getCountriesList = state => {
+    if (state.countries.list) {
+        return state.countries.list.map(c=> {
+            c = Object.assign({}, c);
+            c.prettyName = c.name.split('-').join(' ');
+            return c
+        });
+    }
+    return [];
+};
+
 // ACTIONS
 
 export function loadCountries() {
