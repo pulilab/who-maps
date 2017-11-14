@@ -11,6 +11,7 @@ import { reducers, middleware } from '../store/index';
 import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
 import * as SystemModule from '../store/modules/system';
+import * as CountriesModule from '../store/modules/countries';
 import axios from '../plugins/axios';
 
 import _appTemplate from './app.html';
@@ -36,7 +37,9 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           abstract: true,
           resolve: {
               user: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(UserModule.getProfile());
+                  const user =  $ngRedux.dispatch(UserModule.loadProfile());
+                  const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
+                  return Promise.all([user, countries]);
               }]
           }
       })
@@ -52,10 +55,11 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           template: '<app layout="column" layout-fill></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
-                  await $ngRedux.dispatch(UserModule.getProfile());
+                  await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
-                  const profiles = $ngRedux.dispatch(SystemModule.getUserProfiles());
-                  return Promise.all([projects, profiles]);
+                  const profiles = $ngRedux.dispatch(SystemModule.loadUserProfiles());
+                  const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
+                  return Promise.all([projects, profiles, countries]);
               }]
           },
           params: {
@@ -106,13 +110,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           views: {
               main: {
                   template: '<project layout-fill layout="column" ></project>'
-              }
-          },
-          reload: false,
-          params: {
-              '#': {
-                  dynamic: true,
-                  value: 'general-overview'
               }
           },
           resolve: {
@@ -203,8 +200,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
     $ngReduxProvider.createStoreWith(reducers, middleware, [window.__REDUX_DEVTOOLS_EXTENSION__()], initialState);
 };
 
-function handleStateChange(type) {
-    if (type === 'success') {
+function handleStateChange(type, from, to) {
+    if (type === 'success' && from !== to) {
         const mainContent = document.getElementsByClassName('main-content')[0];
         if (mainContent) {
             mainContent.scrollTop = 0;
@@ -227,13 +224,13 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     }
 
 
-    $transitions.onStart({}, (t) => {
+    $transitions.onStart({}, () => {
         handleStateChange('start');
         return Promise.resolve();
     });
 
-    $transitions.onSuccess({}, () => {
-        handleStateChange('success');
+    $transitions.onSuccess({}, (t) => {
+        handleStateChange('success', t.from().name, t.to().name);
         return Promise.resolve();
     });
 
