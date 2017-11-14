@@ -1,162 +1,22 @@
 import axios from '../../plugins/axios';
-import moment from 'moment';
+
 import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
 import cloneDeep from 'lodash/cloneDeep';
-import isEmpty from 'lodash/isEmpty';
-import isNil from 'lodash/isNil';
+
 import union from 'lodash/union';
-import concat from 'lodash/concat';
-import isPlainObject from 'lodash/isPlainObject';
-import isNull from 'lodash/isNull';
-import reduce from 'lodash/reduce';
-import values from 'lodash/values';
+
+
+import findIndex from 'lodash/findIndex';
 import { axisData, domainData } from '../static_data/charts_static';
 import { project_definition } from '../static_data/project_definition';
-
-const fieldsWithCustomValue =  ['interoperability_standards', 'licenses'];
-const fieldsToConvertToObjectArray = ['donors', 'implementing_partners'];
-
-const getTodayString = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-
-    return [year, month, day].join('-');
-
-};
-
-function convertArrayToStandardCustomObj(data) {
-    data = cloneDeep(data);
-    fieldsWithCustomValue.forEach(key=> {
-        const scaffold = {
-            standard: [],
-            custom: void 0
-        };
-        scaffold.standard = data[key];
-        data[key] = scaffold;
-    });
-    return data;
-}
-
-function concatCustom(obj) {
-    const cat = concat(obj.custom, obj.standard);
-    return cat.filter(item => {
-        return !isNil(item) && !isEmpty(item);
-    });
-}
-
-function mergeCustomAndDefault(collection) {
-    fieldsWithCustomValue.forEach(key => {
-        collection[key] = concatCustom(collection[key]);
-    });
-
-    collection.platforms.forEach(p => {
-        if (p.custom) {
-            p.name = p.custom;
-        }
-    });
-    return Object.assign({}, collection);
-}
-
-function convertDate(date) {
-    const dateFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
-    if (date) {
-        return moment(date, dateFormat).toDate();
-    }
-    return undefined;
-}
-
-function convertStringArrayToObjectArray(data) {
-    fieldsToConvertToObjectArray.forEach(key => {
-        if (!data[key]) {
-            return;
-        }
-        data[key] = data[key].map(value => {
-            return { value };
-        });
-        if (data[key].length === 0) {
-            data[key].push({});
-        }
-    });
-    return Object.assign({}, data);
-}
-
-function convertObjectArrayToStringArray(data) {
-    fieldsToConvertToObjectArray.forEach(key => {
-        if (!data[key]) {
-            return;
-        }
-        data[key] = data[key].map(value => value.value);
-        data[key] = data[key].filter(item => item);
-    });
-    return Object.assign({}, data);
-}
-
-function fillEmptyCollectionsWithDefault(data) {
-    data.coverage = isEmpty(data.coverage) ? [{}] : data.coverage;
-    data.platforms = isEmpty(data.platforms) ? [{}] : data.platforms;
-    return Object.assign({}, data);
-}
-
-function setCoverageType(cov, nat) {
-    let ret = null;
-    if (nat && (nat.clients || nat.facilities || nat.health_workers)) {
-        ret = 2;
-    }
-    else if (cov && cov.length > 1) {
-        ret = 1;
-    }
-    else if (cov && Array.isArray(cov) && cov[0] && cov[0].district) {
-        ret = 1;
-    }
-    return ret;
-}
-
-function createDateFields(processedForm) {
-    processedForm.start_date = moment(processedForm.start_date).toJSON();
-    processedForm.end_date = moment(processedForm.end_date).toJSON();
-    processedForm.implementation_dates = moment(processedForm.implementation_dates).toJSON();
-    return Object.assign({}, processedForm);
-}
-
-function deleteUndefinedAndDoubleDollarKeys(item) {
-    const output = {};
-    Object.keys(item).forEach(key => {
-        if (item[key] !== undefined && key !== '$$hashKey') {
-            output[key] = item[key];
-        }
-    });
-    return output;
-}
-
-function removeEmptyChildObjects(processedForm) {
-    const keyArray = ['coverage', 'platforms'];
-    keyArray.forEach(key => {
-        processedForm[key] = processedForm[key].filter(itm => {
-            itm = deleteUndefinedAndDoubleDollarKeys(itm);
-            if (itm.hasOwnProperty('available')) {
-                delete itm.available;
-            }
-            return Object.keys(itm).length > 0;
-        });
-    });
-
-    return Object.assign({}, processedForm);
-}
-
-function removeKeysWithoutValues(processedForm) {
-    return reduce(processedForm, (result, value, key) => {
-        if (value === null || value === '' || isPlainObject(value) &&  values(value).every(isNull)) {
-            result[key] = void 0;
-        }
-        else {
-            result[key] = value;
-        }
-        return result;
-    }, {});
-}
+import * as CountryModule from './countries';
+import * as UserModule from './user';
+import {
+    convertArrayToStandardCustomObj, convertDate, convertStringArrayToObjectArray,
+    fillEmptyCollectionsWithDefault, setCoverageType, fieldsWithCustomValue, getTodayString, createDateFields,
+    mergeCustomAndDefault, convertObjectArrayToStringArray, removeEmptyChildObjects, removeKeysWithoutValues
+} from '../project_utils';
 
 
 // GETTERS
@@ -179,6 +39,26 @@ export const getCurrentProject = state => {
     return Object.assign({}, project);
 };
 
+function convertCountryFieldsAnswer({ fields }) {
+    return fields.map(f => {
+        switch (f.type) {
+        case 2:
+            f.answer = parseInt(f.answer, 10);
+            break;
+        case 3:
+            f.answer = f.answer === 'true';
+            break;
+        }
+        return f;
+    });
+}
+
+export const getProjectCountryFields = state => isNewProject => {
+    const baseCountryFields = CountryModule.getCountryFields(state);
+    const countryFields = convertCountryFieldsAnswer(getCurrentProject(state));
+    return isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields :  countryFields;
+};
+
 export const getCurrentProjectForEditing = state => {
     let data = getCurrentProject(state);
     data = convertArrayToStandardCustomObj(data);
@@ -198,8 +78,26 @@ export const getCurrentProjectForEditing = state => {
     return Object.assign({}, project_definition, data);
 };
 
-export const getVanillaProjectStructure = state => {
-    return cloneDeep(project_definition);
+export const getVanillaProject = state => {
+    const country = CountryModule.userCountryObject(state);
+    const project = cloneDeep(project_definition);
+    project.country = country.id;
+    project.organisation = UserModule.getProfile(state).organisation;
+    return project;
+};
+
+export const getTeam = state => {
+    if (state.projects.teamViewers) {
+        return cloneDeep(state.projects.teamViewers.team);
+    }
+    return [];
+};
+
+export const getViewers = state => {
+    if (state.projects.teamViewers) {
+        return cloneDeep(state.projects.teamViewers.viewers);
+    }
+    return [];
 };
 
 export const getProjectStructure = state => {
@@ -350,14 +248,16 @@ export function loadProjectDetails() {
                 const dataPromise = axios.get(`/api/projects/${projectId}/toolkit/data/`);
                 const toolkitVersionsPromise = axios.get(`/api/projects/${projectId}/toolkit/versions/`);
                 const coverageVersionsPromise = axios.get(`/api/projects/${projectId}/coverage/versions/`);
-                const [toolkitData, toolkitVersions, coverageVersions] =
-                  await Promise.all([dataPromise, toolkitVersionsPromise, coverageVersionsPromise]);
+                const teamViewersPromise = axios.get(`/api/projects/${projectId}/groups/`);
+                const [toolkitData, toolkitVersions, coverageVersions, teamViewers] =
+                  await Promise.all([dataPromise, toolkitVersionsPromise, coverageVersionsPromise, teamViewersPromise]);
                 dispatch({
                     type: 'SET_PROJECT_INFO',
                     info: {
                         toolkitData: toolkitData.data,
                         toolkitVersions: toolkitVersions.data,
-                        coverageVersions: coverageVersions.data
+                        coverageVersions: coverageVersions.data,
+                        teamViewers: teamViewers.data
                     }
                 });
             }
@@ -392,8 +292,29 @@ export function loadProjectStructure() {
     };
 }
 
-export function saveProject(processedForm) {
+async function saveTeamViewers({ id }, team = [], viewers = []) {
+    const data = {
+        team: team.map(t => t.id),
+        viewers: viewers.map(w => w.id)
+    };
+    await axios.put(`/api/projects/${id}/groups/`, data);
+    return data;
+}
+
+async function saveCountryFields(fields = [], { country, id }) {
+    fields = fields.map(f => {
+        f = Object.assign({}, f);
+        f.answer = f.type === 3 ? JSON.stringify(f.answer) : f.answer;
+        f.project = id;
+        return f;
+    });
+    const { data } = await axios.post(`/api/country-fields/${country}/${id}/`, { fields });
+    return data.fields;
+}
+
+export function saveProject(processedForm, team, viewers, countryFields) {
     return async (dispatch, getState) => {
+        const user = getState().user.profile.id;
         processedForm = cloneDeep(processedForm);
         processedForm.organisation_name = processedForm.organisation.name;
         processedForm.organisation = processedForm.organisation.id;
@@ -404,53 +325,25 @@ export function saveProject(processedForm) {
         processedForm = removeKeysWithoutValues(processedForm);
         processedForm.coverageType = undefined;
         const method = processedForm.id ? 'put' : 'post';
-        const { data } = axios[method](`/api/projects/${processedForm.id}/`, processedForm);
-        console.log(data);
+        const url = processedForm.id ? `/api/projects/${processedForm.id}/` : '/api/projects/';
+        try {
+            const { data } = await axios[method](url, processedForm);
+            const cfPromise = saveCountryFields(countryFields, data);
+            const twPromise = saveTeamViewers(data, team, viewers);
+            const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
+            data.fields = fields;
+            const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
+            const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
+            dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
+            dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
+            return Promise.resolve(data);
+        }
+        catch (e) {
+            console.log(e);
+            return Promise.reject(e);
+        }
     };
-
 }
-
-
- // async updateForm(processedForm) {
- //        const response = await this.ns.updateProject(processedForm, this.projectId);
- //        if (response && response.success) {
- //            // generate a single promise from multiple promise and wait for them to be done.
- //            const [putGroupResult] = await Promise.all([this.putGroups(), this.saveCountryFields(response.data)]);
- //            // update cached project data with the one from the backend
- //            this.cs.updateProject(response.data, processedForm);
- //            this.showToast('Project Updated');
- //            this.postUpdateActions(putGroupResult);
- //        }
- //        else {
- //            this.handleResponse(response);
- //        }
- //
- //    }
- //
- //    async saveForm(processedForm) {
- //        try {
- //            const response = await this.ns.newProject(processedForm);
- //            if (response && response.success) {
- //                // eslint-disable-next-line no-unused-vars
- //                const [putGroupResult, countryFieldResult] = await Promise.all([
- //                    this.putGroups(response.data),
- //                    this.saveCountryFields(response.data)
- //                ]);
- //                response.data.fields = countryFieldResult.fields ? countryFieldResult.fields.slice() : null;
- //                this.cs.addProjectToCache(response.data, processedForm);
- //                this.ownershipCheck(response.data);
- //                this.postSaveActions(putGroupResult);
- //                this.showToast('Project Saved');
- //
- //            }
- //            else {
- //                this.handleResponse(response);
- //            }
- //        }
- //        catch (e) {
- //            console.error(e);
- //        }
- //    }
 
 
 // Reducers
@@ -460,6 +353,24 @@ export default function projects(state = {}, action) {
     switch (action.type) {
     case 'SET_PROJECT_LIST': {
         p.list = action.projects.slice();
+        return Object.assign(state, {}, p);
+    }
+    case 'UPDATE_SAVE_PROJECT': {
+        const list = cloneDeep(p.list);
+        const index = findIndex(list, pj => pj.published.id === action.project.id);
+        if (index !== -1) {
+            const oldProject = list[index];
+            oldProject.published = action.project;
+            list.splice(index, 1, oldProject);
+        }
+        else {
+            const newProject = {
+                published: action.project,
+                draft: {}
+            };
+            list.push(newProject);
+        }
+        p.list = list;
         return Object.assign(state, {}, p);
     }
     case 'SET_CURRENT_PROJECT': {
@@ -474,6 +385,7 @@ export default function projects(state = {}, action) {
         p.toolkitData = action.info.toolkitData;
         p.toolkitVersions = action.info.toolkitVersions;
         p.coverageVersions = action.info.coverageVersions;
+        p.teamViewers = action.info.teamViewers;
         return Object.assign(state, {}, p);
     }
     default:
