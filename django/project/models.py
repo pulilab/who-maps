@@ -127,3 +127,6 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
     def __str__(self):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
         return '[{}]{} {}'.format(self.group, parent, self.name)
+
+    class Meta:
+        verbose_name_plural = 'Digital Strategies'
