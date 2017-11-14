@@ -7,7 +7,7 @@ export const project_definition = {
     country: null,
     countryName: null,
     coverage: [{}],
-    coverageType: undefined,
+    coverageType: 1,
     start_date: undefined,
     end_date: undefined,
     platforms: [{
