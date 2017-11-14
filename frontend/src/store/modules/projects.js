@@ -1,12 +1,8 @@
 import axios from '../../plugins/axios';
-
 import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
 import cloneDeep from 'lodash/cloneDeep';
-
 import union from 'lodash/union';
-
-
 import findIndex from 'lodash/findIndex';
 import { axisData, domainData } from '../static_data/charts_static';
 import { project_definition } from '../static_data/project_definition';
@@ -17,7 +13,6 @@ import {
     fillEmptyCollectionsWithDefault, setCoverageType, fieldsWithCustomValue, getTodayString, createDateFields,
     mergeCustomAndDefault, convertObjectArrayToStringArray, removeEmptyChildObjects, removeKeysWithoutValues
 } from '../project_utils';
-
 
 // GETTERS
 
@@ -222,6 +217,18 @@ export const getCoverageData = state => {
 };
 
 
+export const getSimilarProject = state => {
+    const userProjects = getPublishedProjects(state);
+    if (state.projects.similarProjectNames) {
+        return state.projects.similarProjectNames.map(p => {
+            p = Object.assign({}, p);
+            p.isOwn = userProjects.some(up => up.id === p.id);
+            return p;
+        });
+    }
+    return [];
+};
+
 // ACTIONS
 
 
@@ -347,6 +354,26 @@ export function saveProject(processedForm, team, viewers, countryFields) {
     };
 }
 
+async function searchProjects(query, health_topic = false, location = false,
+                              organisation = false, project_name = false, technology_platform = false) {
+    const { data } = await axios.post('/api/search/projects/', {
+        health_topic,
+        location,
+        organisation,
+        project_name,
+        query,
+        technology_platform
+    });
+    return data;
+}
+
+export function searchDuplicateProjectName(query) {
+    return async (dispatch) => {
+        const list = await searchProjects(query);
+        dispatch({ type: 'SET_SIMILAR_NAME_LIST', list });
+    };
+}
+
 
 // Reducers
 
@@ -355,6 +382,10 @@ export default function projects(state = {}, action) {
     switch (action.type) {
     case 'SET_PROJECT_LIST': {
         p.list = action.projects.slice();
+        return Object.assign(state, {}, p);
+    }
+    case 'SET_SIMILAR_NAME_LIST': {
+        p.similarProjectNames = action.list.slice();
         return Object.assign(state, {}, p);
     }
     case 'UPDATE_SAVE_PROJECT': {
