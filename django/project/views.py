@@ -221,7 +221,9 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         project.team.add(self.request.user.userprofile)
         data = dict(data_serializer.validated_data)
         country_name = project.country.name if project.country else None
-        data.update(dict(id=project.id, public_id=project.public_id, country_name=country_name))
+        org_name = project.get_organisation().name if project.get_organisation() else ''
+        data.update(dict(id=project.id, public_id=project.public_id, country_name=country_name,
+                         organisation_name=org_name))
         return project, data
 
     def _update_project(self, project, data_serializer):
@@ -238,8 +240,9 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         project.data = project_data
         project.save()
         country_name = project.country.name if project.country else None
+        org_name = project.get_organisation().name if project.get_organisation() else ''
         data_serializer.validated_data.update(dict(id=project.id, public_id=project.public_id,
-                                                   country_name=country_name))
+                                                   country_name=country_name, organisation_name=org_name))
         return data_serializer.validated_data
 
 
