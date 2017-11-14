@@ -1,5 +1,6 @@
-import _ from 'lodash';
-import NewProjectService from './ProjectService';
+import forEach from 'lodash/forEach';
+import isPlainObject from 'lodash/isPlainObject';
+
 import * as ProjectModule from '../store/modules/projects';
 import * as SystemModule from '../store/modules/system';
 import * as UserModule from '../store/modules/user';
@@ -9,21 +10,19 @@ import * as CountryModule from '../store/modules/countries';
 
 class ProjectController  {
 
-    constructor($scope, $state, Upload, toast, $timeout, $ngRedux, $location) {
-        this.ns = new NewProjectService(Upload);
-        this.ccs = require('../Common/CustomCountryService');
+    constructor($scope, $state, toast, $timeout, $ngRedux) {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
-        this.location = $location;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.postSaveActions = this.postSaveActions.bind(this);
         this.getCountryFields = this.getCountryFields.bind(this);
         this.registerEventIfNotPresent = this.registerEventIfNotPresent.bind(this);
         this.toast = toast;
         this.mapData = this.mapData.bind(this);
-        this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
+        this.unsubscribe = $ngRedux.connect(this.mapData, ProjectModule)(this);
         this.$ngRedux = $ngRedux;
     }
 
@@ -31,7 +30,7 @@ class ProjectController  {
         const userProfile = UserModule.getProfile(state);
         const newProject = this.state.current.name === 'newProject';
         const project = this.project ? this.project : newProject ?
-            ProjectModule.getVanillaProject(state) : ProjectModule.getCurrentProjectForEditing(state);
+          ProjectModule.getVanillaProject(state) : ProjectModule.getCurrentProjectForEditing(state);
 
         const team = newProject && this.team ?
           this.team : newProject && !this.team ? [userProfile] : ProjectModule.getTeam(state);
@@ -41,6 +40,7 @@ class ProjectController  {
         const users = SystemModule.getUserProfiles(state);
 
         const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
+
         return {
             project,
             team,
@@ -74,6 +74,10 @@ class ProjectController  {
         this.watchers();
     }
 
+    onDestroy() {
+        this.unsubscribe();
+    }
+
     watchers() {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
     }
@@ -98,7 +102,7 @@ class ProjectController  {
     }
 
     clearCustomErrors() {
-        _.forEach(this.form, formItem => {
+        forEach(this.form, formItem => {
             if (formItem && formItem.customError && formItem.customError.length > 0) {
                 formItem.$setValidity('custom', true);
                 formItem.customError = [];
@@ -111,15 +115,10 @@ class ProjectController  {
         if (this.form.$valid) {
             try {
                 const data = await this.saveProject(this.project, this.team, this.viewers, this.countryFields);
-                if (this.editMode) {
-                    this.postUpdateActions(data);
-                }
-                else {
-                    this.postSaveActions(data);
-                }
+                this.postSaveActions(data);
             }
             catch (e) {
-                this.handleResponse(e);
+                this.handleResponse(e.response);
             }
         }
         else {
@@ -232,30 +231,20 @@ class ProjectController  {
         this.toast.show(toast);
     }
 
-    postUpdateActions({ id }) {
-        this.showToast('Project Updated');
-        // this.EE.emit('projectListUpdated');
-        const addAnother = this.isAddAnother;
-        this.isAddAnother = false;
-        const go = {
-            state: addAnother ? 'newProject' : 'dashboard',
-            appName: id
-        };
-        this.navigate(go);
-    }
-
     postSaveActions({ id }) {
-        this.showToast('Project Saved');
+        let toastLabel = 'Project Saved';
+        let navigateTo = 'editProject';
+        if (this.editMode) {
+            toastLabel = 'Project Updated';
+            navigateTo = 'dashboard';
+        }
+        this.showToast(toastLabel);
         const addAnother = this.isAddAnother;
         this.isAddAnother = false;
         const go = {
-            state: addAnother ? 'newProject' : 'editProject',
+            state: addAnother ? 'newProject' : navigateTo,
             appName: id
         };
-        this.navigate(go);
-    }
-
-    navigate(go) {
         this.state.go(go.state, { appName: go.appName }, {
             location: 'replace',
             reload: true
@@ -268,16 +257,16 @@ class ProjectController  {
     }
 
     handleResponse(response) {
-        _.forEach(response.data, (item, key) => {
+        forEach(response.data, (item, key) => {
             try {
-                if (item && _.isPlainObject(item)) {
-                    _.forEach(item, (errors, subKey) => {
+                if (item && isPlainObject(item)) {
+                    forEach(item, (errors, subKey) => {
                         this.addErrorArray(errors, `${key}.${subKey}`);
                     });
                 }
-                else if (item && item[0] && _.isPlainObject(item[0])) {
-                    _.forEach(item, (obj, index) => {
-                        _.forEach(obj, (errors, subKey) => {
+                else if (item && item[0] && isPlainObject(item[0])) {
+                    forEach(item, (obj, index) => {
+                        forEach(obj, (errors, subKey) => {
                             const fieldName = `${key}_${index}.${subKey}`;
                             this.addErrorArray(errors, fieldName);
                         });
@@ -301,10 +290,10 @@ class ProjectController  {
 
     static newProjectFactory() {
         require('./Project.scss');
-        function newProject($scope, $state, Upload, $mdToast, $timeout, $ngRedux, $location) {
-            return new ProjectController($scope, $state, Upload, $mdToast, $timeout, $ngRedux, $location);
+        function newProject($scope, $state, $mdToast, $timeout, $ngRedux) {
+            return new ProjectController($scope, $state, $mdToast, $timeout, $ngRedux);
         }
-        newProject.$inject = ['$scope', '$state', 'Upload', '$mdToast', '$timeout', '$ngRedux', '$location'];
+        newProject.$inject = ['$scope', '$state', '$mdToast', '$timeout', '$ngRedux'];
         return newProject;
     }
 }
