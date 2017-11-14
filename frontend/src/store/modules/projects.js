@@ -41,6 +41,7 @@ export const getCurrentProject = state => {
 
 function convertCountryFieldsAnswer({ fields }) {
     return fields.map(f => {
+        f = Object.assign({}, f);
         switch (f.type) {
         case 2:
             f.answer = parseInt(f.answer, 10);
@@ -56,7 +57,8 @@ function convertCountryFieldsAnswer({ fields }) {
 export const getProjectCountryFields = state => isNewProject => {
     const baseCountryFields = CountryModule.getCountryFields(state);
     const countryFields = convertCountryFieldsAnswer(getCurrentProject(state));
-    return isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields :  countryFields;
+    const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields :  countryFields;
+    return cloneDeep(result);
 };
 
 export const getCurrentProjectForEditing = state => {
