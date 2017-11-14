@@ -12,8 +12,7 @@ const component = {
         structure: '<',
         team: '<',
         viewers: '<',
-        users: '<',
-        projectList: '<'
+        users: '<'
     }
 };
 
