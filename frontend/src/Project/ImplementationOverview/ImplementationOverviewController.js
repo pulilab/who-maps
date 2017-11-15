@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import some from 'lodash/some';
+import every from 'lodash/every';
+import isNil from 'lodash/isNil';
+import isNull from 'lodash/isNull';
 import CollapsibleSet from '../CollapsibleSet';
 import * as CountriesModule from '../../store/modules/countries';
 
@@ -127,15 +130,15 @@ class ImplementationOverview extends CollapsibleSet {
         }
 
         if (current === 'nld' && this.project.national_level_deployment) {
-            return _.some(nld);
+            return some(nld);
         }
         else if (current === 'dld') {
-            return _.some([
+            return some([
                 item.district,
-                !_.isNil(item.health_workers),
-                !_.isNil(item.facilities),
-                !_.isNil(item.clients),
-                _.every(nld, _.isNull)
+                !isNil(item.health_workers),
+                !isNil(item.facilities),
+                !isNil(item.clients),
+                every(nld, isNull)
             ]);
         }
         return false;
