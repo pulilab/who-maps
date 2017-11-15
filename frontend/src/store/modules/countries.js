@@ -11,7 +11,9 @@ const stateDefinition = {
     currentCountryDistricts: [],
     currentCountry: null,
     currentCountryCoverPage: {},
-    mapData: {}
+    mapData: {},
+    currentCountryProjects: [],
+    currentCountryDistrictsProjects: []
 };
 
 // GETTERS
@@ -23,12 +25,25 @@ export const userCountryObject = state => {
     return null;
 };
 
+export const getCountriesList = state => {
+    if (state.countries.list) {
+        return state.countries.list.map(c=> {
+            c = Object.assign({}, c);
+            c.code = c.code.toLocaleLowerCase();
+            c.flag =  `/static/flags/${c.code}.png`;
+            c.prettyName = c.name.split('-').join(' ');
+            return c;
+        }).sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return [];
+};
+
 export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry);
 };
 
 export const getCurrentCountry = state => {
-    return Object.assign({}, state.countries.list.find(c => c.id === state.countries.currentCountry));
+    return Object.assign({}, getCountriesList(state).find(c => c.id === state.countries.currentCountry));
 };
 
 export const getCountryCoverPage = state => {
@@ -55,21 +70,32 @@ export const getCountryCoverPicture = state => {
     return null;
 };
 
-export const getCountriesList = state => {
+export const getCountriesLib = state => {
+    const result = {};
     if (state.countries.list) {
-        return state.countries.list.map(c=> {
-            c = Object.assign({}, c);
-            c.code = c.code.toLocaleLowerCase();
-            c.flag =  `/static/flags/${c.code}.png`;
-            c.prettyName = c.name.split('-').join(' ');
-            return c;
-        }).sort((a, b) => a.name.localeCompare(b.name));
+        state.countries.list.forEach(c => {
+            result[c.id] = c.name;
+        });
     }
-    return [];
+    return result;
 };
 
 export const getCurrentCountryDistricts = state => {
     return state.countries.currentCountryDistricts;
+};
+
+export const getCurrentCountryMapData = state => {
+    const currentCountry = getCurrentCountry(state);
+    currentCountry.mapData = state.countries.mapData[currentCountry.code];
+    currentCountry.districts = getCurrentCountryDistricts(state);
+    return cloneDeep(currentCountry);
+};
+
+export const getCurrentCountryDistrictProjects = state => {
+    return cloneDeep(state.countries.currentCountryDistrictsProjects);
+};
+export const getCurrentCountryProjects = state => {
+    return cloneDeep(state.countries.currentCountryProjects);
 };
 
 // ACTIONS
@@ -121,13 +147,32 @@ export function loadCountryLandingPageInfo() {
     };
 }
 
+export function loadCurrentCountryDistrictsProject() {
+    return async (dispatch, getState) => {
+        const countryId = getCurrentCountry(getState()).id;
+        const { data } = await axios.get(`/api/projects/by-view/map/${countryId}/`);
+        dispatch({ type: 'CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
+    };
+}
+export function loadCountryProjectsOrAll(countryId) {
+    return async (dispatch) => {
+        const url = ['/api/projects/by-view/list/'];
+        if (countryId) {
+            url.push(`${countryId}/`);
+        }
+        const { data } = await axios.get(url.join(''));
+        dispatch({ type: 'CURRENT_COUNTRY_PROJECTS', projects: data });
+    };
+}
+
 export function setCurrentCountry(id) {
     return async dispatch => {
         dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
         const cfPromise =  dispatch(loadCountryFields(id));
         const dsPromise = dispatch(loadCountryMapDataAndDistricts());
         const lPromise = dispatch(loadCountryLandingPageInfo());
-        return Promise.all([cfPromise, dsPromise, lPromise]);
+        const dpPromise = dispatch(loadCurrentCountryDistrictsProject());
+        return Promise.all([cfPromise, dsPromise, lPromise, dpPromise]);
     };
 }
 
@@ -140,6 +185,10 @@ export function setCurrentCountryFromCode(code) {
     };
 }
 
+export async function csvExport(ids) {
+    const { data } = await axios.post('/api/projects/csv-export/', ids);
+    return data;
+}
 
 // Reducers
 
@@ -164,6 +213,14 @@ export default function system(state = stateDefinition, action) {
     }
     case 'SET_CURRENT_COUNTRY_DISTRICTS': {
         s.currentCountryDistricts = action.districts;
+        return Object.assign(state, {}, s);
+    }
+    case 'CURRENT_COUNTRY_PROJECTS': {
+        s.currentCountryProjects = action.projects;
+        return Object.assign(state, {}, s);
+    }
+    case 'CURRENT_COUNTRY_DISTRICT_PROJECTS': {
+        s.currentCountryDistrictsProjects = action.projects;
         return Object.assign(state, {}, s);
     }
     case 'SET_MAP_DATA': {
