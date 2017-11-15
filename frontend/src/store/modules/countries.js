@@ -5,7 +5,9 @@ import unionBy from 'lodash/unionBy';
 const stateDefinition = {
     list: [],
     countryFields: [],
-    currentCountry: null
+    currentCountryDistricts: [],
+    currentCountry: null,
+    mapData: {}
 };
 
 // GETTERS
@@ -21,15 +23,25 @@ export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry);
 };
 
+export const getCurrentCountry = state => {
+    return Object.assign({}, state.countries.list.find(c => c.id === state.countries.currentCountry));
+};
+
 export const getCountriesList = state => {
     if (state.countries.list) {
         return state.countries.list.map(c=> {
             c = Object.assign({}, c);
+            c.code = c.code.toLocaleLowerCase();
+            c.flag =  `/static/flags/${c.code}.png`;
             c.prettyName = c.name.split('-').join(' ');
-            return c
-        });
+            return c;
+        }).sort((a, b) => a.name.localeCompare(b.name));
     }
     return [];
+};
+
+export const getCurrentCountryDistricts = state => {
+    return state.countries.currentCountryDistricts;
 };
 
 // ACTIONS
@@ -54,10 +66,30 @@ export function loadCountryFields(id) {
     };
 }
 
+export function loadCountryMapDataAndDistricts() {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const country = getCurrentCountry(state);
+        let countryData = state.countries.mapData[country.code];
+        if (!countryData) {
+            const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
+            countryData = data;
+            dispatch({ type: 'SET_MAP_DATA', countryData, code: country.code });
+        }
+        const subKey = Object.keys(countryData.objects)[0];
+        const districts = countryData.objects[subKey].geometries.map(object => {
+            return object.properties['name:en'] || object.properties.name;
+        });
+        dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
+    };
+}
+
 export function setCurrentCountry(id) {
     return async dispatch => {
-        await dispatch(loadCountryFields(id));
         dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
+        const cfPromise =  dispatch(loadCountryFields(id));
+        const dsPromise = dispatch(loadCountryMapDataAndDistricts());
+        return Promise.all([cfPromise, dsPromise]);
     };
 }
 
@@ -77,6 +109,16 @@ export default function system(state = stateDefinition, action) {
     }
     case 'UPDATE_COUNTRY_FIELDS_LIST': {
         s.countryFields = unionBy(action.fields, s.countryFields, 'id');
+        return Object.assign(state, {}, s);
+    }
+    case 'SET_CURRENT_COUNTRY_DISTRICTS': {
+        s.currentCountryDistricts = action.districts;
+        return Object.assign(state, {}, s);
+    }
+    case 'SET_MAP_DATA': {
+        const newMapData = {};
+        newMapData[action.code] = action.countryData;
+        s.mapData = Object.assign({}, s.mapData, newMapData);
         return Object.assign(state, {}, s);
     }
     default:
