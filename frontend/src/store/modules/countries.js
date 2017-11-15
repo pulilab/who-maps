@@ -1,12 +1,16 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 import unionBy from 'lodash/unionBy';
+import forEach from 'lodash/forEach';
+import cloneDeep from 'lodash/cloneDeep';
+import { country_default_data } from '../static_data/country_static_data';
 
 const stateDefinition = {
     list: [],
     countryFields: [],
     currentCountryDistricts: [],
     currentCountry: null,
+    currentCountryCoverPage: {},
     mapData: {}
 };
 
@@ -25,6 +29,30 @@ export const getCountryFields = state => {
 
 export const getCurrentCountry = state => {
     return Object.assign({}, state.countries.list.find(c => c.id === state.countries.currentCountry));
+};
+
+export const getCountryCoverPage = state => {
+    const countryCover = cloneDeep(state.countries.currentCountryCoverPage);
+    forEach(country_default_data, (standardValue, key) => {
+        const value = countryCover[key];
+        if (value === null || value === undefined || value === '') {
+            countryCover[key] = standardValue;
+        }
+    });
+    countryCover.partners = countryCover.default_partners.concat(countryCover.partner_logos);
+    return countryCover;
+};
+
+export const getCountryCoverPicture = state => {
+    const country = getCountryCoverPage(state);
+    if (country.cover) {
+        return {
+            background: `url(${country.cover}) 0 0`,
+            'background-size': 'cover',
+            'background-repeat': 'no-repeat'
+        };
+    }
+    return null;
 };
 
 export const getCountriesList = state => {
@@ -84,12 +112,31 @@ export function loadCountryMapDataAndDistricts() {
     };
 }
 
+
+export function loadCountryLandingPageInfo() {
+    return async (dispatch, getState) => {
+        const country = getCurrentCountry(getState());
+        const { data } = await axios.get(`/api/landing/${country.code.toUpperCase()}/`);
+        dispatch({ type: 'SET_COUNTRY_COVER_DATA', cover: data });
+    };
+}
+
 export function setCurrentCountry(id) {
     return async dispatch => {
         dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
         const cfPromise =  dispatch(loadCountryFields(id));
         const dsPromise = dispatch(loadCountryMapDataAndDistricts());
-        return Promise.all([cfPromise, dsPromise]);
+        const lPromise = dispatch(loadCountryLandingPageInfo());
+        return Promise.all([cfPromise, dsPromise, lPromise]);
+    };
+}
+
+export function setCurrentCountryFromCode(code) {
+    return async (dispatch, getState) => {
+        const country = getState().countries.list.find(c => c.code.toLocaleLowerCase() === code.toLocaleLowerCase());
+        if (country && country.id) {
+            dispatch(setCurrentCountry(country.id));
+        }
     };
 }
 
@@ -105,6 +152,10 @@ export default function system(state = stateDefinition, action) {
     }
     case 'SET_CURRENT_COUNTRY': {
         s.currentCountry = action.country;
+        return Object.assign(state, {}, s);
+    }
+    case 'SET_COUNTRY_COVER_DATA': {
+        s.currentCountryCoverPage = action.cover;
         return Object.assign(state, {}, s);
     }
     case 'UPDATE_COUNTRY_FIELDS_LIST': {
