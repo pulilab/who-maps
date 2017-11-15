@@ -19,7 +19,8 @@ from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
 from .tasks import send_project_approval_digest
 
 
-class MockRequest:
+class MockRequest():
+    user = None
     GET = {}
 
 
@@ -62,7 +63,8 @@ class SetupTests(APITestCase):
         response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json().get('id')
 
-        self.country = Country.objects.create(name="country1")
+        user = UserProfile.objects.get(id=self.user_profile_id)
+        self.country = Country.objects.create(name="country1", user=user)
         self.country_id = self.country.id
 
         self.project_data = {
@@ -659,6 +661,16 @@ class ProjectTests(SetupTests):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
 
+    def test_project_approval_admin_filter_country_admins(self):
+        request = MockRequest()
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        request.user = user
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+                                                          approved=True)
+        self.assertEqual(ma.get_queryset(request).count(), 1)
+
 
 class ProjectDraftTests(SetupTests):
 
@@ -766,8 +778,10 @@ class ProjectDraftTests(SetupTests):
     def test_project_approval_admin(self):
         site = AdminSite()
         ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id, approved=True)
-        self.assertEqual(ma.link(project_approval), "<a href='/app/1/edit-project'>See project</a>")
+        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+                                                          approved=True)
+        self.assertEqual(ma.link(project_approval),
+                         "<a href='/app/{}/edit-project'>See project</a>".format(project_approval.id))
 
 
 class PermissionTests(SetupTests):
