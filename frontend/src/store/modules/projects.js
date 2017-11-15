@@ -283,10 +283,13 @@ export function setCurrentProject(id) {
     return async (dispatch, getState) => {
         id = parseInt(id, 10);
         dispatch({ type: 'SET_CURRENT_PROJECT', id });
-        const project = getCurrentProject(getState());
-        const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
-        const detailPromise = dispatch(loadProjectDetails());
-        return Promise.all([mapDataPromise, detailPromise]);
+        if (id) {
+            const project = getCurrentProject(getState());
+            const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
+            const detailPromise = dispatch(loadProjectDetails());
+            return Promise.all([mapDataPromise, detailPromise]);
+        }
+        return Promise.resolve();
     };
 }
 
