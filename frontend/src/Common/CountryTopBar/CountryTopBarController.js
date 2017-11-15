@@ -1,4 +1,5 @@
 import TopBarBehaviour  from '../TopBarBheaviour';
+import { getSubDomain } from '../../Utilities';
 
 class CountryTopBarController extends TopBarBehaviour {
 
@@ -18,7 +19,7 @@ class CountryTopBarController extends TopBarBehaviour {
         if (this.user) {
             this.cs.loadedPromise.then(vm.setProfileData.bind(vm));
         }
-        const subDomain = this.ccs.getSubDomain();
+        const subDomain = getSubDomain();
         this.countryFlag = this.ccs.getCountryFlag(subDomain);
         this.ccs.getCountryData(subDomain).then(data => {
             this.scope.$evalAsync(() => {
