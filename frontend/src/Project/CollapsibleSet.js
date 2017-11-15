@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import remove from 'lodash/remove';
 
 class CollapsibleSet {
     constructor(element, scope, collectionName) {
@@ -72,7 +72,7 @@ class CollapsibleSet {
         }
         const field = this.findField(key);
         if (this.checkboxChecked(t, key)) {
-            _.remove(field, item => {
+            remove(field, item => {
                 return item === t;
             });
         }

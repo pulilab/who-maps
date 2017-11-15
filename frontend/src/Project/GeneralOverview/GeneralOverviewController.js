@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import includes from 'lodash/includes';
 import moment from 'moment';
 import CollapsibleSet from '../CollapsibleSet';
 import * as ProjectModule from '../../store/modules/projects';
@@ -72,8 +72,8 @@ class GeneralOverviewController extends CollapsibleSet {
         return this.users.filter(el => {
             // Avoid to search user that have no proper profile.
             if (el && el.name && el.organisation_name) {
-                return _.includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
-                  _.includes(el.organisation_name.toLowerCase(), criteria.toLowerCase());
+                return includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
+                  includes(el.organisation_name.toLowerCase(), criteria.toLowerCase());
             }
             return false;
         });

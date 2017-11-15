@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 class NavigationController {
 
     constructor($element) {
@@ -22,7 +22,7 @@ class NavigationController {
 
     activateNavigation(hash) {
         const navigation = this.element[0].getElementsByTagName('li');
-        _.forEach(navigation, element => {
+        forEach(navigation, element => {
             if (element.classList.contains(hash)) {
                 element.classList.add('active');
             }
