@@ -147,8 +147,10 @@ def _serialize_project(project, data):
     org_name = project.get_organisation().name if project.get_organisation() else ''
     approved = project.approval.approved if hasattr(project, 'approval') else None
     data.update(id=project.id, name=project.name, organisation_name=org_name,
-                public_id=project.public_id, country_name=project.country.name, approved=approved,
+                country_name=project.country.name, approved=approved,
                 fields=[field.to_representation() for field in country_fields])
+    if isinstance(project, Project):
+        data.update(public_id=project.public_id)
     return data
 
 
@@ -221,7 +223,7 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         project.team.add(self.request.user.userprofile)
         data = dict(data_serializer.validated_data)
         country_name = project.country.name if project.country else None
-        data.update(dict(id=project.id, public_id=project.public_id, country_name=country_name))
+        data.update(dict(id=project.id, country_name=country_name))
         return project, data
 
     def _update_project(self, project, data_serializer):
@@ -238,8 +240,7 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         project.data = project_data
         project.save()
         country_name = project.country.name if project.country else None
-        data_serializer.validated_data.update(dict(id=project.id, public_id=project.public_id,
-                                                   country_name=country_name))
+        data_serializer.validated_data.update(dict(id=project.id, country_name=country_name))
         return data_serializer.validated_data
 
 
@@ -252,6 +253,7 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         data_serializer = ProjectSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
         project, data = self._create_project(Project, data_serializer)
+        data.update(public_id=project.public_id)
         # Add default Toolkit structure for the new project.
         Toolkit.objects.create(project_id=project.id, data=toolkit_default)
         # Remove project draft
@@ -274,6 +276,7 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         data = self._update_project(project, data_serializer)
+        data.update(public_id=project.public_id)
         return Response(data, status=status.HTTP_200_OK)
 
 
@@ -285,7 +288,8 @@ class ProjectDraftCRUDViewSet(ProjectBaseViewSet):
         """
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
-        _, data = self._create_project(ProjectDraft, data_serializer, project_id=data_serializer.validated_data["project"])
+        _, data = self._create_project(ProjectDraft, data_serializer,
+                                       project_id=data_serializer.validated_data["project"])
         return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):

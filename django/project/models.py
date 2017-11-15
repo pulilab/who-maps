@@ -34,7 +34,8 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(data__organisation=organisation_id)
 
     def create(self, **kwargs):
-        kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
+        if self.model == Project:
+            kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
         return super(ProjectManager, self).create(**kwargs)
 
 
@@ -47,8 +48,6 @@ class ProjectBase(ExtendedModel):
     data = JSONField()
     team = models.ManyToManyField(UserProfile, related_name="%(class)s_team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="%(class)s_viewers", blank=True)
-    public_id = models.CharField(max_length=64, default="",
-                                 help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
     projects = ProjectManager()
 
@@ -93,7 +92,8 @@ class ProjectBase(ExtendedModel):
 
 
 class Project(ProjectBase):
-    pass
+    public_id = models.CharField(max_length=64, default="",
+                                 help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
 
 class ProjectDraft(ProjectBase):

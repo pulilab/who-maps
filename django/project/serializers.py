@@ -103,6 +103,7 @@ class ProjectSerializer(ProjectBaseSerializer):
     approved = serializers.BooleanField(required=False, read_only=True)
     # Draft project
     project_draft = serializers.IntegerField(required=False, allow_null=True)
+    project_id = serializers.IntegerField(required=False, read_only=True)
 
 
 class GroupSerializer(serializers.ModelSerializer):
