@@ -135,6 +135,7 @@ class ProjectTests(SetupTests):
         data.update(dict(name="Test Project3"))
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json().get("organisation_name"), self.org.name)
 
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-crud")
@@ -246,6 +247,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
         self.assertEqual(response.json()["platforms"][0]["strategies"][0], "new strat")
+        self.assertEqual(response.json().get("organisation_name"), self.org.name)
 
     def test_update_project_platform_biggies(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
