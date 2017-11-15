@@ -18,7 +18,7 @@ from country.models import Country, CountryField
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer, ProjectDraftSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    ProjectDraft
+    ProjectDraft, ProjectApproval
 from .project_data import project_structure
 
 
@@ -256,6 +256,9 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         data.update(public_id=project.public_id)
         # Add default Toolkit structure for the new project.
         Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+        # Add approval if required by the country
+        if project.country.project_approval:
+            ProjectApproval.objects.create(project=project, user=project.country.user)
         # Remove project draft
         ProjectDraft.objects.filter(id=data_serializer.validated_data.get('project_draft', None)).delete()
         return Response(data, status=status.HTTP_201_CREATED)

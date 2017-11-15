@@ -138,6 +138,15 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
 
+    def test_create_new_project_approval_required(self):
+        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(name="Test Project3"))
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProjectApproval.objects.filter(project_id=response.data['id']).exists(), True)
+
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
@@ -773,7 +782,7 @@ class ProjectDraftTests(SetupTests):
     def test_project_approval_email(self):
         Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
         send_project_approval_digest()
-        self.assertIn('admin/project/projectapproval/add', mail.outbox[1].message().as_string())
+        self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
 
     def test_project_approval_admin(self):
         site = AdminSite()
