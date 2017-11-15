@@ -234,6 +234,10 @@ class CountryViewModuleController {
             this.loadCountryProjectsOrAll(newVal.id);
         }
 
+        if (this.projectsData.length === 0) {
+            this.loadCountryProjectsOrAll(newVal.id);
+        }
+
     }
 
     exportPDF() {
