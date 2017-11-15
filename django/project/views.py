@@ -212,7 +212,7 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         # Draft project
         if project_draft:
             project_draft_data = _serialize_project(project_draft, project_draft.get_member_data())
-        return Response({'draft': project_draft_data, 'published': project_data})
+        return {'draft': project_draft_data, 'published': project_data}
 
     def _create_project(self, klass, data_serializer, **kwargs):
         project_data = copy.copy(data_serializer.validated_data)
@@ -264,7 +264,7 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         """
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
         project_draft = project.project_draft if hasattr(project, 'project_draft') else None
-        return self._get_project_data(project, project_draft)
+        return Response(self._get_project_data(project, project_draft))
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -294,7 +294,7 @@ class ProjectDraftCRUDViewSet(ProjectBaseViewSet):
         """
         project_draft = get_object_or_400(ProjectDraft, "No such project", id=kwargs.get("pk"))
         project = project_draft.project if hasattr(project_draft, 'project') else None
-        return self._get_project_data(project, project_draft)
+        return Response(self._get_project_data(project, project_draft))
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):

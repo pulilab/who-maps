@@ -1,7 +1,5 @@
 from django.contrib import admin
-from django.contrib import admin
 from django.utils.html import mark_safe
-from django import forms
 
 from core.admin import AllObjectsAdmin
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, ProjectApproval
@@ -24,7 +22,7 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
     readonly_fields = ['link']
 
     def link(self, obj):
-        return mark_safe("<a href='/app/project/{}'>See project</a>".format(obj.id))
+        return mark_safe("<a href='/app/{}/edit-project'>See project</a>".format(obj.id))
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)

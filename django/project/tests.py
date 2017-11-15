@@ -702,6 +702,13 @@ class ProjectDraftTests(SetupTests):
 
         self.assertEqual(response.status_code, 201)
 
+    def test_create_new_draft_name_is_not_unique(self):
+        url = reverse("project-draft-crud")
+        data = copy.deepcopy(self.project_draft_data)
+        response = self.test_user_client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, 201)
+
     def test_retrieve_draft_project(self):
         url = reverse("project-draft-detail", kwargs={"pk": self.project_draft_id})
         response = self.test_user_client.get(url)
@@ -760,7 +767,7 @@ class ProjectDraftTests(SetupTests):
         site = AdminSite()
         ma = ProjectApprovalAdmin(ProjectApproval, site)
         project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id, approved=True)
-        self.assertEqual(ma.link(project_approval), "<a href='/app/project/1'>See project</a>")
+        self.assertEqual(ma.link(project_approval), "<a href='/app/1/edit-project'>See project</a>")
 
 
 class PermissionTests(SetupTests):

@@ -97,6 +97,7 @@ class Project(ProjectBase):
 
 
 class ProjectDraft(ProjectBase):
+    name = models.CharField(max_length=255, unique=False)
     project = models.OneToOneField(
             'Project',
             on_delete=models.CASCADE,
