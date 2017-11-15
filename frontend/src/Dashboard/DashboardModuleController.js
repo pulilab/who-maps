@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as ProjectModule from '../store/modules/projects';
+import * as CountriesModule from '../store/modules/countries';
 
 import commProjects from './Mocks/commProjects.js';
 
@@ -26,7 +27,8 @@ class DashboardModuleController {
             toolkitVersion: ProjectModule.getToolkitVersion(state),
             coverageVersion: ProjectModule.getCoverageVersion(state),
             profile: state.user.profile,
-            currentVersion: ProjectModule.getCurrentVersion(state)
+            currentVersion: ProjectModule.getCurrentVersion(state),
+            mapData: CountriesModule.getCurrentCountryMapData(state)
         };
     }
 
@@ -41,7 +43,6 @@ class DashboardModuleController {
 
     onInit() {
         this.projectId = this.state.params.appName;
-        this.mapService = require('../Common/CustomCountryService');
         this.commProjects = commProjects;
         this.resizeEvent();
         this.eventBinding();
@@ -105,7 +106,6 @@ class DashboardModuleController {
 
     async adjustProjectData(data) {
         if (this.profile && data && data.country) {
-            await this.fetchCountryMap(data.country);
             this.districtProjects = this.parseCoverage(data);
             this.nationalLevelCoverage = data.national_level_deployment;
         }
@@ -131,10 +131,6 @@ class DashboardModuleController {
         return this.snapShotProject();
     }
 
-
-    async fetchCountryMap(id) {
-        this.mapData = await this.mapService.getCountryMapData(id);
-    }
 
     adjustCoverageVersions(data) {
         if (!data) {

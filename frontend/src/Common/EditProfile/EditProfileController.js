@@ -1,20 +1,17 @@
 import _ from 'lodash';
 
-import Storage from '../Storage';
-import CommonService  from '../CommonServices';
 import * as UserModule from '../../store/modules/user';
+import * as CountriesModule from '../../store/modules/countries';
+import * as ProjectModule from '../../store/modules/projects';
 
 /* global DEV, Promise */
 
 class EditProfileController  {
 
     constructor($scope, $state, $mdToast, $ngRedux) {
-        this.EE = window.EE;
-        this.ccs = require('../CustomCountryService');
         this.scope = $scope;
         this.state = $state;
         this.toast = $mdToast;
-        this.storage = new Storage();
         this.$onInit = this.initialization.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.bindFunctions();
@@ -27,7 +24,10 @@ class EditProfileController  {
 
     mapState(state) {
         return {
-            userProfile: state.user.profile
+            userProfile: UserModule.getProfile(state),
+            countriesList: CountriesModule.getCountriesList(state),
+            userProjects: ProjectModule.getPublishedProjects(state),
+            structure: ProjectModule.getProjectStructure(state)
         };
     }
 
@@ -36,22 +36,14 @@ class EditProfileController  {
     }
 
     initialization() {
-        this.cs = CommonService;
         this.dataLoaded = false;
         this.sentForm = false;
         this.handleDataLoad();
     }
 
     handleDataLoad() {
-        const self = this;
-        this.userProjects = this.cs.projectList;
-        this.structure = this.cs.projectStructure;
         this.rawName = this.userProfile.name;
-        this.ccs.getCountries().then(data => {
-            self.scope.$evalAsync(() => {
-                self.countriesList = data;
-            });
-        });
+
         this.dataLoaded = true;
         this.scope.$watch(() => {
             return this.userProfile;
@@ -77,13 +69,6 @@ class EditProfileController  {
         this.handleCustomError('country');
     }
 
-    isViewer(project) {
-        return this.cs.isViewer(project);
-    }
-
-    isMember(project) {
-        return this.cs.isMember(project);
-    }
 
     checkErrors(field) {
         if (this.editProfileForm && this.editProfileForm[field]) {
