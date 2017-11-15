@@ -1,24 +1,35 @@
-import CollapsibleSet from '../CollapsibleSet';
 import _ from 'lodash';
+import CollapsibleSet from '../CollapsibleSet';
+import * as CountriesModule from '../../store/modules/countries';
 
 class ImplementationOverview extends CollapsibleSet {
 
-    constructor($scope, $element) {
+    constructor($scope, $element, $ngRedux) {
         super($element, $scope, 'project');
-        this.ccs = require('../../Common/CustomCountryService');
         this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.defaultOnDestroy.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.setAvailableOptions = this.setAvailableOptions.bind(this);
         this.mapHealthFocusAreas = this.mapHealthFocusAreas.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapData, CountriesModule)(this);
+    }
+
+    mapData(state) {
+        return {
+            districtList: CountriesModule.getCurrentCountryDistricts(state)
+        };
     }
 
     onInit() {
         this.districtList = [];
-        this.fetchDistricts = this.fetchDistricts.bind(this);
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.watchers();
         this.health_focus_areas = this.mapHealthFocusAreas(this.structure.health_focus_areas);
+    }
+
+    onDestroy() {
+        this.defaultOnDestroy();
+        this.unsubscribe();
     }
 
     watchers() {
@@ -28,10 +39,6 @@ class ImplementationOverview extends CollapsibleSet {
             this.setAvailableOptions(platform, this.structure.technology_platforms, 'name');
             this.addOtherOption(platform);
         }, true);
-
-        this.scope.$watch(() => {
-            return this.project.country;
-        }, this.fetchDistricts);
 
         this.scope.$watch(()=>{
             return this.project.coverage;
@@ -48,6 +55,8 @@ class ImplementationOverview extends CollapsibleSet {
             this.setAvailableOptions(this.project.coverage, districts, 'district');
             this.addClearOption(this.project.coverage);
         });
+
+        this.scope.$watch(s => s.vm.districtList, this.removeUnavailableDistricts.bind(this));
     }
 
     addOtherOption(platform) {
@@ -74,6 +83,16 @@ class ImplementationOverview extends CollapsibleSet {
                 cov.facilities = undefined;
                 cov.clients = undefined;
             }
+        }
+    }
+
+    removeUnavailableDistricts(districts) {
+        if (districts.length > 0) {
+            this.project.coverage.forEach(cov => {
+                if (districts.indexOf(cov.district) === -1) {
+                    cov.district = undefined;
+                }
+            });
         }
     }
 
@@ -122,24 +141,6 @@ class ImplementationOverview extends CollapsibleSet {
         return false;
     }
 
-    fetchDistricts(country) {
-        const self = this;
-        if (country) {
-            self.ccs.getCountryDistricts(country)
-              .then(self.handleDistrictData.bind(self));
-        }
-    }
-
-    handleDistrictData(data) {
-        this.project.coverage.forEach(cov => {
-            if (data.indexOf(cov.district) === -1) {
-                cov.district = undefined;
-            }
-        });
-        this.districtList = data;
-        this.scope.$evalAsync();
-    }
-
     handleCustomError(key) {
         this.form[key].$setValidity('custom', true);
         this.form[key].customError = [];
@@ -157,10 +158,10 @@ class ImplementationOverview extends CollapsibleSet {
 
     static factory() {
         require('./ImplementationOverview.scss');
-        function implementation($scope, $element) {
-            return new ImplementationOverview($scope, $element);
+        function implementation($scope, $element, $ngRedux) {
+            return new ImplementationOverview($scope, $element, $ngRedux);
         }
-        implementation.$inject = ['$scope', '$element'];
+        implementation.$inject = ['$scope', '$element', '$ngRedux'];
         return implementation;
     }
 }
