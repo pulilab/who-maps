@@ -22,9 +22,8 @@ export const getDomainStructure = (axis, domain) => {
         const result = getStructure()[axis].domains[domain];
         return cloneDeep(result);
     }
-    catch (e) {
-        console.log(e);
-    }
+// eslint-disable-next-line no-empty
+    catch (e) {}
     return [];
 };
 

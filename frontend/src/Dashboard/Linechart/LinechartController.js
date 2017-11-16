@@ -3,7 +3,6 @@ import _ from 'lodash';
 import * as ProjectModule from '../../store/modules/projects';
 
 class LinechartController {
-    // TODO FIX THIS MESS
     constructor($scope, $element, $timeout, $ngRedux) {
         this.scope = $scope;
         this.EE = window.EE;
@@ -56,14 +55,22 @@ class LinechartController {
         }, 0);
     }
 
+    resizeTick() {
+        this.resizeCount += 1;
+    }
+
     onInit() {
-        this.scope.$watchGroup([s => s.vm.data, s => s.vm.chosenData, s=> s.vm.chosenLabels], ([data, chosenData, chosenLabels]) => {
-            if (data) {
-                this.draw(data, chosenData, chosenLabels);
-            }
-        });
+        this.resizeCount = 0;
+        this.scope.$watchGroup([s => s.vm.data, s => s.vm.chosenData, s=> s.vm.chosenLabels, s=> s.vm.resizeCount],
+          ([data, chosenData, chosenLabels]) => {
+              if (data) {
+                  this.draw(data, chosenData, chosenLabels);
+              }
+          });
+        this.EE.on('dashResized', this.resizeTick, this);
     }
     onDestroy() {
+        this.EE.removeListener('dashResized', this.resizeTick);
         this.unsubscribe();
     }
 
@@ -242,7 +249,6 @@ class LinechartController {
         }
 
         // Redraw on window size change
-        window.EE.once('dashResized', this.draw.bind(this));
     }
 
 

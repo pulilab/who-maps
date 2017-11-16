@@ -4,6 +4,7 @@ import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
 import cloneDeep from 'lodash/cloneDeep';
 import { country_default_data } from '../static_data/country_static_data';
+import * as UserModule from './user';
 
 const stateDefinition = {
     list: [],
@@ -94,21 +95,27 @@ export const getCurrentCountryMapData = state => {
 export const getCurrentCountryDistrictProjects = state => {
     const result = {};
     const districts = state.countries.currentCountryDistrictsProjects;
+    const profile = UserModule.getProfile(state);
     for (const d in districts) {
         result[d] = districts[d].map(p => {
             p = Object.assign({}, p);
-            p.isMember = state.user.profile.member.indexOf(p.id) > -1;
-            p.isViewer = state.user.profile.viewer.indexOf(p.id) > -1;
+            if (profile.member && profile.viewer) {
+                p.isMember = profile.member.indexOf(p.id) > -1;
+                p.isViewer = profile.viewer.indexOf(p.id) > -1;
+            }
             return p;
         });
     }
     return result;
 };
 export const getCurrentCountryProjects = state => {
+    const profile = UserModule.getProfile(state);
     return state.countries.currentCountryProjects.map(ccp => {
         ccp = Object.assign({}, ccp);
-        ccp.isMember = state.user.profile.member.indexOf(ccp.id) > -1;
-        ccp.isViewer = state.user.profile.viewer.indexOf(ccp.id) > -1;
+        if (profile.member && profile.viewer) {
+            ccp.isMember = profile.member.indexOf(ccp.id) > -1;
+            ccp.isViewer = profile.viewer.indexOf(ccp.id) > -1;
+        }
         return ccp;
     });
 };

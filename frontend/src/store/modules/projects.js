@@ -30,10 +30,13 @@ import { getToolkitData } from './toolkit';
 
 export const getPublishedProjects = state => {
     if (state.projects.list) {
+        const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
             p = Object.assign({}, p.published);
-            p.isMember = state.user.profile.member.indexOf(p.id) > -1;
-            p.isViewer = state.user.profile.viewer.indexOf(p.id) > -1;
+            if (profile.member && profile.viewer) {
+                p.isMember = profile.member.indexOf(p.id) > -1;
+                p.isViewer = profile.viewer.indexOf(p.id) > -1;
+            }
             return p;
         });
         return sortBy(list, 'id');
@@ -166,7 +169,7 @@ export const getMapsAxisData = state => {
         };
         axis.data.push(lastAxisData);
     }
-    return axisData;
+    return axis;
 };
 export const getMapsDomainData = state => {
     const domains = cloneDeep(domainData);

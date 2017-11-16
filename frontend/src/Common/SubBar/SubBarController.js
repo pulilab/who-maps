@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Clipboard from 'clipboard';
 import * as ProjectModule from '../../store/modules/projects';
+import * as UserModule from '../../store/modules/user';
 
 class SubBarController {
 
@@ -17,7 +18,7 @@ class SubBarController {
     mapState(state) {
         return {
             projects: ProjectModule.getPublishedProjects(state),
-            userProfile: state.user.profile,
+            userProfile: UserModule.getProfile(state),
             currentProject: ProjectModule.getCurrentProject(state)
         };
     }
@@ -60,7 +61,7 @@ class SubBarController {
                 lineHeight: '24px'
             }
         };
-        if (this.userProfile.member.indexOf(item.id) > -1) {
+        if (this.userProfile && this.userProfile.member && this.userProfile.member.indexOf(item.id) > -1) {
             base.name = 'grade';
             base.style.color = '#CD9924';
         }
