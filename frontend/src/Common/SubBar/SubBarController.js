@@ -5,7 +5,6 @@ import * as ProjectModule from '../../store/modules/projects';
 class SubBarController {
 
     constructor($state, $scope, $ngRedux) {
-        this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
@@ -24,18 +23,6 @@ class SubBarController {
     }
 
     onInit() {
-        this.cs = require('../CommonServices');
-        this.eventBinding();
-        // if (this.viewMode) {
-        //     this.cs.getProjectData(this.projectId)
-        //       .then(project => {
-        //           this.currentProject = project;
-        //           this.createShareDefinition();
-        //           this.scope.$evalAsync();
-        //       });
-        // }
-
-
         if (this.currentProject) {
             this.createShareDefinition();
         }
@@ -43,10 +30,6 @@ class SubBarController {
 
     onDestroy() {
         this.unsubscribe();
-    }
-
-    eventBinding() {
-        this.EE.on('projectListUpdated', this.getProjectsData, this);
     }
 
     createShareDefinition() {
@@ -89,28 +72,6 @@ class SubBarController {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    getProjectsData() {
-        const lastProject = _.last(this.projects);
-
-        if (this.state.params && this.state.params.appName
-          && this.state.params.appName.length === 0
-          && lastProject && lastProject.id) {
-            const appName = lastProject.id;
-            const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { appName }, {
-                location: 'replace'
-            });
-        }
-        _.forEach(this.projects, item => {
-            if (item.id === parseInt(this.state.params.appName, 10)) {
-                this.currentProject = item;
-            }
-        });
-
-        this.scope.$evalAsync(() => {
-        });
-
-    }
 
     goToDashboard() {
         this.state.go('dashboard', { 'appName': _.last(this.projects).id });
