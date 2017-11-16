@@ -1,11 +1,10 @@
 import _ from 'lodash';
-import ResetService from './ResetService';
+import { calculateHeight } from '../../Utilities';
+import { resetPassword } from '../../store/modules/user';
 
 class ResetModuleController {
 
     constructor($scope) {
-        this.rs = new ResetService();
-        this.EE = window.EE;
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -15,7 +14,7 @@ class ResetModuleController {
         this.email = '';
         this.sent = false;
         this.style = {
-            height: 300
+            height: calculateHeight()
         };
     }
 
@@ -23,18 +22,15 @@ class ResetModuleController {
         this.email = void 0;
     }
 
-    reset() {
-        const vm = this;
-        if (vm.resetForm.$valid) {
-            vm.rs.reset({ email: vm.email })
-                .then(result => {
-                    if (!result.success) {
-                        vm.handleDataError(result.data);
-                    }
-                    else {
-                        vm.sent = true;
-                    }
-                });
+    async reset() {
+        if (this.resetForm.$valid) {
+            try {
+                await resetPassword({ email: this.email });
+                this.sent = true;
+            }
+            catch (e) {
+                this.handleDataError(e.data);
+            }
         }
     }
 
