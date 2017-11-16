@@ -169,15 +169,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               }
           }
       })
-      .state('refreshProjects', {
-          url: '/refresh-projects',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<refresh-project></refresh-project>'
-              }
-          }
-      })
       .state('terms-of-use', {
           url: '/terms-of-use',
           parent: 'base',
