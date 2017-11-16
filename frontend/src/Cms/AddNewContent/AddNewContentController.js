@@ -1,5 +1,4 @@
 import angular from 'angular';
-import  Protected from '../../Common/Protected';
 import * as CmsModule from '../../store/modules/cms';
 
 
@@ -71,13 +70,11 @@ class AddNewContentDialog {
     }
 }
 
-class AddNewContentController extends Protected {
+class AddNewContentController {
 
     constructor($scope, $mdDialog) {
-        super();
         this.scope = $scope;
         this.dialog = $mdDialog;
-        this.defaultOnInit();
     }
 
     showAddNewContentDialog(event) {
