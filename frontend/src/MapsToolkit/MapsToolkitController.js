@@ -1,38 +1,45 @@
 import _ from 'lodash';
-import { Protected } from '../Common/';
-import MapsToolkitService from './MapsToolkitService';
+import * as UserModule from '../store/modules/user';
+import * as ToolkitModule from '../store/modules/toolkit';
 
-class MapsToolkitController extends Protected {
 
-    constructor($scope, $state, CommonService, structure) {
-        super();
+class MapsToolkitController {
+
+    constructor($scope, $state, $ngRedux) {
         this.state = $state;
         this.scope = $scope;
-        this.cs = CommonService;
-        this.structure = _.cloneDeep(structure);
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.mapData = this.mapData.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapData, ToolkitModule)(this);
+    }
+
+    mapData(state) {
+        const structure = ToolkitModule.getStructure();
+        const rawData = ToolkitModule.getToolkitData(state);
+        this.processAxesData(rawData);
+        return {
+            profile: UserModule.getProfile(state),
+            rawData,
+            structure,
+            domainStructure: ToolkitModule.getDomainStructure(this.axisId, this.domainId)
+        };
     }
 
     onInit() {
-        const vm = this;
-        vm.defaultOnInit();
-        vm.bindEvents();
-        vm.dataLoaded = false;
-        vm.score = 0;
-        vm.projectId = vm.state.params.appName;
-        vm.domainId = vm.state.params.domainId;
-        vm.axisId = vm.state.params.axisId;
-        vm.ms = new MapsToolkitService(vm.projectId);
-        vm.loadData();
-        vm.adjustUserType(vm.cs.userProfile);
-        vm.viewMode = vm.userType < 3;
+        this.bindEvents();
+        this.dataLoaded = false;
+        this.score = 0;
+        this.projectId = this.state.params.appName;
+        this.domainId = this.state.params.domainId;
+        this.axisId = this.state.params.axisId;
+        this.viewMode = this.profile.account_type !== 'I';
+        this.templates = this.importHtmlTemplates();
     }
 
     onDestroy() {
         const vm = this;
-        vm.defaultOnDestroy();
         vm.removeEvents();
     }
 
@@ -48,19 +55,6 @@ class MapsToolkitController extends Protected {
         vm.EE.removeListener('mapsDomainChange', vm.handleChangeDomain, this);
     }
 
-    loadData() {
-        if (_.isNaN(parseInt(this.domainId, 10)) || _.isNaN(parseInt(this.axisId, 10))) {
-            this.state.go(this.state.current.name, {
-                domainId: this.domainId ? this.domainId : 0,
-                axisId: this.axisId ? this.axisId : 0
-            }, {
-                location: 'replace'
-            });
-            return;
-        }
-        this.ms.getProjectData().then(this.processAxesData.bind(this));
-
-    }
 
     handleChangeAxis(id) {
         this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });
@@ -81,27 +75,24 @@ class MapsToolkitController extends Protected {
     }
 
     processAxesData(data) {
-        this.rawData = _.cloneDeep(data);
-        this.axis = data[this.axisId];
-        this.domainStructure = this.structure[this.axisId].domains[this.domainId];
-
-        const templates = this.importHtmlTemplates();
-
-        this.domain = data[this.axisId].domains[this.domainId];
-        this.data = _.merge(this.domain, this.domainStructure);
-        _.forEach(this.data.questions, (question, questionKey) => {
-            question.index = questionKey;
-            question.answers = _.map(question.answers, (value, index) => {
-                let template = null;
-                if (question.answerTemplate && question.answerTemplate[index]) {
-                    template = templates[question.answerTemplate[index]];
-                }
-                this.score += value === -1 ? 0 : value;
-                return { index, value, template };
+        if (data && data.length > 0 && this.axisId && this.domainId) {
+            this.axis = data[this.axisId];
+            this.domain = data[this.axisId].domains[this.domainId];
+            this.data = _.merge(this.domain, this.domainStructure);
+            this.score = 0;
+            _.forEach(this.data.questions, (question, questionKey) => {
+                question.index = questionKey;
+                question.answers = _.map(question.answers, (value, index) => {
+                    let template = null;
+                    if (question.answerTemplate && question.answerTemplate[index]) {
+                        template = this.templates[question.answerTemplate[index]];
+                    }
+                    this.score += value === -1 ? 0 : value;
+                    return { index, value, template };
+                });
             });
-        });
-        this.dataLoaded = true;
-        this.scope.$evalAsync();
+            this.dataLoaded = true;
+        }
 
     }
 
@@ -129,10 +120,7 @@ class MapsToolkitController extends Protected {
             answer: answerId,
             value: points
         };
-        this.score +=  points - this.data.questions[questionId].answers[answerId].value;
-        this.data.questions[questionId].answers[answerId].value = points;
-        this.scope.$evalAsync();
-        this.ms.saveAnswer(answer);
+        this.saveAnswer(answer);
     }
 
     printAnswer(answer) {
@@ -144,7 +132,7 @@ class MapsToolkitController extends Protected {
 
     backButtonDisabled() {
         return parseInt(this.domainId, 10) === 0
-            && parseInt(this.axisId, 10) === 0;
+          && parseInt(this.axisId, 10) === 0;
     }
 
     isLastDomainInAxis() {
@@ -179,13 +167,12 @@ class MapsToolkitController extends Protected {
 
 
     static mapsControllerFactory() {
-        function mapsController($scope, $state) {
+        function mapsController($scope, $state, $ngRedux) {
             const structure = require('./Resource/structure.json');
-            const CommonService = require('../Common/CommonServices');
-            return new MapsToolkitController($scope, $state, CommonService, structure);
+            return new MapsToolkitController($scope, $state, $ngRedux, structure);
         }
 
-        mapsController.$inject = ['$scope', '$state'];
+        mapsController.$inject = ['$scope', '$state', '$ngRedux'];
 
         return mapsController;
     }

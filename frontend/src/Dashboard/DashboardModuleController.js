@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import * as ProjectModule from '../store/modules/projects';
 import * as CountriesModule from '../store/modules/countries';
+import * as  ToolkitModule from '../store/modules/toolkit';
 
 import commProjects from './Mocks/commProjects.js';
 
@@ -22,8 +23,8 @@ class DashboardModuleController {
         return {
             projects: ProjectModule.getPublishedProjects(state),
             projectData: ProjectModule.getCurrentProject(state),
-            rawToolkitData: ProjectModule.getToolkitData(state),
-            axisData: ProjectModule.getToolkitData(state),
+            rawToolkitData: ToolkitModule.getToolkitData(state),
+            axisData: ToolkitModule.getToolkitData(state),
             toolkitVersion: ProjectModule.getToolkitVersion(state),
             coverageVersion: ProjectModule.getCoverageVersion(state),
             profile: state.user.profile,

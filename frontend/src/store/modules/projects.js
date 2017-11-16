@@ -8,11 +8,23 @@ import { axisData, domainData } from '../static_data/charts_static';
 import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
+import * as ToolkitModule from './toolkit';
+
 import {
-    convertArrayToStandardCustomObj, convertDate, convertStringArrayToObjectArray,
-    fillEmptyCollectionsWithDefault, setCoverageType, fieldsWithCustomValue, getTodayString, createDateFields,
-    mergeCustomAndDefault, convertObjectArrayToStringArray, removeEmptyChildObjects, removeKeysWithoutValues
+    convertArrayToStandardCustomObj,
+    convertDate,
+    convertObjectArrayToStringArray,
+    convertStringArrayToObjectArray,
+    createDateFields,
+    fieldsWithCustomValue,
+    fillEmptyCollectionsWithDefault,
+    getTodayString,
+    mergeCustomAndDefault,
+    removeEmptyChildObjects,
+    removeKeysWithoutValues,
+    setCoverageType
 } from '../project_utils';
+import { getToolkitData } from './toolkit';
 
 // GETTERS
 
@@ -106,10 +118,7 @@ export const getProjectStructure = state => {
     return cloneDeep(structure);
 };
 
-export const getToolkitData = state => {
-    const data = state.projects.toolkitData;
-    return data ? data.slice() : [];
-};
+
 export const getToolkitVersion = state => {
     const data = state.projects.toolkitVersions;
     return data ? data.slice() : [];
@@ -254,16 +263,14 @@ export function loadProjectDetails() {
         try {
             const projectId = getState().projects.currentProject;
             if (projectId) {
-                const dataPromise = axios.get(`/api/projects/${projectId}/toolkit/data/`);
                 const toolkitVersionsPromise = axios.get(`/api/projects/${projectId}/toolkit/versions/`);
                 const coverageVersionsPromise = axios.get(`/api/projects/${projectId}/coverage/versions/`);
                 const teamViewersPromise = axios.get(`/api/projects/${projectId}/groups/`);
-                const [toolkitData, toolkitVersions, coverageVersions, teamViewers] =
-                  await Promise.all([dataPromise, toolkitVersionsPromise, coverageVersionsPromise, teamViewersPromise]);
+                const [toolkitVersions, coverageVersions, teamViewers] =
+                  await Promise.all([toolkitVersionsPromise, coverageVersionsPromise, teamViewersPromise]);
                 dispatch({
                     type: 'SET_PROJECT_INFO',
                     info: {
-                        toolkitData: toolkitData.data,
                         toolkitVersions: toolkitVersions.data,
                         coverageVersions: coverageVersions.data,
                         teamViewers: teamViewers.data
@@ -284,10 +291,12 @@ export function setCurrentProject(id) {
         id = parseInt(id, 10);
         dispatch({ type: 'SET_CURRENT_PROJECT', id });
         if (id) {
-            const project = getCurrentProject(getState());
+            const state = getState();
+            const project = getCurrentProject(state);
             const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
             const detailPromise = dispatch(loadProjectDetails());
-            return Promise.all([mapDataPromise, detailPromise]);
+            const toolkitPromise = dispatch(ToolkitModule.loadToolkitData());
+            return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
         }
         return Promise.resolve();
     };

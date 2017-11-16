@@ -1,9 +1,7 @@
-import { AuthApi } from '../Common/';
 
-class MapsToolkitService extends AuthApi {
+class MapsToolkitService {
 
     constructor(_projectId) {
-        super('projects');
         this.projectId = _projectId;
     }
 

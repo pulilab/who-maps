@@ -6,6 +6,7 @@ import uiRoute from 'angular-ui-router';
 import { Components } from '../Common/';
 import { StaticUtilities } from '../Utilities';
 import * as CmsModule from '../store/modules/cms';
+import * as ToolkitModule from '../store/modules/toolkit';
 
 const su = new StaticUtilities('MapsToolkit');
 
@@ -17,8 +18,8 @@ const config = ($stateProvider, $compileProvider) => {
           url: '/maps/:axisId/:domainId',
           parent: 'app',
           params: {
-              axisId: '1',
-              domainId: '1'
+              axisId: '0',
+              domainId: '0'
           },
           views: {
               main: {
@@ -33,7 +34,9 @@ const config = ($stateProvider, $compileProvider) => {
                   return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
               },
               cms: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(CmsModule.getCmsData());
+                  const cmsPromise = $ngRedux.dispatch(CmsModule.getCmsData());
+                  const toolkitPromise = $ngRedux.dispatch(ToolkitModule.loadToolkitData());
+                  return Promise.all([cmsPromise, toolkitPromise]);
               }]
           }
       })
