@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as UserModule from '../../store/modules/user';
+import { calculateHeight } from '../../Utilities';
 class SignupController {
 
     constructor($scope, $location, $anchorScroll, $ngRedux, $state) {
@@ -26,7 +27,7 @@ class SignupController {
         };
 
         this.style = {
-            height: 300
+            height: calculateHeight()
         };
     }
 
