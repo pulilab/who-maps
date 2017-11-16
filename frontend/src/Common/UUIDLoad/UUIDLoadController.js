@@ -1,4 +1,5 @@
 import * as SystemModule from '../../store/modules/system';
+import { calculateHeight } from '../../Utilities';
 
 class UUIDLoadController {
 
@@ -12,7 +13,7 @@ class UUIDLoadController {
 
     onInit() {
         this.style = {
-            height: 300
+            height: calculateHeight()
         };
         this.errorMessage = false;
     }
