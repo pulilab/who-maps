@@ -21,7 +21,6 @@ class CountryMapController {
     onInit() {
 
         this.showPlaceholder = !this.big;
-        this.cs = require('../../Common/CommonServices');
         this.svgPanZoom = svgPanZoom;
         this.covLib = {};
         this.watchers();
@@ -77,15 +76,6 @@ class CountryMapController {
         Array.prototype.forEach.call(districts, distr => {
             distr.classList.remove('global');
         });
-    }
-
-
-    isViewer(project) {
-        return this.cs.isViewer(project);
-    }
-
-    isMember(project) {
-        return this.cs.isMember(project);
     }
 
 
