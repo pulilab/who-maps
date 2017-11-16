@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import merge from 'lodash/merge';
+import forEach from 'lodash/forEach';
+import map from 'lodash/map';
+
 import * as UserModule from '../store/modules/user';
 import * as ToolkitModule from '../store/modules/toolkit';
 
@@ -78,11 +81,11 @@ class MapsToolkitController {
         if (data && data.length > 0 && this.axisId && this.domainId) {
             this.axis = data[this.axisId];
             this.domain = data[this.axisId].domains[this.domainId];
-            this.data = _.merge(this.domain, this.domainStructure);
+            this.data = merge(this.domain, this.domainStructure);
             this.score = 0;
-            _.forEach(this.data.questions, (question, questionKey) => {
+            forEach(this.data.questions, (question, questionKey) => {
                 question.index = questionKey;
-                question.answers = _.map(question.answers, (value, index) => {
+                question.answers = map(question.answers, (value, index) => {
                     let template = null;
                     if (question.answerTemplate && question.answerTemplate[index]) {
                         template = this.templates[question.answerTemplate[index]];

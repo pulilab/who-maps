@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import merge from 'lodash/merge';
+import cloneDeep from 'lodash/cloneDeep';
+import forEach from 'lodash/forEach';
+
 import * as ToolkitModule from '../../store/modules/toolkit';
 
 class ScorecardController {
@@ -8,21 +11,20 @@ class ScorecardController {
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.handleProjectData = this.handleProjectData.bind(this);
         this.mapData = this.mapData.bind(this);
+        this.images = this.importIconTemplates();
         this.unsubscribe = $ngRedux.connect(this.mapData, ToolkitModule)(this);
     }
 
     mapData(state) {
         const structure = ToolkitModule.getStructure();
         const rawData = ToolkitModule.getToolkitData(state);
-        // this.processAxesData(rawData);
+        const data = this.createAxisData(rawData, structure);
         return {
             rawData,
             structure,
-            data: _.merge(rawData, structure),
-            axesSize: rawData.length,
-            domainStructure: ToolkitModule.getDomainStructure(this.axisId, this.domainId)
+            data,
+            axesSize: rawData.length
         };
     }
 
@@ -39,6 +41,7 @@ class ScorecardController {
 
     onDestroy() {
         this.EE.removeListener('mapsAxisChange', this.goToAxis, this);
+        this.unsubscribe();
     }
 
     onInit() {
@@ -48,29 +51,24 @@ class ScorecardController {
         this.EE.on('mapsAxisChange', this.goToAxis, this);
     }
 
-    handleProjectData(data) {
-        this.axesSize = data.length;
-        this.createAxisData();
 
-        if (!this.summary) {
-            this.data = this.data[this.axisId];
-        }
-
-        this.dataLoaded = true;
-        this.scope.$evalAsync();
-    }
-
-    createAxisData() {
-        const images = this.importIconTemplates();
-        _.forEach(this.data, (axis, key) => {
-            axis.id = key;
-            axis.axisName = axis.axis.split('.')[1];
-            axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
-            axis.axisPicture = images['icon-' + axis.axisClass];
-            _.forEach(axis.domains, (domain, index) => {
-                domain.index = index;
+    createAxisData(rawData, structure) {
+        if (rawData && rawData.length > 0) {
+            const data = merge(rawData, structure).map((a, key) => {
+                const axis = cloneDeep(a);
+                axis.id = key;
+                axis.axisName = axis.axis.split('.')[1];
+                axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
+                axis.axisPicture = this.images['icon-' + axis.axisClass];
+                forEach(axis.domains, (domain, index) => {
+                    domain.index = index;
+                });
+                return axis;
             });
-        });
+            this.dataLoaded = true;
+            return this.summary ? data : data[this.axisId];
+        }
+        return [];
     }
 
     updateScore(domain, axis) {
@@ -104,7 +102,7 @@ class ScorecardController {
     static scorecardFactory() {
         const scorecard = ($scope, $state, $ngRedux) => {
             require('./Scorecard.scss');
-            return new ScorecardController($scope, $state, $ngRedux,);
+            return new ScorecardController($scope, $state, $ngRedux);
         };
         scorecard.$inject = ['$scope', '$state', '$ngRedux'];
         return scorecard;
