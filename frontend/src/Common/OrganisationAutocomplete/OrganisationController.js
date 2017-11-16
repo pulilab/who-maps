@@ -6,7 +6,7 @@ export default class OrganisationController {
     constructor($scope) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
-        this.addOrganisation = this.addOrganisation.bind(this);
+        this.addOrganisationName = this.addOrganisationName.bind(this);
         this.organisationSearch = this.organisationSearch.bind(this);
         this.handleOrganisationBlur = this.handleOrganisationBlur.bind(this);
     }
@@ -27,7 +27,7 @@ export default class OrganisationController {
         const typed = first(this.latestOrgs);
         if (typed) {
             if (!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
-                addOrganisation(typed);
+                this.addOrganisationName(typed);
             }
         }
     }
@@ -39,9 +39,10 @@ export default class OrganisationController {
             data.splice(0, 0, input);
         }
         this.latestOrgs = data;
+        return Promise.resolve(data);
     }
 
-    async addOrganisation(organisation) {
+    async addOrganisationName(organisation) {
         if (organisation && organisation.manual && organisation.name.length < 101) {
             const response = await addOrganisation(organisation.name);
             this.scope.$evalAsync(() => {
