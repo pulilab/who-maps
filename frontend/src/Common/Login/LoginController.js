@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as UserModule from '../../store/modules/user';
+import { calculateHeight } from '../../Utilities';
 
 class LoginModuleController {
 
@@ -25,7 +26,7 @@ class LoginModuleController {
             password: ''
         };
         this.style = {
-            height: 300
+            height: calculateHeight()
         };
     }
 
