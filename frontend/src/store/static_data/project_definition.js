@@ -18,6 +18,7 @@ export const project_definition = {
         standard: [],
         custom: undefined
     },
+    fields:[],
     donors: [{}],
     application: [],
     reports: [{}],
