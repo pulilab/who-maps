@@ -314,6 +314,7 @@
             <countrymap
               flex
               big="false"
+              ng-if="vm.mapData && vm.mapData.mapData"
               district-level-coverage="vm.districtProjects"
               national-level-coverage="vm.nationalLevelCoverage"
               map-data="vm.mapData">
