@@ -125,6 +125,15 @@ export function updateTeamViewers(team, viewer) {
     };
 }
 
+export async function verifyEmail(key) {
+    const { data } = await axios.post('/api/rest-auth/registration/verify-email/', key);
+    return data;
+}
+export async function resetPassword(newPassword) {
+    const { data } = await axios.post('/api/rest-auth/password/reset', newPassword);
+    return data;
+}
+
 
 // Reducers
 
