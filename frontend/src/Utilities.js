@@ -64,5 +64,10 @@ const getSubDomain = () => {
     return subDomain;
 };
 
+const calculateHeight = () => {
+    const contentHeight = window.innerHeight - 48;
+    return contentHeight + 'px';
+};
 
-export { StaticUtilities, getSubDomain };
+
+export { StaticUtilities, getSubDomain, calculateHeight };
