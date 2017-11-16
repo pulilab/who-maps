@@ -1,9 +1,6 @@
 import angular from 'angular';
 import ngFileUpload from 'ng-file-upload';
-import AuthApi from './AuthApi';
-import SimpleApi from './SimpleApi';
 import Storage from './Storage';
-import Protected from './Protected';
 import IntroJs from './IntroJs/introJsComponent';
 import SearchableSelectionMenu from './SearchableSelectionMenu/searchableSelectionMenuComponent';
 import projectComponent from './ProjectComponent/projectComponent';
@@ -20,13 +17,11 @@ import EditProfileComponent from './EditProfile/editProfileComponent';
 import countrymap from './CountryMap/countrymap.js';
 import EmailConfirmationComponent from './EmailConfirmation/emailConfirmation';
 import disclaimerComponent from './Disclaimer/disclaimerComponent.js';
-import RefreshProjectComponent from './RefreshProject/refreshProject';
 import UUILoadComponent from './UUIDLoad/UUIDLoad';
 import TermsOfUseComponent from './TermsOfUse/TermsOfUse';
 import TopBarComponent from './TopBar/topBarComponent';
 import SubBarComponent from './SubBar/subBarComponent';
 import CountryTopBarComponent from './CountryTopBar/countryTopBarComponent';
-import CustomCountryService from './CustomCountryService';
 import CountryPartners from './CountryPartners/countryPartnersComponent';
 import OrganisationAutocomplete from './OrganisationAutocomplete/organisationComponent';
 import TrixComponent from './TrixComponent/trixComponent';
@@ -61,7 +56,6 @@ angular.module(moduleName,
     .component(countrymap.name, countrymap)
     .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
     .component(disclaimerComponent.name, disclaimerComponent)
-    .component(RefreshProjectComponent.name, RefreshProjectComponent)
     .component(UUILoadComponent.name, UUILoadComponent)
     .component(TopBarComponent.name, TopBarComponent)
     .component(SubBarComponent.name, SubBarComponent)
@@ -74,9 +68,5 @@ angular.module(moduleName,
 
 
 export { EE };
-export { AuthApi };
 export { Storage };
-export { SimpleApi };
-export { Protected };
-export { CustomCountryService };
 export { moduleName as Components };

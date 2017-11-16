@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Protected from './Protected';
 
 /* global define, Promise, DEV, Symbol, DEBUG */
 
@@ -7,10 +6,9 @@ const singleton = Symbol();
 const singletonEnforcer = Symbol();
 
 
-class CommonServices extends Protected {
+class CommonServices {
 
     constructor(enforcer) {
-        super('');
         if (enforcer !== singletonEnforcer) {
             const error = { error: 'Cannot construct singleton' };
             throw error;
