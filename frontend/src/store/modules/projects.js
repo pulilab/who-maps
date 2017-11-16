@@ -44,8 +44,20 @@ export const getPublishedProjects = state => {
     return [];
 };
 
+
+export const getVanillaProject = state => {
+    const country = CountryModule.userCountryObject(state);
+    const project = cloneDeep(project_definition);
+    project.country = country.id;
+    project.organisation = UserModule.getProfile(state).organisation;
+    return project;
+};
+
 export const getCurrentProject = state => {
-    const project = getPublishedProjects(state).find(p => p.id === state.projects.currentProject);
+    let project = getPublishedProjects(state).find(p => p.id === state.projects.currentProject);
+    if (!project) {
+        project = getVanillaProject(state);
+    }
     return Object.assign({}, project);
 };
 
@@ -90,14 +102,6 @@ export const getCurrentProjectForEditing = state => {
     return Object.assign({}, project_definition, data);
 };
 
-export const getVanillaProject = state => {
-    const country = CountryModule.userCountryObject(state);
-    const project = cloneDeep(project_definition);
-    project.country = country.id;
-    project.organisation = UserModule.getProfile(state).organisation;
-    return project;
-};
-
 export const getTeam = state => {
     if (state.projects.teamViewers) {
         return cloneDeep(state.projects.teamViewers.team);
@@ -120,7 +124,6 @@ export const getProjectStructure = state => {
     });
     return cloneDeep(structure);
 };
-
 
 export const getToolkitVersion = state => {
     const data = state.projects.toolkitVersions;
