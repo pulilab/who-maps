@@ -35,11 +35,8 @@ class ProjectController  {
           this.team : newProject && !this.team ? [userProfile] : ProjectModule.getTeam(state);
         const viewers = newProject && this.viewers ?
           this.viewers : newProject && !this.viewers ? [] : ProjectModule.getViewers(state);
-
         const users = SystemModule.getUserProfiles(state);
-
         const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
-
         return {
             project,
             team,
