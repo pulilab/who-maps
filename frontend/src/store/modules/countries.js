@@ -92,10 +92,25 @@ export const getCurrentCountryMapData = state => {
 };
 
 export const getCurrentCountryDistrictProjects = state => {
-    return cloneDeep(state.countries.currentCountryDistrictsProjects);
+    const result = {};
+    const districts = state.countries.currentCountryDistrictsProjects;
+    for (const d in districts) {
+        result[d] = districts[d].map(p => {
+            p = Object.assign({}, p);
+            p.isMember = state.user.profile.member.indexOf(p.id) > -1;
+            p.isViewer = state.user.profile.viewer.indexOf(p.id) > -1;
+            return p;
+        });
+    }
+    return result;
 };
 export const getCurrentCountryProjects = state => {
-    return cloneDeep(state.countries.currentCountryProjects);
+    return state.countries.currentCountryProjects.map(ccp => {
+        ccp = Object.assign({}, ccp);
+        ccp.isMember = state.user.profile.member.indexOf(ccp.id) > -1;
+        ccp.isViewer = state.user.profile.viewer.indexOf(ccp.id) > -1;
+        return ccp;
+    });
 };
 
 // ACTIONS
