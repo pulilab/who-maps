@@ -31,6 +31,15 @@ export function searchProjects(query, searchFilters) {
     };
 }
 
+export async function searchOrganisation(name) {
+    const { data } = await axios.get(`/api/organisations/?name=${name}`);
+    return data;
+}
+export async function addOrganisation(name) {
+    const { data } = await axios.post('/api/organisations/', { name });
+    return data;
+}
+
 
 // Reducers
 

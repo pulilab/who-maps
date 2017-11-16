@@ -1,11 +1,10 @@
-import _ from 'lodash';
-import OrganisationService from './OrganisationService';
+import first from 'lodash/first';
+import { searchOrganisation, addOrganisation } from '../../store/modules/system';
 
 export default class OrganisationController {
 
     constructor($scope) {
         this.scope = $scope;
-        this.os = new OrganisationService();
         this.$onInit = this.onInit.bind(this);
         this.addOrganisation = this.addOrganisation.bind(this);
         this.organisationSearch = this.organisationSearch.bind(this);
@@ -19,41 +18,36 @@ export default class OrganisationController {
     createBlurHandler() {
         this.scope.$$postDigest(() => {
             document.querySelector('#organisation')
-                .querySelector('input')
-                .addEventListener('blur', this.handleOrganisationBlur);
+              .querySelector('input')
+              .addEventListener('blur', this.handleOrganisationBlur);
         });
     }
 
     handleOrganisationBlur() {
-        const typed = _.first(this.latestOrgs);
+        const typed = first(this.latestOrgs);
         if (typed) {
             if (!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
-                this.addOrganisation(typed);
+                addOrganisation(typed);
             }
         }
     }
 
-    organisationSearch(name) {
-        const promise  = this.os.autocompleteOrganization(name);
-        promise.then(data => {
-            const input = { id: null, name, manual: true };
-            if (!data.some(item => item.name === name)) {
-                data.splice(0, 0, input);
-            }
-            this.latestOrgs = data;
-        });
-        return promise;
+    async organisationSearch(name) {
+        const data = await searchOrganisation(name);
+        const input = { id: null, name, manual: true };
+        if (!data.some(item => item.name === name)) {
+            data.splice(0, 0, input);
+        }
+        this.latestOrgs = data;
     }
 
-    addOrganisation(organisation) {
+    async addOrganisation(organisation) {
         if (organisation && organisation.manual && organisation.name.length < 101) {
-            this.os.addOrganization(organisation.name)
-                .then(response => {
-                    this.scope.$evalAsync(() => {
-                        this.organisation = response;
-                        Object.assign(this.latestOrgs[0], response);
-                    });
-                });
+            const response = await addOrganisation(organisation.name);
+            this.scope.$evalAsync(() => {
+                this.organisation = response;
+                Object.assign(this.latestOrgs[0], response);
+            });
         }
         else {
             this.organisation = organisation;
