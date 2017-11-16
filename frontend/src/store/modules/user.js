@@ -2,6 +2,7 @@
 import axios from '../../plugins/axios';
 import union from 'lodash/union';
 import { Storage } from '../../Common/';
+import * as ProjectModule from './projects';
 
 
 const storage = new Storage();
@@ -83,6 +84,7 @@ export function doLogin({ username, password }) {
             storeData(data, username);
             dispatch({ type: 'SET_USER', user: data });
             await dispatch(loadProfile());
+            await dispatch(ProjectModule.loadUserProjects());
             return Promise.resolve();
         }
         catch ({ response }) {

@@ -48,7 +48,9 @@ export const getPublishedProjects = state => {
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
     const project = cloneDeep(project_definition);
-    project.country = country.id;
+    if (country) {
+        project.country = country.id;
+    }
     project.organisation = UserModule.getProfile(state).organisation;
     return project;
 };
