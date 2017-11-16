@@ -21,9 +21,11 @@ export const getDomainStructure = (axis, domain) => {
     try {
         const result = getStructure()[axis].domains[domain];
         return cloneDeep(result);
-    } catch (e) {
-
     }
+    catch (e) {
+        console.log(e);
+    }
+    return [];
 };
 
 
@@ -73,7 +75,6 @@ export default function toolkit(state = initialState, action) {
     }
     case 'UPDATE_TOOLKIT_DATA': {
         const r = action.data;
-        console.log(r);
         const data = cloneDeep(s.toolkitData);
         data[r.axis].domains[r.domain].questions[r.question].answers[r.answer] = r.value;
         s.toolkitData = data;
