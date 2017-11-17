@@ -280,6 +280,10 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         data = self._update_project(project, data_serializer)
         data.update(public_id=project.public_id)
+        # Remove approval if already approved, so country admin can approve again because project has changed
+        if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved == True:
+            project.approval.delete()
+            ProjectApproval.objects.create(project=project, user=project.country.user)
         return Response(data, status=status.HTTP_200_OK)
 
 

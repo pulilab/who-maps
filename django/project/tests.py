@@ -147,6 +147,30 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(ProjectApproval.objects.filter(project_id=response.data['id']).exists(), True)
 
+    def test_create_new_project_approval_required_on_update(self):
+        # Make country approval-required
+        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+        # Create project
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(name="Test Project3"))
+        response = self.test_user_client.post(url, data, format="json")
+        project_id = response.data['id']
+        approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(approval)
+        # Approve project
+        approval.approved = True
+        approval.save()
+        # Update project
+        url = reverse("project-detail", kwargs={'pk': project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(name="Test Project updated"))
+        response = self.test_user_client.put(url, data, format="json")
+        new_approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(new_approval.approved, None)
+
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
