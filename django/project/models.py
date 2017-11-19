@@ -127,3 +127,19 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
     def __str__(self):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
         return '[{}]{} {}'.format(self.group, parent, self.name)
+
+
+class HealthCategory(ExtendedModel):
+    health_group = models.CharField(max_length=512)
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return '[{}] {}'.format(self.health_group, self.name)
+
+
+class HealthFocusArea(ExtendedModel):
+    health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return '[{}] {}'.format(self.health_category.name, self.name)

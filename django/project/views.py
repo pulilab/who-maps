@@ -17,7 +17,8 @@ from country.models import Country, CountryField
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer
-from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy
+from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
+    HealthCategory, HealthFocusArea
 from .project_data import project_structure
 
 
@@ -122,6 +123,19 @@ class ProjectPublicViewSet(ViewSet):
         strategies.append(provider)
 
         project_structure['strategies'] = strategies
+
+        health_focus_areas = []
+        health_groups = HealthCategory.objects.all().values_list('health_group', flat=True).distinct()
+        for group in health_groups:
+            group_data = {'name': group, 'subGroups': []}
+            for category in HealthCategory.objects.filter(health_group=group):
+                hfa_data = []
+                for hfa in category.health_focus_areas.all():
+                    hfa_data.append(hfa.name)
+                group_data['subGroups'].append({'name': hfa.name, 'health_focus_areas': hfa_data})
+            health_focus_areas.append(group_data)
+        project_structure['health_focus_areas'] = health_focus_areas
+
         return Response(project_structure)
 
     @staticmethod

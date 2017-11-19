@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy
+from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, HealthCategory
 
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
@@ -19,3 +19,5 @@ class DigitalStrategyAdmin(AllObjectsAdmin):
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
+admin.site.register(HealthFocusArea)
+admin.site.register(HealthCategory)
