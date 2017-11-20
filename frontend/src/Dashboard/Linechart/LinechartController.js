@@ -1,52 +1,106 @@
 /* global d3 */
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import forOwn from 'lodash/forOwn';
+import deepEqual from 'deep-equal';
 import * as ProjectModule from '../../store/modules/projects';
 
 class LinechartController {
     constructor($scope, $element, $timeout, $ngRedux) {
         this.scope = $scope;
         this.EE = window.EE;
+        this.$ngRedux = $ngRedux;
         this.el = $element;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.draw = this.draw.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapData.bind(this), ProjectModule)(this);
+        this.watchers = this.watchers.bind(this);
+        this.processDataForDomainChart = this.processDataForDomainChart.bind(this);
+        this.processDataForAxisChart = this.processDataForAxisChart.bind(this);
+        this.processDataForCoverageChart = this.processDataForCoverageChart.bind(this);
+        this.monitorGraphData = this.monitorGraphData.bind(this);
+    }
+
+    onInit() {
+        this.resizeCount = 0;
+        this.dataBit = 0;
+        this.unsubscribe = this.$ngRedux.connect(this.mapData.bind(this), ProjectModule)(this);
+        this.watchers();
+        this.EE.on('dashResized', this.resizeTick, this);
+    }
+
+    onDestroy() {
+        this.EE.removeListener('dashResized', this.resizeTick);
+        this.unsubscribe();
     }
 
     mapData(state) {
-        let data = ProjectModule.getMapsDomainData(state);
-        const result = {};
-
-        if (!this.datachooser) {
-            if (this.notpercentage) {
-                data = ProjectModule.getCoverageData(state);
-                result.data = data.data;
-                result.maxValue = this.calculateMaxData(data);
-                result.labels = data.labels;
-                result.chosenLabels = data.labels;
-            }
-            else {
-                data = ProjectModule.getMapsAxisData(state);
-                result.data = data.data;
-                result.labels = data.labels;
-                result.chosenLabels = data.labels;
-            }
+        let chartConfig = null;
+        if (this.datachooser) {
+            chartConfig = this.processDataForDomainChart(ProjectModule.getMapsDomainData(state));
+        }
+        else if (this.notpercentage) {
+            chartConfig = this.processDataForCoverageChart(ProjectModule.getCoverageData(state));
         }
         else {
-            const activeAxis = data.labels[0];
-            result.data = data;
-            result.labels = data.labels;
-            result.activeAxis = activeAxis;
-            result.chosenData = data[activeAxis].data;
-            result.chosenLabels = data[activeAxis].labels;
+            chartConfig = this.processDataForAxisChart(ProjectModule.getMapsAxisData(state));
         }
+
+        return {
+            chartConfig
+        };
+    }
+
+    processDataForDomainChart(data) {
+        const result = {};
+        const activeAxis = data.labels[0];
+        result.data = data;
+        result.labels = data.labels;
+        result.activeAxis = activeAxis;
+        result.chosenData = data[activeAxis].data;
+        result.chosenLabels = data[activeAxis].labels;
         return result;
+    }
+
+    processDataForAxisChart(data) {
+        const result = {};
+        result.data = data.data;
+        result.labels = data.labels;
+        result.chosenLabels = data.labels;
+        return result;
+    }
+
+    processDataForCoverageChart(data) {
+        const result = {};
+        result.data = data.data;
+        result.maxValue = this.calculateMaxData(data);
+        result.labels = data.labels;
+        result.chosenLabels = data.labels;
+        return result;
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.chartConfig, this.monitorGraphData, true);
+        this.scope.$watchGroup([s => s.vm.dataBit, s => s.vm.resizeCount], () => {
+            const config = cloneDeep(this.chartConfig);
+            this.draw(config);
+        });
+    }
+
+    monitorGraphData(config, old) {
+        const isSameData = deepEqual(config.data, old.data);
+        if (isSameData && this.dataBit === 0) {
+            this.dataBit += 1;
+        }
+        else if (!isSameData) {
+            this.dataBit += 1;
+        }
+
     }
 
     calculateMaxData(data) {
         return data.data.reduce((ret, version) => {
-            _.forOwn(version, (val, key) => {
+            forOwn(version, (val, key) => {
                 if (key !== 'date' || key !== 'x') {
                     ret = val > ret ? val : ret;
                 }
@@ -59,26 +113,10 @@ class LinechartController {
         this.resizeCount += 1;
     }
 
-    onInit() {
-        this.resizeCount = 0;
-        this.scope.$watchGroup([s => s.vm.data, s => s.vm.chosenData, s=> s.vm.chosenLabels, s=> s.vm.resizeCount],
-          ([data, chosenData, chosenLabels]) => {
-              if (data) {
-                  this.draw(data, chosenData, chosenLabels);
-              }
-          });
-        this.EE.on('dashResized', this.resizeTick, this);
-    }
-    onDestroy() {
-        this.EE.removeListener('dashResized', this.resizeTick);
-        this.unsubscribe();
-    }
-
-    draw(data, chosenData, chosenLabels) {
+    draw({ data, chosenData, chosenLabels, labels, maxValue }) {
         d3.select(this.el[0]).select('.linechartcontainer').remove();
         data = this.datachooser && chosenData ? chosenData : data;
-        const labels = this.datachooser && chosenLabels ? chosenLabels : this.labels;
-
+        labels = this.datachooser && chosenLabels ? chosenLabels : labels;
 
         const outer = d3.select(this.el[0])
           .append('div')
@@ -133,7 +171,7 @@ class LinechartController {
 
         const simpleScale = d3.scale.linear()
           .range([height - margin.top, margin.bottom])
-          .domain([0, this.maxValue]);
+          .domain([0, maxValue]);
 
         const yScale = this.notpercentage ? simpleScale : percScale;
 
@@ -180,6 +218,7 @@ class LinechartController {
             const line = d3.svg.line()
               .x(d => xScale(d.x))
               .y(d => yScale(d['axis' + i] || 0));
+
 
             // Full lines
             element.append('svg:path')
