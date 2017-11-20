@@ -4,6 +4,7 @@ import map from 'lodash/map';
 
 import * as UserModule from '../store/modules/user';
 import * as ToolkitModule from '../store/modules/toolkit';
+import * as ProjectModule from '../store/modules/projects';
 
 
 class MapsToolkitController {
@@ -24,6 +25,7 @@ class MapsToolkitController {
         this.processAxesData(rawData);
         return {
             profile: UserModule.getProfile(state),
+            viewMode: ProjectModule.getCurrentProject(state).isViewer,
             rawData,
             structure,
             domainStructure: ToolkitModule.getDomainStructure(this.axisId, this.domainId)
@@ -37,7 +39,6 @@ class MapsToolkitController {
         this.projectId = this.state.params.appName;
         this.domainId = this.state.params.domainId;
         this.axisId = this.state.params.axisId;
-        this.viewMode = this.profile.account_type !== 'I';
         this.templates = this.importHtmlTemplates();
     }
 
