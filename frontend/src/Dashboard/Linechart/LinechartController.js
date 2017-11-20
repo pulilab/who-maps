@@ -293,9 +293,9 @@ class LinechartController {
 
     // Ng-options change
     axisChange(newAxis) {
-        this.chosenData = this.data[newAxis].data;
-        this.chosenLabels = this.data[newAxis].labels;
-        this.draw();
+        this.chartConfig.chosenData = this.chartConfig.data[newAxis].data;
+        this.chartConfig.chosenLabels = this.chartConfig.data[newAxis].labels;
+        this.draw(this.chartConfig);
     }
 
     static linechartFactory() {
