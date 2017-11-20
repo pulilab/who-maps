@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
 import forEach from 'lodash/forEach';
+import cloneDeep from 'lodash/cloneDeep';
 import map from 'lodash/map';
 
 import * as UserModule from '../store/modules/user';
@@ -12,23 +13,24 @@ class MapsToolkitController {
     constructor($scope, $state, $ngRedux) {
         this.state = $state;
         this.scope = $scope;
+        this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.mapData = this.mapData.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapData, ToolkitModule)(this);
+        this.watchers = this.watchers.bind(this);
+
     }
 
     mapData(state) {
         const structure = ToolkitModule.getStructure();
         const rawData = ToolkitModule.getToolkitData(state);
-        this.processAxesData(rawData);
         return {
             profile: UserModule.getProfile(state),
             viewMode: ProjectModule.getCurrentProject(state).isViewer,
             rawData,
             structure,
-            domainStructure: ToolkitModule.getDomainStructure(this.axisId, this.domainId)
+            domainStructure: ToolkitModule.getDomainStructure(this.state.params.axisId, this.state.params.domainId)
         };
     }
 
@@ -40,11 +42,20 @@ class MapsToolkitController {
         this.domainId = this.state.params.domainId;
         this.axisId = this.state.params.axisId;
         this.templates = this.importHtmlTemplates();
+        this.watchers();
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, ToolkitModule)(this);
     }
 
     onDestroy() {
-        const vm = this;
-        vm.removeEvents();
+        this.removeEvents();
+        this.unsubscribe();
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.rawData,
+          rawData => {
+              this.processAxesData(cloneDeep(rawData), this.state.params.axisId, this.state.params.domainId)
+          }, true);
     }
 
     bindEvents() {
@@ -78,10 +89,10 @@ class MapsToolkitController {
         return templates;
     }
 
-    processAxesData(data) {
-        if (data && data.length > 0 && this.axisId && this.domainId) {
-            this.axis = data[this.axisId];
-            this.domain = data[this.axisId].domains[this.domainId];
+    processAxesData(data, axisId, domainId) {
+        if (data && data.length > 0 && axisId && domainId) {
+            this.axis = data[axisId];
+            this.domain = data[axisId].domains[domainId];
             this.data = merge(this.domain, this.domainStructure);
             this.score = 0;
             forEach(this.data.questions, (question, questionKey) => {
