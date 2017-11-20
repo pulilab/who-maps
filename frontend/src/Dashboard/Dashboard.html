@@ -24,7 +24,7 @@
 
         <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
 
-          <md-card md-whiteframe="2" class="dash-stat-card" ng-class="!vm.viewMode ? 'longer' : 'shorter'">
+          <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.state.current.name === 'dashboard'" ng-class="!vm.viewMode ? 'longer' : 'shorter'">
 
             <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
             <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
@@ -129,7 +129,7 @@
             <md-tab label="axis" ng-if="!vm.viewMode">
               <div>
                 <linechart
-                  showdotted="(vm.profile.account_type === 'I')">
+                  showdotted="vm.projectData.isMember">
                 </linechart>
               </div>
             </md-tab>
@@ -137,7 +137,7 @@
             <md-tab label="domains" ng-if="!vm.viewMode">
               <div>
                 <linechart
-                  showdotted="(vm.profile.account_type === 'I')"
+                  showdotted="vm.projectData.isMember"
                   datachooser="true"
                 ></linechart>
               </div>
@@ -244,7 +244,7 @@
           <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
         </div>
 
-        <md-tabs ng-hide="vm.showEmpty" ng-if="vm.profile" md-border-bottom md-dynamic-height class="perf-tab">
+        <md-tabs ng-hide="vm.showEmpty" ng-if="vm.profile.name" md-border-bottom md-dynamic-height class="perf-tab">
 
           <md-tab label="geographical view">
             <countrymap
@@ -260,7 +260,7 @@
           <md-tab label="historical view">
 
             <linechart
-              showdotted="(vm.profile.account_type === 'I')"
+              showdotted="vm.projectData.isMember"
               datachooser="false"
               notpercentage="true"
             ></linechart>
@@ -269,7 +269,7 @@
 
         </md-tabs>
 
-        <div flex ng-if="!vm.profile" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
+        <div flex ng-if="!vm.profile.name" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
           <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
           <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
         </div>
