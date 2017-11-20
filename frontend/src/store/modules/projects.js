@@ -45,6 +45,11 @@ export const getPublishedProjects = state => {
 };
 
 
+export const getUserDefaultProject = state => {
+    const pp = state ? getPublishedProjects(state) : null;
+    return pp && pp[0] ? '' + pp[0].id : null;
+};
+
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
     const project = cloneDeep(project_definition);
@@ -55,12 +60,21 @@ export const getVanillaProject = state => {
     return project;
 };
 
+export const getCurrentProjectIfExist = state => {
+    return getPublishedProjects(state).find(p => p.id === state.projects.currentProject);
+};
+
 export const getCurrentProject = state => {
-    let project = getPublishedProjects(state).find(p => p.id === state.projects.currentProject);
+    let project = getCurrentProjectIfExist(state);
     if (!project) {
         project = getVanillaProject(state);
     }
     return Object.assign({}, project);
+};
+
+export const getCurrentPublicProject = state => {
+    const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
+    return cloneDeep(project);
 };
 
 function convertCountryFieldsAnswer({ fields }) {
@@ -121,9 +135,14 @@ export const getViewers = state => {
 export const getProjectStructure = state => {
     const structure = state.projects.structure;
     const currentProject = getCurrentProject(state);
-    fieldsWithCustomValue.forEach(item => {
-        structure[item] = union(structure[item], currentProject[item]);
-    });
+    try {
+        fieldsWithCustomValue.forEach(item => {
+            structure[item] = union(structure[item], currentProject[item]);
+        });
+    }
+    catch (e) {
+        console.log(e);
+    }
     return cloneDeep(structure);
 };
 
@@ -300,11 +319,16 @@ export function setCurrentProject(id) {
         dispatch({ type: 'SET_CURRENT_PROJECT', id });
         if (id) {
             const state = getState();
-            const project = getCurrentProject(state);
-            const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
-            const detailPromise = dispatch(loadProjectDetails());
-            const toolkitPromise = dispatch(ToolkitModule.loadToolkitData());
-            return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
+            const project = getCurrentProjectIfExist(state);
+            if (project) {
+                const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
+                const detailPromise = dispatch(loadProjectDetails());
+                const toolkitPromise = dispatch(ToolkitModule.loadToolkitData());
+                return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
+            }
+            const { data } = await axios.get(`/api/projects/${id}/`);
+            dispatch({ type: 'SET_CURRENT_PUBLIC_PROJECT_DETAIL', project: data });
+
         }
         return Promise.resolve();
     };
@@ -433,6 +457,10 @@ export default function projects(state = {}, action) {
         p.currentProject = action.id;
         return Object.assign(state, {}, p);
     }
+    case 'SET_CURRENT_PUBLIC_PROJECT_DETAIL': {
+        p.currentPublicProject = action.project;
+        return Object.assign(state, {}, p);
+    }
     case 'SET_PROJECT_STRUCTURE': {
         p.structure = action.structure;
         return Object.assign(state, {}, p);
@@ -443,6 +471,9 @@ export default function projects(state = {}, action) {
         p.coverageVersions = action.info.coverageVersions;
         p.teamViewers = action.info.teamViewers;
         return Object.assign(state, {}, p);
+    }
+    case 'CLEAR_USER_PROJECTS': {
+        return {};
     }
     default:
         return state;

@@ -93,13 +93,13 @@ export function doLogin({ username, password }) {
     };
 }
 
-export function saveProfile() {
+export function saveProfile(profile) {
     return async (dispatch, getState) => {
         const state = getState();
         const id = state.user.user_profile_id || storage.get('user_profile_id');
         const url = id ? `/api/userprofiles/${id}/` : '/api/userprofiles/';
         const action = id ? 'put' : 'post';
-        const p = Object.assign({}, state.user.profile);
+        const p = Object.assign({}, profile);
         p.organisation = p.organisation.id;
         let { data } = await axios[action](url, p);
         data = handleProfile(data);
@@ -110,6 +110,7 @@ export function saveProfile() {
 export function doLogout() {
     return dispatch => {
         storage.clear();
+        dispatch({ type: 'CLEAR_USER_PROJECTS' });
         dispatch({ type: 'UNSET_USER' });
     };
 }

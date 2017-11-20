@@ -146,17 +146,19 @@ export function loadCountryMapDataAndDistricts() {
     return async (dispatch, getState) => {
         const state = getState();
         const country = getCurrentCountry(state);
-        let countryData = state.countries.mapData[country.code];
-        if (!countryData) {
-            const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
-            countryData = data;
-            dispatch({ type: 'SET_MAP_DATA', countryData, code: country.code });
+        if (country && country.code) {
+            let countryData = state.countries.mapData[country.code];
+            if (!countryData) {
+                const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
+                countryData = data;
+                dispatch({ type: 'SET_MAP_DATA', countryData, code: country.code });
+            }
+            const subKey = Object.keys(countryData.objects)[0];
+            const districts = countryData.objects[subKey].geometries.map(object => {
+                return object.properties['name:en'] || object.properties.name;
+            });
+            dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
         }
-        const subKey = Object.keys(countryData.objects)[0];
-        const districts = countryData.objects[subKey].geometries.map(object => {
-            return object.properties['name:en'] || object.properties.name;
-        });
-        dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
     };
 }
 
@@ -164,16 +166,20 @@ export function loadCountryMapDataAndDistricts() {
 export function loadCountryLandingPageInfo() {
     return async (dispatch, getState) => {
         const country = getCurrentCountry(getState());
-        const { data } = await axios.get(`/api/landing/${country.code.toUpperCase()}/`);
-        dispatch({ type: 'SET_COUNTRY_COVER_DATA', cover: data });
+        if (country && country.code) {
+            const { data } = await axios.get(`/api/landing/${country.code.toUpperCase()}/`);
+            dispatch({ type: 'SET_COUNTRY_COVER_DATA', cover: data });
+        }
     };
 }
 
 export function loadCurrentCountryDistrictsProject() {
     return async (dispatch, getState) => {
-        const countryId = getCurrentCountry(getState()).id;
-        const { data } = await axios.get(`/api/projects/by-view/map/${countryId}/`);
-        dispatch({ type: 'CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
+        const country = getCurrentCountry(getState());
+        if (country && country.id) {
+            const { data } = await axios.get(`/api/projects/by-view/map/${country.id}/`);
+            dispatch({ type: 'CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
+        }
     };
 }
 export function loadCountryProjectsOrAll(countryId) {
@@ -189,12 +195,15 @@ export function loadCountryProjectsOrAll(countryId) {
 
 export function setCurrentCountry(id) {
     return async dispatch => {
-        dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
-        const cfPromise =  dispatch(loadCountryFields(id));
-        const dsPromise = dispatch(loadCountryMapDataAndDistricts());
-        const lPromise = dispatch(loadCountryLandingPageInfo());
-        const dpPromise = dispatch(loadCurrentCountryDistrictsProject());
-        return Promise.all([cfPromise, dsPromise, lPromise, dpPromise]);
+        if (id) {
+            dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
+            const cfPromise = dispatch(loadCountryFields(id));
+            const dsPromise = dispatch(loadCountryMapDataAndDistricts());
+            const lPromise = dispatch(loadCountryLandingPageInfo());
+            const dpPromise = dispatch(loadCurrentCountryDistrictsProject());
+            return Promise.all([cfPromise, dsPromise, lPromise, dpPromise]);
+        }
+        return Promise.resolve();
     };
 }
 
