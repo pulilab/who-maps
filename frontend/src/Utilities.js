@@ -41,7 +41,13 @@ class StaticUtilities {
     }
 
     static classifyString(str) {
-        return str.replace(/ /g, '_').replace(/\./g, '-').toLowerCase();
+        try {
+            return str.replace(/ /g, '_').replace(/\./g, '-').toLowerCase();
+        }
+        catch (e) {
+            console.warn('Failed to parse class string', str);
+        }
+        return '';
     }
 
     static prefixHtml() {
