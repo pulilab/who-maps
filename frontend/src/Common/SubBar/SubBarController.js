@@ -10,20 +10,16 @@ class SubBarController {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, ProjectModule)(this);
         this.navigateToProject = this.navigateToProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
     }
 
     mapState(state) {
-        this.isPublic = this.state.current.name === 'public-dashboard';
-        const currentProject = this.isPublic ? ProjectModule.getCurrentPublicProject(state)
-          : ProjectModule.getCurrentProject(state);
         return {
             projects: ProjectModule.getPublishedProjects(state),
             userProfile: UserModule.getProfile(state),
-            currentProject
+            currentProject: ProjectModule.getCurrentProject(state)
         };
     }
 
@@ -87,7 +83,7 @@ class SubBarController {
     }
 
     showSubBar() {
-        return this.state.params.appName !== null;
+        return this.state.params.appName !== null && this.state.current.parent !== 'public';
     }
 
 

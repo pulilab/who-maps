@@ -1,15 +1,15 @@
-<md-toolbar class="md-medium-tall toolbar-project" ng-show="vm.showSubBar()">
+<md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showSubBar()">
     <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
         <ssmenu
-                ng-if="!vm.viewMode"
-                aria-label="Project Chooser"
-                options="vm.projects"
-                option-label = "name"
-                ng-model="vm.currentProject.name"
-                md-container-class="large project-chooser"
-                class="large project-selector"
-                on-close-callback="vm.navigateToProject"
-                icon-function="vm.iconFunction"
+          ng-if="!vm.viewMode"
+          aria-label="Project Chooser"
+          options="vm.projects"
+          option-label = "name"
+          ng-model="vm.currentProject.name"
+          md-container-class="large project-chooser"
+          class="large project-selector"
+          on-close-callback="vm.navigateToProject"
+          icon-function="vm.iconFunction"
         >
             <icon>asd</icon>
         </ssmenu>
@@ -51,11 +51,11 @@
     </div>
     <div class="md-toolbar-tools">
         <div class="project-mainmenu">
-            <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'I' && !vm.viewMode" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    EDIT PROJECT DETAILS
-                </md-tooltip>
-                Edit Project
+            <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.currentProject.isMember && !vm.viewMode" ui-sref-active="active" md-no-ink>
+                  <md-tooltip md-autohide md-direction="top">
+                      EDIT PROJECT DETAILS
+                  </md-tooltip>
+                  Edit Project
             </md-button>
 
             <md-button ui-sref="inventory"  ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'Y'" ui-sref-active="active" md-no-ink>
@@ -74,8 +74,8 @@
                 <md-tooltip md-autohide md-direction="top">
                     GO TO MAPS TOOLKIT
                 </md-tooltip>
-                <span ng-show="vm.userProfile.account_type === 'I'"> Update Score </span>
-                <span ng-hide="vm.userProfile.account_type === 'I'"> Visualize Score </span>
+                <span ng-show="vm.currentProject.isViewer"> Visualize Score </span>
+                <span ng-show="vm.currentProject.isMember"> Update Score </span>
             </md-button>
 
             <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
