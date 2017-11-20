@@ -111,14 +111,14 @@ class ProjectPublicViewSet(ViewSet):
         client_parents = DigitalStrategy.objects.filter(group='Client', parent=None)
         for parent in client_parents.all():
             sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            system['subGroups'].append(sub)
+            client['subGroups'].append(sub)
         strategies.append(client)
 
         provider = {'name': 'Provider', 'subGroups': []}
         provider_parents = DigitalStrategy.objects.filter(group='Provider', parent=None)
         for parent in provider_parents.all():
             sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            system['subGroups'].append(sub)
+            provider['subGroups'].append(sub)
         strategies.append(provider)
 
         project_structure['strategies'] = strategies
