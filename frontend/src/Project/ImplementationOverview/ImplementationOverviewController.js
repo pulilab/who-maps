@@ -9,11 +9,11 @@ class ImplementationOverview extends CollapsibleSet {
 
     constructor($scope, $element, $ngRedux) {
         super($element, $scope, 'project');
+        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.setAvailableOptions = this.setAvailableOptions.bind(this);
         this.mapHealthFocusAreas = this.mapHealthFocusAreas.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapData, CountriesModule)(this);
     }
 
     mapData(state) {
@@ -26,6 +26,7 @@ class ImplementationOverview extends CollapsibleSet {
         this.districtList = [];
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, CountriesModule)(this);
         this.watchers();
         this.health_focus_areas = this.mapHealthFocusAreas(this.structure.health_focus_areas);
     }

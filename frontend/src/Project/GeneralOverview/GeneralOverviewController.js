@@ -10,10 +10,10 @@ class GeneralOverviewController extends CollapsibleSet {
     constructor($scope, $element, $state, $ngRedux) {
         super($element, $scope, 'project');
         this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
         this.mapData = this.mapData.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapData, ProjectModule)(this);
     }
 
     mapData(state) {
@@ -34,6 +34,7 @@ class GeneralOverviewController extends CollapsibleSet {
     onInit() {
         this.defaultOnInit();
         this.bindFunctions();
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
     }
 
