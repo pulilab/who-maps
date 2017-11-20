@@ -188,7 +188,9 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
             token: storage.get('token') || undefined
         }
     };
-    $ngReduxProvider.createStoreWith(reducers, middleware, [window.__REDUX_DEVTOOLS_EXTENSION__()], initialState);
+    const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
+    const storeExtension = reduxDevTools ? [reduxDevTools()] : undefined;
+    $ngReduxProvider.createStoreWith(reducers, middleware, storeExtension, initialState);
 };
 
 function handleStateChange(type, from, to) {

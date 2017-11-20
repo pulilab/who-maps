@@ -15,7 +15,7 @@ SECRET_KEY = 'qu1nafi=f@#w8fz&)(i4h*-1@!gm4)dg^^@vt7!fhwjo!6qh9z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.localhost', '.dev.whomaps.pulilab.com']
+ALLOWED_HOSTS = ['.localhost', '.dev.whomaps.pulilab.com', '*']
 
 
 # Application definition
