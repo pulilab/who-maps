@@ -6,7 +6,7 @@ import findIndex from 'lodash/findIndex';
 
 export function getCmsData() {
     return async dispatch => {
-        let { data } = await axios.get('/api/cms//');
+        let { data } = await axios.get('/api/cms/');
         data = data.map(d => {
             d.searchOccurrences = 0;
             return d;
