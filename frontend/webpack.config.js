@@ -42,11 +42,12 @@ const distPlugins = [
     new webpack.optimize.MinChunkSizePlugin({
         minChunkSize: 51200 // ~50kb
     }),
-    new webpack.optimize.UglifyJsPlugin(
-        {
-            sourceMap: false
-        }
-    )
+    // TODO: fix this
+    // new webpack.optimize.UglifyJsPlugin(
+    //     {
+    //         sourceMap: false
+    //     }
+    // )
 ].concat(basePlugins);
 const devPlugins = [].concat(basePlugins);
 
