@@ -67,8 +67,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               appName: {
                   value: ['$ngRedux', ($ngRedux) => {
                       const state = $ngRedux.getState();
-                      const projects = state ? ProjectsModule.getPublishedProjects(state) : null;
-                      return projects && projects[0] ? '' + projects[0].id : null;
+                      return ProjectsModule.getUserDefaultProject(state);
                   }]
               }
           }
