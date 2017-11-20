@@ -13,6 +13,7 @@ class ProjectController  {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -21,8 +22,6 @@ class ProjectController  {
         this.registerEventIfNotPresent = this.registerEventIfNotPresent.bind(this);
         this.toast = toast;
         this.mapData = this.mapData.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapData, ProjectModule)(this);
-        this.$ngRedux = $ngRedux;
     }
 
     mapData(state) {
@@ -68,6 +67,7 @@ class ProjectController  {
         if (DEV) {
             this.fillTestForm();
         }
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
     }
 
