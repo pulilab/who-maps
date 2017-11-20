@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as ProjectModule from '../store/modules/projects';
 import * as CountriesModule from '../store/modules/countries';
 import * as  ToolkitModule from '../store/modules/toolkit';
+import * as  UserModule from '../store/modules/user';
 
 import commProjects from './Mocks/commProjects.js';
 
@@ -14,20 +15,24 @@ class DashboardModuleController {
         this.EE = window.EE;
         this.$onInit = this.onInit;
         this.$onDestroy = this.onDestroy;
-        this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
+        this.mapData = this.mapData.bind(this);
         this.watchers = this.watchers.bind(this);
+        this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
     }
 
     mapData(state) {
+        this.isPublic = this.state.current.name === 'public-dashboard';
+        const projectData = this.isPublic ? ProjectModule.getCurrentPublicProject(state)
+          : ProjectModule.getCurrentProject(state);
         return {
             projects: ProjectModule.getPublishedProjects(state),
-            projectData: ProjectModule.getCurrentProject(state),
+            projectData,
             rawToolkitData: ToolkitModule.getToolkitData(state),
             axisData: ToolkitModule.getToolkitData(state),
             toolkitVersion: ProjectModule.getToolkitVersion(state),
             coverageVersion: ProjectModule.getCoverageVersion(state),
-            profile: state.user.profile,
+            profile: UserModule.getProfile(state),
             currentVersion: ProjectModule.getCurrentVersion(state),
             mapData: CountriesModule.getCurrentCountryMapData(state)
         };
@@ -47,6 +52,7 @@ class DashboardModuleController {
         this.commProjects = commProjects;
         this.resizeEvent();
         this.eventBinding();
+        this.showEmpty = !this.projectId;
 
         this.pgArray = [
             {
@@ -134,7 +140,7 @@ class DashboardModuleController {
 
 
     adjustCoverageVersions(data) {
-        if (!data) {
+        if (!data || this.isPublic) {
             return;
         }
 
