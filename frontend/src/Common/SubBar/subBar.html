@@ -1,4 +1,4 @@
-<md-toolbar class="md-medium-tall toolbar-project">
+<md-toolbar class="md-medium-tall toolbar-project" ng-show="vm.showSubBar()">
     <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
         <ssmenu
                 ng-if="!vm.viewMode"
@@ -51,7 +51,7 @@
     </div>
     <div class="md-toolbar-tools">
         <div class="project-mainmenu">
-            <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'I'" ui-sref-active="active" md-no-ink>
+            <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'I' && !vm.viewMode" ui-sref-active="active" md-no-ink>
                 <md-tooltip md-autohide md-direction="top">
                     EDIT PROJECT DETAILS
                 </md-tooltip>
