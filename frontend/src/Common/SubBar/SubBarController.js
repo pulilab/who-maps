@@ -19,7 +19,9 @@ class SubBarController {
         return {
             projects: ProjectModule.getPublishedProjects(state),
             userProfile: UserModule.getProfile(state),
-            currentProject: ProjectModule.getCurrentProject(state)
+            currentProject: ProjectModule.getCurrentProject(state),
+            lastVersion: ProjectModule.getCurrentVersion(state),
+            lastVersionDate: ProjectModule.getCurrentVersionDate(state)
         };
     }
 

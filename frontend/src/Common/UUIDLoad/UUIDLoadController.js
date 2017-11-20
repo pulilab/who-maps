@@ -1,4 +1,5 @@
 import * as SystemModule from '../../store/modules/system';
+import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
 
 class UUIDLoadController {
@@ -16,6 +17,7 @@ class UUIDLoadController {
             height: calculateHeight()
         };
         this.errorMessage = false;
+        this.handleProjectLoad();
     }
 
     onDestroy() {
@@ -24,7 +26,8 @@ class UUIDLoadController {
 
     mapState(state) {
         return {
-            search: state.system.projectSearch
+            search: SystemModule.getSearchResult(state),
+            profile: UserModule.getProfile(state)
         };
     }
 
@@ -37,19 +40,19 @@ class UUIDLoadController {
         const project = this.search.slice().pop();
         const id = project && project.id ? project.id : false;
 
-        const state = 'public-dashboard';
+        let state = 'public-dashboard';
 
         if (id === false) {
             this.errorMessage = true;
             return;
         }
 
-        // if (this.cs && this.cs.userProfile) {
-        //     if (this.cs.userProfile.member.indexOf(id) > -1
-        //       || this.cs.userProfile.viewer.indexOf(id) > -1) {
-        //         state = 'dashboard';
-        //     }
-        // }
+        if (this.profile && this.profile.member) {
+            if (this.profile.member.indexOf(id) > -1
+              || this.profile.viewer.indexOf(id) > -1) {
+                state = 'dashboard';
+            }
+        }
         this.state.go(state, { appName: id });
     }
 

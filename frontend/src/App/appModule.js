@@ -47,7 +47,12 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
       .state('share', {
           url: '/project/:projectUUID',
           template: '<uuid-load />',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(UserModule.loadProfile());
+              }]
+          }
       })
 
       .state('app', {

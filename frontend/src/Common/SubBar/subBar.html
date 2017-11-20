@@ -28,13 +28,13 @@
             <div class="info-block">
                 <h6>Version</h6>
                 <span>
-                            {{vm.currentProject.last_version || '0'}}.
-                            {{vm.currentProject.last_version ? ('(' + (vm.currentProject.last_version_date | date: medium) + ')') : '' }}
+                            {{vm.lastVersion}}.
+                            {{vm.lastVersionDate ? ('(' + (vm.lastVersionDate | date: medium) + ')') : '' }}
                        </span>
             </div>
             <div class="info-block">
                 <h6>Organization</h6>
-                <span>{{vm.currentProject.organisation.name}}</span>
+                <span>{{vm.currentProject.organisation_name}}</span>
             </div>
             <div class="info-block">
                 <h6>Contact Person</h6>

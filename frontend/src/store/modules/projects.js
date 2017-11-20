@@ -156,6 +156,12 @@ export const getCurrentVersion = state => {
     return getToolkitVersion(state).length;
 };
 
+export const getCurrentVersionDate = state => {
+    const version = getToolkitVersion(state);
+    const last = version.slice(-1)[0];
+    return last ? last.modified : null;
+};
+
 export const getMapsAxisData = state => {
     const axis = cloneDeep(axisData);
     const toolkitVersion = getToolkitVersion(state);

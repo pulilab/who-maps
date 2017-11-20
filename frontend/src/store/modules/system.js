@@ -8,6 +8,10 @@ export const getUserProfiles  = state => {
     return state.system.profiles ? state.system.profiles.slice() : [];
 };
 
+export const getSearchResult = state => {
+    return state.system.projectSearch ? state.system.projectSearch.slice() : [];
+};
+
 // ACTIONS
 
 export function loadUserProfiles() {
