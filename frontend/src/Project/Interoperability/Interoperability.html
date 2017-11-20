@@ -31,9 +31,23 @@
         <label>Specify URL</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
         <input ng-disabled="!vm.project.interoperability_links[$index].selected"
-               name="link.interop1"
+               name="interoplink"
                md-maxlength="200"
-               ng-model="vm.project.interoperability_links[$index].link">
+               ng-model="vm.project.interoperability_links[$index].link"
+               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/">
+        <div role="alert" ng-messages="vm.form.interoplink.$error.url">
+            <!--tt>{{vm.form.$error}}</tt>
+            <tt>{{vm.form.$error.url}}</tt>
+            <tt>{{vm.form.input.$error}}</tt>
+            <tt>{{vm.form.input.$error.url}}</tt-->
+            <tt>{{vm.form.interoplink}}</tt>
+
+          <div ng-message="url">
+            Make sure your URL is valid.
+          </div>
+            <span class="error" ng-show="vm.form.interoplink.$error.url">
+      Not valid url!</span>
+        </div>
       </md-input-container>
     </div>
 
