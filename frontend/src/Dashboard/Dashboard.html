@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div flex class="dashsection dash-cardholder" layout="column" ng-hide="vm.showEmpty">
+      <div flex class="dashsection dash-cardholder" layout="column" ng-if="!vm.showEmpty">
 
         <div class="dash-subhead">PROJECT DETAILS</div>
         <md-card md-whiteframe="2" flex>
