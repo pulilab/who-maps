@@ -178,7 +178,7 @@ export function loadCurrentCountryDistrictsProject() {
         const country = getCurrentCountry(getState());
         if (country && country.id) {
             const { data } = await axios.get(`/api/projects/by-view/map/${country.id}/`);
-            dispatch({ type: 'CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
+            dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
         }
     };
 }
@@ -189,13 +189,14 @@ export function loadCountryProjectsOrAll(countryId) {
             url.push(`${countryId}/`);
         }
         const { data } = await axios.get(url.join(''));
-        dispatch({ type: 'CURRENT_COUNTRY_PROJECTS', projects: data });
+        dispatch({ type: 'SET_CURRENT_COUNTRY_PROJECTS', projects: data });
     };
 }
 
 export function setCurrentCountry(id) {
-    return async dispatch => {
-        if (id) {
+    return async (dispatch, getState) => {
+        const currentId = getState().countries.currentCountry;
+        if (id && id !== currentId) {
             dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
             const cfPromise = dispatch(loadCountryFields(id));
             const dsPromise = dispatch(loadCountryMapDataAndDistricts());
@@ -246,11 +247,11 @@ export default function system(state = stateDefinition, action) {
         s.currentCountryDistricts = action.districts;
         return Object.assign(state, {}, s);
     }
-    case 'CURRENT_COUNTRY_PROJECTS': {
+    case 'SET_CURRENT_COUNTRY_PROJECTS': {
         s.currentCountryProjects = action.projects;
         return Object.assign(state, {}, s);
     }
-    case 'CURRENT_COUNTRY_DISTRICT_PROJECTS': {
+    case 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS': {
         s.currentCountryDistrictsProjects = action.projects;
         return Object.assign(state, {}, s);
     }

@@ -135,13 +135,10 @@ export const getViewers = state => {
 export const getProjectStructure = state => {
     const structure = state.projects.structure;
     const currentProject = getCurrentProject(state);
-    try {
+    if (currentProject.name) {
         fieldsWithCustomValue.forEach(item => {
             structure[item] = union(structure[item], currentProject[item]);
         });
-    }
-    catch (e) {
-        console.log(e);
     }
     return cloneDeep(structure);
 };
@@ -316,9 +313,9 @@ export function loadProjectDetails() {
 export function setCurrentProject(id) {
     return async (dispatch, getState) => {
         id = parseInt(id, 10);
-        dispatch({ type: 'SET_CURRENT_PROJECT', id });
-        if (id) {
-            const state = getState();
+        const state = getState();
+        if (id && id !== state.projects.currentProject) {
+            dispatch({ type: 'SET_CURRENT_PROJECT', id });
             const project = getCurrentProjectIfExist(state);
             if (project) {
                 const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
@@ -342,9 +339,13 @@ export function snapShotProject() {
     };
 }
 export function loadProjectStructure() {
-    return async (dispatch) => {
-        const { data } = await axios.get('/api/projects/structure/');
-        await dispatch({ type: 'SET_PROJECT_STRUCTURE', structure: data });
+    return async (dispatch, getState) => {
+        const state = getState();
+        const structure = getProjectStructure(state);
+        if (!structure) {
+            const { data } = await axios.get('/api/projects/structure/');
+            await dispatch({ type: 'SET_PROJECT_STRUCTURE', structure: data });
+        }
     };
 }
 
