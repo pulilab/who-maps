@@ -1,6 +1,6 @@
 <div id="dashcontainer" layout="column">
 
-  <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty = !(vm.state.params.appName)">
+  <div layout="row" class="dashrow dashrow-upper">
 
     <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
 
@@ -24,7 +24,7 @@
 
         <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
 
-          <md-card md-whiteframe="2" class="dash-stat-card" ng-class="vm.profile.account_type === 'I' ? 'longer' : 'shorter'">
+          <md-card md-whiteframe="2" class="dash-stat-card" ng-class="!vm.viewMode ? 'longer' : 'shorter'">
 
             <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
             <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
@@ -57,7 +57,7 @@
 
             <md-tab label="overview">
 
-              <div class="dash-cardcontent" layout="column" ng-if="vm.profile">
+              <div class="dash-cardcontent" layout="column" ng-if="!vm.viewMode">
 
                 <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
 
@@ -126,7 +126,7 @@
 
             </md-tab>
 
-            <md-tab label="axis" ng-if="vm.profile">
+            <md-tab label="axis" ng-if="!vm.viewMode">
               <div>
                 <linechart
                   showdotted="(vm.profile.account_type === 'I')">
@@ -134,7 +134,7 @@
               </div>
             </md-tab>
 
-            <md-tab label="domains" ng-if="vm.profile">
+            <md-tab label="domains" ng-if="!vm.viewMode">
               <div>
                 <linechart
                   showdotted="(vm.profile.account_type === 'I')"
@@ -165,19 +165,11 @@
                   </div>
 
                   <div layout="row">
-
                                         <span flex>
                                           <md-icon class="material-icons">playlist_add_check</md-icon>
                                           License</span>
                     <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
                   </div>
-
-                  <!-- <div flex layout="row">
-                      <md-icon class="material-icons">speaker_phone</md-icon>
-                      <span flex>Digital tools</span>
-                      <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
-                      <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
-                  </div> -->
                 </div>
 
                 <div class="lower">
@@ -193,62 +185,6 @@
                 </div>
               </div>
             </md-tab>
-
-            <!--<md-tab label="resources">-->
-            <!--<md-content class="dash-res">-->
-
-
-            <!--<h3>PROJECT REPORT</h3>-->
-            <!--<md-card-->
-            <!--class="resource"-->
-            <!--ng-repeat="report in vm.resources.reports"-->
-            <!--layout="row"-->
-            <!--layout-align="space-around stretch">-->
-
-            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-            <!--<h4>{{report.type === 'file' ? report.filename : report.link}}</h4>-->
-            <!--</div>-->
-            <!--<md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>-->
-            <!--<a ng-href="{{report.link}}" target="_blank" ng-if="report.type === 'link'" layout="column" layout-align="center center">-->
-            <!--<md-icon>launch</md-icon>-->
-            <!--</a>-->
-            <!--</md-card>-->
-
-
-            <!--<h3>ASSOCIATED JOURNAL ARTICLES</h3>-->
-            <!--<md-card-->
-            <!--class="resource"-->
-            <!--ng-repeat="article in vm.resources.articles"-->
-            <!--layout="row"-->
-            <!--layout-align="space-around stretch">-->
-
-            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-            <!--<h4>{{article.type === 'file' ? article.filename : article.link}}</h4>-->
-            <!--</div>-->
-            <!--<md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>-->
-            <!--<a ng-href="{{article.link}}" target="_blank" ng-if="article.type === 'link'" layout="column" layout-align="center center">-->
-            <!--<md-icon>launch</md-icon>-->
-            <!--</a>-->
-            <!--</md-card>-->
-
-
-            <!--<h3>ASSOCIATED CHMI LINKS</h3>-->
-            <!--<md-card-->
-            <!--class="resource"-->
-            <!--ng-repeat="link in vm.resources.links"-->
-            <!--layout="row"-->
-            <!--layout-align="space-around stretch">-->
-
-            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-            <!--<h4>{{link.type === 'file' ? link.filename : link.link}}</h4>-->
-            <!--</div>-->
-            <!--<md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>-->
-            <!--<a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">-->
-            <!--<md-icon>launch</md-icon>-->
-            <!--</a>-->
-            <!--</md-card>-->
-            <!--</md-content>-->
-            <!--</md-tab>-->
 
             <md-tab label="interoperability">
               <md-content class="dash-res">
@@ -345,7 +281,7 @@
 
   <!-- LOWER PART -->
 
-  <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData">
+  <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData && !vm.viewMode && vm.state.params.appName !== null">
 
     <div flex class="dashsection dash-cardholder" layout="column">
 
