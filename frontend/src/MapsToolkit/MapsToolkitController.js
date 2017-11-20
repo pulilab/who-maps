@@ -54,7 +54,7 @@ class MapsToolkitController {
     watchers() {
         this.scope.$watch(s => s.vm.rawData,
           rawData => {
-              this.processAxesData(cloneDeep(rawData), this.state.params.axisId, this.state.params.domainId)
+              this.processAxesData(cloneDeep(rawData), this.state.params.axisId, this.state.params.domainId);
           }, true);
     }
 

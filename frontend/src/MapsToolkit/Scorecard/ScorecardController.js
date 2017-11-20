@@ -8,22 +8,21 @@ class ScorecardController {
     constructor($scope, $state, $ngRedux) {
         this.scope = $scope;
         this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.mapData = this.mapData.bind(this);
-        this.images = this.importIconTemplates();
-        this.unsubscribe = $ngRedux.connect(this.mapData, ToolkitModule)(this);
+        this.watchers = this.watchers.bind(this);
+        this.createAxisData = this.createAxisData.bind(this);
     }
 
     mapData(state) {
         const structure = ToolkitModule.getStructure();
         const rawData = ToolkitModule.getToolkitData(state);
-        const data = this.createAxisData(rawData, structure);
         return {
             rawData,
             structure,
-            data,
             axesSize: rawData.length
         };
     }
@@ -46,15 +45,21 @@ class ScorecardController {
 
     onInit() {
         this.dataLoaded = false;
+        this.images = this.importIconTemplates();
         this.projectId = this.state.params.appName;
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, ToolkitModule)(this);
         this.axisId = this.state.params.axisId;
+        this.watchers();
         this.EE.on('mapsAxisChange', this.goToAxis, this);
     }
 
+    watchers() {
+        this.scope.$watch(s => s.vm.rawData, this.createAxisData, true);
+    }
 
-    createAxisData(rawData, structure) {
+    createAxisData(rawData) {
         if (rawData && rawData.length > 0) {
-            const data = merge(rawData, structure).map((a, key) => {
+            const data = merge(rawData, this.structure).map((a, key) => {
                 const axis = cloneDeep(a);
                 axis.id = key;
                 axis.axisName = axis.axis.split('.')[1];
@@ -66,7 +71,7 @@ class ScorecardController {
                 return axis;
             });
             this.dataLoaded = true;
-            return this.summary ? data : data[this.axisId];
+            this.data =  this.summary ? data : data[this.axisId];
         }
         return [];
     }
