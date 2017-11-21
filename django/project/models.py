@@ -130,11 +130,10 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
 
 
 class HealthCategory(ExtendedModel):
-    health_group = models.CharField(max_length=512)
     name = models.CharField(max_length=512)
 
     def __str__(self):
-        return '[{}] {}'.format(self.health_group, self.name)
+        return self.name
 
 
 class HealthFocusArea(ExtendedModel):

@@ -653,7 +653,7 @@ class ProjectTests(SetupTests):
 
     def test_healthcategory_str(self):
         hc = HealthCategory.objects.all().first()
-        self.assertEqual(str(hc), '[Red group] Sexual and reproductive health')
+        self.assertEqual(str(hc), 'Sexual and reproductive health')
 
     def test_healthfocusarea_str(self):
         hfa = HealthFocusArea.objects.all().first()

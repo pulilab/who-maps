@@ -187,46 +187,14 @@ data = {
     ]
 }
 
-groups = {
-    'Red group': [
-        'Sexual and reproductive health',
-        'Maternal health',
-        'Newborn and Child Health',
-        'Non-communicable diseases',
-        'Vector-borne diseases (not listed under Neglected Tropical Diseases (NTDs)',
-        'Neglected Tropical Diseases (NTDs)',
-        'Cross Cutting',
-    ],
-    'Blue group': [
-        'Violence',
-        'Other chronic conditions and disabilities',
-        'Injury prevention and management',
-        'Wellness and Mental Health',
-        'Infectious diseases (non-vector borne)',
-    ],
-    'Green group': [
-        'Water Sanitation and Hygiene (WASH)',
-        'Nutrition and metabolic disorders',
-        'Environmental Health',
-    ],
-    'Orane group': [
-    ],
-    'Group bordeaux': [
-        'Adolescent and Youth Health',
-        'Humanitarian health',
-        'Civil registration and vital statistics',
-    ],
-}
-
 
 def make_dynamic(apps, schema_editor):
     HealthCategory = apps.get_model('project', 'HealthCategory')
     HealthFocusArea = apps.get_model('project', 'HealthFocusArea')
-    for group, categories in groups.items():
-        for category in categories:
-            hc = HealthCategory.objects.create(health_group=group, name=category)
-            for hfa in data[category]:
-                HealthFocusArea.objects.create(health_category=hc, name=hfa)
+    for category, items in data.items():
+        hc = HealthCategory.objects.create(name=category)
+        for hfa in items:
+            HealthFocusArea.objects.create(health_category=hc, name=hfa)
 
 
 class Migration(migrations.Migration):
