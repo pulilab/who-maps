@@ -193,16 +193,17 @@ export function loadCountryProjectsOrAll(countryId) {
     };
 }
 
-export function setCurrentCountry(id) {
+export function setCurrentCountry(id, waitFor = []) {
     return async (dispatch, getState) => {
         const currentId = getState().countries.currentCountry;
         if (id && id !== currentId) {
             dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
-            const cfPromise = dispatch(loadCountryFields(id));
-            const dsPromise = dispatch(loadCountryMapDataAndDistricts());
-            const lPromise = dispatch(loadCountryLandingPageInfo());
-            const dpPromise = dispatch(loadCurrentCountryDistrictsProject());
-            return Promise.all([cfPromise, dsPromise, lPromise, dpPromise]);
+            const promiseCollection = {};
+            promiseCollection.countryFields = dispatch(loadCountryFields(id));
+            promiseCollection.mapData = dispatch(loadCountryMapDataAndDistricts());
+            promiseCollection.landingPage = dispatch(loadCountryLandingPageInfo());
+            promiseCollection.districts = dispatch(loadCurrentCountryDistrictsProject());
+            return Promise.all(waitFor.map(name => promiseCollection[name]));
         }
         return Promise.resolve();
     };
@@ -212,7 +213,7 @@ export function setCurrentCountryFromCode(code) {
     return async (dispatch, getState) => {
         const country = getState().countries.list.find(c => c.code.toLocaleLowerCase() === code.toLocaleLowerCase());
         if (country && country.id) {
-            dispatch(setCurrentCountry(country.id));
+            dispatch(setCurrentCountry(country.id, ['landingPage']));
         }
     };
 }
@@ -255,12 +256,6 @@ export default function system(state = stateDefinition, action) {
         s.currentCountryDistrictsProjects = action.projects;
         return Object.assign(state, {}, s);
     }
-    // case 'SET_MAP_DATA': {
-    //     const newMapData = {};
-    //     newMapData[action.code] = action.countryData;
-    //     s.mapData = Object.assign({}, s.mapData, newMapData);
-    //     return Object.assign(state, {}, s);
-    // }
     default:
         return state;
     }

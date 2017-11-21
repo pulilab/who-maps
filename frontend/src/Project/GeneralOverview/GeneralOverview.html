@@ -15,7 +15,7 @@
                ng-change="vm.checkName()">
         <div ng-messages="vm.form.name.$error">
           <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+          <div ng-message="md-maxlength">The name has to be less than 101 characters long.</div>
           <div ng-message="custom">
             <div ng-repeat="message in vm.form.name.customError">
               {{message}}

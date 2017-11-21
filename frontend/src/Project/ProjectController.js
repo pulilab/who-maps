@@ -85,7 +85,7 @@ class ProjectController  {
             return;
         }
         if ((oldValue && country !== oldValue) || this.editMode === undefined) {
-            await this.$ngRedux.dispatch(CountryModule.setCurrentCountry(country));
+            await this.$ngRedux.dispatch(CountryModule.setCurrentCountry(country, ['districts', 'countryFields']));
         }
     }
 
