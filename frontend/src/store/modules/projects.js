@@ -409,7 +409,7 @@ export function saveProject(processedForm, team, viewers, countryFields) {
 }
 
 async function searchProjects(query, health_topic = false, location = false,
-                              organisation = false, project_name = false, technology_platform = false) {
+                              organisation = false, project_name = true, technology_platform = false) {
     const { data } = await axios.post('/api/search/projects/', {
         health_topic,
         location,

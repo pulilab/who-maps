@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import * as SystemModule from '../store/modules/system';
 
 
@@ -28,27 +27,10 @@ class AppModuleController {
         this.projectId = this.state.params.appName;
         this.currentPage = this.state.current.name;
         this.showCountryTopBar = false;
-
-        // if (this.viewMode) {
-        //     this.cs.getProjectData(this.projectId)
-        //       .then(project => {
-        //           this.currentProject = project;
-        //           this.scope.$evalAsync();
-        //       });
-        // }
     }
 
     onDestroy()  {
         this.unsubrscibe();
-    }
-
-    checkOwnership(state, cs) {
-        const root = state.current.parent;
-        const id = state.params.appName ? parseInt(state.params.appName, 10) : false;
-        const isMemberOrViewer = cs.isMember({ id }) || cs.isViewer({ id });
-        if (id !== false && !isMemberOrViewer && root === 'app') {
-            state.go('public-dashboard', { appName: id });
-        }
     }
 
     computeShowSubBar() {
@@ -63,7 +45,6 @@ class AppModuleController {
             return this.state.current.name;
         }, value => {
             this.currentPage = value;
-            // this.fillUserData();
             this.showSubBar = this.computeShowSubBar();
         });
     }
@@ -72,26 +53,6 @@ class AppModuleController {
         this.EE.on('logout', this.handleLogoutEvent, this);
     }
 
-    fillUserData() {
-        this.user.projects = this.cs.projectList;
-        const lastProject = _.last(this.user.projects);
-
-        if (this.state.params.appName.length === 0 && lastProject && lastProject.id) {
-            const appName = lastProject.id;
-            const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { appName }, {
-                location: 'replace'
-            });
-        }
-        _.forEach(this.user.projects, item => {
-            if (item.id === parseInt(this.state.params.appName, 10)) {
-                this.currentProject = item;
-            }
-        });
-        this.scope.$evalAsync();
-        this.checkOwnership(this.state, this.cs);
-
-    }
 
     handleLogoutEvent() {
         this.systemLogout();
