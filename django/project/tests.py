@@ -12,14 +12,16 @@ from rest_framework.test import APITestCase
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
-from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, HealthCategory, \
-    ProjectDraft, ProjectApproval
+from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
+    HealthCategory, ProjectDraft, ProjectApproval
 from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
 from .tasks import send_project_approval_digest
+
 
 class MockRequest():
     user = None
     GET = {}
+
 
 class SetupTests(APITestCase):
 
