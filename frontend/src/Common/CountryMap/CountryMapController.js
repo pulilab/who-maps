@@ -116,7 +116,7 @@ class CountryMapController {
             panEnabled: true,
             controlIconsEnabled: false,
             zoomEnabled: true,
-            mouseWheelZoomEnabled: true,
+            mouseWheelZoomEnabled: false,
             preventMouseEventsDefault: true,
             zoomScaleSensitivity: 0.2,
             minZoom: 0.5,

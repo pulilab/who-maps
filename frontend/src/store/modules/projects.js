@@ -324,7 +324,7 @@ export function setCurrentProject(id) {
             dispatch({ type: 'SET_CURRENT_PROJECT', id });
             const project = getCurrentProjectIfExist(state);
             if (project) {
-                const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country));
+                const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country, ['mapData']));
                 const detailPromise = dispatch(loadProjectDetails());
                 const toolkitPromise = dispatch(ToolkitModule.loadToolkitData());
                 return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
