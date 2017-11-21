@@ -3,8 +3,6 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from core.models import ExtendedModel, SoftDeleteMixin
 from country.models import Country
@@ -27,7 +25,8 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(viewers=user.userprofile)
 
     def member_of(self, user):
-        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile)).distinct().order_by('id')
+        return self.get_queryset().filter(Q(team=user.userprofile)
+                                          | Q(viewers=user.userprofile)).distinct().order_by('id')
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
@@ -40,8 +39,8 @@ class ProjectManager(models.Manager):
 
 
 class ProjectBase(ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date",
-                               "started", "application", "last_version")
+    FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
+                               "application", "last_version")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255, unique=True)
@@ -92,19 +91,14 @@ class ProjectBase(ExtendedModel):
 
 
 class Project(ProjectBase):
-    public_id = models.CharField(max_length=64, default="",
-                                 help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
+    public_id = models.CharField(
+        max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
 
 class ProjectDraft(ProjectBase):
     name = models.CharField(max_length=255, unique=False)
     project = models.OneToOneField(
-            'Project',
-            on_delete=models.CASCADE,
-            related_name='project_draft',
-            blank=True,
-            null=True
-        )
+        'Project', on_delete=models.CASCADE, related_name='project_draft', blank=True, null=True)
 
 
 class ProjectApproval(ExtendedModel):

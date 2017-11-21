@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.conf import settings
 from django.core import mail
@@ -163,7 +162,6 @@ class UserProfileTests(APITestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("key")
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
@@ -214,7 +212,8 @@ class UserProfileTests(APITestCase):
             "password": "123456"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('user_profile_id'), UserProfile.objects.get(user__email="test_user2@gmail.com").id)
+        self.assertEqual(response.json().get('user_profile_id'),
+                         UserProfile.objects.get(user__email="test_user2@gmail.com").id)
 
     def test_retrieve_existent_user_profile_on_login(self):
         url = reverse("api_token_auth")

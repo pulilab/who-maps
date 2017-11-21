@@ -1,4 +1,5 @@
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
@@ -167,7 +168,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }
 
-import datetime
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -186,7 +186,7 @@ BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
 # PRODUCTION SETTINGS
-if SITE_ID in [3,4]:
+if SITE_ID in [3, 4]:
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',

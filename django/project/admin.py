@@ -7,15 +7,22 @@ from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, P
 
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
-    list_display = ['name',]
+    list_display = [
+        'name',
+    ]
 
 
 class InteroperabilityLinkAdmin(AllObjectsAdmin):
-    list_display = ['pre', 'name',]
+    list_display = [
+        'pre',
+        'name',
+    ]
 
 
 class DigitalStrategyAdmin(AllObjectsAdmin):
-    list_display = ['__str__',]
+    list_display = [
+        '__str__',
+    ]
 
 
 class ProjectApprovalAdmin(admin.ModelAdmin):
