@@ -90,7 +90,7 @@ export const getCurrentCountryMapData = state => {
     const currentCountry = getCurrentCountry(state);
     currentCountry.mapData = mapData[currentCountry.code];
     currentCountry.districts = getCurrentCountryDistricts(state);
-    return cloneDeep(currentCountry);
+    return currentCountry;
 };
 
 export const getCurrentCountryDistrictProjects = state => {
@@ -151,7 +151,7 @@ export function loadCountryMapDataAndDistricts() {
             const countryData = mapData[country.code];
             if (!countryData) {
                 const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
-                mapData[country.code] = data;
+                mapData[country.code] = Object.freeze(data);
             }
             const subKey = Object.keys(mapData[country.code].objects)[0];
             const districts = mapData[country.code].objects[subKey].geometries.map(object => {
@@ -255,12 +255,12 @@ export default function system(state = stateDefinition, action) {
         s.currentCountryDistrictsProjects = action.projects;
         return Object.assign(state, {}, s);
     }
-    case 'SET_MAP_DATA': {
-        const newMapData = {};
-        newMapData[action.code] = action.countryData;
-        s.mapData = Object.assign({}, s.mapData, newMapData);
-        return Object.assign(state, {}, s);
-    }
+    // case 'SET_MAP_DATA': {
+    //     const newMapData = {};
+    //     newMapData[action.code] = action.countryData;
+    //     s.mapData = Object.assign({}, s.mapData, newMapData);
+    //     return Object.assign(state, {}, s);
+    // }
     default:
         return state;
     }
