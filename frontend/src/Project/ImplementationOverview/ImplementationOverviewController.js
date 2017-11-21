@@ -108,10 +108,8 @@ class ImplementationOverview extends CollapsibleSet {
         let color = 0;
         for (const grandparent of healthFocusAreas) {
             color += 1;
-            for (const parent of grandparent.subGroups) {
-                parent.class = `group-${color}`;
-                intervention.subGroups.push(parent);
-            }
+            grandparent.class = `group-${color}`;
+            intervention.subGroups.push(grandparent);
         }
         return [intervention];
     }
