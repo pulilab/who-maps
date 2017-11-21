@@ -5,10 +5,14 @@ from .models import Country, PartnerLogo, CountryField
 
 
 class CountryListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Country
-        fields = ("id", "name", "code", "project_approval",)
+        fields = (
+            "id",
+            "name",
+            "code",
+            "project_approval",
+        )
 
 
 class LandingPageSerializer(serializers.ModelSerializer):
@@ -24,14 +28,12 @@ class LandingPageSerializer(serializers.ModelSerializer):
 
 
 class CountryFieldsListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CountryField
         fields = ("id", "country", "type", "question")
 
 
 class CountryFieldsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CountryField
         fields = ("country", "type", "question", "answer", "project")
@@ -54,11 +56,18 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
     fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
 
     def create(self, validated_data):
-        return [CountryField.objects.update_or_create(
-            defaults={"answer": field["answer"]}, **{"country": field["country"], "project": field["project"],
-                                                     "question": field["question"], "type": field["type"],
-                                                     "schema": False},
-        )[0] for field in validated_data['fields']]
+        return [
+            CountryField.objects.update_or_create(
+                defaults={"answer": field["answer"]},
+                **{
+                    "country": field["country"],
+                    "project": field["project"],
+                    "question": field["question"],
+                    "type": field["type"],
+                    "schema": False
+                },
+            )[0] for field in validated_data['fields']
+        ]
 
     def to_representation(self, instances):
         return {"fields": [instance.to_representation() for instance in instances]}

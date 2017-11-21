@@ -4,6 +4,6 @@
 
 <ul>
 {% for project in projects %}
-    <li><a href="{% site_url %}/admin/login/?next=/app/project/{{project.id}}/">{{project.name}}</a> >> <a href="{% site_url %}/admin/project/projectapproval/add/?user={{user}}&project={{project.id}}">approve/reject</a></li>
+    <li><a href="{% site_url %}/admin/login/?next=/app/{{project.id}}/edit-project">{{project.name}}</a> >> <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change">approve/reject</a></li>
 {% endfor %}
 </ul>
