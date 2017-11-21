@@ -78,9 +78,7 @@ class CountryMapController {
         });
     }
 
-
     makeGeoFromTopo(topo) {
-        // console.warn('TOPO', topo);
         const subKey = _.keys(topo.objects)[0];
         const ret = topojson.feature(topo, topo.objects[subKey]);
         return ret;
@@ -100,8 +98,6 @@ class CountryMapController {
             topoJSON.transform.scale.map(nr => {
                 return 1 / nr;
             })) * 10;
-
-        // console.log(ret);
 
         if (this.countryName === 'Gambia') {
             ret = 30000;
