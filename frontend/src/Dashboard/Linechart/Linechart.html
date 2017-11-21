@@ -6,7 +6,7 @@
     <li ng-if="vm.showdotted"><span class="smallness">……</span> in progress</li>
 
     <li
-      ng-repeat="label in vm.chosenLabels track by $index"
+      ng-repeat="label in vm.chartConfig.chosenLabels track by $index"
       ng-class="'labelhov' + ($index + 1)"
       class="text-truncate labelhov">
 
