@@ -130,3 +130,18 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
 
     class Meta:
         verbose_name_plural = 'Digital Strategies'
+
+
+class HealthCategory(ExtendedModel):
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name
+
+
+class HealthFocusArea(ExtendedModel):
+    health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return '[{}] {}'.format(self.health_category.name, self.name)

@@ -12,7 +12,7 @@ from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
-from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform
+from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, HealthCategory
 from .admin import DigitalStrategyAdmin
 
 
@@ -650,6 +650,14 @@ class ProjectTests(SetupTests):
     def test_platforms_str(self):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
+
+    def test_healthcategory_str(self):
+        hc = HealthCategory.objects.all().first()
+        self.assertEqual(str(hc), 'Sexual and reproductive health')
+
+    def test_healthfocusarea_str(self):
+        hfa = HealthFocusArea.objects.all().first()
+        self.assertEqual(str(hfa), '[Sexual and reproductive health] Comprehensive sexuality education')
 
 
 class PermissionTests(SetupTests):
