@@ -128,6 +128,9 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
         return '[{}]{} {}'.format(self.group, parent, self.name)
 
+    class Meta:
+        verbose_name_plural = 'Digital Strategies'
+
 
 class HealthCategory(ExtendedModel):
     name = models.CharField(max_length=512)
