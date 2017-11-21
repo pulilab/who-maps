@@ -12,10 +12,11 @@ const stateDefinition = {
     currentCountryDistricts: [],
     currentCountry: null,
     currentCountryCoverPage: {},
-    mapData: {},
     currentCountryProjects: [],
     currentCountryDistrictsProjects: []
 };
+
+const mapData = {};
 
 // GETTERS
 
@@ -87,7 +88,7 @@ export const getCurrentCountryDistricts = state => {
 
 export const getCurrentCountryMapData = state => {
     const currentCountry = getCurrentCountry(state);
-    currentCountry.mapData = state.countries.mapData[currentCountry.code];
+    currentCountry.mapData = mapData[currentCountry.code];
     currentCountry.districts = getCurrentCountryDistricts(state);
     return cloneDeep(currentCountry);
 };
@@ -136,7 +137,7 @@ export function loadCountryFields(id) {
     return async (dispatch, getState) => {
         const countryCountryFields = getState().countries.countryFields.filter(cf =>  cf.country === id);
         if (!countryCountryFields || countryCountryFields.length === 0) {
-            const { data } = await axios.get(`/api/country-fields/${id}`);
+            const { data } = await axios.get(`/api/country-fields/${id}/`);
             dispatch({ type: 'UPDATE_COUNTRY_FIELDS_LIST', fields: data });
         }
     };
@@ -147,14 +148,13 @@ export function loadCountryMapDataAndDistricts() {
         const state = getState();
         const country = getCurrentCountry(state);
         if (country && country.code) {
-            let countryData = state.countries.mapData[country.code];
+            const countryData = mapData[country.code];
             if (!countryData) {
                 const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
-                countryData = data;
-                dispatch({ type: 'SET_MAP_DATA', countryData, code: country.code });
+                mapData[country.code] = data;
             }
-            const subKey = Object.keys(countryData.objects)[0];
-            const districts = countryData.objects[subKey].geometries.map(object => {
+            const subKey = Object.keys(mapData[country.code].objects)[0];
+            const districts = mapData[country.code].objects[subKey].geometries.map(object => {
                 return object.properties['name:en'] || object.properties.name;
             });
             dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
