@@ -34,10 +34,6 @@ dependencies:
 
 test:
   pre:
-      - run:
-          name: Run python linting
-          command: |
-            set -x
     - cd django && flake8
     - cd django && py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
     - cd frontend && yarn test_ci
