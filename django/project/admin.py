@@ -3,7 +3,8 @@ from django.utils.html import mark_safe
 
 from core.admin import AllObjectsAdmin
 from country.models import Country
-from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, ProjectApproval
+from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, ProjectApproval, HealthFocusArea, \
+    HealthCategory
 
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
@@ -44,3 +45,5 @@ admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(ProjectApproval, ProjectApprovalAdmin)
+admin.site.register(HealthFocusArea)
+admin.site.register(HealthCategory)
