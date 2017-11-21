@@ -4,7 +4,6 @@ from datetime import datetime
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
-from django.contrib.admin.options import ModelAdmin
 from django.test import TestCase
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
@@ -12,7 +11,6 @@ from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
-from .serializers import ProjectSerializer
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, ProjectDraft, \
     ProjectApproval
 from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
@@ -621,7 +619,8 @@ class ProjectTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get('health_focus_areas'), self.project_data['health_focus_areas'])
+        self.assertEqual(response.json()['published'].get('health_focus_areas'),
+                         self.project_data['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
         data.update(health_focus_areas=['area1'])
@@ -636,7 +635,8 @@ class ProjectTests(SetupTests):
     def test_update_project_with_different_invalid_name(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name="toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
+        data.update(name="toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninv"
+                         "alidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["name"][0], 'Ensure this field has no more than 128 characters.')
@@ -700,8 +700,8 @@ class ProjectTests(SetupTests):
         user = UserProfile.objects.get(id=self.user_profile_id).user
         request.user = user
         ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                                          approved=True)
+        ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+                                       approved=True)
         self.assertEqual(ma.get_queryset(request).count(), 1)
 
 
@@ -800,7 +800,7 @@ class ProjectDraftTests(SetupTests):
         url = reverse("project-crud")
         data = copy.deepcopy(self.project_data)
         data.update(name='Draft Proj 3', project=self.project_id, project_draft=self.project_draft_id)
-        response = self.test_user_client.post(url, data, format="json")
+        self.test_user_client.post(url, data, format="json")
         self.assertEqual(ProjectDraft.objects.filter(id=self.project_draft_id).exists(), False)
 
     def test_project_approval_email(self):
@@ -1004,7 +1004,7 @@ class PermissionTests(SetupTests):
 
     def test_csv_export_failed(self):
         url = reverse("csv-export")
-        response = self.test_user_client.post(url, {"data": [1,2]}, format="json")
+        response = self.test_user_client.post(url, {"data": [1, 2]}, format="json")
         self.assertEqual(response.status_code, 404)
 
     def test_csv_export_success(self):
@@ -1019,7 +1019,8 @@ class PermissionTests(SetupTests):
 
     def test_retrieve_project_with_country_fields(self):
         CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
-        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?", answer="a1", schema=False)
+        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
+                                          answer="a1", schema=False)
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
 
@@ -1038,7 +1039,8 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['published']['fields'][0]['answer'], cf1.answer)
 
     def test_retrieve_project_with_country_fields_without_schema(self):
-        CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?", answer="a1", schema=False)
+        CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
+                                    answer="a1", schema=False)
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
 

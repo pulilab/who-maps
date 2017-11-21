@@ -30,8 +30,8 @@ class AuthTest(TestCase):
     def test_hide_fields_from_user_change_form(self):
         ma = CustomUserAdmin(User, self.site)
         ma.get_form(None)
-        self.assertEqual(ma.get_list_filter(None),
-                         ('is_staff', 'is_superuser', 'is_active', 'groups', 'userprofile__account_type'))
+        self.assertEqual(
+            ma.get_list_filter(None), ('is_staff', 'is_superuser', 'is_active', 'groups', 'userprofile__account_type'))
         self.assertEqual(ma.country(self.user), self.userprofile.country)
         self.assertEqual(ma.type(self.user), self.userprofile.get_account_type_display())
         self.assertIsNone(ma.organisation(self.user))

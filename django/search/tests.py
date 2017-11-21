@@ -1,10 +1,6 @@
 import copy
-from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from allauth.account.models import EmailConfirmation
-from rest_framework.test import APIClient
-from rest_framework.test import APITestCase
 
 from country.models import Country
 from project.models import Project
@@ -12,7 +8,6 @@ from project.tests import SetupTests
 
 
 class SearchTests(SetupTests):
-
     def setUp(self):
         super(SearchTests, self).setUp()
         project = Project.objects.get(id=self.project_id)
@@ -30,11 +25,7 @@ class SearchTests(SetupTests):
 
     def test_search_two_fields(self):
         url = reverse("search-project")
-        data = {
-            "query": "phrase2",
-            "project_name": True,
-            "location": True
-        }
+        data = {"query": "phrase2", "project_name": True, "location": True}
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
@@ -84,18 +75,14 @@ class SearchTests(SetupTests):
 
     def test_search_not_in_main_categories(self):
         url = reverse("search-project")
-        data = {
-            "query": "overview"
-        }
+        data = {"query": "overview"}
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
 
     def test_search_not_in_main_categories_wiki(self):
         url = reverse("search-project")
-        data = {
-            "query": "wiki.org"
-        }
+        data = {"query": "wiki.org"}
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)

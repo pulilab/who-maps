@@ -1,4 +1,3 @@
-import itertools
 from statistics import mean
 
 from django.db import models
@@ -37,12 +36,12 @@ class Toolkit(ExtendedModel):
         self.data[axis]["domains"][domain]["questions"][question]["answers"][answer] = value
 
         # Filter out -1 values from answers since those stand for not applicable.
-        is_applicable = lambda x: x == None or x >= 0
         answers = self.data[axis]["domains"][domain]["questions"][question]["answers"]
-        applicable_answers = list(filter(is_applicable, answers))
+        applicable_answers = list(filter(lambda x: x is None or x >= 0, answers))
 
         # Update the question score sum (sum of answers).
-        self.data[axis]["domains"][domain]["questions"][question]["question_sum"] = sum(filter(None, applicable_answers))
+        self.data[axis]["domains"][domain]["questions"][question]["question_sum"] = sum(
+            filter(None, applicable_answers))
 
         # Update the domain score sum (sum of question sums).
         questions = self.data[axis]["domains"][domain]["questions"]
@@ -65,29 +64,26 @@ class Toolkit(ExtendedModel):
         self.data[axis]["axis_score"] = axis_score
 
         # Update domain completion percentage
-        all_domain_answers = [answer
-            for questions in self.data[axis]["domains"][domain]["questions"]
-            for answer in questions["answers"]
+        all_domain_answers = [
+            answer for questions in self.data[axis]["domains"][domain]["questions"] for answer in questions["answers"]
         ]
-        answered_domain_answers = [answer
-            for questions in self.data[axis]["domains"][domain]["questions"]
-            for answer in questions["answers"]
-            if answer != None
+        answered_domain_answers = [
+            answer for questions in self.data[axis]["domains"][domain]["questions"] for answer in questions["answers"]
+            if answer is not None
         ]
         domain_completion = (len(answered_domain_answers) / len(all_domain_answers)) * 100
         self.data[axis]["domains"][domain]["domain_completion"] = domain_completion
 
         # Update the axis completion percentage.
-        all_axis_answers = [answer
-            for domains in self.data[axis]["domains"]
-            for questions in domains["questions"]
+        all_axis_answers = [
+            answer
+            for domains in self.data[axis]["domains"] for questions in domains["questions"]
             for answer in questions["answers"]
         ]
-        answered_axis_answers = [answer
-            for domains in self.data[axis]["domains"]
-            for questions in domains["questions"]
-            for answer in questions["answers"]
-            if answer != None
+        answered_axis_answers = [
+            answer
+            for domains in self.data[axis]["domains"] for questions in domains["questions"]
+            for answer in questions["answers"] if answer is not None
         ]
         axis_completion = (len(answered_axis_answers) / len(all_axis_answers)) * 100
         self.data[axis]["axis_completion"] = axis_completion

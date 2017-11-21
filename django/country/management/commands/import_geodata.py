@@ -18,7 +18,7 @@ class Command(BaseCommand):
         for folder in os.listdir(settings.GEOJSON_TEMP_DIR):
             geodata = {}
             for filename in geodata_config.ADMIN_LEVELS_TO_IMPORT:
-                with open(os.path.join(settings.GEOJSON_TEMP_DIR, folder, "topojson_"+filename)) as f:
+                with open(os.path.join(settings.GEOJSON_TEMP_DIR, folder, "topojson_" + filename)) as f:
                     content = f.read()
                     json_content = json.loads(content)
                     geodata[filename.strip(".geojson")] = json_content
@@ -32,7 +32,7 @@ class Command(BaseCommand):
                         break
                     except KeyError:
                         country.code = geom['properties']['ISO3166-1:alpha2']
-            except:
+            except Exception:
                 if country.name == 'the-gambia':
                     country.code = 'GM'
                 elif country.name == 'bangladesh':

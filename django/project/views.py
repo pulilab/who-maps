@@ -72,32 +72,35 @@ class ProjectPublicViewSet(ViewSet):
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
 
-        result_list = functools.reduce(lambda acc, p: acc + [{
-            "id": p.id,
-            "uuid": p.public_id,
-            "name": p.name,
-            "organisation": p.data.get('organisation'),
-            "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
-            "donors": p.data.get('donors'),
-            "country": p.data.get('country'),
-            "country_name": Country.get_name_by_id(p.data.get('country')),
-            "contact_name": p.data.get('contact_name'),
-            "contact_email": p.data.get('contact_email'),
-            "implementation_overview": p.data.get('implementation_overview'),
-            "implementing_partners": p.data.get('implementing_partners'),
-            "implementation_dates": p.data.get('implementation_dates'),
-            "health_focus_areas": p.data.get('health_focus_areas'),
-            "hsc_challenges": p.data.get('hsc_challenges'),
-            "his_bucket": p.data.get('his_bucket'),
-            "geographic_scope": p.data.get('geographic_scope'),
-            "platforms": p.data.get('platforms'),
-        }], projects, [])
+        result_list = functools.reduce(
+            lambda acc, p: acc + [{
+                "id": p.id,
+                "uuid": p.public_id,
+                "name": p.name,
+                "organisation": p.data.get('organisation'),
+                "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
+                "donors": p.data.get('donors'),
+                "country": p.data.get('country'),
+                "country_name": Country.get_name_by_id(p.data.get('country')),
+                "contact_name": p.data.get('contact_name'),
+                "contact_email": p.data.get('contact_email'),
+                "implementation_overview": p.data.get('implementation_overview'),
+                "implementing_partners": p.data.get('implementing_partners'),
+                "implementation_dates": p.data.get('implementation_dates'),
+                "health_focus_areas": p.data.get('health_focus_areas'),
+                "hsc_challenges": p.data.get('hsc_challenges'),
+                "his_bucket": p.data.get('his_bucket'),
+                "geographic_scope": p.data.get('geographic_scope'),
+                "platforms": p.data.get('platforms'), }], projects, [])
 
         return Response(result_list)
 
     @staticmethod
     def project_structure(request):
-        project_structure['interoperability_links'] = [{'pre': x.pre, 'name': x.name} for x in InteroperabilityLink.objects.all()]
+        project_structure['interoperability_links'] = [{
+            'pre': x.pre,
+            'name': x.name
+        } for x in InteroperabilityLink.objects.all()]
         project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
         strategies = []
 
@@ -128,9 +131,18 @@ class ProjectPublicViewSet(ViewSet):
     @staticmethod
     def project_structure_export(request):
         project_structure_export = {}
-        project_structure_export['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()]
-        project_structure_export['technology_platforms'] = [{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()]
-        project_structure_export['digital_strategies'] = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
+        project_structure_export['interoperability_links'] = [{
+            'id': x.id,
+            'name': x.name
+        } for x in InteroperabilityLink.objects.all()]
+        project_structure_export['technology_platforms'] = [{
+            'id': x.id,
+            'name': x.name
+        } for x in TechnologyPlatform.objects.all()]
+        project_structure_export['digital_strategies'] = [{
+            'id': x.id,
+            'name': x.name
+        } for x in DigitalStrategy.objects.all()]
 
         return Response(project_structure_export)
 
@@ -146,9 +158,13 @@ def _serialize_project(project, data):
             country_fields.append(found)
     org_name = project.get_organisation().name if project.get_organisation() else ''
     approved = project.approval.approved if hasattr(project, 'approval') else None
-    data.update(id=project.id, name=project.name, organisation_name=org_name,
-                country_name=project.country.name, approved=approved,
-                fields=[field.to_representation() for field in country_fields])
+    data.update(
+        id=project.id,
+        name=project.name,
+        organisation_name=org_name,
+        country_name=project.country.name,
+        approved=approved,
+        fields=[field.to_representation() for field in country_fields])
     if isinstance(project, Project):
         data.update(public_id=project.public_id)
     return data
@@ -166,7 +182,8 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
 
         for project in projects:
             published = _serialize_project(project, project.data)
-            draft = _serialize_project(project.project_draft, project.project_draft.data) if hasattr(project, 'project_draft') else None
+            draft = _serialize_project(project.project_draft,
+                                       project.project_draft.data) if hasattr(project, 'project_draft') else None
             data.append({'published': published, 'draft': draft})
 
         for project_draft in project_drafts:
@@ -245,7 +262,6 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectCRUDViewSet(ProjectBaseViewSet):
-
     def create(self, request, *args, **kwargs):
         """
         Creates a project.
@@ -281,22 +297,21 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         data = self._update_project(project, data_serializer)
         data.update(public_id=project.public_id)
         # Remove approval if already approved, so country admin can approve again because project has changed
-        if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved == True:
+        if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
             project.approval.delete()
             ProjectApproval.objects.create(project=project, user=project.country.user)
         return Response(data, status=status.HTTP_200_OK)
 
 
 class ProjectDraftCRUDViewSet(ProjectBaseViewSet):
-
     def create(self, request, *args, **kwargs):
         """
         Creates a draft project.
         """
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
-        _, data = self._create_project(ProjectDraft, data_serializer,
-                                       project_id=data_serializer.validated_data["project"])
+        _, data = self._create_project(
+            ProjectDraft, data_serializer, project_id=data_serializer.validated_data["project"])
         return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
@@ -313,7 +328,8 @@ class ProjectDraftCRUDViewSet(ProjectBaseViewSet):
         Updates a draft project.
         """
         data_serializer = ProjectDraftSerializer(data=request.data)
-        project = get_object_or_400(ProjectDraft, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        project = get_object_or_400(
+            ProjectDraft, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         data = self._update_project(project, data_serializer)
         return Response(data, status=status.HTTP_200_OK)
 
@@ -333,7 +349,6 @@ class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet
 
 
 class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
-
     def create(self, request, project_id):
         """
         Makes versions out of Toolkit and coverage data for the project.
@@ -351,10 +366,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         current_cov = project.data["coverage"]
         current_cov += [project.data.get('national_level_deployment', {})]
 
-        new_cov_ver = CoverageVersion(
-                            project_id=project_id,
-                            version=new_version,
-                            data=current_cov)
+        new_cov_ver = CoverageVersion(project_id=project_id, version=new_version, data=current_cov)
         new_cov_ver.save()
 
         # Make a new version from current toolkit.
@@ -365,10 +377,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             new_version = last_toolkit_ver.version + 1
         current_toolkit = get_object_or_400(Toolkit, "No such Toolkit", project_id=project_id).data
-        new_toolkit_ver = ToolkitVersion(
-                            project_id=project_id,
-                            version=new_version,
-                            data=current_toolkit)
+        new_toolkit_ver = ToolkitVersion(project_id=project_id, version=new_version, data=current_toolkit)
         new_toolkit_ver.save()
         data = {
             "coverage": {
@@ -403,7 +412,6 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
-
     def create(self, request):
         """
         Creates CSV file out of a list of project IDs
@@ -437,7 +445,6 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             p.data.get('mobile_application'),
             p.data.get('wiki'),
             ", ".join(p.data.get('interoperability_standards', [])),
-
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
@@ -446,12 +453,13 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         writer = csv.writer(response)
 
         # HEADER
-        writer.writerow(['Name', 'UUID', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name',
-                         'Donors', "Implementing Partners", "Point of Contact",
-                         "Overview of digital health implementation", "Geographical scope",
-                         "Health Focus Areas", "Software", 'Health System Challenges',
-                         'Health Information System Support', 'Government Approved', 'Government Investor',
-                         'Licenses', 'Repository', 'Mobile Application', 'Wiki', 'Interoperability Standards'])
+        writer.writerow([
+            'Name', 'UUID', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name', 'Donors',
+            "Implementing Partners", "Point of Contact", "Overview of digital health implementation",
+            "Geographical scope", "Health Focus Areas", "Software", 'Health System Challenges',
+            'Health Information System Support', 'Government Approved', 'Government Investor', 'Licenses', 'Repository',
+            'Mobile Application', 'Wiki', 'Interoperability Standards'
+        ])
 
         # PROJECTS
         [writer.writerow([field for field in project]) for project in results]

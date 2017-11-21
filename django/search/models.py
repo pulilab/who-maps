@@ -39,12 +39,7 @@ class ProjectSearch(ExtendedModel):
         results = []
         query = kwargs["query"]
 
-        selectable_fields = {
-            "location",
-            "project_name",
-            "technology_platform",
-            "organisation"
-        }
+        selectable_fields = {"location", "project_name", "technology_platform", "organisation"}
         query_keys = set([k for k, v in kwargs.items() if v is True])
         intersect = selectable_fields & query_keys
 

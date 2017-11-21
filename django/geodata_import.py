@@ -17,7 +17,8 @@ def fetch_geodata():
     print("-- Fetching pre-selected country files from Mapzen...")
     # Use pre-selected countries.
 
-    file_list = geodata_config.SELECTED_FILE_LIST if len(sys.argv) > 1 and sys.argv[1] == 'prod' else geodata_config.SELECTED_FILE_LIST_DEV
+    file_list = geodata_config.SELECTED_FILE_LIST if len(
+        sys.argv) > 1 and sys.argv[1] == 'prod' else geodata_config.SELECTED_FILE_LIST_DEV
 
     # Recreating temporary folder for the files.
     try:
@@ -28,7 +29,7 @@ def fetch_geodata():
 
     # Getting the files one by one and saving to the temp folder.
     for filename in file_list:
-        response = urlopen(geodata_config.MAPZEN_S3_URL+filename)
+        response = urlopen(geodata_config.MAPZEN_S3_URL + filename)
 
         with open(geodata_config.GEOJSON_TEMP_DIR + filename, "wb") as f:
             f.write(response.read())
@@ -50,7 +51,7 @@ def topojson():
         os.chdir(os.path.join(geodata_config.GEOJSON_TEMP_DIR, folder))
         for filename in geodata_config.ADMIN_LEVELS_TO_IMPORT:
             print("-- " + filename)
-            os.system("geo2topo -p -o {} {}".format("topojson_"+filename, filename))
+            os.system("geo2topo -p -o {} {}".format("topojson_" + filename, filename))
         print("{} transformed.".format(filename))
 
     print("-- Transforming is done!")

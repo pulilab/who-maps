@@ -4,7 +4,6 @@ from django.db.models.query_utils import Q
 
 
 class GetObjectOrNoneManager(models.Manager):
-
     def get_object_or_none(self, select_for_update=False, **kwargs):
         """
         Hides Exception handling boilerplate when querying for single objects.
@@ -35,7 +34,6 @@ class ExtendedModel(models.Model):
 
 
 class NameByIDMixin(object):
-
     @classmethod
     def get_name_by_id(cls, id=None):
         if not id:
