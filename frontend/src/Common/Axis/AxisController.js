@@ -5,8 +5,10 @@ class AxisController {
 
     constructor($scope) {
         this.scope = $scope;
+        this.EE = window.EE;
         this.$onInit = this.initialization.bind(this);
         this.changeDomain = this.changeDomain.bind(this);
+        this.parseAxisData = this.parseAxisData.bind(this);
     }
 
     initialization() {
@@ -16,19 +18,25 @@ class AxisController {
         if (this.axisId === null || this.axisId === void 0) {
             this.axisId = 0;
         }
+        this.watchers();
 
-        this.EE = window.EE;
-        this.axisName = this.axisData.axis.split('.')[1];
-        const axisName = this.axisData.axis.split('.')[0].replace(' ', '').toLowerCase();
+    }
+
+    watchers() {
+        this.scope.$watch(s => s.vm.axisData, this.parseAxisData, true);
+    }
+
+    parseAxisData(axisData) {
+        this.axisName = axisData.axis.split('.')[1];
+        const axisName = axisData.axis.split('.')[0].replace(' ', '').toLowerCase();
         this.axisClass = axisName;
         this.axisPicture = require('./images/icon-' + axisName + '.svg');
-        this.axisScorePercentage = this.axisData.axis_score;
-        this.axisCompletition = this.axisData.axis_completion;
+        this.axisScorePercentage = axisData.axis_score;
+        this.axisCompletition = axisData.axis_completion;
         this.axisScoreClass = this.advanceClassGenerator(this.axisScorePercentage);
         this.axisCompletitionClass = this.advanceClassGenerator(this.axisCompletition);
-        this.domains = this.axisData.domains;
+        this.domains = axisData.domains;
         this.parseDomainData();
-
     }
 
     setDomainActive(id) {

@@ -52,6 +52,7 @@ export function saveAnswer(answer) {
             if (projectId) {
                 const { data } = await axios.post(`/api/projects/${projectId}/toolkit/score/`, answer);
                 dispatch({ type: 'UPDATE_TOOLKIT_DATA', data });
+                dispatch(loadToolkitData());
             }
             return Promise.resolve();
         }
