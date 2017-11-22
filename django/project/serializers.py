@@ -108,30 +108,10 @@ class ProjectSerializer(ProjectBaseSerializer):
     project_id = serializers.IntegerField(required=False, read_only=True)
 
 
-class GroupSerializer(serializers.ModelSerializer):
-    org = serializers.SerializerMethodField('get_org_name')
-
-    class Meta:
-        model = UserProfile
-        fields = ('id', 'name', 'org')
-
-    @staticmethod
-    def get_org_name(obj):
-        return obj.organisation.name if obj.organisation else None
-
-
 class ProjectGroupListSerializer(serializers.ModelSerializer):
-    team = GroupSerializer(many=True)
-    viewers = GroupSerializer(many=True)
-    user_profiles = serializers.SerializerMethodField()
-
     class Meta:
         model = Project
-        fields = ("team", "viewers", "user_profiles")
-
-    @staticmethod
-    def get_user_profiles(obj):
-        return UserProfile.objects.all().values("id", "name", "organisation__name")
+        fields = ("id", "team", "viewers")
 
 
 class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
