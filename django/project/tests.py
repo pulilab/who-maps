@@ -509,8 +509,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
-        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
+        self.assertEqual(response.json()['team'][0], self.user_profile_id)
 
     def test_project_group_add_user_to_team(self):
         # Create a test user with profile.
@@ -557,15 +556,13 @@ class ProjectTests(SetupTests):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['team'][0]['id'], user_profile_id)
-        self.assertEqual(response.json()['team'][0]['name'], "Test Name 2")
-        self.assertEqual(response.json()['team'][0]['org'], org.name)
+        self.assertEqual(response.json()['team'][0], user_profile_id)
 
     def test_project_group_add_user_always_overwrites_all_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        owner_id = response.json()['team'][0]['id']
+        owner_id = response.json()['team'][0]
 
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -608,15 +605,6 @@ class ProjectTests(SetupTests):
         self.assertTrue("viewers" in response.json())
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(response.json()['team'], [user_profile_id])
-
-    def test_project_group_list_has_all_the_user_profiles_listed(self):
-        url = reverse("project-groups", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['team'][0]['name'], "Test Name")
-        self.assertEqual(response.json()['team'][0]['org'], self.org.name)
-        self.assertTrue("user_profiles" in response.json())
-        self.assertEqual(len(response.json().get('user_profiles')), UserProfile.objects.count())
 
     def test_update_project_updates_health_focus_areas(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
@@ -849,7 +837,7 @@ class PermissionTests(SetupTests):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        owner_id = response.json()['team'][0]['id']
+        owner_id = response.json()['team'][0]
 
         # Create a test user with profile.
         url = reverse("rest_register")
