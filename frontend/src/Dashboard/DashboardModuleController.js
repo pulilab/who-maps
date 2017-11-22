@@ -12,6 +12,7 @@ class DashboardModuleController {
         this.scope = $scope;
         this.state = $state;
         this.timeout = $timeout;
+        this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit;
         this.$onDestroy = this.onDestroy;
@@ -53,31 +54,10 @@ class DashboardModuleController {
         this.resizeEvent();
         this.eventBinding();
         this.showEmpty = !this.projectId;
-
-        this.pgArray = [
-            {
-                title: 'Use the existing evidence base to bolster interventions',
-                description: 'Project teams should remember that mHealth is a catalytic' +
-                ' tool and not often a health Lorem ipsum dolor sit amet,' +
-                ' consectetur adipisicing elit, sed do eiusmod.',
-                commentNr: 17,
-                imageURL: 'someURL'
-            },
-            {
-                title: 'Conduct formative work to understand your context',
-                description: 'Formative research is critical for local validation and ' +
-                'contextualization of mHealth Lorem ipsum dolor sit amet, consectetur' +
-                ' adipisicing elit, sed do eiusmod',
-                commentNr: 6,
-                imageURL: 'someURL'
-            },
-            {
-                title: 'Lorem ipsum dolor sit amet, consectetur adipisici elit',
-                description: 'A short description!',
-                commentNr: 0,
-                imageURL: 'someURL'
-            }
-        ];
+        // IF the user went to CLV and changed country this reset the correct country map, otherwise do nothing
+        if (this.projectData) {
+            this.$ngRedux.dispatch(CountriesModule.setCurrentCountry(this.projectData.country, ['mapData']));
+        }
     }
 
     onDestroy() {

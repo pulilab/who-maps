@@ -13,18 +13,38 @@ class CountryMapController {
         this.EE = window.EE;
         this.tooltipOver = false;
         this.preventMouseOut = false;
-        this.handleData = this.handleData.bind(this);
+        this.checkIfCountryChanged = this.checkIfCountryChanged.bind(this);
+        this.checkIfDistrictDataChanged = this.checkIfDistrictDataChanged.bind(this);
+        this.createInMemoryDOMElement = this.createInMemoryDOMElement.bind(this);
+        this.drawMapShape = this.drawMapShape.bind(this);
         this.$onInit = this.onInit;
         this.$onDestroy = this.onDestroy;
     }
 
     onInit() {
-
         this.showPlaceholder = !this.big;
         this.svgPanZoom = svgPanZoom;
         this.covLib = {};
+        this.svgLib = {};
+        this.drawnMap = null;
+        this.createInMemoryDOMElement();
         this.watchers();
+    }
 
+    createInMemoryDOMElement() {
+        this.elementContainer = d3.select(this.el[0])
+          .append('div')
+          .attr('class', 'countrymapcontainer');
+
+        const width = this.elementContainer[0][0].offsetWidth;
+        const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
+
+        const inMemoryElement = document.createElement('div');
+        this.mapDOMElement = d3.select(inMemoryElement).append('svg');
+        //
+        this.mapDOMElement.attr('class', 'countrymap')
+          .attr('width', width)
+          .attr('height', height);
     }
 
     onDestroy() {
@@ -33,23 +53,27 @@ class CountryMapController {
     }
 
     watchers() {
-        this.scope.$watchCollection(s => [s.vm.districtLevelCoverage, s.vm.mapData], this.handleData);
+        this.scope.$watch(s => s.vm.mapData, this.checkIfCountryChanged);
+        this.scope.$watch(s => [s.vm.districtLevelCoverage, s.vm.drawnMap], this.checkIfDistrictDataChanged, true);
     }
 
-    handleData([districtCoverage, map]) {
-        if (districtCoverage && map) {
-            this.showPlaceholder = true;
-            this.preDraw(map);
-            this.boundNrs = _.reduce(districtCoverage, (ret, value, key) => {
+    checkIfCountryChanged(newMapData, ) {
+        if (newMapData && newMapData.mapData && newMapData.name !== this.drawnMap) {
+            this.drawMapShape(newMapData);
+            this.drawnMap = newMapData.name;
+        }
+    }
 
+    checkIfDistrictDataChanged([newDistrictData, drawnMap]) {
+        if (newDistrictData && drawnMap) {
+            this.boundNrs = _.reduce(newDistrictData, (ret, value, key) => {
                 if (key === 'date') { return ret; }
-
                 _.forOwn(value, (val, k) => {
                     ret[k] = (ret[k] || 0) + val;
                 });
-
                 return ret;
             }, {});
+            this.drawDistricts(newDistrictData);
         }
     }
 
@@ -95,9 +119,9 @@ class CountryMapController {
 
     calculateScale(topoJSON) {
         let ret = Math.max.apply(null,
-            topoJSON.transform.scale.map(nr => {
-                return 1 / nr;
-            })) * 10;
+          topoJSON.transform.scale.map(nr => {
+              return 1 / nr;
+          })) * 10;
 
         if (this.countryName === 'Gambia') {
             ret = 30000;
@@ -107,7 +131,6 @@ class CountryMapController {
     }
 
     makeSvgPannableAndZoomable(element) {
-
         const zoomOptions = {
             panEnabled: true,
             controlIconsEnabled: false,
@@ -126,40 +149,46 @@ class CountryMapController {
         this.svgZoom.zoomOut();
     }
 
-    preDraw(countryMapData) {
-        // console.log(JSON.stringify(topoJSON));
-        d3.select(this.el[0]).select('.countrymapcontainer').remove();
+    drawMapShape(countryMapData) {
+        this.showPlaceholder = true;
 
-        const topoJSON = countryMapData.mapData;
+        if (this.drawnMap) {
+            d3.select(this.el[0]).select('.countrymapcontainer').remove();
+            this.createInMemoryDOMElement();
+        }
         this.countryName = countryMapData.name;
         this.flagUrl = countryMapData.flag;
         this.formatCountryName();
 
-        const geoData = this.makeGeoFromTopo(topoJSON);
-        const outer = d3.select(this.el[0])
-            .append('div')
-            .attr('class', 'countrymapcontainer');
+        const geoData = this.makeGeoFromTopo(countryMapData.mapData);
+        const projection = d3.geo.mercator()
+          .scale(this.calculateScale(countryMapData.mapData));
 
-        const width = outer[0][0].offsetWidth;
-        const height = this.big ? d3.select('#map')[0][0].offsetHeight : 409;
+        const path = d3.geo.path().projection(projection);
 
+        geoData.features.forEach((feature, i) => {
 
-        const inMemoryElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        inMemoryElement.createSVGMatrix();
-        const element = d3.select(inMemoryElement);
+            const districtsName = countryMapData.districts[i];
+            this.svgLib[districtsName] = this.mapDOMElement
+              .append('path')
+              .datum({
+                  type: geoData.type,
+                  geocoding: geoData.geocoding,
+                  features: [feature],
+                  name: districtsName
+              })
+              .attr('d', path)
+              .classed('d3district', true)
+              .classed('global', this.showNationalLevelCoverage)
+              .classed(`name-${districtsName}`, true);
+        });
 
-        element.attr('class', 'countrymap')
-            .attr('width', width)
-            .attr('height', height);
-
-        this.drawDistricts(element, geoData, countryMapData);
-
-        outer.append(() => {
-            return element.node();
+        this.elementContainer.append(() => {
+            return this.mapDOMElement.node();
         });
 
         // this.drawDistricNames(countryMapData, element);
-        this.makeSvgPannableAndZoomable(element.node());
+        this.makeSvgPannableAndZoomable(this.mapDOMElement.node());
 
         this.showPlaceholder = false;
     }
@@ -171,52 +200,33 @@ class CountryMapController {
             if (districtPath) {
                 const box = districtPath.getBBox();
                 element
-                    .append('text')
-                    .attr('x', box.x + box.width / 2)
-                    .attr('y', box.y + box.height / 2)
-                    .text(name)
-                    .attr('font-family', 'Roboto, sans-serif')
-                    .attr('font-size', '40px')
-                    .attr('fill', 'black');
+                  .append('text')
+                  .attr('x', box.x + box.width / 2)
+                  .attr('y', box.y + box.height / 2)
+                  .text(name)
+                  .attr('font-family', 'Roboto, sans-serif')
+                  .attr('font-size', '40px')
+                  .attr('fill', 'black');
             }
         });
     }
 
-    drawDistricts(element, geoData, countryMapData) {
+    drawDistricts(districtLevelCoverage) {
         const self = this;
-
-        const projection = d3.geo.mercator()
-          .scale(this.calculateScale(countryMapData.mapData));
-
-        const path = d3.geo.path().projection(projection);
-
-        geoData.features.forEach((feature, i) => {
-
-            const districtsName = countryMapData.districts[i];
-            const gotData = typeof this.districtLevelCoverage[districtsName] === 'object';
-
-            element
-                .append('path')
-                .datum({
-                    type: geoData.type,
-                    geocoding: geoData.geocoding,
-                    features: [feature]
-                })
-                .attr('d', path)
-                .classed('d3district', true)
-                .classed('global', this.showNationalLevelCoverage)
-                .classed('d3district-data', gotData)
-                .classed(`name-${districtsName}`, true)
-                .on('mouseover', () => {
+        for (const district in districtLevelCoverage) {
+            const node = this.svgLib[district];
+            if (node) {
+                node.classed('d3district-data', true);
+                node.on('mouseover', () => {
                     if (!this.big) {
                         this.activeDistrict = {
-                            name: districtsName,
-                            data: this.districtLevelCoverage[districtsName]
+                            name: district,
+                            data: districtLevelCoverage[district]
                         };
                         this.scope.$evalAsync();
                     }
-                })
-                .attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
+                });
+                node.attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
                     // this bound as DOM iteratee (current district)
                     if (!self.big) {
                         return '';
@@ -228,18 +238,19 @@ class CountryMapController {
                             const stillHovered = (e.parentElement.querySelector(':hover') === e);
 
                             if (stillHovered) {
-                                self.activeDistrict = {
-                                    name: districtsName,
-                                    data: self.districtLevelCoverage[districtsName]
-                                };
-                                self.scope.$evalAsync();
+                                self.scope.$evalAsync(() => {
+                                    self.activeDistrict = {
+                                        name: district,
+                                        data: districtLevelCoverage[district]
+                                    };
+                                });
                             }
                         }, 1000, this);
                     });
                     return '';
                 });
-        });
-
+            }
+        }
     }
 
     static countrymapFactory() {

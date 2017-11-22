@@ -106,7 +106,7 @@ describe('CountryMapController', () => {
         expect(b).toBe('called');
     });
 
-    describe('preDraw', () => {
+    describe('drawMapShape', () => {
 
         beforeEach(() => {
 
@@ -153,29 +153,29 @@ describe('CountryMapController', () => {
 
 
         it('formats country name', () => {
-            vm.preDraw(countryMapData);
+            vm.drawMapShape(countryMapData);
             expect(vm.formatCountryName).toHaveBeenCalled();
         });
 
         it('calls makeGeoFromTopo() with the topoJSON', () => {
-            vm.preDraw(countryMapData);
+            vm.drawMapShape(countryMapData);
             expect(vm.makeGeoFromTopo).toHaveBeenCalled();
         });
 
         it('makes DIV element & SVG element', () => {
-            vm.preDraw(countryMapData);
+            vm.drawMapShape(countryMapData);
             expect(d3.select('.countrymapcontainer').length).toBe(1);
             expect(d3.select('.countrymap').length).toBe(1);
         });
 
         it('calls drawDistricts()', () => {
-            vm.preDraw(countryMapData);
+            vm.drawMapShape(countryMapData);
             expect(vm.drawDistricts).toHaveBeenCalled();
         });
 
         it('resets back .showPlaceholder to false', () => {
             vm.showPlaceholder = true;
-            vm.preDraw(countryMapData);
+            vm.drawMapShape(countryMapData);
             expect(vm.showPlaceholder).toBe(false);
         });
     });
@@ -220,7 +220,7 @@ describe('CountryMapController', () => {
             vm.cs = { projectStructure: { countries: countriesMock } };
             vm.districtLevelCoverage = perfMockMap;
             spyOn(vm, 'svgPanZoom').and.returnValue({ zoomOut: a => a });
-            vm.preDraw(countryMapData);
+            vm.drawMapShape(countryMapData);
         });
 
         it('appends the right number of svg paths(.d3district) to .countrymap', () => {

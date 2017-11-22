@@ -2,7 +2,6 @@
 import axios from '../../plugins/axios';
 import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
-import cloneDeep from 'lodash/cloneDeep';
 import { country_default_data } from '../static_data/country_static_data';
 import * as UserModule from './user';
 
@@ -49,7 +48,7 @@ export const getCurrentCountry = state => {
 };
 
 export const getCountryCoverPage = state => {
-    const countryCover = cloneDeep(state.countries.currentCountryCoverPage);
+    const countryCover = { ...state.countries.currentCountryCoverPage };
     forEach(country_default_data, (standardValue, key) => {
         const value = countryCover[key];
         if (value === null || value === undefined || value === '') {
