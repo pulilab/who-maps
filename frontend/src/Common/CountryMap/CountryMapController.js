@@ -57,7 +57,7 @@ class CountryMapController {
         this.scope.$watch(s => [s.vm.districtLevelCoverage, s.vm.drawnMap], this.checkIfDistrictDataChanged, true);
     }
 
-    checkIfCountryChanged(newMapData, ) {
+    checkIfCountryChanged(newMapData) {
         if (newMapData && newMapData.mapData && newMapData.name !== this.drawnMap) {
             this.drawMapShape(newMapData);
             this.drawnMap = newMapData.name;

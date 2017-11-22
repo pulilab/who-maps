@@ -120,14 +120,14 @@ export const getCurrentProjectForEditing = state => {
 
 export const getTeam = state => {
     if (state.projects.teamViewers) {
-        return [ ...state.projects.teamViewers.team ];
+        return [...state.projects.teamViewers.team];
     }
     return [];
 };
 
 export const getViewers = state => {
     if (state.projects.teamViewers) {
-        return [ ...state.projects.teamViewers.viewers ];
+        return [...state.projects.teamViewers.viewers];
     }
     return [];
 };
