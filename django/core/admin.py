@@ -19,19 +19,22 @@ class UserProfileInline(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     list_display = ('userprofile', 'country', 'type', 'organisation', 'is_staff', 'is_superuser')
     search_fields = ('userprofile__name', 'email', 'userprofile__country', 'userprofile__organisation__name')
-    inlines = (UserProfileInline, )
+    inlines = (UserProfileInline,)
 
     def country(self, obj):
         return obj.userprofile.country
+
     country.allow_tags = True
 
     def type(self, obj):
         return obj.userprofile.get_account_type_display()
+
     type.allow_tags = True
     type.short_description = "Account Type"
 
     def organisation(self, obj):
         return obj.userprofile.organisation
+
     organisation.allow_tags = True
 
     def get_list_filter(self, request):

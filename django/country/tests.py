@@ -17,10 +17,7 @@ class CountryTests(APITestCase):
     def setUp(self):
         # Create a test user with profile.
         url = reverse("rest_register")
-        data = {
-            "email": "test_user@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+        data = {"email": "test_user@gmail.com", "password1": "123456", "password2": "123456"}
         response = self.client.post(url, data)
 
         # Validate the account.
@@ -33,9 +30,7 @@ class CountryTests(APITestCase):
 
         # Log in the user.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test_user@gmail.com",
-            "password": "123456"}
+        data = {"username": "test_user@gmail.com", "password": "123456"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
@@ -53,6 +48,7 @@ class CountryTests(APITestCase):
         self.assertIn("name", response.json()[0].keys())
         self.assertIn("code", response.json()[0].keys())
         self.assertIn("id", response.json()[0].keys())
+        self.assertIn("project_approval", response.json()[0].keys())
 
     def test_retrieve_landing_detail(self):
         url = reverse("country-detail", kwargs={"code": self.country.code})
@@ -101,14 +97,7 @@ class CountryTests(APITestCase):
     def test_create_country_fields_missing_project(self):
         url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1})
 
-        country_fields_data = {
-            "fields": [{
-                "country": self.country.id,
-                "type": 1,
-                "question": "q2?",
-                "answer": "a2"
-            }]
-        }
+        country_fields_data = {"fields": [{"country": self.country.id, "type": 1, "question": "q2?", "answer": "a2"}]}
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['fields'], [{'non_field_errors': ['Project ID needs to be specified']}])
@@ -321,12 +310,16 @@ class CountryTests(APITestCase):
 
         country = Country.objects.create(name='country111', code='C2')
         project_data1 = {
-            'contact_email': 'foo1@gmail.com',
-            'contact_name': 'foo1',
-            'country': country.id,
+            'contact_email':
+            'foo1@gmail.com',
+            'contact_name':
+            'foo1',
+            'country':
+            country.id,
             'platforms': [
                 {
-                    'name': 'OpenSRP',
+                    'name':
+                    'OpenSRP',
                     'strategies': [
                         'Transmit untargeted health promotion content to entire population',
                         "Track client's health and services within a longitudinal care plan",
@@ -335,33 +328,48 @@ class CountryTests(APITestCase):
                 },
             ],
             'interoperability_links': [
-                {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
-                {"name": "Health Worker Registry", "selected": True, "link": "http://example.org"},
+                {
+                    "name": "Client Registry",
+                    "selected": True,
+                    "link": "http://blabla.com"
+                },
+                {
+                    "name": "Health Worker Registry",
+                    "selected": True,
+                    "link": "http://example.org"
+                },
             ]
         }
         project_data2 = {
-            'contact_email': 'foo2@gmail.com',
-            'contact_name': 'foo2',
-            'country': country.id,
-            'platforms': [
+            'contact_email':
+            'foo2@gmail.com',
+            'contact_name':
+            'foo2',
+            'country':
+            country.id,
+            'platforms': [{
+                'name':
+                'OpenSRP',
+                'strategies':
+                ['Transmit untargeted health promotion content to entire population', 'Transmit prescriptions orders']
+            }, {
+                'name':
+                'Bamboo',
+                'strategies': [
+                    'Guide through process algorithms according to clinical protocol',
+                    'Monitor status of health equipment'
+                ]
+            }],
+            'interoperability_links': [
                 {
-                    'name': 'OpenSRP',
-                    'strategies': [
-                        'Transmit untargeted health promotion content to entire population',
-                        'Transmit prescriptions orders'
-                    ]
+                    "name": "Client Registry",
+                    "selected": True,
+                    "link": "http://blabla.com"
                 },
                 {
-                    'name': 'Bamboo',
-                    'strategies': [
-                        'Guide through process algorithms according to clinical protocol',
-                        'Monitor status of health equipment'
-                    ]
-                }
-            ],
-            'interoperability_links': [
-                {"name": "Client Registry", "selected": True, "link": "http://blabla.com"},
-                {"name": "Health Management Information System (HMIS)", "selected": True},
+                    "name": "Health Management Information System (HMIS)",
+                    "selected": True
+                },
             ]
         }
 
@@ -422,7 +430,7 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
 
     def test_staff_can_see_no_country_if_no_user_assigned_to_country(self):
@@ -431,7 +439,7 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 0)
 
     def test_staff_only_sees_the_country_he_is_assigned_to(self):
@@ -442,7 +450,7 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
         user_profile = UserProfile.objects.create(user=self.user)
         Country.objects.create(name="Country1", code="CC1", user=user_profile)
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code'))
+        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 1)
         self.assertEqual(ma.get_queryset(self.request)[0].name, "Country1")
         self.assertEqual(ma.get_queryset(self.request)[0].code, "CC1")
@@ -453,7 +461,11 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_readonly_fields(self.request), ('name', 'code', 'user',))
+        self.assertEqual(ma.get_readonly_fields(self.request), (
+            'name',
+            'code',
+            'user',
+        ))
 
     def test_superuser_can_change_every_field(self):
         ma = CountryAdmin(Country, self.site)
@@ -505,7 +517,8 @@ class CountryAdminTests(TestCase):
         outgoing_email = mail.outbox[-1].message()
         outgoing_email_text = mail.outbox[-1].message().as_string()
 
-        self.assertTrue("You have been selected as the Country Admin for {}".format(country.name) in outgoing_email.values())
+        self.assertTrue(
+            "You have been selected as the Country Admin for {}".format(country.name) in outgoing_email.values())
         self.assertTrue("test@test.com" in outgoing_email.values())
         self.assertTrue('You have been selected as the Country Admin' in outgoing_email_text)
         self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_email_text)

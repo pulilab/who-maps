@@ -70,14 +70,12 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
 
 
 class OrganisationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Organisation
         fields = '__all__'
 
 
 class RegisterWithProfileSerializer(RegisterSerializer):
-
     def custom_signup(self, request, user):
         if not hasattr(user, 'userprofile'):
             account_type = request.POST.get('account_type', request.data.get('account_type', 'I'))

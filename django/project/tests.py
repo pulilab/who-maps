@@ -4,7 +4,6 @@ from datetime import datetime
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
-from django.contrib.admin.options import ModelAdmin
 from django.test import TestCase
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
@@ -12,9 +11,15 @@ from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
-from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform
-from .admin import DigitalStrategyAdmin
 
+from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, HealthCategory, \
+    ProjectDraft, ProjectApproval
+from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
+from .tasks import send_project_approval_digest
+
+class MockRequest():
+    user = None
+    GET = {}
 
 class SetupTests(APITestCase):
 
@@ -55,7 +60,8 @@ class SetupTests(APITestCase):
         response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json().get('id')
 
-        self.country = Country.objects.create(name="country1")
+        user = UserProfile.objects.get(id=self.user_profile_id)
+        self.country = Country.objects.create(name="country1", user=user)
         self.country_id = self.country.id
 
         self.project_data = {
@@ -102,6 +108,7 @@ class SetupTests(APITestCase):
 
         url = reverse("project-crud")
         response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201)
         self.project_id = response.json().get("id")
 
 
@@ -127,6 +134,39 @@ class ProjectTests(SetupTests):
         data.update(dict(name="Test Project3"))
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
+
+    def test_create_new_project_approval_required(self):
+        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(name="Test Project3"))
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProjectApproval.objects.filter(project_id=response.data['id']).exists(), True)
+
+    def test_create_new_project_approval_required_on_update(self):
+        # Make country approval-required
+        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+        # Create project
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(name="Test Project3"))
+        response = self.test_user_client.post(url, data, format="json")
+        project_id = response.data['id']
+        approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(approval)
+        # Approve project
+        approval.approved = True
+        approval.save()
+        # Update project
+        url = reverse("project-detail", kwargs={'pk': project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(name="Test Project updated"))
+        response = self.test_user_client.put(url, data, format="json")
+        new_approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(new_approval.approved, None)
 
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-crud")
@@ -227,7 +267,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['public_id'])
+        self.assertTrue(response.json()['published']['public_id'])
 
     def test_update_project(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
@@ -286,26 +326,26 @@ class ProjectTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("organisation_name"), self.org.name)
-        self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
-        self.assertEqual(response.json().get("country"), self.country_id)
-        self.assertEqual(response.json().get("country_name"), self.country.name)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
+        self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
+        self.assertEqual(response.json()['published'].get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json()['published'].get("country"), self.country_id)
+        self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
     def test_retrieve_project_government_details(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertTrue(response.json().get("government_approved"))
-        self.assertTrue(response.json().get("government_investor") in [0, 1, 2])
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertTrue(response.json()['published'].get("government_approved"))
+        self.assertTrue(response.json()['published'].get("government_investor") in [0, 1, 2])
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[0].get("name"), "Test Project1")
+        self.assertEqual(response.json()[0]['published'].get("name"), "Test Project1")
 
     def test_make_version(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
@@ -356,9 +396,9 @@ class ProjectTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("last_version"), 1)
-        self.assertIn("last_version_date", response.json())
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['published'].get("last_version"), 1)
+        self.assertIn("last_version_date", response.json()['published'])
 
     def test_retrieve_project_list_by_country(self):
         project_data = copy.copy(self.project_data)
@@ -459,7 +499,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-list")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[0]['name'], "Test Project1")
+        self.assertEqual(response.json()[0]['published']['name'], "Test Project1")
 
     def test_project_group_list_team(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -578,7 +618,8 @@ class ProjectTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('health_focus_areas'), self.project_data['health_focus_areas'])
+        self.assertEqual(response.json()['published'].get('health_focus_areas'),
+                         self.project_data['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
         data.update(health_focus_areas=['area1'])
@@ -588,12 +629,13 @@ class ProjectTests(SetupTests):
 
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('health_focus_areas'), data['health_focus_areas'])
+        self.assertEqual(response.json()['published'].get('health_focus_areas'), data['health_focus_areas'])
 
     def test_update_project_with_different_invalid_name(self):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name="toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
+        data.update(name="toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninv"
+                         "alidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["name"][0], 'Ensure this field has no more than 128 characters.')
@@ -650,6 +692,136 @@ class ProjectTests(SetupTests):
     def test_platforms_str(self):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
+
+    def test_project_approval_admin_filter_country_admins(self):
+        request = MockRequest()
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        request.user = user
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+        ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+                                       approved=True)
+        self.assertEqual(ma.get_queryset(request).count(), 1)
+
+
+class ProjectDraftTests(SetupTests):
+
+    def setUp(self):
+        # Published without draft in SetupsTests
+        super(ProjectDraftTests, self).setUp()
+
+        # Draft without published
+        self.project_draft_data = {
+            'name': 'Draft Proj 1',
+            'country': self.country_id,
+            'project': None
+        }
+
+        url = reverse("project-draft-crud")
+        response = self.test_user_client.post(url, self.project_draft_data, format="json")
+        self.project_draft_id = response.json().get("id")
+
+        # Published and its dfraft
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name='Proj 2')
+        response = self.test_user_client.post(url, data, format="json")
+        self.project_pub_id = response.json().get("id")
+
+        self.project_draft_pub_data = {
+            'name': 'Draft Proj 2',
+            'country': self.country_id,
+            'project': self.project_pub_id,
+        }
+
+        url = reverse("project-draft-crud")
+        response = self.test_user_client.post(url, self.project_draft_pub_data, format="json")
+        self.project_draft_pub_id = response.json().get("id")
+
+    def test_create_new_draft_project_basic_data(self):
+        url = reverse("project-draft-crud")
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(name='Draft Proj 3')
+        response = self.test_user_client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_new_draft_name_is_not_unique(self):
+        url = reverse("project-draft-crud")
+        data = copy.deepcopy(self.project_draft_data)
+        response = self.test_user_client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, 201)
+
+    def test_retrieve_draft_project(self):
+        url = reverse("project-draft-detail", kwargs={"pk": self.project_draft_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']['name'], 'Draft Proj 1')
+        self.assertEqual(response.json()['published'], None)
+
+    def test_retireve_published_project(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['name'], 'Test Project1')
+        self.assertEqual(response.json()['draft'], None)
+
+    def test_retireve_published_project_with_draft(self):
+        url = reverse("project-detail", kwargs={"pk": self.project_pub_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']['name'], 'Draft Proj 2')
+        self.assertEqual(response.json()['published']['name'], 'Proj 2')
+
+    def test_update_draft_project(self):
+        url = reverse("project-draft-detail", kwargs={"pk": self.project_draft_id})
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(name="TestProject98",
+                    platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["platforms"][0]["name"], "updated platform")
+        self.assertEqual(response.json()["platforms"][0]["strategies"][0], "new strat")
+
+    def test_project_draft_merged_list(self):
+        url = reverse("project-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]["draft"], None)
+        self.assertEqual(response.json()[0]["published"]["name"], "Test Project1")
+        self.assertEqual(response.json()[1]["draft"]["name"], "Draft Proj 2")
+        self.assertEqual(response.json()[1]["published"]["name"], "Proj 2")
+        self.assertEqual(response.json()[2]["draft"]["name"], "Draft Proj 1")
+        self.assertEqual(response.json()[2]["published"], None)
+
+    def test_delete_draft_after_publish(self):
+        url = reverse("project-crud")
+        data = copy.deepcopy(self.project_data)
+        data.update(name='Draft Proj 3', project=self.project_id, project_draft=self.project_draft_id)
+        self.test_user_client.post(url, data, format="json")
+        self.assertEqual(ProjectDraft.objects.filter(id=self.project_draft_id).exists(), False)
+
+    def test_project_approval_email(self):
+        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+        send_project_approval_digest()
+        self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
+
+    def test_project_approval_admin(self):
+        site = AdminSite()
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+                                                          approved=True)
+        self.assertEqual(ma.link(project_approval),
+                         "<a href='/app/{}/edit-project'>See project</a>".format(project_approval.id))
+
+    def test_healthcategory_str(self):
+        hc = HealthCategory.objects.all().first()
+        self.assertEqual(str(hc), 'Sexual and reproductive health')
+
+    def test_healthfocusarea_str(self):
+        hfa = HealthFocusArea.objects.all().first()
+        self.assertEqual(str(hfa), '[Sexual and reproductive health] Comprehensive sexuality education')
 
 
 class PermissionTests(SetupTests):
@@ -774,8 +946,8 @@ class PermissionTests(SetupTests):
         anon_client = APIClient(format="json")
         response = anon_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("platforms")[0].get('name'), "platform1")
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['published'].get("platforms")[0].get('name'), "platform1")
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY + Project.FIELDS_FOR_LOGGED_IN:
@@ -812,8 +984,8 @@ class PermissionTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("platforms")[0].get('name'), "platform1")
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['published'].get("platforms")[0].get('name'), "platform1")
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
@@ -835,11 +1007,11 @@ class PermissionTests(SetupTests):
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("last_version", response.json())
+        self.assertIn("last_version", response.json()['published'])
 
     def test_csv_export_failed(self):
         url = reverse("csv-export")
-        response = self.test_user_client.post(url, {"data": [1,2]}, format="json")
+        response = self.test_user_client.post(url, {"data": [1, 2]}, format="json")
         self.assertEqual(response.status_code, 404)
 
     def test_csv_export_success(self):
@@ -854,38 +1026,40 @@ class PermissionTests(SetupTests):
 
     def test_retrieve_project_with_country_fields(self):
         CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
-        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?", answer="a1", schema=False)
+        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
+                                          answer="a1", schema=False)
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("organisation_name"), self.org.name)
-        self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
-        self.assertEqual(response.json().get("country"), self.country_id)
-        self.assertEqual(response.json().get("country_name"), self.country.name)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
+        self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
+        self.assertEqual(response.json()['published'].get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json()['published'].get("country"), self.country_id)
+        self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
-        self.assertEqual(response.json()['fields'][0]['country'], cf1.country.id)
-        self.assertEqual(response.json()['fields'][0]['project'], cf1.project.id)
-        self.assertEqual(response.json()['fields'][0]['type'], cf1.type)
-        self.assertEqual(response.json()['fields'][0]['question'], cf1.question)
-        self.assertEqual(response.json()['fields'][0]['answer'], cf1.answer)
+        self.assertEqual(response.json()['published']['fields'][0]['country'], cf1.country.id)
+        self.assertEqual(response.json()['published']['fields'][0]['project'], cf1.project.id)
+        self.assertEqual(response.json()['published']['fields'][0]['type'], cf1.type)
+        self.assertEqual(response.json()['published']['fields'][0]['question'], cf1.question)
+        self.assertEqual(response.json()['published']['fields'][0]['answer'], cf1.answer)
 
     def test_retrieve_project_with_country_fields_without_schema(self):
-        CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?", answer="a1", schema=False)
+        CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
+                                    answer="a1", schema=False)
         url = reverse("project-detail", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get("name"), "Test Project1")
-        self.assertEqual(response.json().get("organisation_name"), self.org.name)
-        self.assertEqual(response.json().get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json().get("platforms")[0]["name"], "platform1")
-        self.assertEqual(response.json().get("country"), self.country_id)
-        self.assertEqual(response.json().get("country_name"), self.country.name)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
+        self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
+        self.assertEqual(response.json()['published'].get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json()['published'].get("country"), self.country_id)
+        self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
-        self.assertEqual(len(response.json()['fields']), 0)
+        self.assertEqual(len(response.json()['published']['fields']), 0)
 
     def test_project_structure_export(self):
         url = reverse("get-project-structure-export")
@@ -928,10 +1102,6 @@ class TestSoftDelete(APITestCase):
 
         is_active_false_count = DigitalStrategy.all_objects.filter(is_active=False).count()
         self.assertEqual(is_active_false_count, 111)
-
-
-class MockRequest:
-    GET = {}
 
 
 class TestAdmin(TestCase):
