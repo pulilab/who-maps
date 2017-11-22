@@ -83,7 +83,7 @@ class ScorecardController {
     }
 
     goToAxis(id) {
-        const axisId = id || this.axisId;
+        const axisId = id === undefined || id === null ? this.axisId : id;
         this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId });
     }
 
