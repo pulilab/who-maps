@@ -433,6 +433,13 @@ export function searchDuplicateProjectName(query) {
     };
 }
 
+export function clearSimilarNameList() {
+    return async (dispatch) => {
+        const list = [];
+        dispatch({ type: 'SET_SIMILAR_NAME_LIST', list });
+    };
+}
+
 
 // Reducers
 

@@ -67,6 +67,7 @@ class ProjectController  {
         if (DEV) {
             this.fillTestForm();
         }
+        this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
     }
