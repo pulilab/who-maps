@@ -28,9 +28,16 @@ class AddNewContentDialog {
     }
 
     async submit() {
-        if (this.form.$valid) {
-            this.saveOrUpdateContent(this.newContent);
-            this.dialog.hide(this.newContent);
+        if (this.form.$valid && this.newContent.textValid) {
+            try {
+                this.saveOrUpdateContent(this.newContent);
+                this.dialog.hide(this.newContent);
+            }
+            catch (e) {
+                console.log(e);
+                this.showToast('Validation error');
+            }
+
         }
         else {
             if (!this.newContent.textValid) {

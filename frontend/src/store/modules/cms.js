@@ -75,7 +75,7 @@ export function reportComment(resource) {
     return async dispatch => {
         await axios.patch(`/api/comment/${resource.id}/`);
         resource.state = 2;
-        dispatch({ type: 'UPDATE_COMMENT', item: resource });
+        dispatch({ type: 'UPDATE_COMMENT', comment: resource });
     };
 }
 
