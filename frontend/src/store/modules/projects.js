@@ -52,7 +52,7 @@ export const getUserDefaultProject = state => {
 
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
-    const project = cloneDeep(project_definition);
+    const project = { ...project_definition };
     if (country) {
         project.country = country.id;
     }
@@ -74,7 +74,7 @@ export const getCurrentProject = state => {
 
 export const getCurrentPublicProject = state => {
     const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
-    return cloneDeep(project);
+    return { ...project };
 };
 
 function convertCountryFieldsAnswer({ fields }) {
@@ -120,14 +120,14 @@ export const getCurrentProjectForEditing = state => {
 
 export const getTeam = state => {
     if (state.projects.teamViewers) {
-        return cloneDeep(state.projects.teamViewers.team);
+        return [ ...state.projects.teamViewers.team ];
     }
     return [];
 };
 
 export const getViewers = state => {
     if (state.projects.teamViewers) {
-        return cloneDeep(state.projects.teamViewers.viewers);
+        return [ ...state.projects.teamViewers.viewers ];
     }
     return [];
 };
@@ -302,10 +302,10 @@ export function loadProjectDetails() {
                     type: 'SET_PROJECT_INFO',
                     info: {
                         toolkitVersions: toolkitVersions.data,
-                        coverageVersions: coverageVersions.data,
-                        teamViewers: teamViewers.data
+                        coverageVersions: coverageVersions.data
                     }
                 });
+                dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: teamViewers.data });
             }
             return Promise.resolve();
         }
@@ -398,6 +398,7 @@ export function saveProject(processedForm, team, viewers, countryFields) {
             const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
             const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
             dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
+            dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
             dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
             return Promise.resolve(data);
         }
@@ -473,10 +474,13 @@ export default function projects(state = {}, action) {
         return Object.assign(state, {}, p);
     }
     case 'SET_PROJECT_INFO': {
-        p.toolkitData = action.info.toolkitData;
         p.toolkitVersions = action.info.toolkitVersions;
         p.coverageVersions = action.info.coverageVersions;
         p.teamViewers = action.info.teamViewers;
+        return Object.assign(state, {}, p);
+    }
+    case 'SET_PROJECT_TEAM_VIEWERS': {
+        p.teamViewers = action.teamViewers;
         return Object.assign(state, {}, p);
     }
     case 'CLEAR_USER_PROJECTS': {
