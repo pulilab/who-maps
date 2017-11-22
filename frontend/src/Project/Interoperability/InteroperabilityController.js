@@ -5,7 +5,7 @@ class InteroperabilityController extends CollapsibleSet {
     constructor($scope, $element) {
         super($element, $scope, 'project',
           [{ toWatch: 'specifyOtherStandard', field: 'interoperability_standards' }],
-          [{ toWatch: 'interoperability_links', check: 'selected', field: 'link'}]);
+          [{ toWatch: 'interoperability_links', check: 'selected', field: 'link' }]);
         this.$onInit = this.defaultOnInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
     }
