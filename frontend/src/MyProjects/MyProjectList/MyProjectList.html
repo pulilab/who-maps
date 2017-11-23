@@ -1,0 +1,19 @@
+<div layout="column" layout-align="start center">
+
+  <div class="page-title">
+    <h1 class="md-display-1 text-center">Projects list</h1>
+  </div>
+
+  <div md-whiteframe="2" class="wrapper" layout="column">
+    <project-component ng-repeat="p in vm.projects"
+                 viewer="p.isViewer"
+                 member="p.isMember"
+                 show-details="true"
+                 ng-model="p">
+
+    </project-component>
+  </div>
+
+  <disclaimer></disclaimer>
+
+</div>
