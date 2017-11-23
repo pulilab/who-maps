@@ -42,14 +42,14 @@
         <div class="md-block results" ng-show="vm.projects">
           <md-subheader class="md-no-sticky">Results ({{vm.resultNr}} out of {{vm.totalNr}}):</md-subheader>
 
-          <projectcomp
+          <project-component
               ng-repeat="project in vm.projects | limitTo: 5"
               viewer="vm.isViewer(project)"
               member="vm.isMember(project)"
               ng-model="project"
               has-link=true
               has-logo=false>
-          </projectcomp>
+          </project-component>
 
           <!--a href="" class="see-all-results md-button md-primary center-block" ng-if="vm.searchStr">See all results...</a-->
         </div>
