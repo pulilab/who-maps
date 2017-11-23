@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import * as UserModule from '../../store/modules/user';
 import * as CountriesModule from '../../store/modules/countries';
-import * as ProjectModule from '../../store/modules/projects';
 
 /* global DEV, Promise */
 
@@ -29,9 +28,7 @@ class EditProfileController  {
         userProfile.country = stateProfile.country;
         return {
             userProfile,
-            countriesList: CountriesModule.getCountriesList(state),
-            userProjects: ProjectModule.getPublishedProjects(state),
-            structure: ProjectModule.getProjectStructure(state)
+            countriesList: CountriesModule.getCountriesList(state)
         };
     }
 
