@@ -72,6 +72,9 @@ class Project(ExtendedModel):
     def get_member_data(self):
         return self.data
 
+    def get_member_draft(self):
+        return self.draft
+
     def get_non_member_data(self):
         return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY)
 
