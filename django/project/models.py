@@ -33,8 +33,7 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(data__organisation=organisation_id)
 
     def create(self, **kwargs):
-        if self.model == Project:
-            kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
+        kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
         return super(ProjectManager, self).create(**kwargs)
 
 
