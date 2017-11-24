@@ -198,18 +198,6 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
 
         return dict(id=project.id, published=published, draft=draft)
 
-    def _create_project(self, klass, data_serializer, **kwargs):
-        project_data = copy.copy(data_serializer.validated_data)
-        project_data.pop('name', None)
-        project = klass.projects.create(name=data_serializer.validated_data["name"], data=project_data, **kwargs)
-        project.team.add(self.request.user.userprofile)
-        data = dict(data_serializer.validated_data)
-        country_name = project.country.name if project.country else None
-        org_name = project.get_organisation().name if project.get_organisation() else ''
-        data.update(dict(id=project.id, country_name=country_name, organisation_name=org_name))
-
-        return project, data
-
     def _update_project(self, project, data_serializer):
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
@@ -237,17 +225,25 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         """
         data_serializer = ProjectPublishedSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
-        project, data = self._create_project(Project, data_serializer)
-        data.update(public_id=project.public_id)
+        project = data_serializer.save(owner=request.user.userprofile)
+
+        data = data_serializer.validated_data
+        data.update(dict(
+            id=project.id,
+            public_id=project.public_id,
+            country_name=project.country.name if project.country else None,
+            organisation_name=project.get_organisation().name if project.get_organisation() else ''
+        ))
 
         # Add default Toolkit structure for the new project.
         Toolkit.objects.create(project_id=project.id, data=toolkit_default)
 
         # Add approval if required by the country
         if project.country.project_approval:
+            # TODO: validate this
             ProjectApproval.objects.create(project=project, user=project.country.user)
 
-        # TODO: handle draft
+        project.sync_draft_to_published()
 
         return Response(data, status=status.HTTP_201_CREATED)
 
