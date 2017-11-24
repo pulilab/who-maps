@@ -2,6 +2,7 @@
 @import '../mixins';
 
 .landing-wrapper {
+  min-width: $page-min-width !important;
   max-width: $page-max-width !important;
   margin: 70px auto 0;
 
@@ -10,7 +11,7 @@
   }
 
   .bg-hero {
-    min-height: 720px;
+    height: 600px;
     background: $color-primary url("./images/bg-welcome-map.jpg") 0 0 no-repeat;
     background-size: cover;
 
@@ -19,111 +20,90 @@
       background-image: url("./images/bg-welcome-map.jpg");
     }
 
+    searchbar {
+      z-index: 900 !important;
+      width: 37%;
+      margin: 0 0 0 50px;
+    }
+
     // Crossbrowser fixes
     .browser-microsoft_edge & {
       background-position: 0 0;
     }
   }
 
-  .welcome {
-    margin: 0;
-    padding: 30px 60px 20px;
-    width: calc( 45% - 100px );
-    background-color: rgba(250,140,0,.87);
-
-    .search-project {
-      padding-right: 45px;
-    }
-
-    .welcome-text {
-      padding-right: 70px;
-    }
-
-    searchbar {
-      z-index: 900 !important;
-      padding-top: 10px;
-    }
-
-    h2, h5 {
-      color: $color-white;
-      word-wrap: break-word;
-    }
-
-    // trim welcome text
-    h5.md-headline {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 6;
-      line-height: 32px;
-      height: auto;
-      max-height: 192px;
-    }
-  }
-
   .content-wrapper {
     position: relative;
     margin: 0;
-    padding: 0 0 100px;
-    // background-color: $color-primary;
+    padding: 0;
 
-    // Crossbrowser fixes
-    .browser-firefox &,
-    .browser-microsoft_edge &,
-    .browser-ie.version-11 & {
-      padding: 0;
-    }
-
-    .what-is-aside {
-      padding: 40px 50px;
+    .content-aside {
       min-height: 500px;
+      background-color: $color-primary;
 
-      @include clearfix();
-
-      h2, h5 {
-        color: $text-primary;
+      > div {
+        padding: 30px 70px;
       }
 
-      .dha-feature {
-        float: left;
-        width: 100%;
-        margin: 20px 0;
+      .welcome {
+        padding-top: 40px;
 
-        .img-wrapper {
-          position: relative;
-
-          &::before {
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            z-index: 1;
-            display: inline-block;
-            width: 70px;
-            height: 70px;
-            background-color: $color-axis4;
-            content: "";
-          }
-
-          img {
-            position: relative;
-            z-index: 2;
-            display: inline-block;
-            margin: 5px;
-            width: 102px;
-            height: auto;
-            box-shadow: 0px 5px 26px 4px rgba(0, 0, 0, 0.12);
-          }
+        h2, h5 {
+          color: $color-white;
+          word-wrap: break-word;
         }
-        p {
-          margin: 0 20px 20px 30px;
-          font-size: 14px;
-          line-height: 20px;
-          color: $text-secondary;
+      }
 
-          // Crossbrowser fixes
-          .browser-safari & {
-            margin-left: 50px;
+      .what-is {
+        padding-bottom: 80px;
+        background-image: linear-gradient(180deg, darken($color-primary, 10%), $color-primary);
+        @include clearfix();
+
+        h2, h5 {
+          color: $color-white;
+        }
+
+        .dha-feature {
+          float: left;
+          width: 100%;
+          margin: 20px 0;
+
+          .img-wrapper {
+            position: relative;
+
+            &::before {
+              position: absolute;
+              top: -2px;
+              left: -2px;
+              z-index: 1;
+              display: inline-block;
+              width: 70px;
+              height: 70px;
+              background-color: $color-axis4;
+              content: "";
+            }
+
+            img {
+              position: relative;
+              z-index: 2;
+              display: inline-block;
+              margin: 5px;
+              width: 102px;
+              height: auto;
+              box-shadow: 0px 5px 26px 4px rgba(0, 0, 0, 0.12);
+            }
+          }
+
+          p {
+            margin: 0 20px 20px 30px;
+            font-size: 14px;
+            line-height: 20px;
+            color: $color-white;
+
+            // Crossbrowser fixes
+            .browser-safari & {
+              margin-left: 50px;
+            }
           }
         }
       }
@@ -133,20 +113,11 @@
       overflow: hidden;
       position: relative;
       z-index: 100;
-      margin-top: -230px;
-      margin-right: 0;
-      margin-left: 0;
+      margin: 0;
       padding: 40px 100px 40px;
       background-color: $color-white;
       border-radius: 0 !important;
-      box-shadow: 0px 5px 26px 4px rgba(0, 0, 0, 0.12);
-
-      // Crossbrowser fixes
-      .browser-firefox &,
-      .browser-microsoft_edge &,
-      .browser-ie.version-11 & {
-        padding-bottom: 240px;
-      }
+      box-shadow: 0px 9px 48px 8px rgba(0, 0, 0, 0.12);
 
       &::before {
         position: absolute;
