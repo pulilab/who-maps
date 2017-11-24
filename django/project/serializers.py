@@ -4,7 +4,6 @@ from django.template import loader
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
 
-from user.models import UserProfile
 from .models import Project
 
 
@@ -71,8 +70,15 @@ class ProjectPublishedSerializer(serializers.Serializer):
     interoperability_standards = serializers.ListField(
         child=serializers.CharField(max_length=64), required=False, max_length=50)
 
+    class Meta:
+        model = Project
+
     def create(self, validated_data):
-        pass
+        owner = validated_data.pop('owner')
+        project = self.Meta.model.projects.create(name=validated_data["name"], data=validated_data)
+        project.team.add(owner)
+
+        return project
 
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
