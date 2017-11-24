@@ -157,7 +157,7 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         for project in Project.projects.member_of(request.user):
             published = project.to_representation()
             draft = project.to_representation(draft_mode=True)
-            data.append(dict(id=project.id, published=published, draft=draft))
+            data.append(project.to_response_dict(published=published, draft=draft))
 
         return Response(data)
 
@@ -196,7 +196,7 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
             draft = project.to_representation(data=draft, draft_mode=True)
         published = project.to_representation(data=data)
 
-        return dict(id=project.id, published=published, draft=draft)
+        return project.to_response_dict(published=published, draft=draft)
 
     def _update_project(self, project, data_serializer):
         data_serializer.fields.get('name').validators = \
@@ -227,16 +227,10 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         data_serializer.is_valid(raise_exception=True)
         project = data_serializer.save(owner=request.user.userprofile)
 
-        data = data_serializer.validated_data
-        data.update(dict(
-            id=project.id,
-            public_id=project.public_id,
-            country_name=project.country.name if project.country else None,
-            organisation_name=project.get_organisation().name if project.get_organisation() else ''
-        ))
-
         # Add default Toolkit structure for the new project.
         Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+
+        data = project.to_representation()
 
         # Add approval if required by the country
         if project.country.project_approval:
@@ -245,7 +239,7 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
 
         project.sync_draft_to_published()
 
-        return Response(data, status=status.HTTP_201_CREATED)
+        return Response(project.to_response_dict(published=data, draft=data), status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         """
