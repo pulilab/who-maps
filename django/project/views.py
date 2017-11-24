@@ -13,7 +13,7 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
-from country.models import Country, CountryField
+from country.models import Country
 
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer, ProjectDraftSerializer
@@ -285,10 +285,11 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
             project.approval.delete()
             ProjectApproval.objects.create(project=project, user=project.country.user)
+
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ProjectDraftCRUDViewSet(ProjectBaseViewSet):
+class ProjectDraftViewSet(ProjectBaseViewSet):
     def create(self, request, *args, **kwargs):
         """
         Creates a draft project.

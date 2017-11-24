@@ -12,12 +12,11 @@ urlpatterns = [
             'put': 'update'
         }),
         name="project-detail"),
-    url(r"^projects/draft/$", view=views.ProjectDraftCRUDViewSet.as_view({
+    url(r"^projects/draft/$", view=views.ProjectDraftViewSet.as_view({
         'post': 'create'
     }), name="project-draft-crud"),
     url(r"^projects/draft/(?P<pk>\d+)/$",
-        view=views.ProjectDraftCRUDViewSet.as_view({
-            'get': 'retrieve',
+        view=views.ProjectDraftViewSet.as_view({
             'put': 'update'
         }),
         name="project-draft-detail"),
