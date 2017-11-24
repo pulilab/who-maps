@@ -29,45 +29,45 @@
 
       <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="start center">
         <div flex class="badges">
-          <div class="draft" ng-hide="vm.ngModel.isPublished">
+          <div class="draft" ng-hide="vm.ngModel.isPublished && false">
             Draft
           </div>
-          <div class="published" ng-show="vm.ngModel.isPublished">
+          <div class="published" ng-show="vm.ngModel.isPublished || true">
             Published
           </div>
-          <div class="country-approved" ng-show="vm.ngModel.countryApproval">
+          <div class="country-approved" ng-show="vm.ngModel.countryApproval || true">
             Approved by country
           </div>
 
         </div>
 
         <div class="buttons" layout="row">
-          <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject" ng-href="{{vm.ngModel.projectUrl}}">
+          <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject || true" ng-href="{{vm.ngModel.projectUrl}}">
             Show more
           </md-button>
 
-           <md-button class="md-primary md-no-ink" ng-if="vm.viewer" ng-click="vm.goToDashboard()">
+           <md-button class="md-primary md-no-ink" ng-if="vm.viewer || true" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
             View Draft
           </md-button>
 
-          <md-button class="md-primary md-no-ink" ng-if="vm.member" ng-click="vm.goToDashboard()">
+          <md-button class="md-primary md-no-ink" ng-if="vm.member || true" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
               mode_edit
             </md-icon>
             Edit Draft
           </md-button>
 
-           <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">
+           <md-button class="md-primary md-no-ink" ng-if="vm.ownProject || true" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
             View Published
           </md-button>
 
-          <md-button class="md-primary md-no-ink" ng-if="vm.ownProject" ng-click="vm.goToDashboard()">
+          <md-button class="md-primary md-no-ink" ng-if="vm.ownProject || true" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>

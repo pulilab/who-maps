@@ -46,16 +46,15 @@ export const getPublishedProjects = state => {
 
 export const getUserProjects = state => {
     if (state.projects.list) {
-        // const profile = UserModule.getProfile(state);
+        const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
             p.isPublished = isPublished;
-            // if (profile.member && profile.viewer) {
-            //     p.isMember = profile.member.indexOf(p.id) > -1;
-            //     p.isViewer = profile.viewer.indexOf(p.id) > -1;
-            // }
-            console.log(p);
+            if (profile.member && profile.viewer) {
+                p.isMember = profile.member.indexOf(p.id) > -1;
+                p.isViewer = profile.viewer.indexOf(p.id) > -1;
+            }
             return p;
         });
         return sortBy(list, 'id');
