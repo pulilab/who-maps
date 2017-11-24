@@ -156,8 +156,8 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         data = []
 
         for project in Project.projects.member_of(request.user):
-            published = project.to_representation() if project.data else None
-            draft = project.to_representation(draft=True)
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
             data.append(dict(id=project.id, published=published, draft=draft))
 
         return Response(data)
@@ -173,6 +173,8 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
 
     def _get_permission_based_data(self, project):
         is_member = False
+        draft = None
+
         if not self.request.user.is_authenticated():  # ANON
             data = project.get_anon_data()
         else:
@@ -180,29 +182,22 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
             is_admin = project.is_admin(self.request.user)
             if is_member or is_admin:  # MEMBER or Country Admin
                 data = project.get_member_data()
+                draft = project.get_member_draft()
             else:  # LOGGED IN
                 data = project.get_non_member_data()
 
         if is_member:
+            # TODO: check if this needed in draft
             last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
             if last_version:
                 data.update(last_version=last_version.version)
                 data.update(last_version_date=last_version.modified)
 
-        return data
+        if draft:
+            draft = project.to_representation(data=draft, draft_mode=True)
+        published = project.to_representation(data=data)
 
-    def _get_project_data(self, project, project_draft):
-        project_data = None
-        project_draft_data = None
-        # Published project
-        if project:
-            project_data_permission = self._get_permission_based_data(project)
-            project_data = _serialize_project(project, project_data_permission)
-        # Draft project
-        if project_draft:
-            project_draft_data = _serialize_project(project_draft, project_draft.get_member_data())
-
-        return {'draft': project_draft_data, 'published': project_data}
+        return dict(id=project.id, published=published, draft=draft)
 
     def _create_project(self, klass, data_serializer, **kwargs):
         project_data = copy.copy(data_serializer.validated_data)
@@ -245,13 +240,16 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         data_serializer.is_valid(raise_exception=True)
         project, data = self._create_project(Project, data_serializer)
         data.update(public_id=project.public_id)
+
         # Add default Toolkit structure for the new project.
         Toolkit.objects.create(project_id=project.id, data=toolkit_default)
+
         # Add approval if required by the country
         if project.country.project_approval:
             ProjectApproval.objects.create(project=project, user=project.country.user)
-        # Remove project draft
-        ProjectDraft.objects.filter(id=data_serializer.validated_data.get('project_draft', None)).delete()
+
+        # TODO: handle draft
+
         return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
@@ -259,8 +257,8 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         Retrieves a project.
         """
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
-        project_draft = project.project_draft if hasattr(project, 'project_draft') else None
-        return Response(self._get_project_data(project, project_draft))
+
+        return Response(self._get_permission_based_data(project))
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -287,16 +285,9 @@ class ProjectDraftViewSet(ProjectBaseViewSet):
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
         _, data = self._create_project(
-            ProjectDraft, data_serializer, project_id=data_serializer.validated_data["project"])
-        return Response(data, status=status.HTTP_201_CREATED)
+            Project, data_serializer, project_id=data_serializer.validated_data["project"])
 
-    def retrieve(self, request, *args, **kwargs):
-        """
-        Retrieves a draft project.
-        """
-        project_draft = get_object_or_400(ProjectDraft, "No such project", id=kwargs.get("pk"))
-        project = project_draft.project if hasattr(project_draft, 'project') else None
-        return Response(self._get_project_data(project, project_draft))
+        return Response(data, status=status.HTTP_201_CREATED)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -305,8 +296,9 @@ class ProjectDraftViewSet(ProjectBaseViewSet):
         """
         data_serializer = ProjectDraftSerializer(data=request.data)
         project = get_object_or_400(
-            ProjectDraft, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+            Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         data = self._update_project(project, data_serializer)
+
         return Response(data, status=status.HTTP_200_OK)
 
 
