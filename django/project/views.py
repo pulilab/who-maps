@@ -157,29 +157,6 @@ class ProjectPublicViewSet(ViewSet):
         return Response(project_structure_export)
 
 
-def _serialize_project(project, data):
-    schema = CountryField.objects.get_schema(project.country.id)
-    answers = CountryField.objects.get_answers(country_id=project.country.id, project_id=project.id)
-    country_fields = []
-
-    for field in schema:
-        found = answers.filter(question=field.question, type=field.type).first()
-        if found:
-            country_fields.append(found)
-    org_name = project.get_organisation().name if project.get_organisation() else ''
-    approved = project.approval.approved if hasattr(project, 'approval') else None
-    data.update(
-        id=project.id,
-        name=project.name,
-        organisation_name=org_name,
-        country_name=project.country.name,
-        approved=approved,
-        fields=[field.to_representation() for field in country_fields])
-    if isinstance(project, Project):
-        data.update(public_id=project.public_id)
-    return data
-
-
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
 
     def list(self, request, *args, **kwargs):
