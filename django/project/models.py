@@ -91,8 +91,13 @@ class Project(ExtendedModel):
                 d.pop(key, None)
         return d
 
-    def to_representation(self, draft=False):
-        data = self.draft if draft else self.data
+    def to_representation(self, data=None, draft_mode=False):
+        if data is None:
+            data = self.get_member_draft() if draft_mode else self.get_member_data()
+
+        if not data:
+            return {}
+
         extra_data = dict(
             id=self.pk,
             name=self.name,
@@ -103,7 +108,7 @@ class Project(ExtendedModel):
         )
 
         data.update(extra_data)
-        if not draft:
+        if not draft_mode:
             data.update(public_id=self.public_id)
 
         return data
