@@ -18,7 +18,7 @@ from country.models import Country, CountryField
 from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
     ProjectGroupUpdateSerializer, ProjectDraftSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    ProjectDraft, ProjectApproval, HealthCategory
+    ProjectApproval, HealthCategory
 from .project_data import project_structure
 
 
@@ -164,18 +164,11 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         Retrieves list of projects user's projects.
         """
         data = []
-        projects = Project.projects.member_of(request.user)
-        project_drafts = ProjectDraft.projects.member_of(request.user).filter(project__isnull=True)
 
-        for project in projects:
-            published = _serialize_project(project, project.data)
-            draft = _serialize_project(project.project_draft,
-                                       project.project_draft.data) if hasattr(project, 'project_draft') else None
-            data.append({'published': published, 'draft': draft})
-
-        for project_draft in project_drafts:
-            draft = _serialize_project(project_draft, project_draft.data)
-            data.append({'published': None, 'draft': draft})
+        for project in Project.projects.member_of(request.user):
+            published = project.to_representation() if project.data else None
+            draft = project.to_representation(draft=True)
+            data.append(dict(id=project.id, published=published, draft=draft))
 
         return Response(data)
 
@@ -218,6 +211,7 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         # Draft project
         if project_draft:
             project_draft_data = _serialize_project(project_draft, project_draft.get_member_data())
+
         return {'draft': project_draft_data, 'published': project_data}
 
     def _create_project(self, klass, data_serializer, **kwargs):
@@ -229,6 +223,7 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
         country_name = project.country.name if project.country else None
         org_name = project.get_organisation().name if project.get_organisation() else ''
         data.update(dict(id=project.id, country_name=country_name, organisation_name=org_name))
+
         return project, data
 
     def _update_project(self, project, data_serializer):
