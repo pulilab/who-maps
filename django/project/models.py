@@ -88,6 +88,22 @@ class Project(ExtendedModel):
                 d.pop(key, None)
         return d
 
+    def to_representation(self, draft=False):
+        data = self.draft if draft else self.data
+        extra_data = dict(
+            id=self.pk,
+            name=self.name,
+            organisation_name=self.get_organisation().name if self.get_organisation() else '',
+            country_name=self.country.name,
+            approved=self.approval.approved if hasattr(self, 'approval') else None,
+            fields=[field.to_representation() for field in CountryField.get_for_project(self)],
+        )
+
+        data.update(extra_data)
+        if not draft:
+            data.update(public_id=self.public_id)
+
+        return data
 
 
 class ProjectApproval(ExtendedModel):
