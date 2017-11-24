@@ -16,9 +16,7 @@ searchbar {
       }
     }
 
-    project-component {
-      padding-top: 0;
-    }
+    project-component {}
   }
 
   .searchinput {
@@ -48,9 +46,17 @@ searchbar {
       border-color: transparent;
       font-size: $headline-font-size-base;
       border-width: 0 0 1px !important;
-      background-color: rgba(255,255,255,.8);
-      box-shadow: 0 5px 25px 0 rgba(0,0,0,.20);
+      background-color: rgba(255,255,255,.78);
+      box-shadow: 0 5px 25px 2px rgba(0,0,0,.20);
       border-radius: 3px;
+      transition: $swift-ease-out;
+
+      &:hover {
+        background-color: rgba(255,255,255,.93);
+        box-shadow:
+          0 5px 25px 2px rgba(0,0,0,.20),
+          0 10px 40px 4px rgba(0,0,0,.12);
+      }
     }
   }
 
@@ -66,6 +72,7 @@ searchbar {
       color: $color-primary;
       box-shadow: none;
       border-radius: 0;
+      transition: none;
     }
 
     md-icon {
