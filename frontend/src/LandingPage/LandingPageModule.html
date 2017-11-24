@@ -1,6 +1,6 @@
 <div class="landing-wrapper" layout=column>
   <div class="bg-hero" ng-style="vm.countryCover" layout=row layout-align="start end">
-      <searchbar></searchbar>
+    <searchbar></searchbar>
   </div>
 
   <div layout="row" class="content-wrapper">
@@ -52,34 +52,14 @@
     <md-card ng-if="vm.user.profile" class="content-main logged-in md-card" flex=60>
       <h2 class="md-display-3">My Projects</h2>
 
-      <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projects">
-        <div layout="row" layout-align="start stretch">
-          <div flex="85">
-            <hgroup>
-              <h3 class="project-title md-headline">{{project.name}}</h3>
-              <h6 class="country-title md-subhead">{{project.countryName}}</h6>
-            </hgroup>
-            <div class="project-links md-block">
-              <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary md-small" md-no-ink>
-                <md-icon class="material-icons">apps</md-icon>
-                Dashboard
-              </md-button>
-              <md-button aria-label="Update Scores" ui-sref="maps({appName: project.id})" class="md-primary md-small" md-no-ink>
-                <md-icon class="material-icons">playlist_add_check</md-icon>
-                Update
-              </md-button>
-              <md-button aria-label="Summary Score" ui-sref="summary({appName: project.id})" class="md-primary md-small" md-no-ink>
-                <md-icon class="material-icons">insert_chart</md-icon>
-                Summary
-              </md-button>
-            </div>
-          </div>
-          <div class="project-stats-2" flex="15">
-            <donors number="project.donors.length"></donors>
-          </div>
-        </div>
+      <project-component ng-repeat="p in vm.projects"
+                         viewer="p.isViewer"
+                         member="p.isMember"
+                         show-details="true"
+                         ng-model="p">
 
-      </md-card>
+      </project-component>
+    </md-card>
   </div>
 </div>
 
