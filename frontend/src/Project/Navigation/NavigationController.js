@@ -1,9 +1,10 @@
 import forEach from 'lodash/forEach';
 class NavigationController {
 
-    constructor($element) {
+    constructor($element, $state) {
         this.EE = window.EE;
         this.element = $element;
+        this.state = $state;
         this.scrollTo = this.scrollTo.bind(this);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -47,16 +48,20 @@ class NavigationController {
         this.EE.emit('projectScrollTo', hash);
     }
 
+    goTo(editMode) {
+        this.state.go(this.state.current.name, { editMode });
+    }
+
     setAddAnother() {
         this.isAddAnother = true;
     }
 
     static navigationFactory() {
         require('./Navigation.scss');
-        function navigation($element) {
-            return new NavigationController($element);
+        function navigation($element, $state) {
+            return new NavigationController($element, $state);
         }
-        navigation.$inject = ['$element'];
+        navigation.$inject = ['$element', '$state'];
         return navigation;
     }
 }

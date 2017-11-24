@@ -17,7 +17,7 @@
                ng-show="vm.showCountryLevelViewButton()"
                md-no-ink>
       <md-icon class="material-icons">public</md-icon>
-      Country View
+      Map
     </md-button>
 
     <md-button aria-label="Go to my Dashboard"
@@ -26,8 +26,18 @@
                ui-sref="dashboard"
                ng-show="vm.showGoToMyDashboardButton()"
                md-no-ink>
-      <md-icon class="material-icons ">apps</md-icon>
+      <md-icon class="material-icons ">dashboard</md-icon>
       Dashboard
+    </md-button>
+
+     <md-button aria-label="My Projects"
+               title="My Projects"
+               class="view-selector"
+               ui-sref="my-projects"
+               ng-show="vm.hasProfile()"
+               md-no-ink>
+      <md-icon class="material-icons ">toc</md-icon>
+      My Projects
     </md-button>
 
     <md-button aria-label="Planning and Guidance"
@@ -37,7 +47,7 @@
                ng-show="vm.showPlanningAndGuidanceButton()"
                md-no-ink>
       <md-icon class="material-icons ">import_contacts</md-icon>
-      Planning &amp; Guidance
+      Planning
     </md-button>
 
     <thematic
@@ -46,9 +56,10 @@
       ng-show="vm.showThematic()"
       buttontitle="MAPS Toolkit"
       buttonclass="md-primary"
-      buttonicon="toc"
-      buttontext="MAPS Toolkit">
+      buttonicon="help_outline"
+      buttontext="Toolkit">
     </thematic>
+
 
     <span flex ></span>
 

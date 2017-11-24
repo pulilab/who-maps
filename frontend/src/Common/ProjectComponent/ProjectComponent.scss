@@ -13,7 +13,7 @@
   }
 }
 
-projectcomp {
+project-component {
 
   display: block;
   padding-top: 30px;
@@ -32,30 +32,30 @@ projectcomp {
     outline: none;
     margin: 0;
 
-      .my-eye,
-      .my-star {
-        position: absolute;
-        top: -6px;
-        right: -19px;
-        background-color: #CD9924;
-        // background-color: $color-gray-lightest;
-        display: block;
-        width: 55px;
-        height: 25px;
-        box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
-        // box-shadow: inset 0 -1px 0 rgba(0,0,0,.075);
-        transform: rotate(40deg);
+    .my-eye,
+    .my-star {
+      position: absolute;
+      top: -6px;
+      right: -19px;
+      background-color: #CD9924;
+      // background-color: $color-gray-lightest;
+      display: block;
+      width: 55px;
+      height: 25px;
+      box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
+      // box-shadow: inset 0 -1px 0 rgba(0,0,0,.075);
+      transform: rotate(40deg);
 
-        md-icon {
-          position: absolute;
-          top: 4px;
-          left: 24px;
-          font-size: 13px;
-          color: $color-white;
-          // color: #CD9924;
-          transform: rotate(-40deg);
-        }
+      md-icon {
+        position: absolute;
+        top: 4px;
+        left: 24px;
+        font-size: 13px;
+        color: $color-white;
+        // color: #CD9924;
+        transform: rotate(-40deg);
       }
+    }
 
     .my-eye {
       background-color: #53A0CE;
@@ -137,7 +137,7 @@ projectcomp {
             }
           }
 
-          .followers {
+          .version {
             padding: 10px;
             max-width: 100px;
             width: 100px;
@@ -182,14 +182,38 @@ projectcomp {
 
         .lower {
           height: 60px;
-          padding: 0 15px 0 0;
+          padding: 0 16px 0 32px;
           border-top: 1px solid $color-gray-lighter;
 
-          .description {
-            padding: 10px 20px;
-            color: $text-secondary;
-            font-size: 14px;
-            @include text-truncate();
+          .badges {
+            display: inline-flex;
+
+            div {
+              height: 24px;
+              text-transform: uppercase;
+              text-align: center;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 24px;
+              border-radius: 3px;
+              margin-right: 8px;
+              padding: 0 4px;
+            }
+
+            .draft {
+              color: $color-black;
+              background-color: #FBC02D;
+            }
+
+            .published {
+              color: $color-white;
+              background-color: #558B2F;
+            }
+
+            .country-approved {
+              color: $color-white;
+              background-color: #7CB342;
+            }
           }
 
           .more {}

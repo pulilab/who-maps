@@ -56,6 +56,24 @@
   }
 }
 
+.publish {
+  // TODO fix the color with the prob
+  .project-section {
+    &.active {
+      .section-title {
+        background-color: #7CB342;
+      }
+    }
+
+    &.project-navigation {
+
+    .section-title {
+      background-color: #7CB342;
+    }
+  }
+  }
+}
+
 .project-section {
   overflow: hidden;
   margin: 0 30px 30px;
@@ -65,7 +83,7 @@
   &.active {
 
     .section-title {
-      background-color: #CD9923 !important;
+      background-color: #CD9923;
 
       &:hover {
         background-color: darken(#CD9923, 3%) !important;
@@ -102,7 +120,7 @@
 
     .section-title {
       text-align: center;
-      background-color: #CD9923 !important;
+      background-color: #CD9923;
     }
   }
 

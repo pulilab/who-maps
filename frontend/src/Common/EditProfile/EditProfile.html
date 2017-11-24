@@ -72,18 +72,6 @@
       </div>
     </form>
   </div>
-  <section md-whiteframe="2" class="my-projects" >
-    <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
-    <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                 viewer="p.isViewer"
-                 member="p.isMember"
-                 show-details="true"
-                 show-logo="true"
-                 ng-model="p">
-
-    </projectcomp>
-
-  </section>
 
   <disclaimer></disclaimer>
 </div>

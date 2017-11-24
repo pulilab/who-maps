@@ -3,6 +3,28 @@
 
 .project-navigation {
 
+  .edit-mode-switch {
+
+    button {
+      background-color: #E0E0E0;
+
+      &.draft {
+
+        &.active {
+          background-color: #FAC134
+        }
+      }
+
+      &.publish {
+
+        &.active {
+          background-color: #558B2F;
+        }
+      }
+    }
+
+  }
+
   .stepper {
 
     ul {

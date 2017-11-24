@@ -32,11 +32,30 @@ export const getPublishedProjects = state => {
     if (state.projects.list) {
         const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
-            p = Object.assign({}, p.published);
+            p = { ...p.published};
             if (profile.member && profile.viewer) {
                 p.isMember = profile.member.indexOf(p.id) > -1;
                 p.isViewer = profile.viewer.indexOf(p.id) > -1;
             }
+            return p;
+        });
+        return sortBy(list, 'id');
+    }
+    return [];
+};
+
+export const getUserProjects = state => {
+    if (state.projects.list) {
+        const profile = UserModule.getProfile(state);
+        const list = state.projects.list.map(p => {
+            const isPublished = !!p.published.name;
+            p = isPublished ? { ...p.published } : { ...p.draft };
+            p.isPublished = isPublished;
+            // if (profile.member && profile.viewer) {
+            //     p.isMember = profile.member.indexOf(p.id) > -1;
+            //     p.isViewer = profile.viewer.indexOf(p.id) > -1;
+            // }
+            console.log(p);
             return p;
         });
         return sortBy(list, 'id');
@@ -99,8 +118,7 @@ export const getProjectCountryFields = state => isNewProject => {
     return cloneDeep(result);
 };
 
-export const getCurrentProjectForEditing = state => {
-    let data = getCurrentProject(state);
+const getCurrentProjectForEditing = (state, data) => {
     data = convertArrayToStandardCustomObj(data);
     data.start_date = convertDate(data.start_date);
     data.implementation_dates = convertDate(data.implementation_dates);
@@ -117,6 +135,17 @@ export const getCurrentProjectForEditing = state => {
     data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
     return Object.assign({}, project_definition, data);
 };
+
+export const getCurrentPublishedProjectForEditing = state => {
+    const project = getCurrentProject(state);
+    return getCurrentProjectForEditing(state, project);
+};
+
+export const getCurrentDraftProjectForEditing = state => {
+    const project = getUserProjects(state).find(p => p.draft.id === state.projects.currentProject);
+    return getCurrentProjectForEditing(state, project.draft);
+};
+
 
 export const getTeam = state => {
     if (state.projects.teamViewers) {
@@ -167,7 +196,7 @@ export const getCurrentVersionDate = state => {
 };
 
 export const getMapsAxisData = state => {
-    const axis = cloneDeep(axisData);
+    const axis = { ...axisData };
     const toolkitVersion = getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
@@ -203,7 +232,7 @@ export const getMapsAxisData = state => {
     return axis;
 };
 export const getMapsDomainData = state => {
-    const domains = cloneDeep(domainData);
+    const domains = { ...domainData };
     const toolkitVersion = getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();

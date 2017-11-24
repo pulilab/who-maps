@@ -109,51 +109,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               }
           }
       })
-      .state('newProject', {
-          url: '/new-project',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<project layout-fill layout="column" ></project>'
-              }
-          },
-          resolve: {
-              user: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
-              }]
-          },
-          profileRequired: true
-      })
-      .state('editProject', {
-          url: '/edit-project',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<project edit-mode="true" layout-fill layout="column" ></project>'
-              }
-          },
-          resolve: {
-              user: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
-              }]
-          },
-          profileRequired: true
-      })
-      .state('inventory', {
-          url: '/inventory',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<project inventory-mode="true" ></project>'
-              }
-          },
-          resolve: {
-              user: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
-              }]
-          },
-          profileRequired: true
-      })
       .state('editProfile', {
           url: '/edit-profile',
           parent: 'app',
@@ -312,7 +267,8 @@ angular.module('app',
         require('../CountryView/'),
         require('../Dashboard/'),
         require('../LandingPage/'),
-        require('../MapsToolkit/')
+        require('../MapsToolkit/'),
+        require('../MyProjects/')
     ]
 )
   .controller('systemController', SystemController.systemControllerFactory())

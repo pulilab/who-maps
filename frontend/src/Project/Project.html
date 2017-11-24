@@ -1,4 +1,4 @@
-<div layout="column" class="new-edit-project" layout-align="start center" >
+<div layout="column" class="new-edit-project" layout-align="start center" ng-class="vm.state.params.editMode" >
   <div class="page-title" ng-hide="vm.editMode">
     <h1 class="md-display-1 text-center">Add New Digital Health Project</h1>
     <h6 class="md-subhead text-center">Please complete the following information in order to add your project into the Digital Health Atlas</h6>
@@ -50,18 +50,6 @@
           country-fields="vm.countryFields"
         ></country-fields>
 
-        <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
-          <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
-          <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                       current-project="vm.isCurrentProject(p.id)"
-                       viewer="p.isViewer"
-                       member="p.isMember"
-                       show-details="true"
-                       show-logo="true"
-                       ng-model="p">
-
-          </projectcomp>
-        </section>
       </div>
       <div class="navigation-area" layout="column">
         <navigation edit-mode="vm.editMode" is-add-another="vm.isAddAnother" show-country-fields="vm.countryFields && vm.countryFields.length > 0"></navigation>

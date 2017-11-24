@@ -27,13 +27,26 @@ class ProjectController  {
     mapData(state) {
         const userProfile = UserModule.getProfile(state);
         const newProject = this.state.current.name === 'newProject';
-        const project = this.project ? this.project : newProject ?
-          ProjectModule.getVanillaProject(state) : ProjectModule.getCurrentProjectForEditing(state);
+        const publishMode = this.state.params.editMode === 'publish';
 
-        const team = newProject && this.team ?
-          this.team : newProject && !this.team ? [userProfile] : ProjectModule.getTeam(state);
-        const viewers = newProject && this.viewers ?
-          this.viewers : newProject && !this.viewers ? [] : ProjectModule.getViewers(state);
+        let project = null;
+        let team = null;
+        let viewers = null;
+
+        if (newProject) {
+            project = this.project ? this.project : ProjectModule.getVanillaProject(state);
+            team = this.team ? this.team : [userProfile];
+            viewers = this.viewers ? this.viewers : [];
+        }
+        else {
+            project = this.project ? this.project : ProjectModule.getCurrentPublishedProjectForEditing(state);
+            // project = this.project ? this.project : publishMode ? ProjectModule.getCurrentPublishedProjectForEditing(state) :
+            //   ProjectModule.getCurrentDraftProjectForEditing();
+            team = this.team ? this.team : ProjectModule.getTeam(state);
+            viewers = this.viewers ? this.viewers : ProjectModule.getViewers(state);
+        };
+
+
         const users = SystemModule.getUserProfiles(state);
 
         const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
