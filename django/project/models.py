@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 
 from core.models import ExtendedModel, SoftDeleteMixin
-from country.models import Country
+from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
 
@@ -38,15 +38,18 @@ class ProjectManager(models.Manager):
         return super(ProjectManager, self).create(**kwargs)
 
 
-class ProjectBase(ExtendedModel):
+class Project(ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
                                "application", "last_version")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255, unique=True)
-    data = JSONField()
-    team = models.ManyToManyField(UserProfile, related_name="%(class)s_team", blank=True)
-    viewers = models.ManyToManyField(UserProfile, related_name="%(class)s_viewers", blank=True)
+    data = JSONField(default=dict())
+    draft = JSONField(default=dict())
+    team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
+    viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
+    public_id = models.CharField(
+        max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
     projects = ProjectManager()
 
@@ -86,19 +89,6 @@ class ProjectBase(ExtendedModel):
                 d.pop(key, None)
         return d
 
-    class Meta:
-        abstract = True
-
-
-class Project(ProjectBase):
-    public_id = models.CharField(
-        max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
-
-
-class ProjectDraft(ProjectBase):
-    name = models.CharField(max_length=255, unique=False)
-    project = models.OneToOneField(
-        'Project', on_delete=models.CASCADE, related_name='project_draft', blank=True, null=True)
 
 
 class ProjectApproval(ExtendedModel):
