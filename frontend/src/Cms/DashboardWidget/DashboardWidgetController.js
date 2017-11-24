@@ -7,6 +7,8 @@ class DashboardWidgetController {
     constructor($scope, $ngRedux) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.splitType = this.splitType.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
