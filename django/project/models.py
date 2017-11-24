@@ -91,6 +91,10 @@ class Project(ExtendedModel):
                 d.pop(key, None)
         return d
 
+    def sync_draft_to_published(self):
+        self.draft = self.data
+        self.save(update_fields=['draft'])
+
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
@@ -102,20 +106,17 @@ class Project(ExtendedModel):
             id=self.pk,
             name=self.name,
             organisation_name=self.get_organisation().name if self.get_organisation() else '',
-            country_name=self.country.name,
+            country_name=self.country.name if self.country else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
             fields=[field.to_representation() for field in CountryField.get_for_project(self)],
         )
 
         data.update(extra_data)
-        if not draft_mode:
-            data.update(public_id=self.public_id)
 
         return data
 
-    def sync_draft_to_published(self):
-        self.draft = self.data
-        self.save(update_fields=['draft'])
+    def to_response_dict(self, published, draft):
+        return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
 
 
 class ProjectApproval(ExtendedModel):
