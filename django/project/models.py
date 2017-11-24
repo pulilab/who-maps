@@ -113,6 +113,10 @@ class Project(ExtendedModel):
 
         return data
 
+    def sync_draft_to_published(self):
+        self.draft = self.data
+        self.save(update_fields=['draft'])
+
 
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval')
