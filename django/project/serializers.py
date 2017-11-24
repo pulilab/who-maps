@@ -30,7 +30,7 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     link = serializers.CharField(required=False, max_length=256)
 
 
-class ProjectBaseSerializer(serializers.Serializer):
+class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
@@ -71,12 +71,14 @@ class ProjectBaseSerializer(serializers.Serializer):
     interoperability_standards = serializers.ListField(
         child=serializers.CharField(max_length=64), required=False, max_length=50)
 
+    def create(self, validated_data):
+        pass
 
-class ProjectDraftSerializer(ProjectBaseSerializer):
+
+class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
     Override fields that are not required for draft project.
     """
-    project = serializers.IntegerField(required=False, allow_null=True)
     name = serializers.CharField(max_length=128)
     # SECTION 1 General Overview
     organisation = serializers.CharField(max_length=128, required=False)
@@ -101,23 +103,11 @@ class ProjectDraftSerializer(ProjectBaseSerializer):
     implementation_dates = serializers.CharField(max_length=128, required=False)
 
 
-class ProjectSerializer(ProjectBaseSerializer):
-    approved = serializers.BooleanField(required=False, read_only=True)
-    # Draft project
-    project_draft = serializers.IntegerField(required=False, allow_null=True)
-    project_id = serializers.IntegerField(required=False, read_only=True)
-
-
-class ProjectGroupListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Project
-        fields = ("id", "team", "viewers")
-
-
-class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
+class ProjectGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ("team", "viewers")
+        read_only_fields = ("id",)
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)

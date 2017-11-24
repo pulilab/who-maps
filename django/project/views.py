@@ -15,8 +15,7 @@ from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 
-from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
-    ProjectGroupUpdateSerializer, ProjectDraftSerializer
+from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     ProjectApproval, HealthCategory
 from .project_data import project_structure
@@ -236,7 +235,7 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         """
         Creates a project.
         """
-        data_serializer = ProjectSerializer(data=request.data)
+        data_serializer = ProjectPublishedSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
         project, data = self._create_project(Project, data_serializer)
         data.update(public_id=project.public_id)
@@ -304,13 +303,13 @@ class ProjectDraftViewSet(ProjectBaseViewSet):
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
-    serializer_class = ProjectGroupListSerializer
+    serializer_class = ProjectGroupSerializer
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         self.check_object_permissions(self.request, instance)
-        serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
+        serializer = ProjectGroupSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
