@@ -140,21 +140,11 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure_export(request):
-        project_structure_export = {}
-        project_structure_export['interoperability_links'] = [{
-            'id': x.id,
-            'name': x.name
-        } for x in InteroperabilityLink.objects.all()]
-        project_structure_export['technology_platforms'] = [{
-            'id': x.id,
-            'name': x.name
-        } for x in TechnologyPlatform.objects.all()]
-        project_structure_export['digital_strategies'] = [{
-            'id': x.id,
-            'name': x.name
-        } for x in DigitalStrategy.objects.all()]
-
-        return Response(project_structure_export)
+        return Response(dict(
+            interoperability_links=[{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()],
+            technology_platforms=[{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()],
+            digital_strategies=[{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
+        ))
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
