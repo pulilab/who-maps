@@ -42,7 +42,7 @@ class Project(ExtendedModel):
                                "application", "last_version")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     data = JSONField(default=dict())
     draft = JSONField(default=dict())
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
