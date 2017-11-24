@@ -3,7 +3,7 @@ import * as CmsModule from '../../store/modules/cms';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, Upload, toast, content, isSuperUser, $ngRedux) {
+    constructor($scope, $mdDialog, Upload, toast, $ngRedux, content, isSuperUser) {
         this.axes = require('../resources/domains');
         this.scope = $scope;
         this.dialog = $mdDialog;
@@ -69,7 +69,7 @@ class AddNewContentDialog {
     static factory(content, isSuperUser) {
 
         function addNewContent($scope, $mdDialog, Upload, $mdToast, $ngRedux) {
-            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, content, isSuperUser, $ngRedux);
+            return new AddNewContentDialog($scope, $mdDialog, Upload, $mdToast, $ngRedux, content, isSuperUser);
         }
 
         addNewContent.$inject = ['$scope', '$mdDialog', 'Upload', '$mdToast', '$ngRedux'];

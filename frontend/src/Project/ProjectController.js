@@ -27,7 +27,7 @@ class ProjectController  {
     mapData(state) {
         const userProfile = UserModule.getProfile(state);
         const newProject = this.state.current.name === 'newProject';
-        const publishMode = this.state.params.editMode === 'publish';
+        // const publishMode = this.state.params.editMode === 'publish';
 
         let project = null;
         let team = null;
@@ -40,11 +40,12 @@ class ProjectController  {
         }
         else {
             project = this.project ? this.project : ProjectModule.getCurrentPublishedProjectForEditing(state);
-            // project = this.project ? this.project : publishMode ? ProjectModule.getCurrentPublishedProjectForEditing(state) :
+            // project = this.project ? this.project : publishMode ?
+            // ProjectModule.getCurrentPublishedProjectForEditing(state) :
             //   ProjectModule.getCurrentDraftProjectForEditing();
             team = this.team ? this.team : ProjectModule.getTeam(state);
             viewers = this.viewers ? this.viewers : ProjectModule.getViewers(state);
-        };
+        }
 
 
         const users = SystemModule.getUserProfiles(state);

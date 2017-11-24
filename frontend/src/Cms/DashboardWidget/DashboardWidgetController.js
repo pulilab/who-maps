@@ -18,8 +18,8 @@ class DashboardWidgetController {
         this.lessons = [];
         this.resources = [];
         this.experiences = [];
-        this.watchers();
         this.currentDomain = this.domains[Math.floor(Math.random() * this.domains.length)];
+        this.watchers();
     }
 
     mapState(state) {
@@ -29,22 +29,14 @@ class DashboardWidgetController {
     }
 
     watchers() {
-        this.scope.$watchGroup([() => {
-            return this.currentDomain;
-        }, () => {
-            return this.scores;
-        }], ([domain, scores]) => {
+        this.scope.$watchGroup([s => s.vm.currentDomain, s => s.vm.scores], ([domain, scores]) => {
             if (domain && scores && scores.length > 0) {
                 this.setDomainVariables(domain, scores);
                 this.splitType(this.all);
             }
         });
 
-        this.scope.$watchCollection(() => {
-            return this.all;
-        }, data => {
-            this.splitType(data);
-        });
+        this.scope.$watchCollection(s => s.vm.all, this.splitType);
     }
 
     splitType(data) {
