@@ -80,6 +80,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
         return project
 
+    def update(self, instance, validated_data):
+        pass
+
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
@@ -107,6 +110,13 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
+
+    def create(self, validated_data):
+        owner = validated_data.pop('owner')
+        project = self.Meta.model.projects.create(name=validated_data["name"], data=validated_data)
+        project.team.add(owner)
+
+        return project
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):

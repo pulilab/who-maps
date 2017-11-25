@@ -228,9 +228,7 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         project = data_serializer.save(owner=request.user.userprofile)
 
         # Add default Toolkit structure for the new project.
-        Toolkit.objects.create(project_id=project.id, data=toolkit_default)
-
-        data = project.to_representation()
+        Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
 
         # Add approval if required by the country
         if project.country.project_approval:
@@ -238,6 +236,8 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
             ProjectApproval.objects.create(project=project, user=project.country.user)
 
         project.sync_draft_to_published()
+
+        data = project.to_representation()
 
         return Response(project.to_response_dict(published=data, draft=data), status=status.HTTP_201_CREATED)
 
@@ -254,8 +254,9 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         """
         Updates a project.
         """
-        data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+
+        data_serializer = ProjectPublishedSerializer(project, data=request.data)
         data = self._update_project(project, data_serializer)
         data.update(public_id=project.public_id)
         # Remove approval if already approved, so country admin can approve again because project has changed
@@ -273,8 +274,11 @@ class ProjectDraftViewSet(ProjectBaseViewSet):
         """
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
-        _, data = self._create_project(
-            Project, data_serializer, project_id=data_serializer.validated_data["project"])
+        project = data_serializer.save(owner=request.user.userprofile)
+
+        # Add default Toolkit structure for the new project.
+        Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
+
 
         return Response(data, status=status.HTTP_201_CREATED)
 
