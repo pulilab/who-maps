@@ -1,7 +1,7 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
 module.exports = function(config) {
 
-    var browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
+    const browsers = process.env.BROWSER_ENV === 'chrome' ? ['HeadlessChrome'] : ['HeadlessCanary'];
     config.set({
         browsers: browsers,
         customLaunchers: {
@@ -15,29 +15,43 @@ module.exports = function(config) {
             }
         },
         files: [
-            { pattern: 'test-context.js', watched: false }
+            'test-context.js'
         ],
         frameworks: ['jasmine'],
         logLevel: config.LOG_INFO,
         preprocessors: {
-            'test-context.js': ['webpack', 'sourcemap']
+            'test-context.js': 'webpack'
         },
-        coverageReporter: {
-            reporters: [
-                { type: 'lcov', subdir: '.' },
-                { type: 'text-summary' },
-                { type: 'html',  subdir: 'html' }
-            ],
+        colors: true,
+        coverageIstanbulReporter: {
+            reports: ['text-summary', 'html'],
             check: {
-                global: {
-                    statements: 50,
-                    branches: 40,
-                    functions: 50,
-                    lines: 50
+                thresholds: {
+                    each: {
+                        statements: 50,
+                        branches: 40,
+                        functions: 50,
+                        lines: 50
+                    }
                 }
-            }
+            },
+            'report-config': {
+                html: {
+                    subdir: 'html'
+                }
+            },
+            fixWebpackSourcePaths: true
         },
-        reporters: ['progress', 'coverage'],
+        specReporter: {
+            maxLogLines: 5,
+            suppressErrorSummary: true,
+            suppressFailed: false,
+            suppressPassed: true,
+            suppressSkipped: true,
+            showSpecTiming: false,
+            failFast: false
+        },
+        reporters: ['coverage-istanbul', 'spec'],
         webpack: {
             devtool: 'inline-source-map',
             module: {
@@ -45,26 +59,40 @@ module.exports = function(config) {
                     {
                         test: /\.js$/,
                         exclude: /node_modules/,
-                        loader: 'babel-loader'
+                        use: [
+                            'babel-loader'
+                        ]
                     },
                     {
-                        test: /^((?!-spec).)*.js$/,
-                        enforce: 'pre',
-                        exclude: /(node_modules|bower_components)/,
-                        loader: 'istanbul-instrumenter-loader',
-                        query: {
-                            esModules: true
-                        }
+                        test: /\.vue/,
+                        use: [
+                            { loader: 'vue-loader' }
+                        ]
+                    },
+                    {
+                        test: /.js$/,
+                        enforce: 'post',
+                        include: /src/,
+                        exclude: /node_modules/,
+                        use: [
+                            { loader: 'istanbul-instrumenter-loader', options: { esModules: true } }
+                        ]
                     },
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|html|scss|geojson)$/,
-                        loaders: ['null-loader']
+                        use: [
+                            { loader: 'null-loader' }
+                        ]
+
                     },
                     {
                         test: /\.(jpe?g|png|gif|ico)$/i,
-                        loaders: [
-                            'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-                            'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                        use: [
+                            { loader: 'file-loader', options: { hash: 'sha512', digest: 'hex', name: '[hash].[ext]' } },
+                            {
+                                loader: 'image-webpack-loader',
+                                options: { bypassOnDebug: true, optimizationLevel: 7, interlaced: false }
+                            }
                         ]
                     }
                 ]
@@ -84,7 +112,8 @@ module.exports = function(config) {
         plugins: [
             require('karma-webpack'),
             require('karma-jasmine'),
-            require('karma-coverage'),
+            require('karma-coverage-istanbul-reporter'),
+            require('karma-spec-reporter'),
             require('karma-sourcemap-loader'),
             require('karma-chrome-launcher')
         ]

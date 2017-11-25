@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'whatwg-fetch';
-import './plugins/VueInstance';
+import './plugins/index';
 import { StaticUtilities } from './Utilities';
 import EE from './Common/EE';
 

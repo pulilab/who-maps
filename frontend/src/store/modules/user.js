@@ -1,7 +1,7 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 import union from 'lodash/union';
-import { Storage } from '../../Common/';
+import Storage from '../../Common/Storage';
 import * as ProjectModule from './projects';
 
 

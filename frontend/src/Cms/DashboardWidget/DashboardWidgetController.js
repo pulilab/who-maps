@@ -7,6 +7,8 @@ class DashboardWidgetController {
     constructor($scope, $ngRedux) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.splitType = this.splitType.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
@@ -18,8 +20,8 @@ class DashboardWidgetController {
         this.lessons = [];
         this.resources = [];
         this.experiences = [];
-        this.watchers();
         this.currentDomain = this.domains[Math.floor(Math.random() * this.domains.length)];
+        this.watchers();
     }
 
     mapState(state) {
@@ -29,22 +31,14 @@ class DashboardWidgetController {
     }
 
     watchers() {
-        this.scope.$watchGroup([() => {
-            return this.currentDomain;
-        }, () => {
-            return this.scores;
-        }], ([domain, scores]) => {
+        this.scope.$watchGroup([s => s.vm.currentDomain, s => s.vm.scores], ([domain, scores]) => {
             if (domain && scores && scores.length > 0) {
                 this.setDomainVariables(domain, scores);
                 this.splitType(this.all);
             }
         });
 
-        this.scope.$watchCollection(() => {
-            return this.all;
-        }, data => {
-            this.splitType(data);
-        });
+        this.scope.$watchCollection(s => s.vm.all, this.splitType);
     }
 
     splitType(data) {

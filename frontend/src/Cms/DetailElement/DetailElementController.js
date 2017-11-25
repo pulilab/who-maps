@@ -5,7 +5,7 @@ import { Storage } from '../../Common/';
 import * as CmsModule from '../../store/modules/cms';
 
 class DetailElementDialog {
-    constructor($scope, $mdDialog, content, $ngRedux) {
+    constructor($scope, $mdDialog, $ngRedux, content) {
         this.scope = $scope;
         this.storage = new Storage();
         this.dialog = $mdDialog;
@@ -86,7 +86,7 @@ class DetailElementDialog {
     static factory(content) {
 
         function detailElement($scope, $mdDialog, $ngRedux) {
-            return new DetailElementDialog($scope, $mdDialog, content, $ngRedux);
+            return new DetailElementDialog($scope, $mdDialog, $ngRedux, content);
         }
 
         detailElement.$inject = ['$scope', '$mdDialog', '$ngRedux'];
