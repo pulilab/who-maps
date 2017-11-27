@@ -7,7 +7,8 @@
            ng-show="vm.projectData.isMember || vm.projectData.isViewer"
            ng-class="vm.projectData.isMember ? 'longer' : 'shorter'">
 
-    <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
+    <md-icon ng-show="vm.projectData.isPublished" class="dash-trendicon rotate">rotate_right</md-icon>
+    <md-icon ng-hide="vm.projectData.isPublished" class="dash-trendicon rotate">assignment</md-icon>
     <span class="dash-stat-nr dash-stat-nr-version" ng-show="vm.projectData.isPublished">{{vm.currentVersion}}.</span>
     <span class="dash-stat-nr draft-version" ng-hide="vm.projectData.isPublished">Draft</span>
     <span class="dash-stat-label">Version</span>
@@ -25,9 +26,11 @@
       <span class="desc">
           Go to the edit project page to review and publish your project
       </span>
-      <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.goToEditProject()">
-        <span class="text">Review &</span>
-        <span>Publish</span>
+      <md-button class="snapshot-button draft md-whiteframe-1dp" ng-click="vm.goToEditProject()">
+        <span class="text">
+          Review &<br>
+          Publish
+        </span>
       </md-button>
     </div>
 
@@ -37,4 +40,3 @@
   <donors class="hten" number="vm.projectData.donors.length"></donors>
 
 </div>
-
