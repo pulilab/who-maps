@@ -156,6 +156,10 @@ def cov():
     local("docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc")
 
 
+def makemigrations():
+    local('docker exec -it whomaps_django_1 python manage.py makemigrations --noinput')
+
+
 def migrate():
     local("docker exec -it whomaps_django_1 python manage.py migrate --noinput")
 

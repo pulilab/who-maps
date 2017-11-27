@@ -45,7 +45,7 @@ class CountryAdmin(admin.ModelAdmin):
         qs = super(CountryAdmin, self).get_queryset(request)
 
         if request.user.is_staff and not request.user.is_superuser:
-            qs = qs.filter(user__user=request.user)
+            qs = qs.filter(users__user=request.user)
 
         return qs
 

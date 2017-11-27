@@ -11,8 +11,7 @@ class Country(NameByIDMixin, ExtendedModel):
     cover_text = models.TextField(blank=True, null=True)
     footer_title = models.CharField(max_length=128, blank=True, null=True)
     footer_text = models.CharField(max_length=128, blank=True, null=True)
-    user = models.ForeignKey(UserProfile, help_text="User who can update the country", null=True, blank=True,
-                             related_name="country_admin")
+    users = models.ManyToManyField(UserProfile, help_text="User who can update the country", blank=True, related_name='+')
 
     class Meta:
         verbose_name_plural = "Countries"
