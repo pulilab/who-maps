@@ -9,7 +9,11 @@ const component = {
     bindings: {
         editMode: '<',
         isAddAnother: '=',
-        showCountryFields: '<'
+        showCountryFields: '<',
+        project: '<',
+        team: '<',
+        viewers: '<',
+        countryFields: '<'
     }
 };
 

@@ -1,10 +1,12 @@
 import forEach from 'lodash/forEach';
+import * as ProjectModule from '../../store/modules/projects';
 class NavigationController {
 
-    constructor($element, $state) {
+    constructor($element, $state, $ngRedux) {
         this.EE = window.EE;
         this.element = $element;
         this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.scrollTo = this.scrollTo.bind(this);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -56,12 +58,16 @@ class NavigationController {
         this.isAddAnother = true;
     }
 
+    saveDraft() {
+        this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project, this.team, this.viewers, this.countryFields));
+    }
+
     static navigationFactory() {
         require('./Navigation.scss');
-        function navigation($element, $state) {
-            return new NavigationController($element, $state);
+        function navigation($element, $state, $ngRedux) {
+            return new NavigationController($element, $state, $ngRedux);
         }
-        navigation.$inject = ['$element', '$state'];
+        navigation.$inject = ['$element', '$state', '$ngRedux'];
         return navigation;
     }
 }

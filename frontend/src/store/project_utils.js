@@ -42,16 +42,15 @@ export function concatCustom(obj) {
 }
 
 export function mergeCustomAndDefault(collection) {
+    const processed = {
+        platforms: collection.platforms.map(p => {
+            return { ...p, name: p.custom };
+        })
+    };
     fieldsWithCustomValue.forEach(key => {
-        collection[key] = concatCustom(collection[key]);
+        processed[key] = concatCustom(collection[key]);
     });
-
-    collection.platforms.forEach(p => {
-        if (p.custom) {
-            p.name = p.custom;
-        }
-    });
-    return Object.assign({}, collection);
+    return { ...processed };
 }
 
 export function convertDate(date) {
@@ -78,14 +77,14 @@ export function convertStringArrayToObjectArray(data) {
 }
 
 export function convertObjectArrayToStringArray(data) {
+    const result = {};
     fieldsToConvertToObjectArray.forEach(key => {
         if (!data[key]) {
             return;
         }
-        data[key] = data[key].map(value => value.value);
-        data[key] = data[key].filter(item => item);
+        result[key] = data[key].map(value => value.value).filter(item => item);
     });
-    return Object.assign({}, data);
+    return { ...result };
 }
 
 export function fillEmptyCollectionsWithDefault(data) {
@@ -109,10 +108,10 @@ export function setCoverageType(cov, nat) {
 }
 
 export function createDateFields(processedForm) {
-    processedForm.start_date = moment(processedForm.start_date).toJSON();
-    processedForm.end_date = moment(processedForm.end_date).toJSON();
-    processedForm.implementation_dates = moment(processedForm.implementation_dates).toJSON();
-    return Object.assign({}, processedForm);
+    const start_date = moment(processedForm.start_date).toJSON();
+    const end_date = moment(processedForm.end_date).toJSON();
+    const implementation_dates = moment(processedForm.implementation_dates).toJSON();
+    return { start_date, end_date, implementation_dates };
 }
 
 export function deleteUndefinedAndDoubleDollarKeys(item) {
@@ -125,10 +124,12 @@ export function deleteUndefinedAndDoubleDollarKeys(item) {
     return output;
 }
 
-export function removeEmptyChildObjects(processedForm) {
+export function removeEmptyChildObjects(form) {
+    const result = {};
     const keyArray = ['coverage', 'platforms'];
     keyArray.forEach(key => {
-        processedForm[key] = processedForm[key].filter(itm => {
+        result[key] = form[key].filter(itm => {
+            itm = { ...itm };
             itm = deleteUndefinedAndDoubleDollarKeys(itm);
             if (itm.hasOwnProperty('available')) {
                 delete itm.available;
@@ -137,7 +138,7 @@ export function removeEmptyChildObjects(processedForm) {
         });
     });
 
-    return Object.assign({}, processedForm);
+    return { ...result };
 }
 
 export function removeKeysWithoutValues(processedForm) {
