@@ -55,7 +55,7 @@ describe('DashboardModuleController', () => {
     beforeEach(() => {
         const scope = $scope(vm);
         spyOn(window.EE, 'on').and.callThrough();
-        vm = DashboardModuleController.dashboardControllerFactory()(scope, state, window.setTimeout, csMock);
+        vm = DashboardModuleController.factory()(scope, state, window.setTimeout, csMock);
         vm.$onInit();
         vm.userType = 3;
     });

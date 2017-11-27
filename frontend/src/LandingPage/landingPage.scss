@@ -131,16 +131,22 @@
         content: "";
       }
 
-      &.logged-out {}
+      &.logged-out {
+        h2 {
+          margin-bottom: 0;
+        }
+      }
 
       &.logged-in {
-        // padding: 40px 100px 340px;
         padding: 40px 100px 100px;
         background-color: $color-gray-lightest;
+
+        h2 {
+          margin-bottom: 60px;
+        }
       }
 
       h2 {
-        margin-bottom: 0;
         color: $color-primary;
       }
 
@@ -152,6 +158,8 @@
         text-transform: uppercase;
         font-size: $title-font-size-base;
       }
+
+      project-component {}
 
       form {
         display: block;
@@ -173,83 +181,10 @@
           min-width: 150px;
         }
       }
-
-      .my-project {
-        margin: 50px 0 0;
-        padding: 0 0 0;
-        // border-bottom: 1px solid $color-gray-lighter;
-
-        &:last-of-type {
-          border: 0;
-        }
-
-        hgroup {
-          padding: 20px;
-          border-bottom: 1px solid $color-gray-lighter;
-        }
-
-        .project-title {
-          margin: 0 8px;
-        }
-
-        .country-title {
-          margin: 8px 8px 0;
-          font-size: 14px;
-          text-transform: uppercase;
-          color: $text-secondary;
-          font-weight: 500;
-        }
-
-        .project-links {
-          padding: 15px 20px 0;
-          // border-bottom: 1px solid $color-gray-lighter;
-
-          .md-button {
-            margin: 0 10px 10px 0;
-          }
-        }
-
-        // .project-stats {
-        //   @include clearfix();
-        // }
-
-        .project-stats-2 {
-          position: relative;
-          min-width: 120px;
-          border-left: 1px solid darken($color-gray-lighter, 6%);
-          background-color: $color-gray-lighter;
-
-          donors .dash-stat-card {
-            width: 80px;
-            height: auto;
-            padding: 5px 20px 15px;
-            margin: 0 auto;
-            position: absolute;;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-        }
-
-        viewers,
-        followers,
-        donors {
-
-          .dash-stat-card {
-            margin: 0;
-            // padding: 5px 15px 20px;
-            // height: auto;
-            // border-left: 1px solid $color-gray-lighter;
-            // border-radius: 0;
-            // box-shadow: none;
-          }
-        }
-      }
     }
   }
 
-  // TODO
-  .trending {
-    margin: 0 30px;
-  }
+  // .trending {
+  //   margin: 0 30px;
+  // }
 }

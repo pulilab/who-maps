@@ -50,7 +50,8 @@ export const getUserProjects = state => {
         const list = state.projects.list.map(p => {
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            p.isPublished = isPublished;
+            // TODO : REMOVE && FALSE
+            p.isPublished = isPublished && false;
             if (profile.member && profile.viewer) {
                 p.isMember = profile.member.indexOf(p.id) > -1;
                 p.isViewer = profile.viewer.indexOf(p.id) > -1;
@@ -79,7 +80,7 @@ export const getVanillaProject = state => {
 };
 
 export const getCurrentProjectIfExist = state => {
-    return getPublishedProjects(state).find(p => p.id === state.projects.currentProject);
+    return getUserProjects(state).find(p => p.id === state.projects.currentProject);
 };
 
 export const getCurrentProject = state => {
@@ -396,7 +397,7 @@ async function saveTeamViewers({ id }, team = [], viewers = []) {
     return data;
 }
 
-async function saveCountryFields(fields = [], { country, id }) {
+async function saveCountryFields(fields = [], country, id) {
     fields = fields.map(f => {
         f = Object.assign({}, f);
         f.answer = f.type === 3 ? JSON.stringify(f.answer) : f.answer;
@@ -423,7 +424,7 @@ export function saveProject(processedForm, team, viewers, countryFields) {
         const url = processedForm.id ? `/api/projects/${processedForm.id}/` : '/api/projects/';
         try {
             const { data } = await axios[method](url, processedForm);
-            const cfPromise = saveCountryFields(countryFields, data);
+            const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
             const twPromise = saveTeamViewers(data, team, viewers);
             const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
             data.fields = fields;
