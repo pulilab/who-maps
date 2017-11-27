@@ -200,17 +200,17 @@ project-component {
 
             .draft {
               color: $color-black;
-              background-color: #FBC02D;
+              background-color: $color-draft;
             }
 
             .published {
               color: $color-white;
-              background-color: #558B2F;
+              background-color: $color-published;
             }
 
             .country-approved {
               color: $color-white;
-              background-color: #744E42;
+              background-color: $color-approved;
             }
           }
 
