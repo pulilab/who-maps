@@ -48,7 +48,7 @@ project-component {
       md-icon {
         position: absolute;
         top: 4px;
-        left: 24px;
+        left: 24px !important;
         font-size: 13px;
         color: $color-white;
         // color: #CD9924;
