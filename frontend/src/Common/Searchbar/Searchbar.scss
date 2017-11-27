@@ -133,17 +133,9 @@ searchbar {
   }
 
   .compact {
-    min-width: 500px;
-    max-width: 500px;
-    top: 0;
-    position: fixed;
-    right: 0;
-    padding-right: 0;
-    padding-left: 0;
+    right: -30px;
 
     #closebtn {
-      top: 20px;
-      right: 40px;
       border-radius: 50px;
 
       .material-icons {
@@ -153,11 +145,6 @@ searchbar {
 
     .md-input {
       width: 456px;
-    }
-
-    .searchcard {
-      padding-top: 90px;
-      color: $text-primary;
     }
 
   }
