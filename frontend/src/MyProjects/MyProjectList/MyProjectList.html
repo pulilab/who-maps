@@ -9,10 +9,8 @@
 
   <div class="wrapper" layout="column">
     <project-component ng-repeat="p in vm.projects"
-                 viewer="p.isViewer"
-                 member="p.isMember"
                  show-details="true"
-                 ng-model="p">
+                 project="p">
     </project-component>
   </div>
 

@@ -7,11 +7,8 @@ const projectComponent = {
     controllerAs: 'vm',
     name: 'projectComponent',
     bindings: {
-        ngModel: '<',
-        showDetails: '<',
-        member: '<',
-        viewer: '<',
-        currentProject: '<'
+        project: '<',
+        showDetails: '<'
     }
 };
 

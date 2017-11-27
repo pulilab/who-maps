@@ -6,18 +6,8 @@ class ProjectComponentController {
     }
 
     initialization() {
-
-        this.ownProject = this.member || this.viewer;
-
-        if (!this.ngModel) {
-            this.ngModel = {};
-        }
-        if (!this.ngModel.followersNr) {
-            this.ngModel.followersNr = 0;
-        }
-
-        if (!this.ngModel.followersTrend) {
-            this.ngModel.followersTrend = 'up';
+        if (!this.project) {
+            this.project = {};
         }
     }
 
@@ -28,8 +18,21 @@ class ProjectComponentController {
     }
 
     goToDashboard() {
-        this.state.go(this.member || this.viewer ? 'dashboard' : 'public-dashboard', { appName: this.ngModel.id });
+        this.state.go(this.member || this.viewer ? 'dashboard' : 'public-dashboard', { appName: this.project.id });
     }
+
+    viewDraft() {
+        this.state.go('editProject', { appName: this.project.id });
+    }
+
+    editDraft() {
+        this.state.go('editProject', { appName: this.project.id });
+    }
+
+    viewPublished() {
+        this.state.go('editProject', { appName: this.project.id, editMode: 'publish' });
+    }
+
 
     static projectComponentFactory() {
         require('./ProjectComponent.scss');
