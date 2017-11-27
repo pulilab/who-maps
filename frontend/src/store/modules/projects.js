@@ -9,6 +9,7 @@ import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
 import * as ToolkitModule from './toolkit';
+import { getToolkitData } from './toolkit';
 
 import {
     convertArrayToStandardCustomObj,
@@ -24,19 +25,24 @@ import {
     removeKeysWithoutValues,
     setCoverageType
 } from '../project_utils';
-import { getToolkitData } from './toolkit';
+
+
+export const isMemberOrViewer = (state, project) => {
+    const profile = UserModule.getProfile(state);
+    if (profile.member && profile.viewer) {
+        const isMember = profile.member.indexOf(project.id) > -1;
+        const isViewer = !isMember && profile.viewer.indexOf(project.id) > -1;
+        return { isMember, isViewer };
+    }
+    return { isMember: false, isViewer: false };
+};
 
 // GETTERS
 
 export const getPublishedProjects = state => {
     if (state.projects.list) {
-        const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
-            p = { ...p.published };
-            if (profile.member && profile.viewer) {
-                p.isMember = profile.member.indexOf(p.id) > -1;
-                p.isViewer = profile.viewer.indexOf(p.id) > -1;
-            }
+            p = { ...p.published, ...isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -46,16 +52,12 @@ export const getPublishedProjects = state => {
 
 export const getUserProjects = state => {
     if (state.projects.list) {
-        const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
             // TODO : REMOVE && FALSE
             p.isPublished = isPublished && false;
-            if (profile.member && profile.viewer) {
-                p.isMember = profile.member.indexOf(p.id) > -1;
-                p.isViewer = profile.viewer.indexOf(p.id) > -1;
-            }
+            p = { ...p, ...isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');

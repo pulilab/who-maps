@@ -1,6 +1,6 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
-
+import * as ProjectModule from './projects';
 
 // GETTERS
 
@@ -9,7 +9,10 @@ export const getUserProfiles  = state => {
 };
 
 export const getSearchResult = state => {
-    return state.system.projectSearch ? state.system.projectSearch.slice() : [];
+    const search = state.system.projectSearch ? state.system.projectSearch : [];
+    return search.map(s => {
+        return { ...s, ...ProjectModule.isMemberOrViewer(state, s) };
+    });
 };
 
 // ACTIONS
