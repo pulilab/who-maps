@@ -17,6 +17,28 @@
 .new-edit-project {
   min-width: $page-min-width;
 
+  .page-title {
+    .draft-bit, .published-bit {
+      display: none;
+    }
+  }
+
+  &.draft {
+    .page-title {
+      .draft-bit {
+        display: inline;
+      }
+    }
+  }
+
+  &.publish {
+    .page-title {
+      .published-bit {
+        display: inline;
+      }
+    }
+  }
+
   .error-placeholder {
     display: none;
     margin: -8px 0 30px 0 !important;
@@ -67,10 +89,10 @@
 
     &.project-navigation {
 
-    .section-title {
-      background-color: #7CB342;
+      .section-title {
+        background-color: #7CB342;
+      }
     }
-  }
   }
 }
 

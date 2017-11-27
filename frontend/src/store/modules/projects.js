@@ -396,7 +396,7 @@ async function saveTeamViewers({ id }, team = [], viewers = []) {
     return data;
 }
 
-async function saveCountryFields(fields = [], { country, id }) {
+async function saveCountryFields(fields = [], country, id) {
     fields = fields.map(f => {
         f = Object.assign({}, f);
         f.answer = f.type === 3 ? JSON.stringify(f.answer) : f.answer;
@@ -423,7 +423,7 @@ export function saveProject(processedForm, team, viewers, countryFields) {
         const url = processedForm.id ? `/api/projects/${processedForm.id}/` : '/api/projects/';
         try {
             const { data } = await axios[method](url, processedForm);
-            const cfPromise = saveCountryFields(countryFields, data);
+            const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
             const twPromise = saveTeamViewers(data, team, viewers);
             const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
             data.fields = fields;
