@@ -2,5 +2,12 @@
 @import '../../mixins';
 
 my-project-list {
+  display: block;
+  margin: 0 auto;
+  padding: 0 30px;
+  max-width: $page-min-width;
 
+  .wrapper {
+    width: 100%;
+  }
 }
