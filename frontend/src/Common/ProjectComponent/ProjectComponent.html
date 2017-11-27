@@ -2,7 +2,6 @@
 
   <div class="project-container" layout="row">
 
-
     <div class="text-container" layout="column">
 
       <div ng-show="vm.member" ng-class="{'my-star':vm.member}"><md-icon>grade</md-icon></div>
@@ -11,7 +10,7 @@
       <div class="upper" layout="row">
         <div class="basic" flex layout="column">
           <span flex class="name">{{vm.ngModel.name}}</span>
-          <span flex class="org-country">{{vm.ngModel.country_name}} | {{vm.ngModel.organisation_name}} </span>
+          <span flex class="org-country">{{vm.ngModel.country_name}} &nbsp;|&nbsp; {{vm.ngModel.organisation_name}} </span>
         </div>
         <div ng-show="vm.showDetails" class="donors" flex="no-grow">
                     <span class="nr">
@@ -38,13 +37,14 @@
           <div class="country-approved" ng-show="vm.ngModel.countryApproval || true">
             Approved by country
           </div>
-
         </div>
 
         <div class="buttons" layout="row">
-          <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject || true" ng-href="{{vm.ngModel.projectUrl}}">
+          <!-- TODO -->
+          <!-- I assume we do not need this anymore... -->
+          <!-- <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject || true" ng-href="{{vm.ngModel.projectUrl}}">
             Show more
-          </md-button>
+          </md-button> -->
 
            <md-button class="md-primary md-no-ink" ng-if="vm.viewer || true" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
@@ -71,7 +71,7 @@
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
-            Go To Dashboard
+            Dashboard
           </md-button>
 
         </div>

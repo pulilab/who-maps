@@ -65,20 +65,20 @@ project-component {
       width: 100%;
       height: auto;
 
-      .project-logo {
-        width: 140px;
-        min-width: 140px;
-        height: 140px;
-        border-right: 1px solid darken($color-gray-lighter, 10%);
-        background: $color-gray-lighter;
-
-        md-icon {
-          width: 40px;
-          height: 40px;
-          color: $color-white;
-          font-size: 40px;
-        }
-      }
+      // .project-logo {
+      //   width: 140px;
+      //   min-width: 140px;
+      //   height: 140px;
+      //   border-right: 1px solid darken($color-gray-lighter, 10%);
+      //   background: $color-gray-lighter;
+      //
+      //   md-icon {
+      //     width: 40px;
+      //     height: 40px;
+      //     color: $color-white;
+      //     font-size: 40px;
+      //   }
+      // }
 
       .text-container {
         width: 100%;
@@ -100,9 +100,9 @@ project-component {
 
             .name {
               color: $color-primary;
-              font-size: 16px;
+              font-size: 20px;
               font-weight: 500;
-              margin: 4px 0 8px;
+              margin: 2px 0 6px;
             }
 
             .org-country {
@@ -113,14 +113,14 @@ project-component {
           }
 
           .donors {
-            padding: 10px;
             max-width: 100px;
             width: 100px;
+            padding: 10px 0;
             border-left: 1px solid $color-gray-lighter;
 
             .nr {
               display: block;
-              margin-top: 6px;
+              margin: 4px 0;
               text-align: center;
               font-weight: 500;
               font-size: 20px;
@@ -137,15 +137,14 @@ project-component {
           }
 
           .version {
-            padding: 10px;
             max-width: 100px;
             width: 100px;
+            padding: 10px 0;
             border-left: 1px solid $color-gray-lighter;
-
 
             .nr {
               display: block;
-              margin-top: 6px;
+              margin: 4px 0;
               text-align: center;
               font-weight: 500;
               font-size: 20px;
@@ -181,7 +180,7 @@ project-component {
 
         .lower {
           height: 60px;
-          padding: 0 16px 0 32px;
+          padding: 0 20px;
           border-top: 1px solid $color-gray-lighter;
 
           .badges {
@@ -196,7 +195,7 @@ project-component {
               line-height: 24px;
               border-radius: 3px;
               margin-right: 8px;
-              padding: 0 4px;
+              padding: 0 8px;
             }
 
             .draft {
@@ -211,11 +210,92 @@ project-component {
 
             .country-approved {
               color: $color-white;
-              background-color: #7CB342;
+              background-color: #744E42;
             }
           }
 
-          .more {}
+          .buttons {
+            .md-button {
+              margin: 6px 0 6px 16px;
+            }
+
+            md-icon {
+              font-size: 20px;
+              width: 20px;
+              min-width: 20px;
+              height: 20px;
+              min-height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.compact {
+    .project-container {
+      .text-container {
+
+        .upper {
+          height: 70px;
+
+          .basic {
+            .name {
+              margin: 0 0 6px;
+              font-size: 16px;
+            }
+
+            .org-country {
+              font-size: 12px;
+            }
+          }
+
+          .donors {
+            .nr {
+              margin: 3px 0;
+              font-size: 16px;
+              line-height: 24px;
+            }
+          }
+
+          .version {
+            .nr {
+              margin: 3px 0;
+              font-size: 16px;
+              line-height: 24px;
+            }
+          }
+        }
+
+        .lower {
+          height: 50px;
+
+          .badges {
+            div {
+              height: 20px;
+              font-size: 12px;
+              line-height: 20px;
+              padding: 0 6px;
+            }
+          }
+
+          .buttons {
+            .md-button {
+              height: 26px;
+              line-height: 26px;
+              font-size: 12px;
+              margin: 4px 4px;
+              padding: 0 6px;
+            }
+
+            md-icon {
+              font-size: 16px;
+              width: 16px;
+              min-width: 16px;
+              height: 18px;
+              min-height: 18px;
+            }
+          }
         }
       }
     }
