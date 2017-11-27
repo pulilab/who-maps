@@ -1,4 +1,3 @@
-import copy
 import functools
 import csv
 
@@ -166,6 +165,8 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def get_permissions(self):
         if self.action == "retrieve":
             return []  # Retrieve needs a bit more complex filtering based on user permission
+        else:
+            return super(ProjectRetrieveViewSet, self).get_permissions()
 
     def _get_permission_based_data(self, project):
         is_member = False
@@ -227,10 +228,10 @@ class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
         instance = data_serializer.save()
 
         # Remove approval if already approved, so country admin can approve again because project has changed
-        if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
-            # TODO: refactor
-            project.approval.delete()
-            ProjectApproval.objects.create(project=project, user=project.country.user)
+        # TODO: refactor
+        # if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
+        #     project.approval.delete()
+        #     ProjectApproval.objects.create(project=project, user=project.country.user)
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
@@ -252,9 +253,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
 
         # Add approval if required by the country
-        if project.country.project_approval:
-            # TODO: validate this
-            ProjectApproval.objects.create(project=project, user=project.country.user)
+        # TODO: validate this
+        # if project.country.project_approval:
+        #
+        #     ProjectApproval.objects.create(project=project, user=project.country.user)
 
         data = project.to_representation()
 
