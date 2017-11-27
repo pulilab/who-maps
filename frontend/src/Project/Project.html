@@ -51,7 +51,15 @@
 
       </div>
       <div class="navigation-area" layout="column">
-        <navigation edit-mode="vm.editMode" is-add-another="vm.isAddAnother" show-country-fields="vm.countryFields && vm.countryFields.length > 0"></navigation>
+        <navigation
+          edit-mode="vm.editMode"
+          is-add-another="vm.isAddAnother"
+          project="vm.project"
+          viewers="vm.viewers"
+          team="vm.team"
+          country-fields="vm.countryFields"
+          show-country-fields="vm.countryFields && vm.countryFields.length > 0"
+        ></navigation>
       </div>
     </form>
   </div>

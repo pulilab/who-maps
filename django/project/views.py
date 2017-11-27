@@ -1,4 +1,3 @@
-import copy
 import functools
 import csv
 
@@ -162,13 +161,12 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         return Response(data)
 
 
-class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
-
+class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def get_permissions(self):
         if self.action == "retrieve":
             return []  # Retrieve needs a bit more complex filtering based on user permission
         else:
-            return super(ProjectBaseViewSet, self).get_permissions()
+            return super(ProjectRetrieveViewSet, self).get_permissions()
 
     def _get_permission_based_data(self, project):
         is_member = False
@@ -198,49 +196,6 @@ class ProjectBaseViewSet(TeamTokenAuthMixin, ViewSet):
 
         return project.to_response_dict(published=published, draft=draft)
 
-    def _update_project(self, project, data_serializer):
-        data_serializer.fields.get('name').validators = \
-            [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
-        data_serializer.fields.get('name').validators\
-            .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
-        self.check_object_permissions(self.request, project)
-        data_serializer.is_valid(raise_exception=True)
-
-        project_data = copy.copy(data_serializer.validated_data)
-        project.name = project_data["name"]
-        project_data.pop('name', None)
-        project.data = project_data
-        project.save()
-        country_name = project.country.name if project.country else None
-        org_name = project.get_organisation().name if project.get_organisation() else ''
-        data_serializer.validated_data.update(dict(id=project.id, country_name=country_name,
-                                                   organisation_name=org_name))
-        return data_serializer.validated_data
-
-
-class ProjectCRUDViewSet(ProjectBaseViewSet):
-    def create(self, request, *args, **kwargs):
-        """
-        Creates a project.
-        """
-        data_serializer = ProjectPublishedSerializer(data=request.data)
-        data_serializer.is_valid(raise_exception=True)
-        project = data_serializer.save(owner=request.user.userprofile)
-
-        # Add default Toolkit structure for the new project.
-        Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
-
-        # Add approval if required by the country
-        if project.country.project_approval:
-            # TODO: validate this
-            ProjectApproval.objects.create(project=project, user=project.country.user)
-
-        project.sync_draft_to_published()
-
-        data = project.to_representation()
-
-        return Response(project.to_response_dict(published=data, draft=data), status=status.HTTP_201_CREATED)
-
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieves a project.
@@ -248,6 +203,9 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
+
+
+class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -257,20 +215,35 @@ class ProjectCRUDViewSet(ProjectBaseViewSet):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
 
         data_serializer = ProjectPublishedSerializer(project, data=request.data)
-        data = self._update_project(project, data_serializer)
-        data.update(public_id=project.public_id)
+
+        data_serializer.fields.get('name').validators = \
+            [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
+        data_serializer.fields.get('name').validators \
+            .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
+
+        self.check_object_permissions(self.request, project)
+
+        data_serializer.is_valid(raise_exception=True)
+
+        instance = data_serializer.save()
+
         # Remove approval if already approved, so country admin can approve again because project has changed
-        if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
-            project.approval.delete()
-            ProjectApproval.objects.create(project=project, user=project.country.user)
+        # TODO: refactor
+        # if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
+        #     project.approval.delete()
+        #     ProjectApproval.objects.create(project=project, user=project.country.user)
 
-        return Response(data, status=status.HTTP_200_OK)
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
-class ProjectDraftViewSet(ProjectBaseViewSet):
+class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
+
     def create(self, request, *args, **kwargs):
         """
-        Creates a draft project.
+        Creates a Draft project.
         """
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
@@ -279,20 +252,35 @@ class ProjectDraftViewSet(ProjectBaseViewSet):
         # Add default Toolkit structure for the new project.
         Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
 
+        # Add approval if required by the country
+        # TODO: validate this
+        # if project.country.project_approval:
+        #
+        #     ProjectApproval.objects.create(project=project, user=project.country.user)
 
-        return Response(data, status=status.HTTP_201_CREATED)
+        data = project.to_representation()
+
+        return Response(project.to_response_dict(published=data, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
         Updates a draft project.
         """
-        data_serializer = ProjectDraftSerializer(data=request.data)
-        project = get_object_or_400(
-            Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
-        data = self._update_project(project, data_serializer)
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
 
-        return Response(data, status=status.HTTP_200_OK)
+        data_serializer = ProjectDraftSerializer(project, data=request.data)
+
+        self.check_object_permissions(self.request, project)
+
+        data_serializer.is_valid(raise_exception=True)
+
+        instance = data_serializer.save()
+
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
@@ -317,6 +305,9 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project.", id=project_id)
         self.check_object_permissions(request, project)
 
+        if not project.public_id:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
         last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version").first()
         if not last_cov_ver:
             # No versions yet.
@@ -324,7 +315,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             new_version = last_cov_ver.version + 1
 
-        current_cov = project.data["coverage"]
+        current_cov = project.data.get("coverage", [])
         current_cov += [project.data.get('national_level_deployment', {})]
 
         new_cov_ver = CoverageVersion(project_id=project_id, version=new_version, data=current_cov)

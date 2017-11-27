@@ -12,12 +12,6 @@ from user.models import UserProfile, Organisation
 class ProjectManager(models.Manager):
     use_in_migrations = True
 
-    @staticmethod
-    def make_public_id(country_id):
-        project_country = Country.objects.filter(id=country_id).first()
-        if project_country:
-            return project_country.code + str(uuid.uuid1()).split('-')[0]
-
     def owner_of(self, user):
         return self.get_queryset().filter(team=user.userprofile)
 
@@ -31,10 +25,6 @@ class ProjectManager(models.Manager):
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
         return self.get_queryset().filter(data__organisation=organisation_id)
-
-    def create(self, **kwargs):
-        kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
-        return super(ProjectManager, self).create(**kwargs)
 
 
 class Project(ExtendedModel):
@@ -91,10 +81,6 @@ class Project(ExtendedModel):
                 d.pop(key, None)
         return d
 
-    def sync_draft_to_published(self):
-        self.draft = self.data
-        self.save(update_fields=['draft'])
-
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
@@ -117,6 +103,14 @@ class Project(ExtendedModel):
 
     def to_response_dict(self, published, draft):
         return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
+
+    def make_public_id(self, country_id):
+        if self.public_id:
+            return
+
+        project_country = Country.objects.filter(id=country_id).first()
+        if project_country:
+            self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
 
 
 class ProjectApproval(ExtendedModel):

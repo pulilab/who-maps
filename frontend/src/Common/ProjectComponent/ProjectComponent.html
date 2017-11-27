@@ -4,23 +4,23 @@
 
     <div class="text-container" layout="column">
 
-      <div ng-show="vm.member" ng-class="{'my-star':vm.member}"><md-icon>grade</md-icon></div>
-      <div ng-show="vm.viewer && !vm.member" ng-class="{'my-eye': vm.viewer}"><md-icon>visibility</md-icon></div>
+      <div ng-show="vm.project.isMember" ng-class="{'my-star':vm.project.isMember}"><md-icon>grade</md-icon></div>
+      <div ng-show="vm.project.isViewer && !vm.project.isMember" ng-class="{'my-eye': vm.project.isViewer}"><md-icon>visibility</md-icon></div>
 
       <div class="upper" layout="row">
         <div class="basic" flex layout="column">
-          <span flex class="name">{{vm.ngModel.name}}</span>
-          <span flex class="org-country">{{vm.ngModel.country_name}} &nbsp;|&nbsp; {{vm.ngModel.organisation_name}} </span>
+          <span flex class="name">{{vm.project.name}}</span>
+          <span flex class="org-country">{{vm.project.country_name}} &nbsp;|&nbsp; {{vm.project.organisation_name}} </span>
         </div>
         <div ng-show="vm.showDetails" class="donors" flex="no-grow">
                     <span class="nr">
-                        {{vm.ngModel.donors.length}}
+                        {{vm.project.donors.length}}
                     </span>
           <span class="static">Donors</span>
         </div>
         <div class="version">
                     <span class="nr">
-                        {{vm.ngModel.followersNr}}
+                        {{vm.project.version}}
                     </span>
           <span class="static">Version</span>
         </div>
@@ -28,13 +28,13 @@
 
       <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="start center">
         <div flex class="badges">
-          <div class="draft" ng-hide="vm.ngModel.isPublished && false">
+          <div class="draft" ng-hide="vm.project.isPublished">
             Draft
           </div>
-          <div class="published" ng-show="vm.ngModel.isPublished || true">
+          <div class="published" ng-show="vm.project.isPublished">
             Published
           </div>
-          <div class="country-approved" ng-show="vm.ngModel.countryApproval || true">
+          <div class="country-approved" ng-show="vm.project.countryApproval">
             Approved by country
           </div>
         </div>
@@ -42,32 +42,32 @@
         <div class="buttons" layout="row">
           <!-- TODO -->
           <!-- I assume we do not need this anymore... -->
-          <!-- <md-button class="md-primary md-no-ink" ng-if="!vm.ownProject || true" ng-href="{{vm.ngModel.projectUrl}}">
+          <!-- <md-button class="md-primary md-no-ink" ng-if="!vm.isMember || vm.project.isViewer || true" ng-href="{{vm.project.projectUrl}}">
             Show more
           </md-button> -->
 
-           <md-button class="md-primary md-no-ink" ng-if="vm.viewer || true" ng-click="vm.goToDashboard()">
+           <md-button class="md-primary md-no-ink" ng-if="vm.project.isViewer" ng-click="vm.viewDraft()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
             View Draft
           </md-button>
 
-          <md-button class="md-primary md-no-ink" ng-if="vm.member || true" ng-click="vm.goToDashboard()">
+          <md-button class="md-primary md-no-ink" ng-if="vm.project.isMember" ng-click="vm.editDraft()">
             <md-icon class="material-icons">
               mode_edit
             </md-icon>
             Edit Draft
           </md-button>
 
-           <md-button class="md-primary md-no-ink" ng-if="vm.ownProject || true" ng-click="vm.goToDashboard()">
+           <md-button class="md-primary md-no-ink" ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.viewPublished()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
             View Published
           </md-button>
 
-          <md-button class="md-primary md-no-ink" ng-if="vm.ownProject || true" ng-click="vm.goToDashboard()">
+          <md-button class="md-primary md-no-ink" ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>

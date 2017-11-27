@@ -44,11 +44,8 @@
 
           <project-component
               ng-repeat="project in vm.projects | limitTo: 5"
-              viewer="vm.isViewer(project)"
-              member="vm.isMember(project)"
-              ng-model="project"
-              has-link=true
-              has-logo=false>
+              project="project"
+              has-link=true>
           </project-component>
 
           <!--a href="" class="see-all-results md-button md-primary center-block" ng-if="vm.searchStr">See all results...</a-->

@@ -73,15 +73,15 @@ class ProjectPublishedSerializer(serializers.Serializer):
     class Meta:
         model = Project
 
-    def create(self, validated_data):
-        owner = validated_data.pop('owner')
-        project = self.Meta.model.projects.create(name=validated_data["name"], data=validated_data)
-        project.team.add(owner)
-
-        return project
-
     def update(self, instance, validated_data):
-        pass
+        instance.name = validated_data["name"]
+        instance.data = validated_data
+        instance.draft = validated_data
+        instance.make_public_id(validated_data['country'])
+
+        instance.save()
+
+        return instance
 
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
@@ -113,10 +113,17 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
-        project = self.Meta.model.projects.create(name=validated_data["name"], data=validated_data)
-        project.team.add(owner)
+        instance = self.Meta.model.projects.create(name=validated_data["name"], draft=validated_data)
+        instance.team.add(owner)
 
-        return project
+        return instance
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data["name"]
+        instance.draft = validated_data
+        instance.save()
+
+        return instance
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):

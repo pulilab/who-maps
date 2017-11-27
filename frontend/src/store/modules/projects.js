@@ -9,6 +9,7 @@ import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
 import * as ToolkitModule from './toolkit';
+import { getToolkitData } from './toolkit';
 
 import {
     convertArrayToStandardCustomObj,
@@ -24,19 +25,35 @@ import {
     removeKeysWithoutValues,
     setCoverageType
 } from '../project_utils';
-import { getToolkitData } from './toolkit';
+
+
+export const isMemberOrViewer = (state, project) => {
+    const profile = UserModule.getProfile(state);
+    if (profile.member && profile.viewer) {
+        const isMember = profile.member.indexOf(project.id) > -1;
+        const isViewer = !isMember && profile.viewer.indexOf(project.id) > -1;
+        return { isMember, isViewer };
+    }
+    return { isMember: false, isViewer: false };
+};
 
 // GETTERS
 
 export const getPublishedProjects = state => {
     if (state.projects.list) {
-        const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
-            p = { ...p.published };
-            if (profile.member && profile.viewer) {
-                p.isMember = profile.member.indexOf(p.id) > -1;
-                p.isViewer = profile.viewer.indexOf(p.id) > -1;
-            }
+            p = { ...p.published, ...isMemberOrViewer(state, p) };
+            return p;
+        });
+        return sortBy(list, 'id');
+    }
+    return [];
+};
+
+export const getDraftedProjects = state => {
+    if (state.projects.list) {
+        const list = state.projects.list.map(p => {
+            p = { ...p.draft, ...isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -46,16 +63,11 @@ export const getPublishedProjects = state => {
 
 export const getUserProjects = state => {
     if (state.projects.list) {
-        const profile = UserModule.getProfile(state);
         const list = state.projects.list.map(p => {
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            // TODO : REMOVE && FALSE
-            p.isPublished = isPublished && false;
-            if (profile.member && profile.viewer) {
-                p.isMember = profile.member.indexOf(p.id) > -1;
-                p.isViewer = profile.viewer.indexOf(p.id) > -1;
-            }
+            p.isPublished = isPublished;
+            p = { ...p, ...isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -129,8 +141,7 @@ const getCurrentProjectForEditing = (state, data) => {
         id: data.organisation,
         name: data.organisation_name
     };
-    data.isMember = state.user.profile.member.indexOf(data.id) > -1;
-    data.isViewer = state.user.profile.viewer.indexOf(data.id) > -1;
+    data = { ...data, ...isMemberOrViewer(state, data) };
 
     data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
     return Object.assign({}, project_definition, data);
@@ -142,8 +153,8 @@ export const getCurrentPublishedProjectForEditing = state => {
 };
 
 export const getCurrentDraftProjectForEditing = state => {
-    const project = getUserProjects(state).find(p => p.draft.id === state.projects.currentProject);
-    return getCurrentProjectForEditing(state, project.draft);
+    const project = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
+    return getCurrentProjectForEditing(state, project);
 };
 
 
@@ -408,32 +419,56 @@ async function saveCountryFields(fields = [], country, id) {
     return data.fields;
 }
 
-export function saveProject(processedForm, team, viewers, countryFields) {
+function processForm(form) {
+    form = {
+        ...form,
+        organisation_name: form.organisation.name,
+        organisation: form.organisation.id,
+        ...createDateFields(form),
+        ...mergeCustomAndDefault(form),
+        ...convertObjectArrayToStringArray(form),
+        ...removeEmptyChildObjects(form),
+        coverageType: undefined
+    };
+    return removeKeysWithoutValues(form);
+}
+
+async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state) {
+    const user = UserModule.getProfile(state).id;
+    const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
+    const twPromise = saveTeamViewers(data, team, viewers);
+    const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
+    data.fields = fields;
+    const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
+    const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
+    dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
+    dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
+    dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
+    return Promise.resolve(data);
+}
+
+export function saveDraft(form, team, viewers, countryFields) {
     return async (dispatch, getState) => {
-        const user = getState().user.profile.id;
-        processedForm = cloneDeep(processedForm);
-        processedForm.organisation_name = processedForm.organisation.name;
-        processedForm.organisation = processedForm.organisation.id;
-        processedForm = createDateFields(processedForm);
-        processedForm = mergeCustomAndDefault(processedForm);
-        processedForm = convertObjectArrayToStringArray(processedForm);
-        processedForm = removeEmptyChildObjects(processedForm);
-        processedForm = removeKeysWithoutValues(processedForm);
-        processedForm.coverageType = undefined;
-        const method = processedForm.id ? 'put' : 'post';
-        const url = processedForm.id ? `/api/projects/${processedForm.id}/` : '/api/projects/';
+        form = processForm(form);
+        const method = form.id ? 'put' : 'post';
+        const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
-            const { data } = await axios[method](url, processedForm);
-            const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
-            const twPromise = saveTeamViewers(data, team, viewers);
-            const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
-            data.fields = fields;
-            const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
-            const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
-            dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
-            dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
-            dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
-            return Promise.resolve(data);
+            const { data } = await axios[method](url, form);
+            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState());
+        }
+        catch (e) {
+            console.log(e);
+            return Promise.reject(e);
+        }
+    };
+}
+
+export function publish(form, team, viewers, countryFields) {
+    return async (dispatch, getState) => {
+        form = processForm(form);
+        try {
+            const { data } = await axios.put(`/api/projects/publish/${form.id}/`, form);
+            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState());
         }
         catch (e) {
             console.log(e);
@@ -485,18 +520,12 @@ export default function projects(state = {}, action) {
     }
     case 'UPDATE_SAVE_PROJECT': {
         const list = cloneDeep(p.list);
-        const index = findIndex(list, pj => pj.published.id === action.project.id);
+        const index = findIndex(list, pj => pj.id === action.project.id);
         if (index !== -1) {
-            const oldProject = list[index];
-            oldProject.published = action.project;
-            list.splice(index, 1, oldProject);
+            list.splice(index, 1, { ...action.project });
         }
         else {
-            const newProject = {
-                published: action.project,
-                draft: {}
-            };
-            list.push(newProject);
+            list.push({ ...action.project });
         }
         p.list = list;
         return Object.assign(state, {}, p);

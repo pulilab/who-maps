@@ -46,6 +46,7 @@
     .add-new-project {
       margin-right: 18px;
     }
+
   }
 
   .app-title {
@@ -91,6 +92,15 @@
   .project-name {
     color: $text-primary;
     font-size: 24px;
+
+    .viewerIcon {
+      color: #53A0CE !important;
+    }
+
+    .memberIcon {
+      color: #CD9924 !important;
+    }
+
   }
 
   .project-selector {

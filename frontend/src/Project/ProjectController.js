@@ -27,7 +27,7 @@ class ProjectController  {
     mapData(state) {
         const userProfile = UserModule.getProfile(state);
         const newProject = this.state.current.name === 'newProject';
-        // const publishMode = this.state.params.editMode === 'publish';
+        const publishMode = this.state.params.editMode === 'publish';
 
         let project = null;
         let team = null;
@@ -39,10 +39,10 @@ class ProjectController  {
             viewers = this.viewers ? this.viewers : [];
         }
         else {
-            project = this.project ? this.project : ProjectModule.getCurrentPublishedProjectForEditing(state);
-            // project = this.project ? this.project : publishMode ?
-            // ProjectModule.getCurrentPublishedProjectForEditing(state) :
-            //   ProjectModule.getCurrentDraftProjectForEditing();
+            // project = this.project ? this.project : ProjectModule.getCurrentPublishedProjectForEditing(state);
+            project = this.project ? this.project : publishMode ?
+            ProjectModule.getCurrentPublishedProjectForEditing(state) :
+              ProjectModule.getCurrentDraftProjectForEditing(state);
             team = this.team ? this.team : ProjectModule.getTeam(state);
             viewers = this.viewers ? this.viewers : ProjectModule.getViewers(state);
         }
@@ -126,7 +126,7 @@ class ProjectController  {
         this.clearCustomErrors();
         if (this.form.$valid) {
             try {
-                const data = await this.saveProject(this.project, this.team, this.viewers, this.countryFields);
+                const data = await this.publish(this.project, this.team, this.viewers, this.countryFields);
                 this.postSaveActions(data);
             }
             catch (e) {

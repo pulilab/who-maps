@@ -1,21 +1,10 @@
 <md-toolbar class="md-medium-tall toolbar-project" ng-if="vm.showSubBar()">
     <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
-        <ssmenu
-          ng-if="!vm.viewMode"
-          aria-label="Project Chooser"
-          options="vm.projects"
-          option-label = "name"
-          ng-model="vm.currentProject.name"
-          md-container-class="large project-chooser"
-          class="large project-selector"
-          on-close-callback="vm.navigateToProject"
-          icon-function="vm.iconFunction"
-        >
-            <icon>asd</icon>
-        </ssmenu>
 
-        <div ng-if="vm.viewMode" class="large project-name">
+        <div class="large project-name">
             {{vm.currentProject.name}} ({{vm.currentProject.country_name}})
+            <md-icon class="material-icons viewerIcon" ng-show="vm.currentProject.isViewer">visibility</md-icon>
+            <md-icon class="material-icons memberIcon" ng-show="vm.currentProject.isMember">grade</md-icon>
         </div>
 
         <div flex></div>
