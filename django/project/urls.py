@@ -3,23 +3,24 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r"^projects/$", view=views.ProjectCRUDViewSet.as_view({
-        'post': 'create'
-    }), name="project-crud"),
     url(r"^projects/(?P<pk>\d+)/$",
-        view=views.ProjectCRUDViewSet.as_view({
+        view=views.ProjectRetrieveViewSet.as_view({
             'get': 'retrieve',
+        }),
+        name="project-retrieve"),
+    url(r"^projects/publish/(?P<pk>\d+)/$",
+        view=views.ProjectPublishViewSet.as_view({
             'put': 'update'
         }),
-        name="project-detail"),
+        name="project-publish"),
     url(r"^projects/draft/$", view=views.ProjectDraftViewSet.as_view({
         'post': 'create'
-    }), name="project-draft-crud"),
+    }), name="project-create"),
     url(r"^projects/draft/(?P<pk>\d+)/$",
         view=views.ProjectDraftViewSet.as_view({
             'put': 'update'
         }),
-        name="project-draft-detail"),
+        name="project-draft"),
     url(r"^projects/member-of/$", view=views.ProjectListViewSet.as_view({
         'get': 'list'
     }), name="project-list"),
