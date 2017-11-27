@@ -68,6 +68,9 @@ class CountryField(models.Model):
         """
         Return all the country fields available for a country filled with the answers (if present)
         """
+        if not project.country:
+            return []
+
         schema = cls.objects.get_schema(project.country.id)
         answers = cls.objects.get_answers(country_id=project.country.id, project_id=project.id)
         country_fields = []
