@@ -26,6 +26,9 @@ function config($stateProvider, $compileProvider) {
               'linechart': () => {
                   return su.lazyLoader($compileProvider, 'Linechart/linechart');
               },
+              'statistics': () => {
+                  return su.lazyLoader($compileProvider, 'Statistics/statisticsComponent');
+              },
               cms: ['$ngRedux', ($ngRedux) => {
                   return $ngRedux.dispatch(CmsModule.getCmsData());
               }],
@@ -48,6 +51,9 @@ function config($stateProvider, $compileProvider) {
               },
               'linechart': () => {
                   return su.lazyLoader($compileProvider, 'Linechart/linechart');
+              },
+              'statistics': () => {
+                  return su.lazyLoader($compileProvider, 'Statistics/statisticsComponent');
               }
           }
       });
