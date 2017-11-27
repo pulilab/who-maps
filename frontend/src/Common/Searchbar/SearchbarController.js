@@ -10,21 +10,12 @@ class SearchbarController {
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.filters = filters;
-
         this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
-
-
-        this.isMember = this.isMember.bind(this);
-        this.isViewer = this.isViewer.bind(this);
-
     }
 
     mapState(state) {
         return {
-            viewer: state.user.profile ? state.user.profile.viewer : [],
-            member: state.user.profile ? state.user.profile.member : [],
-            userProjects: state.projects,
-            projects: state.system.projectSearch
+            projects: SystemModule.getSearchResult(state)
         };
     }
 
@@ -47,20 +38,6 @@ class SearchbarController {
 
     toggleSearch() {
         this.showSearch = !this.showSearch;
-    }
-
-    isViewer(project) {
-        if (this.viewer) {
-            return this.viewer.some(v => v === project);
-        }
-        return false;
-    }
-
-    isMember(project) {
-        if (this.member) {
-            return this.member.some(m => m === project);
-        }
-        return false;
     }
 
 
