@@ -303,6 +303,9 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project.", id=project_id)
         self.check_object_permissions(request, project)
 
+        if not project.public_id:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
         last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version").first()
         if not last_cov_ver:
             # No versions yet.
@@ -310,7 +313,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             new_version = last_cov_ver.version + 1
 
-        current_cov = project.data["coverage"]
+        current_cov = project.data.get("coverage", [])
         current_cov += [project.data.get('national_level_deployment', {})]
 
         new_cov_ver = CoverageVersion(project_id=project_id, version=new_version, data=current_cov)
