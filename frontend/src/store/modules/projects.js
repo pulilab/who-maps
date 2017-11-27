@@ -50,7 +50,8 @@ export const getUserProjects = state => {
         const list = state.projects.list.map(p => {
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            p.isPublished = isPublished;
+            // TODO : REMOVE && FALSE
+            p.isPublished = isPublished && false;
             if (profile.member && profile.viewer) {
                 p.isMember = profile.member.indexOf(p.id) > -1;
                 p.isViewer = profile.viewer.indexOf(p.id) > -1;
@@ -79,7 +80,7 @@ export const getVanillaProject = state => {
 };
 
 export const getCurrentProjectIfExist = state => {
-    return getPublishedProjects(state).find(p => p.id === state.projects.currentProject);
+    return getUserProjects(state).find(p => p.id === state.projects.currentProject);
 };
 
 export const getCurrentProject = state => {

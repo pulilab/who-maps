@@ -20,31 +20,8 @@
 
       <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-hide="vm.showEmpty">
 
-        <div class="dash-subhead">STATISTICS</div>
-
         <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
-
-          <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.state.current.name === 'dashboard'" ng-class="!vm.viewMode ? 'longer' : 'shorter'">
-
-            <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
-            <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
-            <span class="dash-stat-label">Version</span>
-
-            <div class="gray" ng-if="vm.profile.account_type === 'I'" layout="column" layout-align="space-around stretch">
-                            <span class="desc">
-                                Push to save your current stats as a new version:
-                            </span>
-              <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
-                <span class="text plus">+</span>
-                <span class="text">snapshot</span>
-              </md-button>
-            </div>
-
-          </md-card>
-
-
-          <donors class="hten" number="vm.projectData.donors.length"></donors>
-
+          <statistics></statistics>
         </div>
       </div>
 
