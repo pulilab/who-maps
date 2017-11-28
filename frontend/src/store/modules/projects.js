@@ -131,18 +131,20 @@ function convertCountryFieldsAnswer({ fields }) {
     });
 }
 
-export const getCurrentDraft = state => {
-    return getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
-};
-
 export const getCurrentPublished = state => {
     return getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+};
+
+export const getCurrentDraft = state => {
+    const draft = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
+    draft.hasPublishedVersion = !!getCurrentPublished(state);
+    return draft;
 };
 
 export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
     const project = isDraft ? getCurrentDraft(state) : getCurrentPublished(state);
-    const countryFields = convertCountryFieldsAnswer(project);
+    const countryFields = project ? convertCountryFieldsAnswer(project) : false;
     const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields : countryFields;
     return [...result];
 };
