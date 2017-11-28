@@ -7,28 +7,8 @@
 
   <div class="section-wrapper">
     <div layout="row" class="first">
-      <md-input-container flex="60">
-        <label>Project name</label>
-        <input md-maxlength="100" required name="name"
-               ng-model="vm.project.name"
-               ng-model-options="{debounce: 200}"
-               ng-change="vm.checkName()">
-        <div ng-messages="vm.form.name.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength">The name has to be less than 101 characters long.</div>
-          <div ng-message="custom">
-            <div ng-repeat="message in vm.form.name.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
-      <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="40">
-        <span class="similar-label">Similar Project name(s)</span>
-        <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
-          <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a><span ng-if="!$last">, </span>
-        </div>
-      </div>
+      <h6>Project name</h6>
+      <p>{{vm.project.name}}</p>
     </div>
 
     <div layout="row">
