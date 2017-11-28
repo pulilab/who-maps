@@ -1,7 +1,6 @@
 import concat from 'lodash/concat';
 import isPlainObject from 'lodash/isPlainObject';
 import isNull from 'lodash/isNull';
-import reduce from 'lodash/reduce';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import values from 'lodash/values';
@@ -42,15 +41,26 @@ export function concatCustom(obj) {
 }
 
 export function mergeCustomAndDefault(collection) {
-    const processed = {
-        platforms: collection.platforms.map(p => {
-            return { ...p, name: p.custom };
-        })
-    };
+    const processed = {};
     fieldsWithCustomValue.forEach(key => {
         processed[key] = concatCustom(collection[key]);
     });
     return { ...processed };
+}
+
+export function parsePlatformCollection({ platforms }) {
+    return platforms.map(p => {
+        const name = p.name === 'Other' ? p.custom : p.name;
+        const strategies = p.strategies && p.strategies.length > 0 ? p.strategies : undefined;
+        p = {};
+        if (name) {
+            p.name = name;
+        }
+        if (strategies) {
+            p.strategies = strategies;
+        }
+        return p;
+    });
 }
 
 export function convertDate(date) {
@@ -126,7 +136,7 @@ export function deleteUndefinedAndDoubleDollarKeys(item) {
 
 export function removeEmptyChildObjects(form) {
     const result = {};
-    const keyArray = ['coverage', 'platforms'];
+    const keyArray = ['coverage', 'platforms', 'his_bucket', 'hsc_challenges', 'publications', 'links', 'reports'];
     keyArray.forEach(key => {
         result[key] = form[key].filter(itm => {
             itm = { ...itm };
@@ -141,14 +151,15 @@ export function removeEmptyChildObjects(form) {
     return { ...result };
 }
 
+
 export function removeKeysWithoutValues(processedForm) {
-    return reduce(processedForm, (result, value, key) => {
-        if (value === null || value === '' || isPlainObject(value) &&  values(value).every(isNull)) {
-            result[key] = void 0;
+    const result = {};
+    for (const key in processedForm) {
+        const data = processedForm[key];
+        if (data !== null && data !== undefined && data !== ''
+          || (isPlainObject(data) && values(data).some(i => !isNull(i)))) {
+            result[key] = data;
         }
-        else {
-            result[key] = value;
-        }
-        return result;
-    }, {});
+    }
+    return result;
 }
