@@ -18,4 +18,4 @@ const component = {
 };
 
 export default component;
-export const readOnlyGeneralOverview = { ...component, template: _readOnlyTemplate, name: 'readOnlyGeneralOverview'};
+export const readOnlyGeneralOverview = { ...component, template: _readOnlyTemplate, name: 'readOnlyGeneralOverview' };

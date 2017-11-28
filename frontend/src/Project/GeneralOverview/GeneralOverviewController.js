@@ -69,6 +69,10 @@ class GeneralOverviewController extends CollapsibleSet {
         }
     }
 
+    printDate(date) {
+        return moment(date).format('DD:MM:YYYY');
+    }
+
     getUsers(criteria) {
         return this.users.filter(el => {
             // Avoid to search user that have no proper profile.
@@ -81,8 +85,10 @@ class GeneralOverviewController extends CollapsibleSet {
     }
 
     handleCustomError(key) {
-        this.form[key].$setValidity('custom', true);
-        this.form[key].customError = [];
+        if (this.form[key]) {
+            this.form[key].$setValidity('custom', true);
+            this.form[key].customError = [];
+        }
     }
 
     setCustomError(key, error) {

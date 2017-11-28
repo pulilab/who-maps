@@ -12,192 +12,65 @@
     </div>
 
     <div layout="row">
-      <organisation-autocomplete
-        flex="60"
-        organisation="vm.project.organisation"
-        not-required="!vm.activateValidation"
-        form="vm.form">
-      </organisation-autocomplete>
+      <h6>Organisation name</h6>
+      <p>{{vm.project.organisation.name}}</p>
     </div>
 
     <div layout="row">
-      <md-input-container class="md-icon-float" flex="60">
-        <label>Project country</label>
-        <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
-        <md-select ng-model="vm.project.country" name="country" required>
-          <md-option ng-value="{{country.id}}" ng-repeat=" country in vm.countriesList">
-            {{country.prettyName}}
-          </md-option>
-        </md-select>
-        <div ng-messages="vm.form.country.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="custom">
-            <div ng-repeat="message in vm.form.country.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
+      <h6>Project country</h6>
+      <p>{{vm.project.country}}</p>
     </div>
 
-    <md-input-container class="md-block">
-      <label>Geographic scope</label>
-      <textarea ng-model="vm.project.geographic_scope"
-                md-maxlength="500"
-                name="geographic_scope"
-                rows="1"
-                md-select-on-focus>
-      </textarea>
-      <div ng-messages="vm.form.geographic_scope.$error">
-        <div ng-message="custom">
-          <div ng-repeat="message in vm.form.implementation_overview.customError">
-            {{message}}
-          </div>
-        </div>
-      </div>
-      <div layout="row" class="suggestion">
-        <span>Please describe where your implementation is currently taking place</span>
-      </div>
-    </md-input-container>
+    <div layout="row" class="md-block">
+      <h6>Geographic scope</h6>
+      <p>{{vm.project.geographic_scope}}</p>
+    </div>
 
-
-    <md-input-container class="md-block">
-      <label>Overview of the digital health implementation</label>
-      <textarea ng-model="vm.project.implementation_overview"
-                md-maxlength="500"
-                rows="1"
-                ng-required="vm.activateValidation"
-                name="implementation_overview"
-                md-select-on-focus></textarea>
-      <div ng-messages="vm.form.implementation_overview.$error">
-        <div ng-message="required">This is required.</div>
-        <div ng-message="md-maxlength">This field has to be less than 500 characters long.</div>
-        <div ng-message="custom">
-          <div ng-repeat="message in vm.form.implementation_overview.customError">
-            {{message}}
-          </div>
-        </div>
-      </div>
-      <div layout="row" class="suggestion">
-        <span>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.  </span>
-      </div>
-    </md-input-container>
 
     <div layout="row">
-      <md-input-container flex>
-        <label>Project start date</label>
-        <md-datepicker
-          ng-model="vm.project.start_date"
-          md-open-on-focus
-          name="start_date"
-          md-current-view="year">
-        </md-datepicker>
-        <div ng-messages="vm.form.start_date.$error">
-          <div class="custom-error" ng-message="custom">
-            <div ng-repeat="message in vm.form.start_date.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
-
-      <md-input-container flex>
-        <label>Project end date</label>
-        <md-datepicker
-          ng-model="vm.project.end_date"
-          md-open-on-focus
-          name="end_date"
-          md-current-view="year">
-        </md-datepicker>
-        <div ng-messages="vm.form.end_date.$error">
-          <div class="custom-error" ng-message="custom">
-            <div ng-repeat="message in vm.form.end_date.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
+      <h6>Overview of the digital health implementation</h6>
+      <p>{{vm.project.implementation_overview}}</p>
     </div>
 
     <div layout="row">
-      <md-input-container flex>
-        <label>Contact name</label>
-        <input ng-required="vm.activateValidation" name="contact_name" ng-model="vm.project.contact_name"
-               md-maxlength="250">
-        <div ng-messages="vm.form.contact_name.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength"><div ng-message="md-maxlength">This has to be less than 250 characters long.</div></div>
-          <div ng-message="custom">
-            <div ng-repeat="message in vm.form.contact_name.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
+      <div>
+        <h6>Project start date</h6>
+        <p>{{vm.printDate(vm.project.start_date)}}</p>
+      </div>
+      <div>
+        <h6>Project end date</h6>
+        <p>{{vm.printDate(vm.project.end_date)}}</p>
+      </div>
+    </div>
 
-      <md-input-container flex>
-        <label>Contact email</label>
-        <input ng-required="vm.activateValidation" name="contact_email"
-               ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
-               md-minlength="4"
-               md-maxlength="256"
-               ng-model="vm.project.contact_email">
-        <div ng-messages="vm.form.contact_email.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="pattern">This should be a valid email address</div>
-          <div ng-message="custom">
-            <div ng-repeat="message in vm.form.contact_email.customError">
-              {{message}}
-            </div>
-          </div>
-        </div>
-      </md-input-container>
+    <div layout="row">
+      <div flex>
+        <h6>Contact name</h6>
+        <p>{{vm.project.contact_name}}</p>
+      </div>
+
+      <div flex>
+        <h6>Contact email</h6>
+        <p>vm.project.contact_email</p>
+      </div>
     </div>
   </div>
 
   <div class="section-wrapper alt">
-    <h6 class="first">Add Team members (Editor role)</h6>
+    <h6 class="first">Team members (Editor role)</h6>
 
-    <div class="chipper">
-      <div layout="row">
-        <md-contact-chips
-          flex
-          placeholder="Editors of this project"
-          secondary-placeholder="add new team member"
-          ng-model="vm.team"
-          md-contacts="vm.getUsers($query)"
-          md-contact-name="name"
-          md-contact-email="organisation_name"
-          md-require-match="true"
-          md-highlight-flags="i"
-          filter-selected="true">
-        </md-contact-chips>
-      </div>
-      <div layout="row" class="suggestion">
-        <span>Note: if you wish to add members who are not already registered, they will need to be registered before you may add them</span>
+    <div class="readonly-chipper">
+      <div ng-repeat="t in vm.team">
+        {{t.name}}
       </div>
     </div>
 
 
-    <h6>Add Viewers (only Viewer role)</h6>
+    <h6>Viewers (only Viewer role)</h6>
 
-    <div class="chipper">
-      <div layout="row" >
-        <md-contact-chips
-          flex
-          placeholder="Add viewers"
-          secondary-placeholder="add new viewer"
-          ng-model="vm.viewers"
-          md-contacts="vm.getUsers($query)"
-          md-contact-name="name"
-          md-contact-email="organisation_name"
-          md-require-match="true"
-          md-highlight-flags="i"
-          filter-selected="true">
-        </md-contact-chips>
-      </div>
-      <div layout="row" class="suggestion">
-        <span>Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them</span>
+    <div class="readonly-chipper">
+      <div ng-repeat="v in vm.viewers">
+        {{v.name}}
       </div>
     </div>
   </div>

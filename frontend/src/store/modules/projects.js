@@ -91,7 +91,7 @@ export const getEmptyProject = () => {
 
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
-    const project = getEmptyProject()
+    const project = getEmptyProject();
     if (country) {
         project.country = country.id;
     }
