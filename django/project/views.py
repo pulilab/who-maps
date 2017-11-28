@@ -258,9 +258,9 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         #
         #     ProjectApproval.objects.create(project=project, user=project.country.user)
 
-        data = project.to_representation()
+        data = project.to_representation(draft_mode=True)
 
-        return Response(project.to_response_dict(published=data, draft=data), status=status.HTTP_201_CREATED)
+        return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):

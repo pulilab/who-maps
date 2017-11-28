@@ -73,7 +73,7 @@ class CountryMapController {
                 });
                 return ret;
             }, {});
-            this.drawDistricts(newDistrictData);
+            this.fillDistrictData(newDistrictData);
         }
     }
 
@@ -151,7 +151,7 @@ class CountryMapController {
 
     drawMapShape(countryMapData) {
         this.showPlaceholder = true;
-
+        const self = this;
         if (this.drawnMap) {
             d3.select(this.el[0]).select('.countrymapcontainer').remove();
             this.createInMemoryDOMElement();
@@ -180,7 +180,35 @@ class CountryMapController {
               .attr('d', path)
               .classed('d3district', true)
               .classed('global', this.showNationalLevelCoverage)
-              .classed(`name-${districtsName}`, true);
+              .classed(`name-${districtsName}`, true).on('mouseover', () => {
+                  if (!this.big) {
+                      this.activeDistrict = {
+                          name: districtsName,
+                          data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
+                      };
+                      this.scope.$evalAsync();
+                  }
+              })
+              .attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
+                  // this bound as DOM iteratee (current district)
+                  if (!self.big) {
+                      return '';
+                  }
+                  d3.select(this).on('mouseover', () => {
+                      window.setTimeout((e) => {
+                          const stillHovered = (e.parentElement.querySelector(':hover') === e);
+                          if (stillHovered) {
+                              self.scope.$evalAsync(() => {
+                                  self.activeDistrict = {
+                                      name: districtsName,
+                                      data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
+                                  };
+                              });
+                          }
+                      }, 1000, this);
+                  });
+                  return '';
+              });
         });
 
         this.elementContainer.append(() => {
@@ -211,44 +239,12 @@ class CountryMapController {
         });
     }
 
-    drawDistricts(districtLevelCoverage) {
-        const self = this;
+    fillDistrictData(districtLevelCoverage) {
         for (const district in districtLevelCoverage) {
             const node = this.svgLib[district];
             if (node) {
                 node.classed('d3district-data', true);
-                node.on('mouseover', () => {
-                    if (!this.big) {
-                        this.activeDistrict = {
-                            name: district,
-                            data: districtLevelCoverage[district]
-                        };
-                        this.scope.$evalAsync();
-                    }
-                });
-                node.attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
-                    // this bound as DOM iteratee (current district)
-                    if (!self.big) {
-                        return '';
-                    }
-                    d3.select(this).on('mouseover', () => {
-
-                        window.setTimeout((e) => {
-
-                            const stillHovered = (e.parentElement.querySelector(':hover') === e);
-
-                            if (stillHovered) {
-                                self.scope.$evalAsync(() => {
-                                    self.activeDistrict = {
-                                        name: district,
-                                        data: districtLevelCoverage[district]
-                                    };
-                                });
-                            }
-                        }, 1000, this);
-                    });
-                    return '';
-                });
+                node.districtData = districtLevelCoverage[district];
             }
         }
     }

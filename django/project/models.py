@@ -48,7 +48,7 @@ class Project(ExtendedModel):
     @property
     def country(self):
         try:
-            country_id = int(self.data.get('country'))
+            country_id = int(self.data.get('country', self.draft.get('country')))
         except TypeError:  # pragma: no cover
             return None
         return Country.objects.get(id=country_id)
