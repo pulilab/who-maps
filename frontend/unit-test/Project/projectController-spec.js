@@ -120,7 +120,7 @@ describe('ProjectController', () => {
         it('should call the appropriate function after saving succeed', async (done) => {
             spyOn(sc, 'showToast');
             spyOn(sc, 'ownershipCheck');
-            spyOn(sc, 'postSaveActions');
+            spyOn(sc, 'postPublishAction');
             spyOn(sc, 'putGroups').and.returnValue(Promise.resolve({}));
             spyOn(sc, 'saveCountryFields').and.returnValue(Promise.resolve({}));
 
@@ -130,7 +130,7 @@ describe('ProjectController', () => {
             expect(sc.ownershipCheck).toHaveBeenCalled();
             expect(sc.cs.addProjectToCache).toHaveBeenCalled();
             expect(sc.putGroups).toHaveBeenCalled();
-            expect(sc.postSaveActions).toHaveBeenCalled();
+            expect(sc.postPublishAction).toHaveBeenCalled();
             expect(sc.showToast).toHaveBeenCalled();
             done();
         });
@@ -308,11 +308,11 @@ describe('ProjectController', () => {
             state: 'newProject',
             appName : 1
         };
-        sc.postSaveActions({ member: [1] });
+        sc.postPublishAction({ member: [1] });
         expect(sc.navigate).toHaveBeenCalledWith(expectation);
         sc.isAddAnother = false;
         expectation.state = 'editProject';
-        sc.postSaveActions({ member: [1] });
+        sc.postPublishAction({ member: [1] });
         expect(sc.navigate).toHaveBeenCalledWith(expectation);
     });
 

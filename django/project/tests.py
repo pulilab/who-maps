@@ -14,7 +14,8 @@ from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, ProjectApproval
-from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
+from .admin import DigitalStrategyAdmin
+# from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
 
 
@@ -348,6 +349,12 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertTrue(response.json()['published'].get("government_approved"))
         self.assertTrue(response.json()['published'].get("government_investor") in [0, 1, 2])
+
+    def test_retrieve_wrong_http_command(self):
+        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
+        response = self.test_user_client.put(url)
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json(), {'detail': 'Method "PUT" not allowed.'})
 
     def test_retrieve_project_list(self):
         url = reverse("project-list")
