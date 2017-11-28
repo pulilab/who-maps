@@ -1,40 +1,60 @@
 import _ from 'lodash';
-import SignupService from './SignupService';
-import Storage from '../Storage';
-import CommonServices from '../CommonServices';
+import * as UserModule from '../../store/modules/user';
+import { calculateHeight } from '../../Utilities';
 class SignupController {
 
-    constructor($scope, $location, $anchorScroll) {
-        this.ss = new SignupService();
+    constructor($scope, $location, $anchorScroll, $ngRedux, $state) {
         this.EE = window.EE;
         this.scope = $scope;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
-        this.storage = new Storage();
+        this.state = $state;
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
+    }
+
+    onInit() {
         this.inProgress = false;
         this.registered = false;
         this.hideMainForm = false;
-        this.processRegistrationResult = this.processRegistrationResult.bind(this);
+        this.handleDataError = this.handleDataError.bind(this);
         this.register = {
             email: null,
             password1: null,
             password2: null,
             account_type: 'I'
         };
+
         this.style = {
-            height: CommonServices.calculateHeight()
+            height: calculateHeight()
         };
     }
 
-    signup(signupForm) {
+    onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            userModel: state.user
+        };
+    }
+
+    async signup(signupForm) {
         if (signupForm.$valid) {
             this.inProgress = true;
-            this.ss.signup(this.register)
-            .then(result => {
-                if (result) {
-                    this.processRegistrationResult(result, signupForm);
-                }
-            }, this.handleDataError.bind(this, signupForm));
+            try {
+                await this.doSignup(this.register);
+                this.inProgress = false;
+                this.registered = true;
+                setTimeout(() => {
+                    this.state.go('editProfile');
+                }, 5000);
+            }
+            catch (data) {
+                this.handleDataError(signupForm, data);
+            }
         }
     }
 
@@ -63,29 +83,6 @@ class SignupController {
         this.scrollTo('scroll-to-head');
     }
 
-    processRegistrationResult(result, signupForm) {
-        this.inProgress = false;
-        if (result.success) {
-            this.registered = true;
-            const user = {
-                username: this.register.email
-            };
-            this.storage.set('token', result.data.key);
-            this.storage.set('user_profile_id', result.data.user_profile_id);
-            this.storage.set('user', user);
-            setTimeout(() => {
-                this.EE.emit('login');
-            }, 5000);
-        }
-        else {
-            _.forEach(result.data, (item, key) => {
-                signupForm[key].customError = item;
-                signupForm[key].$setValidity('custom', false);
-            });
-        }
-        this.scope.$evalAsync();
-    }
-
     handleCustomError(signupForm, key) {
         signupForm[key].$setValidity('custom', true);
         signupForm[key].customError = [];
@@ -94,10 +91,10 @@ class SignupController {
 
     static signupFactory() {
         require('./Signup.scss');
-        function signup($scope, $location, $anchorScroll) {
-            return new SignupController($scope, $location, $anchorScroll);
+        function signup($scope, $location, $anchorScroll, $ngRedux, $state) {
+            return new SignupController($scope, $location, $anchorScroll, $ngRedux, $state);
         }
-        signup.$inject = ['$scope', '$location', '$anchorScroll'];
+        signup.$inject = ['$scope', '$location', '$anchorScroll', '$ngRedux', '$state'];
         return signup;
     }
 }

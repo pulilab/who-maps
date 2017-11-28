@@ -1,18 +1,18 @@
+import * as CmsModule from '../../store/modules/cms';
+
 class ExperienceListController {
 
-    constructor($scope) {
+    constructor($scope, $ngRedux) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     onInit() {
-        this.cs = require('../CmsService');
         this.domains = require('../resources/domains');
         const axisIndex = parseInt(this.axisId, 10);
         const domainIndex = parseInt(this.domainId, 10);
         this.domain = this.domains[axisIndex].domains[domainIndex];
-        this.data = [];
-        this.getData();
         this.newExperience = {
             body: null,
             valid: false,
@@ -24,10 +24,10 @@ class ExperienceListController {
         this.watchers();
     }
 
-    getData() {
-        return this.cs.getData().then(data => {
-            this.data = data;
-        });
+    mapState(state) {
+        return {
+            data: state.cms.data
+        };
     }
 
     watchers() {
@@ -40,12 +40,12 @@ class ExperienceListController {
         });
     }
 
-    saveExperience() {
-        return this.cs.addContent(this.newExperience).then(() => {
-            this.scope.$evalAsync(() => {
-                this.newExperience.body = false;
-            });
-        });
+    async saveExperience() {
+        await this.saveOrUpdateContent(this.newExperience);
+        this.newExperience.body = false;
+        this.newExperience.name = null;
+        this.form.$setUntouched();
+        this.form.$setPristine();
     }
 
     disableAddButton(experience) {
@@ -54,10 +54,10 @@ class ExperienceListController {
 
     static factory() {
         require('./ExperiencesList.scss');
-        function experienceListController($scope) {
-            return new ExperienceListController($scope);
+        function experienceListController($scope, $ngRedux) {
+            return new ExperienceListController($scope, $ngRedux);
         }
-        experienceListController.$inject = ['$scope'];
+        experienceListController.$inject = ['$scope', '$ngRedux'];
         return experienceListController;
     }
 }

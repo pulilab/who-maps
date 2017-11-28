@@ -41,7 +41,13 @@ class StaticUtilities {
     }
 
     static classifyString(str) {
-        return str.replace(/ /g, '_').replace(/\./g, '-').toLowerCase();
+        try {
+            return str.replace(/ /g, '_').replace(/\./g, '-').toLowerCase();
+        }
+        catch (e) {
+            console.warn('Failed to parse class string', str);
+        }
+        return '';
     }
 
     static prefixHtml() {
@@ -54,5 +60,20 @@ class StaticUtilities {
     }
 }
 
+const getSubDomain = () => {
+    const defaultDomain = 'who';
+    const hostArray = window.location.hostname.split('.');
+    const subDomain = hostArray.length > 1 ? hostArray.shift() : defaultDomain;
+    if (subDomain !== defaultDomain && subDomain.length !== 2) {
+        return defaultDomain;
+    }
+    return subDomain;
+};
 
-export { StaticUtilities };
+const calculateHeight = () => {
+    const contentHeight = window.innerHeight - 48;
+    return contentHeight + 'px';
+};
+
+
+export { StaticUtilities, getSubDomain, calculateHeight };

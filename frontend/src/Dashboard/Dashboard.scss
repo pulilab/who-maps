@@ -15,7 +15,6 @@
             height: 505px;
             margin-bottom: 15px;
         }
-
         &.dashrow-lower {
             //height: 543px;
         }
@@ -74,7 +73,7 @@
                 margin: 15px 0 25px;
                 font-size: 14px;
                 font-weight: 500;
-                color: $text-disabled;
+                color: $text-primary;
             }
 
             .dash-stat-column {
@@ -84,19 +83,16 @@
 
                 .shorter, .longer {
                     margin-bottom: 10px;
-                    md-icon.rotate {
-                        transform: translate(0, 7px);
-                    }
                 }
 
                 .longer {
 
-                    height: 240px;
+                    height: 245px;
 
                     .gray {
 
                         height: 137px;
-                        margin-top: 10px;
+                        margin-top: 15px;
                         border-top: 1px solid $color-gray-lighter;
                         padding: 4px 8px;
                         background-color: $color-gray-lightest;
@@ -119,7 +115,6 @@
                 }
 
                 .snapshot-button {
-
                     height: 60px;
                     padding: 5px;
                     margin: 0;
@@ -127,25 +122,32 @@
                     background-color: $color-green;
 
                     .text {
-
-                        color: white;
+                        color: $color-white;
                         font-size: 12px;
                         line-height: 20px;
                         font-weight: 500;
                         display: block;
 
                         &.plus {
-
                             font-size: 36px;
                             line-height: 28px;
                             font-weight: 300;
+                        }
+                    }
+
+                    &.draft {
+                        background-color: $color-draft;
+
+                        .text {
+                          color: $text-primary;
+                          font-size: 12px;
+                          line-height: 18px;
                         }
                     }
                 }
             }
 
             md-card {
-
                 margin: 0;
                 overflow: hidden;
 

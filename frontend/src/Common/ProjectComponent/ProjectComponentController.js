@@ -1,33 +1,13 @@
-import _ from 'lodash';
-
 class ProjectComponentController {
 
-    constructor($state, CommonServices) {
+    constructor($state) {
         this.state = $state;
-        this.cs = CommonServices;
         this.$onInit = this.initialization.bind(this);
     }
 
     initialization() {
-
-        this.ownProject = this.member || this.viewer;
-
-        if (!this.ngModel) {
-            this.ngModel = {};
-        }
-        if (!this.ngModel.followersNr) {
-            this.ngModel.followersNr = 0;
-        }
-
-        if (!this.ngModel.followersTrend) {
-            this.ngModel.followersTrend = 'up';
-        }
-        if (this.ngModel.country
-            && this.cs.projectStructure.countries
-            && this.cs.projectStructure.countries[this.ngModel.country]) {
-            this.ngModel.countryName = _.find(this.cs.projectStructure.countries, (item) => {
-                return item.id === this.ngModel.country;
-            }).name;
+        if (!this.project) {
+            this.project = {};
         }
     }
 
@@ -38,14 +18,26 @@ class ProjectComponentController {
     }
 
     goToDashboard() {
-        this.state.go(this.member || this.viewer ? 'dashboard' : 'public-dashboard', { appName: this.ngModel.id });
+        this.state.go(this.member || this.viewer ? 'dashboard' : 'public-dashboard', { appName: this.project.id });
     }
+
+    viewDraft() {
+        this.state.go('editProject', { appName: this.project.id });
+    }
+
+    editDraft() {
+        this.state.go('editProject', { appName: this.project.id });
+    }
+
+    viewPublished() {
+        this.state.go('editProject', { appName: this.project.id, editMode: 'publish' });
+    }
+
 
     static projectComponentFactory() {
         require('./ProjectComponent.scss');
         function projectCp($state) {
-            const CommonServices = require('../CommonServices');
-            return new ProjectComponentController($state, CommonServices);
+            return new ProjectComponentController($state);
         }
 
         projectCp.$inject = ['$state'];

@@ -1,19 +1,18 @@
-<div layout="column" class="new-edit-project" layout-align="start center" >
-  <div class="page-title" ng-hide="vm.editMode">
-    <h1 class="md-display-1 text-center">Add New Digital Health Project</h1>
-    <h6 class="md-subhead text-center">Please complete the following information in order to add your project into the Digital Health Atlas</h6>
+<div layout="column" class="new-edit-project" layout-align="start center" ng-class="vm.state.params.editMode" >
+  <div class="page-title" >
+    <h1 class="md-display-1 text-center" ng-hide="vm.editMode">Add New Digital Health Project</h1>
+    <h1 class="md-display-1 text-center"  ng-show="vm.editMode">Edit Project Info</h1>
+    <h6 class="md-subhead text-center" >You are viewing the
+      <span class="draft-bit">Draft</span>
+      <span class="published-bit">Published</span> version of the project</h6>
   </div>
 
-  <div class="page-title" ng-show="vm.editMode">
-    <h1 class="md-display-1 text-center">Edit Project Info</h1>
-  </div>
-
-  <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
-    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-  </div>
+  <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">-->
+    <!--<md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>-->
+  <!--</div>-->
 
   <div class="project-form-wrapper md-block">
-    <form name="vm.form" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
+    <form name="vm.form" ng-submit="vm.save($event)" layout="row" id="npf" novalidate>
       <div class="main-section" layout="column">
         <general-overview
           id="general-overview"
@@ -22,8 +21,7 @@
           structure="vm.structure"
           team="vm.team"
           viewers="vm.viewers"
-          users="vm.users"
-          project-list="vm.cs.projectList">
+          users="vm.users">
         </general-overview>
         <implementation-overview
           id="implementation-overview"
@@ -33,6 +31,7 @@
         </implementation-overview>
         <technology
           id="technology"
+          form="vm.form"
           project="vm.project"
           structure="vm.structure">
         </technology>
@@ -43,28 +42,24 @@
           structure="vm.structure">
         </interoperability>
         <country-fields
-          ng-show="vm.showCountryFields"
+          ng-show="vm.countryFields && vm.countryFields.length > 0"
           id="country-fields"
           form="vm.form"
           project="vm.project"
           country-fields="vm.countryFields"
         ></country-fields>
 
-        <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
-          <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
-          <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                       current-project="vm.isCurrentProject(p.id)"
-                       viewer="vm.isViewer(p)"
-                       member="vm.isMember(p)"
-                       show-details="true"
-                       show-logo="true"
-                       ng-model="p">
-
-          </projectcomp>
-        </section>
       </div>
       <div class="navigation-area" layout="column">
-        <navigation edit-mode="vm.editMode" is-add-another="vm.isAddAnother" show-country-fields="vm.showCountryFields"></navigation>
+        <navigation
+          edit-mode="vm.editMode"
+          is-add-another="vm.isAddAnother"
+          project="vm.project"
+          viewers="vm.viewers"
+          team="vm.team"
+          country-fields="vm.countryFields"
+          show-country-fields="vm.countryFields && vm.countryFields.length > 0"
+        ></navigation>
       </div>
     </form>
   </div>

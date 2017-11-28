@@ -31,9 +31,15 @@
         <label>Specify URL</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
         <input ng-disabled="!vm.project.interoperability_links[$index].selected"
-               name="link.interop1"
+               name="{{'interoperability_links_' + $index + '_link'}}"
                md-maxlength="200"
-               ng-model="vm.project.interoperability_links[$index].link">
+               ng-model="vm.project.interoperability_links[$index].link"
+               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/">
+        <div ng-messages="vm.form['interoperability_links_' + $index + '_link'].$error">
+          <div ng-message="pattern">
+            Make sure your URL is valid.
+          </div>
+        </div>
       </md-input-container>
     </div>
 

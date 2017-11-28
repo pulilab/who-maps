@@ -110,7 +110,7 @@ md-tooltip {
   margin: 0 auto;
 
   .md-display-1 {
-    margin: 50px 0;
+    margin: 50px 0 50px;
     font-size: 40px;
   }
 
@@ -118,6 +118,14 @@ md-tooltip {
     margin: -20px auto 50px;
     max-width: $page-min-width;
     color: $color-gray;
+
+    md-icon {
+      width: 16px;
+      min-width: 16px;
+      height: 22px;
+      min-height: 22px;
+      font-size: 18px;
+    }
   }
 }
 

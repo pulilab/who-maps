@@ -1,42 +1,43 @@
 <div class="linechart-labels" layout="row" ng-if="!vm.showPlaceholder">
 
-    <ul flex ng-class="{'secondary-labelcolors': vm.notpercentage}">
+  <ul flex ng-class="{'secondary-labelcolors': vm.notpercentage}">
 
-        <li ng-if="vm.showdotted"><span class="smallness">___</span> closed</li>
-        <li ng-if="vm.showdotted"><span class="smallness">……</span> in progress</li>
+    <li ng-if="vm.showdotted"><span class="smallness">___</span> closed</li>
+    <li ng-if="vm.showdotted"><span class="smallness">……</span> in progress</li>
 
-        <li
-            ng-repeat="label in vm.chosenLabels track by $index"
-            ng-class="'labelhov' + ($index + 1)"
-            class="text-truncate labelhov">
+    <li
+      ng-repeat="label in vm.chartConfig.chosenLabels track by $index"
+      ng-class="'labelhov' + ($index + 1)"
+      class="text-truncate labelhov">
 
-            <i class="material-icons" ng-class="'labelicon' + ($index + 1)">fiber_manual_record</i> {{label}}
+      <i class="material-icons" ng-class="'labelicon' + ($index + 1)">fiber_manual_record</i> {{label}}
 
-        </li>
+    </li>
 
-    </ul>
+  </ul>
 
-    <div class="chosercontainer" ng-if="vm.datachooser">
-        <md-input-container>
+  <div class="chosercontainer" ng-if="vm.datachooser">
+    {{vm.labels}}
+    <md-input-container>
 
-            <label>Axis to show: </label>
+      <label>Axis to show: </label>
 
-            <md-select
-                aria-label="select axis to view in the chart"
-                class="axischooser"
-                ng-model="vm.activeAxis"
-                ng-change="vm.axisChange(vm.activeAxis)">
+      <md-select
+        aria-label="select axis to view in the chart"
+        class="axischooser"
+        ng-model="vm.chartConfig.activeAxis"
+        ng-change="vm.axisChange(vm.chartConfig.activeAxis)">
 
-                <md-option
-                    ng-repeat="label in vm.labels" value="{{label}}">
+        <md-option
+          ng-repeat="label in vm.chartConfig.labels" value="{{label}}">
 
-                    {{label}}
+          {{label}}
 
-                </md-option>
+        </md-option>
 
-            </md-select>
+      </md-select>
 
-        </md-input-container>
-    </div>
+    </md-input-container>
+  </div>
 
 </div>

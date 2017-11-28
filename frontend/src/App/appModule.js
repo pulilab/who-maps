@@ -6,6 +6,13 @@ import uiRoute from 'angular-ui-router';
 import ngMessages from 'angular-messages';
 import 'angular-password';
 import angularMd from 'angular-material';
+import ngRedux from 'ng-redux';
+import { reducers, middleware } from '../store/index';
+import * as ProjectsModule from '../store/modules/projects';
+import * as UserModule from '../store/modules/user';
+import * as SystemModule from '../store/modules/system';
+import * as CountriesModule from '../store/modules/countries';
+import axios from '../plugins/axios';
 
 import _appTemplate from './app.html';
 import Storage from '../Common/Storage';
@@ -18,47 +25,62 @@ window.addEventListener('singletonRegistered', evt => {
     singletonCollection.push(evt.detail);
 });
 
+const storage = new Storage();
 
-const moduleName = 'app';
-
-const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider, $ngReduxProvider) => {
     $stateProvider
-
       .state('base', {
           url: '',
           template: _appTemplate,
           controller: 'systemController',
           controllerAs: 'vm',
-          abstract: true
+          abstract: true,
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  const user =  $ngRedux.dispatch(UserModule.loadProfile());
+                  const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
+                  return Promise.all([user, countries]);
+              }]
+          }
       })
 
       .state('share', {
           url: '/project/:projectUUID',
           template: '<uuid-load />',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+              user: ['$ngRedux', ($ngRedux) => {
+                  return $ngRedux.dispatch(UserModule.loadProfile());
+              }]
+          }
       })
 
-      .state(moduleName, {
+      .state('app', {
           url: '/app/:appName',
           template: '<app layout="column" layout-fill></app>',
           resolve: {
-              data: () => {
-                  const cs = require('../Common/CommonServices');
-                  return cs.loadedPromise;
+              data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(UserModule.loadProfile());
+                  const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
+                  const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+                  const profiles = $ngRedux.dispatch(SystemModule.loadUserProfiles());
+                  const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
+                  return Promise.all([projects, profiles, countries, structure]);
+              }]
+          },
+          params: {
+              appName: {
+                  value: ['$ngRedux', ($ngRedux) => {
+                      const state = $ngRedux.getState();
+                      return ProjectsModule.getUserDefaultProject(state);
+                  }]
               }
           }
-
       })
       .state('public', {
           url: '/public/:appName',
           template: '<app layout="column" view-mode="true"></app>',
-          resolve: {
-              project: () => {
-                  const cs = require('../Common/CommonServices');
-                  return cs.loadedPromise;
-              }
-          }
-
+          resolve: {}
       })
       .state('login', {
           url: '/login',
@@ -87,33 +109,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               }
           }
       })
-      .state('newProject', {
-          url: '/new-project',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<project layout-fill layout="column" ></project>'
-              }
-          }
-      })
-      .state('editProject', {
-          url: '/edit-project',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<project edit-mode="true" layout-fill layout="column" ></project>'
-              }
-          }
-      })
-      .state('inventory', {
-          url: '/inventory',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<project inventory-mode="true" ></project>'
-              }
-          }
-      })
       .state('editProfile', {
           url: '/edit-profile',
           parent: 'app',
@@ -133,15 +128,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               }
           }
       })
-      .state('refreshProjects', {
-          url: '/refresh-projects',
-          parent: 'app',
-          views: {
-              main: {
-                  template: '<refresh-project></refresh-project>'
-              }
-          }
-      })
       .state('terms-of-use', {
           url: '/terms-of-use',
           parent: 'base',
@@ -156,13 +142,19 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
     $urlRouterProvider.otherwise('/landing');
     $locationProvider.html5Mode(true);
     $anchorScrollProvider.disableAutoScrolling();
+
+    const initialState = {
+        user: {
+            token: storage.get('token') || undefined
+        }
+    };
+    const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
+    const storeExtension = reduxDevTools ? [reduxDevTools()] : undefined;
+    $ngReduxProvider.createStoreWith(reducers, middleware, storeExtension, initialState);
 };
 
-function handleStateChange(event, toState) {
-    if (DEBUG) {
-        console.debug(`Ui route state change ${this} :`, toState.name);
-    }
-    if (this === 'success') {
+function handleStateChange(type, from, to) {
+    if (type === 'success' && from !== to) {
         const mainContent = document.getElementsByClassName('main-content')[0];
         if (mainContent) {
             mainContent.scrollTop = 0;
@@ -170,16 +162,45 @@ function handleStateChange(event, toState) {
     }
 }
 
-const run = ($rootScope, $state, $mdToast, $mdDialog) => {
-    $rootScope.$on('$stateChangeStart', handleStateChange.bind('start'));
-    $rootScope.$on('$stateChangeError', handleStateChange.bind('error'));
-    $rootScope.$on('$stateChangeSuccess', handleStateChange.bind('success'));
+function checkProfile(profile, t) {
+    if (!profile || !profile.name || !profile.country || !profile.organisation_id) {
+        console.log('You can not navigate to that area without a user profile');
+        return t.router.stateService.target('editProfile');
+    }
+    return Promise.resolve();
+}
 
-    const checkXHR = (event) => {
-        $rootScope.progress = event.detail.progression;
-        $rootScope.showLoading = $rootScope.progress !== 100;
-        $rootScope.$evalAsync();
-    };
+const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions) => {
+    const tkn = storage.get('token');
+    if (tkn) {
+        axios.setAuthToken(tkn);
+    }
+
+
+    $transitions.onStart({}, () => {
+        handleStateChange('start');
+        return Promise.resolve();
+    });
+
+    $transitions.onSuccess({}, (t) => {
+        handleStateChange('success', t.from().name, t.to().name);
+        return Promise.resolve();
+    });
+
+    $transitions.onError({}, () => {
+        handleStateChange('error');
+        return Promise.resolve();
+    });
+
+    $transitions.onFinish({}, (t) => {
+        const to = t.to();
+        $ngRedux.dispatch(ProjectsModule.setCurrentProject(t.params().appName));
+        if (to && to.profileRequired) {
+            const state = $ngRedux.getState();
+            return checkProfile(state.user.profile, t);
+        }
+        return Promise.resolve();
+    });
 
     const showPopUp = () => {
         $mdToast.show(
@@ -188,25 +209,20 @@ const run = ($rootScope, $state, $mdToast, $mdDialog) => {
             .position('bottom right')
             .hideDelay(3000)
         );
+
     };
 
     let processingAuth = false;
-    const handleAuthProblem = () => {
+    const handleAuthProblem = async () => {
         if (!processingAuth) {
             processingAuth = true;
-            const storage = new Storage();
             const token = storage.get('token');
             storage.clear();
-            singletonCollection.forEach(purgeFunction => {
-                if (purgeFunction) {
-                    purgeFunction();
-                }
-            });
             const mainUi = window.document.querySelector('ui-view');
             mainUi.style.display = 'none';
             const message = token ? 'You session has expired, please login again.' :
               'You need to be logged in to view this content';
-            const dialog = $mdDialog.show(
+            await $mdDialog.show(
               $mdDialog.alert()
                 .clickOutsideToClose(false)
                 .title('Auth problem')
@@ -214,39 +230,45 @@ const run = ($rootScope, $state, $mdToast, $mdDialog) => {
                 .ariaLabel('Auth problem dialog')
                 .ok('Understand')
             );
-            dialog.then(() => {
-                mainUi.style.display = '';
-                $state.go('landing');
-                processingAuth = false;
-            });
+            mainUi.style.display = '';
+            $state.go('landing');
+            $ngRedux.dispatch(UserModule.doLogout());
+            processingAuth = false;
         }
     };
-    window.addEventListener('xhrmonitor', checkXHR.bind(this));
-    window.addEventListener('xhrFailedRequest', showPopUp.bind(this));
-    window.addEventListener('xhrAuthProblem', handleAuthProblem.bind(this));
+
+    axios.setShowPopUp(showPopUp.bind(this));
+    axios.setHandleAuthProblem(handleAuthProblem.bind(this));
+
+    $ngRedux.subscribe(() => {
+        $timeout(() => {$rootScope.$apply(() => {});}, 100);
+    });
 };
 
-run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog'];
+run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux', '$timeout', '$transitions'];
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$anchorScrollProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
+    '$anchorScrollProvider', '$ngReduxProvider'];
 
 const AppComponent = require('./appComponent');
 const SystemController = require('./SystemController');
 
-angular.module(moduleName,
+angular.module('app',
     [
         uiRoute,
         angularMd,
         ngMessages,
         'ngPassword',
+        ngRedux,
         require('../Common/').Components,
         require('../Project/'),
         require('../Cms/'),
         require('../CountryView/'),
         require('../Dashboard/'),
         require('../LandingPage/'),
-        require('../MapsToolkit/')
+        require('../MapsToolkit/'),
+        require('../MyProjects/')
     ]
 )
   .controller('systemController', SystemController.systemControllerFactory())
@@ -255,4 +277,4 @@ angular.module(moduleName,
   .run(run);
 
 
-export default moduleName;
+export default 'app';

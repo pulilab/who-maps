@@ -39,12 +39,7 @@ class ProjectSearch(ExtendedModel):
         results = []
         query = kwargs["query"]
 
-        selectable_fields = {
-            "location",
-            "project_name",
-            "technology_platform",
-            "organisation"
-        }
+        selectable_fields = {"location", "project_name", "technology_platform", "organisation"}
         query_keys = set([k for k, v in kwargs.items() if v is True])
         intersect = selectable_fields & query_keys
 
@@ -91,20 +86,21 @@ def update_with_project_data(sender, instance, **kwargs):
     """
     Updates relevant ProjectSearch data on every Project model save.
     """
-    project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
-    project_search.location = Country.objects.get(id=instance.data["country"]).name
-    project_search.project_name = instance.name
-    project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation"))
-    project_search.contact_name = instance.data.get("contact_name", "")
-    project_search.contact_email = instance.data.get("contact_email", "")
-    project_search.implementation_overview = instance.data.get("implementation_overview", "")
-    project_search.implementing_partners = ", ".join([x for x in instance.data.get("implementing_partners", "")])
-    project_search.implementation_dates = instance.data.get("implementation_dates", "")
-    project_search.health_focus_areas = ", ".join([x for x in instance.data.get("health_focus_areas", "")])
-    project_search.geographic_scope = instance.data.get("geographic_scope", "")
-    project_search.repository = instance.data.get("repository", "")
-    project_search.mobile_application = instance.data.get("mobile_application", "")
-    project_search.wiki = instance.data.get("wiki", "")
-    project_search.platforms = ", ".join([x.get('name', '') for x in instance.data.get("platforms", "")])
-    project_search.public_id = instance.public_id
-    project_search.save()
+    if instance.public_id:
+        project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
+        project_search.location = Country.objects.get(id=instance.data["country"]).name
+        project_search.project_name = instance.name
+        project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation"))
+        project_search.contact_name = instance.data.get("contact_name", "")
+        project_search.contact_email = instance.data.get("contact_email", "")
+        project_search.implementation_overview = instance.data.get("implementation_overview", "")
+        project_search.implementing_partners = ", ".join([x for x in instance.data.get("implementing_partners", "")])
+        project_search.implementation_dates = instance.data.get("implementation_dates", "")
+        project_search.health_focus_areas = ", ".join([x for x in instance.data.get("health_focus_areas", "")])
+        project_search.geographic_scope = instance.data.get("geographic_scope", "")
+        project_search.repository = instance.data.get("repository", "")
+        project_search.mobile_application = instance.data.get("mobile_application", "")
+        project_search.wiki = instance.data.get("wiki", "")
+        project_search.platforms = ", ".join([x.get('name', '') for x in instance.data.get("platforms", "")])
+        project_search.public_id = instance.public_id
+        project_search.save()

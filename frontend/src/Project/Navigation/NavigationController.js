@@ -1,9 +1,12 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
+import * as ProjectModule from '../../store/modules/projects';
 class NavigationController {
 
-    constructor($element) {
+    constructor($element, $state, $ngRedux) {
         this.EE = window.EE;
         this.element = $element;
+        this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.scrollTo = this.scrollTo.bind(this);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -22,7 +25,7 @@ class NavigationController {
 
     activateNavigation(hash) {
         const navigation = this.element[0].getElementsByTagName('li');
-        _.forEach(navigation, element => {
+        forEach(navigation, element => {
             if (element.classList.contains(hash)) {
                 element.classList.add('active');
             }
@@ -47,16 +50,24 @@ class NavigationController {
         this.EE.emit('projectScrollTo', hash);
     }
 
+    goTo(editMode) {
+        this.state.go(this.state.current.name, { editMode });
+    }
+
     setAddAnother() {
         this.isAddAnother = true;
     }
 
+    saveDraft() {
+        this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project, this.team, this.viewers, this.countryFields));
+    }
+
     static navigationFactory() {
         require('./Navigation.scss');
-        function navigation($element) {
-            return new NavigationController($element);
+        function navigation($element, $state, $ngRedux) {
+            return new NavigationController($element, $state, $ngRedux);
         }
-        navigation.$inject = ['$element'];
+        navigation.$inject = ['$element', '$state', '$ngRedux'];
         return navigation;
     }
 }

@@ -1,47 +1,38 @@
 import _ from 'lodash';
-import Protected  from '../Protected';
 import Clipboard from 'clipboard';
+import * as ProjectModule from '../../store/modules/projects';
+import * as UserModule from '../../store/modules/user';
 
-class SubBarController extends Protected {
+class SubBarController {
 
-    constructor($state, $scope) {
-        super();
-        this.EE = window.EE;
+    constructor($state, $scope, $ngRedux) {
         this.state = $state;
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, ProjectModule)(this);
+        this.navigateToProject = this.navigateToProject.bind(this);
+        this.iconFunction = this.iconFunction.bind(this);
+    }
+
+    mapState(state) {
+        return {
+            projects: ProjectModule.getPublishedProjects(state),
+            userProfile: UserModule.getProfile(state),
+            currentProject: ProjectModule.getCurrentProject(state),
+            lastVersion: ProjectModule.getCurrentVersion(state),
+            lastVersionDate: ProjectModule.getCurrentVersionDate(state)
+        };
     }
 
     onInit() {
-        this.defaultOnInit();
-        this.cs = require('../CommonServices');
-        this.eventBinding();
-        this.projectId = this.state.params.appName;
-        this.currentPage = void 0;
-        this.navigateToProject = this.navigateToProject.bind(this);
-        this.iconFunction = this.iconFunction.bind(this);
-        if (this.user) {
-            this.getProjectsData();
-            this.userProfile = this.cs.userProfile;
-            if (this.userProfile) {
-                this.adjustUserType(this.userProfile);
-            }
-        }
-        if (this.viewMode) {
-            this.cs.getProjectData(this.projectId)
-                .then(project => {
-                    this.currentProject = project;
-                    this.createShareDefinition();
-                    this.scope.$evalAsync();
-                });
-        }
-        else if (this.currentProject) {
+        if (this.currentProject) {
             this.createShareDefinition();
         }
     }
 
-    eventBinding() {
-        this.EE.on('projectListUpdated', this.getProjectsData, this);
+    onDestroy() {
+        this.unsubscribe();
     }
 
     createShareDefinition() {
@@ -58,7 +49,7 @@ class SubBarController extends Protected {
     }
 
     hasProfile() {
-        return this.cs.hasProfile();
+        return  this.userProfile && this.userProfile.country;
     }
 
     iconFunction(item) {
@@ -72,7 +63,7 @@ class SubBarController extends Protected {
                 lineHeight: '24px'
             }
         };
-        if (this.userProfile.member.indexOf(item.id) > -1) {
+        if (this.userProfile && this.userProfile.member && this.userProfile.member.indexOf(item.id) > -1) {
             base.name = 'grade';
             base.style.color = '#CD9924';
         }
@@ -84,30 +75,6 @@ class SubBarController extends Protected {
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
-    getProjectsData() {
-        this.projects = this.cs.projectList.slice();
-        const lastProject = _.last(this.projects);
-
-        if (this.state.params && this.state.params.appName
-            && this.state.params.appName.length === 0
-            && lastProject && lastProject.id) {
-            const appName = lastProject.id;
-            const state = this.state.current.name === 'app' ? 'dashboard' : this.state.current.name;
-            this.state.go(state, { appName }, {
-                location: 'replace'
-            });
-        }
-
-        _.forEach(this.projects, item => {
-            if (item.id === parseInt(this.state.params.appName, 10)) {
-                this.currentProject = item;
-            }
-        });
-
-        this.scope.$evalAsync(() => {
-        });
-
-    }
 
     goToDashboard() {
         this.state.go('dashboard', { 'appName': _.last(this.projects).id });
@@ -117,6 +84,10 @@ class SubBarController extends Protected {
         this.state.go('editProject', { 'appName': _.last(this.projects).id });
     }
 
+    showSubBar() {
+        return this.state.params.appName !== null && this.state.current.parent !== 'public';
+    }
+
 
     openMenu($mdOpenMenu, event) {
         $mdOpenMenu(event);
@@ -124,11 +95,11 @@ class SubBarController extends Protected {
 
     static subBarControllerFactory() {
         require('./subBar.scss');
-        function subBarController($state, $scope) {
-            return new SubBarController($state, $scope);
+        function subBarController($state, $scope, $ngRedux) {
+            return new SubBarController($state, $scope, $ngRedux);
         }
 
-        subBarController.$inject = ['$state', '$scope'];
+        subBarController.$inject = ['$state', '$scope', '$ngRedux'];
 
         return subBarController;
     }

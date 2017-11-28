@@ -1,17 +1,30 @@
-import _ from 'lodash';
-import { Protected } from '../../Common/';
-import MapsToolkitService from '../MapsToolkitService';
+import merge from 'lodash/merge';
+import cloneDeep from 'lodash/cloneDeep';
+import forEach from 'lodash/forEach';
 
-class ScorecardController extends Protected {
-    constructor($scope, $state, structure) {
-        super();
+import * as ToolkitModule from '../../store/modules/toolkit';
+
+class ScorecardController {
+    constructor($scope, $state, $ngRedux) {
         this.scope = $scope;
         this.state = $state;
-        this.structure = structure;
+        this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.handleProjectData = this.handleProjectData.bind(this);
+        this.mapData = this.mapData.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.createAxisData = this.createAxisData.bind(this);
+    }
+
+    mapData(state) {
+        const structure = ToolkitModule.getStructure();
+        const rawData = ToolkitModule.getToolkitData(state);
+        return {
+            rawData,
+            structure,
+            axesSize: rawData.length
+        };
     }
 
     importIconTemplates() {
@@ -26,45 +39,41 @@ class ScorecardController extends Protected {
     }
 
     onDestroy() {
-        this.defaultOnDestroy();
         this.EE.removeListener('mapsAxisChange', this.goToAxis, this);
+        this.unsubscribe();
     }
 
     onInit() {
-        this.defaultOnInit();
         this.dataLoaded = false;
+        this.images = this.importIconTemplates();
         this.projectId = this.state.params.appName;
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, ToolkitModule)(this);
         this.axisId = this.state.params.axisId;
-        this.ms = new MapsToolkitService(this.projectId);
-        this.ms.getProjectData().then(this.handleProjectData);
+        this.watchers();
         this.EE.on('mapsAxisChange', this.goToAxis, this);
     }
 
-    handleProjectData(data) {
-        this.axesSize = data.length;
-        this.data = _.merge(data, this.structure);
-        this.rawData = _.cloneDeep(data);
-        this.createAxisData();
-
-        if (!this.summary) {
-            this.data = this.data[this.axisId];
-        }
-
-        this.dataLoaded = true;
-        this.scope.$evalAsync();
+    watchers() {
+        this.scope.$watch(s => s.vm.rawData, this.createAxisData, true);
     }
 
-    createAxisData() {
-        const images = this.importIconTemplates();
-        _.forEach(this.data, (axis, key) => {
-            axis.id = key;
-            axis.axisName = axis.axis.split('.')[1];
-            axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
-            axis.axisPicture = images['icon-' + axis.axisClass];
-            _.forEach(axis.domains, (domain, index) => {
-                domain.index = index;
+    createAxisData(rawData) {
+        if (rawData && rawData.length > 0) {
+            const data = merge(rawData, this.structure).map((a, key) => {
+                const axis = cloneDeep(a);
+                axis.id = key;
+                axis.axisName = axis.axis.split('.')[1];
+                axis.axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
+                axis.axisPicture = this.images['icon-' + axis.axisClass];
+                forEach(axis.domains, (domain, index) => {
+                    domain.index = index;
+                });
+                return axis;
             });
-        });
+            this.dataLoaded = true;
+            this.data =  this.summary ? data : data[this.axisId];
+        }
+        return [];
     }
 
     updateScore(domain, axis) {
@@ -74,7 +83,7 @@ class ScorecardController extends Protected {
     }
 
     goToAxis(id) {
-        const axisId = id || this.axisId;
+        const axisId = id === undefined || id === null ? this.axisId : id;
         this.state.go(this.viewMode ? 'public-maps' : 'maps', { axisId });
     }
 
@@ -96,12 +105,11 @@ class ScorecardController extends Protected {
     }
 
     static scorecardFactory() {
-        const scorecard = ($scope, $state) => {
+        const scorecard = ($scope, $state, $ngRedux) => {
             require('./Scorecard.scss');
-            const structure = require('../Resource/structure.json');
-            return new ScorecardController($scope, $state, structure);
+            return new ScorecardController($scope, $state, $ngRedux);
         };
-        scorecard.$inject = ['$scope', '$state'];
+        scorecard.$inject = ['$scope', '$state', '$ngRedux'];
         return scorecard;
     }
 

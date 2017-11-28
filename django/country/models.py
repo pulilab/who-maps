@@ -11,8 +11,9 @@ class Country(NameByIDMixin, ExtendedModel):
     cover_text = models.TextField(blank=True, null=True)
     footer_title = models.CharField(max_length=128, blank=True, null=True)
     footer_text = models.CharField(max_length=128, blank=True, null=True)
-    user = models.ForeignKey(UserProfile, help_text="User who can update the country", null=True, blank=True,
-                             related_name="country_admin")
+    user = models.ForeignKey(
+        UserProfile, help_text="User who can update the country", null=True, blank=True, related_name="country_admin")
+    project_approval = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -61,6 +62,25 @@ class CountryField(models.Model):
 
     def __str__(self):
         return ""
+
+    @classmethod
+    def get_for_project(cls, project):
+        """
+        Return all the country fields available for a country filled with the answers (if present)
+        """
+        if not project.country:
+            return []
+
+        schema = cls.objects.get_schema(project.country.id)
+        answers = cls.objects.get_answers(country_id=project.country.id, project_id=project.id)
+        country_fields = []
+
+        for field in schema:
+            found = answers.filter(question=field.question, type=field.type).first()
+            if found:
+                country_fields.append(found)
+
+        return country_fields
 
     def to_representation(self):
         return {

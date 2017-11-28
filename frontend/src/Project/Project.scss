@@ -9,13 +9,47 @@
     width:auto;
     min-width: 20%;
     max-width: 35%;
-    margin:auto;
+    margin: auto;
     text-align: center;
   }
 }
 
 .new-edit-project {
   min-width: $page-min-width;
+
+  .page-title {
+    .draft-bit, .published-bit {
+      display: none;
+      height: 24px;
+      line-height: 24px;
+      margin: 0 4px;
+      padding: 0 8px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+  }
+
+  &.draft {
+    .page-title {
+      .draft-bit {
+        display: inline-block;
+        color: $text-primary;
+        background-color: $color-draft;
+      }
+    }
+  }
+
+  &.publish {
+    .page-title {
+      .published-bit {
+        display: inline-block;
+        color: $color-white;
+        background-color: $color-published;
+      }
+    }
+  }
 
   .error-placeholder {
     display: none;
@@ -56,6 +90,43 @@
   }
 }
 
+.publish {
+  // TODO fix the color with the prob
+  .project-section {
+    .section-title {
+      &:hover {
+        background-color: lighten($color-published, 7%) !important;
+      }
+    }
+
+    &.active {
+      .section-title {
+        background-color: lighten($color-published, 10%);
+        &:hover {
+          background-color: lighten($color-published, 7%) !important;
+        }
+      }
+    }
+
+    &.project-navigation {
+
+      .section-title {
+        background-color: lighten($color-published, 10%) !important;
+      }
+
+      .stepper {
+        li.active,
+        li:hover,
+        li:active {
+          span {
+          background-color: lighten($color-published, 7%);
+          }
+        }
+      }
+    }
+  }
+}
+
 .project-section {
   overflow: hidden;
   margin: 0 30px 30px;
@@ -65,7 +136,7 @@
   &.active {
 
     .section-title {
-      background-color: #CD9923 !important;
+      background-color: #CD9923;
 
       &:hover {
         background-color: darken(#CD9923, 3%) !important;

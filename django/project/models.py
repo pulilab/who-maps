@@ -3,22 +3,14 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from core.models import ExtendedModel, SoftDeleteMixin
-from country.models import Country
+from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
-
-    @staticmethod
-    def make_public_id(country_id):
-        project_country = Country.objects.filter(id=country_id).first()
-        if project_country:
-            return project_country.code + str(uuid.uuid1()).split('-')[0]
 
     def owner_of(self, user):
         return self.get_queryset().filter(team=user.userprofile)
@@ -27,28 +19,26 @@ class ProjectManager(models.Manager):
         return self.get_queryset().filter(viewers=user.userprofile)
 
     def member_of(self, user):
-        return self.get_queryset().filter(Q(team=user.userprofile) | Q(viewers=user.userprofile)).distinct()
+        return self.get_queryset().filter(Q(team=user.userprofile)
+                                          | Q(viewers=user.userprofile)).distinct().order_by('id')
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
         return self.get_queryset().filter(data__organisation=organisation_id)
 
-    def create(self, **kwargs):
-        kwargs['public_id'] = self.make_public_id(kwargs['data']['country'])
-        return super(ProjectManager, self).create(**kwargs)
-
 
 class Project(ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date",
-                               "started", "application", "last_version")
+    FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
+                               "application", "last_version")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
-    name = models.CharField(max_length=255, unique=True)
-    data = JSONField()
+    name = models.CharField(max_length=255)
+    data = JSONField(default=dict())
+    draft = JSONField(default=dict())
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
-    public_id = models.CharField(max_length=64, default="",
-                                 help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
+    public_id = models.CharField(
+        max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
     projects = ProjectManager()
 
@@ -58,7 +48,7 @@ class Project(ExtendedModel):
     @property
     def country(self):
         try:
-            country_id = int(self.data.get('country'))
+            country_id = int(self.data.get('country', self.draft.get('country')))
         except TypeError:  # pragma: no cover
             return None
         return Country.objects.get(id=country_id)
@@ -66,8 +56,14 @@ class Project(ExtendedModel):
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
+    def is_admin(self, user):
+        return self.country.user == user
+
     def get_member_data(self):
         return self.data
+
+    def get_member_draft(self):
+        return self.draft
 
     def get_non_member_data(self):
         return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY)
@@ -84,6 +80,44 @@ class Project(ExtendedModel):
             if key in d:
                 d.pop(key, None)
         return d
+
+    def to_representation(self, data=None, draft_mode=False):
+        if data is None:
+            data = self.get_member_draft() if draft_mode else self.get_member_data()
+
+        if not data:
+            return {}
+
+        extra_data = dict(
+            id=self.pk,
+            name=self.name,
+            organisation_name=self.get_organisation().name if self.get_organisation() else '',
+            country_name=self.country.name if self.country else None,
+            approved=self.approval.approved if hasattr(self, 'approval') else None,
+            fields=[field.to_representation() for field in CountryField.get_for_project(self)],
+        )
+
+        data.update(extra_data)
+
+        return data
+
+    def to_response_dict(self, published, draft):
+        return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
+
+    def make_public_id(self, country_id):
+        if self.public_id:
+            return
+
+        project_country = Country.objects.filter(id=country_id).first()
+        if project_country:
+            self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
+
+
+class ProjectApproval(ExtendedModel):
+    project = models.OneToOneField('Project', related_name='approval')
+    user = models.ForeignKey(UserProfile)
+    approved = models.NullBooleanField(blank=True, null=True)
+    reason = models.TextField(blank=True, null=True)
 
 
 class CoverageVersion(ExtendedModel):

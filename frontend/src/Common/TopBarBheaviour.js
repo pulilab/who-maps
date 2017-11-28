@@ -1,73 +1,84 @@
-import Protected  from './Protected';
+import * as UserModule from '../store/modules/user';
 
-class TopBar extends Protected {
+class TopBar {
 
-    constructor($state, $scope) {
-        super();
+    constructor($state, $scope, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.commonInit = this.commonInit.bind(this);
+        this.commonOnDestroy = this.commonOnDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     commonInit() {
-        this.defaultOnInit();
-        this.cs = require('./CommonServices');
-        this.profileDataReady = false;
         this.writeUserRole = this.writeUserRole.bind(this);
     }
 
+    commonOnDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            userModel: state.user
+        };
+    }
+
     hasProfile() {
-        return this.cs.hasProfile();
+        const p = this.userModel.profile;
+        return p && p.country && p.organisation && p.name;
     }
 
     showCountryLevelViewButton() {
-        return this.isLogin && this.hasProfile();
+        return this.userModel.token;
     }
 
     showGoToMyDashboardButton() {
-        return this.profileDataReady && this.hasProfile();
+        return this.userModel.token;
     }
 
     showPersonaMenu() {
-        return this.profileDataReady && this.hasProfile();
+        return this.userModel.token;
     }
 
     showNewProjectButton() {
-        return this.profileDataReady && this.hasProfile();
+        return this.hasProfile();
     }
 
     showPlanningAndGuidanceButton() {
-        return this.isLogin;
+        return this.hasProfile();
     }
 
 
     showSearch() {
-        return this.isLogin;
+        return this.userModel.token;
     }
     showLogin() {
-        return this.state.current.name !== 'login' && !this.isLogin;
+        return this.state.current.name !== 'login' && !this.userModel.token;
     }
 
     showSignUp() {
-        return this.state.current.name !== 'signup' && !this.isLogin;
+        return this.state.current.name !== 'signup' && !this.userModel.token;
     }
 
     writeUserRole() {
         let type = null;
-        switch (this.userProfile.account_type) {
-        case 'I':
-            type = 'Implementer';
-            break;
-        case 'G':
-            type = 'Government';
-            break;
-        case 'D':
-            type = 'Financial Investor';
-            break;
-        case 'Y':
-            type = 'Inventory';
-            break;
+        if (this.userModel && this.userModel.profile) {
+            switch (this.userModel.profile.account_type) {
+            case 'I':
+                type = 'Implementer';
+                break;
+            case 'G':
+                type = 'Government';
+                break;
+            case 'D':
+                type = 'Financial Investor';
+                break;
+            case 'Y':
+                type = 'Inventory';
+                break;
+            }
         }
         return type;
     }
@@ -84,8 +95,8 @@ class TopBar extends Protected {
     }
 
     logout() {
-        this.isLogin = false;
-        this.EE.emit('logout');
+        this.doLogout();
+        this.state.go('landing');
     }
 }
 

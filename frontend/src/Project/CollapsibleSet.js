@@ -1,13 +1,15 @@
-import _ from 'lodash';
+import remove from 'lodash/remove';
 
 class CollapsibleSet {
-    constructor(element, scope, collectionName) {
+    constructor(element, scope, collectionName, resetDefaultList = [], emptyCheckableArray = []) {
         this.EE = window.EE;
         this.element = element;
         this.scope = scope;
         this.toggleClass = 'collapsed';
         this.activateClass = 'active';
         this.collectionName = collectionName;
+        this.resetDefaultList = resetDefaultList;
+        this.emptyCheckableArray = emptyCheckableArray;
     }
 
     defaultOnInit() {
@@ -18,6 +20,32 @@ class CollapsibleSet {
         setTimeout(() => {
             this.EE.emit('componentLoaded', this.elementId);
         });
+        this.defaultWatchers();
+    }
+
+    defaultWatchers() {
+        this.resetDefaultList.forEach(item => {
+            this.scope.$watch(s => s.vm[item.toWatch], this.emptyCustom.bind(this, item.field));
+        });
+        this.emptyCheckableArray.forEach(item => {
+            this.project[item.toWatch].forEach((innerItem, index) => {
+                this.scope.$watch(s => s.vm.project[item.toWatch][index],
+                  this.emptyCheckable.bind(this, item.check, item.field), true);
+            });
+        });
+
+    }
+
+    emptyCustom(field, checkbox) {
+        if (checkbox === false) {
+            this.project[field].custom = undefined;
+        }
+    }
+
+    emptyCheckable(check, field, item) {
+        if (!item[check]) {
+            item[field] = undefined;
+        }
     }
 
     defaultOnDestroy() {
@@ -72,7 +100,7 @@ class CollapsibleSet {
         }
         const field = this.findField(key);
         if (this.checkboxChecked(t, key)) {
-            _.remove(field, item => {
+            remove(field, item => {
                 return item === t;
             });
         }
@@ -86,7 +114,7 @@ class CollapsibleSet {
             return false;
         }
         const field = this.findField(key);
-        return field.indexOf(t) > -1;
+        return field && field.length ? field.indexOf(t) > -1 : false;
     }
 
     setAvailableOptions(category, options, fieldName) {

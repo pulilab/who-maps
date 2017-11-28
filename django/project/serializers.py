@@ -4,7 +4,6 @@ from django.template import loader
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
 
-from user.models import UserProfile
 from .models import Project
 
 
@@ -20,8 +19,8 @@ class CoverageSerializer(NDPSerializer):
 
 class PlatformSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128, required=True)
-    strategies = serializers.ListField(child=serializers.CharField(max_length=512),
-                                       max_length=64, min_length=0, allow_empty=True)
+    strategies = serializers.ListField(
+        child=serializers.CharField(max_length=512), max_length=64, min_length=0, allow_empty=True)
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
@@ -30,7 +29,7 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     link = serializers.CharField(required=False, max_length=256)
 
 
-class ProjectSerializer(serializers.Serializer):
+class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
@@ -44,18 +43,19 @@ class ProjectSerializer(serializers.Serializer):
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
-    health_focus_areas = serializers.ListField(child=serializers.CharField(max_length=512), max_length=64, required=False)
-    hsc_challenges = serializers.ListField(child=serializers.CharField(max_length=128),
-                                           max_length=64, min_length=0, allow_empty=True)
+    health_focus_areas = serializers.ListField(
+        child=serializers.CharField(max_length=512), max_length=64, required=False)
+    hsc_challenges = serializers.ListField(
+        child=serializers.CharField(max_length=128), max_length=64, min_length=0, allow_empty=True)
     his_bucket = serializers.ListField(child=serializers.CharField(max_length=128), max_length=64)
     coverage = CoverageSerializer(many=True, required=False)
     national_level_deployment = NDPSerializer(required=False)
     government_approved = serializers.BooleanField()
-    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'),
-                                                           (1, 'Yes, they are contributing in-kind people or time'),
-                                                           (2, 'Yes, there is a financial contribution through MOH budget')])
-    implementing_partners = serializers.ListField(child=serializers.CharField(max_length=64),
-                                                  max_length=50, min_length=0, required=False)
+    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'), (
+        1, 'Yes, they are contributing in-kind people or time'), (
+            2, 'Yes, there is a financial contribution through MOH budget')])
+    implementing_partners = serializers.ListField(
+        child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False)
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
 
     # SECTION 3 Technology Overview
@@ -67,41 +67,70 @@ class ProjectSerializer(serializers.Serializer):
 
     # SECTION 4 Interoperability & Standards
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
-    interoperability_standards = serializers.ListField(child=serializers.CharField(max_length=64),
-                                                       required=False, max_length=50)
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    org = serializers.SerializerMethodField('get_org_name')
-
-    class Meta:
-        model = UserProfile
-        fields = ('id', 'name', 'org')
-
-    @staticmethod
-    def get_org_name(obj):
-        return obj.organisation.name if obj.organisation else None
-
-
-class ProjectGroupListSerializer(serializers.ModelSerializer):
-    team = GroupSerializer(many=True)
-    viewers = GroupSerializer(many=True)
-    user_profiles = serializers.SerializerMethodField()
+    interoperability_standards = serializers.ListField(
+        child=serializers.CharField(max_length=64), required=False, max_length=50)
 
     class Meta:
         model = Project
-        fields = ("team", "viewers", "user_profiles")
 
-    @staticmethod
-    def get_user_profiles(obj):
-        return UserProfile.objects.all().values("id", "name", "organisation__name")
+    def update(self, instance, validated_data):
+        instance.name = validated_data["name"]
+        instance.data = validated_data
+        instance.draft = validated_data
+        instance.make_public_id(validated_data['country'])
+
+        instance.save()
+
+        return instance
 
 
-class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
+class ProjectDraftSerializer(ProjectPublishedSerializer):
+    """
+    Override fields that are not required for draft project.
+    """
+    name = serializers.CharField(max_length=128)
+    # SECTION 1 General Overview
+    organisation = serializers.CharField(max_length=128, required=False)
+    country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
+    implementation_overview = serializers.CharField(max_length=512, required=False)
+    contact_name = serializers.CharField(max_length=256, required=False)
+    contact_email = serializers.EmailField(required=False)
 
+    # SECTION 2 Implementation Overview
+    platforms = PlatformSerializer(many=True, required=False)
+    hsc_challenges = serializers.ListField(
+        child=serializers.CharField(max_length=128), max_length=64, min_length=0, allow_empty=True, required=False)
+    his_bucket = serializers.ListField(child=serializers.CharField(max_length=128), max_length=64, required=False)
+    government_approved = serializers.BooleanField(required=False)
+    government_investor = serializers.ChoiceField(
+        choices=[(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
+                 (2, 'Yes, there is a financial contribution through MOH budget')],
+        required=False)
+    donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32, required=False)
+
+    # SECTION 3 Technology Overview
+    implementation_dates = serializers.CharField(max_length=128, required=False)
+
+    def create(self, validated_data):
+        owner = validated_data.pop('owner')
+        instance = self.Meta.model.projects.create(name=validated_data["name"], draft=validated_data)
+        instance.team.add(owner)
+
+        return instance
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data["name"]
+        instance.draft = validated_data
+        instance.save()
+
+        return instance
+
+
+class ProjectGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ("team", "viewers")
+        read_only_fields = ("id",)
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
@@ -124,9 +153,10 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
 
         html_template = loader.get_template("email/new_member.html")
         html_message = html_template.render({
-                                        "project_id": instance.id,
-                                        "project_name": instance.name,
-                                        "role": "team member"})
+            "project_id": instance.id,
+            "project_name": instance.name,
+            "role": "team member"
+        })
         for profile in new_team_members:
             mail.send_mail(
                 subject="You were added to a project!",
@@ -137,9 +167,10 @@ class ProjectGroupUpdateSerializer(serializers.ModelSerializer):
                 fail_silently=True)
 
         html_message = html_template.render({
-                                        "project_id": instance.id,
-                                        "project_name": instance.name,
-                                        "role": "viewer"})
+            "project_id": instance.id,
+            "project_name": instance.name,
+            "role": "viewer"
+        })
         for profile in new_viewers:
             mail.send_mail(
                 subject="You were added to a project!",

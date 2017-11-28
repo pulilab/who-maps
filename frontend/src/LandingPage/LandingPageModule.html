@@ -1,81 +1,63 @@
 <div class="landing-wrapper" layout=column>
   <div class="bg-hero" ng-style="vm.countryCover" layout=row layout-align="start end">
-    <div class="welcome">
-      <div class="welcome-text">
-        <h2 class="md-display-3">Welcome!</h2>
-        <h5 class="md-headline">{{vm.countryData.cover_text}}</h5>
-      </div>
-
-      <searchbar></searchbar>
-    </div>
+    <searchbar></searchbar>
   </div>
 
   <div layout="row" class="content-wrapper">
 
-    <div class="what-is-aside" flex=40>
-      <h5 class="md-headline">Why use the Digital Health Atlas?</h5>
-      <div class="md-block dha-feature" layout="row" layout-align="start start">
-        <div class="img-wrapper" flex=auto>
-          <img src="./images/screenshot-1.png" alt="">
-        </div>
-        <div flex=grow>
-          <p>This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.</p>
+    <div class="content-aside" flex=40>
+
+      <div class="welcome">
+        <div class="welcome-text">
+          <h2 class="md-display-3">Welcome!</h2>
+          <h5 class="md-headline">{{vm.countryData.cover_text}}</h5>
         </div>
       </div>
-      <div class="md-block dha-feature" layout="row" layout-align="start start">
-        <div class="img-wrapper" flex=auto>
-          <img src="./images/screenshot-2.png" alt="">
+
+      <div class="what-is">
+        <h5 class="md-headline">Why use the Digital Health Atlas?</h5>
+        <div class="md-block dha-feature" layout="row" layout-align="start start">
+          <div class="img-wrapper" flex=auto>
+            <img src="./images/screenshot-1.png" alt="">
+          </div>
+          <div flex=grow>
+            <p>This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.</p>
+          </div>
         </div>
-        <div flex=grow>
-          <p>The Digital Health Atlas (DHA) offers governments, technologists, implementers, and donors a platform of tools and guidance to improve the use of, and planning coordination for digital information systems for health.</p>
+        <div class="md-block dha-feature" layout="row" layout-align="start start">
+          <div class="img-wrapper" flex=auto>
+            <img src="./images/screenshot-2.png" alt="">
+          </div>
+          <div flex=grow>
+            <p>The Digital Health Atlas (DHA) offers governments, technologists, implementers, and donors a platform of tools and guidance to improve the use of, and planning coordination for digital information systems for health.</p>
+          </div>
+        </div>
+        <div class="md-block dha-feature" layout="row" layout-align="start start">
+          <div class="img-wrapper" flex=auto>
+            <img src="./images/screenshot-3.png" alt="">
+          </div>
+          <div flex=grow>
+            <p>The DHA facilitates implementers to assess the maturity of their digital health implementations, gain personalized guidance, benefit from other’s implementation experiences, and gain access to global resources from leading technical institutions.</p>
+          </div>
         </div>
       </div>
-      <div class="md-block dha-feature" layout="row" layout-align="start start">
-        <div class="img-wrapper" flex=auto>
-          <img src="./images/screenshot-3.png" alt="">
-        </div>
-        <div flex=grow>
-          <p>The DHA facilitates implementers to assess the maturity of their digital health implementations, gain personalized guidance, benefit from other’s implementation experiences, and gain access to global resources from leading technical institutions.</p>
-        </div>
-      </div>
+
     </div>
 
 
-    <md-card ng-if="!vm.isLogin" class="content-main logged-out md-card" ng-hide="vm.registered" flex=60>
+    <md-card ng-if="!vm.user.profile" class="content-main logged-out md-card" ng-hide="vm.registered" flex=60>
       <signup landing-page="true"></signup>
     </md-card>
 
-    <md-card ng-if="vm.isLogin" class="content-main logged-in md-card" flex=60>
+    <md-card ng-if="vm.user.profile" class="content-main logged-in md-card" flex=60>
       <h2 class="md-display-3">My Projects</h2>
 
-      <md-card md-whiteframe="2" class="my-project" ng-repeat="project in vm.projectList">
-        <div layout="row" layout-align="start stretch">
-          <div flex="85">
-            <hgroup>
-              <h3 class="project-title md-headline">{{project.name}}</h3>
-              <h6 class="country-title md-subhead">{{project.countryName}}</h6>
-            </hgroup>
-            <div class="project-links md-block">
-              <md-button aria-label="Dashboard" ui-sref="dashboard({appName: project.id})" class="md-primary md-small" md-no-ink>
-                <md-icon class="material-icons">apps</md-icon>
-                Dashboard
-              </md-button>
-              <md-button aria-label="Update Scores" ui-sref="maps({appName: project.id})" class="md-primary md-small" md-no-ink>
-                <md-icon class="material-icons">playlist_add_check</md-icon>
-                Update
-              </md-button>
-              <md-button aria-label="Summary Score" ui-sref="summary({appName: project.id})" class="md-primary md-small" md-no-ink>
-                <md-icon class="material-icons">insert_chart</md-icon>
-                Summary
-              </md-button>
-            </div>
-          </div>
-          <div class="project-stats-2" flex="15">
-            <donors number="project.donors.length"></donors>
-          </div>
-        </div>
-
-      </md-card>
+      <project-component ng-repeat="p in vm.projects"
+                         show-details="true"
+                         project="p"
+                         class="compact">
+      </project-component>
+    </md-card>
   </div>
 </div>
 

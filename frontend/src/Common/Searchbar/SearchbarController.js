@@ -1,82 +1,55 @@
 import _ from 'lodash';
-import SearchbarService from './SearchbarService';
-import Storage from '../Storage';
+import * as SystemModule from '../../store/modules/system';
 
 class SearchbarController {
 
-    constructor($state, $scope, filters) {
-        const vm = this;
-        vm.EE = window.EE;
-        vm.scope = $scope;
-        vm.state = $state;
-        vm.storage = new Storage();
-        vm.ss = new SearchbarService();
-        vm.$onInit = vm.initialisation.bind(vm);
-        vm.filters = filters;
-        vm.searchStr = '';
-        vm.resultNr = 0;
-        vm.projects = void 0;
-
-        vm.isMember = vm.isMember.bind(this);
-        vm.isViewer = vm.isViewer.bind(this);
-
-        vm.scope.$watch(() => {
-            return vm.searchStr;
-        }, tmpStr => {
-            vm.search(tmpStr);
-        });
+    constructor($state, $scope, $ngRedux, filters) {
+        this.EE = window.EE;
+        this.scope = $scope;
+        this.state = $state;
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+        this.filters = filters;
+        this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
     }
 
-    initialisation() {
+    mapState(state) {
+        return {
+            projects: SystemModule.getSearchResult(state)
+        };
+    }
+
+    onInit() {
         this.showSearch = false;
-        this.isLogin = this.storage.get('login');
-        if (this.isLogin) {
-            this.getUserData();
-        }
-    }
-
-    getUserData() {
-        const self = this;
-        self.cs  = require('../CommonServices');
-        self.cs.loadedPromise.then(()=> {
-            self.userProjects = self.cs.projectList;
-            self.viewer = self.cs.userProfile.viewer;
-            self.member = self.cs.userProfile.member;
+        this.searchStr = '';
+        this.resultNr = 0;
+        this.projects = void 0;
+        this.scope.$watch(() => {
+            return this.searchStr;
+        }, tmpStr => {
+            this.search(tmpStr);
         });
     }
+
+    onDestroy() {
+        this.unsubscribe();
+    }
+
 
     toggleSearch() {
         this.showSearch = !this.showSearch;
     }
 
-    isViewer(project) {
-        if (this.cs) {
-            return this.cs.isViewer(project);
-        }
-        return false;
-    }
 
-    isMember(project) {
-        if (this.cs) {
-            return this.cs.isMember(project);
-        }
-        return false;
-    }
-
-
-    search(tmpStr) {
-        const vm = this;
+    async search(tmpStr) {
         if (!tmpStr || tmpStr.length === 0) {
             return false;
         }
-        if (tmpStr === vm.searchStr) {
-            if (_.some(vm.filters, { value: true })) {
-                this.ss.searchProject(vm.searchStr, vm.filters).then(results => {
-                    vm.projects = results;
-                    vm.resultNr = _.min([results.length, 5]);
-                    vm.totalNr = results.length;
-                    vm.scope.$evalAsync();
-                });
+        if (tmpStr === this.searchStr) {
+            if (this.filters.some(v => v.value)) {
+                await this.searchProjects(this.searchStr, this.filters);
+                this.resultNr = _.min([this.projects.length, 5]);
+                this.totalNr = this.projects.length;
             }
         }
         return true;
@@ -112,11 +85,11 @@ class SearchbarController {
     static searchbarFactory() {
         require('./Searchbar.scss');
         const filters = require('./Resource/filters.json');
-        function searchController($state, $scope) {
-            return new SearchbarController($state, $scope, filters);
+        function searchController($state, $scope, $ngRedux) {
+            return new SearchbarController($state, $scope, $ngRedux, filters);
         }
 
-        searchController.$inject = ['$state', '$scope'];
+        searchController.$inject = ['$state', '$scope', '$ngRedux'];
 
         return searchController;
     }

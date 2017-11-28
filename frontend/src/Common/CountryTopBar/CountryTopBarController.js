@@ -1,36 +1,40 @@
 import TopBarBehaviour  from '../TopBarBheaviour';
+import * as CountryModule from '../../store/modules/countries';
 
 class CountryTopBarController extends TopBarBehaviour {
 
-    constructor($state, $scope, $timeout) {
-        super($state, $scope);
+    constructor($state, $scope, $timeout, $ngRedux) {
+        super($state, $scope, $ngRedux);
         this.EE = window.EE;
         this.timeout = $timeout;
-        this.ccs = require('../CustomCountryService');
         this.$onInit = this.onInit.bind(this);
+        // this has a different name because TopBarBehaviour implement is own state
+        this.unsubscribeCountry = $ngRedux.connect(this.mapCountryState, CountryModule)(this);
+    }
+
+    mapCountryState(state) {
+        const countryData = CountryModule.getCountryCoverPage(state);
+        const showCountryNameAndFlag = countryData && countryData.name && countryData.name !== 'WHO';
+        return {
+            countryData,
+            countryFlag: CountryModule.getCurrentCountry(state).flag,
+            pageLoaded: !!countryData.name,
+            showCountryNameAndFlag,
+            logoClass: showCountryNameAndFlag ? 'has-country-logo' : ''
+        };
     }
 
     onInit() {
-        const vm = this;
         this.pageLoaded = false;
         this.watchers();
         this.commonInit();
-        if (this.user) {
-            this.cs.loadedPromise.then(vm.setProfileData.bind(vm));
-        }
-        const subDomain = this.ccs.getSubDomain();
-        this.countryFlag = this.ccs.getCountryFlag(subDomain);
-        this.ccs.getCountryData(subDomain).then(data => {
-            this.scope.$evalAsync(() => {
-                vm.countryData = data;
-                vm.pageLoaded = true;
-                vm.showCountryNameAndFlag = vm.countryData && vm.countryData.name && vm.countryData.name !== 'WHO';
-                vm.logoClass = vm.showCountryNameAndFlag ? 'has-country-logo' : '';
-            });
-        });
 
         window.onscroll = this.scrollEventHandler.bind(this);
         document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
+    }
+
+    onDestroy() {
+        this.unsubscribeCountry();
     }
 
     watchers() {
@@ -43,14 +47,6 @@ class CountryTopBarController extends TopBarBehaviour {
         });
     }
 
-    setProfileData() {
-        this.userProfile = this.cs.userProfile;
-        if (this.userProfile) {
-            this.profileDataReady = true;
-        }
-        this.scope.$evalAsync();
-    }
-
     scrollEventHandler(e) {
         const vm = this;
         vm.timeout(() => {
@@ -61,11 +57,11 @@ class CountryTopBarController extends TopBarBehaviour {
 
     static countryTopBarControllerFactory() {
         require('./countryTopBar.scss');
-        function countryTopBarController($state, $scope, $timeout) {
-            return new CountryTopBarController($state, $scope, $timeout);
+        function countryTopBarController($state, $scope, $timeout, $ngRedux) {
+            return new CountryTopBarController($state, $scope, $timeout, $ngRedux);
         }
 
-        countryTopBarController.$inject = ['$state', '$scope', '$timeout'];
+        countryTopBarController.$inject = ['$state', '$scope', '$timeout', '$ngRedux'];
 
         return countryTopBarController;
     }

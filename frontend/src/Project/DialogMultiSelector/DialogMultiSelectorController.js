@@ -1,5 +1,4 @@
 import angular from 'angular';
-import Protected from '../../Common/Protected';
 
 
 class DialogMultiSelectorDialog {
@@ -82,15 +81,12 @@ class DialogMultiSelectorDialog {
     }
 }
 
-class DialogMultiSelector extends Protected {
+class DialogMultiSelector {
 
     constructor($scope, $mdDialog) {
-        super();
         this.scope = $scope;
         this.dialog = $mdDialog;
-        this.defaultOnInit();
         this.checkDuplicates = this.checkDuplicates.bind(this);
-
         this.watchers();
     }
 

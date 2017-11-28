@@ -1,15 +1,18 @@
 import _ from 'lodash';
 import { normalizeName } from '../utilities';
+import * as CmsModule from '../../store/modules/cms';
 
 class DashboardWidgetController {
 
-    constructor($scope) {
+    constructor($scope, $ngRedux) {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.splitType = this.splitType.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     onInit() {
-        this.cs = require('../CmsService');
         this.axes = require('../resources/domains');
         this.domains = _.flatMap(this.axes, axis => {
             return axis.domains;
@@ -17,38 +20,25 @@ class DashboardWidgetController {
         this.lessons = [];
         this.resources = [];
         this.experiences = [];
-        this.all = [];
-        this.getData();
-        this.watchers();
         this.currentDomain = this.domains[Math.floor(Math.random() * this.domains.length)];
+        this.watchers();
     }
 
-    getData() {
-        return this.cs.getData().then(data => {
-            this.scope.$evalAsync(() => {
-                this.all = data;
-            });
-        });
+    mapState(state) {
+        return {
+            all: state.cms.data
+        };
     }
-
 
     watchers() {
-        this.scope.$watchGroup([() => {
-            return this.currentDomain;
-        }, () => {
-            return this.scores;
-        }], ([domain, scores]) => {
-            if (domain) {
+        this.scope.$watchGroup([s => s.vm.currentDomain, s => s.vm.scores], ([domain, scores]) => {
+            if (domain && scores && scores.length > 0) {
                 this.setDomainVariables(domain, scores);
                 this.splitType(this.all);
             }
         });
 
-        this.scope.$watchCollection(() => {
-            return this.all;
-        }, data => {
-            this.splitType(data);
-        });
+        this.scope.$watchCollection(s => s.vm.all, this.splitType);
     }
 
     splitType(data) {
@@ -104,10 +94,10 @@ class DashboardWidgetController {
 
     static factory() {
         require('./DashboardWidget.scss');
-        function dashboardWidgetController($scope) {
-            return new DashboardWidgetController($scope);
+        function dashboardWidgetController($scope, $ngRedux) {
+            return new DashboardWidgetController($scope, $ngRedux);
         }
-        dashboardWidgetController.$inject = ['$scope'];
+        dashboardWidgetController.$inject = ['$scope', '$ngRedux'];
         return dashboardWidgetController;
     }
 }

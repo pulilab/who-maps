@@ -82,10 +82,9 @@
 
       &.md-active {
         background-color: white;
-        opacity: 0.85;
         border: none;
         span {
-          color: $color-primary;
+          color: $text-primary;
         }
       }
     }
