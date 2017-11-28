@@ -37,35 +37,84 @@
           ng-if="vm.publishMode"
           users="vm.users">
         </read-only-general-overview>
+
+
         <implementation-overview
           id="implementation-overview"
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
+          ng-if="!vm.publishMode"
           structure="vm.structure">
         </implementation-overview>
+
+        <read-only-implementation-overview
+          id="implementation-overview"
+          form="vm.form"
+          project="vm.project"
+          ng-if="vm.publishMode"
+          activate-validation="vm.activateValidation"
+          structure="vm.structure">
+        </read-only-implementation-overview>
+
+
         <technology
           id="technology"
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
+          ng-if="!vm.publishMode"
           structure="vm.structure">
         </technology>
+
+        <read-only-technology
+          id="technology"
+          form="vm.form"
+          project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.publishMode"
+          structure="vm.structure">
+        </read-only-technology>
+
+
         <interoperability
           id="interoperability"
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
+          ng-if="!vm.publishMode"
           structure="vm.structure">
         </interoperability>
+
+        <read-only-interoperability
+          id="interoperability"
+          form="vm.form"
+          project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.publishMode"
+          structure="vm.structure">
+        </read-only-interoperability>
+
+
         <country-fields
           ng-show="vm.countryFields && vm.countryFields.length > 0"
           id="country-fields"
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          country-fields="vm.countryFields"
-        ></country-fields>
+          ng-if="!vm.publishMode"
+          country-fields="vm.countryFields">
+        </country-fields>
+
+        <read-only-country-fields
+          ng-show="vm.countryFields && vm.countryFields.length > 0"
+          id="country-fields"
+          form="vm.form"
+          project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.publishMode"
+          country-fields="vm.countryFields">
+        </read-only-country-fields>
 
       </div>
       <div class="navigation-area" layout="column">

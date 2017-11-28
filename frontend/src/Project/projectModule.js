@@ -3,11 +3,15 @@ import newProjectComponent from './projectComponent';
 import interoperability from './Interoperability/interoperabilityComponent';
 import navigation from './Navigation/navigationComponent';
 import generalOverview from './GeneralOverview/generalOverviewComponent';
-import { readOnlyGeneralOverview } from './GeneralOverview/generalOverviewComponent';
 import implementationOverview from './ImplementationOverview/implementationOverviewComponent';
 import technology from './Technology/technologyComponent';
 import countryFields from './CountryFields/countryFieldsComponent';
 import dialogMultiSelection from './DialogMultiSelector/dialogMultiSelectorComponent';
+import { readOnlyCountryFields } from './CountryFields/countryFieldsComponent';
+import { readOnlyGeneralOverview } from './GeneralOverview/generalOverviewComponent';
+import { readOnlyImplementationOverview } from './ImplementationOverview/implementationOverviewComponent';
+import { readOnlyInteroperability } from './Interoperability/interoperabilityComponent';
+import { readOnlyTechnology } from './Technology/technologyComponent';
 import * as ProjectsModule from '../store/modules/projects';
 
 const moduleName = 'Project';
@@ -60,11 +64,15 @@ angular.module(moduleName, [])
   .component(interoperability.name, interoperability)
   .component(navigation.name, navigation)
   .component(generalOverview.name, generalOverview)
-  .component(readOnlyGeneralOverview.name, readOnlyGeneralOverview)
   .component(implementationOverview.name, implementationOverview)
   .component(countryFields.name, countryFields)
   .component(dialogMultiSelection.name, dialogMultiSelection)
   .component(technology.name, technology)
+  .component(readOnlyCountryFields.name, readOnlyCountryFields)
+  .component(readOnlyGeneralOverview.name, readOnlyGeneralOverview)
+  .component(readOnlyImplementationOverview.name, readOnlyImplementationOverview)
+  .component(readOnlyInteroperability.name, readOnlyInteroperability)
+  .component(readOnlyTechnology.name, readOnlyTechnology)
   .config(config);
 
 

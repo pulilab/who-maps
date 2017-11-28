@@ -26,6 +26,10 @@ export const userCountryObject = state => {
     return null;
 };
 
+export const getCountry = (state, id) => {
+    return state.countries.list.find(c => c.id === id);
+};
+
 export const getCountriesList = state => {
     if (state.countries.list) {
         return state.countries.list.map(c=> {

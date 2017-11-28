@@ -158,6 +158,8 @@ const getCurrentProjectForEditing = (state, data) => {
 export const getCurrentPublishedProjectForEditing = state => {
     const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
+        const country = CountryModule.getCountry(state, project.country);
+        project.country_name = country ? country.name : '';
         return getCurrentProjectForEditing(state, project);
     }
     return undefined;
