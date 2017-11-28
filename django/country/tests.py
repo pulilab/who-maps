@@ -321,9 +321,9 @@ class CountryTests(APITestCase):
                     'name':
                     'OpenSRP',
                     'strategies': [
-                        'Transmit untargeted health promotion content to entire population',
-                        "Track client's health and services within a longitudinal care plan",
-                        'Transmit prescriptions orders'
+                        'Transmit or manage out of pocket payments by client',
+                        'Access by client to own medical records',
+                        'Map location of health event'
                     ]
                 },
             ],
@@ -356,8 +356,8 @@ class CountryTests(APITestCase):
                 'name':
                 'Bamboo',
                 'strategies': [
-                    'Guide through process algorithms according to clinical protocol',
-                    'Monitor status of health equipment'
+                    'Provide prompts and alerts based according to protocol',
+                    'Consultations between remote client and healthcare provider'
                 ]
             }],
             'interoperability_links': [
@@ -385,9 +385,9 @@ class CountryTests(APITestCase):
                 '24': {
                     'name': 'OpenSRP',
                     'strategies': {
-                        '6': 'Transmit untargeted health promotion content to entire population',
-                        '31': "Track client's health and services within a longitudinal care plan",
-                        '72': 'Transmit prescriptions orders',
+                        '132': 'Transmit or manage out of pocket payments by client',
+                        '123': 'Access by client to own medical records',
+                        '222': 'Map location of health event'
                     },
                     'owners': {
                         'foo1@gmail.com': 'foo1',
@@ -397,8 +397,8 @@ class CountryTests(APITestCase):
                 '2': {
                     'name': 'Bamboo',
                     'strategies': {
-                        '35': 'Guide through process algorithms according to clinical protocol',
-                        '76': 'Monitor status of health equipment',
+                        '144': 'Provide prompts and alerts based according to protocol',
+                        '148': 'Consultations between remote client and healthcare provider'
                     },
                     'owners': {
                         'foo2@gmail.com': 'foo2',
@@ -410,6 +410,7 @@ class CountryTests(APITestCase):
         Project.objects.create(name='proj2', data=project_data2)
         response = self.client.get(reverse('country-export'))
 
+        self.maxDiff = None
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[-1], expected_data)
 

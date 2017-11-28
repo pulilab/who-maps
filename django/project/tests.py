@@ -13,7 +13,7 @@ from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
-    HealthCategory, ProjectDraft, ProjectApproval
+    HealthCategory, ProjectApproval
 from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
 from .tasks import send_project_approval_digest
 
