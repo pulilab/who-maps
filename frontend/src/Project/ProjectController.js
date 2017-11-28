@@ -9,11 +9,12 @@ import * as CountryModule from '../store/modules/countries';
 
 class ProjectController  {
 
-    constructor($scope, $state, toast, $timeout, $ngRedux) {
+    constructor($scope, $state, toast, $timeout, $mdDialog, $ngRedux) {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
         this.$ngRedux = $ngRedux;
+        this.$mdDialog = $mdDialog;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -52,9 +53,14 @@ class ProjectController  {
                 viewers = ProjectModule.getViewers(state);
             }
         }
+
+        if (project === undefined) {
+            project = ProjectModule.getEmptyProject();
+        }
         const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
         return {
             newProject,
+            publishMode,
             lastVersion,
             project,
             team,
@@ -86,6 +92,7 @@ class ProjectController  {
         if (DEV) {
             this.fillTestForm();
         }
+        this.activateValidation = true;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
@@ -158,13 +165,21 @@ class ProjectController  {
 
         }
         catch (e) {
+            console.log(e);
             this.handleResponse(e.response);
         }
     }
 
 
-    focusInvalidField() {
-        this.showToast('Validation error');
+    async focusInvalidField() {
+        const alert = this.$mdDialog.alert({
+            title: 'Attention',
+            textContent: 'You can\'t publish until all the required fields are filled, you can however save the draft',
+            ok: 'Close',
+            theme: 'alert'
+        });
+
+        this.$mdDialog.show(alert);
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
@@ -292,6 +307,7 @@ class ProjectController  {
     }
 
     handleResponse(response) {
+        console.log(response);
         forEach(response.data, (item, key) => {
             try {
                 if (item && isPlainObject(item)) {
@@ -325,10 +341,10 @@ class ProjectController  {
 
     static newProjectFactory() {
         require('./Project.scss');
-        function newProject($scope, $state, $mdToast, $timeout, $ngRedux) {
-            return new ProjectController($scope, $state, $mdToast, $timeout, $ngRedux);
+        function newProject($scope, $state, $mdToast, $timeout, $mdDialog, $ngRedux) {
+            return new ProjectController($scope, $state, $mdToast, $timeout, $mdDialog, $ngRedux);
         }
-        newProject.$inject = ['$scope', '$state', '$mdToast', '$timeout', '$ngRedux'];
+        newProject.$inject = ['$scope', '$state', '$mdToast', '$timeout', '$mdDialog', '$ngRedux'];
         return newProject;
     }
 }
