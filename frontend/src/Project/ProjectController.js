@@ -28,30 +28,37 @@ class ProjectController  {
         const userProfile = UserModule.getProfile(state);
         const newProject = this.state.current.name === 'newProject';
         const publishMode = this.state.params.editMode === 'publish';
+        const lastVersion = ProjectModule.getLastVersion(state);
 
         let project = null;
         let team = null;
         let viewers = null;
 
-        if (newProject) {
-            project = this.project ? this.project : ProjectModule.getVanillaProject(state);
-            team = this.team ? this.team : [userProfile];
-            viewers = this.viewers ? this.viewers : [];
+        if (this.lastVersion === lastVersion) {
+            project = this.project;
+            team = this.team;
+            viewers = this.viewers;
         }
         else {
-            // project = this.project ? this.project : ProjectModule.getCurrentPublishedProjectForEditing(state);
-            project = this.project ? this.project : publishMode ?
-            ProjectModule.getCurrentPublishedProjectForEditing(state) :
-              ProjectModule.getCurrentDraftProjectForEditing(state);
-            team = this.team ? this.team : ProjectModule.getTeam(state);
-            viewers = this.viewers ? this.viewers : ProjectModule.getViewers(state);
-        }
 
+            if (newProject) {
+                project = ProjectModule.getVanillaProject(state);
+                team = [userProfile];
+                viewers = [];
+            }
+            else {
+                project = publishMode ? ProjectModule.getCurrentPublishedProjectForEditing(state) :
+                  ProjectModule.getCurrentDraftProjectForEditing(state);
+                team = ProjectModule.getTeam(state);
+                viewers = ProjectModule.getViewers(state);
+            }
+        }
 
         const users = SystemModule.getUserProfiles(state);
 
         const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
         return {
+            lastVersion,
             project,
             team,
             viewers,

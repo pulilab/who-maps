@@ -39,6 +39,10 @@ export const isMemberOrViewer = (state, project) => {
 
 // GETTERS
 
+export const getLastVersion = state => {
+    return state.projects.lastVersion;
+};
+
 export const getPublishedProjects = state => {
     if (state.projects.list) {
         const list = state.projects.list.map(p => {
@@ -350,6 +354,7 @@ export function loadProjectDetails() {
                     }
                 });
                 dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: teamViewers.data });
+                dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
             }
             return Promise.resolve();
         }
@@ -443,6 +448,7 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
+    dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
     dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
     return Promise.resolve(data);
 }
@@ -507,7 +513,7 @@ export function clearSimilarNameList() {
 
 // Reducers
 
-export default function projects(state = {}, action) {
+export default function projects(state = { lastVersion: 0 }, action) {
     const p = Object.assign({}, state);
     switch (action.type) {
     case 'SET_PROJECT_LIST': {
@@ -547,6 +553,10 @@ export default function projects(state = {}, action) {
         p.coverageVersions = action.info.coverageVersions;
         p.teamViewers = action.info.teamViewers;
         return Object.assign(state, {}, p);
+    }
+    case 'BUMP_PROJECT_STATE_VERSION': {
+        const lastVersion = state.lastVersion += 1;
+        return { ...state, lastVersion };
     }
     case 'SET_PROJECT_TEAM_VIEWERS': {
         p.teamViewers = action.teamViewers;
