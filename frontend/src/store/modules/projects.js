@@ -20,7 +20,7 @@ import {
     fieldsWithCustomValue,
     fillEmptyCollectionsWithDefault,
     getTodayString,
-    mergeCustomAndDefault,
+    mergeCustomAndDefault, parsePlatformCollection,
     removeEmptyChildObjects,
     removeKeysWithoutValues,
     setCoverageType
@@ -432,9 +432,10 @@ function processForm(form) {
         ...createDateFields(form),
         ...mergeCustomAndDefault(form),
         ...convertObjectArrayToStringArray(form),
-        ...removeEmptyChildObjects(form),
-        coverageType: undefined
+        coverageType: undefined,
+        platforms: parsePlatformCollection(form)
     };
+    form = { ...form, ...removeEmptyChildObjects(form) };
     return removeKeysWithoutValues(form);
 }
 
