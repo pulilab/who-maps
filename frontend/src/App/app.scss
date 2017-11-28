@@ -271,6 +271,12 @@ md-backdrop {
   }
 }
 
+.md-alert-theme {
+  .md-dialog-content {
+    height: auto;
+  }
+}
+
 .md-dialog-container {
   z-index: 10000;
 }
