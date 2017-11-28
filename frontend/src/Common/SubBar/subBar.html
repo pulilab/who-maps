@@ -2,7 +2,7 @@
     <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
 
         <div class="large project-name">
-            {{vm.currentProject.name}} ({{vm.currentProject.country_name}})
+            <div>{{vm.currentProject.name}} ({{vm.currentProject.country_name}})</div>
             <md-icon class="material-icons viewerIcon" ng-show="vm.currentProject.isViewer">visibility</md-icon>
             <md-icon class="material-icons memberIcon" ng-show="vm.currentProject.isMember">grade</md-icon>
         </div>

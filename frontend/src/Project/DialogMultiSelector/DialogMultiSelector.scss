@@ -191,51 +191,51 @@ dialog-multi-selector {
 
   .sub-group {
 
-    &[class*="group"] .sub-header::before,
-    &[class*="group"] .sub-body::before
-     {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: inline-block;
-      width: 5px;
-      height: 100%;
-    }
-
-    &[class*="group"] .sub-body::before {
-      opacity: .35;
-    }
-
-    &.group-1 .sub-header::before,
-    &.group-1 .sub-body::before {
-      background-color: #039BE5;
-    }
-
-    &.group-2 .sub-header::before,
-    &.group-2 .sub-body::before {
-      background-color: #7CB342;
-    }
-
-    &.group-3 .sub-header::before,
-    &.group-3 .sub-body::before {
-      background-color: #D84315;
-    }
-
-    &.group-4 .sub-header:before,
-    &.group-4 .sub-body::before {
-      background-color: #7C3AA4;
-    }
-
-    &.group-5 .sub-header::before,
-    &.group-5 .sub-body::before {
-      background-color: #FAA906;
-    }
-
-    &.group-6 .sub-header::before,
-    &.group-6 .sub-body::before {
-      background-color: #9D9D9D;
-    }
+    // &[class*="group"] .sub-header::before,
+    // &[class*="group"] .sub-body::before
+    //  {
+    //   content: "";
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   display: inline-block;
+    //   width: 5px;
+    //   height: 100%;
+    // }
+    //
+    // &[class*="group"] .sub-body::before {
+    //   opacity: .35;
+    // }
+    //
+    // &.group-1 .sub-header::before,
+    // &.group-1 .sub-body::before {
+    //   background-color: #039BE5;
+    // }
+    //
+    // &.group-2 .sub-header::before,
+    // &.group-2 .sub-body::before {
+    //   background-color: #7CB342;
+    // }
+    //
+    // &.group-3 .sub-header::before,
+    // &.group-3 .sub-body::before {
+    //   background-color: #D84315;
+    // }
+    //
+    // &.group-4 .sub-header:before,
+    // &.group-4 .sub-body::before {
+    //   background-color: #7C3AA4;
+    // }
+    //
+    // &.group-5 .sub-header::before,
+    // &.group-5 .sub-body::before {
+    //   background-color: #FAA906;
+    // }
+    //
+    // &.group-6 .sub-header::before,
+    // &.group-6 .sub-body::before {
+    //   background-color: #9D9D9D;
+    // }
 
     .sub-header {
       position: relative;
