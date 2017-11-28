@@ -57,7 +57,8 @@ class Project(ExtendedModel):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
     def is_country_admin(self, user):
-        return self.get_country().user == user
+        # Country admin has permissions only for the published project
+        return self.get_country().user == user if self.get_country() else False
 
     def get_member_data(self):
         return self.data
