@@ -131,9 +131,18 @@ function convertCountryFieldsAnswer({ fields }) {
     });
 }
 
-export const getProjectCountryFields = state => isNewProject => {
+export const getCurrentDraft = state => {
+    return getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
+};
+
+export const getCurrentPublished = state => {
+    return getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+};
+
+export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
-    const countryFields = convertCountryFieldsAnswer(getCurrentProject(state));
+    const project = isDraft ? getCurrentDraft(state) : getCurrentPublished(state);
+    const countryFields = convertCountryFieldsAnswer(project);
     const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields :  countryFields;
     return cloneDeep(result);
 };
@@ -156,7 +165,7 @@ const getCurrentProjectForEditing = (state, data) => {
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
-    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    const project = getCurrentPublished(state);
     if (project) {
         const country = CountryModule.getCountry(state, project.country);
         project.country_name = country ? country.name : '';
@@ -166,7 +175,7 @@ export const getCurrentPublishedProjectForEditing = state => {
 };
 
 export const getCurrentDraftProjectForEditing = state => {
-    const project = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
+    const project = getCurrentDraft(state);
     return getCurrentProjectForEditing(state, project);
 };
 
@@ -450,12 +459,12 @@ function processForm(form) {
     return removeKeysWithoutValues(form);
 }
 
-async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state) {
+async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state, toUpdate) {
     const user = UserModule.getProfile(state).id;
     const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
     const twPromise = saveTeamViewers(data, team, viewers);
     const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
-    data.fields = fields;
+    data[toUpdate].fields = fields;
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
@@ -472,7 +481,7 @@ export function saveDraft(form, team, viewers, countryFields) {
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
             const { data } = await axios[method](url, form);
-            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState());
+            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'draft');
         }
         catch (e) {
             console.log(e);
@@ -486,7 +495,7 @@ export function publish(form, team, viewers, countryFields) {
         form = processForm(form);
         try {
             const { data } = await axios.put(`/api/projects/publish/${form.id}/`, form);
-            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState());
+            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'published');
         }
         catch (e) {
             console.log(e);
