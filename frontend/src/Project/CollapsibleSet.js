@@ -1,4 +1,5 @@
 import remove from 'lodash/remove';
+import moment from 'moment';
 
 class CollapsibleSet {
     constructor(element, scope, collectionName, resetDefaultList = [], emptyCheckableArray = []) {
@@ -115,6 +116,10 @@ class CollapsibleSet {
         }
         const field = this.findField(key);
         return field && field.length ? field.indexOf(t) > -1 : false;
+    }
+
+    printDate(date) {
+        return moment(date).format('DD:MM:YYYY');
     }
 
     setAvailableOptions(category, options, fieldName) {
