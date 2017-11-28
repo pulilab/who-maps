@@ -52,7 +52,8 @@ class NavigationController {
         this.state.go(this.state.current.name, { editMode });
     }
 
-    saveDraft() {
+    saveDraft(e) {
+        e.preventDefault();
         this.EE.emit('projectSaveDraft');
     }
 
