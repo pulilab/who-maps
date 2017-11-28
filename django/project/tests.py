@@ -15,7 +15,7 @@ from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, ProjectApproval
 from .admin import DigitalStrategyAdmin, ProjectApprovalAdmin
-from .tasks import send_project_approval_digest
+# from .tasks import send_project_approval_digest
 
 
 class MockRequest():
@@ -137,38 +137,38 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "hsc_challenges")
         self.assertEqual(len(response.json().keys()), 9)
 
-    def xtest_create_new_project_approval_required(self):
-        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
-        url = reverse("project-crud")
-        data = copy.deepcopy(self.project_data)
-        data.update(dict(name="Test Project3"))
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(ProjectApproval.objects.filter(project_id=response.data['id']).exists(), True)
-
-    def xtest_create_new_project_approval_required_on_update(self):
-        # Make country approval-required
-        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
-        # Create project
-        url = reverse("project-crud")
-        data = copy.deepcopy(self.project_data)
-        data.update(dict(name="Test Project3"))
-        response = self.test_user_client.post(url, data, format="json")
-        project_id = response.data['id']
-        approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
-        self.assertEqual(response.status_code, 201)
-        self.assertTrue(approval)
-        # Approve project
-        approval.approved = True
-        approval.save()
-        # Update project
-        url = reverse("project-detail", kwargs={'pk': project_id})
-        data = copy.deepcopy(self.project_data)
-        data.update(dict(name="Test Project updated"))
-        response = self.test_user_client.put(url, data, format="json")
-        new_approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(new_approval.approved, None)
+    # def xtest_create_new_project_approval_required(self):
+    #     Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+    #     url = reverse("project-crud")
+    #     data = copy.deepcopy(self.project_data)
+    #     data.update(dict(name="Test Project3"))
+    #     response = self.test_user_client.post(url, data, format="json")
+    #     self.assertEqual(response.status_code, 201)
+    #     self.assertEqual(ProjectApproval.objects.filter(project_id=response.data['id']).exists(), True)
+    #
+    # def xtest_create_new_project_approval_required_on_update(self):
+    #     # Make country approval-required
+    #     Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+    #     # Create project
+    #     url = reverse("project-crud")
+    #     data = copy.deepcopy(self.project_data)
+    #     data.update(dict(name="Test Project3"))
+    #     response = self.test_user_client.post(url, data, format="json")
+    #     project_id = response.data['id']
+    #     approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
+    #     self.assertEqual(response.status_code, 201)
+    #     self.assertTrue(approval)
+    #     # Approve project
+    #     approval.approved = True
+    #     approval.save()
+    #     # Update project
+    #     url = reverse("project-detail", kwargs={'pk': project_id})
+    #     data = copy.deepcopy(self.project_data)
+    #     data.update(dict(name="Test Project updated"))
+    #     response = self.test_user_client.put(url, data, format="json")
+    #     new_approval = ProjectApproval.objects.filter(project_id=response.data['id']).first()
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(new_approval.approved, None)
 
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-create")
@@ -702,15 +702,15 @@ class ProjectTests(SetupTests):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
 
-    def xtest_project_approval_admin_filter_country_admins(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                       approved=True)
-        self.assertEqual(ma.get_queryset(request).count(), 1)
+    # def xtest_project_approval_admin_filter_country_admins(self):
+    #     request = MockRequest()
+    #     site = AdminSite()
+    #     user = UserProfile.objects.get(id=self.user_profile_id).user
+    #     request.user = user
+    #     ma = ProjectApprovalAdmin(ProjectApproval, site)
+    #     ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+    #                                    approved=True)
+    #     self.assertEqual(ma.get_queryset(request).count(), 1)
 
 
 class ProjectDraftTests(SetupTests):
@@ -837,18 +837,18 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.json()['draft']['name'], 'Proj 2')
         self.assertEqual(response.json()['draft'], response.json()['published'])
 
-    def xtest_project_approval_email(self):
-        Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
-        send_project_approval_digest()
-        self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
-
-    def xtest_project_approval_admin(self):
-        site = AdminSite()
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                                          approved=True)
-        self.assertEqual(ma.link(project_approval),
-                         "<a href='/app/{}/edit-project'>See project</a>".format(project_approval.id))
+    # def xtest_project_approval_email(self):
+    #     Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
+    #     send_project_approval_digest()
+    #     self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
+    #
+    # def xtest_project_approval_admin(self):
+    #     site = AdminSite()
+    #     ma = ProjectApprovalAdmin(ProjectApproval, site)
+    #     project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+    #                                                       approved=True)
+    #     self.assertEqual(ma.link(project_approval),
+    #                      "<a href='/app/{}/edit-project'>See project</a>".format(project_approval.id))
 
     def test_healthcategory_str(self):
         hc = HealthCategory.objects.all().first()
@@ -1048,7 +1048,7 @@ class PermissionTests(SetupTests):
         self.assertNotIn("last_version", response.json())
 
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url, format="json")
+        self.test_user_client.post(url, format="json")
         url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
