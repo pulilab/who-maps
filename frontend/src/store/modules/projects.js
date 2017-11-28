@@ -85,9 +85,13 @@ export const getUserDefaultProject = state => {
     return pp && pp[0] ? '' + pp[0].id : null;
 };
 
+export const getEmptyProject = () => {
+    return { ...project_definition };
+};
+
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
-    const project = { ...project_definition };
+    const project = getEmptyProject()
     if (country) {
         project.country = country.id;
     }
@@ -152,8 +156,11 @@ const getCurrentProjectForEditing = (state, data) => {
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
-    const project = getCurrentProject(state);
-    return getCurrentProjectForEditing(state, project);
+    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    if (project) {
+        return getCurrentProjectForEditing(state, project);
+    }
+    return undefined;
 };
 
 export const getCurrentDraftProjectForEditing = state => {
@@ -425,10 +432,12 @@ async function saveCountryFields(fields = [], country, id) {
 }
 
 function processForm(form) {
+    const organisation_name = form.organisation ? form.organisation.name : '';
+    const organisation = form.organisation ? form.organisation.id : null;
     form = {
         ...form,
-        organisation_name: form.organisation.name,
-        organisation: form.organisation.id,
+        organisation_name,
+        organisation,
         ...createDateFields(form),
         ...mergeCustomAndDefault(form),
         ...convertObjectArrayToStringArray(form),
