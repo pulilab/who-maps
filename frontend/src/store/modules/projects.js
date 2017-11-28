@@ -118,7 +118,7 @@ export const getCurrentPublicProject = state => {
 
 function convertCountryFieldsAnswer({ fields }) {
     return fields.map(f => {
-        f = Object.assign({}, f);
+        f = { ... f };
         switch (f.type) {
         case 2:
             f.answer = parseInt(f.answer, 10);
@@ -143,8 +143,8 @@ export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
     const project = isDraft ? getCurrentDraft(state) : getCurrentPublished(state);
     const countryFields = convertCountryFieldsAnswer(project);
-    const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields :  countryFields;
-    return cloneDeep(result);
+    const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields : countryFields;
+    return [...result];
 };
 
 const getCurrentProjectForEditing = (state, data) => {
@@ -477,6 +477,7 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
 export function saveDraft(form, team, viewers, countryFields) {
     return async (dispatch, getState) => {
         form = processForm(form);
+        console.log(form.id);
         const method = form.id ? 'put' : 'post';
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
@@ -546,7 +547,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
         return Object.assign(state, {}, p);
     }
     case 'UPDATE_SAVE_PROJECT': {
-        const list = cloneDeep(p.list);
+        const list = [...p.list];
         const index = findIndex(list, pj => pj.id === action.project.id);
         if (index !== -1) {
             list.splice(index, 1, { ...action.project });
