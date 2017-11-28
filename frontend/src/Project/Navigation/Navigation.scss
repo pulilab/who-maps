@@ -163,6 +163,7 @@
   .edit-buttons {
     padding: 20px 0 30px;
     background-color: $color-gray-lightest;
+    text-align: center;
     box-shadow: inset 0 1px 0 0 rgba(0,0,0,.12);
 
     @media only screen and (max-height: 700px) {
@@ -170,15 +171,17 @@
     }
 
     .md-button {
-      width: 170px;
-      margin: 20px 0 0;
+      width: 180px;
+    }
+
+    .primary-buttons {
+      .md-button {
+        margin: 20px 0 10px;
+      }
     }
 
     .secondary-buttons {
-      .md-button {
-        margin: 10px;
-        color: $text-secondary;
-      }
+      .md-button {}
     }
   }
 
