@@ -18,9 +18,9 @@ class ProjectController  {
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.postSaveActions = this.postSaveActions.bind(this);
+        this.postPublishAction = this.postPublishAction.bind(this);
         this.getCountryFields = this.getCountryFields.bind(this);
-        this.registerEventIfNotPresent = this.registerEventIfNotPresent.bind(this);
+        this.eventListeners = this.eventListeners.bind(this);
         this.toast = toast;
         this.mapData = this.mapData.bind(this);
     }
@@ -55,14 +55,12 @@ class ProjectController  {
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
                 countryFields = ProjectModule.getProjectCountryFields(state)(false, !publishMode);
-                console.log(countryFields, lastVersion);
             }
         }
 
         if (project === undefined) {
             project = ProjectModule.getEmptyProject();
         }
-
         return {
             newProject,
             publishMode,
@@ -73,21 +71,14 @@ class ProjectController  {
             structure: ProjectModule.getProjectStructure(state),
             users: SystemModule.getUserProfiles(state),
             userProfile,
-            projectId: ProjectModule.getCurrentProject(state),
             userProjects: ProjectModule.getPublishedProjects(state),
             countryFields
         };
     }
 
     eventListeners() {
-        this.registerEventIfNotPresent('projectScrollTo', this.scrollToFieldSet);
-        this.registerEventIfNotPresent('projectSaveDraft', this.saveDraft);
-    }
-
-    registerEventIfNotPresent(eventName, handler) {
-        if (!this.EE.listeners(eventName, true)) {
-            this.EE.on(eventName, handler, this);
-        }
+        this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
+        this.EE.on('projectSaveDraft', this.saveDraft, this);
     }
 
     onInit() {
@@ -105,6 +96,8 @@ class ProjectController  {
 
     onDestroy() {
         this.unsubscribe();
+        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
     }
 
     watchers() {
@@ -144,10 +137,19 @@ class ProjectController  {
         if (this.form.$valid) {
             try {
                 const data = await this.publish(this.project, this.team, this.viewers, this.countryFields);
-                this.postSaveActions(data);
+                this.postPublishAction(data);
             }
             catch (e) {
                 this.handleResponse(e.response);
+                const alert = this.$mdDialog.alert({
+                    title: 'Attention',
+                    textContent: 'You can\'t publish until all the required' +
+                    'fields are filled, you can however save the draft',
+                    ok: 'Close',
+                    theme: 'alert'
+                });
+
+                this.$mdDialog.show(alert);
             }
         }
         else {
@@ -177,14 +179,6 @@ class ProjectController  {
 
 
     async focusInvalidField() {
-        const alert = this.$mdDialog.alert({
-            title: 'Attention',
-            textContent: 'You can\'t publish until all the required fields are filled, you can however save the draft',
-            ok: 'Close',
-            theme: 'alert'
-        });
-
-        this.$mdDialog.show(alert);
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
@@ -286,21 +280,9 @@ class ProjectController  {
         this.toast.show(toast);
     }
 
-    postSaveActions({ id }) {
-        let toastLabel = 'Project Saved';
-        let navigateTo = 'editProject';
-        if (this.editMode) {
-            toastLabel = 'Project Updated';
-            navigateTo = 'dashboard';
-        }
-        this.showToast(toastLabel);
-        const addAnother = this.isAddAnother;
-        this.isAddAnother = false;
-        const go = {
-            state: addAnother ? 'newProject' : navigateTo,
-            appName: id
-        };
-        this.state.go(go.state, { appName: go.appName }, {
+    postPublishAction({ id }) {
+        this.showToast('Project Published');
+        this.state.go('editProject', { appName: id, editMode: 'publish' }, {
             location: 'replace',
             reload: true
         });
