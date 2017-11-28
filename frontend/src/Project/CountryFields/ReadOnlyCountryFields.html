@@ -10,59 +10,35 @@
       <div class="generic-container" flex ng-repeat="field in vm.countryFields">
 
         <!-- TEXT INPUT-->
-        <md-input-container
+        <div
           ng-if="field.type === 1"
           class="md-block string-field">
-          <label>{{field.question}}</label>
-          <input type="text" ng-required="vm.activateValidation" md-maxlength="1000" name="custom{{$index}}" ng-model="field.answer">
-          <div ng-messages="vm.form['custom' + $index].$error">
-            <div ng-message="required">This is required.</div>
-          </div>
-        </md-input-container>
+          <h6>{{field.question}}</h6>
+          <p>{{field.answer}}</p>
+        </div>
 
 
         <!-- NUMERIC INPUT-->
-        <md-input-container
+        <div
           ng-if="field.type === 2"
           class="md-block number-field">
-          <label>{{field.question}}</label>
-          <input type="number" ng-required="vm.activateValidation" name="custom{{$index}}" ng-model="field.answer">
-          <div ng-messages="vm.form['custom' + $index].$error">
-            <div ng-message="required">This is required.</div>
-          </div>
-        </md-input-container>
+          <h6>{{field.question}}</h6>
+          <p>{{field.answer}}</p>
+        </div>
 
 
         <!-- RADIO BUTTON-->
         <div
           ng-if="field.type === 3"
           class="yesno-field">
-          <label>{{field.question}}</label>
-          <md-radio-group
-            ng-model="field.answer"
-            name="custom{{$index}}"
-            md-no-ink
-            required
-            class="md-primary"
-            layout="row">
-            <md-radio-button ng-value="true" aria-label="custom{{$index}}-yes">
-              Yes
-            </md-radio-button>
-            <md-radio-button ng-value="false" aria-label="custom{{$index}}-no">
-              No
-            </md-radio-button>
-          </md-radio-group>
-          <div class="radio-error-messages">
-            <div ng-messages="vm.form['custom' + $index].$error">
-              <div ng-message="required">This is required.</div>
-            </div>
-          </div>
+          <h6>{{field.question}}</h6>
+          <p ng-show="field.answer">Yes</p>
+          <p ng-hide="field.answer">No</p>
         </div>
-      </div>
 
+
+      </div>
     </div>
 
   </div>
-</div>
-
 </div>

@@ -5,90 +5,34 @@
   </div>
 
   <div class="section-wrapper">
-    <md-input-container class="md-block first">
-      <label>Technology deployment date</label>
-      <md-datepicker
-        ng-model="vm.project.implementation_dates"
-        md-open-on-focus
-        name="implementation_dates"
-        md-current-view="year"
-        required>
-      </md-datepicker>
-      <div ng-messages="vm.implementation_dates.name.$error">
-        <div ng-message="required">This is required.</div>
-        <div ng-repeat="message in vm.form.implementation_dates.customError">
-          {{message}}
-        </div>
-      </div>
-    </md-input-container>
+    <div class="md-block first">
+      <h6>Technology deployment date</h6>
+      <p>{{vm.printDate(vm.project.implementation_dates)}}</p>
+    </div>
 
     <div class="checklist">
       <h6>Under what license is the project governed?</h6>
       <ul>
-        <li ng-repeat="l in vm.structure.licenses">
-          <md-checkbox
-            ng-checked="vm.checkboxChecked(l, 'licenses')"
-            ng-click="vm.checkboxToggle(l, 'licenses')"
-            md-no-ink
-            aria-label="{{ l }}"
-            class="md-primary">
+        <li ng-repeat="l in vm.structure.licenses" ng-show="vm.checkboxChecked(l, 'licenses')">
             {{ l }}
-          </md-checkbox>
-        </li>
-        <li>
-          <span layout="row">
-            <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
-            <md-input-container class="md-block" flex>
-              <label>Specify other</label>
-              <input ng-required="vm.customLicense"
-                     md-maxlength="64"
-                     name="licenses"
-                     ng-model="vm.project.licenses.custom"
-                     ng-disabled="!vm.customLicense">
-            </md-input-container>
-          </span>
         </li>
       </ul>
     </div>
 
-    <md-input-container class="md-icon-float md-block">
-      <label>Code documentation or download link</label>
-      <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="repository" ng-model="vm.project.repository"
-              ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/"
-              md-maxlength="200" >
-      <div ng-messages="vm.form.repository.$error">
-        <div ng-message="pattern">
-          Make sure your URL is valid.
-        </div>
-      </div>
-    </md-input-container>
+    <div class="md-icon-float md-block">
+      <h6>Code documentation or download link</h6>
+      <p>{{vm.project.repository}}</p>
+    </div>
 
-    <md-input-container class="md-icon-float md-block">
-      <label>Link to the application</label>
-      <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="mobile_application" ng-model="vm.project.mobile_application"
-              ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/"
-              md-maxlength="200">
-      <div ng-messages="vm.form.mobile_application.$error">
-        <div ng-message="pattern">
-          Make sure your URL is valid.
-        </div>
-      </div>
-    </md-input-container>
+    <div class="md-icon-float md-block">
+      <h6>Link to the application</h6>
+      <p>{{vm.project.mobile_application}}</p>
+    </div>
 
-    <md-input-container class="md-icon-float md-block">
-      <label>Link to the wiki page</label>
-      <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="wiki" ng-model="vm.project.wiki"
-              ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/"
-              md-maxlength="200">
-      <div ng-messages="vm.form.wiki.$error">
-        <div ng-message="pattern">
-          Make sure your URL is valid.
-        </div>
-      </div>
-    </md-input-container>
+    <div class="md-icon-float md-block">
+      <h6>Link to the wiki page</h6>
+      <p>{{vm.project.wiki}}</p>
+    </div>
 
   </div>
 
