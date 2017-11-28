@@ -147,7 +147,7 @@ describe('CountryMapController', () => {
 
             spyOn(vm, 'formatCountryName');
             spyOn(vm, 'makeGeoFromTopo');
-            spyOn(vm, 'drawDistricts');
+            spyOn(vm, 'fillDistrictData');
             spyOn(vm, 'makeSvgPannableAndZoomable');
         });
 
@@ -168,9 +168,9 @@ describe('CountryMapController', () => {
             expect(d3.select('.countrymap').length).toBe(1);
         });
 
-        it('calls drawDistricts()', () => {
+        it('calls fillDistrictData()', () => {
             vm.drawMapShape(countryMapData);
-            expect(vm.drawDistricts).toHaveBeenCalled();
+            expect(vm.fillDistrictData).toHaveBeenCalled();
         });
 
         it('resets back .showPlaceholder to false', () => {
@@ -180,7 +180,7 @@ describe('CountryMapController', () => {
         });
     });
 
-    describe('drawDistricts', () => {
+    describe('fillDistrictData', () => {
 
         beforeEach(() => {
             const countriesMock = [
