@@ -184,7 +184,6 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
                 data = project.get_non_member_data()
 
         if is_member:
-            # TODO: check if this needed in draft
             last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
             if last_version:
                 data.update(last_version=last_version.version)
