@@ -1,262 +1,265 @@
 <div class="relative">
 
+  <!-- for DASH -->
+  <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
+
+    <div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
+      <p flex>{{vm.countryName}}</p>
+      <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
+    </div>
+
+    <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
+      <md-tab label="Total">
+
+        <div class="countrychart-tooltip-main" layout="column">
+
+          <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
+            <div flex class="cap lh">{{key}}:<br></div>
+            <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
+          </div>
+
+        </div>
+
+        <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
+
+          <div flex class="activename bold lh">
+            {{vm.activeDistrict.name}}
+          </div>
+
+          <div flex
+               class="coverage-data"
+               layout="row"
+               ng-repeat="(key, datum) in vm.activeDistrict.data">
+
+            <div flex class="cap lh">{{key}}</div>
+            <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
+          </div>
+          <div class="bold lh" ng-show="!vm.activeDistrict.data">No district data</div>
+
+        </div>
+
+      </md-tab>
+      <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+
+        <div class="countrychart-tooltip-main">
+
+          <div flex
+               class="coverage-data"
+               layout="row"
+               ng-repeat="(key, datum) in vm.nationalLevelCoverage"
+               ng-init="vm.saveClass(key, $index, vm.boundNrs)">
+
+            <div flex class="cap lh">{{key}}</div>
+            <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
+          </div>
+          <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No district data</div>
+
+        </div>
+
+      </md-tab>
+    </md-tabs>
+  </div>
+
+  <!-- for CLV -->
+  <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="vm.big" ng-hide="!vm.mapData">
+
+    <div class="countrychart-tooltip-header bold">
+      {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
+      <img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
+    </div>
+
+    <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
+
+      <md-tab label="Sub-national">
+
+        <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
+
+          <div
+            flex
+            layout="column"
+            layout-align="space-around start"
+            class="projectcont"
+            ng-repeat="project in vm.activeDistrict.data | limitTo:5"
+            ui-sref="dashboard({ appName: project.id })">
+
+            <div class="projectname">{{project.name}}</div>
+            <div class="projectorg">{{project.organisation}}</div>
+
+            <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
+            <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
+          </div>
+          <div class="bold lh" ng-show="!vm.activeDistrict.data">No Data</div>
+        </div>
+      </md-tab>
+
+      <md-tab label="National" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+        <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
+
+          <div flex
+               layout="column"
+               layout-align="space-around start"
+               class="projectcont"
+               ng-repeat="project in vm.nationalLevelCoverage | limitTo:5"
+               ui-sref="dashboard({ appName: project.id })">
+
+            <div class="projectname">{{project.name}}</div>
+            <div class="projectorg">{{project.organisation_name}}</div>
+
+            <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
+            <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
+          </div>
+          <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No Data</div>
+        </div>
+      </md-tab>
+    </md-tabs>
+  </div>
+
+  <div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.mapData">
+    <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+    <br>
+    <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+  </div>
+
+  <div class="zoomhandlers2" ng-if="vm.big" ng-hide="!vm.country">
+
     <!-- for DASH -->
     <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
 
-        <div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
-            <p flex>{{vm.countryName}}</p>
-            <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
-        </div>
+      <div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
+        <p flex>{{vm.countryName}}</p>
+        <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
+      </div>
 
-        <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
-            <md-tab label="Total">
+      <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
+        <md-tab label="Total">
 
-                <div class="countrychart-tooltip-main" layout="column">
+          <div class="countrychart-tooltip-main" layout="column">
 
-                    <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
-                        <div flex class="cap lh">{{key}}:<br></div>
-                        <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
-                    </div>
+            <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
+              <div flex class="cap lh">{{key}}:<br></div>
+              <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
+            </div>
 
-                </div>
+          </div>
 
-                <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
+          <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
 
-                    <div flex class="activename bold lh">
-                        {{vm.activeDistrict.name}}
-                    </div>
+            <div flex class="activename bold lh">
+              {{vm.activeDistrict.name}}
+            </div>
 
-                    <div flex
-                         class="coverage-data"
-                         layout="row"
-                         ng-repeat="(key, datum) in vm.activeDistrict.data">
+            <div flex
+                 class="coverage-data"
+                 layout="row"
+                 ng-repeat="(key, datum) in vm.activeDistrict.data">
 
-                        <div flex class="cap lh">{{key}}</div>
-                        <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
-                    </div>
+              <div flex class="cap lh">{{key}}</div>
+              <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
+            </div>
 
-                </div>
+          </div>
 
-            </md-tab>
-            <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+        </md-tab>
+        <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
 
-                <div class="countrychart-tooltip-main">
+          <div class="countrychart-tooltip-main">
 
-                    <div flex
-                         class="coverage-data"
-                         layout="row"
-                         ng-repeat="(key, datum) in vm.nationalLevelCoverage"
-                         ng-init="vm.saveClass(key, $index, vm.boundNrs)">
+            <div flex
+                 class="coverage-data"
+                 layout="row"
+                 ng-repeat="(key, datum) in vm.nationalLevelCoverage"
+                 ng-init="vm.saveClass(key, $index, vm.boundNrs)">
 
-                        <div flex class="cap lh">{{key}}</div>
-                        <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
-                    </div>
-                    <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No Data</div>
+              <div flex class="cap lh">{{key}}</div>
+              <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
+            </div>
 
-                </div>
+          </div>
 
-            </md-tab>
-        </md-tabs>
+        </md-tab>
+      </md-tabs>
     </div>
 
     <!-- for CLV -->
     <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="vm.big" ng-hide="!vm.mapData">
 
-        <div class="countrychart-tooltip-header bold">
-            {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
-            <img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
-        </div>
+      <div class="countrychart-tooltip-header bold">
+        {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
+        <img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
+      </div>
 
-        <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
+      <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
 
-            <md-tab label="Sub-national">
+        <md-tab label="Sub-national">
 
-                <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
+          <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
 
-                    <div
-                        flex
-                        layout="column"
-                        layout-align="space-around start"
-                        class="projectcont"
-                        ng-repeat="project in vm.activeDistrict.data | limitTo:5"
-                        ui-sref="dashboard({ appName: project.id })">
+            <div
+              flex
+              layout="column"
+              layout-align="space-around start"
+              class="projectcont"
+              ng-repeat="project in vm.activeDistrict.data | limitTo:5"
+              ui-sref="dashboard({ appName: project.id })">
 
-                        <div class="projectname">{{project.name}}</div>
-                        <div class="projectorg">{{project.organisation}}</div>
+              <div class="projectname">{{project.name}}</div>
+              <div class="projectorg">{{project.organisation}}</div>
 
-                        <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
-                        <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
-                    </div>
-                </div>
-            </md-tab>
+              <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
+              <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
+            </div>
+          </div>
+        </md-tab>
 
-            <md-tab label="National" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
-                <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
+        <md-tab label="National" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+          <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
 
-                    <div flex
-                        layout="column"
-                        layout-align="space-around start"
-                        class="projectcont"
-                        ng-repeat="project in vm.nationalLevelCoverage | limitTo:5"
-                        ui-sref="dashboard({ appName: project.id })">
+            <div flex
+                 layout="column"
+                 layout-align="space-around start"
+                 class="projectcont"
+                 ng-repeat="project in vm.nationalLevelCoverage | limitTo:5"
+                 ui-sref="dashboard({ appName: project.id })">
 
-                        <div class="projectname">{{project.name}}</div>
-                        <div class="projectorg">{{project.organisation_name}}</div>
+              <div class="projectname">{{project.name}}</div>
+              <div class="projectorg">{{project.organisation_name}}</div>
 
-                         <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
-                        <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
-                    </div>
-                </div>
-            </md-tab>
-        </md-tabs>
+              <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
+              <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
+            </div>
+          </div>
+        </md-tab>
+      </md-tabs>
     </div>
 
     <div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.mapData">
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-        <br>
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
-    </div>
-
-    <div class="zoomhandlers2" ng-if="vm.big" ng-hide="!vm.country">
-
-    <!-- for DASH -->
-    <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
-
-        <div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
-            <p flex>{{vm.countryName}}</p>
-            <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
-        </div>
-
-        <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
-            <md-tab label="Total">
-
-                <div class="countrychart-tooltip-main" layout="column">
-
-                    <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
-                        <div flex class="cap lh">{{key}}:<br></div>
-                        <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
-                    </div>
-
-                </div>
-
-                <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
-
-                    <div flex class="activename bold lh">
-                        {{vm.activeDistrict.name}}
-                    </div>
-
-                    <div flex
-                         class="coverage-data"
-                         layout="row"
-                         ng-repeat="(key, datum) in vm.activeDistrict.data">
-
-                        <div flex class="cap lh">{{key}}</div>
-                        <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
-                    </div>
-
-                </div>
-
-            </md-tab>
-            <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
-
-                <div class="countrychart-tooltip-main">
-
-                    <div flex
-                         class="coverage-data"
-                         layout="row"
-                         ng-repeat="(key, datum) in vm.nationalLevelCoverage"
-                         ng-init="vm.saveClass(key, $index, vm.boundNrs)">
-
-                        <div flex class="cap lh">{{key}}</div>
-                        <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
-                    </div>
-
-                </div>
-
-            </md-tab>
-        </md-tabs>
-    </div>
-
-    <!-- for CLV -->
-    <div class="countrychart-tooltip md-whiteframe-2dp" ng-if="vm.big" ng-hide="!vm.mapData">
-
-        <div class="countrychart-tooltip-header bold">
-            {{vm.countryName}} {{vm.activeDistrict.name ? '-' : ''}} {{vm.activeDistrict.name}}
-            <img class ="tooltip-flag" ng-src="{{vm.flagUrl}}">
-        </div>
-
-        <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
-
-            <md-tab label="Sub-national">
-
-                <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
-
-                    <div
-                        flex
-                        layout="column"
-                        layout-align="space-around start"
-                        class="projectcont"
-                        ng-repeat="project in vm.activeDistrict.data | limitTo:5"
-                        ui-sref="dashboard({ appName: project.id })">
-
-                        <div class="projectname">{{project.name}}</div>
-                        <div class="projectorg">{{project.organisation}}</div>
-
-                        <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
-                        <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
-                    </div>
-                </div>
-            </md-tab>
-
-            <md-tab label="National" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
-                <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
-
-                    <div flex
-                        layout="column"
-                        layout-align="space-around start"
-                        class="projectcont"
-                        ng-repeat="project in vm.nationalLevelCoverage | limitTo:5"
-                        ui-sref="dashboard({ appName: project.id })">
-
-                        <div class="projectname">{{project.name}}</div>
-                        <div class="projectorg">{{project.organisation_name}}</div>
-
-                         <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
-                        <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
-                    </div>
-                </div>
-            </md-tab>
-        </md-tabs>
-    </div>
-
-    <div class="zoomhandlers" ng-if="!vm.big" ng-hide="!vm.mapData">
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-        <br>
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+      <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+      <br>
+      <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
     </div>
 
     <div class="zoomhandlers2" ng-if="vm.big" ng-hide="!vm.mapData">
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-        <br>
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+      <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+      <br>
+      <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
     </div>
 
     <!-- Placeholder spinner -->
     <div class="spinner" layout="row" layout-align="center center" ng-show="vm.showPlaceholder">
-        <span flex>Loading map</span>
-        <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+      <span flex>Loading map</span>
+      <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
     </div>
 
-MapData">
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-        <br>
-        <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
-    </div>
+    MapData">
+    <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+    <br>
+    <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+  </div>
 
-    <!-- Placeholder spinner -->
-    <div class="spinner" layout="row" layout-align="center center" ng-show="vm.showPlaceholder">
-        <span flex>Loading map</span>
-        <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-    </div>
+  <!-- Placeholder spinner -->
+  <div class="spinner" layout="row" layout-align="center center" ng-show="vm.showPlaceholder">
+    <span flex>Loading map</span>
+    <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+  </div>
 
 </div>

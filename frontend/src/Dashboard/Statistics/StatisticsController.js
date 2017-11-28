@@ -17,7 +17,6 @@ class StatisticsController {
         this.isPublic = this.state.current.name === 'public-dashboard';
         const projectData = this.isPublic ? ProjectModule.getCurrentPublicProject(state)
           : ProjectModule.getCurrentProject(state);
-        console.log(projectData);
         return {
             projectData,
             profile: UserModule.getProfile(state),
