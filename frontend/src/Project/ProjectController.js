@@ -34,30 +34,35 @@ class ProjectController  {
         let project = null;
         let team = null;
         let viewers = null;
+        let countryFields = null;
 
         if (this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
             viewers = this.viewers;
+            countryFields = this.countryFields;
         }
         else {
             if (newProject) {
                 project = ProjectModule.getVanillaProject(state);
                 team = [userProfile];
                 viewers = [];
+                countryFields = ProjectModule.getProjectCountryFields(state)(true, !publishMode);
             }
             else {
                 project = publishMode ? ProjectModule.getCurrentPublishedProjectForEditing(state) :
                   ProjectModule.getCurrentDraftProjectForEditing(state);
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
+                countryFields = ProjectModule.getProjectCountryFields(state)(false, !publishMode);
+                console.log(countryFields, lastVersion);
             }
         }
 
         if (project === undefined) {
             project = ProjectModule.getEmptyProject();
         }
-        const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
+
         return {
             newProject,
             publishMode,
