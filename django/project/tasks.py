@@ -1,11 +1,11 @@
-from django.conf import settings
-from django.core import mail
-from django.template import loader
+# from django.conf import settings
+# from django.core import mail
+# from django.template import loader
 from celery.utils.log import get_task_logger
 
-from country.models import Country
-from .models import Project
-from scheduler.celery import app
+# from country.models import Country
+# from .models import Project
+# from scheduler.celery import app
 
 logger = get_task_logger(__name__)
 
