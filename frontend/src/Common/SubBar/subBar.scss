@@ -91,15 +91,25 @@
   }
 
   .project-name {
+    position: relative;
     padding: 16px 12px 8px;
+    max-width: 45%;
     height: 48px;
     color: $text-primary;
     font-size: 24px;
     font-weight: 500;
 
+    > div {
+      display: inline-block;
+      max-width: 100%;
+      @include text-truncate();
+    }
+
     md-icon {
-      position: relative;
-      top: -1px;
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      margin: -6px 0 0 -6px; 
     }
 
     .viewerIcon {
@@ -171,7 +181,6 @@
   }
 
   .project-mainmenu {
-    transform: translate(0, -1px);
 
     .md-button {
       float: left;
@@ -181,8 +190,8 @@
       display: inline-block;
       min-height: 26px;
       height: 26px;
-      margin: 10px 12px 0;
-      padding: 0 0 10px !important;
+      margin: 12px 12px 0;
+      padding: 0 0 6px !important;
       line-height: 26px;
       border-bottom: 2px solid $color-white;
 
@@ -212,6 +221,7 @@
   .project-info {
     margin-right: 13px;
     display: block;
+    max-width: 45%;
     height: 48px;
     color: $color-gray;
     font-size: $body-font-size-base;
