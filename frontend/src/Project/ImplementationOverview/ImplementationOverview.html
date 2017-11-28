@@ -29,7 +29,7 @@
         <md-input-container flex="33" ng-if="platform.name === 'Other'">
           <label>Specify software name</label>
           <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
-                 ng-required="true">
+                 ng-required="vm.activateValidation">
           <div ng-messages="vm.form.platform_custom.$error">
             <div ng-message="required">This is required.</div>
           </div>
@@ -55,7 +55,7 @@
         ng-show="platform.name"
         selection="platform.strategies"
         button-name="Digital Health Interventions"
-        is-required="true"
+        is-required="vm.activateValidation"
         show-title="true"
         elements="vm.structure.strategies"
         collection-name="strategies"
@@ -114,7 +114,7 @@
 
     <div layout="row" class="extra-margin">
       <div layout="column">
-        <md-radio-group ng-model="vm.project.coverageType" name="coverageType" md-no-ink ng-required="true" class="md-primary" layout="row">
+        <md-radio-group ng-model="vm.project.coverageType" name="coverageType" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="row">
           <md-radio-button ng-value="1" aria-label="coverage-type-yes">
             Sub-national
           </md-radio-button>
@@ -275,7 +275,7 @@
 
     <div layout="row" class="extra-margin">
       <div layout="column">
-        <md-radio-group ng-model="vm.project.government_approved" name="government_approved" md-no-ink ng-required="true" class="md-primary" layout="row">
+        <md-radio-group ng-model="vm.project.government_approved" name="government_approved" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="row">
           <md-radio-button ng-value="true" aria-label="government-approved-yes">
             Yes
           </md-radio-button>
@@ -295,7 +295,7 @@
 
     <div layout="row" class="extra-margin">
       <div layout="column">
-        <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="true" class="md-primary" layout="column">
+        <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="column">
           <md-radio-button ng-value="0" aria-label="government-investor-no">
             No, they have not yet contributed
           </md-radio-button>

@@ -10,7 +10,8 @@ const component = {
     bindings: {
         form: '<',
         project: '<',
-        structure: '<'
+        structure: '<',
+        activateValidation: '<'
     }
 };
 

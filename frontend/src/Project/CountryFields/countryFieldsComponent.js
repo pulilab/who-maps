@@ -10,7 +10,8 @@ const technology = {
     bindings: {
         form: '<',
         project: '<',
-        countryFields: '<'
+        countryFields: '<',
+        activateValidation: '<'
     }
 };
 
