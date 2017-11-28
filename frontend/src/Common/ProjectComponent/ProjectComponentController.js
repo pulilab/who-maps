@@ -18,7 +18,8 @@ class ProjectComponentController {
     }
 
     goToDashboard() {
-        this.state.go(this.member || this.viewer ? 'dashboard' : 'public-dashboard', { appName: this.project.id });
+        this.state.go(this.project.isMember || this.project.isViewer ?
+          'dashboard' : 'public-dashboard', { appName: this.project.id });
     }
 
     viewDraft() {

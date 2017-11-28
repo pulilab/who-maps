@@ -60,7 +60,8 @@
             Edit Draft
           </md-button>
 
-           <md-button class="md-primary md-no-ink" ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.viewPublished()">
+           <md-button class="md-primary md-no-ink" ng-show="vm.project.isPublished"
+                      ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.viewPublished()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
