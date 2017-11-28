@@ -54,7 +54,9 @@
 
   .suggestion {
     margin-top: 5px !important;
-    color: $color-gray;
+    margin-left: 2px;
+    margin-bottom: 20px;
+    color: $text-disabled;
     font-size: 12px;
   }
 }

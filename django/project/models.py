@@ -45,10 +45,10 @@ class Project(ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
-    @property
-    def country(self):
+    def get_country(self, draft_mode=False):
         try:
-            country_id = int(self.data.get('country', self.draft.get('country')))
+            country_id = self.draft.get('country') if draft_mode else self.data.get('country')
+            country_id = int(country_id)
         except TypeError:  # pragma: no cover
             return None
         return Country.objects.get(id=country_id)
@@ -56,8 +56,8 @@ class Project(ExtendedModel):
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
-    def is_admin(self, user):
-        return self.country.user == user
+    def is_country_admin(self, user):
+        return self.get_country().user == user
 
     def get_member_data(self):
         return self.data
@@ -71,8 +71,13 @@ class Project(ExtendedModel):
     def get_anon_data(self):
         return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
-    def get_organisation(self):
-        return Organisation.objects.filter(id=self.data.get('organisation')).first()
+    def get_organisation(self, draft_mode=False):
+        try:
+            organisation_id = self.draft.get('organisation') if draft_mode else self.data.get('organisation')
+            organisation_id = int(organisation_id)
+        except TypeError:  # pragma: no cover
+            return None
+        return Organisation.objects.filter(id=organisation_id).first()
 
     def remove_keys(self, keys):
         d = self.data
@@ -91,10 +96,10 @@ class Project(ExtendedModel):
         extra_data = dict(
             id=self.pk,
             name=self.name,
-            organisation_name=self.get_organisation().name if self.get_organisation() else '',
-            country_name=self.country.name if self.country else None,
+            organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
+            country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
-            fields=[field.to_representation() for field in CountryField.get_for_project(self)],
+            fields=[field.to_representation() for field in CountryField.get_for_project(self, draft_mode)],
         )
 
         data.update(extra_data)

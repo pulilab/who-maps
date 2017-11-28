@@ -64,15 +64,16 @@ class CountryField(models.Model):
         return ""
 
     @classmethod
-    def get_for_project(cls, project):
+    def get_for_project(cls, project, draft_mode=False):
         """
         Return all the country fields available for a country filled with the answers (if present)
         """
-        if not project.country:
+        if not project.get_country(draft_mode):
             return []
 
-        schema = cls.objects.get_schema(project.country.id)
-        answers = cls.objects.get_answers(country_id=project.country.id, project_id=project.id)
+        country = project.get_country(draft_mode)
+        schema = cls.objects.get_schema(country.id)
+        answers = cls.objects.get_answers(country_id=country.id, project_id=project.id)
         country_fields = []
 
         for field in schema:
