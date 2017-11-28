@@ -3,6 +3,7 @@ import newProjectComponent from './projectComponent';
 import interoperability from './Interoperability/interoperabilityComponent';
 import navigation from './Navigation/navigationComponent';
 import generalOverview from './GeneralOverview/generalOverviewComponent';
+import { readOnlyGeneralOverview } from './GeneralOverview/generalOverviewComponent';
 import implementationOverview from './ImplementationOverview/implementationOverviewComponent';
 import technology from './Technology/technologyComponent';
 import countryFields from './CountryFields/countryFieldsComponent';
@@ -59,6 +60,7 @@ angular.module(moduleName, [])
   .component(interoperability.name, interoperability)
   .component(navigation.name, navigation)
   .component(generalOverview.name, generalOverview)
+  .component(readOnlyGeneralOverview.name, readOnlyGeneralOverview)
   .component(implementationOverview.name, implementationOverview)
   .component(countryFields.name, countryFields)
   .component(dialogMultiSelection.name, dialogMultiSelection)
