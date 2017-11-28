@@ -13,7 +13,7 @@ from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
-    HealthCategory, ProjectApproval
+    HealthCategory
 from .admin import DigitalStrategyAdmin
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
@@ -300,7 +300,8 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']["platforms"][0]["name"], "updated platform")
-        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0], data["platforms"][0]["strategies"][0])
+        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0],
+                         data["platforms"][0]["strategies"][0])
 
     def test_update_project_healthfocus_biggies(self):
         url = reverse("project-publish", kwargs={"pk": self.project_id})

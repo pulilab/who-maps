@@ -16,7 +16,7 @@ from country.models import Country
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    ProjectApproval, HealthCategory
+    HealthCategory
 from .project_data import project_structure
 
 

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from django.utils.html import mark_safe
+# from django.utils.html import mark_safe
 
 from core.admin import AllObjectsAdmin
-from country.models import Country
-from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, ProjectApproval, HealthFocusArea, \
+# from country.models import Country
+from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory
 
 
