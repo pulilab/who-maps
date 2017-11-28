@@ -49,7 +49,9 @@ class NavigationController {
     }
 
     goTo(editMode) {
-        this.state.go(this.state.current.name, { editMode });
+        if (editMode === 'draft' || editMode === 'publish' && this.project.hasPublishedVersion) {
+            this.state.go(this.state.current.name, { editMode });
+        }
     }
 
     saveDraft(e) {

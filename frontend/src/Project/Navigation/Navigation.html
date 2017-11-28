@@ -4,10 +4,18 @@
     <div>Switch view:</div>
     <div layout="row" layout-align="stretch">
       <div>
-        <button type="button" ng-click="vm.goTo('draft')" class="draft" ng-class="{'active': vm.state.params.editMode === 'draft'}">Draft</button>
+        <button type="button" ng-click="vm.goTo('draft')" class="draft" ng-class="{'active': vm.state.params.editMode === 'draft'}">
+          Draft
+        </button>
       </div>
       <div>
-        <button type="button" ng-click="vm.goTo('publish')" class="publish" ng-class="{'active': vm.state.params.editMode === 'publish'}">Published</button>
+        <button type="button"
+                ng-click="vm.goTo('publish')" class="publish" ng-class="{'active': vm.state.params.editMode === 'publish'}">
+          <md-tooltip md-autohide md-direction="top" ng-show="!vm.project.hasPublishedVersion">
+            There is no published version
+          </md-tooltip>
+          Published
+        </button>
       </div>
     </div>
   </div>
