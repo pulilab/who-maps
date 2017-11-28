@@ -40,7 +40,6 @@ class ProjectController  {
             viewers = this.viewers;
         }
         else {
-
             if (newProject) {
                 project = ProjectModule.getVanillaProject(state);
                 team = [userProfile];
@@ -53,17 +52,15 @@ class ProjectController  {
                 viewers = ProjectModule.getViewers(state);
             }
         }
-
-        const users = SystemModule.getUserProfiles(state);
-
         const countryFields = ProjectModule.getProjectCountryFields(state)(newProject);
         return {
+            newProject,
             lastVersion,
             project,
             team,
             viewers,
             structure: ProjectModule.getProjectStructure(state),
-            users,
+            users: SystemModule.getUserProfiles(state),
             userProfile,
             projectId: ProjectModule.getCurrentProject(state),
             userProjects: ProjectModule.getPublishedProjects(state),
@@ -73,6 +70,7 @@ class ProjectController  {
 
     eventListeners() {
         this.registerEventIfNotPresent('projectScrollTo', this.scrollToFieldSet);
+        this.registerEventIfNotPresent('projectSaveDraft', this.saveDraft);
     }
 
     registerEventIfNotPresent(eventName, handler) {
@@ -144,6 +142,24 @@ class ProjectController  {
             this.focusInvalidField();
         }
 
+    }
+
+    async saveDraft() {
+        try {
+            const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
+              this.team, this.viewers, this.countryFields));
+            this.showToast('Draft updated');
+            if (this.newProject) {
+                this.state.go('editProject', { appName:  project.id }, {
+                    location: 'replace',
+                    reload: false
+                });
+            }
+
+        }
+        catch (e) {
+            this.handleResponse(e.response);
+        }
     }
 
 
