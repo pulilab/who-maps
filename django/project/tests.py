@@ -13,7 +13,7 @@ from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
-    HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 from .admin import DigitalStrategyAdmin
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
@@ -75,17 +75,17 @@ class SetupTests(APITestCase):
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
-            "health_focus_areas": ["area1", "area2"],
+            "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": self.country_id,
             "platforms": [{
-                "name": "platform1",
-                "strategies": ["strat1", "strat2"]
+                "id": 1,
+                "strategies": [1, 2]
             }, {
-                "name": "platform2",
-                "strategies": ["strat1", "strat9"]
+                "id": 2,
+                "strategies": [1, 9]
             }],
-            "licenses": ["lic1", "lic2"],  # Can hold 'other' fields
+            "licenses": [1, 2],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
@@ -93,18 +93,18 @@ class SetupTests(APITestCase):
             "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
             "donors": ["donor1", "donor2"],
-            "his_bucket": ["tax1", "tax2"],
-            "hsc_challenges": ["challenge1", "challenge2"],
+            "his_bucket": [1, 2],
+            "hsc_challenges": [1, 2],
             "government_approved": True,
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
             "mobile_application": "app1, app2",
             "wiki": "http://wiki.org",
-            "interoperability_links": [{"name": "link1", "selected": True, "link": "http://blabla.com"},
-                                       {"name": "link2", "selected": True},
-                                       {"name": "link3", "selected": True, "link": "http://example.org"}],
-            "interoperability_standards": ["CSD - Care Services Discovery"],
+            "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
+                                       {"id": 2, "selected": True},
+                                       {"id": 3, "selected": True, "link": "http://example.org"}],
+            "interoperability_standards": [1],
             "start_date": str(datetime.today().date()),
             "end_date": str(datetime.today().date())
         }
@@ -189,13 +189,13 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(len(response.json().keys()), 8)
         self.assertEqual(response.json()['implementing_partners'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['health_focus_areas'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['licenses'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['health_focus_areas'][0], 'A valid integer is required.')
+        self.assertEqual(response.json()['licenses'][0], 'A valid integer is required.')
         self.assertEqual(response.json()['donors'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['his_bucket'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['hsc_challenges'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['interoperability_links'][0], {'name': ['This field is required.']})
-        self.assertEqual(response.json()['interoperability_standards'][0], 'Not a valid string.')
+        self.assertEqual(response.json()['his_bucket'][0], 'A valid integer is required.')
+        self.assertEqual(response.json()['hsc_challenges'][0], 'A valid integer is required.')
+        self.assertEqual(response.json()['interoperability_links'][0], {'id': ['This field is required.']})
+        self.assertEqual(response.json()['interoperability_standards'][0], 'A valid integer is required.')
 
     def test_create_new_project_with_platform_name_missing(self):
         url = reverse("project-create")
@@ -714,10 +714,6 @@ class ProjectTests(SetupTests):
         item = Licence.objects.create(name='name')
         self.assertEqual(str(item), 'name')
 
-    def test_application_str(self):
-        item = Application.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
     def test_iopstandard_str(self):
         item = InteroperabilityStandard.objects.create(name='name')
         self.assertEqual(str(item), 'name')
@@ -826,11 +822,12 @@ class ProjectDraftTests(SetupTests):
         url = reverse("project-draft", kwargs={"pk": self.project_draft_id})
         data = copy.deepcopy(self.project_draft_data)
         data.update(name="TestProject98",
-                    platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
+                    platforms=[{"id": 999, "strategies": [999]}])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['draft']["platforms"][0]["name"], "updated platform")
-        self.assertEqual(response.json()['draft']["platforms"][0]["strategies"][0], "new strat")
+        self.assertNotEqual(response.json()['draft']["platforms"][0]["id"], self.project_data['platforms'][0]['id'])
+        self.assertNotEqual(response.json()['draft']["platforms"][0]["strategies"][0],
+                         self.project_data['platforms'][0]['strategies'][0])
 
     def test_project_draft_merged_list(self):
         url = reverse("project-list")
@@ -1025,7 +1022,8 @@ class PermissionTests(SetupTests):
         response = anon_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("platforms")[0].get('name'), "platform1")
+        self.assertEqual(response.json()['published'].get("platforms")[0].get('id'),
+                         self.project_data['platforms'][0]['id'])
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY + Project.FIELDS_FOR_LOGGED_IN:
@@ -1063,7 +1061,8 @@ class PermissionTests(SetupTests):
         response = test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("platforms")[0].get('name'), "platform1")
+        self.assertEqual(response.json()['published'].get("platforms")[0].get('id'),
+                         self.project_data['platforms'][0]['id'])
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
@@ -1113,7 +1112,8 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
+                         self.project_data['platforms'][0]['id'])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
         self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
@@ -1133,7 +1133,8 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
+                         self.project_data['platforms'][0]['id'])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
         self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
