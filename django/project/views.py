@@ -110,16 +110,19 @@ class ProjectPublicViewSet(ViewSet):
     def _get_project_structure(self):
         strategies = []
         for group in DigitalStrategy.objects.filter(parent=None).values_list('group', flat=True).distinct():
+            subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
-                strategies.append(dict(
-                    name=group,
-                    subGroups=dict(
+                subGroups.append(dict(
                         id=parent.id,
                         name=parent.name,
                         strategies=parent.strategies.values('id', 'name')
                     )
-                ))
-
+                )
+            strategies.append(dict(
+                name=group,
+                subGroups=subGroups
+            ))
+            
         health_focus_areas = []
         for category in HealthCategory.objects.all():
             health_focus_areas.append(dict(
