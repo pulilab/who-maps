@@ -50,14 +50,14 @@ export function mergeCustomAndDefault(collection) {
 
 export function parsePlatformCollection({ platforms }) {
     return platforms.map(p => {
-        const name = p.name === 'Other' ? p.custom : p.name;
+        const id = p.id;
         const strategies = p.strategies && p.strategies.length > 0 ? p.strategies : undefined;
         p = {};
-        if (name) {
-            p.name = name;
+        if (id) {
+            p.id = id;
         }
         if (strategies) {
-            p.strategies = strategies;
+            p.strategies = strategies.map(s => s.id).filter(s => s);
         }
         return p;
     });

@@ -164,7 +164,7 @@ const getCurrentProjectForEditing = (state, data) => {
     data = { ...data, ...isMemberOrViewer(state, data) };
 
     data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
-    return Object.assign({}, project_definition, data);
+    return { ...project_definition, ...data };
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
@@ -454,7 +454,6 @@ function processForm(form) {
         organisation_name,
         organisation,
         ...createDateFields(form),
-        ...mergeCustomAndDefault(form),
         ...convertObjectArrayToStringArray(form),
         coverageType: undefined,
         platforms: parsePlatformCollection(form)

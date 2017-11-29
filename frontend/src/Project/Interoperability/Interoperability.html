@@ -60,25 +60,8 @@
           <md-checkbox md-no-ink aria-label="{{standard}}"
                        ng-checked="vm.checkboxChecked(standard, 'interoperability_standards')"
                        ng-click="vm.checkboxToggle(standard, 'interoperability_standards')" class="md-primary">
-            {{standard}}
+            {{standard.name}}
           </md-checkbox>
-        </li>
-        <li>
-          <span layout="row">
-            <md-checkbox md-no-ink aria-label="other-standard"
-                         ng-model="vm.specifyOtherStandard"
-                         class="md-primary"
-                         flex="nogrow">
-            </md-checkbox>
-            <md-input-container class="md-block" flex>
-              <label>Specify other</label>
-              <input ng-disabled="!vm.specifyOtherStandard"
-                     ng-required="vm.specifyOtherStandard"
-                     md-maxlength="64"
-                     name="data.c18"
-                     ng-model="vm.project.interoperability_standards.custom">
-            </md-input-container>
-          </span>
         </li>
       </ul>
 
