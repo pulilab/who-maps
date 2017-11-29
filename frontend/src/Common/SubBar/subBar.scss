@@ -74,8 +74,6 @@
 }
 
 .md-medium-tall {
-
-
   .md-toolbar-tools {
     // background-color: $color-primary;
     background-color: $color-white;
@@ -92,7 +90,7 @@
 
   .project-name {
     position: relative;
-    padding: 16px 12px 8px;
+    padding: 20px 12px 4px;
     max-width: 45%;
     height: 48px;
     color: $text-primary;
@@ -109,7 +107,7 @@
       position: absolute;
       top: 50%;
       left: 100%;
-      margin: -6px 0 0 -6px; 
+      margin: -2px 0 0 -6px;
     }
 
     .viewerIcon {

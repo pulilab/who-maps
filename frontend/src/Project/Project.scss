@@ -51,6 +51,11 @@
     }
   }
 
+  .project-form-wrapper {
+    width: 100%;
+    max-width: $page-max-width;
+  }
+
   .error-placeholder {
     display: none;
     margin: -8px 0 30px 0 !important;
@@ -69,6 +74,7 @@
 }
 
 .main-section {
+  width: 100%;
   max-width: $page-max-width - $navigation-width;
   margin: 0 auto;
 }
@@ -91,7 +97,6 @@
 }
 
 .publish {
-  // TODO fix the color with the prob
   .project-section {
     .section-title {
       &:hover {
@@ -134,7 +139,6 @@
   background: $color-white;
 
   &.active {
-
     .section-title {
       background-color: #CD9923;
 
@@ -216,8 +220,8 @@
   }
 
   .section-wrapper {
-    max-height: auto;
-    min-width: calc($page-min-width - $navigation-width - 30px);
+    // max-height: auto;
+    // min-width: calc($page-min-width - $navigation-width - 30px);
     padding: 40px 80px 40px 40px;
     transition: $swift-ease-out;
 
