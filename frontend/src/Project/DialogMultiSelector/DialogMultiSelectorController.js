@@ -1,5 +1,5 @@
 import angular from 'angular';
-
+import findIndex from 'lodash/findIndex';
 
 class DialogMultiSelectorDialog {
     constructor($scope, $mdDialog, buttonName, elements, selection, collectionName, dialogName) {
@@ -51,10 +51,10 @@ class DialogMultiSelectorDialog {
     }
 
     itemChecked(item) {
-        return this.selection.indexOf(item) > -1;
+        return this.selection.some(i => i.id === item.id);
     }
     itemToggle(item) {
-        const index =  this.selection.indexOf(item);
+        const index =  findIndex(this.selection, s => s.id === item.id);
         if (index !== -1) {
             this.selection.splice(index, 1);
         }
@@ -106,18 +106,12 @@ class DialogMultiSelector {
             return;
         }
         const flat = [];
-        const flatWitPath = [];
         for (const e of elements) {
             for (const group of e.subGroups) {
                 for (const item of group[this.collectionName]) {
-                    const itemWithPath = `${e.name} => ${group.name} => ${item}`;
                     const index = flat.indexOf(item);
                     if (index === -1) {
                         flat.push(item);
-                        flatWitPath.push(itemWithPath);
-                    }
-                    else {
-                        console.error(`Dupes in elements collection: ${itemWithPath} / ${flatWitPath[index]} `);
                     }
                 }
             }

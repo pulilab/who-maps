@@ -88,9 +88,6 @@ class ProjectController  {
         this.eventListeners();
         this.districtList = [];
         this.isAddAnother = false;
-        if (DEV) {
-            this.fillTestForm();
-        }
         this.activateValidation = true;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
@@ -190,83 +187,6 @@ class ProjectController  {
         }, 100);
     }
 
-    fillTestForm() {
-        const data = {
-            'name': Math.random().toString(36).substr(2, 20),
-            'organisation': {
-                'id': 1,
-                'name': 'Pulilab'
-            },
-            'country': 33,
-            'countryName': null,
-            'coverage': [
-                {
-                }
-            ],
-            'coverageType': 2,
-            'platforms': [
-                {
-                    'name': 'Bamboo',
-                    'strategies': [
-                        'Point of care and diagnostics'
-                    ]
-                }
-            ],
-            'licenses': {
-                'standard': []
-            },
-            'donors': [
-                {
-                    'value': 'dsfdsfdsf'
-                }
-            ],
-            'application': [],
-            'reports': [
-                {}
-            ],
-            'publications': [
-                {}
-            ],
-            'links': [
-                {}
-            ],
-            'contact_name': 'dfadsfdsfsdfas',
-            'contact_email': 'dsf@dsaf.coim',
-            'implementation_overview': 'dsfdsfdsf',
-            'implementation_dates': new Date(),
-            'geographic_scope': 'dsfds',
-            'interoperability_links': [],
-            'interoperability_standards': {
-                'standard': []
-            },
-            'wiki': '',
-            'repository': '',
-            'mobile_application': '',
-            'implementing_partners': [
-            ],
-            'his_bucket': [
-                'Client applications'
-            ],
-            'hsc_challenges': [
-                'Delayed reporting of events',
-                'Lack of population denominator'
-            ],
-            'health_focus_areas': [],
-            'government_approved': false,
-            'government_investor': 0,
-            'national_level_deployment': {
-                'health_workers': 2,
-                'facilities': 2,
-                'clients': 2
-            }
-        };
-        if (window.location.search.indexOf('test') > -1) {
-            this.scope.$evalAsync(() => {
-                this.project = data;
-
-            });
-        }
-    }
 
     showToast(text) {
         const toast = {
@@ -292,8 +212,13 @@ class ProjectController  {
     }
 
     addErrorArray(errors, key) {
-        this.form[key].customError = errors;
-        this.form[key].$setValidity('custom', false);
+        try {
+            this.form[key].customError = errors;
+            this.form[key].$setValidity('custom', false);
+        }
+        catch (e) {
+            console.warn('failed to set the error for key: ', key);
+        }
     }
 
     handleResponse(response) {

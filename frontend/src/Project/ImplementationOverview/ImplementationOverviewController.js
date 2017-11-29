@@ -40,8 +40,7 @@ class ImplementationOverview extends CollapsibleSet {
         this.scope.$watch(() => {
             return this.project.platforms;
         }, (platform) => {
-            this.setAvailableOptions(platform, this.structure.technology_platforms, 'name');
-            this.addOtherOption(platform);
+            this.setAvailableDictOptions(platform, this.structure.technology_platforms, 'name');
         }, true);
 
         this.scope.$watch(()=>{
@@ -61,14 +60,6 @@ class ImplementationOverview extends CollapsibleSet {
         });
 
         this.scope.$watch(s => s.vm.districtList, this.removeUnavailableDistricts.bind(this));
-    }
-
-    addOtherOption(platform) {
-        platform.forEach(p => {
-            if (p.available.indexOf('Other') === -1) {
-                p.available.push('Other');
-            }
-        });
     }
 
     addClearOption(districts) {

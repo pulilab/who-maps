@@ -30,23 +30,10 @@
             ng-checked="vm.checkboxChecked(l, 'licenses')"
             ng-click="vm.checkboxToggle(l, 'licenses')"
             md-no-ink
-            aria-label="{{ l }}"
+            aria-label="{{ l.name }}"
             class="md-primary">
-            {{ l }}
+            {{ l.name }}
           </md-checkbox>
-        </li>
-        <li>
-          <span layout="row">
-            <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
-            <md-input-container class="md-block" flex>
-              <label>Specify other</label>
-              <input ng-required="vm.customLicense"
-                     md-maxlength="64"
-                     name="licenses"
-                     ng-model="vm.project.licenses.custom"
-                     ng-disabled="!vm.customLicense">
-            </md-input-container>
-          </span>
         </li>
       </ul>
     </div>

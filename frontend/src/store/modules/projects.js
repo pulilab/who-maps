@@ -12,7 +12,6 @@ import * as ToolkitModule from './toolkit';
 import { getToolkitData } from './toolkit';
 
 import {
-    convertArrayToStandardCustomObj,
     convertDate,
     convertObjectArrayToStringArray,
     convertStringArrayToObjectArray,
@@ -20,11 +19,14 @@ import {
     fieldsWithCustomValue,
     fillEmptyCollectionsWithDefault,
     getTodayString,
-    mergeCustomAndDefault, parsePlatformCollection,
+    parsePlatformCollection,
     removeEmptyChildObjects,
     removeKeysWithoutValues,
     setCoverageType,
-    retainNationalOrDistrictCoverage
+    parseOutInteroperabilityLinks,
+    retainNationalOrDistrictCoverage,
+    extractIdFromObjects,
+    convertIdArrayToObjectArray
 } from '../project_utils';
 
 
@@ -150,8 +152,25 @@ export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     return [...result];
 };
 
+export const getProjectStructure = state => {
+    const structure = state.projects.structure;
+    return cloneDeep(structure);
+};
+
+export const getFlatProjectStructure = state => {
+    const structure = state.projects.structure;
+    let strategies = [];
+    structure.strategies.forEach(g => {
+        g.subGroups.forEach(sg => {
+            strategies = [ ...strategies, ...sg.strategies.map(s => ({ ...s }))];
+        });
+    });
+    return { ...structure, strategies };
+};
+
+
 const getCurrentProjectForEditing = (state, data) => {
-    data = convertArrayToStandardCustomObj(data);
+    const structure = getFlatProjectStructure(state);
     data.start_date = convertDate(data.start_date);
     data.implementation_dates = convertDate(data.implementation_dates);
     data.end_date = convertDate(data.end_date);
@@ -161,10 +180,13 @@ const getCurrentProjectForEditing = (state, data) => {
         id: data.organisation,
         name: data.organisation_name
     };
-    data = { ...data, ...isMemberOrViewer(state, data) };
+    data = { ...data,
+        ...isMemberOrViewer(state, data),
+        ...convertIdArrayToObjectArray(data, structure)
+    };
 
     data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
-    return Object.assign({}, project_definition, data);
+    return { ...project_definition, ...data };
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
@@ -201,16 +223,6 @@ export const getViewers = state => {
     return [];
 };
 
-export const getProjectStructure = state => {
-    const structure = state.projects.structure;
-    const currentProject = getCurrentProject(state);
-    if (currentProject.name) {
-        fieldsWithCustomValue.forEach(item => {
-            structure[item] = union(structure[item], currentProject[item]);
-        });
-    }
-    return cloneDeep(structure);
-};
 
 export const getToolkitVersion = state => {
     const data = state.projects.toolkitVersions;
@@ -454,8 +466,9 @@ function processForm(form) {
         organisation_name,
         organisation,
         ...createDateFields(form),
-        ...mergeCustomAndDefault(form),
         ...convertObjectArrayToStringArray(form),
+        ...extractIdFromObjects(form),
+        ...parseOutInteroperabilityLinks(form),
         coverageType: undefined,
         platforms: parsePlatformCollection(form)
     };
