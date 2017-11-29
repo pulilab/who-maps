@@ -34,7 +34,7 @@ const config = ($stateProvider, $compileProvider) => {
                   return su.lazyLoader($compileProvider, 'AxisFooter/axisFooterComponent.js');
               },
               cms: ['$ngRedux', ($ngRedux) => {
-                  const cmsPromise = $ngRedux.dispatch(CmsModule.getCmsData());
+                  const cmsPromise = $ngRedux.dispatch(CmsModule.loadCmsData());
                   const toolkitPromise = $ngRedux.dispatch(ToolkitModule.loadToolkitData());
                   return Promise.all([cmsPromise, toolkitPromise]);
               }]

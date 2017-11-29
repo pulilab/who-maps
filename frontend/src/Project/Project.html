@@ -14,6 +14,7 @@
   <div class="project-form-wrapper md-block">
     <form name="vm.form" ng-submit="vm.save($event)" layout="row" id="npf" novalidate>
       <div class="main-section" layout="column">
+
         <general-overview
           id="general-overview"
           form="vm.form"
@@ -22,7 +23,7 @@
           team="vm.team"
           viewers="vm.viewers"
           activate-validation="vm.activateValidation"
-          ng-if="!vm.publishMode"
+          ng-if="!vm.readOnlyMode"
           users="vm.users">
         </general-overview>
 
@@ -34,7 +35,7 @@
           team="vm.team"
           viewers="vm.viewers"
           activate-validation="vm.activateValidation"
-          ng-if="vm.publishMode"
+          ng-if="vm.readOnlyMode"
           users="vm.users">
         </read-only-general-overview>
 
@@ -44,7 +45,7 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="!vm.publishMode"
+          ng-if="!vm.readOnlyMode"
           structure="vm.structure">
         </implementation-overview>
 
@@ -52,7 +53,7 @@
           id="implementation-overview"
           form="vm.form"
           project="vm.project"
-          ng-if="vm.publishMode"
+          ng-if="vm.readOnlyMode"
           activate-validation="vm.activateValidation"
           structure="vm.structure">
         </read-only-implementation-overview>
@@ -63,7 +64,7 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="!vm.publishMode"
+          ng-if="!vm.readOnlyMode"
           structure="vm.structure">
         </technology>
 
@@ -72,7 +73,7 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="vm.publishMode"
+          ng-if="vm.readOnlyMode"
           structure="vm.structure">
         </read-only-technology>
 
@@ -82,7 +83,7 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="!vm.publishMode"
+          ng-if="!vm.readOnlyMode"
           structure="vm.structure">
         </interoperability>
 
@@ -91,7 +92,7 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="vm.publishMode"
+          ng-if="vm.readOnlyMode"
           structure="vm.structure">
         </read-only-interoperability>
 
@@ -102,7 +103,7 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="!vm.publishMode"
+          ng-if="!vm.readOnlyMode"
           country-fields="vm.countryFields">
         </country-fields>
 
@@ -112,14 +113,14 @@
           form="vm.form"
           project="vm.project"
           activate-validation="vm.activateValidation"
-          ng-if="vm.publishMode"
+          ng-if="vm.readOnlyMode"
           country-fields="vm.countryFields">
         </read-only-country-fields>
 
       </div>
       <div class="navigation-area" layout="column">
         <navigation
-          edit-mode="vm.editMode"
+          read-only-mode="vm.readOnlyMode"
           is-add-another="vm.isAddAnother"
           project="vm.project"
           viewers="vm.viewers"

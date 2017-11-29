@@ -61,9 +61,12 @@ class ProjectController  {
         if (project === undefined) {
             project = ProjectModule.getEmptyProject();
         }
+        const readOnlyMode = publishMode ||
+          (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         return {
             newProject,
             publishMode,
+            readOnlyMode,
             lastVersion,
             project,
             team,

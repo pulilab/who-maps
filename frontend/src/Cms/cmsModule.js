@@ -35,7 +35,7 @@ function config($stateProvider, $compileProvider) {
                     return $ngRedux.dispatch(SystemModule.loadUserProfiles());
                 }],
                 cms: ['$ngRedux', ($ngRedux) => {
-                    return $ngRedux.dispatch(CmsModule.getCmsData());
+                    return $ngRedux.dispatch(CmsModule.loadCmsData());
                 }]
             },
             profileRequired: true

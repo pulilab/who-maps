@@ -48,7 +48,7 @@
       </li>
     </ul>
   </div>
-  <div layout="column" class="edit-buttons" >
+  <div layout="column" class="edit-buttons" ng-if="!vm.readOnlyMode">
     <div class="primary-buttons" ng-if-start="vm.state.params.editMode === 'draft'">
       <md-button type="submit" class="md-primary md-raised">Publish</md-button>
     </div>

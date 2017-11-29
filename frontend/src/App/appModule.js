@@ -80,7 +80,14 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
       .state('public', {
           url: '/public/:appName',
           template: '<app layout="column" view-mode="true"></app>',
-          resolve: {}
+          resolve: {
+              data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(UserModule.loadProfile());
+                  const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
+                  const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
+                  return Promise.all([countries, projects]);
+              }]
+          }
       })
       .state('login', {
           url: '/login',

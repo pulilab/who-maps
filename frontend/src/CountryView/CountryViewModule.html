@@ -65,8 +65,7 @@
                                   md-container-class="country-chooser topalign"
                                   ng-model-options="{trackBy: '$value.id'}"
                                   placeholder='Select a country'
-                                  ng-model="vm.selectedCountry"
-                                  ng-change="vm.updateCountry(vm.selectedCountry)">
+                                  ng-model="vm.selectedCountry">
                                     <md-option ng-value="vm.showAllCountries">Show all countries</md-option>
                                     <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
@@ -130,17 +129,17 @@
                           layout="row"
                           layout-padding
                           ng-repeat="project in vm.projectsData track by $index"
-                          ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
+                          ng-class="{'member': project.isMember, 'viewer': project.isViewer}">
 
                             <div flex="35" class="projectlink" layout="row">
                                 <div flex class="name">
-                                    <md-icon class="member" ng-show="vm.isMember(project)">grade</md-icon>
-                                    <md-icon class="viewer" ng-show="vm.isViewer(project)">visibility</md-icon>
+                                    <md-icon class="member" ng-show="project.isMember">grade</md-icon>
+                                    <md-icon class="viewer" ng-show="project.isViewer">visibility</md-icon>
                                     {{project.name}}
                                 </div>
                                 <div layout="column" class="links">
-                                    <span ng-hide="vm.isMember(project) || vm.isViewer(project)" ui-sref="public-dashboard({ appName: project.id })">Project Dashboard</span>
-                                    <span ng-show="vm.isMember(project) || vm.isViewer(project)" ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ng-hide="project.isTeam" ui-sref="public-dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ng-show="project.isTeam" ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
                                 </div>
                             </div>
                             <div flex="20" class="cap">

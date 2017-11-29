@@ -30,6 +30,7 @@ class CountryViewModuleController {
         const projectsData = CountryModule.getCurrentCountryProjects(state);
         const countryProjects = cloneDeep(projectsData);
         const nationalLevelCoverage = this.filterNLDProjects(projectsData, districtProjects);
+
         return {
             userProfile: UserModule.getProfile(state),
             countries: CountryModule.getCountriesList(state),
@@ -54,7 +55,7 @@ class CountryViewModuleController {
     watchers() {
         this.scope.$watchCollection(s => s.vm.countryProjects, this.generateFilters);
         this.scope.$watch(s => s.vm.filters, this.applyFilters, true);
-        this.scope.$watch(s => s.vm.selectedCountry, this.updateCountry.bind(this));
+        this.scope.$watch(s => s.vm.selectedCountry, this.updateCountry.bind(this), true);
     }
 
     applyFilters(filters, oldValue) {
@@ -194,14 +195,6 @@ class CountryViewModuleController {
             healthInformationSystems, healthSystemChallenges, software];
     }
 
-    isViewer() {
-        return false;
-    }
-
-    isMember() {
-        return false;
-    }
-
     filterNLDProjects(allProjects) {
         let districtsIds = [];
         for (const d in this.countryDistrictProjects) {
@@ -227,7 +220,7 @@ class CountryViewModuleController {
 
 
     updateCountry(newVal, oldVal) {
-        if (!oldVal || newVal.name !== oldVal.name) {
+        if (oldVal && (newVal.name !== oldVal.name)) {
             if (newVal.name !== 'Show all countries') {
                 this.setCurrentCountry(newVal.id);
             }

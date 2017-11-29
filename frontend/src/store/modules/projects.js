@@ -33,9 +33,9 @@ export const isMemberOrViewer = (state, project) => {
     if (profile.member && profile.viewer) {
         const isMember = profile.member.indexOf(project.id) > -1;
         const isViewer = !isMember && profile.viewer.indexOf(project.id) > -1;
-        return { isMember, isViewer };
+        return { isMember, isViewer, isTeam: isMember || isViewer };
     }
-    return { isMember: false, isViewer: false };
+    return { isMember: false, isViewer: false, isTeam: false };
 };
 
 // GETTERS
@@ -69,10 +69,10 @@ export const getDraftedProjects = state => {
 export const getUserProjects = state => {
     if (state.projects.list) {
         const list = state.projects.list.map(p => {
+            const public_id = p.public_id;
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            p.isPublished = isPublished;
-            p = { ...p, ...isMemberOrViewer(state, p) };
+            p = { ...p, ...isMemberOrViewer(state, p), isPublished, public_id };
             return p;
         });
         return sortBy(list, 'id');
@@ -475,6 +475,8 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
     dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
     dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
+    dispatch(CountryModule.loadCurrentCountryProjects());
+    dispatch(CountryModule.loadCurrentCountryDistrictsProject());
     return Promise.resolve(data);
 }
 
