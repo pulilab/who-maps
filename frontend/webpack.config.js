@@ -24,7 +24,7 @@ const basePlugins = [
         LIVE: live,
         NODE_ENV: production ? '"production"' : ''
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
     new ExtractTextPlugin({
         filename: '[name].[contenthash].css',
         allChunks: true,
@@ -65,8 +65,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            Common: 'src/Common/',
-            store: 'src/store/'
+            Common: 'src/Common/'
         }
     },
     module: {
