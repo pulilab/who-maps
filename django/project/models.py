@@ -202,10 +202,6 @@ class Licence(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pass
 
 
-class Application(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
-    pass
-
-
 class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
     pass
 
