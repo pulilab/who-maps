@@ -5,7 +5,6 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
-from django.conf import settings
 from django.core.cache import cache
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
@@ -141,32 +140,32 @@ class ProjectTests(SetupTests):
         self.assertEqual(len(response.json().keys()), 9)
 
     def test_retrieve_project_structure_cache(self):
-        settings.CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}
-        cache.clear()
-        # Shouldn't exists
-        cache_data = cache.get('project-structure-data')
-        self.assertTrue(cache_data is None)
+        with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
+            cache.clear()
+            # Shouldn't exists
+            cache_data = cache.get('project-structure-data')
+            self.assertTrue(cache_data is None)
 
-        # First time retrieval should create cache data
-        url = reverse("get-project-structure")
-        response = self.test_user_client.get(url)
-        cache_data = cache.get('project-structure-data')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(cache_data is None)
+            # First time retrieval should create cache data
+            url = reverse("get-project-structure")
+            response = self.test_user_client.get(url)
+            cache_data = cache.get('project-structure-data')
+            self.assertEqual(response.status_code, 200)
+            self.assertFalse(cache_data is None)
 
-        # Changing cached data should invalidate cache
-        lic = Licence.objects.all().first()
-        lic.name = 'other'
-        lic.save()
-        cache_data = cache.get('project-structure-data')
-        self.assertTrue(cache_data is None)
+            # Changing cached data should invalidate cache
+            lic = Licence.objects.all().first()
+            lic.name = 'other'
+            lic.save()
+            cache_data = cache.get('project-structure-data')
+            self.assertTrue(cache_data is None)
 
-        # Retrieval should create cache data again
-        url = reverse("get-project-structure")
-        response = self.test_user_client.get(url)
-        cache_data = cache.get('project-structure-data')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(cache_data is None)
+            # Retrieval should create cache data again
+            url = reverse("get-project-structure")
+            response = self.test_user_client.get(url)
+            cache_data = cache.get('project-structure-data')
+            self.assertEqual(response.status_code, 200)
+            self.assertFalse(cache_data is None)
 
     # def xtest_create_new_project_approval_required(self):
     #     Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
@@ -857,7 +856,7 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.json()['draft']["platforms"][0]["id"], self.project_data['platforms'][0]['id'])
         self.assertNotEqual(response.json()['draft']["platforms"][0]["strategies"][0],
-                         self.project_data['platforms'][0]['strategies'][0])
+                            self.project_data['platforms'][0]['strategies'][0])
 
     def test_project_draft_merged_list(self):
         url = reverse("project-list")
