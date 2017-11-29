@@ -6,7 +6,6 @@ django:
   links:
     - postgres:postgres
     - celery:celery
-    - rabbitmq:rabbitmq
     - redis:redis
   volumes:
     - ./django:/src
@@ -20,7 +19,7 @@ celery:
     - C_FORCE_ROOT=true
   links:
     - postgres:postgres
-    - rabbitmq:rabbitmq
+    - redis:redis
   volumes:
     - ./django:/src
   command: /usr/local/bin/celery -A scheduler worker -B -l info
@@ -57,15 +56,6 @@ postgresdata:
   volumes:
     - /var/lib/postgresql
   command: "/bin/true"
-
-rabbitmq:
-  restart: always
-  image: rabbitmq:3.6.2
-  environment:
-    - RABBITMQ_PASS=mypass
-  ports:
-    - "5672:5672"
-    - "15672:15672"
 
 redis:
   restart: always
