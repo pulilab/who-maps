@@ -195,14 +195,6 @@ class CountryViewModuleController {
             healthInformationSystems, healthSystemChallenges, software];
     }
 
-    isViewer() {
-        return false;
-    }
-
-    isMember() {
-        return false;
-    }
-
     filterNLDProjects(allProjects) {
         let districtsIds = [];
         for (const d in this.countryDistrictProjects) {
