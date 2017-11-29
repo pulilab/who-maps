@@ -106,58 +106,47 @@ class ProjectPublicViewSet(ViewSet):
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
-    @cache_structure
+    # @cache_structure
     def _get_project_structure(self):
-        project_structure = {}
-        project_structure['interoperability_links'] = [{
-            'pre': x.pre,
-            'name': x.name
-        } for x in InteroperabilityLink.objects.all()]
-        project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
         strategies = []
-
-        system = {'name': 'System', 'subGroups': []}
-        system_parents = DigitalStrategy.objects.filter(group='System', parent=None)
-        for parent in system_parents.all():
-            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            system['subGroups'].append(sub)
-        strategies.append(system)
-
-        client = {'name': 'Client', 'subGroups': []}
-        client_parents = DigitalStrategy.objects.filter(group='Client', parent=None)
-        for parent in client_parents.all():
-            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            client['subGroups'].append(sub)
-        strategies.append(client)
-
-        provider = {'name': 'Provider', 'subGroups': []}
-        provider_parents = DigitalStrategy.objects.filter(group='Provider', parent=None)
-        for parent in provider_parents.all():
-            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            provider['subGroups'].append(sub)
-        strategies.append(provider)
-
-        project_structure['strategies'] = strategies
+        for group in DigitalStrategy.objects.filter(parent=None).values_list('group', flat=True).distinct():
+            for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
+                strategies.append(dict(
+                    name=group,
+                    subGroups=dict(
+                        id=parent.id,
+                        name=parent.name,
+                        strategies=parent.strategies.values('id', 'name')
+                    )
+                ))
 
         health_focus_areas = []
-        for category in HealthCategory.objects.all().order_by('name'):
-            hfa_data = []
-            for hfa in category.health_focus_areas.all():
-                hfa_data.append(hfa.name)
-            health_focus_areas.append({'name': category.name, 'health_focus_areas': hfa_data})
+        for category in HealthCategory.objects.all():
+            health_focus_areas.append(dict(
+                id=category.id,
+                name=category.name,
+                health_focus_areas=category.health_focus_areas.values('id', 'name')
+            ))
 
-        project_structure['health_focus_areas'] = health_focus_areas
-
-        project_structure['licenses'] = [x.name for x in Licence.objects.all()]
-        project_structure['applications'] = [x.name for x in Application.objects.all()]
-        project_structure['interoperability_standards'] = [x.name for x in InteroperabilityStandard.objects.all()]
-        project_structure['his_bucket'] = [x.name for x in HISBucket.objects.all()]
         hsc_challenges = []
-        for hsc in HSCChallenge.objects.values('name').distinct():
-            item = {'name': hsc['name'],
-                    'challenges': [x.challenge for x in HSCChallenge.objects.filter(name=hsc['name'])]}
-            hsc_challenges.append(item)
-        project_structure['hsc_challenges'] = hsc_challenges
+        for hsc in HSCChallenge.objects.values('id', 'name').distinct('name'):
+            hsc_challenges.append(dict(
+                id=hsc['id'],
+                name=hsc['name'],
+                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'name')
+            ))
+
+        project_structure = dict(
+            interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
+            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
+            licenses=Licence.objects.values('id', 'name'),
+            applications=Application.objects.values('id', 'name'),
+            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
+            his_bucket=HISBucket.objects.values('id', 'name'),
+            health_focus_areas=health_focus_areas,
+            hsc_challenges=hsc_challenges,
+            strategies=strategies
+        )
 
         return project_structure
 
@@ -167,9 +156,9 @@ class ProjectPublicViewSet(ViewSet):
         Used to sync objects to "Implementation Toolkit"
         """
         return Response(dict(
-            interoperability_links=[{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()],
-            technology_platforms=[{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()],
-            digital_strategies=[{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
+            interoperability_links=InteroperabilityLink.objects.values('id', 'name'),
+            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
+            digital_strategies=DigitalStrategy.objects.values('id', 'name')
         ))
 
 

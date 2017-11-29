@@ -163,9 +163,6 @@ class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
     class Meta:
         verbose_name_plural = 'Digital Strategies'
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        super(DigitalStrategy, self).save(force_insert, force_update, using, update_fields)
-
 
 class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
     challenge = models.CharField(max_length=512)
