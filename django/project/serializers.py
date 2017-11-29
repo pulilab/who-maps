@@ -14,7 +14,7 @@ class NDPSerializer(serializers.Serializer):
 
 
 class CoverageSerializer(NDPSerializer):
-    district = serializers.IntegerField()
+    district = serializers.CharField(max_length=128)
 
 
 class PlatformSerializer(serializers.Serializer):
