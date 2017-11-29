@@ -62,7 +62,7 @@ class SearchTests(SetupTests):
     def test_search_platform(self):
         url = reverse("search-project")
         data = {
-            "query": "platform",
+            "query": "Adobe",
             "technology_platform": True,
         }
         response = self.test_user_client.post(url, data, format="json")
