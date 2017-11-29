@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
+from django.core.cache import cache
 
 from core.models import ExtendedModel, SoftDeleteMixin
 from country.models import Country, CountryField
@@ -139,7 +140,14 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class InteroperabilityLink(SoftDeleteMixin, ExtendedModel):
+class InvalidateCacheMixin(object):
+
+    def save(self, *args, **kwargs):
+        cache.delete('project-structure-data')
+        return super().save(*args, **kwargs)
+
+
+class InteroperabilityLink(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     pre = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
 
@@ -147,14 +155,14 @@ class InteroperabilityLink(SoftDeleteMixin, ExtendedModel):
         return self.name
 
 
-class TechnologyPlatform(SoftDeleteMixin, ExtendedModel):
+class TechnologyPlatform(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 
-class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
+class DigitalStrategy(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),
@@ -172,14 +180,14 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
         verbose_name_plural = 'Digital Strategies'
 
 
-class HealthCategory(ExtendedModel):
+class HealthCategory(InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=512)
 
     def __str__(self):
         return self.name
 
 
-class HealthFocusArea(ExtendedModel):
+class HealthFocusArea(InvalidateCacheMixin, ExtendedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
     name = models.CharField(max_length=512)
 
@@ -187,35 +195,35 @@ class HealthFocusArea(ExtendedModel):
         return '[{}] {}'.format(self.health_category.name, self.name)
 
 
-class Licence(SoftDeleteMixin, ExtendedModel):
+class Licence(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=512)
 
     def __str__(self):
         return self.name
 
 
-class Application(SoftDeleteMixin, ExtendedModel):
+class Application(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=512)
 
     def __str__(self):
         return self.name
 
 
-class InteroperabilityStandard(SoftDeleteMixin, ExtendedModel):
+class InteroperabilityStandard(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=512)
 
     def __str__(self):
         return self.name
 
 
-class HISBucket(SoftDeleteMixin, ExtendedModel):
+class HISBucket(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=512)
 
     def __str__(self):
         return self.name
 
 
-class HSCChallenge(SoftDeleteMixin, ExtendedModel):
+class HSCChallenge(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     name = models.CharField(max_length=512)
     challenge = models.CharField(max_length=512)
 

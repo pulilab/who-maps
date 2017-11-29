@@ -24,3 +24,5 @@ raven
 pytest-testmon
 pytest-watch
 flake8
+redis==2.10.5
+django-redis-cache==1.7.1

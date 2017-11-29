@@ -7,6 +7,7 @@ django:
     - postgres:postgres
     - celery:celery
     - rabbitmq:rabbitmq
+    - redis:redis
   volumes:
     - ./django:/src
   command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
@@ -65,3 +66,9 @@ rabbitmq:
   ports:
     - "5672:5672"
     - "15672:15672"
+
+redis:
+  restart: always
+  image: redis:3.2.9
+  ports:
+    - "6379"

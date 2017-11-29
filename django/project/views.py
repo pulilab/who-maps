@@ -3,6 +3,7 @@ import csv
 
 from django.db import transaction
 from django.http import HttpResponse
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
@@ -17,6 +18,16 @@ from country.models import Country
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
+
+
+def cache_structure(fn):
+    def wrapper(*args, **kwargs):
+        data = cache.get('project-structure-data')
+        if not data:
+            data = fn(*args, **kwargs)
+            cache.set('project-structure-data', data)
+        return data
+    return wrapper
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -92,8 +103,11 @@ class ProjectPublicViewSet(ViewSet):
 
         return Response(result_list)
 
-    @staticmethod
-    def project_structure(request):
+    def project_structure(self, request):
+        return Response(self._get_project_structure())
+
+    @cache_structure
+    def _get_project_structure(self):
         project_structure = {}
         project_structure['interoperability_links'] = [{
             'pre': x.pre,
@@ -145,7 +159,7 @@ class ProjectPublicViewSet(ViewSet):
             hsc_challenges.append(item)
         project_structure['hsc_challenges'] = hsc_challenges
 
-        return Response(project_structure)
+        return project_structure
 
     @staticmethod
     def project_structure_export(request):
