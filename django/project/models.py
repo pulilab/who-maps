@@ -186,6 +186,9 @@ class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
 
+    class Meta:
+        ordering = ['health_category__name', 'name']
+
 
 class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pre = models.CharField(max_length=255)

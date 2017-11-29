@@ -136,7 +136,7 @@ class ProjectPublicViewSet(ViewSet):
                 challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'name')
             ))
 
-        project_structure = dict(
+        return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
             licenses=Licence.objects.values('id', 'name'),
@@ -147,8 +147,6 @@ class ProjectPublicViewSet(ViewSet):
             hsc_challenges=hsc_challenges,
             strategies=strategies
         )
-
-        return project_structure
 
     @staticmethod
     def project_structure_export(request):
