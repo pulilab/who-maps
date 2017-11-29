@@ -1,0 +1,17 @@
+{% load utils %}
+
+<h1>Your were added to the following projects:</h1>
+
+{% if data.password %}
+<p>Your login credentials are:</p>
+Username: {{ email }}<br>
+Password: {{ data.password }}
+{% endif %}
+
+<p>
+    <ul>
+    {% for project in data.projects %}
+        <li><a href="{{ SITE_URL }}/app/{{ project.id }}/edit-project">{{ project.name }}</a></li>
+    {% endfor %}
+    </ul>
+</p>

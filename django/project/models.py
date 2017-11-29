@@ -2,7 +2,8 @@ import uuid
 
 from django.db import models
 from django.db.models import Q
-from django.contrib.postgres.fields import JSONField
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -145,3 +146,16 @@ class HealthFocusArea(ExtendedModel):
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
+
+
+class ProjectImport(ExtendedModel):
+    user = models.ForeignKey(User)
+    csv = models.FileField()
+    headers = ArrayField(models.CharField(max_length=512), blank=True, null=True)
+    mapping = JSONField(default=dict)
+    imported = models.TextField(null=True, blank=True, default='')
+    failed = models.TextField(null=True, blank=True, default='')
+    status = models.NullBooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return self.csv.name

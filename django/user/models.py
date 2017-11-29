@@ -5,7 +5,7 @@ from core.models import NameByIDMixin, ExtendedModel
 
 
 class Organisation(NameByIDMixin, ExtendedModel):
-    name = models.CharField(unique=True, max_length=100)
+    name = models.CharField(unique=True, max_length=255)
 
     def __str__(self):  # pragma: no cover
         return self.name

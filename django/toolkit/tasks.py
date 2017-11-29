@@ -23,7 +23,6 @@ def send_daily_toolkit_digest():
         toolkit = Toolkit.objects.get_object_or_none(project_id=project.id)
         time_period = (timezone.localtime(timezone.now()) - timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
         if toolkit and toolkit.modified > time_period:
-            logger.info("Toolkit updated recently.")
             html_template = loader.get_template("email/toolkit_digest.html")
             html_message = html_template.render({"project_id": project.id})
             for profile in project.team.all():

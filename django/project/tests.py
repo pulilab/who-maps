@@ -6,13 +6,17 @@ from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
 from django.contrib.admin.options import ModelAdmin
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+from django.contrib.auth.models import User
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
-from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, HealthCategory
+from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea,\
+    HealthCategory, ProjectImport
 from .admin import DigitalStrategyAdmin
 
 
@@ -954,3 +958,69 @@ class TestAdmin(TestCase):
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
         admin.list_display = ['__str__', 'is_active']
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
+
+
+class TestPorjectImportAdmin(TestCase):
+
+    def setUp(self):
+        settings.MEDIA_ROOT = '/tmp/'  # so tests won't litter filesystem
+        settings.DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+        # Admin for testing
+        self.request = MockRequest()
+        self.site = AdminSite()
+
+        # Create admin user
+        self.test_admin = User.objects.create_superuser(
+            username='test_admin',
+            password='test',
+            email='test_admin@test.com',
+        )
+        self.client.force_login(self.test_admin)
+
+        # Create test user
+        self.test_user = User.objects.create_user(
+            username='test_user',
+            password='test',
+            email='test_user@test.com',
+        )
+        UserProfile.objects.create(user=self.test_user, account_type=UserProfile.IMPLEMENTER)
+
+        # CSV data
+        self.csv_content = ('Project,Owner,Owner email,Country,Organisation\n'
+                            'Proj1,Owner Owen,owen@owner.com,Kenya,Org1\n'
+                            'Proj2,Test Owner,test_user@test.com,Kenya,Org2\n'
+                            'Proj3,Test Owner,test_user@test.com,Invalidcountry,Org2\n'
+                            'Proj4,Test Owner,invalidemail,Invalidcountry,Org2\n')
+
+    def test_project_import(self):
+        csv_file = SimpleUploadedFile('a.csv', self.csv_content.encode())
+        url = reverse('admin:project_projectimport_add')
+        data = {
+            'csv': csv_file
+        }
+        response = self.client.post(url, data, format='multipart', follow=True)
+        project_import = ProjectImport.objects.all().first()
+
+        print(project_import.headers)
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('admin:project_projectimport_change', args=[project_import.id])
+        data = {
+            'project_name': 0,
+            'owner_name': 1,
+            'owner_email': 2,
+            'country': 3,
+        }
+        response = self.client.post(url, data, follow=True)
+        project_import.refresh_from_db()
+        p = Project.objects.get(name='Proj1')
+
+        self.assertEqual(response.status_code, 200)
+        # TODO test for org
+        # TODO testfor country
+        # TODO test for failed
+        # TODO test for imported
+        print(project_import.mapping)
+        print(p.team.all())
+        print(p.team.all().first().user.email)
+        print(mail.outbox[0].body)
