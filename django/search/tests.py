@@ -69,6 +69,15 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
 
+    def test_search_hsc(self):
+        url = reverse("search-project")
+        data = {
+            "query": "sexuality",
+        }
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+
     def test_search_not_found(self):
         url = reverse("search-project")
         data = {
