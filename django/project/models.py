@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
+from django.core.cache import cache
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel
 from country.models import Country, CountryField
@@ -139,15 +140,22 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel):
+class InvalidateCacheMixin(object):
+
+    def save(self, *args, **kwargs):
+        cache.delete('project-structure-data')
+        return super().save(*args, **kwargs)
+
+
+class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pre = models.CharField(max_length=255)
 
 
-class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel):
+class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pass
 
 
-class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel):
+class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),
@@ -164,23 +172,23 @@ class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel):
         verbose_name_plural = 'Digital Strategies'
 
 
-class HealthCategory(ExtendedNameOrderedSoftDeletedModel):
+class HealthCategory(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel):
+class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
 
 
-class Licence(ExtendedNameOrderedSoftDeletedModel):
+class Licence(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pass
 
 
-class Application(ExtendedNameOrderedSoftDeletedModel):
+class Application(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pass
 
 
@@ -188,11 +196,11 @@ class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class HISBucket(ExtendedNameOrderedSoftDeletedModel):
+class HISBucket(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pass
 
 
-class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
+class HSCChallenge(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     challenge = models.CharField(max_length=512)
 
     def __str__(self):
