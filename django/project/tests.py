@@ -13,7 +13,7 @@ from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
-    HealthCategory
+    HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
 from .admin import DigitalStrategyAdmin
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
@@ -710,6 +710,26 @@ class ProjectTests(SetupTests):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
 
+    def test_licences_str(self):
+        item = Licence.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_application_str(self):
+        item = Application.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_iopstandard_str(self):
+        item = InteroperabilityStandard.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_hisbucket_str(self):
+        item = HISBucket.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_hsc_str(self):
+        item = HSCChallenge.objects.create(name='name', challenge='challenge')
+        self.assertEqual(str(item), '(name) challenge')
+
     # def xtest_project_approval_admin_filter_country_admins(self):
     #     request = MockRequest()
     #     site = AdminSite()
@@ -1127,8 +1147,8 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.data['interoperability_links'][0], {'id': 1, 'name': 'Client Registry'})
         self.assertEqual(len(response.data['technology_platforms']), 46)
         self.assertEqual(response.data['technology_platforms'][0], {'id': 1, 'name': 'Adobe Forms'})
-        self.assertEqual(len(response.data['digital_strategies']), 111)
-        self.assertEqual(response.data['digital_strategies'][0], {'id': 1, 'name': 'Targeted client communication'})
+        self.assertEqual(len(response.data['digital_strategies']), 115)
+        self.assertEqual(response.data['digital_strategies'][0], {'id': 112, 'name': 'Targeted client communication'})
 
 
 class TestSoftDelete(APITestCase):
@@ -1142,10 +1162,10 @@ class TestSoftDelete(APITestCase):
 
     def test_queryset_delete(self):
         total_count = DigitalStrategy.objects.all().count()
-        self.assertEqual(total_count, 111)
+        self.assertEqual(total_count, 115)
 
         active_count = DigitalStrategy.objects.filter(is_active=True).count()
-        self.assertEqual(active_count, 111)
+        self.assertEqual(active_count, 115)
 
         is_active_false_count = DigitalStrategy.all_objects.filter(is_active=False).count()
         self.assertEqual(is_active_false_count, 0)
@@ -1159,7 +1179,7 @@ class TestSoftDelete(APITestCase):
         self.assertEqual(active_count, 0)
 
         is_active_false_count = DigitalStrategy.all_objects.filter(is_active=False).count()
-        self.assertEqual(is_active_false_count, 111)
+        self.assertEqual(is_active_false_count, 115)
 
 
 class TestAdmin(TestCase):

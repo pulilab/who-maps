@@ -16,8 +16,7 @@ from country.models import Country
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory
-from .project_data import project_structure
+    HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -95,6 +94,7 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure(request):
+        project_structure = {}
         project_structure['interoperability_links'] = [{
             'pre': x.pre,
             'name': x.name
@@ -134,10 +134,24 @@ class ProjectPublicViewSet(ViewSet):
 
         project_structure['health_focus_areas'] = health_focus_areas
 
+        project_structure['licenses'] = [x.name for x in Licence.objects.all()]
+        project_structure['applications'] = [x.name for x in Application.objects.all()]
+        project_structure['interoperability_standards'] = [x.name for x in InteroperabilityStandard.objects.all()]
+        project_structure['his_bucket'] = [x.name for x in HISBucket.objects.all()]
+        hsc_challenges = []
+        for hsc in HSCChallenge.objects.values('name').distinct():
+            item = {'name': hsc['name'],
+                    'challenges': [x.challenge for x in HSCChallenge.objects.filter(name=hsc['name'])]}
+            hsc_challenges.append(item)
+        project_structure['hsc_challenges'] = hsc_challenges
+
         return Response(project_structure)
 
     @staticmethod
     def project_structure_export(request):
+        """
+        Used to sync objects to "Implementation Toolkit"
+        """
         return Response(dict(
             interoperability_links=[{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()],
             technology_platforms=[{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()],

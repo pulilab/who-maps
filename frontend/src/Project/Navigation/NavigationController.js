@@ -34,9 +34,9 @@ class NavigationController {
     }
 
     scrollHandler() {
-        if (this.content.scrollTop > 205) {
+        if (this.content.scrollTop > 260) {
             this.element[0].style.position = 'fixed';
-            this.element[0].style.top = '60px';
+            this.element[0].style.top = '70px';
         }
         else {
             this.element[0].style.position = 'absolute';

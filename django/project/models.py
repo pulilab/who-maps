@@ -185,3 +185,39 @@ class HealthFocusArea(ExtendedModel):
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
+
+
+class Licence(SoftDeleteMixin, ExtendedModel):
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name
+
+
+class Application(SoftDeleteMixin, ExtendedModel):
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name
+
+
+class InteroperabilityStandard(SoftDeleteMixin, ExtendedModel):
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name
+
+
+class HISBucket(SoftDeleteMixin, ExtendedModel):
+    name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name
+
+
+class HSCChallenge(SoftDeleteMixin, ExtendedModel):
+    name = models.CharField(max_length=512)
+    challenge = models.CharField(max_length=512)
+
+    def __str__(self):
+        return '({}) {}'.format(self.name, self.challenge)
