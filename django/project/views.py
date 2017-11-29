@@ -136,7 +136,7 @@ class ProjectPublicViewSet(ViewSet):
             hsc_challenges.append(dict(
                 id=hsc['id'],
                 name=hsc['name'],
-                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'name')
+                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'challenge')
             ))
 
         return dict(
