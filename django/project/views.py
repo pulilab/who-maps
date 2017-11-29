@@ -149,6 +149,9 @@ class ProjectPublicViewSet(ViewSet):
 
     @staticmethod
     def project_structure_export(request):
+        """
+        Used to sync objects to "Implementation Toolkit"
+        """
         return Response(dict(
             interoperability_links=[{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()],
             technology_platforms=[{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()],
