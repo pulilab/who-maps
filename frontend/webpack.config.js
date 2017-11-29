@@ -24,11 +24,11 @@ const basePlugins = [
         LIVE: live,
         NODE_ENV: production ? '"production"' : ''
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js', minChunks: Infinity }),
     new ExtractTextPlugin({
         filename: '[name].[contenthash].css',
-        allChunks: true,
-        disable: !production
+        allChunks: true
+        // disable: !production
     }),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
