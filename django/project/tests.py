@@ -13,7 +13,7 @@ from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
-    HealthCategory
+    HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
 from .admin import DigitalStrategyAdmin
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
@@ -709,6 +709,26 @@ class ProjectTests(SetupTests):
     def test_platforms_str(self):
         tp = TechnologyPlatform.objects.create(name='tp')
         self.assertEqual(str(tp), 'tp')
+
+    def test_licences_str(self):
+        item = Licence.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_application_str(self):
+        item = Application.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_iopstandard_str(self):
+        item = InteroperabilityStandard.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_hisbucket_str(self):
+        item = HISBucket.objects.create(name='name')
+        self.assertEqual(str(item), 'name')
+
+    def test_hsc_str(self):
+        item = HSCChallenge.objects.create(name='name', challenge='challenge')
+        self.assertEqual(str(item), '(name) challenge')
 
     # def xtest_project_approval_admin_filter_country_admins(self):
     #     request = MockRequest()
