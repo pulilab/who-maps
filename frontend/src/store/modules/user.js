@@ -50,7 +50,6 @@ export function loadProfile() {
     return async (dispatch, getState) => {
         const state = getState();
         if (storage.get('login') && !state.user.profile) {
-
             const profileId = state.user.user_profile_id || storage.get('user_profile_id');
             let { data } = await axios.get(`/api/userprofiles/${profileId}/`);
             data = handleProfile(data);

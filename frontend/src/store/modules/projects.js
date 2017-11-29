@@ -33,9 +33,9 @@ export const isMemberOrViewer = (state, project) => {
     if (profile.member && profile.viewer) {
         const isMember = profile.member.indexOf(project.id) > -1;
         const isViewer = !isMember && profile.viewer.indexOf(project.id) > -1;
-        return { isMember, isViewer };
+        return { isMember, isViewer, isTeam: isMember || isViewer };
     }
-    return { isMember: false, isViewer: false };
+    return { isMember: false, isViewer: false, isTeam: false };
 };
 
 // GETTERS
