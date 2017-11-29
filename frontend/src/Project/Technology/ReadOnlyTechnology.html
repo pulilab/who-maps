@@ -1,16 +1,16 @@
-<div class="project-section section-technology" md-whiteframe="2">
+<div class="project-section section-technology read-only" md-whiteframe="2">
   <div class="section-title md-title">
     3. Technology
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
-    <div class="md-block first">
+    <div>
       <h6>Technology deployment date</h6>
       <p>{{vm.printDate(vm.project.implementation_dates)}}</p>
     </div>
 
-    <div class="checklist">
+    <div>
       <h6>Under what license is the project governed?</h6>
       <ul>
         <li ng-repeat="l in vm.structure.licenses" ng-show="vm.checkboxChecked(l, 'licenses')">
@@ -19,21 +19,20 @@
       </ul>
     </div>
 
-    <div class="md-icon-float md-block">
+    <div>
       <h6>Code documentation or download link</h6>
       <p>{{vm.project.repository}}</p>
     </div>
 
-    <div class="md-icon-float md-block">
+    <div>
       <h6>Link to the application</h6>
       <p>{{vm.project.mobile_application}}</p>
     </div>
 
-    <div class="md-icon-float md-block">
+    <div>
       <h6>Link to the wiki page</h6>
       <p>{{vm.project.wiki}}</p>
     </div>
 
   </div>
-
 </div>
