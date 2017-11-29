@@ -140,7 +140,8 @@ class ProjectPublicViewSet(ViewSet):
         project_structure['his_bucket'] = [x.name for x in HISBucket.objects.all()]
         hsc_challenges = []
         for hsc in HSCChallenge.objects.values('name').distinct():
-            item = {'name': hsc['name'], 'challenges': [x.challenge for x in HSCChallenge.objects.filter(name=hsc['name'])]}
+            item = {'name': hsc['name'],
+                    'challenges': [x.challenge for x in HSCChallenge.objects.filter(name=hsc['name'])]}
             hsc_challenges.append(item)
         project_structure['hsc_challenges'] = hsc_challenges
 
