@@ -144,15 +144,7 @@ class InvalidateCacheMixin(object):
 
     def save(self, *args, **kwargs):
         cache.delete('project-structure-data')
-        return super().save(*args, **kwargs)
-
-
-class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
-    pre = models.CharField(max_length=255)
-
-
-class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
-    pass
+        return super(InvalidateCacheMixin, self).save(*args, **kwargs)
 
 
 class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
@@ -171,6 +163,20 @@ class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
     class Meta:
         verbose_name_plural = 'Digital Strategies'
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(DigitalStrategy, self).save(force_insert, force_update, using, update_fields)
+
+
+class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
+    challenge = models.CharField(max_length=512)
+
+    def __str__(self):
+        return '({}) {}'.format(self.name, self.challenge)
+
+    class Meta:
+        verbose_name_plural = 'Health Categories'
+        ordering = ['name', 'challenge']
+
 
 class HealthCategory(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
@@ -182,6 +188,14 @@ class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
+
+
+class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    pre = models.CharField(max_length=255)
+
+
+class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    pass
 
 
 class Licence(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
@@ -198,14 +212,3 @@ class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
 
 class HISBucket(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pass
-
-
-class HSCChallenge(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
-    challenge = models.CharField(max_length=512)
-
-    def __str__(self):
-        return '({}) {}'.format(self.name, self.challenge)
-
-    class Meta:
-        verbose_name_plural = 'Health Categories'
-        ordering = ['name', 'challenge']
