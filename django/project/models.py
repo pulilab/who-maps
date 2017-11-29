@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 
-from core.models import ExtendedModel, SoftDeleteMixin
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel
 from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
@@ -139,22 +139,15 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class InteroperabilityLink(SoftDeleteMixin, ExtendedModel):
+class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel):
     pre = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
 
 
-class TechnologyPlatform(SoftDeleteMixin, ExtendedModel):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
+class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel):
+    pass
 
 
-class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
+class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),
@@ -162,61 +155,44 @@ class DigitalStrategy(SoftDeleteMixin, ExtendedModel):
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
     parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
-    name = models.CharField(max_length=255)
 
     def __str__(self):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
         return '[{}]{} {}'.format(self.group, parent, self.name)
 
-    class Meta:
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Digital Strategies'
 
 
-class HealthCategory(ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class HealthCategory(ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(ExtendedModel):
+class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
-    name = models.CharField(max_length=512)
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
 
 
-class Licence(SoftDeleteMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class Licence(ExtendedNameOrderedSoftDeletedModel):
+    pass
 
 
-class Application(SoftDeleteMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class Application(ExtendedNameOrderedSoftDeletedModel):
+    pass
 
 
-class InteroperabilityStandard(SoftDeleteMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
+    pass
 
 
-class HISBucket(SoftDeleteMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class HISBucket(ExtendedNameOrderedSoftDeletedModel):
+    pass
 
 
-class HSCChallenge(SoftDeleteMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
+class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
     challenge = models.CharField(max_length=512)
 
     def __str__(self):
