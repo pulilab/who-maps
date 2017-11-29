@@ -27,8 +27,8 @@ const basePlugins = [
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js', minChunks: Infinity }),
     new ExtractTextPlugin({
         filename: '[name].[contenthash].css',
-        allChunks: true
-        // disable: !production
+        allChunks: true,
+        disable: true
     }),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
