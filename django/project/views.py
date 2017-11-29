@@ -17,7 +17,7 @@ from country.models import Country
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
 
 def cache_structure(fn):
@@ -122,7 +122,7 @@ class ProjectPublicViewSet(ViewSet):
                 name=group,
                 subGroups=subGroups
             ))
-            
+
         health_focus_areas = []
         for category in HealthCategory.objects.all():
             health_focus_areas.append(dict(
@@ -143,7 +143,6 @@ class ProjectPublicViewSet(ViewSet):
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
             licenses=Licence.objects.values('id', 'name'),
-            applications=Application.objects.values('id', 'name'),
             interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
             health_focus_areas=health_focus_areas,
