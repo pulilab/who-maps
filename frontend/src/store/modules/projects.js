@@ -475,6 +475,8 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
     dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
     dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
+    dispatch(CountryModule.loadCurrentCountryProjects());
+    dispatch(CountryModule.loadCurrentCountryDistrictsProject());
     return Promise.resolve(data);
 }
 

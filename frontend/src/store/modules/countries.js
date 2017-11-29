@@ -3,7 +3,7 @@ import axios from '../../plugins/axios';
 import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
 import { country_default_data } from '../static_data/country_static_data';
-import * as UserModule from './user';
+import { isMemberOrViewer } from './projects';
 
 const stateDefinition = {
     list: [],
@@ -101,27 +101,17 @@ export const getCurrentCountryMapData = state => {
 export const getCurrentCountryDistrictProjects = state => {
     const result = {};
     const districts = state.countries.currentCountryDistrictsProjects;
-    const profile = UserModule.getProfile(state);
     for (const d in districts) {
         result[d] = districts[d].map(p => {
-            p = Object.assign({}, p);
-            if (profile.member && profile.viewer) {
-                p.isMember = profile.member.indexOf(p.id) > -1;
-                p.isViewer = profile.viewer.indexOf(p.id) > -1;
-            }
+            p = { ...p, ...isMemberOrViewer(state, p) };
             return p;
         });
     }
     return result;
 };
 export const getCurrentCountryProjects = state => {
-    const profile = UserModule.getProfile(state);
     return state.countries.currentCountryProjects.map(ccp => {
-        ccp = Object.assign({}, ccp);
-        if (profile.member && profile.viewer) {
-            ccp.isMember = profile.member.indexOf(ccp.id) > -1;
-            ccp.isViewer = profile.viewer.indexOf(ccp.id) > -1;
-        }
+        ccp = { ...ccp, ...isMemberOrViewer(state, ccp) };
         return ccp;
     });
 };
@@ -187,14 +177,25 @@ export function loadCurrentCountryDistrictsProject() {
         }
     };
 }
+
 export function loadCountryProjectsOrAll(countryId) {
     return async (dispatch) => {
+        console.log('LOL')
         const url = ['/api/projects/by-view/list/'];
         if (countryId) {
             url.push(`${countryId}/`);
         }
         const { data } = await axios.get(url.join(''));
         dispatch({ type: 'SET_CURRENT_COUNTRY_PROJECTS', projects: data });
+    };
+}
+
+export function loadCurrentCountryProjects() {
+    return async (dispatch, getState) => {
+        const country = getCurrentCountry(getState());
+        if (country) {
+            dispatch(loadCountryProjectsOrAll(country.id));
+        }
     };
 }
 
