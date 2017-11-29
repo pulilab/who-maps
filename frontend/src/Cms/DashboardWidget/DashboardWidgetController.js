@@ -26,7 +26,7 @@ class DashboardWidgetController {
 
     mapState(state) {
         return {
-            all: state.cms.data
+            all: CmsModule.getCmsData(state)
         };
     }
 

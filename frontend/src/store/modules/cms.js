@@ -4,7 +4,11 @@ import findIndex from 'lodash/findIndex';
 
 // ACTIONS
 
-export function getCmsData() {
+export const getCmsData = state => {
+    return state.cms.data;
+};
+
+export function loadCmsData() {
     return async dispatch => {
         let { data } = await axios.get('/api/cms/');
         data = data.map(d => {

@@ -26,7 +26,7 @@ class ExperienceListController {
 
     mapState(state) {
         return {
-            data: state.cms.data
+            data: CmsModule.getCmsData(state)
         };
     }
 

@@ -1,6 +1,8 @@
 import { prettifyDate, postProcessHtml } from '../utilities';
 import { Storage } from '../../Common/';
 import * as CmsModule from '../../store/modules/cms';
+import * as UserModule from '../../store/modules/user';
+import * as SystemModule from '../../store/modules/system';
 
 class CommentWidgetController {
 
@@ -25,9 +27,9 @@ class CommentWidgetController {
 
     mapState(state) {
         return {
-            global: state.cms.data,
-            userProfile: state.user.profile,
-            profiles: state.system.profiles
+            global: CmsModule.getCmsData(state),
+            userProfile: UserModule.getProfile(state),
+            profiles: SystemModule.getUserProfiles(state)
         };
     }
 

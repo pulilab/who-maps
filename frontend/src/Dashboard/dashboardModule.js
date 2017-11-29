@@ -30,7 +30,7 @@ function config($stateProvider, $compileProvider) {
                   return su.lazyLoader($compileProvider, 'Statistics/statisticsComponent');
               },
               cms: ['$ngRedux', ($ngRedux) => {
-                  return $ngRedux.dispatch(CmsModule.getCmsData());
+                  return $ngRedux.dispatch(CmsModule.loadCmsData());
               }],
               projects: ['$ngRedux', ($ngRedux) => {
                   return $ngRedux.dispatch(ProjectModule.loadUserProjects());

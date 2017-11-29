@@ -1,5 +1,6 @@
 import angular from 'angular';
 import * as CmsModule from '../../store/modules/cms';
+import * as UserModule from '../../store/modules/user';
 
 
 class AddNewContentDialog {
@@ -18,8 +19,8 @@ class AddNewContentDialog {
 
     mapState(state) {
         return {
-            global: state.cms.data,
-            userProfile: state.user.profile
+            global: CmsModule.getCmsData(state),
+            userProfile: UserModule.getProfile(state)
         };
     }
 

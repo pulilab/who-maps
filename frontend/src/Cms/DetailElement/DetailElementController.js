@@ -30,7 +30,7 @@ class DetailElementDialog {
 
     mapState(state) {
         return {
-            global: state.cms.data,
+            global: CmsModule.getCmsData(state),
             userProfile: state.user.profile
         };
     }
