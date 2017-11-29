@@ -180,7 +180,6 @@ export function loadCurrentCountryDistrictsProject() {
 
 export function loadCountryProjectsOrAll(countryId) {
     return async (dispatch) => {
-        console.log('LOL')
         const url = ['/api/projects/by-view/list/'];
         if (countryId) {
             url.push(`${countryId}/`);
