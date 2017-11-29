@@ -880,11 +880,11 @@ class ProjectDraftTests(SetupTests):
 
     def test_healthcategory_str(self):
         hc = HealthCategory.objects.all().first()
-        self.assertEqual(str(hc), 'Sexual and reproductive health')
+        self.assertEqual(str(hc), 'Adolescent and Youth Health')
 
     def test_healthfocusarea_str(self):
         hfa = HealthFocusArea.objects.all().first()
-        self.assertEqual(str(hfa), '[Sexual and reproductive health] Comprehensive sexuality education')
+        self.assertEqual(str(hfa), '[Adolescent and Youth Health] Adolescents and communicable diseases')
 
     def test_make_version_for_draft(self):
         url = reverse("make-version", kwargs={"project_id": self.project_draft_id})
