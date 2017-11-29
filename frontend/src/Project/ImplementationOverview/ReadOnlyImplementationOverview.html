@@ -52,14 +52,8 @@
 
     <div layout="row" class="extra-margin">
       <div layout="column">
-        <md-radio-group ng-model="vm.project.coverageType" name="coverageType" md-no-ink  class="md-primary" layout="row">
-          <md-radio-button ng-value="1" aria-label="coverage-type-yes">
-            Sub-national
-          </md-radio-button>
-          <md-radio-button ng-value="2" aria-label="coverage-type-no">
-            National
-          </md-radio-button>
-        </md-radio-group>
+        <span ng-show="vm.project.coverageType === 1">Sub-national</span>
+        <span ng-show="vm.project.coverageType === 2">National</span>
       </div>
     </div>
 
