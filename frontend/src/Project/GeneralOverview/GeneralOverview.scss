@@ -58,31 +58,4 @@
     color: $text-disabled;
     font-size: 12px;
   }
-
-  &.read-only {
-
-    .section-wrapper {
-      > div {
-        margin-bottom: 40px;
-      }
-
-      .layout-row {
-        > div {
-          width: 25%;
-          padding-right: 60px;
-        }
-      }
-    }
-
-    h6 {
-      display: block;
-      margin: 0 0 10px;
-      padding: 0;
-    }
-
-    p {
-      margin: 0;
-    }
-
-  }
 }

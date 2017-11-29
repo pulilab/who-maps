@@ -1,4 +1,4 @@
-<div class="project-section section-interoperability" md-whiteframe="2">
+<div class="project-section section-interoperability read-only" md-whiteframe="2">
 
   <div class="section-title md-title">
     4. Interoperability
@@ -9,25 +9,27 @@
 
     <h6>Does your digital health project link to a digital HIS?</h6>
 
-
-    <div ng-repeat="link in vm.structure.interoperability_links">
+    <div>
       <ul>
-        <li ng-show="vm.project.interoperability_links[$index].selected">
-          {{link.name}} : {{vm.project.interoperability_links[$index].link}}
+        <li
+          ng-repeat="link in vm.structure.interoperability_links"
+          ng-show="vm.project.interoperability_links[$index].selected">
+          {{link.name}}:<br /> {{vm.project.interoperability_links[$index].link}}
         </li>
       </ul>
     </div>
 
-    <div class="checklist small-top" >
-      <h6>What data standards does your digital health project use?</h6>
 
+    <h6>What data standards does your digital health project use?</h6>
+
+    <div>
       <ul>
         <li ng-repeat="standard in vm.structure.interoperability_standards"
             ng-show="vm.checkboxChecked(standard, 'interoperability_standards')">
             {{standard}}
         </li>
       </ul>
-
     </div>
+
   </div>
 </div>
