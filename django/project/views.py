@@ -106,7 +106,7 @@ class ProjectPublicViewSet(ViewSet):
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
-    # @cache_structure
+    @cache_structure
     def _get_project_structure(self):
         strategies = []
         for group in DigitalStrategy.objects.filter(parent=None).values_list('group', flat=True).distinct():
