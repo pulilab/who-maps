@@ -23,7 +23,8 @@ import {
     mergeCustomAndDefault, parsePlatformCollection,
     removeEmptyChildObjects,
     removeKeysWithoutValues,
-    setCoverageType
+    setCoverageType,
+    retainNationalOrDistrictCoverage
 } from '../project_utils';
 
 
@@ -447,6 +448,7 @@ async function saveCountryFields(fields = [], country, id) {
 function processForm(form) {
     const organisation_name = form.organisation ? form.organisation.name : '';
     const organisation = form.organisation ? form.organisation.id : null;
+    form = { ...form, ...retainNationalOrDistrictCoverage(form) };
     form = {
         ...form,
         organisation_name,
@@ -479,7 +481,6 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
 export function saveDraft(form, team, viewers, countryFields) {
     return async (dispatch, getState) => {
         form = processForm(form);
-        console.log(form.id);
         const method = form.id ? 'put' : 'post';
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
