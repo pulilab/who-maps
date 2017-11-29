@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import forEach from 'lodash/forEach';
 
 import * as UserModule from '../../store/modules/user';
 import * as CountriesModule from '../../store/modules/countries';
@@ -73,7 +74,7 @@ class EditProfileController  {
 
     checkErrors(field) {
         if (this.editProfileForm && this.editProfileForm[field]) {
-            return !_.isEmpty(this.editProfileForm[field].$error);
+            return !isEmpty(this.editProfileForm[field].$error);
         }
         return false;
     }
@@ -97,7 +98,7 @@ class EditProfileController  {
     }
 
     handleResponse(response) {
-        _.forEach(response.data, (item, key) => {
+        forEach(response.data, (item, key) => {
             this.editProfileForm[key].customError = item;
             this.editProfileForm[key].$setValidity('custom', false);
         });

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
 
 const prettifyDate = ({ created }) => {
     // 3:26 pm — 4 May, 2015
@@ -63,7 +63,7 @@ const getAxisName = index => {
 };
 
 const getDomain = id => {
-    const domains = _.flatMap(axes, axis => {
+    const domains = flatMap(axes, axis => {
         return axis.domains;
     });
     return domains.find(domain => {

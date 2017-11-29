@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import filter from 'lodash/filter';
+import last from 'lodash/last';
 import Clipboard from 'clipboard';
 import * as ProjectModule from '../../store/modules/projects';
 import * as UserModule from '../../store/modules/user';
@@ -71,17 +72,17 @@ class SubBarController {
     }
 
     navigateToProject(name) {
-        const id = _.filter(this.projects, { name })[0].id;
+        const id = filter(this.projects, { name })[0].id;
         this.state.go(this.state.current.name, { 'appName': id });
     }
 
 
     goToDashboard() {
-        this.state.go('dashboard', { 'appName': _.last(this.projects).id });
+        this.state.go('dashboard', { 'appName': last(this.projects).id });
     }
 
     goToEditProject() {
-        this.state.go('editProject', { 'appName': _.last(this.projects).id });
+        this.state.go('editProject', { 'appName': last(this.projects).id });
     }
 
     showSubBar() {

@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import min from 'lodash/min';
+import map from 'lodash/map';
+import every from 'lodash/every';
 import * as SystemModule from '../../store/modules/system';
 
 class SearchbarController {
@@ -48,7 +50,7 @@ class SearchbarController {
         if (tmpStr === this.searchStr) {
             if (this.filters.some(v => v.value)) {
                 await this.searchProjects(this.searchStr, this.filters);
-                this.resultNr = _.min([this.projects.length, 5]);
+                this.resultNr = min([this.projects.length, 5]);
                 this.totalNr = this.projects.length;
             }
         }
@@ -64,14 +66,14 @@ class SearchbarController {
     }
 
     checkboxChecks(filter) {
-        this.filters = _.map(this.filters, (f) => {
+        this.filters = map(this.filters, (f) => {
             if (filter.name === 'all' && filter.value && f.name !== 'all') {
                 f.value = false;
             }
             else if (filter.name !== 'all' && filter.value && f.name === 'all') {
                 f.value = false;
             }
-            else if (!filter.value && _.every(this.filters, (ff) => {
+            else if (!filter.value && every(this.filters, (ff) => {
                 return !ff.value;
             })) {
                 f.value = true;

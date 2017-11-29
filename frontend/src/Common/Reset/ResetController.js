@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 import { calculateHeight } from '../../Utilities';
 import { resetPassword } from '../../store/modules/user';
 
@@ -36,7 +36,7 @@ class ResetModuleController {
 
     handleDataError(data) {
         const vm = this;
-        _.forEach(data, (item, key) => {
+        forEach(data, (item, key) => {
             if (vm.resetForm[key]) {
                 vm.resetForm[key].customError = item;
                 vm.resetForm[key].$setValidity('custom', false);
