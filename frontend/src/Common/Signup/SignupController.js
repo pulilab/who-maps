@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
 class SignupController {
@@ -60,7 +60,7 @@ class SignupController {
 
     handleDataError(signupForm, data) {
         this.inProgress = false;
-        _.forEach(data, (item, key) => {
+        forEach(data, (item, key) => {
             if (signupForm[key]) {
                 signupForm[key].customError = item;
                 signupForm[key].$setValidity('custom', false);

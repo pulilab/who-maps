@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import forOwn from 'lodash/forOwn';
 import * as ProjectModule from '../store/modules/projects';
 import * as CountriesModule from '../store/modules/countries';
 import * as  ToolkitModule from '../store/modules/toolkit';
@@ -140,7 +140,7 @@ class DashboardModuleController {
 
             versionObj.data.forEach(distrObj => {
 
-                _.forOwn(distrObj, (val, key) => {
+                forOwn(distrObj, (val, key) => {
 
                     if (key !== 'district') {
 

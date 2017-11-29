@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import keys from 'lodash/keys';
+import reduce from 'lodash/reduce';
+import forOwn from 'lodash/forOwn';
+
 import * as topojson from 'topojson';
 import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
@@ -66,9 +69,9 @@ class CountryMapController {
 
     checkIfDistrictDataChanged([newDistrictData, drawnMap]) {
         if (newDistrictData && drawnMap) {
-            this.boundNrs = _.reduce(newDistrictData, (ret, value, key) => {
+            this.boundNrs = reduce(newDistrictData, (ret, value, key) => {
                 if (key === 'date') { return ret; }
-                _.forOwn(value, (val, k) => {
+                forOwn(value, (val, k) => {
                     ret[k] = (ret[k] || 0) + val;
                 });
                 return ret;
@@ -79,7 +82,7 @@ class CountryMapController {
 
     saveClass(key, index, boundNrs) {
         if (boundNrs) {
-            index += _.keys(boundNrs).length;
+            index += keys(boundNrs).length;
         }
         if (!this.covLib.hasOwnProperty(key)) {
             this.covLib[key] = index;
@@ -103,7 +106,7 @@ class CountryMapController {
     }
 
     makeGeoFromTopo(topo) {
-        const subKey = _.keys(topo.objects)[0];
+        const subKey = keys(topo.objects)[0];
         const ret = topojson.feature(topo, topo.objects[subKey]);
         return ret;
     }

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 
 
 class AxisController {
@@ -47,7 +47,7 @@ class AxisController {
     }
 
     parseDomainData() {
-        _.forEach(this.domains, (domain, index) => {
+        forEach(this.domains, (domain, index) => {
             domain.name = domain.domain.split(':')[1].toLowerCase();
             domain.index = index;
         });

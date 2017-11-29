@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // Determine if is a production build based on environment variable
 const production = process.env.NODE_ENV === 'production';
@@ -24,44 +24,38 @@ const basePlugins = [
         LIVE: live,
         NODE_ENV: production ? '"production"' : ''
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
+    new ExtractTextPlugin({
+        filename: '[name].[contenthash].css',
+        allChunks: true,
+        disable: !production
+    }),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
         title: 'Digital Health Atlas',
         inject: false
-    }),
-    new CleanPlugin(PATH.build)
+    })
 ];
 
-const distPlugins = [
-    new ExtractTextPlugin(
-        {
-            filename: '[name].[chunkhash].css',
-            allChunks: true
-        }
-    ),
-    new webpack.optimize.MinChunkSizePlugin({
-        minChunkSize: 51200 // ~50kb
-    }),
-    new UglifyJsPlugin(
-        {
-            sourceMap: false
-        }
-    )
-].concat(basePlugins);
-const devPlugins = [].concat(basePlugins);
+const distPlugins = basePlugins.concat([
+    new CleanPlugin(PATH.build),
+    new UglifyJsPlugin({
+        sourceMap: false
+    })
+]);
+
+const devPlugins = basePlugins.concat([]);
 
 
 module.exports = {
     entry: {
         app: ['babel-polyfill', './src/index.js'],
         vendor: [
-            'angular', 'lodash',
+            'angular',
             'eventemitter3', 'angular-material',
             'angular-messages', 'angular-password',
             'angular-aria', 'angular-ui-router',
-            'd3', 'es6-promise',
-            'whatwg-fetch', 'intro.js'
+            'd3', 'es6-promise', 'trix', 'moment'
         ]
     },
     output: {
@@ -86,11 +80,10 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [
-                    { loader: 'style-loader' },
-                    { loader: 'css-loader' },
-                    { loader: 'sass-loader' }
-                ]
+                use: ExtractTextPlugin.extract({
+                    use: ['css-loader', 'sass-loader'],
+                    fallback: 'style-loader'
+                })
             },
             {
                 test: /\.css$/,
@@ -114,7 +107,7 @@ module.exports = {
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 use: [
-                    { loader: 'file-loader', options: { name: 'public/fonts/[name].[ext]', }}
+                    { loader: 'file-loader', options: { name: 'public/fonts/[name].[ext]' } }
                 ]
             },
             {

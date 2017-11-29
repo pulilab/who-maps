@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import merge from 'lodash/merge';
+import forEach from 'lodash/forEach';
 import moment from 'moment';
 import pdfMake from 'pdfmake-browserified/';
 import base64Images from './images/base64Images';
@@ -16,7 +17,7 @@ class PDFExportController {
     }
 
     onInit() {
-        _.merge(this, this.pdfStorage.getData());
+        merge(this, this.pdfStorage.getData());
         this.logo = require('./images/dha-logo.svg');
         this.exportDate = moment().format('Do MMM, YYYY');
         this.isAllCountry = this.country && this.country.name === 'Show all countries';
@@ -116,7 +117,7 @@ class PDFExportController {
             images: base64Images
         };
 
-        _.forEach(this.projectList, (project, index)  => {
+        forEach(this.projectList, (project, index)  => {
             const country = project.country_name.replace('-', ' ').toUpperCase();
 
             docDefinition.content.push({

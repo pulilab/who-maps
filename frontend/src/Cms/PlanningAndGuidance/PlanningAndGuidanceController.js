@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
 import * as CmsModule from '../../store/modules/cms';
 
 class PlanningAndGuidanceController {
@@ -108,7 +108,7 @@ class PlanningAndGuidanceController {
     }
 
     extractDomainSelection() {
-        return _.flatMap(this.filters, filter => {
+        return flatMap(this.filters, filter => {
             return filter.domains;
         });
     }

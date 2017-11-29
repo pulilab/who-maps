@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
+import findIndex from 'lodash/findIndex';
 import { normalizeName } from '../utilities';
 import * as CmsModule from '../../store/modules/cms';
 
@@ -14,7 +15,7 @@ class DashboardWidgetController {
 
     onInit() {
         this.axes = require('../resources/domains');
-        this.domains = _.flatMap(this.axes, axis => {
+        this.domains = flatMap(this.axes, axis => {
             return axis.domains;
         });
         this.lessons = [];
@@ -59,7 +60,7 @@ class DashboardWidgetController {
         this.axisColor = normalizeName(axis.name);
         this.domainIcon = normalizeName(domain.name);
         if (scores) {
-            const domainScores = _.flatMap(scores, score => {
+            const domainScores = flatMap(scores, score => {
                 return score.domains.map(dom => {
                     const domainNameParts = dom.domain.split(':');
                     dom.name = domainNameParts.pop().toLowerCase().trim();
@@ -75,7 +76,7 @@ class DashboardWidgetController {
     }
 
     nextDomain() {
-        let next = _.findIndex(this.domains, d => d.id === this.currentDomain.id) + 1;
+        let next = findIndex(this.domains, d => d.id === this.currentDomain.id) + 1;
         if (next > this.domains.length - 1) {
             next = 0;
         }
@@ -84,7 +85,7 @@ class DashboardWidgetController {
     }
 
     prevDomain() {
-        let prev = _.findIndex(this.domains, d => d.id === this.currentDomain.id) - 1;
+        let prev = findIndex(this.domains, d => d.id === this.currentDomain.id) - 1;
         if (prev === -1) {
             prev = this.domains.length - 1;
         }

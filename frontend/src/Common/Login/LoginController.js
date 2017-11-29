@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
 
@@ -54,7 +54,7 @@ class LoginModuleController {
                 non_field_errors: ['Security error']
             };
         }
-        _.forEach(data, (item, key) => {
+        forEach(data, (item, key) => {
             if (vm.loginForm[key]) {
                 vm.loginForm[key].customError = item;
                 vm.loginForm[key].$setValidity('custom', false);
