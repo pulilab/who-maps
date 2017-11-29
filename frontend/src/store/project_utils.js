@@ -138,14 +138,16 @@ export function removeEmptyChildObjects(form) {
     const result = {};
     const keyArray = ['coverage', 'platforms', 'his_bucket', 'hsc_challenges', 'publications', 'links', 'reports'];
     keyArray.forEach(key => {
-        result[key] = form[key].filter(itm => {
-            itm = { ...itm };
-            itm = deleteUndefinedAndDoubleDollarKeys(itm);
-            if (itm.hasOwnProperty('available')) {
-                delete itm.available;
-            }
-            return Object.keys(itm).length > 0;
-        });
+        if (form[key]) {
+            result[key] = form[key].filter(itm => {
+                itm = { ...itm };
+                itm = deleteUndefinedAndDoubleDollarKeys(itm);
+                if (itm.hasOwnProperty('available')) {
+                    delete itm.available;
+                }
+                return Object.keys(itm).length > 0;
+            });
+        }
     });
 
     return { ...result };
@@ -162,4 +164,16 @@ export function removeKeysWithoutValues(processedForm) {
         }
     }
     return result;
+}
+
+export function retainNationalOrDistrictCoverage(form) {
+    let national_level_deployment = null;
+    let coverage = null;
+    if (form.coverageType === 1) {
+        coverage = form.coverage.map(c => ({ ...c }));
+    }
+    else {
+        national_level_deployment = { ...form.national_level_deployment };
+    }
+    return { national_level_deployment, coverage };
 }
