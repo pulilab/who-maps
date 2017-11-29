@@ -98,15 +98,12 @@ DATABASES = {
     }
 }
 
-
 CACHES = {
     'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': [
-            'redis:6379',
-        ],
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -226,6 +223,15 @@ if SITE_ID in [3, 4]:
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         )
+    }
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': [
+                'redis:6379',
+            ],
+        }
     }
 
 if SITE_ID in [3]:
