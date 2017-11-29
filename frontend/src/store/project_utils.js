@@ -4,11 +4,12 @@ import isNull from 'lodash/isNull';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import values from 'lodash/values';
-import cloneDeep from 'lodash/cloneDeep';
 import moment from 'moment';
 
 export const fieldsWithCustomValue =  ['interoperability_standards', 'licenses'];
 export const fieldsToConvertToObjectArray = ['donors', 'implementing_partners'];
+export const fieldsToMapWithId = ['hsc_challenges', 'his_bucket'];
+export const fieldToConvertToObject = ['platforms.strategies'];
 
 export const getTodayString = () => {
     const today = new Date();
@@ -20,18 +21,6 @@ export const getTodayString = () => {
 
 };
 
-export function convertArrayToStandardCustomObj(data) {
-    data = cloneDeep(data);
-    fieldsWithCustomValue.forEach(key=> {
-        const scaffold = {
-            standard: [],
-            custom: void 0
-        };
-        scaffold.standard = data[key];
-        data[key] = scaffold;
-    });
-    return data;
-}
 
 export function concatCustom(obj) {
     const cat = concat(obj.custom, obj.standard);
@@ -176,4 +165,34 @@ export function retainNationalOrDistrictCoverage(form) {
         national_level_deployment = { ...form.national_level_deployment };
     }
     return { national_level_deployment, coverage };
+}
+
+export function extractIdFromObjects(form) {
+    const result = {};
+    fieldsToMapWithId.forEach(field => {
+        result[field] = form[field].map(f => f.id).filter(f => f);
+    });
+    return result;
+}
+
+export function parseOutInteroperabilityLinks(form) {
+    return form.interoperability_links.map(il => ({ id: il.id, link: il.link }));
+}
+
+
+export function convertIdArrayToObjectArray(form, structure) {
+    const result = {};
+    fieldToConvertToObject.forEach(field => {
+        field = field.split('.');
+        if ( field.length === 2) {
+            const parent = field[0];
+            field = field [1];
+            result[parent] = form[parent].map(p => {
+                p = { ...p  };
+                p[field] = p[field].map(f => structure[field].find(sf => sf.id === f));
+                return p;
+            });
+        }
+    });
+    return result;
 }
