@@ -78,9 +78,9 @@ dialog-multi-selector {
 .strategy-selector-dialog {
 
   &.detail-dialog {
-    min-width: 720px;
+    min-width: $page-min-width;
     width: 80vw;
-    max-width: 1280px;
+    max-width: $page-max-width;
   }
 
   &.column-1 {

@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 
-from core.models import ExtendedModel, SoftDeleteMixin
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel
 from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
@@ -147,22 +147,15 @@ class InvalidateCacheMixin(object):
         return super().save(*args, **kwargs)
 
 
-class InteroperabilityLink(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
+class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     pre = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
 
 
-class TechnologyPlatform(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
+class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    pass
 
 
-class DigitalStrategy(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
+class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),
@@ -170,7 +163,6 @@ class DigitalStrategy(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
     parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
-    name = models.CharField(max_length=255)
 
     def __str__(self):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
@@ -180,52 +172,40 @@ class DigitalStrategy(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
         verbose_name_plural = 'Digital Strategies'
 
 
-class HealthCategory(InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class HealthCategory(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(InvalidateCacheMixin, ExtendedModel):
+class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
-    name = models.CharField(max_length=512)
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
 
 
-class Licence(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class Licence(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    pass
 
 
-class Application(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class Application(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    pass
 
 
-class InteroperabilityStandard(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
+    pass
 
 
-class HISBucket(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
+class HISBucket(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+    pass
 
 
-class HSCChallenge(SoftDeleteMixin, InvalidateCacheMixin, ExtendedModel):
-    name = models.CharField(max_length=512)
+class HSCChallenge(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
     challenge = models.CharField(max_length=512)
 
     def __str__(self):
         return '({}) {}'.format(self.name, self.challenge)
+
+    class Meta:
+        verbose_name_plural = 'Health Categories'
+        ordering = ['name', 'challenge']

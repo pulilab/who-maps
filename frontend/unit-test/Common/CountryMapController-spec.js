@@ -1,9 +1,9 @@
 import CountryMapController from '../../src/Common/CountryMap/CountryMapController';
 import d3 from 'd3';
 import angular from 'angular';
-import perfMockMap from '../../src/Common/CountryMap/mock/perfMockMap.js';
+import perfMockMap from '../CountryView/mock/perfMockMap.js';
 import { $scope } from '../testUtilities';
-import { default as countryMapData } from '../../src/Common/CountryMap/mock/sierra-leone/topoTest.json';
+import { default as countryMapData } from '../CountryView/mock/sierra-leone/topoTest.json';
 
 /* global define, it, describe, expect, spyOn, beforeEach, afterEach, angular, xit, xdescribe */
 
