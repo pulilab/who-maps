@@ -43,7 +43,7 @@
       </div>
 
       <dialog-multi-selector
-        ng-show="platform.name"
+        ng-show="platform.id"
         selection="platform.strategies"
         button-name="Digital Health Interventions"
         is-required="vm.activateValidation"
@@ -77,7 +77,7 @@
         <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc_challenges" required multiple>
           <md-optgroup label="{{hsc.name}}" ng-repeat="hsc in vm.structure.hsc_challenges">
             <md-option value="{{challenge.id}}" ng-repeat="challenge in hsc.challenges">
-              {{challenge.name}}
+              {{challenge.challenge}}
             </md-option>
           </md-optgroup>
         </md-select>
