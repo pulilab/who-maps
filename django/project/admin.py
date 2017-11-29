@@ -4,7 +4,7 @@ from django.contrib import admin
 from core.admin import AllObjectsAdmin
 # from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory
+    HealthCategory, Licence, Application, InteroperabilityStandard, HISBucket, HSCChallenge
 
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
@@ -47,3 +47,8 @@ admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 # admin.site.register(ProjectApproval, ProjectApprovalAdmin)
 admin.site.register(HealthFocusArea)
 admin.site.register(HealthCategory)
+admin.site.register(Licence)
+admin.site.register(Application)
+admin.site.register(InteroperabilityStandard)
+admin.site.register(HISBucket)
+admin.site.register(HSCChallenge)
