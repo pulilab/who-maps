@@ -42,6 +42,7 @@ class DashboardModuleController {
     watchers() {
         this.scope.$watch(s => s.vm.projectData, data => {
             this.adjustProjectData(data);
+            this.$ngRedux.dispatch(CountriesModule.setCurrentCountry(data.country, ['mapData']));
         });
         this.scope.$watch(s => s.vm.coverageVersion, data => {
             this.adjustCoverageVersions(data);
@@ -54,10 +55,6 @@ class DashboardModuleController {
         this.resizeEvent();
         this.eventBinding();
         this.showEmpty = !this.projectId;
-        // IF the user went to CLV and changed country this reset the correct country map, otherwise do nothing
-        if (this.projectData) {
-            this.$ngRedux.dispatch(CountriesModule.setCurrentCountry(this.projectData.country, ['mapData']));
-        }
     }
 
     onDestroy() {
@@ -91,7 +88,7 @@ class DashboardModuleController {
         this.EE.removeListener('mapsAxisChange', this.handleChangeAxis, this);
     }
 
-    async adjustProjectData(data) {
+    adjustProjectData(data) {
         if (this.profile && data && data.country) {
             this.districtProjects = this.parseCoverage(data);
             this.nationalLevelCoverage = data.national_level_deployment;
