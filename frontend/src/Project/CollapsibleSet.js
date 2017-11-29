@@ -115,7 +115,7 @@ class CollapsibleSet {
             return false;
         }
         const field = this.findField(key);
-        return field && field.length ? field.indexOf(t) > -1 : false;
+        return field && field.length ? field.some(f => f.id === t.id) : false;
     }
 
     printDate(date) {
@@ -133,6 +133,19 @@ class CollapsibleSet {
             }
             available.sort((a, b) => {
                 return a.localeCompare(b);
+            });
+            item.available = available;
+        });
+    }
+
+    setAvailableDictOptions(category, options) {
+        const used = category.filter(cat => cat.id);
+        category.forEach(item => {
+            const available = options.filter(p => {
+                return item.id === p.id || used.every(u => u.id !== p.id);
+            });
+            available.sort((a, b) => {
+                return a.name.localeCompare(b.name);
             });
             item.available = available;
         });
