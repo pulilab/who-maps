@@ -73,7 +73,7 @@ class SoftDeleteModel(models.Model):
         self.save()
 
 
-class ExtendedNameOrderedSoftDeletedModel(ExtendedModel, SoftDeleteModel):
+class ExtendedNameOrderedSoftDeletedModel(SoftDeleteModel, ExtendedModel):
     name = models.CharField(max_length=512)
 
     class Meta:
