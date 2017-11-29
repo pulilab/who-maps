@@ -160,7 +160,7 @@ class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
         return '[{}]{} {}'.format(self.group, parent, self.name)
 
-    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+    class Meta:
         verbose_name_plural = 'Digital Strategies'
 
 
@@ -197,3 +197,7 @@ class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
 
     def __str__(self):
         return '({}) {}'.format(self.name, self.challenge)
+
+    class Meta:
+        verbose_name_plural = 'Health Categories'
+        ordering = ['name', 'challenge']
