@@ -57,7 +57,7 @@ class ActiveQuerySet(QuerySet):
         self.query.add_q(Q(is_active=True))
 
 
-class SoftDeleteMixin(models.Model):
+class SoftDeleteModel(models.Model):
     is_active = models.BooleanField(default=True)
 
     # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
@@ -71,3 +71,14 @@ class SoftDeleteMixin(models.Model):
     def delete(self, *args, **kwargs):
         self.is_active = False
         self.save()
+
+
+class ExtendedNameOrderedSoftDeletedModel(ExtendedModel, SoftDeleteModel):
+    name = models.CharField(max_length=512)
+
+    class Meta:
+        abstract = True
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
