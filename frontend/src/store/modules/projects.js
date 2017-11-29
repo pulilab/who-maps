@@ -69,10 +69,10 @@ export const getDraftedProjects = state => {
 export const getUserProjects = state => {
     if (state.projects.list) {
         const list = state.projects.list.map(p => {
+            const public_id = p.public_id;
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            p.isPublished = isPublished;
-            p = { ...p, ...isMemberOrViewer(state, p) };
+            p = { ...p, ...isMemberOrViewer(state, p), isPublished, public_id };
             return p;
         });
         return sortBy(list, 'id');
