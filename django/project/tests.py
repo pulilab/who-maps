@@ -260,6 +260,17 @@ class ProjectTests(SetupTests):
         self.assertIn("platforms", response.json())
         self.assertEqual(response.json()['platforms'][0]['id'][0], 'This field is required.')
 
+    def test_create_new_project_with_platform_empty_array(self):
+        url = reverse("project-create")
+        data = copy.deepcopy(self.project_data)
+        new_data = {
+            "name": "Test Project91",
+            "platforms": []
+        }
+        data.update(new_data)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+
     def test_create_new_project_with_platform_strategies_missing(self):
         url = reverse("project-create")
         data = copy.deepcopy(self.project_data)
