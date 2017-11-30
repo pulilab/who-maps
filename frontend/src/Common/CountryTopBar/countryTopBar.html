@@ -58,31 +58,36 @@
         </md-button>
 
         <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
-            <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-                <md-icon md-menu-origin class="material-icons ">person</md-icon>
-            </md-button>
+          <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+              <md-icon md-menu-origin class="material-icons ">person</md-icon>
+          </md-button>
 
-            <md-menu-content width="4">
-                <span class="menu-group-title">
-                    <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
-                    <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
-                </span>
-                <md-menu-item>
-                    <md-button>
-                        <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ui-sref="editProfile">
-                        <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="vm.logout()">
-                        <md-icon class="material-icons">exit_to_app</md-icon>Logout
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
+          <md-menu-content width="4">
+            <md-menu-item>
+              <div class="user-name">
+                <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
+                <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
+                <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
+              </div>
+            </md-menu-item>
+            <md-menu-item>
+              <div class="user-role">
+                <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
+                <span>Role: {{vm.writeUserRole()}}</span>
+              </div>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+                <md-button ui-sref="editProfile">
+                    <md-icon class="material-icons">settings</md-icon>Edit my Profile
+                </md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ng-click="vm.logout()">
+                    <md-icon class="material-icons">exit_to_app</md-icon>Logout
+                </md-button>
+            </md-menu-item>
+          </md-menu-content>
         </md-menu>
 
         <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
