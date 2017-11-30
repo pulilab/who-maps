@@ -496,12 +496,34 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, 200)
 
+        # This will stay as draft
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project3"
+        project_data['organisation'] = str(Organisation.objects.create(name="org3").id)
+
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
         url = reverse("project-country-list", kwargs={"country_id": self.country_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
         self.assertEqual(response.json()[1].get("name"), "Test Project2")
+
+    def test_retrieve_project_exclude_draft(self):
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project2"
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("project-country-list", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0].get("name"), "Test Project1")
+        self.assertEqual(len(response.json()), 1)
 
     def test_retrieve_project_list_all_without_country(self):
         url = reverse("project-all-list")

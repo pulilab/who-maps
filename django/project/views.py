@@ -40,7 +40,7 @@ class ProjectPublicViewSet(ViewSet):
 
         # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
 
-        projects = Project.objects.filter(data__country=int(country_id))
+        projects = Project.projects.published_only().filter(data__country=int(country_id))
 
         # get district names
         district_names = set()
@@ -75,7 +75,7 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
-        projects = Project.objects.all()  # lazy QuerySet
+        projects = Project.projects.published_only()  # lazy QuerySet
 
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
