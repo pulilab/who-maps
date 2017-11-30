@@ -17,7 +17,7 @@ from country.models import Country
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
 
 def cache_structure(fn):
@@ -27,11 +27,11 @@ def cache_structure(fn):
             data = fn(*args, **kwargs)
             cache.set('project-structure-data', data)
         return data
+
     return wrapper
 
 
 class ProjectPublicViewSet(ViewSet):
-
     @staticmethod
     def by_district(request, country_id):
         """
@@ -113,10 +113,10 @@ class ProjectPublicViewSet(ViewSet):
             subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
                 subGroups.append(dict(
-                        id=parent.id,
-                        name=parent.name,
-                        strategies=parent.strategies.values('id', 'name')
-                    )
+                    id=parent.id,
+                    name=parent.name,
+                    strategies=parent.strategies.values('id', 'name')
+                )
                 )
             strategies.append(dict(
                 name=group,
@@ -163,7 +163,6 @@ class ProjectPublicViewSet(ViewSet):
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
-
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
@@ -222,7 +221,6 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
-
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
@@ -256,7 +254,6 @@ class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
-
     def create(self, request, *args, **kwargs):
         """
         Creates a Draft project.
@@ -402,17 +399,20 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
             p.data.get('implementation_overview'),
             p.data.get('geographic_scope'),
-            ", ".join(p.data.get('health_focus_areas', [])),
-            ", ".join([s['name'] for s in p.data.get('platforms', [])]),
-            ", ".join(p.data.get('hsc_challenges', [])),
-            ", ".join(p.data.get('his_bucket', [])),
+            ", ".join(
+                [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))]),
+            ", ".join([str(x) for x in
+                       TechnologyPlatform.objects.get_names_for_ids([x['id'] for x in p.data.get("platforms", [])])]),
+            ", ".join([str(x) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))]),
+            ", ".join([str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))]),
             "Yes" if p.data.get('government_approved') else "No",
             p.data.get('government_investor'),
-            ", ".join(p.data.get('licenses', [])),
+            ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))]),
             p.data.get('repository'),
             p.data.get('mobile_application'),
             p.data.get('wiki'),
-            ", ".join(p.data.get('interoperability_standards', [])),
+            ", ".join([str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
+                p.data.get("interoperability_standards", []))]),
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
