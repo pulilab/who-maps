@@ -279,6 +279,7 @@ md-backdrop {
 
 .md-dialog-container {
   z-index: 10000;
+  min-width: $page-min-width;
 }
 
 .md-open-menu-container {

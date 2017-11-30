@@ -84,7 +84,8 @@ dialog-multi-selector {
   }
 
   &.column-1 {
-    max-width: 720px;
+    min-width: 720px !important;
+    max-width: 720px !important;
 
     .main-group {
       width: 100%;
@@ -92,7 +93,8 @@ dialog-multi-selector {
   }
 
   &.column-2,
-  &.column-3 {
+  &.column-3,
+  &.column-4 {
     md-dialog-content {
       overflow: hidden;
 
@@ -104,7 +106,7 @@ dialog-multi-selector {
 
     .main-group {
       position: relative !important;
-      width: 33.3333333%;
+      width: 33.333333%;
       padding-top: 48px;
       overflow: hidden;
       box-shadow: -3px 0px 7px rgba(0,0,0,.2);
@@ -131,6 +133,7 @@ dialog-multi-selector {
   }
 
   &.column-2 {
+    .main-group,
     .header {
       width: 50%;
     }
@@ -139,6 +142,13 @@ dialog-multi-selector {
   &.column-3 {
     .header {
       width: 33.3333333%;
+    }
+  }
+
+  &.column-4 {
+    .main-group,
+    .header {
+      width: 25%;
     }
   }
 
