@@ -10,6 +10,15 @@ from rest_framework.validators import UniqueValidator
 from .models import Project
 
 
+URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
+
+
+def url_validator(value):
+    if not URL_REGEX.match(value):
+        raise ValidationError('Enter a valid URL.')
+    return value
+
+
 class NDPSerializer(serializers.Serializer):
     clients = serializers.IntegerField(min_value=0, max_value=100000)
     health_workers = serializers.IntegerField(min_value=0, max_value=100000)
@@ -30,6 +39,10 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     selected = serializers.BooleanField(required=False)
     link = serializers.CharField(required=False, max_length=256)
+
+    @staticmethod
+    def validate_link(value):
+        return url_validator(value)
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -64,16 +77,14 @@ class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128)
     licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
-    repository = serializers.CharField(max_length=200, required=False, allow_blank=True)
+    repository = serializers.CharField(max_length=256, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    wiki = serializers.CharField(max_length=200, required=False, allow_blank=True)
+    wiki = serializers.CharField(max_length=256, required=False, allow_blank=True)
 
     # SECTION 4 Interoperability & Standards
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(
         child=serializers.IntegerField(), required=False, max_length=50)
-
-    regex = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
     class Meta:
         model = Project
@@ -88,19 +99,17 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
         return instance
 
-    def url_validator(self, value):
-        if not self.regex.match(value):
-            raise ValidationError('Enter a valid URL.')
-        return value
+    @staticmethod
+    def validate_wiki(value):
+        return url_validator(value)
 
-    def validate_wiki(self, value):
-        return self.url_validator(value)
+    @staticmethod
+    def validate_mobile_application(value):
+        return url_validator(value)
 
-    def validate_mobile_application(self, value):
-        return self.url_validator(value)
-
-    def validate_repository(self, value):
-        return self.url_validator(value)
+    @staticmethod
+    def validate_repository(value):
+        return url_validator(value)
 
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
