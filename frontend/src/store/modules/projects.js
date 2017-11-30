@@ -134,8 +134,11 @@ export const getVanillaProject = state => {
     if (country) {
         project.country = country.id;
     }
+    if (structure) {
+        project.interoperability_links = structure.interoperability_links;
+    }
     project.organisation = UserModule.getProfile(state).organisation;
-    return { ...project, interoperability_links: structure.interoperability_links };
+    return { ...project };
 };
 
 export const getCurrentProjectIfExist = state => {
