@@ -39,7 +39,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
               user: ['$ngRedux', ($ngRedux) => {
                   const user =  $ngRedux.dispatch(UserModule.loadProfile());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
-                  return Promise.all([user, countries]);
+                  const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+                  return Promise.all([user, countries, structure]);
               }]
           }
       })

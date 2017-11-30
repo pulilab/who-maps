@@ -1,36 +1,23 @@
-import merge from 'lodash/merge';
 import forEach from 'lodash/forEach';
 import moment from 'moment';
 import pdfMake from 'pdfmake-browserified/';
 import base64Images from './images/base64Images';
 
-
-import PDFExportStorage from './PDFExportStorage';
-
 class PDFExportController {
 
     constructor() {
-        this.pdfStorage = PDFExportStorage.factory();
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.pdfMake = pdfMake;
     }
 
     onInit() {
-        merge(this, this.pdfStorage.getData());
         this.logo = require('./images/dha-logo.svg');
         this.exportDate = moment().format('Do MMM, YYYY');
         this.isAllCountry = this.country && this.country.name === 'Show all countries';
-        if (this.instantDownload) {
-            this.makePDF();
-            setTimeout(() => {
-                window.close();
-            }, 500);
-        }
     }
 
     onDestroy() {
-
     }
 
     printDate(dateString) {
@@ -38,10 +25,13 @@ class PDFExportController {
         return mom.format('Do MMM, YYYY');
     }
 
+    setData(projectList, country, countryFlag) {
+        this.projectList = projectList;
+        this.country = country;
+        this.countryFlag = countryFlag;
+    }
+
     makePDF() {
-
-
-        // units of measure is point.. friggin point
         const docDefinition = {
             content: [
                 {
@@ -177,7 +167,6 @@ class PDFExportController {
     }
 
     static pdfExportFactory() {
-        require('./PDFExport.scss');
 
         function pdfExportController() {
             return new PDFExportController();

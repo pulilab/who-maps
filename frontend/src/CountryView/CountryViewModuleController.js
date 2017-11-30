@@ -3,7 +3,7 @@ import forEach from 'lodash/forEach';
 import map from 'lodash/map';
 
 import moment from 'moment';
-import PDFExportStorage from './PDFExport/PDFExportStorage';
+import PDFExportController from './PDFExport/PDFExportController';
 import * as CountryModule from '../store/modules/countries';
 import * as UserModule from '../store/modules/user';
 
@@ -13,7 +13,7 @@ class CountryViewModuleController {
         this.scope = $scope;
         this.filter = $filter;
         this.state = $state;
-        this.pdfStorage = PDFExportStorage.factory();
+        this.pdfExport = new PDFExportController();
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
@@ -234,9 +234,8 @@ class CountryViewModuleController {
     }
 
     exportPDF() {
-        this.pdfStorage.setData(this.projectsData, this.selectedCountry);
-        const href = this.state.href('pdf-export');
-        window.open(href);
+        this.pdfExport.setData(this.projectsData, this.selectedCountry);
+        this.pdfExport.makePDF();
     }
 
     async exportCSV() {
