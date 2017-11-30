@@ -147,7 +147,8 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        instance.name = validated_data["name"]
+        if not instance.public_id:
+            instance.name = validated_data["name"]
         instance.draft = validated_data
         instance.save()
 

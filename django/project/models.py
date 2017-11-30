@@ -97,7 +97,7 @@ class Project(ExtendedModel):
 
         extra_data = dict(
             id=self.pk,
-            name=self.name,
+            name=self.draft.get('name', '') if draft_mode else self.name,
             organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
             country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
