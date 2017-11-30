@@ -158,7 +158,6 @@ def test(app=""):
 
 
 def cov():
-    lint()
     local(
         "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
         " --cov-config .coveragerc"
