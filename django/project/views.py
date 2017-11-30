@@ -75,7 +75,7 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
-        projects = Project.objects.all()  # lazy QuerySet
+        projects = Project.objects.exclude(public_id='')  # lazy QuerySet
 
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
