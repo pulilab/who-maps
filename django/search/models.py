@@ -86,7 +86,7 @@ def update_with_project_data(sender, instance, **kwargs):
     """
     Updates relevant ProjectSearch data on every Project model save.
     """
-    return None # TODO: fix this for dynamic models
+    return None  # TODO: fix this for dynamic models
     if instance.public_id:
         project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
         project_search.location = Country.objects.get(id=instance.data["country"]).name
