@@ -1,5 +1,6 @@
 import remove from 'lodash/remove';
 import moment from 'moment';
+import { fixUrl } from '../Utilities';
 
 class CollapsibleSet {
     constructor(element, scope, collectionName, resetDefaultList = [], emptyCheckableArray = []) {
@@ -22,6 +23,7 @@ class CollapsibleSet {
             this.EE.emit('componentLoaded', this.elementId);
         });
         this.defaultWatchers();
+        this.fixUrl = fixUrl;
     }
 
     defaultWatchers() {

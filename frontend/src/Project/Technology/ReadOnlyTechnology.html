@@ -14,24 +14,30 @@
       <h6>Under what license is the project governed?</h6>
       <ul>
         <li ng-repeat="l in vm.project.licenses">
-            {{ l.name }}
+          {{ l.name }}
         </li>
       </ul>
     </div>
 
     <div>
       <h6>Code documentation or download link</h6>
-      <p>{{vm.project.repository}}</p>
+      <a ng-href="{{vm.fixUrl(vm.project.repository)}}" target="_blank">
+        {{vm.project.repository}}
+      </a>
     </div>
 
     <div>
       <h6>Link to the application</h6>
-      <p>{{vm.project.mobile_application}}</p>
+      <a ng-href="{{vm.fixUrl(vm.project.mobile_application)}}" target="_blank">
+        {{vm.project.mobile_application}}
+      </a>
     </div>
 
     <div>
       <h6>Link to the wiki page</h6>
-      <p>{{vm.project.wiki}}</p>
+      <a ng-href="{{vm.fixUrl(vm.project.wiki)}}" target="_blank">
+        {{vm.project.wiki}}
+      </a>
     </div>
 
   </div>

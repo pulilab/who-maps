@@ -75,5 +75,12 @@ const calculateHeight = () => {
     return contentHeight + 'px';
 };
 
+const fixUrl = (url) => {
+    if (!(/^(?:f|ht)tps?:\/\//).test(url)) {
+        url = 'http://' + url;
+    }
+    return url;
+};
 
-export { StaticUtilities, getSubDomain, calculateHeight };
+
+export { StaticUtilities, getSubDomain, calculateHeight, fixUrl };

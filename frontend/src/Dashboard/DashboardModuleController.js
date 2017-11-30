@@ -5,6 +5,7 @@ import * as  ToolkitModule from '../store/modules/toolkit';
 import * as  UserModule from '../store/modules/user';
 
 import commProjects from './Mocks/commProjects.js';
+import { fixUrl } from '../Utilities';
 
 class DashboardModuleController {
 
@@ -20,6 +21,7 @@ class DashboardModuleController {
         this.watchers = this.watchers.bind(this);
         this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
+        this.fixUrl = fixUrl;
     }
 
     mapData(state) {
