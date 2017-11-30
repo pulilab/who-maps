@@ -102,14 +102,11 @@ def update_with_project_data(sender, instance, **kwargs):
         project_search.wiki = instance.data.get("wiki", "")
         project_search.public_id = instance.public_id
 
-        hfa_ids = instance.data.get("health_focus_areas", [])
-        if hfa_ids:
-            health_focus_areas = HealthFocusArea.objects.filter(id__in=hfa_ids).values_list('name', flat=True)
-            project_search.health_focus_areas = ", ".join([x for x in health_focus_areas])
+        project_search.health_focus_areas = ", ".join(
+            [x.name for x in HealthFocusArea.objects.get_names_for_ids(instance.data.get("health_focus_areas", []))])
 
         platform_ids = [x['id'] for x in instance.data.get("platforms", [])]
-        if platform_ids:
-            platforms = TechnologyPlatform.objects.filter(id__in=platform_ids).values_list('name', flat=True)
-            project_search.platforms = ", ".join([x for x in platforms])
+        project_search.platforms = ", ".join([x.name for x in TechnologyPlatform.objects.filter(
+            id__in=platform_ids).only('name')])
 
         project_search.save()
