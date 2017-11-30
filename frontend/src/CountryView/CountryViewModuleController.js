@@ -142,18 +142,13 @@ class CountryViewModuleController {
         if (!countryProjects || !Array.isArray(countryProjects)) {
             return;
         }
-        const extractStrategies = p => {
-            let r = [];
-            for (const plat of p.platforms) {
-                r = r.concat(plat.strategies);
-            }
-            return r;
-        };
         const digitalHealthInterventions = {
             name: 'Digital Health Interventions',
-            filterMappingFn: extractStrategies,
+            filterMappingFn: p => {
+                return Array.isArray(p.digital_strategies) ? p.digital_strategies : [];
+            },
             open: false,
-            items: this.prepareFiltersCheckboxes(extractStrategies)
+            items: this.prepareFiltersCheckboxes('digital_strategies')
         };
 
         const healthInterventions = {
@@ -182,15 +177,13 @@ class CountryViewModuleController {
             items: this.prepareFiltersCheckboxes('hsc_challenges')
         };
 
-        const extractSoftware = p => {
-            return p.platforms.map(plat => plat.name);
-        };
-
         const software = {
             name: 'Software',
-            filterMappingFn: extractSoftware,
+            filterMappingFn: p => {
+                return Array.isArray(p.platforms) ? p.platforms : [];
+            },
             open: false,
-            items: this.prepareFiltersCheckboxes(extractSoftware)
+            items: this.prepareFiltersCheckboxes('platforms')
         };
 
         this.filters = [digitalHealthInterventions, healthInterventions,
