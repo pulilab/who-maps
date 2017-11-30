@@ -147,7 +147,7 @@ class InvalidateCacheMixin(object):
         return super(InvalidateCacheMixin, self).save(*args, **kwargs)
 
 
-class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),
@@ -169,7 +169,7 @@ class HSCChallengeQuerySet(ActiveQuerySet):
         return self.filter(id__in=ids).only('name', 'challenge')
 
 
-class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
+class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     challenge = models.CharField(max_length=512)
 
     def __str__(self):
@@ -182,12 +182,12 @@ class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
     objects = HSCChallengeQuerySet.as_manager()
 
 
-class HealthCategory(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class HealthFocusArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
 
     def __str__(self):
@@ -197,21 +197,21 @@ class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
         ordering = ['health_category__name', 'name']
 
 
-class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pre = models.CharField(max_length=255)
 
 
-class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class Licence(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
+class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class HISBucket(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
