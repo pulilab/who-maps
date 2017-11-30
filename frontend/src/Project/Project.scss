@@ -387,6 +387,16 @@
       }
     }
 
+    .md-block {
+      &.extra-margin {
+        margin-bottom: 40px;
+      }
+
+      &.extra-margin-double {
+        margin-bottom: 80px;
+      }
+    }
+
     .input-group {
       position: relative;
       box-sizing: border-box;
