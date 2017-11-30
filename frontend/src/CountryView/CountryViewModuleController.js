@@ -76,7 +76,9 @@ class CountryViewModuleController {
                     for (const p of this.countryProjects) {
                         const inProject = cat.filterMappingFn(p);
                         if (inProject.some(inArray)) {
-                            filtered.push(p);
+                            if (!filtered.includes(p)) {
+                                filtered.push(p);
+                            }
                         }
                     }
                 }
