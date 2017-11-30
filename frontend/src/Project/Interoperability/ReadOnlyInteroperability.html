@@ -24,9 +24,8 @@
 
     <div>
       <ul>
-        <li ng-repeat="standard in vm.structure.interoperability_standards"
-            ng-show="vm.checkboxChecked(standard, 'interoperability_standards')">
-            {{standard}}
+        <li ng-repeat="standard in vm.project.interoperability_standards">
+            {{standard.name}}
         </li>
       </ul>
     </div>

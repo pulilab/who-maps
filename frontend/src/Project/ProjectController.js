@@ -50,7 +50,7 @@ class ProjectController  {
                 countryFields = ProjectModule.getProjectCountryFields(state)(true, !publishMode);
             }
             else {
-                project = publishMode ? ProjectModule.getCurrentPublishedProjectForEditing(state) :
+                project = publishMode ? ProjectModule.getCurrentPublished(state) :
                   ProjectModule.getCurrentDraftProjectForEditing(state);
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
@@ -63,6 +63,7 @@ class ProjectController  {
         }
         const readOnlyMode = publishMode ||
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
         return {
             newProject,
             publishMode,

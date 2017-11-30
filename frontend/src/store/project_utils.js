@@ -16,8 +16,12 @@ export const fieldToConvertToObject = [
     { key: 'health_focus_areas', structure_key: 'health_focus_areas' }
 ];
 export const dashFieldConvertToObject = [
+    { key: 'health_focus_areas', structure_key: 'health_focus_areas' },
     { key: 'platforms', structure_key: 'technology_platforms' },
-    { key: 'licenses', structure_key: 'licenses' }
+    { key: 'licenses', structure_key: 'licenses' },
+    { key: 'hsc_challenges', structure_key: 'hsc_challenges' },
+    { key: 'his_bucket', structure_key: 'his_bucket' },
+    { key: 'interoperability_standards', structure_key: 'interoperability_standards' }
 ];
 
 export const getTodayString = () => {
@@ -192,10 +196,12 @@ export function parseOutInteroperabilityLinks(form) {
 
 function mapObjectToStructure(toMap, structure, field, structure_key) {
     return toMap.map(f => {
-        const id = f.id || f;
-        return structure[structure_key].find(sf => sf.id === id);
-    })
-        .filter(f =>f);
+        const isInteger = !Number.isNaN(parseInt(f, 10));
+        if (isInteger) {
+            return structure[structure_key].find(sf => sf.id === f);
+        }
+        return { ...f, ...structure[structure_key].find(sf => sf.id === f.id) };
+    }).filter(f =>f);
 }
 
 export function convertIdArrayToObjectArray(form, structure, fieldToConvert) {

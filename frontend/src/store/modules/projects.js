@@ -72,17 +72,24 @@ export const getDraftedProjects = state => {
 
 export const getFlatProjectStructure = state => {
     const structure = state.projects.structure;
-    let strategies = [];
-    structure.strategies.forEach(g => {
-        g.subGroups.forEach(sg => {
-            strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
+    if (structure) {
+        let strategies = [];
+        structure.strategies.forEach(g => {
+            g.subGroups.forEach(sg => {
+                strategies = [...strategies, ...sg.strategies.map(s => ({...s}))];
+            });
         });
-    });
-    let health_focus_areas = [];
-    structure.health_focus_areas.forEach(hfa => {
-        health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
-    });
-    return { ...structure, strategies, health_focus_areas };
+        let health_focus_areas = [];
+        structure.health_focus_areas.forEach(hfa => {
+            health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
+        });
+        let hsc_challenges = [];
+        structure.hsc_challenges.forEach(hsc => {
+            hsc_challenges = [...hsc_challenges, ...hsc.challenges];
+        });
+        return {...structure, strategies, health_focus_areas, hsc_challenges};
+    }
+    return {};
 };
 
 export const getProjectStructure = state => {
@@ -163,16 +170,48 @@ function convertCountryFieldsAnswer({ fields }) {
     });
 }
 
+export const parseProjectForViewMode = (state, project) => {
+    const structure = getFlatProjectStructure(state);
+    const country = CountryModule.getCountry(state, project.country);
+    const secondPhaseCheck = [{ key: 'platforms.strategies', structure_key: 'strategies' }];
+    project =  {
+        ...project,
+        country_name: country ? country.name : '',
+        ...convertIdArrayToObjectArray(project, structure, dashFieldConvertToObject),
+        coverageType: setCoverageType(project.coverage, project.national_level_deployment)
+    };
+    return {
+        ...project,
+        ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck)
+    };
+};
+
 export const getCurrentPublished = state => {
-    return getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    if (project) {
+        return parseProjectForViewMode(state, project);
+    }
+    return undefined;
 };
 
 export const getCurrentDraft = state => {
     const draft = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
     if (draft) {
-        draft.hasPublishedVersion = !!getCurrentPublished(state);
+        return {
+            ...draft,
+            hasPublishedVersion: !!getPublishedProjects(state).find(p=> p.id === state.projects.currentProject)
+        };
     }
-    return draft;
+    return undefined;
+};
+
+
+export const getCurrentDraftInViewMode = state => {
+    const draft = getCurrentDraft(state);
+    if (draft) {
+        return parseProjectForViewMode(state, draft);
+    }
+    return undefined;
 };
 
 export const getProjectCountryFields = state => (isNewProject, isDraft) => {
@@ -208,8 +247,6 @@ const getCurrentProjectForEditing = (state, data) => {
 export const getCurrentPublishedProjectForEditing = state => {
     const project = getCurrentPublished(state);
     if (project) {
-        const country = CountryModule.getCountry(state, project.country);
-        project.country_name = country ? country.name : '';
         return getCurrentProjectForEditing(state, project);
     }
     return undefined;
