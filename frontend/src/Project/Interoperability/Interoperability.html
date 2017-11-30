@@ -33,7 +33,7 @@
                name="{{'interoperability_links_' + $index + '_link'}}"
                md-maxlength="200"
                ng-model="vm.project.interoperability_links[$index].link"
-               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/">
+               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/">
         <div ng-messages="vm.form['interoperability_links_' + $index + '_link'].$error">
           <div ng-message="pattern">
             Make sure your URL is valid.

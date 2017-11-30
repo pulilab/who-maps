@@ -21,15 +21,6 @@ function config($stateProvider, $compileProvider) {
                   return su.lazyLoader($compileProvider, 'countryViewComponent');
               }
           }
-      })
-      .state('pdf-export', {
-          url: '/pdf-export',
-          template: '<pdf-export instant-download="true"></pdf-export>',
-          resolve: {
-              'pdf-export': () => {
-                  return su.lazyLoader($compileProvider, 'PDFExport/PDFExportComponent');
-              }
-          }
       });
 }
 
