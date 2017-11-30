@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div layout="row">
+    <div class="md-block">
       <organisation-autocomplete
         flex="60"
         organisation="vm.project.organisation"
@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div layout="row" class="suggestion">
+      <div class="suggestion">
         <span>Please describe where your implementation is currently taking place</span>
       </div>
     </md-input-container>
@@ -98,8 +98,8 @@
           </div>
         </div>
       </div>
-      <div layout="row" class="suggestion">
-        <span>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.  </span>
+      <div class="suggestion">
+        <span>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</span>
       </div>
     </md-input-container>
 
@@ -179,9 +179,8 @@
     <h6 class="first">Add Team members (Editor role)</h6>
 
     <div class="chipper">
-      <div layout="row">
+      <div class="md-block">
         <md-contact-chips
-          flex
           placeholder="Editors of this project"
           secondary-placeholder="add new team member"
           ng-model="vm.team"
@@ -193,7 +192,7 @@
           filter-selected="true">
         </md-contact-chips>
       </div>
-      <div layout="row" class="suggestion">
+      <div class="suggestion">
         <span>Note: if you wish to add members who are not already registered, they will need to be registered before you may add them</span>
       </div>
     </div>
@@ -202,9 +201,8 @@
     <h6>Add Viewers (only Viewer role)</h6>
 
     <div class="chipper">
-      <div layout="row" >
+      <div class="md-block">
         <md-contact-chips
-          flex
           placeholder="Add viewers"
           secondary-placeholder="add new viewer"
           ng-model="vm.viewers"
@@ -216,7 +214,7 @@
           filter-selected="true">
         </md-contact-chips>
       </div>
-      <div layout="row" class="suggestion">
+      <div class="suggestion">
         <span>Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them</span>
       </div>
     </div>
