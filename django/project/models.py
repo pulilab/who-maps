@@ -27,6 +27,9 @@ class ProjectManager(models.Manager):
     def by_organisation(self, organisation_id):  # pragma: no cover
         return self.get_queryset().filter(data__organisation=organisation_id)
 
+    def published_only(self):
+        return self.exclude(public_id='')
+
 
 class Project(ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
