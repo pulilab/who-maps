@@ -106,6 +106,11 @@ class Project(ExtendedModel):
 
         data.update(extra_data)
 
+        if not draft_mode:
+            last_version = CoverageVersion.objects.filter(project_id=self.pk).order_by("-version").first()
+            if last_version:
+                data.update(last_version=last_version.version, last_version_date=last_version.modified)
+
         return data
 
     def to_response_dict(self, published, draft):
