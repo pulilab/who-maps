@@ -192,7 +192,7 @@ export function parseOutInteroperabilityLinks(form) {
 
 function mapObjectToStructure(toMap, structure, field, structure_key) {
     return toMap.map(f => {
-        const id = f.id || f;
+        const id = f.id || f;
         return structure[structure_key].find(sf => sf.id === id);
     })
         .filter(f =>f);
@@ -215,8 +215,6 @@ export function convertIdArrayToObjectArray(form, structure, fieldToConvert) {
             });
         }
         else if (field.length === 1) {
-            console.log('FIELD', field);
-            console.log(mapObjectToStructure(form[field], structure, field, structure_key));
             field = field[0];
             result[field] = mapObjectToStructure(form[field], structure, field, structure_key);
         }

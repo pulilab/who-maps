@@ -8,7 +8,7 @@ import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
 import * as ToolkitModule from './toolkit';
-import { getToolkitData, getStructure } from './toolkit';
+import { getToolkitData } from './toolkit';
 
 import {
     convertDate,
