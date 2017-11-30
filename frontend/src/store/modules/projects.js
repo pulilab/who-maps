@@ -76,7 +76,7 @@ export const getFlatProjectStructure = state => {
         let strategies = [];
         structure.strategies.forEach(g => {
             g.subGroups.forEach(sg => {
-                strategies = [...strategies, ...sg.strategies.map(s => ({...s}))];
+                strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
             });
         });
         let health_focus_areas = [];
@@ -87,7 +87,7 @@ export const getFlatProjectStructure = state => {
         structure.hsc_challenges.forEach(hsc => {
             hsc_challenges = [...hsc_challenges, ...hsc.challenges];
         });
-        return {...structure, strategies, health_focus_areas, hsc_challenges};
+        return { ...structure, strategies, health_focus_areas, hsc_challenges };
     }
     return {};
 };
