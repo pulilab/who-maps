@@ -51,10 +51,10 @@ class DialogMultiSelectorDialog {
     }
 
     itemChecked(item) {
-        return this.selection.some(i => i.id === item.id);
+        return this.selection.some(i => i && i.id === item.id);
     }
     itemToggle(item) {
-        const index =  findIndex(this.selection, s => s.id === item.id);
+        const index =  findIndex(this.selection, s =>  s &&  s.id === item.id);
         if (index !== -1) {
             this.selection.splice(index, 1);
         }

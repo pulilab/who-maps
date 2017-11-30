@@ -2,7 +2,6 @@ import axios from '../../plugins/axios';
 import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
 import cloneDeep from 'lodash/cloneDeep';
-import union from 'lodash/union';
 import findIndex from 'lodash/findIndex';
 import { axisData, domainData } from '../static_data/charts_static';
 import { project_definition } from '../static_data/project_definition';
@@ -16,7 +15,6 @@ import {
     convertObjectArrayToStringArray,
     convertStringArrayToObjectArray,
     createDateFields,
-    fieldsWithCustomValue,
     fillEmptyCollectionsWithDefault,
     getTodayString,
     parsePlatformCollection,
@@ -25,8 +23,10 @@ import {
     setCoverageType,
     parseOutInteroperabilityLinks,
     retainNationalOrDistrictCoverage,
+    convertIdArrayToObjectArray,
+    handleInteroperabilityLinks,
     extractIdFromObjects,
-    convertIdArrayToObjectArray
+    retainOnlyIds
 } from '../project_utils';
 
 
@@ -92,14 +92,20 @@ export const getEmptyProject = () => {
     return { ...project_definition };
 };
 
+export const getProjectStructure = state => {
+    const structure = state.projects.structure;
+    return cloneDeep(structure);
+};
+
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
     const project = getEmptyProject();
+    const structure = getProjectStructure(state);
     if (country) {
         project.country = country.id;
     }
     project.organisation = UserModule.getProfile(state).organisation;
-    return project;
+    return { ...project, interoperability_links: structure.interoperability_links };
 };
 
 export const getCurrentProjectIfExist = state => {
@@ -140,7 +146,9 @@ export const getCurrentPublished = state => {
 
 export const getCurrentDraft = state => {
     const draft = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
-    draft.hasPublishedVersion = !!getCurrentPublished(state);
+    if (draft) {
+        draft.hasPublishedVersion = !!getCurrentPublished(state);
+    }
     return draft;
 };
 
@@ -152,20 +160,19 @@ export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     return [...result];
 };
 
-export const getProjectStructure = state => {
-    const structure = state.projects.structure;
-    return cloneDeep(structure);
-};
-
 export const getFlatProjectStructure = state => {
     const structure = state.projects.structure;
     let strategies = [];
     structure.strategies.forEach(g => {
         g.subGroups.forEach(sg => {
-            strategies = [ ...strategies, ...sg.strategies.map(s => ({ ...s }))];
+            strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
         });
     });
-    return { ...structure, strategies };
+    let health_focus_areas = [];
+    structure.health_focus_areas.forEach(hfa => {
+        health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
+    });
+    return { ...structure, strategies, health_focus_areas };
 };
 
 
@@ -180,9 +187,11 @@ const getCurrentProjectForEditing = (state, data) => {
         id: data.organisation,
         name: data.organisation_name
     };
-    data = { ...data,
+    data = {
+        ...data,
         ...isMemberOrViewer(state, data),
-        ...convertIdArrayToObjectArray(data, structure)
+        ...convertIdArrayToObjectArray(data, structure),
+        ...handleInteroperabilityLinks(data, structure)
     };
 
     data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
@@ -467,11 +476,12 @@ function processForm(form) {
         organisation,
         ...createDateFields(form),
         ...convertObjectArrayToStringArray(form),
-        ...extractIdFromObjects(form),
         ...parseOutInteroperabilityLinks(form),
         coverageType: undefined,
-        platforms: parsePlatformCollection(form)
+        platforms: parsePlatformCollection(form),
+        ...extractIdFromObjects(form)
     };
+    form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
     return removeKeysWithoutValues(form);
 }

@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 
-from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet
 from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
@@ -147,7 +147,7 @@ class InvalidateCacheMixin(object):
         return super(InvalidateCacheMixin, self).save(*args, **kwargs)
 
 
-class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
         ('Client', 'Client'),
         ('Provider', 'Provider'),
@@ -164,7 +164,12 @@ class DigitalStrategy(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
         verbose_name_plural = 'Digital Strategies'
 
 
-class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
+class HSCChallengeQuerySet(ActiveQuerySet):
+    def get_names_for_ids(self, ids):
+        return self.filter(id__in=ids).only('name', 'challenge')
+
+
+class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     challenge = models.CharField(max_length=512)
 
     def __str__(self):
@@ -174,13 +179,15 @@ class HSCChallenge(ExtendedNameOrderedSoftDeletedModel):
         verbose_name_plural = 'Health Categories'
         ordering = ['name', 'challenge']
 
+    objects = HSCChallengeQuerySet.as_manager()
 
-class HealthCategory(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+
+class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class HealthFocusArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
 
     def __str__(self):
@@ -190,21 +197,21 @@ class HealthFocusArea(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin)
         ordering = ['health_category__name', 'name']
 
 
-class InteroperabilityLink(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pre = models.CharField(max_length=255)
 
 
-class TechnologyPlatform(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class Licence(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class InteroperabilityStandard(ExtendedNameOrderedSoftDeletedModel):
+class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class HISBucket(ExtendedNameOrderedSoftDeletedModel, InvalidateCacheMixin):
+class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
