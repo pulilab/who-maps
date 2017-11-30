@@ -470,6 +470,16 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
+        nameslist = [str(x) for x in HSCChallenge.objects.get_names_for_ids(self.project_data['hsc_challenges'])]
+        self.assertEqual(response.json()[0].get("hsc_challenges"), nameslist)
+        nameslist = [str(x) for x in HealthFocusArea.objects.get_names_for_ids(
+            self.project_data['health_focus_areas'])]
+        self.assertEqual(response.json()[0].get("health_focus_areas"), nameslist)
+        nameslist = [str(x) for x in HISBucket.objects.get_names_for_ids(self.project_data['his_bucket'])]
+        self.assertEqual(response.json()[0].get("his_bucket"), nameslist)
+        nameslist = [str(x) for x in TechnologyPlatform.objects.get_names_for_ids(
+            [x['id'] for x in self.project_data['platforms']])]
+        self.assertEqual(response.json()[0].get("platforms"), nameslist)
         self.assertEqual(len(response.json()), 2)
 
     def test_retrieve_project_list_by_country_all(self):
