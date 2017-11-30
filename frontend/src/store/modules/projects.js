@@ -535,7 +535,7 @@ function processForm(form) {
     return removeKeysWithoutValues(form);
 }
 
-async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state, toUpdate) {
+async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state, toUpdate, method) {
     const user = UserModule.getProfile(state).id;
     const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
     const twPromise = saveTeamViewers(data, team, viewers);
@@ -545,7 +545,9 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
-    dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+    if (method === 'put') {
+        dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+    }
     dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
     dispatch(CountryModule.loadCurrentCountryProjects());
     dispatch(CountryModule.loadCurrentCountryDistrictsProject());
@@ -559,7 +561,7 @@ export function saveDraft(form, team, viewers, countryFields) {
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
             const { data } = await axios[method](url, form);
-            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'draft');
+            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'draft', method);
         }
         catch (e) {
             console.log(e);

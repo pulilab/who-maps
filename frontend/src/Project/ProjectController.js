@@ -35,7 +35,6 @@ class ProjectController  {
         let team = null;
         let viewers = null;
         let countryFields = null;
-
         if (this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
