@@ -83,6 +83,7 @@ class ProjectController  {
     eventListeners() {
         this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
         this.EE.on('projectSaveDraft', this.saveDraft, this);
+        this.EE.on('projectDiscardDraft', this.discardDraft, this);
     }
 
     onInit() {
@@ -176,6 +177,23 @@ class ProjectController  {
         }
     }
 
+    async discardDraft() {
+        const confirm = this.$mdDialog.confirm({
+            title: 'Attention',
+            textContent: 'The current draft will be overwritten by the published version',
+            ok: 'Ok',
+            cancel: 'Cancel',
+            theme: 'alert'
+        });
+        try {
+            await this.$mdDialog.show(confirm);
+            await this.$ngRedux.dispatch(ProjectModule.discardDraft());
+            this.showToast('Draft discarded');
+        }
+        catch (e) {
+            this.showToast('Discard draft process canceled');
+        }
+    }
 
     async focusInvalidField() {
         this.timeout(()=>{

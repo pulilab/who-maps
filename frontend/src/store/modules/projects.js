@@ -249,7 +249,7 @@ const getCurrentProjectForEditing = (state, data) => {
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
-    const project = getCurrentPublished(state);
+    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
         return getCurrentProjectForEditing(state, project);
     }
@@ -565,6 +565,17 @@ export function saveDraft(form, team, viewers, countryFields) {
             console.log(e);
             return Promise.reject(e);
         }
+    };
+}
+
+export function discardDraft() {
+    return async (dispatch, getState) => {
+        const published = getCurrentPublishedProjectForEditing(getState());
+        const form = processForm(published);
+        const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
+        dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
+        dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+        return Promise.resolve(data);
     };
 }
 
