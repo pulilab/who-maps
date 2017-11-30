@@ -40,7 +40,7 @@ class ProjectPublicViewSet(ViewSet):
 
         # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
 
-        projects = Project.objects.filter(data__country=int(country_id))
+        projects = Project.objects.filter(data__country=int(country_id)).exclude(public_id='')
 
         # get district names
         district_names = set()
