@@ -156,13 +156,13 @@
                 <div class="lower">
 
                   <span>Code documentations & download:</span>
-                  <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.repository)}}" target="_blank">{{vm.projectData.repository}}</a>
 
                   <span>Download applications:</span>
-                  <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.mobile_application)}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
                   <span>Link to wiki page:</span>
-                  <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.wiki)}}" target="_blank">{{vm.projectData.wiki}}</a>
                 </div>
               </div>
             </md-tab>
@@ -184,7 +184,7 @@
                       <h4>{{link.link}}</h4>
                     </div>
                   </div>
-                  <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
+                  <a ng-if="link.link" ng-href="{{vm.fixUrl(link.link)}}" target="_blank" flex>
                     <md-icon>launch</md-icon>
                   </a>
                 </md-card>
