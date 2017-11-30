@@ -1,7 +1,10 @@
+import re
+
 from rest_framework import serializers
 from django.core import mail
 from django.template import loader
 from django.conf import settings
+from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from .models import Project
@@ -63,12 +66,14 @@ class ProjectPublishedSerializer(serializers.Serializer):
     licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
     repository = serializers.CharField(max_length=200, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    wiki = serializers.URLField(max_length=200, required=False, allow_blank=True)
+    wiki = serializers.CharField(max_length=200, required=False, allow_blank=True)
 
     # SECTION 4 Interoperability & Standards
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(
         child=serializers.IntegerField(), required=False, max_length=50)
+
+    regex = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
     class Meta:
         model = Project
@@ -82,6 +87,20 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+
+    def url_validator(self, value):
+        if not self.regex.match(value):
+            raise ValidationError('Enter a valid URL.')
+        return value
+
+    def validate_wiki(self, value):
+        return self.url_validator(value)
+
+    def validate_mobile_application(self, value):
+        return self.url_validator(value)
+
+    def validate_repository(self, value):
+        return self.url_validator(value)
 
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):

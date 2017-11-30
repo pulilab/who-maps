@@ -100,7 +100,7 @@ class SetupTests(APITestCase):
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
-            "mobile_application": "app1, app2",
+            "mobile_application":  "http://mobile.app.org",
             "wiki": "http://wiki.org",
             "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
                                        {"id": 2, "selected": True},
@@ -113,7 +113,7 @@ class SetupTests(APITestCase):
         # Create project draft
         url = reverse("project-create")
         response = self.test_user_client.post(url, self.project_data, format="json")
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 201, response.json())
 
         self.project_id = response.json().get("id")
 
@@ -165,6 +165,26 @@ class ProjectTests(SetupTests):
             cache_data = cache.get('project-structure-data')
             self.assertEqual(response.status_code, 200)
             self.assertFalse(cache_data is None)
+
+    def test_validate_wiki_url(self):
+        data = copy.deepcopy(self.project_data)
+        data.update(dict(
+            wiki="wikiorg",
+        ))
+        # Create project draft
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'wiki': ['Enter a valid URL.']})
+
+        data.update(dict(
+            wiki="wiki.cancerresearch",
+        ))
+        # Create project draft
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['draft']['wiki'], 'wiki.cancerresearch')
 
     # def xtest_create_new_project_approval_required(self):
     #     Country.objects.filter(id=self.country_id).update(project_approval=True, user_id=self.user_profile_id)
