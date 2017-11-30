@@ -8,7 +8,8 @@ const projectComponent = {
     name: 'projectComponent',
     bindings: {
         project: '<',
-        showDetails: '<'
+        showDetails: '<',
+        showVersion: '<'
     }
 };
 
