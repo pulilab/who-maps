@@ -225,7 +225,7 @@
           <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
         </div>
 
-        <md-tabs ng-if="vm.profile.name" md-border-bottom md-dynamic-height class="perf-tab">
+        <md-tabs ng-if="!vm.showEmpty" md-border-bottom md-dynamic-height class="perf-tab">
 
           <md-tab label="geographical view">
             <countrymap
