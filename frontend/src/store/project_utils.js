@@ -10,6 +10,7 @@ export const fieldsWithCustomValue =  ['interoperability_standards', 'licenses']
 export const fieldsToConvertToObjectArray = ['donors', 'implementing_partners'];
 export const fieldsToMapWithId = ['health_focus_areas'];
 export const fieldToConvertToObject = ['platforms.strategies', 'health_focus_areas'];
+export const fieldToForceToInt = ['his_bucket', 'hsc_challenges'];
 
 export const getTodayString = () => {
     const today = new Date();
@@ -176,7 +177,7 @@ export function extractIdFromObjects(form) {
 }
 
 export function parseOutInteroperabilityLinks(form) {
-    return { interoperability_links : form.interoperability_links
+    return { interoperability_links : form.interoperability_links.filter(il => il && il.id)
           .map(il => ({ id: il.id, link: il.link, selected: il.selected })) };
 }
 
@@ -210,8 +211,17 @@ export function convertIdArrayToObjectArray(form, structure) {
 
 export function handleInteroperabilityLinks(data, structure) {
     const interoperability_links = structure.interoperability_links.map(s => {
-        const { selected, link } = data.interoperability_links.find(il => il.id === s.id);
+        const incoming = data.interoperability_links.find(il => il.id === s.id);
+        const { selected, link } = incoming ? incoming : {};
         return { ...s, selected, link };
     });
     return { interoperability_links };
+}
+
+export function retainOnlyIds(form) {
+    const result = {};
+    fieldToForceToInt.forEach(key => {
+        result[key] = form[key].filter(i => i.length && i === +i);
+    });
+    return result;
 }

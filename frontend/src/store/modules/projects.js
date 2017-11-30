@@ -25,7 +25,8 @@ import {
     retainNationalOrDistrictCoverage,
     convertIdArrayToObjectArray,
     handleInteroperabilityLinks,
-    extractIdFromObjects
+    extractIdFromObjects,
+    retainOnlyIds
 } from '../project_utils';
 
 
@@ -145,7 +146,9 @@ export const getCurrentPublished = state => {
 
 export const getCurrentDraft = state => {
     const draft = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
-    draft.hasPublishedVersion = !!getCurrentPublished(state);
+    if (draft) {
+        draft.hasPublishedVersion = !!getCurrentPublished(state);
+    }
     return draft;
 };
 
@@ -478,6 +481,7 @@ function processForm(form) {
         platforms: parsePlatformCollection(form),
         ...extractIdFromObjects(form)
     };
+    form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
     return removeKeysWithoutValues(form);
 }
