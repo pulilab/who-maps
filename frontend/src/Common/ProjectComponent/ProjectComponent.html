@@ -19,9 +19,12 @@
           <span class="static">Donors</span>
         </div>
         <div class="version">
-                    <span class="nr">
-                        {{vm.project.version}}
-                    </span>
+          <span class="nr" ng-show="vm.isPublished">
+              {{vm.project.version}}
+          </span>
+          <span ng-hide="vm.isPublished">
+              Draft
+          </span>
           <span class="static">Version</span>
         </div>
       </div>
@@ -46,7 +49,7 @@
             Show more
           </md-button> -->
 
-           <md-button class="md-primary md-no-ink" ng-if="vm.project.isViewer" ng-click="vm.viewDraft()">
+          <md-button class="md-primary md-no-ink" ng-if="vm.project.isViewer" ng-click="vm.viewDraft()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
@@ -60,8 +63,8 @@
             Edit Draft
           </md-button>
 
-           <md-button class="md-primary md-no-ink" ng-show="vm.project.isPublished"
-                      ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.viewPublished()">
+          <md-button class="md-primary md-no-ink" ng-show="vm.project.isPublished"
+                     ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.viewPublished()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
