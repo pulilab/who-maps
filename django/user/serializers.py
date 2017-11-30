@@ -37,6 +37,10 @@ class ProfileTokenSerializer(TokenSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     organisation_name = serializers.SerializerMethodField()
+    country = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    organisation = serializers.PrimaryKeyRelatedField (queryset=Organisation.objects.all(), required=True,
+                                                       allow_null=False)
+    name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
 
     class Meta:
         model = UserProfile
