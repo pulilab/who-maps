@@ -185,7 +185,6 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
             return super(ProjectRetrieveViewSet, self).get_permissions()
 
     def _get_permission_based_data(self, project):
-        is_member = False
         draft = None
 
         if not self.request.user.is_authenticated():  # ANON
@@ -198,12 +197,6 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
                 draft = project.get_member_draft()
             else:  # LOGGED IN
                 data = project.get_non_member_data()
-
-        if is_member:
-            last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
-            if last_version:
-                data.update(last_version=last_version.version)
-                data.update(last_version_date=last_version.modified)
 
         if draft:
             draft = project.to_representation(data=draft, draft_mode=True)

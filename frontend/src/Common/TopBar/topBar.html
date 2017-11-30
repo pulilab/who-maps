@@ -87,18 +87,23 @@
       </md-button>
 
       <md-menu-content width="4">
-                    <span class="menu-group-title">
-                        <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
-                        <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
-                    </span>
         <md-menu-item>
-          <md-button>
-            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
-          </md-button>
+          <div class="user-name">
+            <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
+            <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
+            <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
+          </div>
         </md-menu-item>
         <md-menu-item>
+          <div class="user-role">
+            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
+            <span>Role: {{vm.writeUserRole()}}</span>
+          </div>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
           <md-button ui-sref="editProfile">
-            <md-icon class="material-icons">account_circle</md-icon>Edit my Profile
+            <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>Edit my Profile
           </md-button>
         </md-menu-item>
         <md-menu-item>
