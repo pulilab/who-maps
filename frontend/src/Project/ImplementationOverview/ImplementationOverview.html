@@ -11,27 +11,18 @@
       <div layout="row">
         <md-input-container flex="33">
           <label>Software (select from list)</label>
-          <md-select ng-model="platform.name" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.name' }}" required >
-            <md-option ng-value="plat" ng-repeat="plat in platform.available">
-              {{plat}}
+          <md-select ng-model="platform.id" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.id' }}" required >
+            <md-option ng-value="plat.id" ng-repeat="plat in platform.available">
+              {{plat.name}}
             </md-option>
           </md-select>
-          <div ng-messages="vm.form['platforms_' + $index + '.name'].$error">
+          <div ng-messages="vm.form['platforms_' + $index + '.id'].$error">
             <div ng-message="required">This is required.</div>
             <div ng-message="custom">
-              <div ng-repeat="message in vm.form['platforms_' + $index + '.name'].customError">
+              <div ng-repeat="message in vm.form['platforms_' + $index + '.id'].customError">
                 {{message}}
               </div>
             </div>
-          </div>
-        </md-input-container>
-
-        <md-input-container flex="33" ng-if="platform.name === 'Other'">
-          <label>Specify software name</label>
-          <input ng-model="platform.custom" md-maxlength="120" name="platform_custom"
-                 ng-required="vm.activateValidation">
-          <div ng-messages="vm.form.platform_custom.$error">
-            <div ng-message="required">This is required.</div>
           </div>
         </md-input-container>
 
@@ -52,7 +43,7 @@
       </div>
 
       <dialog-multi-selector
-        ng-show="platform.name"
+        ng-show="platform.id"
         selection="platform.strategies"
         button-name="Digital Health Interventions"
         is-required="vm.activateValidation"
@@ -83,10 +74,10 @@
     <div layout="row" class="extra-margin-double">
       <md-input-container flex>
         <label>What are the Health System Challenges (HSC) your project addresses?</label>
-        <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc" required multiple>
+        <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc_challenges" required multiple>
           <md-optgroup label="{{hsc.name}}" ng-repeat="hsc in vm.structure.hsc_challenges">
-            <md-option value="{{challenge}}" ng-repeat="challenge in hsc.challenges">
-              {{challenge}}
+            <md-option value="{{challenge.id}}" ng-repeat="challenge in hsc.challenges">
+              {{challenge.challenge}}
             </md-option>
           </md-optgroup>
         </md-select>
@@ -99,9 +90,9 @@
     <div layout="row" class="first extra-margin">
       <md-input-container flex>
         <label>What part(s) of the Health Information System (HIS) does this project support?</label>
-        <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his" required multiple>
-          <md-option value="{{his}}" ng-repeat="his in vm.structure.his_bucket">
-            {{his}}
+        <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his_bucket" required multiple>
+          <md-option value="{{his.id}}" ng-repeat="his in vm.structure.his_bucket">
+            {{his.name}}
           </md-option>
         </md-select>
         <div ng-messages="vm.form.his.$error">

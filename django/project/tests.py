@@ -808,7 +808,7 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.json()['draft']["platforms"][0]["id"], self.project_data['platforms'][0]['id'])
         self.assertNotEqual(response.json()['draft']["platforms"][0]["strategies"][0],
-                         self.project_data['platforms'][0]['strategies'][0])
+                            self.project_data['platforms'][0]['strategies'][0])
 
     def test_project_draft_merged_list(self):
         url = reverse("project-list")
