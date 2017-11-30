@@ -59,6 +59,11 @@ class NavigationController {
         this.EE.emit('projectSaveDraft');
     }
 
+    discardDraft(e) {
+        e.preventDefault();
+        this.EE.emit('projectDiscardDraft');
+    }
+
     static navigationFactory() {
         require('./Navigation.scss');
         function navigation($element, $state) {

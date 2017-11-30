@@ -17,6 +17,7 @@ const config = ($stateProvider, $compileProvider) => {
       .state(moduleName, {
           url: '/maps/:axisId/:domainId',
           parent: 'app',
+          profileRequired: true,
           params: {
               axisId: '0',
               domainId: '0'
@@ -43,6 +44,7 @@ const config = ($stateProvider, $compileProvider) => {
       .state('scorecard', {
           url: '/scorecard/:axisId',
           parent: 'app',
+          profileRequired: true,
           views: {
               main: {
                   template: '<scorecard ></scorecard>'
@@ -60,6 +62,7 @@ const config = ($stateProvider, $compileProvider) => {
       .state('summary', {
           url: '/summary',
           parent: 'app',
+          profileRequired: true,
           views: {
               main: {
                   template: '<scorecard layout-fill layout="column" summary="true"></scorecard>'

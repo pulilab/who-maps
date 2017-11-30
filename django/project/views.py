@@ -40,14 +40,14 @@ class ProjectPublicViewSet(ViewSet):
 
         # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
 
-        projects = Project.objects.filter(data__country=int(country_id))
+        projects = Project.projects.published_only().filter(data__country=int(country_id))
 
         # get district names
         district_names = set()
 
         def district_name_finder(projects):
             for project in projects:
-                for district in project.data.get('coverage'):
+                for district in project.data.get('coverage', []):
                     district_names.add(district.get('district'))
 
         district_name_finder(projects)
@@ -58,7 +58,7 @@ class ProjectPublicViewSet(ViewSet):
         def filter_project_by_district_name(districts, projects):
             for district_name in districts:
                 for project in projects:
-                    for district in project.data.get('coverage'):
+                    for district in project.data.get('coverage', []):
                         if district.get('district') == district_name:
                             result_dict[district_name].append({
                                 "id": project.id,
@@ -81,7 +81,7 @@ class ProjectPublicViewSet(ViewSet):
                 ds_names.extend([x.name for x in DigitalStrategy.objects.get_names_for_ids(platform['strategies'])])
             return list(set(ds_names))
 
-        projects = Project.objects.all()  # lazy QuerySet
+        projects = Project.projects.published_only()  # lazy QuerySet
 
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))

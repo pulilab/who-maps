@@ -14,6 +14,7 @@ function config($stateProvider, $compileProvider) {
       .state(moduleName, {
           url: '/dashboard',
           parent: 'app',
+          profileRequired: true,
           views: {
               main: {
                   template: '<dashboard></dashboard>'

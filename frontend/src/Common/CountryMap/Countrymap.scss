@@ -3,6 +3,7 @@
 .relative {
 
   position: relative;
+  height: 100%;
 
   .countrychart-tooltip {
 
@@ -194,16 +195,10 @@
   }
 
   .zoomhandlers2 {
-
-    position: absolute;
-    right: 15px;
-    top: 300px;
-
+    left: auto;
+    right: 20px;
     md-icon {
-
-      color: $color-gray-light;
-      cursor: pointer;
-      outline: none;
+      font-size: 30px;
     }
   }
 
@@ -221,7 +216,6 @@
   }
 
 }
-
 
 .countrymapcontainer {
 
