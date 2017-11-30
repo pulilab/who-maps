@@ -82,5 +82,22 @@
       @include text-hide();
     }
   }
+}
 
+md-menu-content {
+  .user-name,
+  .user-role {
+    md-icon {}
+    span {
+      display: inline-block;
+      padding: 0 12px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+  }
+  .user-role {
+    span {
+      font-weight: 400;
+    }
+  }
 }
