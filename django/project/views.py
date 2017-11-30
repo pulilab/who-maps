@@ -47,7 +47,7 @@ class ProjectPublicViewSet(ViewSet):
 
         def district_name_finder(projects):
             for project in projects:
-                for district in project.data.get('coverage'):
+                for district in project.data.get('coverage', []):
                     district_names.add(district.get('district'))
 
         district_name_finder(projects)
@@ -58,7 +58,7 @@ class ProjectPublicViewSet(ViewSet):
         def filter_project_by_district_name(districts, projects):
             for district_name in districts:
                 for project in projects:
-                    for district in project.data.get('coverage'):
+                    for district in project.data.get('coverage', []):
                         if district.get('district') == district_name:
                             result_dict[district_name].append({
                                 "id": project.id,
