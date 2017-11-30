@@ -145,7 +145,11 @@
                                         <span flex>
                                           <md-icon class="material-icons">playlist_add_check</md-icon>
                                           License</span>
-                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
+                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses">
+                      <md-chip-template>
+                        <span>{{ $chip.name }}</span>
+                      </md-chip-template>
+                    </md-chips>
                   </div>
                 </div>
 
