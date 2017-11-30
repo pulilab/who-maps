@@ -11,7 +11,7 @@
       <div layout="row">
         <md-input-container flex="33">
           <label>Software (select from list)</label>
-          <md-select ng-model="platform.id" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.id' }}" required >
+          <md-select ng-model="platform.id" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.id' }}" ng-required="vm.activateValidation" >
             <md-option ng-value="plat.id" ng-repeat="plat in platform.available">
               {{plat.name}}
             </md-option>

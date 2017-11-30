@@ -148,7 +148,6 @@ class ProjectController  {
                     ok: 'Close',
                     theme: 'alert'
                 });
-
                 this.$mdDialog.show(alert);
             }
         }
