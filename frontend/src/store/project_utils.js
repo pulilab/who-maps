@@ -234,7 +234,7 @@ export function handleInteroperabilityLinks(data, structure) {
 export function retainOnlyIds(form) {
     const result = {};
     fieldToForceToInt.forEach(key => {
-        result[key] = form[key].filter(i => i.length && i === +i);
+        result[key] = form[key].filter(i => !Number.isNaN(parseInt(i, 10)));
     });
     return result;
 }

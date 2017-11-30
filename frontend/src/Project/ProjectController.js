@@ -168,7 +168,6 @@ class ProjectController  {
                     reload: false
                 });
             }
-
         }
         catch (e) {
             console.log(e);
