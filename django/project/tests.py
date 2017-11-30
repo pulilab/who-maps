@@ -132,12 +132,11 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "strategies")
         self.assertContains(response, "technology_platforms")
         self.assertContains(response, "licenses")
-        self.assertContains(response, "applications")
         self.assertContains(response, "interoperability_links")
         self.assertContains(response, "interoperability_standards")
         self.assertContains(response, "his_bucket")
         self.assertContains(response, "hsc_challenges")
-        self.assertEqual(len(response.json().keys()), 9)
+        self.assertEqual(len(response.json().keys()), 8)
 
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
@@ -239,7 +238,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertIn("platforms", response.json())
-        self.assertEqual(response.json()['platforms'][0]['name'][0], 'This field is required.')
+        self.assertEqual(response.json()['platforms'][0]['id'][0], 'This field is required.')
 
     def test_create_new_project_with_platform_strategies_missing(self):
         url = reverse("project-create")
@@ -262,7 +261,7 @@ class ProjectTests(SetupTests):
         new_data = {
             "name": "Test Project93",
             "platforms": [{
-                "name": "strat1",
+                "id": 1,
                 "strategies": []
             }]
         }
@@ -277,7 +276,7 @@ class ProjectTests(SetupTests):
         new_data = {
             "name": "Test Project93",
             "platforms": [{
-                "name": "strat1",
+                "id": 1,
                 "strategies": [],
                 "extra": "lol"
             }]
@@ -311,34 +310,12 @@ class ProjectTests(SetupTests):
         url = reverse("project-publish", kwargs={"pk": self.project_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="TestProject98",
-                    platforms=[{"name": "updated platform", "strategies": ["new strat"]}])
+                    platforms=[{"id": 999, "strategies": [998]}])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published']["platforms"][0]["name"], "updated platform")
-        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0], "new strat")
+        self.assertEqual(response.json()['published']["platforms"][0]["id"], 999)
+        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0], 998)
         self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
-
-    def test_update_project_platform_biggies(self):
-        url = reverse("project-publish", kwargs={"pk": self.project_id})
-        data = copy.deepcopy(self.project_data)
-        data.update(name="TestProject98",
-                    platforms=[{"name": "updated platform", "strategies": ["Transmit targeted health information \
-                                                                            and promotion content to a client based \
-                                                                            on a clinical care plan or \
-                                                                            health/demographic characteristics"]}])
-        response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published']["platforms"][0]["name"], "updated platform")
-        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0],
-                         data["platforms"][0]["strategies"][0])
-
-    def test_update_project_healthfocus_biggies(self):
-        url = reverse("project-publish", kwargs={"pk": self.project_id})
-        data = copy.deepcopy(self.project_data)
-        data.update(health_focus_areas=["a"*511])
-        response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published']["health_focus_areas"][0], data["health_focus_areas"][0])
 
     def test_update_project_errors(self):
         url = reverse("project-publish", kwargs={"pk": self.project_id})
@@ -368,7 +345,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["name"], "platform1")
+        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
+                         self.project_data['platforms'][0]['id'])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
         self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
@@ -672,15 +650,18 @@ class ProjectTests(SetupTests):
                          self.project_data['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
-        data.update(health_focus_areas=['area1'])
+        data.update(health_focus_areas=[1])
         url = reverse("project-publish", kwargs={"pk": self.project_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']["health_focus_areas"], data['health_focus_areas'])
+        self.assertNotEqual(response.json()['published']["health_focus_areas"], self.project_data['health_focus_areas'])
 
         response = self.test_user_client.get(retrieve_url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get('health_focus_areas'), data['health_focus_areas'])
+        self.assertNotEqual(response.json()['published'].get('health_focus_areas'),
+                            self.project_data['health_focus_areas'])
 
     def test_update_project_with_different_invalid_name(self):
         url = reverse("project-publish", kwargs={"pk": self.project_id})

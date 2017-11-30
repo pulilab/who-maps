@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from core.models import ExtendedModel
-from project.models import Project
+from project.models import Project, HealthFocusArea, TechnologyPlatform
 from country.models import Country
 from user.models import Organisation
 
@@ -86,7 +86,6 @@ def update_with_project_data(sender, instance, **kwargs):
     """
     Updates relevant ProjectSearch data on every Project model save.
     """
-    return None  # TODO: fix this for dynamic models
     if instance.public_id:
         project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
         project_search.location = Country.objects.get(id=instance.data["country"]).name
@@ -97,11 +96,17 @@ def update_with_project_data(sender, instance, **kwargs):
         project_search.implementation_overview = instance.data.get("implementation_overview", "")
         project_search.implementing_partners = ", ".join([x for x in instance.data.get("implementing_partners", "")])
         project_search.implementation_dates = instance.data.get("implementation_dates", "")
-        project_search.health_focus_areas = ", ".join([x for x in instance.data.get("health_focus_areas", "")])
         project_search.geographic_scope = instance.data.get("geographic_scope", "")
         project_search.repository = instance.data.get("repository", "")
         project_search.mobile_application = instance.data.get("mobile_application", "")
         project_search.wiki = instance.data.get("wiki", "")
-        project_search.platforms = ", ".join([x.get('name', '') for x in instance.data.get("platforms", "")])
         project_search.public_id = instance.public_id
+
+        project_search.health_focus_areas = ", ".join(
+            [x.name for x in HealthFocusArea.objects.get_names_for_ids(instance.data.get("health_focus_areas", []))])
+
+        platform_ids = [x['id'] for x in instance.data.get("platforms", [])]
+        project_search.platforms = ", ".join([x.name for x in TechnologyPlatform.objects.filter(
+            id__in=platform_ids).only('name')])
+
         project_search.save()

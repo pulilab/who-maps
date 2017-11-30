@@ -14,10 +14,7 @@ export const project_definition = {
         name: null,
         strategies: []
     }],
-    licenses: {
-        standard: [],
-        custom: undefined
-    },
+    licenses: [],
     fields:[],
     donors: [{}],
     application: [],
@@ -30,10 +27,7 @@ export const project_definition = {
     implementation_dates: null,
     geographic_scope: null,
     interoperability_links: [],
-    interoperability_standards: {
-        standard: [],
-        custom: undefined
-    },
+    interoperability_standards: [],
     wiki: '',
     repository: '',
     mobile_application: '',

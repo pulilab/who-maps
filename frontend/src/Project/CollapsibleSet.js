@@ -102,11 +102,11 @@ class CollapsibleSet {
         const field = this.findField(key);
         if (this.checkboxChecked(t, key)) {
             remove(field, item => {
-                return item === t;
+                return item === t.id;
             });
         }
         else {
-            field.push(t);
+            field.push(t.id);
         }
     }
 
@@ -115,7 +115,7 @@ class CollapsibleSet {
             return false;
         }
         const field = this.findField(key);
-        return field && field.length ? field.some(f => f.id === t.id) : false;
+        return field && field.length ? field.some(f => f === t.id) : false;
     }
 
     printDate(date) {

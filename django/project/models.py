@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 
-from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet
 from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
@@ -164,6 +164,11 @@ class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         verbose_name_plural = 'Digital Strategies'
 
 
+class HSCChallengeQuerySet(ActiveQuerySet):
+    def get_names_for_ids(self, ids):
+        return self.filter(id__in=ids).only('name', 'challenge')
+
+
 class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     challenge = models.CharField(max_length=512)
 
@@ -173,6 +178,8 @@ class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta:
         verbose_name_plural = 'Health Categories'
         ordering = ['name', 'challenge']
+
+    objects = HSCChallengeQuerySet.as_manager()
 
 
 class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):

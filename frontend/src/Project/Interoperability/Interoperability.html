@@ -21,8 +21,7 @@
     </md-input-container>
 
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
-      <md-checkbox ng-init="vm.project.interoperability_links[$index] = link"
-                   md-no-ink aria-label=""
+      <md-checkbox md-no-ink aria-label=""
                    ng-model="vm.project.interoperability_links[$index].selected"
                    class="md-primary" flex>
         {{link.pre}}{{link.name}}
