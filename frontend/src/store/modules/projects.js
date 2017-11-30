@@ -120,7 +120,7 @@ export const getUserProjects = state => {
 };
 
 export const getUserDefaultProject = state => {
-    const pp = state ? getPublishedProjects(state) : null;
+    const pp = state ? getUserProjects(state) : null;
     return pp && pp[0] ? '' + pp[0].id : null;
 };
 
