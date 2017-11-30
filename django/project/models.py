@@ -14,18 +14,18 @@ class ProjectManager(models.Manager):
     use_in_migrations = True
 
     def owner_of(self, user):
-        return self.get_queryset().filter(team=user.userprofile)
+        return self.filter(team=user.userprofile)
 
     def viewer_of(self, user):
-        return self.get_queryset().filter(viewers=user.userprofile)
+        return self.filter(viewers=user.userprofile)
 
     def member_of(self, user):
-        return self.get_queryset().filter(Q(team=user.userprofile)
+        return self.filter(Q(team=user.userprofile)
                                           | Q(viewers=user.userprofile)).distinct().order_by('id')
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
-        return self.get_queryset().filter(data__organisation=organisation_id)
+        return self.filter(data__organisation=organisation_id)
 
     def published_only(self):
         return self.exclude(public_id='')
