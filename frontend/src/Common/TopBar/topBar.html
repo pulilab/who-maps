@@ -94,12 +94,13 @@
             <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
           </div>
         </md-menu-item>
-        <md-menu-divider></md-menu-divider>
         <md-menu-item>
-          <md-button>
-            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>Role: {{vm.writeUserRole()}}
-          </md-button>
+          <div class="user-role">
+            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
+            <span>Role: {{vm.writeUserRole()}}</span>
+          </div>
         </md-menu-item>
+        <md-menu-divider></md-menu-divider>
         <md-menu-item>
           <md-button ui-sref="editProfile">
             <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>Edit my Profile

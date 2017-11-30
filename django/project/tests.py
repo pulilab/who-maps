@@ -260,6 +260,17 @@ class ProjectTests(SetupTests):
         self.assertIn("platforms", response.json())
         self.assertEqual(response.json()['platforms'][0]['id'][0], 'This field is required.')
 
+    def test_create_new_project_with_platform_empty_array(self):
+        url = reverse("project-create")
+        data = copy.deepcopy(self.project_data)
+        new_data = {
+            "name": "Test Project91",
+            "platforms": []
+        }
+        data.update(new_data)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+
     def test_create_new_project_with_platform_strategies_missing(self):
         url = reverse("project-create")
         data = copy.deepcopy(self.project_data)
@@ -927,6 +938,45 @@ class ProjectDraftTests(SetupTests):
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("implementing_partners", response.json()['draft'])
+
+    def test_create_project_empty_partial_nld(self):
+        url = reverse("project-create")
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(name='Draft Proj 3', national_level_deployment=None)
+        response = self.test_user_client.post(url, data, format="json")
+        project_id = response.json()['id']
+        self.assertEqual(response.status_code, 201)
+        self.assertIsNone(response.json()['draft']['national_level_deployment'])
+        self.assertIsNone(Project.objects.get(id=project_id).draft['national_level_deployment'])
+
+        data.update(name='Draft Proj 4', national_level_deployment={'clients': 0, 'facilities': 10})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {'national_level_deployment': {'health_workers': ['This field is required.']}})
+
+        data.update(name='Draft Proj 5', national_level_deployment={'clients': None, 'facilities': 10})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'national_level_deployment': {
+            'clients': ['This field may not be null.'],
+            'health_workers': ['This field is required.']}})
+
+        data.update(name='Draft Proj 6',
+                    national_level_deployment={'clients': 80, 'facilities': 10, 'health_workers': 3})
+        response = self.test_user_client.post(url, data, format="json")
+        project_id = response.json()['id']
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['draft']['national_level_deployment'],
+                         {'clients': 80, 'health_workers': 3, 'facilities': 10})
+
+        url = reverse("project-publish", kwargs={"pk": project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(name='Proj 6', national_level_deployment=None)
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.json()['draft']['national_level_deployment'])
+        self.assertIsNone(Project.objects.get(id=project_id).draft['national_level_deployment'])
 
 
 class PermissionTests(SetupTests):
