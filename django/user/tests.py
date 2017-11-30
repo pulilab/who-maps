@@ -250,6 +250,24 @@ class UserProfileTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.json().get("country"), "updated country")
 
+    def test_user_profile_update_with_empty_values(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        data['country'] = None
+        data['organisation'] = None
+        data['name'] = ''
+
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+
+        self.assertEqual(response.json(),
+                         {'country': ['This field may not be null.'],
+                          'organisation': ['This field may not be null.'],
+                          'name': ['This field may not be blank.']})
+
     def test_create_org(self):
         url = reverse("organisation-list")
         data = {
