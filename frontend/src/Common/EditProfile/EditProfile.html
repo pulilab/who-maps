@@ -42,10 +42,10 @@
             form="vm.editProfileForm">
         </organisation-autocomplete>
 
-        <div  class="countries" ng-class="{error: vm.checkErrors('country')}">
+        <div class="countries" ng-class="{error: vm.checkErrors('country')}">
           <ssmenu
               ng-disabled="vm.editMode"
-              ng-required="vm.sentForm"
+              required
               name="country"
               on-close-callback="vm.countryCloseCallback"
               option-label="name"

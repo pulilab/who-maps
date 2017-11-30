@@ -39,7 +39,6 @@ class EditProfileController  {
 
     initialization() {
         this.dataLoaded = false;
-        this.sentForm = false;
         this.handleDataLoad();
     }
 
@@ -81,7 +80,6 @@ class EditProfileController  {
 
 
     async save() {
-        this.sentForm = true;
         if (this.editProfileForm.$valid && this.userProfile.organisation) {
             try {
                 await this.saveProfile(this.userProfile);
