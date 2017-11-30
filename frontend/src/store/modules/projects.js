@@ -27,6 +27,7 @@ import {
     handleInteroperabilityLinks,
     extractIdFromObjects,
     retainOnlyIds,
+    handleNationalLevelCoverage,
     fieldToConvertToObject,
     dashFieldConvertToObject
 } from '../project_utils';
@@ -526,7 +527,8 @@ function processForm(form) {
         ...parseOutInteroperabilityLinks(form),
         coverageType: undefined,
         platforms: parsePlatformCollection(form),
-        ...extractIdFromObjects(form)
+        ...extractIdFromObjects(form),
+        ...handleNationalLevelCoverage(form)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };

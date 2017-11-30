@@ -244,3 +244,16 @@ export function retainOnlyIds(form) {
     });
     return result;
 }
+
+export function handleNationalLevelCoverage({ national_level_deployment }) {
+    const n = { ...national_level_deployment };
+    if (isNil(n.clients) && isNil(n.health_workers) && isNil(n.facilities)) {
+        return { national_level_deployment: undefined };
+    }
+    n.clients = isNil(n.clients) ? 0 : n.clients;
+    n.health_workers = isNil(n.health_workers) ? 0 : n.health_workers;
+    n.facilities = isNil(n.facilities) ? 0 : n.facilities;
+    return { national_level_deployment: n };
+
+
+}
