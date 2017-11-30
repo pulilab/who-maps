@@ -14,18 +14,21 @@ class ProjectManager(models.Manager):
     use_in_migrations = True
 
     def owner_of(self, user):
-        return self.get_queryset().filter(team=user.userprofile)
+        return self.filter(team=user.userprofile)
 
     def viewer_of(self, user):
-        return self.get_queryset().filter(viewers=user.userprofile)
+        return self.filter(viewers=user.userprofile)
 
     def member_of(self, user):
-        return self.get_queryset().filter(Q(team=user.userprofile)
-                                          | Q(viewers=user.userprofile)).distinct().order_by('id')
+        return self.filter(Q(team=user.userprofile)
+                           | Q(viewers=user.userprofile)).distinct().order_by('id')
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
-        return self.get_queryset().filter(data__organisation=organisation_id)
+        return self.filter(data__organisation=organisation_id)
+
+    def published_only(self):
+        return self.exclude(public_id='')
 
 
 class Project(ExtendedModel):
@@ -97,7 +100,7 @@ class Project(ExtendedModel):
 
         extra_data = dict(
             id=self.pk,
-            name=self.name,
+            name=self.draft.get('name', '') if draft_mode else self.name,
             organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
             country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,

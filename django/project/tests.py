@@ -470,6 +470,16 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
+        nameslist = [x.challenge for x in HSCChallenge.objects.get_names_for_ids(self.project_data['hsc_challenges'])]
+        self.assertEqual(response.json()[0].get("hsc_challenges"), nameslist)
+        nameslist = [x.name for x in HealthFocusArea.objects.get_names_for_ids(
+            self.project_data['health_focus_areas'])]
+        self.assertEqual(response.json()[0].get("health_focus_areas"), nameslist)
+        nameslist = [x.name for x in HISBucket.objects.get_names_for_ids(self.project_data['his_bucket'])]
+        self.assertEqual(response.json()[0].get("his_bucket"), nameslist)
+        nameslist = [x.name for x in TechnologyPlatform.objects.get_names_for_ids(
+            [x['id'] for x in self.project_data['platforms']])]
+        self.assertEqual(response.json()[0].get("platforms"), nameslist)
         self.assertEqual(len(response.json()), 2)
 
     def test_retrieve_project_list_by_country_all(self):
@@ -486,12 +496,34 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, 200)
 
+        # This will stay as draft
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project3"
+        project_data['organisation'] = str(Organisation.objects.create(name="org3").id)
+
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
         url = reverse("project-country-list", kwargs={"country_id": self.country_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
         self.assertEqual(response.json()[1].get("name"), "Test Project2")
+
+    def test_retrieve_project_exclude_draft(self):
+        project_data = copy.copy(self.project_data)
+        project_data['name'] = "Test Project2"
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("project-country-list", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0].get("name"), "Test Project1")
+        self.assertEqual(len(response.json()), 1)
 
     def test_retrieve_project_list_all_without_country(self):
         url = reverse("project-all-list")
@@ -938,6 +970,45 @@ class ProjectDraftTests(SetupTests):
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("implementing_partners", response.json()['draft'])
+
+    def test_create_project_empty_partial_nld(self):
+        url = reverse("project-create")
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(name='Draft Proj 3', national_level_deployment=None)
+        response = self.test_user_client.post(url, data, format="json")
+        project_id = response.json()['id']
+        self.assertEqual(response.status_code, 201)
+        self.assertIsNone(response.json()['draft']['national_level_deployment'])
+        self.assertIsNone(Project.objects.get(id=project_id).draft['national_level_deployment'])
+
+        data.update(name='Draft Proj 4', national_level_deployment={'clients': 0, 'facilities': 10})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {'national_level_deployment': {'health_workers': ['This field is required.']}})
+
+        data.update(name='Draft Proj 5', national_level_deployment={'clients': None, 'facilities': 10})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'national_level_deployment': {
+            'clients': ['This field may not be null.'],
+            'health_workers': ['This field is required.']}})
+
+        data.update(name='Draft Proj 6',
+                    national_level_deployment={'clients': 80, 'facilities': 10, 'health_workers': 3})
+        response = self.test_user_client.post(url, data, format="json")
+        project_id = response.json()['id']
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['draft']['national_level_deployment'],
+                         {'clients': 80, 'health_workers': 3, 'facilities': 10})
+
+        url = reverse("project-publish", kwargs={"pk": project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(name='Proj 6', national_level_deployment=None)
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.json()['draft']['national_level_deployment'])
+        self.assertIsNone(Project.objects.get(id=project_id).draft['national_level_deployment'])
 
 
 class PermissionTests(SetupTests):

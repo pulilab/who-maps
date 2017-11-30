@@ -31,7 +31,9 @@ class LinechartController {
 
     onDestroy() {
         this.EE.removeListener('dashResized', this.resizeTick);
-        this.unsubscribe();
+        if (this.unsubscribe) {
+            this.unsubscribe();
+        }
     }
 
     mapData(state) {

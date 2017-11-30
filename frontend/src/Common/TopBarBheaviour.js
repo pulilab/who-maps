@@ -31,7 +31,7 @@ class TopBar {
     }
 
     showCountryLevelViewButton() {
-        return this.userModel.token;
+        return this.hasProfile();
     }
 
     showGoToMyDashboardButton() {

@@ -1,6 +1,6 @@
 <div class="project-section project-navigation" md-whiteframe="2">
   <div class="section-title md-title">Navigation</div>
-  <div class="edit-mode-switch" layout="row" layout-align="start center">
+  <div class="edit-mode-switch" layout="row" layout-align="start center" ng-if="vm.state.current.name === 'editProject'">
     <div>Switch view:</div>
     <div layout="row" layout-align="stretch">
       <div>
@@ -49,16 +49,19 @@
     </ul>
   </div>
   <div layout="column" class="edit-buttons" ng-if="!vm.readOnlyMode">
-    <div class="primary-buttons" ng-if-start="vm.state.params.editMode === 'draft'">
+    <div class="primary-buttons" ng-if-start="vm.state.params.editMode === 'draft' && vm.state.current.name === 'editProject'">
       <md-button type="submit" class="md-primary md-raised">Publish</md-button>
     </div>
     <div class="secondary-buttons">
       <md-button class="md-primary" ng-click="vm.saveDraft($event)">Save draft</md-button>
     </div>
-    <div ng-if-end class="secondary-buttons">
-      <md-button class="md-warn">Discard draft</md-button>
+    <div ng-if-end class="secondary-buttons" ng-show="vm.project.hasPublishedVersion">
+      <md-button class="md-warn" ng-click="vm.discardDraft($event)">Discard draft</md-button>
     </div>
-    <div class="secondary-buttons" ng-if="vm.state.params.editMode === 'publish'">
+    <div class="primary-buttons" ng-if="vm.state.current.name === 'newProject'">
+      <md-button class="md-primary md-raised" ng-click="vm.saveDraft($event)">Save draft</md-button>
+    </div>
+    <div class="secondary-buttons" ng-if="vm.state.params.editMode === 'publish' || vm.state.current.name === 'newProject'">
       <md-button class="md-primary" ui-sref="dashboard">Go to dashboard</md-button>
     </div>
   </div>

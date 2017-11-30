@@ -35,7 +35,6 @@ class ProjectController  {
         let team = null;
         let viewers = null;
         let countryFields = null;
-
         if (this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
@@ -50,7 +49,7 @@ class ProjectController  {
                 countryFields = ProjectModule.getProjectCountryFields(state)(true, !publishMode);
             }
             else {
-                project = publishMode ? ProjectModule.getCurrentPublishedProjectForEditing(state) :
+                project = publishMode ? ProjectModule.getCurrentPublished(state) :
                   ProjectModule.getCurrentDraftProjectForEditing(state);
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
@@ -63,6 +62,7 @@ class ProjectController  {
         }
         const readOnlyMode = publishMode ||
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
         return {
             newProject,
             publishMode,
@@ -82,6 +82,7 @@ class ProjectController  {
     eventListeners() {
         this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
         this.EE.on('projectSaveDraft', this.saveDraft, this);
+        this.EE.on('projectDiscardDraft', this.discardDraft, this);
     }
 
     onInit() {
@@ -148,7 +149,6 @@ class ProjectController  {
                     ok: 'Close',
                     theme: 'alert'
                 });
-
                 this.$mdDialog.show(alert);
             }
         }
@@ -169,7 +169,6 @@ class ProjectController  {
                     reload: false
                 });
             }
-
         }
         catch (e) {
             console.log(e);
@@ -177,6 +176,23 @@ class ProjectController  {
         }
     }
 
+    async discardDraft() {
+        const confirm = this.$mdDialog.confirm({
+            title: 'Attention',
+            textContent: 'The current draft will be overwritten by the published version',
+            ok: 'Ok',
+            cancel: 'Cancel',
+            theme: 'alert'
+        });
+        try {
+            await this.$mdDialog.show(confirm);
+            await this.$ngRedux.dispatch(ProjectModule.discardDraft());
+            this.showToast('Draft discarded');
+        }
+        catch (e) {
+            this.showToast('Discard draft process canceled');
+        }
+    }
 
     async focusInvalidField() {
         this.timeout(()=>{

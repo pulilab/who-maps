@@ -26,7 +26,10 @@ import {
     convertIdArrayToObjectArray,
     handleInteroperabilityLinks,
     extractIdFromObjects,
-    retainOnlyIds
+    retainOnlyIds,
+    handleNationalLevelCoverage,
+    fieldToConvertToObject,
+    dashFieldConvertToObject
 } from '../project_utils';
 
 
@@ -68,13 +71,47 @@ export const getDraftedProjects = state => {
     return [];
 };
 
+export const getFlatProjectStructure = state => {
+    const structure = state.projects.structure;
+    if (structure) {
+        let strategies = [];
+        structure.strategies.forEach(g => {
+            g.subGroups.forEach(sg => {
+                strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
+            });
+        });
+        let health_focus_areas = [];
+        structure.health_focus_areas.forEach(hfa => {
+            health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
+        });
+        let hsc_challenges = [];
+        structure.hsc_challenges.forEach(hsc => {
+            hsc_challenges = [...hsc_challenges, ...hsc.challenges];
+        });
+        return { ...structure, strategies, health_focus_areas, hsc_challenges };
+    }
+    return {};
+};
+
+export const getProjectStructure = state => {
+    const structure = state.projects.structure;
+    return cloneDeep(structure);
+};
+
 export const getUserProjects = state => {
+    const structure = getFlatProjectStructure(state);
     if (state.projects.list) {
         const list = state.projects.list.map(p => {
             const public_id = p.public_id;
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            p = { ...p, ...isMemberOrViewer(state, p), isPublished, public_id };
+            p = {
+                ...p,
+                ...isMemberOrViewer(state, p),
+                isPublished,
+                public_id,
+                ...convertIdArrayToObjectArray(p, structure, dashFieldConvertToObject)
+            };
             return p;
         });
         return sortBy(list, 'id');
@@ -82,19 +119,13 @@ export const getUserProjects = state => {
     return [];
 };
 
-
 export const getUserDefaultProject = state => {
-    const pp = state ? getPublishedProjects(state) : null;
+    const pp = state ? getUserProjects(state) : null;
     return pp && pp[0] ? '' + pp[0].id : null;
 };
 
 export const getEmptyProject = () => {
     return { ...project_definition };
-};
-
-export const getProjectStructure = state => {
-    const structure = state.projects.structure;
-    return cloneDeep(structure);
 };
 
 export const getVanillaProject = state => {
@@ -104,8 +135,11 @@ export const getVanillaProject = state => {
     if (country) {
         project.country = country.id;
     }
+    if (structure) {
+        project.interoperability_links = structure.interoperability_links;
+    }
     project.organisation = UserModule.getProfile(state).organisation;
-    return { ...project, interoperability_links: structure.interoperability_links };
+    return { ...project };
 };
 
 export const getCurrentProjectIfExist = state => {
@@ -140,16 +174,48 @@ function convertCountryFieldsAnswer({ fields }) {
     });
 }
 
+export const parseProjectForViewMode = (state, project) => {
+    const structure = getFlatProjectStructure(state);
+    const country = CountryModule.getCountry(state, project.country);
+    const secondPhaseCheck = [{ key: 'platforms.strategies', structure_key: 'strategies' }];
+    project =  {
+        ...project,
+        country_name: country ? country.name : '',
+        ...convertIdArrayToObjectArray(project, structure, dashFieldConvertToObject),
+        coverageType: setCoverageType(project.coverage, project.national_level_deployment)
+    };
+    return {
+        ...project,
+        ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck)
+    };
+};
+
 export const getCurrentPublished = state => {
-    return getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    if (project) {
+        return parseProjectForViewMode(state, project);
+    }
+    return undefined;
 };
 
 export const getCurrentDraft = state => {
     const draft = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
     if (draft) {
-        draft.hasPublishedVersion = !!getCurrentPublished(state);
+        return {
+            ...draft,
+            hasPublishedVersion: !!getPublishedProjects(state).find(p=> p.id === state.projects.currentProject)
+        };
     }
-    return draft;
+    return undefined;
+};
+
+
+export const getCurrentDraftInViewMode = state => {
+    const draft = getCurrentDraft(state);
+    if (draft) {
+        return parseProjectForViewMode(state, draft);
+    }
+    return undefined;
 };
 
 export const getProjectCountryFields = state => (isNewProject, isDraft) => {
@@ -159,22 +225,6 @@ export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields : countryFields;
     return [...result];
 };
-
-export const getFlatProjectStructure = state => {
-    const structure = state.projects.structure;
-    let strategies = [];
-    structure.strategies.forEach(g => {
-        g.subGroups.forEach(sg => {
-            strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
-        });
-    });
-    let health_focus_areas = [];
-    structure.health_focus_areas.forEach(hfa => {
-        health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
-    });
-    return { ...structure, strategies, health_focus_areas };
-};
-
 
 const getCurrentProjectForEditing = (state, data) => {
     const structure = getFlatProjectStructure(state);
@@ -190,7 +240,7 @@ const getCurrentProjectForEditing = (state, data) => {
     data = {
         ...data,
         ...isMemberOrViewer(state, data),
-        ...convertIdArrayToObjectArray(data, structure),
+        ...convertIdArrayToObjectArray(data, structure, fieldToConvertToObject),
         ...handleInteroperabilityLinks(data, structure)
     };
 
@@ -199,10 +249,8 @@ const getCurrentProjectForEditing = (state, data) => {
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
-    const project = getCurrentPublished(state);
+    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
-        const country = CountryModule.getCountry(state, project.country);
-        project.country_name = country ? country.name : '';
         return getCurrentProjectForEditing(state, project);
     }
     return undefined;
@@ -479,14 +527,15 @@ function processForm(form) {
         ...parseOutInteroperabilityLinks(form),
         coverageType: undefined,
         platforms: parsePlatformCollection(form),
-        ...extractIdFromObjects(form)
+        ...extractIdFromObjects(form),
+        ...handleNationalLevelCoverage(form)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
     return removeKeysWithoutValues(form);
 }
 
-async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state, toUpdate) {
+async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state, toUpdate, method) {
     const user = UserModule.getProfile(state).id;
     const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
     const twPromise = saveTeamViewers(data, team, viewers);
@@ -496,7 +545,9 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
-    dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+    if (method === 'put') {
+        dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+    }
     dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
     dispatch(CountryModule.loadCurrentCountryProjects());
     dispatch(CountryModule.loadCurrentCountryDistrictsProject());
@@ -510,12 +561,23 @@ export function saveDraft(form, team, viewers, countryFields) {
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
             const { data } = await axios[method](url, form);
-            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'draft');
+            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'draft', method);
         }
         catch (e) {
             console.log(e);
             return Promise.reject(e);
         }
+    };
+}
+
+export function discardDraft() {
+    return async (dispatch, getState) => {
+        const published = getCurrentPublishedProjectForEditing(getState());
+        const form = processForm(published);
+        const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
+        dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
+        dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+        return Promise.resolve(data);
     };
 }
 

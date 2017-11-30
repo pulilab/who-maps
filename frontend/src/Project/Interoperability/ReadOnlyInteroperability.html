@@ -14,7 +14,10 @@
         <li
           ng-repeat="link in vm.structure.interoperability_links"
           ng-show="vm.project.interoperability_links[$index].selected">
-          {{link.name}}:<br /> {{vm.project.interoperability_links[$index].link}}
+          {{link.name}}:<br />
+          <a ng-href="{{vm.fixUrl(vm.project.interoperability_links[$index].link)}}" target="_blank">
+            {{vm.project.interoperability_links[$index].link}}
+          </a>
         </li>
       </ul>
     </div>
@@ -24,9 +27,8 @@
 
     <div>
       <ul>
-        <li ng-repeat="standard in vm.structure.interoperability_standards"
-            ng-show="vm.checkboxChecked(standard, 'interoperability_standards')">
-            {{standard}}
+        <li ng-repeat="standard in vm.project.interoperability_standards">
+          {{standard.name}}
         </li>
       </ul>
     </div>

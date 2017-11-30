@@ -16,7 +16,7 @@
         <h6>Digital Health Interventions</h6>
         <div layout="row">
           <ul>
-            <li ng-repeat="s in platform.strategies">{{s}}</li>
+            <li ng-repeat="s in platform.strategies">{{s.name}}</li>
           </ul>
         </div>
       </div>
@@ -29,7 +29,7 @@
 
     <div>
       <ul>
-        <li ng-repeat="hf in vm.project.health_focus_areas">{{hf}}</li>
+        <li ng-repeat="hf in vm.project.health_focus_areas">{{hf.name}}</li>
       </ul>
     </div>
 
@@ -37,7 +37,7 @@
 
     <div>
       <ul>
-        <li ng-repeat="hsc in vm.project.hsc_challenges">{{hsc}}</li>
+        <li ng-repeat="hsc in vm.project.hsc_challenges">{{hsc.challenge}}</li>
       </ul>
     </div>
 
@@ -45,7 +45,7 @@
 
     <div>
       <ul>
-        <li ng-repeat="his in vm.project.his_bucket">{{his}}</li>
+        <li ng-repeat="his in vm.project.his_bucket">{{his.name}}</li>
       </ul>
     </div>
 
@@ -131,7 +131,7 @@
 
     <div>
       <ul>
-        <li ng-repeat="partner in vm.project.implementing_partners">{{partner.value}}</li>
+        <li ng-repeat="partner in vm.project.implementing_partners">{{partner}}</li>
       </ul>
     </div>
 
@@ -139,7 +139,7 @@
 
     <div>
       <ul>
-        <li ng-repeat="donor in vm.project.donors">{{donor.value}}</li>
+        <li ng-repeat="donor in vm.project.donors">{{donor}}</li>
       </ul>
     </div>
 

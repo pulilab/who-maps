@@ -9,8 +9,20 @@ import moment from 'moment';
 export const fieldsWithCustomValue =  ['interoperability_standards', 'licenses'];
 export const fieldsToConvertToObjectArray = ['donors', 'implementing_partners'];
 export const fieldsToMapWithId = ['health_focus_areas'];
-export const fieldToConvertToObject = ['platforms.strategies', 'health_focus_areas'];
 export const fieldToForceToInt = ['his_bucket', 'hsc_challenges'];
+
+export const fieldToConvertToObject = [
+    { key: 'platforms.strategies', structure_key: 'strategies' },
+    { key: 'health_focus_areas', structure_key: 'health_focus_areas' }
+];
+export const dashFieldConvertToObject = [
+    { key: 'health_focus_areas', structure_key: 'health_focus_areas' },
+    { key: 'platforms', structure_key: 'technology_platforms' },
+    { key: 'licenses', structure_key: 'licenses' },
+    { key: 'hsc_challenges', structure_key: 'hsc_challenges' },
+    { key: 'his_bucket', structure_key: 'his_bucket' },
+    { key: 'interoperability_standards', structure_key: 'interoperability_standards' }
+];
 
 export const getTodayString = () => {
     const today = new Date();
@@ -182,28 +194,35 @@ export function parseOutInteroperabilityLinks(form) {
 }
 
 
-function mapObjectToStructure(toMap, structure, field) {
-    return toMap.map(f => structure[field].find(sf => sf.id === f))
-              .filter(f =>f);
+function mapObjectToStructure(toMap, structure, field, structure_key) {
+    return toMap.map(f => {
+        const isInteger = !Number.isNaN(parseInt(f, 10));
+        if (isInteger) {
+            return structure[structure_key].find(sf => sf.id === f);
+        }
+        return { ...f, ...structure[structure_key].find(sf => sf.id === f.id) };
+    }).filter(f =>f);
 }
 
-export function convertIdArrayToObjectArray(form, structure) {
+export function convertIdArrayToObjectArray(form, structure, fieldToConvert) {
     const result = {};
-    fieldToConvertToObject.forEach(field => {
-        field = field.split('.');
+    fieldToConvert.forEach(field => {
+        const structure_key = field.structure_key;
+        field = field.key.split('.');
         if (field.length === 2) {
             const parent = field[0];
             field = field [1];
             result[parent] = form[parent].map(p => {
                 p = { ...p  };
                 if (p[field]) {
-                    p[field] = mapObjectToStructure(p[field], structure, field);
+                    p[field] = mapObjectToStructure(p[field], structure, field, structure_key);
                 }
                 return p;
             });
         }
         else if (field.length === 1) {
-            result[field] = mapObjectToStructure(form[field], structure, field);
+            field = field[0];
+            result[field] = mapObjectToStructure(form[field], structure, field, structure_key);
         }
     });
     return result;
@@ -221,7 +240,20 @@ export function handleInteroperabilityLinks(data, structure) {
 export function retainOnlyIds(form) {
     const result = {};
     fieldToForceToInt.forEach(key => {
-        result[key] = form[key].filter(i => i.length && i === +i);
+        result[key] = form[key].filter(i => !Number.isNaN(parseInt(i, 10)));
     });
     return result;
+}
+
+export function handleNationalLevelCoverage({ national_level_deployment }) {
+    const n = { ...national_level_deployment };
+    if (isNil(n.clients) && isNil(n.health_workers) && isNil(n.facilities)) {
+        return { national_level_deployment: undefined };
+    }
+    n.clients = isNil(n.clients) ? 0 : n.clients;
+    n.health_workers = isNil(n.health_workers) ? 0 : n.health_workers;
+    n.facilities = isNil(n.facilities) ? 0 : n.facilities;
+    return { national_level_deployment: n };
+
+
 }

@@ -145,20 +145,24 @@
                                         <span flex>
                                           <md-icon class="material-icons">playlist_add_check</md-icon>
                                           License</span>
-                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
+                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses">
+                      <md-chip-template>
+                        <span>{{ $chip.name }}</span>
+                      </md-chip-template>
+                    </md-chips>
                   </div>
                 </div>
 
                 <div class="lower">
 
                   <span>Code documentations & download:</span>
-                  <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.repository)}}" target="_blank">{{vm.projectData.repository}}</a>
 
                   <span>Download applications:</span>
-                  <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.mobile_application)}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
                   <span>Link to wiki page:</span>
-                  <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.wiki)}}" target="_blank">{{vm.projectData.wiki}}</a>
                 </div>
               </div>
             </md-tab>
@@ -180,7 +184,7 @@
                       <h4>{{link.link}}</h4>
                     </div>
                   </div>
-                  <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
+                  <a ng-if="link.link" ng-href="{{vm.fixUrl(link.link)}}" target="_blank" flex>
                     <md-icon>launch</md-icon>
                   </a>
                 </md-card>
@@ -194,7 +198,7 @@
                   layout-align="space-around stretch">
 
                   <div flex class="res-text" layout="column" layout-align="space-around start">
-                    <h4>{{standard}}</h4>
+                    <h4>{{standard.name}}</h4>
                   </div>
                 </md-card>
 
@@ -221,7 +225,7 @@
           <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
         </div>
 
-        <md-tabs ng-if="vm.profile.name" md-border-bottom md-dynamic-height class="perf-tab">
+        <md-tabs ng-if="!vm.showEmpty" md-border-bottom md-dynamic-height class="perf-tab">
 
           <md-tab label="geographical view">
             <countrymap

@@ -4,8 +4,8 @@
 
     <div class="text-container" layout="column">
 
-      <div ng-show="vm.project.isMember" ng-class="{'my-star':vm.project.isMember}"><md-icon>grade</md-icon></div>
-      <div ng-show="vm.project.isViewer && !vm.project.isMember" ng-class="{'my-eye': vm.project.isViewer}"><md-icon>visibility</md-icon></div>
+      <div ng-show="vm.project.isMember && vm.showVersion" ng-class="{'my-star':vm.project.isMember}"><md-icon>grade</md-icon></div>
+      <div ng-show="vm.project.isViewer && !vm.project.isMember && vm.showVersion" ng-class="{'my-eye': vm.project.isViewer}"><md-icon>visibility</md-icon></div>
 
       <div class="upper" layout="row">
         <div class="basic" flex layout="column">
@@ -18,9 +18,9 @@
                     </span>
           <span class="static">Donors</span>
         </div>
-        <div class="version">
+        <div class="version" ng-if="vm.showVersion">
           <span class="nr" ng-show="vm.isPublished">
-              {{vm.project.version}}
+              {{vm.project.last_version}}
           </span>
           <span class="nr" ng-hide="vm.isPublished">
               Draft

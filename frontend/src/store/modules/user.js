@@ -109,8 +109,18 @@ export function saveProfile(profile) {
 export function doLogout() {
     return dispatch => {
         storage.clear();
-        dispatch({ type: 'CLEAR_USER_PROJECTS' });
-        dispatch({ type: 'UNSET_USER' });
+        try {
+            dispatch({ type: 'CLEAR_USER_PROJECTS' });
+        }
+        catch (e) {
+            console.warn(e);
+        }
+        try {
+            dispatch({ type: 'UNSET_USER' });
+        }
+        catch (e) {
+            console.warn(e);
+        }
     };
 }
 

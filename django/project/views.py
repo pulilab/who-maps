@@ -40,14 +40,14 @@ class ProjectPublicViewSet(ViewSet):
 
         # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
 
-        projects = Project.objects.filter(data__country=int(country_id))
+        projects = Project.projects.published_only().filter(data__country=int(country_id))
 
         # get district names
         district_names = set()
 
         def district_name_finder(projects):
             for project in projects:
-                for district in project.data.get('coverage'):
+                for district in project.data.get('coverage', []):
                     district_names.add(district.get('district'))
 
         district_name_finder(projects)
@@ -58,7 +58,7 @@ class ProjectPublicViewSet(ViewSet):
         def filter_project_by_district_name(districts, projects):
             for district_name in districts:
                 for project in projects:
-                    for district in project.data.get('coverage'):
+                    for district in project.data.get('coverage', []):
                         if district.get('district') == district_name:
                             result_dict[district_name].append({
                                 "id": project.id,
@@ -75,7 +75,13 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
-        projects = Project.objects.all()  # lazy QuerySet
+        def get_strategies(platforms):
+            ds_names = []
+            for platform in platforms:
+                ds_names.extend([x.name for x in DigitalStrategy.objects.get_names_for_ids(platform['strategies'])])
+            return list(set(ds_names))
+
+        projects = Project.projects.published_only()  # lazy QuerySet
 
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
@@ -95,12 +101,16 @@ class ProjectPublicViewSet(ViewSet):
                 "implementation_overview": p.data.get('implementation_overview'),
                 "implementing_partners": p.data.get('implementing_partners'),
                 "implementation_dates": p.data.get('implementation_dates'),
-                "health_focus_areas": p.data.get('health_focus_areas'),
-                "hsc_challenges": p.data.get('hsc_challenges'),
-                "his_bucket": p.data.get('his_bucket'),
+                "health_focus_areas": [x.name for x in HealthFocusArea.objects.get_names_for_ids(
+                    p.data.get("health_focus_areas", []))],
+                "digital_strategies": get_strategies(p.data.get("platforms", [])),
+                "hsc_challenges": [x.challenge for x in HSCChallenge.objects.get_names_for_ids(
+                    p.data.get("hsc_challenges", []))],
+                "his_bucket": [x.name for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))],
                 "geographic_scope": p.data.get('geographic_scope'),
-                "platforms": p.data.get('platforms'), }], projects, [])
-
+                "platforms": [x.name for x in TechnologyPlatform.objects.get_names_for_ids(
+                    [x['id'] for x in p.data.get("platforms", [])])],
+            }], projects, [])
         return Response(result_list)
 
     def project_structure(self, request):

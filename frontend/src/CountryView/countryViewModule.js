@@ -11,6 +11,7 @@ function config($stateProvider, $compileProvider) {
       .state(moduleName, {
           url: '/country',
           parent: 'app',
+          profileRequired: true,
           views: {
               main: {
                   template: '<country-view></country-view>'
