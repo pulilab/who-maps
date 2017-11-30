@@ -419,6 +419,37 @@ md-datepicker {
   }
 }
 
+// TODO
+// NASTY hack
+md-virtual-repeat-container {
+  min-width: 500px !important;
+}
+
+ul.md-contact-chips-suggestions {
+  li {
+    .md-contact-suggestion {
+      display: flex;
+      width: 100%;
+
+      > span {
+        flex-flow: row;
+      }
+
+      .md-contact-name {
+        width: 40%;
+
+        .highlight {
+          text-decoration: underline;
+          color: $color-primary;
+        }
+      }
+      .md-contact-email {
+        width: 60%;
+      }
+    }
+  }
+}
+
 // Md-menu
 
 md-menu-content {
