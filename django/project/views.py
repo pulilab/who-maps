@@ -95,11 +95,14 @@ class ProjectPublicViewSet(ViewSet):
                 "implementation_overview": p.data.get('implementation_overview'),
                 "implementing_partners": p.data.get('implementing_partners'),
                 "implementation_dates": p.data.get('implementation_dates'),
-                "health_focus_areas": [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))],
-                "hsc_challenges": [str(x) for x in HSCChallenge.objects.get_names_for_ids(p.data.get("hsc_challenges", []))],
+                "health_focus_areas": [str(x) for x in HealthFocusArea.objects.get_names_for_ids(
+                    p.data.get("health_focus_areas", []))],
+                "hsc_challenges": [str(x) for x in HSCChallenge.objects.get_names_for_ids(
+                    p.data.get("hsc_challenges", []))],
                 "his_bucket": [str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))],
                 "geographic_scope": p.data.get('geographic_scope'),
-                "platforms": [str(x) for x in TechnologyPlatform.objects.get_names_for_ids([x['id'] for x in p.data.get("platforms", [])])],
+                "platforms": [str(x) for x in TechnologyPlatform.objects.get_names_for_ids(
+                    [x['id'] for x in p.data.get("platforms", [])])],
             }], projects, [])
 
         return Response(result_list)
