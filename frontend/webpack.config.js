@@ -28,7 +28,7 @@ const basePlugins = [
     new ExtractTextPlugin({
         filename: '[name].[contenthash].css',
         allChunks: true,
-        disable: true
+        disable: !production
     }),
     new HtmlWebpackPlugin({
         template: 'index.ejs',

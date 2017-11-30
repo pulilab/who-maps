@@ -177,7 +177,6 @@ class PDFExportController {
     }
 
     static pdfExportFactory() {
-        require('./PDFExport.scss');
 
         function pdfExportController() {
             return new PDFExportController();
