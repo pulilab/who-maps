@@ -8,7 +8,7 @@ import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
 import * as ToolkitModule from './toolkit';
-import { getToolkitData } from './toolkit';
+import { getToolkitData, getStructure } from './toolkit';
 
 import {
     convertDate,
@@ -26,7 +26,9 @@ import {
     convertIdArrayToObjectArray,
     handleInteroperabilityLinks,
     extractIdFromObjects,
-    retainOnlyIds
+    retainOnlyIds,
+    fieldToConvertToObject,
+    dashFieldConvertToObject
 } from '../project_utils';
 
 
@@ -68,20 +70,46 @@ export const getDraftedProjects = state => {
     return [];
 };
 
+export const getFlatProjectStructure = state => {
+    const structure = state.projects.structure;
+    let strategies = [];
+    structure.strategies.forEach(g => {
+        g.subGroups.forEach(sg => {
+            strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
+        });
+    });
+    let health_focus_areas = [];
+    structure.health_focus_areas.forEach(hfa => {
+        health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
+    });
+    return { ...structure, strategies, health_focus_areas };
+};
+
+export const getProjectStructure = state => {
+    const structure = state.projects.structure;
+    return cloneDeep(structure);
+};
+
 export const getUserProjects = state => {
+    const structure = getFlatProjectStructure(state);
     if (state.projects.list) {
         const list = state.projects.list.map(p => {
             const public_id = p.public_id;
             const isPublished = !!p.published.name;
             p = isPublished ? { ...p.published } : { ...p.draft };
-            p = { ...p, ...isMemberOrViewer(state, p), isPublished, public_id };
+            p = {
+                ...p,
+                ...isMemberOrViewer(state, p),
+                isPublished,
+                public_id,
+                ...convertIdArrayToObjectArray(p, structure, dashFieldConvertToObject)
+            };
             return p;
         });
         return sortBy(list, 'id');
     }
     return [];
 };
-
 
 export const getUserDefaultProject = state => {
     const pp = state ? getPublishedProjects(state) : null;
@@ -90,11 +118,6 @@ export const getUserDefaultProject = state => {
 
 export const getEmptyProject = () => {
     return { ...project_definition };
-};
-
-export const getProjectStructure = state => {
-    const structure = state.projects.structure;
-    return cloneDeep(structure);
 };
 
 export const getVanillaProject = state => {
@@ -160,22 +183,6 @@ export const getProjectCountryFields = state => (isNewProject, isDraft) => {
     return [...result];
 };
 
-export const getFlatProjectStructure = state => {
-    const structure = state.projects.structure;
-    let strategies = [];
-    structure.strategies.forEach(g => {
-        g.subGroups.forEach(sg => {
-            strategies = [...strategies, ...sg.strategies.map(s => ({ ...s }))];
-        });
-    });
-    let health_focus_areas = [];
-    structure.health_focus_areas.forEach(hfa => {
-        health_focus_areas = [...health_focus_areas, ...hfa.health_focus_areas];
-    });
-    return { ...structure, strategies, health_focus_areas };
-};
-
-
 const getCurrentProjectForEditing = (state, data) => {
     const structure = getFlatProjectStructure(state);
     data.start_date = convertDate(data.start_date);
@@ -190,7 +197,7 @@ const getCurrentProjectForEditing = (state, data) => {
     data = {
         ...data,
         ...isMemberOrViewer(state, data),
-        ...convertIdArrayToObjectArray(data, structure),
+        ...convertIdArrayToObjectArray(data, structure, fieldToConvertToObject),
         ...handleInteroperabilityLinks(data, structure)
     };
 
