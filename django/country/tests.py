@@ -152,8 +152,9 @@ class CountryTests(APITestCase):
             }]
         }
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['fields'], [{'non_field_errors': ["Answer can't be empty"]}])
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['fields'], [
+            {'country': self.country.id, 'type': 1, 'question': 'q2?', 'answer': '', 'project': project.id}])
 
         country_fields_data = {
             "fields": [{
@@ -161,12 +162,13 @@ class CountryTests(APITestCase):
                 "project": project.id,
                 "type": 1,
                 "question": "q2?",
-                "answers": ""
+                "answers": None
             }]
         }
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['fields'], [{'non_field_errors': ["Answer can't be empty"]}])
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['fields'], [
+            {'country': self.country.id, 'type': 1, 'question': 'q2?', 'answer': '', 'project': project.id}])
 
     def test_create_country_fields_missing_question(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
