@@ -27,6 +27,7 @@ import {
     handleInteroperabilityLinks,
     extractIdFromObjects,
     retainOnlyIds,
+    handleNationalLevelCoverage,
     fieldToConvertToObject,
     dashFieldConvertToObject
 } from '../project_utils';
@@ -134,8 +135,11 @@ export const getVanillaProject = state => {
     if (country) {
         project.country = country.id;
     }
+    if (structure) {
+        project.interoperability_links = structure.interoperability_links;
+    }
     project.organisation = UserModule.getProfile(state).organisation;
-    return { ...project, interoperability_links: structure.interoperability_links };
+    return { ...project };
 };
 
 export const getCurrentProjectIfExist = state => {
@@ -523,7 +527,8 @@ function processForm(form) {
         ...parseOutInteroperabilityLinks(form),
         coverageType: undefined,
         platforms: parsePlatformCollection(form),
-        ...extractIdFromObjects(form)
+        ...extractIdFromObjects(form),
+        ...handleNationalLevelCoverage(form)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
