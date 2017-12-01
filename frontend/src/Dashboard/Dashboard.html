@@ -181,7 +181,7 @@
                   <div flex>
                     <div class="res-title">{{link.name}}</div>
                     <div class="res-text">
-                      <h4>{{link.link}}</h4>
+                      <h4>{{vm.structure.interoperability_links[$index].name}} : {{link.link}}</h4>
                     </div>
                   </div>
                   <a ng-if="link.link" ng-href="{{vm.fixUrl(link.link)}}" target="_blank" flex>

@@ -31,6 +31,7 @@ class DashboardModuleController {
         return {
             projects: ProjectModule.getPublishedProjects(state),
             projectData,
+            structure: ProjectModule.getProjectStructure(state),
             rawToolkitData: ToolkitModule.getToolkitData(state),
             axisData: ToolkitModule.getToolkitData(state),
             toolkitVersion: ProjectModule.getToolkitVersion(state),
