@@ -160,6 +160,7 @@ class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         ('Client', 'Client'),
         ('Provider', 'Provider'),
         ('System', 'System'),
+        ('Data service', 'Data service')
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
     parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
