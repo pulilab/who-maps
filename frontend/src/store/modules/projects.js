@@ -301,7 +301,7 @@ export const getCurrentVersionDate = state => {
 };
 
 export const getMapsAxisData = state => {
-    const axis = { ...axisData };
+    const axis = { labels: [...axisData.labels], data: [] };
     const toolkitVersion = getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
@@ -337,12 +337,12 @@ export const getMapsAxisData = state => {
     return axis;
 };
 export const getMapsDomainData = state => {
-    const domains = { ...domainData };
+    const domains =  { labels: [...domainData.labels] };
     const toolkitVersion = getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
-
-    domains.labels.forEach((axis, axInd) => {
+    domainData.labels.forEach((axis, axInd) => {
+        domains[axis] = { labels: [...domainData[axis].labels], data: [] };
         if (toolkitVersion.length > 0) {
             domains[axis].data = toolkitVersion.map(version => {
                 const ret = {};
