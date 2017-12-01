@@ -6,7 +6,7 @@ import { $ngRedux, $scope, $state } from '../testUtilities';
 let controller = null;
 
 
-fdescribe('PlanningAndGuidanceController', () => {
+describe('PlanningAndGuidanceController', () => {
 
     beforeEach(()=> {
         controller = PlanningAndGuidanceController.factory()(null, $state, $ngRedux);
