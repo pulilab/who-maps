@@ -63,20 +63,24 @@ class ImplementationOverview extends CollapsibleSet {
     }
 
     addClearOption(districts) {
-        districts.forEach(p => {
-            if (p.available.indexOf('Clear selection') === -1 && p.district !== undefined) {
-                p.available.unshift('Clear selection');
-            }
-        });
+        if (districts && districts.length> 0) {
+            districts.forEach(p => {
+                if (p.available.indexOf('Clear selection') === -1 && p.district !== undefined) {
+                    p.available.unshift('Clear selection');
+                }
+            });
+        }
     }
 
     clearDistrict(coverage) {
-        for (const cov of coverage) {
-            if (cov.district === 'Clear selection') {
-                cov.district = undefined;
-                cov.health_workers = undefined;
-                cov.facilities = undefined;
-                cov.clients = undefined;
+        if (coverage && coverage.length > 0) {
+            for (const cov of coverage) {
+                if (cov.district === 'Clear selection') {
+                    cov.district = undefined;
+                    cov.health_workers = undefined;
+                    cov.facilities = undefined;
+                    cov.clients = undefined;
+                }
             }
         }
     }

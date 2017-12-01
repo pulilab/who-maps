@@ -143,16 +143,18 @@ class CollapsibleSet {
     }
 
     setAvailableDictOptions(category, options) {
-        const used = category.filter(cat => cat.id);
-        category.forEach(item => {
-            const available = options.filter(p => {
-                return item.id === p.id || used.every(u => u.id !== p.id);
+        if (category && category.length > 0) {
+            const used = category.filter(cat => cat.id);
+            category.forEach(item => {
+                const available = options.filter(p => {
+                    return item.id === p.id || used.every(u => u.id !== p.id);
+                });
+                available.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                });
+                item.available = available;
             });
-            available.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-            });
-            item.available = available;
-        });
+        }
     }
 }
 
