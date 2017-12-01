@@ -86,7 +86,8 @@ class ImplementationOverview extends CollapsibleSet {
     }
 
     removeUnavailableDistricts(districts) {
-        if (districts.length > 0) {
+        if (this.project.coverage &&  this.project.coverage.length > 0
+          && districts && districts.length > 0 ) {
             this.project.coverage.forEach(cov => {
                 if (districts.indexOf(cov.district) === -1) {
                     cov.district = undefined;
