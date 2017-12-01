@@ -220,6 +220,9 @@ export function setCurrentCountryFromCode(code) {
         if (country && country.id) {
             dispatch(setCurrentCountry(country.id, ['landingPage']));
         }
+        else {
+            dispatch({ type: 'UNSET_CURRENT_COUNTRY' });
+        }
     };
 }
 
@@ -239,6 +242,11 @@ export default function system(state = stateDefinition, action) {
     }
     case 'SET_CURRENT_COUNTRY': {
         s.currentCountry = action.country;
+        return Object.assign(state, {}, s);
+    }
+    case 'UNSET_CURRENT_COUNTRY': {
+        s.currentCountry = null;
+        s.currentCountryCoverPage = {};
         return Object.assign(state, {}, s);
     }
     case 'SET_COUNTRY_COVER_DATA': {
