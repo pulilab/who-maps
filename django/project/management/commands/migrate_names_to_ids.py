@@ -43,23 +43,36 @@ class Command(BaseCommand):
         for project in project_qs:
             self.stdout.write('- Working on project {} -'.format(project.id))
 
-            project.data['his_bucket'] = [his_bucket_mapping[bn] for bn in project.data['his_bucket']]
+            project.data['his_bucket'] = [his_bucket_mapping[bn]
+                                          for bn in project.data['his_bucket']
+                                          if not isinstance(bn, int)]
 
-            project.data['hsc_challenges'] = [hsc_challenge_mapping[hsc] for hsc in project.data['hsc_challenges']]
+            project.data['hsc_challenges'] = [hsc_challenge_mapping[hsc]
+                                              for hsc in project.data['hsc_challenges']
+                                              if not isinstance(hsc, int)]
 
             for link in project.data['interoperability_links']:
+                if 'id' in link:
+                    continue
+
                 name = link.pop('name')
                 link['id'] = interoperability_link_mapping[name]
 
             project.data['interoperability_standards'] = [interoperability_standard_mapping[i]
-                                                          for i in project.data['interoperability_standards']]
+                                                          for i in project.data['interoperability_standards']
+                                                          if not isinstance(i, int)]
 
-            project.data['licenses'] = [license_mapping[l] for l in project.data['licenses']]
+            project.data['licenses'] = [license_mapping[l]
+                                        for l in project.data['licenses']
+                                        if not isinstance(l, int)]
 
             project.data['platforms'] = [{'id': platform_mapping[p['name']], 'strategies': []}
-                                         for p in project.data['platforms']]
+                                         for p in project.data['platforms']
+                                         if 'id' not in p]
 
             project.data['health_focus_areas'] = []
+
+            project.draft = project.data
 
             project.save()
 
