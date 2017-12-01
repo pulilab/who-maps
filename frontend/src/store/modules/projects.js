@@ -228,6 +228,9 @@ export const getProjectCountryFields = state => (isNewProject, isDraft) => {
 
 const getCurrentProjectForEditing = (state, data) => {
     const structure = getFlatProjectStructure(state);
+    if (!data) {
+        data = getVanillaProject(state);
+    }
     data.start_date = convertDate(data.start_date);
     data.implementation_dates = convertDate(data.implementation_dates);
     data.end_date = convertDate(data.end_date);
