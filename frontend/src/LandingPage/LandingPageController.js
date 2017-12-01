@@ -18,7 +18,7 @@ class LandingPageModuleController {
     mapState(state) {
         return {
             user: state.user,
-            projects: ProjectModule.getPublishedProjects(state),
+            projects: ProjectModule.getUserProjects(state),
             countryData: CountryModule.getCountryCoverPage(state),
             countryCover: CountryModule.getCountryCoverPicture(state)
         };
