@@ -72,6 +72,8 @@ class Command(BaseCommand):
 
             project.data['health_focus_areas'] = []
 
+            project.draft = project.data
+
             project.save()
 
             self.stdout.write('- Finished on project {} -'.format(project.id))
