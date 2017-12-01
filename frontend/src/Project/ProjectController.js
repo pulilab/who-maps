@@ -238,7 +238,10 @@ class ProjectController  {
     }
 
     handleResponse(response) {
-        console.log(response);
+        if (response && response.status === 500) {
+            console.error('500 from the API', response);
+            return;
+        }
         forEach(response.data, (item, key) => {
             try {
                 if (item && isPlainObject(item)) {

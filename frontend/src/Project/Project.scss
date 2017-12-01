@@ -110,6 +110,15 @@
         line-height: 24px;
       }
 
+      a {
+        color: $color-primary;
+
+        &:hover {
+          text-decoration: none;
+          color: lighten($color-primary, 10%);
+        }
+      }
+
       ul {
         margin: 0;
         padding: 0 0 0 20px;
