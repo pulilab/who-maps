@@ -38,6 +38,12 @@ export function searchProjects(query, searchFilters) {
     };
 }
 
+export function unsetSearchedProjects() {
+    return dispatch => {
+        dispatch({ type: 'UNSET_PROJECT_SEARCH_RESULT' });
+    };
+}
+
 export async function searchOrganisation(name) {
     const { data } = await axios.get(`/api/organisations/?name=${name}`);
     return data;
@@ -59,6 +65,10 @@ export default function system(state = {}, action) {
     }
     case 'SET_PROJECT_SEARCH_RESULT': {
         s.projectSearch = action.projects;
+        return Object.assign(state, {}, s);
+    }
+    case 'UNSET_PROJECT_SEARCH_RESULT': {
+        s.projectSearch = [];
         return Object.assign(state, {}, s);
     }
     default:
