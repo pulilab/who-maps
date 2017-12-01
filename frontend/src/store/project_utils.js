@@ -142,6 +142,9 @@ export function removeEmptyChildObjects(form) {
     keyArray.forEach(key => {
         if (form[key]) {
             result[key] = form[key].filter(itm => {
+                if (typeof  item === 'number') {
+                    return true;
+                }
                 itm = { ...itm };
                 itm = deleteUndefinedAndDoubleDollarKeys(itm);
                 if (itm.hasOwnProperty('available')) {

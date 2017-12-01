@@ -23,6 +23,7 @@ class ProjectController  {
         this.eventListeners = this.eventListeners.bind(this);
         this.toast = toast;
         this.mapData = this.mapData.bind(this);
+        this.createDialogs = this.createDialogs.bind(this);
     }
 
     mapData(state) {
@@ -93,12 +94,24 @@ class ProjectController  {
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
+        this.createDialogs();
+    }
+
+    createDialogs() {
+        this.confirmDraftDiscard = this.$mdDialog.confirm({
+            title: 'Attention',
+            textContent: 'The current draft will be overwritten by the published version',
+            ok: 'Ok',
+            cancel: 'Cancel',
+            theme: 'alert'
+        });
     }
 
     onDestroy() {
         this.unsubscribe();
         this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
         this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
+        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraft);
     }
 
     watchers() {
@@ -177,19 +190,13 @@ class ProjectController  {
     }
 
     async discardDraft() {
-        const confirm = this.$mdDialog.confirm({
-            title: 'Attention',
-            textContent: 'The current draft will be overwritten by the published version',
-            ok: 'Ok',
-            cancel: 'Cancel',
-            theme: 'alert'
-        });
         try {
-            await this.$mdDialog.show(confirm);
+            await this.$mdDialog.show(this.confirmDraftDiscard);
             await this.$ngRedux.dispatch(ProjectModule.discardDraft());
             this.showToast('Draft discarded');
         }
         catch (e) {
+            console.log(e);
             this.showToast('Discard draft process canceled');
         }
     }
