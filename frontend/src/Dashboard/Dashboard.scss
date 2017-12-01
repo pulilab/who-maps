@@ -466,7 +466,7 @@
                         padding: 30px 11% 0 11%;
                         text-align: center;
                         font-size: 14px;
-                        font-color: $text-primary;
+                        color: $text-primary;
                         line-height: 20px;
                     }
 
@@ -479,201 +479,18 @@
                 }
             }
 
-            // .dash-improve {
-
-            //     md-card-header {
-
-            //         color: white;
-            //         height: 50px;
-            //         padding: 0;
-            //         box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.15);
-            //         border-top-left-radius: 3px;
-            //         border-top-right-radius: 3px;
-            //         user-select: none;
-            //         user-select: none;
-            //         user-select: none;
-
-            //         &.axis1 {
-            //             background-color: $color-axis1;
-            //         }
-            //         &.axis2 {
-            //             background-color: $color-axis2;
-            //         }
-            //         &.axis3 {
-            //             background-color: $color-axis3;
-            //         }
-            //         &.axis4 {
-            //             background-color: $color-axis4;
-            //         }
-            //         &.axis5 {
-            //             background-color: $color-axis5;
-            //         }
-            //         &.axis6 {
-            //             background-color: $color-axis6;
-            //         }
-
-            //         img {
-            //             width: 40px;
-            //             height: 40px;
-            //             margin: 5px;
-            //         }
-
-            //         h4 {
-            //             font-size: 14px;
-            //             font-weight: 500;
-
-            //             span {
-            //                 text-transform: capitalize;
-            //             }
-            //         }
-
-            //         ssmenu {
-
-            //             margin-right: 30px;
-            //             transform: translate(0, -3px);
-
-            //             md-select-value span {
-
-            //                 color: white;
-            //             }
-
-            //             md-select-value {
-            //                 border-bottom-width: 0;
-            //             }
-            //         }
-
-            //         md-icon {
-            //             margin-left: -15px;
-            //             margin-right: 15px;
-            //             color: white;
-            //             outline: none;
-            //             cursor: pointer;
-            //         }
-            //     }
-
-            //     md-tab-content {
-
-            //         height: 406px;
-            //         border-bottom-left-radius: 3px;
-            //         border-bottom-right-radius: 3px;
-
-            //         md-content {
-
-            //             height: 406px;
-            //             padding: 0 10px;
-            //             background-color: $color-gray-lightest;
-
-            //             .subhead {
-            //                 max-height: 88px;
-
-            //                 p {
-            //                     margin: auto 0;
-            //                     padding-left: 12px;
-            //                     color: $text-secondary;
-            //                     font-size: 14px;
-            //                     line-height: 20px;
-            //                 }
-
-            //                 a {
-            //                     color: $color-primary;
-            //                 }
-
-            //                 img {
-            //                     height: 150px;
-            //                     width: auto;
-            //                 }
-            //             }
-
-
-            //             md-card {
-
-            //                 margin-bottom: 12px;
-            //                 z-index: 10;
-            //                 position: relative;
-
-            //                 img {
-            //                     width: 70px;
-            //                     height: 70px;
-            //                     margin: 12px;
-            //                 }
-
-            //                 .txt {
-            //                     margin: 6px 20px 6px 0;
-
-            //                     * {
-            //                         line-height: 14px;
-            //                         margin: 0;
-            //                         cursor: pointer;
-            //                     }
-
-            //                     h5 {
-            //                         color: $color-primary;
-            //                     }
-            //                     .desc {
-            //                         color: $color-gray;
-            //                         cursor: default;
-            //                     }
-            //                     .comm {
-            //                         color: $text-secondary;
-            //                         font-size: 12px;
-            //                         font-weight: 500;
-
-            //                         md-icon {
-            //                             font-size: 14px;
-            //                             height: 14px;
-            //                             width: 14px;
-            //                         }
-            //                     }
-            //                 }
-
-            //             }
-
-            //         }
-            //     }
-
-            // }
-
-            // .dash-community {
-            //     opacity: 0.5;
-            //     padding: 20px 10px;
-            //     background-color: $color-gray-lightest;
-            //     pointer-events: none;
-
-            //     .project-cont {
-
-            //         overflow: hidden;
-            //         margin: 0;
-
-            //         &:nth-child(2) {
-            //             margin: 20px 0 20px 0;
-            //         }
-
-            //         .header {
-
-            //             span {
-
-            //                 color: text-primary;
-            //                 font-size: 12px;
-            //                 font-weight: 500;
-            //                 padding-left: 10px;
-            //                 cursor: default;
-            //             }
-
-            //             md-icon {
-
-            //                 font-size: 24px;
-            //                 cursor: pointer;
-            //                 margin: 0;
-            //                 transform: translate(-5px, -6px);
-            //                 outline: none;
-
-            //                 &[disabled] {
-            //                     color: $color-gray-light;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+            .perf-tab {
+                height: 449px;
+                md-tabs-content-wrapper {
+                    top: 41px;
+                }
+                md-tabs-content-wrapper, md-tab-content {
+                    overflow: hidden;
+                }
+                .countrychart-tooltip md-tabs-content-wrapper{
+                    top: 0px;
+                }
+            }
         }
     }
 
