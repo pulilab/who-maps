@@ -112,17 +112,16 @@
       }
 
       .activename {
-
         color: $color-primary;
       }
 
       .lh {
+        margin: 10px;
         line-height: 20px;
-        margin: 3px 0;
+        color: $text-secondary;
       }
 
       .projectcont {
-
         height: 60px;
         border-top: 1px solid $color-gray-lighter;
         position: relative;
