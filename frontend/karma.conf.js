@@ -25,16 +25,16 @@ module.exports = function(config) {
         colors: true,
         coverageIstanbulReporter: {
             reports: ['text-summary', 'html'],
-            check: {
-                thresholds: {
-                    each: {
-                        statements: 50,
-                        branches: 40,
-                        functions: 50,
-                        lines: 50
-                    }
-                }
-            },
+            // check: {
+            //     thresholds: {
+            //         each: {
+            //             statements: 50,
+            //             branches: 40,
+            //             functions: 50,
+            //             lines: 50
+            //         }
+            //     }
+            // },
             'report-config': {
                 html: {
                     subdir: 'html'
