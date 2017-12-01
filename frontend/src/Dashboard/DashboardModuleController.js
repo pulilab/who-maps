@@ -124,7 +124,7 @@ class DashboardModuleController {
             return;
         }
 
-        const coverage = this.projectData.coverage.slice();
+        const coverage = this.projectData.coverage ? this.projectData.coverage.slice() : [];
         coverage.push(Object.assign({}, this.projectData.national_level_deployment));
         data.push({ data: coverage });
 
