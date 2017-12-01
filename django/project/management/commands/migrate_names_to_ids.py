@@ -71,6 +71,7 @@ class Command(BaseCommand):
                                          if 'id' not in p]
 
             project.data['health_focus_areas'] = []
+            project.data['name'] = project.name
 
             project.draft = project.data
 
