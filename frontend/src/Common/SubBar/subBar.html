@@ -10,16 +10,19 @@
         <div flex></div>
 
         <div class="project-info" layout="row">
-            <div class="info-block">
+            <div class="info-block" ng-show="vm.currentProject.isPublished">
                 <h6>UUID</h6>
                 <span>{{vm.currentProject.public_id}}</span>
             </div>
             <div class="info-block">
                 <h6>Version</h6>
-                <span>
-                            {{vm.lastVersion}}.
-                            {{vm.lastVersionDate ? ('(' + (vm.lastVersionDate | date: medium) + ')') : '' }}
-                       </span>
+                <span ng-show="vm.currentProject.isPublished">
+                    {{vm.lastVersion}}.
+                    {{vm.lastVersionDate ? ('(' + (vm.lastVersionDate | date: medium) + ')') : '' }}
+                </span>
+                <span ng-hide="vm.currentProject.isPublished">
+                    Draft
+                </span>
             </div>
             <div class="info-block">
                 <h6>Organization</h6>
@@ -41,18 +44,18 @@
     <div class="md-toolbar-tools md-toolbar-tools-mainmenu">
         <div class="project-mainmenu">
             <md-button ui-sref="dashboard"
-            ui-sref-active="active" md-no-ink>
-                         <md-tooltip md-autohide md-direction="top">
-                             GO TO DASHBOARD
-                         </md-tooltip>
+                       ui-sref-active="active" md-no-ink>
+                <md-tooltip md-autohide md-direction="top">
+                    GO TO DASHBOARD
+                </md-tooltip>
                 Dashboard
             </md-button>
 
             <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.currentProject.isMember && !vm.viewMode" ui-sref-active="active" md-no-ink>
-                  <md-tooltip md-autohide md-direction="top">
-                      EDIT PROJECT DETAILS
-                  </md-tooltip>
-                  Edit Project
+                <md-tooltip md-autohide md-direction="top">
+                    EDIT PROJECT DETAILS
+                </md-tooltip>
+                Edit Project
             </md-button>
 
             <md-button ui-sref="inventory"  ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'Y'" ui-sref-active="active" md-no-ink>

@@ -103,7 +103,7 @@ export const getUserProjects = state => {
     if (state.projects.list) {
         const list = state.projects.list.map(p => {
             const public_id = p.public_id;
-            const isPublished = !!p.published.name;
+            const isPublished = !!public_id;
             p = isPublished ? { ...p.published } : { ...p.draft };
             p = {
                 ...p,

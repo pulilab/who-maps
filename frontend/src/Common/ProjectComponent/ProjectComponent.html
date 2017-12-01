@@ -19,10 +19,10 @@
           <span class="static">Donors</span>
         </div>
         <div class="version" ng-if="vm.showVersion">
-          <span class="nr" ng-show="vm.isPublished">
-              {{vm.project.last_version}}
+          <span class="nr" ng-show="vm.project.isPublished">
+              {{vm.project.last_version || 0}}
           </span>
-          <span class="nr" ng-hide="vm.isPublished">
+          <span class="nr" ng-hide="vm.project.isPublished">
               Draft
           </span>
           <span class="static">Version</span>
