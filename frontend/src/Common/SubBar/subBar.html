@@ -28,7 +28,7 @@
                 <h6>Organization</h6>
                 <span>{{vm.currentProject.organisation_name}}</span>
             </div>
-            <div class="info-block">
+            <div class="info-block" ng-if="vm.currentProject.contact_name">
                 <h6>Contact Person</h6>
                 <span>{{vm.currentProject.contact_name}}</span>
                 <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
