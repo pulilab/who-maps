@@ -39,7 +39,7 @@
           </div>
         </div>
 
-        <div class="md-block results" ng-show="vm.projects">
+        <div class="md-block results" ng-show="vm.projects && vm.projects.length > 0">
           <md-subheader class="md-no-sticky">Results ({{vm.resultNr}} out of {{vm.totalNr}}):</md-subheader>
 
           <project-component

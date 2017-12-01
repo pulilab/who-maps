@@ -25,7 +25,6 @@ class SearchbarController {
         this.showSearch = false;
         this.searchStr = '';
         this.resultNr = 0;
-        this.projects = void 0;
         this.scope.$watch(() => {
             return this.searchStr;
         }, tmpStr => {
@@ -34,12 +33,16 @@ class SearchbarController {
     }
 
     onDestroy() {
+        this.unsetSearchedProjects();
         this.unsubscribe();
     }
 
 
     toggleSearch() {
         this.showSearch = !this.showSearch;
+        if (!this.showSearch) {
+            this.unsetSearchedProjects();
+        }
     }
 
 
