@@ -229,11 +229,11 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
             const mainUi = window.document.querySelector('ui-view');
             mainUi.style.display = 'none';
             const message = token ? 'You session has expired, please login again.' :
-              'You need to be logged in to view this content';
+              'You need to log in to view this content';
             await $mdDialog.show(
               $mdDialog.alert()
                 .clickOutsideToClose(false)
-                .title('Auth problem')
+                .title('Authentication problem')
                 .textContent(message)
                 .ariaLabel('Auth problem dialog')
                 .ok('Understand')

@@ -4,13 +4,19 @@
 /* TOP NAVIGATION BAR
    ============================= */
 
+// Fix for md-menu & md-scroll-mask stacking bug
+top-bar {
+  position: relative;
+  z-index: 49;
+}
+//
+
 .main-toolbar {
-  z-index: 1000;
-  min-height: 48px;
   position: fixed;
   top: 0;
   left: 0;
   width: calc(100% - 10px);
+  min-height: 48px;
   box-shadow: $whiteframe-shadow-4dp;
 
   @media only screen and (max-width: $page-min-width) {
