@@ -15,7 +15,6 @@
     background: $color-primary url("./images/bg-welcome-map.jpg") 0 0 no-repeat;
     background-size: cover;
 
-    // TODO
     &.logged-in {
       background-image: url("./images/bg-welcome-map.jpg");
     }

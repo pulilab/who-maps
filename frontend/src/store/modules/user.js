@@ -63,7 +63,6 @@ export function doSignup({ account_type, password1, password2, email }) {
         try {
             const { data } = await axios.post('/api/rest-auth/registration/',
               { account_type, password1, password2, email });
-            // TODO: FIX this when backend is ready
             data.token = data.key;
             data.is_superuser = false;
             storeData(data, email);
