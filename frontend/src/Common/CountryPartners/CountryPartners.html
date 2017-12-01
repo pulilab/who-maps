@@ -8,20 +8,8 @@
         </div>
 
         <div class="content-logos" flex="60" flex-offset="10">
-            <!-- TODO -->
-            <!-- first block is static, the second is from the backend/js? -->
-
             <div class="partnerscontainer">
                 <h4 class="md-title">Global support to DHA</h4>
-                <!-- TODO -->
-                <!-- This logic should be moved to the next 'partnerscointer' -->
-                <!-- <div
-                    ng-repeat="logo in vm.partners track by $index | limitTo:4 "
-                    class="partner"
-                    ng-if="vm.partners.length">
-
-                      <span class="logoimg" style="background-image: url({{logo}})"></span>
-                </div> -->
                 <div class="partner">
                     <span class="logoimg" style="background-image: url('/static/partners/who-logo.png')"></span>
                 </div>
@@ -38,10 +26,13 @@
 
             <!-- TODO -->
             <!-- Hide this when it's empty! -->
-            <div class="partnerscontainer hidden">
+            <div class="partnerscontainer " ng-if="vm.partners.length">
                 <h4 class="md-title">In-country support to DHA</h4>
-                <div class="partner">
-                    <span class="logoimg" style="background-image: url()"></span>
+                <div
+                  ng-repeat="logo in vm.partners track by $index | limitTo:4 "
+                  class="partner">
+
+                    <span class="logoimg" style="background-image: url({{logo}})"></span>
                 </div>
             </div>
         </div>
