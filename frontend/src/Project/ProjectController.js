@@ -158,7 +158,7 @@ class ProjectController  {
                 const alert = this.$mdDialog.alert({
                     title: 'Attention',
                     textContent: 'You can\'t publish until all the required' +
-                    'fields are filled, you can however save the draft',
+                    ' fields are filled, you can however save the draft',
                     ok: 'Close',
                     theme: 'alert'
                 });
