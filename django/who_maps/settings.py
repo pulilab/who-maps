@@ -243,8 +243,8 @@ if SITE_ID in [3]:
 # Mailgun settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.mailgun.org"
-EMAIL_HOST_USER = 'postmaster@qa.toolkit.pulilab.com'
-EMAIL_HOST_PASSWORD = '7e36ad8187b8799f4c29c380ea361e97'
+EMAIL_HOST_USER = "postmaster@whomaps.pulilab.com"
+EMAIL_HOST_PASSWORD = "5ede15430fbf90989648a0fe12e379cc"
 EMAIL_PORT = 587
 
 FROM_EMAIL = DEFAULT_FROM_EMAIL
