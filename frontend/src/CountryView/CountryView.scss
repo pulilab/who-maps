@@ -4,11 +4,12 @@
   margin: 0 auto 0 auto;
   padding: 30px 30px 0 30px;
   max-width: $page-max-width;
-  min-height: calc(100vh - 48px);
+  min-height: calc(100vh - 144px);
   justify-content: space-between;
 
   md-card {
     margin: 0;
+    height: calc(100vh - 204px);
   }
 
   .rel {
@@ -21,9 +22,6 @@
       font-size: 14px;
       color: $text-primary;
       font-weight: bold;
-    }
-
-    .clv-tab-container {
     }
 
     .clv-filter-container {
@@ -166,11 +164,22 @@
     .tab-wrap {
 
       background-color: $color-gray-lightest;
+      min-height: calc(100vh - 245px);
 
       &.emptyy {
 
         background: url("./img/wmap.svg") center center no-repeat;
         background-size: 80% auto;
+      }
+
+      &.map {
+        height: calc(100vh - 245px);
+        .relative {
+          height: 0px;
+        }
+        .countrymapcontainer {
+          height: calc(100vh - 245px);
+        }
       }
     }
 
@@ -208,13 +217,21 @@
     md-select-value {
       text-transform: capitalize!important;
     }
+
+    md-tabs-content-wrapper {
+      top: 41px;
+    }
   }
 
   #map {
 
     position: relative;
-    min-height: calc(100vh - 150px);
+    min-height: calc(100vh - 245px);
     background-color: $color-gray-lightest;
+
+    md-tabs-content-wrapper {
+      top: 0px;
+    }
 
     .countrychart-tooltip {
       top: 20px;
@@ -253,7 +270,6 @@
   }
 
   #list {
-    min-height: calc(100vh - 150px);
 
     .projectcont {
       margin: 0 20px;
