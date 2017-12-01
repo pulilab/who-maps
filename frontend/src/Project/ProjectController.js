@@ -105,6 +105,14 @@ class ProjectController  {
             cancel: 'Cancel',
             theme: 'alert'
         });
+
+        this.publishAlert = this.$mdDialog.alert({
+            title: 'Attention',
+            textContent: 'You can\'t publish until all the required' +
+            ' fields are filled, you can however save the draft',
+            ok: 'Close',
+            theme: 'alert'
+        });
     }
 
     onDestroy() {
@@ -154,18 +162,12 @@ class ProjectController  {
                 this.postPublishAction(data);
             }
             catch (e) {
-                this.handleResponse(e.response);
-                const alert = this.$mdDialog.alert({
-                    title: 'Attention',
-                    textContent: 'You can\'t publish until all the required' +
-                    ' fields are filled, you can however save the draft',
-                    ok: 'Close',
-                    theme: 'alert'
-                });
-                this.$mdDialog.show(alert);
+                await this.handleResponse(e.response);
+                this.$mdDialog.show(this.publishAlert);
             }
         }
         else {
+            await this.$mdDialog.show(this.publishAlert);
             this.focusInvalidField();
         }
 
