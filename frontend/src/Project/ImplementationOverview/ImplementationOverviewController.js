@@ -63,7 +63,7 @@ class ImplementationOverview extends CollapsibleSet {
     }
 
     addClearOption(districts) {
-        if (districts && districts.length> 0) {
+        if (districts && districts.length > 0) {
             districts.forEach(p => {
                 if (p.available.indexOf('Clear selection') === -1 && p.district !== undefined) {
                     p.available.unshift('Clear selection');
@@ -87,7 +87,7 @@ class ImplementationOverview extends CollapsibleSet {
 
     removeUnavailableDistricts(districts) {
         if (this.project.coverage &&  this.project.coverage.length > 0
-          && districts && districts.length > 0 ) {
+          && districts && districts.length > 0) {
             this.project.coverage.forEach(cov => {
                 if (districts.indexOf(cov.district) === -1) {
                     cov.district = undefined;
