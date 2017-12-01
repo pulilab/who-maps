@@ -162,7 +162,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
 };
 
 function handleStateChange(type, from, to) {
-    if (type === 'success' && from !== to) {
+    if (type === 'success' && (from.name !== to.name || to.name === 'editProject')) {
         const mainContent = document.getElementsByClassName('main-content')[0];
         if (mainContent) {
             mainContent.scrollTop = 0;
@@ -191,7 +191,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     });
 
     $transitions.onSuccess({}, (t) => {
-        handleStateChange('success', t.from().name, t.to().name);
+        handleStateChange('success', t.from(), t.to());
         return Promise.resolve();
     });
 
