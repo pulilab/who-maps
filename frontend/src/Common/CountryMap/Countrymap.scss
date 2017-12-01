@@ -3,6 +3,7 @@
 .relative {
 
   position: relative;
+  height: 100%;
 
   .countrychart-tooltip {
 
@@ -82,10 +83,9 @@
 
       &.md-active {
         background-color: white;
-        opacity: 0.85;
         border: none;
         span {
-          color: $color-primary;
+          color: $text-primary;
         }
       }
     }
@@ -112,17 +112,16 @@
       }
 
       .activename {
-
         color: $color-primary;
       }
 
       .lh {
+        margin: 10px;
         line-height: 20px;
-        margin: 3px 0;
+        color: $text-secondary;
       }
 
       .projectcont {
-
         height: 60px;
         border-top: 1px solid $color-gray-lighter;
         position: relative;
@@ -195,16 +194,10 @@
   }
 
   .zoomhandlers2 {
-
-    position: absolute;
-    right: 15px;
-    top: 300px;
-
+    left: auto;
+    right: 20px;
     md-icon {
-
-      color: $color-gray-light;
-      cursor: pointer;
-      outline: none;
+      font-size: 30px;
     }
   }
 
@@ -222,7 +215,6 @@
   }
 
 }
-
 
 .countrymapcontainer {
 

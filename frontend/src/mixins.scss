@@ -29,6 +29,11 @@
                                   not supported by any browser */
 }
 
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
 // CSS image replacement
 @mixin text-hide() {
   border: 0;

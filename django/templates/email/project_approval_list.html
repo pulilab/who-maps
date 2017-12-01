@@ -1,0 +1,9 @@
+{% load utils %}
+
+<h1>The projects listed below are waiting for your approval:</h1>
+
+<ul>
+{% for project in projects %}
+    <li><a href="{% site_url %}/admin/login/?next=/app/{{project.id}}/edit-project">{{project.name}}</a> >> <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change">approve/reject</a></li>
+{% endfor %}
+</ul>

@@ -19,7 +19,6 @@ SELECTED_FILE_LIST = [
     "mauritania_geojson.tgz",
     "turkey_geojson.tgz",
     "uruguay_geojson.tgz",
-
     "belarus_geojson.tgz",
     "bhutan_geojson.tgz",
     "cape-verde_geojson.tgz",
@@ -102,17 +101,9 @@ SELECTED_FILE_LIST = [
 ]
 
 # SELECTED_FILE_LIST_DEV = SELECTED_FILE_LIST
-SELECTED_FILE_LIST_DEV = [
-    "sierra-leone_geojson.tgz",
-    "rwanda_geojson.tgz",
-    "uganda_geojson.tgz",
-    "india_geojson.tgz"
-]
+SELECTED_FILE_LIST_DEV = ["sierra-leone_geojson.tgz", "rwanda_geojson.tgz", "uganda_geojson.tgz", "india_geojson.tgz"]
 
 ADMIN_LEVELS_TO_IMPORT = [
-    "admin_level_2.geojson",
-    "admin_level_3.geojson",
-    "admin_level_4.geojson",
-    "admin_level_5.geojson",
+    "admin_level_2.geojson", "admin_level_3.geojson", "admin_level_4.geojson", "admin_level_5.geojson",
     "admin_level_6.geojson"
 ]

@@ -1,0 +1,147 @@
+<div class="project-section section-strategy read-only" md-whiteframe="2">
+  <div class="section-title md-title">
+    2. Implementation overview
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
+  </div>
+
+  <div class="section-wrapper">
+    <h6>Add one or more Software and related Digital Health Interventions (DHI):</h6>
+
+    <div class="input-group" ng-repeat="platform in vm.project.platforms">
+      <div class="extra-margin">
+        <h6>Software</h6>
+        <p>{{platform.name}}</p>
+      </div>
+      <div>
+        <h6>Digital Health Interventions</h6>
+        <div layout="row">
+          <ul>
+            <li ng-repeat="s in platform.strategies">{{s.name}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-wrapper">
+
+    <h6>Health focus area(s)</h6>
+
+    <div>
+      <ul>
+        <li ng-repeat="hf in vm.project.health_focus_areas">{{hf.name}}</li>
+      </ul>
+    </div>
+
+    <h6>What are the Health System Challenges (HSC) your project addresses?</h6>
+
+    <div>
+      <ul>
+        <li ng-repeat="hsc in vm.project.hsc_challenges">{{hsc.challenge}}</li>
+      </ul>
+    </div>
+
+    <h6>What part(s) of the Health Information System (HIS) does this project support?</h6>
+
+    <div>
+      <ul>
+        <li ng-repeat="his in vm.project.his_bucket">{{his.name}}</li>
+      </ul>
+    </div>
+
+    <h6>What kind of coverage does your project have?</h6>
+
+    <div>
+      <div layout="column">
+        <span ng-show="vm.project.coverageType === 1">Sub-national</span>
+        <span ng-show="vm.project.coverageType === 2">National</span>
+      </div>
+    </div>
+
+    <div ng-show="vm.project.coverageType === 1">
+      <h6 class="subtitle"><i class="material-icons">&#xE567;</i> District level deployment</h6>
+
+      <div class="input-group" ng-repeat="cov in vm.project.coverage">
+        <div layout="column">
+          <div layout="row">
+            <div class="district" flex="50">
+              <h6>District</h6>
+              <p>{{cov.district}}</p>
+            </div>
+            <div flex="50"></div>
+          </div>
+          <div layout="row">
+            <div class="number" flex="20">
+              <h6># Health Workers</h6>
+              <p>{{cov.health_workers}}</p>
+            </div>
+            <div class="number" flex="20">
+              <h6># Facilities</h6>
+              <p>{{cov.facilities}}</p>
+            </div>
+            <div class="number" flex="20">
+              <h6># Clients</h6>
+              <p>{{cov.clients}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="vm.project.coverageType === 2">
+      <h6 class="subtitle"><i class="material-icons">&#xE153;</i> National level deployment</h6>
+
+      <div class="input-group">
+        <div layout="row">
+          <div class="number" flex="20">
+            <h6># Health Workers</h6>
+            <p>{{vm.project.national_level_deployment.health_workers}}</p>
+          </div>
+          <div class="number" flex="20">
+            <h6># Facilities</h6>
+            <p>{{vm.project.national_level_deployment.facilities}}</p>
+          </div>
+          <div class="number" flex="20">
+            <h6># Clients</h6>
+            <p>{{vm.project.national_level_deployment.clients}}</p>
+          </div>
+          <div flex="40"></div>
+        </div>
+      </div>
+    </div>
+
+    <h6>Has the government approved the project?</h6>
+
+    <div>
+      <div layout="column">
+        <span ng-show="vm.project.government_approved">Yes</span>
+        <span ng-hide="vm.project.government_approved">No</span>
+      </div>
+    </div>
+
+    <h6>Has the government financially invested in the project?</h6>
+
+    <div>
+      <p ng-show="vm.project.government_investor === 0">No, they have not yet contributed</p>
+      <p ng-show="vm.project.government_investor === 1">Yes, they are contributing in-kind people or time</p>
+      <p ng-show="vm.project.government_investor === 2">Yes, there is a financial contribution through MOH budget</p>
+    </div>
+
+    <h6>Implementing partners</h6>
+
+    <div>
+      <ul>
+        <li ng-repeat="partner in vm.project.implementing_partners">{{partner}}</li>
+      </ul>
+    </div>
+
+    <h6>Donors</h6>
+
+    <div>
+      <ul>
+        <li ng-repeat="donor in vm.project.donors">{{donor}}</li>
+      </ul>
+    </div>
+
+  </div>
+</div>

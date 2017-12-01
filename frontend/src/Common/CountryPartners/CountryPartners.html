@@ -1,24 +1,36 @@
 <div class="wrapper-preset">
     <div layout="row" laxout-align="start start">
 
-        <div class="content-preset" flex="40">
-
-          <h4 class="md-title">{{vm.footerTitle}}</h4>
-          <p>{{vm.permanentFooter}}</p>
-          <p>{{vm.footerText}}</p>
-
+        <div class="content-preset" flex="30">
+            <h4 class="md-title">{{vm.footerTitle}}</h4>
+            <p>{{vm.permanentFooter}}</p>
+            <p>{{vm.footerText}}</p>
         </div>
 
-        <div class="content-logos" flex="60">
-            <h4 class="md-title">Project Partners</h4>
-
+        <div class="content-logos" flex="60" flex-offset="10">
             <div class="partnerscontainer">
-                <div
-                    ng-repeat="logo in vm.partners track by $index | limitTo:4 "
-                    class="partner"
-                    ng-if="vm.partners.length">
+                <h4 class="md-title">Global support to DHA</h4>
+                <div class="partner">
+                    <span class="logoimg" style="background-image: url('/static/partners/who-logo.png')"></span>
+                </div>
+                <div class="partner">
+                    <span class="logoimg" style="background-image: url('/static/partners/logo-hrp-new-cropped.png')"></span>
+                </div>
+                <div class="partner">
+                    <span class="logoimg" style="background-image: url('/static/partners/logo-path-color.png')"></span>
+                </div>
+                <div class="partner">
+                    <span class="logoimg" style="background-image: url('/static/partners/logo-digital_square.png')"></span>
+                </div>
+            </div>
 
-                      <span class="logoimg" style="background-image: url({{logo}})"></span>
+            <div class="partnerscontainer " ng-if="vm.partners.length">
+                <h4 class="md-title">In-country support to DHA</h4>
+                <div
+                  ng-repeat="logo in vm.partners track by $index | limitTo:4 "
+                  class="partner">
+
+                    <span class="logoimg" style="background-image: url({{logo}})"></span>
                 </div>
             </div>
         </div>

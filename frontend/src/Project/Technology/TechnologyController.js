@@ -3,7 +3,7 @@ import CollapsibleSet from '../CollapsibleSet';
 class TechnologyController extends CollapsibleSet {
 
     constructor($scope, $element) {
-        super($element, $scope, 'project');
+        super($element, $scope, 'project', [{ toWatch: 'customLicense', field: 'licenses' }]);
         this.$onInit = this.defaultOnInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
     }

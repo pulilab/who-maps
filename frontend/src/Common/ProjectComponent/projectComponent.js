@@ -5,14 +5,11 @@ const projectComponent = {
     controller: ProjectComponentController.projectComponentFactory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'projectcomp',
+    name: 'projectComponent',
     bindings: {
-        ngModel: '<',
+        project: '<',
         showDetails: '<',
-        showLogo: '<',
-        member: '<',
-        viewer: '<',
-        currentProject: '<'
+        showVersion: '<'
     }
 };
 

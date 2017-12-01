@@ -13,10 +13,9 @@
   }
 }
 
-projectcomp {
-
+project-component {
   display: block;
-  padding-top: 30px;
+  margin-bottom: 30px;
 
   .show-pointer {
     cursor: pointer !important;
@@ -32,30 +31,30 @@ projectcomp {
     outline: none;
     margin: 0;
 
-      .my-eye,
-      .my-star {
-        position: absolute;
-        top: -6px;
-        right: -19px;
-        background-color: #CD9924;
-        // background-color: $color-gray-lightest;
-        display: block;
-        width: 55px;
-        height: 25px;
-        box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
-        // box-shadow: inset 0 -1px 0 rgba(0,0,0,.075);
-        transform: rotate(40deg);
+    .my-eye,
+    .my-star {
+      position: absolute;
+      top: -6px;
+      right: -19px;
+      background-color: #CD9924;
+      // background-color: $color-gray-lightest;
+      display: block;
+      width: 55px;
+      height: 25px;
+      box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
+      // box-shadow: inset 0 -1px 0 rgba(0,0,0,.075);
+      transform: rotate(40deg);
 
-        md-icon {
-          position: absolute;
-          top: 4px;
-          left: 24px;
-          font-size: 13px;
-          color: $color-white;
-          // color: #CD9924;
-          transform: rotate(-40deg);
-        }
+      md-icon {
+        position: absolute;
+        top: 4px;
+        left: 24px !important;
+        font-size: 13px;
+        color: $color-white;
+        // color: #CD9924;
+        transform: rotate(-40deg);
       }
+    }
 
     .my-eye {
       background-color: #53A0CE;
@@ -66,20 +65,20 @@ projectcomp {
       width: 100%;
       height: auto;
 
-      .project-logo {
-        width: 140px;
-        min-width: 140px;
-        height: 140px;
-        border-right: 1px solid darken($color-gray-lighter, 10%);
-        background: $color-gray-lighter;
-
-        md-icon {
-          width: 40px;
-          height: 40px;
-          color: $color-white;
-          font-size: 40px;
-        }
-      }
+      // .project-logo {
+      //   width: 140px;
+      //   min-width: 140px;
+      //   height: 140px;
+      //   border-right: 1px solid darken($color-gray-lighter, 10%);
+      //   background: $color-gray-lighter;
+      //
+      //   md-icon {
+      //     width: 40px;
+      //     height: 40px;
+      //     color: $color-white;
+      //     font-size: 40px;
+      //   }
+      // }
 
       .text-container {
         width: 100%;
@@ -101,9 +100,9 @@ projectcomp {
 
             .name {
               color: $color-primary;
-              font-size: 16px;
+              font-size: 20px;
               font-weight: 500;
-              margin: 4px 0 8px;
+              margin: 2px 0 6px;
             }
 
             .org-country {
@@ -114,14 +113,14 @@ projectcomp {
           }
 
           .donors {
-            padding: 10px;
             max-width: 100px;
             width: 100px;
+            padding: 10px 0;
             border-left: 1px solid $color-gray-lighter;
 
             .nr {
               display: block;
-              margin-top: 6px;
+              margin: 4px 0;
               text-align: center;
               font-weight: 500;
               font-size: 20px;
@@ -137,16 +136,15 @@ projectcomp {
             }
           }
 
-          .followers {
-            padding: 10px;
+          .version {
             max-width: 100px;
             width: 100px;
+            padding: 10px 0;
             border-left: 1px solid $color-gray-lighter;
-
 
             .nr {
               display: block;
-              margin-top: 6px;
+              margin: 4px 0;
               text-align: center;
               font-weight: 500;
               font-size: 20px;
@@ -182,17 +180,122 @@ projectcomp {
 
         .lower {
           height: 60px;
-          padding: 0 15px 0 0;
+          padding: 0 20px;
           border-top: 1px solid $color-gray-lighter;
 
-          .description {
-            padding: 10px 20px;
-            color: $text-secondary;
-            font-size: 14px;
-            @include text-truncate();
+          .badges {
+            display: inline-flex;
+
+            div {
+              height: 24px;
+              text-transform: uppercase;
+              text-align: center;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 24px;
+              border-radius: 3px;
+              margin-right: 8px;
+              padding: 0 8px;
+            }
+
+            .draft {
+              color: $color-black;
+              background-color: $color-draft;
+            }
+
+            .published {
+              color: $color-white;
+              background-color: $color-published;
+            }
+
+            .country-approved {
+              color: $color-white;
+              background-color: $color-approved;
+            }
           }
 
-          .more {}
+          .buttons {
+            .md-button {
+              margin: 6px 0 6px 16px;
+            }
+
+            md-icon {
+              font-size: 20px;
+              width: 20px;
+              min-width: 20px;
+              height: 20px;
+              min-height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.compact {
+    .project-container {
+      .text-container {
+
+        .upper {
+          height: 70px;
+
+          .basic {
+            .name {
+              margin: 0 0 6px;
+              font-size: 16px;
+            }
+
+            .org-country {
+              font-size: 12px;
+            }
+          }
+
+          .donors {
+            .nr {
+              margin: 3px 0;
+              font-size: 16px;
+              line-height: 24px;
+            }
+          }
+
+          .version {
+            .nr {
+              margin: 3px 0;
+              font-size: 16px;
+              line-height: 24px;
+            }
+          }
+        }
+
+        .lower {
+          height: 50px;
+
+          .badges {
+            div {
+              height: 20px;
+              font-size: 12px;
+              line-height: 20px;
+              padding: 0 6px;
+            }
+          }
+
+          .buttons {
+            .md-button {
+              height: 26px;
+              line-height: 26px;
+              font-size: 12px;
+              margin: 4px 4px;
+              padding: 0 6px;
+            }
+
+            md-icon {
+              font-size: 16px;
+              width: 16px;
+              min-width: 16px;
+              height: 18px;
+              min-height: 18px;
+            }
+          }
         }
       }
     }
