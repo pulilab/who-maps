@@ -4,8 +4,9 @@ import * as CountryModule from '../store/modules/countries';
 
 class LandingPageModuleController {
 
-    constructor($scope, $location, $anchorScroll, $ngRedux) {
+    constructor($scope, $state, $location, $anchorScroll, $ngRedux) {
         this.scope = $scope;
+        this.state = $state;
         this.EE = window.EE;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
@@ -37,13 +38,17 @@ class LandingPageModuleController {
         this.$anchorScroll();
     }
 
+    goToNewProject() {
+        this.state.go('newProject');
+    }
+
     static landingControllerFactory() {
-        function landingController($scope, $location, $anchorScroll, $ngRedux) {
+        function landingController($scope, $state, $location, $anchorScroll, $ngRedux) {
             require('./landingPage.scss');
-            return new LandingPageModuleController($scope, $location, $anchorScroll, $ngRedux);
+            return new LandingPageModuleController($scope, $state, $location, $anchorScroll, $ngRedux);
         }
 
-        landingController.$inject = ['$scope', '$location', '$anchorScroll', '$ngRedux'];
+        landingController.$inject = ['$scope', '$state', '$location', '$anchorScroll', '$ngRedux'];
 
         return landingController;
     }
