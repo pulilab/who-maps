@@ -142,7 +142,7 @@ export function removeEmptyChildObjects(form) {
     keyArray.forEach(key => {
         if (form[key]) {
             result[key] = form[key].filter(itm => {
-                if (typeof  item === 'number') {
+                if (typeof itm === 'number') {
                     return true;
                 }
                 itm = { ...itm };

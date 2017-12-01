@@ -371,7 +371,7 @@ export const getCoverageData = state => {
     const coverageVersion = getCoverageVersion(state);
     const projectData =  getCurrentProject(state);
 
-    const coverage = projectData.coverage.slice();
+    const coverage = projectData.coverage ? projectData.coverage.slice() : [];
     coverage.push(Object.assign({}, projectData.national_level_deployment));
     coverageVersion.push({ data: coverage });
 
