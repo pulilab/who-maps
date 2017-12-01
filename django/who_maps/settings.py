@@ -214,7 +214,8 @@ if SITE_ID in [3, 4]:
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
                      '.digitalhealthatlas.com']
 
-    EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+    # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
