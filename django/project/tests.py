@@ -1214,7 +1214,7 @@ class PermissionTests(SetupTests):
         self.assertContains(response, "a@a.com")
 
     def test_retrieve_project_with_country_fields(self):
-        CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
+        schema_1 = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
         cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
                                           answer="a1", schema=False)
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
@@ -1229,6 +1229,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
         self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
+        self.assertEqual(response.json()['published']['fields'][0]['schema_id'], schema_1.id)
         self.assertEqual(response.json()['published']['fields'][0]['country'], cf1.country.id)
         self.assertEqual(response.json()['published']['fields'][0]['project'], cf1.project.id)
         self.assertEqual(response.json()['published']['fields'][0]['type'], cf1.type)
