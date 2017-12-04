@@ -451,7 +451,8 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         user_profile = UserProfile.objects.create(user=self.user)
-        Country.objects.create(name="Country1", code="CC1", user=user_profile)
+        country = Country.objects.create(name="Country1", code="CC1")
+        country.users.add(user_profile)
         self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), 1)
         self.assertEqual(ma.get_queryset(self.request)[0].name, "Country1")
@@ -479,7 +480,8 @@ class CountryAdminTests(TestCase):
 
     def test_country_field_inlines(self):
         user_profile = UserProfile.objects.create(user=self.user)
-        country = Country.objects.create(name="Country1", code="CC1", user=user_profile)
+        country = Country.objects.create(name="Country1", code="CC1")
+        country.users.add(user_profile)
         CountryField.objects.create(country=country, type=1, question="q1?", schema=True)
         CountryField.objects.create(country=country, type=1, question="q2?", schema=False)
         ma = CountryAdmin(Country, self.site)
