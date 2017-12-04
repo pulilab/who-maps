@@ -40,6 +40,7 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
     inlines = (PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
+    filter_horizontal = ('users',)
 
     def get_queryset(self, request):
         qs = super(CountryAdmin, self).get_queryset(request)
