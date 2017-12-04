@@ -1219,7 +1219,7 @@ class PermissionTests(SetupTests):
                                           answer="a1", schema=False)
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
