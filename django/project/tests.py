@@ -65,7 +65,8 @@ class SetupTests(APITestCase):
         self.user_profile_id = response.json().get('id')
 
         user = UserProfile.objects.get(id=self.user_profile_id)
-        self.country = Country.objects.create(name="country1", user=user)
+        self.country = Country.objects.create(name="country1")
+        self.country.users.add(user)
         self.country_id = self.country.id
 
         self.project_data = {

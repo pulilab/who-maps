@@ -172,6 +172,10 @@ def lint():
     local('docker-compose exec django flake8')
 
 
+def makemigrations():
+    local('docker exec -it whomaps_django_1 python manage.py makemigrations --noinput')
+
+
 def migrate():
     local("docker exec -it whomaps_django_1 python manage.py migrate --noinput")
 
