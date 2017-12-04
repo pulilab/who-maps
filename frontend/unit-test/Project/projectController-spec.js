@@ -14,7 +14,7 @@ let sc = {
 const scope = $scope(sc);
 
 
-fdescribe('ProjectController', () => {
+describe('ProjectController', () => {
 
     beforeEach(() => {
         sc = new ProjectController(scope, $state, toast, $timeout, dialog, $ngRedux);
