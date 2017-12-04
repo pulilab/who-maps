@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "karma start",
+    "test": "karma start & yarn serve_coverage",
     "serve_coverage": "cd coverage/html/ && browser-sync start --no-open -s -f **/*.*",
     "test_ci": "cross-env BROWSER_ENV=chrome karma start --single-run",
     "dev": "yarn serve",
