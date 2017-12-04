@@ -1,15 +1,9 @@
-from datetime import datetime
 from math import ceil
 
 from django.core.urlresolvers import reverse
 from django.core import mail
-from allauth.account.models import EmailConfirmation
-from rest_framework.test import APIClient
-from rest_framework.test import APITestCase
 
-from country.models import Country
 from project.tests import SetupTests
-from user.models import Organisation
 from .models import Toolkit
 from . import tasks
 
@@ -88,7 +82,7 @@ class ToolkitTests(SetupTests):
                 "answer": 0,
                 "value": 2
             }
-        response = self.test_user_client.post(url, data, format="json")
+        self.test_user_client.post(url, data, format="json")
         url = reverse("toolkit-data", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, 200)
@@ -141,6 +135,6 @@ class ToolkitTests(SetupTests):
                 "answer": 0,
                 "value": 2
             }
-        response = self.test_user_client.post(url, data, format="json")
+        self.test_user_client.post(url, data, format="json")
         tasks.send_daily_toolkit_digest()
         self.assertEqual(mail.outbox[1].subject, "MAPS Toolkit updated!")

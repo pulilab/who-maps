@@ -1,13 +1,12 @@
 server {
-
-    server_name digitalhealthatlas.org;
+    server_name *.digitalhealthatlas.org;
     charset utf-8;
     listen 80;
-    return 301 https://digitalhealthatlas.org$request_uri;
+    return 301 https://$host$request_uri;
 }
 
 server {
-    server_name digitalhealthatlas.org;
+    server_name *.digitalhealthatlas.org;
     client_max_body_size 20M;
     charset utf-8;
     index	index.html;

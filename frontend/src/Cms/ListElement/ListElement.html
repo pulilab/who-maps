@@ -2,8 +2,6 @@
 <div ng-if="vm.item.type !== 3" md-whiteframe="2" class="cms-list-element" layout="row"  layout-align="start stretch">
 
   <div class="cover-img">
-    <!-- TODO: Nico!
-    Please add 'type-1' & 'type-2' class to 'no-cover' -->
     <span class="no-cover" ng-class="vm.typeClass(vm.item)" ng-hide="vm.item.cover"></span>
     <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">
   </div>

@@ -1,4 +1,5 @@
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
@@ -15,7 +16,7 @@ SECRET_KEY = 'qu1nafi=f@#w8fz&)(i4h*-1@!gm4)dg^^@vt7!fhwjo!6qh9z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.localhost', '.dev.whomaps.pulilab.com']
+ALLOWED_HOSTS = ['.localhost', '.dev.whomaps.pulilab.com', '*']
 
 
 # Application definition
@@ -97,6 +98,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -167,7 +175,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }
 
-import datetime
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -182,16 +189,20 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Celery settings
-BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+BROKER_URL = 'redis://redis:6379/0'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
 # PRODUCTION SETTINGS
-if SITE_ID in [3,4]:
+if SITE_ID in [3, 4]:
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
             "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
-        }
+        },
+        "send_project_approval_digest": {
+            "task": 'send_project_approval_digest',
+            "schedule": datetime.timedelta(days=1),
+        },
     }
     RAVEN_CONFIG = {
         'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
@@ -203,7 +214,8 @@ if SITE_ID in [3,4]:
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
                      '.digitalhealthatlas.com']
 
-    EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+    # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -212,6 +224,15 @@ if SITE_ID in [3,4]:
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         )
+    }
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': [
+                'redis:6379',
+            ],
+        }
     }
 
 if SITE_ID in [3]:

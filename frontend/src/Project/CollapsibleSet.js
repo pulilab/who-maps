@@ -1,13 +1,17 @@
-import _ from 'lodash';
+import remove from 'lodash/remove';
+import moment from 'moment';
+import { fixUrl } from '../Utilities';
 
 class CollapsibleSet {
-    constructor(element, scope, collectionName) {
+    constructor(element, scope, collectionName, resetDefaultList = [], emptyCheckableArray = []) {
         this.EE = window.EE;
         this.element = element;
         this.scope = scope;
         this.toggleClass = 'collapsed';
         this.activateClass = 'active';
         this.collectionName = collectionName;
+        this.resetDefaultList = resetDefaultList;
+        this.emptyCheckableArray = emptyCheckableArray;
     }
 
     defaultOnInit() {
@@ -18,6 +22,33 @@ class CollapsibleSet {
         setTimeout(() => {
             this.EE.emit('componentLoaded', this.elementId);
         });
+        this.defaultWatchers();
+        this.fixUrl = fixUrl;
+    }
+
+    defaultWatchers() {
+        this.resetDefaultList.forEach(item => {
+            this.scope.$watch(s => s.vm[item.toWatch], this.emptyCustom.bind(this, item.field));
+        });
+        this.emptyCheckableArray.forEach(item => {
+            this.project[item.toWatch].forEach((innerItem, index) => {
+                this.scope.$watch(s => s.vm.project[item.toWatch][index],
+                  this.emptyCheckable.bind(this, item.check, item.field), true);
+            });
+        });
+
+    }
+
+    emptyCustom(field, checkbox) {
+        if (checkbox === false) {
+            this.project[field].custom = undefined;
+        }
+    }
+
+    emptyCheckable(check, field, item) {
+        if (!item[check]) {
+            item[field] = undefined;
+        }
     }
 
     defaultOnDestroy() {
@@ -72,12 +103,12 @@ class CollapsibleSet {
         }
         const field = this.findField(key);
         if (this.checkboxChecked(t, key)) {
-            _.remove(field, item => {
-                return item === t;
+            remove(field, item => {
+                return item === t.id;
             });
         }
         else {
-            field.push(t);
+            field.push(t.id);
         }
     }
 
@@ -86,23 +117,44 @@ class CollapsibleSet {
             return false;
         }
         const field = this.findField(key);
-        return field.indexOf(t) > -1;
+        return field && field.length ? field.some(f => f === t.id) : false;
+    }
+
+    printDate(date) {
+        return moment(date).format('DD-MM-YYYY');
     }
 
     setAvailableOptions(category, options, fieldName) {
-        const used = category.map(cat => cat[fieldName]).filter(name => name);
-        category.forEach(item => {
-            const available = options.filter(p => {
-                return used.indexOf(p) === -1;
+        if (category && category.length > 0) {
+            const used = category.map(cat => cat[fieldName]).filter(name => name);
+            category.forEach(item => {
+                const available = options.filter(p => {
+                    return used.indexOf(p) === -1;
+                });
+                if (item[fieldName]) {
+                    available.push(item[fieldName]);
+                }
+                available.sort((a, b) => {
+                    return a.localeCompare(b);
+                });
+                item.available = available;
             });
-            if (item[fieldName]) {
-                available.push(item[fieldName]);
-            }
-            available.sort((a, b) => {
-                return a.localeCompare(b);
+        }
+    }
+
+    setAvailableDictOptions(category, options) {
+        if (category && category.length > 0) {
+            const used = category.filter(cat => cat.id);
+            category.forEach(item => {
+                const available = options.filter(p => {
+                    return item.id === p.id || used.every(u => u.id !== p.id);
+                });
+                available.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                });
+                item.available = available;
             });
-            item.available = available;
-        });
+        }
     }
 }
 

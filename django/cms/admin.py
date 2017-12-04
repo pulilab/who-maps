@@ -5,11 +5,15 @@ from cms.models import Post, State, Comment
 
 def ban(modeladmin, request, queryset):
     queryset.update(state=State.BANNED)
+
+
 ban.short_description = "Ban selected items"
 
 
 def normalize(modeladmin, request, queryset):
     queryset.update(state=State.NORMAL)
+
+
 normalize.short_description = "Mark selected items as normal"
 
 

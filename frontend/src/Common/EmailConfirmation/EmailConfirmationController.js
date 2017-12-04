@@ -1,11 +1,9 @@
-import EmailConfirmationService from './EmailConfirmationService';
-import CommonServices from '../CommonServices';
+import { calculateHeight } from '../../Utilities';
+import { verifyEmail } from '../../store/modules/user';
 
 class EmailConfirmationController {
 
     constructor($scope, $state) {
-        this.es = new EmailConfirmationService();
-        this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
@@ -15,7 +13,7 @@ class EmailConfirmationController {
     onInit() {
         this.inProcess = true;
         this.style = {
-            height: CommonServices.calculateHeight()
+            height: calculateHeight()
         };
         this.key = this.state.params.key;
 
@@ -27,17 +25,21 @@ class EmailConfirmationController {
     onDestroy() {
     }
 
-    activateEmail() {
-        this.es.activateEmail(this.key)
-            .then(response => {
-                this.inProcess = false;
-                this.success = response.success;
-                this.scope.$evalAsync();
-            }, () => {
-                this.inProcess = false;
-                this.success = false;
-                this.scope.$evalAsync();
-            });
+    async activateEmail() {
+        let success = false;
+        try {
+            await verifyEmail({ key: this.key });
+            success = true;
+        }
+        catch (e) {
+            console.log(e);
+        }
+        this.scope.$evalAsync(() => {
+            this.inProcess = false;
+            this.success = success;
+        });
+
+
     }
 
 

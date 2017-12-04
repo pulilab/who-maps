@@ -65,13 +65,13 @@ class CmsTest(TestCase):
 
         post_data = {}
         post_data.update(self.post_data)
-        post_data['name'] = 'a'*128
+        post_data['name'] = 'a' * 128
         post = Post.objects.create(**post_data)
-        self.assertEqual(post.slug, 'a'*128)
+        self.assertEqual(post.slug, 'a' * 128)
 
         # Slug ads extra chars to the end to keep the uniqueness - overflow check here
         post = Post.objects.create(**post_data)
-        self.assertEqual(post.slug, ('a' * 128)+'--1')
+        self.assertEqual(post.slug, ('a' * 128) + '--1')
 
     def test_states(self):
         self.assertEqual(Post.objects.normal().count(), 1)
@@ -132,14 +132,10 @@ class CmsTest(TestCase):
 
 
 class CmsApiTest(APITestCase):
-
     def setUp(self):
         # Create a test user with profile.
         url = reverse("rest_register")
-        data = {
-            "email": "test_user@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+        data = {"email": "test_user@gmail.com", "password1": "123456", "password2": "123456"}
         self.client.post(url, data)
 
         # Validate the account.
@@ -152,9 +148,7 @@ class CmsApiTest(APITestCase):
 
         # Log in the user.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test_user@gmail.com",
-            "password": "123456"}
+        data = {"username": "test_user@gmail.com", "password": "123456"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
@@ -163,10 +157,7 @@ class CmsApiTest(APITestCase):
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
-        data = {
-            "name": "Test Name",
-            "organisation": self.org.id,
-            "country": "test_country"}
+        data = {"name": "Test Name", "organisation": self.org.id, "country": "test_country"}
         response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json().get('id')
 
@@ -337,9 +328,8 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
 
-        comment = Comment.objects.create(text="Comment 2",
-                                         user_id=self.user_profile_id,
-                                         post=Post.objects.get(id=self.post_id))
+        comment = Comment.objects.create(
+            text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.get(url)
@@ -357,11 +347,7 @@ class CmsApiTest(APITestCase):
     def test_add_comment(self):
         self.test_create()
 
-        self.comment_data = {
-            "text": "Comment 1",
-            "user": self.user_profile_id,
-            "post": self.post_id
-        }
+        self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post_id}
 
         url = reverse("comment-list")
         response = self.test_user_client.post(url, self.comment_data, format="json")
@@ -388,11 +374,7 @@ class CmsApiTest(APITestCase):
     def test_update_comment(self):
         self.test_add_comment()
 
-        self.comment_data = {
-            "text": "Comment Updated",
-            "user": self.user_profile_id,
-            "post": self.post_id
-        }
+        self.comment_data = {"text": "Comment Updated", "user": self.user_profile_id, "post": self.post_id}
 
         url = reverse("comment-detail", kwargs={"pk": self.comment_id})
         response = self.test_user_client.put(url, self.comment_data, format="json")
@@ -417,9 +399,8 @@ class CmsApiTest(APITestCase):
     def test_flagged_comment_shows(self):
         self.test_flag_comment()
 
-        comment = Comment.objects.create(text="Comment 2",
-                                         user_id=self.user_profile_id,
-                                         post=Post.objects.get(id=self.post_id))
+        comment = Comment.objects.create(
+            text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.get(url)
@@ -444,9 +425,8 @@ class CmsApiTest(APITestCase):
     def test_banned_comment_doesnt_show(self):
         self.test_add_comment()
 
-        comment = Comment.objects.create(text="Comment 2",
-                                         user_id=self.user_profile_id,
-                                         post=Post.objects.get(id=self.post_id))
+        comment = Comment.objects.create(
+            text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.get(url)
@@ -546,23 +526,16 @@ class CmsApiTest(APITestCase):
 
 
 class PermissionTest(APITestCase):
-
     def setUp(self):
         # user 1 signup
         url = reverse("rest_register")
-        data = {
-            "email": "test@who.who",
-            "password1": "secure1234",
-            "password2": "secure1234"}
+        data = {"email": "test@who.who", "password1": "secure1234", "password2": "secure1234"}
         response = self.client.post(url, data)
         self.user_profile_id = response.json()['user_profile_id']
 
         # user 2 signup
         url = reverse("rest_register")
-        data = {
-            "email": "test2@who.who",
-            "password1": "secure1234",
-            "password2": "secure1234"}
+        data = {"email": "test2@who.who", "password1": "secure1234", "password2": "secure1234"}
         response = self.client.post(url, data)
         self.user_profile_id_2 = response.json()['user_profile_id']
 
@@ -580,10 +553,7 @@ class PermissionTest(APITestCase):
 
         # Log in user 1.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
@@ -628,10 +598,7 @@ class PermissionTest(APITestCase):
 
         # Log in user 2.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test2@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -650,10 +617,7 @@ class PermissionTest(APITestCase):
 
         # Log in user 2.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test2@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -670,10 +634,7 @@ class PermissionTest(APITestCase):
 
         # Log in user 2.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test2@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -695,11 +656,7 @@ class PermissionTest(APITestCase):
 
         self.post = Post.objects.create(**self.post_data)
 
-        self.comment_data = {
-            "text": "Comment 1",
-            "user": self.user_profile_id,
-            "post": self.post.id
-        }
+        self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post.id}
 
         url = reverse("comment-list")
         response = self.client.post(url, self.comment_data, format="json")
@@ -719,18 +676,11 @@ class PermissionTest(APITestCase):
 
         self.post = Post.objects.create(**self.post_data)
 
-        self.comment_data = {
-            "text": "Comment 1",
-            "user": self.user_profile_id_2,
-            "post": self.post.id
-        }
+        self.comment_data = {"text": "Comment 1", "user": self.user_profile_id_2, "post": self.post.id}
 
         # Log in user 2.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test2@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -763,11 +713,7 @@ class PermissionTest(APITestCase):
 
         self.post = Post.objects.create(**self.post_data)
 
-        self.comment_data = {
-            "text": "Comment 1",
-            "user": self.user_profile_id,
-            "post": self.post.id
-        }
+        self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post.id}
 
         url = reverse("comment-list")
         response = self.test_user_client.post(url, self.comment_data, format="json")
@@ -788,19 +734,12 @@ class PermissionTest(APITestCase):
 
         # Log in user 2.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test2@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
-        self.comment_data = {
-            "text": "Comment Updated",
-            "user": self.user_profile_id_2,
-            "post": self.post.id
-        }
+        self.comment_data = {"text": "Comment Updated", "user": self.user_profile_id_2, "post": self.post.id}
 
         url = reverse("comment-detail", kwargs={"pk": self.comment_id})
         response = test_user_client.put(url, self.comment_data, format="json")
@@ -820,11 +759,7 @@ class PermissionTest(APITestCase):
 
         self.post = Post.objects.create(**self.post_data)
 
-        self.comment_data = {
-            "text": "Comment 1",
-            "user": self.user_profile_id,
-            "post": self.post.id
-        }
+        self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post.id}
 
         url = reverse("comment-list")
         response = self.test_user_client.post(url, self.comment_data, format="json")
@@ -845,10 +780,7 @@ class PermissionTest(APITestCase):
 
         # Log in user 2.
         url = reverse("api_token_auth")
-        data = {
-            "username": "test2@who.who",
-            "password": "secure1234"
-        }
+        data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -982,8 +914,8 @@ class CmsAdminTests(TestCase):
         state_filter_class = ma.list_filter[0]
         state_filter_obj = state_filter_class(self.request, {}, Post, ma)
 
-        self.assertEqual(state_filter_obj.lookups(self.request, ma),
-                         ((0, 'All'), (1, 'Normal'), (2, 'Flagged'), (3, 'Banned')))
+        self.assertEqual(
+            state_filter_obj.lookups(self.request, ma), ((0, 'All'), (1, 'Normal'), (2, 'Flagged'), (3, 'Banned')))
         self.assertFalse(ma.has_add_permission(self.request))
 
         Post.objects.create(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
@@ -1028,7 +960,10 @@ class CmsAdminTests(TestCase):
         self.assertEqual(Comment.objects.banned().count(), 0)
 
         change_url = urlresolvers.reverse('admin:cms_comment_changelist')
-        data = {'action': 'ban', '_selected_action': Comment.objects.filter(state=State.FLAGGED).values_list('pk', flat=True)}
+        data = {
+            'action': 'ban',
+            '_selected_action': Comment.objects.filter(state=State.FLAGGED).values_list('pk', flat=True)
+        }
         self.client.login(username=self.admin.email, password=self.password)
         response = self.client.post(change_url, data, follow=True)
         self.assertEqual(response.status_code, 200)

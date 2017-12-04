@@ -22,7 +22,8 @@ class ToolkitViewSet(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # Check if there's a project for the ID.
-            toolkit = get_object_or_400(Toolkit, select_for_update=True, error_message="No such project.", project=project_id)
+            toolkit = get_object_or_400(
+                Toolkit, select_for_update=True, error_message="No such project.", project=project_id)
             try:
                 # Update the scores.
                 toolkit.update_score(**serializer.validated_data)

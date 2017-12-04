@@ -1,7 +1,7 @@
 <div class="project-section section-technology" md-whiteframe="2">
   <div class="section-title md-title">
     3. Technology
-    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
@@ -30,23 +30,10 @@
             ng-checked="vm.checkboxChecked(l, 'licenses')"
             ng-click="vm.checkboxToggle(l, 'licenses')"
             md-no-ink
-            aria-label="{{ l }}"
+            aria-label="{{ l.name }}"
             class="md-primary">
-            {{ l }}
+            {{ l.name }}
           </md-checkbox>
-        </li>
-        <li>
-          <span layout="row">
-            <md-checkbox md-no-ink aria-label="custom-license" ng-model="vm.customLicense" class="md-primary" flex="nogrow"></md-checkbox>
-            <md-input-container class="md-block" flex>
-              <label>Specify other</label>
-              <input ng-required="vm.customLicense"
-                     md-maxlength="64"
-                     name="licenses"
-                     ng-model="vm.project.licenses.custom"
-                     ng-disabled="!vm.customLicense">
-            </md-input-container>
-          </span>
         </li>
       </ul>
     </div>
@@ -54,22 +41,40 @@
     <md-input-container class="md-icon-float md-block">
       <label>Code documentation or download link</label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="link.documentation" ng-model="vm.project.repository"
-              md-maxlength="200">
+      <input  name="repository" ng-model="vm.project.repository"
+              ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
+              md-maxlength="200" >
+      <div ng-messages="vm.form.repository.$error">
+        <div ng-message="pattern">
+          Make sure your URL is valid.
+        </div>
+      </div>
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
       <label>Link to the application</label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="link.app" ng-model="vm.project.mobile_application"
+      <input  name="mobile_application" ng-model="vm.project.mobile_application"
+              ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200">
+      <div ng-messages="vm.form.mobile_application.$error">
+        <div ng-message="pattern">
+          Make sure your URL is valid.
+        </div>
+      </div>
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
       <label>Link to the wiki page</label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
-      <input  name="link.wiki" ng-model="vm.project.wiki"
+      <input  name="wiki" ng-model="vm.project.wiki"
+              ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200">
+      <div ng-messages="vm.form.wiki.$error">
+        <div ng-message="pattern">
+          Make sure your URL is valid.
+        </div>
+      </div>
     </md-input-container>
 
   </div>

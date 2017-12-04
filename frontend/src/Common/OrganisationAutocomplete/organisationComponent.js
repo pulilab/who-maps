@@ -9,7 +9,8 @@ const component = {
     name: 'organisationAutocomplete',
     bindings: {
         organisation: '=',
-        form: '<'
+        form: '<',
+        notRequired: '<'
     }
 };
 

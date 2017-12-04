@@ -46,6 +46,7 @@
     .add-new-project {
       margin-right: 18px;
     }
+
   }
 
   .app-title {
@@ -73,14 +74,9 @@
 }
 
 .md-medium-tall {
-
-  &>.md-toolbar-tools {
-  }
-
   .md-toolbar-tools {
     // background-color: $color-primary;
     background-color: $color-white;
-    box-shadow: inset 0 -2px 0 darken($color-page-background, 4%);
   }
 
   .md-toolbar-tools-bottom {
@@ -88,35 +84,67 @@
     box-shadow: 0 1px 0 #BDBDBD;
   }
 
+  .md-toolbar-tools-mainmenu {
+    border-bottom: 2px solid  darken($color-page-background, 4%);
+  }
+
   .project-name {
+    position: relative;
+    padding: 20px 12px 4px;
+    max-width: 45%;
+    height: 48px;
     color: $text-primary;
     font-size: 24px;
-  }
+    font-weight: 500;
 
-  .project-selector {
-    md-input-container {
-      margin: 16px 0 0 12px !important;
-      padding: 0 !important;
-      max-width: 50vw;
-
-      md-select {
-        .md-select-value {
-          padding-left: 0;
-          border: none;
-          color: $text-primary;
-        }
-
-        .md-select-icon {
-          margin: 0;
-          transform: translate3d(-6px, -2px, 0);
-
-        }
-      }
+    > div {
+      display: inline-block;
+      max-width: 100%;
+      @include text-truncate();
     }
+
+    md-icon {
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      margin: -2px 0 0 -6px;
+    }
+
+    .viewerIcon {
+      color: #53A0CE !important;
+    }
+
+    .memberIcon {
+      color: #CD9924 !important;
+    }
+
   }
+
+  // .project-selector {
+  //   md-input-container {
+  //     margin: 16px 0 0 12px !important;
+  //     padding: 0 !important;
+  //     max-width: 50vw;
+  //
+  //     md-select {
+  //       .md-select-value {
+  //         padding-left: 0;
+  //         border: none;
+  //         color: $text-primary;
+  //       }
+  //
+  //       .md-select-icon {
+  //         margin: 0;
+  //         transform: translate3d(-6px, -2px, 0);
+  //
+  //       }
+  //     }
+  //   }
+  // }
 
   .project-submenu {
-    margin: 0 10px 0 10px;
+    float: left;
+    // margin: 0 10px 0 10px;
     // .md-menu,
     // .md-button {
     //   min-width: 80px !important;
@@ -151,34 +179,35 @@
   }
 
   .project-mainmenu {
+
     .md-button {
+      float: left;
       position: relative;
       overflow: visible;
       box-sizing: content-box;
       display: inline-block;
       min-height: 26px;
       height: 26px;
-      margin: 12px 10px 0 0;
-      padding: 0 12px 10px !important;
+      margin: 12px 12px 0;
+      padding: 0 0 6px !important;
       line-height: 26px;
-      box-shadow: inset 0 -2px 0 darken($color-page-background, 4%);
-      // border-radius: 3px 3px 0 0;
+      border-bottom: 2px solid $color-white;
 
       > span {
-        color: $text-disabled !important;
+        color: $color-primary !important;
       }
 
       &:hover {
-        box-shadow: inset 0 -2px 0 darken($color-page-background, 12%);
+        border-bottom: 2px solid $color-primary;
 
         > span {
-          color: $text-primary !important;
+          color: $color-primary !important;
         }
       }
 
       &.active {
+        border-bottom: 2px solid $color-primary;
         background-color: #fff !important;
-        box-shadow: inset 0 -2px 0 $color-primary;
 
         > span {
           color: $color-primary !important;
@@ -190,6 +219,7 @@
   .project-info {
     margin-right: 13px;
     display: block;
+    max-width: 45%;
     height: 48px;
     color: $color-gray;
     font-size: $body-font-size-base;
@@ -199,17 +229,16 @@
       height: 48px;
       padding-left: 20px;
       padding-right: 15px;
-      // border-left: 1px solid $color-gray-lighter;
 
       &:last-of-type {
         padding-right: 0;
       }
 
       h6 {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
         height:14px;
-        margin: 14px 0 2px;
+        margin: 14px 0 4px;
         padding: 0;
         text-transform: uppercase;
       }

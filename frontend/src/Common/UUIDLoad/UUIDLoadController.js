@@ -1,28 +1,34 @@
-import SearchbarService from '../Searchbar/SearchbarService';
-
+import * as SystemModule from '../../store/modules/system';
+import * as UserModule from '../../store/modules/user';
+import { calculateHeight } from '../../Utilities';
 
 class UUIDLoadController {
 
-    constructor($state, CommonServices) {
+    constructor($state, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
-        this.cs = CommonServices;
-        this.ss = new SearchbarService();
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
     }
 
     onInit() {
         this.style = {
-            height: this.cs.calculateHeight()
+            height: calculateHeight()
         };
         this.errorMessage = false;
-
-        const reset = this.cs.reset();
-        reset.loadedPromise.then(this.handleProjectLoad.bind(this));
+        this.handleProjectLoad();
     }
 
     onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            search: SystemModule.getSearchResult(state),
+            profile: UserModule.getProfile(state)
+        };
     }
 
     async handleProjectLoad() {
@@ -30,9 +36,8 @@ class UUIDLoadController {
         const filters = {
             all: true
         };
-
-        const search = await this.ss.searchProject(uuid, filters);
-        const project = search.slice().pop();
+        await this.searchProjects(uuid, filters);
+        const project = this.search.slice().pop();
         const id = project && project.id ? project.id : false;
 
         let state = 'public-dashboard';
@@ -42,9 +47,9 @@ class UUIDLoadController {
             return;
         }
 
-        if (this.cs && this.cs.userProfile) {
-            if (this.cs.userProfile.member.indexOf(id) > -1
-              || this.cs.userProfile.viewer.indexOf(id) > -1) {
+        if (this.profile && this.profile.member) {
+            if (this.profile.member.indexOf(id) > -1
+              || this.profile.viewer.indexOf(id) > -1) {
                 state = 'dashboard';
             }
         }
@@ -53,12 +58,11 @@ class UUIDLoadController {
 
     static uuidLoadFactory() {
         require('./UUIDLoad.scss');
-        const CommonServices = require('../CommonServices');
-        function uuidLoadController($state) {
-            return new UUIDLoadController($state, CommonServices);
+        function uuidLoadController($state, $ngRedux) {
+            return new UUIDLoadController($state, $ngRedux);
         }
 
-        uuidLoadController.$inject = ['$state'];
+        uuidLoadController.$inject = ['$state', '$ngRedux'];
 
         return uuidLoadController;
     }

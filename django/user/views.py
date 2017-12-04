@@ -30,7 +30,6 @@ class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, Upd
 
 
 class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
-
     def post(self, request):
         """
         Decorate the login/token retrieval response with userprofile information.

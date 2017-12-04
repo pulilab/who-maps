@@ -15,6 +15,7 @@ def dev():
     env.frontend_root = 'frontend'
     env.webpack_options = ''
 
+
 def production():
     """Configure prod"""
     env.hosts = ['whomaps@207.154.215.126']
@@ -25,6 +26,7 @@ def production():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
+
 
 def staging():
     """Configure staging"""
@@ -40,9 +42,9 @@ def staging():
 
 # COMMANDS #
 
+
 def deploy():
     db_up = None
-
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
         # get new stuff from git
@@ -52,11 +54,14 @@ def deploy():
         time.sleep(10)
 
         if env.name == 'dev':
-            options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(env.project_root, env.project_root)
+            options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(
+                env.project_root, env.project_root)
         elif env.name == 'staging':
-            options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(env.project_root, env.project_root)
+            options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(
+                env.project_root, env.project_root)
         elif env.name == 'production':
-            options = "-f {}/docker-compose.yml -f {}/docker-compose.prod.yml ".format(env.project_root, env.project_root)
+            options = "-f {}/docker-compose.yml -f {}/docker-compose.prod.yml ".format(
+                env.project_root, env.project_root)
             run('mv ~/who-maps/nginx/conf.d/production.conf.disabled ~/who-maps/nginx/conf.d/production.conf')
         else:
             options = ""
@@ -153,7 +158,14 @@ def test(app=""):
 
 
 def cov():
-    local("docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc")
+    local(
+        "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
+        " --cov-config .coveragerc"
+    )
+
+
+def lint():
+    local('docker-compose exec django flake8')
 
 
 def makemigrations():

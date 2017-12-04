@@ -1,4 +1,5 @@
 import _template from './GeneralOverview.html';
+import _readOnlyTemplate from './ReadOnlyGeneralOverview.html';
 import ProjectDetailsController from './GeneralOverviewController';
 
 const component = {
@@ -12,9 +13,9 @@ const component = {
         structure: '<',
         team: '<',
         viewers: '<',
-        users: '<',
-        projectList: '<'
+        users: '<'
     }
 };
 
 export default component;
+export const readOnlyGeneralOverview = { ...component, template: _readOnlyTemplate, name: 'readOnlyGeneralOverview' };

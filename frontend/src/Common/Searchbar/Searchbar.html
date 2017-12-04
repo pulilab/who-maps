@@ -10,7 +10,7 @@
             ng-model-options="{debounce: 500}"
             ng-focus="vm.showSearch = true"
             aria-label="search input field"
-            placeholder="Search projects">
+            placeholder="Type and search projects...">
     </md-input-container>
 
     <md-button
@@ -39,17 +39,14 @@
           </div>
         </div>
 
-        <div class="md-block results" ng-show="vm.projects">
+        <div class="md-block results" ng-show="vm.projects && vm.projects.length > 0">
           <md-subheader class="md-no-sticky">Results ({{vm.resultNr}} out of {{vm.totalNr}}):</md-subheader>
 
-          <projectcomp
+          <project-component
               ng-repeat="project in vm.projects | limitTo: 5"
-              viewer="vm.isViewer(project)"
-              member="vm.isMember(project)"
-              ng-model="project"
-              has-link=true
-              has-logo=false>
-          </projectcomp>
+              project="project"
+              show-version="false">
+          </project-component>
 
           <!--a href="" class="see-all-results md-button md-primary center-block" ng-if="vm.searchStr">See all results...</a-->
         </div>

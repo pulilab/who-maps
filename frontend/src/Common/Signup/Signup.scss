@@ -103,6 +103,10 @@ signup {
       margin-bottom: 12px;
     }
 
+    p {
+      line-height: 24px;
+    }
+
     i.material-icons {
       display: block;
       color: $color-green;
@@ -171,9 +175,35 @@ signup {
     .main-form {
       background-color: $color-white;
       padding: 0;
+
       .form-actions {
         margin-top: 0;
         border-top: none;
+      }
+    }
+
+    .form-success {
+      float: left;
+      margin: 20px 0;
+      padding: 40px 60px 60px;
+      background-color: $color-gray-lightest;
+      border-radius: 5px;
+
+      h4 {
+        margin: 20px 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        text-align: center;
+      }
+
+      p {
+        margin: 0;
+        line-height: 24px;
+      }
+
+      i.material-icons {
+        margin: 0 0 10px;
+        font-size: 64px;
       }
     }
 

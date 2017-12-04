@@ -1,0 +1,79 @@
+<div class="project-section section-projectdetails read-only active" md-whiteframe="2">
+
+  <div class="section-title md-title">
+    1. General overview
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
+  </div>
+
+  <div class="section-wrapper">
+    <div>
+      <h6>Project name</h6>
+      <p>{{vm.project.name}}</p>
+    </div>
+
+    <div>
+      <h6>Organisation name</h6>
+      <p>{{vm.project.organisation_name}}</p>
+    </div>
+
+    <div>
+      <h6>Project country</h6>
+      <p>{{vm.project.country_name}}</p>
+    </div>
+
+    <div>
+      <h6>Geographic scope</h6>
+      <p>{{vm.project.geographic_scope}}</p>
+    </div>
+
+
+    <div>
+      <h6>Overview of the digital health implementation</h6>
+      <p>{{vm.project.implementation_overview}}</p>
+    </div>
+
+    <div layout="row">
+      <div>
+        <h6>Project start date</h6>
+        <p>{{vm.printDate(vm.project.start_date)}}</p>
+      </div>
+      <div>
+        <h6>Project end date</h6>
+        <p>{{vm.printDate(vm.project.end_date)}}</p>
+      </div>
+    </div>
+
+    <div layout="row">
+      <div>
+        <h6>Contact name</h6>
+        <p>{{vm.project.contact_name}}</p>
+      </div>
+
+      <div>
+        <h6>Contact email</h6>
+        <p>{{vm.project.contact_email}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-wrapper alt">
+    <h6 class="first">Team members (Editor role)</h6>
+
+    <div class="readonly-chipper">
+      <div ng-repeat="t in vm.team">
+        {{t.name}}
+        <span ng-if="!$last">,</span>
+      </div>
+    </div>
+
+
+    <h6>Viewers (only Viewer role)</h6>
+
+    <div class="readonly-chipper">
+      <div ng-repeat="v in vm.viewers">
+        {{v.name}}
+        <span ng-if="!$last">,</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -110,7 +110,7 @@ md-tooltip {
   margin: 0 auto;
 
   .md-display-1 {
-    margin: 50px 0;
+    margin: 50px 0 50px;
     font-size: 40px;
   }
 
@@ -118,6 +118,14 @@ md-tooltip {
     margin: -20px auto 50px;
     max-width: $page-min-width;
     color: $color-gray;
+
+    md-icon {
+      width: 16px;
+      min-width: 16px;
+      height: 22px;
+      min-height: 22px;
+      font-size: 18px;
+    }
   }
 }
 
@@ -263,8 +271,15 @@ md-backdrop {
   }
 }
 
+.md-alert-theme {
+  .md-dialog-content {
+    height: auto;
+  }
+}
+
 .md-dialog-container {
   z-index: 10000;
+  min-width: $page-min-width;
 }
 
 .md-open-menu-container {
@@ -405,6 +420,37 @@ md-datepicker {
   }
 }
 
+// TODO
+// NASTY hack
+md-virtual-repeat-container {
+  min-width: 500px !important;
+}
+
+ul.md-contact-chips-suggestions {
+  li {
+    .md-contact-suggestion {
+      display: flex;
+      width: 100%;
+
+      > span {
+        flex-flow: row;
+      }
+
+      .md-contact-name {
+        width: 40%;
+
+        .highlight {
+          text-decoration: underline;
+          color: $color-primary;
+        }
+      }
+      .md-contact-email {
+        width: 60%;
+      }
+    }
+  }
+}
+
 // Md-menu
 
 md-menu-content {
@@ -460,6 +506,11 @@ p.global-error {
       top: 7px;
     }
   }
+}
+
+// Scroll mask
+
+.md-scroll-mask {
 }
 
 

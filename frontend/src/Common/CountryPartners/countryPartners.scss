@@ -2,33 +2,23 @@
 @import '../../mixins';
 
 .wrapper-preset {
-  width: 100%;
+  max-width: $page-max-width;
+  margin: 100px auto 0;
   background-color: $color-white;
 
   > div {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 40px 50px 60px;
-  }
-
-  h4 {
-    font-weight: 400;
+    padding: 50px 70px;
   }
 
   p {
-    font-size: 14px;
-    line-height: 20px;
-    color: $text-secondary;
+    font-size: 16px;
+    line-height: 24px;
+    color: $text-primary;
   }
 }
 
-.content-preset {
-  padding-right: 80px;
-}
-
-.content-logos {
-  padding-left: 60px;
-}
+.content-preset {}
+.content-logos {}
 
 country-partners {
 
@@ -39,10 +29,11 @@ country-partners {
       box-sizing: border-box;
       float: left;
       // Partner logo placholder size
-      width: 160px;
-      height: 120px;
+      width: 25%;
+      height: 80px;
       //
-      margin: 10px 40px 5px 0;
+      margin: 0 0 50px;
+      padding: 0 50px 0 0;
       // background-color: $color-gray-lightest;
 
 			.logoimg {
@@ -56,4 +47,13 @@ country-partners {
 			}
 		}
   }
+
+  + disclaimer {
+    footer {
+      max-width: $page-max-width;
+      margin: 0 auto;
+      background-color: $color-gray-lightest !important;
+    }
+  }
+
 }
