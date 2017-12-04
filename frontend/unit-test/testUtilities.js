@@ -3,8 +3,8 @@
 const dialog = {
     cancel: jasmine.createSpy('cancel'),
     hide: jasmine.createSpy('hide'),
-    alert: jasmine.createSpy('alert').and.returnValue({}),
-    confirm: jasmine.createSpy('confirm').and.returnValue({}),
+    alert: jasmine.createSpy('alert').and.returnValue({ type: 'alert' }),
+    confirm: jasmine.createSpy('confirm').and.returnValue({ type: 'confirm' }),
     show: jasmine.createSpy('show').and.callFake((config) => {
         if (config.onComplete) {
             config.onComplete();
@@ -68,8 +68,8 @@ const EE = {
 
 
 const $ngRedux = {
-    connect: jasmine.createSpy('connect').and.returnValue(() => () => {}),
-    dispatch: jasmine.createSpy('dispatch')
+    connect: jasmine.createSpy('connect').and.returnValue(() => () => 'unsubscribeFn'),
+    dispatch: jasmine.createSpy('dispatch').and.callFake(toCall => toCall())
 };
 
 const angularForm = {
