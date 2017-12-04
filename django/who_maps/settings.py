@@ -190,6 +190,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 # Celery settings
 BROKER_URL = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
 # PRODUCTION SETTINGS
@@ -214,8 +215,7 @@ if SITE_ID in [3, 4]:
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
                      '.digitalhealthatlas.com']
 
-    # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
