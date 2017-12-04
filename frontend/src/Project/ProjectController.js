@@ -58,12 +58,15 @@ class ProjectController  {
             }
         }
 
+        const readOnlyMode = publishMode ||
+          (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+        // this line is to check if you are on the draft page as a viewer
+        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
+
+        // If by any chance the project is undefined load the default project - fixes logout explosion -
         if (project === undefined) {
             project = ProjectModule.getEmptyProject();
         }
-        const readOnlyMode = publishMode ||
-          (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
-        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
         return {
             newProject,
             publishMode,
