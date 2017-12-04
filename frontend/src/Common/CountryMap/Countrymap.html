@@ -88,7 +88,7 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh" ng-show="!vm.activeDistrict.data">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.activeDistrict.data">No projects available</div>
         </div>
       </md-tab>
 
@@ -108,7 +108,7 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.nationalLevelCoverage">No projects available</div>
         </div>
       </md-tab>
     </md-tabs>
