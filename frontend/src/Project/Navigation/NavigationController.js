@@ -66,7 +66,7 @@ class NavigationController {
         }
     }
 
-    saveDraft(e) {
+    saveDraftEvent(e) {
         e.preventDefault();
         this.EE.emit('projectSaveDraft');
     }

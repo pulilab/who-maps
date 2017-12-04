@@ -53,13 +53,13 @@
       <md-button type="submit" class="md-primary md-raised">Publish</md-button>
     </div>
     <div class="secondary-buttons">
-      <md-button class="md-primary" ng-click="vm.saveDraft($event)">Save draft</md-button>
+      <md-button class="md-primary" ng-click="vm.saveDraftEvent($event)">Save draft</md-button>
     </div>
     <div ng-if-end class="secondary-buttons" ng-show="vm.project.hasPublishedVersion">
       <md-button class="md-warn" ng-click="vm.discardDraft($event)">Discard draft</md-button>
     </div>
     <div class="primary-buttons" ng-if="vm.state.current.name === 'newProject'">
-      <md-button class="md-primary md-raised" ng-click="vm.saveDraft($event)">Save draft</md-button>
+      <md-button class="md-primary md-raised" ng-click="vm.saveDraftEvent($event)">Save draft</md-button>
     </div>
     <div class="secondary-buttons" ng-if="vm.state.params.editMode === 'publish' || vm.state.current.name === 'newProject'">
       <md-button class="md-primary" ui-sref="dashboard">Go to dashboard</md-button>
