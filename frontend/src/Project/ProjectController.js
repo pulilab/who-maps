@@ -31,30 +31,26 @@ class ProjectController  {
         const newProject = this.state.current.name === 'newProject';
         const publishMode = this.state.params.editMode === 'publish';
         const lastVersion = ProjectModule.getLastVersion(state);
-
         let project = null;
         let team = null;
         let viewers = null;
-        let countryFields = null;
+
         if (this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
             viewers = this.viewers;
-            countryFields = this.countryFields;
         }
         else {
             if (newProject) {
                 project = ProjectModule.getVanillaProject(state);
                 team = [userProfile];
                 viewers = [];
-                countryFields = ProjectModule.getProjectCountryFields(state)(true, !publishMode);
             }
             else {
                 project = publishMode ? ProjectModule.getCurrentPublished(state) :
                   ProjectModule.getCurrentDraftProjectForEditing(state);
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
-                countryFields = ProjectModule.getProjectCountryFields(state)(false, !publishMode);
             }
         }
 
@@ -75,8 +71,7 @@ class ProjectController  {
             structure: ProjectModule.getProjectStructure(state),
             users: SystemModule.getUserProfiles(state),
             userProfile,
-            userProjects: ProjectModule.getPublishedProjects(state),
-            countryFields
+            userProjects: ProjectModule.getPublishedProjects(state)
         };
     }
 
@@ -126,13 +121,9 @@ class ProjectController  {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
     }
 
-    async getCountryFields(country, oldValue) {
-        // this is ugly like this otherwise the coverage reporter fails
-        if (!country) {
-            return;
-        }
-        if ((oldValue && country !== oldValue) || this.editMode === undefined) {
-            await this.$ngRedux.dispatch(CountryModule.setCurrentCountry(country, ['districts', 'countryFields']));
+    getCountryFields(country) {
+        if (country) {
+            this.$ngRedux.dispatch(CountryModule.setCurrentCountry(country, ['districts', 'countryFields']));
         }
     }
 
@@ -154,11 +145,11 @@ class ProjectController  {
         });
     }
 
-    async save() {
+    async publishProject() {
         this.clearCustomErrors();
         if (this.form.$valid) {
             try {
-                const data = await this.publish(this.project, this.team, this.viewers, this.countryFields);
+                const data = await this.publish(this.project, this.team, this.viewers);
                 this.postPublishAction(data);
             }
             catch (e) {
@@ -176,7 +167,7 @@ class ProjectController  {
     async saveDraft() {
         try {
             const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
-              this.team, this.viewers, this.countryFields));
+              this.team, this.viewers));
             this.showToast('Draft updated');
             if (this.newProject) {
                 this.state.go('editProject', { appName:  project.id }, {
