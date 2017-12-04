@@ -77,8 +77,8 @@ class ProjectController  {
 
     eventListeners() {
         this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
-        this.EE.on('projectSaveDraft', this.saveDraft, this);
-        this.EE.on('projectDiscardDraft', this.discardDraft, this);
+        this.EE.on('projectSaveDraft', this.saveDraftHandler, this);
+        this.EE.on('projectDiscardDraft', this.saveDraftHandler, this);
     }
 
     onInit() {
@@ -87,6 +87,9 @@ class ProjectController  {
         this.isAddAnother = false;
         this.activateValidation = true;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
+        if (this.state.current.name === 'newProject') {
+            this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
+        }
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
         this.createDialogs();
@@ -113,8 +116,8 @@ class ProjectController  {
     onDestroy() {
         this.unsubscribe();
         this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
-        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraft);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
+        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraftHandler);
     }
 
     watchers() {
@@ -164,7 +167,7 @@ class ProjectController  {
 
     }
 
-    async saveDraft() {
+    async saveDraftHandler() {
         try {
             const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
               this.team, this.viewers));
