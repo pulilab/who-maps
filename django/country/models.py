@@ -82,6 +82,7 @@ class CountryField(models.Model):
 
     def to_representation(self):
         return {
+            "id": self.pk,
             "country": self.country.id,
             "type": self.type,
             "question": self.question,
