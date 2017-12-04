@@ -18,7 +18,7 @@ def move_country_admin_to_m2m(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('country', '0014_country_users'),
+        ('country', '0015_country_users'),
     ]
 
     operations = [

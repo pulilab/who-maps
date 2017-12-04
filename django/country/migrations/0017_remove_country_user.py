@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('country', '0015_move_admin_to_m2m'),
+        ('country', '0016_move_admin_to_m2m'),
     ]
 
     operations = [
