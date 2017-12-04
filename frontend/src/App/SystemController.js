@@ -1,18 +1,28 @@
-import _ from 'lodash';
-import { Storage } from '../Common/';
+import * as UserModule from '../store/modules/user';
 
 class SystemController {
 
-    constructor($state, $scope) {
+    constructor($state, $scope, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
-        this.storage = new Storage();
-        this.eventBindings();
-        this.cs = require('../Common/CommonServices');
-        this.isLogin = this.storage.get('login');
-        this.userProfile = this.cs.userProfile;
         this.watchers();
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+    }
+
+    mapState(state) {
+        return {
+            userProfile: state.user.profile
+        };
+    }
+
+    onInit() {
+    }
+
+    onDestroy() {
+        this.unsubscribe();
     }
 
     watchers() {
@@ -23,58 +33,22 @@ class SystemController {
         });
     }
 
-    eventBindings() {
-        this.EE.once('login', this.handleLogin.bind(this));
-    }
-
-    handleLogin() {
-        this.storage.set('login', true);
-        const rs = this.cs.reset();
-        rs.loadedPromise.then(() => {
-            let appName = _.last(rs.projectList);
-            if (!this.cs.userProfile || _.isNull(this.cs.userProfile.name) || this.cs.userProfile.name === '') {
-                this.state.go('editProfile');
-            }
-            else if (appName && appName.id && this.cs.userProfile.account_type === 'I') {
-                appName = appName.id;
-                this.state.go('dashboard', { appName });
-            }
-            else {
-                const state = this.cs.userProfile.account_type === 'Y' ? 'inventory' : 'country';
-                appName = appName && appName.id ? appName.id : null;
-                this.state.go(state, { appName });
-            }
-        }, () => {
-            console.error('failed login');
-        });
-    }
-
     hasProfile() {
-        return this.cs.hasProfile();
+        return this.userProfile;
     }
 
     openMenu($mdOpenMenu, event) {
         $mdOpenMenu(event);
     }
 
-    logout() {
-        const rest = this.cs.reset();
-        rest.loadedPromise.then(() => {
-            this.isLogin = false;
-            this.userProfileId = null;
-            this.storage.clear();
-        });
-    }
-
-
     static systemControllerFactory() {
 
-        function systemController($state, $scope) {
+        function systemController($state, $scope, $ngRedux) {
 
-            return new SystemController($state, $scope);
+            return new SystemController($state, $scope, $ngRedux);
         }
 
-        systemController.$inject = ['$state', '$scope'];
+        systemController.$inject = ['$state', '$scope', '$ngRedux'];
 
         return systemController;
     }

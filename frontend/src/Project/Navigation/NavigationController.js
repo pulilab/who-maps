@@ -1,9 +1,10 @@
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 class NavigationController {
 
-    constructor($element) {
+    constructor($element, $state) {
         this.EE = window.EE;
         this.element = $element;
+        this.state = $state;
         this.scrollTo = this.scrollTo.bind(this);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
@@ -22,7 +23,7 @@ class NavigationController {
 
     activateNavigation(hash) {
         const navigation = this.element[0].getElementsByTagName('li');
-        _.forEach(navigation, element => {
+        forEach(navigation, element => {
             if (element.classList.contains(hash)) {
                 element.classList.add('active');
             }
@@ -33,9 +34,9 @@ class NavigationController {
     }
 
     scrollHandler() {
-        if (this.content.scrollTop > 205) {
+        if (this.content.scrollTop > 260) {
             this.element[0].style.position = 'fixed';
-            this.element[0].style.top = '60px';
+            this.element[0].style.top = '70px';
         }
         else {
             this.element[0].style.position = 'absolute';
@@ -47,16 +48,28 @@ class NavigationController {
         this.EE.emit('projectScrollTo', hash);
     }
 
-    setAddAnother() {
-        this.isAddAnother = true;
+    goTo(editMode) {
+        if (editMode === 'draft' || editMode === 'publish' && this.project.hasPublishedVersion) {
+            this.state.go(this.state.current.name, { editMode });
+        }
+    }
+
+    saveDraft(e) {
+        e.preventDefault();
+        this.EE.emit('projectSaveDraft');
+    }
+
+    discardDraft(e) {
+        e.preventDefault();
+        this.EE.emit('projectDiscardDraft');
     }
 
     static navigationFactory() {
         require('./Navigation.scss');
-        function navigation($element) {
-            return new NavigationController($element);
+        function navigation($element, $state) {
+            return new NavigationController($element, $state);
         }
-        navigation.$inject = ['$element'];
+        navigation.$inject = ['$element', '$state'];
         return navigation;
     }
 }

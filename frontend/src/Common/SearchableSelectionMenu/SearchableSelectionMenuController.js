@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import replace from 'lodash/replace';
+import cloneDeep from 'lodash/cloneDeep';
 import angular from 'angular';
 
 class SearchableSelectionMenuController {
@@ -46,11 +47,11 @@ class SearchableSelectionMenuController {
     }
 
     prepareOptionsArray() {
-        const temp = _.cloneDeep(this.options);
+        const temp = cloneDeep(this.options);
         if (this.subOptions === void 0 || this.subOptions === 0) {
             this.subOptions = 0;
             this.fields = [{}];
-            this.fields[0][this.subOptions] = _.cloneDeep(temp);
+            this.fields[0][this.subOptions] = cloneDeep(temp);
         }
         else {
             this.fields = temp;
@@ -83,7 +84,7 @@ class SearchableSelectionMenuController {
         }
         const element = this.element.find('span')[0];
         let cont = angular.element(element).html();
-        cont = _.replace(cont, /,/g, '');
+        cont = replace(cont, /,/g, '');
         angular.element(element).html(cont);
     }
 

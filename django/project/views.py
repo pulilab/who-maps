@@ -1,9 +1,9 @@
-import copy
 import functools
 import csv
 
 from django.db import transaction
 from django.http import HttpResponse
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
@@ -13,17 +13,25 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
-from country.models import Country, CountryField
+from country.models import Country
 
-from .serializers import ProjectSerializer, ProjectGroupListSerializer, \
-    ProjectGroupUpdateSerializer
+from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HealthFocusArea
-from .project_data import project_structure
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
+
+
+def cache_structure(fn):
+    def wrapper(*args, **kwargs):
+        data = cache.get('project-structure-data')
+        if not data:
+            data = fn(*args, **kwargs)
+            cache.set('project-structure-data', data)
+        return data
+
+    return wrapper
 
 
 class ProjectPublicViewSet(ViewSet):
-
     @staticmethod
     def by_district(request, country_id):
         """
@@ -32,14 +40,14 @@ class ProjectPublicViewSet(ViewSet):
 
         # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
 
-        projects = Project.objects.filter(data__country=int(country_id))
+        projects = Project.projects.published_only().filter(data__country=int(country_id))
 
         # get district names
         district_names = set()
 
         def district_name_finder(projects):
             for project in projects:
-                for district in project.data.get('coverage'):
+                for district in project.data.get('coverage', []):
                     district_names.add(district.get('district'))
 
         district_name_finder(projects)
@@ -50,7 +58,7 @@ class ProjectPublicViewSet(ViewSet):
         def filter_project_by_district_name(districts, projects):
             for district_name in districts:
                 for project in projects:
-                    for district in project.data.get('coverage'):
+                    for district in project.data.get('coverage', []):
                         if district.get('district') == district_name:
                             result_dict[district_name].append({
                                 "id": project.id,
@@ -67,204 +75,254 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
-        projects = Project.objects.all()  # lazy QuerySet
+        def get_strategies(platforms):
+            ds_names = []
+            for platform in platforms:
+                ds_names.extend([x.name for x in DigitalStrategy.objects.get_names_for_ids(platform['strategies'])])
+            return list(set(ds_names))
+
+        projects = Project.projects.published_only()  # lazy QuerySet
 
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
 
-        result_list = functools.reduce(lambda acc, p: acc + [{
-            "id": p.id,
-            "uuid": p.public_id,
-            "name": p.name,
-            "organisation": p.data.get('organisation'),
-            "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
-            "donors": p.data.get('donors'),
-            "country": p.data.get('country'),
-            "country_name": Country.get_name_by_id(p.data.get('country')),
-            "contact_name": p.data.get('contact_name'),
-            "contact_email": p.data.get('contact_email'),
-            "implementation_overview": p.data.get('implementation_overview'),
-            "implementing_partners": p.data.get('implementing_partners'),
-            "implementation_dates": p.data.get('implementation_dates'),
-            "health_focus_areas": p.data.get('health_focus_areas'),
-            "hsc_challenges": p.data.get('hsc_challenges'),
-            "his_bucket": p.data.get('his_bucket'),
-            "geographic_scope": p.data.get('geographic_scope'),
-            "platforms": p.data.get('platforms'),
-        }], projects, [])
-
+        result_list = functools.reduce(
+            lambda acc, p: acc + [{
+                "id": p.id,
+                "uuid": p.public_id,
+                "name": p.name,
+                "organisation": p.data.get('organisation'),
+                "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
+                "donors": p.data.get('donors'),
+                "country": p.data.get('country'),
+                "country_name": Country.get_name_by_id(p.data.get('country')),
+                "contact_name": p.data.get('contact_name'),
+                "contact_email": p.data.get('contact_email'),
+                "implementation_overview": p.data.get('implementation_overview'),
+                "implementing_partners": p.data.get('implementing_partners'),
+                "implementation_dates": p.data.get('implementation_dates'),
+                "health_focus_areas": [x.name for x in HealthFocusArea.objects.get_names_for_ids(
+                    p.data.get("health_focus_areas", []))],
+                "digital_strategies": get_strategies(p.data.get("platforms", [])),
+                "hsc_challenges": [x.challenge for x in HSCChallenge.objects.get_names_for_ids(
+                    p.data.get("hsc_challenges", []))],
+                "his_bucket": [x.name for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))],
+                "geographic_scope": p.data.get('geographic_scope'),
+                "platforms": [x.name for x in TechnologyPlatform.objects.get_names_for_ids(
+                    [x['id'] for x in p.data.get("platforms", [])])],
+            }], projects, [])
         return Response(result_list)
 
-    @staticmethod
-    def project_structure(request):
-        project_structure['interoperability_links'] = [{'pre': x.pre, 'name': x.name} for x in InteroperabilityLink.objects.all()]
-        project_structure['technology_platforms'] = [x.name for x in TechnologyPlatform.objects.all()]
+    def project_structure(self, request):
+        return Response(self._get_project_structure())
+
+    @cache_structure
+    def _get_project_structure(self):
         strategies = []
-
-        system = {'name': 'System', 'subGroups': []}
-        system_parents = DigitalStrategy.objects.filter(group='System', parent=None)
-        for parent in system_parents.all():
-            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            system['subGroups'].append(sub)
-        strategies.append(system)
-
-        client = {'name': 'Client', 'subGroups': []}
-        client_parents = DigitalStrategy.objects.filter(group='Client', parent=None)
-        for parent in client_parents.all():
-            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            client['subGroups'].append(sub)
-        strategies.append(client)
-
-        provider = {'name': 'Provider', 'subGroups': []}
-        provider_parents = DigitalStrategy.objects.filter(group='Provider', parent=None)
-        for parent in provider_parents.all():
-            sub = {'name': parent.name, 'strategies': [x.name for x in parent.strategies.all()]}
-            provider['subGroups'].append(sub)
-        strategies.append(provider)
-
-        project_structure['strategies'] = strategies
+        for group in DigitalStrategy.objects.filter(parent=None).values_list('group', flat=True).distinct():
+            subGroups = []
+            for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
+                subGroups.append(dict(
+                    id=parent.id,
+                    name=parent.name,
+                    strategies=parent.strategies.values('id', 'name')
+                )
+                )
+            strategies.append(dict(
+                name=group,
+                subGroups=subGroups
+            ))
 
         health_focus_areas = []
-        for category in HealthCategory.objects.all().order_by('name'):
-            hfa_data = []
-            for hfa in category.health_focus_areas.all():
-                hfa_data.append(hfa.name)
-            health_focus_areas.append({'name': category.name, 'health_focus_areas': hfa_data})
+        for category in HealthCategory.objects.all():
+            health_focus_areas.append(dict(
+                id=category.id,
+                name=category.name,
+                health_focus_areas=category.health_focus_areas.values('id', 'name')
+            ))
 
-        project_structure['health_focus_areas'] = health_focus_areas
+        hsc_challenges = []
+        for hsc in HSCChallenge.objects.values('id', 'name').distinct('name'):
+            hsc_challenges.append(dict(
+                id=hsc['id'],
+                name=hsc['name'],
+                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'challenge')
+            ))
 
-        return Response(project_structure)
+        return dict(
+            interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
+            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
+            licenses=Licence.objects.values('id', 'name'),
+            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
+            his_bucket=HISBucket.objects.values('id', 'name'),
+            health_focus_areas=health_focus_areas,
+            hsc_challenges=hsc_challenges,
+            strategies=strategies
+        )
 
     @staticmethod
     def project_structure_export(request):
-        project_structure_export = {}
-        project_structure_export['interoperability_links'] = [{'id': x.id, 'name': x.name} for x in InteroperabilityLink.objects.all()]
-        project_structure_export['technology_platforms'] = [{'id': x.id, 'name': x.name} for x in TechnologyPlatform.objects.all()]
-        project_structure_export['digital_strategies'] = [{'id': x.id, 'name': x.name} for x in DigitalStrategy.objects.all()]
-
-        return Response(project_structure_export)
+        """
+        Used to sync objects to "Implementation Toolkit"
+        """
+        return Response(dict(
+            interoperability_links=InteroperabilityLink.objects.values('id', 'name'),
+            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
+            digital_strategies=DigitalStrategy.objects.values('id', 'name')
+        ))
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
-
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
         """
-        return Response(Project.projects.member_of(request.user).values("id", "name"))
+        data = []
+
+        for project in Project.projects.member_of(request.user):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+
+        return Response(data)
 
 
-class ProjectCRUDViewSet(TeamTokenAuthMixin, ViewSet):
-
+class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def get_permissions(self):
         if self.action == "retrieve":
             return []  # Retrieve needs a bit more complex filtering based on user permission
         else:
-            return super(ProjectCRUDViewSet, self).get_permissions()
+            return super(ProjectRetrieveViewSet, self).get_permissions()
 
-    def create(self, request, *args, **kwargs):
-        """
-        Creates a project.
-        """
-        data_serializer = ProjectSerializer(data=request.data)
-        data_valid = data_serializer.is_valid()
-        if data_valid:
-            project_data = copy.copy(data_serializer.validated_data)
-            project_data.pop('name', None)
-            project = Project.projects.create(name=data_serializer.validated_data["name"], data=project_data)
-            project.team.add(request.user.userprofile)
-            # Add default Toolkit structure for the new project.
-            Toolkit.objects.create(project_id=project.id, data=toolkit_default)
-            data = dict(data_serializer.validated_data)
-            data.update(dict(id=project.id, public_id=project.public_id, country_name=project.country.name))
-            return Response(data, status=status.HTTP_201_CREATED)
+    def _get_permission_based_data(self, project):
+        draft = None
+
+        if not self.request.user.is_authenticated():  # ANON
+            data = project.get_anon_data()
         else:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            is_member = project.is_member(self.request.user)
+            is_country_admin = project.is_country_admin(self.request.user)
+            if is_member or is_country_admin:  # MEMBER or Country Admin
+                data = project.get_member_data()
+                draft = project.get_member_draft()
+            else:  # LOGGED IN
+                data = project.get_non_member_data()
+
+        if draft:
+            draft = project.to_representation(data=draft, draft_mode=True)
+        published = project.to_representation(data=data)
+
+        return project.to_response_dict(published=published, draft=draft)
 
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieves a project.
         """
-        is_member = False
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
-        if not request.user.is_authenticated():  # ANON
-            data = project.get_anon_data()
-        else:
-            is_member = project.is_member(request.user)
-            if is_member:  # MEMBER
-                data = project.get_member_data()
-            else:  # LOGGED IN
-                data = project.get_non_member_data()
+        return Response(self._get_permission_based_data(project))
 
-        if is_member:
-            last_version = CoverageVersion.objects.filter(project_id=project.id).order_by("-version").first()
-            if last_version:
-                data.update(last_version=last_version.version)
-                data.update(last_version_date=last_version.modified)
 
-        schema = CountryField.objects.get_schema(project.country.id)
-        answers = CountryField.objects.get_answers(country_id=project.country.id, project_id=project.id)
-        country_fields = []
-
-        for field in schema:
-            found = answers.filter(question=field.question, type=field.type).first()
-            if found:
-                country_fields.append(found)
-
-        data.update(id=project.id, name=project.name, organisation_name=project.get_organisation().name,
-                    public_id=project.public_id, country_name=project.country.name,
-                    fields=[field.to_representation() for field in country_fields])
-        return Response(data)
-
+class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
         Updates a project.
         """
-        data_serializer = ProjectSerializer(data=request.data)
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+
+        data_serializer = ProjectPublishedSerializer(project, data=request.data)
+
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
-        data_serializer.fields.get('name').validators\
-            .append(UniqueValidator(queryset=Project.objects.all().exclude(id=project.id)))
-        self.check_object_permissions(request, project)
-        data_valid = data_serializer.is_valid()
-        if data_valid:
-            project_data = copy.copy(data_serializer.validated_data)
-            project.name = project_data["name"]
-            project_data.pop('name', None)
-            project.data = project_data
-            project.save()
-            data_serializer.validated_data.update(dict(id=project.id, public_id=project.public_id,
-                                                       country_name=project.country.name))
-            return Response(data_serializer.validated_data, status=status.HTTP_200_OK)
-        else:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data_serializer.fields.get('name').validators \
+            .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
+
+        self.check_object_permissions(self.request, project)
+
+        data_serializer.is_valid(raise_exception=True)
+
+        instance = data_serializer.save()
+
+        # Remove approval if already approved, so country admin can approve again because project has changed
+        # TODO: refactor
+        # if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
+        #     project.approval.delete()
+        #     ProjectApproval.objects.create(project=project, user=project.country.user)
+
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
+
+
+class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
+    def create(self, request, *args, **kwargs):
+        """
+        Creates a Draft project.
+        """
+        data_serializer = ProjectDraftSerializer(data=request.data)
+        data_serializer.is_valid(raise_exception=True)
+        project = data_serializer.save(owner=request.user.userprofile)
+
+        # Add default Toolkit structure for the new project.
+        Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
+
+        # Add approval if required by the country
+        # TODO: validate this
+        # if project.country.project_approval:
+        #
+        #     ProjectApproval.objects.create(project=project, user=project.country.user)
+
+        data = project.to_representation(draft_mode=True)
+
+        return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        """
+        Updates a draft project.
+        """
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+
+        data_serializer = ProjectDraftSerializer(project, data=request.data)
+
+        self.check_object_permissions(self.request, project)
+
+        data_serializer.is_valid(raise_exception=True)
+
+        instance = data_serializer.save()
+
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
-    serializer_class = ProjectGroupListSerializer
+    serializer_class = ProjectGroupSerializer
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         self.check_object_permissions(self.request, instance)
-        serializer = ProjectGroupUpdateSerializer(instance, data=request.data)
+        serializer = ProjectGroupSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
 
 class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
-
     def create(self, request, project_id):
         """
         Makes versions out of Toolkit and coverage data for the project.
         """
         project = get_object_or_400(Project, "No such project.", id=project_id)
         self.check_object_permissions(request, project)
+
+        if not project.public_id:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version").first()
         if not last_cov_ver:
@@ -273,13 +331,10 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             new_version = last_cov_ver.version + 1
 
-        current_cov = project.data["coverage"]
+        current_cov = project.data.get("coverage", [])
         current_cov += [project.data.get('national_level_deployment', {})]
 
-        new_cov_ver = CoverageVersion(
-                            project_id=project_id,
-                            version=new_version,
-                            data=current_cov)
+        new_cov_ver = CoverageVersion(project_id=project_id, version=new_version, data=current_cov)
         new_cov_ver.save()
 
         # Make a new version from current toolkit.
@@ -290,10 +345,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             new_version = last_toolkit_ver.version + 1
         current_toolkit = get_object_or_400(Toolkit, "No such Toolkit", project_id=project_id).data
-        new_toolkit_ver = ToolkitVersion(
-                            project_id=project_id,
-                            version=new_version,
-                            data=current_toolkit)
+        new_toolkit_ver = ToolkitVersion(project_id=project_id, version=new_version, data=current_toolkit)
         new_toolkit_ver.save()
         data = {
             "coverage": {
@@ -328,7 +380,6 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
-
     def create(self, request):
         """
         Creates CSV file out of a list of project IDs
@@ -351,18 +402,20 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
             p.data.get('implementation_overview'),
             p.data.get('geographic_scope'),
-            ", ".join(p.data.get('health_focus_areas', [])),
-            ", ".join([s['name'] for s in p.data.get('platforms', [])]),
-            ", ".join(p.data.get('hsc_challenges', [])),
-            ", ".join(p.data.get('his_bucket', [])),
+            ", ".join(
+                [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))]),
+            ", ".join([str(x) for x in
+                       TechnologyPlatform.objects.get_names_for_ids([x['id'] for x in p.data.get("platforms", [])])]),
+            ", ".join([str(x) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))]),
+            ", ".join([str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))]),
             "Yes" if p.data.get('government_approved') else "No",
             p.data.get('government_investor'),
-            ", ".join(p.data.get('licenses', [])),
+            ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))]),
             p.data.get('repository'),
             p.data.get('mobile_application'),
             p.data.get('wiki'),
-            ", ".join(p.data.get('interoperability_standards', [])),
-
+            ", ".join([str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
+                p.data.get("interoperability_standards", []))]),
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
@@ -371,12 +424,13 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         writer = csv.writer(response)
 
         # HEADER
-        writer.writerow(['Name', 'UUID', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name',
-                         'Donors', "Implementing Partners", "Point of Contact",
-                         "Overview of digital health implementation", "Geographical scope",
-                         "Health Focus Areas", "Software", 'Health System Challenges',
-                         'Health Information System Support', 'Government Approved', 'Government Investor',
-                         'Licenses', 'Repository', 'Mobile Application', 'Wiki', 'Interoperability Standards'])
+        writer.writerow([
+            'Name', 'UUID', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name', 'Donors',
+            "Implementing Partners", "Point of Contact", "Overview of digital health implementation",
+            "Geographical scope", "Health Focus Areas", "Software", 'Health System Challenges',
+            'Health Information System Support', 'Government Approved', 'Government Investor', 'Licenses', 'Repository',
+            'Mobile Application', 'Wiki', 'Interoperability Standards'
+        ])
 
         # PROJECTS
         [writer.writerow([field for field in project]) for project in results]

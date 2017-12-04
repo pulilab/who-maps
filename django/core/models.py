@@ -4,7 +4,6 @@ from django.db.models.query_utils import Q
 
 
 class GetObjectOrNoneManager(models.Manager):
-
     def get_object_or_none(self, select_for_update=False, **kwargs):
         """
         Hides Exception handling boilerplate when querying for single objects.
@@ -35,7 +34,6 @@ class ExtendedModel(models.Model):
 
 
 class NameByIDMixin(object):
-
     @classmethod
     def get_name_by_id(cls, id=None):
         if not id:
@@ -58,8 +56,11 @@ class ActiveQuerySet(QuerySet):
     def add_intial_q(self):
         self.query.add_q(Q(is_active=True))
 
+    def get_names_for_ids(self, ids):
+        return self.filter(id__in=ids).only('name')
 
-class SoftDeleteMixin(models.Model):
+
+class SoftDeleteModel(models.Model):
     is_active = models.BooleanField(default=True)
 
     # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
@@ -73,3 +74,14 @@ class SoftDeleteMixin(models.Model):
     def delete(self, *args, **kwargs):
         self.is_active = False
         self.save()
+
+
+class ExtendedNameOrderedSoftDeletedModel(SoftDeleteModel, ExtendedModel):
+    name = models.CharField(max_length=512)
+
+    class Meta:
+        abstract = True
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name

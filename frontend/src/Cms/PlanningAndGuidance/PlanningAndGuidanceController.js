@@ -1,42 +1,42 @@
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
+import * as CmsModule from '../../store/modules/cms';
 
 class PlanningAndGuidanceController {
 
-    constructor($scope, $state) {
+    constructor($scope, $state, $ngRedux) {
         this.scope = $scope;
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.$postLink = this.postLink.bind(this);
         this.applyFilters = this.applyFilters.bind(this);
         this.extractDomainSelection = this.extractDomainSelection.bind(this);
         this.applyLimitOrSearch = this.applyLimitOrSearch.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     onInit() {
-        this.cs = require('../CmsService');
         this.createFilters();
         this.lessons = [];
         this.resources = [];
         this.experiences = [];
-        this.all = [];
         this.showLimit = 10;
         this.showAllFlag = false;
-        this.getData();
         this.searchText = null;
         this.watchers();
+    }
+    onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            all: CmsModule.getCmsData(state)
+        };
     }
 
     postLink() {
         this.checkHash();
-    }
-
-    getData() {
-        this.cs.getData().then(data => {
-            this.scope.$evalAsync(() => {
-                data.forEach(item => { item.searchOccurrences = 0; });
-                this.all = data;
-            });
-        });
     }
 
     checkHash() {
@@ -108,7 +108,7 @@ class PlanningAndGuidanceController {
     }
 
     extractDomainSelection() {
-        return _.flatMap(this.filters, filter => {
+        return flatMap(this.filters, filter => {
             return filter.domains;
         });
     }
@@ -186,10 +186,10 @@ class PlanningAndGuidanceController {
 
     static factory() {
         require('./PlanningAndGuidance.scss');
-        function planningAndGuidance($scope, $state) {
-            return new PlanningAndGuidanceController($scope, $state);
+        function planningAndGuidance($scope, $state, $ngRedux) {
+            return new PlanningAndGuidanceController($scope, $state, $ngRedux);
         }
-        planningAndGuidance.$inject = ['$scope', '$state'];
+        planningAndGuidance.$inject = ['$scope', '$state', '$ngRedux'];
         return planningAndGuidance;
     }
 }

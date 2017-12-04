@@ -8,34 +8,26 @@ const su = new StaticUtilities('CountryView');
 
 function config($stateProvider, $compileProvider) {
     $stateProvider
-        .state(moduleName, {
-            url: '/country',
-            parent: 'app',
-            views: {
-                main: {
-                    template: '<country-view></country-view>',
-                    resolve: {
-                        'country': () => {
-                            return su.lazyLoader($compileProvider, 'countryViewComponent');
-                        }
-                    }
-                }
-            }
-        })
-        .state('pdf-export', {
-            url: '/pdf-export',
-            template: '<pdf-export instant-download="true"></pdf-export>',
-            resolve: {
-                'pdf-export': () => {
-                    return su.lazyLoader($compileProvider, 'PDFExport/PDFExportComponent');
-                }
-            }
-        });
+      .state(moduleName, {
+          url: '/country',
+          parent: 'app',
+          profileRequired: true,
+          views: {
+              main: {
+                  template: '<country-view></country-view>'
+              }
+          },
+          resolve: {
+              'country': () => {
+                  return su.lazyLoader($compileProvider, 'countryViewComponent');
+              }
+          }
+      });
 }
 
 config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .config(config);
+  .config(config);
 
 export default moduleName;

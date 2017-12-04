@@ -1,65 +1,36 @@
-import { Storage } from '../Common/';
-import SignupService from '../Common/Signup/SignupService';
-import { CustomCountryService } from '../Common/';
+import { getSubDomain } from '../Utilities';
+import * as ProjectModule from '../store/modules/projects';
+import * as CountryModule from '../store/modules/countries';
 
 class LandingPageModuleController {
 
-    constructor($scope, $location, $anchorScroll) {
-        this.storage = new Storage();
-        this.ss = new SignupService();
-        this.ccs = CustomCountryService;
+    constructor($scope, $state, $location, $anchorScroll, $ngRedux) {
         this.scope = $scope;
+        this.state = $state;
         this.EE = window.EE;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.addEventListeners = this.addEventListeners.bind(this);
-        this.removeEventListeners = this.removeEventListeners.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CountryModule)(this);
+    }
+
+    mapState(state) {
+        return {
+            user: state.user,
+            projects: ProjectModule.getUserProjects(state),
+            countryData: CountryModule.getCountryCoverPage(state),
+            countryCover: CountryModule.getCountryCoverPicture(state)
+        };
     }
 
     onInit() {
-        const vm = this;
-        this.isLogin = this.storage.get('login');
-        if (this.isLogin) {
-            const commonService = require('../Common/CommonServices');
-            this.projectList = commonService.projectList;
-        }
-        const subDomain = this.ccs.getSubDomain();
-        this.ccs.getCountryData(subDomain).then(data => {
-            vm.scope.$evalAsync(() => {
-                vm.countryData = data;
-                vm.countryCover = null;
-                vm.countryData.partners = data.default_partners.concat(data.partner_logos);
-                if (data.cover) {
-                    vm.countryCover = {
-                        background: `url(${data.cover}) 0 0`,
-                        'background-size': 'cover',
-                        'background-repeat': 'no-repeat'
-                    };
-                }
-            });
-        });
-        this.addEventListeners();
+        const subDomain = getSubDomain();
+        this.setCurrentCountryFromCode(subDomain);
     }
 
     onDestroy() {
-        this.isLogin = void 0;
-        this.removeEventListeners();
-    }
-
-    addEventListeners() {
-        this.EE.on('logout', this.handleLogout, this);
-    }
-
-    handleLogout() {
-        this.scope.$evalAsync(() => {
-            this.isLogin = false;
-        });
-    }
-
-    removeEventListeners() {
-        this.EE.removeListener('logout', this.handleLogout, this);
+        this.unsubscribe();
     }
 
     scrollTo(idString) {
@@ -67,13 +38,17 @@ class LandingPageModuleController {
         this.$anchorScroll();
     }
 
+    goToNewProject() {
+        this.state.go('newProject');
+    }
+
     static landingControllerFactory() {
-        function landingController($scope, $location, $anchorScroll) {
+        function landingController($scope, $state, $location, $anchorScroll, $ngRedux) {
             require('./landingPage.scss');
-            return new LandingPageModuleController($scope, $location, $anchorScroll);
+            return new LandingPageModuleController($scope, $state, $location, $anchorScroll, $ngRedux);
         }
 
-        landingController.$inject = ['$scope', '$location', '$anchorScroll'];
+        landingController.$inject = ['$scope', '$state', '$location', '$anchorScroll', '$ngRedux'];
 
         return landingController;
     }

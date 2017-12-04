@@ -1,6 +1,5 @@
 import LandingPageController from './LandingPageController';
 import _template from './LandingPageModule.html';
-import './landingPage.scss';
 
 const hssComponent = {
     controller: LandingPageController.landingControllerFactory(),

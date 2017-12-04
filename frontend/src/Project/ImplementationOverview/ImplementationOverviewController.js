@@ -1,37 +1,47 @@
+import some from 'lodash/some';
+import every from 'lodash/every';
+import isNil from 'lodash/isNil';
+import isNull from 'lodash/isNull';
 import CollapsibleSet from '../CollapsibleSet';
-import _ from 'lodash';
+import * as CountriesModule from '../../store/modules/countries';
 
 class ImplementationOverview extends CollapsibleSet {
 
-    constructor($scope, $element) {
+    constructor($scope, $element, $ngRedux) {
         super($element, $scope, 'project');
-        this.ccs = require('../../Common/CustomCountryService');
+        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.defaultOnDestroy.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.setAvailableOptions = this.setAvailableOptions.bind(this);
         this.mapHealthFocusAreas = this.mapHealthFocusAreas.bind(this);
     }
 
+    mapData(state) {
+        return {
+            districtList: CountriesModule.getCurrentCountryDistricts(state)
+        };
+    }
+
     onInit() {
         this.districtList = [];
-        this.fetchDistricts = this.fetchDistricts.bind(this);
         this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, CountriesModule)(this);
         this.watchers();
         this.health_focus_areas = this.mapHealthFocusAreas(this.structure.health_focus_areas);
+    }
+
+    onDestroy() {
+        this.defaultOnDestroy();
+        this.unsubscribe();
     }
 
     watchers() {
         this.scope.$watch(() => {
             return this.project.platforms;
         }, (platform) => {
-            this.setAvailableOptions(platform, this.structure.technology_platforms, 'name');
-            this.addOtherOption(platform);
+            this.setAvailableDictOptions(platform, this.structure.technology_platforms, 'name');
         }, true);
-
-        this.scope.$watch(() => {
-            return this.project.country;
-        }, this.fetchDistricts);
 
         this.scope.$watch(()=>{
             return this.project.coverage;
@@ -48,32 +58,41 @@ class ImplementationOverview extends CollapsibleSet {
             this.setAvailableOptions(this.project.coverage, districts, 'district');
             this.addClearOption(this.project.coverage);
         });
-    }
 
-    addOtherOption(platform) {
-        platform.forEach(p => {
-            if (p.available.indexOf('Other') === -1) {
-                p.available.push('Other');
-            }
-        });
+        this.scope.$watch(s => s.vm.districtList, this.removeUnavailableDistricts.bind(this));
     }
 
     addClearOption(districts) {
-        districts.forEach(p => {
-            if (p.available.indexOf('Clear selection') === -1 && p.district !== undefined) {
-                p.available.unshift('Clear selection');
-            }
-        });
+        if (districts && districts.length > 0) {
+            districts.forEach(p => {
+                if (p.available.indexOf('Clear selection') === -1 && p.district !== undefined) {
+                    p.available.unshift('Clear selection');
+                }
+            });
+        }
     }
 
     clearDistrict(coverage) {
-        for (const cov of coverage) {
-            if (cov.district === 'Clear selection') {
-                cov.district = undefined;
-                cov.health_workers = undefined;
-                cov.facilities = undefined;
-                cov.clients = undefined;
+        if (coverage && coverage.length > 0) {
+            for (const cov of coverage) {
+                if (cov.district === 'Clear selection') {
+                    cov.district = undefined;
+                    cov.health_workers = undefined;
+                    cov.facilities = undefined;
+                    cov.clients = undefined;
+                }
             }
+        }
+    }
+
+    removeUnavailableDistricts(districts) {
+        if (this.project.coverage &&  this.project.coverage.length > 0
+          && districts && districts.length > 0) {
+            this.project.coverage.forEach(cov => {
+                if (districts.indexOf(cov.district) === -1) {
+                    cov.district = undefined;
+                }
+            });
         }
     }
 
@@ -85,10 +104,8 @@ class ImplementationOverview extends CollapsibleSet {
         let color = 0;
         for (const grandparent of healthFocusAreas) {
             color += 1;
-            for (const parent of grandparent.subGroups) {
-                parent.class = `group-${color}`;
-                intervention.subGroups.push(parent);
-            }
+            grandparent.class = `group-${color}`;
+            intervention.subGroups.push(grandparent);
         }
         return [intervention];
     }
@@ -108,36 +125,18 @@ class ImplementationOverview extends CollapsibleSet {
         }
 
         if (current === 'nld' && this.project.national_level_deployment) {
-            return _.some(nld);
+            return some(nld);
         }
         else if (current === 'dld') {
-            return _.some([
+            return some([
                 item.district,
-                !_.isNil(item.health_workers),
-                !_.isNil(item.facilities),
-                !_.isNil(item.clients),
-                _.every(nld, _.isNull)
+                !isNil(item.health_workers),
+                !isNil(item.facilities),
+                !isNil(item.clients),
+                every(nld, isNull)
             ]);
         }
         return false;
-    }
-
-    fetchDistricts(country) {
-        const self = this;
-        if (country) {
-            self.ccs.getCountryDistricts(country)
-              .then(self.handleDistrictData.bind(self));
-        }
-    }
-
-    handleDistrictData(data) {
-        this.project.coverage.forEach(cov => {
-            if (data.indexOf(cov.district) === -1) {
-                cov.district = undefined;
-            }
-        });
-        this.districtList = data;
-        this.scope.$evalAsync();
     }
 
     handleCustomError(key) {
@@ -157,10 +156,10 @@ class ImplementationOverview extends CollapsibleSet {
 
     static factory() {
         require('./ImplementationOverview.scss');
-        function implementation($scope, $element) {
-            return new ImplementationOverview($scope, $element);
+        function implementation($scope, $element, $ngRedux) {
+            return new ImplementationOverview($scope, $element, $ngRedux);
         }
-        implementation.$inject = ['$scope', '$element'];
+        implementation.$inject = ['$scope', '$element', '$ngRedux'];
         return implementation;
     }
 }

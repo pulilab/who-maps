@@ -3,24 +3,22 @@
 
     <md-card md-whiteframe="2" class="rel" layout="row">
         <div class="littleheader">COUNTRY LEVEL VIEW</div>
-        <md-tabs md-border-bottom md-dynamic-height md-center-tabs="true" flex="75" class="clv-tab-container">
+        <md-tabs md-border-bottom md-center-tabs="true" flex="75" class="clv-tab-container">
 
             <!-- MAP VIEW -->
             <md-tab label="map view">
 
-                <div class="tab-wrap" id="map" ng-class="{'emptyy': !vm.projectsData}">
+                <div class="tab-wrap map" id="map" ng-class="{'emptyy': !vm.projectsData}">
 
                     <md-card md-whiteframe="2" class="countrychoser">
                         <md-input-container>
                             <md-select
                               class="no-border"
                               md-container-class="country-chooser topalign"
-                              ng-model-options="{trackBy: '$value.id'}"
+                              ng-model-options="{trackBy: '$value.id', allowInvalid: true}"
                               placeholder='Select a country'
-                              ng-model="vm.selectedCountry"
-                              ng-change="vm.updateCountry(vm.selectedCountry)">
+                              ng-model="vm.selectedCountry">
                                 <md-option ng-repeat="country in vm.countries track by $index" ng-value="country">{{country.name}}</md-option>
-
                             </md-select>
                         </md-input-container>
                     </md-card>
@@ -67,8 +65,7 @@
                                   md-container-class="country-chooser topalign"
                                   ng-model-options="{trackBy: '$value.id'}"
                                   placeholder='Select a country'
-                                  ng-model="vm.selectedCountry"
-                                  ng-change="vm.updateCountry(vm.selectedCountry)">
+                                  ng-model="vm.selectedCountry">
                                     <md-option ng-value="vm.showAllCountries">Show all countries</md-option>
                                     <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
@@ -132,17 +129,17 @@
                           layout="row"
                           layout-padding
                           ng-repeat="project in vm.projectsData track by $index"
-                          ng-class="{'member': vm.isMember(project), 'viewer': vm.isViewer(project)}">
+                          ng-class="{'member': project.isMember, 'viewer': project.isViewer}">
 
                             <div flex="35" class="projectlink" layout="row">
                                 <div flex class="name">
-                                    <md-icon class="member" ng-show="vm.isMember(project)">grade</md-icon>
-                                    <md-icon class="viewer" ng-show="vm.isViewer(project)">visibility</md-icon>
+                                    <md-icon class="member" ng-show="project.isMember">grade</md-icon>
+                                    <md-icon class="viewer" ng-show="project.isViewer">visibility</md-icon>
                                     {{project.name}}
                                 </div>
                                 <div layout="column" class="links">
-                                    <span ng-hide="vm.isMember(project) || vm.isViewer(project)" ui-sref="public-dashboard({ appName: project.id })">Project Dashboard</span>
-                                    <span ng-show="vm.isMember(project) || vm.isViewer(project)" ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ng-hide="project.isTeam" ui-sref="public-dashboard({ appName: project.id })">Project Dashboard</span>
+                                    <span ng-show="project.isTeam" ui-sref="dashboard({ appName: project.id })">Project Dashboard</span>
                                 </div>
                             </div>
                             <div flex="20" class="cap">
@@ -177,7 +174,8 @@
                             Number of Projects
                         </div>
                         <div class="country-name">
-                            in {{vm.selectedCountry.name}}
+                            <!-- in {{vm.selectedCountry.name}} -->
+                            in selected country
                         </div>
                     </div>
                     <div class="project-counter-arrow">

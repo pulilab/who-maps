@@ -7,7 +7,6 @@ from user.models import UserProfile
 
 
 class StateManager(models.QuerySet):
-
     def normal(self):
         return self.filter(state=State.NORMAL)
 

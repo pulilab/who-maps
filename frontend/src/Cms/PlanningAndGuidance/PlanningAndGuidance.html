@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <cms-list-element ng-repeat="item in vm.toShow | orderBy: ['searchOccurrences', 'id'] : true| limitTo : vm.showLimit" item="item"></cms-list-element>
+        <cms-list-element ng-repeat="item in vm.toShow | orderBy: ['searchOccurrences', 'id'] : true | limitTo : vm.showLimit" item="item"></cms-list-element>
         <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.toShow.length === 0" class="empty-card">
           <span>
             <i class="material-icons">sentiment_dissatisfied</i>

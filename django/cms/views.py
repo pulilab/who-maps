@@ -14,7 +14,6 @@ from cms.serializers import CmsSerializer, CommentSerializer
 
 
 class FlagMixin(object):
-
     def partial_update(self, request, *args, **kwargs):
         """
         PATCH endpoint used for flagging content (eg: post, comment)
@@ -55,8 +54,8 @@ class CmsViewSet(FlagMixin, ModelViewSet):
         super(CmsViewSet, self).perform_create(serializer)
 
 
-class CommentViewSet(FlagMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
-                     mixins.DestroyModelMixin, GenericViewSet):
+class CommentViewSet(FlagMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                     GenericViewSet):
     queryset = Comment.objects.showable().order_by('-id')
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)

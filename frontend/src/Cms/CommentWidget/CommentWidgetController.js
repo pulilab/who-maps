@@ -1,28 +1,45 @@
 import { prettifyDate, postProcessHtml } from '../utilities';
 import { Storage } from '../../Common/';
+import * as CmsModule from '../../store/modules/cms';
+import * as UserModule from '../../store/modules/user';
+import * as SystemModule from '../../store/modules/system';
 
 class CommentWidgetController {
 
-    constructor($scope) {
+    constructor($scope, $ngRedux) {
         this.scope = $scope;
         this.prettifyDate = prettifyDate;
         this.postProcessHtml = postProcessHtml;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.storage = new Storage();
+        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
 
     }
     onInit() {
         this.expanded = false;
         this.editMode = false;
-        this.cs = require('../CmsService');
+    }
+
+    onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        return {
+            global: CmsModule.getCmsData(state),
+            userProfile: UserModule.getProfile(state),
+            profiles: SystemModule.getUserProfiles(state)
+        };
     }
 
     isAuthor() {
-        return this.cs.currentUserId === this.comment.user;
+        return this.userProfile.id === this.comment.user;
     }
 
     getUsername() {
-        return this.cs.getNameFromId(this.comment);
+        const user = this.profiles.find(p => p.id === this.comment.user);
+        return user ? user.name : 'No name';
     }
 
     edit() {
@@ -32,13 +49,9 @@ class CommentWidgetController {
         }
     }
 
-    update() {
-        return this.cs.updateComment(this.modified).then(() => {
-            this.scope.$evalAsync(() => {
-                this.comment = Object.assign({}, this.modified);
-                this.editMode = false;
-            });
-        });
+    async update() {
+        await this.updateComment(this.modified);
+        this.editMode  = false;
     }
 
     readMore() {
@@ -47,10 +60,10 @@ class CommentWidgetController {
 
     static factory() {
         require('./CommentWidget.scss');
-        function commentWidget($scope) {
-            return new CommentWidgetController($scope);
+        function commentWidget($scope, $ngRedux) {
+            return new CommentWidgetController($scope, $ngRedux);
         }
-        commentWidget.$inject = ['$scope'];
+        commentWidget.$inject = ['$scope', '$ngRedux'];
         return commentWidget;
     }
 }

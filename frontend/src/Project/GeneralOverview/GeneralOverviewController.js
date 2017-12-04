@@ -1,17 +1,28 @@
-import _ from 'lodash';
+import includes from 'lodash/includes';
 import moment from 'moment';
 import CollapsibleSet from '../CollapsibleSet';
-import ProjectService from '../ProjectService';
+import * as ProjectModule from '../../store/modules/projects';
+import * as CountriesModule from '../../store/modules/countries';
 
 
 class GeneralOverviewController extends CollapsibleSet {
 
-    constructor($scope, $element) {
+    constructor($scope, $element, $state, $ngRedux) {
         super($element, $scope, 'project');
-        this.ccs = require('../../Common/CustomCountryService');
-        this.ns = new ProjectService();
+        this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
+        this.mapData = this.mapData.bind(this);
+    }
+
+    mapData(state) {
+        const similarProject = ProjectModule.getSimilarProject(state)
+          .filter(p =>  !this.project || p.id !== this.project.id);
+        return {
+            similarProject,
+            countriesList : CountriesModule.getCountriesList(state)
+        };
     }
 
     bindFunctions() {
@@ -23,9 +34,8 @@ class GeneralOverviewController extends CollapsibleSet {
     onInit() {
         this.defaultOnInit();
         this.bindFunctions();
+        this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
-        this.getStructureData();
-        this.projectList = [];
     }
 
     watchers() {
@@ -59,29 +69,22 @@ class GeneralOverviewController extends CollapsibleSet {
         }
     }
 
-    getStructureData() {
-        const self = this;
-        this.ccs.getCountries().then(data => {
-            self.scope.$evalAsync(() => {
-                self.countriesList = data;
-            });
-        });
-    }
-
     getUsers(criteria) {
         return this.users.filter(el => {
             // Avoid to search user that have no proper profile.
             if (el && el.name && el.organisation_name) {
-                return _.includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
-                    _.includes(el.organisation_name.toLowerCase(), criteria.toLowerCase());
+                return includes(el.name.toLowerCase(), criteria.toLowerCase()) ||
+                  includes(el.organisation_name.toLowerCase(), criteria.toLowerCase());
             }
             return false;
         });
     }
 
     handleCustomError(key) {
-        this.form[key].$setValidity('custom', true);
-        this.form[key].customError = [];
+        if (this.form[key]) {
+            this.form[key].$setValidity('custom', true);
+            this.form[key].customError = [];
+        }
     }
 
     setCustomError(key, error) {
@@ -93,26 +96,14 @@ class GeneralOverviewController extends CollapsibleSet {
         this.form[key].customError = errors;
     }
 
-    checkName() {
-        const self = this;
+    async checkName() {
         this.handleCustomError('name');
-        if (self.project.name && self.project.name.length > 0 && self.project.name !== self.currentName) {
-            self.ns.autocompleteProjectName(self.project.name)
-                .then(result => {
-                    _.forEach(result, project => {
-                        project.isOwn = _.find(self.projectList, pj => {
-                            return pj.id === project.id;
-                        });
-                    });
-                    result = result.filter(project => {
-                        return project.name !== self.currentName;
-                    });
-                    self.similarProject = result;
-                    if (result && result[0] && result[0].name.toLowerCase() === self.project.name.toLowerCase()) {
-                        self.setCustomError('name', 'Project name is not unique');
-                    }
-                    self.scope.$evalAsync();
-                });
+        if (this.project.name && this.project.name.length > 0 && this.project.name !== this.currentName) {
+            await this.searchDuplicateProjectName(this.project.name);
+            if (this.similarProject && this.similarProject[0]
+              && this.similarProject[0].name.toLowerCase() === this.project.name.toLowerCase()) {
+                this.setCustomError('name', 'Project name is not unique');
+            }
         }
     }
 
@@ -130,10 +121,10 @@ class GeneralOverviewController extends CollapsibleSet {
 
     static factory() {
         require('./GeneralOverview.scss');
-        function generalOverview($scope, $element) {
-            return new GeneralOverviewController($scope, $element);
+        function generalOverview($scope, $element, $state, $ngRedux) {
+            return new GeneralOverviewController($scope, $element, $state, $ngRedux);
         }
-        generalOverview.$inject = ['$scope', '$element'];
+        generalOverview.$inject = ['$scope', '$element', '$state', '$ngRedux'];
         return generalOverview;
     }
 }

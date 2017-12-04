@@ -1,59 +1,50 @@
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import forEach from 'lodash/forEach';
 
-import EditProfileService from './EditProfileService';
-import Protected from '../Protected';
-import Storage from '../Storage';
-import CommonService  from '../CommonServices';
+import * as UserModule from '../../store/modules/user';
+import * as CountriesModule from '../../store/modules/countries';
 
 /* global DEV, Promise */
 
-class EditProfileController extends Protected {
+class EditProfileController  {
 
-    constructor($scope, $state, $mdToast) {
-        super();
-        this.es = new EditProfileService();
-        this.EE = window.EE;
-        this.ccs = require('../CustomCountryService');
+    constructor($scope, $state, $mdToast, $ngRedux) {
         this.scope = $scope;
         this.state = $state;
         this.toast = $mdToast;
-        this.storage = new Storage();
         this.$onInit = this.initialization.bind(this);
-        this.$onDestroy = this.defaultOnDestroy.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.bindFunctions();
+        this.mapState = this.mapState.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     bindFunctions() {
         this.countryCloseCallback = this.countryCloseCallback.bind(this);
     }
 
+    mapState(state) {
+        const stateProfile = UserModule.getProfile(state);
+        const userProfile = this.userProfile ? this.userProfile : stateProfile;
+        userProfile.country = stateProfile.country;
+        return {
+            userProfile,
+            countriesList: CountriesModule.getCountriesList(state)
+        };
+    }
+
+    onDestroy() {
+        this.unsubscribe();
+    }
+
     initialization() {
-        this.cs = CommonService;
         this.dataLoaded = false;
-        this.sentForm = false;
         this.handleDataLoad();
     }
 
     handleDataLoad() {
-        const self = this;
-        this.userProjects = this.cs.projectList;
-        this.structure = this.cs.projectStructure;
-        this.userProfile = this.cs.userProfile;
-        this.rawName = this.cs.userProfile.name;
-        this.ccs.getCountries().then(data => {
-            self.scope.$evalAsync(() => {
-                self.countriesList = data;
-            });
-        });
-        if (this.userProfile && this.userProfile.organisation && _.isNull(this.userProfile.organisation.name)) {
-            this.userProfile.organisation = null;
-        }
-        if (!this.userProfile || !this.userProfile.email) {
-            const user = this.storage.get('user');
-            this.userProfile = {
-                email: user.username
-            };
-        }
+        this.rawName = this.userProfile.name;
+
         this.dataLoaded = true;
         this.scope.$watch(() => {
             return this.userProfile;
@@ -66,73 +57,46 @@ class EditProfileController extends Protected {
 
     showToast(text) {
         this.toast.show(
-            this.toast.simple()
-                .textContent(text)
-                .position('bottom right')
-                .hideDelay(3000)
+          this.toast.simple()
+            .textContent(text)
+            .position('bottom right')
+            .hideDelay(3000)
         );
     }
 
 
     countryCloseCallback(name) {
-        this.userProfile.country = name;
+        this.setCountry(name);
         this.handleCustomError('country');
     }
 
-    isViewer(project) {
-        return this.cs.isViewer(project);
-    }
-
-    isMember(project) {
-        return this.cs.isMember(project);
-    }
 
     checkErrors(field) {
         if (this.editProfileForm && this.editProfileForm[field]) {
-            return !_.isEmpty(this.editProfileForm[field].$error);
+            return !isEmpty(this.editProfileForm[field].$error);
         }
         return false;
     }
 
 
-    save() {
-        this.sentForm = true;
+    async save() {
         if (this.editProfileForm.$valid && this.userProfile.organisation) {
-            const profile = _.cloneDeep(this.userProfile);
-            profile.organisation = this.userProfile.organisation.id;
-            const request = profile.id ?
-                this.es.updateProfile(profile) : this.es.createProfile(profile);
-            request.then(result => {
-                if (result.success) {
-                    this.handleSuccessSave(result);
-                }
-                else {
-                    this.handleResponse(result.data);
-                }
-            });
+            try {
+                await this.saveProfile(this.userProfile);
+                this.state.go('dashboard');
+            }
+            catch (data) {
+                this.handleResponse(data);
+            }
+
         }
         else {
             this.showToast('Validation error');
         }
     }
 
-    handleSuccessSave(result) {
-        this.showToast('Profile successfully updated');
-        this.storage.set('user_profile_id', result.data.id);
-        const reset = this.cs.reset();
-        this.cs.userProfileId = result.data.id;
-        return reset.loadedPromise.then(()=> {
-            this.userProfile = this.cs.userProfile;
-            this.EE.emit('profileUpdated');
-            this.scope.$evalAsync();
-            if (!this.rawName) {
-                this.state.go('dashboard');
-            }
-        });
-    }
-
     handleResponse(response) {
-        _.forEach(response.data, (item, key) => {
+        forEach(response.data, (item, key) => {
             this.editProfileForm[key].customError = item;
             this.editProfileForm[key].$setValidity('custom', false);
         });
@@ -147,11 +111,11 @@ class EditProfileController extends Protected {
     static editProfileFactory() {
         require('./EditProfile.scss');
 
-        function editProfile($scope, $state, $mdToast) {
-            return new EditProfileController($scope, $state, $mdToast);
+        function editProfile($scope, $state, $mdToast, $ngRedux) {
+            return new EditProfileController($scope, $state, $mdToast, $ngRedux);
         }
 
-        editProfile.$inject = ['$scope', '$state', '$mdToast'];
+        editProfile.$inject = ['$scope', '$state', '$mdToast', '$ngRedux'];
 
         return editProfile;
     }

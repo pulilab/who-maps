@@ -4,16 +4,16 @@
   <ul class="selected-strategies">
     <li ng-repeat="item in vm.selection">
       <i class="material-icons">done</i>
-      <span>{{item}}</span>
+      <span>{{item.name}}</span>
     </li>
   </ul>
 
   <md-button ng-show="vm.selection.length > 0" class="edit-button md-primary" md-no-ink ng-click="vm.showModal($event)">
-    <md-icon>create</md-icon> Edit selection <!-- {{vm.buttonName}} -->
+    <md-icon>playlist_add_check</md-icon> Edit selection <!-- {{vm.buttonName}} -->
   </md-button>
 
   <md-button class="add-button md-primary" ng-hide="vm.elements.length === 0 || vm.selection.length > 0" md-no-ink ng-click="vm.showModal($event)">
-    <md-icon>playlist_add_check</md-icon> Add {{vm.buttonName}}
+    <md-icon>add</md-icon> Add {{vm.buttonName}}
   </md-button>
 
   <md-input-container class="dms-error">
