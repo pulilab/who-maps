@@ -4,9 +4,9 @@ django:
   expose:
     - "8000"
   links:
-    - postgres:postgres
-    - celery:celery
-    - redis:redis
+    - postgres
+    - celery
+    - redis
   volumes:
     - ./django:/src
   command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
@@ -18,8 +18,8 @@ celery:
   environment:
     - C_FORCE_ROOT=true
   links:
-    - postgres:postgres
-    - redis:redis
+    - postgres
+    - redis
   volumes:
     - ./django:/src
   command: /usr/local/bin/celery -A scheduler worker -B -l info
