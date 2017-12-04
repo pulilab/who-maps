@@ -119,7 +119,7 @@ class ProjectPublicViewSet(ViewSet):
     @cache_structure
     def _get_project_structure(self):
         strategies = []
-        for group in DigitalStrategy.objects.filter(parent=None).values_list('group', flat=True).distinct():
+        for group, _ in DigitalStrategy.GROUP_CHOICES:
             subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
                 subGroups.append(dict(
