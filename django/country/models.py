@@ -76,13 +76,13 @@ class CountryField(models.Model):
         for field in schema:
             found = answers.filter(question=field.question, type=field.type).first()
             if found:
-                country_fields.append(found)
+                country_fields.append((found, field.id))
 
         return country_fields
 
-    def to_representation(self):
+    def to_representation(self, schema_id=None):
         return {
-            "id": self.pk,
+            "schema_id": schema_id,
             "country": self.country.id,
             "type": self.type,
             "question": self.question,
