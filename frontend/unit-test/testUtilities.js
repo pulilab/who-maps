@@ -3,6 +3,8 @@
 const dialog = {
     cancel: jasmine.createSpy('cancel'),
     hide: jasmine.createSpy('hide'),
+    alert: jasmine.createSpy('alert').and.returnValue({}),
+    confirm: jasmine.createSpy('confirm').and.returnValue({}),
     show: jasmine.createSpy('show').and.callFake((config) => {
         if (config.onComplete) {
             config.onComplete();
@@ -20,6 +22,7 @@ const dialog = {
 
 const $state = {
     params: {},
+    current: {},
     go: jasmine.createSpy('stateGo')
 };
 
