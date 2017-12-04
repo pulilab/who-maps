@@ -83,21 +83,27 @@ class ProjectController  {
         };
     }
 
-    eventListeners() {
-        this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
-        this.EE.on('projectSaveDraft', this.saveDraft, this);
-        this.EE.on('projectDiscardDraft', this.discardDraft, this);
-    }
-
     onInit() {
         this.eventListeners();
         this.districtList = [];
-        this.isAddAnother = false;
         this.activateValidation = true;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
         this.createDialogs();
+    }
+
+    onDestroy() {
+        this.unsubscribe();
+        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
+        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraft);
+    }
+
+    eventListeners() {
+        this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
+        this.EE.on('projectSaveDraft', this.saveDraft, this);
+        this.EE.on('projectDiscardDraft', this.discardDraft, this);
     }
 
     createDialogs() {
@@ -116,13 +122,6 @@ class ProjectController  {
             ok: 'Close',
             theme: 'alert'
         });
-    }
-
-    onDestroy() {
-        this.unsubscribe();
-        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
-        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraft);
     }
 
     watchers() {

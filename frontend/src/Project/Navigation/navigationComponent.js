@@ -8,7 +8,6 @@ const component = {
     name: 'navigation',
     bindings: {
         readOnlyMode: '<',
-        isAddAnother: '=',
         showCountryFields: '<',
         project: '<',
         team: '<',
