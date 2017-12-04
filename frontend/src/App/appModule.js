@@ -236,12 +236,13 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
                 .clickOutsideToClose(false)
                 .title('Authentication problem')
                 .textContent(message)
+                .theme('alert')
                 .ariaLabel('Auth problem dialog')
                 .ok('Understand')
             );
             mainUi.style.display = '';
-            $state.go('landing');
             $ngRedux.dispatch(UserModule.doLogout());
+            $state.go('landing');
             processingAuth = false;
         }
     };
