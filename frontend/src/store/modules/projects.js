@@ -695,7 +695,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
         const list = [...state.list];
         const index = findIndex(list, pj => pj.id === action.projectId);
         const fields = [...list[index].draft.fields];
-        const fieldIndex = findIndex(fields, f => f.id === action.countryField.id);
+        const fieldIndex = findIndex(fields, f => f.schema_id === action.countryField.schema_id);
         if (fieldIndex !== -1) {
             fields.splice(fieldIndex, 1, { ...action.countryField });
         }
