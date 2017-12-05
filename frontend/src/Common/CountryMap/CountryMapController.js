@@ -10,9 +10,10 @@ import d3 from 'd3';
 
 class CountryMapController {
 
-    constructor($element, $scope) {
+    constructor($element, $scope, $state) {
         this.el = $element;
         this.scope = $scope;
+        this.state = $state;
         this.EE = window.EE;
         this.tooltipOver = false;
         this.preventMouseOut = false;
@@ -252,14 +253,23 @@ class CountryMapController {
         }
     }
 
+    goToProject(project) {
+        if (project.isMember) {
+            this.state.go('dashboard', { appName: project.id });
+        }
+        else {
+            this.state.go('public-dashboard', { appName: project.id });
+        }
+    }
+
     static countrymapFactory() {
         require('./Countrymap.scss');
 
-        function countrymap($element, $scope) {
-            return new CountryMapController($element, $scope);
+        function countrymap($element, $scope, $state) {
+            return new CountryMapController($element, $scope, $state);
         }
 
-        countrymap.$inject = ['$element', '$scope'];
+        countrymap.$inject = ['$element', '$scope', '$state'];
 
         return countrymap;
     }

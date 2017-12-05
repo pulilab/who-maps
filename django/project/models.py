@@ -62,7 +62,7 @@ class Project(ExtendedModel):
 
     def is_country_admin(self, user):
         # Country admin has permissions only for the published project
-        return self.get_country().user == user if self.get_country() else False
+        return user in self.get_country().users.all() if self.get_country() else False
 
     def get_member_data(self):
         return self.data
@@ -104,7 +104,8 @@ class Project(ExtendedModel):
             organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
             country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
-            fields=[field.to_representation() for field in CountryField.get_for_project(self, draft_mode)],
+            fields=[field.to_representation(schema_id)
+                    for field, schema_id in CountryField.get_for_project(self, draft_mode)],
         )
 
         data.update(extra_data)

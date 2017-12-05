@@ -1,24 +1,36 @@
 import forEach from 'lodash/forEach';
+import * as ProjectModule from '../../store/modules/projects';
 class NavigationController {
 
-    constructor($element, $state) {
+    constructor($element, $state, $ngRedux) {
         this.EE = window.EE;
         this.element = $element;
         this.state = $state;
+        this.$ngRedux = $ngRedux;
         this.scrollTo = this.scrollTo.bind(this);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.scrollHandler = this.scrollHandler.bind(this);
+        this.mapState = this.mapState.bind(this);
     }
 
     onInit() {
         this.content = window.document.getElementsByClassName('main-content')[0];
         this.content.addEventListener('scroll', this.scrollHandler);
         this.EE.on('activateFieldSet', this.activateNavigation, this);
+        this.unsubscribe = this.$ngRedux.connect(this.mapState, ProjectModule)(this);
     }
 
     onDestroy() {
         this.EE.removeListener('activateFieldSet', this.activateNavigation);
+        this.unsubscribe();
+    }
+
+    mapState(state) {
+        const countryFields = ProjectModule.getProjectCountryFields(state)(!this.isPublished);
+        return {
+            countryFields
+        };
     }
 
     activateNavigation(hash) {
@@ -54,22 +66,22 @@ class NavigationController {
         }
     }
 
-    saveDraft(e) {
+    saveDraftEvent(e) {
         e.preventDefault();
         this.EE.emit('projectSaveDraft');
     }
 
-    discardDraft(e) {
+    discardDraftEvent(e) {
         e.preventDefault();
         this.EE.emit('projectDiscardDraft');
     }
 
     static navigationFactory() {
         require('./Navigation.scss');
-        function navigation($element, $state) {
-            return new NavigationController($element, $state);
+        function navigation($element, $state, $ngRedux) {
+            return new NavigationController($element, $state, $ngRedux);
         }
-        navigation.$inject = ['$element', '$state'];
+        navigation.$inject = ['$element', '$state', '$ngRedux'];
         return navigation;
     }
 }

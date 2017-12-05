@@ -10,6 +10,7 @@ const component = {
         readOnlyMode: '<',
         showCountryFields: '<',
         project: '<',
+        isPublished: '<',
         team: '<',
         viewers: '<',
         countryFields: '<'

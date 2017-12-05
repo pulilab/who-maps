@@ -1,4 +1,4 @@
-<div class="project-section section-country-fields" md-whiteframe="2">
+<div class="project-section section-country-fields" md-whiteframe="2" ng-show="vm.countryFields && vm.countryFields.length > 0">
   <div class="section-title md-title">
     5. Country fields
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -14,7 +14,10 @@
           ng-if="field.type === 1"
           class="md-block string-field">
           <label>{{field.question}}</label>
-          <input type="text" ng-required="vm.activateValidation" md-maxlength="1000" name="custom{{$index}}" ng-model="field.answer">
+          <input type="text" ng-required="vm.activateValidation"
+                 ng-blur="vm.updateProjectCountryFields(field)"
+                 md-maxlength="1000" name="custom{{$index}}"
+                 ng-model="field.answer">
           <div ng-messages="vm.form['custom' + $index].$error">
             <div ng-message="required">This is required.</div>
           </div>
@@ -26,7 +29,10 @@
           ng-if="field.type === 2"
           class="md-block number-field">
           <label>{{field.question}}</label>
-          <input type="number" ng-required="vm.activateValidation" name="custom{{$index}}" ng-model="field.answer">
+          <input type="number" ng-required="vm.activateValidation"
+                 ng-blur="vm.updateProjectCountryFields(field)"
+                 name="custom{{$index}}"
+                 ng-model="field.answer">
           <div ng-messages="vm.form['custom' + $index].$error">
             <div ng-message="required">This is required.</div>
           </div>
@@ -40,9 +46,10 @@
           <label>{{field.question}}</label>
           <md-radio-group
             ng-model="field.answer"
+            ng-blur="vm.updateProjectCountryFields(field)"
             name="custom{{$index}}"
             md-no-ink
-            required
+            ng-required="vm.activateValidation"
             class="md-primary"
             layout="row">
             <md-radio-button ng-value="true" aria-label="custom{{$index}}-yes">

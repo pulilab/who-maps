@@ -1,5 +1,6 @@
-from fabric.api import local, run, cd, env
 import time
+from fabric.api import local, run, cd, env
+from fabric.context_managers import warn_only
 
 # ENVIRONMENTS #
 
@@ -21,7 +22,7 @@ def production():
     env.hosts = ['whomaps@207.154.215.126']
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/2.2"
+    env.branch = "tags/3.1"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -33,7 +34,7 @@ def staging():
     env.hosts = ['whomaps@139.59.148.238']
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/2.2"
+    env.branch = "tags/3.1"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -49,6 +50,9 @@ def deploy():
     with cd(env.project_root):
         # get new stuff from git
         run('git fetch')
+        if env.name == 'production':
+            with warn_only():
+                run('rm ~/who-maps/nginx/conf.d/production.conf')
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(10)
@@ -62,7 +66,7 @@ def deploy():
         elif env.name == 'production':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.prod.yml ".format(
                 env.project_root, env.project_root)
-            run('mv ~/who-maps/nginx/conf.d/production.conf.disabled ~/who-maps/nginx/conf.d/production.conf')
+            run('cp ~/who-maps/nginx/conf.d/production.conf.disabled ~/who-maps/nginx/conf.d/production.conf')
         else:
             options = ""
 
@@ -166,6 +170,10 @@ def cov():
 
 def lint():
     local('docker-compose exec django flake8')
+
+
+def makemigrations():
+    local('docker exec -it whomaps_django_1 python manage.py makemigrations --noinput')
 
 
 def migrate():
