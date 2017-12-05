@@ -573,7 +573,10 @@ async function postProjectSaveActions(data, team, viewers, dispatch, state, toUp
     const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
     const twPromise = saveTeamViewers(data, team, viewers);
     const [teamViewers] = await Promise.all([twPromise, cfPromise]);
-    data[toUpdate].fields = countryFields;
+    if (toUpdate === 'published') {
+        data.published.fields = countryFields;
+    }
+    data.draft.fields = countryFields;
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
@@ -610,6 +613,7 @@ export function discardDraft() {
         const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
         dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
         dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
+
         return Promise.resolve(data);
     };
 }

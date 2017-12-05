@@ -78,7 +78,7 @@ class ProjectController  {
     eventListeners() {
         this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
         this.EE.on('projectSaveDraft', this.saveDraftHandler, this);
-        this.EE.on('projectDiscardDraft', this.saveDraftHandler, this);
+        this.EE.on('projectDiscardDraft', this.discardDraftHandler, this);
     }
 
     onInit() {
@@ -117,7 +117,7 @@ class ProjectController  {
         this.unsubscribe();
         this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
         this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
-        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraftHandler);
+        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     watchers() {
@@ -185,7 +185,7 @@ class ProjectController  {
         }
     }
 
-    async discardDraft() {
+    async discardDraftHandler() {
         try {
             await this.$mdDialog.show(this.confirmDraftDiscard);
             await this.$ngRedux.dispatch(ProjectModule.discardDraft());

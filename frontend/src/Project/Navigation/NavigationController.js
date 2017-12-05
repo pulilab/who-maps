@@ -71,7 +71,7 @@ class NavigationController {
         this.EE.emit('projectSaveDraft');
     }
 
-    discardDraft(e) {
+    discardDraftEvent(e) {
         e.preventDefault();
         this.EE.emit('projectDiscardDraft');
     }
