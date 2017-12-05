@@ -482,10 +482,9 @@ export function loadProjectDetails() {
 export function setCurrentProject(id) {
     return async (dispatch, getState) => {
         id = parseInt(id, 10);
-        const state = getState();
-        if (id && id !== -1 && id !== state.projects.currentProject) {
+        if (id && id !== -1 && id !== getState().projects.currentProject) {
             dispatch({ type: 'SET_CURRENT_PROJECT', id });
-            const project = getCurrentProjectIfExist(state);
+            const project = getCurrentProjectIfExist(getState());
             if (project) {
                 const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country, ['mapData']));
                 const detailPromise = dispatch(loadProjectDetails());
