@@ -104,7 +104,8 @@ class Project(ExtendedModel):
             organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
             country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
-            fields=[field.to_representation() for field in CountryField.get_for_project(self, draft_mode)],
+            fields=[field.to_representation(schema_id)
+                    for field, schema_id in CountryField.get_for_project(self, draft_mode)],
         )
 
         data.update(extra_data)

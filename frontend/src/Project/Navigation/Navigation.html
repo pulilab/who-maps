@@ -41,7 +41,7 @@
           <span><i class="material-icons">&#xE5C8;</i></span>Interoperability
         </a>
       </li>
-      <li class="country-fields" ng-show="vm.showCountryFields">
+      <li class="country-fields" ng-show="vm.countryFields && vm.countryFields.length > 0">
         <a ng-click="vm.scrollTo('country-fields')">
           <span><i class="material-icons">&#xE5C8;</i></span>Country fields
         </a>
@@ -53,13 +53,13 @@
       <md-button type="submit" class="md-primary md-raised">Publish</md-button>
     </div>
     <div class="secondary-buttons">
-      <md-button class="md-primary" ng-click="vm.saveDraft($event)">Save draft</md-button>
+      <md-button class="md-primary" ng-click="vm.saveDraftEvent($event)">Save draft</md-button>
     </div>
     <div ng-if-end class="secondary-buttons" ng-show="vm.project.hasPublishedVersion">
       <md-button class="md-warn" ng-click="vm.discardDraft($event)">Discard draft</md-button>
     </div>
     <div class="primary-buttons" ng-if="vm.state.current.name === 'newProject'">
-      <md-button class="md-primary md-raised" ng-click="vm.saveDraft($event)">Save draft</md-button>
+      <md-button class="md-primary md-raised" ng-click="vm.saveDraftEvent($event)">Save draft</md-button>
     </div>
     <div class="secondary-buttons" ng-if="vm.state.params.editMode === 'publish' || vm.state.current.name === 'newProject'">
       <md-button class="md-primary" ui-sref="dashboard">Go to dashboard</md-button>

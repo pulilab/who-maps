@@ -45,13 +45,24 @@ export const isMemberOrViewer = (state, project) => {
 
 // GETTERS
 
+export const getCurrentProjectId = state => {
+    return state.projects.currentProject;
+};
+
 export const getLastVersion = state => {
     return state.projects.lastVersion;
 };
 
+function getSavedProjectList(state) {
+    if (state.projects.list) {
+        return state.projects.list.filter(p => p.id !== -1);
+    }
+    return undefined;
+}
+
 export const getPublishedProjects = state => {
     if (state.projects.list) {
-        const list = state.projects.list.map(p => {
+        const list = getSavedProjectList(state).map(p => {
             p = { ...p.published, ...isMemberOrViewer(state, p) };
             return p;
         });
@@ -62,7 +73,7 @@ export const getPublishedProjects = state => {
 
 export const getDraftedProjects = state => {
     if (state.projects.list) {
-        const list = state.projects.list.map(p => {
+        const list = getSavedProjectList(state).map(p => {
             p = { ...p.draft, ...isMemberOrViewer(state, p) };
             return p;
         });
@@ -101,7 +112,7 @@ export const getProjectStructure = state => {
 export const getUserProjects = state => {
     const structure = getFlatProjectStructure(state);
     if (state.projects.list) {
-        const list = state.projects.list.map(p => {
+        const list = getSavedProjectList(state).map(p => {
             const public_id = p.public_id;
             const isPublished = !!public_id;
             p = isPublished ? { ...p.published } : { ...p.draft };
@@ -159,7 +170,7 @@ export const getCurrentPublicProject = state => {
     return { ...project };
 };
 
-function convertCountryFieldsAnswer({ fields }) {
+function convertCountryFieldsAnswer(fields) {
     return fields.map(f => {
         f = { ... f };
         switch (f.type) {
@@ -218,11 +229,21 @@ export const getCurrentDraftInViewMode = state => {
     return undefined;
 };
 
-export const getProjectCountryFields = state => (isNewProject, isDraft) => {
+const getStoredCountryFields = state => isDraft => {
+    let project = isDraft ? getCurrentDraft(state) : getCurrentPublished(state);
+    if (project === undefined) {
+        const newProject = state.projects.list.find(p=>p.id === -1);
+        if (newProject) {
+            project = newProject.draft;
+        }
+    }
+    return project ? project.fields : [];
+};
+
+export const getProjectCountryFields = state => (isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
-    const project = isDraft ? getCurrentDraft(state) : getCurrentPublished(state);
-    const countryFields = project ? convertCountryFieldsAnswer(project) : false;
-    const result = isNewProject || !countryFields || countryFields.length === 0 ? baseCountryFields : countryFields;
+    const countryFields = convertCountryFieldsAnswer(getStoredCountryFields(state)(isDraft));
+    const result = baseCountryFields.map(bc => ({ ...bc, ...countryFields.find(cf => cf.schema_id === bc.id) }));
     return [...result];
 };
 
@@ -416,7 +437,7 @@ export function loadUserProjects() {
     return async (dispatch, getState) => {
         try {
             const state = getState();
-            if (state.user.profile && !state.projects.list) {
+            if (state.user.profile && !getSavedProjectList(state)) {
                 const { data } = await axios.get('/api/projects/member-of/');
                 dispatch({ type: 'SET_PROJECT_LIST', projects: data });
             }
@@ -433,7 +454,7 @@ export function loadProjectDetails() {
     return async (dispatch, getState) => {
         try {
             const projectId = getState().projects.currentProject;
-            if (projectId) {
+            if (projectId && projectId !== -1) {
                 const toolkitVersionsPromise = axios.get(`/api/projects/${projectId}/toolkit/versions/`);
                 const coverageVersionsPromise = axios.get(`/api/projects/${projectId}/coverage/versions/`);
                 const teamViewersPromise = axios.get(`/api/projects/${projectId}/groups/`);
@@ -462,7 +483,7 @@ export function setCurrentProject(id) {
     return async (dispatch, getState) => {
         id = parseInt(id, 10);
         const state = getState();
-        if (id && id !== state.projects.currentProject) {
+        if (id && id !== -1 && id !== state.projects.currentProject) {
             dispatch({ type: 'SET_CURRENT_PROJECT', id });
             const project = getCurrentProjectIfExist(state);
             if (project) {
@@ -473,7 +494,17 @@ export function setCurrentProject(id) {
             }
             const { data } = await axios.get(`/api/projects/${id}/`);
             dispatch({ type: 'SET_CURRENT_PUBLIC_PROJECT_DETAIL', project: data });
-
+        }
+        else if (id === -1) {
+            dispatch({ type: 'SET_CURRENT_PROJECT', id });
+            const newProject = {
+                id: -1,
+                draft: {
+                    fields: []
+                },
+                public: {}
+            };
+            dispatch({ type: 'UPDATE_SAVE_PROJECT', project: newProject });
         }
         return Promise.resolve();
     };
@@ -506,14 +537,13 @@ async function saveTeamViewers({ id }, team = [], viewers = []) {
     return data;
 }
 
-async function saveCountryFields(fields = [], country, id) {
-    fields = fields.map(f => {
-        f = Object.assign({}, f);
-        f.answer = f.type === 3 ? JSON.stringify(f.answer) : f.answer;
-        f.project = id;
-        return f;
+async function saveCountryFields(fields = [], countryId, project) {
+    fields = fields.map(({ country, question, type, answer }) => {
+        return {
+            country, answer, type, question, project
+        };
     });
-    const { data } = await axios.post(`/api/country-fields/${country}/${id}/`, { fields });
+    const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/`, { fields });
     return data.fields;
 }
 
@@ -538,12 +568,13 @@ function processForm(form) {
     return removeKeysWithoutValues(form);
 }
 
-async function postProjectSaveActions(data, team, viewers, countryFields, dispatch, state, toUpdate, method) {
+async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate, method) {
     const user = UserModule.getProfile(state).id;
+    const countryFields = getStoredCountryFields(state)(true);
     const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
     const twPromise = saveTeamViewers(data, team, viewers);
-    const [fields, teamViewers] = await Promise.all([cfPromise, twPromise]);
-    data[toUpdate].fields = fields;
+    const [teamViewers] = await Promise.all([twPromise, cfPromise]);
+    data[toUpdate].fields = countryFields;
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
@@ -557,14 +588,14 @@ async function postProjectSaveActions(data, team, viewers, countryFields, dispat
     return Promise.resolve(data);
 }
 
-export function saveDraft(form, team, viewers, countryFields) {
+export function saveDraft(form, team, viewers) {
     return async (dispatch, getState) => {
         form = processForm(form);
         const method = form.id ? 'put' : 'post';
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
             const { data } = await axios[method](url, form);
-            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'draft', method);
+            return postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'draft', method);
         }
         catch (e) {
             console.log(e);
@@ -584,12 +615,12 @@ export function discardDraft() {
     };
 }
 
-export function publish(form, team, viewers, countryFields) {
+export function publish(form, team, viewers) {
     return async (dispatch, getState) => {
         form = processForm(form);
         try {
             const { data } = await axios.put(`/api/projects/publish/${form.id}/`, form);
-            return postProjectSaveActions(data, team, viewers, countryFields,  dispatch, getState(), 'published');
+            return postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'published');
         }
         catch (e) {
             console.log(e);
@@ -625,22 +656,32 @@ export function clearSimilarNameList() {
     };
 }
 
+export function updateProjectCountryFields({ id, answer, question, type, country, schema_id }) {
+    return (dispatch, getState) => {
+        const projectId = getCurrentProjectId(getState());
+        if (type === 3) {
+            answer = answer === true ? 'true' : 'false';
+        }
+        const countryField = { id, answer, question, type, country, schema_id: schema_id ? schema_id : id };
+        dispatch({ type: 'UPDATE_COUNTRY_FIELD_ANSWER', projectId, countryField });
+    };
+}
+
 
 // Reducers
 
 export default function projects(state = { lastVersion: 0 }, action) {
-    const p = Object.assign({}, state);
     switch (action.type) {
     case 'SET_PROJECT_LIST': {
-        p.list = action.projects.slice();
-        return Object.assign(state, {}, p);
+        const list = action.projects.slice();
+        return { ...state, list };
     }
     case 'SET_SIMILAR_NAME_LIST': {
-        p.similarProjectNames = action.list.slice();
-        return Object.assign(state, {}, p);
+        const similarProjectNames = action.list.slice();
+        return { ...state, similarProjectNames };
     }
     case 'UPDATE_SAVE_PROJECT': {
-        const list = [...p.list];
+        const list = [...state.list];
         const index = findIndex(list, pj => pj.id === action.project.id);
         if (index !== -1) {
             list.splice(index, 1, { ...action.project });
@@ -648,34 +689,47 @@ export default function projects(state = { lastVersion: 0 }, action) {
         else {
             list.push({ ...action.project });
         }
-        p.list = list;
-        return Object.assign(state, {}, p);
+        return { ...state, list };
+    }
+    case 'UPDATE_COUNTRY_FIELD_ANSWER': {
+        const list = [...state.list];
+        const index = findIndex(list, pj => pj.id === action.projectId);
+        const fields = [...list[index].draft.fields];
+        const fieldIndex = findIndex(fields, f => f.id === action.countryField.id);
+        if (fieldIndex !== -1) {
+            fields.splice(fieldIndex, 1, { ...action.countryField });
+        }
+        else {
+            fields.push({ ...action.countryField });
+        }
+        list[index].draft.fields = fields;
+        return { ...state, list };
     }
     case 'SET_CURRENT_PROJECT': {
-        p.currentProject = action.id;
-        return Object.assign(state, {}, p);
+        const currentProject = action.id;
+        return { ...state, currentProject };
     }
     case 'SET_CURRENT_PUBLIC_PROJECT_DETAIL': {
-        p.currentPublicProject = action.project;
-        return Object.assign(state, {}, p);
+        const currentPublicProject = action.project;
+        return { ...state, currentPublicProject };
     }
     case 'SET_PROJECT_STRUCTURE': {
-        p.structure = action.structure;
-        return Object.assign(state, {}, p);
+        const structure = action.structure;
+        return { ...state, structure };
     }
     case 'SET_PROJECT_INFO': {
-        p.toolkitVersions = action.info.toolkitVersions;
-        p.coverageVersions = action.info.coverageVersions;
-        p.teamViewers = action.info.teamViewers;
-        return Object.assign(state, {}, p);
+        const toolkitVersions = action.info.toolkitVersions;
+        const coverageVersions = action.info.coverageVersions;
+        const teamViewers = action.info.teamViewers;
+        return { ...state, toolkitVersions, coverageVersions, teamViewers };
     }
     case 'BUMP_PROJECT_STATE_VERSION': {
         const lastVersion = state.lastVersion += 1;
         return { ...state, lastVersion };
     }
     case 'SET_PROJECT_TEAM_VIEWERS': {
-        p.teamViewers = action.teamViewers;
-        return Object.assign(state, {}, p);
+        const teamViewers = action.teamViewers;
+        return { ...state, teamViewers };
     }
     case 'CLEAR_USER_PROJECTS': {
         return {};

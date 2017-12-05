@@ -31,30 +31,26 @@ class ProjectController  {
         const newProject = this.state.current.name === 'newProject';
         const publishMode = this.state.params.editMode === 'publish';
         const lastVersion = ProjectModule.getLastVersion(state);
-
         let project = null;
         let team = null;
         let viewers = null;
-        let countryFields = null;
+
         if (this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
             viewers = this.viewers;
-            countryFields = this.countryFields;
         }
         else {
             if (newProject) {
                 project = ProjectModule.getVanillaProject(state);
                 team = [userProfile];
                 viewers = [];
-                countryFields = ProjectModule.getProjectCountryFields(state)(true, !publishMode);
             }
             else {
                 project = publishMode ? ProjectModule.getCurrentPublished(state) :
                   ProjectModule.getCurrentDraftProjectForEditing(state);
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
-                countryFields = ProjectModule.getProjectCountryFields(state)(false, !publishMode);
             }
         }
 
@@ -75,15 +71,14 @@ class ProjectController  {
             structure: ProjectModule.getProjectStructure(state),
             users: SystemModule.getUserProfiles(state),
             userProfile,
-            userProjects: ProjectModule.getPublishedProjects(state),
-            countryFields
+            userProjects: ProjectModule.getPublishedProjects(state)
         };
     }
 
     eventListeners() {
         this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
-        this.EE.on('projectSaveDraft', this.saveDraft, this);
-        this.EE.on('projectDiscardDraft', this.discardDraft, this);
+        this.EE.on('projectSaveDraft', this.saveDraftHandler, this);
+        this.EE.on('projectDiscardDraft', this.saveDraftHandler, this);
     }
 
     onInit() {
@@ -92,6 +87,9 @@ class ProjectController  {
         this.isAddAnother = false;
         this.activateValidation = true;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
+        if (this.state.current.name === 'newProject') {
+            this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
+        }
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
         this.createDialogs();
@@ -118,21 +116,17 @@ class ProjectController  {
     onDestroy() {
         this.unsubscribe();
         this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
-        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraft);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
+        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraftHandler);
     }
 
     watchers() {
         this.scope.$watch(s => s.vm.project.country, this.getCountryFields);
     }
 
-    async getCountryFields(country, oldValue) {
-        // this is ugly like this otherwise the coverage reporter fails
-        if (!country) {
-            return;
-        }
-        if ((oldValue && country !== oldValue) || this.editMode === undefined) {
-            await this.$ngRedux.dispatch(CountryModule.setCurrentCountry(country, ['districts', 'countryFields']));
+    getCountryFields(country) {
+        if (country) {
+            this.$ngRedux.dispatch(CountryModule.setCurrentCountry(country, ['districts', 'countryFields']));
         }
     }
 
@@ -154,11 +148,11 @@ class ProjectController  {
         });
     }
 
-    async save() {
+    async publishProject() {
         this.clearCustomErrors();
         if (this.form.$valid) {
             try {
-                const data = await this.publish(this.project, this.team, this.viewers, this.countryFields);
+                const data = await this.publish(this.project, this.team, this.viewers);
                 this.postPublishAction(data);
             }
             catch (e) {
@@ -173,10 +167,10 @@ class ProjectController  {
 
     }
 
-    async saveDraft() {
+    async saveDraftHandler() {
         try {
             const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
-              this.team, this.viewers, this.countryFields));
+              this.team, this.viewers));
             this.showToast('Draft updated');
             if (this.newProject) {
                 this.state.go('editProject', { appName:  project.id }, {
