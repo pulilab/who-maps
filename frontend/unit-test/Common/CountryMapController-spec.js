@@ -1,248 +1,208 @@
 import CountryMapController from '../../src/Common/CountryMap/CountryMapController';
 import d3 from 'd3';
 import angular from 'angular';
-import perfMockMap from '../CountryView/mock/perfMockMap.js';
-import { $scope } from '../testUtilities';
-import { default as countryMapData } from '../CountryView/mock/sierra-leone/topoTest.json';
+import { $scope, $state } from '../testUtilities';
+import { default as topoSl } from './sl-topo.json';
+import { default as SLCountryMapData } from './sl-countrymapdata.json';
 
-/* global define, it, describe, expect, spyOn, beforeEach, afterEach, angular, xit, xdescribe */
-
+const mapNode = document.createElement('div');
+mapNode.id = 'map';
+document.body.appendChild(mapNode);
 const el = angular.element(document.body);
 
-let vm;
+let cc = {};
+const scope = $scope(cc);
 
-describe('CountryMapController', () => {
+fdescribe('CountryMapController', () => {
 
     beforeEach(() => {
-        const scope = $scope(vm);
-        vm = CountryMapController.countrymapFactory()(el, scope);
+        cc = CountryMapController.countrymapFactory()(el, scope, $state);
+        cc.$onInit();
     });
 
-    it('is defined', () => {
-
-        expect(vm).toBeDefined();
-    });
-
-    describe('constructor fn.', () => {
-
-        it('catches $element into vm.el', () => {
-            expect(vm.el).toBe(el);
+    afterEach(() => {
+        const last = document.getElementById('map')
+        if (last) {
+            last.innerHTML = '';
+        }
+        document.querySelectorAll('.countrymapcontainer').forEach(cont => {
+            cont.remove();
         });
-
-        it('assigns $onInit & $onDestroy', () => {
-            expect(typeof vm.$onInit).toBe('function');
-            expect(typeof vm.$onDestroy).toBe('function');
-        });
-
-        it('defines self.tooltipOver and self.preventMouseOut as false', () => {
-            expect(vm.tooltipOver).toBeFalsy();
-            expect(vm.preventMouseOut).toBeFalsy();
+        document.querySelectorAll('.countrymap').forEach(cont => {
+            cont.remove();
         });
     });
 
-    describe('$onInit', () => {
+    it('has a factory function', () => {
+        expect(CountryMapController.countrymapFactory).toBeDefined();
+        const onSpot = CountryMapController.countrymapFactory()(el, scope);
+        expect(onSpot.constructor.name).toBe(cc.constructor.name);
+    });
 
-        it('defines self.showPlaceholder bindable from self.big binding', () => {
+    it('has onInit fn.', () => {
+        spyOn(cc, 'createInMemoryDOMElement');
+        spyOn(cc, 'watchers');
 
-            vm.big = true;
-            vm.onInit();
-            expect(vm.showPlaceholder).toBe(false);
+        expect(cc.showPlaceholder).toBe(true);
+        cc.big = true;
+        cc.$onInit();
+        expect(cc.showPlaceholder).toBe(false);
 
-            vm.big = false;
-            vm.onInit();
-            expect(vm.showPlaceholder).toBe(true);
-        });
+        expect(cc.svgPanZoom).toBeDefined();
+        expect(Object.keys(cc.covLib)).toEqual([]);
+        expect(Object.keys(cc.svgLib)).toEqual([]);
+        expect(cc.drawnMap).toBe(null);
 
-        it('binds svgPanZoom library', () => {
-            vm.onInit();
-            expect(vm.svgPanZoom).toBeDefined();
-        });
+        expect(cc.createInMemoryDOMElement).toHaveBeenCalled();
+        expect(cc.watchers).toHaveBeenCalled();
+    });
+
+    it('has onDestroy fn.', () => {
+        cc.$onDestroy();
+        expect(cc.data).toBe(false);
+        expect(cc.countryMapData).toBe(false);
+    });
+
+    it('has createInMemoryDOMElement fn.', () => {
+        cc.big = false;
+        cc.createInMemoryDOMElement();
+
+        // appends div.countrymapcontainer
+        expect(document.querySelector('div.countrymapcontainer')).not.toBe(null);
+
+        // creates mapDOMElement svg.countrymap
+        expect(cc.mapDOMElement[0][0].classList.contains('countrymap')).toBe(true);
+
+        // height set to '409px' for dashboard (!big) maps
+        expect(cc.mapDOMElement[0][0].height.baseVal.valueAsString).toBe('409');
+
+        // height set to parents height
+        cc.big = true;
+        cc.createInMemoryDOMElement();
+        const parentsHeight = d3.select('#map')[0][0].offsetHeight.toString()
+        expect(cc.mapDOMElement[0][0].height.baseVal.valueAsString).toBe(parentsHeight);
 
     });
 
-    it('$onDestroy resets self.data & self.map', () => {
-        vm.data = true;
-        vm.countryMapData = true;
-        vm.onDestroy();
-        expect(vm.data || vm.countryMapData).toBe(false);
+    it('has watchers fn.', () => {
+        spyOn(cc, 'checkIfCountryChanged');
+        spyOn(cc, 'checkIfDistrictDataChanged');
+        cc.watchers();
+        expect(cc.checkIfCountryChanged).toHaveBeenCalled();
+        expect(cc.checkIfDistrictDataChanged).toHaveBeenCalled();
     });
 
+    it('has checkIfCountryChanged fn.', () => {
+        spyOn(cc, 'drawMapShape');
+        cc.drawnMap = 'country1';
+        const newMapDataMock = { mapData: '...', name: 'country2' };
 
-    it('has a method .makeGeoFromTopo(), that uses the topojson lib to make a geojson out of the data', () => {
-        const ret = vm.makeGeoFromTopo(countryMapData.mapData);
-        expect(typeof ret).toBe('object');
+        cc.checkIfCountryChanged(newMapDataMock);
+        expect(cc.drawMapShape).toHaveBeenCalledWith(newMapDataMock);
+        expect(cc.drawnMap).toBe('country2');
     });
 
-
-    it('formatCountryName() formats the self.country bindable upon a library', () => {
-
-        vm.countryName = 'Border India - Bangladesh';
-        vm.formatCountryName();
-        expect(vm.countryName).toBe('Bangladesh');
-
-        vm.countryName = 'Border Malawi - Mozambique';
-        vm.formatCountryName();
-        expect(vm.countryName).toBe('Malawi');
-
-        vm.countryName = 'Something not in the lib';
-        vm.formatCountryName();
-        expect(vm.countryName).toBe('Something not in the lib');
+    it('has checkIfDistrictDataChanged fn.', () => {
+        spyOn(cc, 'fillDistrictData');
+        const newDistrictData = { 'Département de l\'Ouest': { 'clients': 2, 'health_workers': 3, 'facilities': 4 } };
+        cc.checkIfDistrictDataChanged([newDistrictData, 'Haiti']);
+        expect(cc.boundNrs.clients).toBe(2);
+        expect(cc.boundNrs.health_workers).toBe(3);
+        expect(cc.boundNrs.facilities).toBe(4);
+        expect(cc.fillDistrictData).toHaveBeenCalledWith(newDistrictData);
     });
 
+    it('has saveClass fn.', () => {
+        cc.saveClass('clients', 0, undefined);
+        expect(cc.covLib.clients).toBe(0);
+        expect(cc.covLib.health_workers).toBe(undefined);
+        expect(cc.covLib.facilities).toBe(undefined);
 
-    it('calculateScale() should return a number from the topoJson', () => {
-        const ret = vm.calculateScale(countryMapData.mapData);
-        expect(typeof ret).toBe('number');
+        cc.saveClass('health_workers', 1, undefined);
+        expect(cc.covLib.clients).toBe(0);
+        expect(cc.covLib.health_workers).toBe(1);
+        expect(cc.covLib.facilities).toBe(undefined);
+
+        cc.saveClass('facilities', 2, [1, 2]);
+        expect(cc.covLib.clients).toBe(0);
+        expect(cc.covLib.health_workers).toBe(1);
+        expect(cc.covLib.facilities).toBe(4);
+
+        // no rewrite
+        cc.saveClass('clients', 3, [1, 2]);
+        expect(cc.covLib.clients).toBe(0);
+        expect(cc.covLib.health_workers).toBe(1);
+        expect(cc.covLib.facilities).toBe(4);
+
     });
 
-    it('makeSvgPannableAndZoomable() makes .svgZoom bindable instance out of lib & zooms out once', () => {
-
-        vm.onInit();
-        let b;
-        spyOn(vm, 'svgPanZoom').and.returnValue({ zoomOut: () => { b = 'called'; } });
-        vm.makeSvgPannableAndZoomable();
-        expect(vm.svgPanZoom).toHaveBeenCalled();
-        expect(vm.svgZoom).toBeDefined();
-        expect(b).toBe('called');
+    it('has makeGeoFromTopo fn.', () => {
+        const res = cc.makeGeoFromTopo(topoSl);
+        expect(typeof res).toBe('object');
     });
 
-    describe('drawMapShape', () => {
-
-        beforeEach(() => {
-
-            const countriesMock = [
-                {
-                    'name': 'Bangladesh',
-                    'id': 1
-                }, {
-                    'name': 'India',
-                    'id': 2
-                }, {
-                    'name': 'Indonesia',
-                    'id': 6
-                }, {
-                    'name': 'Kenya',
-                    'id': 3
-                }, {
-                    'name': 'Malawi',
-                    'id': 7
-                }, {
-                    'name': 'Pakistan',
-                    'id': 8
-                }, {
-                    'name': 'Philippines',
-                    'id': 4
-                }, {
-                    'name': 'Senegal',
-                    'id': 9
-                }, {
-                    'name': 'Sierra Leone',
-                    'id': 5
-                }, {
-                    'name': 'Tunisia',
-                    'id': 10
-                }
-            ];
-            vm.cs = { projectStructure: { countries: countriesMock } };
-
-            spyOn(vm, 'formatCountryName');
-            spyOn(vm, 'makeGeoFromTopo');
-            spyOn(vm, 'fillDistrictData');
-            spyOn(vm, 'makeSvgPannableAndZoomable');
-        });
-
-
-        it('formats country name', () => {
-            vm.drawMapShape(countryMapData);
-            expect(vm.formatCountryName).toHaveBeenCalled();
-        });
-
-        it('calls makeGeoFromTopo() with the topoJSON', () => {
-            vm.drawMapShape(countryMapData);
-            expect(vm.makeGeoFromTopo).toHaveBeenCalled();
-        });
-
-        it('makes DIV element & SVG element', () => {
-            vm.drawMapShape(countryMapData);
-            expect(d3.select('.countrymapcontainer').length).toBe(1);
-            expect(d3.select('.countrymap').length).toBe(1);
-        });
-
-        it('calls fillDistrictData()', () => {
-            vm.drawMapShape(countryMapData);
-            expect(vm.fillDistrictData).toHaveBeenCalled();
-        });
-
-        it('resets back .showPlaceholder to false', () => {
-            vm.showPlaceholder = true;
-            vm.drawMapShape(countryMapData);
-            expect(vm.showPlaceholder).toBe(false);
-        });
+    it('has calculateScale fn.', () => {
+        const scale1 = cc.calculateScale(topoSl);
+        expect(scale1).toBe(13792.952002930891);
     });
 
-    describe('fillDistrictData', () => {
+    it('has makeSvgPannableAndZoomable fn.', () => {
+        let didItRun = false;
+        spyOn(cc, 'svgPanZoom').and.returnValue({ zoomOut: () => { didItRun = true; } });
+        cc.makeSvgPannableAndZoomable('element');
+        expect(cc.svgPanZoom).toHaveBeenCalledWith('element', jasmine.any(Object));
+        expect(didItRun).toBe(true);
+    });
 
-        beforeEach(() => {
-            const countriesMock = [
-                {
-                    'name': 'Bangladesh',
-                    'id': 1
-                }, {
-                    'name': 'India',
-                    'id': 2
-                }, {
-                    'name': 'Indonesia',
-                    'id': 6
-                }, {
-                    'name': 'Kenya',
-                    'id': 3
-                }, {
-                    'name': 'Malawi',
-                    'id': 7
-                }, {
-                    'name': 'Pakistan',
-                    'id': 8
-                }, {
-                    'name': 'Philippines',
-                    'id': 4
-                }, {
-                    'name': 'Senegal',
-                    'id': 9
-                }, {
-                    'name': 'Sierra Leone',
-                    'id': 5
-                }, {
-                    'name': 'Tunisia',
-                    'id': 10
-                }
-            ];
-            vm.onInit();
-            vm.cs = { projectStructure: { countries: countriesMock } };
-            vm.districtLevelCoverage = perfMockMap;
-            spyOn(vm, 'svgPanZoom').and.returnValue({ zoomOut: a => a });
-            vm.drawMapShape(countryMapData);
-        });
+    it('has drawMapShape fn.', () => {
+        spyOn(cc, 'makeGeoFromTopo').and.callThrough();
+        spyOn(cc, 'createInMemoryDOMElement').and.callThrough();
+        cc.drawMapShape(SLCountryMapData);
 
-        it('appends the right number of svg paths(.d3district) to .countrymap', () => {
-            // 14 is sierra leones districts count (mock data)
-            expect(d3.selectAll('.d3district')[0].length).toBe(14);
-        });
+        expect(cc.showPlaceholder).toBe(false);
+        expect(cc.countryName).toBe(SLCountryMapData.name);
+        expect(cc.flagUrl).toBe(SLCountryMapData.flag);
+        expect(document.querySelectorAll('.countrymapcontainer').length).toBe(1);
+        expect(document.querySelectorAll('.countrymap').length).toBe(1);
+        expect(cc.makeGeoFromTopo).toHaveBeenCalledWith(SLCountryMapData.mapData);
+        expect(document.querySelectorAll('.d3district').length).toBe(SLCountryMapData.districts.length);
+        // mouseover funtionality not triggerable
 
-        it('gives .d3district-data class to the districts that has data', () => {
-            // 3 is the nr of districts with data in the mockdata
-            expect(d3.selectAll('.d3district-data')[0].length).toBe(3);
-        });
+        // drawnmap if
+        cc.drawnMap = 'Country Draw first!';
+        cc.drawMapShape(SLCountryMapData);
+        expect(cc.createInMemoryDOMElement).toHaveBeenCalledTimes(1);
+    });
 
-        it('changes vm.activedistrict bindable objects content on .d3district mouseover & mouseout', () => {
-            // Triggering the event for the first found element
-            d3.select('.d3district').on('mouseover')();
-            expect(vm.activeDistrict.name.length).toBeGreaterThan(0);
-            expect(vm.scope.$evalAsync).toHaveBeenCalled();
+    it('has setTotal fn.', () => {
+        cc.drawMapShape(SLCountryMapData);
+        cc.setTotal();
+        expect(document.querySelectorAll('.global').length).toBe(0);
+        expect(cc.showNationalLevelCoverage).toBe(false);
+    });
 
-            d3.select('.d3district-data').on('mouseover')();
-            expect(vm.activeDistrict.data).toBeDefined();
-            expect(typeof vm.activeDistrict.data).toBe('object');
-            expect(vm.scope.$evalAsync).toHaveBeenCalled();
-        });
+    it('has setGlobal fn.', () => {
+        cc.drawMapShape(SLCountryMapData);
+        cc.setGlobal();
+        expect(document.querySelectorAll('.global').length).toBe(14);
+        expect(cc.showNationalLevelCoverage).toBe(true);
+    });
+
+    it('has fillDistrictData fn.', () => {
+        cc.drawMapShape(SLCountryMapData);
+        const districtLevelCoverage = {
+            'Kambia District': { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
+            'Bombali District': { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
+        };
+        cc.fillDistrictData(districtLevelCoverage);
+        expect(document.querySelectorAll('.d3district-data').length).toBe(2);
+    });
+
+    it('has goToProject fn.', () => {
+        cc.goToProject({ isMember: true, id: 1 });
+        expect(cc.state.go).toHaveBeenCalledWith('dashboard', { appName: 1 });
+
+        cc.goToProject({ isMember: false, id: 2 });
+        expect(cc.state.go).toHaveBeenCalledWith('public-dashboard', { appName: 2 });
     });
 });
