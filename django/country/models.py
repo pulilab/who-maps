@@ -43,20 +43,26 @@ class CountryField(models.Model):
     TEXT = 1
     NUMBER = 2
     YESNO = 3
+    SINGLE = 4
+    MULTI = 5
 
     TYPE_CHOICES = (
         (TEXT, "Text field"),
         (NUMBER, "Numeric field"),
         (YESNO, "Yes - no field"),
+        (SINGLE, "Single choice"),
+        (MULTI, "Multiple choice"),
     )
 
     country = models.ForeignKey(Country)
     type = models.IntegerField(choices=TYPE_CHOICES)
     question = models.CharField(max_length=256, blank=False)
     answer = models.TextField(max_length=2000, blank=True)
+    draft = models.TextField(max_length=2000, blank=True)
     project = models.ForeignKey('project.Project', null=True)
     enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
     schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
+    schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
 
     objects = CountryFieldManager()
 
