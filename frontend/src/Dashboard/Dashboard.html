@@ -1,6 +1,6 @@
 <div id="dashcontainer" layout="column">
 
-  <div layout="row" class="dashrow dashrow-upper" ng-init="vm.showEmpty = !(vm.state.params.appName)">
+  <div layout="row" class="dashrow dashrow-upper">
 
     <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
 
@@ -20,35 +20,12 @@
 
       <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-hide="vm.showEmpty">
 
-        <div class="dash-subhead">STATISTICS</div>
-
         <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
-
-          <md-card md-whiteframe="2" class="dash-stat-card" ng-if="vm.userType > 1" ng-class="vm.userType === 3 ? 'longer' : 'shorter'">
-
-            <md-icon class="dash-trendicon rotate">rotate_right</md-icon>
-            <span class="dash-stat-nr dash-stat-nr-version">{{vm.currentVersion}}.</span>
-            <span class="dash-stat-label">Version</span>
-
-            <div class="gray" ng-if="vm.userType === 3" layout="column" layout-align="space-around stretch">
-                            <span class="desc">
-                                Push to save your current stats as a new version:
-                            </span>
-              <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
-                <span class="text plus">+</span>
-                <span class="text">snapshot</span>
-              </md-button>
-            </div>
-
-          </md-card>
-
-
-          <donors class="hten" number="vm.projectData.donors.length"></donors>
-
+          <statistics></statistics>
         </div>
       </div>
 
-      <div flex class="dashsection dash-cardholder" layout="column" ng-hide="vm.showEmpty">
+      <div flex class="dashsection dash-cardholder" layout="column" ng-if="!vm.showEmpty">
 
         <div class="dash-subhead">PROJECT DETAILS</div>
         <md-card md-whiteframe="2" flex>
@@ -57,7 +34,7 @@
 
             <md-tab label="overview">
 
-              <div class="dash-cardcontent" layout="column" ng-if="vm.userType > 1">
+              <div class="dash-cardcontent" layout="column" ng-if="!vm.viewMode">
 
                 <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
 
@@ -91,7 +68,7 @@
                 </div>
               </div>
 
-              <div class="dash-cardcontent infoview" layout="column" ng-if="vm.userType < 2" layout="column" layout-align="space-between stretch">
+              <div class="dash-cardcontent infoview" layout="column" ng-if="vm.viewMode" layout="column" layout-align="space-between stretch">
                 <div layout="row" layout-align="start center" class="roww">
                   <div flex="25" class='label'>NAME</div>
                   <div class="data">{{vm.projectData.name}}</div>
@@ -126,18 +103,18 @@
 
             </md-tab>
 
-            <md-tab label="axis" ng-if="vm.userType > 1">
+            <md-tab label="axis" ng-if="!vm.viewMode">
               <div>
                 <linechart
-                  showdotted="(vm.userType === 3)">
+                  showdotted="vm.projectData.isMember">
                 </linechart>
               </div>
             </md-tab>
 
-            <md-tab label="domains" ng-if="vm.userType > 1">
+            <md-tab label="domains" ng-if="!vm.viewMode">
               <div>
                 <linechart
-                  showdotted="(vm.userType === 3)"
+                  showdotted="vm.projectData.isMember"
                   datachooser="true"
                 ></linechart>
               </div>
@@ -165,90 +142,30 @@
                   </div>
 
                   <div layout="row">
-
                                         <span flex>
                                           <md-icon class="material-icons">playlist_add_check</md-icon>
                                           License</span>
-                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses"></md-chips>
+                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses">
+                      <md-chip-template>
+                        <span>{{ $chip.name }}</span>
+                      </md-chip-template>
+                    </md-chips>
                   </div>
-
-                  <!-- <div flex layout="row">
-                      <md-icon class="material-icons">speaker_phone</md-icon>
-                      <span flex>Digital tools</span>
-                      <md-chips flex="66" readonly="true" ng-model="vm.projectData.digital_tools"></md-chips>
-                      <md-chips flex="66" ng-init="mockTools = ['MOCK', 'tools']" readonly="true" ng-model="mockTools"></md-chips>
-                  </div> -->
                 </div>
 
                 <div class="lower">
 
                   <span>Code documentations & download:</span>
-                  <a ng-href="{{vm.projectData.repository}}" target="_blank">{{vm.projectData.repository}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.repository)}}" target="_blank">{{vm.projectData.repository}}</a>
 
                   <span>Download applications:</span>
-                  <a ng-href="{{vm.projectData.mobile_application}}" target="_blank">{{vm.projectData.mobile_application}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.mobile_application)}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
                   <span>Link to wiki page:</span>
-                  <a ng-href="{{vm.projectData.wiki}}" target="_blank">{{vm.projectData.wiki}}</a>
+                  <a ng-href="{{vm.fixUrl(vm.projectData.wiki)}}" target="_blank">{{vm.projectData.wiki}}</a>
                 </div>
               </div>
             </md-tab>
-
-            <!--<md-tab label="resources">-->
-            <!--<md-content class="dash-res">-->
-
-
-            <!--<h3>PROJECT REPORT</h3>-->
-            <!--<md-card-->
-            <!--class="resource"-->
-            <!--ng-repeat="report in vm.resources.reports"-->
-            <!--layout="row"-->
-            <!--layout-align="space-around stretch">-->
-
-            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-            <!--<h4>{{report.type === 'file' ? report.filename : report.link}}</h4>-->
-            <!--</div>-->
-            <!--<md-icon ng-if="report.type === 'file'" ng-click="vm.downloadRes(report)">file_download</md-icon>-->
-            <!--<a ng-href="{{report.link}}" target="_blank" ng-if="report.type === 'link'" layout="column" layout-align="center center">-->
-            <!--<md-icon>launch</md-icon>-->
-            <!--</a>-->
-            <!--</md-card>-->
-
-
-            <!--<h3>ASSOCIATED JOURNAL ARTICLES</h3>-->
-            <!--<md-card-->
-            <!--class="resource"-->
-            <!--ng-repeat="article in vm.resources.articles"-->
-            <!--layout="row"-->
-            <!--layout-align="space-around stretch">-->
-
-            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-            <!--<h4>{{article.type === 'file' ? article.filename : article.link}}</h4>-->
-            <!--</div>-->
-            <!--<md-icon ng-if="article.type === 'file'" ng-click="vm.downloadRes(article)">file_download</md-icon>-->
-            <!--<a ng-href="{{article.link}}" target="_blank" ng-if="article.type === 'link'" layout="column" layout-align="center center">-->
-            <!--<md-icon>launch</md-icon>-->
-            <!--</a>-->
-            <!--</md-card>-->
-
-
-            <!--<h3>ASSOCIATED CHMI LINKS</h3>-->
-            <!--<md-card-->
-            <!--class="resource"-->
-            <!--ng-repeat="link in vm.resources.links"-->
-            <!--layout="row"-->
-            <!--layout-align="space-around stretch">-->
-
-            <!--<div flex class="res-text" layout="column" layout-align="space-around start">-->
-            <!--<h4>{{link.type === 'file' ? link.filename : link.link}}</h4>-->
-            <!--</div>-->
-            <!--<md-icon ng-if="link.type === 'file'" ng-click="vm.downloadRes(link)">file_download</md-icon>-->
-            <!--<a ng-href="{{link.link}}" target="_blank" ng-if="link.type === 'link'" layout="column" layout-align="center center">-->
-            <!--<md-icon>launch</md-icon>-->
-            <!--</a>-->
-            <!--</md-card>-->
-            <!--</md-content>-->
-            <!--</md-tab>-->
 
             <md-tab label="interoperability">
               <md-content class="dash-res">
@@ -264,10 +181,10 @@
                   <div flex>
                     <div class="res-title">{{link.name}}</div>
                     <div class="res-text">
-                      <h4>{{link.link}}</h4>
+                      <h4>{{vm.structure.interoperability_links[$index].name}} : {{link.link}}</h4>
                     </div>
                   </div>
-                  <a ng-if="link.link" ng-href="{{link.link}}" target="_blank" flex>
+                  <a ng-if="link.link" ng-href="{{vm.fixUrl(link.link)}}" target="_blank" flex>
                     <md-icon>launch</md-icon>
                   </a>
                 </md-card>
@@ -281,7 +198,7 @@
                   layout-align="space-around stretch">
 
                   <div flex class="res-text" layout="column" layout-align="space-around start">
-                    <h4>{{standard}}</h4>
+                    <h4>{{standard.name}}</h4>
                   </div>
                 </md-card>
 
@@ -308,7 +225,7 @@
           <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
         </div>
 
-        <md-tabs ng-hide="vm.showEmpty" ng-if="vm.userType !== 0" md-border-bottom md-dynamic-height class="perf-tab">
+        <md-tabs ng-if="!vm.showEmpty && vm.profile.name" md-border-bottom class="perf-tab">
 
           <md-tab label="geographical view">
             <countrymap
@@ -320,19 +237,17 @@
             </countrymap>
           </md-tab>
 
-          <md-tab label="historical view">
-
+          <md-tab label="historical view" ng-if="!vm.showEmpty && vm.state.current.parent !== 'public'">
             <linechart
-              showdotted="(vm.userType === 3)"
+              showdotted="vm.projectData.isMember"
               datachooser="false"
-              notpercentage="true"
-            ></linechart>
-
+              notpercentage="true">
+            </linechart>
           </md-tab>
 
         </md-tabs>
 
-        <div flex ng-if="vm.userType === 0" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
+        <div flex ng-if="!vm.profile.name" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
           <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
           <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
         </div>
@@ -344,7 +259,7 @@
 
   <!-- LOWER PART -->
 
-  <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData">
+  <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData && !vm.viewMode && vm.state.params.appName !== null">
 
     <div flex class="dashsection dash-cardholder" layout="column">
 

@@ -1,8 +1,9 @@
 import TechnologyController from './TechnologyController';
 import _template from './Technology.html';
+import _readOnlyTemplate from './ReadOnlyTechnology.html';
 
 
-const technology = {
+const component = {
     template: _template,
     controller: TechnologyController.technologyControllerFactory(),
     controllerAs: 'vm',
@@ -10,8 +11,10 @@ const technology = {
     bindings: {
         form: '<',
         project: '<',
-        structure: '<'
+        structure: '<',
+        activateValidation: '<'
     }
 };
 
-export default technology;
+export default component;
+export const readOnlyTechnology = { ...component, name: 'readOnlyTechnology', template: _readOnlyTemplate };

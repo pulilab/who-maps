@@ -1,6 +1,6 @@
   <div class="autocomplete-wrapper md-block">
     <md-autocomplete
-        required
+        ng-required="!vm.notRequired"
         id="organisation"
         md-input-name="organisation"
         md-no-cache="true"
@@ -9,6 +9,7 @@
         md-search-text="vm.searchText"
         md-items="item in vm.organisationSearch(vm.searchText)"
         md-item-text="item.name"
+        md-delay="300"
         md-min-length="2"
         md-floating-label="Organisation name">
       <md-item-template>

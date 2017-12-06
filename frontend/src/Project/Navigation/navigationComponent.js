@@ -7,9 +7,12 @@ const component = {
     controllerAs: 'vm',
     name: 'navigation',
     bindings: {
-        editMode: '<',
-        isAddAnother: '=',
-        showCountryFields: '<'
+        readOnlyMode: '<',
+        project: '<',
+        isPublished: '<',
+        team: '<',
+        viewers: '<',
+        countryFields: '<'
     }
 };
 

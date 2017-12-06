@@ -5,7 +5,7 @@ from django.conf import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "who_maps.settings")
 
-app = Celery("scheduler")
+app = Celery("scheduler", set_as_current=True)
 
 app.config_from_object("django.conf:settings")
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

@@ -1,32 +1,52 @@
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import forEach from 'lodash/forEach';
+import map from 'lodash/map';
+
 import moment from 'moment';
-import CountryService from './CountryService.js';
-import PDFExportStorage from './PDFExport/PDFExportStorage';
+import PDFExportController from './PDFExport/PDFExportController';
+import * as CountryModule from '../store/modules/countries';
+import * as UserModule from '../store/modules/user';
 
 class CountryViewModuleController {
 
-    constructor($scope, $filter, $state,  CommonService) {
-
-        this.EE = window.EE;
-        this.cs = CommonService;
+    constructor($scope, $filter, $state, $ngRedux) {
         this.scope = $scope;
         this.filter = $filter;
         this.state = $state;
-        this.mapService = require('../Common/CustomCountryService');
-        this.service = new CountryService();
-        this.pdfStorage = PDFExportStorage.factory();
+        this.pdfExport = new PDFExportController();
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
-        this.fetchDistrictProjects = this.fetchDistrictProjects.bind(this);
         this.watchers = this.watchers.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.applyFilters = this.applyFilters.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CountryModule)(this);
+    }
+
+    mapState(state) {
+        const mapData = CountryModule.getCurrentCountryMapData(state);
+        const districtProjects = CountryModule.getCurrentCountryDistrictProjects(state);
+        const selectedCountry = this.selectedCountry ? this.selectedCountry : CountryModule.getCurrentCountry(state);
+        const projectsData = CountryModule.getCurrentCountryProjects(state);
+        const countryProjects = cloneDeep(projectsData);
+        const nationalLevelCoverage = this.filterNLDProjects(projectsData, districtProjects);
+
+        return {
+            userProfile: UserModule.getProfile(state),
+            countries: CountryModule.getCountriesList(state),
+            countriesLib: CountryModule.getCountriesLib(state),
+            selectedCountry,
+            mapData,
+            districtProjects,
+            projectsData,
+            countryProjects,
+            nationalLevelCoverage
+        };
     }
 
 
     onInit() {
         this.header = this.generateHeader();
-        this.getCountries();
         this.lastFilter = null;
         this.watchers();
         this.showAllCountries = { id: false, name: 'Show all countries' };
@@ -35,6 +55,7 @@ class CountryViewModuleController {
     watchers() {
         this.scope.$watchCollection(s => s.vm.countryProjects, this.generateFilters);
         this.scope.$watch(s => s.vm.filters, this.applyFilters, true);
+        this.scope.$watch(s => s.vm.selectedCountry, this.updateCountry.bind(this), true);
     }
 
     applyFilters(filters, oldValue) {
@@ -55,7 +76,9 @@ class CountryViewModuleController {
                     for (const p of this.countryProjects) {
                         const inProject = cat.filterMappingFn(p);
                         if (inProject.some(inArray)) {
-                            filtered.push(p);
+                            if (!filtered.includes(p)) {
+                                filtered.push(p);
+                            }
                         }
                     }
                 }
@@ -119,18 +142,13 @@ class CountryViewModuleController {
         if (!countryProjects || !Array.isArray(countryProjects)) {
             return;
         }
-        const extractStrategies = p => {
-            let r = [];
-            for (const plat of p.platforms) {
-                r = r.concat(plat.strategies);
-            }
-            return r;
-        };
         const digitalHealthInterventions = {
             name: 'Digital Health Interventions',
-            filterMappingFn: extractStrategies,
+            filterMappingFn: p => {
+                return Array.isArray(p.digital_strategies) ? p.digital_strategies : [];
+            },
             open: false,
-            items: this.prepareFiltersCheckboxes(extractStrategies)
+            items: this.prepareFiltersCheckboxes('digital_strategies')
         };
 
         const healthInterventions = {
@@ -159,46 +177,17 @@ class CountryViewModuleController {
             items: this.prepareFiltersCheckboxes('hsc_challenges')
         };
 
-        const extractSoftware = p => {
-            return p.platforms.map(plat => plat.name);
-        };
-
         const software = {
             name: 'Software',
-            filterMappingFn: extractSoftware,
+            filterMappingFn: p => {
+                return Array.isArray(p.platforms) ? p.platforms : [];
+            },
             open: false,
-            items: this.prepareFiltersCheckboxes(extractSoftware)
+            items: this.prepareFiltersCheckboxes('platforms')
         };
 
         this.filters = [digitalHealthInterventions, healthInterventions,
             healthInformationSystems, healthSystemChallenges, software];
-    }
-
-    async getCountries() {
-
-        const countries =  await this.mapService.getCountries();
-        this.countries = countries.slice();
-        this.countriesLib = {};
-        this.countries.forEach(country => {
-            this.countriesLib[country.id] = country.name;
-        });
-
-        // console.debug('COUNTRY LIB', this.countriesLib);
-
-        if (this.cs.userProfile && this.cs.userProfile.country) {
-            const name = this.cs.userProfile.country;
-            this.selectedCountry = _.find(this.countries, { name });
-            this.updateCountry(this.selectedCountry);
-            this.scope.$evalAsync();
-        }
-    }
-
-    isViewer(project) {
-        return this.cs.isViewer(project);
-    }
-
-    isMember(project) {
-        return this.cs.isMember(project);
     }
 
     filterNLDProjects(allProjects) {
@@ -225,74 +214,43 @@ class CountryViewModuleController {
     }
 
 
-    async getProjects(countryObj) {
-        // console.debug('Selected:', countryObj);
-        const projects = await this.service.getProjects(countryObj.id);
-        // console.debug('PROJECTS in ' + countryObj.name, data);
-        this.projectsData = projects;
-        this.countryProjects = _.cloneDeep(projects);
-        this.nationalLevelCoverage  = this.filterNLDProjects(projects, this.districtProjects);
-
-    }
-
-    updateCountry(countryObj) {
-        if (countryObj.name !== 'Show all countries') {
-            return this.changeMapTo(countryObj);
+    updateCountry(newVal, oldVal) {
+        if (oldVal && (newVal.name !== oldVal.name)) {
+            if (newVal.name !== 'Show all countries') {
+                this.setCurrentCountry(newVal.id);
+            }
+            this.loadCountryProjectsOrAll(newVal.id);
         }
 
-        return this.getProjects(countryObj);
+        if (this.projectsData.length === 0) {
+            this.loadCountryProjectsOrAll(newVal.id);
+        }
 
-    }
-
-    async changeMapTo(countryObj) {
-        // this avoid double drawing the map
-        this.mapData = undefined;
-        this.districtProjects = undefined;
-        this.fetchCountryMap(countryObj.id);
-        await this.fetchDistrictProjects(countryObj.id);
-        return this.getProjects(countryObj);
-    }
-
-    // For map TAB
-    async fetchDistrictProjects(countryId) {
-        const districtProjects = await this.service.getDistrictProjects(countryId);
-        this.scope.$evalAsync(() => {
-            this.districtProjects = districtProjects;
-            this.countryDistrictProjects = _.cloneDeep(districtProjects);
-        });
-    }
-
-    async fetchCountryMap(id) {
-        const mapData =  await this.mapService.getCountryMapData(id);
-        this.scope.$evalAsync(() => {
-            this.mapData = mapData;
-        });
     }
 
     exportPDF() {
-        this.pdfStorage.setData(this.projectsData, this.selectedCountry);
-        const href = this.state.href('pdf-export');
-        window.open(href);
+        this.pdfExport.setData(this.projectsData, this.selectedCountry);
+        this.pdfExport.makePDF();
     }
 
-    exportCSV() {
-        const ids = _.map(this.projectsData, p => {
+    async exportCSV() {
+        const ids = map(this.projectsData, p => {
             return p.id;
         });
-        this.service.exportCSV(ids).then(response => {
-            const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${response}`);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', `clv-export-${moment().format('MMMM-Do-YYYY-h-mm-ss ')}.csv`);
-            link.setAttribute('target', '_blank');
-            document.body.appendChild(link);
+        const response = await CountryModule.csvExport(ids);
 
-            link.click();
-        });
+        const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${response}`);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `clv-export-${moment().format('MMMM-Do-YYYY-h-mm-ss ')}.csv`);
+        link.setAttribute('target', '_blank');
+        document.body.appendChild(link);
+
+        link.click();
     }
 
     orderTable(name) {
-        _.forEach(this.header, h => {
+        forEach(this.header, h => {
             h.up = false;
             h.down = false;
         });
@@ -317,12 +275,11 @@ class CountryViewModuleController {
     }
 
     static countryControllerFactory() {
-        function countryController($scope, $filter, $state) {
-            const CommonService = require('../Common/CommonServices');
-            return new CountryViewModuleController($scope, $filter, $state, CommonService);
+        function countryController($scope, $filter, $state, $ngRedux) {
+            return new CountryViewModuleController($scope, $filter, $state, $ngRedux);
         }
 
-        countryController.$inject = ['$scope', '$filter', '$state'];
+        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux'];
 
         return countryController;
     }

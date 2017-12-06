@@ -37,22 +37,27 @@ class PartnerLogoInline(admin.TabularInline):
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code')
+    list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
     inlines = (PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
+    filter_horizontal = ('users',)
 
     def get_queryset(self, request):
         qs = super(CountryAdmin, self).get_queryset(request)
 
         if request.user.is_staff and not request.user.is_superuser:
-            qs = qs.filter(user__user=request.user)
+            qs = qs.filter(users__user=request.user)
 
         return qs
 
     def get_readonly_fields(self, request, obj=None):
         fields = super(CountryAdmin, self).get_readonly_fields(request, obj)
         if request.user.is_staff and not request.user.is_superuser:
-            fields += ('name', 'code', 'user', )
+            fields += (
+                'name',
+                'code',
+                'user',
+            )
         return fields
 
     def save_model(self, request, obj, form, change):

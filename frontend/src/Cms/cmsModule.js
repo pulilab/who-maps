@@ -1,6 +1,8 @@
 import angular from 'angular';
 import uiRoute from 'angular-ui-router';
 import { StaticUtilities } from '../Utilities';
+import * as SystemModule from '../store/modules/system';
+import * as CmsModule from '../store/modules/cms';
 
 import addNewContent from './AddNewContent/addNewContentComponent';
 import commentWidget from './CommentWidget/commentWidgetComponent';
@@ -16,34 +18,41 @@ const su = new StaticUtilities('Cms');
 
 function config($stateProvider, $compileProvider) {
     $stateProvider
-        .state(moduleName,
+      .state(moduleName,
         {
             url: '/cms',
             parent: 'app',
             views: {
                 main: {
-                    template: '<planning-and-guidance></planning-and-guidance>',
-                    resolve: {
-                        'main': () => {
-                            return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
-                        }
-                    }
+                    template: '<planning-and-guidance></planning-and-guidance>'
                 }
-            }
+            },
+            resolve: {
+                'main': () => {
+                    return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
+                },
+                system: ['$ngRedux', ($ngRedux) => {
+                    return $ngRedux.dispatch(SystemModule.loadUserProfiles());
+                }],
+                cms: ['$ngRedux', ($ngRedux) => {
+                    return $ngRedux.dispatch(CmsModule.loadCmsData());
+                }]
+            },
+            profileRequired: true
         });
 }
 
 config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName, [uiRoute])
-    .component(addNewContent.name, addNewContent)
-    .component(commentWidget.name, commentWidget)
-    .component(dashboardWidget.name, dashboardWidget)
-    .component(detailElement.name, detailElement)
-    .component(experiencesList.name, experiencesList)
-    .component(listElement.name, listElement)
-    .component(reportButton.name, reportButton)
-    .component(staticInfoWidget.name, staticInfoWidget)
-    .config(config);
+  .component(addNewContent.name, addNewContent)
+  .component(commentWidget.name, commentWidget)
+  .component(dashboardWidget.name, dashboardWidget)
+  .component(detailElement.name, detailElement)
+  .component(experiencesList.name, experiencesList)
+  .component(listElement.name, listElement)
+  .component(reportButton.name, reportButton)
+  .component(staticInfoWidget.name, staticInfoWidget)
+  .config(config);
 
 export default moduleName;

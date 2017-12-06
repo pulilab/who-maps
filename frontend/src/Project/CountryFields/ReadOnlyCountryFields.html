@@ -1,0 +1,44 @@
+<div class="project-section section-country-fields" md-whiteframe="2">
+  <div class="section-title md-title">
+    5. Country fields
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
+  </div>
+
+  <div class="section-wrapper">
+    <div layout="column">
+
+      <div class="generic-container" flex ng-repeat="field in vm.countryFields">
+
+        <!-- TEXT INPUT-->
+        <div
+          ng-if="field.type === 1"
+          class="md-block string-field">
+          <h6>{{field.question}}</h6>
+          <p>{{field.answer}}</p>
+        </div>
+
+
+        <!-- NUMERIC INPUT-->
+        <div
+          ng-if="field.type === 2"
+          class="md-block number-field">
+          <h6>{{field.question}}</h6>
+          <p>{{field.answer}}</p>
+        </div>
+
+
+        <!-- RADIO BUTTON-->
+        <div
+          ng-if="field.type === 3"
+          class="yesno-field">
+          <h6>{{field.question}}</h6>
+          <p ng-show="field.answer">Yes</p>
+          <p ng-hide="field.answer">No</p>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</div>

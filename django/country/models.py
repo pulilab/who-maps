@@ -11,8 +11,9 @@ class Country(NameByIDMixin, ExtendedModel):
     cover_text = models.TextField(blank=True, null=True)
     footer_title = models.CharField(max_length=128, blank=True, null=True)
     footer_text = models.CharField(max_length=128, blank=True, null=True)
-    user = models.ForeignKey(UserProfile, help_text="User who can update the country", null=True, blank=True,
-                             related_name="country_admin")
+    users = models.ManyToManyField(UserProfile, help_text="User who can update the country", blank=True,
+                                   related_name='+', limit_choices_to={'user__groups__name': 'Country Admin'})
+    project_approval = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -62,8 +63,26 @@ class CountryField(models.Model):
     def __str__(self):
         return ""
 
-    def to_representation(self):
+    @classmethod
+    def get_for_project(cls, project, draft_mode=False):
+        """
+        Return all the country fields available for a country filled with the answers (if present)
+        """
+        country = project.get_country(draft_mode)
+        schema = cls.objects.get_schema(country.id)
+        answers = cls.objects.get_answers(country_id=country.id, project_id=project.id)
+        country_fields = []
+
+        for field in schema:
+            found = answers.filter(question=field.question, type=field.type).first()
+            if found:
+                country_fields.append((found, field.id))
+
+        return country_fields
+
+    def to_representation(self, schema_id=None):
         return {
+            "schema_id": schema_id,
             "country": self.country.id,
             "type": self.type,
             "question": self.question,

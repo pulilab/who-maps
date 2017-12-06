@@ -1,12 +1,13 @@
+import * as CmsModule from '../../store/modules/cms';
 
 class ReportDeleteButtonController {
 
-    constructor() {
+    constructor($ngRedux) {
         this.$onInit = this.onInit.bind(this);
+        this.unsubscribe = $ngRedux.connect(() => { return {}; }, CmsModule)(this);
     }
 
     onInit() {
-        this.cs = require('../CmsService');
         this.isDelete = this.type && this.type === 'delete';
         this.status = this.item.state === 2 && !this.isDelete ? 'reported' : 'close';
     }
@@ -21,20 +22,20 @@ class ReportDeleteButtonController {
 
     doReport() {
         if (this.item.user) {
-            this.cs.reportComment(this.item);
+            this.reportComment(this.item);
         }
         else {
-            this.cs.reportContent(this.item);
+            this.reportContent(this.item);
         }
         this.status = 'reported';
     }
 
     doDelete() {
         if (this.item.user) {
-            this.cs.deleteComment(this.item);
+            this.deleteComment(this.item);
         }
         else {
-            this.cs.deleteContent(this.item);
+            this.deleteContent(this.item);
         }
     }
 
@@ -44,10 +45,10 @@ class ReportDeleteButtonController {
 
     static factory() {
         require('./ReportDeleteButton.scss');
-        function reportButton() {
-            return new ReportDeleteButtonController();
+        function reportButton($ngRedux) {
+            return new ReportDeleteButtonController($ngRedux);
         }
-        reportButton.$inject = [];
+        reportButton.$inject = ['$ngRedux'];
         return reportButton;
     }
 }

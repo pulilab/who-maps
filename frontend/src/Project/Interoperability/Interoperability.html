@@ -2,7 +2,7 @@
 
   <div class="section-title md-title">
     4. Interoperability
-    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">&#xE313;</i></span>
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
@@ -21,8 +21,7 @@
     </md-input-container>
 
     <div layout="row" ng-repeat="link in vm.structure.interoperability_links">
-      <md-checkbox ng-init="vm.project.interoperability_links[$index].name = link.name"
-                   md-no-ink aria-label=""
+      <md-checkbox md-no-ink aria-label=""
                    ng-model="vm.project.interoperability_links[$index].selected"
                    class="md-primary" flex>
         {{link.pre}}{{link.name}}
@@ -31,9 +30,15 @@
         <label>Specify URL</label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
         <input ng-disabled="!vm.project.interoperability_links[$index].selected"
-               name="link.interop1"
+               name="{{'interoperability_links_' + $index + '_link'}}"
                md-maxlength="200"
-               ng-model="vm.project.interoperability_links[$index].link">
+               ng-model="vm.project.interoperability_links[$index].link"
+               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/">
+        <div ng-messages="vm.form['interoperability_links_' + $index + '_link'].$error">
+          <div ng-message="pattern">
+            Make sure your URL is valid.
+          </div>
+        </div>
       </md-input-container>
     </div>
 
@@ -54,25 +59,8 @@
           <md-checkbox md-no-ink aria-label="{{standard}}"
                        ng-checked="vm.checkboxChecked(standard, 'interoperability_standards')"
                        ng-click="vm.checkboxToggle(standard, 'interoperability_standards')" class="md-primary">
-            {{standard}}
+            {{standard.name}}
           </md-checkbox>
-        </li>
-        <li>
-          <span layout="row">
-            <md-checkbox md-no-ink aria-label="other-standard"
-                         ng-model="vm.specifyOtherStandard"
-                         class="md-primary"
-                         flex="nogrow">
-            </md-checkbox>
-            <md-input-container class="md-block" flex>
-              <label>Specify other</label>
-              <input ng-disabled="!vm.specifyOtherStandard"
-                     ng-required="vm.specifyOtherStandard"
-                     md-maxlength="64"
-                     name="data.c18"
-                     ng-model="vm.project.interoperability_standards.custom">
-            </md-input-container>
-          </span>
         </li>
       </ul>
 

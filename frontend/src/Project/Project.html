@@ -1,20 +1,20 @@
-<div layout="column" class="new-edit-project" layout-align="start center" >
-  <div class="page-title" ng-hide="vm.editMode">
-    <h1 class="md-display-1 text-center">Add New Digital Health Project</h1>
-    <h6 class="md-subhead text-center">Please complete the following information in order to add your project into the Digital Health Atlas</h6>
+<div layout="column" class="new-edit-project" layout-align="start center" ng-class="vm.state.params.editMode" >
+  <div class="page-title" >
+    <h1 class="md-display-1 text-center" ng-hide="vm.editMode">Add New Digital Health Project</h1>
+    <h1 class="md-display-1 text-center"  ng-show="vm.editMode">Edit Project Info</h1>
+    <h6 class="md-subhead text-center" ng-show="vm.editMode">You are viewing the
+      <span class="draft-bit">Draft</span>
+      <span class="published-bit">Published</span> version of the project</h6>
   </div>
 
-  <div class="page-title" ng-show="vm.editMode">
-    <h1 class="md-display-1 text-center">Edit Project Info</h1>
-  </div>
-
-  <div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
-    <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-  </div>
+  <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">-->
+    <!--<md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>-->
+  <!--</div>-->
 
   <div class="project-form-wrapper md-block">
-    <form name="vm.form" ng-submit="vm.save($event)" ng-if="vm.dataLoaded" layout="row" id="npf" novalidate>
+    <form name="vm.form" ng-submit="vm.publishProject($event)" layout="row" id="npf" novalidate>
       <div class="main-section" layout="column">
+
         <general-overview
           id="general-overview"
           form="vm.form"
@@ -22,49 +22,110 @@
           structure="vm.structure"
           team="vm.team"
           viewers="vm.viewers"
-          users="vm.users"
-          project-list="vm.cs.projectList">
+          activate-validation="vm.activateValidation"
+          ng-if="!vm.readOnlyMode"
+          users="vm.users">
         </general-overview>
+
+        <read-only-general-overview
+          id="general-overview"
+          form="vm.form"
+          project="vm.project"
+          structure="vm.structure"
+          team="vm.team"
+          viewers="vm.viewers"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.readOnlyMode"
+          users="vm.users">
+        </read-only-general-overview>
+
+
         <implementation-overview
           id="implementation-overview"
           form="vm.form"
           project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="!vm.readOnlyMode"
           structure="vm.structure">
         </implementation-overview>
+
+        <read-only-implementation-overview
+          id="implementation-overview"
+          form="vm.form"
+          project="vm.project"
+          ng-if="vm.readOnlyMode"
+          activate-validation="vm.activateValidation"
+          structure="vm.structure">
+        </read-only-implementation-overview>
+
+
         <technology
           id="technology"
+          form="vm.form"
           project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="!vm.readOnlyMode"
           structure="vm.structure">
         </technology>
+
+        <read-only-technology
+          id="technology"
+          form="vm.form"
+          project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.readOnlyMode"
+          structure="vm.structure">
+        </read-only-technology>
+
+
         <interoperability
           id="interoperability"
           form="vm.form"
           project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="!vm.readOnlyMode"
           structure="vm.structure">
         </interoperability>
+
+        <read-only-interoperability
+          id="interoperability"
+          form="vm.form"
+          project="vm.project"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.readOnlyMode"
+          structure="vm.structure">
+        </read-only-interoperability>
+
+
         <country-fields
-          ng-show="vm.showCountryFields"
           id="country-fields"
           form="vm.form"
           project="vm.project"
-          country-fields="vm.countryFields"
-        ></country-fields>
+          is-published="vm.publishMode"
+          is-new-project="vm.newProject"
+          activate-validation="vm.activateValidation"
+          ng-if="!vm.readOnlyMode">
+        </country-fields>
 
-        <section md-whiteframe="2" class="my-projects" ng-if="vm.editMode">
-          <h3 class="md-title">My projects ({{vm.userProjects.length}})</h3>
-          <projectcomp ng-repeat="p in vm.userProjects | orderBy:'id'"
-                       current-project="vm.isCurrentProject(p.id)"
-                       viewer="vm.isViewer(p)"
-                       member="vm.isMember(p)"
-                       show-details="true"
-                       show-logo="true"
-                       ng-model="p">
+        <read-only-country-fields
+          id="country-fields"
+          form="vm.form"
+          project="vm.project"
+          is-published="vm.publishMode"
+          is-new-project="vm.newProject"
+          activate-validation="vm.activateValidation"
+          ng-if="vm.readOnlyMode">
+        </read-only-country-fields>
 
-          </projectcomp>
-        </section>
       </div>
       <div class="navigation-area" layout="column">
-        <navigation edit-mode="vm.editMode" is-add-another="vm.isAddAnother" show-country-fields="vm.showCountryFields"></navigation>
+        <navigation
+          read-only-mode="vm.readOnlyMode"
+          is-published="vm.publishMode"
+          project="vm.project"
+          viewers="vm.viewers"
+          team="vm.team"
+        ></navigation>
       </div>
     </form>
   </div>
