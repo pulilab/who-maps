@@ -13,7 +13,7 @@ const el = angular.element(document.body);
 let cc = {};
 const scope = $scope(cc);
 
-fdescribe('CountryMapController', () => {
+describe('CountryMapController', () => {
 
     beforeEach(() => {
         cc = CountryMapController.countrymapFactory()(el, scope, $state);

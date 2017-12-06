@@ -25,7 +25,7 @@ describe('ProjectController', () => {
         sc.$onInit();
     });
 
-    it('mapData fn', () => {
+    fit('mapData fn', () => {
         const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
         spyOn(ProjectModule, 'getLastVersion').and.returnValue(1);
         spyOn(ProjectModule, 'getVanillaProject').and.returnValue('vanilla');
@@ -34,7 +34,6 @@ describe('ProjectController', () => {
           spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').and.returnValue('gcdpfe');
         spyOn(ProjectModule, 'getTeam').and.returnValue(['gt']);
         spyOn(ProjectModule, 'getViewers').and.returnValue(['gv']);
-        spyOn(ProjectModule, 'getProjectCountryFields').and.returnValue(() => 'gpcf');
         spyOn(ProjectModule, 'getEmptyProject').and.returnValue('gep');
         spyOn(ProjectModule, 'getCurrentDraftInViewMode').and.returnValue('gcdivm');
         spyOn(ProjectModule, 'getProjectStructure').and.returnValue('gps');
@@ -45,7 +44,6 @@ describe('ProjectController', () => {
         sc.project = 1;
         sc.team = [{ id: 1 }];
         sc.viewers = [{ id: 1 }];
-        sc.countryFields = 1;
         sc.state.current.name = 'newProject';
         sc.state.params.editMode = 'draft';
 
@@ -68,7 +66,6 @@ describe('ProjectController', () => {
         expect(result.users).toBe('gups');
         expect(result.userProfile.id).toBe(1);
         expect(result.userProjects).toBe('gpps');
-        expect(result.countryFields).toBe(1);
 
         profileSpy.and.returnValue({ id : 2 });
         sc.viewers = [{ id: 2 }];
@@ -90,12 +87,10 @@ describe('ProjectController', () => {
         expect(UserModule.getProfile).toHaveBeenCalledTimes(3);
         expect(ProjectModule.getLastVersion).toHaveBeenCalledTimes(3);
         expect(ProjectModule.getVanillaProject).toHaveBeenCalledTimes(1);
-        expect(ProjectModule.getProjectCountryFields).toHaveBeenCalledTimes(1);
 
         expect(result.project).toBe('vanilla');
         expect(result.team[0].id).toBe(2);
         expect(result.viewers.length).toBe(0);
-        expect(result.countryFields).toBe('gpcf');
 
 
         sc.state.current.name = 'editMode';
@@ -112,7 +107,6 @@ describe('ProjectController', () => {
         expect(result.project).toBe('cps');
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
-        expect(result.countryFields).toBe('gpcf');
 
 
         sc.state.params.editMode = 'draft';
@@ -129,7 +123,6 @@ describe('ProjectController', () => {
         expect(result.project).toBe('gcdpfe');
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
-        expect(result.countryFields).toBe('gpcf');
 
         currentDraftForEditing.and.returnValue(undefined);
         result = sc.mapData({});
