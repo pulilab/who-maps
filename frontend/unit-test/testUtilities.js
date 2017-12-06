@@ -74,6 +74,7 @@ const angularForm = {
 
 const A = f => done => f().then(done).catch(done.fail);
 
+const $element = {};
 
 export {
     dialog,
@@ -86,5 +87,6 @@ export {
     EE,
     $ngRedux,
     angularForm,
-    A
+    A,
+    $element
 };
