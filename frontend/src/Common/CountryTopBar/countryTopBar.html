@@ -62,7 +62,7 @@
               <md-icon md-menu-origin class="material-icons ">person</md-icon>
           </md-button>
 
-          <md-menu-content width="4">
+          <md-menu-content class="user-menu" width="4">
             <md-menu-item>
               <div class="user-name">
                 <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
@@ -87,6 +87,27 @@
                     <md-icon class="material-icons">exit_to_app</md-icon>Logout
                 </md-button>
             </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <!-- TODO -->
+            <span class="label">Country</span>
+            <md-menu-item>
+              <div class="user-lang" layout="row" layout-align="start center">
+                <span class="country-flag">
+                    <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
+                </span>
+                <span class="country-label">Countryname</span>
+              </div>
+            </md-menu-item>
+            <span class="label">Site language</span>
+            <md-menu-item>
+              <div class="user-lang" layout="row" layout-align="start center">
+                <span class="country-flag">
+                    <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
+                </span>
+                <span class="country-label">Sitelanguage</span>
+              </div>
+            </md-menu-item>
+            <!-- -->
           </md-menu-content>
         </md-menu>
 
