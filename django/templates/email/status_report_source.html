@@ -1,0 +1,457 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>dhatlas email template</title>
+<style>
+/* -------------------------------------
+    GLOBAL
+------------------------------------- */
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100% !important;
+  height: 100%;
+  font-size: 100%;
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+}
+
+img {
+  max-width: 600px;
+  width: auto;
+}
+
+table {
+  border-spacing: 0;
+}
+
+
+/* -------------------------------------
+    ELEMENTS
+------------------------------------- */
+a {
+  color: #283593;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.btn-primary {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  width: auto !important;
+}
+
+.btn-primary td {
+  border-radius: 5px;
+  background-color: #283593;
+  vertical-align: top;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  /* box-shadow */
+}
+
+.btn-primary td a {
+  display: inline-block;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 5px;
+  background-color: #283593;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.group-title {
+  width: 100%;
+  margin: 40px 0 20px;
+  padding: 8px 50px;
+  background-color: #B0BEC5;
+  color: #FFFFFF;
+}
+
+.group-title .title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.group-title .number {
+  text-align: right;
+  font-size: 12px;
+}
+
+.project-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 50px;
+}
+
+.project-list li {
+  margin: 10px 0 20px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: bold;
+  color: #283593;
+}
+
+.last {
+  margin-bottom: 0;
+}
+
+.first {
+  margin-top: 0;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.padding {
+  padding: 10px 0;
+}
+
+/* -------------------------------------
+    TOPNAV
+------------------------------------- */
+table.topnav-wrap {
+  background-color: #283593;
+  width: 100%;
+  height: 50px;
+  color: #FFFFFF;
+}
+
+table.topnav-wrap td {
+  padding: 0 20px;
+}
+
+.logo strong {
+  display: inline-block;
+  margin-top: 5px;
+  width: 163px;
+  height: 22px;
+  border: 0;
+  /* TODO: copy this to the server and link it back properly */
+  background: transparent url("images/dha-logo@2x.png") 0 0 no-repeat;
+  /*---*/
+  background-color: transparent;
+  -webkit-background-size: 163px 22px;
+  background-size: 163px 22px;
+  color: transparent;
+  text-shadow: none;
+}
+
+.link {
+  text-align: right;
+}
+
+.link a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+/* -------------------------------------
+    HEADLINE
+------------------------------------- */
+table.headline-wrap {
+  width: 100%;
+  color: #283593;
+  text-align: center;
+}
+
+table.headline-wrap h2 {
+  margin: 30px 0;
+}
+
+
+/* -------------------------------------
+    BODY
+------------------------------------- */
+table.body-wrap {
+  width: 100%;
+  padding: 0 20px;
+}
+
+table.body-wrap .container {
+  padding: 50px;
+  -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+}
+
+.container-fullwidth {
+  padding: 50px 0 !important;
+}
+
+.container-fullwidth h3,
+.container-fullwidth p,
+.container-fullwidth .btn-primary {
+  padding: 0 50px;
+}
+
+table.body-wrap .container-bg-1 {
+  /* TODO: copy this to the server and link it back properly */
+  background: #FFFFFF url("images/bg-icon-1.png") center bottom no-repeat;
+  /*---*/
+  -webkit-background-size: 44% auto;
+  background-size: 44% auto;
+}
+
+table.body-wrap .container-bg-2 {
+  /* TODO: copy this to the server and link it back properly */
+  background: #FFFFFF url("images/bg-icon-2.png") 40% bottom no-repeat;
+  /*---*/
+  -webkit-background-size: 44% auto;
+  background-size: 44% auto;
+}
+
+
+/* -------------------------------------
+    FOOTER
+------------------------------------- */
+table.footer-wrap {
+  clear: both !important;
+  width: 100%;
+  margin: 10px 0 20px;
+  padding: 0 20px;
+  font-size: 12px;
+}
+
+.footer-wrap .container p {
+  color: #9D9D9D;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+table.footer-wrap ul {
+  margin: 20px;
+  padding: 0;
+  font-size: 12px;
+}
+
+table.footer-wrap ul li {
+  display: inline-block;
+  margin: 0 10px 10px;
+  list-style-type: none;
+}
+
+table.footer-wrap a {
+  color: #9D9D9D;
+  text-decoration: underline;
+}
+
+
+/* -------------------------------------
+    TYPOGRAPHY
+------------------------------------- */
+h1,
+h2,
+h3 {
+  margin: 40px 0 20px;
+  color: #283593;
+  font-weight: 500;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 40px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 20px;
+}
+
+p,
+ul,
+ol {
+  margin-bottom: 20px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+ul li,
+ol li {
+  margin-left: 5px;
+  list-style-position: inside;
+}
+
+/* ---------------------------------------------------
+    RESPONSIVENESS
+------------------------------------------------------ */
+.container {
+  display: block !important;
+  clear: both !important;
+  margin: 0 auto !important;
+  max-width: 600px !important;
+}
+
+/* Outlook compatibility */
+.body-wrap .container,
+.headline-wrap .container  {
+  padding: 0 20px;
+}
+
+.content {
+  display: block;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.content table {
+  width: 100%;
+}
+
+</style>
+</head>
+
+<body bgcolor="#E3EAEF">
+
+<!-- topnav -->
+<table class="topnav-wrap" width="100%" height="50px" bgcolor="#283593">
+  <tr>
+    <td class="logo"><strong>Digital Health Atlas</strong></td>
+    <td class="link"><a href="http://digitalhealthatlas.org/">Visit Visit digitalhealthatlas.org</a></td>
+  </tr>
+</table>
+
+<!-- headline -->
+<table class="headline-wrap" width="100%">
+  <tr>
+    <td class="container">
+      <div class="content">
+        <table>
+          <tr>
+            <td>
+              <h2>Status report</h2>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<!-- body -->
+<table class="body-wrap" bgcolor="#E3EAEF">
+  <tr>
+    <td></td>
+    <td class="container container-fullwidth" bgcolor="#FFFFFF">
+
+      <!-- content -->
+      <div class="content">
+      <table>
+        <tr>
+          <td>
+            <h3 class="first">Dear John Doe!</h3>
+            <p class="first">The projects listed below are waiting for your approval:</p>
+
+            <!-- today -->
+            <table class="group-title" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td class="title">
+                  Today
+                </td>
+                <td class="number">
+                  x project(s)
+                </td>
+              </tr>
+            </table>
+            <!-- /today -->
+
+            <ul class="project-list">
+              <li><a href="#">Project name</a></li>
+              <li><a href="#">Project name</a></li>
+              <li><a href="#">Project name</a></li>
+            </ul>
+
+            <!-- earlier -->
+            <table class="group-title" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td class="title">
+                  Earlier
+                </td>
+                <td class="number">
+                  x project(s)
+                </td>
+              </tr>
+            </table>
+            <!-- /earlier -->
+
+            <ul class="project-list">
+              <li><a href="#">Project name</a></li>
+              <li><a href="#">Project name</a></li>
+              <li><a href="#">Project name</a></li>
+              <li><a href="#">Project name</a></li>
+              <li><a href="#">Project name lorem ipsum dolor sitamet</a></li>
+            </ul>
+
+            <!-- button -->
+            <table class="btn-primary center last" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td>
+                  <a href="#">Go to Admin Dashboard</a>
+                </td>
+              </tr>
+            </table>
+            <!-- /button -->
+          </td>
+        </tr>
+      </table>
+      </div>
+      <!-- /content -->
+
+    </td>
+    <td></td>
+  </tr>
+</table>
+<!-- /body -->
+
+<!-- footer -->
+<table class="footer-wrap">
+  <tr>
+    <td></td>
+    <td class="container">
+
+      <!-- content -->
+      <div class="content">
+        <table>
+          <tr>
+            <td align="center">
+              <ul>
+                <li><a href="http://digitalhealthatlas.org">Go to website</a></li>
+                <li><a href="http://digitalhealthatlas.org/terms-of-use">Terms of services</a></li>
+                <li><a href="mailto:digitalhealthatlas@gmail.com">Contact us</a></li>
+              </ul>
+              <p><b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- /content -->
+
+    </td>
+    <td></td>
+  </tr>
+</table>
+<!-- /footer -->
+
+</body>
+</html>
