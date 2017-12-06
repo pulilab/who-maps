@@ -15,34 +15,45 @@
       <span class="last-update">Last update: {{vm.userProfile.modified}}</span>
     </div>
     <form name="vm.editProfileForm" ng-submit="vm.save($event)" novalidate>
-      <div layout="column" class="main-form">
-        <md-input-container>
-          <label>My name</label>
-          <input ng-model="vm.userProfile.name" required name="name"  type="text" ng-change="vm.handleCustomError('name')" />
-          <div ng-messages="vm.editProfileForm.name.$error">
-            <div ng-message="required">This is required.</div>
-            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.name.customError">{{error}} </div>
-          </div>
-        </md-input-container>
+      <div layout="row" class="first">
+        <div flex="50">
+          <md-input-container class="md-block">
+            <label>My name</label>
+            <input ng-model="vm.userProfile.name" required name="name"  type="text" ng-change="vm.handleCustomError('name')" />
+            <div ng-messages="vm.editProfileForm.name.$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom" ng-repeat="error in vm.editProfileForm.name.customError">{{error}} </div>
+            </div>
+          </md-input-container>
+        </div>
 
-        <md-input-container >
-          <label>My email address</label>
-          <input ng-model="vm.userProfile.email"
-                 ng-disabled="true" required name="email"
-                 type="email" ng-change="vm.handleCustomError('email')" />
-          <div ng-messages="vm.editProfileForm.email.$error">
-            <div ng-message="email">This must be a valid email</div>
-            <div ng-message="required">This is required.</div>
-            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.email.customError">{{error}} </div>
-          </div>
-        </md-input-container>
+        <div flex="50">
+          <md-input-container class="md-block">
+            <label>My email address</label>
+            <input ng-model="vm.userProfile.email"
+                   ng-disabled="true" required name="email"
+                   type="email" ng-change="vm.handleCustomError('email')" />
+            <div ng-messages="vm.editProfileForm.email.$error">
+              <div ng-message="email">This must be a valid email</div>
+              <div ng-message="required">This is required.</div>
+              <div ng-message="custom" ng-repeat="error in vm.editProfileForm.email.customError">{{error}} </div>
+            </div>
+          </md-input-container>
+        </div>
+      </div>
 
+      <div class="md-block">
         <organisation-autocomplete
             organisation="vm.userProfile.organisation"
             form="vm.editProfileForm">
         </organisation-autocomplete>
+      </div>
 
-        <div class="countries" ng-class="{error: vm.checkErrors('country')}">
+      <div layout="row">
+        <!-- TODO -->
+        <!-- Add label to ssmenus, as it is on the design:
+        https://invis.io/GEEK0JOQP#/267409856_03_-_Edit_Profile_Page_V2 -->
+        <div class="countries" ng-class="{error: vm.checkErrors('country')}" flex="50">
           <ssmenu
               ng-disabled="vm.editMode"
               required
@@ -51,23 +62,37 @@
               option-label="name"
               options="vm.countriesList"
               ng-model="vm.userProfile.country"
-              placeholder="Select country from list"
-          ></ssmenu>
+              placeholder="Select country from list">
+            </ssmenu>
           <div ng-messages="vm.editProfileForm.country.$error">
             <div ng-message="required">This is required.</div>
             <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}} </div>
           </div>
         </div>
-
-
-
-        <div layout="row" class="edit-button">
-          <div flex="50" layout="row" layout-align="start center">
-            <md-button class="md-gray md-raised" ui-sref="dashboard">Dismiss Changes</md-button>
+        <div class="languages" ng-class="{error: vm.checkErrors('country')}" flex="50">
+          <ssmenu
+              ng-disabled="vm.editMode"
+              required
+              name="country"
+              on-close-callback="vm.countryCloseCallback"
+              option-label="name"
+              options="vm.countriesList"
+              ng-model="vm.userProfile.country"
+              placeholder="Select country from list">
+            </ssmenu>
+          <div ng-messages="vm.editProfileForm.country.$error">
+            <div ng-message="required">This is required.</div>
+            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}} </div>
           </div>
-          <div flex="50" layout="row" layout-align="end center">
-            <md-button type="submit" class="md-primary md-raised">Save Profile</md-button>
-          </div>
+        </div>
+      </div>
+
+      <div layout="row" class="edit-button">
+        <div flex="50" layout="row" layout-align="start center">
+          <md-button class="md-gray md-raised" ui-sref="dashboard">Dismiss Changes</md-button>
+        </div>
+        <div flex="50" layout="row" layout-align="end center">
+          <md-button type="submit" class="md-primary md-raised">Save Profile</md-button>
         </div>
       </div>
     </form>
