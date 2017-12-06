@@ -54,15 +54,20 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
     fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
 
     def create(self, validated_data):
+        mode = self.context['request'].parser_context['kwargs']['mode']
         return [
             CountryField.objects.update_or_create(
-                defaults={"answer": field.get("answer", "")},
+                defaults={"answer": field.get("answer", ""),
+                          "draft": field.get("answer", "")} if mode == "publish" else {
+                    "draft": field.get("answer", "")},
                 **{
                     "country": field["country"],
                     "project": field["project"],
                     "question": field["question"],
                     "type": field["type"],
-                    "schema": False
+                    "schema": False,
+                    "schema_instance": CountryField.get_schema_for_answer(country=field["country"],
+                                                                          question=field["question"])
                 },
             )[0] for field in validated_data['fields']
         ]
