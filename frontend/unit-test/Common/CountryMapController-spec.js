@@ -16,7 +16,7 @@ const scope = $scope(cc);
 describe('CountryMapController', () => {
 
     beforeEach(() => {
-        cc = CountryMapController.countrymapFactory()(el, scope, $state);
+        cc = CountryMapController.countrymapFactory()(el, scope, $state());
         cc.$onInit();
     });
 

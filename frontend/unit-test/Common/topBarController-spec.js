@@ -20,7 +20,7 @@ const scope = $scope(ac);
 describe('TopBarController', () => {
 
     beforeEach(() => {
-        ac = TopBarController.topBarControllerFactory()($state, scope);
+        ac = TopBarController.topBarControllerFactory()($state(), scope);
         ac.scope = $scope(ac);
         ac.cs = {
             projectList: [],

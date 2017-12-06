@@ -17,7 +17,7 @@ const scope = $scope(sc);
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new ProjectController(scope, $state, toast, $timeout, dialog, $ngRedux);
+        sc = new ProjectController(scope, $state(), toast, $timeout, dialog, $ngRedux);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -28,7 +28,7 @@ describe('ProjectController', () => {
 
     it('should have a factory  fn.', () => {
         expect(ProjectController.newProjectFactory).toBeDefined();
-        const onSpot = ProjectController.newProjectFactory()($scope(sc), $state, toast, $timeout, dialog, $ngRedux);
+        const onSpot = ProjectController.newProjectFactory()($scope(sc), $state(), toast, $timeout, dialog, $ngRedux);
         expect(onSpot.constructor.name).toBe(sc.constructor.name);
     });
 

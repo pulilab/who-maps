@@ -22,7 +22,7 @@ describe('CountryTopBarController', () => {
 
     beforeEach(() => {
         boundFunctions.onInit = spyOn(CountryTopBarController.prototype, 'onInit').and.callThrough();
-        controller = CountryTopBarController.countryTopBarControllerFactory()($state, scope, $timeout);
+        controller = CountryTopBarController.countryTopBarControllerFactory()($state(), scope, $timeout);
         controller.state.current = { name:  'something' };
     });
 

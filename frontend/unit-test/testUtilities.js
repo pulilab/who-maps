@@ -13,11 +13,11 @@ const dialog = {
     })
 };
 
-const $state = {
+const $state = () => ({
     params: {},
     current: {},
     go: jasmine.createSpy('stateGo')
-};
+});
 
 const $scope = (controller) =>  {
     return {
