@@ -100,14 +100,8 @@ class ProjectController  {
     onDestroy() {
         this.unsubscribe();
         this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraft);
-        this.EE.removeAllListeners('projectDiscardDraft', this.saveDraft);
-    }
-
-    eventListeners() {
-        this.EE.on('projectScrollTo', this.scrollToFieldSet, this);
-        this.EE.on('projectSaveDraft', this.saveDraft, this);
-        this.EE.on('projectDiscardDraft', this.discardDraft, this);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
+        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     createDialogs() {
@@ -126,13 +120,6 @@ class ProjectController  {
             ok: 'Close',
             theme: 'alert'
         });
-    }
-
-    onDestroy() {
-        this.unsubscribe();
-        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
-        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     watchers() {
@@ -171,7 +158,7 @@ class ProjectController  {
                 this.postPublishAction(data);
             }
             catch (e) {
-                await this.handleResponse(e.response);
+                this.handleResponse(e.response);
                 this.$mdDialog.show(this.publishAlert);
             }
         }
@@ -184,8 +171,7 @@ class ProjectController  {
 
     async saveDraftHandler() {
         try {
-            const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
-              this.team, this.viewers));
+            const project = await this.saveDraft(this.project, this.team, this.viewers);
             this.showToast('Draft updated');
             if (this.newProject) {
                 this.state.go('editProject', { appName:  project.id }, {
@@ -203,7 +189,7 @@ class ProjectController  {
     async discardDraftHandler() {
         try {
             await this.$mdDialog.show(this.confirmDraftDiscard);
-            await this.$ngRedux.dispatch(ProjectModule.discardDraft());
+            await this.discardDraft();
             this.showToast('Draft discarded');
         }
         catch (e) {
@@ -212,7 +198,7 @@ class ProjectController  {
         }
     }
 
-    async focusInvalidField() {
+    focusInvalidField() {
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
