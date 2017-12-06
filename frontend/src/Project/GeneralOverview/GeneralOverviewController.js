@@ -14,6 +14,10 @@ class GeneralOverviewController extends CollapsibleSet {
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.defaultOnDestroy.bind(this);
         this.mapData = this.mapData.bind(this);
+        this.getUsers = this.getUsers.bind(this);
+        this.checkName = this.checkName.bind(this);
+        this.validateDateRange = this.validateDateRange.bind(this);
+        this.openSimilarProject = this.openSimilarProject.bind(this);
     }
 
     mapData(state) {
@@ -25,15 +29,8 @@ class GeneralOverviewController extends CollapsibleSet {
         };
     }
 
-    bindFunctions() {
-        this.getUsers = this.getUsers.bind(this);
-        this.checkName = this.checkName.bind(this);
-        this.validateDateRange = this.validateDateRange.bind(this);
-    }
-
     onInit() {
         this.defaultOnInit();
-        this.bindFunctions();
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
     }
@@ -78,22 +75,6 @@ class GeneralOverviewController extends CollapsibleSet {
             }
             return false;
         });
-    }
-
-    handleCustomError(key) {
-        if (this.form[key]) {
-            this.form[key].$setValidity('custom', true);
-            this.form[key].customError = [];
-        }
-    }
-
-    setCustomError(key, error) {
-        const errors = this.form[key].customError || [];
-        if (errors.indexOf('error') === -1) {
-            errors.push(error);
-        }
-        this.form[key].$setValidity('custom', false);
-        this.form[key].customError = errors;
     }
 
     async checkName() {

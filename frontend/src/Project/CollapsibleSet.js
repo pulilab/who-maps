@@ -160,6 +160,23 @@ class CollapsibleSet {
             });
         }
     }
+
+    handleCustomError(key) {
+        if (this.form[key]) {
+            this.form[key].$setValidity('custom', true);
+            this.form[key].customError = [];
+        }
+    }
+
+    setCustomError(key, error) {
+        const errors = this.form[key].customError || [];
+        if (errors.indexOf(error) === -1) {
+            errors.push(error);
+        }
+        this.form[key].$setValidity('custom', false);
+        this.form[key].customError = errors;
+    }
+
 }
 
 export default CollapsibleSet;
