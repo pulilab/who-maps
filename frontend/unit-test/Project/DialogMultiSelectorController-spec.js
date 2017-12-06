@@ -43,34 +43,6 @@ describe('DialogMultiSelector', () => {
         expect(controller.dialog.show).toHaveBeenCalled();
     });
 
-    it('should have a fn. that checks duplicates in the elements passed to the component', () => {
-        const ele = [
-            {
-                name: 'a',
-                subGroups: [
-                    {
-                        name: 'b',
-                        items: ['a', 'b']
-                    }
-                ]
-            },
-            {
-                name: 'aa',
-                subGroups: [
-                    {
-                        name: 'bb',
-                        items: ['a', 'bb']
-                    }
-                ]
-            }
-        ];
-        spyOn(console, 'error');
-        controller.collectionName = 'items';
-        controller.checkDuplicates(ele);
-        expect(window.console.error).toHaveBeenCalled();
-    });
-
-
 });
 
 
