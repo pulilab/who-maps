@@ -225,5 +225,42 @@ describe('CollapsibleSet class', () => {
         expect(platforms[0].available).toEqual([{ name: 'a', id: 1 }, { name: 'c', id: 3 }]);
     });
 
+    it('handleCustomError fn', () => {
+        controller.form = {
+            a: {
+                $setValidity: jasmine.createSpy('.$setValidity'),
+                customError: [1]
+            }
+        };
+
+        controller.handleCustomError('b');
+        expect(controller.form.a.$setValidity).not.toHaveBeenCalled();
+        expect(controller.form.a.customError).toEqual([1]);
+
+        controller.handleCustomError('a');
+        expect(controller.form.a.$setValidity).toHaveBeenCalled();
+        expect(controller.form.a.customError).toEqual([]);
+
+    });
+
+    it('setCustomError fn', () => {
+        controller.form = {
+            a: {
+                $setValidity: jasmine.createSpy('.$setValidity'),
+                customError: [1]
+            }
+        };
+        controller.setCustomError('a', 1);
+        expect(controller.form.a.$setValidity).toHaveBeenCalled();
+        expect(controller.form.a.customError).toEqual([1]);
+
+        controller.form.a.customError = null;
+        controller.setCustomError('a', 1);
+        expect(controller.form.a.$setValidity).toHaveBeenCalled();
+        expect(controller.form.a.customError).toEqual([1]);
+
+
+    });
+
 
 });
