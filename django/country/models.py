@@ -82,16 +82,24 @@ class CountryField(models.Model):
         for field in schema:
             found = answers.filter(question=field.question, type=field.type).first()
             if found:
-                country_fields.append((found, field.id))
+                country_fields.append(found)
 
         return country_fields
 
-    def to_representation(self, schema_id=None):
+    @classmethod
+    def get_schema_for_answer(cls, country, question):
+        try:
+            return cls.objects.get(schema=True, enabled=True, country=country, question=question)
+        except Exception:
+            return None
+
+    def to_representation(self):
         return {
-            "schema_id": schema_id,
+            "schema_id": getattr(self.schema_instance, 'pk', None),
             "country": self.country.id,
             "type": self.type,
             "question": self.question,
             "answer": self.answer,
+            "draft": self.draft,
             "project": self.project.id
         }
