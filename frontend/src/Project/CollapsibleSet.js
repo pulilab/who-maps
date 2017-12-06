@@ -27,15 +27,19 @@ class CollapsibleSet {
     }
 
     defaultWatchers() {
-        this.resetDefaultList.forEach(item => {
-            this.scope.$watch(s => s.vm[item.toWatch], this.emptyCustom.bind(this, item.field));
-        });
-        this.emptyCheckableArray.forEach(item => {
-            this.project[item.toWatch].forEach((innerItem, index) => {
-                this.scope.$watch(s => s.vm.project[item.toWatch][index],
-                  this.emptyCheckable.bind(this, item.check, item.field), true);
+        if (this.resetDefaultList && this.resetDefaultList.length > 0) {
+            this.resetDefaultList.forEach(item => {
+                this.scope.$watch(s => s.vm[item.toWatch], this.emptyCustom.bind(this, item.field));
             });
-        });
+        }
+        if (this.emptyCheckableArray && this.emptyCheckableArray.length > 0) {
+            this.emptyCheckableArray.forEach(item => {
+                this.project[item.toWatch].forEach((innerItem, index) => {
+                    this.scope.$watch(s => s.vm.project[item.toWatch][index],
+                      this.emptyCheckable.bind(this, item.check, item.field), true);
+                });
+            });
+        }
 
     }
 
