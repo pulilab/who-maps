@@ -1,5 +1,5 @@
 import ProjectController from '../../src/Project/ProjectController';
-import { $state, $scope, toast, $ngRedux, dialog, $timeout } from '../testUtilities';
+import { $state, $scope, toast, $ngRedux, dialog, $timeout, EE, A } from '../testUtilities';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as UserModule from '../../src/store/modules/user';
 import * as SystemModule from '../../src/store/modules/system';
@@ -22,10 +22,17 @@ describe('ProjectController', () => {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
         };
+        sc.EE = EE;
         sc.$onInit();
     });
 
-    fit('mapData fn', () => {
+    it('should have a factory  fn.', () => {
+        expect(ProjectController.newProjectFactory).toBeDefined();
+        const onSpot = ProjectController.newProjectFactory()($scope(sc), $state, toast, $timeout, dialog, $ngRedux);
+        expect(onSpot.constructor.name).toBe(sc.constructor.name);
+    });
+
+    it('mapData fn', () => {
         const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
         spyOn(ProjectModule, 'getLastVersion').and.returnValue(1);
         spyOn(ProjectModule, 'getVanillaProject').and.returnValue('vanilla');
@@ -132,11 +139,12 @@ describe('ProjectController', () => {
 
     });
 
-    it('has a onInit fn', () => {
+    it('onInit fn', () => {
         spyOn(sc, 'eventListeners');
         spyOn(sc, 'watchers');
         spyOn(sc, 'createDialogs');
         spyOn(ProjectModule, 'clearSimilarNameList').and.returnValue(() => {});
+        spyOn(ProjectModule, 'setCurrentProject').and.returnValue(() => {});
         sc.activateValidation = undefined;
         sc.districtList = undefined;
         sc.unsubcribe = undefined;
@@ -153,10 +161,13 @@ describe('ProjectController', () => {
         expect(Array.isArray(sc.districtList)).toBe(true);
         expect(sc.unsubscribe).toBeDefined();
         expect(sc.unsubscribe()).toBe('unsubscribeFn');
+
+        sc.state.current.name = 'newProject';
+        sc.onInit();
+        expect(ProjectModule.setCurrentProject).toHaveBeenCalled();
     });
 
-    it('has a onDestroy fn.', () => {
-        spyOn(sc.EE, 'removeAllListeners');
+    it('onDestroy fn.', () => {
         sc.unsubscribe = jasmine.createSpy('unsubscribe');
         sc.onDestroy();
         expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectDiscardDraft', jasmine.any(Function));
@@ -166,14 +177,13 @@ describe('ProjectController', () => {
     });
 
     it('has a eventListeners fn', () => {
-        spyOn(sc.EE, 'on');
         sc.eventListeners();
-        expect(sc.EE.on).toHaveBeenCalledWith('projectScrollTo', jasmine.any(Function), jasmine.any(Object));
-        expect(sc.EE.on).toHaveBeenCalledWith('projectSaveDraft', jasmine.any(Function), jasmine.any(Object));
-        expect(sc.EE.on).toHaveBeenCalledWith('projectDiscardDraft', jasmine.any(Function), jasmine.any(Object));
+        expect(sc.EE.on.calls.argsFor(0)).toEqual(['projectScrollTo', jasmine.any(Function), jasmine.anything()]);
+        expect(sc.EE.on.calls.argsFor(1)).toEqual(['projectSaveDraft', jasmine.any(Function), jasmine.anything()]);
+        expect(sc.EE.on.calls.argsFor(2)).toEqual(['projectDiscardDraft', jasmine.any(Function), jasmine.anything()]);
     });
 
-    it('has a createDialogs', () => {
+    it('createDialogs fn.', () => {
         sc.createDialogs();
         expect(sc.$mdDialog.confirm).toHaveBeenCalledWith(jasmine.any(Object));
         expect(sc.$mdDialog.alert).toHaveBeenCalledWith(jasmine.any(Object));
@@ -181,31 +191,22 @@ describe('ProjectController', () => {
         expect(sc.publishAlert.type).toBe('alert');
     });
 
-    it('has a watchers fn', () => {
+    it('watchers fn', () => {
         spyOn(sc, 'getCountryFields');
         sc.watchers();
         expect(sc.getCountryFields).toHaveBeenCalled();
     });
 
-    it('has a getCountryFields', async (done) => {
-        spyOn(CountryModule, 'setCurrentCountry').and.returnValue( () => Promise.resolve());
+    it('getCountryFields fn.', A(async () => {
+        spyOn(CountryModule, 'setCurrentCountry').and.returnValue(() => Promise.resolve());
         await sc.getCountryFields();
         expect(CountryModule.setCurrentCountry).not.toHaveBeenCalled();
 
-        sc.editMode = true;
-        await sc.getCountryFields(1, 2);
+        await sc.getCountryFields(1);
         expect(CountryModule.setCurrentCountry).toHaveBeenCalled();
-        done();
-    });
+    }));
 
-    it('save fn.', () => {
-        const e = document.createElement('div');
-        e.setAttribute('id', 'npf');
-        document.body.appendChild(e);
-    });
-
-    it('should have a function that scroll the view ', () => {
-        spyOn(sc.EE, 'emit');
+    it('scrollToFieldSet fn.', () => {
         const a = document.createElement('div');
         const mainElement = document.createElement('div');
         mainElement.setAttribute('class', 'main-content');
@@ -213,13 +214,177 @@ describe('ProjectController', () => {
         a.setAttribute('id', 'a');
         window.document.body.appendChild(a);
         window.document.body.appendChild(mainElement);
+        sc.scrollToFieldSet();
+        expect(sc.EE.emit).not.toHaveBeenCalled();
+
         sc.scrollToFieldSet('a');
         expect(sc.EE.emit).toHaveBeenCalled();
+    });
+
+    it('clearCustomErrors fn.', () => {
+        const formItem = {};
+        sc.form = [formItem];
+        sc.clearCustomErrors();
+        formItem.$setValidity = jasmine.createSpy('setValidity');
+        expect(formItem.$setValidity).not.toHaveBeenCalled();
+
+        formItem.customError = [];
+        sc.clearCustomErrors();
+        expect(formItem.$setValidity).not.toHaveBeenCalled();
+
+        formItem.customError = [1];
+        sc.clearCustomErrors();
+        expect(formItem.customError).toEqual([]);
+        expect(formItem.$setValidity).toHaveBeenCalledWith('custom', true);
+    });
+
+
+    it('publishProject async fn.', A(async () => {
+        spyOn(sc, 'clearCustomErrors');
+        spyOn(sc, 'focusInvalidField');
+        spyOn(sc, 'postPublishAction');
+        spyOn(sc, 'handleResponse');
+        sc.publish =  jasmine.createSpy('publish').and.returnValue(Promise.resolve());
+        sc.form = {
+            $valid: false
+        };
+        await sc.publishProject();
+        expect(sc.clearCustomErrors).toHaveBeenCalledTimes(1);
+        expect(sc.focusInvalidField).toHaveBeenCalledTimes(1);
+        expect(sc.$mdDialog.show).toHaveBeenCalled();
+
+        sc.form.$valid = true;
+        await sc.publishProject();
+        expect(sc.clearCustomErrors).toHaveBeenCalledTimes(2);
+        expect(sc.publish).toHaveBeenCalledTimes(1);
+        expect(sc.postPublishAction).toHaveBeenCalledTimes(1);
+
+        sc.publish.and.returnValue(Promise.reject({ response: {} }));
+        await sc.publishProject();
+        expect(sc.clearCustomErrors).toHaveBeenCalledTimes(3);
+        expect(sc.publish).toHaveBeenCalledTimes(2);
+        expect(sc.handleResponse).toHaveBeenCalledTimes(1);
+        expect(sc.postPublishAction).toHaveBeenCalledTimes(1);
+        expect(sc.$mdDialog.show).toHaveBeenCalled();
+
+    }));
+
+    it('saveDraftHandler fn.', A(async () => {
+        sc.saveDraft = jasmine.createSpy('saveDraft').and.returnValue(Promise.resolve({ id: 1 }));
+        spyOn(sc, 'showToast');
+        spyOn(sc, 'handleResponse');
+        sc.newProject = false;
+        await sc.saveDraftHandler();
+        expect(sc.saveDraft).toHaveBeenCalled();
+        expect(sc.showToast).toHaveBeenCalled();
+        expect(sc.state.go).not.toHaveBeenCalled();
+
+        sc.newProject = true;
+        await sc.saveDraftHandler();
+        expect(sc.saveDraft).toHaveBeenCalledTimes(2);
+        expect(sc.showToast).toHaveBeenCalledTimes(2);
+        expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
+
+        sc.saveDraft.and.returnValue(Promise.reject({ response: 1 }));
+        await sc.saveDraftHandler();
+        expect(sc.handleResponse).toHaveBeenCalledWith(1);
+
+    }));
+
+    it('discardDraftHandler fn.', A(async () => {
+        sc.discardDraft = jasmine.createSpy('disacrdDraft§').and.returnValue(Promise.resolve());
+        spyOn(sc, 'showToast');
+        await sc.discardDraftHandler();
+        expect(sc.$mdDialog.show).toHaveBeenCalled();
+        expect(sc.discardDraft).toHaveBeenCalled();
+        expect(sc.showToast).toHaveBeenCalledWith('Draft discarded');
+
+        sc.discardDraft.and.returnValue(Promise.reject(1));
+        await sc.discardDraftHandler();
+        expect(sc.showToast).toHaveBeenCalledWith('Discard draft process canceled');
+    }));
+
+    it('focusInvalidField fn.', () => {
+        const a = document.createElement('div');
+        a.setAttribute('id', 'npf');
+        window.document.body.appendChild(a);
+        const errorDom = document.createElement('div');
+        errorDom.setAttribute('class', 'ng-invalid');
+        errorDom.focus = jasmine.createSpy('focus');
+        sc.focusInvalidField();
+
+        a.appendChild(errorDom);
+        sc.focusInvalidField();
+        expect(errorDom.focus).toHaveBeenCalled();
+        window.document.body.removeChild(a);
     });
 
     it('should have a function that open a simple toast', () => {
         sc.showToast('a');
         expect(sc.toast.show).toHaveBeenCalled();
+    });
+
+    it('showToast fn.', () => {
+        sc.showToast();
+        expect(sc.toast.show).toHaveBeenCalled();
+    });
+
+    it('postPublishAction', () => {
+        spyOn(sc, 'showToast');
+        sc.postPublishAction({ id: 1 });
+        expect(sc.showToast).toHaveBeenCalled();
+        expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
+    });
+
+    it('addErrorArray fn. ', ()=> {
+        sc.form = {
+            a: {
+                customError: null,
+                $setValidity: jasmine.createSpy('setValidity')
+            }
+        };
+        sc.addErrorArray(1, 'b');
+        expect(sc.form.a.$setValidity).not.toHaveBeenCalled();
+
+        sc.addErrorArray(1, 'a');
+        expect(sc.form.a.$setValidity).toHaveBeenCalled();
+        expect(sc.form.a.customError).toBe(1);
+    });
+
+    it('handleResponse fn', () => {
+        spyOn(console, 'error');
+        const errorSpy = spyOn(sc, 'addErrorArray');
+        spyOn(sc, 'focusInvalidField');
+        const response = {
+            status: 500
+        };
+        sc.handleResponse(response);
+        expect(console.error).toHaveBeenCalled();
+
+        response.status = 400;
+        response.data = {
+            a: {
+                b: 1
+            }
+        };
+
+        sc.handleResponse(response);
+        expect(sc.addErrorArray).toHaveBeenCalledWith(1, 'a.b');
+        response.data = {
+            a : [{
+                b: 1
+            }]
+        };
+        sc.handleResponse(response);
+        expect(sc.addErrorArray).toHaveBeenCalledWith(1, 'a_0.b');
+
+        response.data.a = 1;
+        sc.handleResponse(response);
+        expect(sc.addErrorArray).toHaveBeenCalledWith(1, 'a');
+
+        errorSpy.and.throwError();
+        sc.handleResponse(response);
+        expect(console.error).toHaveBeenCalledTimes(2);
     });
 
 });
