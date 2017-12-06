@@ -20,7 +20,7 @@ class CountryFieldInline(admin.TabularInline):
 
 class AddCountryFieldInline(admin.TabularInline):
     model = CountryField
-    verbose_name_plural = "Add additional country fields"
+    verbose_name_plural = "Add country fields"
     extra = 0
     can_delete = False
     fields = ('type', 'question')
