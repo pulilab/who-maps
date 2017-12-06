@@ -1217,7 +1217,7 @@ class PermissionTests(SetupTests):
     def test_retrieve_project_with_country_fields(self):
         schema_1 = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
         cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
-                                          answer="a1", schema=False)
+                                          answer="a1", schema=False, schema_instance=schema_1)
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
 
