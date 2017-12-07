@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('country', '0019_migrate_country_fields'),
+        ('country', '0020_countryfield_options'),
     ]
 
     operations = [
