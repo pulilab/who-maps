@@ -1,8 +1,6 @@
 import csv
-import logging
 
 from django.contrib import admin
-from django.contrib.postgres.forms import JSONField
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
@@ -147,7 +145,7 @@ class ProjectImportFieldMappingForm(forms.ModelForm):
 
     class Meta:
         model = ProjectImport
-        fields = ['project_name', 'owner_name', 'owner_email', 'organisation', 'country', 'description',]
+        fields = ['project_name', 'owner_name', 'owner_email', 'organisation', 'country', 'description']
 
 
 class ProjectImportStatusForm(forms.ModelForm):
@@ -212,14 +210,12 @@ class ProjectImportAdmin(admin.ModelAdmin):
             obj.save()
 
             # Notify users
-            logging.info(self._users_to_notify)
             self._notify_users()
 
     def _notify_users(self):
         html_template = loader.get_template('email/import_projects.html')
         for email, data in self._users_to_notify.items():
             html_message = html_template.render({'email': email, 'data': data})
-            logging.info(html_message)
             mail.send_mail(
                 subject="You were added to imported projects",
                 message="",
@@ -252,17 +248,14 @@ class ProjectImportAdmin(admin.ModelAdmin):
         return valid
 
     def _import_project(self, row, project_import):
-        # TODO align to new draft system - projects should be drafts
-        # Project name
         project_name_col = int(project_import.mapping['project_name'])
-        # TODO draft won't need country at creation
-        project = Project.objects.create(name=row[project_name_col], data={'country': 1})
+        project = Project.objects.create(name=row[project_name_col], draft={})
 
         # Organisation
         if project_import.mapping['organisation']:
             organisation_col = int(project_import.mapping['organisation'])
             organisation, _ = Organisation.objects.get_or_create(name=row[organisation_col])
-            project.data.update(organisation=organisation.id, organisation_name=organisation.name)
+            project.draft.update(organisation=organisation.id, organisation_name=organisation.name)
         else:
             organisation = None
 
@@ -270,14 +263,14 @@ class ProjectImportAdmin(admin.ModelAdmin):
         if project_import.mapping['country']:
             country_col = int(project_import.mapping['country'])
             country = Country.objects.get(name=row[country_col])
-            project.data.update(country=country.id, country_name=country.name)
+            project.draft.update(country=country.id, country_name=country.name)
         else:
             country = None
 
         # Description
         if project_import.mapping['description']:
             description_col = int(project_import.mapping['description'])
-            project.data.update(implementation_overview=row[description_col])
+            project.draft.update(implementation_overview=row[description_col])
 
         # Add user, assign to team
         owner_name_col = int(project_import.mapping['owner_name'])
@@ -312,8 +305,8 @@ class ProjectImportAdmin(admin.ModelAdmin):
         user.set_password(password)
         user.save()
         EmailAddress.objects.create(user=user, email=email, primary=True, verified=True)
-        UserProfile.objects.create(account_type=UserProfile.IMPLEMENTER, user=user, name=name, organisation=organisation,
-                                   country=country)
+        UserProfile.objects.create(account_type=UserProfile.IMPLEMENTER, user=user, name=name,
+                                   organisation=organisation, country=country)
         user.refresh_from_db()
         return user, password
 

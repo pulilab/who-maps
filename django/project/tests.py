@@ -1383,62 +1383,86 @@ class TestPorjectImportAdmin(TestCase):
     def setUp(self):
         settings.MEDIA_ROOT = '/tmp/'  # so tests won't litter filesystem
         settings.DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-        # Admin for testing
-        self.request = MockRequest()
-        self.site = AdminSite()
+        with self.settings(DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage'):
+            # Admin for testing
+            self.request = MockRequest()
+            self.site = AdminSite()
 
-        # Create admin user
-        self.test_admin = User.objects.create_superuser(
-            username='test_admin',
-            password='test',
-            email='test_admin@test.com',
-        )
-        self.client.force_login(self.test_admin)
+            # Create admin user
+            self.test_admin = User.objects.create_superuser(
+                username='test_admin',
+                password='test',
+                email='test_admin@test.com',
+            )
+            self.client.force_login(self.test_admin)
 
-        # Create test user
-        self.test_user = User.objects.create_user(
-            username='test_user',
-            password='test',
-            email='test_user@test.com',
-        )
-        UserProfile.objects.create(user=self.test_user, account_type=UserProfile.IMPLEMENTER)
+            # Create test user
+            self.test_user = User.objects.create_user(
+                username='test_user',
+                password='test',
+                email='test_user@test.com',
+            )
+            UserProfile.objects.create(user=self.test_user, account_type=UserProfile.IMPLEMENTER)
 
-        # CSV data
-        self.csv_content = ('Project,Owner,Owner email,Country,Organisation\n'
-                            'Proj1,Owner Owen,owen@owner.com,Kenya,Org1\n'
-                            'Proj2,Test Owner,test_user@test.com,Kenya,Org2\n'
-                            'Proj3,Test Owner,test_user@test.com,Invalidcountry,Org2\n'
-                            'Proj4,Test Owner,invalidemail,Invalidcountry,Org2\n')
+            # CSV data
+            self.csv_content = ('Project,Owner,Owner email,Country,Organisation\n'
+                                'Proj1,Owner Owen,owen@owner.com,Kenya,Org1\n'
+                                'Proj2,Test Owner,test_user@test.com,Kenya,Org2\n'
+                                'Proj3,Test Owner,test_user@test.com,Invalidcountry,Org2\n'
+                                'Proj4,Test Owner,invalidemail,Invalidcountry,Org2\n')
 
     def test_project_import(self):
+        # Upload csv
         csv_file = SimpleUploadedFile('a.csv', self.csv_content.encode())
         url = reverse('admin:project_projectimport_add')
         data = {
             'csv': csv_file
         }
         response = self.client.post(url, data, format='multipart', follow=True)
-        project_import = ProjectImport.objects.all().first()
-
-        print(project_import.headers)
         self.assertEqual(response.status_code, 200)
 
+        # Map fields
+        project_import = ProjectImport.objects.all().first()
         url = reverse('admin:project_projectimport_change', args=[project_import.id])
         data = {
-            'project_name': 0,
-            'owner_name': 1,
-            'owner_email': 2,
-            'country': 3,
+            'project_name': '0',
+            'owner_name': '1',
+            'owner_email': '2',
+            'country': '3',
+            'description': '',
+            'organisation': '4',
         }
         response = self.client.post(url, data, follow=True)
         project_import.refresh_from_db()
-        p = Project.objects.get(name='Proj1')
-
         self.assertEqual(response.status_code, 200)
-        # TODO test for org
-        # TODO testfor country
-        # TODO test for failed
-        # TODO test for imported
-        print(project_import.mapping)
-        print(p.team.all())
-        print(p.team.all().first().user.email)
-        print(mail.outbox[0].body)
+        self.assertEqual(project_import.mapping, data)
+
+        self.assertTrue(Project.objects.filter(name='Proj1').exists())
+        self.assertTrue(Project.objects.filter(name='Proj2').exists())
+        self.assertFalse(Project.objects.filter(name='Proj3').exists())
+        self.assertFalse(Project.objects.filter(name='Proj4').exists())
+        self.assertTrue(Organisation.objects.filter(name='Org1').exists())
+        self.assertTrue(Organisation.objects.filter(name='Org2').exists())
+        self.assertEquals(Organisation.objects.get(name='Org1').id,
+                          Project.objects.get(name='Proj1').draft['organisation'])
+        self.assertEquals(Organisation.objects.get(name='Org2').id,
+                          Project.objects.get(name='Proj2').draft['organisation'])
+        self.assertEquals(Project.objects.get(name='Proj1').draft['country_name'], 'Kenya')
+        self.assertEquals(Project.objects.get(name='Proj1').draft['country'], Country.objects.get(name='Kenya').id)
+        self.assertEquals(Project.objects.get(name='Proj2').draft['country_name'], 'Kenya')
+        self.assertEquals(Project.objects.get(name='Proj2').draft['country'], Country.objects.get(name='Kenya').id)
+        self.assertTrue(UserProfile.objects.filter(user__email='owen@owner.com').exists())
+        self.assertEquals(UserProfile.objects.filter(user__email='owen@owner.com').first(),
+                          Project.objects.get(name='Proj1').team.first())
+        self.assertEquals(UserProfile.objects.filter(user__email='test_user@test.com').first(),
+                          Project.objects.get(name='Proj2').team.first())
+        self.assertIn('owen@owner.com', mail.outbox[0].alternatives[0][0])
+        self.assertIn('app/{}/edit-project'.format(Project.objects.get(name='Proj1').id),
+                      mail.outbox[0].alternatives[0][0])
+        self.assertIn('app/{}/edit-project'.format(Project.objects.get(name='Proj2').id),
+                      mail.outbox[1].alternatives[0][0])
+        self.assertIn('Proj1', project_import.imported)
+        self.assertIn('Proj2', project_import.imported)
+        self.assertIn('Line 3, Invalidcountry: No such country.', project_import.failed)
+        self.assertIn('Line 4, Invalidcountry: No such country.', project_import.failed)
+        self.assertIn('Line 4, invalidemail: Enter a valid email address.', project_import.failed)
