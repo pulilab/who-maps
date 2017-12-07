@@ -1,6 +1,6 @@
 /* eslint-disable no-warning-comments */
 import cloneDeep from 'lodash/cloneDeep';
-import axios from 'axios';
+import axios from '../../plugins/axios';
 import structure from '../static_data/toolkit_structure.json';
 
 const initialState = {

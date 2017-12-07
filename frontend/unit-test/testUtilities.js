@@ -81,6 +81,9 @@ const $location = {
     hash: jasmine.createSpy('locationHash').and.callFake(input => input)
 };
 
+const dispatch = jasmine.createSpy('dispatch');
+
+
 export {
     dialog,
     $state,
@@ -94,5 +97,6 @@ export {
     angularForm,
     A,
     $element,
-    $location
+    $location,
+    dispatch
 };
