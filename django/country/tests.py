@@ -157,7 +157,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'], [
             {'schema_id': None, 'country': self.country.id, 'type': 1,
-             'question': 'q2?', 'answer': '', 'draft': '', 'project': project.id}])
+             'question': 'q2?', 'answer': '', 'project': project.id}])
 
         country_fields_data = {
             "fields": [{
@@ -172,7 +172,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'], [
             {'schema_id': None, 'country': self.country.id, 'type': 1,
-             'question': 'q2?', 'answer': '', 'draft': '', 'project': project.id}])
+             'question': 'q2?', 'answer': '', 'project': project.id}])
 
     def test_create_country_fields_missing_question(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
@@ -279,8 +279,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
-        self.assertEqual(response.json()['fields'][0]['draft'], country_fields_data['fields'][0]['answer'])
-        self.assertEqual(response.json()['fields'][0]['answer'], '')
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
         self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
         self.assertEqual(response.json()['fields'][0]['type'], country_fields_data['fields'][0]['type'])
         self.assertEqual(response.json()['fields'][0]['project'], project.id)
@@ -303,8 +302,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
-        self.assertEqual(response.json()['fields'][0]['draft'], country_fields_data['fields'][0]['answer'])
-        self.assertEqual(response.json()['fields'][0]['answer'], '')
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
 
         url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
                                                 "mode": 'publish'})
@@ -321,7 +319,6 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=country_fields_data2, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
-        self.assertEqual(response.json()['fields'][0]['draft'], country_fields_data2['fields'][0]['answer'])
         self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data2['fields'][0]['answer'])
         self.assertNotEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
 
