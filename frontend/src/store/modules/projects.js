@@ -536,13 +536,14 @@ async function saveTeamViewers({ id }, team = [], viewers = []) {
     return data;
 }
 
-async function saveCountryFields(fields = [], countryId, project) {
+async function saveCountryFields(fields = [], countryId, project, toUpdate) {
     fields = fields.map(({ country, question, type, answer }) => {
         return {
             country, answer, type, question, project
         };
     });
-    const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/`, { fields });
+    toUpdate = toUpdate === 'published' ? 'publish' : 'draft';
+    const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/${toUpdate}/`, { fields });
     return data.fields;
 }
 
@@ -570,15 +571,15 @@ function processForm(form) {
 async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate, method) {
     const user = UserModule.getProfile(state).id;
     const countryFields = getStoredCountryFields(state)(true);
-    const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
+    const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id, toUpdate);
     const twPromise = saveTeamViewers(data, team, viewers);
-    const [teamViewers] = await Promise.all([twPromise, cfPromise]);
-    if (toUpdate === 'published') {
-        data.published.fields = countryFields;
-    }
-    data.draft.fields = countryFields;
+    const [teamViewers, fields] = await Promise.all([twPromise, cfPromise]);
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
+    if (toUpdate === 'published') {
+        data.published.fields = fields;
+    }
+    data.draft.fields = fields;
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
     if (method === 'put') {
@@ -610,10 +611,11 @@ export function discardDraft() {
     return async (dispatch, getState) => {
         const published = getCurrentPublishedProjectForEditing(getState());
         const form = processForm(published);
+        const countryFields = getStoredCountryFields(getState())(false);
         const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
+        data.draft.fields = await saveCountryFields(countryFields, data.draft.country, data.id, 'published');
         dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
         dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
-
         return Promise.resolve(data);
     };
 }
