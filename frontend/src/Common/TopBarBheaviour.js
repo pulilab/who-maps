@@ -27,7 +27,7 @@ class TopBar {
 
     hasProfile() {
         const p = this.userModel.profile;
-        return p && p.country && p.organisation && p.name;
+        return !!(p && p.country && p.organisation && p.name);
     }
 
     showCountryLevelViewButton() {

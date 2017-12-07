@@ -54,12 +54,15 @@ class ProjectController  {
             }
         }
 
+        const readOnlyMode = publishMode ||
+          (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+        // this line is to check if you are on the draft page as a viewer
+        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
+
+        // If by any chance the project is undefined load the default project - fixes logout explosion -
         if (project === undefined) {
             project = ProjectModule.getEmptyProject();
         }
-        const readOnlyMode = publishMode ||
-          (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
-        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
         return {
             newProject,
             publishMode,
@@ -84,7 +87,6 @@ class ProjectController  {
     onInit() {
         this.eventListeners();
         this.districtList = [];
-        this.isAddAnother = false;
         this.activateValidation = true;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         if (this.state.current.name === 'newProject') {
@@ -93,6 +95,13 @@ class ProjectController  {
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
         this.createDialogs();
+    }
+
+    onDestroy() {
+        this.unsubscribe();
+        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
+        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     createDialogs() {
@@ -111,13 +120,6 @@ class ProjectController  {
             ok: 'Close',
             theme: 'alert'
         });
-    }
-
-    onDestroy() {
-        this.unsubscribe();
-        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
-        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     watchers() {
@@ -156,7 +158,7 @@ class ProjectController  {
                 this.postPublishAction(data);
             }
             catch (e) {
-                await this.handleResponse(e.response);
+                this.handleResponse(e.response);
                 this.$mdDialog.show(this.publishAlert);
             }
         }
@@ -169,8 +171,7 @@ class ProjectController  {
 
     async saveDraftHandler() {
         try {
-            const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
-              this.team, this.viewers));
+            const project = await this.saveDraft(this.project, this.team, this.viewers);
             this.showToast('Draft updated');
             if (this.newProject) {
                 this.state.go('editProject', { appName:  project.id }, {
@@ -188,7 +189,7 @@ class ProjectController  {
     async discardDraftHandler() {
         try {
             await this.$mdDialog.show(this.confirmDraftDiscard);
-            await this.$ngRedux.dispatch(ProjectModule.discardDraft());
+            await this.discardDraft();
             this.showToast('Draft discarded');
         }
         catch (e) {
@@ -197,7 +198,7 @@ class ProjectController  {
         }
     }
 
-    async focusInvalidField() {
+    focusInvalidField() {
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {

@@ -9,13 +9,13 @@ let controller = null;
 describe('PlanningAndGuidanceController', () => {
 
     beforeEach(()=> {
-        controller = PlanningAndGuidanceController.factory()(null, $state, $ngRedux);
+        controller = PlanningAndGuidanceController.factory()(null, $state(), $ngRedux);
         controller.scope = $scope(controller);
     });
 
     it('should have a factory  function', () => {
         expect(PlanningAndGuidanceController.factory).toBeDefined();
-        const onSpot = PlanningAndGuidanceController.factory()($scope(controller), $state, $ngRedux);
+        const onSpot = PlanningAndGuidanceController.factory()($scope(controller), $state(), $ngRedux);
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
     it('should have an on init function', ()=> {

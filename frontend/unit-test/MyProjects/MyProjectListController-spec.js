@@ -10,6 +10,6 @@ const scope = $scope(controller);
 describe('MyProjectListController', () => {
 
     beforeEach(()=> {
-        controller = new MyProjectListController(scope, $state);
+        controller = new MyProjectListController(scope, $state());
     });
 });
