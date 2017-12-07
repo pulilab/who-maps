@@ -50,14 +50,12 @@
       </div>
 
       <div layout="row">
-        <!-- TODO -->
-        <!-- Add label to ssmenus, as it is on the design:
-        https://invis.io/GEEK0JOQP#/267409856_03_-_Edit_Profile_Page_V2 -->
         <div class="countries" ng-class="{error: vm.checkErrors('country')}" flex="50">
           <ssmenu
               ng-disabled="vm.editMode"
               required
               name="country"
+              label="Country"
               on-close-callback="vm.countryCloseCallback"
               option-label="name"
               options="vm.countriesList"
@@ -73,7 +71,8 @@
           <ssmenu
               ng-disabled="vm.editMode"
               required
-              name="country"
+              label="Language"
+              name="language"
               on-close-callback="vm.countryCloseCallback"
               option-label="name"
               options="vm.countriesList"
