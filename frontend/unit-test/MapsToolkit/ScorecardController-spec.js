@@ -1,98 +1,54 @@
-import _ from 'lodash';
 import ScorecardController from '../../src/MapsToolkit/Scorecard/ScorecardController';
+import { $scope, $state, $ngRedux } from '../testUtilities';
+import * as ToolkitModule from '../../src/store/modules/toolkit';
 
 /* global define, it, describe, expect, beforeEach, afterEach, spyOn, Promise, jasmine */
 
 let sc = {};
 
-const $state = {
-    params: {
-        axisId: 0,
-        domainId: 0,
-        appName: 1
-    },
-    go: jasmine.createSpy('go'),
-    current: {
-        name: ''
-    }
-};
-
-const $scope = {
-    $evalAsync: jasmine.createSpy('eval')
-};
-
-const mockData = require('../../src/MapsToolkit/Resource/mockData.json');
-
-const mockInvariantData = () => {
-    return _.cloneDeep(mockData);
-};
-
 describe('ScorecardController', () => {
 
     beforeEach(() => {
         spyOn(ScorecardController.prototype, 'onInit').and.callThrough();
-        sc = ScorecardController.scorecardFactory()($scope, $state);
+        sc = ScorecardController.scorecardFactory()({}, $state(), $ngRedux);
+        sc.scope = $scope(sc);
+        sc.state.params = {
+            axisId: 0,
+            domainId: 0,
+            appName: 1
+        };
         sc.$onInit();
     });
 
-    afterEach(() => {
-        sc.state.go.calls.reset();
+    it('mapData fn.', () => {
+        spyOn(ToolkitModule, 'getStructure').and.returnValue(1);
+        spyOn(ToolkitModule, 'getToolkitData').and.returnValue([1]);
+        const result = sc.mapData({});
+        expect(result.structure).toBe(1);
+        expect(result.rawData[0]).toBe(1);
+        expect(result.axesSize).toBe(1);
     });
 
-    it('should have a function that initializes the component', () => {
-        expect(sc.onInit).toHaveBeenCalled();
-        expect(sc.projectId).toBeDefined();
-        expect(sc.axisId).toBeDefined();
+    it('onInit fn. ', () => {
+        spyOn(sc, 'importIconTemplates');
+        spyOn(sc, 'watchers');
+
+        sc.onInit();
+
+        expect(sc.watchers).toHaveBeenCalled();
+        expect(sc.importIconTemplates).toHaveBeenCalled();
+        expect(sc.$ngRedux.connect).toHaveBeenCalled();
     });
 
-    it('should have a function that processes the data', () => {
-        const mock = mockInvariantData();
-        sc.handleProjectData(mock);
-        expect(sc.axesSize).toBe(mock.length);
-        expect(sc.data).toBeDefined();
-        expect(sc.dataLoaded).toBe(true);
-        expect(sc.scope.$evalAsync).toHaveBeenCalled();
+    it('onDestroy fn.', () => {
+        sc.unsubscribe = jasmine.createSpy('unsubscribe');
+        spyOn(sc.EE, 'removeListener');
+
+        sc.onDestroy();
+
+        expect(sc.unsubscribe).toHaveBeenCalled();
+        expect(sc.EE.removeListener).toHaveBeenCalledWith('mapsAxisChange', jasmine.any(Function), jasmine.any(Object));
     });
 
-    it('should have a function that leads to the maps toolkit on the proper domain', () => {
-        const d = {
-            index: 0
-        };
-        sc.updateScore(d);
-        expect(sc.state.go).toHaveBeenCalledWith('maps', { axisId: 0, domainId: 0 });
-    });
-
-    it('should have a function that goes to the next axis in the maps page', () => {
-        sc.goToNextAxis();
-        expect(sc.state.go).toHaveBeenCalledWith('maps', { axisId: 1 });
-    });
-
-    it('should have a function that disable go to next axis if is the last one', () => {
-        sc.handleProjectData(mockInvariantData());
-        let r = sc.isLastAxis();
-        expect(r).toBe(false);
-        sc.axisId = sc.axesSize;
-        r = sc.isLastAxis();
-        expect(r).toBe(true);
-    });
-
-    it('should not filter data when its in summary mode', () => {
-        sc.summary = true;
-        sc.handleProjectData(mockInvariantData());
-        const summaryData = sc.data;
-        sc.summary = false;
-        sc.handleProjectData(mockInvariantData());
-        expect(sc.data).not.toBe(summaryData);
-        expect(sc.data.domains).toBeDefined();
-        expect(summaryData.domains).not.toBeDefined();
-        expect(summaryData[0].domains).toBeDefined();
-    });
-
-    it('should have a function that injects axis data', () => {
-        sc.handleProjectData(mockInvariantData());
-        expect(sc.data.axisName).toBeDefined();
-        expect(sc.data.axisClass).toBeDefined();
-        expect(sc.data.axisPicture).toBeDefined();
-    });
 
 });

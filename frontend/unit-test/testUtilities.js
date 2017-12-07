@@ -76,6 +76,11 @@ const A = f => done => f().then(done).catch(done.fail);
 
 const $element = {};
 
+
+const $location = {
+    hash: jasmine.createSpy('locationHash').and.callFake(input => input)
+};
+
 export {
     dialog,
     $state,
@@ -88,5 +93,6 @@ export {
     $ngRedux,
     angularForm,
     A,
-    $element
+    $element,
+    $location
 };

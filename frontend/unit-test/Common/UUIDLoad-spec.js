@@ -1,30 +1,18 @@
 import UUIDLoadController from '../../src/Common/UUIDLoad/UUIDLoadController';
-
+import { $state, $ngRedux, EE, A } from '../testUtilities';
 /* global Promise, define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let ulc = {};
-
-const $state = {
-    go: jasmine.createSpy('go'),
-    params: {
-        projectUUID: 'randomxstuffcontainxxxx1'
-    }
-
-};
-
-const cs = {
-    userProfile: {
-        member: [],
-        viewer: []
-    }
-};
 
 
 describe('UUID Project load Components controller', () => {
 
     beforeEach(() => {
-        ulc = UUIDLoadController.uuidLoadFactory()($state);
-
+        ulc = UUIDLoadController.uuidLoadFactory()($state(), $ngRedux);
+        ulc.EE = EE;
+        ulc.state.params = {
+            projectUUID: 'randomxstuffcontainxxxx1'
+        };
         ulc.$onInit();
     });
 
@@ -33,19 +21,24 @@ describe('UUID Project load Components controller', () => {
         expect(typeof ulc).toBe('object');
     });
 
-    it('should have a function that can transform an UUID in a projectID', async (done) => {
+    it('should have a function that can transform an UUID in a projectID', A(async () => {
         expect(ulc.handleProjectLoad).toBeDefined();
-        ulc.cs.userProfile = cs.userProfile;
-        spyOn(ulc.ss, 'searchProject').and.returnValue([{ id:1 }]);
-
+        ulc.searchProjects = jasmine.createSpy('searchProjects').and.returnValue(Promise.resolve());
+        ulc.search = [];
         await ulc.handleProjectLoad();
+        expect(ulc.state.go).not.toHaveBeenCalled();
 
+
+        ulc.search = [{ id: 1 }];
+        await ulc.handleProjectLoad();
         expect(ulc.state.go).toHaveBeenCalledWith('public-dashboard', { appName: 1 });
 
-        ulc.cs.userProfile.member.push(1);
+
+        ulc.profile = {
+            member: [1]
+        };
         await ulc.handleProjectLoad();
         expect(ulc.state.go).toHaveBeenCalledWith('dashboard', { appName: 1 });
-        done();
-    });
+    }));
 
 });

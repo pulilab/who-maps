@@ -110,17 +110,17 @@ describe('DialogMultiSelectorDialog', () => {
     });
 
     it('should have a function that return true if an item is present in the selection', () => {
-        controller.selection = ['a'];
-        let res = controller.itemChecked('b');
+        controller.selection = [{ id: 1 }];
+        let res = controller.itemChecked({ id: 2 });
         expect(res).toBeFalsy();
-        res = controller.itemChecked('a');
+        res = controller.itemChecked({ id: 1 });
         expect(res).toBeTruthy();
     });
     it('should have a function that add or remove an element form the selection', () => {
-        controller.selection = ['a'];
-        controller.itemToggle('b');
-        expect(controller.selection[1]).toBe('b');
-        controller.itemToggle('b');
+        controller.selection = [{ id: 1 }];
+        controller.itemToggle({ id: 2 });
+        expect(controller.selection[1].id).toBe(2);
+        controller.itemToggle({ id: 2 });
         expect(controller.selection.length).toBe(1);
     });
 

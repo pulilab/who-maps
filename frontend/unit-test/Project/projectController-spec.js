@@ -178,9 +178,9 @@ describe('ProjectController', () => {
 
     it('has a eventListeners fn', () => {
         sc.eventListeners();
-        expect(sc.EE.on.calls.argsFor(0)).toEqual(['projectScrollTo', jasmine.any(Function), jasmine.anything()]);
-        expect(sc.EE.on.calls.argsFor(1)).toEqual(['projectSaveDraft', jasmine.any(Function), jasmine.anything()]);
-        expect(sc.EE.on.calls.argsFor(2)).toEqual(['projectDiscardDraft', jasmine.any(Function), jasmine.anything()]);
+        expect(sc.EE.on).toHaveBeenCalledWith('projectScrollTo', jasmine.any(Function), jasmine.anything());
+        expect(sc.EE.on).toHaveBeenCalledWith('projectSaveDraft', jasmine.any(Function), jasmine.anything());
+        expect(sc.EE.on).toHaveBeenCalledWith('projectDiscardDraft', jasmine.any(Function), jasmine.anything());
     });
 
     it('createDialogs fn.', () => {
@@ -214,6 +214,8 @@ describe('ProjectController', () => {
         a.setAttribute('id', 'a');
         window.document.body.appendChild(a);
         window.document.body.appendChild(mainElement);
+
+        sc.EE.emit.calls.reset();
         sc.scrollToFieldSet();
         expect(sc.EE.emit).not.toHaveBeenCalled();
 

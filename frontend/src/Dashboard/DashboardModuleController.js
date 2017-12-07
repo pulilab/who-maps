@@ -20,7 +20,6 @@ class DashboardModuleController {
         this.mapData = this.mapData.bind(this);
         this.watchers = this.watchers.bind(this);
         this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
-        this.watchers();
         this.fixUrl = fixUrl;
     }
 
@@ -53,6 +52,7 @@ class DashboardModuleController {
     }
 
     onInit() {
+        this.watchers();
         this.projectId = this.state.params.appName;
         this.commProjects = commProjects;
         this.resizeEvent();
