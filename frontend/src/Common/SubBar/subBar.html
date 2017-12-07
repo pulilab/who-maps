@@ -87,7 +87,7 @@
 
             <div class="project-submenu">
                 <md-menu md-position-mode="target-left target">
-                    <md-button ng-click="vm.openMenu($mdOpenMenu, $event)"  class="share-link" aria-label="Share" md-no-ink>
+                    <md-button ng-click="vm.openMenu($mdOpenMenu, $event)" ng-show="vm.currentProject.isPublished" class="share-link" aria-label="Share" md-no-ink>
                         <!-- <md-icon class="material-icons">share</md-icon> -->
                         Share Public Link
                     </md-button>

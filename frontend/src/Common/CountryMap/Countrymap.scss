@@ -15,7 +15,6 @@
     line-height: 16px;
     white-space: nowrap;
     min-width: 160px;
-    opacity: 0.88;
 
     .colorednr {
       color: white;
@@ -26,7 +25,6 @@
       font-weight: 500;
       text-align: center;
       border-radius: 3px;
-      opacity: 0.85;
     }
     .color0 { background-color: #7CB342; }
     .color1 { background-color: #039BE5; }
@@ -92,7 +90,7 @@
 
     md-tab-content {
 			background-color: #FFFFFF;
-			opacity: 0.87;
+			opacity: 0.9;
     }
 
     .countrychart-tooltip-main {
@@ -116,9 +114,13 @@
       }
 
       .lh {
-        margin: 10px;
+        margin: 5px 0;
         line-height: 20px;
-        color: $text-secondary;
+
+        &.no-projects {
+          margin: 10px;
+          color: $text-secondary;
+        }
       }
 
       .projectcont {

@@ -10,9 +10,10 @@ import d3 from 'd3';
 
 class CountryMapController {
 
-    constructor($element, $scope) {
+    constructor($element, $scope, $state) {
         this.el = $element;
         this.scope = $scope;
+        this.state = $state;
         this.EE = window.EE;
         this.tooltipOver = false;
         this.preventMouseOut = false;
@@ -44,7 +45,7 @@ class CountryMapController {
 
         const inMemoryElement = document.createElement('div');
         this.mapDOMElement = d3.select(inMemoryElement).append('svg');
-        //
+
         this.mapDOMElement.attr('class', 'countrymap')
           .attr('width', width)
           .attr('height', height);
@@ -111,26 +112,12 @@ class CountryMapController {
         return ret;
     }
 
-    formatCountryName() {
-        const dictionary = {
-            'Border India - Bangladesh': 'Bangladesh',
-            'Border Malawi - Mozambique': 'Malawi'
-        };
-        this.countryName = dictionary[this.countryName]
-          ? dictionary[this.countryName] : this.countryName;
-    }
-
     calculateScale(topoJSON) {
-        let ret = Math.max.apply(null,
-          topoJSON.transform.scale.map(nr => {
-              return 1 / nr;
-          })) * 10;
-
-        if (this.countryName === 'Gambia') {
-            ret = 30000;
-        }
-
-        return ret;
+        return Math.max.apply(null,
+            topoJSON.transform.scale.map(nr => {
+                return 1 / nr;
+            })
+        ) * 10;
     }
 
     makeSvgPannableAndZoomable(element) {
@@ -161,7 +148,6 @@ class CountryMapController {
         }
         this.countryName = countryMapData.name;
         this.flagUrl = countryMapData.flag;
-        this.formatCountryName();
 
         const geoData = this.makeGeoFromTopo(countryMapData.mapData);
         const projection = d3.geo.mercator()
@@ -218,29 +204,30 @@ class CountryMapController {
             return this.mapDOMElement.node();
         });
 
-        // this.drawDistricNames(countryMapData, element);
+        // this.drawDistricNames(countryMapData, this.mapDOMElement);
         this.makeSvgPannableAndZoomable(this.mapDOMElement.node());
 
         this.showPlaceholder = false;
     }
 
-    drawDistricNames(countryMapData, element) {
-        countryMapData.districts.forEach((name, i) => {
+    // Currently unused, because of font scaling and district name length inconsistencies
+    // drawDistricNames(countryMapData, element) {
+    //     countryMapData.districts.forEach((name, i) => {
 
-            const districtPath = document.getElementsByClassName('d3district')[i];
-            if (districtPath) {
-                const box = districtPath.getBBox();
-                element
-                  .append('text')
-                  .attr('x', box.x + box.width / 2)
-                  .attr('y', box.y + box.height / 2)
-                  .text(name)
-                  .attr('font-family', 'Roboto, sans-serif')
-                  .attr('font-size', '40px')
-                  .attr('fill', 'black');
-            }
-        });
-    }
+    //         const districtPath = document.getElementsByClassName('d3district')[i];
+    //         if (districtPath) {
+    //             const box = districtPath.getBBox();
+    //             element
+    //                 .append('text')
+    //                 .attr('x', box.x + box.width / 2)
+    //                 .attr('y', box.y + box.height / 2)
+    //                 .text(name)
+    //                 .attr('font-family', 'Roboto, sans-serif')
+    //                 .attr('font-size', '40px')
+    //                 .attr('fill', 'black');
+    //         }
+    //     });
+    // }
 
     fillDistrictData(districtLevelCoverage) {
         for (const district in districtLevelCoverage) {
@@ -252,14 +239,23 @@ class CountryMapController {
         }
     }
 
+    goToProject(project) {
+        if (project.isMember) {
+            this.state.go('dashboard', { appName: project.id });
+        }
+        else {
+            this.state.go('public-dashboard', { appName: project.id });
+        }
+    }
+
     static countrymapFactory() {
         require('./Countrymap.scss');
 
-        function countrymap($element, $scope) {
-            return new CountryMapController($element, $scope);
+        function countrymap($element, $scope, $state) {
+            return new CountryMapController($element, $scope, $state);
         }
 
-        countrymap.$inject = ['$element', '$scope'];
+        countrymap.$inject = ['$element', '$scope', '$state'];
 
         return countrymap;
     }

@@ -12,11 +12,11 @@
 
   .bg-hero {
     height: 600px;
-    background: $color-primary url("./images/bg-welcome-map.jpg") 0 0 no-repeat;
+    background: $color-primary url("./images/bg-welcome-map-new.jpg") 0 0 no-repeat;
     background-size: cover;
 
     &.logged-in {
-      background-image: url("./images/bg-welcome-map.jpg");
+      background-image: url("./images/bg-welcome-map-new.jpg");
     }
 
     searchbar {

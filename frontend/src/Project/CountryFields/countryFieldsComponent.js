@@ -11,7 +11,9 @@ const component = {
     bindings: {
         form: '<',
         project: '<',
-        countryFields: '<',
+        isPublished: '<',
+        isNewProject: '<',
+        showCountryFields: '=',
         activateValidation: '<'
     }
 };

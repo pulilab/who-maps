@@ -15,7 +15,7 @@ from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
-from .admin import DigitalStrategyAdmin
+from .admin import DigitalStrategyAdmin, TechnologyPlatformAdmin
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
 
@@ -65,7 +65,8 @@ class SetupTests(APITestCase):
         self.user_profile_id = response.json().get('id')
 
         user = UserProfile.objects.get(id=self.user_profile_id)
-        self.country = Country.objects.create(name="country1", user=user)
+        self.country = Country.objects.create(name="country1")
+        self.country.users.add(user)
         self.country_id = self.country.id
 
         self.project_data = {
@@ -1214,7 +1215,7 @@ class PermissionTests(SetupTests):
         self.assertContains(response, "a@a.com")
 
     def test_retrieve_project_with_country_fields(self):
-        CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
+        schema_1 = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
         cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
                                           answer="a1", schema=False)
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
@@ -1229,6 +1230,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
         self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
 
+        self.assertEqual(response.json()['published']['fields'][0]['schema_id'], schema_1.id)
         self.assertEqual(response.json()['published']['fields'][0]['country'], cf1.country.id)
         self.assertEqual(response.json()['published']['fields'][0]['project'], cf1.project.id)
         self.assertEqual(response.json()['published']['fields'][0]['type'], cf1.type)
@@ -1301,9 +1303,74 @@ class TestAdmin(TestCase):
         self.request = MockRequest()
         self.site = AdminSite()
 
+        url = reverse('rest_register')
+        data = {'email': 'test_user@gmail.com',
+                'password1': '123456',
+                'password2': '123456'}
+        self.client.post(url, data)
+
+        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
+        url = reverse('rest_verify_email')
+        data = {'key': key}
+        self.client.post(url, data)
+
     def test_admin(self):
         admin = DigitalStrategyAdmin(DigitalStrategy, self.site)
         self.assertEqual(admin.get_queryset(self.request).count(), DigitalStrategy.all_objects.all().count())
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
         admin.list_display = ['__str__', 'is_active']
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
+
+    def test_created_notification(self):
+        initial_email_count = len(mail.outbox)
+
+        tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
+
+        ModelForm = tpa.get_form(self.request)
+        data = {'name': 'New technology platform',
+                'is_active': True}
+        form = ModelForm(data)
+
+        self.assertTrue(form.is_valid(), form.errors)
+        tpa.save_form(self.request, form, False)
+
+        self.assertEqual(len(mail.outbox),
+                         initial_email_count + UserProfile.objects.all().count())
+        self.assertIn('New technology platform was created: {}'.format(str(form.instance)),
+                      mail.outbox[-1].message().as_string())
+
+    def test_modified_notification(self):
+        initial_email_count = len(mail.outbox)
+
+        tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
+        technology_platform = TechnologyPlatform(name='Test platform')
+
+        ModelForm = tpa.get_form(self.request, technology_platform)
+        data = {'name': 'something different',
+                'is_active': technology_platform.is_active}
+        form = ModelForm(data, instance=technology_platform)
+
+        self.assertTrue(form.is_valid(), form.errors)
+        tpa.save_form(self.request, form, True)
+
+        self.assertEqual(len(mail.outbox),
+                         initial_email_count + UserProfile.objects.all().count())
+        self.assertIn('Technology Platform - {} was changed'.format(str(form.instance)),
+                      mail.outbox[-1].message().as_string())
+
+    def test_modified_but_not_changed(self):
+        initial_email_count = len(mail.outbox)
+
+        tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
+        technology_platform = TechnologyPlatform(name='Test platform')
+
+        ModelForm = tpa.get_form(self.request, technology_platform)
+        data = {'name': technology_platform.name,
+                'is_active': technology_platform.is_active}
+        form = ModelForm(data, instance=technology_platform)
+
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertFalse(form.has_changed(), form.changed_data)
+        tpa.save_form(self.request, form, True)
+
+        self.assertEqual(len(mail.outbox), initial_email_count)

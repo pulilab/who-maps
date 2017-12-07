@@ -12,7 +12,7 @@
   <!--</div>-->
 
   <div class="project-form-wrapper md-block">
-    <form name="vm.form" ng-submit="vm.save($event)" layout="row" id="npf" novalidate>
+    <form name="vm.form" ng-submit="vm.publishProject($event)" layout="row" id="npf" novalidate>
       <div class="main-section" layout="column">
 
         <general-overview
@@ -98,35 +98,33 @@
 
 
         <country-fields
-          ng-show="vm.countryFields && vm.countryFields.length > 0"
           id="country-fields"
           form="vm.form"
           project="vm.project"
+          is-published="vm.publishMode"
+          is-new-project="vm.newProject"
           activate-validation="vm.activateValidation"
-          ng-if="!vm.readOnlyMode"
-          country-fields="vm.countryFields">
+          ng-if="!vm.readOnlyMode">
         </country-fields>
 
         <read-only-country-fields
-          ng-show="vm.countryFields && vm.countryFields.length > 0"
           id="country-fields"
           form="vm.form"
           project="vm.project"
+          is-published="vm.publishMode"
+          is-new-project="vm.newProject"
           activate-validation="vm.activateValidation"
-          ng-if="vm.readOnlyMode"
-          country-fields="vm.countryFields">
+          ng-if="vm.readOnlyMode">
         </read-only-country-fields>
 
       </div>
       <div class="navigation-area" layout="column">
         <navigation
           read-only-mode="vm.readOnlyMode"
-          is-add-another="vm.isAddAnother"
+          is-published="vm.publishMode"
           project="vm.project"
           viewers="vm.viewers"
           team="vm.team"
-          country-fields="vm.countryFields"
-          show-country-fields="vm.countryFields && vm.countryFields.length > 0"
         ></navigation>
       </div>
     </form>

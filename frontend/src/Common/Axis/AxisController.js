@@ -77,11 +77,11 @@ class AxisController {
 
     static axisFactory() {
         require('./Axis.scss');
-        function signup($scope) {
+        function newAxis($scope) {
             return new AxisController($scope);
         }
-        signup.$inject = ['$scope'];
-        return signup;
+        newAxis.$inject = ['$scope'];
+        return newAxis;
     }
 }
 

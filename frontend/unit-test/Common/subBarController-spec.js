@@ -1,45 +1,21 @@
 import { default as SubBarController } from '../../src/Common/SubBar/SubBarController';
-import EE  from '../../src/Common/EE';
-
-EE.initialize();
+import { $state, $scope, $ngRedux, EE } from '../testUtilities';
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let ac = {};
-const $state = {
-    go: () => {},
-    current: {
-        name: 'mock'
-    }
-};
 
-const mockData = {
-    countries: [{
-        id: 1,
-        name: 'asd'
-    }]
-};
-
-const $scope = {
-    $watch: () => {}
-};
 
 describe('SubBarController', () => {
 
     beforeEach(() => {
-        ac = SubBarController.subBarControllerFactory()($state, $scope);
-        ac.cs = {
-            projectList: [],
-            projectStructure: mockData,
-            populateProjectStructure: jasmine.createSpy('pps'),
-            getProjectData: jasmine.createSpy('gpd'),
-            reset: jasmine.createSpy('asd').and.returnValue({ loadedPromise: Promise.resolve() })
-        };
+        ac = SubBarController.subBarControllerFactory()($state(), {}, $ngRedux);
+        ac.sope = $scope(ac);
+        ac.EE = EE;
     });
 
 
     it('should have a function that update the selected project', () => {
-        spyOn(ac.state, 'go');
         ac.projects = [{ name: 'asd', id: 1 }];
         ac.navigateToProject('asd');
         expect(ac.state.go).toHaveBeenCalled();

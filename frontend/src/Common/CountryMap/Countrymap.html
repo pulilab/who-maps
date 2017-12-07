@@ -80,7 +80,8 @@
             layout-align="space-around start"
             class="projectcont"
             ng-repeat="project in vm.activeDistrict.data | limitTo:5"
-            ui-sref="dashboard({ appName: project.id })">
+            ng-click="vm.goToProject(project)"
+            >
 
             <div class="projectname">{{project.name}}</div>
             <div class="projectorg">{{project.organisation}}</div>
@@ -88,7 +89,7 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh" ng-show="!vm.activeDistrict.data">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.activeDistrict.data">No projects available</div>
         </div>
       </md-tab>
 
@@ -108,7 +109,7 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.nationalLevelCoverage">No projects available</div>
         </div>
       </md-tab>
     </md-tabs>
