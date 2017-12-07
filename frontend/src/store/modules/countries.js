@@ -46,7 +46,7 @@ export const getCountriesList = state => {
 export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry).map(cf =>{
         return { ...cf };
-    });
+    }).sort((a, b) => a.id - b.id);
 };
 
 export const getCurrentCountry = state => {
