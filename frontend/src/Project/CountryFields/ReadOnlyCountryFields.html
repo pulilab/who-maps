@@ -36,6 +36,25 @@
           <p ng-hide="field.answer">No</p>
         </div>
 
+        <!-- SINGLE SELECTION FIELD-->
+        <div
+          ng-if="field.type ===4"
+          class="single-selection-field">
+          <h6>{{field.question}}</h6>
+          <p >{{field.answer}}</p>
+        </div>
+
+
+         <!--MULTIPLE SELECTION-->
+        <div
+          ng-if="field.type === 5"
+          class="multi-selection-field">
+          <h6>{{field.question}}</h6>
+          <ul>
+            <li ng-repeat="a in field.answer">{{a}}</li>
+          </ul>
+        </div>
+
 
       </div>
     </div>

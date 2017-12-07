@@ -65,8 +65,12 @@ class CountryField(models.Model):
     enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
     schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
     schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    required = models.BooleanField(default=False)
 
     objects = CountryFieldManager()
+
+    class Meta:
+        ordering = ['id']
 
     def __str__(self):
         return ""

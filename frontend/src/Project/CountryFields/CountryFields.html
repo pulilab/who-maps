@@ -65,6 +65,46 @@
             </div>
           </div>
         </div>
+
+
+        <!--SINGLE SELECTION-->
+        <div
+          ng-if="field.type === 4"
+          class="single-selection-field">
+          <label>{{field.question}}</label>
+          <md-select ng-model="field.answer" name="custom{{$index}}"
+                     ng-required="vm.activateValidation">
+            <md-option value="{{option}}" ng-repeat="option in field.options">
+              {{option}}
+            </md-option>
+          </md-select>
+          <div class="radio-error-messages">
+            <div ng-messages="vm.form['custom' + $index].$error">
+              <div ng-message="required">This is required.</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!--MULTIPLE SELECTION-->
+        <div
+          ng-if="field.type === 5"
+          class="multi-selection-field">
+          <label>{{field.question}}</label>
+          <md-select ng-model="field.answer" md-select-separator="empty" multiple name="custom{{$index}}"
+                     ng-required="vm.activateValidation">
+            <md-option value="{{option}}" ng-repeat="option in field.options">
+              {{option}}
+            </md-option>
+          </md-select>
+          <div class="radio-error-messages">
+            <div ng-messages="vm.form['custom' + $index].$error">
+              <div ng-message="required">This is required.</div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
 
     </div>
