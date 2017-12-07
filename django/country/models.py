@@ -93,13 +93,12 @@ class CountryField(models.Model):
         except Exception:
             return None
 
-    def to_representation(self):
+    def to_representation(self, draft_mode=False):
         return {
             "schema_id": getattr(self.schema_instance, 'pk', None),
             "country": self.country.id,
             "type": self.type,
             "question": self.question,
-            "answer": self.answer,
-            "draft": self.draft,
+            "answer": self.draft if draft_mode else self.answer,
             "project": self.project.id
         }
