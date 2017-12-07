@@ -73,4 +73,5 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
         ]
 
     def to_representation(self, instances):
-        return {"fields": [instance.to_representation() for instance in instances]}
+        mode = self.context['request'].parser_context['kwargs']['mode']
+        return {"fields": [instance.to_representation(mode == "draft") for instance in instances]}
