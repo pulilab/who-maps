@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from core.models import NameByIDMixin, ExtendedModel
 from user.models import UserProfile
@@ -57,6 +58,7 @@ class CountryField(models.Model):
     country = models.ForeignKey(Country)
     type = models.IntegerField(choices=TYPE_CHOICES)
     question = models.CharField(max_length=256, blank=False)
+    options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
     answer = models.TextField(max_length=2000, blank=True)
     draft = models.TextField(max_length=2000, blank=True)
     project = models.ForeignKey('project.Project', null=True)

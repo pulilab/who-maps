@@ -1,4 +1,6 @@
 from django.conf import settings
+
+from core.admin import ArrayFieldMixin
 from django.core import mail, urlresolvers
 from django.contrib import admin
 from django.template import loader
@@ -11,22 +13,27 @@ class CountryFieldInline(admin.TabularInline):
     extra = 0
     max_num = 0
     can_delete = False
-    fields = ('type', 'question', 'enabled')
-    readonly_fields = ('type', 'question')
+    fields = ('type', 'question', 'options', 'enabled')
+    readonly_fields = ('type', 'question', 'options')
 
     def get_queryset(self, request):
         return super(CountryFieldInline, self).get_queryset(request).filter(schema=True)
 
 
-class AddCountryFieldInline(admin.TabularInline):
+class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
     model = CountryField
     verbose_name_plural = "Add country fields"
     extra = 0
     can_delete = False
-    fields = ('type', 'question')
+    fields = ('type', 'question', 'options')
 
     def get_queryset(self, request):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
+
+
+@admin.register(CountryField)
+class CFAdmin(ArrayFieldMixin, admin.ModelAdmin):
+    fields = ('type', 'question', 'options')
 
 
 class PartnerLogoInline(admin.TabularInline):
