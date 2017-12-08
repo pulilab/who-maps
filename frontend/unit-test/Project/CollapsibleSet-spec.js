@@ -184,8 +184,8 @@ describe('CollapsibleSet class', () => {
     });
 
     it('printDate fn', () => {
-        const result = controller.printDate('2017-12-31T23:00:00.000Z');
-        expect(result).toBe('01-01-2018');
+        const result = controller.printDate('2017-12-31T23:00:00');
+        expect(result).toBe('31-12-2017');
     });
 
     it('should have a function that remove already selected platforms', () => {
