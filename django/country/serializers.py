@@ -30,7 +30,7 @@ class LandingPageSerializer(serializers.ModelSerializer):
 class CountryFieldsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryField
-        fields = ("id", "country", "type", "question", "options")
+        fields = ("id", "country", "type", "question", "required", "options")
 
 
 class CountryFieldsSerializer(serializers.ModelSerializer):
