@@ -85,7 +85,7 @@ class ProjectController  {
         this.eventListeners();
         this.districtList = [];
         this.isAddAnother = false;
-        this.activateValidation = true;
+        this.activateValidation = false;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         if (this.state.current.name === 'newProject') {
             this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
@@ -168,20 +168,26 @@ class ProjectController  {
     }
 
     async saveDraftHandler() {
-        try {
-            const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
-              this.team, this.viewers));
-            this.showToast('Draft updated');
-            if (this.newProject) {
-                this.state.go('editProject', { appName:  project.id }, {
-                    location: 'replace',
-                    reload: false
-                });
+        this.clearCustomErrors();
+        if (this.form.$valid) {
+            try {
+                const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
+                  this.team, this.viewers));
+                this.showToast('Draft updated');
+                if (this.newProject) {
+                    this.state.go('editProject', {appName: project.id}, {
+                        location: 'replace',
+                        reload: false
+                    });
+                }
+            }
+            catch (e) {
+                console.log(e);
+                this.handleResponse(e.response);
             }
         }
-        catch (e) {
-            console.log(e);
-            this.handleResponse(e.response);
+        else {
+            this.focusInvalidField();
         }
     }
 
@@ -197,7 +203,7 @@ class ProjectController  {
         }
     }
 
-    async focusInvalidField() {
+    focusInvalidField() {
         this.timeout(()=>{
             const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
