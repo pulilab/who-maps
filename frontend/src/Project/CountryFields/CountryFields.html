@@ -72,9 +72,12 @@
           ng-if="field.type === 4"
           class="single-selection-field">
           <label>{{field.question}}</label>
-          <md-select ng-model="field.answer" name="custom{{$index}}"
-                     ng-required="vm.activateValidation">
-            <md-option value="{{option}}" ng-repeat="option in field.options">
+          <md-select ng-model="field.answer"
+                     name="custom{{$index}}"
+                     aria-label="custom{{$index}}"
+                     ng-required="vm.activateValidation"
+                     md-on-close="vm.updateProjectCountryFields(field)">
+            <md-option value="{{option}}" ng-repeat="option in field.options" >
               {{option}}
             </md-option>
           </md-select>
@@ -91,8 +94,13 @@
           ng-if="field.type === 5"
           class="multi-selection-field">
           <label>{{field.question}}</label>
-          <md-select ng-model="field.answer" md-select-separator="empty" multiple name="custom{{$index}}"
-                     ng-required="vm.activateValidation">
+          <md-select ng-model="field.answer"
+                     md-select-separator="empty"
+                     aria-label="custom{{$index}}"
+                     multiple
+                     name="custom{{$index}}"
+                     ng-required="vm.activateValidation"
+                     md-on-close="vm.updateProjectCountryFields(field)">
             <md-option value="{{option}}" ng-repeat="option in field.options">
               {{option}}
             </md-option>

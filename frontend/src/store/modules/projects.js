@@ -180,6 +180,8 @@ function convertCountryFieldsAnswer(fields) {
         case 3:
             f.answer = f.answer === 'true';
             break;
+        case 5:
+            f.answer = JSON.parse(f.answer)
         }
         return f;
     });
@@ -243,7 +245,13 @@ const getStoredCountryFields = state => isDraft => {
 export const getProjectCountryFields = state => (isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
     const countryFields = convertCountryFieldsAnswer(getStoredCountryFields(state)(isDraft));
-    const result = baseCountryFields.map(bc => ({ ...bc, ...countryFields.find(cf => cf.schema_id === bc.id) }));
+    const result = baseCountryFields.map(bc => {
+        const saved = countryFields.find(cf => cf.schema_id === bc.id);
+        return {
+            ...bc,
+            answer: saved ? saved.answer : bc.answer
+        };
+    });
     return [...result];
 };
 
@@ -664,10 +672,18 @@ export function clearSimilarNameList() {
 export function updateProjectCountryFields({ id, answer, question, type, country, schema_id }) {
     return (dispatch, getState) => {
         const projectId = getCurrentProjectId(getState());
-        if (type === 3) {
+        switch (type) {
+        case 3: {
             answer = answer === true ? 'true' : 'false';
+            break;
         }
-        const countryField = { id, answer, question, type, country, schema_id: schema_id ? schema_id : id };
+        case 5: {
+            answer = JSON.stringify(answer);
+            break;
+        }
+        }
+        schema_id = schema_id ? schema_id : id;
+        const countryField = { id, answer, question, type, country, schema_id };
         dispatch({ type: 'UPDATE_COUNTRY_FIELD_ANSWER', projectId, countryField });
     };
 }
