@@ -1,8 +1,6 @@
 from django.conf import settings
-from django.contrib.postgres.fields.array import ArrayField
 
 from core.admin import ArrayFieldMixin
-from core.admin.widgets import NoneReadOnlyAdminArrayField
 from django.core import mail, urlresolvers
 from django.contrib import admin
 from django.template import loader

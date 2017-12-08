@@ -80,7 +80,6 @@ class ArrayFieldMixin(object):
         js = ('arrayfield.js',)
 
 
-
 admin.site.login_form = CustomAuthenticationForm
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)

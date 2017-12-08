@@ -657,7 +657,7 @@ class CountryAdminTests(TestCase):
         addcountryfield_formset_and_inline = formsets_and_inlines[1]
         addcountryfield_inline = addcountryfield_formset_and_inline[1]
 
-        self.assertEqual(countryfield_inline.get_readonly_fields(self.request), ('type', 'question', 'options'))
+        self.assertEqual(countryfield_inline.get_readonly_fields(self.request), ('type', 'question'))
         self.assertEqual(countryfield_inline.get_queryset(self.request).count(), 1)
 
         self.assertEqual(addcountryfield_inline.get_readonly_fields(self.request), ())
