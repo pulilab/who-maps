@@ -29,7 +29,7 @@ import {
     retainOnlyIds,
     handleNationalLevelCoverage,
     fieldToConvertToObject,
-    dashFieldConvertToObject
+    dashFieldConvertToObject, handleCoverage
 } from '../project_utils';
 
 
@@ -570,7 +570,8 @@ function processForm(form) {
         coverageType: undefined,
         platforms: parsePlatformCollection(form),
         ...extractIdFromObjects(form),
-        ...handleNationalLevelCoverage(form)
+        ...handleNationalLevelCoverage(form),
+        ...handleCoverage(form)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
