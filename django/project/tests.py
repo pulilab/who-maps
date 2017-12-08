@@ -1409,9 +1409,88 @@ class TestPorjectImportAdmin(TestCase):
                                 'Proj1,Owner Owen,owen@owner.com,Kenya,Org1\n'
                                 'Proj2,Test Owner,test_user@test.com,Kenya,Org2\n'
                                 'Proj3,Test Owner,test_user@test.com,Invalidcountry,Org2\n'
-                                'Proj4,Test Owner,invalidemail,Invalidcountry,Org2\n')
+                                'Proj4,Test Owner,invalidemail,Invalidcountry,Org2\n'
+                                'Proj11,Owner Owen,owen@owner.com,Kenya,Org11\n')
 
-    def test_project_import(self):
+    def test_project_import_wrong_ext(self):
+        # Upload csv
+        csv_file = SimpleUploadedFile('a.asdf', self.csv_content.encode())
+        url = reverse('admin:project_projectimport_add')
+        data = {
+            'csv': csv_file
+        }
+        response = self.client.post(url, data, format='multipart', follow=True)
+        self.assertTrue('Only CSV format is accepted.' in response.content.decode('utf-8'))
+
+    def test_project_import_success(self):
+        csv_content = ('Project,Owner,Owner email,Country,Organisation,Description\n'
+                       'Proj1,Owner Owen,owen@owner.com,Kenya,Org1,Some desc\n')
+        # Upload csv
+        csv_file = SimpleUploadedFile('a.csv', csv_content.encode())
+        url = reverse('admin:project_projectimport_add')
+        data = {
+            'csv': csv_file
+        }
+        response = self.client.post(url, data, format='multipart', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Map fields
+        project_import = ProjectImport.objects.all().first()
+        url = reverse('admin:project_projectimport_change', args=[project_import.id])
+        data = {
+            'project_name': '0',
+            'owner_name': '1',
+            'owner_email': '2',
+            'country': '3',
+            'description': '5',
+            'organisation': '4',
+        }
+        response = self.client.post(url, data, follow=True)
+        project_import.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(project_import.mapping, data)
+        self.assertEqual(project_import.status, True)
+
+        # Check results page
+        url = reverse('admin:project_projectimport_change', args=[project_import.id])
+        response = self.client.get(url)
+        self.assertTrue('Proj1' in response.content.decode('utf-8'))
+
+    def test_project_import_success_no_country_no_org(self):
+        csv_content = ('Project,Owner,Owner email,Organisation\n'
+                       'Proj1,Owner Owen,owen@owner.com,Org1\n')
+        # Upload csv
+        csv_file = SimpleUploadedFile('a.csv', csv_content.encode())
+        url = reverse('admin:project_projectimport_add')
+        data = {
+            'csv': csv_file
+        }
+        response = self.client.post(url, data, format='multipart', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Map fields
+        project_import = ProjectImport.objects.all().first()
+        url = reverse('admin:project_projectimport_change', args=[project_import.id])
+        data = {
+            'project_name': '0',
+            'owner_name': '1',
+            'owner_email': '2',
+            'country': '',
+            'description': '',
+            'organisation': '',
+        }
+        response = self.client.post(url, data, follow=True)
+        project_import.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(project_import.mapping, data)
+        self.assertEqual(project_import.status, True)
+
+        # Check results page
+        url = reverse('admin:project_projectimport_change', args=[project_import.id])
+        response = self.client.get(url)
+        self.assertTrue('Proj1' in response.content.decode('utf-8'))
+
+    def test_project_import_some_fails(self):
         # Upload csv
         csv_file = SimpleUploadedFile('a.csv', self.csv_content.encode())
         url = reverse('admin:project_projectimport_add')
@@ -1436,6 +1515,13 @@ class TestPorjectImportAdmin(TestCase):
         project_import.refresh_from_db()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(project_import.mapping, data)
+
+        # Check results page
+        url = reverse('admin:project_projectimport_change', args=[project_import.id])
+        response = self.client.get(url)
+        self.assertTrue('Line 3, Invalidcountry: No such country.' in response.content.decode('utf-8'))
+        self.assertTrue('Line 4, Invalidcountry: No such country.' in response.content.decode('utf-8'))
+        self.assertTrue('Line 4, invalidemail: Enter a valid email address.' in response.content.decode('utf-8'))
 
         self.assertTrue(Project.objects.filter(name='Proj1').exists())
         self.assertTrue(Project.objects.filter(name='Proj2').exists())

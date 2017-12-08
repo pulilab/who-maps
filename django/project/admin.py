@@ -161,9 +161,7 @@ class ProjectImportAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(ProjectImportAdmin, self).get_queryset(request)
-        if not request.user.is_superuser:
-            qs = qs.filter(user=request.user)
-        return qs
+        return qs.filter(user=request.user)
 
     def get_form(self, request, obj=None, **kwargs):
         # First step, upload csv
@@ -202,7 +200,6 @@ class ProjectImportAdmin(admin.ModelAdmin):
                     if self._is_row_valid(row, line_no, obj):
                         self._import_project(row, obj)
             # Set status
-            obj.refresh_from_db()
             if obj.failed:
                 obj.status = False
             else:
