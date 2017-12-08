@@ -111,6 +111,14 @@ class ImplementationOverview extends CollapsibleSet {
         return !isNil(district.health_workers) || !isNil(district.clients) || !isNil(district.facilities);
     }
 
+    isSubLevelCoverageRequired() {
+        return this.project.coverageType === 1 && this.activateValidation;
+    }
+
+    isNationalLevelCoverageRequired() {
+        return this.project.coverageType === 2 && this.activateValidation;
+    }
+
     static factory() {
         require('./ImplementationOverview.scss');
         function implementation($scope, $element, $ngRedux) {

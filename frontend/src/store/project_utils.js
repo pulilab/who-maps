@@ -250,6 +250,9 @@ export function retainOnlyIds(form) {
 
 function defaultEmptyCoverageToZero(item) {
     item = { ...item };
+    if (isNil(item.clients) && isNil(item.health_workers) && isNil(item.facilities)) {
+        return undefined;
+    }
     item.clients = isNil(item.clients) ? 0 : item.clients;
     item.health_workers = isNil(item.health_workers) ? 0 : item.health_workers;
     item.facilities = isNil(item.facilities) ? 0 : item.facilities;
@@ -258,9 +261,6 @@ function defaultEmptyCoverageToZero(item) {
 
 export function handleNationalLevelCoverage({ national_level_deployment }) {
     const n = { ...national_level_deployment };
-    if (isNil(n.clients) && isNil(n.health_workers) && isNil(n.facilities)) {
-        return { national_level_deployment: undefined };
-    }
     return { national_level_deployment: defaultEmptyCoverageToZero(n) };
 
 }
@@ -269,6 +269,6 @@ export function handleCoverage({ coverage }) {
     coverage  = coverage ? coverage : [];
     const cov = coverage.map(c => {
         return defaultEmptyCoverageToZero(c);
-    });
+    }).filter(c => c);
     return { coverage : cov };
 }
