@@ -82,3 +82,17 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
     def to_representation(self, instances):
         draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
         return {"fields": [instance.to_representation(draft_mode) for instance in instances]}
+
+    def validate_fields(self, value):
+        country_id = self.context['request'].parser_context['kwargs']['country_id']
+        draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
+
+        schema = CountryField.objects.get_schema(country_id)
+
+        if draft_mode:
+            return value
+        else:
+            for field in schema:
+                if field.required and not len(list(filter(lambda a, f=field: a['question'] == f.question, value))):
+                    raise ValidationError("All required answers need to be given")
+            return value
