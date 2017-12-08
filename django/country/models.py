@@ -35,10 +35,10 @@ class PartnerLogo(ExtendedModel):
 
 class CountryFieldManager(models.Manager):
     def get_schema(self, country_id):
-        return self.get_queryset().filter(country_id=country_id, schema=True, enabled=True)
+        return self.filter(country_id=country_id, schema=True, enabled=True)
 
     def get_answers(self, country_id, project_id):
-        return self.get_queryset().filter(country_id=country_id, project_id=project_id, enabled=True, schema=False)
+        return self.filter(country_id=country_id, project_id=project_id, enabled=True, schema=False)
 
 
 class CountryField(models.Model):
@@ -95,10 +95,7 @@ class CountryField(models.Model):
 
     @classmethod
     def get_schema_for_answer(cls, country, question):
-        try:
-            return cls.objects.get(schema=True, enabled=True, country=country, question=question)
-        except (ObjectDoesNotExist, MultipleObjectsReturned):
-            return None
+        return cls.objects.filter(schema=True, enabled=True, country=country, question=question).first()
 
     def to_representation(self, draft_mode=False):
         return {
