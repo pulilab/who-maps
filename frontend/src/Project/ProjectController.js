@@ -86,7 +86,7 @@ class ProjectController  {
     onInit() {
         this.eventListeners();
         this.districtList = [];
-        this.activateValidation = true;
+        this.activateValidation = false;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         if (this.state.current.name === 'newProject') {
             this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
@@ -149,46 +149,52 @@ class ProjectController  {
         });
     }
 
-    async publishProject() {
+    publishProject() {
         this.clearCustomErrors();
-        if (this.form.$valid) {
-            try {
-                const data = await this.publish(this.project, this.team, this.viewers);
-                this.postPublishAction(data);
+        this.activateValidation = true;
+        this.timeout(async () => {
+            if (this.form.$valid) {
+                try {
+                    const data = await this.publish(this.project, this.team, this.viewers);
+                    this.postPublishAction(data);
+                }
+                catch (e) {
+                    this.handleResponse(e.response);
+                    this.$mdDialog.show(this.publishAlert);
+                }
             }
-            catch (e) {
-                this.handleResponse(e.response);
-                this.$mdDialog.show(this.publishAlert);
+            else {
+                await this.$mdDialog.show(this.publishAlert);
+                this.focusInvalidField();
             }
-        }
-        else {
-            await this.$mdDialog.show(this.publishAlert);
-            this.focusInvalidField();
-        }
+        });
 
     }
 
-    async saveDraftHandler() {
+    saveDraftHandler() {
         this.clearCustomErrors();
-        if (this.form.$valid) {
-            try {
-                const project = await this.saveDraft(this.project, this.team, this.viewers);
-                this.showToast('Draft updated');
-                if (this.newProject) {
-                    this.state.go('editProject', {appName: project.id}, {
-                        location: 'replace',
-                        reload: false
-                    });
+        this.activateValidation = false;
+        this.timeout(async () => {
+            if (this.form.$valid) {
+                try {
+                    const project = await this.saveDraft(this.project, this.team, this.viewers);
+                    this.showToast('Draft updated');
+                    if (this.newProject) {
+                        this.state.go('editProject', { appName: project.id }, {
+                            location: 'replace',
+                            reload: false
+                        });
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                    this.handleResponse(e.response);
                 }
             }
-            catch (e) {
-                console.log(e);
-                this.handleResponse(e.response);
+            else {
+                this.focusInvalidField();
             }
-        }
-        else {
-            this.focusInvalidField();
-        }
+        });
     }
 
     async discardDraftHandler() {

@@ -1,7 +1,4 @@
-import some from 'lodash/some';
-import every from 'lodash/every';
 import isNil from 'lodash/isNil';
-import isNull from 'lodash/isNull';
 import CollapsibleSet from '../CollapsibleSet';
 import * as CountriesModule from '../../store/modules/countries';
 
@@ -24,7 +21,6 @@ class ImplementationOverview extends CollapsibleSet {
 
     onInit() {
         this.districtList = [];
-        this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.unsubscribe = this.$ngRedux.connect(this.mapData, CountriesModule)(this);
         this.watchers();
@@ -108,6 +104,19 @@ class ImplementationOverview extends CollapsibleSet {
             intervention.subGroups.push(grandparent);
         }
         return [intervention];
+    }
+
+
+    isSubLevelCoverageDistrictRequired(district) {
+        return !isNil(district.health_workers) || !isNil(district.clients) || !isNil(district.facilities);
+    }
+
+    isSubLevelCoverageRequired() {
+        return this.project.coverageType === 1 && this.activateValidation;
+    }
+
+    isNationalLevelCoverageRequired() {
+        return this.project.coverageType === 2 && this.activateValidation;
     }
 
     static factory() {
