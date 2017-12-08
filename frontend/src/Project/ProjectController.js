@@ -209,9 +209,11 @@ class ProjectController  {
         }
     }
 
-    focusInvalidField() {
+    focusInvalidField(focusCountryFields) {
         this.timeout(()=>{
-            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+            const firstInvalid = focusCountryFields ?
+              document.getElementById('npf').querySelector('section-country-fields')
+              : document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
                 firstInvalid.focus();
             }
@@ -255,6 +257,10 @@ class ProjectController  {
     handleResponse(response) {
         if (response && response.status === 500) {
             console.error('500 from the API', response);
+            return;
+        }
+        if (response.custom) {
+            this.focusInvalidField();
             return;
         }
         forEach(response.data, (item, key) => {

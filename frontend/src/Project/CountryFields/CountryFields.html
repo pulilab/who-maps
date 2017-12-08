@@ -72,21 +72,23 @@
         <div
           ng-if="field.type === 4"
           class="single-selection-field">
-          <label>{{field.question}}</label>
-          <md-select ng-model="field.answer"
-                     name="custom{{$index}}"
-                     aria-label="custom{{$index}}"
-                     ng-required="vm.activateValidation && field.required"
-                     md-on-close="vm.updateProjectCountryFields(field)">
-            <md-option value="{{option}}" ng-repeat="option in field.options" >
-              {{option}}
-            </md-option>
-          </md-select>
-          <div class="radio-error-messages">
-            <div ng-messages="vm.form['custom' + $index].$error">
-              <div ng-message="required">This is required.</div>
+          <md-input-container class="md-block">
+            <label>{{field.question}}</label>
+            <md-select ng-model="field.answer"
+                       name="custom{{$index}}"
+                       aria-label="custom{{$index}}"
+                       ng-required="vm.activateValidation && field.required"
+                       md-on-close="vm.updateProjectCountryFields(field)">
+              <md-option value="{{option}}" ng-repeat="option in field.options" >
+                {{option}}
+              </md-option>
+            </md-select>
+            <div class="radio-error-messages">
+              <div ng-messages="vm.form['custom' + $index].$error">
+                <div ng-message="required">This is required.</div>
+              </div>
             </div>
-          </div>
+          </md-input-container>
         </div>
 
 
@@ -94,23 +96,25 @@
         <div
           ng-if="field.type === 5"
           class="multi-selection-field">
-          <label>{{field.question}}</label>
-          <md-select ng-model="field.answer"
-                     md-select-separator="empty"
-                     aria-label="custom{{$index}}"
-                     multiple
-                     name="custom{{$index}}"
-                     ng-required="vm.activateValidation && field.required"
-                     md-on-close="vm.updateProjectCountryFields(field)">
-            <md-option value="{{option}}" ng-repeat="option in field.options">
-              {{option}}
-            </md-option>
-          </md-select>
-          <div class="radio-error-messages">
-            <div ng-messages="vm.form['custom' + $index].$error">
-              <div ng-message="required">This is required.</div>
+          <md-input-container class="md-block">
+            <label>{{field.question}}</label>
+            <md-select ng-model="field.answer"
+                       md-select-separator="empty"
+                       aria-label="custom{{$index}}"
+                       multiple
+                       name="custom{{$index}}"
+                       ng-required="vm.activateValidation && field.required"
+                       md-on-close="vm.updateProjectCountryFields(field)">
+              <md-option value="{{option}}" ng-repeat="option in field.options">
+                {{option}}
+              </md-option>
+            </md-select>
+            <div class="radio-error-messages">
+              <div ng-messages="vm.form['custom' + $index].$error">
+                <div ng-message="required">This is required.</div>
+              </div>
             </div>
-          </div>
+          </md-input-container>
         </div>
 
 
