@@ -4,34 +4,25 @@ import re
 
 from django.contrib.postgres.forms.array import SimpleArrayField
 from django.forms.widgets import MultiWidget, TextInput
+from django.templatetags.static import static
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 
 class AdminArrayFieldWidget(MultiWidget):
-    template_name = 'admin/widgets/arrayfieldwidget.html'
     is_hidden = False
     input_class = TextInput
-    outer_html = '<ul{id_attr} data-element-counter="{element_count}" class="arrayfield-list">{content}{add_new}</ul>'
-    add_new_html = '<li><a href="#" onclick="addNewInputElement(this)">Add new entry</a></li>'
+    outer_html = '<ul{id_attr} data-element-counter="{element_count}" class="arrayfield-list"' \
+                 'style="padding: 0; margin: 0; display: none;">{content}{add_new}</ul>'
+    inner_html = '<li style="list-style-type: none;">{widget}' \
+                 '<a href="#" class="delete-arraywidget-item" style="color: #CC3434; padding-left: 8px">Delete</a></li>'
+    add_new_html = '<li style="list-style-type: none;"><a href="#" class="add-arraywidget-item">Add new entry</a></li>'
 
     def __init__(self, input_widget, attrs=None):
         self.widget = input_widget
         super(AdminArrayFieldWidget, self).__init__([], attrs)
 
     def render(self, name, value, attrs=None):
-        """
-
-            {% for widget in widget.subwidgets %}
-                <li>
-                    {% include widget.template_name %}
-                    <img src="{% static "admin/img/icon-no.svg" %}" alt="Delete" onclick="deleteTextInput(this)">
-                </li>
-            {% endfor %}
-            <li><a href="#" onclick="addNewInputElement('#{{ widget.name }}')">Add new entry</a></li>
-        </ul>
-        """
-
         if value:
             widget_count = len(value)
         else:
@@ -49,7 +40,9 @@ class AdminArrayFieldWidget(MultiWidget):
     def format_output(self, rendered_widgets):
         output = []
         for widget in rendered_widgets:
-            output.append('<li>{}<img src="#" alt="Delete" onclick="deleteTextInput(this)" /></li>'.format(widget))
+            output.append(format_html(self.inner_html,
+                                      widget=widget,
+                                      img_src=static('admin/img/icon-no.svg')))
         return '\n'.join(output)
 
     def value_from_datadict(self, data, files, name):
@@ -83,8 +76,10 @@ class AdminArrayFieldWidget(MultiWidget):
 
 
 class AdminArrayField(SimpleArrayField):
+    widget = AdminArrayFieldWidget
+
     def __init__(self, *args, **kwargs):
-        widget = AdminArrayFieldWidget(input_widget=kwargs['base_field'].widget)
+        widget = self.widget(input_widget=kwargs['base_field'].widget)
         kwargs.setdefault('widget', widget)
         super(AdminArrayField, self).__init__(*args, **kwargs)
 
@@ -96,3 +91,14 @@ class AdminArrayField(SimpleArrayField):
             value = self.delimiter.join(value)
 
         return super(AdminArrayField, self).to_python(value)
+
+
+class NoneReadOnlyAdminArrayFieldWidget(AdminArrayFieldWidget):
+    def render(self, name, value, attrs=None):
+        if value is None:
+            return mark_safe('-')
+        return super(NoneReadOnlyAdminArrayFieldWidget, self).render(name, value, attrs)
+
+
+class NoneReadOnlyAdminArrayField(AdminArrayField):
+    widget = NoneReadOnlyAdminArrayFieldWidget
