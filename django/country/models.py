@@ -56,7 +56,7 @@ class CountryField(models.Model):
         (MULTI, "Multiple choice"),
     )
 
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, related_name='fields')
     type = models.IntegerField(choices=TYPE_CHOICES)
     question = models.CharField(max_length=256, blank=False)
     options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
@@ -72,6 +72,11 @@ class CountryField(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def save(self, *args, **kwargs):
+        if self.type in [CountryField.TEXT, CountryField.NUMBER, CountryField.YESNO]:
+            self.options = None
+        super(CountryField, self).save(*args, **kwargs)
 
     def __str__(self):
         return ""

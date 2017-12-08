@@ -552,8 +552,15 @@ async function saveCountryFields(fields = [], countryId, project, toUpdate) {
         };
     });
     toUpdate = toUpdate === 'published' ? 'publish' : 'draft';
-    const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/${toUpdate}/`, { fields });
-    return data.fields;
+    try {
+        const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/${toUpdate}/`, { fields });
+        return data.fields;
+    }
+    catch (e) {
+        console.log(e);
+        return false;
+    }
+
 }
 
 function processForm(form) {
@@ -586,6 +593,13 @@ async function postProjectSaveActions(data, team, viewers, dispatch, state, toUp
     const [teamViewers, fields] = await Promise.all([twPromise, cfPromise]);
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
+    if (fields === false) {
+        const response = {
+            custom: true,
+            message: 'Failed to save country fields'
+        };
+        return Promise.reject({ response });
+    }
     if (toUpdate === 'published') {
         data.published.fields = fields;
     }
