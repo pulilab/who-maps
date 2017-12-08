@@ -105,7 +105,6 @@ class CountryField(models.Model):
             "country": self.country.id,
             "type": self.type,
             "question": self.question,
-            "options": self.options,
             "answer": self.draft if draft_mode else self.answer,
             "project": self.project.id
         }
