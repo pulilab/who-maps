@@ -129,7 +129,7 @@
           <div layout="row">
             <md-input-container class="district" flex="50">
               <label>District</label>
-              <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.project.coverageType === 1">
+              <md-select ng-model="cov.district" name="{{'coverage_' + $index}}" ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
                 <md-option value="{{district}}" ng-repeat="district in cov.available">
                   {{district}}
                 </md-option>
