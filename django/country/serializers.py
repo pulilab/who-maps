@@ -41,8 +41,14 @@ class CountryFieldsSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if "project" not in attrs:
             raise ValidationError("Project ID needs to be specified")
+        schema = CountryField.get_schema_for_answer(country=attrs["country"], question=attrs["question"])
+        if not schema:
+            raise ValidationError("No schema found for this answer")
+        else:
+            if schema.required and self.context['request'].parser_context['kwargs']['mode'] == 'publish' \
+                    and not attrs.get("answer"):
+                raise ValidationError("Answer is required for: {}".format(attrs["question"]))
 
-        draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
         return attrs
 
     @staticmethod
