@@ -13,7 +13,7 @@ class CountryFieldInline(admin.TabularInline):
     extra = 0
     max_num = 0
     can_delete = False
-    fields = ('type', 'question', 'options', 'enabled')
+    fields = ('type', 'question', 'options', 'required', 'enabled')
     readonly_fields = ('type', 'question', 'options')
 
     def get_queryset(self, request):
@@ -25,7 +25,7 @@ class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
     verbose_name_plural = "Add country fields"
     extra = 0
     can_delete = False
-    fields = ('type', 'question', 'options')
+    fields = ('type', 'question', 'options', 'required')
 
     def get_queryset(self, request):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
