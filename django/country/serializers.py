@@ -59,9 +59,8 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
         draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
         return [
             CountryField.objects.update_or_create(
-                defaults={"answer": field.get("answer", ""), "draft": field.get("answer", ""),
-                          "options": field.get("options")} if not draft_mode else {"draft": field.get("answer", ""),
-                                                                                   "options": field.get("options")},
+                defaults={"answer": field.get("answer", ""), "draft": field.get("answer", "")} if not draft_mode else {
+                    "draft": field.get("answer", "")},
                 **{
                     "country": field["country"],
                     "project": field["project"],
