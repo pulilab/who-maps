@@ -278,6 +278,7 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 201)
+
         self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
         self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
         self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
@@ -321,6 +322,33 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
         self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data2['fields'][0]['answer'])
         self.assertNotEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+
+    def test_create_single_multiselect(self):
+        new_schema = CountryField.objects.create(options=["a1", "a2"], country=self.country, type=1,
+                                                 question="q2?", schema=True)
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": 4,
+                "question": "q2?",
+                "options": ["a1", "a2", "a3"]
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(response.json()['fields'][0]['schema_id'], new_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], '')
+        self.assertEqual(response.json()['fields'][0]['options'], country_fields_data['fields'][0]['options'])
+        self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
+        self.assertEqual(response.json()['fields'][0]['type'], country_fields_data['fields'][0]['type'])
+        self.assertEqual(response.json()['fields'][0]['project'], project.id)
+        self.assertEqual(response.json()['fields'][0]['country'], self.country.id)
 
     def test_update_answer(self):
         self.test_create_country_fields_correct_project()

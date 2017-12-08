@@ -30,17 +30,19 @@ class LandingPageSerializer(serializers.ModelSerializer):
 class CountryFieldsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryField
-        fields = ("id", "country", "type", "question")
+        fields = ("id", "country", "type", "question", "options")
 
 
 class CountryFieldsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryField
-        fields = ("country", "type", "question", "answer", "project")
+        fields = ("country", "type", "question", "options", "answer", "project")
 
     def validate(self, attrs):
         if "project" not in attrs:
             raise ValidationError("Project ID needs to be specified")
+
+        draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
         return attrs
 
     @staticmethod
@@ -54,12 +56,12 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
     fields = CountryFieldsSerializer(many=True, required=True, allow_null=False)
 
     def create(self, validated_data):
-        mode = self.context['request'].parser_context['kwargs']['mode']
+        draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
         return [
             CountryField.objects.update_or_create(
-                defaults={"answer": field.get("answer", ""),
-                          "draft": field.get("answer", "")} if mode == "publish" else {
-                    "draft": field.get("answer", "")},
+                defaults={"answer": field.get("answer", ""), "draft": field.get("answer", ""),
+                          "options": field.get("options")} if not draft_mode else {"draft": field.get("answer", ""),
+                                                                                   "options": field.get("options")},
                 **{
                     "country": field["country"],
                     "project": field["project"],
@@ -73,5 +75,5 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
         ]
 
     def to_representation(self, instances):
-        mode = self.context['request'].parser_context['kwargs']['mode']
-        return {"fields": [instance.to_representation(mode == "draft") for instance in instances]}
+        draft_mode = self.context['request'].parser_context['kwargs']['mode'] == 'draft'
+        return {"fields": [instance.to_representation(draft_mode) for instance in instances]}
