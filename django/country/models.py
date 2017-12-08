@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields.array import ArrayField
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from core.models import NameByIDMixin, ExtendedModel
 from user.models import UserProfile
@@ -96,7 +97,7 @@ class CountryField(models.Model):
     def get_schema_for_answer(cls, country, question):
         try:
             return cls.objects.get(schema=True, enabled=True, country=country, question=question)
-        except Exception:
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
 
     def to_representation(self, draft_mode=False):
