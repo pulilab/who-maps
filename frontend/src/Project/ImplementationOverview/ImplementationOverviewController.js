@@ -110,35 +110,6 @@ class ImplementationOverview extends CollapsibleSet {
         return [intervention];
     }
 
-    validateCoverage(current, item) {
-
-        let nld;
-        if (this.project.national_level_deployment) {
-            nld = [
-                this.project.national_level_deployment.health_workers,
-                this.project.national_level_deployment.facilities,
-                this.project.national_level_deployment.clients
-            ];
-        }
-        else {
-            nld = [null];
-        }
-
-        if (current === 'nld' && this.project.national_level_deployment) {
-            return some(nld);
-        }
-        else if (current === 'dld') {
-            return some([
-                item.district,
-                !isNil(item.health_workers),
-                !isNil(item.facilities),
-                !isNil(item.clients),
-                every(nld, isNull)
-            ]);
-        }
-        return false;
-    }
-
     handleCustomError(key) {
         this.form[key].$setValidity('custom', true);
         this.form[key].customError = [];

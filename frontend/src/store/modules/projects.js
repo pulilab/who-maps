@@ -181,7 +181,7 @@ function convertCountryFieldsAnswer(fields) {
             f.answer = f.answer === 'true';
             break;
         case 5:
-            f.answer = JSON.parse(f.answer)
+            f.answer = JSON.parse(f.answer);
         }
         return f;
     });
