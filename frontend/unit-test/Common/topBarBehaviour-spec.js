@@ -1,63 +1,41 @@
 import TopBar from '../../src/Common/TopBarBheaviour';
-import EE  from '../../src/Common/EE';
+import { $state, $ngRedux, $scope, EE } from '../testUtilities';
 
-EE.initialize();
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let controller = {};
-const $state = {
-    go: () => {},
-    current: {
-        name: 'mock'
-    }
-};
 
-
-const $scope = {
-    $watch: () => {},
-    $evalAsync: ()=>{}
-};
-
-
-const boundFunctions = {};
-
-const ccsSpies = {
-    getCountryData: jasmine.createSpy('getCountryData').and.returnValue(Promise.resolve()),
-    getSubDomain: jasmine.createSpy('getSubDomain').and.returnValue('ug'),
-    getCountryFlag: jasmine.createSpy('getCountryFlag').and.returnValue('url-ug'),
-    hasProfile: jasmine.createSpy('commonInit').and.returnValue(true)
-};
-
-describe('TopBar', () => {
+describe('TopBarBehaviour', () => {
 
     beforeEach(() => {
-        boundFunctions.commonInit = spyOn(TopBar.prototype, 'commonInit').and.callThrough();
-        controller = new TopBar($state, $scope);
-        controller.cs = ccsSpies;
+        controller = new TopBar($state(), {}, $ngRedux);
+        controller.scope = $scope(controller);
+        controller.EE = EE;
     });
 
     it('should have an init function', () => {
         expect(controller.commonInit).toBeDefined();
     });
 
-    it('should wait for the profile to be ready', ()=> {
-        controller.user = false;
-        controller.commonInit();
-        expect(controller.profileDataReady).toBeFalsy();
-    });
-
     it('should have a show CLV button function', () => {
-        controller.isLogin = true;
+        const spy = spyOn(controller, 'hasProfile').and.returnValue(true);
         let result = controller.showCountryLevelViewButton();
-        expect(result).toBeTruthy();
-        controller.isLogin = false;
+        expect(result).toBe(true);
+
+        spy.and.returnValue(false);
         result = controller.showCountryLevelViewButton();
-        expect(result).toBeFalsy();
+        expect(result).toBe(false);
     });
 
     it('should have a show a Login and Signup buttons function', () => {
-        controller.isLogin = true;
+        controller.userModel = {
+            token: true
+        };
+        controller.state.current = {
+            name: 'something'
+        };
+
         const result = {
             login: controller.showLogin(),
             signup: controller.showSignUp()
@@ -65,7 +43,8 @@ describe('TopBar', () => {
         expect(result.login).toBeFalsy();
         expect(result.signup).toBeFalsy();
 
-        controller.isLogin = false;
+        controller.userModel.token = false;
+
         result.login = controller.showLogin();
         result.signup = controller.showSignUp();
         expect(result.login).toBeTruthy();
@@ -74,33 +53,38 @@ describe('TopBar', () => {
 
 
     it('should have a show new project button function', ()=>{
-        controller.profileDataReady = true;
-        controller.userProfile = {
-            account_type: 'I'
-        };
-        spyOn(controller, 'hasProfile').and.returnValue(true);
-        const result = controller.showNewProjectButton();
-        expect(result).toBeTruthy();
-        expect(controller.hasProfile).toHaveBeenCalled();
+        const spy = spyOn(controller, 'hasProfile').and.returnValue(true);
+        let result = controller.showNewProjectButton();
+        expect(result).toBe(true);
+
+        spy.and.returnValue(false);
+        result = controller.showNewProjectButton();
+        expect(result).toBe(false);
     });
 
     it('should have a show dashboard button function', ()=>{
-        controller.profileDataReady = true;
+        controller.userModel = {
+            token: true
+        };
         let result = controller.showGoToMyDashboardButton();
         expect(result).toBeTruthy();
-        controller.profileDataReady = false;
+        controller.userModel.token = false;
         result = controller.showGoToMyDashboardButton();
         expect(result).toBeFalsy();
     });
 
     it('should have a has profile function', ()=>{
-        controller.commonInit();
-        const spy = spyOn(controller.cs, 'hasProfile');
-        spy.and.returnValue(true);
+        controller.userModel = {
+            profile: {
+                country: 1,
+                organisation: 'a',
+                name: 'b'
+            }
+        };
         let result = controller.hasProfile();
         expect(result).toBeTruthy();
 
-        spy.and.returnValue(false);
+        controller.userModel.profile.country = undefined;
         result = controller.hasProfile();
         expect(result).toBeFalsy();
     });

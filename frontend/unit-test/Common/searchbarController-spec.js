@@ -1,21 +1,16 @@
 import SearchbarController from '../../src/Common/Searchbar/SearchbarController';
-
+import { $state, $scope,  $ngRedux, EE } from '../testUtilities';
 /* global Promise, define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
 
 let sb = {};
 
-const $scope = {
-    $watch: jasmine.createSpy('watch')
-};
-
-const $state = {
-
-};
 
 describe('Searchbar Components controller', () => {
 
     beforeEach(() => {
-        sb = SearchbarController.searchbarFactory()($state, $scope);
+        sb = SearchbarController.searchbarFactory()($state(), {}, $ngRedux, {});
+        sb.scope = $scope(sb);
+        sb.EE = EE;
         sb.$onInit();
     });
 
@@ -36,13 +31,13 @@ describe('Searchbar Components controller', () => {
     });
 
     it('should have a function that perform a search', () => {
-        spyOn(sb.ss, 'searchProject').and.returnValue(Promise.resolve());
+        sb.searchProjects = jasmine.createSpy('searchProjects').and.returnValue(Promise.resolve());
         sb.search('yolo');
-        expect(sb.ss.searchProject).not.toHaveBeenCalled();
+        expect(sb.searchProjects).not.toHaveBeenCalled();
         sb.filters[0].active = true;
         sb.searchStr = 'swag';
         sb.search('swag');
-        expect(sb.ss.searchProject).toHaveBeenCalledTimes(1);
+        expect(sb.searchProjects).toHaveBeenCalledTimes(1);
     });
 
 });

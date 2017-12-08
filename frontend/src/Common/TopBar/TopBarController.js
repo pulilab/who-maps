@@ -25,7 +25,7 @@ class TopBarController extends TopBarBehaviour {
     }
 
     showThematic() {
-        return this.userModel;
+        return !!this.userModel;
     }
 
     static topBarControllerFactory() {

@@ -35,7 +35,8 @@ class MapsToolkitController {
     }
 
     onInit() {
-        this.bindEvents();
+        this.EE.on('mapsAxisChange', this.handleChangeAxis, this);
+        this.EE.on('mapsDomainChange', this.handleChangeDomain, this);
         this.dataLoaded = false;
         this.score = 0;
         this.projectId = this.state.params.appName;
@@ -47,7 +48,8 @@ class MapsToolkitController {
     }
 
     onDestroy() {
-        this.removeEvents();
+        this.EE.removeListener('mapsAxisChange', this.handleChangeAxis, this);
+        this.EE.removeListener('mapsDomainChange', this.handleChangeDomain, this);
         this.unsubscribe();
     }
 
@@ -57,19 +59,6 @@ class MapsToolkitController {
               this.processAxesData(cloneDeep(rawData), this.state.params.axisId, this.state.params.domainId);
           }, true);
     }
-
-    bindEvents() {
-        const vm = this;
-        vm.EE.on('mapsAxisChange', vm.handleChangeAxis, this);
-        vm.EE.on('mapsDomainChange', vm.handleChangeDomain, this);
-    }
-
-    removeEvents() {
-        const vm = this;
-        vm.EE.removeListener('mapsAxisChange', vm.handleChangeAxis, this);
-        vm.EE.removeListener('mapsDomainChange', vm.handleChangeDomain, this);
-    }
-
 
     handleChangeAxis(id) {
         this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });

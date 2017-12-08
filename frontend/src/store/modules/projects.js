@@ -199,7 +199,8 @@ export const parseProjectForViewMode = (state, project) => {
     };
     return {
         ...project,
-        ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck)
+        ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck),
+        hasPublishedVersion: true
     };
 };
 
