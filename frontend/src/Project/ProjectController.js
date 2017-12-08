@@ -86,7 +86,7 @@ class ProjectController  {
     onInit() {
         this.eventListeners();
         this.districtList = [];
-        this.activateValidation = true;
+        this.activateValidation = false;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         if (this.state.current.name === 'newProject') {
             this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
@@ -175,7 +175,7 @@ class ProjectController  {
                 const project = await this.saveDraft(this.project, this.team, this.viewers);
                 this.showToast('Draft updated');
                 if (this.newProject) {
-                    this.state.go('editProject', {appName: project.id}, {
+                    this.state.go('editProject', { appName: project.id }, {
                         location: 'replace',
                         reload: false
                     });
