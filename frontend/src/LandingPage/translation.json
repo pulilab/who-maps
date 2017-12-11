@@ -1,0 +1,16 @@
+{
+  "authenticated": {
+    "top-bar": {
+      "country_view_button": "Country View",
+      "dashboard_button": "Dashboard",
+      "new_project_button": "New Project",
+      "persona_menu": {
+        "role_line": "Role: $$role_name$$",
+        "edit_my_profile": "Edit my Profile",
+        "logout": "Logout",
+        "country_sub_title": "Country",
+        "site_language_sub_title": "Site Language"
+      }
+    }
+  }
+}
