@@ -82,6 +82,7 @@ const $location = {
 };
 
 const dispatch = jasmine.createSpy('dispatch');
+const getState = state =>  jasmine.createSpy('getState').and.returnValue(state);
 
 const defaultAxiosSuccess = Promise.resolve({ data: 1 });
 
@@ -100,5 +101,6 @@ export {
     $element,
     $location,
     dispatch,
-    defaultAxiosSuccess
+    defaultAxiosSuccess,
+    getState
 };
