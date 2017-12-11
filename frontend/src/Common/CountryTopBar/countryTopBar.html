@@ -45,7 +45,7 @@
                    ng-show="vm.showCountryLevelViewButton()"
                    md-no-ink>
             <md-icon class="material-icons">public</md-icon>
-            {{vm.translate('authenticated.top-bar.country_view_button')}}
+            {{vm.translate('AUTHENTICATED.TOP_BAR.COUNTRY_VIEW_BUTTON')}}
         </md-button>
 
         <md-button aria-label="Go to my Dashboard"
@@ -54,7 +54,7 @@
                    ng-show="vm.showGoToMyDashboardButton()"
                    md-no-ink>
             <md-icon class="material-icons ">apps</md-icon>
-            {{vm.translate('authenticated.top-bar.dashboard_button')}}
+            {{vm.translate('AUTHENTICATED.TOP_BAR.DASHBOARD_BUTTON')}}
         </md-button>
 
         <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
@@ -73,7 +73,7 @@
             <md-menu-item>
               <div class="user-role">
                 <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-                <span>{{vm.translate('authenticated.top-bar.persona_menu.role_line', {role_name : vm.writeUserRole()})}}</span>
+                <span>{{vm.translate('AUTHENTICATED.TOP_BAR.PERSONA_MENU.ROLE_LINE', {role_name : vm.writeUserRole()})}}</span>
               </div>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>

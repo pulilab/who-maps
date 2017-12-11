@@ -1,15 +1,15 @@
 {
-  "authenticated": {
-    "top-bar": {
-      "country_view_button": "Country View",
-      "dashboard_button": "Dashboard",
-      "new_project_button": "New Project",
-      "persona_menu": {
-        "role_line": "Role: $$role_name$$",
-        "edit_my_profile": "Edit my Profile",
-        "logout": "Logout",
-        "country_sub_title": "Country",
-        "site_language_sub_title": "Site Language"
+  "AUTHENTICATED": {
+    "TOP_BAR": {
+      "COUNTRY_VIEW_BUTTON": "Country View",
+      "DASHBOARD_BUTTON": "Dashboard",
+      "NEW_PROJECT_BUTTON": "New Project",
+      "PERSONA_MENU": {
+        "ROLE_LINE": "Role: $$role_name$$",
+        "EDIT_MY_PROFILE": "Edit my Profile",
+        "LOGOUT": "Logout",
+        "COUNTRY_SUB_TITLE": "Country",
+        "SITE_LANGUAGE_SUB_TITLE": "Site Language"
       }
     }
   }
