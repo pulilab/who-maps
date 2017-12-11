@@ -83,6 +83,7 @@ const $location = {
 
 const dispatch = jasmine.createSpy('dispatch');
 
+const defaultAxiosSuccess = Promise.resolve({ data: 1 });
 
 export {
     dialog,
@@ -98,5 +99,6 @@ export {
     A,
     $element,
     $location,
-    dispatch
+    dispatch,
+    defaultAxiosSuccess
 };
