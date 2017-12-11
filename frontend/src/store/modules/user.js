@@ -151,7 +151,6 @@ export async function resetPassword(newPassword) {
 export default function user(state = {}, action) {
     switch (action.type) {
     case 'SET_USER': {
-        console.log(action)
         return { ...state, ...action.user };
     }
     case 'SET_PROFILE': {
