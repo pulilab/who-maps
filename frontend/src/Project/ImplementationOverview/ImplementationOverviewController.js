@@ -1,7 +1,4 @@
-import some from 'lodash/some';
-import every from 'lodash/every';
 import isNil from 'lodash/isNil';
-import isNull from 'lodash/isNull';
 import CollapsibleSet from '../CollapsibleSet';
 import * as CountriesModule from '../../store/modules/countries';
 
@@ -24,7 +21,6 @@ class ImplementationOverview extends CollapsibleSet {
 
     onInit() {
         this.districtList = [];
-        this.validateCoverage = this.validateCoverage.bind(this);
         this.defaultOnInit();
         this.unsubscribe = this.$ngRedux.connect(this.mapData, CountriesModule)(this);
         this.watchers();
@@ -110,35 +106,18 @@ class ImplementationOverview extends CollapsibleSet {
         return [intervention];
     }
 
-    validateCoverage(current, item) {
 
-        let nld;
-        if (this.project.national_level_deployment) {
-            nld = [
-                this.project.national_level_deployment.health_workers,
-                this.project.national_level_deployment.facilities,
-                this.project.national_level_deployment.clients
-            ];
-        }
-        else {
-            nld = [null];
-        }
-
-        if (current === 'nld' && this.project.national_level_deployment) {
-            return some(nld);
-        }
-        else if (current === 'dld') {
-            return some([
-                item.district,
-                !isNil(item.health_workers),
-                !isNil(item.facilities),
-                !isNil(item.clients),
-                every(nld, isNull)
-            ]);
-        }
-        return false;
+    isSubLevelCoverageDistrictRequired(district) {
+        return !isNil(district.health_workers) || !isNil(district.clients) || !isNil(district.facilities);
     }
 
+    isSubLevelCoverageRequired() {
+        return this.project.coverageType === 1 && this.activateValidation;
+    }
+
+    isNationalLevelCoverageRequired() {
+        return this.project.coverageType === 2 && this.activateValidation;
+    }
 
     static factory() {
         require('./ImplementationOverview.scss');

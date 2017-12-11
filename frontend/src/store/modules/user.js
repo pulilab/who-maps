@@ -15,7 +15,7 @@ export const getProfile = state => {
 
 // ACTIONS
 
-const storeData = (data, email) => {
+export const storeData = (data, email) => {
     storage.set('token', data.token);
     storage.set('user_profile_id', data.user_profile_id);
     storage.set('is_superuser', data.is_superuser);
@@ -24,7 +24,7 @@ const storeData = (data, email) => {
     axios.setAuthToken(data.token);
 };
 
-const handleProfile = (data) => {
+export const handleProfile = (data) => {
     data.email = storage.get('email');
     if (data.organisation) {
         data.organisation_id = data.organisation;
@@ -52,7 +52,7 @@ export function loadProfile() {
         if (storage.get('login') && !state.user.profile) {
             const profileId = state.user.user_profile_id || storage.get('user_profile_id');
             let { data } = await axios.get(`/api/userprofiles/${profileId}/`);
-            data = handleProfile(data);
+            data = exports.handleProfile(data);
             dispatch({ type: 'SET_PROFILE', profile: data });
         }
     };
@@ -65,7 +65,7 @@ export function doSignup({ account_type, password1, password2, email }) {
               { account_type, password1, password2, email });
             data.token = data.key;
             data.is_superuser = false;
-            storeData(data, email);
+            exports.storeData(data, email);
             dispatch({ type: 'SET_USER', user: data });
             return Promise.resolve();
         }
@@ -79,9 +79,9 @@ export function doLogin({ username, password }) {
     return async dispatch => {
         try {
             const { data } = await axios.post('/api/api-token-auth/', { username, password });
-            storeData(data, username);
+            exports.storeData(data, username);
             dispatch({ type: 'SET_USER', user: data });
-            await dispatch(loadProfile());
+            await dispatch(exports.loadProfile());
             await dispatch(ProjectModule.loadUserProjects());
             return Promise.resolve();
         }
@@ -100,7 +100,7 @@ export function saveProfile(profile) {
         const p = Object.assign({}, profile);
         p.organisation = p.organisation.id;
         let { data } = await axios[action](url, p);
-        data = handleProfile(data);
+        data = exports.handleProfile(data);
         dispatch({ type: 'SET_PROFILE', profile: data });
     };
 }
@@ -141,7 +141,7 @@ export async function verifyEmail(key) {
     return data;
 }
 export async function resetPassword(newPassword) {
-    const { data } = await axios.post('/api/rest-auth/password/reset', newPassword);
+    const { data } = await axios.post('/api/rest-auth/password/reset/', newPassword);
     return data;
 }
 
@@ -149,29 +149,26 @@ export async function resetPassword(newPassword) {
 // Reducers
 
 export default function user(state = {}, action) {
-    const u = Object.assign(state, {});
     switch (action.type) {
     case 'SET_USER': {
-        return Object.assign(state, {}, action.user);
+        return { ...state, ...action.user };
     }
     case 'SET_PROFILE': {
-        u.profile = u.profile ? u.profile : {};
-        u.profile = Object.assign(u.profile, {}, action.profile);
-        return Object.assign({}, u);
+        const profile = state.profile ? { ...state.profile, ...action.profile } : { ...action.profile };
+        return { ...state, profile };
     }
     case 'UPDATE_TEAM_VIEWER': {
-        const profile = u.profile || {};
+        const profile = state.profile || {};
         profile.member = action.member;
         profile.viewer = action.viewer;
-        u.profile = profile;
-        return Object.assign({}, u);
+        return { ...state, profile };
     }
     case 'UNSET_USER': {
         return {};
     }
     case 'SET_COUNTRY': {
-        u.profile.country = action.country;
-        return Object.assign({}, u);
+        const profile = { ...state.profile, country: action.country };
+        return { ...state, profile };
     }
     default:
         return state;

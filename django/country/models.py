@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from core.models import NameByIDMixin, ExtendedModel
 from user.models import UserProfile
@@ -33,32 +34,48 @@ class PartnerLogo(ExtendedModel):
 
 class CountryFieldManager(models.Manager):
     def get_schema(self, country_id):
-        return self.get_queryset().filter(country_id=country_id, schema=True, enabled=True)
+        return self.filter(country_id=country_id, schema=True, enabled=True)
 
     def get_answers(self, country_id, project_id):
-        return self.get_queryset().filter(country_id=country_id, project_id=project_id, enabled=True, schema=False)
+        return self.filter(country_id=country_id, project_id=project_id, enabled=True, schema=False)
 
 
 class CountryField(models.Model):
     TEXT = 1
     NUMBER = 2
     YESNO = 3
+    SINGLE = 4
+    MULTI = 5
 
     TYPE_CHOICES = (
         (TEXT, "Text field"),
         (NUMBER, "Numeric field"),
         (YESNO, "Yes - no field"),
+        (SINGLE, "Single choice"),
+        (MULTI, "Multiple choice"),
     )
 
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, related_name='fields')
     type = models.IntegerField(choices=TYPE_CHOICES)
     question = models.CharField(max_length=256, blank=False)
+    options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
     answer = models.TextField(max_length=2000, blank=True)
+    draft = models.TextField(max_length=2000, blank=True)
     project = models.ForeignKey('project.Project', null=True)
     enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
     schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
+    schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    required = models.BooleanField(default=False)
 
     objects = CountryFieldManager()
+
+    class Meta:
+        ordering = ['id']
+
+    def save(self, *args, **kwargs):
+        if self.type in [CountryField.TEXT, CountryField.NUMBER, CountryField.YESNO]:
+            self.options = None
+        super(CountryField, self).save(*args, **kwargs)
 
     def __str__(self):
         return ""
@@ -76,16 +93,20 @@ class CountryField(models.Model):
         for field in schema:
             found = answers.filter(question=field.question, type=field.type).first()
             if found:
-                country_fields.append((found, field.id))
+                country_fields.append(found)
 
         return country_fields
 
-    def to_representation(self, schema_id=None):
+    @classmethod
+    def get_schema_for_answer(cls, country, question):
+        return cls.objects.filter(schema=True, enabled=True, country=country, question=question).first()
+
+    def to_representation(self, draft_mode=False):
         return {
-            "schema_id": schema_id,
+            "schema_id": getattr(self.schema_instance, 'pk', None),
             "country": self.country.id,
             "type": self.type,
             "question": self.question,
-            "answer": self.answer,
+            "answer": self.draft if draft_mode else self.answer,
             "project": self.project.id
         }

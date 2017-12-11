@@ -157,7 +157,7 @@ describe('ProjectController', () => {
         expect(ProjectModule.clearSimilarNameList).toHaveBeenCalled();
         expect(sc.$ngRedux.connect).toHaveBeenCalled();
 
-        expect(sc.activateValidation).toBe(true);
+        expect(sc.activateValidation).toBe(false);
         expect(Array.isArray(sc.districtList)).toBe(true);
         expect(sc.unsubscribe).toBeDefined();
         expect(sc.unsubscribe()).toBe('unsubscribeFn');
@@ -276,6 +276,13 @@ describe('ProjectController', () => {
         spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
         sc.newProject = false;
+        sc.form = {
+            $valid: false
+        };
+        await sc.saveDraftHandler();
+        expect(sc.saveDraft).not.toHaveBeenCalled();
+
+        sc.form.$valid = true;
         await sc.saveDraftHandler();
         expect(sc.saveDraft).toHaveBeenCalled();
         expect(sc.showToast).toHaveBeenCalled();

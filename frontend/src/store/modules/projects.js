@@ -29,7 +29,7 @@ import {
     retainOnlyIds,
     handleNationalLevelCoverage,
     fieldToConvertToObject,
-    dashFieldConvertToObject
+    dashFieldConvertToObject, handleCoverage
 } from '../project_utils';
 
 
@@ -180,6 +180,8 @@ function convertCountryFieldsAnswer(fields) {
         case 3:
             f.answer = f.answer === 'true';
             break;
+        case 5:
+            f.answer = JSON.parse(f.answer);
         }
         return f;
     });
@@ -244,7 +246,13 @@ const getStoredCountryFields = state => isDraft => {
 export const getProjectCountryFields = state => (isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
     const countryFields = convertCountryFieldsAnswer(getStoredCountryFields(state)(isDraft));
-    const result = baseCountryFields.map(bc => ({ ...bc, ...countryFields.find(cf => cf.schema_id === bc.id) }));
+    const result = baseCountryFields.map(bc => {
+        const saved = countryFields.find(cf => cf.schema_id === bc.id);
+        return {
+            ...bc,
+            answer: saved ? saved.answer : bc.answer
+        };
+    });
     return [...result];
 };
 
@@ -537,14 +545,22 @@ async function saveTeamViewers({ id }, team = [], viewers = []) {
     return data;
 }
 
-async function saveCountryFields(fields = [], countryId, project) {
+async function saveCountryFields(fields = [], countryId, project, toUpdate) {
     fields = fields.map(({ country, question, type, answer }) => {
         return {
             country, answer, type, question, project
         };
     });
-    const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/`, { fields });
-    return data.fields;
+    toUpdate = toUpdate === 'published' ? 'publish' : 'draft';
+    try {
+        const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/${toUpdate}/`, { fields });
+        return data.fields;
+    }
+    catch (e) {
+        console.log(e);
+        return false;
+    }
+
 }
 
 function processForm(form) {
@@ -561,7 +577,8 @@ function processForm(form) {
         coverageType: undefined,
         platforms: parsePlatformCollection(form),
         ...extractIdFromObjects(form),
-        ...handleNationalLevelCoverage(form)
+        ...handleNationalLevelCoverage(form),
+        ...handleCoverage(form)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
@@ -571,15 +588,22 @@ function processForm(form) {
 async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate, method) {
     const user = UserModule.getProfile(state).id;
     const countryFields = getStoredCountryFields(state)(true);
-    const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
+    const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id, toUpdate);
     const twPromise = saveTeamViewers(data, team, viewers);
-    const [teamViewers] = await Promise.all([twPromise, cfPromise]);
-    if (toUpdate === 'published') {
-        data.published.fields = countryFields;
-    }
-    data.draft.fields = countryFields;
+    const [teamViewers, fields] = await Promise.all([twPromise, cfPromise]);
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
+    if (fields === false) {
+        const response = {
+            custom: true,
+            message: 'Failed to save country fields'
+        };
+        return Promise.reject({ response });
+    }
+    if (toUpdate === 'published') {
+        data.published.fields = fields;
+    }
+    data.draft.fields = fields;
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
     if (method === 'put') {
@@ -611,10 +635,11 @@ export function discardDraft() {
     return async (dispatch, getState) => {
         const published = getCurrentPublishedProjectForEditing(getState());
         const form = processForm(published);
+        const countryFields = getStoredCountryFields(getState())(false);
         const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
+        data.draft.fields = await saveCountryFields(countryFields, data.draft.country, data.id, 'published');
         dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
         dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
-
         return Promise.resolve(data);
     };
 }
@@ -663,10 +688,18 @@ export function clearSimilarNameList() {
 export function updateProjectCountryFields({ id, answer, question, type, country, schema_id }) {
     return (dispatch, getState) => {
         const projectId = getCurrentProjectId(getState());
-        if (type === 3) {
+        switch (type) {
+        case 3: {
             answer = answer === true ? 'true' : 'false';
+            break;
         }
-        const countryField = { id, answer, question, type, country, schema_id: schema_id ? schema_id : id };
+        case 5: {
+            answer = JSON.stringify(answer);
+            break;
+        }
+        }
+        schema_id = schema_id ? schema_id : id;
+        const countryField = { id, answer, question, type, country, schema_id };
         dispatch({ type: 'UPDATE_COUNTRY_FIELD_ANSWER', projectId, countryField });
     };
 }

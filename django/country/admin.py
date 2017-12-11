@@ -1,29 +1,33 @@
 from django.conf import settings
+
+from core.admin import ArrayFieldMixin
 from django.core import mail, urlresolvers
 from django.contrib import admin
 from django.template import loader
-from country.models import Country, PartnerLogo, CountryField
+from .models import Country, PartnerLogo, CountryField
+from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
 
 
 class CountryFieldInline(admin.TabularInline):
     model = CountryField
+    form = CountryFieldAdminFormNoneReadOnlyOptions
     verbose_name_plural = "Existing country fields"
     extra = 0
     max_num = 0
     can_delete = False
-    fields = ('type', 'question', 'enabled')
+    fields = ('type', 'question', 'options', 'required', 'enabled')
     readonly_fields = ('type', 'question')
 
     def get_queryset(self, request):
         return super(CountryFieldInline, self).get_queryset(request).filter(schema=True)
 
 
-class AddCountryFieldInline(admin.TabularInline):
+class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
     model = CountryField
-    verbose_name_plural = "Add additional country fields"
+    form = CountryFieldAdminForm
+    verbose_name_plural = "Add country fields"
     extra = 0
-    can_delete = False
-    fields = ('type', 'question')
+    fields = ('type', 'question', 'options', 'required')
 
     def get_queryset(self, request):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
