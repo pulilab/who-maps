@@ -44,7 +44,10 @@
       <md-input-container class="md-icon-float" flex="60">
         <label>Project country</label>
         <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
-        <md-select ng-model="vm.project.country" name="country" required>
+        <md-select ng-model="vm.project.country" name="country" ng-disabled="vm.project.hasPublishedVersion" required>
+          <md-tooltip md-autohide md-direction="top" ng-show="vm.project.hasPublishedVersion">
+            You can not change the country of a published project
+          </md-tooltip>
           <md-option ng-value="{{country.id}}" ng-repeat=" country in vm.countriesList">
             {{country.prettyName}}
           </md-option>
