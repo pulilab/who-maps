@@ -33,11 +33,6 @@ class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
 
 
-@admin.register(CountryField)
-class CFAdmin(ArrayFieldMixin, admin.ModelAdmin):
-    fields = ('type', 'question', 'options')
-
-
 class PartnerLogoInline(admin.TabularInline):
     model = PartnerLogo
     extra = 0
