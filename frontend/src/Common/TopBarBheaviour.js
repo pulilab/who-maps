@@ -1,4 +1,5 @@
 import * as UserModule from '../store/modules/user';
+import * as LanguageModule from '../store/modules/language';
 
 class TopBar {
 
@@ -6,13 +7,16 @@ class TopBar {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.$ngRedux = $ngRedux;
         this.commonInit = this.commonInit.bind(this);
         this.commonOnDestroy = this.commonOnDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     commonInit() {
         this.writeUserRole = this.writeUserRole.bind(this);
+        this.translate = LanguageModule.translate.bind(this, this.$ngRedux.getState());
     }
 
     commonOnDestroy() {

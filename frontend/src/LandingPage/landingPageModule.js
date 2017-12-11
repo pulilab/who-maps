@@ -1,6 +1,7 @@
 import angular from 'angular';
 import { StaticUtilities } from '../Utilities';
 import * as ProjectModule from '../store/modules/projects';
+import * as LanguageModule from '../store/modules/language';
 /* global define Promise, $compileProvider */
 
 import uiRoute from 'angular-ui-router';
@@ -22,7 +23,8 @@ function config($stateProvider, $compileProvider) {
               main: () => {
                   return su.lazyLoader($compileProvider, 'landingPageComponent');
               },
-              data: ['$ngRedux', ($ngRedux) => {
+              data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   return $ngRedux.dispatch(ProjectModule.loadUserProjects());
               }]
           }
@@ -39,7 +41,8 @@ function config($stateProvider, $compileProvider) {
               main: () => {
                   return su.lazyLoader($compileProvider, 'landingPageComponent');
               },
-              data: ['$ngRedux', ($ngRedux) => {
+              data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   return $ngRedux.dispatch(ProjectModule.loadUserProjects());
               }]
           }
