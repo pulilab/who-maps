@@ -52,7 +52,7 @@ export function loadProfile() {
         if (storage.get('login') && !state.user.profile) {
             const profileId = state.user.user_profile_id || storage.get('user_profile_id');
             let { data } = await axios.get(`/api/userprofiles/${profileId}/`);
-            data = handleProfile(data);
+            data = this.handleProfile(data);
             dispatch({ type: 'SET_PROFILE', profile: data });
         }
     };
@@ -65,7 +65,7 @@ export function doSignup({ account_type, password1, password2, email }) {
               { account_type, password1, password2, email });
             data.token = data.key;
             data.is_superuser = false;
-            storeData(data, email);
+            this.storeData(data, email);
             dispatch({ type: 'SET_USER', user: data });
             return Promise.resolve();
         }
@@ -79,9 +79,9 @@ export function doLogin({ username, password }) {
     return async dispatch => {
         try {
             const { data } = await axios.post('/api/api-token-auth/', { username, password });
-            storeData(data, username);
+            this.storeData(data, username);
             dispatch({ type: 'SET_USER', user: data });
-            await dispatch(loadProfile());
+            await dispatch(this.loadProfile());
             await dispatch(ProjectModule.loadUserProjects());
             return Promise.resolve();
         }
@@ -100,7 +100,7 @@ export function saveProfile(profile) {
         const p = Object.assign({}, profile);
         p.organisation = p.organisation.id;
         let { data } = await axios[action](url, p);
-        data = handleProfile(data);
+        data = this.handleProfile(data);
         dispatch({ type: 'SET_PROFILE', profile: data });
     };
 }
@@ -141,7 +141,7 @@ export async function verifyEmail(key) {
     return data;
 }
 export async function resetPassword(newPassword) {
-    const { data } = await axios.post('/api/rest-auth/password/reset', newPassword);
+    const { data } = await axios.post('/api/rest-auth/password/reset/', newPassword);
     return data;
 }
 
