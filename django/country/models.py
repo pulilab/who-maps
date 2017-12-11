@@ -1,5 +1,4 @@
 from django.contrib.postgres.fields.array import ArrayField
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from core.models import NameByIDMixin, ExtendedModel
 from user.models import UserProfile

@@ -4,7 +4,6 @@ import re
 
 from django.contrib.postgres.forms.array import SimpleArrayField
 from django.forms.widgets import MultiWidget, TextInput
-from django.templatetags.static import static
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -41,8 +40,7 @@ class AdminArrayFieldWidget(MultiWidget):
         output = []
         for widget in rendered_widgets:
             output.append(format_html(self.inner_html,
-                                      widget=widget,
-                                      img_src=static('admin/img/icon-no.svg')))
+                                      widget=widget))
         return '\n'.join(output)
 
     def value_from_datadict(self, data, files, name):
@@ -65,14 +63,6 @@ class AdminArrayFieldWidget(MultiWidget):
         if value is None:
             return []
         raise TypeError('Cannot handle type {}'.format(type(value).__name__))
-
-    def get_context(self, name, value, attrs):
-        context = super(AdminArrayFieldWidget, self).get_context(name, value, attrs)
-        if value:
-            context['widget']['element_count'] = len(value)
-        else:
-            context['widget']['element_count'] = 0
-        return context
 
 
 class AdminArrayField(SimpleArrayField):
