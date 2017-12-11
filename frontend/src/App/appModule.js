@@ -12,6 +12,7 @@ import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
 import * as SystemModule from '../store/modules/system';
 import * as CountriesModule from '../store/modules/countries';
+import * as LanguageModule from '../store/modules/language';
 import axios from '../plugins/axios';
 
 import _appTemplate from './app.html';
@@ -193,6 +194,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     $transitions.onSuccess({}, (t) => {
         handleStateChange('success', t.from(), t.to());
+        $ngRedux.dispatch(LanguageModule.setRoute(t.to().name));
         return Promise.resolve();
     });
 
