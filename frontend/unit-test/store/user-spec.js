@@ -1,11 +1,11 @@
 import * as UserModule from '../../src/store/modules/user';
 import * as ProjectModule from '../../src/store/modules/projects';
 import Storage from '../../src/Common/Storage';
-import { A, defaultAxiosSuccess, dispatch } from '../testUtilities';
+import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, console */
 
 describe('USER Store Module', () => {
 
@@ -46,7 +46,7 @@ describe('USER Store Module', () => {
 
         it('handleProfile', () => {
             spyOn(Storage.prototype, 'get');
-            let result = UserModule.handleProfile({ id : 1 });
+            let result = UserModule.handleProfile({ id: 1 });
             expect(result.organisation).toEqual(null);
             result = UserModule.handleProfile({ organisation: 1 });
             expect(result.organisation).toEqual({
@@ -67,7 +67,137 @@ describe('USER Store Module', () => {
 
         }));
 
+        it('loadProfile', A(async () => {
+            const spy = spyOn(Storage.prototype, 'get');
+            dispatch.calls.reset();
+
+            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            spyOn(UserModule, 'handleProfile').and.returnValue(1);
+
+            await UserModule.loadProfile()(dispatch, getState({ user: {} }));
+            expect(dispatch).not.toHaveBeenCalled();
+
+            spy.and.returnValue(true);
+
+            await UserModule.loadProfile()(dispatch, getState({ user: { profile: 1 } }));
+            expect(dispatch).not.toHaveBeenCalled();
+
+
+            await UserModule.loadProfile()(dispatch, getState({ user: { user_profile_id: 99 } }));
+            expect(axios.get).toHaveBeenCalledWith('/api/userprofiles/99/');
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
+
+            await UserModule.loadProfile()(dispatch, getState({ user: {} }));
+            expect(axios.get).toHaveBeenCalledWith('/api/userprofiles/99/');
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
+
+        }));
+
+        it('doSignup', A(async () => {
+            const spy = spyOn(axios, 'post').and.returnValue(
+              Promise.resolve({ data: { key: 'a', is_superuser: false } }));
+            spyOn(UserModule, 'storeData');
+            const signup = { account_type: 1, password1: 2, password2: 2, email: 3 };
+
+            await UserModule.doSignup(signup)(dispatch);
+
+            expect(axios.post).toHaveBeenCalledWith('/api/rest-auth/registration/', signup);
+            expect(UserModule.storeData).toHaveBeenCalledWith({ token: 'a', key: 'a', is_superuser: false }, 3);
+
+            spy.and.returnValue(Promise.reject({ response: { data: 1 } }));
+
+            try {
+                await UserModule.doSignup(signup)(dispatch);
+            }
+            catch (e) {
+                expect(e).toEqual(1);
+            }
+
+        }));
+
+        it('doLogin', A(async () => {
+            const spy = spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
+            spyOn(UserModule, 'storeData');
+            spyOn(UserModule, 'loadProfile');
+            spyOn(ProjectModule, 'loadUserProjects');
+
+            await UserModule.doLogin({ username: 1, password: 2 })(dispatch);
+            expect(axios.post).toHaveBeenCalledWith('/api/api-token-auth/', { username: 1, password: 2 });
+            expect(UserModule.storeData).toHaveBeenCalledWith(1, 1);
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_USER', user: 1 });
+            expect(UserModule.loadProfile).toHaveBeenCalled();
+
+            spy.and.returnValue(Promise.reject({ response: { data: 1 } }));
+            try {
+                await UserModule.doLogin({ username: 1, password: 2 })(dispatch);
+            }
+            catch (e) {
+                expect(e).toBe(1);
+            }
+        }));
+
+        it('saveProfile', A(async () => {
+            spyOn(Storage.prototype, 'get').and.returnValue(null);
+            spyOn(UserModule, 'handleProfile').and.returnValue(1);
+            spyOn(axios, 'put').and.returnValue(defaultAxiosSuccess);
+            spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
+            const state = { user: {} };
+
+            await UserModule.saveProfile({ organisation: { id: 1 } })(dispatch, getState(state));
+            expect(axios.post).toHaveBeenCalledWith('/api/userprofiles/', { organisation: 1 });
+            expect(UserModule.handleProfile).toHaveBeenCalledWith(1);
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
+
+            state.user.user_profile_id =  1;
+            await UserModule.saveProfile({ organisation: { id: 1 } })(dispatch, getState(state));
+            expect(axios.put).toHaveBeenCalledWith('/api/userprofiles/1/', { organisation: 1 });
+            expect(UserModule.handleProfile).toHaveBeenCalledWith(1);
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
+
+        }));
+
+        it('doLogout', () => {
+            spyOn(Storage.prototype, 'clear');
+            spyOn(console, 'warn');
+            UserModule.doLogout()(dispatch);
+            expect(Storage.prototype.clear).toHaveBeenCalled();
+            expect(dispatch).toHaveBeenCalledWith({ type: 'CLEAR_USER_PROJECTS' });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'UNSET_USER' });
+            const throwingSpy = jasmine.createSpy('faulty').and.throwError('mock error');
+            UserModule.doLogout()(throwingSpy);
+            expect(console.warn).toHaveBeenCalled();
+        });
+
+
+        it('updateTeamViewers', () => {
+            const state = {
+                user: {
+                    profile: {
+                        member: [1],
+                        viewer: [2]
+                    }
+                }
+            };
+            UserModule.updateTeamViewers([3], [4])(dispatch, getState(state));
+            expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_TEAM_VIEWER', member: [1, 3], viewer: [2, 4] });
+        });
+
+        it('verifyEmail', A(async () => {
+            spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
+            const result = await UserModule.verifyEmail('a');
+            expect(axios.post).toHaveBeenCalledWith('/api/rest-auth/registration/verify-email/', 'a');
+            expect(result).toBe(1);
+        }));
+
+        it('resetPassword', A(async () => {
+            spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
+            const result = await UserModule.resetPassword('a');
+            expect(axios.post).toHaveBeenCalledWith('/api/rest-auth/password/reset/', 'a');
+            expect(result).toBe(1);
+        }));
+
     });
+
 
     describe('REDUCERS', () => {
         it('SET_USER', () => {
@@ -84,7 +214,7 @@ describe('USER Store Module', () => {
             state = UserModule.default(state, action);
             expect(state.profile.id).toBe(1);
 
-            state.profile =  {
+            state.profile = {
                 id: 2
             };
             action = { type: 'SET_PROFILE', profile: { id: 1 } };
