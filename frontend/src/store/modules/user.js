@@ -52,7 +52,7 @@ export function loadProfile() {
         if (storage.get('login') && !state.user.profile) {
             const profileId = state.user.user_profile_id || storage.get('user_profile_id');
             let { data } = await axios.get(`/api/userprofiles/${profileId}/`);
-            data = this.handleProfile(data);
+            data = exports.handleProfile(data);
             dispatch({ type: 'SET_PROFILE', profile: data });
         }
     };
@@ -65,7 +65,7 @@ export function doSignup({ account_type, password1, password2, email }) {
               { account_type, password1, password2, email });
             data.token = data.key;
             data.is_superuser = false;
-            this.storeData(data, email);
+            exports.storeData(data, email);
             dispatch({ type: 'SET_USER', user: data });
             return Promise.resolve();
         }
@@ -79,9 +79,9 @@ export function doLogin({ username, password }) {
     return async dispatch => {
         try {
             const { data } = await axios.post('/api/api-token-auth/', { username, password });
-            this.storeData(data, username);
+            exports.storeData(data, username);
             dispatch({ type: 'SET_USER', user: data });
-            await dispatch(this.loadProfile());
+            await dispatch(exports.loadProfile());
             await dispatch(ProjectModule.loadUserProjects());
             return Promise.resolve();
         }
@@ -100,7 +100,7 @@ export function saveProfile(profile) {
         const p = Object.assign({}, profile);
         p.organisation = p.organisation.id;
         let { data } = await axios[action](url, p);
-        data = this.handleProfile(data);
+        data = exports.handleProfile(data);
         dispatch({ type: 'SET_PROFILE', profile: data });
     };
 }
@@ -151,6 +151,7 @@ export async function resetPassword(newPassword) {
 export default function user(state = {}, action) {
     switch (action.type) {
     case 'SET_USER': {
+        console.log(action)
         return { ...state, ...action.user };
     }
     case 'SET_PROFILE': {
