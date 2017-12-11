@@ -12,7 +12,7 @@
         md-open-on-focus
         name="implementation_dates"
         md-current-view="year"
-        required>
+        ng-required="vm.activateValidation">
       </md-datepicker>
       <div ng-messages="vm.implementation_dates.name.$error">
         <div ng-message="required">This is required.</div>

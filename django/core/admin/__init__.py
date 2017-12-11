@@ -6,9 +6,11 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.postgres.fields.array import ArrayField
 from rest_framework.authtoken.models import Token
 
 from user.models import UserProfile
+from .widgets import AdminArrayField
 
 
 class UserProfileInline(admin.StackedInline):
@@ -69,6 +71,13 @@ class AllObjectsAdmin(admin.ModelAdmin):
         if 'is_active' in list_display:
             return list_display
         return list_display + ['is_active']
+
+
+class ArrayFieldMixin(object):
+    formfield_overrides = {ArrayField: {'form_class': AdminArrayField}}
+
+    class Media:
+        js = ('arrayfield.js',)
 
 
 admin.site.login_form = CustomAuthenticationForm

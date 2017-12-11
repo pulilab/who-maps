@@ -56,7 +56,6 @@ class ProjectController  {
 
         const readOnlyMode = publishMode ||
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
-        // this line is to check if you are on the draft page as a viewer
         project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
         // If by any chance the project is undefined load the default project - fixes logout explosion -
@@ -87,7 +86,7 @@ class ProjectController  {
     onInit() {
         this.eventListeners();
         this.districtList = [];
-        this.activateValidation = true;
+        this.activateValidation = false;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         if (this.state.current.name === 'newProject') {
             this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
@@ -150,40 +149,52 @@ class ProjectController  {
         });
     }
 
-    async publishProject() {
+    publishProject() {
         this.clearCustomErrors();
-        if (this.form.$valid) {
-            try {
-                const data = await this.publish(this.project, this.team, this.viewers);
-                this.postPublishAction(data);
+        this.activateValidation = true;
+        this.timeout(async () => {
+            if (this.form.$valid) {
+                try {
+                    const data = await this.publish(this.project, this.team, this.viewers);
+                    this.postPublishAction(data);
+                }
+                catch (e) {
+                    this.handleResponse(e.response);
+                    this.$mdDialog.show(this.publishAlert);
+                }
             }
-            catch (e) {
-                this.handleResponse(e.response);
-                this.$mdDialog.show(this.publishAlert);
+            else {
+                await this.$mdDialog.show(this.publishAlert);
+                this.focusInvalidField();
             }
-        }
-        else {
-            await this.$mdDialog.show(this.publishAlert);
-            this.focusInvalidField();
-        }
+        });
 
     }
 
-    async saveDraftHandler() {
-        try {
-            const project = await this.saveDraft(this.project, this.team, this.viewers);
-            this.showToast('Draft updated');
-            if (this.newProject) {
-                this.state.go('editProject', { appName:  project.id }, {
-                    location: 'replace',
-                    reload: false
-                });
+    saveDraftHandler() {
+        this.clearCustomErrors();
+        this.activateValidation = false;
+        this.timeout(async () => {
+            if (this.form.$valid) {
+                try {
+                    const project = await this.saveDraft(this.project, this.team, this.viewers);
+                    this.showToast('Draft updated');
+                    if (this.newProject) {
+                        this.state.go('editProject', { appName: project.id }, {
+                            location: 'replace',
+                            reload: false
+                        });
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                    this.handleResponse(e.response);
+                }
             }
-        }
-        catch (e) {
-            console.log(e);
-            this.handleResponse(e.response);
-        }
+            else {
+                this.focusInvalidField();
+            }
+        });
     }
 
     async discardDraftHandler() {
@@ -198,9 +209,11 @@ class ProjectController  {
         }
     }
 
-    focusInvalidField() {
+    focusInvalidField(focusCountryFields) {
         this.timeout(()=>{
-            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+            const firstInvalid = focusCountryFields ?
+              document.getElementById('npf').querySelector('section-country-fields')
+              : document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
                 firstInvalid.focus();
             }
@@ -244,6 +257,10 @@ class ProjectController  {
     handleResponse(response) {
         if (response && response.status === 500) {
             console.error('500 from the API', response);
+            return;
+        }
+        if (response.custom) {
+            this.focusInvalidField();
             return;
         }
         forEach(response.data, (item, key) => {

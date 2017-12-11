@@ -182,31 +182,4 @@ describe('ImplementationOverview', () => {
         expect(r[0].subGroups[0].name).toBe('a');
         expect(r[0].subGroups[0].class).toBe('group-1');
     });
-
-    it('validateCoverage fn.', ()  => {
-        controller.project = {
-            national_level_deployment: {
-                health_workers: 1,
-                clients: 2,
-                facilities: 3
-            }
-        };
-
-        let result = controller.validateCoverage('nld', {});
-        expect(result).toBe(true);
-
-        controller.project = {};
-        result = controller.validateCoverage('nld', {});
-        expect(result).toBe(false);
-
-        const item = {
-            district: 1,
-            health_workers: 2,
-            clients: 3,
-            facilities: 4
-        };
-
-        result = controller.validateCoverage('dld', item);
-        expect(result).toBe(true);
-    });
 });
