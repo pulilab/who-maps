@@ -57,19 +57,15 @@ export async function addOrganisation(name) {
 // Reducers
 
 export default function system(state = {}, action) {
-    const s = Object.assign({}, state);
     switch (action.type) {
     case 'SET_USER_PROFILES': {
-        s.profiles = action.profiles;
-        return Object.assign(state, {}, s);
+        return { ...state, profiles: action.profiles };
     }
     case 'SET_PROJECT_SEARCH_RESULT': {
-        s.projectSearch = action.projects;
-        return Object.assign(state, {}, s);
+        return { ...state, projectSearch: action.projects };
     }
     case 'UNSET_PROJECT_SEARCH_RESULT': {
-        s.projectSearch = [];
-        return Object.assign(state, {}, s);
+        return { ...state, projectSearch: [] };
     }
     default:
         return state;

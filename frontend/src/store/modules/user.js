@@ -15,7 +15,7 @@ export const getProfile = state => {
 
 // ACTIONS
 
-const storeData = (data, email) => {
+export const storeData = (data, email) => {
     storage.set('token', data.token);
     storage.set('user_profile_id', data.user_profile_id);
     storage.set('is_superuser', data.is_superuser);
@@ -24,7 +24,7 @@ const storeData = (data, email) => {
     axios.setAuthToken(data.token);
 };
 
-const handleProfile = (data) => {
+export const handleProfile = (data) => {
     data.email = storage.get('email');
     if (data.organisation) {
         data.organisation_id = data.organisation;
@@ -149,29 +149,26 @@ export async function resetPassword(newPassword) {
 // Reducers
 
 export default function user(state = {}, action) {
-    const u = Object.assign(state, {});
     switch (action.type) {
     case 'SET_USER': {
-        return Object.assign(state, {}, action.user);
+        return { ...state, ...action.user };
     }
     case 'SET_PROFILE': {
-        u.profile = u.profile ? u.profile : {};
-        u.profile = Object.assign(u.profile, {}, action.profile);
-        return Object.assign({}, u);
+        const profile = state.profile ? { ...state.profile, ...action.profile } : { ...action.profile };
+        return { ...state, profile };
     }
     case 'UPDATE_TEAM_VIEWER': {
-        const profile = u.profile || {};
+        const profile = state.profile || {};
         profile.member = action.member;
         profile.viewer = action.viewer;
-        u.profile = profile;
-        return Object.assign({}, u);
+        return { ...state, profile };
     }
     case 'UNSET_USER': {
         return {};
     }
     case 'SET_COUNTRY': {
-        u.profile.country = action.country;
-        return Object.assign({}, u);
+        const profile = { ...state.profile, country: action.country };
+        return { ...state, profile };
     }
     default:
         return state;
