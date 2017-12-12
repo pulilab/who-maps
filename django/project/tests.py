@@ -815,6 +815,14 @@ class ProjectTests(SetupTests):
                                        approved=True)
         self.assertEqual(ma.get_queryset(request).count(), 1)
 
+    def test_project_approval_email(self):
+        c = Country.objects.get(id=self.country_id)
+        c.project_approval = True
+        c.users.add(self.user_profile_id)
+        c.save()
+        send_project_approval_digest()
+        self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
+
 
 class ProjectDraftTests(SetupTests):
 
@@ -940,14 +948,6 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']['name'], 'Proj 2')
         self.assertEqual(response.json()['draft'], response.json()['published'])
-
-    def test_project_approval_email(self):
-        c = Country.objects.get(id=self.country_id)
-        c.project_approval = True
-        c.users.add(self.user_profile_id)
-        c.save()
-        send_project_approval_digest()
-        self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
 
     def test_project_approval_admin(self):
         site = AdminSite()

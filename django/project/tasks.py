@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core import mail
 from django.template import loader
+from django.utils import timezone
 from celery.utils.log import get_task_logger
 
 from country.models import Country
@@ -15,9 +16,13 @@ def send_project_approval_digest():
     countries = Country.objects.exclude(users=None)
     for country in countries:
         if country.project_approval:
-            projects = Project.objects.filter(data__country=country.id, approval__isnull=True)
-            html_template = loader.get_template('email/project_approval_list.html')
-            html_message = html_template.render({'projects': projects})
+            projects_today = Project.objects.filter(data__country=country.id, approval__approved__isnull=True,
+                                                    created__day=timezone.now().day)
+            projects_earlier = Project.objects.filter(
+                data__country=country.id, approval__approved__isnull=True).exclude(id__in=projects_today.values('id'))
+            html_template = loader.get_template('email/status_report_inline.html')
+            html_message = html_template.render({'projects_today': projects_today,
+                                                 'projects_earlier': projects_earlier})
             mail.send_mail(
                 subject='Projects waiting for your approval',
                 message='',
