@@ -172,8 +172,7 @@ class MapsToolkitController {
 
     static mapsControllerFactory() {
         function mapsController($scope, $state, $ngRedux) {
-            const structure = require('./Resource/structure.json');
-            return new MapsToolkitController($scope, $state, $ngRedux, structure);
+            return new MapsToolkitController($scope, $state, $ngRedux);
         }
 
         mapsController.$inject = ['$scope', '$state', '$ngRedux'];
