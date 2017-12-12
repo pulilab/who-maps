@@ -37,7 +37,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           controllerAs: 'vm',
           abstract: true,
           resolve: {
-              user: ['$ngRedux', ($ngRedux) => {
+              user: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   const user =  $ngRedux.dispatch(UserModule.loadProfile());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
