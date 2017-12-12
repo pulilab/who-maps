@@ -16,7 +16,6 @@ class TopBar {
 
     commonInit() {
         this.writeUserRole = this.writeUserRole.bind(this);
-        this.translate = LanguageModule.translate.bind(this, this.$ngRedux.getState());
     }
 
     commonOnDestroy() {
@@ -24,6 +23,7 @@ class TopBar {
     }
 
     mapState(state) {
+        this.translate = LanguageModule.translate.bind(this, state);
         return {
             userModel: state.user
         };
