@@ -2,6 +2,7 @@ import min from 'lodash/min';
 import map from 'lodash/map';
 import every from 'lodash/every';
 import * as SystemModule from '../../store/modules/system';
+import * as LanguageModule from '../../store/modules/language';
 
 class SearchbarController {
 
@@ -11,11 +12,13 @@ class SearchbarController {
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.filters = filters;
         this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
     }
 
     mapState(state) {
+        this.translate = LanguageModule.translate.bind(this, state);
         return {
             projects: SystemModule.getSearchResult(state)
         };
