@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'rest_framework_expiring_authtoken',
+    'rosetta',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -227,14 +228,14 @@ if SITE_ID in [3, 4]:
         )
     }
 
-    CACHES = {
-        'default': {
-            'BACKEND': 'redis_cache.RedisCache',
-            'LOCATION': [
-                'redis:6379',
-            ],
-        }
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': [
+            'redis:6379',
+        ],
     }
+}
 
 if SITE_ID in [3]:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -280,6 +281,11 @@ LOGGING = {
 }
 
 LOGIN_URL = '/login/'
+
+ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
+LOCALE_PATHS = [
+    '/frontend/src/LandingPage',
+]
 
 for arg in sys.argv:
     if 'test' in arg:
