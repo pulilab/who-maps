@@ -1,5 +1,5 @@
 {
-  "TOP_BAR": {
+  "COUNTRY_TOP_BAR": {
     "LOGIN": "Login",
     "SIGN_UP": "Sign Up",
     "COUNTRY_VIEW_BUTTON": "Country View",
@@ -16,5 +16,10 @@
     "GET_MAPS_TOOLKIT": "Get MAPS Toolkit",
     "DHA_INTRO_TEXT": "A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions.",
     "DOWNLOAD_PDF_BUTTON": "Download Pdf"
+  },
+  "SEARCH_BAR": {
+    "SEARCH_INPUT_PLACEHOLDER": "Type and search projects...",
+    "SET_FILTERS": "Set filters:",
+    "RESULT_STATS": "Results ($$result_nr$$ out of $$total_nr$$):"
   }
 }
