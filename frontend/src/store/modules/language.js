@@ -1,18 +1,63 @@
 /* eslint-disable no-warning-comments */
 // import axios from '../../plugins/axios';
+import debounce from 'lodash/debounce';
 import testTranslation from '../../LandingPage/translation';
+
+export class TranslationError {
+    constructor() {
+        this.stateName = null;
+        this.list = [];
+    }
+    toString() {
+        return `state ${this.stateName} missing translations: \n${this.list.join('\n')}`;
+    }
+
+    add(error, stateName) {
+        if (this.stateName !== stateName) {
+            this.clear();
+            this.stateName = stateName;
+        }
+        this.addError(error);
+    }
+
+    addError(error) {
+        if (!this.list.includes(error)) {
+            this.list.push(error);
+            debounce(() => {
+                this.print();
+            }, 500)();
+        }
+    }
+    clear() {
+        this.list = [];
+    }
+
+    print() {
+        if (this.list.length > 0) {
+            console.error(this.toString());
+            this.clear();
+        }
+    }
+}
+
+const errors = new exports.TranslationError();
+
 // GETTERS
-
-
-// const placeholder = /\$\$([\s\S]+?)\$\$/g;
 
 export const translate = (state, address, params) => {
     const path = address.split('.');
     const route = exports.getCurrentRouteState(state);
-    let toCompile = state.language.translation[route];
-    path.forEach(name => {
-        toCompile = toCompile[name];
-    });
+    let toCompile = state.language.translation;
+    try {
+        toCompile = toCompile[route];
+        path.forEach(name => {
+            toCompile = toCompile[name];
+        });
+    }
+    catch (e) {
+        errors.add(address, state.language.currentState);
+    }
+    toCompile = toCompile ? toCompile : address;
     for (const p in params) {
         const item = `$$${p}$$`;
         if (toCompile.includes(item)) {
