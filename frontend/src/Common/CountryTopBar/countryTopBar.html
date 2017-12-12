@@ -1,136 +1,146 @@
 <md-toolbar class="main-toolbar toolbar-global toolbar-landing" ng-class="[vm.isScrolled, vm.pageClass, vm.logoClass]">
-    <div class="md-toolbar-tools">
-        <div class="country-logo" layout-align="">
+  <div class="md-toolbar-tools">
+    <div class="country-logo" layout-align="">
 
-            <a ui-sref="landing">
-                <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
-                <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
-            </a>
+      <a ui-sref="landing">
+        <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+        <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
+      </a>
 
-        </div>
+    </div>
 
-        <div class="supported-by" ng-show="vm.showCountryNameAndFlag"></div>
+    <div class="supported-by" ng-show="vm.showCountryNameAndFlag"></div>
 
-        <span flex ></span>
+    <span flex ></span>
 
-        <div class="current-country row" ng-if="vm.showCountryNameAndFlag">
-            <div class="country-flag">
-                <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
-            </div>
-            <div class="country-name">{{vm.countryData.name}}</div>
-        </div>
+    <div class="current-country row" ng-if="vm.showCountryNameAndFlag">
+      <div class="country-flag">
+        <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
+      </div>
+      <div class="country-name">{{vm.countryData.name}}</div>
+    </div>
 
-        <md-button class="landing-link md-primary"
-                   ui-sref-active="active"
-                   ui-sref="login"
-                   aria-label="Login"
-                   ng-show="vm.showLogin()"
-                   md-no-ink>
-            Login
-        </md-button>
+    <md-button class="landing-link md-primary"
+               ui-sref-active="active"
+               ui-sref="login"
+               aria-label="Login"
+               ng-show="vm.showLogin()"
+               md-no-ink>
+      {{vm.translate('TOP_BAR.LOGIN')}}
+    </md-button>
 
-        <md-button class="landing-link md-primary"
-                   ui-sref-active="active"
-                   ui-sref="signup"
-                   aria-label="Singup"
-                   ng-show="vm.showSignUp()"
-                   md-no-ink >
-            Sign Up
-        </md-button>
+    <md-button class="landing-link md-primary"
+               ui-sref-active="active"
+               ui-sref="signup"
+               aria-label="Singup"
+               ng-show="vm.showSignUp()"
+               md-no-ink >
+      {{vm.translate('TOP_BAR.SIGN_UP')}}
+    </md-button>
 
 
-        <md-button aria-label="Country Level View"
-                   class="view-selector"
-                   ui-sref="country"
-                   ng-show="vm.showCountryLevelViewButton()"
-                   md-no-ink>
-            <md-icon class="material-icons">public</md-icon>
-            {{vm.translate('AUTHENTICATED.TOP_BAR.COUNTRY_VIEW_BUTTON')}}
-        </md-button>
+    <md-button aria-label="Country Level View"
+               class="view-selector"
+               ui-sref="country"
+               ng-show="vm.showCountryLevelViewButton()"
+               md-no-ink>
+      <md-icon class="material-icons">public</md-icon>
+      {{vm.translate('TOP_BAR.COUNTRY_VIEW_BUTTON')}}
+    </md-button>
 
-        <md-button aria-label="Go to my Dashboard"
-                   class="view-selector"
-                   ui-sref="dashboard"
-                   ng-show="vm.showGoToMyDashboardButton()"
-                   md-no-ink>
-            <md-icon class="material-icons ">apps</md-icon>
-            {{vm.translate('AUTHENTICATED.TOP_BAR.DASHBOARD_BUTTON')}}
-        </md-button>
+    <md-button aria-label="Go to my Dashboard"
+               class="view-selector"
+               ui-sref="dashboard"
+               ng-show="vm.showGoToMyDashboardButton()"
+               md-no-ink>
+      <md-icon class="material-icons ">apps</md-icon>
+      {{vm.translate('TOP_BAR.DASHBOARD_BUTTON')}}
+    </md-button>
 
-        <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
-          <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-              <md-icon md-menu-origin class="material-icons ">person</md-icon>
+    <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
+      <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+        <md-icon md-menu-origin class="material-icons ">person</md-icon>
+      </md-button>
+
+      <md-menu-content class="user-menu" width="4">
+        <md-menu-item>
+          <div class="user-name">
+            <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
+            <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
+            <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
+          </div>
+        </md-menu-item>
+        <md-menu-item>
+          <div class="user-role">
+            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
+            <span>{{vm.translate('TOP_BAR.PERSONA_MENU.ROLE_LINE', {role_name : vm.writeUserRole()})}}</span>
+          </div>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button ui-sref="editProfile">
+            <md-icon class="material-icons">settings</md-icon>
+            {{vm.translate('TOP_BAR.EDIT_MY_PROFILE')}}
           </md-button>
-
-          <md-menu-content class="user-menu" width="4">
-            <md-menu-item>
-              <div class="user-name">
-                <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
-                <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
-                <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
-              </div>
-            </md-menu-item>
-            <md-menu-item>
-              <div class="user-role">
-                <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-                <span>{{vm.translate('AUTHENTICATED.TOP_BAR.PERSONA_MENU.ROLE_LINE', {role_name : vm.writeUserRole()})}}</span>
-              </div>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-                <md-button ui-sref="editProfile">
-                    <md-icon class="material-icons">settings</md-icon>Edit my Profile
-                </md-button>
-            </md-menu-item>
-            <md-menu-item>
-                <md-button ng-click="vm.logout()">
-                    <md-icon class="material-icons">exit_to_app</md-icon>Logout
-                </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <!-- TODO -->
-            <span class="label">Country</span>
-            <md-menu-item>
-              <div class="user-lang" layout="row" layout-align="start center">
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="vm.logout()">
+            <md-icon class="material-icons">exit_to_app</md-icon>
+            {{vm.translate('TOP_BAR.LOGOUT')}}
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <!-- TODO -->
+        <span class="label">
+              {{vm.translate('TOP_BAR.COUNTRY_SUB_TITLE')}}
+            </span>
+        <md-menu-item>
+          <div class="user-lang" layout="row" layout-align="start center">
                 <span class="country-flag">
                     <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
                 </span>
-                <span class="country-label">Countryname</span>
-              </div>
-            </md-menu-item>
-            <span class="label">Site language</span>
-            <md-menu-item>
-              <div class="user-lang" layout="row" layout-align="start center">
+            <span class="country-label">Countryname</span>
+          </div>
+        </md-menu-item>
+        <span class="label">
+               {{vm.translate('TOP_BAR.SITE_LANGUAGE_SUB_TITLE')}}
+            </span>
+        <md-menu-item>
+          <div class="user-lang" layout="row" layout-align="start center">
                 <span class="country-flag">
                     <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
                 </span>
-                <span class="country-label">Sitelanguage</span>
-              </div>
-            </md-menu-item>
-            <!-- -->
-          </md-menu-content>
-        </md-menu>
+            <span class="country-label">Sitelanguage</span>
+          </div>
+        </md-menu-item>
+        <!-- -->
+      </md-menu-content>
+    </md-menu>
 
-        <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
-                   aria-label="Add new project"
-                   ng-show="vm.showNewProjectButton()"
-                   md-no-ink>
-            <md-icon class="material-icons">add</md-icon>
-            New Project
-        </md-button>
+    <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
+               aria-label="Add new project"
+               ng-show="vm.showNewProjectButton()"
+               md-no-ink>
+      <md-icon class="material-icons">add</md-icon>
+      {{vm.translate('TOP_BAR.NEW_PROJECT')}}
+    </md-button>
+  </div>
+  <div class="md-toolbar-tools-bottom">
+    <h3>
+      {{vm.translate('TOP_BAR.GET_MAPS_TOOLKIT')}}
+    </h3>
+    <div class="dl-note">
+      <p>
+        {{vm.translate('TOP_BAR.DHA_INTRO_TEXT')}}
+      </p>
     </div>
-    <div class="md-toolbar-tools-bottom">
-        <h3>Get MAPS Toolkit</h3>
-        <div class="dl-note">
-            <p>A WHO toolkit for measuring and facilitating scale-up <br> and national institutionalization of digital health solutions.</p>
-        </div>
-        <md-button class="dl-maps-link md-raised md-primary"
-                   href="/static/documents/maps_toolkit_eng.pdf"
-                   download="Maps Toolkit.pdf"
-                   target="_blank"
-                   aria-label="Download MAPS Toolkit">
-            <md-icon class="material-icons">cloud_download</md-icon>
-            Download Pdf
-        </md-button>
-    </div>
+    <md-button class="dl-maps-link md-raised md-primary"
+               href="/static/documents/maps_toolkit_eng.pdf"
+               download="Maps Toolkit.pdf"
+               target="_blank"
+               aria-label="Download MAPS Toolkit">
+      <md-icon class="material-icons">cloud_download</md-icon>
+      {{vm.translate('TOP_BAR.DOWNLOAD_PDF_BUTTON')}}
+    </md-button>
+  </div>
 </md-toolbar>

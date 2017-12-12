@@ -1,16 +1,20 @@
 {
-  "AUTHENTICATED": {
-    "TOP_BAR": {
-      "COUNTRY_VIEW_BUTTON": "Country View",
-      "DASHBOARD_BUTTON": "Dashboard",
-      "NEW_PROJECT_BUTTON": "New Project",
-      "PERSONA_MENU": {
-        "ROLE_LINE": "Role: $$role_name$$",
-        "EDIT_MY_PROFILE": "Edit my Profile",
-        "LOGOUT": "Logout",
-        "COUNTRY_SUB_TITLE": "Country",
-        "SITE_LANGUAGE_SUB_TITLE": "Site Language"
-      }
-    }
+  "TOP_BAR": {
+    "LOGIN": "Login",
+    "SIGN_UP": "Sign Up",
+    "COUNTRY_VIEW_BUTTON": "Country View",
+    "DASHBOARD_BUTTON": "Dashboard",
+    "NEW_PROJECT_BUTTON": "New Project",
+    "PERSONA_MENU": {
+      "ROLE_LINE": "Role: $$role_name$$",
+      "EDIT_MY_PROFILE": "Edit my Profile",
+      "LOGOUT": "Logout",
+      "COUNTRY_SUB_TITLE": "Country",
+      "SITE_LANGUAGE_SUB_TITLE": "Site Language"
+    },
+    "NEW_PROJECT": "New Project",
+    "GET_MAPS_TOOLKIT": "Get MAPS Toolkit",
+    "DHA_INTRO_TEXT": "A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions.",
+    "DOWNLOAD_PDF_BUTTON": "Download Pdf"
   }
 }
