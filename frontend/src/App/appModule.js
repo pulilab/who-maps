@@ -226,7 +226,6 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         if (!processingAuth) {
             processingAuth = true;
             const token = storage.get('token');
-            storage.clear();
             const mainUi = window.document.querySelector('ui-view');
             mainUi.style.display = 'none';
             const message = token ? 'You session has expired, please login again.' :

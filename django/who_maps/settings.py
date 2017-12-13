@@ -176,7 +176,8 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }
 
-EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
+# EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
+EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(minutes=1)
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False

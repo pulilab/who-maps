@@ -5,6 +5,9 @@ const instance = axios.create();
 instance.setAuthToken = (token) => {
     instance.defaults.headers.common.Authorization = `Token ${token}`;
 };
+instance.unSetAuthToken = () => {
+    instance.defaults.headers.common.Authorization = null;
+};
 
 instance.setShowPopUp = handler => {
     instance.popUpFunction = handler;
