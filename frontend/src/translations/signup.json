@@ -1,0 +1,28 @@
+{
+  "SIGNUP_MODULE": {
+    "TITLE": "Sign up",
+    "HEADLINE": "Whether you are an implementer, government, or financial investor, or technologist, sign up below.",
+    "STEP_ONE_ROLE_SELECT": "1. Select your role",
+    "IMPLEMENTER_ROLE": "Implementer or Technologist",
+    "IMPLEMENTER_ROLE_DESCRIPTION": "How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation.",
+    "INVESTOR_ROLE": "Financial Investor",
+    "INVESTOR_ROLE_DESCRIPTION": "What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio.",
+    "GOVERNMENT_ROLE": "Government",
+    "GOVERNMENT_ROLE_DESCRIPTION": "Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country.",
+    "GO_TO_NEXT_STEP": "Go to next step",
+    "STEP_TWO_FORM": "2. Fill out the form below",
+    "EMAIL_INPUT_LABEL": "Email address",
+    "PASSWORD_INPUT_LABEL": "Password",
+    "PASSWORD2_INPUT_LABEL": "Password (Again)",
+    "LOGIN_QUESTION": "Already signed up?",
+    "LOGIN_LINK": "Login here",
+    "SIGNUP_BUTTON": "Sign up now",
+    "CONGRATULATIONS_TITLE": "Congratulations!",
+    "CONGRATULATIONS_MESSAGE": "Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds..."
+  },
+  "DISCLAIMER_MODULE": {
+    "CALL_OUT": "Disclaimer:",
+    "MAIN_TEXT": "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.",
+    "TERMS_OF_USE_LINK": "Terms of use"
+  }
+}

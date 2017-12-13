@@ -2,6 +2,8 @@
 // import axios from '../../plugins/axios';
 import debounce from 'lodash/debounce';
 import landingPage from '../../translations/landingPage';
+import dashboardPage from '../../translations/dashboard';
+import singupPage from '../../translations/signup';
 import errorMessagesTranslation from '../../translations/errorMessages';
 
 export class TranslationError {
@@ -84,7 +86,9 @@ export function loadTranslations() {
     return dispatch => {
         const translation = {
             landing: landingPage,
-            errors: errorMessagesTranslation
+            dashboard: dashboardPage,
+            errors: errorMessagesTranslation,
+            signup: singupPage
         };
         dispatch({ type: 'SET_TRANSLATION', translation });
     };
