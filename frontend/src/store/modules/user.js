@@ -108,6 +108,7 @@ export function saveProfile(profile) {
 export function doLogout() {
     return dispatch => {
         storage.clear();
+        axios.unSetAuthToken();
         try {
             dispatch({ type: 'CLEAR_USER_PROJECTS' });
         }

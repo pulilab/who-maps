@@ -60,13 +60,13 @@ class CountryAdmin(admin.ModelAdmin):
             fields += (
                 'name',
                 'code',
-                'user',
+                'users',
             )
         return fields
 
     def save_model(self, request, obj, form, change):
         super(CountryAdmin, self).save_model(request, obj, form, change)
-        if change and 'user' in form.changed_data and obj.user:
+        if change and 'users' in form.changed_data and obj.users:
             self._notify_user(obj)
 
     @staticmethod
@@ -79,6 +79,6 @@ class CountryAdmin(admin.ModelAdmin):
             subject="You have been selected as the Country Admin for {}".format(country.name),
             message="",
             from_email=settings.FROM_EMAIL,
-            recipient_list=[country.user.user.email],
+            recipient_list=[profile.user.email for profile in country.users.all()],
             html_message=html_message,
             fail_silently=True)
