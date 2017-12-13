@@ -47,5 +47,20 @@
     "SIGNUP_BUTTON": "Sign up now",
     "CONGRATULATIONS_TITLE": "Congratulations!",
     "CONGRATULATIONS_MESSAGE": "Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds..."
+  },
+  "MY_PROJECTS": "My Projects",
+  "NO_PROJECTS_PRESENT": "No projects have been added yet.",
+  "ADD_NEW_PROJECT_BUTTON": "Add new project",
+  "PROJECT_MODULE": {
+    "DONORS_COUNT_LABEL": "Donors",
+    "DRAFT_VERSION": "Draft",
+    "VERSION_LABEL": "Version",
+    "DRAFT_BADGE": "Draft",
+    "PUBLISHED_BADGE": "Published",
+    "APPROVED_BY_COUNTRY_BADGE": "Approved by country",
+    "VIEW_DRAFT_BUTTON": "View Draft",
+    "EDIT_DRAFT_BUTTON": "Edit Draft",
+    "VIEW_PUBLISHED_BUTTON": "View Published",
+    "GO_TO_DASHBOARD_BUTTON": "Dashboard"
   }
 }

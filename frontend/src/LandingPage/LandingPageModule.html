@@ -60,13 +60,17 @@
     </md-card>
 
     <md-card ng-if="vm.user.profile && vm.user.profile.name" class="content-main logged-in md-card" flex=60>
-      <h2 class="md-display-3">My Projects</h2>
+      <h2 class="md-display-3">
+        {{vm.translate('MY_PROJECTS')}}
+      </h2>
 
       <div class="no-projects" ng-if="vm.projects.length === 0">
-        <h5 class="md-headline">No projects have been added yet.</h5>
+        <h5 class="md-headline">
+        {{vm.translate('NO_PROJECTS_PRESENT')}}
+        </h5>
         <md-button class="md-raised md-primary" ng-click="vm.goToNewProject()">
           <md-icon class="material-icons">add</md-icon>
-          Add new project
+          {{vm.translate('ADD_NEW_PROJECT_BUTTON')}}
         </md-button>
       </div>
 
