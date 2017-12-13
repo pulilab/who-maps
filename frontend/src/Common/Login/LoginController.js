@@ -1,6 +1,7 @@
 import forEach from 'lodash/forEach';
 import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
+import * as LanguageModule from '../../store/modules/language';
 
 class LoginModuleController {
 
@@ -10,11 +11,13 @@ class LoginModuleController {
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.handleDataError = this.handleDataError.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     mapState(state) {
+        this.translate = LanguageModule.translate.bind(this, state);
         return {
             userModel: state.user
         };

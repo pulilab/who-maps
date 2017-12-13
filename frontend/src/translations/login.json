@@ -1,0 +1,17 @@
+{
+  "LOGIN_MODULE": {
+    "TITLE": "Login",
+    "EMAIL_INPUT_LABEL": "Email address",
+    "PASSWORD_INPUT_LABEL": "Password",
+    "FORGOT_PASSWORD_QUESTION": "Forgot password?",
+    "LOGIN_LINK": "Login here",
+    "LOGIN_BUTTON": "Login",
+    "CONGRATULATIONS_TITLE": "Congratulations!",
+    "CONGRATULATIONS_MESSAGE": "Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds..."
+  },
+  "DISCLAIMER_MODULE": {
+    "CALL_OUT": "Disclaimer:",
+    "MAIN_TEXT": "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.",
+    "TERMS_OF_USE_LINK": "Terms of use"
+  }
+}

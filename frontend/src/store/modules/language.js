@@ -3,7 +3,8 @@
 import debounce from 'lodash/debounce';
 import landingPage from '../../translations/landingPage';
 import dashboardPage from '../../translations/dashboard';
-import singupPage from '../../translations/signup';
+import signupPage from '../../translations/signup';
+import loginPage from '../../translations/login';
 import errorMessagesTranslation from '../../translations/errorMessages';
 
 export class TranslationError {
@@ -88,7 +89,8 @@ export function loadTranslations() {
             landing: landingPage,
             dashboard: dashboardPage,
             errors: errorMessagesTranslation,
-            signup: singupPage
+            signup: signupPage,
+            login: loginPage
         };
         dispatch({ type: 'SET_TRANSLATION', translation });
     };
