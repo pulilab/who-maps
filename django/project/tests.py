@@ -1410,6 +1410,7 @@ class TestAdmin(TestCase):
 
         ModelForm = tpa.get_form(self.request, technology_platform)
         data = {'name': technology_platform.name,
+                'name_en': technology_platform.name,
                 'is_active': technology_platform.is_active}
         form = ModelForm(data, instance=technology_platform)
 
@@ -1475,17 +1476,14 @@ class TestModelTranslations(TestCase):
         url = reverse("get-project-structure")
 
         # Getting the english version
-        # response = self.test_user_client.get(url)
-        # self.assertEqual(response.status_code, 200)
-        # self.assertEqual(response.json()['technology_platforms'][0]['name'], 'English name')
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['technology_platforms'][0]['name'], 'English name')
 
-        profile = self.user.profile
+        profile = self.user.userprofile
         profile.refresh_from_db()
         profile.language = 'fr'
         profile.save()
-
-        p = UserProfile.objects.get(id=profile.id)
-        self.assertEqual(p.language, '')
 
         # Getting the french version
         response = self.test_user_client.get(url)

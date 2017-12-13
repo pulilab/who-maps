@@ -15,4 +15,4 @@ class ExceptionLoggingMiddleware(object):
 class LanguageSelectorMiddleware(object):
     def process_view(self, request, view_func, view_args, view_kwargs):
         if request.user.is_authenticated:
-            activate(request.user.profile.language)
+            activate(request.user.userprofile.language)

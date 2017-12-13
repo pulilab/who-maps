@@ -29,7 +29,7 @@ class UserProfile(ExtendedModel):
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
