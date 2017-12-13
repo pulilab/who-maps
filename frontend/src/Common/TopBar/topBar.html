@@ -5,7 +5,9 @@
       ui-sref="landing"
       aria-label="Digital Health Atlas"
       class="app-title" md-no-ink>
-      <span>Digital Health Atlas</span>
+      <span>
+      {{vm.translate('TOP_BAR.DIGITAL_HEALTH_ATLAS')}}
+      </span>
     </md-button>
 
     <md-button aria-label="Country Level View"
@@ -15,17 +17,17 @@
                ng-show="vm.showCountryLevelViewButton()"
                md-no-ink>
       <md-icon class="material-icons">public</md-icon>
-      Country Map
+      {{vm.translate('TOP_BAR.COUNTRY_MAP_BUTTON')}}
     </md-button>
 
-     <md-button aria-label="My Projects"
+    <md-button aria-label="My Projects"
                title="My Projects"
                class="view-selector"
                ui-sref="my-projects"
                ng-show="vm.hasProfile()"
                md-no-ink>
       <md-icon class="material-icons ">toc</md-icon>
-      My Projects
+      {{vm.translate('TOP_BAR.MY_PROJECTS_BUTTON')}}
     </md-button>
 
     <md-button aria-label="Planning and Guidance"
@@ -35,17 +37,17 @@
                ng-show="vm.showPlanningAndGuidanceButton()"
                md-no-ink>
       <md-icon class="material-icons ">import_contacts</md-icon>
-      Planning &amp; Guidance
+      {{vm.translate('TOP_BAR.PLANNING_AND_GUIDANCE_BUTTON')}}
     </md-button>
 
     <thematic
       axis="vm.axis"
       domain="vm.domain"
       ng-show="vm.showThematic()"
-      buttontitle="MAPS Toolkit"
+      buttontitle="{{vm.translate('TOP_BAR.THEMATIC_GUIDANCE_TITLE')}}"
       buttonclass="md-primary"
       buttonicon="help_outline"
-      buttontext="Toolkit">
+      buttontext="{{vm.translate('TOP_BAR.THEMATIC_GUIDANCE_BUTTON')}}">
     </thematic>
 
     <span flex></span>
@@ -65,7 +67,7 @@
                aria-label="Login"
                ng-show="vm.showLogin()"
                md-no-ink>
-      Login
+      {{vm.translate('TOP_BAR.LOGIN')}}
     </md-button>
 
     <md-button class="landing-link"
@@ -74,7 +76,7 @@
                aria-label="Singup"
                ng-show="vm.showSignUp()"
                md-no-ink >
-      Sign Up
+      {{vm.translate('TOP_BAR.SIGNUP')}}
     </md-button>
 
     <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
@@ -93,23 +95,27 @@
         <md-menu-item>
           <div class="user-role">
             <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-            <span>Role: {{vm.writeUserRole()}}</span>
+            <span>{{vm.translate('TOP_BAR.PERSONA_MENU.ROLE_LINE', {role_name : vm.writeUserRole()})}}</span>
           </div>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
           <md-button ui-sref="editProfile">
-            <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>Edit my Profile
+            <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>
+            {{vm.translate('TOP_BAR.PERSONA_MENU.EDIT_MY_PROFILE')}}
           </md-button>
         </md-menu-item>
         <md-menu-item>
           <md-button ng-click="vm.logout()">
-            <md-icon class="material-icons">exit_to_app</md-icon>Logout
+            <md-icon class="material-icons">exit_to_app</md-icon>
+            {{vm.translate('TOP_BAR.PERSONA_MENU.LOGOUT')}}
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <!-- TODO -->
-        <span class="label">Country</span>
+        <span class="label">
+          {{vm.translate('TOP_BAR.PERSONA_MENU.COUNTRY_SUB_TITLE')}}
+        </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
             <span class="country-flag">
@@ -118,7 +124,9 @@
             <span class="country-label">Countryname</span>
           </div>
         </md-menu-item>
-        <span class="label">Site language</span>
+        <span class="label">
+          {{vm.translate('TOP_BAR.PERSONA_MENU.SITE_LANGUAGE_SUB_TITLE')}}
+        </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
             <span class="country-flag">
@@ -136,7 +144,7 @@
                ng-show="vm.showNewProjectButton()"
                md-no-ink>
       <md-icon class="material-icons">add</md-icon>
-      New Project
+      {{vm.translate('TOP_BAR.NEW_PROJECT_BUTTON')}}
     </md-button>
 
   </div>

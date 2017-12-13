@@ -1,4 +1,28 @@
 {
+  "TOP_BAR": {
+    "DIGITAL_HEALTH_ATLAS": "Digital Health Atlas",
+    "COUNTRY_MAP_BUTTON": "Country Map",
+    "MY_PROJECTS_BUTTON": "My Projects",
+    "PLANNING_AND_GUIDANCE_BUTTON": "Planning & Guidance",
+    "THEMATIC_GUIDANCE_BUTTON": "Toolkit",
+    "THEMATIC_GUIDANCE_TITLE": "MAPS Toolkit",
+    "COUNTRY_VIEW_BUTTON": "Country View",
+    "DASHBOARD_BUTTON": "Dashboard",
+    "LOGIN": "Login",
+    "SIGN_UP": "Sign Up",
+    "NEW_PROJECT_BUTTON": "New Project",
+    "PERSONA_MENU": {
+      "ROLE_LINE": "Role: $$role_name$$",
+      "EDIT_MY_PROFILE": "Edit my Profile",
+      "LOGOUT": "Logout",
+      "COUNTRY_SUB_TITLE": "Country",
+      "SITE_LANGUAGE_SUB_TITLE": "Site Language"
+    },
+    "NEW_PROJECT": "New Project",
+    "GET_MAPS_TOOLKIT": "Get MAPS Toolkit",
+    "DHA_INTRO_TEXT": "A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions.",
+    "DOWNLOAD_PDF_BUTTON": "Download Pdf"
+  },
   "SEARCH_BAR": {
     "SEARCH_INPUT_PLACEHOLDER": "Type and search projects...",
     "SET_FILTERS": "Set filters:",
