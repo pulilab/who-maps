@@ -1,14 +1,29 @@
+import * as LanguageModule from '../../store/modules/language';
+
 class ProjectComponentController {
 
-    constructor($state) {
+    constructor($state, $ngRedux) {
         this.state = $state;
-        this.$onInit = this.initialization.bind(this);
+        this.$ngRedux = $ngRedux;
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.ondDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
     }
 
-    initialization() {
+    mapState(state) {
+        this.translate = LanguageModule.translate.bind(this, state);
+        return {};
+    }
+
+    onInit() {
+        this.unsubscribe = this.$ngRedux.connect(this.mapState, null)(this);
         if (!this.project) {
             this.project = {};
         }
+    }
+
+    ondDestroy() {
+        this.unsubscribe();
     }
 
     cardClick() {
@@ -37,11 +52,11 @@ class ProjectComponentController {
 
     static projectComponentFactory() {
         require('./ProjectComponent.scss');
-        function projectCp($state) {
-            return new ProjectComponentController($state);
+        function projectCp($state, $ngRedux) {
+            return new ProjectComponentController($state, $ngRedux);
         }
 
-        projectCp.$inject = ['$state'];
+        projectCp.$inject = ['$state', '$ngRedux'];
 
         return projectCp;
     }
