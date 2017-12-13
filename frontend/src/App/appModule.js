@@ -63,6 +63,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           template: '<app layout="column" layout-fill></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -85,6 +86,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           template: '<app layout="column" view-mode="true"></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
