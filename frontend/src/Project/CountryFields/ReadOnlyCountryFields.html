@@ -1,11 +1,11 @@
-<div class="project-section section-country-fields" md-whiteframe="2" ng-show="vm.countryFields && vm.countryFields.length > 0">
+<div class="project-section section-country-fields read-only" md-whiteframe="2" ng-show="vm.countryFields && vm.countryFields.length > 0">
+
   <div class="section-title md-title">
     5. Country fields
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
-    <div layout="column">
 
       <div class="generic-container" flex ng-repeat="field in vm.countryFields">
 
@@ -57,7 +57,7 @@
 
 
       </div>
-    </div>
 
   </div>
+
 </div>
