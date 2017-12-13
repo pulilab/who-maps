@@ -3,6 +3,7 @@ import last from 'lodash/last';
 import Clipboard from 'clipboard';
 import * as ProjectModule from '../../store/modules/projects';
 import * as UserModule from '../../store/modules/user';
+import * as LanguageModule from '../../store/modules/language';
 
 class SubBarController {
 
@@ -11,12 +12,14 @@ class SubBarController {
         this.scope = $scope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, ProjectModule)(this);
         this.navigateToProject = this.navigateToProject.bind(this);
         this.iconFunction = this.iconFunction.bind(this);
     }
 
     mapState(state) {
+        this.translate = LanguageModule.translate.bind(this, state);
         return {
             projects: ProjectModule.getPublishedProjects(state),
             userProfile: UserModule.getProfile(state),

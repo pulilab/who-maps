@@ -28,6 +28,30 @@
     "SET_FILTERS": "Set filters:",
     "RESULT_STATS": "Results ($$result_nr$$ out of $$total_nr$$):"
   },
+  "SUB_BAR": {
+    "PUBLIC_ID_LABEL": "UUID",
+    "VERSION_LABEL": "Version",
+    "DRAFT_VERSION_LABEL": "Draft",
+    "ORGANISATION_LABEL": "Organisation",
+    "CONTACT_PERSON_LABEL": "Contact Person",
+    "EMAIL_LABEL": "EMAIL",
+    "DASHBOARD_BUTTON": "Dashboard",
+    "DASHBOARD_BUTTON_TOOLTIP": "GO TO DASHBOARD",
+    "EDIT_PROJECT_BUTTON": "Edit Project",
+    "EDIT_PROJECT_BUTTON_TOOLTIP": "EDIT PROJECT DETAILS",
+    "MAPS_TOOLKIT_BUTTON_AS_MEMBER": "Update Score",
+    "MAPS_TOOLKIT_BUTTON_AS_VIEWER": "Visualize Score",
+    "MAPS_TOOLKIT_BUTTON_TOOLTIP": "GO TO MAPS TOOLKIT",
+    "SCORE_BUTTON": "Summary Score",
+    "SCORE_BUTTON_TOOLTIP": "SHOW SCORE SUMMARY",
+    "SHARE_LINK_MODULE": {
+      "SHARE_PUBLIC_LINK_BUTTON": "Share Public Link",
+      "SHARE_PUBLIC_LINK_TEXT": "Share Public Link",
+      "COPY_URL_BUTTON": "Copy URL",
+      "COPIED_CONFIRMATION": "Copied",
+      "CLOSE_BUTTON": "Close"
+    }
+  },
   "DISCLAIMER_MODULE": {
     "CALL_OUT": "Disclaimer:",
     "MAIN_TEXT": "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.",
