@@ -1,6 +1,8 @@
 import copy
 from datetime import datetime
 
+from django.utils.translation import override
+
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
@@ -1416,3 +1418,76 @@ class TestAdmin(TestCase):
         tpa.save_form(self.request, form, True)
 
         self.assertEqual(len(mail.outbox), initial_email_count)
+
+
+class TestModelTranslations(TestCase):
+    def setUp(self):
+        # Create a test user with profile.
+        url = reverse('rest_register')
+        data = {
+            'email': 'test_user@gmail.com',
+            'password1': '123456',
+            'password2': '123456'}
+        self.client.post(url, data)
+
+        # Validate the account.
+        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
+        url = reverse('rest_verify_email')
+        data = {
+            'key': key,
+        }
+        self.client.post(url, data)
+
+        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
+        url = reverse('rest_verify_email')
+        data = {
+            'key': key,
+        }
+        self.client.post(url, data)
+
+        # Log in the user.
+        data = {
+            'username': 'test_user@gmail.com',
+            'password': '123456'}
+        response = self.client.post(reverse('api_token_auth'), data)
+        self.test_user_key = response.json().get('token')
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION='Token {}'.format(self.test_user_key), format='json')
+        user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
+        self.user = user_profile.user
+
+        self.platform = TechnologyPlatform.objects.create(name='Test platform')
+        self.platform.name_en = 'English name'
+        self.platform.name_fr = 'French name'
+        self.platform.save()
+
+    def test_model_translations(self):
+        self.assertEqual(self.platform.name, 'English name')
+
+        with override('en'):
+            self.assertEqual(self.platform.name, 'English name')
+
+        with override('fr'):
+            self.assertEqual(self.platform.name, 'French name')
+
+    def test_translation_through_api(self):
+        TechnologyPlatform.objects.exclude(id=self.platform.id).delete()
+
+        url = reverse("get-project-structure")
+
+        # Getting the english version
+        # response = self.test_user_client.get(url)
+        # self.assertEqual(response.status_code, 200)
+        # self.assertEqual(response.json()['technology_platforms'][0]['name'], 'English name')
+
+        profile = self.user.profile
+        profile.refresh_from_db()
+        profile.language = 'fr'
+        profile.save()
+
+        p = UserProfile.objects.get(id=profile.id)
+        self.assertEqual(p.language, '')
+
+        # Getting the french version
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['technology_platforms'][0]['name'], '')

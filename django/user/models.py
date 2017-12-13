@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 from core.models import NameByIDMixin, ExtendedModel
@@ -28,10 +29,11 @@ class UserProfile(ExtendedModel):
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""

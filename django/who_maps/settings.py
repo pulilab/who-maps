@@ -22,6 +22,8 @@ ALLOWED_HOSTS = ['.localhost', '.dev.whomaps.pulilab.com', '*']
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,6 +63,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.LanguageSelectorMiddleware',
     'core.middleware.ExceptionLoggingMiddleware',
 ]
 
@@ -127,7 +130,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+gettext = lambda s: s # noqa
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('fr', gettext('French')),
+    ('es', gettext('French')),
+    ('pt', gettext('French')),
+)
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
