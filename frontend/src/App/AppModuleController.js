@@ -1,21 +1,14 @@
 import * as SystemModule from '../store/modules/system';
-import axios from '../plugins/axios';
 
 
 class AppModuleController {
 
-    constructor($state, $scope, $rootScope, $mdToast, $ngRedux, gettextCatalog) {
+    constructor($state, $scope, $rootScope, $mdToast, $ngRedux) {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.dialog = $mdToast;
         this.rootScope = $rootScope;
-        window.changeLanguage = async () => {
-            const { data } = await axios.get('/static/t.json');
-            console.log(data);
-            gettextCatalog.setStrings('en', data.catalog);
-            console.log(gettextCatalog);
-        };
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.unsubrscibe = $ngRedux.connect(this.mapState, SystemModule)(this);
@@ -71,11 +64,11 @@ class AppModuleController {
 
     static appControllerFactory() {
 
-        function appController($state, $scope, $rootScope, $mdToast, $ngRedux, gettextCatalog) {
-            return new AppModuleController($state, $scope, $rootScope, $mdToast, $ngRedux, gettextCatalog);
+        function appController($state, $scope, $rootScope, $mdToast, $ngRedux) {
+            return new AppModuleController($state, $scope, $rootScope, $mdToast, $ngRedux);
         }
 
-        appController.$inject = ['$state', '$scope', '$rootScope', '$mdToast', '$ngRedux', 'gettextCatalog'];
+        appController.$inject = ['$state', '$scope', '$rootScope', '$mdToast', '$ngRedux'];
 
         return appController;
     }

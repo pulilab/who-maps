@@ -257,6 +257,8 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     gettextCatalog.setCurrentLanguage('en');
     gettextCatalog.debug = true;
+    // TODO  remove this when done setting up the multilanguage
+    window.gettextCatalog = gettextCatalog;
 };
 
 run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux',
