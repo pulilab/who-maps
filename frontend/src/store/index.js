@@ -6,7 +6,6 @@ import system  from './modules/system';
 import cms  from './modules/cms';
 import countries  from './modules/countries';
 import toolkit  from './modules/toolkit';
-import language  from './modules/language';
 
 
 const reducers = combineReducers({
@@ -15,8 +14,7 @@ const reducers = combineReducers({
     system,
     cms,
     countries,
-    toolkit,
-    language
+    toolkit
 });
 
 const middleware = [thunk];

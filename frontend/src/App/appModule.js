@@ -7,12 +7,12 @@ import ngMessages from 'angular-messages';
 import 'angular-password';
 import angularMd from 'angular-material';
 import ngRedux from 'ng-redux';
+import angularGettext from 'angular-gettext';
 import { reducers, middleware } from '../store/index';
 import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
 import * as SystemModule from '../store/modules/system';
 import * as CountriesModule from '../store/modules/countries';
-import * as LanguageModule from '../store/modules/language';
 import axios from '../plugins/axios';
 
 import _appTemplate from './app.html';
@@ -38,7 +38,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           abstract: true,
           resolve: {
               user: ['$ngRedux', async ($ngRedux) => {
-                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   const user =  $ngRedux.dispatch(UserModule.loadProfile());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -63,7 +62,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           template: '<app layout="column" layout-fill></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
-                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -86,7 +84,6 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           template: '<app layout="column" view-mode="true"></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
-                  await $ngRedux.dispatch(LanguageModule.loadTranslations());
                   await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -183,7 +180,7 @@ function checkProfile(profile, t) {
     return Promise.resolve();
 }
 
-const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions) => {
+const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions, gettextCatalog) => {
     const tkn = storage.get('token');
     if (tkn) {
         axios.setAuthToken(tkn);
@@ -197,7 +194,6 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     $transitions.onSuccess({}, (t) => {
         handleStateChange('success', t.from(), t.to());
-        $ngRedux.dispatch(LanguageModule.setRoute(t.to().name));
         return Promise.resolve();
     });
 
@@ -258,9 +254,13 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     $ngRedux.subscribe(() => {
         $timeout(() => {$rootScope.$apply(() => {});}, 100);
     });
+
+    gettextCatalog.setCurrentLanguage('en');
+    gettextCatalog.debug = true;
 };
 
-run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux', '$timeout', '$transitions'];
+run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux',
+    '$timeout', '$transitions', 'gettextCatalog'];
 
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
@@ -276,6 +276,7 @@ angular.module('app',
         ngMessages,
         'ngPassword',
         ngRedux,
+        angularGettext,
         require('../Common/').Components,
         require('../Project/'),
         require('../Cms/'),

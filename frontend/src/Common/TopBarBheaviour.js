@@ -1,5 +1,4 @@
 import * as UserModule from '../store/modules/user';
-import * as LanguageModule from '../store/modules/language';
 
 class TopBar {
 
@@ -10,7 +9,6 @@ class TopBar {
         this.$ngRedux = $ngRedux;
         this.commonInit = this.commonInit.bind(this);
         this.commonOnDestroy = this.commonOnDestroy.bind(this);
-        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
@@ -23,7 +21,6 @@ class TopBar {
     }
 
     mapState(state) {
-        this.translate = LanguageModule.translate.bind(this, state);
         return {
             userModel: state.user
         };
@@ -58,6 +55,7 @@ class TopBar {
     showSearch() {
         return this.userModel.token;
     }
+
     showLogin() {
         return this.state.current.name !== 'login' && !this.userModel.token;
     }

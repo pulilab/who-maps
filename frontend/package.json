@@ -18,12 +18,14 @@
     "e2e-server": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver",
     "e2e-server-circleci": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver_linux",
     "e2e": "./node_modules/.bin/wdio wdio.conf.js",
-    "e2e-circleci": "./node_modules/.bin/wdio wdio_prod.conf.js"
+    "e2e-circleci": "./node_modules/.bin/wdio wdio_prod.conf.js",
+    "extract_po": "angular-gettext-cli --files './src/**/*.+(js|html)' --dest './djangojs.pot' --marker-name i18n"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "angular-gettext-cli": "^1.2.0",
     "angular-material-source": "git+https://github.com/angular/material.git",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -85,6 +87,7 @@
     "angular": "1.5.11",
     "angular-animate": "1.5.0",
     "angular-aria": "1.5.0",
+    "angular-gettext": "^2.3.10",
     "angular-material": "https://github.com/pulilab/material.git#p1.1.2",
     "angular-messages": "1.5.0",
     "angular-mocks": "1.5.5",

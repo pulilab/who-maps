@@ -1,7 +1,6 @@
 import { getSubDomain } from '../Utilities';
 import * as ProjectModule from '../store/modules/projects';
 import * as CountryModule from '../store/modules/countries';
-import * as LanguageModule from '../store/modules/language';
 
 class LandingPageModuleController {
 
@@ -18,7 +17,6 @@ class LandingPageModuleController {
     }
 
     mapState(state) {
-        this.translate = LanguageModule.translate.bind(this, state);
         return {
             user: state.user,
             projects: ProjectModule.getUserProjects(state),

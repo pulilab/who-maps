@@ -6,7 +6,7 @@
       aria-label="Digital Health Atlas"
       class="app-title" md-no-ink>
       <span>
-      {{vm.translate('TOP_BAR.DIGITAL_HEALTH_ATLAS')}}
+        <translate>Digital Health Atlas</translate>
       </span>
     </md-button>
 
@@ -17,7 +17,7 @@
                ng-show="vm.showCountryLevelViewButton()"
                md-no-ink>
       <md-icon class="material-icons">public</md-icon>
-      {{vm.translate('TOP_BAR.COUNTRY_MAP_BUTTON')}}
+      <translate>Country Map</translate>
     </md-button>
 
     <md-button aria-label="My Projects"
@@ -27,7 +27,7 @@
                ng-show="vm.hasProfile()"
                md-no-ink>
       <md-icon class="material-icons ">toc</md-icon>
-      {{vm.translate('TOP_BAR.MY_PROJECTS_BUTTON')}}
+      <translate>My Projects</translate>
     </md-button>
 
     <md-button aria-label="Planning and Guidance"
@@ -37,17 +37,17 @@
                ng-show="vm.showPlanningAndGuidanceButton()"
                md-no-ink>
       <md-icon class="material-icons ">import_contacts</md-icon>
-      {{vm.translate('TOP_BAR.PLANNING_AND_GUIDANCE_BUTTON')}}
+      <translate>Planning &amp; Guidance</translate>
     </md-button>
 
     <thematic
       axis="vm.axis"
       domain="vm.domain"
       ng-show="vm.showThematic()"
-      buttontitle="{{vm.translate('TOP_BAR.THEMATIC_GUIDANCE_TITLE')}}"
+      buttontitle="MAPS Toolkit | translate"
       buttonclass="md-primary"
       buttonicon="help_outline"
-      buttontext="{{vm.translate('TOP_BAR.THEMATIC_GUIDANCE_BUTTON')}}">
+      buttontext="Toolkit">
     </thematic>
 
     <span flex></span>
@@ -67,7 +67,7 @@
                aria-label="Login"
                ng-show="vm.showLogin()"
                md-no-ink>
-      {{vm.translate('TOP_BAR.LOGIN')}}
+      <translate>Login</translate>
     </md-button>
 
     <md-button class="landing-link"
@@ -76,7 +76,7 @@
                aria-label="Singup"
                ng-show="vm.showSignUp()"
                md-no-ink >
-      {{vm.translate('TOP_BAR.SIGN_UP')}}
+      <translate>Sign Up</translate>
     </md-button>
 
     <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
@@ -95,26 +95,28 @@
         <md-menu-item>
           <div class="user-role">
             <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-            <span>{{vm.translate('TOP_BAR.PERSONA_MENU.ROLE_LINE', {role_name : vm.writeUserRole()})}}</span>
+            <span>
+              <translate>Role: {{vm.writeUserRole()}}</translate>
+            </span>
           </div>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
           <md-button ui-sref="editProfile">
             <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>
-            {{vm.translate('TOP_BAR.PERSONA_MENU.EDIT_MY_PROFILE')}}
+            <translate> Edit my Profile</translate>
           </md-button>
         </md-menu-item>
         <md-menu-item>
           <md-button ng-click="vm.logout()">
             <md-icon class="material-icons">exit_to_app</md-icon>
-            {{vm.translate('TOP_BAR.PERSONA_MENU.LOGOUT')}}
+            <translate>Logout</translate>
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <!-- TODO -->
         <span class="label">
-          {{vm.translate('TOP_BAR.PERSONA_MENU.COUNTRY_SUB_TITLE')}}
+          <translate>Country</translate>
         </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
@@ -125,7 +127,7 @@
           </div>
         </md-menu-item>
         <span class="label">
-          {{vm.translate('TOP_BAR.PERSONA_MENU.SITE_LANGUAGE_SUB_TITLE')}}
+          <translate>Site Language</translate>
         </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
@@ -144,7 +146,7 @@
                ng-show="vm.showNewProjectButton()"
                md-no-ink>
       <md-icon class="material-icons">add</md-icon>
-      {{vm.translate('TOP_BAR.NEW_PROJECT_BUTTON')}}
+      <translate>New Project</translate>
     </md-button>
 
   </div>

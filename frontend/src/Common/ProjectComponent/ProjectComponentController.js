@@ -1,4 +1,3 @@
-import * as LanguageModule from '../../store/modules/language';
 
 class ProjectComponentController {
 
@@ -7,23 +6,16 @@ class ProjectComponentController {
         this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.ondDestroy.bind(this);
-        this.mapState = this.mapState.bind(this);
     }
 
-    mapState(state) {
-        this.translate = LanguageModule.translate.bind(this, state);
-        return {};
-    }
 
     onInit() {
-        this.unsubscribe = this.$ngRedux.connect(this.mapState, null)(this);
         if (!this.project) {
             this.project = {};
         }
     }
 
     ondDestroy() {
-        this.unsubscribe();
     }
 
     cardClick() {

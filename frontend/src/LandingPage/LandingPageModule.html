@@ -9,7 +9,9 @@
 
       <div class="welcome">
         <div class="welcome-text">
-          <h2 class="md-display-3">{{vm.translate('WELCOME_TITLE')}}</h2>
+          <h2 class="md-display-3">
+            <translate>Welcome!</translate>
+          </h2>
           <h5 class="md-headline">
             {{vm.countryData.cover_text}}
           </h5>
@@ -18,7 +20,7 @@
 
       <div class="what-is">
         <h5 class="md-headline">
-          {{vm.translate('WHY_DHA_PARAGRAPH')}}
+          <translate>Why use the Digital Health Atlas?</translate>
         </h5>
         <div class="md-block dha-feature" layout="row" layout-align="start start">
           <div class="img-wrapper" flex=auto>
@@ -26,7 +28,9 @@
           </div>
           <div flex=grow>
             <p>
-              {{vm.translate('DHA_DEMO_BOX_1')}}
+              <translate>
+                This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.
+              </translate>
             </p>
           </div>
         </div>
@@ -36,7 +40,9 @@
           </div>
           <div flex=grow>
             <p>
-              {{vm.translate('DHA_DEMO_BOX_2')}}
+              <translate>
+                The Digital Health Atlas (DHA) offers governments, technologists, implementers, and donors a platform of tools and guidance to improve the use of, and planning coordination for digital information systems for health.
+              </translate>
             </p>
           </div>
         </div>
@@ -46,7 +52,9 @@
           </div>
           <div flex=grow>
             <p>
-              {{vm.translate('DHA_DEMO_BOX_3')}}
+              <translate>
+                The DHA facilitates implementers to assess the maturity of their digital health implementations, gain personalized guidance, benefit from other’s implementation experiences, and gain access to global resources from leading technical institutions.
+              </translate>
             </p>
           </div>
         </div>
@@ -61,16 +69,22 @@
 
     <md-card ng-if="vm.user.profile && vm.user.profile.name" class="content-main logged-in md-card" flex=60>
       <h2 class="md-display-3">
-        {{vm.translate('MY_PROJECTS')}}
+        <translate>
+          My Projects
+        </translate>
       </h2>
 
       <div class="no-projects" ng-if="vm.projects.length === 0">
         <h5 class="md-headline">
-        {{vm.translate('NO_PROJECTS_PRESENT')}}
+          <translate>
+            No projects have been added yet.
+          </translate>
         </h5>
         <md-button class="md-raised md-primary" ng-click="vm.goToNewProject()">
           <md-icon class="material-icons">add</md-icon>
-          {{vm.translate('ADD_NEW_PROJECT_BUTTON')}}
+          <translate>
+            Add new project
+          </translate>
         </md-button>
       </div>
 

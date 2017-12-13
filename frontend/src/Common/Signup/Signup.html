@@ -1,7 +1,7 @@
 <div class="signup-wrapper" layout="column" layout-align="start center" ng-style="vm.style" ng-if="!vm.landingPage">
   <div class="page-title">
     <h1 class="md-display-1 text-center">
-      {{vm.translate('SIGNUP_MODULE.TITLE')}}
+      <translate>Sign Up</translate>
     </h1>
     <!-- <h6>Subtitle if needed</h6> -->
   </div>
@@ -11,77 +11,77 @@
       <form layout="column" name="signupForm" ng-submit="vm.signup(signupForm)" novalidate ng-hide="vm.registered">
         <div layout="column" class="role-form">
           <h4>
-            {{vm.translate('SIGNUP_MODULE.STEP_ONE_ROLE_SELECT')}}
+            <translate>1. Select your role</translate>
           </h4>
           <md-radio-group ng-model="vm.register.account_type">
             <md-radio-button value="I" ng-selected="true" class="md-primary">
               <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
-              {{vm.translate('SIGNUP_MODULE.IMPLEMENTER_ROLE')}}
+              <translate>Implementer or Technologist</translate>
             </md-radio-button>
             <p class="md-small">
-              {{vm.translate('SIGNUP_MODULE.IMPLEMENTER_ROLE_DESCRIPTION')}}
+              <translate>How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation.</translate>
             </p>
             <md-radio-button value="D" class="md-primary">
               <img src="./images/icon-role-investor.svg" alt="" class="img-role">
-              {{vm.translate('SIGNUP_MODULE.INVESTOR_ROLE')}}
+              <translate>Financial Investor</translate>
             </md-radio-button>
             <p class="md-small">
-              {{vm.translate('SIGNUP_MODULE.INVESTOR_ROLE_DESCRIPTION')}}
+              <translate>What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio.</translate>
             </p>
             <md-radio-button value="G" class="md-primary">
               <img src="./images/icon-role-government.svg" alt="" class="img-role">
-              {{vm.translate('SIGNUP_MODULE.GOVERNMENT_ROLE')}}
+              <translate>Government</translate>
             </md-radio-button>
             <p class="md-small">
-              {{vm.translate('SIGNUP_MODULE.GOVERNMENT_ROLE_DESCRIPTION')}}
+              <translate>Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country.</translate>
             </p>
           </md-radio-group>
         </div>
         <div layout="column" class="main-form">
           <h4>
-            {{vm.translate('SIGNUP_MODULE.STEP_TWO_FORM')}}
+            <translate>(2. Fill out the form below</translate>
           </h4>
           <md-input-container class="md-block">
             <label>
-              {{vm.translate('SIGNUP_MODULE.EMAIL_INPUT_LABEL')}}
+              <translate>Email address</translate>
             </label>
             <input ng-model="vm.register.email" required name="email" type="email" ng-change="vm.handleCustomError(signupForm, 'email')" />
             <div ng-messages="signupForm.email.$error">
               <div ng-message="required">
-                {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+                <translate>This is required</translate>
               </div>
               <div ng-message="email">
-                {{vm.translate('ERROR_MESSAGES.EMAIL')}}
+                <translate>This should be a valid email</translate>
               </div>
               <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
             </div>
           </md-input-container>
           <md-input-container>
             <label>
-              {{vm.translate('SIGNUP_MODULE.PASSWORD_INPUT_LABEL')}}
+              <translate>Password}</translate>
             </label>
             <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6" ng-change="vm.handleCustomError(signupForm, 'password1')"/>
             <div ng-messages="signupForm.password1.$error" >
               <div ng-message="required">
-                {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+                <translate>This is required</translate>
               </div>
               <div ng-message="minlength">
-                {{vm.translate('ERROR_MESSAGES.MIN_LENGTH')}}
+                <translate>This need to be at least 6 chars</translate>
               </div>
               <div ng-message="custom" ng-repeat="error in signupForm.password1.customError">{{error}} </div>
             </div>
           </md-input-container>
           <md-input-container>
             <label>
-              {{vm.translate('SIGNUP_MODULE.PASSWORD2_INPUT_LABEL')}}
+              <translate>Password (Again)</translate>
             </label>
             <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" ng-change="vm.handleCustomError(signupForm, 'password2')" />
             <div ng-messages="signupForm.password2.$error">
               <div ng-message="required">
-                {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+                <translate>This is required</translate>
               </div>
               <div ng-message="passwordMatch">
-                {{vm.translate('ERROR_MESSAGES.PASSWORD_MATCH')}}
+                <translate>Your passwords do not match.</translate>
               </div>
               <div ng-message="custom" ng-repeat="error in signupForm.password2.customError">{{error}} </div>
             </div>
@@ -92,15 +92,15 @@
           <div layout="row" layout-align="start">
             <div flex="auto" class="login-back">
               <small>
-                {{vm.translate('SIGNUP_MODULE.LOGIN_QUESTION')}}
+                <translate>Already signed up?</translate>
                 <a ui-sref="login">
-                  {{vm.translate('SIGNUP_MODULE.LOGIN_LINK')}}
+                  <translate>Login here</translate>
                 </a>
               </small>
             </div>
             <div flex="grow" layout="column" layout-align="center end">
               <md-button ng-hide="vm.inProgress" class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
-                {{vm.translate('SIGNUP_MODULE.SIGNUP_BUTTON')}}
+                <translate>Sign up now</translate>
               </md-button>
 
               <md-progress-circular ng-show="vm.inProgress" md-mode="indeterminate"></md-progress-circular>
@@ -111,10 +111,10 @@
       <div layout="column" class="form-success" ng-show="vm.registered">
         <i class="material-icons">check_circle</i>
         <h4>
-          {{vm.translate('SIGNUP_MODULE.CONGRATULATIONS_TITLE')}}
+          <translate>Go to next step</translate>
         </h4>
         <p class="text-center">
-          {{vm.translate('SIGNUP_MODULE.CONGRATULATIONS_MESSAGE')}}
+          <translate>Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds...</translate>
         </p>
       </div>
     </md-content>
@@ -125,98 +125,108 @@
 
 <div ng-if="vm.landingPage" class="landing-page" ng-style="vm.style" >
   <h2 class="md-display-3">
-    {{vm.translate('SIGNUP_MODULE.TITLE')}}
+    <translate>Sign up</translate>
   </h2>
   <h5 class="md-headline" id="scroll-to-head">
-    {{vm.translate('SIGNUP_MODULE.HEADLINE')}}
+    <translate>Whether you are an implementer, government, or financial investor, or technologist, sign up below.</translate>
   </h5>
 
   <form name="signupForm" ng-submit="vm.signup(signupForm)"  novalidate ng-hide="vm.registered" >
     <div layout="column" class="role-form" ng-class="{'hidden' : vm.hideMainForm}">
-      <h4>{{vm.translate('SIGNUP_MODULE.STEP_ONE_ROLE_SELECT')}}</h4>
+      <h4>
+        <translate>1. Select your role</translate>
+      </h4>
       <md-radio-group ng-model="vm.register.account_type">
         <md-radio-button value="I" ng-selected="true" class="md-primary">
           <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
-          {{vm.translate('SIGNUP_MODULE.IMPLEMENTER_ROLE')}}
+          <translate>Implementer or Technologist</translate>
         </md-radio-button>
         <p>
-        {{vm.translate('SIGNUP_MODULE.IMPLEMENTER_ROLE_DESCRIPTION')}}
+          <translate>
+            How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation.
+          </translate>
         </p>
         <md-radio-button value="D" class="md-primary">
           <img src="./images/icon-role-investor.svg" alt="" class="img-role">
-          {{vm.translate('SIGNUP_MODULE.INVESTOR_ROLE')}}
+          <translate>Financial Investor</translate>
         </md-radio-button>
         <p>
-          {{vm.translate('SIGNUP_MODULE.INVESTOR_ROLE_DESCRIPTION')}}
+          <translate>
+            What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio.
+          </translate>
         </p>
         <md-radio-button value="G" class="md-primary">
           <img src="./images/icon-role-government.svg" alt="" class="img-role">
-          {{vm.translate('SIGNUP_MODULE.GOVERNMENT_ROLE')}}
+          <translate>Government</translate>
         </md-radio-button>
         <p>
-          {{vm.translate('SIGNUP_MODULE.GOVERNMENT_ROLE_DESCRIPTION')}}
+          <translate>
+            Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country.
+          </translate>
         </p>
       </md-radio-group>
 
       <div class="form-actions" layout=row layout-align=end>
         <md-button class="md-raised md-primary" type="submit" ng-click="vm.nextStep()">
-          {{vm.translate('SIGNUP_MODULE.GO_TO_NEXT_STEP')}}
+          <translate>('SIGNUP_MODULE.GO_TO_NEXT_STEP')}}</translate>
           <md-icon class="material-icons">arrow_forward</md-icon>
         </md-button>
       </div>
     </div>
     <div layout="column" class="main-form next-step" ng-class="{'hidden' : !vm.hideMainForm}">
       <h4>
-        {{vm.translate('SIGNUP_MODULE.STEP_TWO_FORM')}}
+        <translate>
+          Go to next step
+        </translate>
       </h4>
       <md-input-container class="md-block">
         <label>
-          {{vm.translate('SIGNUP_MODULE.EMAIL_INPUT_LABEL')}}
+          <translate>Email address</translate>
         </label>
         <input ng-model="vm.register.email" required name="email" type="email" ng-change="vm.handleCustomError(signupForm, 'email')" />
         <div ng-messages="signupForm.email.$error">
           <div ng-message="required">
-            {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+            <translate>This is required</translate>
           </div>
           <div ng-message="email">
-            {{vm.translate('ERROR_MESSAGES.EMAIL')}}
+            <translate>This should be a valid email</translate>
           </div>
           <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
         </div>
       </md-input-container>
       <md-input-container>
         <label>
-          {{vm.translate('SIGNUP_MODULE.PASSWORD_INPUT_LABEL')}}
+          <translate>Password}</translate>
         </label>
         <input ng-model="vm.register.password1" type="password" name="password1" required ng-minlength="6" ng-change="vm.handleCustomError(signupForm, 'password1')"/>
         <div ng-messages="signupForm.password1.$error" >
           <div ng-message="required">
-            {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+            <translate>This is required</translate>
           </div>
           <div ng-message="minlength">
-            {{vm.translate('ERROR_MESSAGES.MIN_LENGTH')}}
+            <translate>This need to be at least 6 chars</translate>
           </div>
           <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
         </div>
       </md-input-container>
       <md-input-container>
         <label>
-          {{vm.translate('SIGNUP_MODULE.PASSWORD2_INPUT_LABEL')}}
+          <translate>Password (Again)</translate>
         </label>
         <input ng-model="vm.register.password2" type="password" name="password2" required  match-password="password1" ng-change="vm.handleCustomError(signupForm, 'password2')" />
         <div ng-messages="signupForm.password2.$error">
           <div ng-message="required">
-            {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+            <translate>This is required</translate>
           </div>
           <div ng-message="passwordMatch">
-           {{vm.translate('ERROR_MESSAGES.PASSWORD_MATCH')}}
+            <translate>Your passwords do not match.</translate>
           </div>
           <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
         </div>
       </md-input-container>
       <div class="form-actions" layout=row layout-align=end>
         <md-button ng-hide="vm.inProgress" class="md-raised md-primary" type="submit" ng-disabled="signupForm.$invalid">
-          {{vm.translate('SIGNUP_MODULE.SIGNUP_BUTTON')}}
+          <translate>Sign up now</translate>
         </md-button>
         <md-progress-circular ng-show="vm.inProgress" md-mode="indeterminate"></md-progress-circular>
       </div>
@@ -226,10 +236,10 @@
   <div layout="column" class="form-success md-whiteframe-2dp" ng-show="vm.registered">
     <i class="material-icons">check_circle</i>
     <h4>
-      {{vm.translate('SIGNUP_MODULE.CONGRATULATIONS_TITLE')}}
+      <translate>gGo to next step</translate>
     </h4>
     <p class="text-center">
-      {{vm.translate('SIGNUP_MODULE.CONGRATULATIONS_MESSAGE')}}
+      <translate>Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds...</translate>
     </p>
   </div>
 </div>

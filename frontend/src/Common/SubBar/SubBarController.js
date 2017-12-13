@@ -3,7 +3,6 @@ import last from 'lodash/last';
 import Clipboard from 'clipboard';
 import * as ProjectModule from '../../store/modules/projects';
 import * as UserModule from '../../store/modules/user';
-import * as LanguageModule from '../../store/modules/language';
 
 class SubBarController {
 
@@ -19,7 +18,6 @@ class SubBarController {
     }
 
     mapState(state) {
-        this.translate = LanguageModule.translate.bind(this, state);
         return {
             projects: ProjectModule.getPublishedProjects(state),
             userProfile: UserModule.getProfile(state),

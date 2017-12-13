@@ -1,6 +1,0 @@
-{
-  "REQUIRED": "This is required",
-  "EMAIL": "This field must be a valid email",
-  "MIN_LENGTH": "This need to be at least 6 chars",
-  "PASSWORD_MATCH": "Your passwords do not match."
-}

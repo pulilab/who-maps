@@ -10,7 +10,7 @@
             ng-model-options="{debounce: 500}"
             ng-focus="vm.showSearch = true"
             aria-label="search input field"
-            placeholder="{{vm.translate('SEARCH_BAR.SEARCH_INPUT_PLACEHOLDER')}}">
+            placeholder="{{ 'Type and search projects...' | translate}}}">
     </md-input-container>
 
     <md-button
@@ -27,7 +27,7 @@
 
         <div class="md-block filters">
           <md-subheader class="md-no-sticky">
-            {{vm.translate('SEARCH_BAR.SET_FILTERS')}}
+            <translate>Set filters:</translate>
           </md-subheader>
 
           <div>
@@ -43,7 +43,9 @@
 
         <div class="md-block results" ng-show="vm.projects && vm.projects.length > 0">
           <md-subheader class="md-no-sticky">
-             {{vm.translate('SEARCH_BAR.RESULT_STATS', {result_nr: vm.resultNr, total_nr: vm.totalNr})}}
+            <translate>
+              Results ({{vm.resultNr}} out of {{vm.totalNr}}):
+            </translate>
           </md-subheader>
 
           <project-component

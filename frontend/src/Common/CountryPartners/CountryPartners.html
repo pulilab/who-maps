@@ -10,7 +10,7 @@
     <div class="content-logos" flex="60" flex-offset="10">
       <div class="partnerscontainer">
         <h4 class="md-title">
-        {{vm.translate('COUNTRY_PARTNERS_MODULE.GLOBAL_SUPPORT_HEADLINE')}}
+        <translate>Global support to DHA</translate>
         </h4>
         <div class="partner">
           <span class="logoimg" style="background-image: url('/static/partners/who-logo.png')"></span>
@@ -28,7 +28,7 @@
 
       <div class="partnerscontainer " ng-if="vm.partners.length">
         <h4 class="md-title">
-        {{vm.translate('COUNTRY_PARTNERS_MODULE.IN_COUNTRY_SUPPORT_HEADLINE')}}
+        <translate>In-country support to DHA</translate>
         </h4>
         <div
           ng-repeat="logo in vm.partners track by $index | limitTo:4 "

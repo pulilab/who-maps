@@ -1,7 +1,7 @@
 import forEach from 'lodash/forEach';
 import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
-import * as LanguageModule from '../../store/modules/language';
+
 class SignupController {
 
     constructor($scope, $location, $anchorScroll, $ngRedux, $state) {
@@ -38,7 +38,6 @@ class SignupController {
     }
 
     mapState(state) {
-        this.translate = LanguageModule.translate.bind(this, state);
         return {
             userModel: state.user
         };

@@ -1,7 +1,7 @@
 <div class="login-wrapper" layout="column" layout-align="start center" ng-style="vm.style">
   <div class="page-title">
     <h1 class="md-display-1 text-center">
-      {{vm.translate('LOGIN_MODULE.TITLE')}}
+      <translate>Login</translate>
     </h1>
     <!-- <h6>Subtitle if needed</h6> -->
   </div>
@@ -11,27 +11,27 @@
       <form layout="column" name="vm.loginForm" ng-submit="vm.login()" novalidate>
         <md-input-container>
           <label>
-            {{vm.translate('LOGIN_MODULE.EMAIL_INPUT_LABEL')}}
+            <translate>Email address</translate>
           </label>
           <input ng-required="true" name="username" ng-model="vm.user.username" type="email" ng-change="vm.handleCustomError('username')" />
           <div ng-messages="vm.loginForm.username.$error">
             <div ng-message="required">
-              {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+              <translate>This is required</translate>
             </div>
             <div ng-message="email">
-              {{vm.translate('ERROR_MESSAGES.EMAIL')}}
+              <translate>This field must be a valid email</translate>
             </div>
             <div ng-message="custom" ng-repeat="error in vm.loginForm.username.customError">{{error}} </div>
           </div>
         </md-input-container>
         <md-input-container>
           <label>
-            {{vm.translate('LOGIN_MODULE.PASSWORD_INPUT_LABEL')}}
+            <translate>Password</translate>
           </label>
           <input ng-required="true" name="password" ng-model="vm.user.password" type="password" ng-change="vm.handleCustomError('password')"/>
           <div ng-messages="vm.loginForm.password.$error">
             <div ng-message="required">
-              {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
+              <translate>This is required</translate>
             </div>
             <div ng-message="custom" ng-repeat="error in vm.loginForm.password.customError">{{error}} </div>
           </div>
@@ -44,12 +44,12 @@
         <div layout="row" layout-align="start">
           <div flex=auto>
             <md-button class="md-gray md-small md-no-ink" ui-sref="reset">
-              {{vm.translate('LOGIN_MODULE.FORGOT_PASSWORD_QUESTION')}}
+              <translate>Forgot password?"</translate>
             </md-button>
           </div>
           <div flex=grow layout-align="end">
             <md-button type="submit" class="md-raised md-primary">
-              {{vm.translate('LOGIN_MODULE.LOGIN_BUTTON')}}
+              <translate>Login</translate>
             </md-button>
           </div>
         </div>

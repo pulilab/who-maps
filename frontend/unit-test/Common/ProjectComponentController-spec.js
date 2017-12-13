@@ -16,7 +16,6 @@ describe('ProjectComponentController', () => {
     it('should have a function that handle the initialization', () => {
         pcc.$onInit();
         expect(pcc.onInit).toHaveBeenCalled();
-        expect(pcc.$ngRedux.connect).toHaveBeenCalledWith(jasmine.any(Function), null);
     });
 
 });

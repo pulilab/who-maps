@@ -26,7 +26,7 @@
                aria-label="Login"
                ng-show="vm.showLogin()"
                md-no-ink>
-      {{vm.translate('COUNTRY_TOP_BAR.LOGIN')}}
+      <translate> Login </translate>
     </md-button>
 
     <md-button class="landing-link md-primary"
@@ -35,7 +35,7 @@
                aria-label="Singup"
                ng-show="vm.showSignUp()"
                md-no-ink >
-      {{vm.translate('COUNTRY_TOP_BAR.SIGN_UP')}}
+      <translate>Sign Up</translate>
     </md-button>
 
 
@@ -45,7 +45,7 @@
                ng-show="vm.showCountryLevelViewButton()"
                md-no-ink>
       <md-icon class="material-icons">public</md-icon>
-      {{vm.translate('COUNTRY_TOP_BAR.COUNTRY_VIEW_BUTTON')}}
+      <translate>Country View</translate>
     </md-button>
 
     <md-button aria-label="Go to my Dashboard"
@@ -54,7 +54,7 @@
                ng-show="vm.showGoToMyDashboardButton()"
                md-no-ink>
       <md-icon class="material-icons ">apps</md-icon>
-      {{vm.translate('COUNTRY_TOP_BAR.DASHBOARD_BUTTON')}}
+      <translate>Dashboard</translate>
     </md-button>
 
     <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
@@ -73,26 +73,28 @@
         <md-menu-item>
           <div class="user-role">
             <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-            <span>{{vm.translate('COUNTRY_TOP_BAR.PERSONA_MENU.ROLE_LINE', {role_name : vm.writeUserRole()})}}</span>
+            <span>
+              <translate>Role: {{vm.writeUserRole()}}</translate>
+            </span>
           </div>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
           <md-button ui-sref="editProfile">
             <md-icon class="material-icons">settings</md-icon>
-            {{vm.translate('COUNTRY_TOP_BAR.PERSONA_MENU.EDIT_MY_PROFILE')}}
+            <translate>Edit my Profile</translate>
           </md-button>
         </md-menu-item>
         <md-menu-item>
           <md-button ng-click="vm.logout()">
             <md-icon class="material-icons">exit_to_app</md-icon>
-            {{vm.translate('COUNTRY_TOP_BAR.PERSONA_MENU.LOGOUT')}}
+            <translate>Logout</translate>
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <!-- TODO -->
         <span class="label">
-              {{vm.translate('COUNTRY_TOP_BAR.PERSONA_MENU.COUNTRY_SUB_TITLE')}}
+          <translate>Country</translate>
             </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
@@ -103,7 +105,7 @@
           </div>
         </md-menu-item>
         <span class="label">
-               {{vm.translate('COUNTRY_TOP_BAR.PERSONA_MENU.SITE_LANGUAGE_SUB_TITLE')}}
+          <translate>Site Language</translate>
             </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
@@ -122,16 +124,16 @@
                ng-show="vm.showNewProjectButton()"
                md-no-ink>
       <md-icon class="material-icons">add</md-icon>
-      {{vm.translate('COUNTRY_TOP_BAR.NEW_PROJECT')}}
+      <translate>New Project</translate>
     </md-button>
   </div>
   <div class="md-toolbar-tools-bottom">
     <h3>
-      {{vm.translate('COUNTRY_TOP_BAR.GET_MAPS_TOOLKIT')}}
+      <translate>Get MAPS Toolkit</translate>
     </h3>
     <div class="dl-note">
       <p>
-        {{vm.translate('COUNTRY_TOP_BAR.DHA_INTRO_TEXT')}}
+        <translate>A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions.</translate>
       </p>
     </div>
     <md-button class="dl-maps-link md-raised md-primary"
@@ -140,7 +142,7 @@
                target="_blank"
                aria-label="Download MAPS Toolkit">
       <md-icon class="material-icons">cloud_download</md-icon>
-      {{vm.translate('COUNTRY_TOP_BAR.DOWNLOAD_PDF_BUTTON')}}
+      <translate>Download Pdf</translate>
     </md-button>
   </div>
 </md-toolbar>
