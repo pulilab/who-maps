@@ -1,0 +1,51 @@
+{
+  "COUNTRY_TOP_BAR": {
+    "LOGIN": "Login",
+    "SIGN_UP": "Sign Up",
+    "COUNTRY_VIEW_BUTTON": "Country View",
+    "DASHBOARD_BUTTON": "Dashboard",
+    "NEW_PROJECT_BUTTON": "New Project",
+    "PERSONA_MENU": {
+      "ROLE_LINE": "Role: $$role_name$$",
+      "EDIT_MY_PROFILE": "Edit my Profile",
+      "LOGOUT": "Logout",
+      "COUNTRY_SUB_TITLE": "Country",
+      "SITE_LANGUAGE_SUB_TITLE": "Site Language"
+    },
+    "NEW_PROJECT": "New Project",
+    "GET_MAPS_TOOLKIT": "Get MAPS Toolkit",
+    "DHA_INTRO_TEXT": "A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions.",
+    "DOWNLOAD_PDF_BUTTON": "Download Pdf"
+  },
+  "SEARCH_BAR": {
+    "SEARCH_INPUT_PLACEHOLDER": "Type and search projects...",
+    "SET_FILTERS": "Set filters:",
+    "RESULT_STATS": "Results ($$result_nr$$ out of $$total_nr$$):"
+  },
+  "WELCOME_TITLE": "Welcome!",
+  "WHY_DHA_PARAGRAPH": "Why use the Digital Health Atlas?",
+  "DHA_DEMO_BOX_1": "This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.",
+  "DHA_DEMO_BOX_2": "The Digital Health Atlas (DHA) offers governments, technologists, implementers, and donors a platform of tools and guidance to improve the use of, and planning coordination for digital information systems for health.",
+  "DHA_DEMO_BOX_3": "The DHA facilitates implementers to assess the maturity of their digital health implementations, gain personalized guidance, benefit from other’s implementation experiences, and gain access to global resources from leading technical institutions.",
+  "SIGNUP_MODULE": {
+    "TITLE": "Sign up",
+    "HEADLINE": "Whether you are an implementer, government, or financial investor, or technologist, sign up below.",
+    "STEP_ONE_ROLE_SELECT": "1. Select your role",
+    "IMPLEMENTER_ROLE": "Implementer or Technologist",
+    "IMPLEMENTER_ROLE_DESCRIPTION": "How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation.",
+    "INVESTOR_ROLE": "Financial Investor",
+    "INVESTOR_ROLE_DESCRIPTION": "What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio.",
+    "GOVERNMENT_ROLE": "Government",
+    "GOVERNMENT_ROLE_DESCRIPTION": "Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country.",
+    "GO_TO_NEXT_STEP": "Go to next step",
+    "STEP_TWO_FORM": "2. Fill out the form below",
+    "EMAIL_INPUT_LABEL": "Email address",
+    "PASSWORD_INPUT_LABEL": "Password",
+    "PASSWORD2_INPUT_LABEL": "Password (Again)",
+    "LOGIN_QUESTION": "Already signed up?",
+    "LOGIN_LINK": "Login here",
+    "SIGNUP_BUTTON": "Sign up now",
+    "CONGRATULATIONS_TITLE": "Congratulations!",
+    "CONGRATULATIONS_MESSAGE": "Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds..."
+  }
+}

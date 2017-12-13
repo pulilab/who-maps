@@ -1,7 +1,8 @@
 /* eslint-disable no-warning-comments */
 // import axios from '../../plugins/axios';
 import debounce from 'lodash/debounce';
-import testTranslation from '../../LandingPage/translation';
+import landingPage from '../../translations/landingPage';
+import errorMessagesTranslation from '../../translations/errorMessages';
 
 export class TranslationError {
     constructor() {
@@ -48,8 +49,10 @@ export const translate = (state, address, params) => {
     const path = address.split('.');
     const route = exports.getCurrentRouteState(state);
     let toCompile = state.language.translation;
+    const errorMessages = toCompile.errors;
     try {
         toCompile = toCompile[route];
+        toCompile.ERROR_MESSAGES = errorMessages;
         path.forEach(name => {
             toCompile = toCompile[name];
         });
@@ -80,7 +83,8 @@ export const getCurrentRouteState  = state => {
 export function loadTranslations() {
     return dispatch => {
         const translation = {
-            landing: testTranslation
+            landing: landingPage,
+            errors: errorMessagesTranslation
         };
         dispatch({ type: 'SET_TRANSLATION', translation });
     };
