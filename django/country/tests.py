@@ -659,7 +659,7 @@ class CountryAdminTests(TestCase):
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'name',
             'code',
-            'user',
+            'users',
         ))
 
     def test_superuser_can_change_every_field(self):
@@ -705,9 +705,9 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
 
         class MockForm:
-            changed_data = ['user']
+            changed_data = ['users']
 
-        country.user = user_profile
+        country.users.add(user_profile)
         ma.save_model(self.request, country, MockForm(), True)
 
         outgoing_email = mail.outbox[-1].message()
