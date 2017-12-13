@@ -62,5 +62,9 @@
     "EDIT_DRAFT_BUTTON": "Edit Draft",
     "VIEW_PUBLISHED_BUTTON": "View Published",
     "GO_TO_DASHBOARD_BUTTON": "Dashboard"
+  },
+  "COUNTRY_PARTNERS_MODULE": {
+    "GLOBAL_SUPPORT_HEADLINE": "Global support to DHA",
+    "IN_COUNTRY_SUPPORT_HEADLINE": "In-country support to DHA"
   }
 }
