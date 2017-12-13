@@ -134,22 +134,22 @@
   <form name="signupForm" ng-submit="vm.signup(signupForm)"  novalidate ng-hide="vm.registered" >
     <div layout="column" class="role-form" ng-class="{'hidden' : vm.hideMainForm}">
       <h4>{{vm.translate('SIGNUP_MODULE.STEP_ONE_ROLE_SELECT')}}</h4>
-      <md-radio-group ng-model="vm.register.role">
-        <md-radio-button value="1" ng-selected="true" class="md-primary">
+      <md-radio-group ng-model="vm.register.account_type">
+        <md-radio-button value="I" ng-selected="true" class="md-primary">
           <img src="./images/icon-role-implementer.svg" alt="" class="img-role">
           {{vm.translate('SIGNUP_MODULE.IMPLEMENTER_ROLE')}}
         </md-radio-button>
         <p>
         {{vm.translate('SIGNUP_MODULE.IMPLEMENTER_ROLE_DESCRIPTION')}}
         </p>
-        <md-radio-button value="2" class="md-primary">
+        <md-radio-button value="D" class="md-primary">
           <img src="./images/icon-role-investor.svg" alt="" class="img-role">
           {{vm.translate('SIGNUP_MODULE.INVESTOR_ROLE')}}
         </md-radio-button>
         <p>
           {{vm.translate('SIGNUP_MODULE.INVESTOR_ROLE_DESCRIPTION')}}
         </p>
-        <md-radio-button value="3" class="md-primary">
+        <md-radio-button value="G" class="md-primary">
           <img src="./images/icon-role-government.svg" alt="" class="img-role">
           {{vm.translate('SIGNUP_MODULE.GOVERNMENT_ROLE')}}
         </md-radio-button>
@@ -208,7 +208,9 @@
           <div ng-message="required">
             {{vm.translate('ERROR_MESSAGES.REQUIRED')}}
           </div>
-          <div ng-message="passwordMatch">Your passwords do not match.</div>
+          <div ng-message="passwordMatch">
+           {{vm.translate('ERROR_MESSAGES.PASSWORD_MATCH')}}
+          </div>
           <div ng-message="custom" ng-repeat="error in signupForm.email.customError">{{error}} </div>
         </div>
       </md-input-container>
