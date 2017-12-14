@@ -37,6 +37,7 @@ class SetupTests(APITestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201, response.json())
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -45,6 +46,7 @@ class SetupTests(APITestCase):
             "key": key,
         }
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -52,6 +54,7 @@ class SetupTests(APITestCase):
             "username": "test_user@gmail.com",
             "password": "123456"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
         self.user_profile_id = response.json().get('user_profile_id')
@@ -64,6 +67,7 @@ class SetupTests(APITestCase):
             "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.put(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
         self.user_profile_id = response.json().get('id')
 
         user = UserProfile.objects.get(id=self.user_profile_id)
@@ -1429,7 +1433,8 @@ class TestModelTranslations(TestCase):
             'email': 'test_user@gmail.com',
             'password1': '123456',
             'password2': '123456'}
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201)
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
@@ -1437,20 +1442,23 @@ class TestModelTranslations(TestCase):
         data = {
             'key': key,
         }
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
 
         key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
         url = reverse('rest_verify_email')
         data = {
             'key': key,
         }
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
 
         # Log in the user.
         data = {
             'username': 'test_user@gmail.com',
             'password': '123456'}
         response = self.client.post(reverse('api_token_auth'), data)
+        self.assertEqual(response.status_code, 200)
         self.test_user_key = response.json().get('token')
         self.test_user_client = APIClient(HTTP_AUTHORIZATION='Token {}'.format(self.test_user_key), format='json')
         user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
