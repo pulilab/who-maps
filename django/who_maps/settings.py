@@ -63,7 +63,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.LanguageSelectorMiddleware',
     'core.middleware.ExceptionLoggingMiddleware',
 ]
 
@@ -237,14 +236,14 @@ if SITE_ID in [3, 4]:
         )
     }
 
-    CACHES = {
-        'default': {
-            'BACKEND': 'redis_cache.RedisCache',
-            'LOCATION': [
-                'redis:6379',
-            ],
-        }
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': [
+            'redis:6379',
+        ],
     }
+}
 
 if SITE_ID in [3]:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
