@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import QuerySet
 from django.db.models.query_utils import Q
+from modeltranslation.manager import multilingual_queryset_factory
 
 
 class GetObjectOrNoneManager(models.Manager):
@@ -60,13 +61,16 @@ class ActiveQuerySet(QuerySet):
         return self.filter(id__in=ids).only('name')
 
 
+MultilingualActiveQuerySet = multilingual_queryset_factory(ActiveQuerySet)
+
+
 class SoftDeleteModel(models.Model):
     is_active = models.BooleanField(default=True)
 
     # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
     #            as a default queryset
     all_objects = QuerySet.as_manager()
-    objects = ActiveQuerySet.as_manager()
+    objects = MultilingualActiveQuerySet.as_manager()
 
     class Meta:
         abstract = True

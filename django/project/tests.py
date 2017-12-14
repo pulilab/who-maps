@@ -155,7 +155,7 @@ class ProjectTests(SetupTests):
             # First time retrieval should create cache data
             url = reverse("get-project-structure")
             response = self.test_user_client.get(url)
-            cache_data = cache.get('project-structure-data')
+            cache_data = cache.get('project-structure-data-en')
             self.assertEqual(response.status_code, 200)
             self.assertFalse(cache_data is None)
 
@@ -169,7 +169,7 @@ class ProjectTests(SetupTests):
             # Retrieval should create cache data again
             url = reverse("get-project-structure")
             response = self.test_user_client.get(url)
-            cache_data = cache.get('project-structure-data')
+            cache_data = cache.get('project-structure-data-en')
             self.assertEqual(response.status_code, 200)
             self.assertFalse(cache_data is None)
 
@@ -1480,20 +1480,16 @@ class TestModelTranslations(TestCase):
 
     def test_translation_through_api(self):
         TechnologyPlatform.objects.exclude(id=self.platform.id).delete()
+        cache.clear()
 
-        url = reverse("get-project-structure")
+        url = reverse('get-project-structure')
 
         # Getting the english version
-        response = self.test_user_client.get(url)
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['technology_platforms'][0]['name'], 'English name')
 
-        profile = self.user.userprofile
-        profile.refresh_from_db()
-        profile.language = 'fr'
-        profile.save()
-
         # Getting the french version
-        response = self.test_user_client.get(url)
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['technology_platforms'][0]['name'], '')
+        self.assertEqual(response.json()['technology_platforms'][0]['name'], 'French name')

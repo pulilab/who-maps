@@ -4,6 +4,7 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from django.core.cache import cache
+from django.utils.translation import get_language
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
@@ -22,10 +23,11 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 def cache_structure(fn):
     def wrapper(*args, **kwargs):
-        data = cache.get('project-structure-data')
+        cache_key = 'project-structure-data-{}'.format(get_language())
+        data = cache.get(cache_key)
         if not data:
             data = fn(*args, **kwargs)
-            cache.set('project-structure-data', data)
+            cache.set(cache_key, data)
         return data
 
     return wrapper
