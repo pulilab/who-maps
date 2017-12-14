@@ -134,8 +134,8 @@ gettext = lambda s: s # noqa
 LANGUAGES = (
     ('en', gettext('English')),
     ('fr', gettext('French')),
-    ('es', gettext('French')),
-    ('pt', gettext('French')),
+    ('es', gettext('Spanish')),
+    ('pt', gettext('Portuguese')),
 )
 LANGUAGE_CODE = 'en'
 
