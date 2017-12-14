@@ -4,7 +4,6 @@ import * as CountriesModule from '../store/modules/countries';
 import * as  ToolkitModule from '../store/modules/toolkit';
 import * as  UserModule from '../store/modules/user';
 
-import commProjects from './Mocks/commProjects.js';
 import { fixUrl } from '../Utilities';
 
 class DashboardModuleController {
@@ -54,7 +53,6 @@ class DashboardModuleController {
     onInit() {
         this.watchers();
         this.projectId = this.state.params.appName;
-        this.commProjects = commProjects;
         this.resizeEvent();
         this.eventBinding();
         this.showEmpty = !this.projectId;
