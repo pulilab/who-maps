@@ -1,7 +1,7 @@
 <div class="project-section section-country-fields" md-whiteframe="2" ng-show="vm.countryFields && vm.countryFields.length > 0">
 
   <div class="section-title md-title">
-    5. Country fields
+    <translate>5. Country fields</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
@@ -25,7 +25,9 @@
                    md-select-on-focus
                    ></textarea>
             <div ng-messages="vm.form['custom' + $index].$error">
-              <div ng-message="required">This is required.</div>
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
             </div>
           </md-input-container>
         </div>
@@ -42,7 +44,9 @@
                    name="custom{{$index}}"
                    ng-model="field.answer">
             <div ng-messages="vm.form['custom' + $index].$error">
-              <div ng-message="required">This is required.</div>
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
             </div>
           </md-input-container>
         </div>
@@ -62,15 +66,17 @@
             class="md-primary"
             layout="row">
             <md-radio-button ng-value="true" aria-label="custom{{$index}}-yes">
-              Yes
+              <translate>Yes</translate>
             </md-radio-button>
             <md-radio-button ng-value="false" aria-label="custom{{$index}}-no">
-              No
+              <translate>No</translate>
             </md-radio-button>
           </md-radio-group>
           <div class="radio-error-messages">
             <div ng-messages="vm.form['custom' + $index].$error">
-              <div ng-message="required">This is required.</div>
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
             </div>
           </div>
         </div>
@@ -93,7 +99,9 @@
             </md-select>
             <div class="radio-error-messages">
               <div ng-messages="vm.form['custom' + $index].$error">
-                <div ng-message="required">This is required.</div>
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
               </div>
             </div>
           </md-input-container>
@@ -119,7 +127,9 @@
             </md-select>
             <div class="radio-error-messages">
               <div ng-messages="vm.form['custom' + $index].$error">
-                <div ng-message="required">This is required.</div>
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
               </div>
             </div>
           </md-input-container>

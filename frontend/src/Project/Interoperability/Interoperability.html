@@ -1,13 +1,15 @@
 <div class="project-section section-interoperability" md-whiteframe="2">
 
   <div class="section-title md-title">
-    4. Interoperability
+    <translate>4. Interoperability</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
 
-    <h6>Does your digital health project link to a digital HIS?</h6>
+    <h6>
+      <translate>Does your digital health project link to a digital HIS?</translate>
+    </h6>
 
     <md-input-container class="md-block error-placeholder">
       <input  name="interoperability_links" ng-model="vm.hiddenFields" aria-label="hidden">
@@ -27,7 +29,9 @@
         {{link.pre}}{{link.name}}
       </md-checkbox>
       <md-input-container class="md-icon-float md-block" flex>
-        <label>Specify URL</label>
+        <label>
+          <translate>Specify URL</translate>
+        </label>
         <md-icon><i class="material-icons">&#xE157;</i></md-icon>
         <input ng-disabled="!vm.project.interoperability_links[$index].selected"
                name="{{'interoperability_links_' + $index + '_link'}}"
@@ -36,14 +40,16 @@
                ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/">
         <div ng-messages="vm.form['interoperability_links_' + $index + '_link'].$error">
           <div ng-message="pattern">
-            Make sure your URL is valid.
+            <translate>Make sure your URL is valid.</translate>
           </div>
         </div>
       </md-input-container>
     </div>
 
     <div class="checklist small-top" >
-      <h6>What data standards does your digital health project use?</h6>
+      <h6>
+        <translate>What data standards does your digital health project use?</translate>
+      </h6>
       <md-input-container class="error-placeholder">
         <input  name="interoperability_standards" ng-model="vm.hiddenFields" aria-label="hidden">
         <div ng-messages="vm.form.interoperability_standards.$error">
