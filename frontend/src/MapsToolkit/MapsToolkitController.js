@@ -10,9 +10,10 @@ import * as ProjectModule from '../store/modules/projects';
 
 class MapsToolkitController {
 
-    constructor($scope, $state, $ngRedux) {
+    constructor($scope, $state, $ngRedux, $sce) {
         this.state = $state;
         this.scope = $scope;
+        this.$sce = $sce;
         this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
@@ -89,7 +90,7 @@ class MapsToolkitController {
                 question.answers = map(question.answers, (value, index) => {
                     let template = null;
                     if (question.answerTemplate && question.answerTemplate[index]) {
-                        template = this.templates[question.answerTemplate[index]];
+                        template = this.$sce.trustAsHtml(this.templates[question.answerTemplate[index]]);
                     }
                     this.score += value === -1 ? 0 : value;
                     return { index, value, template };
@@ -171,11 +172,11 @@ class MapsToolkitController {
 
 
     static mapsControllerFactory() {
-        function mapsController($scope, $state, $ngRedux) {
-            return new MapsToolkitController($scope, $state, $ngRedux);
+        function mapsController($scope, $state, $ngRedux, $sce) {
+            return new MapsToolkitController($scope, $state, $ngRedux, $sce,);
         }
 
-        mapsController.$inject = ['$scope', '$state', '$ngRedux'];
+        mapsController.$inject = ['$scope', '$state', '$ngRedux', '$sce'];
 
         return mapsController;
     }

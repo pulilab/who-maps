@@ -270,12 +270,26 @@ config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
 const AppComponent = require('./appComponent');
 const SystemController = require('./SystemController');
 
+angular.module('ngHtmlCompile', [])
+  .directive('ngHtmlCompile', ($compile) => {
+      return {
+          restrict: 'A',
+          link(scope, element, attrs) {
+              scope.$watch(attrs.ngHtmlCompile, (newValue) => {
+                  element.html(newValue);
+                  $compile(element.contents())(scope);
+              });
+          }
+      };
+  });
+
 angular.module('app',
     [
         uiRoute,
         angularMd,
         ngMessages,
         'ngPassword',
+        'ngHtmlCompile',
         ngRedux,
         angularGettext,
         require('../Common/').Components,
