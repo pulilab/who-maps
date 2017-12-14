@@ -11,14 +11,14 @@
         md-item-text="item.name"
         md-delay="300"
         md-min-length="2"
-        md-floating-label="Organisation name">
+        md-floating-label="{{'Organisation name'|translate}}">
       <md-item-template>
         <span md-highlight-text="vm.searchText" md-highlight-flags="^i">{{item.name}}</span>
       </md-item-template>
 
     </md-autocomplete>
     <div class="autocomplete-errors" ng-messages="vm.form.organisation.$error">
-      <div ng-message="required">This field is required</div>
-      <div ng-message="maxlength">This field has to be less than 100 characters long.</div>
+      <div ng-message="required"><translate>This field is required</translate></div>
+      <div ng-message="maxlength"><translate>This field has to be less than 100 characters long.</translate></div>
     </div>
   </div>

@@ -11,8 +11,8 @@
       <md-content class="left">
 
         <div class="headline">
-          <h6>MAPS Toolkit</h6>
-          <p>This section provides definitions and descriptions of key concepts, and highlights their relevance to scaling up and sustainability. It also includes diagrams to illustrate the conceptual framework underlying the Toolkit.</p>
+          <h6><translate>MAPS Toolkit</translate></h6>
+          <p><translate>This section provides definitions and descriptions of key concepts, and highlights their relevance to scaling up and sustainability. It also includes diagrams to illustrate the conceptual framework underlying the Toolkit.</translate></p>
         </div>
 
           <div class="axes" ng-repeat="(axisId, axis) in vm.data track by $index">
@@ -57,7 +57,7 @@
               ng-click="vm.changeSpot(+axisId - 2, +domainId)"
               ng-class="{'active-domain': domain.active}">
 
-                  <span ng-if="axisId > 1">Domain {{domain.id}}: {{domain.name}}</span>
+                  <span ng-if="axisId > 1"><translate>Domain</translate> {{domain.id}}: {{domain.name}}</span>
                   <span ng-if="axisId < 2">{{domain.name}}</span>
 
             </div>
@@ -71,7 +71,7 @@
 
             <img ng-src="{{vm.icons[+vm.axis + 2]}}">
 
-            <span ng-if="vm.axis > -1">AXIS {{+vm.axis + 1}}. - {{vm.data[+vm.axis + 2].domains[+vm.domain].name}}
+            <span ng-if="vm.axis > -1"><translate>AXIS</translate> {{+vm.axis + 1}}. - {{vm.data[+vm.axis + 2].domains[+vm.domain].name}}
             </span>
 
             <span ng-if="vm.axis < 0">{{vm.data[+vm.axis + 2].domains[+vm.domain].name}}</span>

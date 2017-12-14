@@ -13,10 +13,10 @@
                    ng-keydown="vm.searchKey($event)"
                    type="text"
                    ng-model="vm.search.text"
-                   placeholder="Search"
+                   placeholder="{{'Search'|translate}}"
             />
         </span>
-        <span class="selection-limit" ng-if="vm.limit">Maximum allowed: {{ vm.limit }}</span>
+        <span class="selection-limit" ng-if="vm.limit"><translate>Maximum allowed:</translate> {{ vm.limit }}</span>
         <div ng-repeat="group in vm.fields">
             <span ng-if="vm.subHeader" class="option-group-title">{{ group[vm.subHeader] }}</span>
             <md-option
