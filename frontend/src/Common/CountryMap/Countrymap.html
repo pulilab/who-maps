@@ -9,7 +9,7 @@
     </div>
 
     <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
-      <md-tab label="Total">
+      <md-tab label="{{'Total'|translate}}">
 
         <div class="countrychart-tooltip-main" layout="column">
 
@@ -34,12 +34,12 @@
             <div flex class="cap lh">{{key}}</div>
             <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
           </div>
-          <div class="bold lh" ng-show="!vm.activeDistrict.data">No coverage data</div>
+          <div class="bold lh" ng-show="!vm.activeDistrict.data" translate>No coverage data</div>
 
         </div>
 
       </md-tab>
-      <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+      <md-tab label="{{'Global'|translate}}" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
 
         <div class="countrychart-tooltip-main">
 
@@ -52,7 +52,7 @@
             <div flex class="cap lh">{{key}}</div>
             <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
           </div>
-          <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No national coverage</div>
+          <div class="bold lh" ng-show="!vm.nationalLevelCoverage" translate>No national coverage</div>
 
         </div>
 
@@ -70,7 +70,7 @@
 
     <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
 
-      <md-tab label="Sub-national">
+      <md-tab label="{{'Sub-national'|translate}}">
 
         <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
 
@@ -89,11 +89,11 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh no-projects" ng-show="!vm.activeDistrict.data">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.activeDistrict.data" translate>No projects available</div>
         </div>
       </md-tab>
 
-      <md-tab label="National" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+      <md-tab label="{{'National'|translate}}" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
         <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
 
           <div flex
@@ -109,7 +109,7 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh no-projects" ng-show="!vm.nationalLevelCoverage">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.nationalLevelCoverage" translate>No projects available</div>
         </div>
       </md-tab>
     </md-tabs>
