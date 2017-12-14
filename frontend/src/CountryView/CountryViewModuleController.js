@@ -9,11 +9,11 @@ import * as UserModule from '../store/modules/user';
 
 class CountryViewModuleController {
 
-    constructor($scope, $filter, $state, $ngRedux) {
+    constructor($scope, $filter, $state, $ngRedux, gettextCatalog) {
         this.scope = $scope;
         this.filter = $filter;
         this.state = $state;
-        this.pdfExport = new PDFExportController();
+        this.pdfExport = new PDFExportController(gettextCatalog);
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
@@ -275,11 +275,11 @@ class CountryViewModuleController {
     }
 
     static countryControllerFactory() {
-        function countryController($scope, $filter, $state, $ngRedux) {
-            return new CountryViewModuleController($scope, $filter, $state, $ngRedux);
+        function countryController($scope, $filter, $state, $ngRedux, gettextCatalog) {
+            return new CountryViewModuleController($scope, $filter, $state, $ngRedux, gettextCatalog);
         }
 
-        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux'];
+        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux', 'gettextCatalog'];
 
         return countryController;
     }
