@@ -142,11 +142,10 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         hsc_challenges = []
-        for hsc in HSCChallenge.objects.values('id', 'name').distinct('name'):
+        for hsc_name in HSCChallenge.objects.values_list('name', flat=True).distinct():
             hsc_challenges.append(dict(
-                id=hsc['id'],
-                name=hsc['name'],
-                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'challenge')
+                name=hsc_name,
+                challenges=HSCChallenge.objects.filter(name=hsc_name).values('id', 'challenge')
             ))
 
         return dict(
