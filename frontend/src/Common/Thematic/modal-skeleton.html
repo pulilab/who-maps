@@ -37,7 +37,8 @@
               ng-class="(+vm.axis + 2) == $index ? 'active' : ''">
 
               <span ng-if="$index > 1" flex ng-click="vm.axisClick(axis, axisId);">
-                {{'AXIS ' + ($index - 1) + '.'}}<br>
+                <translate>{{'AXIS ' + ($index - 1) + '.'}}</translate>
+                  <br>
               </span>
               <span flex ng-click="vm.axisClick(axis, axisId);">{{axis.name}}</span>
 
@@ -57,7 +58,7 @@
           ng-click="vm.changeSpot(+axisId - 2, +domainId)"
           ng-class="{'active-domain': domain.active}">
 
-          <span ng-if="axisId > 1"><translate>Domain</translate> {{domain.id}}: {{domain.name}}</span>
+          <span ng-if="axisId > 1"><translate>Domain {{domain.id}} : {{domain.name}} </translate></span>
           <span ng-if="axisId < 2">{{domain.name}}</span>
 
         </div>
@@ -82,8 +83,8 @@
       <md-content class="right-content" ng-class="'axis' + (vm.axis + 1)">
 
         <div id="help-anchor"></div>
-        <div class="axis-html" ng-bind-html="vm.templates[(vm.axis + 1) + '.html']"></div>
-        <div class="content-html" ng-bind-html="vm.templates[(vm.axis + 1) + '-' + vm.domain + '.html']"></div>
+        <div class="axis-html" ng-html-compile="vm.templates[(vm.axis + 1) + '.html']"></div>
+        <div class="content-html" ng-html-compile="vm.templates[(vm.axis + 1) + '-' + vm.domain + '.html']"></div>
 
       </md-content>
 

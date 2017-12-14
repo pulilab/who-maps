@@ -173,7 +173,7 @@ class MapsToolkitController {
 
     static mapsControllerFactory() {
         function mapsController($scope, $state, $ngRedux, $sce) {
-            return new MapsToolkitController($scope, $state, $ngRedux, $sce,);
+            return new MapsToolkitController($scope, $state, $ngRedux, $sce);
         }
 
         mapsController.$inject = ['$scope', '$state', '$ngRedux', '$sce'];
