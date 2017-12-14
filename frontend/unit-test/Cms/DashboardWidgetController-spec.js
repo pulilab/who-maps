@@ -1,5 +1,5 @@
 import DashboardWidgetController from '../../src/Cms/DashboardWidget/DashboardWidgetController';
-import { scores } from '../../src/Cms/resources/mockData';
+import { scores } from './mockData';
 import { $scope, $ngRedux } from '../testUtilities';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
