@@ -285,7 +285,7 @@ LOGIN_URL = '/login/'
 
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 LOCALE_PATHS = [
-    '/frontend/src/LandingPage',
+    os.path.join(BASE_DIR, 'translations'),
 ]
 
 for arg in sys.argv:
