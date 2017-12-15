@@ -52,10 +52,8 @@
 
     <span flex></span>
 
-    <!-- TODO -->
-    <!-- Add flags dynamically -->
     <div class="language-badge">
-      <div class="country-flag" style="background-image: url('/static/flags/af.png')">
+      <div class="country-flag" style="{{'background-image: url(' + vm.userLanguage.flag +')'}}">
       </div>
     </div>
 
@@ -114,16 +112,17 @@
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
-        <!-- TODO -->
         <span class="label">
           <translate>Country</translate>
         </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
             <span class="country-flag">
-                <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
+                <img ng-src="{{vm.userCountry.flag}}" alt="{{vm.userCountry.prettyName}}">
             </span>
-            <span class="country-label">Countryname</span>
+            <span class="country-label">
+              {{vm.userCountry.prettyName}}
+            </span>
           </div>
         </md-menu-item>
         <span class="label">
@@ -132,12 +131,13 @@
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
             <span class="country-flag">
-                <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
+                <img ng-src="{{vm.userLanguage.flag}}" alt="{{vm.userLanguage.name}}">
             </span>
-            <span class="country-label">Sitelanguage</span>
+            <span class="country-label">
+              {{vm.userLanguage.name}}
+            </span>
           </div>
         </md-menu-item>
-        <!-- -->
       </md-menu-content>
     </md-menu>
 

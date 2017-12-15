@@ -1,0 +1,24 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "name": "English",
+      "flag": "gb.png"
+    },
+    {
+      "code": "es",
+      "name": "Spanish",
+      "flag": "es.png"
+    },
+    {
+      "code": "fr",
+      "name": "French",
+      "flag": "fr.png"
+    },
+    {
+      "code": "pt",
+      "name": "Portuguese",
+      "flag": "pt.png"
+    }
+  ]
+}

@@ -44,46 +44,46 @@
 
       <div class="md-block">
         <organisation-autocomplete
-            organisation="vm.userProfile.organisation"
-            form="vm.editProfileForm">
+          organisation="vm.userProfile.organisation"
+          form="vm.editProfileForm">
         </organisation-autocomplete>
       </div>
 
       <div layout="row">
         <div class="countries" ng-class="{error: vm.checkErrors('country')}" flex="50">
           <ssmenu
-              ng-disabled="vm.editMode"
-              required
-              name="country"
-              label="{{'Country'|translate}}"
-              on-close-callback="vm.countryCloseCallback"
-              option-label="name"
-              options="vm.countriesList"
-              ng-model="vm.userProfile.country"
-              placeholder="{{'Select country from list'|translate}}">
-            </ssmenu>
+            ng-disabled="vm.editMode"
+            required
+            name="country"
+            label="{{'Country'|translate}}"
+            on-close-callback="vm.countryCloseCallback"
+            option-label="name"
+            options="vm.countriesList"
+            ng-model="vm.userProfile.country"
+            placeholder="{{'Select country from list'|translate}}">
+          </ssmenu>
           <div ng-messages="vm.editProfileForm.country.$error">
             <div ng-message="required"><translate>This is required.</translate></div>
             <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}}</div>
           </div>
         </div>
-        <div class="languages" ng-class="{error: vm.checkErrors('country')}" flex="50">
-          <ssmenu
-              ng-disabled="vm.editMode"
-              required
-              label="{{'Language'|translate}}"
-              name="language"
-              on-close-callback="vm.countryCloseCallback"
-              option-label="name"
-              options="vm.countriesList"
-              ng-model="vm.userProfile.country"
-              placeholder="{{'Select country from list'|translate}}">
-            </ssmenu>
-          <div ng-messages="vm.editProfileForm.country.$error">
-            <div ng-message="required"><translate>This is required.</translate></div>
-            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}}</div>
-          </div>
+        <div class="languages" flex="50">
+          <md-input-container class="md-block">
+            <label>
+              <translate>Site language</translate>
+            </label>
+            <md-select ng-model="vm.userProfile.language">
+               <md-option ng-value="lang.code" ng-repeat="lang in vm.languages">{{lang.name}}</md-option>
+            </md-select>
+            <div ng-messages="vm.editProfileForm.country.$error">
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
+              <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}}</div>
+            </div>
+          </md-input-container>
         </div>
+
       </div>
 
       <div layout="row" class="edit-button">

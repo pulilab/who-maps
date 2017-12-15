@@ -4,6 +4,7 @@ import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
 import { country_default_data } from '../static_data/country_static_data';
 import { isMemberOrViewer } from './projects';
+import * as UserModule from './user';
 
 const stateDefinition = {
     list: [],
@@ -30,6 +31,7 @@ export const getCountry = (state, id) => {
     return state.countries.list.find(c => c.id === id);
 };
 
+
 export const getCountriesList = state => {
     if (state.countries.list) {
         return state.countries.list.map(c=> {
@@ -41,6 +43,12 @@ export const getCountriesList = state => {
         }).sort((a, b) => a.name.localeCompare(b.name));
     }
     return [];
+};
+
+export const getUserCountry = (state) => {
+    const profile = UserModule.getProfile(state);
+    const name = profile && profile.country ? profile.country : undefined;
+    return exports.getCountriesList(state).find(c => c.name === name || c.prettyName === name);
 };
 
 export const getCountryFields = state => {
