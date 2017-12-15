@@ -1,6 +1,8 @@
 import copy
 from datetime import datetime
 
+from django.utils.translation import override
+
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
@@ -35,6 +37,7 @@ class SetupTests(APITestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201, response.json())
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -43,6 +46,7 @@ class SetupTests(APITestCase):
             "key": key,
         }
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -50,6 +54,7 @@ class SetupTests(APITestCase):
             "username": "test_user@gmail.com",
             "password": "123456"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
         self.user_profile_id = response.json().get('user_profile_id')
@@ -62,6 +67,7 @@ class SetupTests(APITestCase):
             "organisation": self.org.id,
             "country": "test_country"}
         response = self.test_user_client.put(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
         self.user_profile_id = response.json().get('id')
 
         user = UserProfile.objects.get(id=self.user_profile_id)
@@ -149,7 +155,7 @@ class ProjectTests(SetupTests):
             # First time retrieval should create cache data
             url = reverse("get-project-structure")
             response = self.test_user_client.get(url)
-            cache_data = cache.get('project-structure-data')
+            cache_data = cache.get('project-structure-data-en')
             self.assertEqual(response.status_code, 200)
             self.assertFalse(cache_data is None)
 
@@ -163,7 +169,7 @@ class ProjectTests(SetupTests):
             # Retrieval should create cache data again
             url = reverse("get-project-structure")
             response = self.test_user_client.get(url)
-            cache_data = cache.get('project-structure-data')
+            cache_data = cache.get('project-structure-data-en')
             self.assertEqual(response.status_code, 200)
             self.assertFalse(cache_data is None)
 
@@ -1408,6 +1414,7 @@ class TestAdmin(TestCase):
 
         ModelForm = tpa.get_form(self.request, technology_platform)
         data = {'name': technology_platform.name,
+                'name_en': technology_platform.name,
                 'is_active': technology_platform.is_active}
         form = ModelForm(data, instance=technology_platform)
 
@@ -1416,3 +1423,73 @@ class TestAdmin(TestCase):
         tpa.save_form(self.request, form, True)
 
         self.assertEqual(len(mail.outbox), initial_email_count)
+
+
+class TestModelTranslations(TestCase):
+    def setUp(self):
+        # Create a test user with profile.
+        url = reverse('rest_register')
+        data = {
+            'email': 'test_user@gmail.com',
+            'password1': '123456',
+            'password2': '123456'}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        # Validate the account.
+        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
+        url = reverse('rest_verify_email')
+        data = {
+            'key': key,
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+
+        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
+        url = reverse('rest_verify_email')
+        data = {
+            'key': key,
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+
+        # Log in the user.
+        data = {
+            'username': 'test_user@gmail.com',
+            'password': '123456'}
+        response = self.client.post(reverse('api_token_auth'), data)
+        self.assertEqual(response.status_code, 200)
+        self.test_user_key = response.json().get('token')
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION='Token {}'.format(self.test_user_key), format='json')
+        user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
+        self.user = user_profile.user
+
+        self.platform = TechnologyPlatform.objects.create(name='Test platform')
+        self.platform.name_en = 'English name'
+        self.platform.name_fr = 'French name'
+        self.platform.save()
+
+    def test_model_translations(self):
+        self.assertEqual(self.platform.name, 'English name')
+
+        with override('en'):
+            self.assertEqual(self.platform.name, 'English name')
+
+        with override('fr'):
+            self.assertEqual(self.platform.name, 'French name')
+
+    def test_translation_through_api(self):
+        TechnologyPlatform.objects.exclude(id=self.platform.id).delete()
+        cache.clear()
+
+        url = reverse('get-project-structure')
+
+        # Getting the english version
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['technology_platforms'][0]['name'], 'English name')
+
+        # Getting the french version
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['technology_platforms'][0]['name'], 'French name')

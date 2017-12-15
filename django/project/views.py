@@ -4,6 +4,7 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from django.core.cache import cache
+from django.utils.translation import get_language
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
@@ -22,10 +23,11 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 def cache_structure(fn):
     def wrapper(*args, **kwargs):
-        data = cache.get('project-structure-data')
+        cache_key = 'project-structure-data-{}'.format(get_language())
+        data = cache.get(cache_key)
         if not data:
             data = fn(*args, **kwargs)
-            cache.set('project-structure-data', data)
+            cache.set(cache_key, data)
         return data
 
     return wrapper
@@ -142,11 +144,10 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         hsc_challenges = []
-        for hsc in HSCChallenge.objects.values('id', 'name').distinct('name'):
+        for hsc_name in HSCChallenge.objects.values_list('name', flat=True).distinct():
             hsc_challenges.append(dict(
-                id=hsc['id'],
-                name=hsc['name'],
-                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'challenge')
+                name=hsc_name,
+                challenges=HSCChallenge.objects.filter(name=hsc_name).values('id', 'challenge')
             ))
 
         return dict(
