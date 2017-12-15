@@ -43,6 +43,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
           abstract: true,
           resolve: {
               user: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   const user =  $ngRedux.dispatch(UserModule.loadProfile());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -67,6 +68,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
           template: '<app layout="column" layout-fill></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
@@ -89,6 +91,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
           template: '<app layout="column" view-mode="true"></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   await $ngRedux.dispatch(UserModule.loadProfile());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());

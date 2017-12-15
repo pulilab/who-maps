@@ -95,24 +95,28 @@
         <!-- TODO -->
         <span class="label">
           <translate>Country</translate>
-            </span>
+        </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
-                <span class="country-flag">
-                    <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
-                </span>
-            <span class="country-label">Countryname</span>
+            <span class="country-flag">
+              <img ng-src="{{vm.userCountry.flag}}" alt="{{vm.userCountry.prettyName}}">
+            </span>
+            <span class="country-label">
+               {{vm.userCountry.prettyName}}
+            </span>
           </div>
         </md-menu-item>
         <span class="label">
           <translate>Site Language</translate>
-            </span>
+        </span>
         <md-menu-item>
           <div class="user-lang" layout="row" layout-align="start center">
-                <span class="country-flag">
-                    <img ng-src="/static/flags/af.png" alt="Afghanistan" src="/static/flags/af.png">
-                </span>
-            <span class="country-label">Sitelanguage</span>
+            <span class="country-flag">
+                 <img ng-src="{{vm.userLanguage.flag}}" alt="{{vm.userLanguage.name}}">
+            </span>
+            <span class="country-label">
+              {{vm.userLanguage.name}}
+            </span>
           </div>
         </md-menu-item>
         <!-- -->

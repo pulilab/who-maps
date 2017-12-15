@@ -1,4 +1,5 @@
 import * as UserModule from '../store/modules/user';
+import * as CountryModel from '../store/modules/countries';
 
 class TopBar {
 
@@ -21,8 +22,14 @@ class TopBar {
     }
 
     mapState(state) {
+
+        const userModel = state.user;
+        const userCountry = CountryModel.getUserCountry(state);
+        const userLanguage = UserModule.getUserLanguage(state);
         return {
-            userModel: state.user
+            userModel,
+            userCountry,
+            userLanguage
         };
     }
 

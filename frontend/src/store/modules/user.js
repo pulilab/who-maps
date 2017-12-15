@@ -3,7 +3,8 @@ import axios from '../../plugins/axios';
 import union from 'lodash/union';
 import Storage from '../../Common/Storage';
 import * as ProjectModule from './projects';
-
+import * as SystemModule from './system';
+import { setLanguage } from '../../plugins/language';
 
 const storage = new Storage();
 
@@ -11,6 +12,12 @@ const storage = new Storage();
 
 export const getProfile = state => {
     return Object.assign({}, state.user.profile);
+};
+
+export const getUserLanguage = state => {
+    const languages = SystemModule.getLanguages(state);
+    const language = state && state.user && state.user.profile ? state.user.profile.language : undefined;
+    return languages.find(l => l.code === language);
 };
 
 // ACTIONS
@@ -53,6 +60,7 @@ export function loadProfile() {
             const profileId = state.user.user_profile_id || storage.get('user_profile_id');
             let { data } = await axios.get(`/api/userprofiles/${profileId}/`);
             data = exports.handleProfile(data);
+            setLanguage(data.language);
             dispatch({ type: 'SET_PROFILE', profile: data });
         }
     };
@@ -101,6 +109,7 @@ export function saveProfile(profile) {
         p.organisation = p.organisation.id;
         let { data } = await axios[action](url, p);
         data = exports.handleProfile(data);
+        setLanguage(data.language);
         dispatch({ type: 'SET_PROFILE', profile: data });
     };
 }

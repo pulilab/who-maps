@@ -15,12 +15,24 @@ export const getSearchResult = state => {
     });
 };
 
+export const getLanguages = state => {
+    return state.system.languages.map(l => ({ ...l, flag: `/static/flags/${l.flag}` }));
+};
+
 // ACTIONS
 
 export function loadUserProfiles() {
     return async dispatch => {
         const { data } = await axios.get('/api/userprofiles/');
         dispatch({ type: 'SET_USER_PROFILES', profiles: data });
+    };
+}
+
+export function loadAvailableLanguages() {
+    return async dispatch => {
+        // const { data } = await axios.get('/api/userprofiles/');
+        const data = require('../static_data/languages.json');
+        dispatch({ type: 'SET_LANGUAGES', languages: data.languages });
     };
 }
 
@@ -66,6 +78,9 @@ export default function system(state = {}, action) {
     }
     case 'UNSET_PROJECT_SEARCH_RESULT': {
         return { ...state, projectSearch: [] };
+    }
+    case 'SET_LANGUAGES': {
+        return { ...state, languages: action.languages };
     }
     default:
         return state;
