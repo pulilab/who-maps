@@ -30,8 +30,7 @@ export function loadUserProfiles() {
 
 export function loadAvailableLanguages() {
     return async dispatch => {
-        // const { data } = await axios.get('/api/userprofiles/');
-        const data = require('../static_data/languages.json');
+        const { data } = await axios.get('/api/static-data/');
         dispatch({ type: 'SET_LANGUAGES', languages: data.languages });
     };
 }

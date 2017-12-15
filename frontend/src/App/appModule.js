@@ -43,11 +43,11 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
           abstract: true,
           resolve: {
               user: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(UserModule.loadProfile());
                   await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
-                  const user =  $ngRedux.dispatch(UserModule.loadProfile());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
-                  return Promise.all([user, countries, structure]);
+                  return Promise.all([countries, structure]);
               }]
           }
       })
@@ -68,8 +68,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
           template: '<app layout="column" layout-fill></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
-                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   await $ngRedux.dispatch(UserModule.loadProfile());
+                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
                   const profiles = $ngRedux.dispatch(SystemModule.loadUserProfiles());
@@ -91,8 +91,8 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
           template: '<app layout="column" view-mode="true"></app>',
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
-                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   await $ngRedux.dispatch(UserModule.loadProfile());
+                  await $ngRedux.dispatch(SystemModule.loadAvailableLanguages());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
