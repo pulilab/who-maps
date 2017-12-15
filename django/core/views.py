@@ -1,6 +1,11 @@
+from django.conf import settings
+from django.utils.translation import ugettext
+
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
+from rest_framework.response import Response
 
 from project.permissions import InTeamOrReadOnly
 from project.models import Project
@@ -57,3 +62,25 @@ def get_object_or_400(cls, error_message="No such object.", select_for_update=Fa
         return obj
     else:
         raise Http400(error_message)
+
+
+class StaticDataView(GenericAPIView):
+    flag_mapping = {'en': 'gb.png',
+                    'fr': 'fr.png',
+                    'es': 'es.png',
+                    'pt': 'pt.png'}
+
+    def get(self, request):
+        data = {}
+        language_data = self.get_language_data()
+        data['languages'] = language_data
+
+        return Response(data)
+
+    def get_language_data(self):
+        languages = []
+        for code, name in settings.LANGUAGES:
+            languages.append({'code': code,
+                              'name': ugettext(name),
+                              'flag': self.flag_mapping.get(code, '')})
+        return languages
