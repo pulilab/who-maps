@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.db.models import Q
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 
@@ -151,7 +152,9 @@ class File(ExtendedModel):
 class InvalidateCacheMixin(object):
 
     def save(self, *args, **kwargs):
-        cache.delete('project-structure-data')
+        for language in settings.LANGUAGES:
+            cache_key = 'project-structure-data-{}'.format(language[0])
+            cache.delete(cache_key)
         return super(InvalidateCacheMixin, self).save(*args, **kwargs)
 
 
