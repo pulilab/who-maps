@@ -44,7 +44,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ("id", "name", "country", "account_type", "organisation", "user", "created", "organisation_name")
+        fields = ("id", "name", "country", "account_type", "organisation", "user", "created", "organisation_name",
+                  "language")
 
     @staticmethod
     def get_organisation_name(obj):
