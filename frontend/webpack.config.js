@@ -150,6 +150,10 @@ module.exports = {
             '/static/*': {
                 target:  'http://localhost/',
                 secure: false
+            },
+            '/translation/*': {
+                target:  'http://localhost/',
+                secure: false
             }
         }
     },

@@ -14,6 +14,7 @@ import * as UserModule from '../store/modules/user';
 import * as SystemModule from '../store/modules/system';
 import * as CountriesModule from '../store/modules/countries';
 import axios from '../plugins/axios';
+import { getLanguage, setCatalog, setDateLocaleProvider, setScope } from '../plugins/language';
 
 import _appTemplate from './app.html';
 import Storage from '../Common/Storage';
@@ -28,7 +29,11 @@ window.addEventListener('singletonRegistered', evt => {
 
 const storage = new Storage();
 
-const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider, $ngReduxProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider,
+                $anchorScrollProvider, $ngReduxProvider, $mdDateLocaleProvider) => {
+
+    setDateLocaleProvider($mdDateLocaleProvider);
+
     $stateProvider
       .state('base', {
           url: '',
@@ -181,6 +186,9 @@ function checkProfile(profile, t) {
 }
 
 const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions, gettextCatalog) => {
+    setCatalog(gettextCatalog);
+    setScope($rootScope);
+    getLanguage();
     const tkn = storage.get('token');
     if (tkn) {
         axios.setAuthToken(tkn);
@@ -254,10 +262,6 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         $timeout(() => {$rootScope.$apply(() => {});}, 100);
     });
 
-    gettextCatalog.setCurrentLanguage('en');
-    gettextCatalog.debug = true;
-    // TODO  remove this when done setting up the multilanguage
-    window.gettextCatalog = gettextCatalog;
 };
 
 run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux',
@@ -265,10 +269,11 @@ run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux',
 
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
-    '$anchorScrollProvider', '$ngReduxProvider'];
+    '$anchorScrollProvider', '$ngReduxProvider', '$mdDateLocaleProvider'];
 
 const AppComponent = require('./appComponent');
 const SystemController = require('./SystemController');
+
 
 angular.module('ngHtmlCompile', [])
   .directive('ngHtmlCompile', ($compile) => {
