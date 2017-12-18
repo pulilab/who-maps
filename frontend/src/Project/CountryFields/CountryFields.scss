@@ -32,7 +32,14 @@
     }
 
     md-radio-group {
+      margin-top: 25px;
       margin-bottom: 20px;
+    }
+  }
+
+  .multi-selection-field {
+    md-input-container {
+      margin-top: 0;
     }
   }
 
