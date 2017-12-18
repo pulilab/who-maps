@@ -1,5 +1,6 @@
 import * as UserModule from '../../src/store/modules/user';
 import * as ProjectModule from '../../src/store/modules/projects';
+import * as SystemModule from '../../src/store/modules/system';
 import Storage from '../../src/Common/Storage';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
@@ -21,6 +22,36 @@ describe('USER Store Module', () => {
             };
             const result = UserModule.getProfile(state);
             expect(result.id).toBe(1);
+        });
+
+        it('getUserLanguage', () => {
+            const spy = spyOn(SystemModule, 'getLanguages').and.returnValue([]);
+            const state = {};
+
+
+            let result = UserModule.getUserLanguage(state);
+            expect(result).toEqual(undefined);
+            expect(SystemModule.getLanguages).toHaveBeenCalled();
+
+            state.user = {};
+            result = UserModule.getUserLanguage(state);
+            expect(result).toEqual(undefined);
+            expect(SystemModule.getLanguages).toHaveBeenCalled();
+
+
+            state.user.profile = {};
+
+            result = UserModule.getUserLanguage(state);
+            expect(result).toEqual(undefined);
+            expect(SystemModule.getLanguages).toHaveBeenCalled();
+
+            state.user.profile.language = 1;
+            spy.and.returnValue([{ code: 1, name: 'a' }]);
+
+            result = UserModule.getUserLanguage(state);
+            expect(result).toEqual({ code:1, name: 'a' });
+            expect(SystemModule.getLanguages).toHaveBeenCalled();
+
         });
 
     });

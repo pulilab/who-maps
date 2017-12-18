@@ -19,12 +19,12 @@ export const getStructure = () => {
 
 export const getDomainStructure = (axis, domain) => {
     try {
-        const result = getStructure()[axis].domains[domain];
+        const result = exports.getStructure()[axis].domains[domain];
         return cloneDeep(result);
     }
 // eslint-disable-next-line no-empty
     catch (e) {}
-    return [];
+    return {};
 };
 
 
@@ -67,18 +67,15 @@ export function saveAnswer(answer) {
 // Reducers
 
 export default function toolkit(state = initialState, action) {
-    const s = Object.assign({}, state);
     switch (action.type) {
     case 'SET_TOOLKIT_DATA': {
-        s.toolkitData = action.data;
-        return Object.assign(state, {}, s);
+        return { ...state, toolkitData: action.data };
     }
     case 'UPDATE_TOOLKIT_DATA': {
         const r = action.data;
-        const data = cloneDeep(s.toolkitData);
+        const data = cloneDeep(state.toolkitData);
         data[r.axis].domains[r.domain].questions[r.question].answers[r.answer] = r.value;
-        s.toolkitData = data;
-        return Object.assign(state, {}, s);
+        return { ...state, toolkitData: data };
     }
     default:
         return state;
