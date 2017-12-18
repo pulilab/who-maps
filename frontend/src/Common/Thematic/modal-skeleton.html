@@ -37,7 +37,7 @@
               ng-class="(+vm.axis + 2) == $index ? 'active' : ''">
 
               <span ng-if="$index > 1" flex ng-click="vm.axisClick(axis, axisId);">
-                <translate>{{'AXIS ' + ($index - 1) + '.'}}</translate>
+                <translate>AXIS {{($index - 1)}}.</translate>
                   <br>
               </span>
               <span flex ng-click="vm.axisClick(axis, axisId);">{{axis.name}}</span>

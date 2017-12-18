@@ -226,7 +226,7 @@
     <div class="chipper">
       <div class="md-block">
         <md-contact-chips
-          placeholder="Editors of this project"
+          placeholder="{{'Editors of this project' | translate }}"
           secondary-placeholder="{{'add new team member' | translate }}"
           ng-model="vm.team"
           md-contacts="vm.getUsers($query)"
@@ -253,7 +253,7 @@
     <div class="chipper">
       <div class="md-block">
         <md-contact-chips
-          placeholder="Add viewers"
+          placeholder="{{'Add viewers' | translate }}"
           secondary-placeholder="{{'add new viewer' | translate }}"
           ng-model="vm.viewers"
           md-contacts="vm.getUsers($query)"

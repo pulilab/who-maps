@@ -94,7 +94,7 @@
         <div class="search-content md-block">
           <md-input-container md-no-float class="cms-search md-block">
             <md-icon class="material-icons">search</md-icon>
-            <input type="text" ng-model="vm.searchText" ng-change="vm.search()" placeholder="Search">
+            <input type="text" ng-model="vm.searchText" ng-change="vm.search()" placeholder="{{'Search' | translate }}">
             <md-button ng-show="vm.searchText.length > 0" class="clear-search md-icon-button" aria-label="clear" ng-click="vm.clearSearch()">
               <md-icon>clear</md-icon>
             </md-button>
