@@ -297,7 +297,7 @@ ROSETTA_WSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_PER_PAGE = 25
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'translations'),
+    os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
     os.path.join(BASE_DIR, 'locale'),
     os.path.join(BASE_DIR, 'cms/locale'),
     os.path.join(BASE_DIR, 'core/locale'),
