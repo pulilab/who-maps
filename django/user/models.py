@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 from core.models import NameByIDMixin, ExtendedModel
 
@@ -18,10 +19,10 @@ class UserProfile(ExtendedModel):
     GOVERNMENT = 'G'
     INVENTORY = 'Y'
     ACCOUNT_TYPE_CHOICES = (
-        (IMPLEMENTER, 'Implementer'),
-        (DONOR, 'Financial Investor'),
-        (GOVERNMENT, 'Government'),
-        (INVENTORY, 'Inventory User'),
+        (IMPLEMENTER, _('Implementer')),
+        (DONOR, _('Financial Investor')),
+        (GOVERNMENT, _('Government')),
+        (INVENTORY, _('Inventory User')),
     )
 
     account_type = models.CharField(

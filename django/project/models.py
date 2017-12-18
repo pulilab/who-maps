@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
+from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet
 from country.models import Country, CountryField
@@ -160,10 +161,10 @@ class InvalidateCacheMixin(object):
 
 class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
-        ('Client', 'Client'),
-        ('Provider', 'Provider'),
-        ('System', 'System'),
-        ('Data service', 'Data service')
+        ('Client', _('Client')),
+        ('Provider', _('Provider')),
+        ('System', _('System')),
+        ('Data service', _('Data service'))
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
     parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
