@@ -103,7 +103,9 @@
 
     <div class="md-block first extra-margin-double">
       <md-input-container class="md-block">
-        <label>What part(s) of the Health Information System (HIS) does this project support?</label>
+        <label>
+          <translate>What part(s) of the Health Information System (HIS) does this project support?</translate>
+        </label>
         <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his_bucket" ng-required="vm.activateValidation" multiple>
           <md-option value="{{his.id}}" ng-repeat="his in vm.structure.his_bucket">
             {{his.name}}
@@ -148,7 +150,9 @@
         <div layout="column">
           <div layout="row">
             <md-input-container class="district" flex="50">
-              <label>District</label>
+              <label>
+                <translate>District</translate>
+              </label>
               <md-select ng-model="cov.district"
                          name="{{'coverage_' + $index + '.district'}}"
                          ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
@@ -390,7 +394,9 @@
 
     <div layout="row" ng-repeat="partner in vm.project.implementing_partners" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
-        <input ng-model="partner.value" placeholder="Partner's name" md-maxlength="64">
+        <input ng-model="partner.value"
+               placeholder="{{'Partner\'s name' | translate }}"
+               md-maxlength="64">
       </md-input-container>
       <div class="add-more-item">
         <md-button class="md-warn" aria-label="Remove"
@@ -409,7 +415,7 @@
     </div>
 
     <h6 class="required">
-      <translate>>Donors (Add one at least)</translate>
+      <translate>Donors (Add one at least)</translate>
     </h6>
 
     <md-input-container class="error-placeholder">
@@ -425,7 +431,9 @@
 
     <div layout="row" ng-repeat="donor in vm.project.donors" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
-        <input ng-model="donor.value" placeholder="Donor's name" md-maxlength="64" ng-required="vm.activateValidation" name="{{'donor_' + $index}}">
+        <input ng-model="donor.value"
+               placeholder="{{'Donor\'s name' | translate }}"
+               md-maxlength="64" ng-required="vm.activateValidation" name="{{'donor_' + $index}}">
         <div ng-messages="vm.form['donor_' + $index].$error">
           <div ng-message="required">
             <translate>This is required.</translate>

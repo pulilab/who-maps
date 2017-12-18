@@ -2,12 +2,14 @@
 <div id="clv-container" layout="column">
 
   <md-card md-whiteframe="2" class="rel" layout="row">
-    <div class="littleheader"><translate>COUNTRY LEVEL VIEW</translate></div>
+    <div class="littleheader">
+      <translate>COUNTRY LEVEL VIEW</translate>
+    </div>
 
     <md-tabs md-border-bottom md-center-tabs="true" flex="75" class="clv-tab-container">
 
       <!-- MAP VIEW -->
-      <md-tab label="map view">
+      <md-tab label="{{'map view' | translate }}">
 
         <div class="tab-wrap map" id="map" ng-class="{'emptyy': !vm.projectsData}">
 
@@ -39,7 +41,7 @@
 
 
       <!-- LIST VIEW -->
-      <md-tab label="list view">
+      <md-tab label="{{'list view' | translate }}">
         <div class="tab-wrap" id="list">
 
           <div class="headercont" layout="row">
