@@ -71,6 +71,7 @@ class AdminArrayField(SimpleArrayField):
     def __init__(self, *args, **kwargs):
         widget = self.widget(input_widget=kwargs['base_field'].widget)
         kwargs.setdefault('widget', widget)
+        kwargs.setdefault('delimiter', '\x1f')
         super(AdminArrayField, self).__init__(*args, **kwargs)
 
     def prepare_value(self, value):
