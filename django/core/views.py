@@ -10,6 +10,11 @@ from rest_framework.response import Response
 from project.permissions import InTeamOrReadOnly
 from project.models import Project
 
+from .data.chart_data import CHART_DATA
+from .data.country_defaults import COUNTRY_DEFAULTS
+from .data.domains import DOMAINS
+from .data.search_filters import SEARCH_FILTERS
+
 
 class TokenAuthMixin(object):
     """
@@ -74,6 +79,10 @@ class StaticDataView(GenericAPIView):
         data = {}
         language_data = self.get_language_data()
         data['languages'] = language_data
+        data['search_filters'] = SEARCH_FILTERS
+        data['country_defaults'] = COUNTRY_DEFAULTS
+        data['chart_data'] = CHART_DATA
+        data['domains'] = DOMAINS
 
         return Response(data)
 
