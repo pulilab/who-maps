@@ -1,70 +1,76 @@
-from __future__ import unicode_literals
+from django.utils.translation import ugettext_lazy as _
 
 
 AXIS_DATA = {
     'labels': [
-        'Groundwork',
-        'Partnership',
-        'Financial health',
-        'Technology & Architecture',
-        'Operations',
-        'Monitoring & Evaulation'
+        {'id': 'groundwork',
+         'name': _('Groundwork')},
+        {'id': 'partnerships',
+         'name': _('Partnership')},
+        {'id': 'financialHealth',
+         'name': _('Financial health')},
+        {'id': 'technologyAndArchitecture',
+         'name': _('Technology & Architecture')},
+        {'id': 'operations',
+         'name': _('Operations')},
+        {'id': 'monitoringAndEvaluation',
+         'name': _('Monitoring & Evaulation')}
     ],
     'data': []
 }
 
 DOMAIN_DATA = {
     'labels': [
-        'Groundwork',
-        'Partnerships',
-        'Financial health',
-        'Technology & Architecture',
-        'Operations',
-        'Monitoring & evaluation'
+        _('Groundwork'),
+        _('Partnerships'),
+        _('Financial health'),
+        _('Technology & Architecture'),
+        _('Operations'),
+        _('Monitoring & evaluation')
     ],
-    'Groundwork': {
+    'groundwork': {
         'labels': [
-            'Parameters of scale',
-            'Contextual environment',
-            'Scientific basis'
+            _('Parameters of scale'),
+            _('Contextual environment'),
+            _('Scientific basis')
         ],
         'data': []
     },
-    'Partnerships': {
+    'partnerships': {
         'labels': [
-            'Strategic engagement',
-            'Partnership sustainability'
+            _('Strategic engagement'),
+            _('Partnership sustainability')
         ],
         'data': []
     },
-    'Financial health': {
+    'financialHealth': {
         'labels': [
-            'Financial management',
-            'Financial model'
+            _('Financial management'),
+            _('Financial model')
         ],
         'data': []
     },
-    'Technology & Architecture': {
+    'technologyAndArchitecture': {
         'labels': [
-            'Data',
-            'Interoperability',
-            'Adaptability'
+            _('Data'),
+            _('Interoperability'),
+            _('Adaptability')
         ],
         'data': []
     },
-    'Operations': {
+    'operations': {
         'labels': [
-            'Personnel',
-            'Training & support',
-            'Outreach & sanitization',
-            'Contingency planning'
+            _('Personnel'),
+            _('Training & support'),
+            _('Outreach & sanitization'),
+            _('Contingency planning')
         ],
         'data': []
     },
-    'Monitoring & evaluation': {
+    'monitoringAndEvaluation': {
         'labels': [
-            'Process monitoring',
-            'Evaluation reach'
+            _('Process monitoring'),
+            _('Evaluation reach')
         ],
         'data': []
     }

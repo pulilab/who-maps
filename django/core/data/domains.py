@@ -1,55 +1,77 @@
-from __future__ import unicode_literals
+from django.utils.translation import ugettext_lazy as _
 
+
+AXIS = [
+    {'id': 1,
+     'name': _('Groundwork')},
+    {'id': 2,
+     'name': _('Partnership')},
+    {'id': 3,
+     'name': _('Financial Health')},
+    {'id': 4,
+     'name': _('Technology & Architecture')},
+    {'id': 5,
+     'name': _('Operations')},
+    {'id': 6,
+     'name': _('Monitoring & Evaluation')},
+    {'id': 7,
+     'name': _('About')},
+    {'id': 8,
+     'name': _('Introduction')}
+]
 
 DOMAINS = [
-    {'name': 'Groundwork',
-     'domains': [
-         {'name': 'Parameters of Scale',
-          'id': 1},
-         {'name': 'Contextual environment',
-          'id': 2},
-         {'name': 'Scientific basis',
-          'id': 3}
-     ]},
-    {'name': 'Partnership',
-     'domains': [
-         {'name': 'Strategic Engagement',
-          'id': 4},
-         {'name': 'Partnership Sustainability',
-          'id': 5}
-     ]},
-    {'name': 'Financial Health',
-     'domains': [
-         {'name': 'Financial Management',
-          'id': 6},
-         {'name': 'Financial Model',
-          'id': 7}
-     ]},
-    {'name': 'Technology & Architecture',
-     'domains': [
-         {'name': 'Data',
-          'id': 8},
-         {'name': 'Interoperability',
-          'id': 9},
-         {'name': 'Adaptability',
-          'id': 10}
-     ]},
-    {'name': 'Operations',
-     'domains': [
-         {'name': 'Personnel',
-          'id': 11},
-         {'name': 'Training and Support',
-          'id': 12},
-         {'name': 'Outreach and Sensitization',
-          'id': 13},
-         {'name': 'Contingency Planning',
-          'id': 14}
-     ]},
-    {'name': 'Monitoring & Evaluation',
-     'domains': [
-         {'name': 'Process Monitoring',
-          'id': 15},
-         {'name': 'Evaluation Research',
-          'id': 16}
-     ]}
+    {'id': 1,
+     'axis': 1,
+     'name': _('Parameters of Scale')},
+    {'id': 2,
+     'axis': 1,
+     'name': _('Contextual environment')},
+    {'id': 3,
+     'axis': 1,
+     'name': _('Scientific basis')},
+
+    {'id': 4,
+     'axis': 2,
+     'name': _('Strategic Engagement')},
+    {'id': 5,
+     'axis': 2,
+     'name': _('Partnership Sustainability')},
+
+    {'id': 6,
+     'axis': 3,
+     'name': _('Financial Management')},
+    {'id': 7,
+     'axis': 3,
+     'name': _('Financial Model')},
+
+    {'id': 8,
+     'axis': 4,
+     'name': _('Data')},
+    {'id': 9,
+     'axis': 4,
+     'name': _('Interoperability')},
+    {'id': 10,
+     'axis': 4,
+     'name': _('Adaptability')},
+
+    {'id': 11,
+     'axis': 5,
+     'name': _('Personnel')},
+    {'id': 12,
+     'axis': 5,
+     'name': _('Training and Support')},
+    {'id': 13,
+     'axis': 5,
+     'name': _('Outreach and Sensitization')},
+    {'id': 14,
+     'axis': 5,
+     'name': _('Contingency Planning')},
+
+    {'id': 15,
+     'axis': 6,
+     'name': _('Process Monitoring')},
+    {'id': 16,
+     'axis': 6,
+     'name': _('Evaluation Research')}
 ]

@@ -1,17 +1,17 @@
-from __future__ import unicode_literals
+from django.utils.translation import ugettext_lazy as _
 
 TOOLKIT_STRUCTURE = [
     {'domains': [
         {'id': 1,
-         'sub_text': 'The articulation of the basic features of the scaling-up process, including the endgame strategy,'
-                     ' which will guide decision-making in other arenas',
+         'sub_text': _('The articulation of the basic features of the scaling-up process, including the endgame '
+                       'strategy, which will guide decision-making in other arenas'),
          'questions': [
              {'id': '1-1',
-              'text': 'Have the overall goals for scaling up been articulated?',
+              'text': _('Have the overall goals for scaling up been articulated?'),
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -19,16 +19,16 @@ TOOLKIT_STRUCTURE = [
               ]}]
          },
         {'id': 2,
-         'sub_text': 'The assessment of the environmental elements that may facilitate or impede implementation of '
-                     'mHealth in the setting or settings targeted for scaling up',
+         'sub_text': _('The assessment of the environmental elements that may facilitate or impede implementation of '
+                       'mHealth in the setting or settings targeted for scaling up'),
          'questions': [
              {'id': '2-1',
-              'text': 'Has the policy environment in the local setting(s), where scaling up will take place, '
-                      'been assessed?',
+              'text': _('Has the policy environment in the local setting(s), where scaling up will take place, '
+                        'been assessed?'),
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -40,9 +40,9 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has the technical environment in the local setting(s), where scaling up will take '
                       'place, been assessed?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -55,9 +55,9 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has the mHealth landscape in the local setting(s), where scaling up will take place, '
                       'been assessed? ',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -75,9 +75,9 @@ TOOLKIT_STRUCTURE = [
              {'id': '3-1a',
               'text': 'Has sufficient evidence been gathered or previously produced in support of the mHealth product?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -89,9 +89,9 @@ TOOLKIT_STRUCTURE = [
              {'id': '3-1b',
               'text': ' Have the key components of the product’s strategy (or health purpose) been validated?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -101,13 +101,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '3-2',
               'text': 'Has the product’s appropriateness in the local setting(s) been demonstrated?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -130,13 +130,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have the types of collaboration that will be necessary during the scaling-up process been '
                       'determined?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -148,26 +148,16 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have relationships been developed with partners/vendors that fulfil the following needs, as '
                       'appropriate?',
               'choices': [
-                  {
-                      'label': 'No',
-                      'points': 0
-                  },
-                  {
-                      'label': 'Identified',
-                      'points': 1
-                  },
-                  {
-                      'label': 'Informal Partnerships',
-                      'points': 2
-                  },
-                  {
-                      'label': 'Formal partner with agreement',
-                      'points': 3
-                  },
-                  {
-                      'label': 'N/A',
-                      'points': -1
-                  }
+                  {'label': _('No'),
+                   'points': 0},
+                  {'label': _('Identified'),
+                   'points': 1},
+                  {'label': _('Informal Partnerships'),
+                   'points': 2},
+                  {'label': _('Formal partner with agreement'),
+                   'points': 3},
+                  {'label': _('N/A'),
+                   'points': -1}
               ],
               'answerTemplate': [
                   '4-1b-1',
@@ -183,13 +173,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '4-2',
               'text': 'Has the value of the mHealth product been communicated to partners?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -206,13 +196,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '5-1a',
               'text': 'Have specific champions been fostered and developed among core partners, as needed?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -224,9 +214,9 @@ TOOLKIT_STRUCTURE = [
               'text': 'For one of the champions identified in SAQ 5-1a, does he/she have the capacity necessary to '
                       'advocate for the mHealth product?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -240,9 +230,9 @@ TOOLKIT_STRUCTURE = [
               'text': 'For a second champion identified in the previous question, does he/she have the capacity '
                       'necessary to advocate for the mHealth product?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -255,13 +245,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '5-2a',
               'text': 'Have mechanisms for inclusive planning been established with partners?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -274,13 +264,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has a common understanding of the key components of the scaling-up process been established '
                       'with core partners?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -300,13 +290,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Is there a solid understanding of the costs, from a programme perspective, to execute the '
                       'project at its current scale?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -320,13 +310,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '6-2',
               'text': 'Is there a solid understanding of the cost (if any) to the end-user or programme beneficiaries?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -336,13 +326,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '6-3',
               'text': ' Is there a solid understanding of the cost (if any) to the health system? ',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -353,13 +343,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '6-4',
               'text': 'Have the potential economic costs for scaling up the mHealth project been forecasted?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -377,14 +367,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has the value that the mHealth product delivers to stakeholders, as compared to existing '
                       'alternatives, been demonstrated?',
               'choices': [
-                  {'label': 'No',
-                   'points': 0
-                   },
-                  {'label': 'In progress',
+                  {'label': _('No'),
+                   'points': 0},
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -397,13 +386,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has a comprehensive and logical business plan been developed to guide project operations and '
                       'resource mobilization?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -416,13 +405,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have strategic choices been made regarding partners who offer sustainable funding for scaling '
                       'up?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -443,11 +432,11 @@ TOOLKIT_STRUCTURE = [
              {'id': '8-1',
               'text': 'Does the application have features that aim to improve data accessibility and quality?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 1},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -459,11 +448,11 @@ TOOLKIT_STRUCTURE = [
               'text': 'Is the data centre (server and connectivity) appropriate for supporting increases in data flow, '
                       'processing and storage during scaling up?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 1},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -477,11 +466,11 @@ TOOLKIT_STRUCTURE = [
              {'id': '8-3a',
               'text': 'Does the system include provisions for minimizing risk and maximizing data security?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 1},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -494,11 +483,11 @@ TOOLKIT_STRUCTURE = [
               'text': 'Do components of the system adhere to relevant government standards and policies for data '
                       'security and privacy?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 1},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -514,13 +503,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have you taken steps to facilitate interoperability with relevant information systems and '
                       'applications/software?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -532,13 +521,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have you achieved interoperability with information systems based on adherence to relevant data '
                       'standards?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Interoperability Demostrated',
+                  {'label': _('Interoperability Demostrated'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -554,13 +543,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '10-1',
               'text': 'Can the technology be adapted to meet emerging needs during scaling up?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -572,13 +561,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '10-2',
               'text': 'Can the product’s content be adapted for new user groups and/or settings during scaling up?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -590,13 +579,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have you taken steps to facilitate the transferability of the product with different kinds of '
                       'hardware/systems?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -615,13 +604,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Are appropriate mechanisms in place to allow the project to adapt to changing human resource '
                       'needs?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -637,13 +626,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have the key leadership positions required to guide scaling up and support operations been '
                       'filled?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -661,15 +650,15 @@ TOOLKIT_STRUCTURE = [
              {'id': '12-1a',
               'text': 'Have training programmes for end-users and secondary users of the product been developed?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3},
-                  {'label': 'N/A',
+                  {'label': _('N/A'),
                    'points': -1}
               ],
               'answerTemplate': [
@@ -686,13 +675,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '12-1b',
               'text': 'Are the tools developed for end-users and secondary users appropriate?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -705,13 +694,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has a structure been established for providing ongoing supervision for end-users during and '
                       'after their adoption of the product?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -722,13 +711,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '12-3',
               'text': 'Have efforts been made to ensure that adequate user and technical support systems are in place?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -745,13 +734,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have procedures and strategies for orienting key stakeholders to the mHealth product been '
                       'developed?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -763,13 +752,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has community mobilization been undertaken with the communities that will be served by scaling '
                       'up the mHealth product?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -785,13 +774,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have procedures been developed for addressing technical constraints (such as those identified '
                       'in Factor 2-2)?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -802,13 +791,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '14-2',
               'text': 'Have procedures been developed for retaining mobile devices in a health worker setting?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -828,9 +817,9 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have appropriate resources been allocated to support ongoing monitoring of implementation '
                       'throughout all stages of scaling up?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -840,13 +829,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '15-1b',
               'text': 'Have processes and tools been developed for monitoring implementation and programme fidelity?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -858,13 +847,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have processes and tools been developed to allow for data analysis and optimization of '
                       'implementation?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -881,9 +870,9 @@ TOOLKIT_STRUCTURE = [
              {'id': '16-1a',
               'text': 'Have appropriate resources been allocated to support evaluation research?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'Yes',
+                  {'label': _('Yes'),
                    'points': 2}
               ],
               'answerTemplate': [
@@ -895,13 +884,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Has the foundation been laid for conducting relevant evaluation research using appropriate '
                       'methods?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -912,13 +901,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '16-1c',
               'text': 'Are data streams available for supporting evaluation research activities?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -929,13 +918,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'Have the types of evidence that will be demonstrated at various levels of the health sector, '
                       'and by key stakeholders, been articulated?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -948,13 +937,13 @@ TOOLKIT_STRUCTURE = [
               'text': 'For each of the outcomes specified in 16-2a, have the key components of the evaluation process '
                       'been defined?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -966,13 +955,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '16-2c',
               'text': 'Has data collection been carried out to support the following evidence claims?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
@@ -985,13 +974,13 @@ TOOLKIT_STRUCTURE = [
              {'id': '16-3',
               'text': 'Have the means of dissemination of evaluation results been defined?',
               'choices': [
-                  {'label': 'No',
+                  {'label': _('No'),
                    'points': 0},
-                  {'label': 'In progress',
+                  {'label': _('In progress'),
                    'points': 1},
-                  {'label': 'Performed',
+                  {'label': _('Performed'),
                    'points': 2},
-                  {'label': 'Documented',
+                  {'label': _('Documented'),
                    'points': 3}
               ],
               'answerTemplate': [
