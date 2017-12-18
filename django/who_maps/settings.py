@@ -263,6 +263,8 @@ EMAIL_PORT = 587
 
 FROM_EMAIL = DEFAULT_FROM_EMAIL
 
+
+
 # Geodata settings
 GEOJSON_TEMP_DIR = os.path.join(os.path.dirname(__file__), os.pardir, 'temp/')
 
@@ -291,7 +293,7 @@ LOGGING = {
     },
 }
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/admin/login/'
 
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 LOCALE_PATHS = [
