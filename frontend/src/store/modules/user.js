@@ -111,6 +111,7 @@ export function saveProfile(profile) {
         data = exports.handleProfile(data);
         setLanguage(data.language);
         dispatch({ type: 'SET_PROFILE', profile: data });
+        dispatch(SystemModule.loadAvailableLanguages());
     };
 }
 
