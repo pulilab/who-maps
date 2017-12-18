@@ -1,8 +1,7 @@
 import os
 import datetime
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
+from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -58,9 +57,9 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -132,12 +131,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-gettext = lambda s: s # noqa
 LANGUAGES = (
-    ('en', gettext('English')),
-    ('fr', gettext('French')),
-    ('es', gettext('Spanish')),
-    ('pt', gettext('Portuguese')),
+    ('en', _('English')),
+    ('fr', _('French')),
+    ('es', _('Spanish')),
+    ('pt', _('Portuguese')),
 )
 LANGUAGE_CODE = 'en'
 
@@ -295,8 +293,19 @@ LOGGING = {
 LOGIN_URL = '/admin/login/'
 
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
+ROSETTA_WSGI_AUTO_RELOAD = True
+ROSETTA_MESSAGES_PER_PAGE = 25
+
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'translations'),
+    os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'cms/locale'),
+    os.path.join(BASE_DIR, 'core/locale'),
+    os.path.join(BASE_DIR, 'country/locale'),
+    os.path.join(BASE_DIR, 'project/locale'),
+    os.path.join(BASE_DIR, 'search/locale'),
+    os.path.join(BASE_DIR, 'toolkit/locale'),
+    os.path.join(BASE_DIR, 'user/locale'),
 ]
 
 for arg in sys.argv:

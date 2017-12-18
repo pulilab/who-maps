@@ -35,7 +35,10 @@
 
       <div flex class="dashsection dash-cardholder" layout="column" ng-if="!vm.showEmpty">
 
-        <div class="dash-subhead">PROJECT DETAILS</div>
+        <div class="dash-subhead">
+          <translate>PROJECT DETAILS</translate>
+        </div>
+
         <md-card md-whiteframe="2" flex>
 
           <md-tabs md-border-bottom md-dynamic-height>
@@ -139,7 +142,7 @@
 
             </md-tab>
 
-            <md-tab label="axis" ng-if="!vm.viewMode">
+            <md-tab label="{{'axis' | translate}}" ng-if="!vm.viewMode">
               <div>
                 <linechart
                   showdotted="vm.projectData.isMember">
@@ -147,7 +150,7 @@
               </div>
             </md-tab>
 
-            <md-tab label="domains" ng-if="!vm.viewMode">
+            <md-tab label="{{'domains' | translate}}" ng-if="!vm.viewMode">
               <div>
                 <linechart
                   showdotted="vm.projectData.isMember"
@@ -156,7 +159,7 @@
               </div>
             </md-tab>
 
-            <md-tab label="technology">
+            <md-tab label="{{'technology' | translate}}">
 
               <div class="dash-tech">
                 <div
@@ -191,7 +194,7 @@
 
                 <div class="lower">
                   <span>
-                    <translate>Code documentations & download:</translate>
+                    <translate>Code documentations &amp; download:</translate>
                   </span>
                   <a ng-href="{{vm.fixUrl(vm.projectData.repository)}}" target="_blank">{{vm.projectData.repository}}</a>
 
@@ -208,7 +211,7 @@
               </div>
             </md-tab>
 
-            <md-tab label="interoperability">
+            <md-tab label="{{'interoperability' | translate}}">
               <md-content class="dash-res">
 
 
