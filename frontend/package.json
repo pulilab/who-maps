@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start & yarn serve-coverage",
+    "test_chrome": "cross-env BROWSER_ENV=chrome karma start & yarn serve-coverage",
     "serve-coverage": "browser-sync start --config bs-config.js",
     "test_ci": "cross-env BROWSER_ENV=chrome karma start --single-run",
     "dev": "yarn serve",
