@@ -6,7 +6,7 @@ import { EE } from '../../src/Common/common';
 
 let ac = {};
 
-fdescribe('AppModuleController', () => {
+describe('AppModuleController', () => {
 
     beforeEach(() => {
         EE.initialize();
