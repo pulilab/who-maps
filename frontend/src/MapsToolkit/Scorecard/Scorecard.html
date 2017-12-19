@@ -39,7 +39,9 @@
     <div ng-repeat="domain in vm.data.domains track by $index" layout="column" class="domain">
       <div layout="row" class="domain-header">
         <div layout="row" flex="auto" layout-align="start center">
-          <h4>{{domain.domain}} ({{domain.domain_max}} points)</h4>
+          <h4>
+            <translate>{{domain.domain}} ({{domain.domain_max}} points)</translate>
+          </h4>
         </div>
         <div layout="row" flex="auto" layout-align="end center">
           <md-button class="md-primary" ng-click="vm.updateScore(domain)">
@@ -63,7 +65,9 @@
           <span> {{ question.text }} </span>
         </div>
         <div flex="auto" layout="row" layout-align="end center">
-          <strong>{{question.question_sum}}</strong> / {{question.question_max}} points
+          <translate>
+            <strong>{{question.question_sum}}</strong> / {{question.question_max}} points
+          </translate>
         </div>
       </div>
 

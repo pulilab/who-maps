@@ -63,7 +63,9 @@
             ></md-checkbox>
           </div>
           <div flex="10" class="fourth-box" layout="column" layout-align="center center">
-            <span ng-show="answer.value !== null" > {{vm.printAnswer(answer)}} points</span>
+            <span ng-show="answer.value !== null" >
+              <translate>{{vm.printAnswer(answer)}} points</translate>
+            </span>
 
           </div>
         </div>
