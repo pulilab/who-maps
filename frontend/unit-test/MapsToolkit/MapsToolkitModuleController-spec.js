@@ -7,7 +7,7 @@ import { $scope, $state, $ngRedux } from '../testUtilities';
 let mc = {};
 
 
-const mockData = require('../../src/MapsToolkit/Resource/mockData.json');
+const mockData = require('./mockData.json');
 
 const mockInvariantData = () => {
     return _.cloneDeep(mockData);

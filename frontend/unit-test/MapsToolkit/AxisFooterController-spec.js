@@ -18,7 +18,7 @@ describe('AxisFooterController', () => {
             axisId: 0,
             domainId: 0
         };
-        afc.axes = require('../../src/MapsToolkit/Resource/mockData.json');
+        afc.axes = require('./mockData.json');
     });
 
     it('should have an initialization function that get fired through $onInit', () => {
