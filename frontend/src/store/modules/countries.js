@@ -2,9 +2,9 @@
 import axios from '../../plugins/axios';
 import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
-import { country_default_data } from '../static_data/country_static_data';
 import { isMemberOrViewer } from './projects';
 import * as UserModule from './user';
+import * as SystemModule from './system';
 
 const stateDefinition = {
     list: [],
@@ -63,6 +63,7 @@ export const getCurrentCountry = state => {
 
 export const getCountryCoverPage = state => {
     const countryCover = { ...state.countries.currentCountryCoverPage };
+    const country_default_data = SystemModule.getLandingPageDefaults(state);
     forEach(country_default_data, (standardValue, key) => {
         const value = countryCover[key];
         if (value === null || value === undefined || value === '') {
