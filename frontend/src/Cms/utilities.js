@@ -1,5 +1,4 @@
 import moment from 'moment';
-import flatMap from 'lodash/flatMap';
 
 const prettifyDate = ({ created }) => {
     // 3:26 pm — 4 May, 2015
@@ -56,32 +55,6 @@ const levenshtein = (a, b) => {
     }
     return row[a.length];
 };
-const axes = require('./resources/domains');
-
-const getAxisName = index => {
-    return axes[index].name;
-};
-
-const getDomain = id => {
-    const domains = flatMap(axes, axis => {
-        return axis.domains;
-    });
-    return domains.find(domain => {
-        return domain.id === id;
-    });
-};
-
-const axisAndDomainName = domainId => {
-    const domain = getDomain(domainId);
-    const axis = axes.find(ax => {
-        return ax.domains.some(dom => {
-            return dom.id === domain.id;
-        });
-    });
-    return {
-        axisName: axis.name, domainName: domain.name
-    };
-};
 
 const normalizeName = (name) => {
     return name.toLowerCase().replace('&', 'and').replace(/ /g, '-');
@@ -97,9 +70,6 @@ export default {
     prettifyDate,
     itemType,
     levenshtein,
-    getAxisName,
-    getDomain,
-    axisAndDomainName,
     normalizeName,
     postProcessHtml
 };

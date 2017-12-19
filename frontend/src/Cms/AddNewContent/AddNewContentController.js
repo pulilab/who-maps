@@ -5,7 +5,6 @@ import * as UserModule from '../../store/modules/user';
 
 class AddNewContentDialog {
     constructor($scope, $mdDialog, Upload, toast, $ngRedux, content, isSuperUser) {
-        this.axes = require('../resources/domains');
         this.scope = $scope;
         this.dialog = $mdDialog;
         this.upload = Upload;
@@ -19,6 +18,7 @@ class AddNewContentDialog {
 
     mapState(state) {
         return {
+            axes: CmsModule.getDomainStructureForCms(state),
             global: CmsModule.getCmsData(state),
             userProfile: UserModule.getProfile(state)
         };

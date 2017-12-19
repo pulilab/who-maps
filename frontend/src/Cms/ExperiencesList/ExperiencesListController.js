@@ -4,29 +4,35 @@ class ExperienceListController {
 
     constructor($scope, $ngRedux) {
         this.scope = $scope;
+        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+        this.mapState = this.mapState.bind(this);
     }
 
     onInit() {
-        this.domains = require('../resources/domains');
-        const axisIndex = parseInt(this.axisId, 10);
-        const domainIndex = parseInt(this.domainId, 10);
-        this.domain = this.domains[axisIndex].domains[domainIndex];
-        this.newExperience = {
-            body: null,
-            valid: false,
-            name: null,
-            domain: this.domain.id,
-            type: 3
-        };
-
         this.watchers();
+        this.unsubscribe = this.$ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     mapState(state) {
+        const domains = CmsModule.getDomainStructureForCms(state);
+        const axisIndex = parseInt(this.axisId, 10);
+        const domainIndex = parseInt(this.domainId, 10);
+        const domain = domains[axisIndex].domains[domainIndex];
+
+        const newExperience = {
+            body: null,
+            valid: false,
+            name: null,
+            domain: domain.id,
+            type: 3
+        };
+
         return {
-            data: CmsModule.getCmsData(state)
+            data: CmsModule.getCmsData(state),
+            domains,
+            domain,
+            newExperience
         };
     }
 

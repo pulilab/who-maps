@@ -3,7 +3,7 @@ import * as mom from 'moment';
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
-const axes = require('../../src/Cms/resources/domains');
+const axes = require('./domains');
 describe('CMS Utilities', () => {
 
     it('should have a prettifyDate fn', () => {
@@ -41,21 +41,6 @@ describe('CMS Utilities', () => {
         expect(result).toBe(1);
     });
 
-    it('should have a fn that return an Axis name', () => {
-
-        expect(utilities.getAxisName(0)).toBe(axes[0].name);
-    });
-    it('should have a fn that return a domain from his id', () => {
-        const domain = axes[0].domains[0];
-        expect(utilities.getDomain(domain.id).name).toBe(domain.name);
-
-    });
-    it('should have a fn that return an axis and a domainName from a domain id', ()  => {
-        const domain = axes[0].domains[0];
-        const r = utilities.axisAndDomainName(domain.id);
-        expect(r.axisName).toBe(axes[0].name);
-        expect(r.domainName).toBe(domain.name);
-    });
 
     it('should have a fn that normalize a name', () => {
         const test = 'a & b';

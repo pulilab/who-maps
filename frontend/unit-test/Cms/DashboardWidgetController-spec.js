@@ -23,17 +23,18 @@ describe('DashboardWidgetController', () => {
     it('should have an onInit function', () => {
         spyOn(controller, 'watchers');
         controller.$onInit();
-        expect(controller.currentDomain).toBeDefined();
         expect(controller.watchers).toHaveBeenCalled();
     });
 
     it('should have a watcher function', () => {
-        const watcherSpy = spyOn(controller, 'watchers')
+        const watcherSpy = spyOn(controller, 'watchers');
+        spyOn(controller, 'mapState');
         controller.$onInit();
         watcherSpy.and.callThrough();
         spyOn(controller, 'setDomainVariables');
         spyOn(controller, 'splitType');
         controller.scores = [1];
+        controller.currentDomain = 2;
         controller.watchers();
 
         expect(controller.splitType).toHaveBeenCalled();
@@ -55,7 +56,7 @@ describe('DashboardWidgetController', () => {
 
     it('should have a function that set the domain Variables', () => {
         controller.scores = scores;
-        controller.axes = require('../../src/Cms/resources/domains');
+        controller.axes = require('./domains');
         controller.setDomainVariables({ id: 1, name: 'Parameters of Scale' }, scores);
         expect(controller.axisColor).toBe('groundwork');
         expect(controller.domainIcon).toBe('parameters-of-scale');
@@ -66,7 +67,7 @@ describe('DashboardWidgetController', () => {
 
     it('should have a next domain fn', () => {
         spyOn(controller, 'watchers');
-        controller.$onInit();
+        controller.domains = [{ id: 1 }, { id: 2 }];
         controller.currentDomain = controller.domains[0];
         controller.nextDomain();
         expect(controller.currentDomain.id).toBe(controller.domains[1].id);
@@ -79,7 +80,7 @@ describe('DashboardWidgetController', () => {
 
     it('should have a prev domain fn', () => {
         spyOn(controller, 'watchers');
-        controller.$onInit();
+        controller.domains = [{ id: 1 }, { id: 2 }];
         controller.currentDomain = controller.domains[1];
         controller.prevDomain();
         expect(controller.currentDomain.id).toBe(controller.domains[0].id);
