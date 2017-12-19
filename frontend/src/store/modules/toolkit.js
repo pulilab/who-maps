@@ -1,7 +1,7 @@
 /* eslint-disable no-warning-comments */
 import cloneDeep from 'lodash/cloneDeep';
 import axios from '../../plugins/axios';
-import structure from '../static_data/toolkit_structure.json';
+import * as SystemModule from './system';
 
 const initialState = {
     toolkitData: []
@@ -13,18 +13,22 @@ export const getToolkitData = state => {
     return data ? cloneDeep(data) : [];
 };
 
-export const getStructure = () => {
-    return cloneDeep(structure);
+export const getStructure = state => {
+    const axis = SystemModule.getAxis(state);
+    const domains = SystemModule.getDomains(state);
+    const questions = SystemModule.getQuestions(state);
+    return axis.map(a => ({ ...a, domains: domains
+          .filter(d => d.axis === a.id)
+          .map(df => ({ ...df, questions: questions
+                .filter(q => q.domain === df.id)
+                .map(qf => ({ ... qf, id: `${qf.domain}-${qf.question_id}` }))
+          }))
+    }));
 };
 
-export const getDomainStructure = (axis, domain) => {
-    try {
-        const result = exports.getStructure()[axis].domains[domain];
-        return cloneDeep(result);
-    }
-// eslint-disable-next-line no-empty
-    catch (e) {}
-    return {};
+export const getDomainStructure = (state, axis, domain) => {
+    const structure = exports.getStructure(state);
+    return structure && structure[axis] && structure[axis].domains[domain] ? structure[axis].domains[domain] : {};
 };
 
 

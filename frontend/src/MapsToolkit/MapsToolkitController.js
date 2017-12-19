@@ -24,14 +24,13 @@ class MapsToolkitController {
     }
 
     mapData(state) {
-        const structure = ToolkitModule.getStructure();
         const rawData = ToolkitModule.getToolkitData(state);
         return {
             profile: UserModule.getProfile(state),
             viewMode: ProjectModule.getCurrentProject(state).isViewer,
             rawData,
-            structure,
-            domainStructure: ToolkitModule.getDomainStructure(this.state.params.axisId, this.state.params.domainId)
+            domainStructure:
+              ToolkitModule.getDomainStructure(state, this.state.params.axisId, this.state.params.domainId)
         };
     }
 

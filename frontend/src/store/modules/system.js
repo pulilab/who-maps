@@ -10,7 +10,8 @@ const initialState = {
     thematic_overview: [],
     axis: [],
     domains: [],
-    landing_page_defaults: {}
+    landing_page_defaults: {},
+    toolkit_questions: []
 };
 
 // GETTERS
@@ -38,6 +39,18 @@ export const getLandingPageDefaults = state => {
     return { ...state.system.landing_page_defaults };
 };
 
+export const getAxis = state => {
+    return [...state.system.axis];
+};
+
+export const getDomains = state => {
+    return [...state.system.domains];
+};
+
+export const getQuestions = state => {
+    return [...state.system.toolkit_questions];
+};
+
 // ACTIONS
 
 export function loadUserProfiles() {
@@ -57,6 +70,7 @@ export function loadStaticData() {
         dispatch({ type: 'SET_LANGUAGES', languages: data.languages });
         dispatch({ type: 'SET_SEARCH_FILTERS', search_filters: data.search_filters });
         dispatch({ type: 'SET_THEMATIC_OVERVIEW', thematic_overview: data.thematic_overview });
+        dispatch({ type: 'SET_TOOLKIT_QUESTIONS', toolkit_questions: data.toolkit_questions });
     };
 }
 
@@ -120,6 +134,9 @@ export default function system(state = initialState, action) {
     }
     case 'SET_THEMATIC_OVERVIEW': {
         return { ...state, thematic_overview: action.thematic_overview };
+    }
+    case 'SET_TOOLKIT_QUESTIONS': {
+        return { ...state, toolkit_questions: action.toolkit_questions };
     }
     default:
         return state;
