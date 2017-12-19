@@ -3,7 +3,6 @@ import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
 import cloneDeep from 'lodash/cloneDeep';
 import findIndex from 'lodash/findIndex';
-import { axisData, domainData } from '../static_data/charts_static';
 import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
@@ -31,6 +30,7 @@ import {
     fieldToConvertToObject,
     dashFieldConvertToObject, handleCoverage
 } from '../project_utils';
+import * as SystemModule from './system';
 
 
 export const isMemberOrViewer = (state, project) => {
@@ -334,13 +334,14 @@ export const getCurrentVersionDate = state => {
 };
 
 export const getMapsAxisData = state => {
-    const axis = { labels: [...axisData.labels], data: [] };
+    const axis = SystemModule.getAxis(state);
+    const chartAxis = { labels: axis.map(a => a.name), data: [] };
     const toolkitVersion = getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
     if (toolkitVersion.length > 0) {
         // Data from versions
-        axis.data = toolkitVersion.map(version => {
+        chartAxis.data = toolkitVersion.map(version => {
             return {
                 date: version.modified.split('T')[0],
                 axis1: version.data[0].axis_score / 100,
@@ -365,19 +366,22 @@ export const getMapsAxisData = state => {
             axis6: toolkitData[5].axis_score / 100,
             date: todayString
         };
-        axis.data.push(lastAxisData);
+        chartAxis.data.push(lastAxisData);
     }
-    return axis;
+    return chartAxis;
 };
+
 export const getMapsDomainData = state => {
-    const domains =  { labels: [...domainData.labels] };
+    const domains = SystemModule.getDomains(state);
+    const axes = SystemModule.getAxis(state);
+    const chartData = { labels: axes.map(a => a.name) };
     const toolkitVersion = getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
-    domainData.labels.forEach((axis, axInd) => {
-        domains[axis] = { labels: [...domainData[axis].labels], data: [] };
+    axes.forEach((axis, axInd) => {
+        chartData[axis.name] = { labels: domains.filter(d => d.axis === axis.id).map(df => df.name), data: [] };
         if (toolkitVersion.length > 0) {
-            domains[axis].data = toolkitVersion.map(version => {
+            chartData[axis.name].data = toolkitVersion.map(version => {
                 const ret = {};
                 ret.date = version.modified.split('T')[0];
                 version.data[axInd].domains.forEach((domain, domainInd) => {
@@ -391,10 +395,10 @@ export const getMapsDomainData = state => {
             toolkitData[axInd].domains.forEach((dom, ii) => {
                 current['axis' + (ii + 1)] = dom.domain_percentage / 100;
             });
-            domains[axis].data.push(current);
+            chartData[axis.name].data.push(current);
         }
     });
-    return domains;
+    return chartData;
 };
 
 export const getCoverageData = state => {

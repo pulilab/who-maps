@@ -33,12 +33,21 @@ describe('PlanningAndGuidanceController', () => {
     });
 
     it('should have a function that create a filter object for the UI', () => {
+        controller.axes = [
+            {
+                name: 1,
+                domains: [
+                    {
+                        name: 2, id: 1
+                    }
+                ]
+            }
+        ];
         controller.createFilters();
-        const rawFilter = require('../../src/Cms/resources/domains');
-        expect(controller.filters[0].name).toBe(rawFilter[0].name);
+        expect(controller.filters[0].name).toBe(1);
         expect(controller.filters[0].open).toBeFalsy();
         expect(controller.filters[0].selected).toBeFalsy();
-        expect(controller.filters[0].domains[0].name).toBe(rawFilter[0].domains[0].name);
+        expect(controller.filters[0].domains[0].name).toBe(2);
         expect(controller.filters[0].domains[0].open).toBeFalsy();
 
     });

@@ -1,11 +1,25 @@
-import { prettifyDate, itemType, axisAndDomainName, normalizeName, postProcessHtml } from '../utilities';
+import { prettifyDate, itemType, normalizeName, postProcessHtml } from '../utilities';
+import * as CmsModule from '../../store/modules/cms';
 
 class ListElementController {
 
-    constructor() {
+    constructor($ngRedux) {
+        this.$ngRedux = $ngRedux;
         this.prettifyDate = prettifyDate;
         this.postProcessHtml = postProcessHtml;
         this.itemType = itemType;
+        this.$onInit = this.onInit.bind(this);
+        this.mapState = this.mapState.bind(this);
+    }
+
+    mapState(state) {
+        return {
+            axisAndDomainName: CmsModule.getAxisAndDomainName(state, this.item.domain)
+        };
+    }
+
+    onInit() {
+        this.$ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     typeClass(item) {
@@ -13,12 +27,12 @@ class ListElementController {
     }
 
     showAxisAndDomain() {
-        const result = axisAndDomainName(this.item.domain);
+        const result = this.axisAndDomainName;
         return `${result.axisName} - ${result.domainName}`;
     }
 
     axisAndDomainClass() {
-        const result = axisAndDomainName(this.item.domain);
+        const result = this.axisAndDomainName;
         result.domainName = normalizeName(result.domainName);
         result.axisName = normalizeName(result.axisName);
         return `axis-${result.axisName} domain-${result.domainName}`;
@@ -26,10 +40,10 @@ class ListElementController {
 
     static factory() {
         require('./ListElement.scss');
-        function listElement() {
-            return new ListElementController();
+        function listElement($ngRedux) {
+            return new ListElementController($ngRedux);
         }
-        listElement.$inject = [];
+        listElement.$inject = ['$ngRedux'];
         return listElement;
     }
 }

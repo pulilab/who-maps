@@ -54,7 +54,7 @@
       <md-button ui-sref="dashboard"
                  ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
-          <translate translate-context="tooltip">GO TO DASHBOARD</translate>
+          <translate>GO TO DASHBOARD</translate>
         </md-tooltip>
         <span>
           <translate>Dashboard</translate>
@@ -63,7 +63,7 @@
 
       <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.currentProject.isMember && !vm.viewMode" ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
-          <translate translate-context="tooltip">EDIT PROJECT DETAILS</translate>
+          <translate >EDIT PROJECT DETAILS</translate>
         </md-tooltip>
         <span>
           <translate>Edit Project</translate>
@@ -72,7 +72,7 @@
 
       <md-button ui-sref="maps" ng-show="vm.userType !== 'G'" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
-          <translate translate-context="tooltip">GO TO MAPS TOOLKIT</translate>
+          <translate >GO TO MAPS TOOLKIT</translate>
         </md-tooltip>
         <span ng-show="vm.currentProject.isViewer">
           <translate>Visualize Score</translate>
@@ -84,7 +84,7 @@
 
       <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
-          <translate translate-context="tooltip">SHOW SCORE SUMMARY</translate>
+          <translate>SHOW SCORE SUMMARY</translate>
         </md-tooltip>
         <span>
           <translate>Summary Score</translate>
@@ -95,7 +95,7 @@
         <md-menu md-position-mode="target-left target">
           <md-button ng-click="vm.openMenu($mdOpenMenu, $event)" ng-show="vm.currentProject.isPublished" class="share-link" aria-label="Share" md-no-ink>
             <!-- <md-icon class="material-icons">share</md-icon> -->
-            <translate translate-context="button">Share Public Link</translate>
+            <translate>Share Public Link</translate>
           </md-button>
           <md-menu-content class="share-url">
             <md-menu-item>

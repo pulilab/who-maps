@@ -31,10 +31,6 @@ msgid ""
 "                  pages owned and operated by Results for Development Institute (“HRP,” “we,” or “our”)."
 msgstr ""
 
-#: ./src/Dashboard/Statistics/Statistics.html:28
-msgid "+"
-msgstr ""
-
 #: ./src/Cms/CommentWidget/CommentWidget.html:32
 msgid "...Read less"
 msgstr ""
@@ -320,7 +316,7 @@ msgstr ""
 msgid "Add Viewers (only Viewer role)"
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:61
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:63
 msgid "Add a title"
 msgstr ""
 
@@ -332,11 +328,11 @@ msgstr ""
 msgid "Add comment ({{vm.item.comments.length}})"
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:75
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:77
 msgid "Add content"
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:84
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:86
 msgid "Add cover image"
 msgstr ""
 
@@ -482,9 +478,7 @@ msgid "Any physical device that people are able to touch, such as a mobile hands
 msgstr ""
 
 #: ./src/Cms/PlanningAndGuidance/PlanningAndGuidance.html:110
-msgid ""
-"Apply filters to list:<translate>\n"
-"          </translate>"
+msgid "Apply filters to list:"
 msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:195
@@ -574,7 +568,7 @@ msgstr ""
 msgid "Can the mHealth product be used effectively by the intended users?"
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:98
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:100
 #: ./src/Cms/CommentWidget/CommentWidget.html:44
 #: ./src/Cms/DetailElement/DetailElementDialog.html:101
 #: ./src/Cms/DetailElement/DetailElementDialog.html:58
@@ -644,7 +638,6 @@ msgid "Congratulations"
 msgstr ""
 
 #: ./src/Common/EmailConfirmation/EmailConfirmation.html:15
-msgctxt "part 1 of 3"
 msgid "Congratulations your email address is verified, you can now"
 msgstr ""
 
@@ -973,15 +966,7 @@ msgid "Download applications:"
 msgstr ""
 
 #: ./src/Common/ProjectComponent/ProjectComponent.html:28
-msgctxt "version-type"
-msgid "Draft"
-msgstr ""
-
 #: ./src/Common/ProjectComponent/ProjectComponent.html:39
-msgctxt "badge"
-msgid "Draft"
-msgstr ""
-
 #: ./src/Common/SubBar/subBar.html:28
 #: ./src/Dashboard/Statistics/Statistics.html:16
 #: ./src/Project/Navigation/Navigation.html:12
@@ -994,7 +979,6 @@ msgid "During the process of scaling up, several components of an mHealth produc
 msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:66
-msgctxt "tooltip"
 msgid "EDIT PROJECT DETAILS"
 msgstr ""
 
@@ -1232,12 +1216,10 @@ msgid "Furthermore, <b><em>user and technical support</em></b> systems must be i
 msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:57
-msgctxt "tooltip"
 msgid "GO TO DASHBOARD"
 msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:75
-msgctxt "tooltip"
 msgid "GO TO MAPS TOOLKIT"
 msgstr ""
 
@@ -1970,7 +1952,7 @@ msgstr ""
 msgid "Maximum amount of character reached"
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:88
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:90
 msgid "Maximum file size: 10MB"
 msgstr ""
 
@@ -2136,7 +2118,7 @@ msgstr ""
 
 #: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:18
 #: ./src/Common/Thematic/static/0-2.html:38
-#: ./src/Project/CountryFields/CountryFields.html:72
+#: ./src/Project/CountryFields/CountryFields.html:73
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:340
 msgid "No"
 msgstr ""
@@ -2639,7 +2621,6 @@ msgid "SERP"
 msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:87
-msgctxt "tooltip"
 msgid "SHOW SCORE SUMMARY"
 msgstr ""
 
@@ -2722,6 +2703,7 @@ msgstr ""
 msgid "Select a country"
 msgstr ""
 
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:47
 #: ./src/Cms/DashboardWidget/DashboardWidget.html:9
 msgid "Select a domain"
 msgstr ""
@@ -2743,11 +2725,7 @@ msgid "Set filters:"
 msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:103
-msgid "Share Public Link"
-msgstr ""
-
 #: ./src/Common/SubBar/subBar.html:98
-msgctxt "button"
 msgid "Share Public Link"
 msgstr ""
 
@@ -2904,7 +2882,7 @@ msgstr ""
 msgid "Sub-national"
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:102
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:104
 msgid "Submit"
 msgstr ""
 
@@ -3170,7 +3148,7 @@ msgstr ""
 msgid "The name has to be less than 101 characters long."
 msgstr ""
 
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:69
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:71
 #: ./src/Cms/ExperiencesList/ExperiencesList.html:32
 msgid "The name has to be less than 120 characters long."
 msgstr ""
@@ -3263,7 +3241,6 @@ msgid "There is no project to show in this country."
 msgstr ""
 
 #: ./src/Project/Navigation/Navigation.html:19
-msgctxt "tooltip"
 msgid "There is no published version"
 msgstr ""
 
@@ -3348,19 +3325,19 @@ msgid "This is required"
 msgstr ""
 
 #: ./src/Cms/AddNewContent/AddNewContentDialog.html:41
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:54
-#: ./src/Cms/AddNewContent/AddNewContentDialog.html:66
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:56
+#: ./src/Cms/AddNewContent/AddNewContentDialog.html:68
 #: ./src/Cms/ExperiencesList/ExperiencesList.html:29
 #: ./src/Common/EditProfile/EditProfile.html:24
 #: ./src/Common/EditProfile/EditProfile.html:38
 #: ./src/Common/EditProfile/EditProfile.html:66
 #: ./src/Common/EditProfile/EditProfile.html:80
 #: ./src/Common/Reset/Reset.html:16
-#: ./src/Project/CountryFields/CountryFields.html:103
-#: ./src/Project/CountryFields/CountryFields.html:131
-#: ./src/Project/CountryFields/CountryFields.html:29
+#: ./src/Project/CountryFields/CountryFields.html:105
+#: ./src/Project/CountryFields/CountryFields.html:134
+#: ./src/Project/CountryFields/CountryFields.html:28
 #: ./src/Project/CountryFields/CountryFields.html:48
-#: ./src/Project/CountryFields/CountryFields.html:78
+#: ./src/Project/CountryFields/CountryFields.html:79
 #: ./src/Project/DialogMultiSelector/DialogMultiSelector.html:25
 #: ./src/Project/GeneralOverview/GeneralOverview.html:115
 #: ./src/Project/GeneralOverview/GeneralOverview.html:184
@@ -3825,7 +3802,7 @@ msgid "Written instructions intended to document the steps required for project 
 msgstr ""
 
 #: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
-#: ./src/Project/CountryFields/CountryFields.html:69
+#: ./src/Project/CountryFields/CountryFields.html:70
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:337
 msgid "Yes"
 msgstr ""
@@ -3932,7 +3909,6 @@ msgid "add new viewer"
 msgstr ""
 
 #: ./src/Common/EmailConfirmation/EmailConfirmation.html:17
-msgctxt "part 3 of 3"
 msgid "and use the system"
 msgstr ""
 
@@ -4748,7 +4724,6 @@ msgid "literature review;"
 msgstr ""
 
 #: ./src/Common/EmailConfirmation/EmailConfirmation.html:16
-msgctxt "part 2 of 3"
 msgid "login"
 msgstr ""
 

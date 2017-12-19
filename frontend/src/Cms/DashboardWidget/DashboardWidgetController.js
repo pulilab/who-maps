@@ -2,32 +2,35 @@ import flatMap from 'lodash/flatMap';
 import findIndex from 'lodash/findIndex';
 import { normalizeName } from '../utilities';
 import * as CmsModule from '../../store/modules/cms';
+import * as SystemModule from '../../store/modules/system';
 
 class DashboardWidgetController {
 
     constructor($scope, $ngRedux) {
         this.scope = $scope;
+        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
         this.watchers = this.watchers.bind(this);
         this.splitType = this.splitType.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+
     }
 
     onInit() {
-        this.axes = require('../resources/domains');
-        this.domains = flatMap(this.axes, axis => {
-            return axis.domains;
-        });
         this.lessons = [];
         this.resources = [];
         this.experiences = [];
-        this.currentDomain = this.domains[Math.floor(Math.random() * this.domains.length)];
         this.watchers();
+        this.unsubscribe = this.$ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     mapState(state) {
+        const domains = SystemModule.getDomains(state);
+        const currentDomain = domains[Math.floor(Math.random() * domains.length)];
         return {
-            all: CmsModule.getCmsData(state)
+            axes: CmsModule.getDomainStructureForCms(state),
+            all: CmsModule.getCmsData(state),
+            domains,
+            currentDomain
         };
     }
 

@@ -1,12 +1,48 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 import findIndex from 'lodash/findIndex';
+import * as SystemModule from './system';
 
-// ACTIONS
+
+// GETTERS
 
 export const getCmsData = state => {
     return state.cms.data;
 };
+
+export const getDomainStructureForCms = state => {
+    const axes = SystemModule.getAxis(state);
+    const domains = SystemModule.getDomains(state);
+    return axes.map(a => ({ ...a, domains: domains.filter(d => d.axis === a.id) }));
+};
+
+
+export const getAxisName = (state, index) => {
+    const axes = SystemModule.getAxis(state);
+    return axes[index].name;
+};
+
+export const getDomain = (state, id) => {
+    const domains = SystemModule.getDomains(state);
+    return domains.find(domain => {
+        return domain.id === id;
+    });
+};
+
+export const getAxisAndDomainName = (state, domainId) => {
+    const domain = getDomain(state, domainId);
+    const axes = exports.getDomainStructureForCms(state);
+    const axis = axes.find(ax => {
+        return ax.domains.some(dom => {
+            return dom.id === domain.id;
+        });
+    });
+    return {
+        axisName: axis.name, domainName: domain.name
+    };
+};
+
+// ACTIONS
 
 export function loadCmsData() {
     return async dispatch => {

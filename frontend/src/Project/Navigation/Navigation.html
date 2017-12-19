@@ -16,7 +16,7 @@
         <button type="button"
                 ng-click="vm.goTo('publish')" class="publish" ng-class="{'active': vm.state.params.editMode === 'publish'}">
           <md-tooltip md-autohide md-direction="top" ng-show="!vm.project.hasPublishedVersion">
-            <translate translate-context="tooltip">There is no published version</translate>
+            <translate>There is no published version</translate>
           </md-tooltip>
           <translate>Published</translate>
         </button>

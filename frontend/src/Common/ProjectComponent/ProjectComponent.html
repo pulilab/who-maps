@@ -25,7 +25,7 @@
               {{vm.project.last_version || 0}}
           </span>
           <span class="nr" ng-hide="vm.project.isPublished">
-            <translate translate-context="version-type">Draft</translate>
+            <translate >Draft</translate>
           </span>
           <span class="static">
             <translate>Version</translate>
@@ -36,7 +36,7 @@
       <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="start center">
         <div flex class="badges">
           <div class="draft" ng-hide="vm.project.isPublished">
-            <translate translate-context="badge">Draft</translate>
+            <translate >Draft</translate>
           </div>
           <div class="published" ng-show="vm.project.isPublished">
             <translate>Published</translate>
