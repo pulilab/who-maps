@@ -51,6 +51,25 @@ export const getQuestions = state => {
     return [...state.system.toolkit_questions];
 };
 
+export const getThematicOverview = state => {
+    const th = state.system.thematic_overview;
+    return th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }));
+
+};
+
+export const getDomainsForThematic = state => {
+    const axis = exports.getAxis(state);
+    const domains = exports.getDomains(state);
+    const thematic_specific = exports.getThematicOverview(state);
+    return [
+        ...thematic_specific.map(t => ({ name: t.name, domains: t.domains })),
+        ...axis.map(a => ({ name: a.name, domains: domains
+                .filter(d=> d.axis === a.id)
+                .map(df => ({ name: df.name }))
+        }))];
+
+};
+
 // ACTIONS
 
 export function loadUserProfiles() {
