@@ -165,16 +165,20 @@ msgstr ""
 msgid "<b>Viewer</b> of."
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:100
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:104
 msgid "<span> {{vm.data.axis}} score</span>"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:84
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:88
 msgid "<strong>Domain {{domian.id}} percentage </strong> (Domain total divided by {{domain.domain_max}}, then multiplied by 100)"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:77
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:81
 msgid "<strong>{{domain.domain_sum}} </strong> / {{domain.domain_max}} points"
+msgstr ""
+
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:68
+msgid "<strong>{{question.question_sum}}</strong> / {{question.question_max}} points"
 msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:140
@@ -408,7 +412,7 @@ msgstr ""
 msgid "African Network for Digital Health"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:138
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:142
 msgid ""
 "After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to\n"
 "        this sheet. This will allow you to compare your progress across the six axes, and to identify the domains\n"
@@ -710,7 +714,7 @@ msgstr ""
 msgid "Country View"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:55
+#: ./src/Project/Navigation/Navigation.html:65
 msgid "Country fields"
 msgstr ""
 
@@ -815,7 +819,7 @@ msgstr ""
 msgid "Digital Health Interventions"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:73
+#: ./src/Project/Navigation/Navigation.html:83
 msgid "Discard draft"
 msgstr ""
 
@@ -935,7 +939,7 @@ msgstr ""
 msgid "Domain {{domain.id}} : {{domain.name}}"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:73
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:77
 msgid "Domain {{domian.id}} total"
 msgstr ""
 
@@ -1249,7 +1253,7 @@ msgstr ""
 msgid "GSMA"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:31
+#: ./src/Project/Navigation/Navigation.html:33
 msgid "General"
 msgstr ""
 
@@ -1295,17 +1299,17 @@ msgstr ""
 msgid "Go back to login"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:195
-#: ./src/Project/Navigation/Navigation.html:83
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:199
+#: ./src/Project/Navigation/Navigation.html:93
 msgid "Go to dashboard"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:120
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:124
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:17
 msgid "Go to next axis"
 msgstr ""
 
-#: ./src/MapsToolkit/MapsToolkitModule.html:93
+#: ./src/MapsToolkit/MapsToolkitModule.html:95
 msgid "Go to next domain"
 msgstr ""
 
@@ -1315,7 +1319,7 @@ msgstr ""
 msgid "Go to next step"
 msgstr ""
 
-#: ./src/MapsToolkit/MapsToolkitModule.html:86
+#: ./src/MapsToolkit/MapsToolkitModule.html:88
 msgid "Go to prev domain"
 msgstr ""
 
@@ -1575,7 +1579,7 @@ msgstr ""
 msgid "If you want to see world map for the geographical and historic view please subscribe first!"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:37
+#: ./src/Project/Navigation/Navigation.html:41
 msgid "Implementation"
 msgstr ""
 
@@ -1598,7 +1602,7 @@ msgstr ""
 msgid "Implementing partners:"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:200
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:204
 msgid "Improve project"
 msgstr ""
 
@@ -1728,7 +1732,7 @@ msgstr ""
 msgid "International Telecommunication Union"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:49
+#: ./src/Project/Navigation/Navigation.html:57
 msgid "Interoperability"
 msgstr ""
 
@@ -2513,7 +2517,7 @@ msgstr ""
 msgid "Projects using MAPS should meet the following basic criteria:"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:63
+#: ./src/Project/Navigation/Navigation.html:73
 msgid "Publish"
 msgstr ""
 
@@ -2626,7 +2630,7 @@ msgstr ""
 msgid "SAQ"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:61
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:63
 msgid "SAQ {{question.id}}"
 msgstr ""
 
@@ -2677,8 +2681,8 @@ msgstr ""
 msgid "Save Profile"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:68
 #: ./src/Project/Navigation/Navigation.html:78
+#: ./src/Project/Navigation/Navigation.html:88
 msgid "Save draft"
 msgstr ""
 
@@ -2738,12 +2742,12 @@ msgstr ""
 msgid "Set filters:"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:98
-msgctxt "button"
+#: ./src/Common/SubBar/subBar.html:103
 msgid "Share Public Link"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:103
+#: ./src/Common/SubBar/subBar.html:98
+msgctxt "button"
 msgid "Share Public Link"
 msgstr ""
 
@@ -2763,8 +2767,8 @@ msgstr ""
 msgid "Show all countries"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:176
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:53
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:180
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:55
 msgid "Show help"
 msgstr ""
 
@@ -2781,11 +2785,11 @@ msgstr ""
 msgid "Show more..."
 msgstr ""
 
-#: ./src/MapsToolkit/MapsToolkitModule.html:97
+#: ./src/MapsToolkit/MapsToolkitModule.html:99
 msgid "Show scorecard"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:126
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:130
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:23
 msgid "Show summary score"
 msgstr ""
@@ -2874,7 +2878,7 @@ msgstr ""
 msgid "Standard operating procedures (SOPs):"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:115
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:119
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:12
 msgid "Start axis again"
 msgstr ""
@@ -2960,7 +2964,7 @@ msgstr ""
 msgid "Technical Working Group (Rwanda)"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:43
+#: ./src/Project/Navigation/Navigation.html:49
 msgid "Technology"
 msgstr ""
 
@@ -3491,7 +3495,7 @@ msgstr ""
 msgid "Total cost of ownership (TCO):"
 msgstr ""
 
-#: ./src/MapsToolkit/MapsToolkitModule.html:75
+#: ./src/MapsToolkit/MapsToolkitModule.html:77
 msgid "Total point earned (out of a possible {{vm.domain.domain_max}})"
 msgstr ""
 
@@ -3566,8 +3570,8 @@ msgstr ""
 msgid "Update Score"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:170
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:47
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:174
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:49
 msgid "Update score"
 msgstr ""
 
@@ -4961,7 +4965,8 @@ msgstr ""
 msgid "www.digitalhealthatlas.org"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:161
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:165
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:43
 msgid "{{domain.domain}} ({{domain.domain_max}} points)"
 msgstr ""
 
@@ -4975,6 +4980,10 @@ msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:22
 msgid "{{vm.data.domain}} ({{vm.data.domain_max}} points)"
+msgstr ""
+
+#: ./src/MapsToolkit/MapsToolkitModule.html:67
+msgid "{{vm.printAnswer(answer)}} points"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-0.html:8
