@@ -14,6 +14,7 @@ from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
 from .data.search_filters import SEARCH_FILTERS
 from .data.thematic_overview import THEMATIC_OVERVIEW
+from .data.toolkit_questions import TOOLKIT_QUESTIONS
 
 
 class TokenAuthMixin(object):
@@ -84,6 +85,7 @@ class StaticDataView(GenericAPIView):
         data['axis'] = AXIS
         data['domains'] = DOMAINS
         data['thematic_overview'] = THEMATIC_OVERVIEW
+        data['toolkit_questions'] = TOOLKIT_QUESTIONS
 
         return Response(data)
 
