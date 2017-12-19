@@ -125,6 +125,14 @@ class TestAdminArrayField(TestCase):
         python_value = self.field.to_python(value)
         self.assertEqual(python_value, ['first', 'second', 'last'])
 
+    def test_delimiter(self):
+        value = ['first', 'some, with, comas']
+        python_value = self.field.to_python(value)
+        self.assertEqual(python_value, ['first', 'some, with, comas'])
+
+        native_value = self.field.prepare_value(python_value)
+        self.assertEqual(native_value, value)
+
 
 class TestCountryFieldAdmin(TestCase):
     def test_cleaning_create(self):

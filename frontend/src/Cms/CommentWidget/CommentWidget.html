@@ -23,7 +23,7 @@
       </small>
     </div>
     <div class="comment-text" ng-if="!vm.editMode">
-      <span class="comment-text-wrapper" ng-bind-html="vm.postProcessHtml(vm.comment.text)"></span>
+      <div class="comment-text-wrapper" ng-bind-html="vm.postProcessHtml(vm.comment.text)"></div>
       <span ng-click="vm.readMore()" ng-show="vm.comment.text.length > 200" class="read-more">
         <span ng-hide="vm.expanded">
           <translate>Read more...</translate>
