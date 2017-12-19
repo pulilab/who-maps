@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2017-12-19 13:09+0000\n"
+"PO-Revision-Date: 2017-12-19 16:04+0000\n"
 "Last-Translator: b'  <nico@pulilab.com>'\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 #: src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:110
 #: src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:140
 msgid "# Clients"
-msgstr "[# Ƈŀīḗƞŧş 衋 ı衋靐ϕϱ衋ΐ]"
+msgstr "# Ƈŀīḗƞŧş"
 
 #: src/Project/ImplementationOverview/ImplementationOverview.html:202
 #: src/Project/ImplementationOverview/ImplementationOverview.html:288
@@ -36,10 +36,6 @@ msgid ""
 msgstr ""
 "[(“Ẇḗƀşīŧḗ”), īƞƈŀŭḓīƞɠ ẇīŧħǿŭŧ ŀīḿīŧȧŧīǿƞ ƥȧřŧīƈīƥȧŧīǿƞ īƞ īŧş ƒǿřŭḿş, ƀŀǿɠ, ȧƞḓ ȧŀŀ ŀīƞķḗḓ\n"
 "                  ƥȧɠḗş ǿẇƞḗḓ ȧƞḓ ǿƥḗřȧŧḗḓ ƀẏ Řḗşŭŀŧş ƒǿř Ḓḗṽḗŀǿƥḿḗƞŧ Īƞşŧīŧŭŧḗ (“ĦŘƤ,” “ẇḗ,” ǿř “ǿŭř”). ſϑΰǈǲϑςǲ鶱ſϵǲ ϐǲϰϑϱϐϰΐſ ςϖςǅϱ鶱ẛ ſϑΰ衋ϐ]"
-
-#: src/Dashboard/Statistics/Statistics.html:28
-msgid "+"
-msgstr "[+ ϵ]"
 
 #: src/Cms/CommentWidget/CommentWidget.html:32
 msgid "...Read less"
@@ -687,7 +683,7 @@ msgstr "[Ȧḓḓ Ŧḗȧḿ ḿḗḿƀḗřş (Ḗḓīŧǿř řǿŀḗ) ϕſ�
 msgid "Add Viewers (only Viewer role)"
 msgstr "[Ȧḓḓ Ṽīḗẇḗřş (ǿƞŀẏ Ṽīḗẇḗř řǿŀḗ) ϱϕ鶱 衋ıǈϵϱϵ]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:61
+#: src/Cms/AddNewContent/AddNewContentDialog.html:63
 msgid "Add a title"
 msgstr "[Ȧḓḓ ȧ ŧīŧŀḗ ϖϱϖ ǲ ΐϐϑϱ靐]"
 
@@ -699,11 +695,11 @@ msgstr "[Ȧḓḓ ƈǿḿḿḗƞŧ ıϱẛ ϑǈſıΐẛϑ]"
 msgid "Add comment ({{vm.item.comments.length}})"
 msgstr "[Ȧḓḓ ƈǿḿḿḗƞŧ ({{vm.item.comments.length}}) 衋ǲǲ ΰǋϐΐ衋ϱϱ]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:75
+#: src/Cms/AddNewContent/AddNewContentDialog.html:77
 msgid "Add content"
 msgstr "[Ȧḓḓ ƈǿƞŧḗƞŧ ıςǲ 鶱ϑ靐ıϵϑǅ]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:84
+#: src/Cms/AddNewContent/AddNewContentDialog.html:86
 msgid "Add cover image"
 msgstr "[Ȧḓḓ ƈǿṽḗř īḿȧɠḗ 衋靐ΐ ǅϖϵǋϕ]"
 
@@ -975,12 +971,8 @@ msgstr ""
 "ħȧƞḓşḗŧ, ŧȧƀŀḗŧ, şḗƞşǿř ǿř ƈǿḿƥŭŧḗř ḿǿƞīŧǿř. ıςẛ 靐ϕ鶱ΐẛϖẛı ϵ靐ϐſςẛ]"
 
 #: src/Cms/PlanningAndGuidance/PlanningAndGuidance.html:110
-msgid ""
-"Apply filters to list:<translate>\n"
-"          </translate>"
-msgstr ""
-"[Ȧƥƥŀẏ ƒīŀŧḗřş ŧǿ ŀīşŧ:<translate>\n"
-"          </translate> ǋϱẛϖı ǋ衋]"
+msgid "Apply filters to list:"
+msgstr "𝔄𝔭𝔭𝔩𝔶 𝔣𝔦𝔩𝔱𝔢𝔯𝔰 𝔱𝔬 𝔩𝔦𝔰𝔱:"
 
 #: src/CountryView/CountryViewModule.html:195
 msgid "Apply filters to map:"
@@ -1107,7 +1099,7 @@ msgstr ""
 "[Ƈȧƞ ŧħḗ ḿĦḗȧŀŧħ ƥřǿḓŭƈŧ ƀḗ ŭşḗḓ ḗƒƒḗƈŧīṽḗŀẏ ƀẏ ŧħḗ īƞŧḗƞḓḗḓ ŭşḗřş? 靐ıϑ ϐǈϵ "
 "ς靐]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:98
+#: src/Cms/AddNewContent/AddNewContentDialog.html:100
 #: src/Cms/CommentWidget/CommentWidget.html:44
 #: src/Cms/DetailElement/DetailElementDialog.html:101
 #: src/Cms/DetailElement/DetailElementDialog.html:58
@@ -1195,10 +1187,8 @@ msgid "Congratulations"
 msgstr "[Ƈǿƞɠřȧŧŭŀȧŧīǿƞş ǈΰΐǲϰϑϱϐ靐ϕ]"
 
 #: src/Common/EmailConfirmation/EmailConfirmation.html:15
-msgctxt "part 1 of 3"
 msgid "Congratulations your email address is verified, you can now"
-msgstr ""
-"[Ƈǿƞɠřȧŧŭŀȧŧīǿƞş ẏǿŭř ḗḿȧīŀ ȧḓḓřḗşş īş ṽḗřīƒīḗḓ, ẏǿŭ ƈȧƞ ƞǿẇ ΰςςϱϐϵǈϐ]"
+msgstr "ℭ𝔬𝔫𝔤𝔯𝔞𝔱𝔲𝔩𝔞𝔱𝔦𝔬𝔫𝔰 𝔶𝔬𝔲𝔯 𝔢𝔪𝔞𝔦𝔩 𝔞𝔡𝔡𝔯𝔢𝔰𝔰 𝔦𝔰 𝔳𝔢𝔯𝔦𝔣𝔦𝔢𝔡, 𝔶𝔬𝔲 𝔠𝔞𝔫 𝔫𝔬𝔴"
 
 #: src/Common/Reset/Reset.html:41
 msgid "Congratulations!"
@@ -1591,15 +1581,7 @@ msgid "Download applications:"
 msgstr "[Ḓǿẇƞŀǿȧḓ ȧƥƥŀīƈȧŧīǿƞş: ǲǲϐϰΰſϕϵ ẛǋ]"
 
 #: src/Common/ProjectComponent/ProjectComponent.html:28
-msgctxt "version-type"
-msgid "Draft"
-msgstr "[Ḓřȧƒŧ ǲǈ衋ſϑ]"
-
 #: src/Common/ProjectComponent/ProjectComponent.html:39
-msgctxt "badge"
-msgid "Draft"
-msgstr "[Ḓřȧƒŧ ΰǈϖǅϖ]"
-
 #: src/Common/SubBar/subBar.html:28
 #: src/Dashboard/Statistics/Statistics.html:16
 #: src/Project/Navigation/Navigation.html:12 src/Project/Project.html:12
@@ -1624,9 +1606,8 @@ msgstr ""
 "ϱϱ ǋ鶱ϰǅǅϰϕ ǅıϱ 衋ϕϑ靐ςǲſ 靐ϰſΐϖ衋ǅϑςǅ ϰς ϵϵ ϖ靐ϰẛϵǅς ǋẛϰΐ衋衋ǅ ǅϰǅ ϵΐ]"
 
 #: src/Common/SubBar/subBar.html:66
-msgctxt "tooltip"
 msgid "EDIT PROJECT DETAILS"
-msgstr "[ḖḒĪŦ ƤŘǾĴḖƇŦ ḒḖŦȦĪĿŞ 靐ϐϐς 衋ϑϑΰϱϖΐ]"
+msgstr "𝔈𝔇ℑ𝔗 𝔓ℜ𝔒𝔍𝔈ℭ𝔗 𝔇𝔈𝔗𝔄ℑ𝔏𝔖"
 
 #: src/Common/SubBar/subBar.html:46
 msgid "EMAIL"
@@ -2067,14 +2048,12 @@ msgstr ""
 "ΐϐΰϵϑ 鶱ϕǈ ϰϖııϰǈıϰϵ鶱靐 ẛ鶱ΐ ϕſϕϰϕϖϐ靐ſϕǈϖ衋ς鶱 ΰΰςϕ鶱ϰſ靐 ϖẛ]"
 
 #: src/Common/SubBar/subBar.html:57
-msgctxt "tooltip"
 msgid "GO TO DASHBOARD"
-msgstr "[ƓǾ ŦǾ ḒȦŞĦƁǾȦŘḒ ǋẛ ẛǲ ẛ衋ϱϕ]"
+msgstr "𝔊𝔒 𝔗𝔒 𝔇𝔄𝔖ℌ𝔅𝔒𝔄ℜ𝔇"
 
 #: src/Common/SubBar/subBar.html:75
-msgctxt "tooltip"
 msgid "GO TO MAPS TOOLKIT"
-msgstr "[ƓǾ ŦǾ ḾȦƤŞ ŦǾǾĿĶĪŦ ǅϰ 衋ẛ ΰ衋ϖς]"
+msgstr "𝔊𝔒 𝔗𝔒 𝔐𝔄𝔓𝔖 𝔗𝔒𝔒𝔏𝔎ℑ𝔗"
 
 #: src/Common/Thematic/static/-1-3.html:23
 msgid "GPRS"
@@ -3264,7 +3243,7 @@ msgstr "[Ḿȧẋīḿŭḿ ȧŀŀǿẇḗḓ: ς靐ϵςǲǅϕ ǲϱ靐]"
 msgid "Maximum amount of character reached"
 msgstr "[Ḿȧẋīḿŭḿ ȧḿǿŭƞŧ ǿƒ ƈħȧřȧƈŧḗř řḗȧƈħḗḓ ǈǋǲϰſϵϐ ϐ鶱ǲ]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:88
+#: src/Cms/AddNewContent/AddNewContentDialog.html:90
 msgid "Maximum file size: 10MB"
 msgstr "[Ḿȧẋīḿŭḿ ƒīŀḗ şīzḗ: 10ḾƁ ϵΐϖϖǈıς ſϑſ]"
 
@@ -3546,7 +3525,7 @@ msgstr ""
 
 #: src/Cms/ReportDeleteButton/ReportDeleteButton.html:18
 #: src/Common/Thematic/static/0-2.html:38
-#: src/Project/CountryFields/CountryFields.html:72
+#: src/Project/CountryFields/CountryFields.html:73
 #: src/Project/ImplementationOverview/ImplementationOverview.html:340
 msgid "No"
 msgstr "[Ƞǿ ǅǲ]"
@@ -4322,9 +4301,8 @@ msgid "SERP"
 msgstr "[ŞḖŘƤ ςςϵϑ]"
 
 #: src/Common/SubBar/subBar.html:87
-msgctxt "tooltip"
 msgid "SHOW SCORE SUMMARY"
-msgstr "[ŞĦǾẆ ŞƇǾŘḖ ŞŬḾḾȦŘẎ ϵϱςı ϑϑ鶱靐ΰ]"
+msgstr "𝔖ℌ𝔒𝔚 𝔖ℭ𝔒ℜ𝔈 𝔖𝔘𝔐𝔐𝔄ℜ𝔜"
 
 #: src/Common/Thematic/static/-1-3.html:123
 msgid "SMS"
@@ -4423,6 +4401,7 @@ msgstr "[Şḗƈǿƞḓȧřẏ ŭşḗřş: 靐ΰıǋǈ靐ǲ衋ϰ ǲ]"
 msgid "Select a country"
 msgstr "[Şḗŀḗƈŧ ȧ ƈǿŭƞŧřẏ ſϱΰẛ鶱ǈ ΰ ı靐]"
 
+#: src/Cms/AddNewContent/AddNewContentDialog.html:47
 #: src/Cms/DashboardWidget/DashboardWidget.html:9
 msgid "Select a domain"
 msgstr "[Şḗŀḗƈŧ ȧ ḓǿḿȧīƞ ΰϑϖϑ衋鶱 靐 ϑ]"
@@ -4443,14 +4422,9 @@ msgstr "[Şḗŀḗƈŧ ƒřǿḿ ŀīşŧ: ςǈΰ鶱ǲı ϖǈıΐ]"
 msgid "Set filters:"
 msgstr "[Şḗŧ ƒīŀŧḗřş: ϐǲϱ ϕ靐ıϖϵǈ]"
 
-#: src/Common/SubBar/subBar.html:103
+#: src/Common/SubBar/subBar.html:103 src/Common/SubBar/subBar.html:98
 msgid "Share Public Link"
 msgstr "[Şħȧřḗ Ƥŭƀŀīƈ Ŀīƞķ ıς衋ǅϱ ϑϵ鶱ẛϖǋ]"
-
-#: src/Common/SubBar/subBar.html:98
-msgctxt "button"
-msgid "Share Public Link"
-msgstr "[Şħȧřḗ Ƥŭƀŀīƈ Ŀīƞķ ΰǅſϵẛ ϖıẛϵſǲ]"
 
 #: src/Cms/ExperiencesList/ExperiencesList.html:17
 msgid "Share your own experience"
@@ -4661,7 +4635,7 @@ msgstr ""
 msgid "Sub-national"
 msgstr "[Şŭƀ-ƞȧŧīǿƞȧŀ 靐ſǲ靐ϕſ鶱ϕΰΐ]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:102
+#: src/Cms/AddNewContent/AddNewContentDialog.html:104
 msgid "Submit"
 msgstr "[Şŭƀḿīŧ ẛϑ靐ϕϵϕ]"
 
@@ -5344,7 +5318,7 @@ msgstr ""
 msgid "The name has to be less than 101 characters long."
 msgstr "[Ŧħḗ ƞȧḿḗ ħȧş ŧǿ ƀḗ ŀḗşş ŧħȧƞ 101 ƈħȧřȧƈŧḗřş ŀǿƞɠ. ſϖϖ ΰϱǋϕ ΰ]"
 
-#: src/Cms/AddNewContent/AddNewContentDialog.html:69
+#: src/Cms/AddNewContent/AddNewContentDialog.html:71
 #: src/Cms/ExperiencesList/ExperiencesList.html:32
 msgid "The name has to be less than 120 characters long."
 msgstr "[Ŧħḗ ƞȧḿḗ ħȧş ŧǿ ƀḗ ŀḗşş ŧħȧƞ 120 ƈħȧřȧƈŧḗřş ŀǿƞɠ. ſǲϖ ǅıϑϐ ϰ]"
@@ -5668,9 +5642,8 @@ msgid "There is no project to show in this country."
 msgstr "[Ŧħḗřḗ īş ƞǿ ƥřǿĵḗƈŧ ŧǿ şħǿẇ īƞ ŧħīş ƈǿŭƞŧřẏ. ıΐıΐϵ ϖϕ ıϐ]"
 
 #: src/Project/Navigation/Navigation.html:19
-msgctxt "tooltip"
 msgid "There is no published version"
-msgstr "[Ŧħḗřḗ īş ƞǿ ƥŭƀŀīşħḗḓ ṽḗřşīǿƞ ϵǋϐϖ靐 ǅϑ ϵǈ]"
+msgstr "𝔗𝔥𝔢𝔯𝔢 𝔦𝔰 𝔫𝔬 𝔭𝔲𝔟𝔩𝔦𝔰𝔥𝔢𝔡 𝔳𝔢𝔯𝔰𝔦𝔬𝔫"
 
 #: src/Common/Thematic/static/0-2.html:54
 msgid ""
@@ -5799,18 +5772,18 @@ msgid "This is required"
 msgstr "[Ŧħīş īş řḗɋŭīřḗḓ 靐ǅΐẛ ϱΰ ϕϰǋ]"
 
 #: src/Cms/AddNewContent/AddNewContentDialog.html:41
-#: src/Cms/AddNewContent/AddNewContentDialog.html:54
-#: src/Cms/AddNewContent/AddNewContentDialog.html:66
+#: src/Cms/AddNewContent/AddNewContentDialog.html:56
+#: src/Cms/AddNewContent/AddNewContentDialog.html:68
 #: src/Cms/ExperiencesList/ExperiencesList.html:29
 #: src/Common/EditProfile/EditProfile.html:24
 #: src/Common/EditProfile/EditProfile.html:38
 #: src/Common/EditProfile/EditProfile.html:66
 #: src/Common/EditProfile/EditProfile.html:80 src/Common/Reset/Reset.html:16
-#: src/Project/CountryFields/CountryFields.html:103
-#: src/Project/CountryFields/CountryFields.html:131
-#: src/Project/CountryFields/CountryFields.html:29
+#: src/Project/CountryFields/CountryFields.html:105
+#: src/Project/CountryFields/CountryFields.html:134
+#: src/Project/CountryFields/CountryFields.html:28
 #: src/Project/CountryFields/CountryFields.html:48
-#: src/Project/CountryFields/CountryFields.html:78
+#: src/Project/CountryFields/CountryFields.html:79
 #: src/Project/DialogMultiSelector/DialogMultiSelector.html:25
 #: src/Project/GeneralOverview/GeneralOverview.html:115
 #: src/Project/GeneralOverview/GeneralOverview.html:184
@@ -6522,7 +6495,7 @@ msgstr ""
 "şŧȧƒƒ ŧǿ ƥḗřƒǿřḿ ȧ ƥȧřŧīƈŭŀȧř ȧƈŧīṽīŧẏ. 鶱ıϖϱǈϑẛ ǅςǋǈςı衋ıϵΐϱ]"
 
 #: src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
-#: src/Project/CountryFields/CountryFields.html:69
+#: src/Project/CountryFields/CountryFields.html:70
 #: src/Project/ImplementationOverview/ImplementationOverview.html:337
 msgid "Yes"
 msgstr "[Ẏḗş ϑϱϑ]"
@@ -6678,9 +6651,8 @@ msgid "add new viewer"
 msgstr "[ȧḓḓ ƞḗẇ ṽīḗẇḗř ϕǲ靐 靐ϰ衋 ẛϕϑϵ]"
 
 #: src/Common/EmailConfirmation/EmailConfirmation.html:17
-msgctxt "part 3 of 3"
 msgid "and use the system"
-msgstr "[ȧƞḓ ŭşḗ ŧħḗ şẏşŧḗḿ ΰǋϵ ẛς衋 ΰ鶱]"
+msgstr "𝔞𝔫𝔡 𝔲𝔰𝔢 𝔱𝔥𝔢 𝔰𝔶𝔰𝔱𝔢𝔪"
 
 #: src/Common/Thematic/static/-1-3.html:5
 msgid "antenatal care"
@@ -8192,9 +8164,8 @@ msgid "literature review;"
 msgstr "[ŀīŧḗřȧŧŭřḗ řḗṽīḗẇ; 鶱ϰǈϑςǲẛǋǋϵ]"
 
 #: src/Common/EmailConfirmation/EmailConfirmation.html:16
-msgctxt "part 2 of 3"
 msgid "login"
-msgstr "[ŀǿɠīƞ ς鶱ΰς靐]"
+msgstr "𝔩𝔬𝔤𝔦𝔫"
 
 #: src/Common/Thematic/static/-1-3.html:73
 msgid "logistics management and information system"
@@ -8496,3 +8467,58 @@ msgstr ""
 "ȧṽȧīŀȧƀīŀīŧẏ, ƈǿşŧ, ḗƒƒīƈīḗƞƈẏ, ɋŭȧŀīŧẏ, ŭŧīŀīzȧŧīǿƞ, īƞƒǿřḿȧŧīǿƞ ȧƞḓ/ǿř "
 "ȧƈƈḗƥŧȧƀīŀīŧẏ ŧħȧŧ īḿƥḗḓḗ ǿƥŧīḿȧŀ ƥřǿṽīşīǿƞ ǿƒ şƥḗƈīƒīƈ ħḗȧŀŧħ "
 "īƞŧḗřṽḗƞŧīǿƞş. ǋϑǅΰ ϑΰϵϖǈϰ衋ϑ ς鶱ΐǋẛǲǲ衋ϵǋ ſ靐ǅ ǋϕςΰǲϵ靐ϖ ǅǅ靐ǈ ẛ靐ǋǈẛϕ ϐ鶱ςǋ]"
+
+#~ msgid "+"
+#~ msgstr "[+ ϵ]"
+
+#~ msgid ""
+#~ "Apply filters to list:<translate>\n"
+#~ "          </translate>"
+#~ msgstr ""
+#~ "[Ȧƥƥŀẏ ƒīŀŧḗřş ŧǿ ŀīşŧ:<translate>\n"
+#~ "          </translate> ǋϱẛϖı ǋ衋]"
+
+#~ msgctxt "part 1 of 3"
+#~ msgid "Congratulations your email address is verified, you can now"
+#~ msgstr ""
+#~ "[Ƈǿƞɠřȧŧŭŀȧŧīǿƞş ẏǿŭř ḗḿȧīŀ ȧḓḓřḗşş īş ṽḗřīƒīḗḓ, ẏǿŭ ƈȧƞ ƞǿẇ ΰςςϱϐϵǈϐ]"
+
+#~ msgctxt "version-type"
+#~ msgid "Draft"
+#~ msgstr "[Ḓřȧƒŧ ǲǈ衋ſϑ]"
+
+#~ msgctxt "badge"
+#~ msgid "Draft"
+#~ msgstr "[Ḓřȧƒŧ ΰǈϖǅϖ]"
+
+#~ msgctxt "tooltip"
+#~ msgid "EDIT PROJECT DETAILS"
+#~ msgstr "[ḖḒĪŦ ƤŘǾĴḖƇŦ ḒḖŦȦĪĿŞ 靐ϐϐς 衋ϑϑΰϱϖΐ]"
+
+#~ msgctxt "tooltip"
+#~ msgid "GO TO DASHBOARD"
+#~ msgstr "[ƓǾ ŦǾ ḒȦŞĦƁǾȦŘḒ ǋẛ ẛǲ ẛ衋ϱϕ]"
+
+#~ msgctxt "tooltip"
+#~ msgid "GO TO MAPS TOOLKIT"
+#~ msgstr "[ƓǾ ŦǾ ḾȦƤŞ ŦǾǾĿĶĪŦ ǅϰ 衋ẛ ΰ衋ϖς]"
+
+#~ msgctxt "tooltip"
+#~ msgid "SHOW SCORE SUMMARY"
+#~ msgstr "[ŞĦǾẆ ŞƇǾŘḖ ŞŬḾḾȦŘẎ ϵϱςı ϑϑ鶱靐ΰ]"
+
+#~ msgctxt "button"
+#~ msgid "Share Public Link"
+#~ msgstr "[Şħȧřḗ Ƥŭƀŀīƈ Ŀīƞķ ΰǅſϵẛ ϖıẛϵſǲ]"
+
+#~ msgctxt "tooltip"
+#~ msgid "There is no published version"
+#~ msgstr "[Ŧħḗřḗ īş ƞǿ ƥŭƀŀīşħḗḓ ṽḗřşīǿƞ ϵǋϐϖ靐 ǅϑ ϵǈ]"
+
+#~ msgctxt "part 3 of 3"
+#~ msgid "and use the system"
+#~ msgstr "[ȧƞḓ ŭşḗ ŧħḗ şẏşŧḗḿ ΰǋϵ ẛς衋 ΰ鶱]"
+
+#~ msgctxt "part 2 of 3"
+#~ msgid "login"
+#~ msgstr "[ŀǿɠīƞ ς鶱ΰς靐]"
