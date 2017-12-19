@@ -15,8 +15,7 @@ TOOLKIT_QUESTIONS = [
      ]},
     {'question_id': '1',
      'domain': 2,
-     'text': _('Has the policy environment in the local setting(s), where scaling up will take place, '
-                 'been assessed?'),
+     'text': _('Has the policy environment in the local setting(s), where scaling up will take place, been assessed?'),
      'choices': [
          {'label': _('No'),
           'points': 0},

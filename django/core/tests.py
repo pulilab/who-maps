@@ -168,6 +168,7 @@ class TestStaticDataEndpoint(TestCase):
         self.assertIn('axis', response.json())
         self.assertIn('domains', response.json())
         self.assertIn('thematic_overview', response.json())
+        self.assertIn('toolkit_questions', response.json())
 
     def test_language_payload(self):
         response = self.client.get(reverse('core:static-data'))
