@@ -23,17 +23,22 @@ describe('TOOLKIT Store Module', () => {
         });
 
         it('getStructure', () => {
-            const result = ToolkitModule.getStructure();
+            const state = {};
+            spyOn(SystemModule, 'getAxis').and.returnValue([{ id: 1 }]);
+            spyOn(SystemModule, 'getDomains').and.returnValue([{ axis: 1, id: 1 }]);
+            spyOn(SystemModule, 'getQuestions').and.returnValue([{ domain: 1, question_id: 'a' }]);
+            const result = ToolkitModule.getStructure(state);
             expect(result[0].domains[0].id).toBe(1);
         });
 
         it('getDomainStructure', () => {
+            const state = {};
             const spy = spyOn(ToolkitModule, 'getStructure');
-            let result = ToolkitModule.getDomainStructure(0, 0);
+            let result = ToolkitModule.getDomainStructure(state, 0, 0);
             expect(result).toEqual({});
 
-            spy.and.callThrough();
-            result = ToolkitModule.getDomainStructure(0, 0);
+            spy.and.returnValue([{ domains: [{ id: 1 }] }]);
+            result = ToolkitModule.getDomainStructure(state, 0, 0);
             expect(result.id).toBe(1);
 
         });
