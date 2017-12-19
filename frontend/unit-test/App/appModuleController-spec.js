@@ -1,6 +1,5 @@
 import AppModuleController from '../../src/App/AppModuleController';
 import { $scope, $state, toast, $ngRedux } from '../testUtilities';
-import { EE } from '../../src/Common/common';
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
@@ -9,7 +8,6 @@ let ac = {};
 describe('AppModuleController', () => {
 
     beforeEach(() => {
-        EE.initialize();
         ac = AppModuleController.appControllerFactory()($state, $scope, {}, toast, $ngRedux);
     });
 
