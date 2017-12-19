@@ -43,7 +43,9 @@
               </div>
             </md-input-container>
             <md-input-container>
-              <label>Select a domain</label>
+              <label>
+                <translate>Select a domain</translate>
+              </label>
               <md-select aria-label="domain-selector" name="domain" ng-model="vm.newContent.domain" required class="">
                 <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
                   <md-option ng-value="domain.id" ng-repeat="domain in axis.domains track by domain.id">{{domain.name}}</md-option>
