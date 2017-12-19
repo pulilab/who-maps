@@ -36,7 +36,7 @@ class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
 class PartnerLogoInline(admin.TabularInline):
     model = PartnerLogo
     extra = 0
-    max_num = 2
+    max_num = 4
 
 
 @admin.register(Country)
