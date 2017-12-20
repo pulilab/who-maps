@@ -1,4 +1,5 @@
 import uuid
+from collections import namedtuple
 
 from django.db import models
 from django.db.models import Q
@@ -177,21 +178,29 @@ class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         verbose_name_plural = 'Digital Strategies'
 
 
+class HSCGroup(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta:
+        verbose_name = 'Health System Challenge Group'
+
+
 class HSCChallengeQuerySet(ActiveQuerySet):
+    FakeChallenge = namedtuple('FakeChallenge', ['name', 'challenge'])
+
     def get_names_for_ids(self, ids):
-        return self.filter(id__in=ids).only('name', 'challenge')
+        return [self.FakeChallenge(l.group.name, l.name)
+                for l in self.filter(id__in=ids).select_related('group')]
 
 
 class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    challenge = models.CharField(max_length=512)
+    group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
 
     def __str__(self):
-        return '({}) {}'.format(self.name, self.challenge)
+        return '({}) {}'.format(self.group.name, self.name)
 
     class Meta:
         verbose_name = 'Health System Challenge'
         verbose_name_plural = 'Health System Challenges'
-        ordering = ['name', 'challenge']
+        ordering = ('name',)
 
     objects = HSCChallengeQuerySet.as_manager()
 

@@ -9,7 +9,7 @@ from core.admin import AllObjectsAdmin
 # from country.models import Country
 from user.models import UserProfile
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCGroup, HSCChallenge
 
 
 class ChangeNotificationMixin(object):
@@ -83,6 +83,10 @@ class HISBucketAdmin(ChangeNotificationMixin, admin.ModelAdmin):
     pass
 
 
+class HSCGroupAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+    pass
+
+
 class HSCChallengeAdmin(ChangeNotificationMixin, admin.ModelAdmin):
     pass
 
@@ -111,4 +115,5 @@ admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(Licence, LicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
 admin.site.register(HISBucket, HISBucketAdmin)
+admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
