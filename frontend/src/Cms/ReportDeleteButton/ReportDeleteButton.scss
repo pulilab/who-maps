@@ -29,7 +29,6 @@ cms-report-delete-button {
       }
 
       .report-text::after {
-        content: "Report";
         position: relative;
         top: -1px;
         float: left;
@@ -44,7 +43,6 @@ cms-report-delete-button {
       }
 
       .delete-text::after {
-        content: "Delete";
         position: relative;
         top: -1px;
         float: left;
@@ -131,7 +129,6 @@ cms-report-delete-button {
       }
 
       .report-text::after {
-        content: "Reported";
         width: auto;
         opacity: 1;
         color: $color-red;

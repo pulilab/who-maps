@@ -493,7 +493,7 @@ msgstr ""
 msgid "Architecture:"
 msgstr ""
 
-#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:13
+#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:17
 msgid "Are you sure?"
 msgstr ""
 
@@ -784,6 +784,10 @@ msgstr ""
 
 #: ./src/Common/Thematic/static/1-0.html:16
 msgid "Define the metrics (e.g. growth, adoption, or expansion of geo-political area, as described in Table 2)."
+msgstr ""
+
+#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:11
+msgid "Delete"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-2.html:45
@@ -2116,7 +2120,7 @@ msgstr ""
 msgid "Next, the project team must consider <b><em>end-user cost</em></b>, or the cost incurred by the user, which includes technology costs (e.g. mobile devices, airtime) and non-technology costs (e.g. costs associated with seeking services promoted by the mHealth product, or cost savings resulting from receiving information through a mobile device). These end-user costs have implications for the feasibility of scaling up, and calculating them will help project teams anticipate any economic barriers to widespread user adoption."
 msgstr ""
 
-#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:18
+#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
 #: ./src/Common/Thematic/static/0-2.html:38
 #: ./src/Project/CountryFields/CountryFields.html:73
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:340
@@ -2566,6 +2570,10 @@ msgstr ""
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:452
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:47
 msgid "Remove"
+msgstr ""
+
+#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:5
+msgid "Report"
 msgstr ""
 
 #: ./src/Dashboard/Dashboard.html:129
@@ -3801,7 +3809,7 @@ msgstr ""
 msgid "Written instructions intended to document the steps required for project staff to perform a particular activity."
 msgstr ""
 
-#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
+#: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:26
 #: ./src/Project/CountryFields/CountryFields.html:70
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:337
 msgid "Yes"

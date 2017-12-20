@@ -1,11 +1,15 @@
 <div class="button-wrapper" ng-class="vm.status">
   <md-button class="flag-button" md-no-ink ng-click="vm.open()" ng-if="!vm.isDelete">
     <md-icon>flag</md-icon>
-    <span class="report-text"></span>
+    <span class="report-text">
+      <translate>Report</translate>
+    </span>
   </md-button>
   <md-button class="flag-button" md-no-ink ng-click="vm.open()" ng-if="vm.isDelete">
     <md-icon>clear</md-icon>
-    <span class="delete-text"></span>
+    <span class="delete-text">
+      <translate>Delete</translate>
+    </span>
   </md-button>
   <div class="warning-zone">
     <div layout="row">
