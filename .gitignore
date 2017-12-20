@@ -32,3 +32,5 @@ errorShots/
 .testmon*
 /ssl/
 /frontend/djangojs.pot
+*.po
+*.mo
