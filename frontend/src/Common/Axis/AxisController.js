@@ -10,7 +10,6 @@ class AxisController {
         this.$onInit = this.onInit.bind(this);
         this.mapState = this.mapState.bind(this);
         this.changeDomain = this.changeDomain.bind(this);
-        this.parseAxisData = this.parseAxisData.bind(this);
     }
 
     mapState(state) {
