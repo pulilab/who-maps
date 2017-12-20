@@ -59,35 +59,35 @@ class InteroperabilityLinkAdmin(ChangeNotificationMixin, AllObjectsAdmin):
 
 class DigitalStrategyAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     list_display = [
-        '__str__',
+        '__str__'
     ]
 
 
-class HealthFocusAreaAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HealthFocusAreaAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HealthCategoryAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HealthCategoryAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class LicenceAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class LicenceAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class InteroperabilityStandardAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HISBucketAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HISBucketAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HSCGroupAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HSCGroupAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HSCChallengeAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
