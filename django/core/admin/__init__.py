@@ -1,5 +1,6 @@
 from allauth.account.models import EmailAddress, EmailConfirmation
 from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
@@ -7,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.postgres.fields.array import ArrayField
+from modeltranslation.translator import translator
 from rest_framework.authtoken.models import Token
 
 from user.models import UserProfile
@@ -73,7 +75,11 @@ class AllObjectsAdmin(admin.ModelAdmin):
         return list_display + ['is_active', 'translated']
 
     def translated(self, obj):
-        return all([obj.name_en, obj.name_fr, obj.name_es, obj.name_pt])
+        translated = True
+        for field_name in translator.get_options_for_model(self.model).get_field_names():
+            for language in settings.LANGUAGES:
+                translated &= bool(getattr(obj, '{}_{}'.format(field_name, language[0])))
+        return translated
     translated.short_description = "Translated"
     translated.boolean = True
 
