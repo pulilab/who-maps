@@ -121,7 +121,7 @@ class ProjectPublicViewSet(ViewSet):
     @cache_structure
     def _get_project_structure(self):
         strategies = []
-        for group, _ in DigitalStrategy.GROUP_CHOICES:
+        for group, group_name in DigitalStrategy.GROUP_CHOICES:
             subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
                 subGroups.append(dict(
@@ -131,7 +131,7 @@ class ProjectPublicViewSet(ViewSet):
                 )
                 )
             strategies.append(dict(
-                name=group,
+                name=group_name,
                 subGroups=subGroups
             ))
 
