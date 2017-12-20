@@ -13,6 +13,7 @@ class CountryViewModuleController {
         this.scope = $scope;
         this.filter = $filter;
         this.state = $state;
+        this.gettextCatalog = gettextCatalog;
         this.pdfExport = new PDFExportController(gettextCatalog);
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
@@ -142,8 +143,9 @@ class CountryViewModuleController {
         if (!countryProjects || !Array.isArray(countryProjects)) {
             return;
         }
+        const t = this.gettextCatalog.getString.bind(this.gettextCatalog);
         const digitalHealthInterventions = {
-            name: 'Digital Health Interventions',
+            name: t('Digital Health Interventions'),
             filterMappingFn: p => {
                 return Array.isArray(p.digital_strategies) ? p.digital_strategies : [];
             },
@@ -152,7 +154,7 @@ class CountryViewModuleController {
         };
 
         const healthInterventions = {
-            name: 'Health Focus Areas',
+            name: t('Health Focus Areas'),
             filterMappingFn: p => {
                 return Array.isArray(p.health_focus_areas) ? p.health_focus_areas : [];
             },
@@ -160,7 +162,7 @@ class CountryViewModuleController {
             items: this.prepareFiltersCheckboxes('health_focus_areas')
         };
         const healthInformationSystems = {
-            name: 'Health Information Systems',
+            name: t('Health Information Systems'),
             filterMappingFn: p => {
                 return Array.isArray(p.his_bucket) ? p.his_bucket : [];
             },
@@ -169,7 +171,7 @@ class CountryViewModuleController {
         };
 
         const healthSystemChallenges = {
-            name: 'Health System Challenges',
+            name: t('Health System Challenges'),
             filterMappingFn: p => {
                 return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];
             },
@@ -178,7 +180,7 @@ class CountryViewModuleController {
         };
 
         const software = {
-            name: 'Software',
+            name: t('Software'),
             filterMappingFn: p => {
                 return Array.isArray(p.platforms) ? p.platforms : [];
             },
