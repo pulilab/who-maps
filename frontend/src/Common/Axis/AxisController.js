@@ -1,61 +1,59 @@
-import forEach from 'lodash/forEach';
+import * as ToolkitModule from '../../store/modules/toolkit';
 
 
 class AxisController {
 
-    constructor($scope) {
+    constructor($scope, $ngRedux) {
         this.scope = $scope;
+        this.$ngRedux = $ngRedux;
         this.EE = window.EE;
-        this.$onInit = this.initialization.bind(this);
+        this.$onInit = this.onInit.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.changeDomain = this.changeDomain.bind(this);
         this.parseAxisData = this.parseAxisData.bind(this);
     }
 
-    initialization() {
+    mapState(state) {
+        const axisId = parseInt(this.axisIndex, 10) + 1;
+        const domainId = this.domainIndex ? parseInt(this.domainIndex, 10) + 1 : null;
+        const axis = ToolkitModule.getAxisDetail(state, axisId);
+        const axisClass = axis.axis.split('.')[0].replace(' ', '').toLowerCase();
+        const axisPicture = require('./images/icon-' + axisClass + '.svg');
+        const axisScorePercentage =  axis.axis_score;
+        const axisCompletion =  axis.axis_completion;
+        return {
+            axisId,
+            domainId,
+            axisPicture,
+            axisName: axis.name,
+            axisClass,
+            axisScoreClass: this.advanceClassGenerator(axisScorePercentage),
+            axisCompletionClass: this.advanceClassGenerator(axisCompletion),
+            domains: axis.domains
+        };
+    }
+
+    onInit() {
         if (this.axisId === null || this.axisId === void 0) {
             this.axisId = 0;
         }
-        this.watchers();
-
-    }
-
-    watchers() {
-        this.scope.$watch(s => s.vm.axisData, this.parseAxisData, true);
-    }
-
-    parseAxisData(axisData) {
-        this.axisName = axisData.axis.split('.')[1];
-        const axisName = axisData.axis.split('.')[0].replace(' ', '').toLowerCase();
-        this.axisClass = axisName;
-        this.axisPicture = require('./images/icon-' + axisName + '.svg');
-        this.axisScorePercentage = axisData.axis_score;
-        this.axisCompletition = axisData.axis_completion;
-        this.axisScoreClass = this.advanceClassGenerator(this.axisScorePercentage);
-        this.axisCompletitionClass = this.advanceClassGenerator(this.axisCompletition);
-        this.domains = axisData.domains;
-        this.parseDomainData();
+        this.$ngRedux.connect(this.mapState, null)(this);
     }
 
     setDomainActive(id) {
-        if (this.domainId) {
-            return parseInt(this.domainId, 10) === id;
+        if (this.domainIndex) {
+            return parseInt(this.domainIndex, 10) === id;
         }
         return false;
     }
 
-    parseDomainData() {
-        forEach(this.domains, (domain, index) => {
-            domain.name = domain.domain.split(':')[1].toLowerCase();
-            domain.index = index;
-        });
-    }
 
     changeDomain(domain) {
-        this.EE.emit('mapsDomainChange', this.axisId, domain.index);
+        this.EE.emit('mapsDomainChange', this.axisIndex, domain.index);
     }
 
     goToAxis() {
-        const axisId = this.axisId;
+        const axisId = parseInt(this.axisId, 10) - 1;
         this.EE.emit('mapsAxisChange', axisId);
     }
 
@@ -74,10 +72,10 @@ class AxisController {
 
     static axisFactory() {
         require('./Axis.scss');
-        function newAxis($scope) {
-            return new AxisController($scope);
+        function newAxis($scope, $ngRedux) {
+            return new AxisController($scope, $ngRedux);
         }
-        newAxis.$inject = ['$scope'];
+        newAxis.$inject = ['$scope', '$ngRedux'];
         return newAxis;
     }
 }
