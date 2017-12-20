@@ -18,6 +18,8 @@ from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 from .admin import DigitalStrategyAdmin, TechnologyPlatformAdmin
+
+
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
 
@@ -28,7 +30,6 @@ class MockRequest():
 
 
 class SetupTests(APITestCase):
-
     def setUp(self):
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -107,7 +108,7 @@ class SetupTests(APITestCase):
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
-            "mobile_application":  "http://mobile.app.org",
+            "mobile_application": "http://mobile.app.org",
             "wiki": "http://wiki.org",
             "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
                                        {"id": 2, "selected": True},
@@ -131,7 +132,6 @@ class SetupTests(APITestCase):
 
 
 class ProjectTests(SetupTests):
-
     def test_retrieve_project_structure(self):
         url = reverse("get-project-structure")
         response = self.test_user_client.get(url)
@@ -806,19 +806,18 @@ class ProjectTests(SetupTests):
         item = HSCChallenge.objects.create(name='name', challenge='challenge')
         self.assertEqual(str(item), '(name) challenge')
 
-    # def xtest_project_approval_admin_filter_country_admins(self):
-    #     request = MockRequest()
-    #     site = AdminSite()
-    #     user = UserProfile.objects.get(id=self.user_profile_id).user
-    #     request.user = user
-    #     ma = ProjectApprovalAdmin(ProjectApproval, site)
-    #     ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-    #                                    approved=True)
-    #     self.assertEqual(ma.get_queryset(request).count(), 1)
+        # def xtest_project_approval_admin_filter_country_admins(self):
+        #     request = MockRequest()
+        #     site = AdminSite()
+        #     user = UserProfile.objects.get(id=self.user_profile_id).user
+        #     request.user = user
+        #     ma = ProjectApprovalAdmin(ProjectApproval, site)
+        #     ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+        #                                    approved=True)
+        #     self.assertEqual(ma.get_queryset(request).count(), 1)
 
 
 class ProjectDraftTests(SetupTests):
-
     def setUp(self):
         # Published without draft in SetupsTests
         super(ProjectDraftTests, self).setUp()
@@ -1019,7 +1018,6 @@ class ProjectDraftTests(SetupTests):
 
 
 class PermissionTests(SetupTests):
-
     def test_team_member_can_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
@@ -1315,7 +1313,6 @@ class PermissionTests(SetupTests):
 
 
 class TestSoftDelete(APITestCase):
-
     def test_on_instance_delete(self):
         ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
         self.assertEqual(ds1.is_active, True)
@@ -1346,7 +1343,6 @@ class TestSoftDelete(APITestCase):
 
 
 class TestAdmin(TestCase):
-
     def setUp(self):
         self.request = MockRequest()
         self.site = AdminSite()
