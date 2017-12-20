@@ -1,4 +1,8 @@
 import axios from './axios';
+import moment from 'moment';
+import fr from 'moment/locale/fr';
+import es from 'moment/locale/es';
+import pt from 'moment/locale/pt';
 
 const navigator = window.navigator;
 const language  = navigator.languages && navigator.languages[0] ||
@@ -24,13 +28,17 @@ export const setDateLocaleProvider = provider => {
     config.mdDateLocaleProvider  = provider;
 };
 
-export const configureDates = catalog => {
-    const c = catalog.catalog;
-    if (c.January) {
-        config.mdDateLocaleProvider.months = [c.January, c.February, c.March, c.April, c.May, c.June,
-            c.July, c.August, c.September, c.October, c.November, c.December];
-        config.mdDateLocaleProvider.shortMonths  = config.mdDateLocaleProvider.months.map(m => m.slice(0, 4));
-    }
+export const configureDates = ln => {
+    const locales = {
+        fr,
+        es,
+        pt
+    };
+    const localised = moment().locale(ln, locales[ln]);
+    config.mdDateLocaleProvider.months = localised.localeData().months();
+    config.mdDateLocaleProvider.shortMonths  = localised.localeData().monthsShort();
+    config.mdDateLocaleProvider.days  = localised.localeData().weekdays();
+    config.mdDateLocaleProvider.shortDays  = localised.localeData().weekdaysShort();
 };
 
 export const getLanguage = async () => {
@@ -38,7 +46,7 @@ export const getLanguage = async () => {
     const { data } = await axios.get('/translation/json/');
     config.gettextCatalog.setCurrentLanguage(config.language);
     config.gettextCatalog.setStrings(config.language, data.catalog);
-    exports.configureDates(data);
+    exports.configureDates(config.language);
     config.scope.$digest();
 };
 

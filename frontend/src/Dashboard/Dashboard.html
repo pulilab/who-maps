@@ -47,7 +47,7 @@
 
               <div class="dash-cardcontent" layout="column" ng-if="!vm.viewMode">
 
-                <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
+                <axis flex ng-repeat="axis in vm.rawToolkitData" axis-index="$index"></axis>
 
                 <div layout="row" class="dash-overview-tooltips">
                   <div class="dash-overview-tooltip">

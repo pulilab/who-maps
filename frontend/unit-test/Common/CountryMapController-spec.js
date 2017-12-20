@@ -112,30 +112,6 @@ describe('CountryMapController', () => {
         expect(cc.fillDistrictData).toHaveBeenCalledWith(newDistrictData);
     });
 
-    it('has saveClass fn.', () => {
-        cc.saveClass('clients', 0, undefined);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(undefined);
-        expect(cc.covLib.facilities).toBe(undefined);
-
-        cc.saveClass('health_workers', 1, undefined);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(1);
-        expect(cc.covLib.facilities).toBe(undefined);
-
-        cc.saveClass('facilities', 2, [1, 2]);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(1);
-        expect(cc.covLib.facilities).toBe(4);
-
-        // no rewrite
-        cc.saveClass('clients', 3, [1, 2]);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(1);
-        expect(cc.covLib.facilities).toBe(4);
-
-    });
-
     it('has makeGeoFromTopo fn.', () => {
         const res = cc.makeGeoFromTopo(topoSl);
         expect(typeof res).toBe('object');

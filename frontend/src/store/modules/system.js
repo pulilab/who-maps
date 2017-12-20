@@ -57,6 +57,7 @@ export const getThematicOverview = state => {
 
 };
 
+
 export const getDomainsForThematic = state => {
     const axis = exports.getAxis(state);
     const domains = exports.getDomains(state);
@@ -64,8 +65,8 @@ export const getDomainsForThematic = state => {
     return [
         ...thematic_specific.map(t => ({ name: t.name, domains: t.domains })),
         ...axis.map(a => ({ name: a.name, domains: domains
-                .filter(d=> d.axis === a.id)
-                .map(df => ({ name: df.name }))
+              .filter(d=> d.axis === a.id)
+              .map(df => ({ name: df.name }))
         }))];
 
 };

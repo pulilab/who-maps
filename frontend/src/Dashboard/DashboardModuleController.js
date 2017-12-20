@@ -31,7 +31,6 @@ class DashboardModuleController {
             projectData,
             structure: ProjectModule.getProjectStructure(state),
             rawToolkitData: ToolkitModule.getToolkitData(state),
-            axisData: ToolkitModule.getToolkitData(state),
             toolkitVersion: ProjectModule.getToolkitVersion(state),
             coverageVersion: ProjectModule.getCoverageVersion(state),
             profile: UserModule.getProfile(state),
