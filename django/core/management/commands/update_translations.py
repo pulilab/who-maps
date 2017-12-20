@@ -1,5 +1,6 @@
 import os
 from subprocess import call
+from shutil import copyfile
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
@@ -20,5 +21,8 @@ class Command(BaseCommand):
         pot_file = os.path.join(settings.LOCALE_PATHS[0], pot_name)
 
         for language in settings.LANGUAGES:
-            po_file = os.path.join(settings.LOCALE_PATHS[0], '{}/LC_MESSAGES/djangojs.po'.format(language[0]))
-            call(["msgmerge", "-U", "-N", po_file, pot_file])
+            if not language[0] == 'en':
+                po_file = os.path.join(settings.LOCALE_PATHS[0], '{}/LC_MESSAGES/djangojs.po'.format(language[0]))
+                if not os.path.exists(po_file):
+                    copyfile(pot_file, po_file)
+                call(["msgmerge", "-U", "-N", po_file, pot_file])
