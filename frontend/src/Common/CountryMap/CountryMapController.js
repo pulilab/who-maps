@@ -81,15 +81,6 @@ class CountryMapController {
         }
     }
 
-    saveClass(key, index, boundNrs) {
-        if (boundNrs) {
-            index += keys(boundNrs).length;
-        }
-        if (!this.covLib.hasOwnProperty(key)) {
-            this.covLib[key] = index;
-        }
-    }
-
     setGlobal() {
         this.showNationalLevelCoverage = true;
         const districts = document.getElementsByClassName('d3district');
