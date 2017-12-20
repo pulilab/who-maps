@@ -1362,7 +1362,7 @@ class TestAdmin(TestCase):
     def test_admin(self):
         admin = DigitalStrategyAdmin(DigitalStrategy, self.site)
         self.assertEqual(admin.get_queryset(self.request).count(), DigitalStrategy.all_objects.all().count())
-        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
+        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active', 'translated'])
         admin.list_display = ['__str__', 'is_active']
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
 
