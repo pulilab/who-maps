@@ -4,7 +4,7 @@
 
 <div class="maps-toolkit" layout="column" ng-if="vm.dataLoaded" >
   <div layout="row" flex="100" md-whiteframe="2" class="axis-row">
-    <axis flex="auto" show-current="true" domain-id="vm.domainId" axis-data="vm.axis" axis-id="vm.axisId"></axis>
+    <axis flex="auto" show-current="true" domain-index="vm.domainId" axis-index="vm.axisId"></axis>
     <div flex="auto" layout="row" layout-align="end center">
       <md-button class="md-primary" ng-click="vm.goToScorecard()">
         <md-icon>insert_chart</md-icon>
@@ -20,7 +20,7 @@
         <div class="left" flex>
           <h4>
             <translate>
-              {{vm.data.domain}} ({{vm.data.domain_max}} points)
+              {{vm.data.name}} ({{vm.data.domain_max}} points)
             </translate>
           </h4>
           <p>
