@@ -12,6 +12,7 @@ describe('axisController', () => {
     beforeEach(() => {
         ac = AxisController.axisFactory()(scope);
         parseAxisData = spyOn(ac, 'parseAxisData');
+        ac.axisData = require('./axisMockData');
         ac.$onInit();
     });
 
@@ -33,7 +34,6 @@ describe('axisController', () => {
         spyOn(ac, 'watchers');
         ac.$onInit();
         expect(ac.watchers).toHaveBeenCalledTimes(1);
-        expect(typeof ac.axisData).toBe('object');
         expect(ac.axisId).toBe(0);
 
         ac.$onInit();
