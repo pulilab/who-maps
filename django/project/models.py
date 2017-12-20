@@ -189,6 +189,7 @@ class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         return '({}) {}'.format(self.name, self.challenge)
 
     class Meta:
+        verbose_name = 'Health System Challenge'
         verbose_name_plural = 'Health System Challenges'
         ordering = ['name', 'challenge']
 
