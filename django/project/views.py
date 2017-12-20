@@ -11,6 +11,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
@@ -121,7 +122,7 @@ class ProjectPublicViewSet(ViewSet):
     @cache_structure
     def _get_project_structure(self):
         strategies = []
-        for group, _ in DigitalStrategy.GROUP_CHOICES:
+        for group, group_name in DigitalStrategy.GROUP_CHOICES:
             subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
                 subGroups.append(dict(
@@ -131,7 +132,7 @@ class ProjectPublicViewSet(ViewSet):
                 )
                 )
             strategies.append(dict(
-                name=group,
+                name=group_name,
                 subGroups=subGroups
             ))
 
@@ -144,10 +145,11 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         hsc_challenges = []
-        for hsc_name in HSCChallenge.objects.values_list('name', flat=True).distinct():
+        for group in HSCGroup.objects.values('id', 'name'):
             hsc_challenges.append(dict(
-                name=hsc_name,
-                challenges=HSCChallenge.objects.filter(name=hsc_name).values('id', 'challenge')
+                name=group['name'],
+                challenges=[{'id': c['id'], 'challenge': c['name']}
+                            for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
             ))
 
         return dict(

@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import QuerySet
 from django.db.models.query_utils import Q
-from modeltranslation.manager import multilingual_queryset_factory
+from modeltranslation.manager import multilingual_queryset_factory, MultilingualQuerySet
 
 
 class GetObjectOrNoneManager(models.Manager):
@@ -69,7 +69,7 @@ class SoftDeleteModel(models.Model):
 
     # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
     #            as a default queryset
-    all_objects = QuerySet.as_manager()
+    all_objects = MultilingualQuerySet.as_manager()
     objects = MultilingualActiveQuerySet.as_manager()
 
     class Meta:

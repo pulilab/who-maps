@@ -16,8 +16,10 @@ from country.models import Country, CountryField
 from user.models import Organisation, UserProfile
 
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup
 from .admin import DigitalStrategyAdmin, TechnologyPlatformAdmin
+
+
 # from .admin import ProjectApprovalAdmin
 # from .tasks import send_project_approval_digest
 
@@ -28,7 +30,6 @@ class MockRequest():
 
 
 class SetupTests(APITestCase):
-
     def setUp(self):
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -107,7 +108,7 @@ class SetupTests(APITestCase):
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
-            "mobile_application":  "http://mobile.app.org",
+            "mobile_application": "http://mobile.app.org",
             "wiki": "http://wiki.org",
             "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
                                        {"id": 2, "selected": True},
@@ -131,7 +132,6 @@ class SetupTests(APITestCase):
 
 
 class ProjectTests(SetupTests):
-
     def test_retrieve_project_structure(self):
         url = reverse("get-project-structure")
         response = self.test_user_client.get(url)
@@ -803,22 +803,22 @@ class ProjectTests(SetupTests):
         self.assertEqual(str(item), 'name')
 
     def test_hsc_str(self):
-        item = HSCChallenge.objects.create(name='name', challenge='challenge')
+        hsc_group = HSCGroup.objects.create(name='name')
+        item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
         self.assertEqual(str(item), '(name) challenge')
 
-    # def xtest_project_approval_admin_filter_country_admins(self):
-    #     request = MockRequest()
-    #     site = AdminSite()
-    #     user = UserProfile.objects.get(id=self.user_profile_id).user
-    #     request.user = user
-    #     ma = ProjectApprovalAdmin(ProjectApproval, site)
-    #     ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-    #                                    approved=True)
-    #     self.assertEqual(ma.get_queryset(request).count(), 1)
+        # def xtest_project_approval_admin_filter_country_admins(self):
+        #     request = MockRequest()
+        #     site = AdminSite()
+        #     user = UserProfile.objects.get(id=self.user_profile_id).user
+        #     request.user = user
+        #     ma = ProjectApprovalAdmin(ProjectApproval, site)
+        #     ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+        #                                    approved=True)
+        #     self.assertEqual(ma.get_queryset(request).count(), 1)
 
 
 class ProjectDraftTests(SetupTests):
-
     def setUp(self):
         # Published without draft in SetupsTests
         super(ProjectDraftTests, self).setUp()
@@ -1019,7 +1019,6 @@ class ProjectDraftTests(SetupTests):
 
 
 class PermissionTests(SetupTests):
-
     def test_team_member_can_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
@@ -1315,7 +1314,6 @@ class PermissionTests(SetupTests):
 
 
 class TestSoftDelete(APITestCase):
-
     def test_on_instance_delete(self):
         ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
         self.assertEqual(ds1.is_active, True)
@@ -1346,7 +1344,6 @@ class TestSoftDelete(APITestCase):
 
 
 class TestAdmin(TestCase):
-
     def setUp(self):
         self.request = MockRequest()
         self.site = AdminSite()
@@ -1493,3 +1490,107 @@ class TestModelTranslations(TestCase):
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['technology_platforms'][0]['name'], 'French name')
+
+    def test_innermost_translation(self):
+        DigitalStrategy.objects.all().delete()
+        HealthFocusArea.objects.all().delete()
+        HealthCategory.objects.all().delete()
+        cache.clear()
+
+        strategy = DigitalStrategy.objects.create(name='Test strategy', group=DigitalStrategy.GROUP_CHOICES[0][0])
+        strategy.name_en = 'English name'
+        strategy.name_fr = 'French name'
+        strategy.save()
+
+        child_strategy = DigitalStrategy.objects.create(name='Child strategy', parent=strategy,
+                                                        group=DigitalStrategy.GROUP_CHOICES[0][0])
+        child_strategy.name_en = 'Child name'
+        child_strategy.name_fr = 'Omlette du fromage'
+        child_strategy.save()
+
+        health_category = HealthCategory.objects.create(name='Parent category')
+        health_category.name_en = 'English name'
+        health_category.name_fr = 'French name'
+        health_category.save()
+
+        health_focus_area = HealthFocusArea.objects.create(name='Health focus area', health_category=health_category)
+        health_focus_area.name_en = 'English area'
+        health_focus_area.name_fr = 'French area'
+        health_focus_area.save()
+
+        url = reverse('get-project-structure')
+        # Getting the english version
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['strategies'][0],
+                         {'name': 'Client',
+                          'subGroups': [{'id': strategy.id,
+                                         'name': 'English name',
+                                         'strategies': [{'id': child_strategy.id,
+                                                         'name': 'Child name'}]}]})
+        self.assertEqual(response.json()['health_focus_areas'][0],
+                         {'id': health_category.id,
+                          'name': 'English name',
+                          'health_focus_areas': [{'id': health_focus_area.id,
+                                                  'name': 'English area'}]})
+
+        # Getting the french version
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['strategies'][0],
+                         {'name': 'Client',
+                          'subGroups': [{'id': strategy.id,
+                                         'name': 'French name',
+                                         'strategies': [{'id': child_strategy.id,
+                                                         'name': 'Omlette du fromage'}]}]})
+        self.assertEqual(response.json()['health_focus_areas'][0],
+                         {'id': health_category.id,
+                          'name': 'French name',
+                          'health_focus_areas': [{'id': health_focus_area.id,
+                                                  'name': 'French area'}]})
+
+    def test_health_system_challenges(self):
+        self.maxDiff = None
+        HSCChallenge.objects.all().delete()
+        HSCGroup.objects.all().delete()
+        cache.clear()
+
+        hsc_group = HSCGroup.objects.create(name='First group')
+        hsc_group.name_en = 'First group'
+        hsc_group.name_fr = 'Omlette du fromage'
+        hsc_group.save()
+
+        hsc = HSCChallenge.objects.create(name='Solve an issue', group=hsc_group)
+        hsc_2 = HSCChallenge.objects.create(name='Other problem appeared', group=hsc_group)
+        hsc_3 = HSCChallenge.objects.create(name='Third failure here', group=hsc_group)
+
+        hsc.name_en = 'Solve an issue'
+        hsc.name_fr = "l'Solve an issue"
+        hsc.save()
+
+        url = reverse('get-project-structure')
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['hsc_challenges'][0],
+                         {'name': 'First group',
+                          'challenges': [
+                              {'id': hsc_2.id,
+                               'challenge': 'Other problem appeared'},
+                              {'id': hsc.id,
+                               'challenge': 'Solve an issue'},
+                              {'id': hsc_3.id,
+                               'challenge': 'Third failure here'}
+                          ]})
+
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['hsc_challenges'][0],
+                         {'name': 'Omlette du fromage',
+                          'challenges': [
+                              {'id': hsc.id,
+                               'challenge': "l'Solve an issue"},
+                              {'id': hsc_2.id,
+                               'challenge': 'Other problem appeared'},
+                              {'id': hsc_3.id,
+                               'challenge': 'Third failure here'}
+                          ]})
