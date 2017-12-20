@@ -10,7 +10,7 @@ def fix_hidden_translated_values(apps, schema_editor):
     HSCGroup = apps.get_model('project', 'HSCGroup')
     HSCChallenge = apps.get_model('project', 'HSCChallenge')
 
-    HSCGroup.objects.update(name_en=F('name'))
+    HSCGroup.all_objects.update(name_en=F('name'))
     HSCChallenge.objects.update(name_en=F('name'))
 
 
