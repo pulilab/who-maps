@@ -70,7 +70,12 @@ class AllObjectsAdmin(admin.ModelAdmin):
         list_display = list(super(AllObjectsAdmin, self).get_list_display(request))
         if 'is_active' in list_display:
             return list_display
-        return list_display + ['is_active']
+        return list_display + ['is_active', 'translated']
+
+    def translated(self, obj):
+        return all([obj.name_en, obj.name_fr, obj.name_es, obj.name_pt])
+    translated.short_description = "Translated"
+    translated.boolean = True
 
 
 class ArrayFieldMixin(object):
