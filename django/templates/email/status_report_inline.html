@@ -1,3 +1,4 @@
+{% load utils %}
 <!-- TODO -->
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" valign="top" bgcolor="#E3EAEF" style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;width:100% !important;height:100%;font-size:100%;font-family:'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;" ><tr><td style="vertical-align:top;">
@@ -38,7 +39,7 @@
         <table style="border-spacing:0;width:100%;" >
           <tr>
             <td>
-              <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >Dear John Doe!</h3>
+              <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >Dear Admin!</h3>
               <p class="first" style="margin-bottom:20px;font-weight:normal;font-size:14px;line-height:1.6;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >The projects listed below are waiting for your approval:</p>
 
               <!-- today -->
@@ -48,16 +49,16 @@
                     Today
                   </td>
                   <td class="number" style="text-align:right;font-size:12px;" >
-                    x project(s)
+                    {{ projects_today.count }} project(s)
                   </td>
                 </tr>
               </table>
               <!-- /today -->
 
               <ul class="project-list" style="font-weight:normal;font-size:14px;line-height:1.6;list-style-type:none;list-style-position:outside;list-style-image:none;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
+              {% for project in projects_today %}
+                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ project.name }}</a></li>
+              {% endfor %}
               </ul>
 
               <!-- earlier -->
@@ -67,25 +68,22 @@
                     Earlier
                   </td>
                   <td class="number" style="text-align:right;font-size:12px;" >
-                    x project(s)
+                    {{ projects_earlier.count }} project(s)
                   </td>
                 </tr>
               </table>
               <!-- /earlier -->
 
               <ul class="project-list" style="font-weight:normal;font-size:14px;line-height:1.6;list-style-type:none;list-style-position:outside;list-style-image:none;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name</a></li>
-                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="#" style="color:#283593;text-decoration:none;word-break:break-all;" >Project name lorem ipsum dolor sitamet</a></li>
-              </ul>
+              {% for project in projects_earlier %}
+                <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ project.name }}</a></li>
+              {% endfor %}
 
               <!-- button -->
               <table class="btn-primary center last" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;margin-top:40px;margin-bottom:0;margin-left:auto;margin-right:auto;width:auto !important;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
                 <tr>
                   <td style="border-radius:5px;background-color:#283593;vertical-align:top;text-align:center;text-transform:uppercase;font-size:14px;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;" >
-                    <a href="#" style="word-break:break-all;display:inline-block;padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px;border-width:0;border-radius:5px;background-color:#283593;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26);color:#FFFFFF;text-decoration:none;font-weight:bold;line-height:1;cursor:pointer;" >Go to Admin Dashboard</a>
+                    <a href="{% site_url %}/admin" style="word-break:break-all;display:inline-block;padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px;border-width:0;border-radius:5px;background-color:#283593;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26);color:#FFFFFF;text-decoration:none;font-weight:bold;line-height:1;cursor:pointer;" >Go to Admin Dashboard</a>
                   </td>
                 </tr>
               </table>

@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.postgres.fields.array import ArrayField
+from django.forms.widgets import MediaDefiningClass
 from modeltranslation.translator import translator
 from rest_framework.authtoken.models import Token
 
@@ -64,7 +65,30 @@ class CustomAuthenticationForm(AuthenticationForm):
             self.fields['username'].label = "Email"
 
 
-class AllObjectsAdmin(admin.ModelAdmin):
+class MultiLevelAdminMeta(MediaDefiningClass):
+    """
+    Metaclass for classes that can have media definitions.
+    """
+    def __new__(mcs, name, bases, attrs):
+        new_class = super(MultiLevelAdminMeta, mcs).__new__(mcs, name, bases, attrs)
+
+        def get_translated_function(language):
+            def translated(self, obj):
+                translated = True
+                for field_name in translator.get_options_for_model(self.model).get_field_names():
+                    translated &= bool(getattr(obj, '{}_{}'.format(field_name, language)))
+                return translated
+            translated.short_description = 'Translated {}'.format(language.upper())
+            translated.boolean = True
+            return translated
+
+        for language_code, language_name in settings.LANGUAGES:
+            setattr(new_class, 'is_translated_{}'.format(language_code), get_translated_function(language_code))
+
+        return new_class
+
+
+class AllObjectsAdmin(admin.ModelAdmin, metaclass=MultiLevelAdminMeta):
     def get_queryset(self, request):
         return self.model.all_objects.all()
 
@@ -72,16 +96,9 @@ class AllObjectsAdmin(admin.ModelAdmin):
         list_display = list(super(AllObjectsAdmin, self).get_list_display(request))
         if 'is_active' in list_display:
             return list_display
-        return list_display + ['is_active', 'translated']
 
-    def translated(self, obj):
-        translated = True
-        for field_name in translator.get_options_for_model(self.model).get_field_names():
-            for language in settings.LANGUAGES:
-                translated &= bool(getattr(obj, '{}_{}'.format(field_name, language[0])))
-        return translated
-    translated.short_description = "Translated"
-    translated.boolean = True
+        language_fields = ['is_translated_{}'.format(l[0]) for l in settings.LANGUAGES]
+        return list_display + ['is_active'] + language_fields
 
 
 class ArrayFieldMixin(object):
