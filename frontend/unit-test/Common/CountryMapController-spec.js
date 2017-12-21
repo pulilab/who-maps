@@ -167,7 +167,6 @@ describe('CountryMapController', () => {
     it('has fillDistrictData fn.', () => {
         const mapData = { ...SLCountryMapData, districts: SLCountryMapData.districts.map((name, id) => ({ id, name })) };
         cc.drawMapShape(mapData);
-        console.log(mapData.districts);
         const districtLevelCoverage = {
             0 : { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
             1 : { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
