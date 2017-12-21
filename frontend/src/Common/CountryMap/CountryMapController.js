@@ -81,15 +81,6 @@ class CountryMapController {
         }
     }
 
-    saveClass(key, index, boundNrs) {
-        if (boundNrs) {
-            index += keys(boundNrs).length;
-        }
-        if (!this.covLib.hasOwnProperty(key)) {
-            this.covLib[key] = index;
-        }
-    }
-
     setGlobal() {
         this.showNationalLevelCoverage = true;
         const districts = document.getElementsByClassName('d3district');
@@ -169,34 +160,13 @@ class CountryMapController {
               .attr('d', path)
               .classed('d3district', true)
               .classed('global', this.showNationalLevelCoverage)
-              .classed(`name-${districtsName}`, true).on('mouseover', () => {
-                  if (!this.big) {
+              .classed(`name-${districtsName}`, true).on('click', () => {
+                  this.scope.$evalAsync(() => {
                       this.activeDistrict = {
                           name: districtsName,
                           data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
                       };
-                      this.scope.$evalAsync();
-                  }
-              })
-              .attr('data-justtocatchdomelement', function setDistrictActiveIfHoveredLonger() {
-                  // this bound as DOM iteratee (current district)
-                  if (!self.big) {
-                      return '';
-                  }
-                  d3.select(this).on('mouseover', () => {
-                      window.setTimeout((e) => {
-                          const stillHovered = (e.parentElement.querySelector(':hover') === e);
-                          if (stillHovered) {
-                              self.scope.$evalAsync(() => {
-                                  self.activeDistrict = {
-                                      name: districtsName,
-                                      data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
-                                  };
-                              });
-                          }
-                      }, 1000, this);
                   });
-                  return '';
               });
         });
 

@@ -7,12 +7,15 @@ const pdfMakeReturn = {
     download: jasmine.createSpy('pdfdownload')
 };
 
+const gettextCatalogMock = {
+    getString: jasmine.createSpy('getString')
+};
+
 
 describe('PDFExport Controller', () => {
 
     beforeEach(() => {
-        pef = PDFExportController.pdfExportFactory()();
-        pef.$onInit();
+        pef = new PDFExportController(gettextCatalogMock);
         pef.country = {
             name: 'a'
         };

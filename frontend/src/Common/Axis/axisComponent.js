@@ -8,10 +8,9 @@ const axisComponent = {
     controllerAs: 'vm',
     name: 'axis',
     bindings: {
-        axisData: '<',
-        axisId: '<',
+        axisIndex: '<',
         showCurrent: '@',
-        domainId: '<'
+        domainIndex: '<'
     }
 };
 

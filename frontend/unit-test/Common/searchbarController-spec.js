@@ -8,7 +8,7 @@ let sb = {};
 describe('Searchbar Components controller', () => {
 
     beforeEach(() => {
-        sb = SearchbarController.searchbarFactory()($state(), {}, $ngRedux, {});
+        sb = SearchbarController.searchbarFactory()($state(), {}, $ngRedux);
         sb.scope = $scope(sb);
         sb.EE = EE;
         sb.$onInit();
@@ -20,7 +20,6 @@ describe('Searchbar Components controller', () => {
     });
 
     it('fetches basic information about search results', () => {
-        expect(typeof sb.filters).toBe('object');
         expect(typeof sb.resultNr).toBe('number');
     });
 
@@ -32,7 +31,12 @@ describe('Searchbar Components controller', () => {
 
     it('should have a function that perform a search', () => {
         sb.searchProjects = jasmine.createSpy('searchProjects').and.returnValue(Promise.resolve());
+        sb.filters = [{
+            active: false,
+            value: 1
+        }];
         sb.search('yolo');
+
         expect(sb.searchProjects).not.toHaveBeenCalled();
         sb.filters[0].active = true;
         sb.searchStr = 'swag';

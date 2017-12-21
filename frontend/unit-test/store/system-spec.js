@@ -43,6 +43,16 @@ describe('System Store Module', () => {
 
         });
 
+        it('getLanguages', () => {
+            const state = {
+                system: {
+                    languages: [{ flag: '1' }]
+                }
+            };
+            const result = SystemModule.getLanguages(state);
+            expect(result[0].flag).toBe('/static/flags/1');
+        });
+
     });
 
     describe('ACTIONS', () => {
@@ -52,6 +62,13 @@ describe('System Store Module', () => {
             await SystemModule.loadUserProfiles()(dispatch);
             expect(axios.get).toHaveBeenCalledWith('/api/userprofiles/');
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_USER_PROFILES', profiles: 1 });
+        }));
+
+        it('loadStaticData', A(async () => {
+            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            await SystemModule.loadStaticData()(dispatch);
+            expect(axios.get).toHaveBeenCalledWith('/api/static-data/');
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_LANGUAGES', languages: undefined });
         }));
 
         it('searchProjects', A(async() => {
@@ -101,9 +118,17 @@ describe('System Store Module', () => {
 
         it('UNSET_PROJECT_SEARCH_RESULT', () => {
             let state = {};
-            const action = { type: 'UNSET_PROJECT_SEARCH_RESULT'};
+            const action = { type: 'UNSET_PROJECT_SEARCH_RESULT' };
             state = SystemModule.default(state, action);
             expect(state.projectSearch).toEqual([]);
+
+        });
+
+        it('SET_LANGUAGES', () => {
+            let state = {};
+            const action = { type: 'SET_LANGUAGES', languages: 1 };
+            state = SystemModule.default(state, action);
+            expect(state.languages).toEqual(1);
 
         });
     });

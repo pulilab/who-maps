@@ -1,19 +1,25 @@
 <div class="project-section section-strategy read-only" md-whiteframe="2">
   <div class="section-title md-title">
-    2. Implementation overview
+    <translate>2. Implementation overview</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
-    <h6>Add one or more Software and related Digital Health Interventions (DHI):</h6>
+    <h6>
+      <translate>Add one or more Software and related Digital Health Interventions (DHI):</translate>
+    </h6>
 
     <div class="input-group" ng-repeat="platform in vm.project.platforms">
       <div class="extra-margin">
-        <h6>Software</h6>
+        <h6>
+          <translate>Software</translate>
+        </h6>
         <p>{{platform.name}}</p>
       </div>
       <div>
-        <h6>Digital Health Interventions</h6>
+        <h6>
+          <translate>Digital Health Interventions</translate>
+        </h6>
         <div layout="row">
           <ul>
             <li ng-repeat="s in platform.strategies">{{s.name}}</li>
@@ -25,7 +31,9 @@
 
   <div class="section-wrapper">
 
-    <h6>Health focus area(s)</h6>
+    <h6>
+      <translate>Health focus area(s)</translate>
+    </h6>
 
     <div>
       <ul>
@@ -33,7 +41,9 @@
       </ul>
     </div>
 
-    <h6>What are the Health System Challenges (HSC) your project addresses?</h6>
+    <h6>
+      <translate>What are the Health System Challenges (HSC) your project addresses?</translate>
+    </h6>
 
     <div>
       <ul>
@@ -41,7 +51,9 @@
       </ul>
     </div>
 
-    <h6>What part(s) of the Health Information System (HIS) does this project support?</h6>
+    <h6>
+      <translate>What part(s) of the Health Information System (HIS) does this project support?</translate>
+    </h6>
 
     <div>
       <ul>
@@ -49,38 +61,54 @@
       </ul>
     </div>
 
-    <h6>What kind of coverage does your project have?</h6>
+    <h6>
+      <translate>What kind of coverage does your project have?</translate>
+    </h6>
 
     <div>
       <div layout="column">
-        <span ng-show="vm.project.coverageType === 1">Sub-national</span>
-        <span ng-show="vm.project.coverageType === 2">National</span>
+        <span ng-show="vm.project.coverageType === 1">
+          <translate>Sub-national</translate>
+        </span>
+        <span ng-show="vm.project.coverageType === 2">
+          <translate>National</translate>
+        </span>
       </div>
     </div>
 
     <div ng-show="vm.project.coverageType === 1">
-      <h6 class="subtitle"><i class="material-icons">&#xE567;</i> District level deployment</h6>
+      <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
+        <translate>District level deployment</translate>
+      </h6>
 
       <div class="input-group" ng-repeat="cov in vm.project.coverage">
         <div layout="column">
           <div layout="row">
             <div class="district" flex="50">
-              <h6>District</h6>
+              <h6>
+                <translate>District</translate>
+              </h6>
               <p>{{cov.district}}</p>
             </div>
             <div flex="50"></div>
           </div>
           <div layout="row">
             <div class="number" flex="20">
-              <h6># Health Workers</h6>
+              <h6>
+                <translate># Health Workers</translate>
+              </h6>
               <p>{{cov.health_workers}}</p>
             </div>
             <div class="number" flex="20">
-              <h6># Facilities</h6>
+              <h6>
+                <translate># Facilities</translate>
+              </h6>
               <p>{{cov.facilities}}</p>
             </div>
             <div class="number" flex="20">
-              <h6># Clients</h6>
+              <h6>
+                <translate># Clients</translate>
+              </h6>
               <p>{{cov.clients}}</p>
             </div>
           </div>
@@ -89,20 +117,28 @@
     </div>
 
     <div ng-show="vm.project.coverageType === 2">
-      <h6 class="subtitle"><i class="material-icons">&#xE153;</i> National level deployment</h6>
+      <h6 class="subtitle"><i class="material-icons">&#xE153;</i>
+        <translate>National level deployment</translate>
+      </h6>
 
       <div class="input-group">
         <div layout="row">
           <div class="number" flex="20">
-            <h6># Health Workers</h6>
+            <h6>
+              <translate># Health Workers</translate>
+            </h6>
             <p>{{vm.project.national_level_deployment.health_workers}}</p>
           </div>
           <div class="number" flex="20">
-            <h6># Facilities</h6>
+            <h6>
+              <translate># Facilities</translate>
+            </h6>
             <p>{{vm.project.national_level_deployment.facilities}}</p>
           </div>
           <div class="number" flex="20">
-            <h6># Clients</h6>
+            <h6>
+              <translate># Clients</translate>
+            </h6>
             <p>{{vm.project.national_level_deployment.clients}}</p>
           </div>
           <div flex="40"></div>
@@ -110,7 +146,9 @@
       </div>
     </div>
 
-    <h6>Has the government approved the project?</h6>
+    <h6>
+      <translate>Has the government approved the project?</translate>
+    </h6>
 
     <div>
       <div layout="column">
@@ -119,15 +157,25 @@
       </div>
     </div>
 
-    <h6>Has the government financially invested in the project?</h6>
+    <h6>
+      <translate>Has the government financially invested in the project?</translate>
+    </h6>
 
     <div>
-      <p ng-show="vm.project.government_investor === 0">No, they have not yet contributed</p>
-      <p ng-show="vm.project.government_investor === 1">Yes, they are contributing in-kind people or time</p>
-      <p ng-show="vm.project.government_investor === 2">Yes, there is a financial contribution through MOH budget</p>
+      <p ng-show="vm.project.government_investor === 0">
+        <translate>No, they have not yet contributed</translate>
+      </p>
+      <p ng-show="vm.project.government_investor === 1">
+        <translate>Yes, they are contributing in-kind people or time</translate>
+      </p>
+      <p ng-show="vm.project.government_investor === 2">
+        <translate>Yes, there is a financial contribution through MOH budget</translate>
+      </p>
     </div>
 
-    <h6>Implementing partners</h6>
+    <h6>
+      <translate>Implementing partners</translate>
+    </h6>
 
     <div>
       <ul>
@@ -135,7 +183,9 @@
       </ul>
     </div>
 
-    <h6>Donors</h6>
+    <h6>
+      <translate>Donors</translate>
+    </h6>
 
     <div>
       <ul>

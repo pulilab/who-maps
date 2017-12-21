@@ -1,20 +1,24 @@
 <div class="project-section project-navigation" md-whiteframe="2">
-  <div class="section-title md-title">Navigation</div>
+  <div class="section-title md-title">
+    <translate>Navigation</translate>
+  </div>
   <div class="edit-mode-switch" layout="row" layout-align="start center" ng-if="vm.state.current.name === 'editProject'">
-    <div>Switch view:</div>
+    <div>
+      <translate>Switch view:</translate>
+    </div>
     <div layout="row" layout-align="stretch">
       <div>
         <button type="button" ng-click="vm.goTo('draft')" class="draft" ng-class="{'active': vm.state.params.editMode === 'draft'}">
-          Draft
+          <translate>Draft</translate>
         </button>
       </div>
       <div>
         <button type="button"
                 ng-click="vm.goTo('publish')" class="publish" ng-class="{'active': vm.state.params.editMode === 'publish'}">
           <md-tooltip md-autohide md-direction="top" ng-show="!vm.project.hasPublishedVersion">
-            There is no published version
+            <translate>There is no published version</translate>
           </md-tooltip>
-          Published
+          <translate>Published</translate>
         </button>
       </div>
     </div>
@@ -23,46 +27,71 @@
     <ul>
       <li class="general-overview active">
         <a ng-click="vm.scrollTo('general-overview')">
-          <span><i class="material-icons">&#xE5C8;</i></span>General
+          <span class="step">
+            <i class="material-icons">&#xE5C8;</i>
+          </span>
+          <translate>General</translate>
         </a>
       </li>
       <li class="implementation-overview">
         <a ng-click="vm.scrollTo('implementation-overview')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Implementation
+          <span class="step">
+            <i class="material-icons">&#xE5C8;</i>
+          </span>
+          <translate>Implementation</translate>
         </a>
       </li>
       <li class="technology">
         <a ng-click="vm.scrollTo('technology')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Technology
+          <span class="step">
+            <i class="material-icons">&#xE5C8;</i>
+          </span>
+          <translate>Technology</translate>
         </a>
       </li>
       <li class="interoperability">
         <a ng-click="vm.scrollTo('interoperability')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Interoperability
+          <span class="step">
+            <i class="material-icons">&#xE5C8;</i>
+          </span>
+          <translate>Interoperability</translate>
         </a>
       </li>
       <li class="country-fields" ng-show="vm.countryFields && vm.countryFields.length > 0">
         <a ng-click="vm.scrollTo('country-fields')">
-          <span><i class="material-icons">&#xE5C8;</i></span>Country fields
+          <span class="step">
+            <i class="material-icons">&#xE5C8;</i>
+          </span>
+          <translate>Country fields</translate>
         </a>
       </li>
     </ul>
   </div>
   <div layout="column" class="edit-buttons" ng-if="!vm.readOnlyMode">
     <div class="primary-buttons" ng-if-start="vm.state.params.editMode === 'draft' && vm.state.current.name === 'editProject'">
-      <md-button type="submit" class="md-primary md-raised">Publish</md-button>
+      <md-button type="submit" class="md-primary md-raised">
+        <translate>Publish</translate>
+      </md-button>
     </div>
     <div class="secondary-buttons">
-      <md-button class="md-primary" ng-click="vm.saveDraftEvent($event)">Save draft</md-button>
+      <md-button class="md-primary" ng-click="vm.saveDraftEvent($event)">
+        <translate>Save draft</translate>
+      </md-button>
     </div>
     <div ng-if-end class="secondary-buttons" ng-show="vm.project.hasPublishedVersion">
-      <md-button class="md-warn" ng-click="vm.discardDraftEvent($event)">Discard draft</md-button>
+      <md-button class="md-warn" ng-click="vm.discardDraftEvent($event)">
+        <translate>Discard draft</translate>
+      </md-button>
     </div>
     <div class="primary-buttons" ng-if="vm.state.current.name === 'newProject'">
-      <md-button class="md-primary md-raised" ng-click="vm.saveDraftEvent($event)">Save draft</md-button>
+      <md-button class="md-primary md-raised" ng-click="vm.saveDraftEvent($event)">
+        <translate>Save draft</translate>
+      </md-button>
     </div>
     <div class="secondary-buttons" ng-if="vm.state.params.editMode === 'publish' || vm.state.current.name === 'newProject'">
-      <md-button class="md-primary" ui-sref="dashboard">Go to dashboard</md-button>
+      <md-button class="md-primary" ui-sref="dashboard">
+        <translate>Go to dashboard</translate>
+      </md-button>
     </div>
   </div>
 </div>

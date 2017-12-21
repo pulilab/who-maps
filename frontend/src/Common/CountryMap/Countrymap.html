@@ -9,13 +9,27 @@
     </div>
 
     <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
-      <md-tab label="Total">
+      <md-tab label="{{'Total'|translate}}">
 
         <div class="countrychart-tooltip-main" layout="column">
 
-          <div flex layout="row" class="coverage-data" ng-repeat="(key, numb) in vm.boundNrs" ng-init="vm.saveClass(key, $index)">
-            <div flex class="cap lh">{{key}}:<br></div>
-            <div class="bold lh colorednr" ng-class="'color'+$index">{{numb}}</div>
+          <div flex layout="row" class="coverage-data" >
+            <div flex class="cap lh">
+              <translate>Clients: </translate>
+            </div>
+            <div class="bold lh colorednr color0">{{vm.boundNrs.clients || 0}}</div>
+          </div>
+          <div flex layout="row" class="coverage-data">
+            <div flex class="cap lh">
+              <translate>Health Workers: </translate>
+            </div>
+            <div class="bold lh colorednr color1">{{vm.boundNrs.health_workers || 0}}</div>
+          </div>
+          <div flex layout="row" class="coverage-data">
+            <div flex class="cap lh">
+              <translate>Facilities: </translate>
+            </div>
+            <div class="bold lh colorednr color2">{{vm.boundNrs.facilities || 0}}</div>
           </div>
 
         </div>
@@ -26,33 +40,66 @@
             {{vm.activeDistrict.name}}
           </div>
 
-          <div flex
-               class="coverage-data"
-               layout="row"
-               ng-repeat="(key, datum) in vm.activeDistrict.data">
-
-            <div flex class="cap lh">{{key}}</div>
-            <div class="bold lh colorednr" ng-class="'color' + vm.covLib[key]">{{datum}}</div>
+          <div ng-show="vm.activeDistrict.data">
+            <div flex
+                 class="coverage-data"
+                 layout="row">
+              <div flex class="cap lh">
+                <translate>Clients: </translate>
+              </div>
+              <div class="bold lh colorednr color0">{{vm.activeDistrict.data.clients}}</div>
+            </div>
+            <div flex
+                 class="coverage-data"
+                 layout="row">
+              <div flex class="cap lh">
+                <translate>Health Workers: </translate>
+              </div>
+              <div class="bold lh colorednr color1">{{vm.activeDistrict.data.health_workers}}</div>
+            </div>
+            <div flex
+                 class="coverage-data"
+                 layout="row">
+              <div flex class="cap lh">
+                <translate>Facilities: </translate>
+              </div>
+              <div class="bold lh colorednr color2">{{vm.activeDistrict.data.facilities}}</div>
+            </div>
           </div>
-          <div class="bold lh" ng-show="!vm.activeDistrict.data">No coverage data</div>
+          <div class="bold lh" ng-show="!vm.activeDistrict.data" translate>No coverage data</div>
 
         </div>
 
       </md-tab>
-      <md-tab label="Global" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+      <md-tab label="{{'Global'|translate}}" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
 
         <div class="countrychart-tooltip-main">
 
-          <div flex
-               class="coverage-data"
-               layout="row"
-               ng-repeat="(key, datum) in vm.nationalLevelCoverage"
-               ng-init="vm.saveClass(key, $index, vm.boundNrs)">
+          <div ng-show="vm.nationalLevelCoverage">
+            <div flex class="coverage-data" layout="row">
+              <div flex class="cap lh">
+                <translate>Clients: </translate>
+              </div>
+              <div class="bold lh colorednr color0">{{vm.nationalLevelCoverage.clients}}</div>
+            </div>
 
-            <div flex class="cap lh">{{key}}</div>
-            <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
+            <div flex class="coverage-data" layout="row">
+              <div flex class="cap lh">
+                <translate>Health Workers: </translate>
+              </div>
+              <div class="bold lh colorednr color1">{{vm.nationalLevelCoverage.health_workers}}</div>
+            </div>
+
+            <div flex class="coverage-data"layout="row">
+              <div flex class="cap lh">
+                <translate>Facilities: </translate>
+              </div>
+              <div class="bold lh colorednr color2">{{vm.nationalLevelCoverage.facilities}}</div>
+            </div>
+
           </div>
-          <div class="bold lh" ng-show="!vm.nationalLevelCoverage">No national coverage</div>
+
+          <div class="bold lh" ng-show="!vm.nationalLevelCoverage" translate>No national coverage</div>
 
         </div>
 
@@ -70,7 +117,7 @@
 
     <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
 
-      <md-tab label="Sub-national">
+      <md-tab label="{{'Sub-national'|translate}}">
 
         <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig" ng-show="vm.activeDistrict.name" >
 
@@ -81,7 +128,7 @@
             class="projectcont"
             ng-repeat="project in vm.activeDistrict.data | limitTo:5"
             ng-click="vm.goToProject(project)"
-            >
+          >
 
             <div class="projectname">{{project.name}}</div>
             <div class="projectorg">{{project.organisation}}</div>
@@ -89,11 +136,11 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh no-projects" ng-show="!vm.activeDistrict.data">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.activeDistrict.data" translate>No projects available</div>
         </div>
       </md-tab>
 
-      <md-tab label="National" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+      <md-tab label="{{'National'|translate}}" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
         <div class="countrychart-tooltip-main countrychart-tooltip-main-big mainbig">
 
           <div flex
@@ -109,7 +156,7 @@
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
-          <div class="bold lh no-projects" ng-show="!vm.nationalLevelCoverage">No projects available</div>
+          <div class="bold lh no-projects" ng-show="!vm.nationalLevelCoverage" translate>No projects available</div>
         </div>
       </md-tab>
     </md-tabs>

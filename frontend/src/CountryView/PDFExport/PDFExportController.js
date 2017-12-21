@@ -5,9 +5,9 @@ import base64Images from './images/base64Images';
 
 class PDFExportController {
 
-    constructor() {
-        this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
+    constructor(gettextCatalog) {
+        this.onInit();
+        this.makePDF = this.makePDF.bind(this, gettextCatalog);
         this.pdfMake = pdfMake;
     }
 
@@ -15,9 +15,6 @@ class PDFExportController {
         this.logo = require('./images/dha-logo.svg');
         this.exportDate = moment().format('Do MMM, YYYY');
         this.isAllCountry = this.country && this.country.name === 'Show all countries';
-    }
-
-    onDestroy() {
     }
 
     printDate(dateString) {
@@ -31,7 +28,7 @@ class PDFExportController {
         this.countryFlag = countryFlag;
     }
 
-    makePDF() {
+    makePDF(gettextCatalog) {
         const docDefinition = {
             content: [
                 {
@@ -41,7 +38,7 @@ class PDFExportController {
                         body: [
                             [
                                 {
-                                    text: 'Digital Health Atlas',
+                                    text: gettextCatalog.getString('Digital Health Atlas'),
                                     fillColor: '#1A237E',
                                     color: '#FFFFFF',
                                     colSpan: 2,
@@ -58,7 +55,7 @@ class PDFExportController {
                                     margin: [5, 0, 0, 0]
                                 },
                                 {
-                                    text: `List exported on ${this.exportDate}`,
+                                    text: gettextCatalog.getString(`List exported on ${this.exportDate}`),
                                     fillColor: '#EEEEEE',
                                     color: '#000000',
                                     style: 'headerSecondRowRight',
@@ -122,29 +119,36 @@ class PDFExportController {
                                 fillColor: '#EEEEEE',
                                 style: 'tableHeader', colSpan: this.isAllCountry ? 4 : 5
                             }, '', '', '',
-                            this.isAllCountry ? { text: `UUID: ${project.uuid || ''}`, style: 'subHeader' } : '',
-                            this.isAllCountry ? country :  { text: `UUID: ${project.uuid || ''}`, style: 'subHeader' }
+                            this.isAllCountry ? { text: gettextCatalog.getString(`UUID: ${project.uuid || ''}`),
+                                style: 'subHeader' } : '',
+                            this.isAllCountry ? country :
+                            { text: gettextCatalog.getString(`UUID: ${project.uuid || ''}`),
+                                style: 'subHeader' }
                         ],
                         [
-                            [{ text: 'Date of: ', style: 'subHeader' }, this.printDate(project.implementation_dates)],
-                            [{ text: 'Organisation name: ', style: 'subHeader' }, project.organisation_name || ''],
-                            [{ text: 'Donors:', style: 'subHeader' },  project.donors.join(', ')],
+                            [{ text: gettextCatalog.getString('Date of: '), style: 'subHeader' },
+                                this.printDate(project.implementation_dates)],
+                            [{ text: gettextCatalog.getString('Organisation name: '), style: 'subHeader' },
+                                project.organisation_name || ''],
+                            [{ text: gettextCatalog.getString('Donors:'), style: 'subHeader' },
+                                project.donors.join(', ')],
                             [
-                                { text: 'Implementing partners:', style: 'subHeader' },
+                                { text: gettextCatalog.getString('Implementing partners:'), style: 'subHeader' },
                                 project.implementing_partners || ''],
                             [
-                                { text: 'Health Focus Area:', style: 'subHeader' },
+                                { text: gettextCatalog.getString('Health Focus Area:'), style: 'subHeader' },
                                 project.health_focus_areas ? project.health_focus_areas.join(', ') : ''
                             ],
                             [
-                                { text: 'Point of contact:', style: 'subHeader' },
+                                { text: gettextCatalog.getString('Point of contact:'), style: 'subHeader' },
                                 `${project.contact_name || ''} - ${project.contact_email || ''}`
                             ]
                         ],
                         [
                             {
                                 stack: [
-                                    { text: 'Overview of digital health implementation: ', style: 'subHeader' },
+                                    { text: gettextCatalog.getString('Overview of digital health implementation: '),
+                                        style: 'subHeader' },
                                     { text: project.implementation_overview || '' }
                                 ],
                                 colSpan: 3
@@ -152,7 +156,7 @@ class PDFExportController {
                             '', '',
                             {
                                 stack: [
-                                    { text: 'Geographical coverage: ', style: 'subHeader' },
+                                    { text: gettextCatalog.getString('Geographical coverage: '), style: 'subHeader' },
                                     project.geographic_scope || ''
                                 ],
                                 colSpan: 3
@@ -165,18 +169,6 @@ class PDFExportController {
         });
         this.pdfMake(docDefinition).download('clv-searchable-export.pdf');
     }
-
-    static pdfExportFactory() {
-
-        function pdfExportController() {
-            return new PDFExportController();
-        }
-
-        pdfExportController.$inject = [];
-
-        return pdfExportController;
-    }
-
 }
 
 export default PDFExportController;

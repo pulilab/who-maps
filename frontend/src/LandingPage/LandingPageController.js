@@ -12,6 +12,7 @@ class LandingPageModuleController {
         this.$anchorScroll = $anchorScroll;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, CountryModule)(this);
     }
 

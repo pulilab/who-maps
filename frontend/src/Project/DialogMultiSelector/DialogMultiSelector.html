@@ -9,17 +9,21 @@
   </ul>
 
   <md-button ng-show="vm.selection.length > 0" class="edit-button md-primary" md-no-ink ng-click="vm.showModal($event)">
-    <md-icon>playlist_add_check</md-icon> Edit selection <!-- {{vm.buttonName}} -->
+    <md-icon>playlist_add_check</md-icon>
+    <translate>Edit selection</translate>
   </md-button>
 
   <md-button class="add-button md-primary" ng-hide="vm.elements.length === 0 || vm.selection.length > 0" md-no-ink ng-click="vm.showModal($event)">
-    <md-icon>add</md-icon> Add {{vm.buttonName}}
+    <md-icon>add</md-icon>
+    <translate>Add {{vm.buttonName}}</translate>
   </md-button>
 
   <md-input-container class="dms-error">
     <input name="{{vm.name}}" ng-model="vm.selection" ng-required="vm.isRequired" aria-label="vm.name" class="hidden-input">
     <div ng-messages="vm.formElement.$error" class="custom-error">
-      <div ng-message="required">This is required.</div>
+      <div ng-message="required">
+        <translate>This is required.</translate>
+      </div>
       <div ng-message="custom">
         <div ng-repeat="message in vm.formElement.customError">
           {{message}}

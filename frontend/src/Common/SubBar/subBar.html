@@ -1,123 +1,137 @@
 <md-toolbar class="md-medium-tall toolbar-project md-whiteframe-1dp" ng-if="vm.showSubBar()">
-    <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
+  <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-hide="!vm.state.params.appName">
 
-        <div class="large project-name">
-            <div>{{vm.currentProject.name}} ({{vm.currentProject.country_name}})</div>
-            <md-icon class="material-icons viewerIcon" ng-show="vm.currentProject.isViewer">visibility</md-icon>
-            <md-icon class="material-icons memberIcon" ng-show="vm.currentProject.isMember">grade</md-icon>
+    <div class="large project-name">
+      <div>{{vm.currentProject.name}} ({{vm.currentProject.country_name}})</div>
+      <md-icon class="material-icons viewerIcon" ng-show="vm.currentProject.isViewer">visibility</md-icon>
+      <md-icon class="material-icons memberIcon" ng-show="vm.currentProject.isMember">grade</md-icon>
+    </div>
+
+    <div flex></div>
+
+    <div class="project-info" layout="row" layout-align="end center">
+      <div class="info-block" ng-show="vm.currentProject.isPublished">
+        <h6>
+          <translate>UUID</translate>
+        </h6>
+        <span class="data-info">{{vm.currentProject.public_id}}</span>
+      </div>
+      <div class="info-block">
+        <h6>
+          <translate>Version</translate>
+        </h6>
+        <span ng-show="vm.currentProject.isPublished" class="data-info">
+          {{vm.lastVersion}}.
+          {{vm.lastVersionDate ? ('(' + (vm.lastVersionDate | date: medium) + ')') : '' }}
+        </span>
+        <span ng-hide="vm.currentProject.isPublished" class="data-info">
+          <translate>Draft</translate>
+        </span>
+      </div>
+      <div class="info-block">
+        <h6>
+          <translate>Organisation</translate>
+        </h6>
+        <span class="data-info">{{vm.currentProject.organisation_name}}</span>
+      </div>
+      <div class="info-block" ng-if="vm.currentProject.contact_name" layout="row">
+        <div>
+          <h6>
+            <translate>Contact Person</translate>
+          </h6>
+          <span class="data-info">{{vm.currentProject.contact_name}}</span>
         </div>
+        <div>
+          <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
+            <md-icon class="material-icons">
+              mail_outline
+            </md-icon>
+            <translate>EMAIL</translate>
+          </md-button>
+        </div>
+      </div>
 
-        <div flex></div>
+    </div>
+  </div>
+  <div class="md-toolbar-tools md-toolbar-tools-mainmenu">
+    <div class="project-mainmenu">
+      <md-button ui-sref="dashboard"
+                 ui-sref-active="active" md-no-ink>
+        <md-tooltip md-autohide md-direction="top">
+          <translate>GO TO DASHBOARD</translate>
+        </md-tooltip>
+        <span>
+          <translate>Dashboard</translate>
+        </span>
+      </md-button>
 
-        <div class="project-info" layout="row">
-            <div class="info-block" ng-show="vm.currentProject.isPublished">
-                <h6>UUID</h6>
-                <span>{{vm.currentProject.public_id}}</span>
-            </div>
-            <div class="info-block">
-                <h6>Version</h6>
-                <span ng-show="vm.currentProject.isPublished">
-                    {{vm.lastVersion}}.
-                    {{vm.lastVersionDate ? ('(' + (vm.lastVersionDate | date: medium) + ')') : '' }}
-                </span>
-                <span ng-hide="vm.currentProject.isPublished">
-                    Draft
-                </span>
-            </div>
-            <div class="info-block">
-                <h6>Organization</h6>
-                <span>{{vm.currentProject.organisation_name}}</span>
-            </div>
-            <div class="info-block" ng-if="vm.currentProject.contact_name">
-                <h6>Contact Person</h6>
-                <span>{{vm.currentProject.contact_name}}</span>
-                <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
-                    <md-icon class="material-icons">
-                        mail_outline
-                    </md-icon>
-                    EMAIL
+      <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.currentProject.isMember && !vm.viewMode" ui-sref-active="active" md-no-ink>
+        <md-tooltip md-autohide md-direction="top">
+          <translate >EDIT PROJECT DETAILS</translate>
+        </md-tooltip>
+        <span>
+          <translate>Edit Project</translate>
+        </span>
+      </md-button>
+
+      <md-button ui-sref="maps" ng-show="vm.userType !== 'G'" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
+        <md-tooltip md-autohide md-direction="top">
+          <translate >GO TO MAPS TOOLKIT</translate>
+        </md-tooltip>
+        <span ng-show="vm.currentProject.isViewer">
+          <translate>Visualize Score</translate>
+        </span>
+        <span ng-show="vm.currentProject.isMember">
+          <translate>Update Score</translate>
+        </span>
+      </md-button>
+
+      <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
+        <md-tooltip md-autohide md-direction="top">
+          <translate>SHOW SCORE SUMMARY</translate>
+        </md-tooltip>
+        <span>
+          <translate>Summary Score</translate>
+        </span>
+      </md-button>
+
+      <div class="project-submenu">
+        <md-menu md-position-mode="target-left target">
+          <md-button ng-click="vm.openMenu($mdOpenMenu, $event)" ng-show="vm.currentProject.isPublished" class="share-link" aria-label="Share" md-no-ink>
+            <!-- <md-icon class="material-icons">share</md-icon> -->
+            <translate>Share Public Link</translate>
+          </md-button>
+          <md-menu-content class="share-url">
+            <md-menu-item>
+              <span class="share-title">
+                <translate>Share Public Link</translate>
+              </span>
+            </md-menu-item>
+            <md-menu-item>
+              <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
+            </md-menu-item>
+            <md-menu-item>
+              <div class="share-button-container" >
+                <md-button ng-hide="vm.shareUrl.copyClicked"
+                           data-clipboard-target='.share-url-box'
+                           class="md-primary md-raised share-copy"
+                           md-prevent-menu-close="md-prevent-menu-close" >
+                  <translate>Copy URL</translate>
                 </md-button>
-            </div>
-
-        </div>
+                <md-button ng-show="vm.shareUrl.copyClicked"
+                           class="md-raised share-copy share-copied">
+                  <md-icon>check</md-icon>
+                  <translate>Copied</translate>
+                </md-button>
+                <md-button class="share-cancel">
+                  <translate>Close</translate>
+                </md-button>
+              </div>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
     </div>
-    <div class="md-toolbar-tools md-toolbar-tools-mainmenu">
-        <div class="project-mainmenu">
-            <md-button ui-sref="dashboard"
-                       ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    GO TO DASHBOARD
-                </md-tooltip>
-                Dashboard
-            </md-button>
-
-            <md-button ui-sref="editProject" ng-disabled="!vm.hasProfile()" ng-if="vm.currentProject.isMember && !vm.viewMode" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    EDIT PROJECT DETAILS
-                </md-tooltip>
-                Edit Project
-            </md-button>
-
-            <md-button ui-sref="inventory"  ng-disabled="!vm.hasProfile()" ng-if="vm.userProfile.account_type === 'Y'" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    INVENTORY PROJECT CREATION
-                </md-tooltip>
-                Inventory
-            </md-button>
-            <md-button ui-sref="#"  ng-show="vm.userType !== 'G'" ng-disabled="!vm.hasProfile()" ng-if="false" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    TIPS AND RESOURCES
-                </md-tooltip>
-                Improve Project
-            </md-button>
-            <md-button ui-sref="maps" ng-show="vm.userType !== 'G'" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    GO TO MAPS TOOLKIT
-                </md-tooltip>
-                <span ng-show="vm.currentProject.isViewer"> Visualize Score </span>
-                <span ng-show="vm.currentProject.isMember"> Update Score </span>
-            </md-button>
-
-            <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
-                <md-tooltip md-autohide md-direction="top">
-                    SHOW SCORE SUMMARY
-                </md-tooltip>
-                Summary Score
-            </md-button>
-
-            <div class="project-submenu">
-                <md-menu md-position-mode="target-left target">
-                    <md-button ng-click="vm.openMenu($mdOpenMenu, $event)" ng-show="vm.currentProject.isPublished" class="share-link" aria-label="Share" md-no-ink>
-                        <!-- <md-icon class="material-icons">share</md-icon> -->
-                        Share Public Link
-                    </md-button>
-                    <md-menu-content class="share-url">
-                        <md-menu-item>
-                            <span class="share-title">Share Public Link</span>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <input readonly class="share-url-box" ng-model="vm.shareUrl.url" />
-                        </md-menu-item>
-                        <md-menu-item>
-                            <div class="share-button-container" >
-                                <md-button ng-hide="vm.shareUrl.copyClicked"
-                                           data-clipboard-target='.share-url-box'
-                                           class="md-primary md-raised share-copy"
-                                           md-prevent-menu-close="md-prevent-menu-close" >
-                                    Copy URL
-                                </md-button>
-                                <md-button ng-show="vm.shareUrl.copyClicked"
-                                           class="md-raised share-copy share-copied">
-                                    <md-icon>check</md-icon>
-                                    Copied
-                                </md-button>
-                                <md-button class="share-cancel">Close</md-button>
-                            </div>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
-        </div>
-    </div>
+  </div>
 
 </md-toolbar>

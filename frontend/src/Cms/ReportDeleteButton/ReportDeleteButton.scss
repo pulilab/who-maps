@@ -28,30 +28,19 @@ cms-report-delete-button {
         transition: $swift-ease-out;
       }
 
-      .report-text::after {
-        content: "Report";
-        position: relative;
-        top: -1px;
-        float: left;
-        display: inline-block;
+      .report-text {
         width: 0;
         overflow: hidden;
-        font-family: Roboto, "Helvetica Neue", sans-serif;
-        font-size: 14px;
-        line-height: 24px;
+        color: $text-disabled;
+        line-height: 22px;
         opacity: 0;
         transition: $swift-ease-out;
       }
 
-      .delete-text::after {
-        content: "Delete";
-        position: relative;
-        top: -1px;
-        float: left;
+      .delete-text {
+        line-height: 22px;
         display: inline-block;
-        font-family: Roboto, "Helvetica Neue", sans-serif;
-        font-size: 14px;
-        line-height: 24px;
+        color: $text-disabled;
         transition: $swift-ease-out;
       }
 
@@ -59,17 +48,16 @@ cms-report-delete-button {
         md-icon {
           color: $color-gray;
         }
-        .report-text::after {
+        .report-text {
           width: auto;
           opacity: 1;
           color: $color-gray;
         }
-        .delete-text::after {
+        .delete-text {
           color: $color-gray;
         }
       }
     }
-
   }
 
   .close {
@@ -131,7 +119,6 @@ cms-report-delete-button {
       }
 
       .report-text::after {
-        content: "Reported";
         width: auto;
         opacity: 1;
         color: $color-red;

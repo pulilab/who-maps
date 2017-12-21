@@ -97,7 +97,7 @@
           color: $text-primary;
         }
 
-        span {
+        .step {
           background-color: #CD9923;
           border-width: 2px;
         }
@@ -125,7 +125,7 @@
       }
     }
 
-    span {
+    .step {
       position: absolute;
       top: 15px;
       left: 30px;

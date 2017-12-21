@@ -2,9 +2,11 @@
 
   <div class="cms-widget-header" ng-class="vm.axisColor" layout="row">
     <div class="domain-icon" ng-class="vm.domainIcon" flex></div>
-    <div class="domain-score" flex>You've scored {{vm.domainScore}}% in {{vm.currentDomain.name}} domain!</div>
+    <div class="domain-score" flex>
+      <translate>You've scored {{vm.domainScore}} % in {{vm.currentDomain.name}} domain!</translate>
+    </div>
     <div class="domain-selector" flex>
-      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain'" class="">
+      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain' | translate" class="">
         <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
           <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain.name}}</md-option>
         </md-optgroup>
@@ -23,27 +25,61 @@
   <div layout="row" layout-margin="10" layout-wrap>
     <div class="category-column" layout="column" flex>
       <div md-whiteframe="2" class="category-header lessons-tips" layout="row"  layout-align="start center">
-        <h4>Tips and Considerations</h4>
+        <h4>
+          <translate>Tips and Considerations</translate>
+        </h4>
       </div>
       <cms-list-element ng-repeat="item in vm.lessons | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
-      <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.lessons.length === 0" class="empty-card">No lessons have been added yet...</div>
-      <md-button md-no-ink ui-sref="cms({'#': 'lessons'})" class="md-primary md-small goto-cms">More Tips &amp; Considerations</md-button>
+      <div md-whiteframe="2"
+           layout="row"
+           layout-align="start center"
+           ng-show="vm.lessons.length === 0"
+           class="empty-card">
+        <translate>No lessons have been added yet...</translate>
+      </div>
+
+      <md-button md-no-ink ui-sref="cms({'#': 'lessons'})" class="md-primary md-small goto-cms">
+        <translate>More Tips &amp; Considerations</translate>
+      </md-button>
     </div>
     <div class="category-column" layout="column" flex>
       <div md-whiteframe="2" class="category-header resources" layout="row"  layout-align="start center">
-        <h4>Resources</h4>
+        <h4>
+          <translate>Resources</translate>
+        </h4>
       </div>
       <cms-list-element ng-repeat="item in vm.resources | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
-      <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.resources.length === 0" class="empty-card">No resources have been added yet...</div>
-      <md-button md-no-ink ui-sref="cms({'#': 'resources'})" class="md-primary md-small goto-cms">More Resources</md-button>
+      <div md-whiteframe="2"
+           layout="row"
+           layout-align="start center"
+           ng-show="vm.resources.length === 0"
+           class="empty-card">
+        <translate>No resources have been added yet...</translate>
+      </div>
+      <md-button md-no-ink ui-sref="cms({'#': 'resources'})" class="md-primary md-small goto-cms">
+        <translate>More Resources</translate>
+      </md-button>
     </div>
     <div class="category-column" layout="column" flex>
-      <div md-whiteframe="2" class="category-header experiences" layout="row"  layout-align="start center">
-        <h4>Experiences</h4>
+      <div md-whiteframe="2"
+           class="category-header experiences"
+           layout="row"
+           layout-align="start center">
+        <h4>
+          <translate>Experiences</translate>
+        </h4>
       </div>
       <cms-list-element ng-repeat="item in vm.experiences | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
-      <div md-whiteframe="2" layout="row" layout-align="start center" ng-show="vm.experiences.length === 0" class="empty-card">No experiences have been added yet...</div>
-      <md-button md-no-ink ui-sref="cms({'#': 'experiences'})" class="md-primary md-small goto-cms">More Experiences</md-button>
+      <div md-whiteframe="2"
+           layout="row"
+           layout-align="start center"
+           ng-show="vm.experiences.length === 0"
+           class="empty-card">
+        <translate>No experiences have been added yet...</translate>
+      </div>
+      <md-button md-no-ink ui-sref="cms({'#': 'experiences'})" class="md-primary md-small goto-cms">
+        <translate>More Experiences</translate>
+      </md-button>
     </div>
   </div>
 

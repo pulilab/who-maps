@@ -9,6 +9,10 @@ instance.unSetAuthToken = () => {
     instance.defaults.headers.common.Authorization = null;
 };
 
+instance.setLanguageHeader = (ln) => {
+    instance.defaults.headers.common['Accept-Language']  = ln;
+};
+
 instance.setShowPopUp = handler => {
     instance.popUpFunction = handler;
 };

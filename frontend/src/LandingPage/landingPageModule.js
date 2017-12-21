@@ -22,7 +22,7 @@ function config($stateProvider, $compileProvider) {
               main: () => {
                   return su.lazyLoader($compileProvider, 'landingPageComponent');
               },
-              data: ['$ngRedux', ($ngRedux) => {
+              data: ['$ngRedux', async ($ngRedux) => {
                   return $ngRedux.dispatch(ProjectModule.loadUserProjects());
               }]
           }
@@ -39,7 +39,7 @@ function config($stateProvider, $compileProvider) {
               main: () => {
                   return su.lazyLoader($compileProvider, 'landingPageComponent');
               },
-              data: ['$ngRedux', ($ngRedux) => {
+              data: ['$ngRedux', async ($ngRedux) => {
                   return $ngRedux.dispatch(ProjectModule.loadUserProjects());
               }]
           }

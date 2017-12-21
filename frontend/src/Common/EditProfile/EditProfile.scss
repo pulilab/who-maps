@@ -1,8 +1,8 @@
 @import '../../variables';
 @import '../../mixins';
 
-$coverage-height:60px;
-$strategies-height:60px;
+$coverage-height: 60px;
+$strategies-height: 60px;
 
 edit-profile {
   display: block;
@@ -34,8 +34,6 @@ edit-profile {
     flex: 1 0 auto !important;
     height: auto !important;
     display: block;
-
-    form
 
     .edit-button {
       padding: 50px 0 30px;
@@ -71,6 +69,26 @@ edit-profile {
     font-size: 12px;
     padding-top:5px;
     color: $color-gray;
+  }
+
+  form {
+    .layout-row {
+      &.first {
+        margin-top: 20px;
+      }
+
+      > div {
+        margin-left: 40px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    ssmenu md-input-container {
+      display: block;
+    }
   }
 
 

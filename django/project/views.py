@@ -4,12 +4,14 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from django.core.cache import cache
+from django.utils.translation import get_language
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
@@ -22,10 +24,11 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 def cache_structure(fn):
     def wrapper(*args, **kwargs):
-        data = cache.get('project-structure-data')
+        cache_key = 'project-structure-data-{}'.format(get_language())
+        data = cache.get(cache_key)
         if not data:
             data = fn(*args, **kwargs)
-            cache.set('project-structure-data', data)
+            cache.set(cache_key, data)
         return data
 
     return wrapper
@@ -119,7 +122,7 @@ class ProjectPublicViewSet(ViewSet):
     @cache_structure
     def _get_project_structure(self):
         strategies = []
-        for group, _ in DigitalStrategy.GROUP_CHOICES:
+        for group, group_name in DigitalStrategy.GROUP_CHOICES:
             subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
                 subGroups.append(dict(
@@ -129,7 +132,7 @@ class ProjectPublicViewSet(ViewSet):
                 )
                 )
             strategies.append(dict(
-                name=group,
+                name=group_name,
                 subGroups=subGroups
             ))
 
@@ -142,11 +145,11 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         hsc_challenges = []
-        for hsc in HSCChallenge.objects.values('id', 'name').distinct('name'):
+        for group in HSCGroup.objects.values('id', 'name'):
             hsc_challenges.append(dict(
-                id=hsc['id'],
-                name=hsc['name'],
-                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'challenge')
+                name=group['name'],
+                challenges=[{'id': c['id'], 'challenge': c['name']}
+                            for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
             ))
 
         return dict(

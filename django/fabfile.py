@@ -210,3 +210,7 @@ def up_debug():
     time.sleep(2)
     local("docker stop whomaps_django_1")
     local("docker-compose run --service-ports django python manage.py runserver 0.0.0.0:8000")
+
+
+def update_translations():
+    local("docker-compose exec django python manage.py update_translations master.pot")

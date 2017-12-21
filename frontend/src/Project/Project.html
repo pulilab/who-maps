@@ -1,10 +1,21 @@
 <div layout="column" class="new-edit-project" layout-align="start center" ng-class="vm.state.params.editMode" >
   <div class="page-title" >
-    <h1 class="md-display-1 text-center" ng-hide="vm.editMode">Add New Digital Health Project</h1>
-    <h1 class="md-display-1 text-center"  ng-show="vm.editMode">Edit Project Info</h1>
-    <h6 class="md-subhead text-center" ng-show="vm.editMode">You are viewing the
-      <span class="draft-bit">Draft</span>
-      <span class="published-bit">Published</span> version of the project</h6>
+    <h1 class="md-display-1 text-center" ng-hide="vm.editMode">
+      <translate>Add New Digital Health Project</translate>
+    </h1>
+    <h1 class="md-display-1 text-center"  ng-show="vm.editMode">
+      <translate>Edit Project Info</translate>
+    </h1>
+    <h6 class="md-subhead text-center" ng-show="vm.editMode">
+      <translate>You are viewing the</translate>
+      <span class="draft-bit">
+        <translate>Draft</translate>
+      </span>
+      <span class="published-bit">
+        <translate>Published</translate>
+      </span>
+      <translate>version of the project>/
+    </h6>
   </div>
 
   <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">-->

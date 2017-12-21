@@ -9,11 +9,12 @@ import * as UserModule from '../store/modules/user';
 
 class CountryViewModuleController {
 
-    constructor($scope, $filter, $state, $ngRedux) {
+    constructor($scope, $filter, $state, $ngRedux, gettextCatalog) {
         this.scope = $scope;
         this.filter = $filter;
         this.state = $state;
-        this.pdfExport = new PDFExportController();
+        this.gettextCatalog = gettextCatalog;
+        this.pdfExport = new PDFExportController(gettextCatalog);
         this.$onInit = this.onInit.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
@@ -142,8 +143,12 @@ class CountryViewModuleController {
         if (!countryProjects || !Array.isArray(countryProjects)) {
             return;
         }
+        const gettextCatalog = this.gettextCatalog;
+        // whenever using the translation module in js the string must always be call from gettextCatalog.getString
+        // otherwise the string extractor does not pick it up
+        // the translations still works if the sting is present in the po file
         const digitalHealthInterventions = {
-            name: 'Digital Health Interventions',
+            name: gettextCatalog.getString('Digital Health Interventions'),
             filterMappingFn: p => {
                 return Array.isArray(p.digital_strategies) ? p.digital_strategies : [];
             },
@@ -152,7 +157,7 @@ class CountryViewModuleController {
         };
 
         const healthInterventions = {
-            name: 'Health Focus Areas',
+            name: gettextCatalog.getString('Health Focus Areas'),
             filterMappingFn: p => {
                 return Array.isArray(p.health_focus_areas) ? p.health_focus_areas : [];
             },
@@ -160,7 +165,7 @@ class CountryViewModuleController {
             items: this.prepareFiltersCheckboxes('health_focus_areas')
         };
         const healthInformationSystems = {
-            name: 'Health Information Systems',
+            name: gettextCatalog.getString('Health Information Systems'),
             filterMappingFn: p => {
                 return Array.isArray(p.his_bucket) ? p.his_bucket : [];
             },
@@ -169,7 +174,7 @@ class CountryViewModuleController {
         };
 
         const healthSystemChallenges = {
-            name: 'Health System Challenges',
+            name: gettextCatalog.getString('Health System Challenges'),
             filterMappingFn: p => {
                 return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];
             },
@@ -178,7 +183,7 @@ class CountryViewModuleController {
         };
 
         const software = {
-            name: 'Software',
+            name: gettextCatalog.getString('Software'),
             filterMappingFn: p => {
                 return Array.isArray(p.platforms) ? p.platforms : [];
             },
@@ -275,11 +280,11 @@ class CountryViewModuleController {
     }
 
     static countryControllerFactory() {
-        function countryController($scope, $filter, $state, $ngRedux) {
-            return new CountryViewModuleController($scope, $filter, $state, $ngRedux);
+        function countryController($scope, $filter, $state, $ngRedux, gettextCatalog) {
+            return new CountryViewModuleController($scope, $filter, $state, $ngRedux, gettextCatalog);
         }
 
-        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux'];
+        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux', 'gettextCatalog'];
 
         return countryController;
     }

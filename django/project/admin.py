@@ -9,7 +9,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from user.models import UserProfile
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectApproval
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCGroup, HSCChallenge, ProjectApproval
 
 
 class ChangeNotificationMixin(object):
@@ -59,31 +59,35 @@ class InteroperabilityLinkAdmin(ChangeNotificationMixin, AllObjectsAdmin):
 
 class DigitalStrategyAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     list_display = [
-        '__str__',
+        '__str__'
     ]
 
 
-class HealthFocusAreaAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HealthFocusAreaAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HealthCategoryAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HealthCategoryAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class LicenceAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class LicenceAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class InteroperabilityStandardAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HISBucketAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HISBucketAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HSCChallengeAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HSCGroupAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+    pass
+
+
+class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
@@ -111,4 +115,5 @@ admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(Licence, LicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
 admin.site.register(HISBucket, HISBucketAdmin)
+admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)

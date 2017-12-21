@@ -1,15 +1,28 @@
 import angular from 'angular';
 import SkeletonController from './SkeletonController.js';
-import mock from './mockStructure.js';
+import * as SystemModule from '../../store/modules/system';
 
 class ThematicController {
-    constructor($mdDialog, $scope) {
+    constructor($mdDialog, $scope, $ngRedux) {
         this.modal = $mdDialog;
-        this.data = mock;
         this.scope = $scope;
-        this.icons = this.data.map((el, i) => require('./images/icon-axis' + (i - 1) + '.svg'));
+        this.$ngRedux = $ngRedux;
+        this.$onInit = this.onInit.bind(this);
+
 
     }
+    mapState(state) {
+        const data = SystemModule.getDomainsForThematic(state);
+        const icons = data.map((el, i) => require('./images/icon-axis' + (i - 1) + '.svg'));
+        return {
+            icons,
+            data
+        };
+    }
+    onInit() {
+        this.$ngRedux.connect(this.mapState, null)(this);
+    }
+
     showModal() {
         this.axis = parseInt(this.axis, 10);
         this.domain = parseInt(this.domain, 10);
@@ -24,11 +37,11 @@ class ThematicController {
     }
 
     static thematicFactory() {
-        const thematic = ($mdDialog, $scope) => {
+        const thematic = ($mdDialog, $scope, $ngRedux) => {
             require('./Thematic.scss');
-            return new ThematicController($mdDialog, $scope);
+            return new ThematicController($mdDialog, $scope, $ngRedux);
         };
-        thematic.$inject = ['$mdDialog', '$scope'];
+        thematic.$inject = ['$mdDialog', '$scope', '$ngRedux'];
         return thematic;
     }
 }

@@ -22,6 +22,7 @@ class UserTests(APITestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201, response.json())
         self.test_user_key = response.json().get("key")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
@@ -32,6 +33,7 @@ class UserTests(APITestCase):
             "key": key,
         }
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
 
         # Create a test user, don't validate the account.
         url = reverse("rest_register")
@@ -40,6 +42,7 @@ class UserTests(APITestCase):
             "password1": "123456",
             "password2": "123456"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201, response.json())
 
         # Store to be able to mock later.
         self.timezone_now = timezone.now()
@@ -238,6 +241,7 @@ class UserProfileTests(APITestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('id'), user_profile_id)
+        self.assertIn('language', response.json())
 
     def test_update_user_profile(self):
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})

@@ -69,6 +69,23 @@ top-bar {
         display: inline-block !important;
       }
     }
+
+    .language-badge {
+      overflow: hidden;
+      width: 22px;
+      height: 22px;
+      margin-right: 12px;
+      border-radius: 22px;
+      border: 2px solid #A9AED3;
+
+      .country-flag {
+        display: block;
+        height: 100%;
+        background-repeat: none;
+        background-position: center center;
+        background-size: auto 100%;
+      }
+    }
   }
 
   .app-title {
@@ -90,7 +107,21 @@ top-bar {
   }
 }
 
-md-menu-content {
+md-menu-content.user-menu {
+  max-height: 90vh !important;
+
+  .label {
+    margin: 12px 16px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: $text-disabled;
+    text-transform: uppercase;
+  }
+
+  md-menu-item + .label {
+    margin-top: 4px;
+  }
+
   .user-name,
   .user-role {
     md-icon {}
@@ -101,9 +132,30 @@ md-menu-content {
       font-weight: 500;
     }
   }
+
   .user-role {
     span {
       font-weight: 400;
+    }
+  }
+
+  .user-lang {
+    font-size: 15px;
+
+    .country-flag {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      margin-right: 16px;
+
+      img {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        max-width: 24px;
+        height: auto;
+        transform: translate(0, -50%);
+      }
     }
   }
 }

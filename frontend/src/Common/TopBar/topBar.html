@@ -5,7 +5,9 @@
       ui-sref="landing"
       aria-label="Digital Health Atlas"
       class="app-title" md-no-ink>
-      <span>Digital Health Atlas</span>
+      <span>
+        <translate>Digital Health Atlas</translate>
+      </span>
     </md-button>
 
     <md-button aria-label="Country Level View"
@@ -15,18 +17,17 @@
                ng-show="vm.showCountryLevelViewButton()"
                md-no-ink>
       <md-icon class="material-icons">public</md-icon>
-      Country Map
+      <translate>Country Map</translate>
     </md-button>
 
-
-     <md-button aria-label="My Projects"
+    <md-button aria-label="My Projects"
                title="My Projects"
                class="view-selector"
                ui-sref="my-projects"
                ng-show="vm.hasProfile()"
                md-no-ink>
       <md-icon class="material-icons ">toc</md-icon>
-      My Projects
+      <translate>My Projects</translate>
     </md-button>
 
     <md-button aria-label="Planning and Guidance"
@@ -36,22 +37,27 @@
                ng-show="vm.showPlanningAndGuidanceButton()"
                md-no-ink>
       <md-icon class="material-icons ">import_contacts</md-icon>
-      Planning &amp; Guidance
+      <translate>Planning &amp; Guidance</translate>
     </md-button>
 
     <thematic
       axis="vm.axis"
       domain="vm.domain"
       ng-show="vm.showThematic()"
-      buttontitle="MAPS Toolkit"
+      buttontitle="{{'MAPS Toolkit' | translate}}"
       buttonclass="md-primary"
       buttonicon="help_outline"
-      buttontext="Toolkit">
+      buttontext="{{'Toolkit' | translate}}">
     </thematic>
 
-    <span flex ></span>
+    <span flex></span>
 
-    <searchbar compact-mode="true" ng-show="vm.showSearch()"></searchbar>
+    <div class="language-badge">
+      <div class="country-flag" style="{{'background-image: url(' + vm.userLanguage.flag +')'}}">
+      </div>
+    </div>
+
+    <searchbar compact-mode="true" ng-if="vm.showSearch()"></searchbar>
 
     <md-button class="landing-link"
                ui-sref-active="active"
@@ -59,7 +65,7 @@
                aria-label="Login"
                ng-show="vm.showLogin()"
                md-no-ink>
-      Login
+      <translate>Login</translate>
     </md-button>
 
     <md-button class="landing-link"
@@ -68,7 +74,7 @@
                aria-label="Singup"
                ng-show="vm.showSignUp()"
                md-no-ink >
-      Sign Up
+      <translate>Sign Up</translate>
     </md-button>
 
     <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
@@ -76,7 +82,7 @@
         <md-icon md-menu-origin class="material-icons ">person</md-icon>
       </md-button>
 
-      <md-menu-content width="4">
+      <md-menu-content class="user-menu" width="4">
         <md-menu-item>
           <div class="user-name">
             <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
@@ -87,19 +93,50 @@
         <md-menu-item>
           <div class="user-role">
             <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-            <span>Role: {{vm.writeUserRole()}}</span>
+            <span>
+              <translate>Role: {{vm.writeUserRole()}}</translate>
+            </span>
           </div>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
           <md-button ui-sref="editProfile">
-            <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>Edit my Profile
+            <md-icon class="material-icons"><i class="material-icons">settings</i></md-icon>
+            <translate> Edit my Profile</translate>
           </md-button>
         </md-menu-item>
         <md-menu-item>
           <md-button ng-click="vm.logout()">
-            <md-icon class="material-icons">exit_to_app</md-icon>Logout
+            <md-icon class="material-icons">exit_to_app</md-icon>
+            <translate>Logout</translate>
           </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <span class="label">
+          <translate>Country</translate>
+        </span>
+        <md-menu-item>
+          <div class="user-lang" layout="row" layout-align="start center">
+            <span class="country-flag">
+                <img ng-src="{{vm.userCountry.flag}}" alt="{{vm.userCountry.prettyName}}">
+            </span>
+            <span class="country-label">
+              {{vm.userCountry.prettyName}}
+            </span>
+          </div>
+        </md-menu-item>
+        <span class="label">
+          <translate>Site Language</translate>
+        </span>
+        <md-menu-item>
+          <div class="user-lang" layout="row" layout-align="start center">
+            <span class="country-flag">
+                <img ng-src="{{vm.userLanguage.flag}}" alt="{{vm.userLanguage.name}}">
+            </span>
+            <span class="country-label">
+              {{vm.userLanguage.name}}
+            </span>
+          </div>
         </md-menu-item>
       </md-menu-content>
     </md-menu>
@@ -109,7 +146,7 @@
                ng-show="vm.showNewProjectButton()"
                md-no-ink>
       <md-icon class="material-icons">add</md-icon>
-      New Project
+      <translate>New Project</translate>
     </md-button>
 
   </div>

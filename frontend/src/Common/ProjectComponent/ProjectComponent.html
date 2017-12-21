@@ -16,29 +16,33 @@
                     <span class="nr">
                         {{vm.project.donors.length}}
                     </span>
-          <span class="static">Donors</span>
+          <span class="static">
+            <translate>Donors</translate>
+          </span>
         </div>
         <div class="version" ng-if="vm.showVersion">
           <span class="nr" ng-show="vm.project.isPublished">
               {{vm.project.last_version || 0}}
           </span>
           <span class="nr" ng-hide="vm.project.isPublished">
-              Draft
+            <translate >Draft</translate>
           </span>
-          <span class="static">Version</span>
+          <span class="static">
+            <translate>Version</translate>
+          </span>
         </div>
       </div>
 
       <div ng-if="vm.showDetails" class="lower" layout="row" layout-align="start center">
         <div flex class="badges">
           <div class="draft" ng-hide="vm.project.isPublished">
-            Draft
+            <translate >Draft</translate>
           </div>
           <div class="published" ng-show="vm.project.isPublished">
-            Published
+            <translate>Published</translate>
           </div>
           <div class="country-approved" ng-show="vm.project.countryApproval">
-            Approved by country
+            <translate>Approved by country</translate>
           </div>
         </div>
 
@@ -48,14 +52,14 @@
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
-            View Draft
+            <translate>View Draft</translate>
           </md-button>
 
           <md-button class="md-primary md-no-ink" ng-if="vm.project.isMember" ng-click="vm.editDraft()">
             <md-icon class="material-icons">
               mode_edit
             </md-icon>
-            Edit Draft
+            <translate>Edit Draft</translate>
           </md-button>
 
           <md-button class="md-primary md-no-ink" ng-show="vm.project.isPublished"
@@ -63,14 +67,14 @@
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
-            View Published
+            <translate>View Published</translate>
           </md-button>
 
           <md-button class="md-primary md-no-ink" ng-if="vm.project.isMember || vm.project.isViewer" ng-click="vm.goToDashboard()">
             <md-icon class="material-icons">
               arrow_forward
             </md-icon>
-            Dashboard
+            <translate>Dashboard</translate>
           </md-button>
 
         </div>
