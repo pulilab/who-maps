@@ -218,14 +218,13 @@
 
   .project-info {
     margin-right: 13px;
-    display: block;
     max-width: 45%;
     height: 48px;
     color: $color-gray;
     font-size: $body-font-size-base;
 
     .info-block {
-      float: left;
+
       height: 48px;
       padding-left: 20px;
       padding-right: 15px;
@@ -237,20 +236,22 @@
       h6 {
         font-size: 11px;
         font-weight: 500;
-        height:14px;
+        height: 14px;
         margin: 14px 0 4px;
         padding: 0;
         text-transform: uppercase;
+        @include text-truncate();
       }
 
-      > span {
+      .data-info {
         display: inline-block;
-        float: left;
         min-height: 24px;
         line-height: 12px;
         color: $text-primary;
-        font-size:12px;
+        font-size: 12px;
         font-weight: 500;
+        @include text-truncate();
+
         &:last-of-type {
           margin-right: 0;
         }
@@ -258,7 +259,6 @@
     }
 
     .md-button {
-      float: right;
       margin: 0 14px 0 6px;
 
       .material-icons,
@@ -277,7 +277,7 @@
     .contact-button {
       &.md-button {
         position: relative;
-        top: -4px;
+        top: 27px;
         min-width: 0 !important;
         min-height: auto;
         margin: 0 0 0 5px;
@@ -290,10 +290,11 @@
           margin: 0;
           padding: 0;
           line-height: 12px;
-          font-size:12px;
-          height:12px;
+          font-size: 12px;
+          height: 12px;
           color: $color-primary !important;
         }
+
         .material-icons {
           position: relative;
           top: 4px;
