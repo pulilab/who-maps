@@ -161,11 +161,12 @@ class CountryMapController {
               .classed('d3district', true)
               .classed('global', this.showNationalLevelCoverage)
               .classed(`name-${districtsName}`, true).on('click', () => {
-                  this.activeDistrict = {
-                      name: districtsName,
-                      data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
-                  };
-                  this.scope.$evalAsync();
+                  this.scope.$evalAsync(() => {
+                      this.activeDistrict = {
+                          name: districtsName,
+                          data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
+                      };
+                  });
               });
         });
 
