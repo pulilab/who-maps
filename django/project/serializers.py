@@ -1,9 +1,10 @@
 import re
 
-from rest_framework import serializers
 from django.core import mail
-from django.template import loader
 from django.conf import settings
+from django.template import loader
+from django.utils.translation import ugettext, override
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
@@ -181,28 +182,35 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
 
         html_template = loader.get_template("email/new_member.html")
-        html_message = html_template.render({
-            "project_id": instance.id,
-            "project_name": instance.name,
-            "role": "team member"
-        })
+
         for profile in new_team_members:
+            with override(profile.language):
+                subject = ugettext("You were added to a project!")
+                html_message = html_template.render({
+                    "project_id": instance.id,
+                    "project_name": instance.name,
+                    "role": "team member"
+                })
+
             mail.send_mail(
-                subject="You were added to a project!",
+                subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
 
-        html_message = html_template.render({
-            "project_id": instance.id,
-            "project_name": instance.name,
-            "role": "viewer"
-        })
         for profile in new_viewers:
+            with override(profile.language):
+                subject = ugettext("You were added to a project!")
+                html_message = html_template.render({
+                    "project_id": instance.id,
+                    "project_name": instance.name,
+                    "role": "viewer"
+                })
+
             mail.send_mail(
-                subject="You were added to a project!",
+                subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],

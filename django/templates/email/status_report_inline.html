@@ -1,4 +1,5 @@
 {% load utils %}
+{% load i18n %}
 <!-- TODO -->
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" valign="top" bgcolor="#E3EAEF" style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;width:100% !important;height:100%;font-size:100%;font-family:'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;" ><tr><td style="vertical-align:top;">
@@ -6,8 +7,8 @@
   <!-- topnav -->
   <table class="topnav-wrap" width="100%" height="50px" bgcolor="#283593" style="border-spacing:0;background-color:#283593;width:100%;height:50px;color:#FFFFFF;" >
     <tr>
-      <td class="logo" style="padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" ><strong style="display:inline-block;margin-top:5px;width:163px;height:22px;border-width:0;background-color:transparent;background-image:url('images/dha-logo@2x.png');background-repeat:no-repeat;background-position:0 0;background-attachment:scroll;-webkit-background-size:163px 22px;background-size:163px 22px;color:transparent;text-shadow:none;" >Digital Health Atlas</strong></td>
-      <td class="link" style="text-align:right;padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" ><a href="http://digitalhealthatlas.org/" style="word-break:break-all;color:#FFFFFF;text-decoration:none;font-size:12px;" >Visit Visit digitalhealthatlas.org</a></td>
+      <td class="logo" style="padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" ><strong style="display:inline-block;margin-top:5px;width:163px;height:22px;border-width:0;background-color:transparent;background-image:url('images/dha-logo@2x.png');background-repeat:no-repeat;background-position:0 0;background-attachment:scroll;-webkit-background-size:163px 22px;background-size:163px 22px;color:transparent;text-shadow:none;" >{% trans "Digital Health Atlas" %}</strong></td>
+      <td class="link" style="text-align:right;padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" ><a href="http://digitalhealthatlas.org/" style="word-break:break-all;color:#FFFFFF;text-decoration:none;font-size:12px;" >{% trans "Visit Visit digitalhealthatlas.org" %}</a></td>
     </tr>
   </table>
 
@@ -19,7 +20,7 @@
           <table style="border-spacing:0;width:100%;" >
             <tr>
               <td>
-                <h2 style="color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:30px;margin-top:30px;margin-bottom:30px;margin-right:0;margin-left:0;text-align:center;" >Status report</h2>
+                <h2 style="color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:30px;margin-top:30px;margin-bottom:30px;margin-right:0;margin-left:0;text-align:center;" >{% trans "Status report" %}</h2>
               </td>
             </tr>
           </table>
@@ -39,8 +40,8 @@
         <table style="border-spacing:0;width:100%;" >
           <tr>
             <td>
-              <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >Dear Admin!</h3>
-              <p class="first" style="margin-bottom:20px;font-weight:normal;font-size:14px;line-height:1.6;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >The projects listed below are waiting for your approval:</p>
+              <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >{% trans "Dear Admin!" %}</h3>
+              <p class="first" style="margin-bottom:20px;font-weight:normal;font-size:14px;line-height:1.6;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >{% trans "The projects listed below are waiting for your approval:" %}</p>
 
               <!-- today -->
               <table class="group-title" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;margin-top:40px;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:8px;padding-bottom:8px;padding-right:50px;padding-left:50px;background-color:#B0BEC5;color:#FFFFFF;width:100%;" >
@@ -49,7 +50,7 @@
                     Today
                   </td>
                   <td class="number" style="text-align:right;font-size:12px;" >
-                    {{ projects_today.count }} project(s)
+                    {{ projects_today.count }} {% trans "project(s)" %}
                   </td>
                 </tr>
               </table>
@@ -68,7 +69,7 @@
                     Earlier
                   </td>
                   <td class="number" style="text-align:right;font-size:12px;" >
-                    {{ projects_earlier.count }} project(s)
+                    {{ projects_earlier.count }} {% trans "project(s)" %}
                   </td>
                 </tr>
               </table>
@@ -83,7 +84,7 @@
               <table class="btn-primary center last" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;margin-top:40px;margin-bottom:0;margin-left:auto;margin-right:auto;width:auto !important;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
                 <tr>
                   <td style="border-radius:5px;background-color:#283593;vertical-align:top;text-align:center;text-transform:uppercase;font-size:14px;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;" >
-                    <a href="{% site_url %}/admin" style="word-break:break-all;display:inline-block;padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px;border-width:0;border-radius:5px;background-color:#283593;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26);color:#FFFFFF;text-decoration:none;font-weight:bold;line-height:1;cursor:pointer;" >Go to Admin Dashboard</a>
+                    <a href="{% site_url %}/admin" style="word-break:break-all;display:inline-block;padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px;border-width:0;border-radius:5px;background-color:#283593;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26);color:#FFFFFF;text-decoration:none;font-weight:bold;line-height:1;cursor:pointer;" >{% trans "Go to Admin Dashboard" %}</a>
                   </td>
                 </tr>
               </table>
@@ -112,11 +113,11 @@
             <tr>
               <td align="center">
                 <ul style="font-weight:normal;line-height:1.6;margin-top:20px;margin-bottom:20px;margin-right:20px;margin-left:20px;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;font-size:12px;" >
-                  <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="http://digitalhealthatlas.org" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >Go to website</a></li>
-                  <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="http://digitalhealthatlas.org/terms-of-use" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >Terms of services</a></li>
-                  <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="mailto:digitalhealthatlas@gmail.com" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >Contact us</a></li>
+                  <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="http://digitalhealthatlas.org" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >{% trans "Go to website" %}</a></li>
+                  <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="http://digitalhealthatlas.org/terms-of-use" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >{% trans "Terms of services" %}</a></li>
+                  <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="mailto:digitalhealthatlas@gmail.com" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >{% trans "Contact us" %}</a></li>
                 </ul>
-                <p style="margin-bottom:20px;font-weight:normal;color:#9D9D9D;font-size:10px;line-height:1.4;" ><b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.</p>
+                <p style="margin-bottom:20px;font-weight:normal;color:#9D9D9D;font-size:10px;line-height:1.4;" >{% trans "<b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use." %}</p>
               </td>
             </tr>
           </table>

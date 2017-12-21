@@ -509,6 +509,7 @@ class CmsApiTest(APITestCase):
         self.test_create()
         self.password = 'mypassword'
         self.admin = User.objects.create_superuser('myuser', 'f@pulilab.com', self.password)
+        UserProfile.objects.create(user=self.admin, language='fr')
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.patch(url)
@@ -516,13 +517,28 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.json()['detail'], "Content flagged.")
 
-        outgoing_email = mail.outbox[-1].message()
-        outgoing_email_text = mail.outbox[-1].message().as_string()
+        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
+            en_index = -2
+            fr_index = -1
+        else:
+            en_index = -1
+            fr_index = -2
 
-        self.assertTrue('Content has been flagged.' in outgoing_email.values())
-        self.assertTrue('path_user@dhatlas.org, f@pulilab.com' in outgoing_email.values())
-        self.assertTrue('Content has been flagged as inappropriate. Please take action.' in outgoing_email_text)
-        self.assertTrue('/admin/cms/post/{}/change/'.format(self.post_id) in outgoing_email_text)
+        outgoing_en_email = mail.outbox[en_index].message()
+        outgoing_en_email_text = outgoing_en_email.as_string()
+
+        self.maxDiff = None
+        self.assertTrue('Content has been flagged.' in outgoing_en_email.values())
+        self.assertTrue('path_user@dhatlas.org' in outgoing_en_email.values())
+        self.assertTrue('Content has been flagged as inappropriate. Please take action.' in outgoing_en_email_text)
+        self.assertTrue('/admin/cms/post/{}/change/'.format(self.post_id) in outgoing_en_email_text)
+        self.assertTrue('<meta http-equiv="content-language" content="en">' in outgoing_en_email_text)
+
+        outgoing_fr_email = mail.outbox[fr_index].message()
+        outgoing_fr_email_text = outgoing_fr_email.as_string()
+
+        self.assertTrue('f@pulilab.com' in outgoing_fr_email.values())
+        self.assertTrue('<meta http-equiv="content-language" content="fr">' in outgoing_fr_email_text)
 
 
 class PermissionTest(APITestCase):

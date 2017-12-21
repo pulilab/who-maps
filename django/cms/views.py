@@ -1,5 +1,9 @@
+from collections import defaultdict
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext, override
+
 from django.core import mail, urlresolvers
 from django.template import loader
 
@@ -28,17 +32,29 @@ class FlagMixin(object):
     def _notify_admins(instance):
         html_template = loader.get_template("email/flag_content.html")
         change_url = urlresolvers.reverse('admin:cms_{}_change'.format(instance._meta.model_name), args=(instance.id,))
-        html_message = html_template.render({'change_url': change_url})
 
         admins = User.objects.filter(is_superuser=True)
         if admins:
-            mail.send_mail(
-                subject="Content has been flagged.",
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[admin.email for admin in admins],
-                html_message=html_message,
-                fail_silently=True)
+            email_mapping = defaultdict(list)
+            for admin in admins:
+                try:
+                    email_mapping[admin.userprofile.language].append(admin.email)
+                except ObjectDoesNotExist:
+                    email_mapping[settings.LANGUAGE_CODE].append(admin.email)
+
+            for language, email_list in email_mapping.items():
+                with override(language):
+                    subject = ugettext("Content has been flagged.")
+                    html_message = html_template.render({'change_url': change_url,
+                                                         'language': language})
+
+                mail.send_mail(
+                    subject=subject,
+                    message="",
+                    from_email=settings.FROM_EMAIL,
+                    recipient_list=email_list,
+                    html_message=html_message,
+                    fail_silently=True)
 
 
 class CmsViewSet(FlagMixin, ModelViewSet):
