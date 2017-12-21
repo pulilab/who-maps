@@ -657,7 +657,7 @@ msgstr "[ȦẊĪŞ ϵϱϖǋ]"
 
 #: src/Common/Thematic/modal-skeleton.html:40
 msgid "AXIS {{($index - 1)}}."
-msgstr "[ȦẊĪŞ {{($īƞḓḗẋ - 1)}}. ςǋẛϱ ΐſςǅẛΐ]"
+msgstr "[ȦẊĪŞ {{($index - 1)}}. ςǋẛϱ ΐſςǅẛΐ]"
 
 #: src/Common/Thematic/static/2-0.html:48
 msgid "Academia"
