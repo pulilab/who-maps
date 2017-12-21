@@ -5,6 +5,7 @@ import forEach from 'lodash/forEach';
 import { isMemberOrViewer } from './projects';
 import * as UserModule from './user';
 import * as SystemModule from './system';
+import { getCurrentLanguage } from '../../plugins/language';
 
 const stateDefinition = {
     list: [],
@@ -97,7 +98,9 @@ export const getCountriesLib = state => {
 };
 
 export const getCurrentCountryDistricts = state => {
-    return state.countries.currentCountryDistricts;
+    const ln = getCurrentLanguage();
+    return state.countries.currentCountryDistricts
+      .map(ccd => ({ id: ccd.en || ccd.name, name: ccd[ln] || ccd.en || ccd.name }));
 };
 
 export const getCurrentCountryMapData = state => {
@@ -159,7 +162,13 @@ export function loadCountryMapDataAndDistricts() {
             }
             const subKey = Object.keys(mapData[country.code].objects)[0];
             const districts = mapData[country.code].objects[subKey].geometries.map(object => {
-                return object.properties['name:en'] || object.properties.name;
+                return {
+                    name: object.properties.name,
+                    en: object.properties['name:en'],
+                    es: object.properties['name:es'],
+                    fr: object.properties['name:fr'],
+                    pt: object.properties['name:pt']
+                };
             });
             dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
         }

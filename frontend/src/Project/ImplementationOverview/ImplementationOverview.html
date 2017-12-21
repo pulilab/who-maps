@@ -156,8 +156,8 @@
               <md-select ng-model="cov.district"
                          name="{{'coverage_' + $index + '.district'}}"
                          ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
-                <md-option value="{{district}}" ng-repeat="district in cov.available">
-                  {{district}}
+                <md-option value="{{district.id}}" ng-repeat="district in cov.available">
+                  {{district.name}}
                 </md-option>
                 <md-option md-option-empty ng-hide="vm.districtList.length">
                   <translate>Select a country </translate>

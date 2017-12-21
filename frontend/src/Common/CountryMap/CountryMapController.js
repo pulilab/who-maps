@@ -149,22 +149,22 @@ class CountryMapController {
         geoData.features.forEach((feature, i) => {
 
             const districtsName = countryMapData.districts[i];
-            this.svgLib[districtsName] = this.mapDOMElement
+            this.svgLib[districtsName.id] = this.mapDOMElement
               .append('path')
               .datum({
                   type: geoData.type,
                   geocoding: geoData.geocoding,
                   features: [feature],
-                  name: districtsName
+                  name: districtsName.name
               })
               .attr('d', path)
               .classed('d3district', true)
               .classed('global', this.showNationalLevelCoverage)
-              .classed(`name-${districtsName}`, true).on('click', () => {
+              .classed(`name-${districtsName.id}`, true).on('click', () => {
                   this.scope.$evalAsync(() => {
                       this.activeDistrict = {
-                          name: districtsName,
-                          data: self.svgLib[districtsName] ? self.svgLib[districtsName].districtData : null
+                          name: districtsName.name,
+                          data: self.svgLib[districtsName.id] ? self.svgLib[districtsName.id].districtData : null
                       };
                   });
               });
