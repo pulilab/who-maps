@@ -55,6 +55,8 @@ export const setLanguage = ln => {
     return exports.getLanguage();
 };
 
+export const getCurrentLanguage = () => {
+    return config.language;
+};
 
-window.LANG = config;
-window.setLanguage = setLanguage;
+
