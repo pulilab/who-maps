@@ -133,7 +133,7 @@ class Project(ExtendedModel):
 
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval')
-    user = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(UserProfile, blank=True, null=True)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
 
