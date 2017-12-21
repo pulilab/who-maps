@@ -21,7 +21,7 @@ describe('CountryMapController', () => {
     });
 
     afterEach(() => {
-        const last = document.getElementById('map')
+        const last = document.getElementById('map');
         if (last) {
             last.innerHTML = '';
         }
@@ -79,7 +79,7 @@ describe('CountryMapController', () => {
         // height set to parents height
         cc.big = true;
         cc.createInMemoryDOMElement();
-        const parentsHeight = d3.select('#map')[0][0].offsetHeight.toString()
+        const parentsHeight = d3.select('#map')[0][0].offsetHeight.toString();
         expect(cc.mapDOMElement[0][0].height.baseVal.valueAsString).toBe(parentsHeight);
 
     });
@@ -165,10 +165,12 @@ describe('CountryMapController', () => {
     });
 
     it('has fillDistrictData fn.', () => {
-        cc.drawMapShape(SLCountryMapData);
+        const mapData = { ...SLCountryMapData, districts: SLCountryMapData.districts.map((name, id) => ({ id, name })) };
+        cc.drawMapShape(mapData);
+        console.log(mapData.districts);
         const districtLevelCoverage = {
-            'Kambia District': { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
-            'Bombali District': { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
+            0 : { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
+            1 : { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
         };
         cc.fillDistrictData(districtLevelCoverage);
         expect(document.querySelectorAll('.d3district-data').length).toBe(2);
