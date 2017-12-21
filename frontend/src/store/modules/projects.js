@@ -418,10 +418,10 @@ export const getCoverageData = state => {
 
         versionObj.data.forEach(distrObj => {
             forOwn(distrObj, (val, key) => {
-                if (key !== 'district') {
-                    const newKey = key.replace('_', ' ');
-                    if (ret.labels.indexOf(newKey) < 0) { ret.labels.push(newKey); }
-                    const name = 'axis' + (ret.labels.indexOf(newKey) + 1);
+                const labels = ['clients', 'facilities', 'health_workers'];
+                const index = labels.indexOf(key);
+                if (index > -1) {
+                    const name = `axis${index + 1}`;
                     ret.data[vInd][name] = (ret.data[vInd][name] || 0) + val;
                 }
             });

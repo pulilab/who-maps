@@ -143,9 +143,12 @@ class CountryViewModuleController {
         if (!countryProjects || !Array.isArray(countryProjects)) {
             return;
         }
-        const t = this.gettextCatalog.getString.bind(this.gettextCatalog);
+        const gettextCatalog = this.gettextCatalog;
+        // whenever using the translation module in js the string must always be call from gettextCatalog.getString
+        // otherwise the string extractor does not pick it up
+        // the translations still works if the sting is present in the po file
         const digitalHealthInterventions = {
-            name: t('Digital Health Interventions'),
+            name: gettextCatalog.getString('Digital Health Interventions'),
             filterMappingFn: p => {
                 return Array.isArray(p.digital_strategies) ? p.digital_strategies : [];
             },
@@ -154,7 +157,7 @@ class CountryViewModuleController {
         };
 
         const healthInterventions = {
-            name: t('Health Focus Areas'),
+            name: gettextCatalog.getString('Health Focus Areas'),
             filterMappingFn: p => {
                 return Array.isArray(p.health_focus_areas) ? p.health_focus_areas : [];
             },
@@ -162,7 +165,7 @@ class CountryViewModuleController {
             items: this.prepareFiltersCheckboxes('health_focus_areas')
         };
         const healthInformationSystems = {
-            name: t('Health Information Systems'),
+            name: gettextCatalog.getString('Health Information Systems'),
             filterMappingFn: p => {
                 return Array.isArray(p.his_bucket) ? p.his_bucket : [];
             },
@@ -171,7 +174,7 @@ class CountryViewModuleController {
         };
 
         const healthSystemChallenges = {
-            name: t('Health System Challenges'),
+            name: gettextCatalog.getString('Health System Challenges'),
             filterMappingFn: p => {
                 return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];
             },
@@ -180,7 +183,7 @@ class CountryViewModuleController {
         };
 
         const software = {
-            name: t('Software'),
+            name: gettextCatalog.getString('Software'),
             filterMappingFn: p => {
                 return Array.isArray(p.platforms) ? p.platforms : [];
             },
