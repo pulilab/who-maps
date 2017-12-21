@@ -235,11 +235,10 @@
       stroke: #9B9DA8;
       stroke-width: 5px;
       pointer-events: all;
-      cursor: default;
+      cursor: pointer;
 
       &.d3district-data {
 
-        cursor: pointer;
         fill: $color-map-dark;
         transition: $swift-ease-out;
 
