@@ -70,7 +70,9 @@
                   placeholder="{{'Select a country'|translate}}"
                   ng-model="vm.selectedCountry">
 
-                  <md-option ng-value="vm.showAllCountries"><translate>Show all countries</translate></md-option>
+                  <md-option ng-value="vm.showAllCountries">
+                    <translate>Show all countries</translate>
+                  </md-option>
                   <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
 
                 </md-select>

@@ -75,15 +75,30 @@
 
         <div class="countrychart-tooltip-main">
 
-          <div flex
-               class="coverage-data"
-               layout="row"
-               ng-repeat="(key, datum) in vm.nationalLevelCoverage"
-               ng-init="vm.saveClass(key, $index, vm.boundNrs)">
+          <div ng-show="vm.nationalLevelCoverage">
+            <div flex class="coverage-data" layout="row">
+              <div flex class="cap lh">
+                <translate>Clients: </translate>
+              </div>
+              <div class="bold lh colorednr color0">{{vm.nationalLevelCoverage.clients}}</div>
+            </div>
 
-            <div flex class="cap lh">{{key}}</div>
-            <div class="bold lh colorednr" ng-class="'color'+vm.covLib[key]">{{datum}}</div>
+            <div flex class="coverage-data" layout="row">
+              <div flex class="cap lh">
+                <translate>Health Workers: </translate>
+              </div>
+              <div class="bold lh colorednr color1">{{vm.nationalLevelCoverage.health_workers}}</div>
+            </div>
+
+            <div flex class="coverage-data"layout="row">
+              <div flex class="cap lh">
+                <translate>Facilities: </translate>
+              </div>
+              <div class="bold lh colorednr color2">{{vm.nationalLevelCoverage.facilities}}</div>
+            </div>
+
           </div>
+
           <div class="bold lh" ng-show="!vm.nationalLevelCoverage" translate>No national coverage</div>
 
         </div>
