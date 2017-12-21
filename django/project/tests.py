@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+from django.conf import settings
 
 from django.utils.translation import override
 
@@ -1368,7 +1369,8 @@ class TestAdmin(TestCase):
     def test_admin(self):
         admin = DigitalStrategyAdmin(DigitalStrategy, self.site)
         self.assertEqual(admin.get_queryset(self.request).count(), DigitalStrategy.all_objects.all().count())
-        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active', 'translated'])
+        translate_bools = ['is_translated_{}'.format(language_code) for language_code, _ in settings.LANGUAGES]
+        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'] + translate_bools)
         admin.list_display = ['__str__', 'is_active']
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
 
