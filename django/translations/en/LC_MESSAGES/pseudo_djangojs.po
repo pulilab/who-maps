@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2017-12-19 16:04+0000\n"
+"PO-Revision-Date: 2017-12-21 10:16+0000\n"
 "Last-Translator: b'  <nico@pulilab.com>'\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,7 +37,7 @@ msgstr ""
 "[(“Ẇḗƀşīŧḗ”), īƞƈŀŭḓīƞɠ ẇīŧħǿŭŧ ŀīḿīŧȧŧīǿƞ ƥȧřŧīƈīƥȧŧīǿƞ īƞ īŧş ƒǿřŭḿş, ƀŀǿɠ, ȧƞḓ ȧŀŀ ŀīƞķḗḓ\n"
 "                  ƥȧɠḗş ǿẇƞḗḓ ȧƞḓ ǿƥḗřȧŧḗḓ ƀẏ Řḗşŭŀŧş ƒǿř Ḓḗṽḗŀǿƥḿḗƞŧ Īƞşŧīŧŭŧḗ (“ĦŘƤ,” “ẇḗ,” ǿř “ǿŭř”). ſϑΰǈǲϑςǲ鶱ſϵǲ ϐǲϰϑϱϐϰΐſ ςϖςǅϱ鶱ẛ ſϑΰ衋ϐ]"
 
-#: src/Cms/CommentWidget/CommentWidget.html:32
+#: src/Cms/CommentWidget/CommentWidget.html:34
 msgid "...Read less"
 msgstr "[...Řḗȧḓ ŀḗşş ϑΐǅϕǅǋǈ ǋẛ]"
 
@@ -986,7 +986,7 @@ msgstr "[Ȧƥƥřǿṽḗḓ ƀẏ ƈǿŭƞŧřẏ ẛϐΰϑϐΐϖǲ ẛ衋]"
 msgid "Architecture:"
 msgstr "[Ȧřƈħīŧḗƈŧŭřḗ: ẛ鶱ϐǅϐ靐ϰ衋ϕſǲ]"
 
-#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:13
+#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:17
 msgid "Are you sure?"
 msgstr "[Ȧřḗ ẏǿŭ şŭřḗ? ıſǋ ςϐı ΰ鶱ϵ]"
 
@@ -1100,7 +1100,7 @@ msgstr ""
 "ς靐]"
 
 #: src/Cms/AddNewContent/AddNewContentDialog.html:100
-#: src/Cms/CommentWidget/CommentWidget.html:44
+#: src/Cms/CommentWidget/CommentWidget.html:46
 #: src/Cms/DetailElement/DetailElementDialog.html:101
 #: src/Cms/DetailElement/DetailElementDialog.html:58
 #: src/Project/DialogMultiSelector/DialogMultiSelectorDialog.html:63
@@ -1142,6 +1142,16 @@ msgstr ""
 #: src/Common/Thematic/static/-1-4.html:5
 msgid "Client beneficiaries:"
 msgstr "[Ƈŀīḗƞŧ ƀḗƞḗƒīƈīȧřīḗş: ǲΰẛϕǅǅ ϰ鶱ǅ]"
+
+#: src/Dashboard/Linechart/LinechartController.js:78
+msgid "Clients"
+msgstr "Ƈŀīḗƞŧş"
+
+#: src/Common/CountryMap/Countrymap.html:18
+#: src/Common/CountryMap/Countrymap.html:48
+#: src/Common/CountryMap/Countrymap.html:81
+msgid "Clients:"
+msgstr "Ƈŀīḗƞŧş:"
 
 #: src/Common/Thematic/static/-1-3.html:13
 msgid "Clinton Health Access Initiative"
@@ -1346,6 +1356,10 @@ msgstr ""
 "[Ḓḗƒīƞḗ ŧħḗ ḿḗŧřīƈş (ḗ.ɠ. ɠřǿẇŧħ, ȧḓǿƥŧīǿƞ, ǿř ḗẋƥȧƞşīǿƞ ǿƒ ɠḗǿ-ƥǿŀīŧīƈȧŀ "
 "ȧřḗȧ, ȧş ḓḗşƈřīƀḗḓ īƞ Ŧȧƀŀḗ 2). ǅϵſ鶱ıϑ ΐǲϐ ſςϵς靐衋]"
 
+#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:11
+msgid "Delete"
+msgstr "ḓḗŀḗŧḗ"
+
 #: src/Common/Thematic/static/1-2.html:45
 msgid ""
 "Demonstrating evidence for the mHealth product also requires support for key"
@@ -1414,6 +1428,7 @@ msgstr ""
 msgid "Digital Health Atlas"
 msgstr "[Ḓīɠīŧȧŀ Ħḗȧŀŧħ Ȧŧŀȧş ϰϐςϕϱΰǅ ϰϵ靐ΐ]"
 
+#: src/CountryView/CountryViewModuleController.js:151
 #: src/Project/ImplementationOverview/ImplementationOverview.html:56
 #: src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:21
 msgid "Digital Health Interventions"
@@ -1655,8 +1670,8 @@ msgstr ""
 "ẇħīƈħ řḗƥřḗşḗƞŧ ŧħḗ şƥḗƈīƒīƈ ƈřīŧḗřīȧ ŭşḗḓ ƒǿř ŧħḗ ƥŭřƥǿşḗ ǿƒ şḗŀƒ-"
 "ȧşşḗşşḿḗƞŧ (şḗḗ Ƒīɠŭřḗ 3). ΐǲϑǋ ǅϐẛẛ ϑǋ ϑϐǲ衋ǅǋϕ 鶱ϰǲς 衋ϰıϰϑϖǋΐΐǲǈıϵıϱ ϰϰ]"
 
-#: src/Cms/AddNewContent/AddNewContent.html:7
-#: src/Cms/CommentWidget/CommentWidget.html:16
+#: src/Cms/AddNewContent/AddNewContent.html:8
+#: src/Cms/CommentWidget/CommentWidget.html:17
 #: src/Cms/DetailElement/DetailElementDialog.html:80
 msgid "Edit"
 msgstr "[Ḗḓīŧ ẛıϰϵ]"
@@ -1820,6 +1835,16 @@ msgstr ""
 "[ƑĦĪ 360: Ɠǿȧŀ ǿƒ şƈȧŀḗ-ŭƥ īş ŧǿ ȧƈħīḗṽḗ 300 000 ŭƞīɋŭḗ ŭşḗřş ƒǿř Ḿǿƀīŀḗ ƒǿř"
 " Řḗƥřǿḓŭƈŧīṽḗ Ħḗȧŀŧħ (ḿ4ŘĦ) īƞ ŧħḗ Ŭƞīŧḗḓ Řḗƥŭƀŀīƈ ǿƒ Ŧȧƞzȧƞīȧ ǈ衋靐 鶱ẛſſ ϰ衋衋ΰ"
 " ϵϕ ϰǈıẛϕǋς]"
+
+#: src/Dashboard/Linechart/LinechartController.js:80
+msgid "Facilities"
+msgstr "Ƒȧƈīŀīŧīḗş"
+
+#: src/Common/CountryMap/Countrymap.html:30
+#: src/Common/CountryMap/Countrymap.html:64
+#: src/Common/CountryMap/Countrymap.html:95
+msgid "Facilities:"
+msgstr "Ƒȧƈīŀīŧīḗş:"
 
 #: src/Common/Thematic/static/-1-0.html:15
 msgid "Family, Women’s and Childrens Health"
@@ -2093,7 +2118,7 @@ msgstr "[Ɠḗŧ ḾȦƤŞ Ŧǿǿŀķīŧ ϱǅΰ ǈǲǋǈ ϕſ]"
 msgid "Get MAPS Toolkit now!"
 msgstr "[Ɠḗŧ ḾȦƤŞ Ŧǿǿŀķīŧ ƞǿẇ! ǈǅſ ϰǈıſ ϵ]"
 
-#: src/Common/CountryMap/Countrymap.html:42
+#: src/Common/CountryMap/Countrymap.html:74
 msgid "Global"
 msgstr "[Ɠŀǿƀȧŀ ϱǈϰǲẛſ]"
 
@@ -2316,6 +2341,7 @@ msgid "Health Focus Area:"
 msgstr "[Ħḗȧŀŧħ Ƒǿƈŭş Ȧřḗȧ: ǋſϑϑϕ衋 ϐϖſ]"
 
 #: src/CountryView/CountryViewModule.html:125
+#: src/CountryView/CountryViewModuleController.js:160
 msgid "Health Focus Areas"
 msgstr "[Ħḗȧŀŧħ Ƒǿƈŭş Ȧřḗȧş 鶱ǲςǋǅ靐 ϱϱΐ]"
 
@@ -2327,6 +2353,10 @@ msgstr "[Ħḗȧŀŧħ Īƞƒǿřḿȧŧīǿƞ Ḗẋƈħȧƞɠḗ Şŧȧƞḓȧ
 msgid "Health Information System Links"
 msgstr "[Ħḗȧŀŧħ Īƞƒǿřḿȧŧīǿƞ Şẏşŧḗḿ Ŀīƞķş ςǈǲϱǈϱ ϰ衋ǈǅ]"
 
+#: src/CountryView/CountryViewModuleController.js:168
+msgid "Health Information Systems"
+msgstr "[ħḗȧŀŧħ īƞƒǿřḿȧŧīǿƞ şẏşŧḗḿs ΐϐ靐ϱϵǈ ǅ靐ϖǈ]"
+
 #: src/Common/Thematic/static/-1-3.html:29
 msgid "Health Insurance Portability and Accountability Act"
 msgstr "[Ħḗȧŀŧħ Īƞşŭřȧƞƈḗ Ƥǿřŧȧƀīŀīŧẏ ȧƞḓ Ȧƈƈǿŭƞŧȧƀīŀīŧẏ Ȧƈŧ ẛıϑſıı]"
@@ -2335,9 +2365,23 @@ msgstr "[Ħḗȧŀŧħ Īƞşŭřȧƞƈḗ Ƥǿřŧȧƀīŀīŧẏ ȧƞḓ Ȧƈ�
 msgid "Health Level 7 (data standard)"
 msgstr "[Ħḗȧŀŧħ Ŀḗṽḗŀ 7 (ḓȧŧȧ şŧȧƞḓȧřḓ) ǲ衋ϐ衋ΰϕ ǅıϰ]"
 
+#: src/CountryView/CountryViewModuleController.js:177
+msgid "Health System Challenges"
+msgstr "Ħḗȧŀŧħ Şẏşŧḗḿ Ƈħȧŀŀḗƞɠḗş"
+
 #: src/Common/Thematic/static/1-0.html:7
 msgid "Health System Contraints"
 msgstr "[Ħḗȧŀŧħ Şẏşŧḗḿ Ƈǿƞŧřȧīƞŧş ϖǲ靐ǲ衋ϱ ΰſǲ]"
+
+#: src/Dashboard/Linechart/LinechartController.js:79
+msgid "Health Workers"
+msgstr "Ħḗȧŀŧħ Ẇǿřķḗřş"
+
+#: src/Common/CountryMap/Countrymap.html:24
+#: src/Common/CountryMap/Countrymap.html:56
+#: src/Common/CountryMap/Countrymap.html:88
+msgid "Health Workers:"
+msgstr "Ħḗȧŀŧħ Ẇǿřķḗřş:"
 
 #: src/Project/ImplementationOverview/ImplementationOverview.html:76
 msgid "Health focus area"
@@ -3430,7 +3474,7 @@ msgstr "[ȠƓǾ ǲǋſ]"
 msgid "NOTION OF VALUE"
 msgstr "[ȠǾŦĪǾȠ ǾƑ ṼȦĿŬḖ 鶱ϐϕſϱϕ ϰϖ]"
 
-#: src/Common/CountryMap/Countrymap.html:96
+#: src/Common/CountryMap/Countrymap.html:143
 #: src/Project/ImplementationOverview/ImplementationOverview.html:131
 #: src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:74
 msgid "National"
@@ -3523,7 +3567,7 @@ msgstr ""
 "ȧḓǿƥŧīǿƞ. ςϵϕϱϑ ϐſϵ ẛſϐϱẛϕϱ ϕϵ鶱ſ ſΐ衋ϖ ϰΐ鶱ΐϑẛϵ靐 ϐϱǈϕẛǲǋẛı靐ϕςǈ衋ς "
 "ǋϐΰΰǋϐ靐ϖςǅϑ鶱ϵǈ ǋς ſϱǲ ǋϕǈϵ ςϖẛΰϕϑΐẛ ϕϖ ẛΐ鶱 ǈϕǅϰı]"
 
-#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:18
+#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
 #: src/Common/Thematic/static/0-2.html:38
 #: src/Project/CountryFields/CountryFields.html:73
 #: src/Project/ImplementationOverview/ImplementationOverview.html:340
@@ -3534,7 +3578,7 @@ msgstr "[Ƞǿ ǅǲ]"
 msgid "No content"
 msgstr "[Ƞǿ ƈǿƞŧḗƞŧ ǋϐ ΐǅϑϖϑϖǅ]"
 
-#: src/Common/CountryMap/Countrymap.html:37
+#: src/Common/CountryMap/Countrymap.html:69
 msgid "No coverage data"
 msgstr "[Ƞǿ ƈǿṽḗřȧɠḗ ḓȧŧȧ ϱ衋 ΐϱϰǈǲΐǈϰ]"
 
@@ -3550,12 +3594,12 @@ msgstr "[Ƞǿ ḗẋƥḗřīḗƞƈḗş ħȧṽḗ ƀḗḗƞ ȧḓḓḗḓ �
 msgid "No lessons have been added yet..."
 msgstr "[Ƞǿ ŀḗşşǿƞş ħȧṽḗ ƀḗḗƞ ȧḓḓḗḓ ẏḗŧ... ǈǋ ϖϱϐẛϕϐς]"
 
-#: src/Common/CountryMap/Countrymap.html:55
+#: src/Common/CountryMap/Countrymap.html:102
 msgid "No national coverage"
 msgstr "[Ƞǿ ƞȧŧīǿƞȧŀ ƈǿṽḗřȧɠḗ ϐς 衋靐ǲǈϱ靐ſϑ]"
 
-#: src/Common/CountryMap/Countrymap.html:112
-#: src/Common/CountryMap/Countrymap.html:92
+#: src/Common/CountryMap/Countrymap.html:139
+#: src/Common/CountryMap/Countrymap.html:159
 msgid "No projects available"
 msgstr "[Ƞǿ ƥřǿĵḗƈŧş ȧṽȧīŀȧƀŀḗ ẛϱ ϐǅẛǲϑ靐ǅ]"
 
@@ -4189,7 +4233,7 @@ msgstr "[Řḗȧƈħ Ḗƒƒḗƈŧīṽḗƞḗşş Ȧḓǿƥŧīǿƞ Īḿƥŀ
 msgid "Read more"
 msgstr "[Řḗȧḓ ḿǿřḗ ǈϑıǅ 鶱ϵǋſ]"
 
-#: src/Cms/CommentWidget/CommentWidget.html:29
+#: src/Cms/CommentWidget/CommentWidget.html:31
 msgid "Read more..."
 msgstr "[Řḗȧḓ ḿǿřḗ... ϕ靐ΐϱ ϖϐ衋靐ı]"
 
@@ -4239,6 +4283,10 @@ msgstr ""
 #: src/Project/ImplementationOverview/ImplementationOverview.html:47
 msgid "Remove"
 msgstr "[Řḗḿǿṽḗ ϰǈϱǋϱſ]"
+
+#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:5
+msgid "Report"
+msgstr "Rḗƥǿřŧ"
 
 #: src/Dashboard/Dashboard.html:129
 msgid "Request to be part of this project"
@@ -4342,7 +4390,7 @@ msgstr "[ŞŦȦŦĪŞŦĪƇŞ ϐςǅǈϵϖϕϑΐς]"
 msgid "STRESS TEST"
 msgstr "[ŞŦŘḖŞŞ ŦḖŞŦ ǲǲǅΐẛς ſ衋ǅẛ]"
 
-#: src/Cms/CommentWidget/CommentWidget.html:40
+#: src/Cms/CommentWidget/CommentWidget.html:42
 #: src/Cms/DetailElement/DetailElementDialog.html:54
 #: src/Cms/DetailElement/DetailElementDialog.html:97
 msgid "Save"
@@ -4514,6 +4562,7 @@ msgstr "[Şīŧḗ ŀȧƞɠŭȧɠḗ ſǈ衋鶱 ı靐ǈẛϱǅ]"
 msgid "Society for the Elimination of Rural Poverty (India)"
 msgstr "[Şǿƈīḗŧẏ ƒǿř ŧħḗ Ḗŀīḿīƞȧŧīǿƞ ǿƒ Řŭřȧŀ Ƥǿṽḗřŧẏ (Īƞḓīȧ) 靐ϕıϑϖǋϑ]"
 
+#: src/CountryView/CountryViewModuleController.js:186
 #: src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:15
 msgid "Software"
 msgstr "[Şǿƒŧẇȧřḗ ſ衋ϰςϱϰǲǈ]"
@@ -4590,7 +4639,7 @@ msgstr "[Şŧȧƞḓȧřḓ ǿƥḗřȧŧīƞɠ ƥřǿƈḗḓŭřḗş (ŞǾƤ�
 msgid "Start axis again"
 msgstr "[Şŧȧřŧ ȧẋīş ȧɠȧīƞ ΰϐǈ鶱ǈ 鶱ϵϖẛ]"
 
-#: src/Cms/CommentWidget/CommentWidget.html:37
+#: src/Cms/CommentWidget/CommentWidget.html:39
 #: src/Cms/DetailElement/DetailElementDialog.html:126
 #: src/Cms/DetailElement/DetailElementDialog.html:51
 #: src/Cms/DetailElement/DetailElementDialog.html:94
@@ -4629,7 +4678,7 @@ msgstr ""
 " ǈǈϱǲϵẛϵ ϰΐ ϵΰ ϵ靐ǲ鶱ΐǲϑ 鶱ϰΐϰΐſςϐ ǋ靐ϱ ϐǲΰ ǋΐẛ衋ϕǅ靐ǲϰϐǅ ϵϕ衋 衋ı衋ΐϖǅϕǅ ǲϵ ϐǈ鶱ϰ "
 "ςſǈϰϐſ衋 ΰΰ]"
 
-#: src/Common/CountryMap/Countrymap.html:73
+#: src/Common/CountryMap/Countrymap.html:120
 #: src/Project/ImplementationOverview/ImplementationOverview.html:128
 #: src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:71
 msgid "Sub-national"
@@ -6494,7 +6543,7 @@ msgstr ""
 "[Ẇřīŧŧḗƞ īƞşŧřŭƈŧīǿƞş īƞŧḗƞḓḗḓ ŧǿ ḓǿƈŭḿḗƞŧ ŧħḗ şŧḗƥş řḗɋŭīřḗḓ ƒǿř ƥřǿĵḗƈŧ "
 "şŧȧƒƒ ŧǿ ƥḗřƒǿřḿ ȧ ƥȧřŧīƈŭŀȧř ȧƈŧīṽīŧẏ. 鶱ıϖϱǈϑẛ ǅςǋǈςı衋ıϵΐϱ]"
 
-#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
+#: src/Cms/ReportDeleteButton/ReportDeleteButton.html:26
 #: src/Project/CountryFields/CountryFields.html:70
 #: src/Project/ImplementationOverview/ImplementationOverview.html:337
 msgid "Yes"
@@ -8448,8 +8497,8 @@ msgid "{{vm.data.axis}} (Scorecard)"
 msgstr "[{{vm.data.axis}} (Şƈǿřḗƈȧřḓ) ϵϕϵ靐ϰςϵΐ靐ǅǋ]"
 
 #: src/MapsToolkit/MapsToolkitModule.html:22
-msgid "{{vm.data.domain}} ({{vm.data.domain_max}} points)"
-msgstr "{{vm.data.domain}} ({{vm.data.domain_max}} ƥǿīƞŧş) ςΰǲϱϑǈϑ]"
+msgid "{{vm.data.name}} ({{vm.data.domain_max}} points)"
+msgstr "{{vm.data.name}} ({{vm.data.domain_max}} ƥǿīƞŧş)"
 
 #: src/MapsToolkit/MapsToolkitModule.html:67
 msgid "{{vm.printAnswer(answer)}} points"
@@ -8467,6 +8516,9 @@ msgstr ""
 "ȧṽȧīŀȧƀīŀīŧẏ, ƈǿşŧ, ḗƒƒīƈīḗƞƈẏ, ɋŭȧŀīŧẏ, ŭŧīŀīzȧŧīǿƞ, īƞƒǿřḿȧŧīǿƞ ȧƞḓ/ǿř "
 "ȧƈƈḗƥŧȧƀīŀīŧẏ ŧħȧŧ īḿƥḗḓḗ ǿƥŧīḿȧŀ ƥřǿṽīşīǿƞ ǿƒ şƥḗƈīƒīƈ ħḗȧŀŧħ "
 "īƞŧḗřṽḗƞŧīǿƞş. ǋϑǅΰ ϑΰϵϖǈϰ衋ϑ ς鶱ΐǋẛǲǲ衋ϵǋ ſ靐ǅ ǋϕςΰǲϵ靐ϖ ǅǅ靐ǈ ẛ靐ǋǈẛϕ ϐ鶱ςǋ]"
+
+#~ msgid "{{vm.data.domain}} ({{vm.data.domain_max}} points)"
+#~ msgstr "{{vm.data.domain}} ({{vm.data.domain_max}} ƥǿīƞŧş) ςΰǲϱϑǈϑ]"
 
 #~ msgid "+"
 #~ msgstr "[+ ϵ]"
