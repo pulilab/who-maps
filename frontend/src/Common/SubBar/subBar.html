@@ -9,22 +9,22 @@
 
     <div flex></div>
 
-    <div class="project-info" layout="row">
+    <div class="project-info" layout="row" layout-align="end center">
       <div class="info-block" ng-show="vm.currentProject.isPublished">
         <h6>
           <translate>UUID</translate>
         </h6>
-        <span>{{vm.currentProject.public_id}}</span>
+        <span class="data-info">{{vm.currentProject.public_id}}</span>
       </div>
       <div class="info-block">
         <h6>
           <translate>Version</translate>
         </h6>
-        <span ng-show="vm.currentProject.isPublished">
+        <span ng-show="vm.currentProject.isPublished" class="data-info">
           {{vm.lastVersion}}.
           {{vm.lastVersionDate ? ('(' + (vm.lastVersionDate | date: medium) + ')') : '' }}
         </span>
-        <span ng-hide="vm.currentProject.isPublished">
+        <span ng-hide="vm.currentProject.isPublished" class="data-info">
           <translate>Draft</translate>
         </span>
       </div>
@@ -32,19 +32,23 @@
         <h6>
           <translate>Organisation</translate>
         </h6>
-        <span>{{vm.currentProject.organisation_name}}</span>
+        <span class="data-info">{{vm.currentProject.organisation_name}}</span>
       </div>
-      <div class="info-block" ng-if="vm.currentProject.contact_name">
-        <h6>
-          <translate>Contact Person</translate>
-        </h6>
-        <span>{{vm.currentProject.contact_name}}</span>
-        <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
-          <md-icon class="material-icons">
-            mail_outline
-          </md-icon>
-          <translate>EMAIL</translate>
-        </md-button>
+      <div class="info-block" ng-if="vm.currentProject.contact_name" layout="row">
+        <div>
+          <h6>
+            <translate>Contact Person</translate>
+          </h6>
+          <span class="data-info">{{vm.currentProject.contact_name}}</span>
+        </div>
+        <div>
+          <md-button class="contact-button" ng-href="mailto:{{vm.currentProject.contact_email}}"  md-no-ink>
+            <md-icon class="material-icons">
+              mail_outline
+            </md-icon>
+            <translate>EMAIL</translate>
+          </md-button>
+        </div>
       </div>
 
     </div>
