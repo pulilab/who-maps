@@ -31,7 +31,7 @@ def copy_translations(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0037_auto_20171212_1331'),
+        ('project', '0038_auto_20171212_1331'),
     ]
 
     operations = [

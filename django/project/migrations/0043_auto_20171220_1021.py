@@ -17,7 +17,7 @@ def fix_hidden_translated_values(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0041_auto_20171220_0947'),
+        ('project', '0042_auto_20171220_0947'),
     ]
 
     operations = [
