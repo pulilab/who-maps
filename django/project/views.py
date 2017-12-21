@@ -17,7 +17,7 @@ from country.models import Country
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
 
 
 def cache_structure(fn):
@@ -246,9 +246,9 @@ class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
 
         # Remove approval if already approved, so country admin can approve again because project has changed
         # TODO: refactor
-        # if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
-        #     project.approval.delete()
-        #     ProjectApproval.objects.create(project=project, user=project.country.user)
+        if project.get_country().project_approval and hasattr(project, 'approval') and project.approval.approved:
+            project.approval.delete()
+            ProjectApproval.objects.create(project=project)
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
@@ -270,9 +270,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         # Add approval if required by the country
         # TODO: validate this
-        # if project.country.project_approval:
-        #
-        #     ProjectApproval.objects.create(project=project, user=project.country.user)
+        if project.get_country(draft_mode=True).project_approval:
+            ProjectApproval.objects.create(project=project)
 
         data = project.to_representation(draft_mode=True)
 
