@@ -832,12 +832,9 @@ class ProjectTests(SetupTests):
         c.save()
         send_project_approval_digest()
 
-        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
-            en_index = -2
-            fr_index = -1
-        else:
-            en_index = -1
-            fr_index = -2
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
 
         outgoing_en_email_text = mail.outbox[en_index].message().as_string()
 
@@ -1064,12 +1061,10 @@ class PermissionTests(SetupTests):
 
         self.assertEqual(len(mail.outbox), 3)
 
-        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
-            en_index = -2
-            fr_index = -1
-        else:
-            en_index = -1
-            fr_index = -2
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
+
 
         outgoing_en_email = mail.outbox[en_index].message()
         outgoing_en_email_text = outgoing_en_email.as_string()
@@ -1430,12 +1425,9 @@ class TestAdmin(TestCase):
         self.assertEqual(len(mail.outbox),
                          initial_email_count + UserProfile.objects.all().count())
 
-        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
-            en_index = -2
-            fr_index = -1
-        else:
-            en_index = -1
-            fr_index = -2
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
 
         outgoing_en_email_text = mail.outbox[en_index].message().as_string()
 
@@ -1464,12 +1456,9 @@ class TestAdmin(TestCase):
         self.assertEqual(len(mail.outbox),
                          initial_email_count + UserProfile.objects.all().count())
 
-        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
-            en_index = -2
-            fr_index = -1
-        else:
-            en_index = -1
-            fr_index = -2
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
 
         outgoing_en_email_text = mail.outbox[en_index].message().as_string()
 

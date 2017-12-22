@@ -517,12 +517,9 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.json()['detail'], "Content flagged.")
 
-        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
-            en_index = -2
-            fr_index = -1
-        else:
-            en_index = -1
-            fr_index = -2
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
 
         outgoing_en_email = mail.outbox[en_index].message()
         outgoing_en_email_text = outgoing_en_email.as_string()
