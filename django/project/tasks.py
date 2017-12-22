@@ -1,4 +1,7 @@
+from collections import defaultdict
 from django.conf import settings
+from django.utils.translation import ugettext, override
+
 from django.core import mail
 from django.template import loader
 from django.utils import timezone
@@ -21,11 +24,21 @@ def send_project_approval_digest():
             projects_earlier = Project.objects.filter(
                 data__country=country.id, approval__approved__isnull=True).exclude(id__in=projects_today.values('id'))
             html_template = loader.get_template('email/status_report_inline.html')
-            html_message = html_template.render({'projects_today': projects_today,
-                                                 'projects_earlier': projects_earlier})
-            mail.send_mail(
-                subject='Projects waiting for your approval',
-                message='',
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[x.user.email for x in country.users.all()],
-                html_message=html_message)
+
+            email_mapping = defaultdict(list)
+            for profile in country.users.all():
+                email_mapping[profile.language].append(profile.user.email)
+
+            for language, email_list in email_mapping.items():
+                with override(language):
+                    subject = ugettext('Projects waiting for your approval')
+                    html_message = html_template.render({'projects_today': projects_today,
+                                                         'projects_earlier': projects_earlier,
+                                                         'language': language})
+
+                mail.send_mail(
+                    subject=subject,
+                    message='',
+                    from_email=settings.FROM_EMAIL,
+                    recipient_list=email_list,
+                    html_message=html_message)

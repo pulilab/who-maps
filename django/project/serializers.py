@@ -189,7 +189,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 html_message = html_template.render({
                     "project_id": instance.id,
                     "project_name": instance.name,
-                    "role": "team member"
+                    "role": "team member",
+                    "language": profile.language
                 })
 
             mail.send_mail(
@@ -206,7 +207,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 html_message = html_template.render({
                     "project_id": instance.id,
                     "project_name": instance.name,
-                    "role": "viewer"
+                    "role": "viewer",
+                    "language": profile.language
                 })
 
             mail.send_mail(

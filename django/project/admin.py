@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import mark_safe
 from django.conf import settings
 from django.core import mail
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, override
 from django.template import loader
 
 from core.admin import AllObjectsAdmin
@@ -22,25 +22,33 @@ class ChangeNotificationMixin(object):
         return super(ChangeNotificationMixin, self).save_form(request, form, change)
 
     def send_changed_notification(self, form):
-        subject = ugettext('{} - {} was changed').format(form.instance._meta.verbose_name.title(),
-                                                         str(form.instance))
         html_template = loader.get_template('email/data_model_changed.html')
-        html_message = html_template.render({'text': subject})
-        self.send_notification_email(subject, html_message)
+
+        for profile in UserProfile.objects.all():
+            with override(profile.language):
+                subject = ugettext('{} - {} was changed').format(form.instance._meta.verbose_name.title(),
+                                                                 str(form.instance))
+                html_message = html_template.render({'text': subject,
+                                                     'language': profile.language})
+                self.send_notification_email(profile.user.email, subject, html_message)
 
     def send_created_notification(self, form):
-        subject = ugettext('New {} was created: {}').format(form.instance._meta.verbose_name,
-                                                            str(form.instance))
         html_template = loader.get_template('email/new_data_model_created.html')
-        html_message = html_template.render({'text': subject})
-        self.send_notification_email(subject, html_message)
 
-    def send_notification_email(self, subject, html_message):
         for profile in UserProfile.objects.all():
+            with override(profile.language):
+                subject = ugettext('New {} was created: {}').format(form.instance._meta.verbose_name,
+                                                                    str(form.instance))
+                html_message = html_template.render({'text': subject,
+                                                     'language': profile.language})
+
+                self.send_notification_email(profile.user.email, subject, html_message)
+
+    def send_notification_email(self, email, subject, html_message):
             mail.send_mail(subject=subject,
                            message='',
                            from_email=settings.FROM_EMAIL,
-                           recipient_list=[profile.user.email],
+                           recipient_list=[email],
                            html_message=html_message)
 
 

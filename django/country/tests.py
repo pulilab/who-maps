@@ -704,17 +704,34 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
 
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+
         class MockForm:
             changed_data = ['users']
 
-        country.users.add(user_profile)
+        country.users.add(user_profile, user_2_profile)
         ma.save_model(self.request, country, MockForm(), True)
 
-        outgoing_email = mail.outbox[-1].message()
-        outgoing_email_text = mail.outbox[-1].message().as_string()
+        if '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string():
+            en_index = -2
+            fr_index = -1
+        else:
+            en_index = -1
+            fr_index = -2
+
+        outgoing_en_email = mail.outbox[en_index].message()
+        outgoing_en_email_text = outgoing_en_email.as_string()
 
         self.assertTrue(
-            "You have been selected as the Country Admin for {}".format(country.name) in outgoing_email.values())
-        self.assertTrue("test@test.com" in outgoing_email.values())
-        self.assertTrue('You have been selected as the Country Admin' in outgoing_email_text)
-        self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_email_text)
+            "You have been selected as the Country Admin for {}".format(country.name) in outgoing_en_email.values())
+        self.assertTrue("test@test.com" in outgoing_en_email.values())
+        self.assertTrue('You have been selected as the Country Admin' in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+
+        outgoing_fr_email = mail.outbox[fr_index].message()
+        outgoing_fr_email_text = outgoing_fr_email.as_string()
+
+        self.assertTrue("test2@test.test" in outgoing_fr_email.values())
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
