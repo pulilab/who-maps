@@ -20,6 +20,10 @@ export const getUserLanguage = state => {
     return languages.find(l => l.code === language);
 };
 
+export const isSuperUser = state => {
+    return state.user.profile.is_superuser;
+};
+
 // ACTIONS
 
 export const storeData = (data, email) => {
@@ -33,6 +37,7 @@ export const storeData = (data, email) => {
 
 export const handleProfile = (data) => {
     data.email = storage.get('email');
+    data.is_superuser = storage.get('is_superuser');
     if (data.organisation) {
         data.organisation_id = data.organisation;
         data.organisation = {

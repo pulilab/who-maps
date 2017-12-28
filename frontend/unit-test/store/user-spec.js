@@ -54,6 +54,18 @@ describe('USER Store Module', () => {
 
         });
 
+        it('isSuperUser', () => {
+            const state = {
+                user: {
+                    profile: {
+                        is_superuser: true
+                    }
+                }
+            };
+            const result = UserModule.isSuperUser(state);
+            expect(result).toBe(true);
+        });
+
     });
 
     describe('ACTIONS', () => {
