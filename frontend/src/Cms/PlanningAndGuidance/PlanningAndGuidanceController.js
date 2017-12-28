@@ -158,7 +158,7 @@ class PlanningAndGuidanceController {
 
     activate(name) {
         if (typeof name === 'number') {
-            name = [null, 'resources', 'lessons'][name];
+            name = [null, 'resources', 'lessons', 'experiences'][name];
         }
         const newName = name || window.location.hash.replace('#', '') || 'all';
         this.scope.$evalAsync(() => {
