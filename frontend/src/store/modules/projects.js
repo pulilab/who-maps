@@ -748,7 +748,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
     }
     case 'SET_CURRENT_PROJECT': {
         const currentProject = action.id;
-        return { ...state, currentProject };
+        return { ...state, currentProject, lastVersion: 0 };
     }
     case 'SET_CURRENT_PUBLIC_PROJECT_DETAIL': {
         const currentPublicProject = action.project;
