@@ -3,7 +3,6 @@ import axios from '../../plugins/axios';
 import findIndex from 'lodash/findIndex';
 import * as SystemModule from './system';
 
-
 // GETTERS
 
 export const getCmsData = state => {
@@ -30,7 +29,7 @@ export const getDomain = (state, id) => {
 };
 
 export const getAxisAndDomainName = (state, domainId) => {
-    const domain = getDomain(state, domainId);
+    const domain = exports.getDomain(state, domainId);
     const axes = exports.getDomainStructureForCms(state);
     const axis = axes.find(ax => {
         return ax.domains.some(dom => {

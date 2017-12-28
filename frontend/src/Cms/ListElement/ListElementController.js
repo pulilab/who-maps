@@ -32,10 +32,10 @@ class ListElementController {
     }
 
     axisAndDomainClass() {
-        const result = this.axisAndDomainName;
-        result.domainName = normalizeName(result.domainName);
-        result.axisName = normalizeName(result.axisName);
-        return `axis-${result.axisName} domain-${result.domainName}`;
+        const r = { ...this.axisAndDomainName };
+        r.domainName = normalizeName(r.domainName);
+        r.axisName = normalizeName(r.axisName);
+        return `axis-${r.axisName} domain-${r.domainName}`;
     }
 
     static factory() {
