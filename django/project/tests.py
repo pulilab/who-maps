@@ -1065,7 +1065,6 @@ class PermissionTests(SetupTests):
         en_index = -2 if first_en else -1
         fr_index = -1 if first_en else -2
 
-
         outgoing_en_email = mail.outbox[en_index].message()
         outgoing_en_email_text = outgoing_en_email.as_string()
         self.assertEqual(mail.outbox[en_index].subject, "You were added to a project!")
