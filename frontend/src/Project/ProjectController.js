@@ -1,4 +1,5 @@
 import forEach from 'lodash/forEach';
+import isNil from 'lodash/isNil';
 import isPlainObject from 'lodash/isPlainObject';
 import * as ProjectModule from '../store/modules/projects';
 import * as SystemModule from '../store/modules/system';
@@ -34,8 +35,7 @@ class ProjectController  {
         let project = null;
         let team = null;
         let viewers = null;
-
-        if (this.lastVersion === lastVersion) {
+        if (!isNil(this.lastVersion) && this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
             viewers = this.viewers;
@@ -58,10 +58,6 @@ class ProjectController  {
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
-        // If by any chance the project is undefined load the default project - fixes logout explosion -
-        if (project === undefined) {
-            project = ProjectModule.getEmptyProject();
-        }
         return {
             newProject,
             publishMode,
