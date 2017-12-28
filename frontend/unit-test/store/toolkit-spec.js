@@ -55,6 +55,9 @@ describe('TOOLKIT Store Module', () => {
             expect(result.domains[0].a).toBe(1);
             expect(result.domains[0].b).toBe(2);
             expect(result.domains[0].c).toBe(1);
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(SystemModule.getDomains).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
         });
 
     });
