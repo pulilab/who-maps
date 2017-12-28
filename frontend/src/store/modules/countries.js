@@ -254,40 +254,30 @@ export async function csvExport(ids) {
 // Reducers
 
 export default function system(state = stateDefinition, action) {
-    const s = Object.assign({}, state);
     switch (action.type) {
     case 'SET_COUNTRIES_LIST': {
-        s.list = action.countries;
-        return Object.assign(state, {}, s);
+        return { ...state, list: action.countries };
     }
     case 'SET_CURRENT_COUNTRY': {
-        s.currentCountry = action.country;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountry: action.country };
     }
     case 'UNSET_CURRENT_COUNTRY': {
-        s.currentCountry = null;
-        s.currentCountryCoverPage = {};
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountry: null, currentCountryCoverPage: {} };
     }
     case 'SET_COUNTRY_COVER_DATA': {
-        s.currentCountryCoverPage = action.cover;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryCoverPage: action.cover };
     }
     case 'UPDATE_COUNTRY_FIELDS_LIST': {
-        s.countryFields = unionBy(action.fields, s.countryFields, 'id');
-        return Object.assign(state, {}, s);
+        return { ...state, countryFields: unionBy(action.fields, state.countryFields, 'id') };
     }
     case 'SET_CURRENT_COUNTRY_DISTRICTS': {
-        s.currentCountryDistricts = action.districts;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryDistricts: action.districts };
     }
     case 'SET_CURRENT_COUNTRY_PROJECTS': {
-        s.currentCountryProjects = action.projects;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryProjects: action.projects };
     }
     case 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS': {
-        s.currentCountryDistrictsProjects = action.projects;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryDistrictsProjects: action.projects };
     }
     default:
         return state;
