@@ -43,6 +43,20 @@ describe('TOOLKIT Store Module', () => {
 
         });
 
+        it('getAxisDetail', () => {
+            spyOn(SystemModule, 'getAxis').and.returnValue([{ id: 1, a: 1, c: 3 }]);
+            spyOn(SystemModule, 'getDomains').and.returnValue([{ id: 1, a: 1, c: 1 }]);
+            spyOn(ToolkitModule, 'getToolkitData')
+              .and.returnValue([{ id: 1, a: 2, domains: [{ id: 1, b: 2, c: 3 }] }]);
+            const result = ToolkitModule.getAxisDetail({}, 1);
+            expect(result.a).toBe(2);
+            expect(result.c).toBe(3);
+            expect(result.domains[0].id).toBe(1);
+            expect(result.domains[0].a).toBe(1);
+            expect(result.domains[0].b).toBe(2);
+            expect(result.domains[0].c).toBe(1);
+        });
+
     });
 
     describe('ACTIONS', () => {
