@@ -130,13 +130,6 @@ describe('ProjectController', () => {
         expect(result.project).toBe('gcdpfe');
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
-
-        currentDraftForEditing.and.returnValue(undefined);
-        result = sc.mapData({});
-        expect(ProjectModule.getEmptyProject).toHaveBeenCalledTimes(1);
-
-        expect(result.project).toBe('gep');
-
     });
 
     it('onInit fn', () => {
