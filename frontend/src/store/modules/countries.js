@@ -17,7 +17,7 @@ const stateDefinition = {
     currentCountryDistrictsProjects: []
 };
 
-const mapData = {};
+export const mapData = {};
 
 // GETTERS
 
@@ -36,11 +36,13 @@ export const getCountry = (state, id) => {
 export const getCountriesList = state => {
     if (state.countries.list) {
         return state.countries.list.map(c=> {
-            c = Object.assign({}, c);
-            c.code = c.code.toLocaleLowerCase();
-            c.flag =  `/static/flags/${c.code}.png`;
-            c.prettyName = c.name.split('-').join(' ');
-            return c;
+            const code = c.code.toLocaleLowerCase();
+            return {
+                ...c,
+                code,
+                flag: `/static/flags/${code}.png`,
+                prettyName: c.name.split('-').join(' ')
+            };
         }).sort((a, b) => a.name.localeCompare(b.name));
     }
     return [];
@@ -76,7 +78,7 @@ export const getCountryCoverPage = state => {
 };
 
 export const getCountryCoverPicture = state => {
-    const country = getCountryCoverPage(state);
+    const country = exports.getCountryCoverPage(state);
     if (country.cover) {
         return {
             background: `url(${country.cover}) 0 0`,
@@ -104,9 +106,9 @@ export const getCurrentCountryDistricts = state => {
 };
 
 export const getCurrentCountryMapData = state => {
-    const currentCountry = getCurrentCountry(state);
+    const currentCountry = exports.getCurrentCountry(state);
     currentCountry.mapData = mapData[currentCountry.code];
-    currentCountry.districts = getCurrentCountryDistricts(state);
+    currentCountry.districts = exports.getCurrentCountryDistricts(state);
     return currentCountry;
 };
 
