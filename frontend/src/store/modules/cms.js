@@ -3,10 +3,14 @@ import axios from '../../plugins/axios';
 import findIndex from 'lodash/findIndex';
 import * as SystemModule from './system';
 
+const initialState = {
+    data: []
+};
+
 // GETTERS
 
 export const getCmsData = state => {
-    return state.cms.data;
+    return [...state.cms.data];
 };
 
 export const getDomainStructureForCms = state => {
@@ -54,7 +58,7 @@ export function loadCmsData() {
     };
 }
 
-function addContent(resource) {
+export function addContent(resource) {
     return async (dispatch) => {
         const { data } = await axios.post('/api/cms/', resource);
         data.searchOccurrences = 0;
@@ -62,7 +66,7 @@ function addContent(resource) {
     };
 }
 
-function updateContent(resource, id) {
+export function updateContent(resource, id) {
     return async (dispatch) => {
         const { data } = await axios.put(`/api/cms/${id}/`, resource);
         data.searchOccurrences = 0;
@@ -87,10 +91,10 @@ export function saveOrUpdateContent(resource) {
         }
 
         if (id) {
-            dispatch(updateContent(resource, id));
+            dispatch(exports.updateContent(resource, id));
         }
         else {
-            dispatch(addContent(resource));
+            dispatch(exports.addContent(resource));
         }
     };
 }
@@ -133,10 +137,10 @@ export function addNewComment(comment, { id }) {
         dispatch({ type: 'ADD_COMMENT', comment: data });
     };
 }
+
 export function updateComment(comment) {
     return async (dispatch) => {
         const { data } = await axios.put(`/api/comment/${comment.id}/`, comment);
-        data.searchOccurrences = 0;
         dispatch({ type: 'UPDATE_COMMENT', comment: data });
     };
 }
@@ -144,61 +148,51 @@ export function updateComment(comment) {
 
 // Reducers
 
-export default function cms(state = {}, action) {
-    const c = Object.assign({}, state);
+export default function cms(state = initialState, action) {
     switch (action.type) {
     case 'SET_CMS_DATA': {
-        c.data = action.data;
-        return Object.assign(state, {}, c);
+        return { ...state, data: action.data };
     }
     case 'ADD_CMS_ENTRY': {
-        const current = c.data.slice();
-        current.push(action.item);
-        c.data = current;
-        return Object.assign(state, {}, c);
+        return { ...state, data: [...state.data, action.item] };
     }
     case 'UPDATE_CMS_ENTRY': {
-        const current = c.data.slice();
+        const current = [...state.data];
         const index = findIndex(current, i => i.id === action.item.id);
         current.splice(index, 1, action.item);
-        c.data = current;
-        return Object.assign(state, {}, c);
+        return { ...state, data: current };
     }
     case 'DELETE_CMS_ENTRY': {
-        const current = c.data.slice();
+        const current = [...state.data];
         const index = findIndex(current, i => i.id === action.id);
         current.splice(index, 1);
-        c.data = current;
-        return Object.assign(state, {}, c);
+        return { ...state, data: current };
     }
     case 'ADD_COMMENT': {
-        const current = c.data.slice();
+        const current = [...state.data];
         const index = findIndex(current, i => i.id === action.comment.post);
         const item = current[index];
         item.comments.push(action.comment);
         current.splice(index, 1, item);
-        c.data = current;
-        return Object.assign(state, {}, c);
+        return { ...state, data: current };
     }
     case 'UPDATE_COMMENT': {
-        const current = c.data.slice();
+        const current = [...state.data];
         const index = findIndex(current, i => i.id === action.comment.post);
         const item = current[index];
         const commentIndex = findIndex(item.comments, com => com.id === action.comment.id);
         item.comments.splice(commentIndex, 1, action.comment);
         current.splice(index, 1, item);
-        c.data = current;
-        return Object.assign(state, {}, c);
+        return { ...state, data: current };
     }
     case 'DELETE_COMMENT': {
-        const current = c.data.slice();
+        const current = [...state.data];
         const index = findIndex(current, i => i.id === action.comment.post);
         const item = current[index];
         const commentIndex = findIndex(item.comments, com => com.id === action.comment.id);
         item.comments.splice(commentIndex, 1);
         current.splice(index, 1, item);
-        c.data = current;
-        return Object.assign(state, {}, c);
+        return { ...state, data: current };
     }
     default:
         return state;
