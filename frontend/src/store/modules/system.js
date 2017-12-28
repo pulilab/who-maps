@@ -16,7 +16,7 @@ const initialState = {
 
 // GETTERS
 
-export const getUserProfiles  = state => {
+export const getUserProfiles = state => {
     return state.system.profiles ? state.system.profiles.slice() : [];
 };
 
@@ -32,7 +32,7 @@ export const getLanguages = state => {
 };
 
 export const getSearchFilters = state => {
-    return state.system.search_filters.slice();
+    return [...state.system.search_filters];
 };
 
 export const getLandingPageDefaults = state => {
@@ -64,8 +64,9 @@ export const getDomainsForThematic = state => {
     const thematic_specific = exports.getThematicOverview(state);
     return [
         ...thematic_specific.map(t => ({ name: t.name, domains: t.domains })),
-        ...axis.map(a => ({ name: a.name, domains: domains
-              .filter(d=> d.axis === a.id)
+        ...axis.map(a => ({
+            name: a.name, domains: domains
+              .filter(d => d.axis === a.id)
               .map(df => ({ name: df.name }))
         }))];
 
@@ -85,8 +86,10 @@ export function loadStaticData() {
         const { data } = await axios.get('/api/static-data/');
         dispatch({ type: 'SET_AXIS', axis: data.axis });
         dispatch({ type: 'SET_DOMAINS', domains: data.domains });
-        dispatch({ type: 'SET_LANDING_PAGE_DEFAULTS',
-            landing_page_defaults: data.landing_page_defaults });
+        dispatch({
+            type: 'SET_LANDING_PAGE_DEFAULTS',
+            landing_page_defaults: data.landing_page_defaults
+        });
         dispatch({ type: 'SET_LANGUAGES', languages: data.languages });
         dispatch({ type: 'SET_SEARCH_FILTERS', search_filters: data.search_filters });
         dispatch({ type: 'SET_THEMATIC_OVERVIEW', thematic_overview: data.thematic_overview });
@@ -118,6 +121,7 @@ export async function searchOrganisation(name) {
     const { data } = await axios.get(`/api/organisations/?name=${name}`);
     return data;
 }
+
 export async function addOrganisation(name) {
     const { data } = await axios.post('/api/organisations/', { name });
     return data;
