@@ -773,7 +773,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
         return { ...state, teamViewers };
     }
     case 'CLEAR_USER_PROJECTS': {
-        return {};
+        return { structure: state.structure };
     }
     default:
         return state;
