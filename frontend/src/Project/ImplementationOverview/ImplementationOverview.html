@@ -328,27 +328,6 @@
       </div>
     </div>
 
-    <h6 class="required extra-margin">Has the government approved the project?</h6>
-
-    <div class="md-block extra-margin">
-      <div layout="column">
-        <md-radio-group ng-model="vm.project.government_approved" name="government_approved" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="row">
-          <md-radio-button ng-value="true" aria-label="government-approved-yes">
-            <translate>Yes</translate>
-          </md-radio-button>
-          <md-radio-button ng-value="false" aria-label="government-approved-no">
-            <translate>No</translate>
-          </md-radio-button>
-        </md-radio-group>
-        <div class="radio-error-messages">
-          <div ng-messages="vm.form.government_approved.$error">
-            <div ng-message="required">
-              <translate>This is required.</translate>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <h6 class="required extra-margin">
       <translate>Has the government financially invested in the project?</translate>
