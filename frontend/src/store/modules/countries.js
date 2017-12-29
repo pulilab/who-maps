@@ -155,7 +155,7 @@ export function loadCountryFields(id) {
 export function loadCountryMapDataAndDistricts() {
     return async (dispatch, getState) => {
         const state = getState();
-        const country = getCurrentCountry(state);
+        const country = exports.getCurrentCountry(state);
         if (country && country.code) {
             const countryData = mapData[country.code];
             if (!countryData) {
@@ -180,7 +180,7 @@ export function loadCountryMapDataAndDistricts() {
 
 export function loadCountryLandingPageInfo() {
     return async (dispatch, getState) => {
-        const country = getCurrentCountry(getState());
+        const country = exports.getCurrentCountry(getState());
         if (country && country.code) {
             const { data } = await axios.get(`/api/landing/${country.code.toUpperCase()}/`);
             dispatch({ type: 'SET_COUNTRY_COVER_DATA', cover: data });
@@ -190,7 +190,7 @@ export function loadCountryLandingPageInfo() {
 
 export function loadCurrentCountryDistrictsProject() {
     return async (dispatch, getState) => {
-        const country = getCurrentCountry(getState());
+        const country = exports.getCurrentCountry(getState());
         if (country && country.id) {
             const { data } = await axios.get(`/api/projects/by-view/map/${country.id}/`);
             dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
@@ -211,9 +211,9 @@ export function loadCountryProjectsOrAll(countryId) {
 
 export function loadCurrentCountryProjects() {
     return async (dispatch, getState) => {
-        const country = getCurrentCountry(getState());
+        const country = exports.getCurrentCountry(getState());
         if (country) {
-            dispatch(loadCountryProjectsOrAll(country.id));
+            dispatch(exports.loadCountryProjectsOrAll(country.id));
         }
     };
 }
@@ -224,10 +224,10 @@ export function setCurrentCountry(id, waitFor = []) {
         if (id && id !== currentId) {
             dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
             const promiseCollection = {};
-            promiseCollection.countryFields = dispatch(loadCountryFields(id));
-            promiseCollection.mapData = dispatch(loadCountryMapDataAndDistricts());
-            promiseCollection.landingPage = dispatch(loadCountryLandingPageInfo());
-            promiseCollection.districts = dispatch(loadCurrentCountryDistrictsProject());
+            promiseCollection.countryFields = dispatch(exports.loadCountryFields(id));
+            promiseCollection.mapData = dispatch(exports.loadCountryMapDataAndDistricts());
+            promiseCollection.landingPage = dispatch(exports.loadCountryLandingPageInfo());
+            promiseCollection.districts = dispatch(exports.loadCurrentCountryDistrictsProject());
             return Promise.all(waitFor.map(name => promiseCollection[name]));
         }
         return Promise.resolve();
@@ -238,7 +238,7 @@ export function setCurrentCountryFromCode(code) {
     return async (dispatch, getState) => {
         const country = getState().countries.list.find(c => c.code.toLocaleLowerCase() === code.toLocaleLowerCase());
         if (country && country.id) {
-            dispatch(setCurrentCountry(country.id, ['landingPage']));
+            dispatch(exports.setCurrentCountry(country.id, ['landingPage']));
         }
         else {
             dispatch({ type: 'UNSET_CURRENT_COUNTRY' });
