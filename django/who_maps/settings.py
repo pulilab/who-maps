@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'country',
     'search',
     'scheduler',
-    'cms'
+    'cms',
+    'woof',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

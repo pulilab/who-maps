@@ -15,6 +15,7 @@ urlpatterns = [
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
     url(r"^api/", include("cms.urls")),
+    url(r"^api/", include("woof.urls")),
 ]
 
 if settings.DEBUG:  # pragma: no cover
