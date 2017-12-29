@@ -103,7 +103,6 @@ class SetupTests(APITestCase):
             "donors": ["donor1", "donor2"],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
-            "government_approved": True,
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
@@ -398,7 +397,6 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertTrue(response.json()['published'].get("government_approved"))
         self.assertTrue(response.json()['published'].get("government_investor") in [0, 1, 2])
 
     def test_retrieve_wrong_http_command(self):

@@ -410,7 +410,6 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
                        TechnologyPlatform.objects.get_names_for_ids([x['id'] for x in p.data.get("platforms", [])])]),
             ", ".join([str(x) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))]),
             ", ".join([str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))]),
-            "Yes" if p.data.get('government_approved') else "No",
             p.data.get('government_investor'),
             ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))]),
             p.data.get('repository'),
