@@ -5,19 +5,20 @@ import * as SystemModule from '../../store/modules/system';
 
 class SearchbarController {
 
-    constructor($state, $scope, $ngRedux, filters) {
+    constructor($state, $scope, $ngRedux) {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.filters = filters;
+        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
     }
 
     mapState(state) {
         return {
-            projects: SystemModule.getSearchResult(state)
+            projects: SystemModule.getSearchResult(state),
+            filters: SystemModule.getSearchFilters(state)
         };
     }
 
@@ -89,9 +90,8 @@ class SearchbarController {
 
     static searchbarFactory() {
         require('./Searchbar.scss');
-        const filters = require('./Resource/filters.json');
         function searchController($state, $scope, $ngRedux) {
-            return new SearchbarController($state, $scope, $ngRedux, filters);
+            return new SearchbarController($state, $scope, $ngRedux);
         }
 
         searchController.$inject = ['$state', '$scope', '$ngRedux'];

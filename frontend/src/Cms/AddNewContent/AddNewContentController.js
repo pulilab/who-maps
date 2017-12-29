@@ -4,8 +4,7 @@ import * as UserModule from '../../store/modules/user';
 
 
 class AddNewContentDialog {
-    constructor($scope, $mdDialog, Upload, toast, $ngRedux, content, isSuperUser) {
-        this.axes = require('../resources/domains');
+    constructor($scope, $mdDialog, Upload, toast, $ngRedux, content) {
         this.scope = $scope;
         this.dialog = $mdDialog;
         this.upload = Upload;
@@ -13,14 +12,15 @@ class AddNewContentDialog {
         this.showTrixError = false;
         this.disableSubmit = false;
         this.newContent = content;
-        this.isSuperUser = isSuperUser;
         this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
     }
 
     mapState(state) {
         return {
+            axes: CmsModule.getDomainStructureForCms(state),
             global: CmsModule.getCmsData(state),
-            userProfile: UserModule.getProfile(state)
+            userProfile: UserModule.getProfile(state),
+            isSuperUser: UserModule.isSuperUser(state)
         };
     }
 
@@ -89,7 +89,7 @@ class AddNewContentController {
         const content = this.toEdit ? Object.assign({}, this.toEdit) : {};
 
         this.dialog.show({
-            controller: AddNewContentDialog.factory(content, this.isSuperUser),
+            controller: AddNewContentDialog.factory(content),
             controllerAs: 'vm',
             template: require('./AddNewContentDialog.html'),
             parent: angular.element(document.body),

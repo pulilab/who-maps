@@ -3,6 +3,7 @@ import forEach from 'lodash/forEach';
 
 import * as UserModule from '../../store/modules/user';
 import * as CountriesModule from '../../store/modules/countries';
+import * as SystemModule from '../../store/modules/system';
 
 /* global DEV, Promise */
 
@@ -29,7 +30,8 @@ class EditProfileController  {
         userProfile.country = stateProfile.country;
         return {
             userProfile,
-            countriesList: CountriesModule.getCountriesList(state)
+            countriesList: CountriesModule.getCountriesList(state),
+            languages: SystemModule.getLanguages(state)
         };
     }
 

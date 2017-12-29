@@ -1,23 +1,29 @@
 <div class="project-section section-strategy" md-whiteframe="2">
   <div class="section-title md-title">
-    2. Implementation overview
+    <translate>2. Implementation overview</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
-    <h6 class="first required">Add one or more Software and related Digital Health Interventions (DHI):</h6>
+    <h6 class="first required">
+      <translate>Add one or more Software and related Digital Health Interventions (DHI):</translate>
+    </h6>
 
     <div class="software-dhi input-group" ng-repeat="platform in vm.project.platforms">
       <div layout="row">
         <md-input-container flex="33">
-          <label>Software (select from list)</label>
+          <label>
+            <translate>Software (select from list)</translate>
+          </label>
           <md-select ng-model="platform.id" md-on-close="vm.platformSelected(platform)" name="{{'platforms_'+ $index + '.id' }}" ng-required="vm.activateValidation" >
             <md-option ng-value="plat.id" ng-repeat="plat in platform.available">
               {{plat.name}}
             </md-option>
           </md-select>
           <div ng-messages="vm.form['platforms_' + $index + '.id'].$error">
-            <div ng-message="required">This is required.</div>
+            <div ng-message="required">
+              <translate>This is required.</translate>
+            </div>
             <div ng-message="custom">
               <div ng-repeat="message in vm.form['platforms_' + $index + '.id'].customError">
                 {{message}}
@@ -31,12 +37,14 @@
             <md-button class="md-primary" aria-label="Add more"
                        ng-show="vm.showAddMore($index, vm.project.platforms)"
                        ng-click="vm.addChild('platforms')">
-              <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+              <md-icon><i class="material-icons">&#xE145;</i></md-icon>
+              <translate>Add more</translate>
             </md-button>
             <md-button class="md-warn" aria-label="Remove"
                        ng-show="vm.showRemove($index, vm.project.platforms)"
                        ng-click="vm.removeChild($index, 'platforms')">
-              <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+              <md-icon><i class="material-icons">&#xE15B;</i></md-icon>
+              <translate>Remove</translate>
             </md-button>
           </div>
         </div>
@@ -45,7 +53,7 @@
       <dialog-multi-selector
         ng-show="platform.id"
         selection="platform.strategies"
-        button-name="Digital Health Interventions"
+        button-name="{{'Digital Health Interventions' | translate }}"
         is-required="vm.activateValidation"
         show-title="true"
         elements="vm.structure.strategies"
@@ -60,10 +68,12 @@
   <div class="section-wrapper">
 
     <div class="essential md-block">
-      <h6>Health focus area(s) &ndash; select all that apply:</h6>
+      <h6>
+        <translate>Health focus area(s) &ndash; select all that apply:</translate>
+      </h6>
       <dialog-multi-selector
         selection="vm.project.health_focus_areas"
-        button-name="Health focus area"
+        button-name="{{'Health focus area' | translate }}"
         elements="vm.health_focus_areas"
         name="'health_focus_areas'"
         form-element="vm.form.health_focus_areas"
@@ -73,7 +83,9 @@
 
     <div class="md-block extra-margin-double">
       <md-input-container class="md-block">
-        <label>What are the Health System Challenges (HSC) your project addresses?</label>
+        <label>
+          <translate>What are the Health System Challenges (HSC) your project addresses?</translate>
+        </label>
         <md-select ng-model="vm.project.hsc_challenges" md-select-separator="empty" name="hsc_challenges" ng-required="vm.activateValidation" multiple>
           <md-optgroup label="{{hsc.name}}" ng-repeat="hsc in vm.structure.hsc_challenges">
             <md-option value="{{challenge.id}}" ng-repeat="challenge in hsc.challenges">
@@ -82,21 +94,27 @@
           </md-optgroup>
         </md-select>
         <div ng-messages="vm.form.hsc.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
         </div>
       </md-input-container>
     </div>
 
     <div class="md-block first extra-margin-double">
       <md-input-container class="md-block">
-        <label>What part(s) of the Health Information System (HIS) does this project support?</label>
+        <label>
+          <translate>What part(s) of the Health Information System (HIS) does this project support?</translate>
+        </label>
         <md-select ng-model="vm.project.his_bucket" md-select-separator="empty" name="his_bucket" ng-required="vm.activateValidation" multiple>
           <md-option value="{{his.id}}" ng-repeat="his in vm.structure.his_bucket">
             {{his.name}}
           </md-option>
         </md-select>
         <div ng-messages="vm.form.his.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
         </div>
       </md-input-container>
     </div>
@@ -107,38 +125,48 @@
       <div layout="column">
         <md-radio-group ng-model="vm.project.coverageType" name="coverageType" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="row">
           <md-radio-button ng-value="1" aria-label="coverage-type-yes">
-            Sub-national
+            <translate>Sub-national</translate>
           </md-radio-button>
           <md-radio-button ng-value="2" aria-label="coverage-type-no">
-            National
+            <translate>National</translate>
           </md-radio-button>
         </md-radio-group>
         <div class="radio-error-messages">
           <div ng-messages="vm.form.coverageType.$error">
-            <div ng-message="required">This is required.</div>
+            <div ng-message="required">
+              <translate>This is required.</translate>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div ng-show="vm.project.coverageType === 1" class="md-block extra-margin">
-      <h6 class="subtitle"><i class="material-icons">&#xE567;</i> District level deployment</h6>
+      <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
+        <translate>District level deployment</translate>
+      </h6>
 
       <div class="input-group" ng-repeat="cov in vm.project.coverage">
         <div layout="column">
           <div layout="row">
             <md-input-container class="district" flex="50">
-              <label>District</label>
+              <label>
+                <translate>District</translate>
+              </label>
               <md-select ng-model="cov.district"
                          name="{{'coverage_' + $index + '.district'}}"
                          ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
-                <md-option value="{{district}}" ng-repeat="district in cov.available">
-                  {{district}}
+                <md-option value="{{district.id}}" ng-repeat="district in cov.available">
+                  {{district.name}}
                 </md-option>
-                <md-option md-option-empty ng-hide="vm.districtList.length"> Select a country </md-option>
+                <md-option md-option-empty ng-hide="vm.districtList.length">
+                  <translate>Select a country </translate>
+                </md-option>
               </md-select>
               <div ng-messages="vm.form['coverage_' + $index + '.district'].$error">
-                <div ng-message="required">This is required.</div>
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
                 <div ng-message="custom">
                   <div ng-repeat="message in vm.form['coverage_' + $index + '.district'].customError">
                     {{message}}
@@ -150,14 +178,18 @@
           </div>
           <div layout="row">
             <md-input-container class="number" flex="20">
-              <label># Health Workers</label>
+              <label>
+                <translate># Health Workers</translate>
+              </label>
               <input ng-required="vm.isSubLevelCoverageRequired()"
                      name="{{'coverage_' + $index}}.health_workers"
                      type="number"
                      min="0"
                      ng-model="cov.health_workers" >
               <div ng-messages="vm.form['coverage_' + $index + '.health_workers'].$error">
-                <div ng-message="required">This is required.</div>
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
                 <div ng-message="custom">
                   <div ng-repeat="message in vm.form['coverage_' + $index + '.health_workers'].customError">
                     {{message}}
@@ -166,14 +198,18 @@
               </div>
             </md-input-container>
             <md-input-container class="number" flex="20">
-              <label># Facilities</label>
+              <label>
+                <translate># Facilities</translate>
+              </label>
               <input ng-required="vm.isSubLevelCoverageRequired()"
                      name="{{'coverage_' + $index}}.facilities"
                      type="number"
                      min="0"
                      ng-model="cov.facilities">
               <div ng-messages="vm.form['coverage_' + $index + '.facilities'].$error">
-                <div ng-message="required">This is required.</div>
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
                 <div ng-message="custom">
                   <div ng-repeat="message in vm.form['coverage_' + $index + '.facilities'].customError">
                     {{message}}
@@ -182,14 +218,18 @@
               </div>
             </md-input-container>
             <md-input-container class="number" flex="20">
-              <label># Clients</label>
+              <label>
+                <translate># Clients</translate>
+              </label>
               <input ng-required="vm.isSubLevelCoverageRequired()"
                      name="{{'coverage_' + $index}}.clients"
                      type="number"
                      min="0"
                      ng-model="cov.clients">
               <div ng-messages="vm.form['coverage_' + $index + '.clients'].$error">
-                <div ng-message="required">This is required.</div>
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
                 <div ng-message="custom">
                   <div ng-repeat="message in vm.form['coverage_' + $index + '.clients'].customError">
                     {{message}}
@@ -201,12 +241,14 @@
               <md-button class="md-warn" aria-label="Remove"
                          ng-show="vm.showRemove($index, vm.project.coverage)"
                          ng-click="vm.removeChild($index, 'coverage')">
-                <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+                <md-icon><i class="material-icons">&#xE15B;</i></md-icon>
+                <translate>Remove</translate>
               </md-button>
               <md-button class="md-primary" aria-label="Add more"
                          ng-show="vm.showAddMore($index, vm.project.coverage)"
                          ng-click="vm.addChild('coverage')">
-                <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+                <md-icon><i class="material-icons">&#xE145;</i></md-icon>
+                <translate>Add more</translate>
               </md-button>
             </div>
           </div>
@@ -215,19 +257,25 @@
     </div>
 
     <div ng-show="vm.project.coverageType === 2" class="md-block extra-margin">
-      <h6 class="subtitle first"><i class="material-icons">&#xE153;</i> National level deployment</h6>
+      <h6 class="subtitle first"><i class="material-icons">&#xE153;</i>
+        <translate>National level deployment</translate>
+      </h6>
 
       <div class="input-group">
         <div layout="row">
           <md-input-container class="number" flex="20">
-            <label># Health Workers</label>
+            <label>
+              <translate># Health Workers</translate>
+            </label>
             <input type="number"
                    min="0"
                    name="national_level_deployment.health_workers"
                    ng-required="vm.isNationalLevelCoverageRequired()"
                    ng-model="vm.project.national_level_deployment.health_workers">
             <div ng-messages="vm.form['national_level_deployment.health_workers'].$error">
-              <div ng-message="required">This is required.</div>
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
               <div ng-message="custom">
                 <div ng-repeat="message in vm.form['national_level_deployment.health_workers'].customError">
                   {{message}}
@@ -236,14 +284,18 @@
             </div>
           </md-input-container>
           <md-input-container class="number" flex="20">
-            <label># Facilities</label>
+            <label>
+              <translate># Facilities</translate>
+            </label>
             <input type="number"
                    min="0"
                    name="national_level_deployment.facilities"
                    ng-required="vm.isNationalLevelCoverageRequired()"
                    ng-model="vm.project.national_level_deployment.facilities">
             <div ng-messages="vm.form['national_level_deployment.facilities'].$error">
-              <div ng-message="required">This is required.</div>
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
               <div ng-message="custom">
                 <div ng-repeat="message in vm.form['national_level_deployment.facilities'].customError">
                   {{message}}
@@ -252,14 +304,18 @@
             </div>
           </md-input-container>
           <md-input-container class="number" flex="20">
-            <label># Clients</label>
+            <label>
+              <translate># Clients</translate>
+            </label>
             <input type="number"
                    min="0"
                    name="national_level_deployment.clients"
                    ng-required="vm.isNationalLevelCoverageRequired()"
                    ng-model="vm.project.national_level_deployment.clients">
             <div ng-messages="vm.form['national_level_deployment.clients'].$error">
-              <div ng-message="required">This is required.</div>
+              <div ng-message="required">
+                <translate>This is required.</translate>
+              </div>
               <div ng-message="custom">
                 <div ng-repeat="message in vm.form['national_level_deployment.clients'].customError">
                   {{message}}
@@ -272,50 +328,37 @@
       </div>
     </div>
 
-    <h6 class="required extra-margin">Has the government approved the project?</h6>
 
-    <div class="md-block extra-margin">
-      <div layout="column">
-        <md-radio-group ng-model="vm.project.government_approved" name="government_approved" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="row">
-          <md-radio-button ng-value="true" aria-label="government-approved-yes">
-            Yes
-          </md-radio-button>
-          <md-radio-button ng-value="false" aria-label="government-approved-no">
-            No
-          </md-radio-button>
-        </md-radio-group>
-        <div class="radio-error-messages">
-          <div ng-messages="vm.form.government_approved.$error">
-            <div ng-message="required">This is required.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h6 class="required extra-margin">Has the government financially invested in the project?</h6>
+    <h6 class="required extra-margin">
+      <translate>Has the government financially invested in the project?</translate>
+    </h6>
 
     <div class="md-block extra-margin">
       <div layout="column">
         <md-radio-group ng-model="vm.project.government_investor" name="government_investor" md-no-ink ng-required="vm.activateValidation" class="md-primary" layout="column">
           <md-radio-button ng-value="0" aria-label="government-investor-no">
-            No, they have not yet contributed
+            <translate>No, they have not yet contributed</translate>
           </md-radio-button>
           <md-radio-button ng-value="1" aria-label="government-investor-yes-1">
-            Yes, they are contributing in-kind people or time
+            <translate>Yes, they are contributing in-kind people or time</translate>
           </md-radio-button>
           <md-radio-button ng-value="2" aria-label="government-investor-yes-2">
-            Yes, there is a financial contribution through MOH budget
+            <translate>Yes, there is a financial contribution through MOH budget</translate>
           </md-radio-button>
         </md-radio-group>
         <div class="radio-error-messages">
           <div ng-messages="vm.form.government_investor.$error">
-            <div ng-message="required">This is required.</div>
+            <div ng-message="required">
+              <translate>This is required.</translate>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <h6>Implementing partners</h6>
+    <h6>
+      <translate>Implementing partners</translate>
+    </h6>
 
     <md-input-container class="error-placeholder">
       <input  name="implementing_partners" ng-model="vm.hiddenFields" aria-label="hidden">
@@ -330,23 +373,29 @@
 
     <div layout="row" ng-repeat="partner in vm.project.implementing_partners" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
-        <input ng-model="partner.value" placeholder="Partner's name" md-maxlength="64">
+        <input ng-model="partner.value"
+               placeholder="{{'Partner\'s name' | translate }}"
+               md-maxlength="64">
       </md-input-container>
       <div class="add-more-item">
         <md-button class="md-warn" aria-label="Remove"
                    ng-show="vm.showRemove($index, vm.project.implementing_partners)"
                    ng-click="vm.removeChild($index, 'implementing_partners')">
-          <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+          <md-icon><i class="material-icons">&#xE15B;</i></md-icon>
+          <translate>Remove</translate>
         </md-button>
         <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showAddMore($index, vm.project.implementing_partners)"
                    ng-click="vm.addChild('implementing_partners')">
-          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon>
+          <translate>Add more</translate>
         </md-button>
       </div>
     </div>
 
-    <h6 class="required">Donors (Add one at least)</h6>
+    <h6 class="required">
+      <translate>Donors (Add one at least)</translate>
+    </h6>
 
     <md-input-container class="error-placeholder">
       <input  name="donors" ng-model="vm.hiddenFields" aria-label="hidden">
@@ -361,10 +410,16 @@
 
     <div layout="row" ng-repeat="donor in vm.project.donors" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
-        <input ng-model="donor.value" placeholder="Donor's name" md-maxlength="64" ng-required="vm.activateValidation" name="{{'donor_' + $index}}">
+        <input ng-model="donor.value"
+               placeholder="{{'Donor\'s name' | translate }}"
+               md-maxlength="64" ng-required="vm.activateValidation" name="{{'donor_' + $index}}">
         <div ng-messages="vm.form['donor_' + $index].$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength">This field has to be less than 64 characters long.</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
+          <div ng-message="md-maxlength">
+            <translate>This field has to be less than 64 characters long.</translate>
+          </div>
         </div>
       </md-input-container>
 
@@ -372,12 +427,14 @@
         <md-button class="md-warn" aria-label="Remove"
                    ng-show="vm.showRemove($index, vm.project.donors)"
                    ng-click="vm.removeChild($index, 'donors')">
-          <md-icon><i class="material-icons">&#xE15B;</i></md-icon> Remove
+          <md-icon><i class="material-icons">&#xE15B;</i></md-icon>
+          <translate>Remove</translate>
         </md-button>
         <md-button class="md-primary" aria-label="Add more"
                    ng-show="vm.showAddMore($index, vm.project.donors)"
                    ng-click="vm.addChild('donors')">
-          <md-icon><i class="material-icons">&#xE145;</i></md-icon> Add more
+          <md-icon><i class="material-icons">&#xE145;</i></md-icon>
+          <translate>Add more</translate>
         </md-button>
       </div>
     </div>

@@ -84,14 +84,15 @@
       line-height: 48px;
 
       .material-icons,
-      > span {
+      span {
         width: auto;
         color: $color-primary !important;
+        transition: $swift-ease-out;
       }
 
       &:hover {
         .material-icons,
-        > span {
+        span {
           color: $color-primary-muted !important;
         }
       }

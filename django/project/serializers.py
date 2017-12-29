@@ -1,9 +1,10 @@
 import re
 
-from rest_framework import serializers
 from django.core import mail
-from django.template import loader
 from django.conf import settings
+from django.template import loader
+from django.utils.translation import ugettext, override
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
@@ -66,7 +67,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
-    government_approved = serializers.BooleanField()
     government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'), (
         1, 'Yes, they are contributing in-kind people or time'), (
             2, 'Yes, there is a financial contribution through MOH budget')])
@@ -129,7 +129,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
-    government_approved = serializers.BooleanField(required=False)
     government_investor = serializers.ChoiceField(
         choices=[(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
                  (2, 'Yes, there is a financial contribution through MOH budget')],
@@ -181,28 +180,37 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
 
         html_template = loader.get_template("email/new_member.html")
-        html_message = html_template.render({
-            "project_id": instance.id,
-            "project_name": instance.name,
-            "role": "team member"
-        })
+
         for profile in new_team_members:
+            with override(profile.language):
+                subject = ugettext("You were added to a project!")
+                html_message = html_template.render({
+                    "project_id": instance.id,
+                    "project_name": instance.name,
+                    "role": "team member",
+                    "language": profile.language
+                })
+
             mail.send_mail(
-                subject="You were added to a project!",
+                subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
 
-        html_message = html_template.render({
-            "project_id": instance.id,
-            "project_name": instance.name,
-            "role": "viewer"
-        })
         for profile in new_viewers:
+            with override(profile.language):
+                subject = ugettext("You were added to a project!")
+                html_message = html_template.render({
+                    "project_id": instance.id,
+                    "project_name": instance.name,
+                    "role": "viewer",
+                    "language": profile.language
+                })
+
             mail.send_mail(
-                subject="You were added to a project!",
+                subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],

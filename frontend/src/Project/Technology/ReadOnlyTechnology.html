@@ -1,17 +1,21 @@
 <div class="project-section section-technology read-only" md-whiteframe="2">
   <div class="section-title md-title">
-    3. Technology
+    <translate>3. Technology</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
     <div>
-      <h6>Technology deployment date</h6>
+      <h6>
+        <translate>Technology deployment date</translate>
+      </h6>
       <p>{{vm.printDate(vm.project.implementation_dates)}}</p>
     </div>
 
     <div>
-      <h6>Under what license is the project governed?</h6>
+      <h6>
+        <translate>Under what license is the project governed?</translate>
+      </h6>
       <ul>
         <li ng-repeat="l in vm.project.licenses">
           {{ l.name }}
@@ -20,21 +24,27 @@
     </div>
 
     <div>
-      <h6>Code documentation or download link</h6>
+      <h6>
+        <translate>Code documentation or download link</translate>
+      </h6>
       <a ng-href="{{vm.fixUrl(vm.project.repository)}}" target="_blank">
         {{vm.project.repository}}
       </a>
     </div>
 
     <div>
-      <h6>Link to the application</h6>
+      <h6>
+        <translate>Link to the application</translate>
+      </h6>
       <a ng-href="{{vm.fixUrl(vm.project.mobile_application)}}" target="_blank">
         {{vm.project.mobile_application}}
       </a>
     </div>
 
     <div>
-      <h6>Link to the wiki page</h6>
+      <h6>
+        <translate>Link to the wiki page</translate>
+      </h6>
       <a ng-href="{{vm.fixUrl(vm.project.wiki)}}" target="_blank">
         {{vm.project.wiki}}
       </a>

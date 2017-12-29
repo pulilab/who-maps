@@ -21,7 +21,7 @@ describe('CountryMapController', () => {
     });
 
     afterEach(() => {
-        const last = document.getElementById('map')
+        const last = document.getElementById('map');
         if (last) {
             last.innerHTML = '';
         }
@@ -79,7 +79,7 @@ describe('CountryMapController', () => {
         // height set to parents height
         cc.big = true;
         cc.createInMemoryDOMElement();
-        const parentsHeight = d3.select('#map')[0][0].offsetHeight.toString()
+        const parentsHeight = d3.select('#map')[0][0].offsetHeight.toString();
         expect(cc.mapDOMElement[0][0].height.baseVal.valueAsString).toBe(parentsHeight);
 
     });
@@ -110,30 +110,6 @@ describe('CountryMapController', () => {
         expect(cc.boundNrs.health_workers).toBe(3);
         expect(cc.boundNrs.facilities).toBe(4);
         expect(cc.fillDistrictData).toHaveBeenCalledWith(newDistrictData);
-    });
-
-    it('has saveClass fn.', () => {
-        cc.saveClass('clients', 0, undefined);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(undefined);
-        expect(cc.covLib.facilities).toBe(undefined);
-
-        cc.saveClass('health_workers', 1, undefined);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(1);
-        expect(cc.covLib.facilities).toBe(undefined);
-
-        cc.saveClass('facilities', 2, [1, 2]);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(1);
-        expect(cc.covLib.facilities).toBe(4);
-
-        // no rewrite
-        cc.saveClass('clients', 3, [1, 2]);
-        expect(cc.covLib.clients).toBe(0);
-        expect(cc.covLib.health_workers).toBe(1);
-        expect(cc.covLib.facilities).toBe(4);
-
     });
 
     it('has makeGeoFromTopo fn.', () => {
@@ -189,10 +165,11 @@ describe('CountryMapController', () => {
     });
 
     it('has fillDistrictData fn.', () => {
-        cc.drawMapShape(SLCountryMapData);
+        const mapData = { ...SLCountryMapData, districts: SLCountryMapData.districts.map((name, id) => ({ id, name })) };
+        cc.drawMapShape(mapData);
         const districtLevelCoverage = {
-            'Kambia District': { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
-            'Bombali District': { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
+            0 : { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
+            1 : { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
         };
         cc.fillDistrictData(districtLevelCoverage);
         expect(document.querySelectorAll('.d3district-data').length).toBe(2);

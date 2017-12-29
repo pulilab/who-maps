@@ -1,6 +1,6 @@
 import SkeletonController from '../../src/Common/Thematic/SkeletonController.js';
 import { $scope, $interpolate, $anchorScroll } from '../testUtilities';
-import mock from '../../src/Common/Thematic/mockStructure.js';
+import mock from './mockStructure.js';
 import _ from 'lodash';
 
 /* global define, it, describe, expect, beforeEach, spyOn, Promise, jasmine */

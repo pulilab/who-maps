@@ -1,17 +1,15 @@
 import * as SystemModule from '../store/modules/system';
 
-
 class AppModuleController {
 
     constructor($state, $scope, $rootScope, $mdToast, $ngRedux) {
-        this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
         this.dialog = $mdToast;
         this.rootScope = $rootScope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.unsubrscibe = $ngRedux.connect(this.mapState, SystemModule)(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
     }
 
     mapState(state) {
@@ -23,14 +21,13 @@ class AppModuleController {
 
     onInit() {
         this.watchers();
-        this.eventBinding();
         this.projectId = this.state.params.appName;
         this.currentPage = this.state.current.name;
         this.showCountryTopBar = false;
     }
 
     onDestroy()  {
-        this.unsubrscibe();
+        this.unsubscribe();
     }
 
     computeShowSubBar() {
@@ -46,19 +43,6 @@ class AppModuleController {
         }, value => {
             this.currentPage = value;
             this.showSubBar = this.computeShowSubBar();
-        });
-    }
-
-    eventBinding() {
-        this.EE.on('logout', this.handleLogoutEvent, this);
-    }
-
-
-    handleLogoutEvent() {
-        this.systemLogout();
-        const rest = this.cs.reset();
-        rest.loadedPromise.then(() => {
-            this.state.go('landing', { appName: null });
         });
     }
 

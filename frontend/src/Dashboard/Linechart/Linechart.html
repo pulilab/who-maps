@@ -2,8 +2,12 @@
 
   <ul flex ng-class="{'secondary-labelcolors': vm.notpercentage}">
 
-    <li ng-if="vm.showdotted"><span class="smallness">___</span> closed</li>
-    <li ng-if="vm.showdotted"><span class="smallness">……</span> in progress</li>
+    <li ng-if="vm.showdotted"><span class="smallness">___</span>
+      <translate>closed</translate>
+    </li>
+    <li ng-if="vm.showdotted"><span class="smallness">……</span>
+      <translate>in progress</translate>
+    </li>
 
     <li
       ng-repeat="label in vm.chartConfig.chosenLabels track by $index"
@@ -20,7 +24,9 @@
     {{vm.labels}}
     <md-input-container>
 
-      <label>Axis to show: </label>
+      <label>
+        <translate>Axis to show:</translate>
+      </label>
 
       <md-select
         aria-label="select axis to view in the chart"

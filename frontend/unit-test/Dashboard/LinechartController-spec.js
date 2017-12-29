@@ -1,7 +1,7 @@
 import LinechartController from '../../src/Dashboard/Linechart/LinechartController';
-import { default as axisdata } from '../../src/Dashboard/Mocks/chartmock.js';
-import { default as axisdata2 } from '../../src/Dashboard/Mocks/chartmock2.js';
-import { default as axisdata3 } from '../../src/Dashboard/Mocks/chartmock3.js';
+import { default as axisdata } from './Mocks/chartmock.js';
+import { default as axisdata2 } from './Mocks/chartmock2.js';
+import { default as axisdata3 } from './Mocks/chartmock3.js';
 require('d3');
 require('angular');
 import { $scope, $timeout, $ngRedux, EE } from '../testUtilities';

@@ -42,11 +42,11 @@
 
     .md-title {
       font-size: 14px;
-      margin: 5px 0;
+      margin: 5px 0 8px;
     }
     .comment-info {
       display: block;
-      margin: 0 0 10px;
+      margin: 0 0 15px;
 
       .time {
         position: relative;
@@ -61,20 +61,22 @@
 
         .edit-button {
           position: relative;
-          top: 4px;
           left: 0;
           min-width: auto;
           width: auto;
+          min-height: 24px;
+          max-height: 24px;
           margin: 0 6px 0 0;
           padding: 0;
           font-size: 12px;
-          line-height: 16px;
+          line-height: 24px;
           background-color: transparent !important;
           transition: $swift-ease-out;
 
           md-icon {
             float: left;
             font-size: 16px;
+            line-height: 24px;
             color: $text-disabled;
             transition: $swift-ease-out;
           }
@@ -86,31 +88,31 @@
         }
 
         .flag-button {
-          top: 2px;
           min-height: 24px;
           max-height: 24px;
-          line-height: 24px;
           margin: 0;
 
           md-icon {
+            float: left;
             font-size: 16px;
+            line-height: 22px;
           }
 
-          .report-text::after {
-            top: -2px;
+          .report-text {
             font-size: 12px;
+            line-height: 24px;
           }
 
-          .delete-text::after {
-            top: -2px;
+          .delete-text {
             font-size: 12px;
+            line-height: 24px;
           }
         }
       }
 
       .active {
         .warning-zone {
-          top: 6px;
+          top: 0;
           height: 24px;
           padding: 0 8px;
 

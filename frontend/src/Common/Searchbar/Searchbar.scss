@@ -133,9 +133,12 @@ searchbar {
   }
 
   .compact {
+    position: absolute;
+    top: 15px;
     right: -30px;
 
     #closebtn {
+      top: 38px;
       border-radius: 50px;
 
       .material-icons {
@@ -145,6 +148,10 @@ searchbar {
 
     .md-input {
       width: 456px;
+    }
+
+    .searchcard {
+      top: 0;
     }
 
   }

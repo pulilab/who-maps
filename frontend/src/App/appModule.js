@@ -7,12 +7,14 @@ import ngMessages from 'angular-messages';
 import 'angular-password';
 import angularMd from 'angular-material';
 import ngRedux from 'ng-redux';
+import angularGettext from 'angular-gettext';
 import { reducers, middleware } from '../store/index';
 import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
 import * as SystemModule from '../store/modules/system';
 import * as CountriesModule from '../store/modules/countries';
 import axios from '../plugins/axios';
+import { getLanguage, setCatalog, setDateLocaleProvider, setScope } from '../plugins/language';
 
 import _appTemplate from './app.html';
 import Storage from '../Common/Storage';
@@ -27,7 +29,11 @@ window.addEventListener('singletonRegistered', evt => {
 
 const storage = new Storage();
 
-const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorScrollProvider, $ngReduxProvider) => {
+const config = ($stateProvider, $urlRouterProvider, $locationProvider,
+                $anchorScrollProvider, $ngReduxProvider, $mdDateLocaleProvider) => {
+
+    setDateLocaleProvider($mdDateLocaleProvider);
+
     $stateProvider
       .state('base', {
           url: '',
@@ -36,11 +42,12 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           controllerAs: 'vm',
           abstract: true,
           resolve: {
-              user: ['$ngRedux', ($ngRedux) => {
-                  const user =  $ngRedux.dispatch(UserModule.loadProfile());
+              user: ['$ngRedux', async ($ngRedux) => {
+                  await $ngRedux.dispatch(UserModule.loadProfile());
+                  await $ngRedux.dispatch(SystemModule.loadStaticData());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
-                  return Promise.all([user, countries, structure]);
+                  return Promise.all([countries, structure]);
               }]
           }
       })
@@ -62,6 +69,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
                   await $ngRedux.dispatch(UserModule.loadProfile());
+                  await $ngRedux.dispatch(SystemModule.loadStaticData());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
                   const profiles = $ngRedux.dispatch(SystemModule.loadUserProfiles());
@@ -84,6 +92,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider, $anchorSc
           resolve: {
               data: ['$ngRedux', async ($ngRedux) => {
                   await $ngRedux.dispatch(UserModule.loadProfile());
+                  await $ngRedux.dispatch(SystemModule.loadStaticData());
                   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
                   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
                   const countries =  $ngRedux.dispatch(CountriesModule.loadCountries());
@@ -179,7 +188,10 @@ function checkProfile(profile, t) {
     return Promise.resolve();
 }
 
-const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions) => {
+const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $transitions, gettextCatalog) => {
+    setCatalog(gettextCatalog);
+    setScope($rootScope);
+    getLanguage();
     const tkn = storage.get('token');
     if (tkn) {
         axios.setAuthToken(tkn);
@@ -252,16 +264,32 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     $ngRedux.subscribe(() => {
         $timeout(() => {$rootScope.$apply(() => {});}, 100);
     });
+
 };
 
-run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux', '$timeout', '$transitions'];
+run.$inject = ['$rootScope', '$state', '$mdToast', '$mdDialog', '$ngRedux',
+    '$timeout', '$transitions', 'gettextCatalog'];
 
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider',
-    '$anchorScrollProvider', '$ngReduxProvider'];
+    '$anchorScrollProvider', '$ngReduxProvider', '$mdDateLocaleProvider'];
 
 const AppComponent = require('./appComponent');
 const SystemController = require('./SystemController');
+
+
+angular.module('ngHtmlCompile', [])
+  .directive('ngHtmlCompile', ['$compile', ($compile) => {
+      return {
+          restrict: 'A',
+          link(scope, element, attrs) {
+              scope.$watch(attrs.ngHtmlCompile, (newValue) => {
+                  element.html(newValue);
+                  $compile(element.contents())(scope);
+              });
+          }
+      };
+  }]);
 
 angular.module('app',
     [
@@ -269,7 +297,9 @@ angular.module('app',
         angularMd,
         ngMessages,
         'ngPassword',
+        'ngHtmlCompile',
         ngRedux,
+        angularGettext,
         require('../Common/').Components,
         require('../Project/'),
         require('../Cms/'),

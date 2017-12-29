@@ -31,3 +31,6 @@ errorShots/
 .yarnclean
 .testmon*
 /ssl/
+/frontend/djangojs.pot
+*.po
+*.mo

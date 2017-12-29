@@ -2,7 +2,10 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h3 class="md-title" >
-        Add {{vm.buttonName}} <span ng-show="vm.dialogName">to {{vm.dialogName}}</span>
+        <translate>Add {{vm.buttonName}} </translate>
+        <span ng-show="vm.dialogName">
+          <translate>to {{vm.dialogName}}</translate>
+        </span>
       </h3>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="vm.cancel()">
@@ -15,11 +18,19 @@
     <div class="main-group" ng-repeat="group in vm.elements">
         <div class="header" layout="row" layout-align="start center" layout-wrap  ng-click="vm.toggle(group)">
 
-          <h4 flex="auto" ng-show="group.name">{{group.name}}</h4>
-          <h4 flex="auto" ng-hide="group.name">Select from list:</h4>
+          <h4 flex="auto" ng-show="group.name">
+            {{group.name}}
+          </h4>
+          <h4 flex="auto" ng-hide="group.name">
+            <translate>Select from list:</translate>
+          </h4>
 
-          <small ng-hide="group.allOpen" ng-click="vm.toggleAll(group)">Open all</small>
-          <small ng-show="group.allOpen" ng-click="vm.toggleAll(group)">Close all</small>
+          <small ng-hide="group.allOpen" ng-click="vm.toggleAll(group)">
+            <translate>Open all</translate>
+          </small>
+          <small ng-show="group.allOpen" ng-click="vm.toggleAll(group)">
+            <translate>Close all</translate>
+          </small>
         </div>
         <div class="body">
           <div class="sub-group" ng-class="vm.subGroupClass(subGroup)" ng-repeat="subGroup in group.subGroups" >
@@ -49,11 +60,11 @@
 
   <md-dialog-actions layout="row">
     <md-button ng-click="vm.cancel()">
-      Cancel
+      <translate>Cancel</translate>
     </md-button>
     <span flex></span>
     <md-button  class="md-primary md-raised" ng-click="vm.addSelected()">
-      Add selected
+      <translate>Add selected</translate>
     </md-button>
   </md-dialog-actions>
 

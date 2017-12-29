@@ -23,7 +23,8 @@ const searchableSelectionMenuComponent = {
         limit: '<',
         optionLabel: '@',
         hint: '@',
-        iconFunction: '='
+        iconFunction: '=',
+        label: '@'
     }
 
 };

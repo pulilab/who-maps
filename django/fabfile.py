@@ -22,7 +22,7 @@ def production():
     env.hosts = ['whomaps@207.154.215.126']
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/3.1.3"
+    env.branch = "tags/3.1.4"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -34,7 +34,7 @@ def staging():
     env.hosts = ['whomaps@139.59.148.238']
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/3.1.3"
+    env.branch = "tags/3.2.2"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -210,3 +210,7 @@ def up_debug():
     time.sleep(2)
     local("docker stop whomaps_django_1")
     local("docker-compose run --service-ports django python manage.py runserver 0.0.0.0:8000")
+
+
+def update_translations():
+    local("docker-compose exec django python manage.py update_translations master.pot")

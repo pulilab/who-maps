@@ -8,12 +8,20 @@
 
       <div ng-show="vm.showEmpty" flex class="dashsection dash-cardholder">
 
-        <div class="dash-subhead">PROJECT DETAILS</div>
+        <div class="dash-subhead">
+          <translate>PROJECT DETAILS</translate>
+        </div>
 
         <md-card md-whiteframe="2" flex class="dash-emptyleft">
           <div class="emptychild" layout="column" layout-align="start center">
-            <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">add new project</md-button>
-            <p>to include your project in the inventory and begin tracking your performance</p>
+            <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">
+              <translate>add new project</translate>
+            </md-button>
+            <p>
+              <translate>
+                to include your project in the inventory and begin tracking your performance
+              </translate>
+            </p>
           </div>
         </md-card>
       </div>
@@ -27,75 +35,106 @@
 
       <div flex class="dashsection dash-cardholder" layout="column" ng-if="!vm.showEmpty">
 
-        <div class="dash-subhead">PROJECT DETAILS</div>
+        <div class="dash-subhead">
+          <translate>PROJECT DETAILS</translate>
+        </div>
+
         <md-card md-whiteframe="2" flex>
 
           <md-tabs md-border-bottom md-dynamic-height>
 
-            <md-tab label="overview">
+            <md-tab label="{{'overview' | translate}}">
 
               <div class="dash-cardcontent" layout="column" ng-if="!vm.viewMode">
 
-                <axis flex ng-repeat="axis in vm.axisData" axis-data="axis" axis-id="$index"></axis>
+                <axis flex ng-repeat="axis in vm.rawToolkitData" axis-index="$index"></axis>
 
                 <div layout="row" class="dash-overview-tooltips">
                   <div class="dash-overview-tooltip">
                     <img src="../Common/Axis/images/flag-started.svg" />
-                    <span>Already started</span>
+                    <span>
+                      <translate>Already started</translate>
+                    </span>
                   </div>
                   <div class="dash-overview-tooltip">
                     <img src="../Common/Axis/images/flag-notstarted.svg" />
-                    <span>Not started yet</span>
+                    <span>
+                      <translate>Not started yet</translate>
+                    </span>
                   </div>
                   <div class="dash-overview-tooltip">
-                    <span><countrychart-tooltip>P</countrychart-tooltip> - Progress</span>
+                    <span>
+                      <translate>
+                      <b>P</b> - Progress
+                      </translate>
+                    </span>
                   </div>
                   <div class="dash-overview-tooltip">
-                    <span><b>S</b> - Score</span>
+                    <span>
+                      <translate>
+                      <b>S</b> - Score
+                      </translate>
+                    </span>
                   </div>
                   <div class="dash-overview-tooltip">
                     <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
-                    <span>0-49%</span>
+                    <span>
+                      <translate>0-49%</translate>
+                    </span>
                   </div>
                   <div class="dash-overview-tooltip">
                     <md-icon class="material-icons dash-overw-toolkit-ball2">fiber_manual_record</md-icon>
-                    <span>50-99%</span>
+                    <span>
+                      <translate>50-99%</translate>
+                    </span>
                   </div>
                   <div class="dash-overview-tooltip">
                     <md-icon class="material-icons dash-overw-toolkit-ball3">fiber_manual_record</md-icon>
-                    <span>100%</span>
+                    <span>
+                      <translate>100%</translate>
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div class="dash-cardcontent infoview" layout="column" ng-if="vm.viewMode" layout="column" layout-align="space-between stretch">
                 <div layout="row" layout-align="start center" class="roww">
-                  <div flex="25" class='label'>NAME</div>
+                  <div flex="25" class='label'>
+                    <translate>NAME</translate>
+                  </div>
                   <div class="data">{{vm.projectData.name}}</div>
                 </div>
 
                 <div layout="row" layout-align="start center" class="roww">
-                  <div flex="25" class='label'>LOCATION</div>
+                  <div flex="25" class='label'>
+                    <translate>LOCATION</translate>
+                  </div>
                   <div class="data">{{vm.projectData.country_name}}</div>
                 </div>
 
                 <div layout="row" layout-align="start center" class="roww">
-                  <div flex="25" class='label'>ORGANISATION</div>
+                  <div flex="25" class='label'>
+                    <translate>ORGANISATION</translate>
+                  </div>
                   <div class="data">{{vm.projectData.organisation_name}}</div>
                 </div>
 
                 <div layout="row" layout-align="start center" class="roww borderless">
-                  <div flex="25" class='label'>CONTACT</div>
+                  <div flex="25" class='label'>
+                    <translate>CONTACT</translate>
+                  </div>
                   <div class="data">
                     {{vm.projectData.contact_name}}
                     <a ng-href="mailto:{{vm.projectData.contact_email + '?subject=Request for approval'}}">
-                      Request to be part of this project
+                      <translate>Request to be part of this project</translate>
                     </a>
                   </div>
                 </div>
 
                 <div flex class="gray">
-                  <div class='label labelobj'>OBJECTIVES</div>
+                  <div class='label labelobj'>
+                    <translate>OBJECTIVES</translate>
+                  </div>
                   <div class="data data2">{{vm.projectData.goals_to_scale}}</div>
                 </div>
 
@@ -103,7 +142,7 @@
 
             </md-tab>
 
-            <md-tab label="axis" ng-if="!vm.viewMode">
+            <md-tab label="{{'axis' | translate}}" ng-if="!vm.viewMode">
               <div>
                 <linechart
                   showdotted="vm.projectData.isMember">
@@ -111,7 +150,7 @@
               </div>
             </md-tab>
 
-            <md-tab label="domains" ng-if="!vm.viewMode">
+            <md-tab label="{{'domains' | translate}}" ng-if="!vm.viewMode">
               <div>
                 <linechart
                   showdotted="vm.projectData.isMember"
@@ -120,7 +159,7 @@
               </div>
             </md-tab>
 
-            <md-tab label="technology">
+            <md-tab label="{{'technology' | translate}}">
 
               <div class="dash-tech">
                 <div
@@ -128,23 +167,23 @@
                   layout="column">
 
                   <div layout="row" layout-align="start start">
-
-                                        <span flex>
-                                          <md-icon class="material-icons">device_hub</md-icon>
-                                          Technology platforms</span>
+                    <span flex>
+                      <md-icon class="material-icons">device_hub</md-icon>
+                      <translate>Technology platforms</translate>
+                    </span>
                     <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
                       <md-chip-template>
-                                            <span>
-                                              {{$chip.name}}
-                                            </span>
+                        <span>
+                          {{$chip.name}}
+                        </span>
                       </md-chip-template>
                     </md-chips>
                   </div>
-
                   <div layout="row">
-                                        <span flex>
-                                          <md-icon class="material-icons">playlist_add_check</md-icon>
-                                          License</span>
+                    <span flex>
+                      <md-icon class="material-icons">playlist_add_check</md-icon>
+                      <translate>License</translate>
+                    </span>
                     <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses">
                       <md-chip-template>
                         <span>{{ $chip.name }}</span>
@@ -154,24 +193,31 @@
                 </div>
 
                 <div class="lower">
-
-                  <span>Code documentations & download:</span>
+                  <span>
+                    <translate>Code documentations &amp; download:</translate>
+                  </span>
                   <a ng-href="{{vm.fixUrl(vm.projectData.repository)}}" target="_blank">{{vm.projectData.repository}}</a>
 
-                  <span>Download applications:</span>
+                  <span>
+                    <translate>Download applications:</translate>
+                  </span>
                   <a ng-href="{{vm.fixUrl(vm.projectData.mobile_application)}}" target="_blank">{{vm.projectData.mobile_application}}</a>
 
-                  <span>Link to wiki page:</span>
+                  <span>
+                    <translate>Link to wiki page:</translate>
+                  </span>
                   <a ng-href="{{vm.fixUrl(vm.projectData.wiki)}}" target="_blank">{{vm.projectData.wiki}}</a>
                 </div>
               </div>
             </md-tab>
 
-            <md-tab label="interoperability">
+            <md-tab label="{{'interoperability' | translate}}">
               <md-content class="dash-res">
 
 
-                <h3>Health Information System Links</h3>
+                <h3>
+                  <translate>Health Information System Links</translate>
+                </h3>
                 <md-card
                   class="resource"
                   ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
@@ -190,7 +236,9 @@
                 </md-card>
 
 
-                <h3>Health Information Exchange Standards</h3>
+                <h3>
+                  <translate>Health Information Exchange Standards</translate>
+                </h3>
                 <md-card
                   class="resource"
                   ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
@@ -214,20 +262,26 @@
     </div>
 
     <div flex="40" class="dashsection dash-cardholder" layout="column">
-      <div class="dash-subhead">PROJECT PERFORMANCE</div>
+      <div class="dash-subhead">
+        <translate>PROJECT PERFORMANCE</translate>
+      </div>
       <md-card md-whiteframe="2" flex class="dash-perf">
 
         <div flex class="emptyright" layout="column" ng-show="vm.showEmpty">
           <p class="afteri">
             <md-icon class="material-icons unselectable">info</md-icon>
-            What will you find here?
+            <translate>What will you find here?</translate>
           </p>
-          <p class="detail">By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.</p>
+          <p class="detail">
+            <translate>
+            By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.
+            </translate>
+          </p>
         </div>
 
         <md-tabs ng-if="!vm.showEmpty && vm.profile.name" md-border-bottom class="perf-tab">
 
-          <md-tab label="geographical view">
+          <md-tab label="{{'geographical view' | translate}}">
             <countrymap
               flex
               big="false"
@@ -237,7 +291,7 @@
             </countrymap>
           </md-tab>
 
-          <md-tab label="historical view" ng-if="!vm.showEmpty && vm.state.current.parent !== 'public'">
+          <md-tab label="{{'historical view' | translate}}" ng-if="!vm.showEmpty && vm.state.current.parent !== 'public'">
             <linechart
               showdotted="vm.projectData.isMember"
               datachooser="false"
@@ -248,8 +302,14 @@
         </md-tabs>
 
         <div flex ng-if="!vm.profile.name" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
-          <p class="loggedout">If you want to see world map for the geographical and historic view please subscribe first!</p>
-          <md-button class="md-raised" ui-sref="signup">sign up now</md-button>
+          <p class="loggedout">
+            <translate>
+            If you want to see world map for the geographical and historic view please subscribe first!
+            </translate>
+          </p>
+          <md-button class="md-raised" ui-sref="signup">
+            <translate>sign up now</translate>
+          </md-button>
         </div>
 
       </md-card>
@@ -263,7 +323,9 @@
 
     <div flex class="dashsection dash-cardholder" layout="column">
 
-      <div class="dash-subhead">IMPROVE PROJECT</div>
+      <div class="dash-subhead">
+        <translate>IMPROVE PROJECT</translate>
+      </div>
 
       <cms-dashboard-widget scores="vm.rawToolkitData" ></cms-dashboard-widget>
     </div>

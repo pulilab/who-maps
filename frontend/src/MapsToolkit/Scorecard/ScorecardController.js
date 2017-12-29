@@ -18,7 +18,7 @@ class ScorecardController {
     }
 
     mapData(state) {
-        const structure = ToolkitModule.getStructure();
+        const structure = ToolkitModule.getStructure(state);
         const rawData = ToolkitModule.getToolkitData(state);
         return {
             rawData,

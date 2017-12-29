@@ -1,4 +1,5 @@
 import * as UserModule from '../store/modules/user';
+import * as CountryModel from '../store/modules/countries';
 
 class TopBar {
 
@@ -6,6 +7,7 @@ class TopBar {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
+        this.$ngRedux = $ngRedux;
         this.commonInit = this.commonInit.bind(this);
         this.commonOnDestroy = this.commonOnDestroy.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
@@ -20,8 +22,14 @@ class TopBar {
     }
 
     mapState(state) {
+
+        const userModel = state.user;
+        const userCountry = CountryModel.getUserCountry(state);
+        const userLanguage = UserModule.getUserLanguage(state);
         return {
-            userModel: state.user
+            userModel,
+            userCountry,
+            userLanguage
         };
     }
 
@@ -54,6 +62,7 @@ class TopBar {
     showSearch() {
         return this.userModel.token;
     }
+
     showLogin() {
         return this.state.current.name !== 'login' && !this.userModel.token;
     }
@@ -94,9 +103,9 @@ class TopBar {
         $mdOpenMenu(event);
     }
 
-    logout() {
+    async logout() {
+        await this.state.go('landing');
         this.doLogout();
-        this.state.go('landing');
     }
 }
 

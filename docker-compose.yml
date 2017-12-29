@@ -9,6 +9,7 @@ django:
     - redis
   volumes:
     - ./django:/src
+    - ./frontend:/frontend
     - ./nginx/site/static:/usr/share/django/static:rw
   command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
 #  command: python manage.py runserver 0.0.0.0:8000 # FOR DEBUG

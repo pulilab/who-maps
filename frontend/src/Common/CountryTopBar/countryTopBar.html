@@ -1,115 +1,152 @@
 <md-toolbar class="main-toolbar toolbar-global toolbar-landing" ng-class="[vm.isScrolled, vm.pageClass, vm.logoClass]">
-    <div class="md-toolbar-tools">
-        <div class="country-logo" layout-align="">
+  <div class="md-toolbar-tools">
+    <div class="country-logo" layout-align="">
 
-            <a ui-sref="landing">
-                <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
-                <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
-            </a>
+      <a ui-sref="landing">
+        <img ng-hide="vm.countryData.logo" src="images/dha-logo-blue.svg" class="no-country" />
+        <img ng-show="vm.countryData.logo" ng-src="{{vm.countryData.logo}}" class="" />
+      </a>
 
-        </div>
+    </div>
 
-        <div class="supported-by" ng-show="vm.showCountryNameAndFlag"></div>
+    <div class="supported-by" ng-show="vm.showCountryNameAndFlag"></div>
 
-        <span flex ></span>
+    <span flex ></span>
 
-        <div class="current-country row" ng-if="vm.showCountryNameAndFlag">
-            <div class="country-flag">
-                <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
-            </div>
-            <div class="country-name">{{vm.countryData.name}}</div>
-        </div>
+    <div class="current-country row" ng-if="vm.showCountryNameAndFlag">
+      <div class="country-flag">
+        <img ng-src="{{vm.countryFlag}}" alt="{{vm.countryData.name}}">
+      </div>
+      <div class="country-name">{{vm.countryData.name}}</div>
+    </div>
 
-        <md-button class="landing-link md-primary"
-                   ui-sref-active="active"
-                   ui-sref="login"
-                   aria-label="Login"
-                   ng-show="vm.showLogin()"
-                   md-no-ink>
-            Login
-        </md-button>
+    <md-button class="landing-link md-primary"
+               ui-sref-active="active"
+               ui-sref="login"
+               aria-label="Login"
+               ng-show="vm.showLogin()"
+               md-no-ink>
+      <translate> Login </translate>
+    </md-button>
 
-        <md-button class="landing-link md-primary"
-                   ui-sref-active="active"
-                   ui-sref="signup"
-                   aria-label="Singup"
-                   ng-show="vm.showSignUp()"
-                   md-no-ink >
-            Sign Up
-        </md-button>
+    <md-button class="landing-link md-primary"
+               ui-sref-active="active"
+               ui-sref="signup"
+               aria-label="Signup"
+               ng-show="vm.showSignUp()"
+               md-no-ink >
+      <translate>Sign Up</translate>
+    </md-button>
 
 
-        <md-button aria-label="Country Level View"
-                   class="view-selector"
-                   ui-sref="country"
-                   ng-show="vm.showCountryLevelViewButton()"
-                   md-no-ink>
-            <md-icon class="material-icons">public</md-icon>
-            Country View
-        </md-button>
+    <md-button aria-label="Country Level View"
+               class="view-selector"
+               ui-sref="country"
+               ng-show="vm.showCountryLevelViewButton()"
+               md-no-ink>
+      <md-icon class="material-icons">public</md-icon>
+      <translate>Country View</translate>
+    </md-button>
 
-        <md-button aria-label="Go to my Dashboard"
-                   class="view-selector"
-                   ui-sref="dashboard"
-                   ng-show="vm.showGoToMyDashboardButton()"
-                   md-no-ink>
-            <md-icon class="material-icons ">apps</md-icon>
-            Dashboard
-        </md-button>
+    <md-button aria-label="Go to my Dashboard"
+               class="view-selector"
+               ui-sref="dashboard"
+               ng-show="vm.showGoToMyDashboardButton()"
+               md-no-ink>
+      <md-icon class="material-icons ">apps</md-icon>
+      <translate>Dashboard</translate>
+    </md-button>
 
-        <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
-          <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
-              <md-icon md-menu-origin class="material-icons ">person</md-icon>
+    <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
+      <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
+        <md-icon md-menu-origin class="material-icons ">person</md-icon>
+      </md-button>
+
+      <md-menu-content class="user-menu" width="4">
+        <md-menu-item>
+          <div class="user-name">
+            <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
+            <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
+            <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
+          </div>
+        </md-menu-item>
+        <md-menu-item>
+          <div class="user-role">
+            <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
+            <span>
+              <translate>Role: {{vm.writeUserRole()}}</translate>
+            </span>
+          </div>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button ui-sref="editProfile">
+            <md-icon class="material-icons">settings</md-icon>
+            <translate>Edit my Profile</translate>
           </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="vm.logout()">
+            <md-icon class="material-icons">exit_to_app</md-icon>
+            <translate>Logout</translate>
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <!-- TODO -->
+        <span class="label">
+          <translate>Country</translate>
+        </span>
+        <md-menu-item>
+          <div class="user-lang" layout="row" layout-align="start center">
+            <span class="country-flag">
+              <img ng-src="{{vm.userCountry.flag}}" alt="{{vm.userCountry.prettyName}}">
+            </span>
+            <span class="country-label">
+               {{vm.userCountry.prettyName}}
+            </span>
+          </div>
+        </md-menu-item>
+        <span class="label">
+          <translate>Site Language</translate>
+        </span>
+        <md-menu-item>
+          <div class="user-lang" layout="row" layout-align="start center">
+            <span class="country-flag">
+                 <img ng-src="{{vm.userLanguage.flag}}" alt="{{vm.userLanguage.name}}">
+            </span>
+            <span class="country-label">
+              {{vm.userLanguage.name}}
+            </span>
+          </div>
+        </md-menu-item>
+        <!-- -->
+      </md-menu-content>
+    </md-menu>
 
-          <md-menu-content width="4">
-            <md-menu-item>
-              <div class="user-name">
-                <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
-                <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}} </span>
-                <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}} </span>
-              </div>
-            </md-menu-item>
-            <md-menu-item>
-              <div class="user-role">
-                <md-icon class="material-icons" md-menu-align-target>verified_user</md-icon>
-                <span>Role: {{vm.writeUserRole()}}</span>
-              </div>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-                <md-button ui-sref="editProfile">
-                    <md-icon class="material-icons">settings</md-icon>Edit my Profile
-                </md-button>
-            </md-menu-item>
-            <md-menu-item>
-                <md-button ng-click="vm.logout()">
-                    <md-icon class="material-icons">exit_to_app</md-icon>Logout
-                </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-
-        <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
-                   aria-label="Add new project"
-                   ng-show="vm.showNewProjectButton()"
-                   md-no-ink>
-            <md-icon class="material-icons">add</md-icon>
-            New Project
-        </md-button>
+    <md-button class="landing-link md-primary add-new-project" ui-sref="newProject"
+               aria-label="Add new project"
+               ng-show="vm.showNewProjectButton()"
+               md-no-ink>
+      <md-icon class="material-icons">add</md-icon>
+      <translate>New Project</translate>
+    </md-button>
+  </div>
+  <div class="md-toolbar-tools-bottom">
+    <h3>
+      <translate>Get MAPS Toolkit</translate>
+    </h3>
+    <div class="dl-note">
+      <p>
+        <translate>A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions.</translate>
+      </p>
     </div>
-    <div class="md-toolbar-tools-bottom">
-        <h3>Get MAPS Toolkit</h3>
-        <div class="dl-note">
-            <p>A WHO toolkit for measuring and facilitating scale-up <br> and national institutionalization of digital health solutions.</p>
-        </div>
-        <md-button class="dl-maps-link md-raised md-primary"
-                   href="/static/documents/maps_toolkit_eng.pdf"
-                   download="Maps Toolkit.pdf"
-                   target="_blank"
-                   aria-label="Download MAPS Toolkit">
-            <md-icon class="material-icons">cloud_download</md-icon>
-            Download Pdf
-        </md-button>
-    </div>
+    <md-button class="dl-maps-link md-raised md-primary"
+               href="/static/documents/maps_toolkit_eng.pdf"
+               download="Maps Toolkit.pdf"
+               target="_blank"
+               aria-label="Download MAPS Toolkit">
+      <md-icon class="material-icons">cloud_download</md-icon>
+      <translate>Download Pdf</translate>
+    </md-button>
+  </div>
 </md-toolbar>

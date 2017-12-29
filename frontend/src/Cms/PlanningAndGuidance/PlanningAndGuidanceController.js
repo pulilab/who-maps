@@ -31,6 +31,7 @@ class PlanningAndGuidanceController {
 
     mapState(state) {
         return {
+            axes: CmsModule.getDomainStructureForCms(state),
             all: CmsModule.getCmsData(state)
         };
     }
@@ -114,8 +115,7 @@ class PlanningAndGuidanceController {
     }
 
     createFilters() {
-        const rawFilters = require('../resources/domains');
-        this.filters = rawFilters.map(({ name, domains }) => {
+        this.filters = this.axes.map(({ name, domains }) => {
             return {
                 name,
                 open: false,
@@ -158,7 +158,7 @@ class PlanningAndGuidanceController {
 
     activate(name) {
         if (typeof name === 'number') {
-            name = [null, 'resources', 'lessons'][name];
+            name = [null, 'resources', 'lessons', 'experiences'][name];
         }
         const newName = name || window.location.hash.replace('#', '') || 'all';
         this.scope.$evalAsync(() => {

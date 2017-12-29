@@ -1,4 +1,6 @@
+from collections import defaultdict
 from django.conf import settings
+from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
 from django.core import mail, urlresolvers
@@ -36,7 +38,7 @@ class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
 class PartnerLogoInline(admin.TabularInline):
     model = PartnerLogo
     extra = 0
-    max_num = 2
+    max_num = 4
 
 
 @admin.register(Country)
@@ -73,12 +75,22 @@ class CountryAdmin(admin.ModelAdmin):
     def _notify_user(country):
         html_template = loader.get_template("email/country_admin.html")
         change_url = urlresolvers.reverse('admin:country_country_change', args=(country.id,))
-        html_message = html_template.render({'change_url': change_url, 'country_name': country.name})
 
-        mail.send_mail(
-            subject="You have been selected as the Country Admin for {}".format(country.name),
-            message="",
-            from_email=settings.FROM_EMAIL,
-            recipient_list=[profile.user.email for profile in country.users.all()],
-            html_message=html_message,
-            fail_silently=True)
+        email_mapping = defaultdict(list)
+        for profile in country.users.all():
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            with override(language):
+                subject = ugettext("You have been selected as the Country Admin for {country_name}")
+                html_message = html_template.render({'change_url': change_url,
+                                                     'country_name': country.name,
+                                                     'language': language})
+
+            mail.send_mail(
+                subject=subject.format(country_name=country.name),
+                message="",
+                from_email=settings.FROM_EMAIL,
+                recipient_list=email_list,
+                html_message=html_message,
+                fail_silently=True)

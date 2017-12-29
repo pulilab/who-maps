@@ -3,7 +3,8 @@ import './disclaimer.scss';
 
 const donorsComponent = {
     template: _template,
-    name: 'disclaimer'
+    name: 'disclaimer',
+    controllerAs: 'vm'
 };
 
 export default donorsComponent;

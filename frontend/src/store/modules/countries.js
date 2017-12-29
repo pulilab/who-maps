@@ -2,8 +2,10 @@
 import axios from '../../plugins/axios';
 import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
-import { country_default_data } from '../static_data/country_static_data';
 import { isMemberOrViewer } from './projects';
+import * as UserModule from './user';
+import * as SystemModule from './system';
+import { getCurrentLanguage } from '../../plugins/language';
 
 const stateDefinition = {
     list: [],
@@ -15,7 +17,7 @@ const stateDefinition = {
     currentCountryDistrictsProjects: []
 };
 
-const mapData = {};
+export const mapData = {};
 
 // GETTERS
 
@@ -30,17 +32,26 @@ export const getCountry = (state, id) => {
     return state.countries.list.find(c => c.id === id);
 };
 
+
 export const getCountriesList = state => {
     if (state.countries.list) {
         return state.countries.list.map(c=> {
-            c = Object.assign({}, c);
-            c.code = c.code.toLocaleLowerCase();
-            c.flag =  `/static/flags/${c.code}.png`;
-            c.prettyName = c.name.split('-').join(' ');
-            return c;
+            const code = c.code.toLocaleLowerCase();
+            return {
+                ...c,
+                code,
+                flag: `/static/flags/${code}.png`,
+                prettyName: c.name.split('-').join(' ')
+            };
         }).sort((a, b) => a.name.localeCompare(b.name));
     }
     return [];
+};
+
+export const getUserCountry = (state) => {
+    const profile = UserModule.getProfile(state);
+    const name = profile && profile.country ? profile.country : undefined;
+    return exports.getCountriesList(state).find(c => c.name === name || c.prettyName === name);
 };
 
 export const getCountryFields = state => {
@@ -55,6 +66,7 @@ export const getCurrentCountry = state => {
 
 export const getCountryCoverPage = state => {
     const countryCover = { ...state.countries.currentCountryCoverPage };
+    const country_default_data = SystemModule.getLandingPageDefaults(state);
     forEach(country_default_data, (standardValue, key) => {
         const value = countryCover[key];
         if (value === null || value === undefined || value === '') {
@@ -66,7 +78,7 @@ export const getCountryCoverPage = state => {
 };
 
 export const getCountryCoverPicture = state => {
-    const country = getCountryCoverPage(state);
+    const country = exports.getCountryCoverPage(state);
     if (country.cover) {
         return {
             background: `url(${country.cover}) 0 0`,
@@ -88,13 +100,15 @@ export const getCountriesLib = state => {
 };
 
 export const getCurrentCountryDistricts = state => {
-    return state.countries.currentCountryDistricts;
+    const ln = getCurrentLanguage();
+    return state.countries.currentCountryDistricts
+      .map(ccd => ({ id: ccd.en || ccd.name, name: ccd[ln] || ccd.en || ccd.name }));
 };
 
 export const getCurrentCountryMapData = state => {
-    const currentCountry = getCurrentCountry(state);
+    const currentCountry = exports.getCurrentCountry(state);
     currentCountry.mapData = mapData[currentCountry.code];
-    currentCountry.districts = getCurrentCountryDistricts(state);
+    currentCountry.districts = exports.getCurrentCountryDistricts(state);
     return currentCountry;
 };
 
@@ -141,7 +155,7 @@ export function loadCountryFields(id) {
 export function loadCountryMapDataAndDistricts() {
     return async (dispatch, getState) => {
         const state = getState();
-        const country = getCurrentCountry(state);
+        const country = exports.getCurrentCountry(state);
         if (country && country.code) {
             const countryData = mapData[country.code];
             if (!countryData) {
@@ -150,7 +164,13 @@ export function loadCountryMapDataAndDistricts() {
             }
             const subKey = Object.keys(mapData[country.code].objects)[0];
             const districts = mapData[country.code].objects[subKey].geometries.map(object => {
-                return object.properties['name:en'] || object.properties.name;
+                return {
+                    name: object.properties.name,
+                    en: object.properties['name:en'],
+                    es: object.properties['name:es'],
+                    fr: object.properties['name:fr'],
+                    pt: object.properties['name:pt']
+                };
             });
             dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
         }
@@ -160,7 +180,7 @@ export function loadCountryMapDataAndDistricts() {
 
 export function loadCountryLandingPageInfo() {
     return async (dispatch, getState) => {
-        const country = getCurrentCountry(getState());
+        const country = exports.getCurrentCountry(getState());
         if (country && country.code) {
             const { data } = await axios.get(`/api/landing/${country.code.toUpperCase()}/`);
             dispatch({ type: 'SET_COUNTRY_COVER_DATA', cover: data });
@@ -170,7 +190,7 @@ export function loadCountryLandingPageInfo() {
 
 export function loadCurrentCountryDistrictsProject() {
     return async (dispatch, getState) => {
-        const country = getCurrentCountry(getState());
+        const country = exports.getCurrentCountry(getState());
         if (country && country.id) {
             const { data } = await axios.get(`/api/projects/by-view/map/${country.id}/`);
             dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: data });
@@ -191,9 +211,9 @@ export function loadCountryProjectsOrAll(countryId) {
 
 export function loadCurrentCountryProjects() {
     return async (dispatch, getState) => {
-        const country = getCurrentCountry(getState());
+        const country = exports.getCurrentCountry(getState());
         if (country) {
-            dispatch(loadCountryProjectsOrAll(country.id));
+            dispatch(exports.loadCountryProjectsOrAll(country.id));
         }
     };
 }
@@ -204,10 +224,10 @@ export function setCurrentCountry(id, waitFor = []) {
         if (id && id !== currentId) {
             dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
             const promiseCollection = {};
-            promiseCollection.countryFields = dispatch(loadCountryFields(id));
-            promiseCollection.mapData = dispatch(loadCountryMapDataAndDistricts());
-            promiseCollection.landingPage = dispatch(loadCountryLandingPageInfo());
-            promiseCollection.districts = dispatch(loadCurrentCountryDistrictsProject());
+            promiseCollection.countryFields = dispatch(exports.loadCountryFields(id));
+            promiseCollection.mapData = dispatch(exports.loadCountryMapDataAndDistricts());
+            promiseCollection.landingPage = dispatch(exports.loadCountryLandingPageInfo());
+            promiseCollection.districts = dispatch(exports.loadCurrentCountryDistrictsProject());
             return Promise.all(waitFor.map(name => promiseCollection[name]));
         }
         return Promise.resolve();
@@ -218,7 +238,7 @@ export function setCurrentCountryFromCode(code) {
     return async (dispatch, getState) => {
         const country = getState().countries.list.find(c => c.code.toLocaleLowerCase() === code.toLocaleLowerCase());
         if (country && country.id) {
-            dispatch(setCurrentCountry(country.id, ['landingPage']));
+            dispatch(exports.setCurrentCountry(country.id, ['landingPage']));
         }
         else {
             dispatch({ type: 'UNSET_CURRENT_COUNTRY' });
@@ -234,40 +254,30 @@ export async function csvExport(ids) {
 // Reducers
 
 export default function system(state = stateDefinition, action) {
-    const s = Object.assign({}, state);
     switch (action.type) {
     case 'SET_COUNTRIES_LIST': {
-        s.list = action.countries;
-        return Object.assign(state, {}, s);
+        return { ...state, list: action.countries };
     }
     case 'SET_CURRENT_COUNTRY': {
-        s.currentCountry = action.country;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountry: action.country };
     }
     case 'UNSET_CURRENT_COUNTRY': {
-        s.currentCountry = null;
-        s.currentCountryCoverPage = {};
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountry: null, currentCountryCoverPage: {} };
     }
     case 'SET_COUNTRY_COVER_DATA': {
-        s.currentCountryCoverPage = action.cover;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryCoverPage: action.cover };
     }
     case 'UPDATE_COUNTRY_FIELDS_LIST': {
-        s.countryFields = unionBy(action.fields, s.countryFields, 'id');
-        return Object.assign(state, {}, s);
+        return { ...state, countryFields: unionBy(action.fields, state.countryFields, 'id') };
     }
     case 'SET_CURRENT_COUNTRY_DISTRICTS': {
-        s.currentCountryDistricts = action.districts;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryDistricts: action.districts };
     }
     case 'SET_CURRENT_COUNTRY_PROJECTS': {
-        s.currentCountryProjects = action.projects;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryProjects: action.projects };
     }
     case 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS': {
-        s.currentCountryDistrictsProjects = action.projects;
-        return Object.assign(state, {}, s);
+        return { ...state, currentCountryDistrictsProjects: action.projects };
     }
     default:
         return state;
