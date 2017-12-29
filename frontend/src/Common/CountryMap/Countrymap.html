@@ -127,8 +127,7 @@
             layout-align="space-around start"
             class="projectcont"
             ng-repeat="project in vm.activeDistrict.data | limitTo:5"
-            ng-click="vm.goToProject(project)"
-          >
+            ng-click="vm.goToProject(project)">
 
             <div class="projectname">{{project.name}}</div>
             <div class="projectorg">{{project.organisation}}</div>
@@ -148,7 +147,7 @@
                layout-align="space-around start"
                class="projectcont"
                ng-repeat="project in vm.nationalLevelCoverage | limitTo:5"
-               ui-sref="dashboard({ appName: project.id })">
+               ng-click="vm.goToProject(project)">
 
             <div class="projectname">{{project.name}}</div>
             <div class="projectorg">{{project.organisation_name}}</div>
