@@ -96,6 +96,9 @@ export default function toolkit(state = initialState, action) {
         data[r.axis].domains[r.domain].questions[r.question].answers[r.answer] = r.value;
         return { ...state, toolkitData: data };
     }
+    case 'CLEAR_TOOLKIT_DATA': {
+        return { ...initialState };
+    }
     default:
         return state;
     }

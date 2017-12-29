@@ -194,6 +194,9 @@ export default function cms(state = initialState, action) {
         current.splice(index, 1, item);
         return { ...state, data: current };
     }
+    case 'CLEAR_CMS_DATA': {
+        return { ...initialState };
+    }
     default:
         return state;
     }

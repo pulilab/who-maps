@@ -235,6 +235,15 @@ describe('CMS Store Module', () => {
             expect(state.data[0].comments[0]).toEqual(undefined);
         });
 
+        it('CLEAR_CMS_DATA', () => {
+            let state = {
+                data: [{ id: 1, comments: [{ id: 2, post:1, name: 3 }] }]
+            };
+            const action = { type: 'CLEAR_CMS_DATA' };
+            state = CmsModule.default(state, action);
+            expect(state.data).toEqual([]);
+        });
+
     });
 
 });

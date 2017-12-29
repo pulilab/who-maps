@@ -126,6 +126,8 @@ export function doLogout() {
         axios.unSetAuthToken();
         try {
             dispatch({ type: 'CLEAR_USER_PROJECTS' });
+            dispatch({ type: 'CLEAR_TOOLKIT_DATA' });
+            dispatch({ type: 'CLEAR_CMS_DATA' });
         }
         catch (e) {
             console.warn(e);

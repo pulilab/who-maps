@@ -150,6 +150,16 @@ describe('TOOLKIT Store Module', () => {
 
         });
 
+        it('CLEAR_TOOLKIT_DATA', () => {
+            let state = {
+                toolkitData: 1
+            };
+            const action = { type: 'CLEAR_TOOLKIT_DATA', data: 1 };
+            state = ToolkitModule.default(state, action);
+            expect(state.toolkitData).toEqual([]);
+
+        });
+
     });
 
 });
