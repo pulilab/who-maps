@@ -110,10 +110,12 @@ top-bar {
 md-menu-content.user-menu {
   max-height: 90vh !important;
 
+
+
   .label {
     margin: 12px 16px 0;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 400;
     color: $text-disabled;
     text-transform: uppercase;
   }
@@ -125,17 +127,17 @@ md-menu-content.user-menu {
   .user-name,
   .user-role {
     md-icon {}
-    span {
+    > span {
       display: inline-block;
-      padding: 0 12px;
+      padding: 0 12px 0 16px;
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 400;
     }
   }
 
-  .user-role {
-    span {
-      font-weight: 400;
+  .user-name {
+    > span {
+      font-weight: 500;
     }
   }
 
@@ -146,7 +148,6 @@ md-menu-content.user-menu {
       position: relative;
       width: 24px;
       height: 24px;
-      margin-right: 16px;
 
       img {
         position: absolute;
@@ -156,6 +157,10 @@ md-menu-content.user-menu {
         height: auto;
         transform: translate(0, -50%);
       }
+    }
+
+    .country-label {
+      padding: 0 16px 0 20px;
     }
   }
 }
