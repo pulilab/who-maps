@@ -67,7 +67,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
-    government_approved = serializers.BooleanField()
     government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'), (
         1, 'Yes, they are contributing in-kind people or time'), (
             2, 'Yes, there is a financial contribution through MOH budget')])
@@ -130,7 +129,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
-    government_approved = serializers.BooleanField(required=False)
     government_investor = serializers.ChoiceField(
         choices=[(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
                  (2, 'Yes, there is a financial contribution through MOH budget')],
