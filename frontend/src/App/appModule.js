@@ -279,7 +279,7 @@ const SystemController = require('./SystemController');
 
 
 angular.module('ngHtmlCompile', [])
-  .directive('ngHtmlCompile', ($compile) => {
+  .directive('ngHtmlCompile', ['$compile', ($compile) => {
       return {
           restrict: 'A',
           link(scope, element, attrs) {
@@ -289,7 +289,7 @@ angular.module('ngHtmlCompile', [])
               });
           }
       };
-  });
+  }]);
 
 angular.module('app',
     [
