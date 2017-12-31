@@ -54,7 +54,7 @@ def pull_prod_dev():
         run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
         run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
         # Backup production media files
-        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/)
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
     # Switch to dev
     dev()
     with cd(env.project_root):
@@ -77,7 +77,7 @@ def backup_prod():
         run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
         run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
         # Backup production media files
-        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/)
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
 
 
 def deploy():
