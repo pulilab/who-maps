@@ -1,21 +1,25 @@
 <div class="project-section section-technology" md-whiteframe="2">
   <div class="section-title md-title">
-    3. Technology
+    <translate>3. Technology</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
     <md-input-container class="md-block first">
-      <label>Technology deployment date</label>
+      <label>
+        <translate>Technology deployment date</translate>
+      </label>
       <md-datepicker
         ng-model="vm.project.implementation_dates"
         md-open-on-focus
         name="implementation_dates"
         md-current-view="year"
-        required>
+        ng-required="vm.activateValidation">
       </md-datepicker>
       <div ng-messages="vm.implementation_dates.name.$error">
-        <div ng-message="required">This is required.</div>
+        <div ng-message="required">
+          <translate>This is required.</translate>
+        </div>
         <div ng-repeat="message in vm.form.implementation_dates.customError">
           {{message}}
         </div>
@@ -23,7 +27,9 @@
     </md-input-container>
 
     <div class="checklist">
-      <h6>Under what license is the project governed?</h6>
+      <h6>
+        <translate>Under what license is the project governed?</translate>
+      </h6>
       <ul>
         <li ng-repeat="l in vm.structure.licenses">
           <md-checkbox
@@ -39,40 +45,46 @@
     </div>
 
     <md-input-container class="md-icon-float md-block">
-      <label>Code documentation or download link</label>
+      <label>
+        <translate>Code documentation or download link</translate>
+      </label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
       <input  name="repository" ng-model="vm.project.repository"
               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200" >
       <div ng-messages="vm.form.repository.$error">
         <div ng-message="pattern">
-          Make sure your URL is valid.
+          <translate>Make sure your URL is valid.</translate>
         </div>
       </div>
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
-      <label>Link to the application</label>
+      <label>
+        <translate>Link to the application</translate>
+      </label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
       <input  name="mobile_application" ng-model="vm.project.mobile_application"
               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200">
       <div ng-messages="vm.form.mobile_application.$error">
         <div ng-message="pattern">
-          Make sure your URL is valid.
+          <translate>Make sure your URL is valid.</translate>
         </div>
       </div>
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
-      <label>Link to the wiki page</label>
+      <label>
+        <translate>Link to the wiki page</translate>
+      </label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
       <input  name="wiki" ng-model="vm.project.wiki"
               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200">
       <div ng-messages="vm.form.wiki.$error">
         <div ng-message="pattern">
-          Make sure your URL is valid.
+          <translate>Make sure your URL is valid.</translate>
         </div>
       </div>
     </md-input-container>

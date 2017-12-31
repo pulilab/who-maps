@@ -1,10 +1,13 @@
 import uuid
+from collections import namedtuple
 
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
+from django.conf import settings
 from django.core.cache import cache
+from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet
 from country.models import Country, CountryField
@@ -105,8 +108,7 @@ class Project(ExtendedModel):
             organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
             country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
-            fields=[field.to_representation(schema_id)
-                    for field, schema_id in CountryField.get_for_project(self, draft_mode)],
+            fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
         )
 
         data.update(extra_data)
@@ -132,7 +134,7 @@ class Project(ExtendedModel):
 
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval')
-    user = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(UserProfile, blank=True, null=True)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
 
@@ -153,16 +155,18 @@ class File(ExtendedModel):
 class InvalidateCacheMixin(object):
 
     def save(self, *args, **kwargs):
-        cache.delete('project-structure-data')
+        for language in settings.LANGUAGES:
+            cache_key = 'project-structure-data-{}'.format(language[0])
+            cache.delete(cache_key)
         return super(InvalidateCacheMixin, self).save(*args, **kwargs)
 
 
 class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
-        ('Client', 'Client'),
-        ('Provider', 'Provider'),
-        ('System', 'System'),
-        ('Data service', 'Data service')
+        ('Client', _('Client')),
+        ('Provider', _('Provider')),
+        ('System', _('System')),
+        ('Data service', _('Data service'))
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
     parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
@@ -175,20 +179,29 @@ class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         verbose_name_plural = 'Digital Strategies'
 
 
+class HSCGroup(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta:
+        verbose_name = 'Health System Challenge Group'
+
+
 class HSCChallengeQuerySet(ActiveQuerySet):
+    FakeChallenge = namedtuple('FakeChallenge', ['name', 'challenge'])
+
     def get_names_for_ids(self, ids):
-        return self.filter(id__in=ids).only('name', 'challenge')
+        return [self.FakeChallenge(l.group.name, l.name)
+                for l in self.filter(id__in=ids).select_related('group')]
 
 
 class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    challenge = models.CharField(max_length=512)
+    group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
 
     def __str__(self):
-        return '({}) {}'.format(self.name, self.challenge)
+        return '({}) {}'.format(self.group.name, self.name)
 
     class Meta:
+        verbose_name = 'Health System Challenge'
         verbose_name_plural = 'Health System Challenges'
-        ordering = ['name', 'challenge']
+        ordering = ('name',)
 
     objects = HSCChallengeQuerySet.as_manager()
 

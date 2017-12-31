@@ -28,7 +28,7 @@ import Thematic from './Thematic/thematicComponent';
 
 import EE from './EE';
 
-if (! window.EE) {
+if (!window.EE) {
     EE.initialize();
 }
 

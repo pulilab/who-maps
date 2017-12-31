@@ -5,12 +5,13 @@ import deepEqual from 'deep-equal';
 import * as ProjectModule from '../../store/modules/projects';
 
 class LinechartController {
-    constructor($scope, $element, $timeout, $ngRedux) {
+    constructor($scope, $element, $timeout, $ngRedux, gettextCatalog) {
         this.scope = $scope;
         this.EE = window.EE;
         this.$ngRedux = $ngRedux;
         this.el = $element;
         this.timeout = $timeout;
+        this.gettextCatalog = gettextCatalog;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.draw = this.draw.bind(this);
@@ -73,11 +74,15 @@ class LinechartController {
     }
 
     processDataForCoverageChart(data) {
+        const gettextCatalog = this.gettextCatalog;
+        const labels = [gettextCatalog.getString('Clients'),
+            gettextCatalog.getString('Health Workers'),
+            gettextCatalog.getString('Facilities')];
         const result = {};
         result.data = data.data;
         result.maxValue = this.calculateMaxData(data);
-        result.labels = data.labels;
-        result.chosenLabels = data.labels;
+        result.labels = labels;
+        result.chosenLabels = labels;
         return result;
     }
 
@@ -304,11 +309,11 @@ class LinechartController {
         require('./Linechart.scss');
         require('d3');
 
-        function linechart($scope, $element, $timeout, $ngRedux) {
-            return new LinechartController($scope, $element, $timeout, $ngRedux);
+        function linechart($scope, $element, $timeout, $ngRedux, gettextCatalog) {
+            return new LinechartController($scope, $element, $timeout, $ngRedux, gettextCatalog);
         }
 
-        linechart.$inject = ['$scope', '$element', '$timeout', '$ngRedux'];
+        linechart.$inject = ['$scope', '$element', '$timeout', '$ngRedux', 'gettextCatalog'];
 
         return linechart;
     }

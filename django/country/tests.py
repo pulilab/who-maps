@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.core import mail
@@ -38,7 +40,7 @@ class CountryTests(APITestCase):
         self.country = Country.objects.create(name="country1", code="CC")
         PartnerLogo.objects.create(country=self.country)
 
-        CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
+        self.cf_schema = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
         CountryField.objects.create(country=self.country, type=1, question="q1?", answer="a1", schema=False)
 
     def test_get_countries(self):
@@ -79,7 +81,7 @@ class CountryTests(APITestCase):
         self.assertNotIn("answer", response.json()[0].keys())
 
     def test_create_country_fields_fake_project(self):
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1, "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
@@ -95,7 +97,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'], [{'project': ['Invalid pk "1" - object does not exist.']}])
 
     def test_create_country_fields_missing_project(self):
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1, "mode": 'publish'})
 
         country_fields_data = {"fields": [{"country": self.country.id, "type": 1, "question": "q2?", "answer": "a2"}]}
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
@@ -103,7 +105,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'], [{'non_field_errors': ['Project ID needs to be specified']}])
 
     def test_create_country_fields_empty_project(self):
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": 1, "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
@@ -119,8 +121,10 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'], [{'project': ['Project ID needs to be specified']}])
 
     def test_create_country_fields_correct_project(self):
+        CountryField.objects.create(country=self.country, type=1, question="q2?", schema=True)
         self.project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": self.project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": self.project.id,
+                                                "mode": 'publish'})
 
         self.country_fields_data = {
             "fields": [{
@@ -140,8 +144,10 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'][0]['answer'], self.country_fields_data['fields'][0]['answer'])
 
     def test_create_country_fields_missing_answer(self):
+        schema = CountryField.objects.create(country=self.country, type=1, question="q2?", schema=True)
         project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
@@ -154,7 +160,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'], [
-            {'schema_id': None, 'country': self.country.id, 'type': 1,
+            {'schema_id': schema.id, 'country': self.country.id, 'type': 1,
              'question': 'q2?', 'answer': '', 'project': project.id}])
 
         country_fields_data = {
@@ -169,12 +175,13 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['fields'], [
-            {'schema_id': None, 'country': self.country.id, 'type': 1,
+            {'schema_id': schema.id, 'country': self.country.id, 'type': 1,
              'question': 'q2?', 'answer': '', 'project': project.id}])
 
     def test_create_country_fields_missing_question(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
@@ -190,7 +197,8 @@ class CountryTests(APITestCase):
 
     def test_create_country_fields_empty_question(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
@@ -207,7 +215,8 @@ class CountryTests(APITestCase):
 
     def test_create_country_fields_missing_type(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
@@ -223,43 +232,251 @@ class CountryTests(APITestCase):
 
     def test_create_country_fields_wrong_type(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
 
         country_fields_data = {
             "fields": [{
                 "country": self.country.id,
                 "project": project.id,
-                "type": "4",
+                "type": "9",
                 "question": "q2?",
                 "answer": "a2"
             }]
         }
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['fields'], [{'type': ['"4" is not a valid choice.']}])
+        self.assertEqual(response.json()['fields'], [{'type': ['"9" is not a valid choice.']}])
 
     def test_create_country_fields_wrong_type_two(self):
         project = Project.objects.create(name="project1", data={"country": self.country.id})
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": 9,
+                "question": "q2?",
+                "answer": "a2"
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['fields'], [{'type': ['"9" is not a valid choice.']}])
+
+    def test_create_draft_cf(self):
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
 
         country_fields_data = {
             "fields": [{
                 "country": self.country.id,
                 "project": project.id,
                 "type": 4,
+                "question": "q1?",
+                "answer": "a9"
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+        self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
+        self.assertEqual(response.json()['fields'][0]['type'], country_fields_data['fields'][0]['type'])
+        self.assertEqual(response.json()['fields'][0]['project'], project.id)
+        self.assertEqual(response.json()['fields'][0]['country'], self.country.id)
+
+    def test_create_publish_rewrites_draft(self):
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": 4,
+                "question": "q1?",
+                "answer": "a9"
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
+
+        country_fields_data2 = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": 4,
+                "question": "q1?",
+                "answer": "b9"
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data2, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['fields'][0]['schema_id'], self.cf_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data2['fields'][0]['answer'])
+        self.assertNotEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+
+    def test_create_single_selection(self):
+        options = ["a1", "a2"]
+        new_schema = CountryField.objects.create(options=options, country=self.country, type=1,
+                                                 question="q2?", schema=True)
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.SINGLE,
+                "question": "q2?",
+                "answer": "a1"
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(response.json()['fields'][0]['schema_id'], new_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+        self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
+        self.assertEqual(response.json()['fields'][0]['type'], country_fields_data['fields'][0]['type'])
+        self.assertEqual(response.json()['fields'][0]['project'], project.id)
+        self.assertEqual(response.json()['fields'][0]['country'], self.country.id)
+
+    def test_create_multi_selection(self):
+        options = ["a1", "a2"]
+        new_schema = CountryField.objects.create(options=options, country=self.country, type=CountryField.SINGLE,
+                                                 question="q2?", schema=True)
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.SINGLE,
+                "question": "q2?",
+                "answer": json.dumps(["a1", "a2", "a3"])
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['fields'][0]['schema_id'], new_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+        self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
+        self.assertEqual(response.json()['fields'][0]['type'], country_fields_data['fields'][0]['type'])
+        self.assertEqual(response.json()['fields'][0]['project'], project.id)
+        self.assertEqual(response.json()['fields'][0]['country'], self.country.id)
+
+    def test_required_fields(self):
+        new_schema = CountryField.objects.create(required=True, country=self.country, type=1,
+                                                 question="q2?", schema=True)
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.TEXT,
+                "question": "q2?",
+                "answer": ""
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['fields'][0]['schema_id'], new_schema.id)
+        self.assertEqual(response.json()['fields'][0]['answer'], country_fields_data['fields'][0]['answer'])
+        self.assertEqual(response.json()['fields'][0]['question'], country_fields_data['fields'][0]['question'])
+        self.assertEqual(response.json()['fields'][0]['type'], country_fields_data['fields'][0]['type'])
+        self.assertEqual(response.json()['fields'][0]['project'], project.id)
+        self.assertEqual(response.json()['fields'][0]['country'], self.country.id)
+
+        publish_url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                        "mode": 'publish'})
+        response = self.test_user_client.post(publish_url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'fields': [{'non_field_errors': ['Answer is required for: q2?']}]})
+
+    def test_no_schema_present(self):
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'draft'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.TEXT,
+                "question": "q2?",
+                "answer": ""
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 400, response)
+        self.assertEqual(response.json(), {'fields': [{'non_field_errors': ['No schema found for this answer']}]})
+
+    def test_all_required_fields_are_required(self):
+        new_schema1 = CountryField.objects.create(required=True, country=self.country, type=1,
+                                                  question="q2?", schema=True)
+        new_schema2 = CountryField.objects.create(required=True, country=self.country, type=1,
+                                                  question="q3?", schema=True)
+        project = Project.objects.create(name="project1", data={"country": self.country.id})
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": project.id,
+                                                "mode": 'publish'})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.TEXT,
                 "question": "q2?",
                 "answer": "a2"
             }]
         }
         response = self.test_user_client.post(url, data=country_fields_data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['fields'], [{'type': ['"4" is not a valid choice.']}])
+        self.assertEqual(response.json(), {'fields': ['All required answers need to be given']})
+
+        country_fields_data = {
+            "fields": [{
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.TEXT,
+                "question": "q2?",
+                "answer": "a2"
+            }, {
+                "country": self.country.id,
+                "project": project.id,
+                "type": CountryField.TEXT,
+                "question": "q3?",
+                "answer": "a3"
+            }]
+        }
+        response = self.test_user_client.post(url, data=country_fields_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        country_fields_data['fields'][0].update(schema_id=new_schema1.id)
+        country_fields_data['fields'][1].update(schema_id=new_schema2.id)
+        self.assertEqual(response.json(), country_fields_data)
 
     def test_update_answer(self):
         self.test_create_country_fields_correct_project()
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": self.project.id})
-
-        country_field_id = CountryField.objects.get(question="q2?").id
+        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": self.project.id,
+                                                "mode": 'publish'})
+        country_field_id = CountryField.objects.get(question="q2?", schema=False).id
 
         self.country_fields_data = {
             "fields": [{
@@ -272,38 +489,11 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.post(url, data=self.country_fields_data, format="json")
 
-        country_field_updated_id = CountryField.objects.get(question="q2?").id
+        country_field_updated_id = CountryField.objects.get(question="q2?", schema=False).id
 
-        self.assertEqual(CountryField.objects.get(question="q2?").__str__(), "")
+        self.assertEqual(CountryField.objects.get(question="q2?", schema=False).__str__(), "")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(country_field_id, country_field_updated_id)
-        self.assertEqual(response.json()['fields'][0]['country'], self.country_fields_data['fields'][0]['country'])
-        self.assertEqual(response.json()['fields'][0]['project'], self.country_fields_data['fields'][0]['project'])
-        self.assertEqual(response.json()['fields'][0]['type'], self.country_fields_data['fields'][0]['type'])
-        self.assertEqual(response.json()['fields'][0]['question'], self.country_fields_data['fields'][0]['question'])
-        self.assertEqual(response.json()['fields'][0]['answer'], self.country_fields_data['fields'][0]['answer'])
-
-    def test_update_answer_and_question(self):
-        self.test_create_country_fields_correct_project()
-        url = reverse("country-fields", kwargs={"country_id": self.country.id, "project_id": self.project.id})
-
-        country_field_id = CountryField.objects.get(question="q2?").id
-
-        self.country_fields_data = {
-            "fields": [{
-                "country": self.country.id,
-                "project": self.project.id,
-                "type": 1,
-                "question": "q2_updated?",
-                "answer": "a2_updated"
-            }]
-        }
-        response = self.test_user_client.post(url, data=self.country_fields_data, format="json")
-
-        country_field_updated_id = CountryField.objects.get(question="q2_updated?").id
-
-        self.assertEqual(response.status_code, 201)
-        self.assertNotEqual(country_field_id, country_field_updated_id)
         self.assertEqual(response.json()['fields'][0]['country'], self.country_fields_data['fields'][0]['country'])
         self.assertEqual(response.json()['fields'][0]['project'], self.country_fields_data['fields'][0]['project'])
         self.assertEqual(response.json()['fields'][0]['type'], self.country_fields_data['fields'][0]['type'])
@@ -469,7 +659,7 @@ class CountryAdminTests(TestCase):
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'name',
             'code',
-            'user',
+            'users',
         ))
 
     def test_superuser_can_change_every_field(self):
@@ -514,17 +704,31 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
 
-        class MockForm:
-            changed_data = ['user']
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
 
-        country.user = user_profile
+        class MockForm:
+            changed_data = ['users']
+
+        country.users.add(user_profile, user_2_profile)
         ma.save_model(self.request, country, MockForm(), True)
 
-        outgoing_email = mail.outbox[-1].message()
-        outgoing_email_text = mail.outbox[-1].message().as_string()
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
+
+        outgoing_en_email = mail.outbox[en_index].message()
+        outgoing_en_email_text = outgoing_en_email.as_string()
 
         self.assertTrue(
-            "You have been selected as the Country Admin for {}".format(country.name) in outgoing_email.values())
-        self.assertTrue("test@test.com" in outgoing_email.values())
-        self.assertTrue('You have been selected as the Country Admin' in outgoing_email_text)
-        self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_email_text)
+            "You have been selected as the Country Admin for {}".format(country.name) in outgoing_en_email.values())
+        self.assertTrue("test@test.com" in outgoing_en_email.values())
+        self.assertTrue('You have been selected as the Country Admin' in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+
+        outgoing_fr_email = mail.outbox[fr_index].message()
+        outgoing_fr_email_text = outgoing_fr_email.as_string()
+
+        self.assertTrue("test2@test.test" in outgoing_fr_email.values())
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)

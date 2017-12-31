@@ -1,4 +1,5 @@
 import forEach from 'lodash/forEach';
+import isNil from 'lodash/isNil';
 import isPlainObject from 'lodash/isPlainObject';
 import * as ProjectModule from '../store/modules/projects';
 import * as SystemModule from '../store/modules/system';
@@ -34,8 +35,7 @@ class ProjectController  {
         let project = null;
         let team = null;
         let viewers = null;
-
-        if (this.lastVersion === lastVersion) {
+        if (!isNil(this.lastVersion) && this.lastVersion === lastVersion) {
             project = this.project;
             team = this.team;
             viewers = this.viewers;
@@ -54,12 +54,10 @@ class ProjectController  {
             }
         }
 
-        if (project === undefined) {
-            project = ProjectModule.getEmptyProject();
-        }
         const readOnlyMode = publishMode ||
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
+
         return {
             newProject,
             publishMode,
@@ -84,8 +82,7 @@ class ProjectController  {
     onInit() {
         this.eventListeners();
         this.districtList = [];
-        this.isAddAnother = false;
-        this.activateValidation = true;
+        this.activateValidation = false;
         this.$ngRedux.dispatch(ProjectModule.clearSimilarNameList());
         if (this.state.current.name === 'newProject') {
             this.$ngRedux.dispatch(ProjectModule.setCurrentProject(-1));
@@ -93,6 +90,13 @@ class ProjectController  {
         this.unsubscribe = this.$ngRedux.connect(this.mapData, ProjectModule)(this);
         this.watchers();
         this.createDialogs();
+    }
+
+    onDestroy() {
+        this.unsubscribe();
+        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
+        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
+        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     createDialogs() {
@@ -111,13 +115,6 @@ class ProjectController  {
             ok: 'Close',
             theme: 'alert'
         });
-    }
-
-    onDestroy() {
-        this.unsubscribe();
-        this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
-        this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
-        this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
     }
 
     watchers() {
@@ -148,47 +145,58 @@ class ProjectController  {
         });
     }
 
-    async publishProject() {
+    publishProject() {
         this.clearCustomErrors();
-        if (this.form.$valid) {
-            try {
-                const data = await this.publish(this.project, this.team, this.viewers);
-                this.postPublishAction(data);
+        this.activateValidation = true;
+        this.timeout(async () => {
+            if (this.form.$valid) {
+                try {
+                    const data = await this.publish(this.project, this.team, this.viewers);
+                    this.postPublishAction(data);
+                }
+                catch (e) {
+                    this.handleResponse(e.response);
+                    this.$mdDialog.show(this.publishAlert);
+                }
             }
-            catch (e) {
-                await this.handleResponse(e.response);
-                this.$mdDialog.show(this.publishAlert);
+            else {
+                await this.$mdDialog.show(this.publishAlert);
+                this.focusInvalidField();
             }
-        }
-        else {
-            await this.$mdDialog.show(this.publishAlert);
-            this.focusInvalidField();
-        }
+        });
 
     }
 
-    async saveDraftHandler() {
-        try {
-            const project = await this.$ngRedux.dispatch(ProjectModule.saveDraft(this.project,
-              this.team, this.viewers));
-            this.showToast('Draft updated');
-            if (this.newProject) {
-                this.state.go('editProject', { appName:  project.id }, {
-                    location: 'replace',
-                    reload: false
-                });
+    saveDraftHandler() {
+        this.clearCustomErrors();
+        this.activateValidation = false;
+        this.timeout(async () => {
+            if (this.form.$valid) {
+                try {
+                    const project = await this.saveDraft(this.project, this.team, this.viewers);
+                    this.showToast('Draft updated');
+                    if (this.newProject) {
+                        this.state.go('editProject', { appName: project.id }, {
+                            location: 'replace',
+                            reload: false
+                        });
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                    this.handleResponse(e.response);
+                }
             }
-        }
-        catch (e) {
-            console.log(e);
-            this.handleResponse(e.response);
-        }
+            else {
+                this.focusInvalidField();
+            }
+        });
     }
 
     async discardDraftHandler() {
         try {
             await this.$mdDialog.show(this.confirmDraftDiscard);
-            await this.$ngRedux.dispatch(ProjectModule.discardDraft());
+            await this.discardDraft();
             this.showToast('Draft discarded');
         }
         catch (e) {
@@ -197,9 +205,11 @@ class ProjectController  {
         }
     }
 
-    async focusInvalidField() {
+    focusInvalidField(focusCountryFields) {
         this.timeout(()=>{
-            const firstInvalid = document.getElementById('npf').querySelector('.ng-invalid');
+            const firstInvalid = focusCountryFields ?
+              document.getElementById('npf').querySelector('section-country-fields')
+              : document.getElementById('npf').querySelector('.ng-invalid');
             if (firstInvalid) {
                 firstInvalid.focus();
             }
@@ -243,6 +253,10 @@ class ProjectController  {
     handleResponse(response) {
         if (response && response.status === 500) {
             console.error('500 from the API', response);
+            return;
+        }
+        if (response.custom) {
+            this.focusInvalidField();
             return;
         }
         forEach(response.data, (item, key) => {

@@ -36,5 +36,5 @@ export const project_definition = {
     his_bucket: [],
     hsc_challenges: [],
     health_focus_areas: [],
-    government_investor: 0
+    government_investor: undefined
 };

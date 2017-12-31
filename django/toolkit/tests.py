@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.core import mail
 
 from project.tests import SetupTests
+from user.models import UserProfile
 from .models import Toolkit
 from . import tasks
 
@@ -137,4 +138,17 @@ class ToolkitTests(SetupTests):
             }
         self.test_user_client.post(url, data, format="json")
         tasks.send_daily_toolkit_digest()
-        self.assertEqual(mail.outbox[1].subject, "MAPS Toolkit updated!")
+        self.assertEqual(mail.outbox[-1].subject, "MAPS Toolkit updated!")
+
+        profile = UserProfile.objects.get(id=self.user_profile_id)
+        self.assertEqual(profile.language, 'en')
+        self.assertIn('<meta http-equiv="content-language" content="en">',
+                      str(mail.outbox[-1].message()))
+
+        # check other language
+        profile.language = 'fr'
+        profile.save()
+        tasks.send_daily_toolkit_digest()
+
+        self.assertIn('<meta http-equiv="content-language" content="fr">',
+                      str(mail.outbox[-1].message()))

@@ -3,7 +3,6 @@ import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
 import cloneDeep from 'lodash/cloneDeep';
 import findIndex from 'lodash/findIndex';
-import { axisData, domainData } from '../static_data/charts_static';
 import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
@@ -29,8 +28,9 @@ import {
     retainOnlyIds,
     handleNationalLevelCoverage,
     fieldToConvertToObject,
-    dashFieldConvertToObject
+    dashFieldConvertToObject, handleCoverage
 } from '../project_utils';
+import * as SystemModule from './system';
 
 
 export const isMemberOrViewer = (state, project) => {
@@ -53,16 +53,16 @@ export const getLastVersion = state => {
     return state.projects.lastVersion;
 };
 
-function getSavedProjectList(state) {
+export const getSavedProjectList = (state) => {
     if (state.projects.list) {
         return state.projects.list.filter(p => p.id !== -1);
     }
     return undefined;
-}
+};
 
 export const getPublishedProjects = state => {
     if (state.projects.list) {
-        const list = getSavedProjectList(state).map(p => {
+        const list = exports.getSavedProjectList(state).map(p => {
             p = { ...p.published, ...isMemberOrViewer(state, p) };
             return p;
         });
@@ -73,7 +73,7 @@ export const getPublishedProjects = state => {
 
 export const getDraftedProjects = state => {
     if (state.projects.list) {
-        const list = getSavedProjectList(state).map(p => {
+        const list = exports.getSavedProjectList(state).map(p => {
             p = { ...p.draft, ...isMemberOrViewer(state, p) };
             return p;
         });
@@ -110,9 +110,9 @@ export const getProjectStructure = state => {
 };
 
 export const getUserProjects = state => {
-    const structure = getFlatProjectStructure(state);
+    const structure = exports.getFlatProjectStructure(state);
     if (state.projects.list) {
-        const list = getSavedProjectList(state).map(p => {
+        const list = exports.getSavedProjectList(state).map(p => {
             const public_id = p.public_id;
             const isPublished = !!public_id;
             p = isPublished ? { ...p.published } : { ...p.draft };
@@ -131,7 +131,7 @@ export const getUserProjects = state => {
 };
 
 export const getUserDefaultProject = state => {
-    const pp = state ? getUserProjects(state) : null;
+    const pp = state ? exports.getUserProjects(state) : null;
     return pp && pp[0] ? '' + pp[0].id : null;
 };
 
@@ -141,8 +141,8 @@ export const getEmptyProject = () => {
 
 export const getVanillaProject = state => {
     const country = CountryModule.userCountryObject(state);
-    const project = getEmptyProject();
-    const structure = getProjectStructure(state);
+    const project = exports.getEmptyProject();
+    const structure = exports.getProjectStructure(state);
     if (country) {
         project.country = country.id;
     }
@@ -154,13 +154,13 @@ export const getVanillaProject = state => {
 };
 
 export const getCurrentProjectIfExist = state => {
-    return getUserProjects(state).find(p => p.id === state.projects.currentProject);
+    return exports.getUserProjects(state).find(p => p.id === state.projects.currentProject);
 };
 
 export const getCurrentProject = state => {
-    let project = getCurrentProjectIfExist(state);
+    let project = exports.getCurrentProjectIfExist(state);
     if (!project) {
-        project = getVanillaProject(state);
+        project = exports.getVanillaProject(state);
     }
     return Object.assign({}, project);
 };
@@ -170,7 +170,7 @@ export const getCurrentPublicProject = state => {
     return { ...project };
 };
 
-function convertCountryFieldsAnswer(fields) {
+export const convertCountryFieldsAnswer = (fields) => {
     return fields.map(f => {
         f = { ... f };
         switch (f.type) {
@@ -180,13 +180,15 @@ function convertCountryFieldsAnswer(fields) {
         case 3:
             f.answer = f.answer === 'true';
             break;
+        case 5:
+            f.answer = JSON.parse(f.answer);
         }
         return f;
     });
-}
+};
 
 export const parseProjectForViewMode = (state, project) => {
-    const structure = getFlatProjectStructure(state);
+    const structure = exports.getFlatProjectStructure(state);
     const country = CountryModule.getCountry(state, project.country);
     const secondPhaseCheck = [{ key: 'platforms.strategies', structure_key: 'strategies' }];
     project =  {
@@ -197,12 +199,13 @@ export const parseProjectForViewMode = (state, project) => {
     };
     return {
         ...project,
-        ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck)
+        ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck),
+        hasPublishedVersion: true
     };
 };
 
 export const getCurrentPublished = state => {
-    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    const project = exports.getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
         return parseProjectForViewMode(state, project);
     }
@@ -210,11 +213,11 @@ export const getCurrentPublished = state => {
 };
 
 export const getCurrentDraft = state => {
-    const draft = getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
+    const draft = exports.getDraftedProjects(state).find(p => p.id === state.projects.currentProject);
     if (draft) {
         return {
             ...draft,
-            hasPublishedVersion: !!getPublishedProjects(state).find(p=> p.id === state.projects.currentProject)
+            hasPublishedVersion: !!exports.getPublishedProjects(state).find(p=> p.id === state.projects.currentProject)
         };
     }
     return undefined;
@@ -222,15 +225,15 @@ export const getCurrentDraft = state => {
 
 
 export const getCurrentDraftInViewMode = state => {
-    const draft = getCurrentDraft(state);
+    const draft = exports.getCurrentDraft(state);
     if (draft) {
-        return parseProjectForViewMode(state, draft);
+        return exports.parseProjectForViewMode(state, draft);
     }
     return undefined;
 };
 
-const getStoredCountryFields = state => isDraft => {
-    let project = isDraft ? getCurrentDraft(state) : getCurrentPublished(state);
+export const getStoredCountryFields = state => isDraft => {
+    let project = isDraft ? exports.getCurrentDraft(state) : exports.getCurrentPublished(state);
     if (project === undefined) {
         const newProject = state.projects.list.find(p=>p.id === -1);
         if (newProject) {
@@ -242,15 +245,21 @@ const getStoredCountryFields = state => isDraft => {
 
 export const getProjectCountryFields = state => (isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
-    const countryFields = convertCountryFieldsAnswer(getStoredCountryFields(state)(isDraft));
-    const result = baseCountryFields.map(bc => ({ ...bc, ...countryFields.find(cf => cf.schema_id === bc.id) }));
+    const countryFields = exports.convertCountryFieldsAnswer(getStoredCountryFields(state)(isDraft));
+    const result = baseCountryFields.map(bc => {
+        const saved = countryFields.find(cf => cf.schema_id === bc.id);
+        return {
+            ...bc,
+            answer: saved ? saved.answer : bc.answer
+        };
+    });
     return [...result];
 };
 
-const getCurrentProjectForEditing = (state, data) => {
-    const structure = getFlatProjectStructure(state);
+export const getCurrentProjectForEditing = (state, data) => {
+    const structure = exports.getFlatProjectStructure(state);
     if (!data) {
-        data = getVanillaProject(state);
+        data = exports.getVanillaProject(state);
     }
     data.start_date = convertDate(data.start_date);
     data.implementation_dates = convertDate(data.implementation_dates);
@@ -273,16 +282,16 @@ const getCurrentProjectForEditing = (state, data) => {
 };
 
 export const getCurrentPublishedProjectForEditing = state => {
-    const project = getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
+    const project = exports.getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
-        return getCurrentProjectForEditing(state, project);
+        return exports.getCurrentProjectForEditing(state, project);
     }
     return undefined;
 };
 
 export const getCurrentDraftProjectForEditing = state => {
-    const project = getCurrentDraft(state);
-    return getCurrentProjectForEditing(state, project);
+    const project = exports.getCurrentDraft(state);
+    return exports.getCurrentProjectForEditing(state, project);
 };
 
 
@@ -315,23 +324,24 @@ export const getCoverageVersion = state => {
 };
 
 export const getCurrentVersion = state => {
-    return getToolkitVersion(state).length;
+    return exports.getToolkitVersion(state).length;
 };
 
 export const getCurrentVersionDate = state => {
-    const version = getToolkitVersion(state);
+    const version = exports.getToolkitVersion(state);
     const last = version.slice(-1)[0];
     return last ? last.modified : null;
 };
 
 export const getMapsAxisData = state => {
-    const axis = { labels: [...axisData.labels], data: [] };
-    const toolkitVersion = getToolkitVersion(state);
+    const axis = SystemModule.getAxis(state);
+    const chartAxis = { labels: axis.map(a => a.name), data: [] };
+    const toolkitVersion = exports.getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
     if (toolkitVersion.length > 0) {
         // Data from versions
-        axis.data = toolkitVersion.map(version => {
+        chartAxis.data = toolkitVersion.map(version => {
             return {
                 date: version.modified.split('T')[0],
                 axis1: version.data[0].axis_score / 100,
@@ -356,19 +366,22 @@ export const getMapsAxisData = state => {
             axis6: toolkitData[5].axis_score / 100,
             date: todayString
         };
-        axis.data.push(lastAxisData);
+        chartAxis.data.push(lastAxisData);
     }
-    return axis;
+    return chartAxis;
 };
+
 export const getMapsDomainData = state => {
-    const domains =  { labels: [...domainData.labels] };
-    const toolkitVersion = getToolkitVersion(state);
+    const domains = SystemModule.getDomains(state);
+    const axes = SystemModule.getAxis(state);
+    const chartData = { labels: axes.map(a => a.name) };
+    const toolkitVersion = exports.getToolkitVersion(state);
     const toolkitData = getToolkitData(state);
     const todayString = getTodayString();
-    domainData.labels.forEach((axis, axInd) => {
-        domains[axis] = { labels: [...domainData[axis].labels], data: [] };
+    axes.forEach((axis, axInd) => {
+        chartData[axis.name] = { labels: domains.filter(d => d.axis === axis.id).map(df => df.name), data: [] };
         if (toolkitVersion.length > 0) {
-            domains[axis].data = toolkitVersion.map(version => {
+            chartData[axis.name].data = toolkitVersion.map(version => {
                 const ret = {};
                 ret.date = version.modified.split('T')[0];
                 version.data[axInd].domains.forEach((domain, domainInd) => {
@@ -382,15 +395,15 @@ export const getMapsDomainData = state => {
             toolkitData[axInd].domains.forEach((dom, ii) => {
                 current['axis' + (ii + 1)] = dom.domain_percentage / 100;
             });
-            domains[axis].data.push(current);
+            chartData[axis.name].data.push(current);
         }
     });
-    return domains;
+    return chartData;
 };
 
 export const getCoverageData = state => {
-    const coverageVersion = getCoverageVersion(state);
-    const projectData =  getCurrentProject(state);
+    const coverageVersion = exports.getCoverageVersion(state);
+    const projectData =  exports.getCurrentProject(state);
 
     const coverage = projectData.coverage ? projectData.coverage.slice() : [];
     coverage.push(Object.assign({}, projectData.national_level_deployment));
@@ -405,10 +418,10 @@ export const getCoverageData = state => {
 
         versionObj.data.forEach(distrObj => {
             forOwn(distrObj, (val, key) => {
-                if (key !== 'district') {
-                    const newKey = key.replace('_', ' ');
-                    if (ret.labels.indexOf(newKey) < 0) { ret.labels.push(newKey); }
-                    const name = 'axis' + (ret.labels.indexOf(newKey) + 1);
+                const labels = ['clients', 'facilities', 'health_workers'];
+                const index = labels.indexOf(key);
+                if (index > -1) {
+                    const name = `axis${index + 1}`;
                     ret.data[vInd][name] = (ret.data[vInd][name] || 0) + val;
                 }
             });
@@ -419,7 +432,7 @@ export const getCoverageData = state => {
 
 
 export const getSimilarProject = state => {
-    const userProjects = getPublishedProjects(state);
+    const userProjects = exports.getPublishedProjects(state);
     if (state.projects.similarProjectNames) {
         return state.projects.similarProjectNames.map(p => {
             p = Object.assign({}, p);
@@ -437,7 +450,7 @@ export function loadUserProjects() {
     return async (dispatch, getState) => {
         try {
             const state = getState();
-            if (state.user.profile && !getSavedProjectList(state)) {
+            if (state.user.profile && !exports.getSavedProjectList(state)) {
                 const { data } = await axios.get('/api/projects/member-of/');
                 dispatch({ type: 'SET_PROJECT_LIST', projects: data });
             }
@@ -519,7 +532,7 @@ export function snapShotProject() {
 export function loadProjectStructure() {
     return async (dispatch, getState) => {
         const state = getState();
-        const structure = getProjectStructure(state);
+        const structure = exports.getProjectStructure(state);
         if (!structure) {
             const { data } = await axios.get('/api/projects/structure/');
             await dispatch({ type: 'SET_PROJECT_STRUCTURE', structure: data });
@@ -527,7 +540,7 @@ export function loadProjectStructure() {
     };
 }
 
-async function saveTeamViewers({ id }, team = [], viewers = []) {
+export async function saveTeamViewers({ id }, team = [], viewers = []) {
     const data = {
         team: team.map(t => t.id),
         viewers: viewers.map(w => w.id)
@@ -536,17 +549,25 @@ async function saveTeamViewers({ id }, team = [], viewers = []) {
     return data;
 }
 
-async function saveCountryFields(fields = [], countryId, project) {
+export async function saveCountryFields(fields = [], countryId, project, toUpdate) {
     fields = fields.map(({ country, question, type, answer }) => {
         return {
             country, answer, type, question, project
         };
     });
-    const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/`, { fields });
-    return data.fields;
+    toUpdate = toUpdate === 'published' ? 'publish' : 'draft';
+    try {
+        const { data } = await axios.post(`/api/country-fields/${countryId}/${project}/${toUpdate}/`, { fields });
+        return data.fields;
+    }
+    catch (e) {
+        console.log(e);
+        return false;
+    }
+
 }
 
-function processForm(form) {
+export function processForm(form) {
     const organisation_name = form.organisation ? form.organisation.name : '';
     const organisation = form.organisation ? form.organisation.id : null;
     form = { ...form, ...retainNationalOrDistrictCoverage(form) };
@@ -560,25 +581,33 @@ function processForm(form) {
         coverageType: undefined,
         platforms: parsePlatformCollection(form),
         ...extractIdFromObjects(form),
-        ...handleNationalLevelCoverage(form)
+        ...handleNationalLevelCoverage(form),
+        ...handleCoverage(form)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };
     return removeKeysWithoutValues(form);
 }
 
-async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate, method) {
+export async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate, method) {
     const user = UserModule.getProfile(state).id;
-    const countryFields = getStoredCountryFields(state)(true);
-    const cfPromise = saveCountryFields(countryFields, data.draft.country, data.id);
-    const twPromise = saveTeamViewers(data, team, viewers);
-    const [teamViewers] = await Promise.all([twPromise, cfPromise]);
-    if (toUpdate === 'published') {
-        data.published.fields = countryFields;
-    }
-    data.draft.fields = countryFields;
+    const countryFields = exports.getStoredCountryFields(state)(true);
+    const cfPromise = exports.saveCountryFields(countryFields, data.draft.country, data.id, toUpdate);
+    const twPromise = exports.saveTeamViewers(data, team, viewers);
+    const [teamViewers, fields] = await Promise.all([twPromise, cfPromise]);
     const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
     const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
+    if (fields === false) {
+        const response = {
+            custom: true,
+            message: 'Failed to save country fields'
+        };
+        return Promise.reject({ response });
+    }
+    if (toUpdate === 'published') {
+        data.published.fields = fields;
+    }
+    data.draft.fields = fields;
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
     if (method === 'put') {
@@ -592,12 +621,12 @@ async function postProjectSaveActions(data, team, viewers, dispatch, state, toUp
 
 export function saveDraft(form, team, viewers) {
     return async (dispatch, getState) => {
-        form = processForm(form);
+        form = exports.processForm(form);
         const method = form.id ? 'put' : 'post';
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
             const { data } = await axios[method](url, form);
-            return postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'draft', method);
+            return exports.postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'draft', method);
         }
         catch (e) {
             console.log(e);
@@ -608,22 +637,23 @@ export function saveDraft(form, team, viewers) {
 
 export function discardDraft() {
     return async (dispatch, getState) => {
-        const published = getCurrentPublishedProjectForEditing(getState());
-        const form = processForm(published);
+        const published = exports.getCurrentPublishedProjectForEditing(getState());
+        const form = exports.processForm(published);
+        const countryFields = exports.getStoredCountryFields(getState())(false);
         const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
+        data.draft.fields = await exports.saveCountryFields(countryFields, data.draft.country, data.id, 'published');
         dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
         dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
-
         return Promise.resolve(data);
     };
 }
 
 export function publish(form, team, viewers) {
     return async (dispatch, getState) => {
-        form = processForm(form);
+        form = exports.processForm(form);
         try {
             const { data } = await axios.put(`/api/projects/publish/${form.id}/`, form);
-            return postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'published');
+            return exports.postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'published');
         }
         catch (e) {
             console.log(e);
@@ -632,7 +662,7 @@ export function publish(form, team, viewers) {
     };
 }
 
-async function searchProjects(query, health_topic = false, location = false,
+export async function searchProjects(query, health_topic = false, location = false,
                               organisation = false, project_name = true, technology_platform = false) {
     const { data } = await axios.post('/api/search/projects/', {
         health_topic,
@@ -647,25 +677,32 @@ async function searchProjects(query, health_topic = false, location = false,
 
 export function searchDuplicateProjectName(query) {
     return async (dispatch) => {
-        const list = await searchProjects(query);
+        const list = await exports.searchProjects(query);
         dispatch({ type: 'SET_SIMILAR_NAME_LIST', list });
     };
 }
 
 export function clearSimilarNameList() {
     return async (dispatch) => {
-        const list = [];
-        dispatch({ type: 'SET_SIMILAR_NAME_LIST', list });
+        dispatch({ type: 'SET_SIMILAR_NAME_LIST', list: [] });
     };
 }
 
 export function updateProjectCountryFields({ id, answer, question, type, country, schema_id }) {
     return (dispatch, getState) => {
-        const projectId = getCurrentProjectId(getState());
-        if (type === 3) {
+        const projectId = exports.getCurrentProjectId(getState());
+        switch (type) {
+        case 3: {
             answer = answer === true ? 'true' : 'false';
+            break;
         }
-        const countryField = { id, answer, question, type, country, schema_id: schema_id ? schema_id : id };
+        case 5: {
+            answer = JSON.stringify(answer);
+            break;
+        }
+        }
+        schema_id = schema_id ? schema_id : id;
+        const countryField = { id, answer, question, type, country, schema_id };
         dispatch({ type: 'UPDATE_COUNTRY_FIELD_ANSWER', projectId, countryField });
     };
 }
@@ -710,7 +747,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
     }
     case 'SET_CURRENT_PROJECT': {
         const currentProject = action.id;
-        return { ...state, currentProject };
+        return { ...state, currentProject, lastVersion: 0 };
     }
     case 'SET_CURRENT_PUBLIC_PROJECT_DETAIL': {
         const currentPublicProject = action.project;
@@ -735,7 +772,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
         return { ...state, teamViewers };
     }
     case 'CLEAR_USER_PROJECTS': {
-        return {};
+        return { structure: state.structure };
     }
     default:
         return state;

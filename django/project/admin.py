@@ -6,20 +6,20 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core import mail
+from django.utils.html import mark_safe
 from django.template import loader
 from django.conf import settings
-# from django.utils.html import mark_safe
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, override
 
 from allauth.account.models import EmailAddress
 from toolkit.toolkit_data import toolkit_default
 from core.admin import AllObjectsAdmin
 from country.models import Country
-from user.models import UserProfile, Organisation
 from toolkit.models import Toolkit
-# from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
+    ProjectApproval
+from user.models import UserProfile, Organisation
 
 
 class ChangeNotificationMixin(object):
@@ -32,25 +32,33 @@ class ChangeNotificationMixin(object):
         return super(ChangeNotificationMixin, self).save_form(request, form, change)
 
     def send_changed_notification(self, form):
-        subject = ugettext('{} - {} was changed').format(form.instance._meta.verbose_name.title(),
-                                                         str(form.instance))
         html_template = loader.get_template('email/data_model_changed.html')
-        html_message = html_template.render({'text': subject})
-        self.send_notification_email(subject, html_message)
+
+        for profile in UserProfile.objects.all():
+            with override(profile.language):
+                subject = ugettext('{} - {} was changed').format(form.instance._meta.verbose_name.title(),
+                                                                 str(form.instance))
+                html_message = html_template.render({'text': subject,
+                                                     'language': profile.language})
+                self.send_notification_email(profile.user.email, subject, html_message)
 
     def send_created_notification(self, form):
-        subject = ugettext('New {} was created: {}').format(form.instance._meta.verbose_name,
-                                                            str(form.instance))
         html_template = loader.get_template('email/new_data_model_created.html')
-        html_message = html_template.render({'text': subject})
-        self.send_notification_email(subject, html_message)
 
-    def send_notification_email(self, subject, html_message):
         for profile in UserProfile.objects.all():
+            with override(profile.language):
+                subject = ugettext('New {} was created: {}').format(form.instance._meta.verbose_name,
+                                                                    str(form.instance))
+                html_message = html_template.render({'text': subject,
+                                                     'language': profile.language})
+
+                self.send_notification_email(profile.user.email, subject, html_message)
+
+    def send_notification_email(self, email, subject, html_message):
             mail.send_mail(subject=subject,
                            message='',
                            from_email=settings.FROM_EMAIL,
-                           recipient_list=[profile.user.email],
+                           recipient_list=[email],
                            html_message=html_message)
 
 
@@ -69,47 +77,51 @@ class InteroperabilityLinkAdmin(ChangeNotificationMixin, AllObjectsAdmin):
 
 class DigitalStrategyAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     list_display = [
-        '__str__',
+        '__str__'
     ]
 
 
-class HealthFocusAreaAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HealthFocusAreaAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HealthCategoryAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HealthCategoryAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class LicenceAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class LicenceAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class InteroperabilityStandardAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HISBucketAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HISBucketAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-class HSCChallengeAdmin(ChangeNotificationMixin, admin.ModelAdmin):
+class HSCGroupAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
-# class ProjectApprovalAdmin(admin.ModelAdmin):
-#     list_display = ['project', 'user', 'approved', 'reason']
-#     readonly_fields = ['link']
-#
-#     def link(self, obj):
-#         return mark_safe("<a href='/app/{}/edit-project'>See project</a>".format(obj.id))
-#
-#     def get_queryset(self, request):
-#         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
-#         if not request.user.is_superuser:
-#             country_ids = Country.objects.filter(user=request.user.userprofile).values_list('id', flat=True)
-#             qs = qs.filter(project__data__country__contained_by=list(country_ids))
-#         return qs
+class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+    pass
+
+
+class ProjectApprovalAdmin(admin.ModelAdmin):
+    list_display = ['project', 'user', 'approved', 'reason']
+    readonly_fields = ['link']
+
+    def link(self, obj):
+        return mark_safe("<a href='/app/{}/edit-project'>See project</a>".format(obj.id))
+
+    def get_queryset(self, request):
+        qs = super(ProjectApprovalAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            country_ids = Country.objects.filter(users__in=[request.user.userprofile]).values_list('id', flat=True)
+            qs = qs.filter(project__data__country__contained_by=list(country_ids))
+        return qs
 
 
 def validate_csv_ext(value):
@@ -311,11 +323,12 @@ class ProjectImportAdmin(admin.ModelAdmin):
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
-# admin.site.register(ProjectApproval, ProjectApprovalAdmin)
+admin.site.register(ProjectApproval, ProjectApprovalAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
 admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(Licence, LicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
 admin.site.register(HISBucket, HISBucketAdmin)
+admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(ProjectImport, ProjectImportAdmin)

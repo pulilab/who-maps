@@ -1,6 +1,7 @@
 import forEach from 'lodash/forEach';
 import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
+
 class SignupController {
 
     constructor($scope, $location, $anchorScroll, $ngRedux, $state) {
@@ -11,6 +12,7 @@ class SignupController {
         this.state = $state;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 

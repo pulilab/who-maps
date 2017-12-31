@@ -9,13 +9,13 @@ let controller = null;
 describe('PlanningAndGuidanceController', () => {
 
     beforeEach(()=> {
-        controller = PlanningAndGuidanceController.factory()(null, $state, $ngRedux);
+        controller = PlanningAndGuidanceController.factory()(null, $state(), $ngRedux);
         controller.scope = $scope(controller);
     });
 
     it('should have a factory  function', () => {
         expect(PlanningAndGuidanceController.factory).toBeDefined();
-        const onSpot = PlanningAndGuidanceController.factory()($scope(controller), $state, $ngRedux);
+        const onSpot = PlanningAndGuidanceController.factory()($scope(controller), $state(), $ngRedux);
         expect(onSpot.constructor.name).toBe(controller.constructor.name);
     });
     it('should have an on init function', ()=> {
@@ -33,12 +33,21 @@ describe('PlanningAndGuidanceController', () => {
     });
 
     it('should have a function that create a filter object for the UI', () => {
+        controller.axes = [
+            {
+                name: 1,
+                domains: [
+                    {
+                        name: 2, id: 1
+                    }
+                ]
+            }
+        ];
         controller.createFilters();
-        const rawFilter = require('../../src/Cms/resources/domains');
-        expect(controller.filters[0].name).toBe(rawFilter[0].name);
+        expect(controller.filters[0].name).toBe(1);
         expect(controller.filters[0].open).toBeFalsy();
         expect(controller.filters[0].selected).toBeFalsy();
-        expect(controller.filters[0].domains[0].name).toBe(rawFilter[0].domains[0].name);
+        expect(controller.filters[0].domains[0].name).toBe(2);
         expect(controller.filters[0].domains[0].open).toBeFalsy();
 
     });

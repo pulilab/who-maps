@@ -10,9 +10,10 @@ import * as ProjectModule from '../store/modules/projects';
 
 class MapsToolkitController {
 
-    constructor($scope, $state, $ngRedux) {
+    constructor($scope, $state, $ngRedux, $sce) {
         this.state = $state;
         this.scope = $scope;
+        this.$sce = $sce;
         this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
@@ -23,19 +24,19 @@ class MapsToolkitController {
     }
 
     mapData(state) {
-        const structure = ToolkitModule.getStructure();
         const rawData = ToolkitModule.getToolkitData(state);
         return {
             profile: UserModule.getProfile(state),
             viewMode: ProjectModule.getCurrentProject(state).isViewer,
             rawData,
-            structure,
-            domainStructure: ToolkitModule.getDomainStructure(this.state.params.axisId, this.state.params.domainId)
+            domainStructure:
+              ToolkitModule.getDomainStructure(state, this.state.params.axisId, this.state.params.domainId)
         };
     }
 
     onInit() {
-        this.bindEvents();
+        this.EE.on('mapsAxisChange', this.handleChangeAxis, this);
+        this.EE.on('mapsDomainChange', this.handleChangeDomain, this);
         this.dataLoaded = false;
         this.score = 0;
         this.projectId = this.state.params.appName;
@@ -47,7 +48,8 @@ class MapsToolkitController {
     }
 
     onDestroy() {
-        this.removeEvents();
+        this.EE.removeListener('mapsAxisChange', this.handleChangeAxis, this);
+        this.EE.removeListener('mapsDomainChange', this.handleChangeDomain, this);
         this.unsubscribe();
     }
 
@@ -57,19 +59,6 @@ class MapsToolkitController {
               this.processAxesData(cloneDeep(rawData), this.state.params.axisId, this.state.params.domainId);
           }, true);
     }
-
-    bindEvents() {
-        const vm = this;
-        vm.EE.on('mapsAxisChange', vm.handleChangeAxis, this);
-        vm.EE.on('mapsDomainChange', vm.handleChangeDomain, this);
-    }
-
-    removeEvents() {
-        const vm = this;
-        vm.EE.removeListener('mapsAxisChange', vm.handleChangeAxis, this);
-        vm.EE.removeListener('mapsDomainChange', vm.handleChangeDomain, this);
-    }
-
 
     handleChangeAxis(id) {
         this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });
@@ -100,7 +89,7 @@ class MapsToolkitController {
                 question.answers = map(question.answers, (value, index) => {
                     let template = null;
                     if (question.answerTemplate && question.answerTemplate[index]) {
-                        template = this.templates[question.answerTemplate[index]];
+                        template = this.$sce.trustAsHtml(this.templates[question.answerTemplate[index]]);
                     }
                     this.score += value === -1 ? 0 : value;
                     return { index, value, template };
@@ -182,12 +171,11 @@ class MapsToolkitController {
 
 
     static mapsControllerFactory() {
-        function mapsController($scope, $state, $ngRedux) {
-            const structure = require('./Resource/structure.json');
-            return new MapsToolkitController($scope, $state, $ngRedux, structure);
+        function mapsController($scope, $state, $ngRedux, $sce) {
+            return new MapsToolkitController($scope, $state, $ngRedux, $sce);
         }
 
-        mapsController.$inject = ['$scope', '$state', '$ngRedux'];
+        mapsController.$inject = ['$scope', '$state', '$ngRedux', '$sce'];
 
         return mapsController;
     }

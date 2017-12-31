@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "karma start",
-    "serve_coverage": "cd coverage/html/ && browser-sync start --no-open -s -f **/*.*",
+    "test": "karma start & yarn serve-coverage",
+    "test_chrome": "cross-env BROWSER_ENV=chrome karma start & yarn serve-coverage",
+    "serve-coverage": "browser-sync start --config bs-config.js",
     "test_ci": "cross-env BROWSER_ENV=chrome karma start --single-run",
     "dev": "yarn serve",
     "css_2": "cross-env NODE_ENV=production node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline --port 8100",
@@ -18,12 +19,14 @@
     "e2e-server": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver",
     "e2e-server-circleci": "java -jar ./e2e/webdriverio/selenium-server-standalone-2.53.0.jar -Dwebdriver.chrome.driver=./e2e/webdriverio/chromedriver_linux",
     "e2e": "./node_modules/.bin/wdio wdio.conf.js",
-    "e2e-circleci": "./node_modules/.bin/wdio wdio_prod.conf.js"
+    "e2e-circleci": "./node_modules/.bin/wdio wdio_prod.conf.js",
+    "extract_po": "angular-gettext-cli --files './src/**/*.+(js|html)' --dest '../django/translations/master.pot' --marker-name i18n"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "angular-gettext-cli": "^1.2.0",
     "angular-material-source": "git+https://github.com/angular/material.git",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -33,6 +36,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.24.1",
+    "browser-sync": "^2.18.13",
     "clean-webpack-plugin": "^0.1.8",
     "cross-env": "^3.2.3",
     "css-loader": "^0.27.3",
@@ -84,6 +88,7 @@
     "angular": "1.5.11",
     "angular-animate": "1.5.0",
     "angular-aria": "1.5.0",
+    "angular-gettext": "^2.3.10",
     "angular-material": "https://github.com/pulilab/material.git#p1.1.2",
     "angular-messages": "1.5.0",
     "angular-mocks": "1.5.5",

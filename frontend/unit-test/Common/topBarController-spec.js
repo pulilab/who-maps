@@ -1,39 +1,21 @@
 import { default as TopBarController } from '../../src/Common/TopBar/TopBarController';
-import { EE } from '../../src/Common/common';
-import { $scope, $state } from '../testUtilities';
-
-EE.initialize();
+import { $scope, $state, $ngRedux, EE } from '../testUtilities';
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let ac = {};
 
-const mockData = {
-    countries: [{
-        id: 1,
-        name: 'asd'
-    }]
-};
-
-const scope = $scope(ac);
 
 describe('TopBarController', () => {
 
     beforeEach(() => {
-        ac = TopBarController.topBarControllerFactory()($state, scope);
+        ac = TopBarController.topBarControllerFactory()($state(), {}, $ngRedux);
         ac.scope = $scope(ac);
-        ac.cs = {
-            projectList: [],
-            projectStructure: mockData,
-            populateProjectStructure: jasmine.createSpy('pps'),
-            getProjectData: jasmine.createSpy('gpd'),
-            reset: jasmine.createSpy('asd').and.returnValue({ loadedPromise: Promise.resolve() })
-        };
+        ac.EE = EE;
     });
 
     it('should have a watcher function', () => {
         spyOn(ac, 'setAxisDomain');
-        ac.state = $state;
         ac.watchers();
         expect(ac.setAxisDomain).toHaveBeenCalled();
     });
@@ -55,11 +37,11 @@ describe('TopBarController', () => {
     });
 
     it('should have a show thematic overview button function', () => {
-        ac.isLogin = true;
+        ac.userModel = {};
         let result = ac.showThematic();
-        expect(result).toBeTruthy();
-        ac.isLogin = false;
+        expect(result).toBe(true);
+        ac.userModel = undefined;
         result = ac.showThematic();
-        expect(result).toBeFalsy();
+        expect(result).toBe(false);
     });
 });

@@ -4,7 +4,6 @@ import * as CountriesModule from '../store/modules/countries';
 import * as  ToolkitModule from '../store/modules/toolkit';
 import * as  UserModule from '../store/modules/user';
 
-import commProjects from './Mocks/commProjects.js';
 import { fixUrl } from '../Utilities';
 
 class DashboardModuleController {
@@ -20,7 +19,6 @@ class DashboardModuleController {
         this.mapData = this.mapData.bind(this);
         this.watchers = this.watchers.bind(this);
         this.unsubscribeProjects = $ngRedux.connect(this.mapData, ProjectModule)(this);
-        this.watchers();
         this.fixUrl = fixUrl;
     }
 
@@ -33,7 +31,6 @@ class DashboardModuleController {
             projectData,
             structure: ProjectModule.getProjectStructure(state),
             rawToolkitData: ToolkitModule.getToolkitData(state),
-            axisData: ToolkitModule.getToolkitData(state),
             toolkitVersion: ProjectModule.getToolkitVersion(state),
             coverageVersion: ProjectModule.getCoverageVersion(state),
             profile: UserModule.getProfile(state),
@@ -53,8 +50,8 @@ class DashboardModuleController {
     }
 
     onInit() {
+        this.watchers();
         this.projectId = this.state.params.appName;
-        this.commProjects = commProjects;
         this.resizeEvent();
         this.eventBinding();
         this.showEmpty = !this.projectId;

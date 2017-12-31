@@ -1,11 +1,11 @@
-<div class="project-section section-country-fields" md-whiteframe="2">
+<div class="project-section section-country-fields read-only" md-whiteframe="2" ng-show="vm.countryFields && vm.countryFields.length > 0">
+
   <div class="section-title md-title">
-    5. Country fields
+    <translate>5. Country fields</translate>
     <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
-    <div layout="column">
 
       <div class="generic-container" flex ng-repeat="field in vm.countryFields">
 
@@ -36,9 +36,28 @@
           <p ng-hide="field.answer">No</p>
         </div>
 
+        <!-- SINGLE SELECTION FIELD-->
+        <div
+          ng-if="field.type ===4"
+          class="single-selection-field">
+          <h6>{{field.question}}</h6>
+          <p >{{field.answer}}</p>
+        </div>
+
+
+         <!--MULTIPLE SELECTION-->
+        <div
+          ng-if="field.type === 5"
+          class="multi-selection-field">
+          <h6>{{field.question}}</h6>
+          <ul>
+            <li ng-repeat="a in field.answer">{{a}}</li>
+          </ul>
+        </div>
+
 
       </div>
-    </div>
 
   </div>
+
 </div>

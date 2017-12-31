@@ -1,46 +1,34 @@
 import CountryViewModuleController from '../../src/CountryView/CountryViewModuleController';
-import { $scope, EE } from '../testUtilities';
+import { $scope, EE, $state, $ngRedux } from '../testUtilities';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
 
 let vm = {};
 
 
-const csMock = {
-    hssStructure: {
-        continuum: {}
-    },
-    projectStructure: {
-        technology_platforms: {}
-    },
-    isViewer: () => {},
-    isMember: () => {}
-};
-
-
 describe('CountryViewModuleController', () => {
 
     beforeEach(() => {
-        const scope = $scope(vm);
-        vm = CountryViewModuleController.countryControllerFactory()(scope);
-        vm.cs = csMock;
+        vm = CountryViewModuleController.countryControllerFactory()({}, {}, $state(), $ngRedux);
+        vm.scope = $scope(vm);
         vm.EE = EE;
     });
 
-    it('has onInit fn. which gets countries and setup the watcher', () => {
-        spyOn(vm, 'getCountries');
+    it('onInit fn.', () => {
         spyOn(vm, 'watchers');
         vm.$onInit();
-        expect(vm.getCountries).toHaveBeenCalled();
         expect(vm.watchers).toHaveBeenCalled();
     });
 
-    it('should have a watcher function', () => {
+    it('watcher fn.', () => {
+        vm.countryProjects = [];
         spyOn(vm, 'applyFilters');
         spyOn(vm, 'generateFilters');
+        spyOn(vm, 'updateCountry');
         vm.watchers();
         expect(vm.applyFilters).toHaveBeenCalled();
         expect(vm.generateFilters).toHaveBeenCalled();
+        expect(vm.updateCountry).toHaveBeenCalled();
     });
 
     describe('apply filters function', () => {
@@ -97,39 +85,20 @@ describe('CountryViewModuleController', () => {
 
     });
 
-    it('has the commonservices\' isViewer and isMember fn.s', () => {
-        spyOn(vm.cs, 'isViewer');
-        spyOn(vm.cs, 'isMember');
-        vm.isViewer('a');
-        vm.isMember('b');
-        expect(vm.cs.isViewer).toHaveBeenCalledWith('a');
-        expect(vm.cs.isMember).toHaveBeenCalledWith('b');
+
+    it('updateCountry fn.', () => {
+        vm.projectsData = [];
+        vm.setCurrentCountry = jasmine.createSpy('setCurrentCountry');
+        vm.loadCountryProjectsOrAll = jasmine.createSpy('loadCountryProjectsOrAll');
+
+        vm.updateCountry({ id: 1 });
+        expect(vm.loadCountryProjectsOrAll).toHaveBeenCalled();
+
+        vm.updateCountry({ id: 1, name: 'a' }, { id: 2, name: 'b' });
+        expect(vm.loadCountryProjectsOrAll).toHaveBeenCalled();
+        expect(vm.setCurrentCountry).toHaveBeenCalled();
+
     });
-
-    it('has updateCountry fn.', () => {
-        spyOn(vm, 'changeMapTo');
-        spyOn(vm, 'getProjects');
-
-        const countryObj = { name: 'aa' };
-        vm.updateCountry(countryObj);
-
-        countryObj.name = 'Show all countries';
-        vm.updateCountry(countryObj);
-        expect(vm.changeMapTo.calls.count()).toBe(1);
-        expect(vm.getProjects.calls.count()).toBe(1);
-    });
-
-    it('has changeMapTo fn.', () => {
-        const countryMock = { id: 'id' };
-        spyOn(vm, 'fetchCountryMap');
-        spyOn(vm, 'fetchDistrictProjects');
-
-        vm.changeMapTo(countryMock);
-
-        expect(vm.fetchCountryMap).toHaveBeenCalledWith('id');
-        expect(vm.fetchDistrictProjects).toHaveBeenCalledWith('id');
-    });
-
 
     it('has a print implementing_partners fn', () => {
         const result = vm.printImplementingPartners({ implementing_partners: [1, 2] });

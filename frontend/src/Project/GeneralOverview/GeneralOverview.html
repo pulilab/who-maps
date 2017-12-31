@@ -1,21 +1,27 @@
 <div class="project-section section-projectdetails active" md-whiteframe="2">
 
   <div class="section-title md-title">
-    1. General overview
-    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i>
+    <translate>1. General overview</translate>
+    <span class="toggler" ng-click="vm.collapse()"><i class="material-icons">keyboard_arrow_down</i></span>
   </div>
 
   <div class="section-wrapper">
     <div layout="row" class="first">
       <md-input-container flex="60">
-        <label>Project name</label>
+        <label>
+          <translate>Project name</translate>
+        </label>
         <input md-maxlength="100" required name="name"
                ng-model="vm.project.name"
                ng-model-options="{debounce: 200}"
                ng-change="vm.checkName()">
         <div ng-messages="vm.form.name.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength">The name has to be less than 101 characters long.</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
+          <div ng-message="md-maxlength">
+            <translate>The name has to be less than 101 characters long.</translate>
+          </div>
           <div ng-message="custom">
             <div ng-repeat="message in vm.form.name.customError">
               {{message}}
@@ -24,7 +30,9 @@
         </div>
       </md-input-container>
       <div class="similar-project md-block" ng-show="vm.similarProject.length > 0" flex="40">
-        <span class="similar-label">Similar Project name(s)</span>
+        <span class="similar-label">
+          <translate>Similar Project name(s)</translate>
+        </span>
         <div ng-class="{ownProject: similar.isOwn}" ng-repeat="similar in vm.similarProject">
           <a href="#" ng-click="vm.openSimilarProject(similar, $event)" class="similar-link">{{similar.name}}</a><span ng-if="!$last">, </span>
         </div>
@@ -42,15 +50,22 @@
 
     <div layout="row">
       <md-input-container class="md-icon-float" flex="60">
-        <label>Project country</label>
+        <label>
+          <translate>Project country</translate>
+        </label>
         <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
-        <md-select ng-model="vm.project.country" name="country" required>
+        <md-select ng-model="vm.project.country" name="country" ng-disabled="vm.project.hasPublishedVersion" required>
+          <md-tooltip md-autohide md-direction="top" ng-show="vm.project.hasPublishedVersion">
+            <translat>You can not change the country of a published project</translate>
+          </md-tooltip>
           <md-option ng-value="{{country.id}}" ng-repeat=" country in vm.countriesList">
             {{country.prettyName}}
           </md-option>
         </md-select>
         <div ng-messages="vm.form.country.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
           <div ng-message="custom">
             <div ng-repeat="message in vm.form.country.customError">
               {{message}}
@@ -61,7 +76,9 @@
     </div>
 
     <md-input-container class="md-block">
-      <label>Geographic scope</label>
+      <label>
+        <translate>Geographic scope</translate>
+      </label>
       <textarea ng-model="vm.project.geographic_scope"
                 md-maxlength="500"
                 name="geographic_scope"
@@ -76,21 +93,30 @@
         </div>
       </div>
       <div class="suggestion">
-        <span>Please describe where your implementation is currently taking place</span>
+        <span>
+          <translate>Please describe where your implementation is currently taking place</translate>
+        </span>
       </div>
     </md-input-container>
 
     <md-input-container class="md-block">
-      <label>Overview of the digital health implementation</label>
+      <label>
+        <translate>Overview of the digital health implementation</translate>
+      </label>
       <textarea ng-model="vm.project.implementation_overview"
                 md-maxlength="500"
                 rows="1"
                 ng-required="vm.activateValidation"
                 name="implementation_overview"
                 md-select-on-focus></textarea>
+
       <div ng-messages="vm.form.implementation_overview.$error">
-        <div ng-message="required">This is required.</div>
-        <div ng-message="md-maxlength">This field has to be less than 500 characters long.</div>
+        <div ng-message="required">
+          <translate>This is required.</translate>
+        </div>
+        <div ng-message="md-maxlength">
+          <translate>This field has to be less than 500 characters long.</translate>
+        </div>
         <div ng-message="custom">
           <div ng-repeat="message in vm.form.implementation_overview.customError">
             {{message}}
@@ -98,13 +124,19 @@
         </div>
       </div>
       <div class="suggestion">
-        <span>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</span>
+        <span>
+          <translate>
+          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
+          </translate>
+        </span>
       </div>
     </md-input-container>
 
     <div layout="row">
       <md-input-container flex>
-        <label>Project start date</label>
+        <label>
+          <translate>Project start date</translate>
+        </label>
         <md-datepicker
           ng-model="vm.project.start_date"
           md-open-on-focus
@@ -121,7 +153,9 @@
       </md-input-container>
 
       <md-input-container flex>
-        <label>Project end date</label>
+        <label>
+          <translate>Project end date</translate>
+        </label>
         <md-datepicker
           ng-model="vm.project.end_date"
           md-open-on-focus
@@ -140,11 +174,15 @@
 
     <div layout="row">
       <md-input-container flex>
-        <label>Contact name</label>
+        <label>
+          <translate>Contact name</translate>
+        </label>
         <input ng-required="vm.activateValidation" name="contact_name" ng-model="vm.project.contact_name"
                md-maxlength="250">
         <div ng-messages="vm.form.contact_name.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
           <div ng-message="md-maxlength"><div ng-message="md-maxlength">This has to be less than 250 characters long.</div></div>
           <div ng-message="custom">
             <div ng-repeat="message in vm.form.contact_name.customError">
@@ -155,15 +193,21 @@
       </md-input-container>
 
       <md-input-container flex>
-        <label>Contact email</label>
+        <label>
+          <translate>Contact email</translate>
+        </label>
         <input ng-required="vm.activateValidation" name="contact_email"
                ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
                md-minlength="4"
                md-maxlength="256"
                ng-model="vm.project.contact_email">
         <div ng-messages="vm.form.contact_email.$error">
-          <div ng-message="required">This is required.</div>
-          <div ng-message="pattern">This should be a valid email address</div>
+          <div ng-message="required">
+            <translate>This is required.</translate>
+          </div>
+          <div ng-message="pattern">
+            <translate>This should be a valid email address</translate>
+          </div>
           <div ng-message="custom">
             <div ng-repeat="message in vm.form.contact_email.customError">
               {{message}}
@@ -175,13 +219,15 @@
   </div>
 
   <div class="section-wrapper alt">
-    <h6 class="first">Add Team members (Editor role)</h6>
+    <h6 class="first">
+      <translate>Add Team members (Editor role)</translate>
+    </h6>
 
     <div class="chipper">
       <div class="md-block">
         <md-contact-chips
-          placeholder="Editors of this project"
-          secondary-placeholder="add new team member"
+          placeholder="{{'Editors of this project' | translate }}"
+          secondary-placeholder="{{'add new team member' | translate }}"
           ng-model="vm.team"
           md-contacts="vm.getUsers($query)"
           md-contact-name="name"
@@ -192,17 +238,23 @@
         </md-contact-chips>
       </div>
       <div class="suggestion">
-        <span>Note: if you wish to add members who are not already registered, they will need to be registered before you may add them</span>
+        <span>
+          <translate>
+          Note: if you wish to add members who are not already registered, they will need to be registered before you may add them
+          </translate>
+        </span>
       </div>
     </div>
 
-    <h6>Add Viewers (only Viewer role)</h6>
+    <h6>
+      <translate>Add Viewers (only Viewer role)</translate>
+    </h6>
 
     <div class="chipper">
       <div class="md-block">
         <md-contact-chips
-          placeholder="Add viewers"
-          secondary-placeholder="add new viewer"
+          placeholder="{{'Add viewers' | translate }}"
+          secondary-placeholder="{{'add new viewer' | translate }}"
           ng-model="vm.viewers"
           md-contacts="vm.getUsers($query)"
           md-contact-name="name"
@@ -213,7 +265,9 @@
         </md-contact-chips>
       </div>
       <div class="suggestion">
-        <span>Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them</span>
+        <span>
+          <translate>Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them</translate>
+        </span>
       </div>
     </div>
   </div>

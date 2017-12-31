@@ -3,25 +3,21 @@
 const dialog = {
     cancel: jasmine.createSpy('cancel'),
     hide: jasmine.createSpy('hide'),
+    alert: jasmine.createSpy('alert').and.returnValue({ type: 'alert' }),
+    confirm: jasmine.createSpy('confirm').and.returnValue({ type: 'confirm' }),
     show: jasmine.createSpy('show').and.callFake((config) => {
         if (config.onComplete) {
             config.onComplete();
         }
-        return {
-            then: fn => {
-                fn();
-                return {
-                    catch: fn2 => fn2()
-                };
-            }
-        };
+        return Promise.resolve();
     })
 };
 
-const $state = {
+const $state = () => ({
     params: {},
+    current: {},
     go: jasmine.createSpy('stateGo')
-};
+});
 
 const $scope = (controller) =>  {
     return {
@@ -60,13 +56,15 @@ const $interpolate = jasmine.createSpy('interpolate').and.returnValue(() => {});
 const $anchorScroll = jasmine.createSpy('$anchorScroll').and.callFake(a => a);
 
 const EE = {
-    emit: jasmine.createSpy('EE')
+    emit: jasmine.createSpy('emit'),
+    on: jasmine.createSpy('on'),
+    removeAllListeners: jasmine.createSpy('removeAllListeners')
 };
 
 
 const $ngRedux = {
-    connect: jasmine.createSpy('connect').and.returnValue(() => () => {}),
-    dispatch: jasmine.createSpy('dispatch')
+    connect: jasmine.createSpy('connect').and.returnValue(() => () => 'unsubscribeFn'),
+    dispatch: jasmine.createSpy('dispatch').and.callFake(toCall => toCall())
 };
 
 const angularForm = {
@@ -74,6 +72,19 @@ const angularForm = {
     $setPristine: jasmine.createSpy('$setPristine')
 };
 
+const A = f => done => f().then(done).catch(done.fail);
+
+const $element = {};
+
+
+const $location = {
+    hash: jasmine.createSpy('locationHash').and.callFake(input => input)
+};
+
+const dispatch = jasmine.createSpy('dispatch');
+const getState = state =>  jasmine.createSpy('getState').and.returnValue(state);
+
+const defaultAxiosSuccess = Promise.resolve({ data: 1 });
 
 export {
     dialog,
@@ -85,5 +96,11 @@ export {
     $timeout,
     EE,
     $ngRedux,
-    angularForm
+    angularForm,
+    A,
+    $element,
+    $location,
+    dispatch,
+    defaultAxiosSuccess,
+    getState
 };

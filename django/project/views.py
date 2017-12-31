@@ -4,12 +4,14 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from django.core.cache import cache
+from django.utils.translation import get_language
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
@@ -17,15 +19,16 @@ from country.models import Country
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
 
 
 def cache_structure(fn):
     def wrapper(*args, **kwargs):
-        data = cache.get('project-structure-data')
+        cache_key = 'project-structure-data-{}'.format(get_language())
+        data = cache.get(cache_key)
         if not data:
             data = fn(*args, **kwargs)
-            cache.set('project-structure-data', data)
+            cache.set(cache_key, data)
         return data
 
     return wrapper
@@ -119,7 +122,7 @@ class ProjectPublicViewSet(ViewSet):
     @cache_structure
     def _get_project_structure(self):
         strategies = []
-        for group, _ in DigitalStrategy.GROUP_CHOICES:
+        for group, group_name in DigitalStrategy.GROUP_CHOICES:
             subGroups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
                 subGroups.append(dict(
@@ -129,7 +132,7 @@ class ProjectPublicViewSet(ViewSet):
                 )
                 )
             strategies.append(dict(
-                name=group,
+                name=group_name,
                 subGroups=subGroups
             ))
 
@@ -142,11 +145,11 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         hsc_challenges = []
-        for hsc in HSCChallenge.objects.values('id', 'name').distinct('name'):
+        for group in HSCGroup.objects.values('id', 'name'):
             hsc_challenges.append(dict(
-                id=hsc['id'],
-                name=hsc['name'],
-                challenges=HSCChallenge.objects.filter(name=hsc['name']).values('id', 'challenge')
+                name=group['name'],
+                challenges=[{'id': c['id'], 'challenge': c['name']}
+                            for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
             ))
 
         return dict(
@@ -246,9 +249,9 @@ class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
 
         # Remove approval if already approved, so country admin can approve again because project has changed
         # TODO: refactor
-        # if project.country.project_approval and hasattr(project, 'approval') and project.approval.approved:
-        #     project.approval.delete()
-        #     ProjectApproval.objects.create(project=project, user=project.country.user)
+        if project.get_country().project_approval and hasattr(project, 'approval') and project.approval.approved:
+            project.approval.delete()
+            ProjectApproval.objects.create(project=project)
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
@@ -270,9 +273,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         # Add approval if required by the country
         # TODO: validate this
-        # if project.country.project_approval:
-        #
-        #     ProjectApproval.objects.create(project=project, user=project.country.user)
+        if project.get_country(draft_mode=True).project_approval:
+            ProjectApproval.objects.create(project=project)
 
         data = project.to_representation(draft_mode=True)
 
@@ -408,7 +410,6 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
                        TechnologyPlatform.objects.get_names_for_ids([x['id'] for x in p.data.get("platforms", [])])]),
             ", ".join([str(x) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))]),
             ", ".join([str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))]),
-            "Yes" if p.data.get('government_approved') else "No",
             p.data.get('government_investor'),
             ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))]),
             p.data.get('repository'),

@@ -1,7 +1,7 @@
 /* eslint-disable no-warning-comments */
 import cloneDeep from 'lodash/cloneDeep';
-import axios from 'axios';
-import structure from '../static_data/toolkit_structure.json';
+import axios from '../../plugins/axios';
+import * as SystemModule from './system';
 
 const initialState = {
     toolkitData: []
@@ -13,18 +13,37 @@ export const getToolkitData = state => {
     return data ? cloneDeep(data) : [];
 };
 
-export const getStructure = () => {
-    return cloneDeep(structure);
+export const getStructure = state => {
+    const axis = SystemModule.getAxis(state);
+    const domains = SystemModule.getDomains(state);
+    const questions = SystemModule.getQuestions(state);
+    return axis.map(a => ({ ...a, domains: domains
+          .filter(d => d.axis === a.id)
+          .map(df => ({ ...df, questions: questions
+                .filter(q => q.domain === df.id)
+                .map(qf => ({ ... qf, id: `${qf.domain}-${qf.question_id}` }))
+          }))
+    }));
 };
 
-export const getDomainStructure = (axis, domain) => {
-    try {
-        const result = getStructure()[axis].domains[domain];
-        return cloneDeep(result);
-    }
-// eslint-disable-next-line no-empty
-    catch (e) {}
-    return [];
+export const getDomainStructure = (state, axis, domain) => {
+    const structure = exports.getStructure(state);
+    return structure && structure[axis] && structure[axis].domains[domain] ? structure[axis].domains[domain] : {};
+};
+
+export const getAxisDetail = (state, axisId) => {
+    const axisStructure = SystemModule.getAxis(state).find(a => a.id === axisId);
+    const domains = SystemModule.getDomains(state);
+    const axisData = exports.getToolkitData(state).find(a => a.id === axisId);
+    return {
+        ...axisStructure,
+        ...axisData,
+        domains: axisData.domains.map((add, index) => ({
+            ...add,
+            ...domains.find(d => d.id === add.id),
+            index
+        }))
+    };
 };
 
 
@@ -67,18 +86,18 @@ export function saveAnswer(answer) {
 // Reducers
 
 export default function toolkit(state = initialState, action) {
-    const s = Object.assign({}, state);
     switch (action.type) {
     case 'SET_TOOLKIT_DATA': {
-        s.toolkitData = action.data;
-        return Object.assign(state, {}, s);
+        return { ...state, toolkitData: action.data };
     }
     case 'UPDATE_TOOLKIT_DATA': {
         const r = action.data;
-        const data = cloneDeep(s.toolkitData);
+        const data = cloneDeep(state.toolkitData);
         data[r.axis].domains[r.domain].questions[r.question].answers[r.answer] = r.value;
-        s.toolkitData = data;
-        return Object.assign(state, {}, s);
+        return { ...state, toolkitData: data };
+    }
+    case 'CLEAR_TOOLKIT_DATA': {
+        return { ...initialState };
     }
     default:
         return state;

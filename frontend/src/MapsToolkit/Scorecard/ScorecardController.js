@@ -18,7 +18,7 @@ class ScorecardController {
     }
 
     mapData(state) {
-        const structure = ToolkitModule.getStructure();
+        const structure = ToolkitModule.getStructure(state);
         const rawData = ToolkitModule.getToolkitData(state);
         return {
             rawData,
@@ -38,11 +38,6 @@ class ScorecardController {
         return templates;
     }
 
-    onDestroy() {
-        this.EE.removeListener('mapsAxisChange', this.goToAxis, this);
-        this.unsubscribe();
-    }
-
     onInit() {
         this.dataLoaded = false;
         this.images = this.importIconTemplates();
@@ -51,6 +46,11 @@ class ScorecardController {
         this.axisId = this.state.params.axisId;
         this.watchers();
         this.EE.on('mapsAxisChange', this.goToAxis, this);
+    }
+
+    onDestroy() {
+        this.EE.removeListener('mapsAxisChange', this.goToAxis, this);
+        this.unsubscribe();
     }
 
     watchers() {
