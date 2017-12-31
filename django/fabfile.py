@@ -43,6 +43,42 @@ def staging():
 
 # COMMANDS #
 
+def pull_prod_dev():
+    # Make backups on production
+    production()
+    tag = None
+    with cd(env.project_root):
+        # Get current tag
+        tag = run('git describe --tags')
+        # Backup production database
+        run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
+        # Backup production media files
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/)
+    # Switch to dev
+    dev()
+    with cd(env.project_root):
+        # Deploy as usual, but from the production tag
+        env.branch = 'tags/{}'.format(tag)
+        deploy()
+        # Import production database
+        run('scp whomaps@207.154.215.126:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .')
+        run('cat dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+        # Import production media files
+        run('rm -rf media')
+        run('scp whomaps@207.154.215.126:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .')
+        run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz media')
+
+
+def backup_prod():
+    production()
+    with cd(env.project_root):
+        # Backup production database
+        run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
+        # Backup production media files
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/)
+
 
 def deploy():
     db_up = None
@@ -120,6 +156,11 @@ def deploy():
             run('yarn dist{}'.format(env.webpack_options))
             run('yarn clean-server-folder')
             run('yarn copy-to-server')
+
+    # Set cron for backups
+    if env.name == 'production':
+        cmd = '0 4 * * * cd /home/whomaps/who-maps/django && fab backup_prod'
+        run("grep '{}' /etc/crontab || echo '{}' >> /etc/crontab".format(cmd, cmd))
 
     tear_down()
 
