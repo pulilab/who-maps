@@ -63,7 +63,7 @@ export const getSavedProjectList = (state) => {
 export const getPublishedProjects = state => {
     if (state.projects.list) {
         const list = exports.getSavedProjectList(state).map(p => {
-            p = { ...p.published, ...isMemberOrViewer(state, p) };
+            p = { ...p.published, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -74,7 +74,7 @@ export const getPublishedProjects = state => {
 export const getDraftedProjects = state => {
     if (state.projects.list) {
         const list = exports.getSavedProjectList(state).map(p => {
-            p = { ...p.draft, ...isMemberOrViewer(state, p) };
+            p = { ...p.draft, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -118,7 +118,7 @@ export const getUserProjects = state => {
             p = isPublished ? { ...p.published } : { ...p.draft };
             p = {
                 ...p,
-                ...isMemberOrViewer(state, p),
+                ...exports.isMemberOrViewer(state, p),
                 isPublished,
                 public_id,
                 ...convertIdArrayToObjectArray(p, structure, dashFieldConvertToObject)
@@ -272,7 +272,7 @@ export const getCurrentProjectForEditing = (state, data) => {
     };
     data = {
         ...data,
-        ...isMemberOrViewer(state, data),
+        ...exports.isMemberOrViewer(state, data),
         ...convertIdArrayToObjectArray(data, structure, fieldToConvertToObject),
         ...handleInteroperabilityLinks(data, structure)
     };
