@@ -3,6 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import TokenSerializer, PasswordResetSerializer
 from rest_auth.models import TokenModel
 
+from country.models import Country
 from project.models import Project
 from .models import UserProfile, Organisation
 
@@ -37,7 +38,8 @@ class ProfileTokenSerializer(TokenSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     organisation_name = serializers.SerializerMethodField()
-    country = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=True,
+                                                 allow_null=False)
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
                                                       allow_null=False)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
