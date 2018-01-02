@@ -168,7 +168,7 @@ export const getCurrentProject = state => {
     if (!project) {
         project = exports.getVanillaProject(state);
     }
-    return Object.assign({}, project);
+    return { ... project };
 };
 
 export const getCurrentPublicProject = state => {
