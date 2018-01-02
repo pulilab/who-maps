@@ -49,7 +49,6 @@ deployment:
   dev:
     branch: master
     commands:
-      - sudo pip install docker-compose==1.16.1
       - cd django && fab dev deploy
 
 general:
