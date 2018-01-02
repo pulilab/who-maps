@@ -213,7 +213,7 @@ export const parseProjectForViewMode = (state, project) => {
 export const getCurrentPublished = state => {
     const project = exports.getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
-        return parseProjectForViewMode(state, project);
+        return exports.parseProjectForViewMode(state, project);
     }
     return undefined;
 };
