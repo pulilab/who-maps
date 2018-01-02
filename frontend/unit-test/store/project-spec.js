@@ -1,5 +1,6 @@
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as UserModule from '../../src/store/modules/user';
+import * as CountryModule from '../../src/store/modules/countries';
 import * as ProjectUtils from '../../src/store/project_utils';
 import { project_definition } from '../../src/store/static_data/project_definition';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
@@ -240,6 +241,74 @@ describe('Project Store Module', () => {
             const result = ProjectModule.getEmptyProject();
             expect(result).toEqual(project_definition);
             expect(result).not.toBe(project_definition);
+        });
+
+        it('getVanillaProject', () => {
+            spyOn(ProjectModule, 'getEmptyProject').and.returnValue({ id: 1 });
+            const structureSpy = spyOn(ProjectModule, 'getProjectStructure');
+            const countrySpy = spyOn(CountryModule, 'userCountryObject');
+            const profileSpy = spyOn(UserModule, 'getProfile');
+
+            let result = ProjectModule.getVanillaProject({});
+            expect(result).toEqual({ id: 1, organisation: null });
+
+            countrySpy.and.returnValue({ id: 1 });
+            result = ProjectModule.getVanillaProject({});
+            expect(result).toEqual({ id: 1, organisation: null, country: 1 });
+
+            structureSpy.and.returnValue({ interoperability_links: 1 });
+            result = ProjectModule.getVanillaProject({});
+            expect(result).toEqual({ id: 1, organisation: null, country: 1, interoperability_links: 1 });
+
+            profileSpy.and.returnValue({ organisation: 1 });
+            result = ProjectModule.getVanillaProject({});
+            expect(result).toEqual({ id: 1, organisation: 1, country: 1, interoperability_links: 1 });
+        });
+
+        it('getCurrentProjectIfExist', () => {
+            spyOn(ProjectModule, 'getUserProjects').and.returnValue([{ id: 1 }, { id: 2 }]);
+            const state = {
+                projects: {
+                    currentProject: 1
+                }
+            };
+            const result = ProjectModule.getCurrentProjectIfExist(state);
+            expect(result.id).toBe(1);
+        });
+
+        it('getCurrentProject', () => {
+            const currentSpy = spyOn(ProjectModule, 'getCurrentProjectIfExist');
+            spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ id: 1 });
+            let result = ProjectModule.getCurrentProject({});
+            expect(result).toEqual({ id: 1 });
+            expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
+            expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
+            ProjectModule.getVanillaProject.calls.reset();
+
+            currentSpy.and.returnValue({ id: 2 });
+            result = ProjectModule.getCurrentProject({});
+            expect(result).toEqual({ id: 2 });
+            expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
+            expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
+
+        });
+
+        it('getCurrentPublicProject', () => {
+            const state = {
+                projects: {
+                }
+            };
+            let result = ProjectModule.getCurrentPublicProject(state);
+            expect(result).toEqual({});
+            state.projects.currentPublicProject = {
+                published: {
+                    id: 1
+                }
+            };
+
+            result = ProjectModule.getCurrentPublicProject(state);
+            expect(result).toEqual(state.projects.currentPublicProject.published);
+            expect(result).not.toBe(state.projects.currentPublicProject.published);
         });
 
     });
