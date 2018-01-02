@@ -141,6 +141,11 @@
                 <div flex class="name">
                   <md-icon class="member" ng-show="project.isMember">grade</md-icon>
                   <md-icon class="viewer" ng-show="project.isViewer">visibility</md-icon>
+
+                  <div class="country-approved" ng-show="project.approved">
+                    <translate>Approved by country</translate>
+                  </div>
+
                   {{project.name}}
                 </div>
                 <div layout="column" class="links">
