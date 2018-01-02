@@ -311,6 +311,97 @@ describe('Project Store Module', () => {
             expect(result).not.toBe(state.projects.currentPublicProject.published);
         });
 
+        it('convertCountryFieldsAnswer', () => {
+            const toStringify = {
+                id: 1
+            };
+            const answers = [
+                { type: 2, answer: '10' },
+                { type: 3, answer: 'true' },
+                { type: 5, answer: JSON.stringify(toStringify) }
+            ];
+            const result = ProjectModule.convertCountryFieldsAnswer(answers);
+            expect(result).toEqual([
+                { type: 2, answer: 10 },
+                { type: 3, answer: true },
+                { type: 5, answer: toStringify }
+            ]);
+        });
+
+        it('parseProjectForViewMode', () => {
+            spyOn(ProjectModule, 'getFlatProjectStructure');
+            spyOn(CountryModule, 'getCountry');
+            spyOn(ProjectUtils, 'convertIdArrayToObjectArray');
+            spyOn(ProjectUtils, 'setCoverageType');
+            const result = ProjectModule.parseProjectForViewMode({}, {});
+            expect(ProjectModule.getFlatProjectStructure).toHaveBeenCalled();
+            expect(CountryModule.getCountry).toHaveBeenCalled();
+            expect(ProjectUtils.convertIdArrayToObjectArray).toHaveBeenCalledTimes(2);
+            expect(ProjectUtils.setCoverageType).toHaveBeenCalledTimes(1);
+            expect(result.hasPublishedVersion).toBe(true);
+        });
+
+        it('getCurrentPublished', () => {
+            spyOn(ProjectModule, 'getPublishedProjects').and.returnValue([{ id: 1 }]);
+            spyOn(ProjectModule, 'parseProjectForViewMode').and.returnValue(1);
+            const state = {
+                projects: {
+                    currentProject: 2
+                }
+            };
+
+            let result = ProjectModule.getCurrentPublished(state);
+            expect(ProjectModule.getPublishedProjects).toHaveBeenCalled();
+            expect(ProjectModule.parseProjectForViewMode).not.toHaveBeenCalled();
+            expect(result).toEqual(undefined);
+
+            state.projects.currentProject = 1;
+            result = ProjectModule.getCurrentPublished(state);
+            expect(ProjectModule.getPublishedProjects).toHaveBeenCalled();
+            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalled();
+            expect(result).toEqual(1);
+
+        });
+
+        it('getCurrentDraft', () => {
+            spyOn(ProjectModule, 'getDraftedProjects').and.returnValue([{ id: 1 }]);
+            spyOn(ProjectModule, 'getPublishedProjects').and.returnValue([{ id: 1 }]);
+            const state = {
+                projects: {
+                    currentProject: 2
+                }
+            };
+            let result = ProjectModule.getCurrentDraft(state);
+            expect(ProjectModule.getDraftedProjects).toHaveBeenCalled();
+            expect(ProjectModule.getPublishedProjects).not.toHaveBeenCalled();
+            expect(result).toEqual(undefined);
+
+            state.projects.currentProject = 1;
+            result = ProjectModule.getCurrentDraft(state);
+            expect(ProjectModule.getDraftedProjects).toHaveBeenCalled();
+            expect(ProjectModule.getPublishedProjects).toHaveBeenCalled();
+
+            expect(result).toEqual({ id: 1, hasPublishedVersion: true });
+        });
+
+        it('getCurrentDraftInViewMode', () => {
+            const draftSpy = spyOn(ProjectModule, 'getCurrentDraft');
+            spyOn(ProjectModule, 'parseProjectForViewMode').and.returnValue(1);
+
+            let result = ProjectModule.getCurrentDraftInViewMode({});
+            expect(ProjectModule.getCurrentDraft).toHaveBeenCalled();
+            expect(ProjectModule.parseProjectForViewMode).not.toHaveBeenCalled();
+            expect(result).toEqual(undefined);
+
+            draftSpy.and.returnValue([{ id: 1 }]);
+
+            result = ProjectModule.getCurrentDraftInViewMode({});
+            expect(ProjectModule.getCurrentDraft).toHaveBeenCalled();
+            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalled();
+            expect(result).toEqual(1);
+
+        });
+
     });
 
     describe('ACTIONS', () => {
