@@ -26,7 +26,7 @@ dependencies:
     - "frontend/node_modules"
     - "~/.cache/yarn"
   override:
-    - sudo pip install docker-compose==1.16.1
+    # - sudo pip install docker-compose
     - cd frontend && yarn
     #- cd frontend && npm install -g webpack
     - cd django && pip install -r requirements.txt
@@ -49,6 +49,7 @@ deployment:
   dev:
     branch: master
     commands:
+      - sudo pip install docker-compose==1.16.1
       - cd django && fab dev deploy
 
 general:
