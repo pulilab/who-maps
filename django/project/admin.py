@@ -258,7 +258,7 @@ class ProjectImportAdmin(admin.ModelAdmin):
 
     def _import_project(self, row, project_import):
         project_name_col = int(project_import.mapping['project_name'])
-        project = Project.objects.create(name=row[project_name_col], draft={})
+        project = Project.objects.create(name=row[project_name_col], draft={'name': row[project_name_col]})
 
         # Organisation
         if project_import.mapping['organisation']:
