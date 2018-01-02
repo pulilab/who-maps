@@ -4,6 +4,8 @@ services:
     django:
         environment:
             - SITE_ID=3
+        # Current DO instance has 2 cores so (2 Workers * CPU Cores) + 1 = 5
+        command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 5 -b :8000 --timeout 120
 
     celery:
         environment:
