@@ -53,9 +53,14 @@ export const getLastVersion = state => {
     return state.projects.lastVersion;
 };
 
+
 export const getSavedProjectList = (state) => {
     if (state.projects.list) {
-        return state.projects.list.filter(p => p.id !== -1);
+        return state.projects.list.filter(p => p.id !== -1)
+          .map(pf => ({ ...pf, draft: {
+              ...exports.getVanillaProject(state), donors: [], implementing_partners: [], ...pf.draft
+          }
+          }));
     }
     return undefined;
 };
