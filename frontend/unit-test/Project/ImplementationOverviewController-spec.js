@@ -46,13 +46,13 @@ describe('ImplementationOverview', () => {
         controller.project.platforms = [];
         controller.structure = {};
         controller.structure.technology_platform = [];
-        spyOn(controller, 'setAvailableOptions');
+        spyOn(controller, 'setAvailableDictOptions');
         spyOn(controller, 'clearDistrict');
         spyOn(controller, 'addClearOption');
         controller.watchers();
         expect(controller.scope.$watch).toHaveBeenCalled();
         expect(controller.scope.$watchGroup).toHaveBeenCalled();
-        expect(controller.setAvailableOptions).toHaveBeenCalled();
+        expect(controller.setAvailableDictOptions).toHaveBeenCalled();
         expect(controller.clearDistrict).toHaveBeenCalled();
         expect(controller.addClearOption).toHaveBeenCalled();
     });

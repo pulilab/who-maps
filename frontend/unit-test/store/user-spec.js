@@ -54,6 +54,18 @@ describe('USER Store Module', () => {
 
         });
 
+        it('isSuperUser', () => {
+            const state = {
+                user: {
+                    profile: {
+                        is_superuser: true
+                    }
+                }
+            };
+            const result = UserModule.isSuperUser(state);
+            expect(result).toBe(true);
+        });
+
     });
 
     describe('ACTIONS', () => {
@@ -193,6 +205,8 @@ describe('USER Store Module', () => {
             UserModule.doLogout()(dispatch);
             expect(Storage.prototype.clear).toHaveBeenCalled();
             expect(dispatch).toHaveBeenCalledWith({ type: 'CLEAR_USER_PROJECTS' });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'CLEAR_TOOLKIT_DATA' });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'CLEAR_CMS_DATA' });
             expect(dispatch).toHaveBeenCalledWith({ type: 'UNSET_USER' });
             const throwingSpy = jasmine.createSpy('faulty').and.throwError('mock error');
             UserModule.doLogout()(throwingSpy);

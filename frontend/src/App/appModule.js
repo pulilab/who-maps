@@ -25,15 +25,17 @@ const SystemController = require('./SystemController');
 
 // MODULE REGISTRATION
 angular.module('ngHtmlCompile', [])
-    .directive('ngHtmlCompile', $compile => ({
-        restrict: 'A',
-        link(scope, element, attrs) {
-            scope.$watch(attrs.ngHtmlCompile, (newValue) => {
-                element.html(newValue);
-                $compile(element.contents())(scope);
-            });
-        }
-    }));
+  .directive('ngHtmlCompile', ['$compile', ($compile) => {
+      return {
+          restrict: 'A',
+          link(scope, element, attrs) {
+              scope.$watch(attrs.ngHtmlCompile, (newValue) => {
+                  element.html(newValue);
+                  $compile(element.contents())(scope);
+              });
+          }
+      };
+  }]);
 
 angular.module('app',
     [

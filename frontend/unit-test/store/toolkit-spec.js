@@ -43,6 +43,23 @@ describe('TOOLKIT Store Module', () => {
 
         });
 
+        it('getAxisDetail', () => {
+            spyOn(SystemModule, 'getAxis').and.returnValue([{ id: 1, a: 1, c: 3 }]);
+            spyOn(SystemModule, 'getDomains').and.returnValue([{ id: 1, a: 1, c: 1 }]);
+            spyOn(ToolkitModule, 'getToolkitData')
+              .and.returnValue([{ id: 1, a: 2, domains: [{ id: 1, b: 2, c: 3 }] }]);
+            const result = ToolkitModule.getAxisDetail({}, 1);
+            expect(result.a).toBe(2);
+            expect(result.c).toBe(3);
+            expect(result.domains[0].id).toBe(1);
+            expect(result.domains[0].a).toBe(1);
+            expect(result.domains[0].b).toBe(2);
+            expect(result.domains[0].c).toBe(1);
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(SystemModule.getDomains).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+        });
+
     });
 
     describe('ACTIONS', () => {
@@ -130,6 +147,16 @@ describe('TOOLKIT Store Module', () => {
                 data: { axis: 0, domain: 0, question: 0, answer: 0, value: 1 } };
             state = ToolkitModule.default(state, action);
             expect(state.toolkitData[0].domains[0].questions[0].answers[0]).toBe(1);
+
+        });
+
+        it('CLEAR_TOOLKIT_DATA', () => {
+            let state = {
+                toolkitData: 1
+            };
+            const action = { type: 'CLEAR_TOOLKIT_DATA', data: 1 };
+            state = ToolkitModule.default(state, action);
+            expect(state.toolkitData).toEqual([]);
 
         });
 

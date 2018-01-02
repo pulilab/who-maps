@@ -103,9 +103,9 @@ class TopBar {
         $mdOpenMenu(event);
     }
 
-    logout() {
+    async logout() {
+        await this.state.go('landing');
         this.doLogout();
-        this.state.go('landing');
     }
 }
 

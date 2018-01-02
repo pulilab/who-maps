@@ -146,12 +146,13 @@ class CollapsibleSet {
         }
     }
 
-    setAvailableDictOptions(category, options) {
+    setAvailableDictOptions(category, options, fieldName) {
         if (category && category.length > 0) {
-            const used = category.filter(cat => cat.id);
+            fieldName = fieldName ? fieldName : 'id';
+            const used = category.filter(cat => cat[fieldName]);
             category.forEach(item => {
                 const available = options.filter(p => {
-                    return item.id === p.id || used.every(u => u.id !== p.id);
+                    return item[fieldName] === p.id || used.every(u => u[fieldName] !== p.id);
                 });
                 available.sort((a, b) => {
                     return a.name.localeCompare(b.name);

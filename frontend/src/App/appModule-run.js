@@ -23,7 +23,7 @@ function checkProfile(profile, t) {
     return Promise.resolve();
 }
 
-function setAxiosBaseTokenIfInStorage(storage, axios) {
+function setAxiosBaseTokenIfInStorage() {
     const tkn = storage.get('token');
     if (tkn) {
         axios.setAuthToken(tkn);
@@ -35,7 +35,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     setScope($rootScope);
     getLanguage();
 
-    setAxiosBaseTokenIfInStorage(storage, axios);
+    setAxiosBaseTokenIfInStorage();
 
     $transitions.onStart({}, () => {
         handleStateChange('start');

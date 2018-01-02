@@ -51,7 +51,7 @@ class ImplementationOverview extends CollapsibleSet {
         }, () => {
             return this.districtList;
         }], ([, districts]) => {
-            this.setAvailableOptions(this.project.coverage, districts, 'district');
+            this.setAvailableDictOptions(this.project.coverage, districts, 'district');
             this.addClearOption(this.project.coverage);
         });
 
@@ -85,7 +85,7 @@ class ImplementationOverview extends CollapsibleSet {
         if (this.project.coverage &&  this.project.coverage.length > 0
           && districts && districts.length > 0) {
             this.project.coverage.forEach(cov => {
-                if (districts.indexOf(cov.district) === -1) {
+                if (districts.map(d => d.id).indexOf(cov.district) === -1) {
                     cov.district = undefined;
                 }
             });

@@ -1,6 +1,8 @@
 import copy
 from datetime import datetime
+from django.conf import settings
 
+from django.contrib.auth.models import User
 from django.utils.translation import override
 
 from django.core import mail
@@ -101,7 +103,6 @@ class SetupTests(APITestCase):
             "donors": ["donor1", "donor2"],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
-            "government_approved": True,
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
             "repository": "http://some.repo",
@@ -396,7 +397,6 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertTrue(response.json()['published'].get("government_approved"))
         self.assertTrue(response.json()['published'].get("government_investor") in [0, 1, 2])
 
     def test_retrieve_wrong_http_command(self):
@@ -821,12 +821,27 @@ class ProjectTests(SetupTests):
         self.assertEqual(ma.get_queryset(request).count(), 1)
 
     def test_project_approval_email(self):
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+
         c = Country.objects.get(id=self.country_id)
         c.project_approval = True
-        c.users.add(self.user_profile_id)
+        c.users.add(self.user_profile_id, user_2_profile)
         c.save()
         send_project_approval_digest()
-        self.assertIn('admin/project/projectapproval/', mail.outbox[1].message().as_string())
+
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
+
+        outgoing_en_email_text = mail.outbox[en_index].message().as_string()
+
+        self.assertIn('admin/project/projectapproval/', outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+
+        outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
+
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
 
 class ProjectDraftTests(SetupTests):
@@ -1026,19 +1041,35 @@ class ProjectDraftTests(SetupTests):
 
 class PermissionTests(SetupTests):
     def test_team_member_can_update_project_groups(self):
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
         user_profile_id = UserProfile.objects.first().id
         groups = {
-            "team": [user_profile_id],
+            "team": [user_profile_id, user_2_profile.id],
             "viewers": [user_profile_id]
         }
         response = self.test_user_client.put(url, groups, format="json")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['team'], [user_profile_id])
+        self.assertEqual(response.json()['team'], [user_profile_id, user_2_profile.id])
         self.assertEqual(response.json()['viewers'], [user_profile_id])
-        self.assertEqual(mail.outbox[1].subject, "You were added to a project!")
+
+        self.assertEqual(len(mail.outbox), 3)
+
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
+
+        outgoing_en_email = mail.outbox[en_index].message()
+        outgoing_en_email_text = outgoing_en_email.as_string()
+        self.assertEqual(mail.outbox[en_index].subject, "You were added to a project!")
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+
+        outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
     def test_team_viewer_cannot_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -1368,12 +1399,15 @@ class TestAdmin(TestCase):
     def test_admin(self):
         admin = DigitalStrategyAdmin(DigitalStrategy, self.site)
         self.assertEqual(admin.get_queryset(self.request).count(), DigitalStrategy.all_objects.all().count())
-        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active', 'translated'])
+        translate_bools = ['is_translated_{}'.format(language_code) for language_code, _ in settings.LANGUAGES]
+        self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'] + translate_bools)
         admin.list_display = ['__str__', 'is_active']
         self.assertEqual(admin.get_list_display(self.request), ['__str__', 'is_active'])
 
     def test_created_notification(self):
         initial_email_count = len(mail.outbox)
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        UserProfile.objects.create(user=user_2, language='fr')
 
         tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
 
@@ -1387,11 +1421,23 @@ class TestAdmin(TestCase):
 
         self.assertEqual(len(mail.outbox),
                          initial_email_count + UserProfile.objects.all().count())
-        self.assertIn('New technology platform was created: {}'.format(str(form.instance)),
-                      mail.outbox[-1].message().as_string())
+
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
+
+        outgoing_en_email_text = mail.outbox[en_index].message().as_string()
+
+        self.assertIn('New technology platform was created: {}'.format(str(form.instance)), outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+
+        outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
     def test_modified_notification(self):
         initial_email_count = len(mail.outbox)
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        UserProfile.objects.create(user=user_2, language='fr')
 
         tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
         technology_platform = TechnologyPlatform(name='Test platform')
@@ -1406,8 +1452,18 @@ class TestAdmin(TestCase):
 
         self.assertEqual(len(mail.outbox),
                          initial_email_count + UserProfile.objects.all().count())
-        self.assertIn('Technology Platform - {} was changed'.format(str(form.instance)),
-                      mail.outbox[-1].message().as_string())
+
+        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
+        en_index = -2 if first_en else -1
+        fr_index = -1 if first_en else -2
+
+        outgoing_en_email_text = mail.outbox[en_index].message().as_string()
+
+        self.assertIn('Technology Platform - {} was changed'.format(str(form.instance)), outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+
+        outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
     def test_modified_but_not_changed(self):
         initial_email_count = len(mail.outbox)
