@@ -119,10 +119,10 @@ export function setCoverageType(cov, nat) {
     return ret;
 }
 
-export function createDateFields(processedForm) {
-    const start_date = moment(processedForm.start_date).toJSON();
-    const end_date = moment(processedForm.end_date).toJSON();
-    const implementation_dates = moment(processedForm.implementation_dates).toJSON();
+export function createDateFields(pf) {
+    const start_date = pf.start_date ? moment(pf.start_date).toJSON() : null;
+    const end_date = pf.end_date ? moment(pf.end_date).toJSON() : null;
+    const implementation_dates = pf.implementation_dates ? moment(pf.implementation_dates).toJSON() : null;
     return { start_date, end_date, implementation_dates };
 }
 
