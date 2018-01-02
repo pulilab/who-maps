@@ -26,7 +26,7 @@ dependencies:
     - "frontend/node_modules"
     - "~/.cache/yarn"
   override:
-    # - sudo pip install docker-compose
+    - sudo pip install docker-compose==1.8.1
     - cd frontend && yarn
     #- cd frontend && npm install -g webpack
     - cd django && pip install -r requirements.txt
