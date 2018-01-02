@@ -201,8 +201,6 @@ def down():
 
 def up():
     local("docker-compose up -d")
-    time.sleep(5)
-    rebuild_db()
 
 
 def up_debug():
