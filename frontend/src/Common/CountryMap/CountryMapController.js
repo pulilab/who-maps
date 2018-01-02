@@ -58,7 +58,7 @@ class CountryMapController {
 
     watchers() {
         this.scope.$watch(s => s.vm.mapData, this.checkIfCountryChanged);
-        this.scope.$watch(s => [s.vm.districtLevelCoverage, s.vm.drawnMap], this.checkIfDistrictDataChanged, true);
+        this.scope.$watch(s => s.vm.districtLevelCoverage, this.checkIfDistrictDataChanged, true);
     }
 
     checkIfCountryChanged(newMapData) {
@@ -68,10 +68,12 @@ class CountryMapController {
         }
     }
 
-    checkIfDistrictDataChanged([newDistrictData, drawnMap]) {
-        if (newDistrictData && drawnMap) {
+    checkIfDistrictDataChanged(newDistrictData) {
+        if (newDistrictData && this.drawnMap) {
             this.boundNrs = reduce(newDistrictData, (ret, value, key) => {
-                if (key === 'date') { return ret; }
+                if (key === 'date') {
+                    return ret;
+                }
                 forOwn(value, (val, k) => {
                     ret[k] = (ret[k] || 0) + val;
                 });
@@ -105,9 +107,9 @@ class CountryMapController {
 
     calculateScale(topoJSON) {
         return Math.max.apply(null,
-            topoJSON.transform.scale.map(nr => {
-                return 1 / nr;
-            })
+          topoJSON.transform.scale.map(nr => {
+              return 1 / nr;
+          })
         ) * 10;
     }
 
@@ -199,12 +201,17 @@ class CountryMapController {
     //     });
     // }
 
+
     fillDistrictData(districtLevelCoverage) {
-        for (const district in districtLevelCoverage) {
+        for (const district in this.svgLib) {
             const node = this.svgLib[district];
-            if (node) {
+            if (districtLevelCoverage[district]) {
                 node.classed('d3district-data', true);
                 node.districtData = districtLevelCoverage[district];
+            }
+            else {
+                node.classed('d3district-data', false);
+                node.districtData = null;
             }
         }
     }
