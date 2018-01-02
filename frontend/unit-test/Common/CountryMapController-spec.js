@@ -104,8 +104,9 @@ describe('CountryMapController', () => {
 
     it('has checkIfDistrictDataChanged fn.', () => {
         spyOn(cc, 'fillDistrictData');
+        cc.drawnMap = true;
         const newDistrictData = { 'Département de l\'Ouest': { 'clients': 2, 'health_workers': 3, 'facilities': 4 } };
-        cc.checkIfDistrictDataChanged([newDistrictData, 'Haiti']);
+        cc.checkIfDistrictDataChanged(newDistrictData);
         expect(cc.boundNrs.clients).toBe(2);
         expect(cc.boundNrs.health_workers).toBe(3);
         expect(cc.boundNrs.facilities).toBe(4);
