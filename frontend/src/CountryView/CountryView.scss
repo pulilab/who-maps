@@ -41,7 +41,7 @@
           position: absolute;
           top:20px;
           left:20px;
-          width:240px;
+          width:280px;
           height: 60px;
           background: $color-white;
 
@@ -51,7 +51,7 @@
 
             .description {
               position: absolute;
-              width: 125px;
+              width: 165px;
               height:20px;
               top:12px;
               left:15px;
@@ -61,7 +61,7 @@
 
             .country-name {
               position: absolute;
-              width:125px;
+              width:165px;
               height: 16px;
               top: 32px;
               left:15px;
@@ -72,7 +72,7 @@
 
           .project-counter-arrow {
             position: absolute;
-            left: 165px;
+            left: 185px;
             height: 60px;
             overflow: hidden;
 
@@ -88,75 +88,85 @@
             position: absolute;
             right: 15px;
             top: 10px;
-            width: 40px;
+            width: 60px;
             height: 36px;
             font-size: 36px;
             line-height: 40px;
             text-align: center;
-            color: $color-black;
+            color: $text-primary;
           }
         }
 
         .filter-list {
           position: absolute;
-          top:110px;
-          left:20px;
-          width:240px;
+          top: 120px;
+          left: 20px;
+          width: 280px;
 
           .description {
             font-size: 14px;
             font-weight: 500;
-            color: $color-black;
+            color: $text-primary;
             margin-bottom: 20px;
+          }
+
+          .country-approval-switch {
+            margin-bottom: 20px;
+
+            md-switch {
+              margin: 0;
+            }
+            .md-label {
+              font-size: 12px;
+            }
           }
 
           .list-headers {
 
-            .header{
+            .header {
+              margin-bottom: 10px;
               outline:none;
               cursor: pointer;
               font-weight: 500;
-              font-size:12px;
-              color: $color-black;
+              font-size: 12px;
+              color: $text-primary;
               text-transform: capitalize;
 
+              md-icon {
+                position: relative;
+                top: -1px;
+              }
             }
 
             .list-item {
-              margin-left:25px;
+              margin-left: 27px;
               margin-bottom: 10px;
 
+              &:last-child {
+                margin-bottom: 20px;
+              }
+
               md-checkbox {
-                margin:0;
+                margin: 0;
                 font-size: 12px;
                 font-weight: 300;
-                color: $color-black;
-                min-height: 17px;
+                color: $text-primary;
 
                 .md-container {
                   top: 0;
                   transform: none;
                 }
 
-                .md-icon {
-                  width: 17px;
-                  height:17px;
-                  font-size: 17px;
-                }
                 .md-label {
-                  margin-left: 22px;
+                  margin-left: 25px;
+                  line-height: 16px;
                 }
               }
-
             }
-
           }
-
         }
       }
-
     }
-
   }
 
   md-tabs {

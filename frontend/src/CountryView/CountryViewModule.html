@@ -203,11 +203,11 @@
 
           <div class="description"><translate>Apply filters to map:</translate></div>
 
-          <div class="country-approval-switch" ng-show="vm.selectedCountry.project_approval">
-            <h6>
+          <div class="country-approval-switch" layout="row" layout-align="start center" ng-show="vm.selectedCountry.project_approval">
+            <md-switch class="md-primary" ng-model="vm.showOnlyApproved" aria-label="show only approved"></md-switch>
+            <span class="md-label">
               <translate>Show only approved projects</translate>
-            </h6>
-            <md-switch ng-model="vm.showOnlyApproved" aria-label="show only approved"></md-switch>
+            </span>
           </div>
 
           <div class="list-headers" ng-repeat="header in vm.filters">
@@ -219,7 +219,7 @@
             </div>
 
             <div class="list-item" ng-repeat="item in header.items  | orderBy: 'name' " ng-show="header.open">
-              <md-checkbox class="md-primary" ng-model="item.value" aria-label="item.name">
+              <md-checkbox class="md-primary small" ng-model="item.value" aria-label="item.name">
                 {{item.name}}
               </md-checkbox>
             </div>
