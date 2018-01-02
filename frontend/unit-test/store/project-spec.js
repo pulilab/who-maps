@@ -84,7 +84,6 @@ describe('Project Store Module', () => {
 
             state.projects.list = [{ id: -1 }, { id: 1 }];
             result = ProjectModule.getSavedProjectList(state);
-            console.log(result);
             expect(result).toEqual([{ id: 1, draft: { donors: [], implementing_partners: [] } }]);
             expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
 
