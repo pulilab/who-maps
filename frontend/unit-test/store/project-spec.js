@@ -74,15 +74,18 @@ describe('Project Store Module', () => {
         });
 
         it('getSavedProjectList', () => {
+            spyOn(ProjectModule, 'getVanillaProject');
             const state = {
                 projects: {}
             };
+
             let result = ProjectModule.getSavedProjectList(state);
             expect(result).toBe(undefined);
 
             state.projects.list = [{ id: -1 }, { id: 1 }];
             result = ProjectModule.getSavedProjectList(state);
-            expect(result).toEqual([{ id: 1 }]);
+            expect(result).toEqual([{ id: 1, draft: { donors: [], implementing_partners: [] } }]);
+            expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
 
         });
 

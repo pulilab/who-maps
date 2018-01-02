@@ -53,9 +53,14 @@ export const getLastVersion = state => {
     return state.projects.lastVersion;
 };
 
+
 export const getSavedProjectList = (state) => {
     if (state.projects.list) {
-        return state.projects.list.filter(p => p.id !== -1);
+        return state.projects.list.filter(p => p.id !== -1)
+          .map(pf => ({ ...pf, draft: {
+              ...exports.getVanillaProject(state), donors: [], implementing_partners: [], ...pf.draft
+          }
+          }));
     }
     return undefined;
 };
@@ -149,7 +154,8 @@ export const getVanillaProject = state => {
     if (structure) {
         project.interoperability_links = structure.interoperability_links;
     }
-    project.organisation = UserModule.getProfile(state).organisation;
+    const profile = UserModule.getProfile(state);
+    project.organisation = profile && profile.organisation ? profile.organisation : null;
     return { ...project };
 };
 
