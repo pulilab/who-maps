@@ -157,12 +157,11 @@ class CmsApiTest(APITestCase):
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
-        data = {"name": "Test Name", "organisation": self.org.id, "country": "test_country"}
-        response = self.test_user_client.put(url, data)
-        self.user_profile_id = response.json().get('id')
-
         self.country = Country.objects.create(name="country1")
         self.country_id = self.country.id
+        data = {"name": "Test Name", "organisation": self.org.id, "country": self.country_id}
+        response = self.test_user_client.put(url, data)
+        self.user_profile_id = response.json().get('id')
 
     def test_create(self):
         self.post_data = {

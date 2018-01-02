@@ -23,7 +23,7 @@ class AuthTest(TestCase):
 
         self.site = AdminSite()
         self.user = User.objects.create(username="alma", password="korte")
-        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte", country="Country1")
+        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte", country=Country.objects.get(id=1))
 
     def test_email_authentication(self):
         self.assertTrue(self.client.login(username=self.admin.email, password=self.password))
