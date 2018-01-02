@@ -64,6 +64,7 @@ class ProjectPublicViewSet(ViewSet):
                     for district in project.data.get('coverage', []):
                         if district.get('district') == district_name:
                             result_dict[district_name].append({
+                                "approved": project.approval.approved if hasattr(project, 'approval') else None,
                                 "id": project.id,
                                 "name": project.name,
                                 "organisation": Organisation.get_name_by_id(project.data.get('organisation'))
@@ -91,6 +92,7 @@ class ProjectPublicViewSet(ViewSet):
 
         result_list = functools.reduce(
             lambda acc, p: acc + [{
+                "approved": p.approval.approved if hasattr(p, 'approval') else None,
                 "id": p.id,
                 "uuid": p.public_id,
                 "name": p.name,
