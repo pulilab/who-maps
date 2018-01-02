@@ -170,6 +170,7 @@ class ProjectImportStatusForm(forms.ModelForm):
 
 class ProjectImportAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'created', 'status']
+    _users_to_notify = {}
 
     def get_queryset(self, request):
         qs = super(ProjectImportAdmin, self).get_queryset(request)
@@ -188,10 +189,9 @@ class ProjectImportAdmin(admin.ModelAdmin):
         elif obj.status is not None:
             kwargs['form'] = ProjectImportStatusForm
             self.readonly_fields = ['status', 'imported', 'failed', 'csv']
-        return super().get_form(request, obj, **kwargs)
+        return super(ProjectImportAdmin, self).get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
-        self._users_to_notify = {}
         # Save uploaded CSV and get headers
         if not change:
             obj.user = request.user
