@@ -1,9 +1,11 @@
 /* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, fdescribe */
-const spyScope = {};
-
 import { $state, toast, dialog, $ngRedux, $timeout } from '../testUtilities';
-const $rootScope = {};
+import axios from '../../src/plugins/axios';
+import Storage from '../../src/Common/Storage';
+
 import { run, handleStateChange, checkProfile, setAxiosBaseTokenIfInStorage } from '../../src/App/appModule-run';
+const spyScope = {};
+const $rootScope = {};
 spyScope.setAxiosBaseTokenIfInStorage = setAxiosBaseTokenIfInStorage;
 import 'axios';
 
@@ -78,9 +80,9 @@ describe('AppModule - run submodule', () => {
     });
 
     it('sets axios base token if finds it in the storage', () => {
-        const axios = { setAuthToken: jasmine.createSpy('setAuthToken') };
-        const storage = { get: (a) => a };
-        setAxiosBaseTokenIfInStorage(storage, axios);
+        spyOn(axios, 'setAuthToken');
+        spyOn(Storage.prototype, 'get').and.returnValue('token');
+        setAxiosBaseTokenIfInStorage();
         expect(axios.setAuthToken).toHaveBeenCalledWith('token');
     });
 
