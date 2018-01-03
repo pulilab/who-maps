@@ -7,7 +7,7 @@ from fabric.context_managers import warn_only
 
 def dev():
     """Configure dev"""
-    env.hosts = ['whomaps@dev.whomaps.pulilab.com']
+    env.host_string = 'whomaps@dev.whomaps.pulilab.com'
     env.name = 'dev'
     env.port = 22
     env.branch = "master"
@@ -19,7 +19,7 @@ def dev():
 
 def production():
     """Configure prod"""
-    env.hosts = ['whomaps@207.154.215.126']
+    env.host_string = 'whomaps@207.154.215.126'
     env.name = 'production'
     env.port = 22
     env.branch = "tags/3.1.4"
@@ -31,7 +31,7 @@ def production():
 
 def staging():
     """Configure staging"""
-    env.hosts = ['whomaps@139.59.148.238']
+    env.host_string = 'whomaps@139.59.148.238'
     env.name = 'staging'
     env.port = 22
     env.branch = "tags/3.2.2"
@@ -43,8 +43,11 @@ def staging():
 
 # COMMANDS #
 
-def pull_prod_dev():
-    # Make backups on production
+def copy_prod(server):
+    if server not in ['dev', 'staging']:
+        print("Error. Valid servers are 'dev', 'staging'.")
+        exit(1)
+    # Dump prod data and tag
     production()
     tag = None
     with cd(env.project_root):
@@ -54,20 +57,21 @@ def pull_prod_dev():
         run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
         run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
         # Backup production media files
-        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
-    # Switch to dev
-    dev()
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz django/media')
+    # Load prod data and code
+    globals()[server]()
     with cd(env.project_root):
         # Deploy as usual, but from the production tag
         env.branch = 'tags/{}'.format(tag)
         deploy()
         # Import production database
         run('scp whomaps@207.154.215.126:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .')
-        run('cat dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+        run('tar -xzvf dump`date +%d-%m-%Y`.sql.tar.gz')
+        run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
         # Import production media files
         run('rm -rf media')
         run('scp whomaps@207.154.215.126:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .')
-        run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz media')
+        run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz django/media/')
 
 
 def backup():
