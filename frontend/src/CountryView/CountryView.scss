@@ -26,11 +26,15 @@
 
     .clv-filter-container {
       padding-top: 40px;
+      min-width: 320px;
+      max-width: 320px;
 
       .filter-wrapper {
         background: $color-map-filter-background;
         position: relative;
         overflow-y: scroll;
+        border-top: 1px solid rgba(0,0,0,.12);
+        border-left: 1px solid rgba(0,0,0,.08);
 
         &::-webkit-scrollbar-track {
           background-color: $color-map-filter-background;
@@ -39,9 +43,9 @@
 
         .filter-project-counter {
           position: absolute;
-          top:20px;
-          left:20px;
-          width:240px;
+          top: 20px;
+          left: 20px;
+          width: 280px;
           height: 60px;
           background: $color-white;
 
@@ -51,28 +55,28 @@
 
             .description {
               position: absolute;
-              width: 125px;
-              height:20px;
-              top:12px;
-              left:15px;
+              width: 155px;
+              height: 20px;
+              top: 12px;
+              left: 15px;
               font-weight: 500;
               font-size: 14px;
             }
 
             .country-name {
               position: absolute;
-              width:125px;
+              width: 155px;
               height: 16px;
               top: 32px;
-              left:15px;
-              font-size:12px;
+              left: 15px;
+              font-size: 12px;
               color: $color-gray;
             }
           }
 
           .project-counter-arrow {
             position: absolute;
-            left: 165px;
+            left: 185px;
             height: 60px;
             overflow: hidden;
 
@@ -80,94 +84,104 @@
               position: relative;
               height: 67px;
               width: auto;
-              top: -3.5px;
+              top: -3px;
             }
           }
 
           .project-counter-number {
             position: absolute;
             right: 15px;
-            top: 10px;
-            width: 40px;
-            height: 36px;
+            top: 0;
+            width: 60px;
+            height: 60px;
             font-size: 36px;
-            line-height: 40px;
+            line-height: 60px;
             text-align: center;
-            color: $color-black;
+            color: $text-primary;
+
           }
         }
 
         .filter-list {
           position: absolute;
-          top:110px;
-          left:20px;
-          width:240px;
+          top: 120px;
+          left: 20px;
+          width: 260px;
 
           .description {
             font-size: 14px;
             font-weight: 500;
-            color: $color-black;
+            color: $text-primary;
             margin-bottom: 20px;
+          }
+
+          .country-approval-switch {
+            margin-bottom: 20px;
+
+            md-switch {
+              margin: 0;
+            }
+            .md-label {
+              font-size: 12px;
+              font-weight: 300;
+            }
           }
 
           .list-headers {
 
-            .header{
+            .header {
+              margin-bottom: 10px;
               outline:none;
               cursor: pointer;
               font-weight: 500;
-              font-size:12px;
-              color: $color-black;
+              font-size: 12px;
+              color: $text-primary;
               text-transform: capitalize;
 
+              md-icon {
+                position: relative;
+                top: -1px;
+              }
             }
 
             .list-item {
-              margin-left:25px;
+              margin-left: 27px;
               margin-bottom: 10px;
 
+              &:last-child {
+                margin-bottom: 20px;
+              }
+
               md-checkbox {
-                margin:0;
+                margin: 0;
                 font-size: 12px;
                 font-weight: 300;
-                color: $color-black;
-                min-height: 17px;
+                color: $text-primary;
 
                 .md-container {
                   top: 0;
                   transform: none;
                 }
 
-                .md-icon {
-                  width: 17px;
-                  height:17px;
-                  font-size: 17px;
-                }
                 .md-label {
-                  margin-left: 22px;
+                  margin-left: 25px;
+                  line-height: 16px;
                 }
               }
-
             }
-
           }
-
         }
       }
-
     }
-
   }
 
   md-tabs {
 
     .tab-wrap {
-
       background-color: $color-gray-lightest;
       min-height: calc(100vh - 245px);
 
       &.emptyy {
-
         background: url("./img/wmap.svg") center center no-repeat;
         background-size: 80% auto;
       }
@@ -186,22 +200,18 @@
     md-tabs-wrapper {
 
       md-tabs-canvas {
-
         height: 40px;
 
         md-pagination-wrapper {
-
           height: 40px;
 
           md-tab-item {
-
             color: $text-disabled;
             padding-top: 8px;
             padding-bottom: 8px;
             font-size: 12px;
 
             &.md-active {
-
               color: $text-primary;
             }
           }
@@ -224,7 +234,6 @@
   }
 
   #map {
-
     position: relative;
     min-height: calc(100vh - 245px);
     background-color: $color-gray-lightest;
@@ -286,23 +295,17 @@
 
       .countrychoser {
         height: 40px;
-        display: block;
-        position: absolute;
-        top: 20px;
-        left: 20px;
 
         md-input-container {
           margin: 2px 15px 0 15px;
 
           span {
             font-size: 14px;
-            font-weight: 14px;
-            color: $text-primary!important;
+            color: $text-primary !important;
 
             .md-text {
               font-size: 14px;
-              font-weight: 14px;
-              color: $text-primary!important;
+              color: $text-primary !important;
             }
           }
 
@@ -316,9 +319,15 @@
       }
 
       .exports {
+
         .md-button {
-          float: right;
-          margin-top: 5px;
+          padding-right: 12px;
+        }
+
+        .exports-label {
+          margin-right: 10px;
+          font-size: 12px;
+          color: $text-primary;
         }
       }
 
@@ -326,11 +335,9 @@
         min-width: 220px;
         font-size: 12px;
         color: $text-secondary;
-        padding-top: 12px;
         margin-right: 20px;
 
         > span {
-          float: right;
           display: inline-block;
           margin-left: 20px;
         }
@@ -350,40 +357,48 @@
 
       .headerrow {
 
-        width: 1600px;
+        width: 2000px;
         border-bottom: 1px solid $color-gray-light;
         background-color: white;
 
         div {
           outline: none;
           cursor: pointer;
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 500;
           color: $text-secondary;
         }
 
         :first-child {
-
-          color: $text-primary;
           cursor: pointer;
         }
       }
 
       .projectrow {
-
-        width: 1600px;
+        width: 2000px;
         border-bottom: 1px solid $color-gray-lighter;
         cursor: default;
 
         .projectlink {
+          .name {
+            font-size: 14px;
+            line-height: 18px;
+            padding-right: 20px;
+          }
           .links {
-            margin-right: 10px;
-            span {
-              color: $color-primary;
-              cursor: pointer;
-              &:first-child {
-                margin-bottom: 7px;
-              }
+            .md-button {
+              margin: 15px 0;
+            }
+          }
+          .country-approved {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            color: $color-approved;
+
+            i {
+              font-size: 14px;
+              transform: translate(0, 2px);
             }
           }
         }
@@ -396,28 +411,29 @@
           background-color: #D5E1E8 !important;
         }
 
-        a {
+        a:not(.md-button) {
+          min-height: 30px;
+          min-width: 60px;
+          line-height: 30px;
           color: $color-primary;
           text-decoration: none;
         }
 
         div {
-
-          font-size: 14px;
-          color: $text-secondary;
+          font-size: 12px;
+          line-height: 18px;
+          color: $text-primary;
 
           &:first-child {
-
             font-weight: 500;
-            color: $text-primary;
           }
         }
 
         md-icon {
-
-          font-size: 14px;
-          height: 14px;
-          width: 14px;
+          font-size: 18px;
+          height: 18px;
+          width: 18px;
+          transform: translate(-4px, 0);
 
           &.member {
             color: #CD9924;
@@ -431,12 +447,10 @@
 
 
         &:nth-child(even) {
-
           background-color: #EEEEEE;
         }
 
         &.own {
-
           background-color: #FFF9C4;
         }
       }

@@ -55,32 +55,30 @@ describe('CountryViewModuleController', () => {
 
 
         it('should not run if the only change is on the open - close ', ()  => {
+            vm.filterBit = 0;
             oldValues[0].open = false;
-            vm.applyFilters(filters, oldValues);
-            expect(vm.scope.$evalAsync).not.toHaveBeenCalled();
+            vm.checkIfFilterIsApplied(filters, oldValues);
+            expect(vm.filterBit).toBe(0);
         });
 
         it('should call the mappingFilter fn on the filter object', () => {
             vm.countryProjects = [{}];
-            vm.applyFilters(filters, oldValues);
+            vm.selectedCountry = {
+                project_approval: true
+            };
+            vm.filters = filters;
+            vm.applyFilters([false]);
             expect(filterMappingFn).toHaveBeenCalled();
         });
         it('should show only project that contain one or more enabled filters', () => {
             vm.countryProjects = [{}];
+            vm.selectedCountry = {
+                project_approval: true
+            };
             filters[0].filterMappingFn = () => ['a'];
-            vm.applyFilters(filters, oldValues);
+            vm.filters = filters;
+            vm.applyFilters([false]);
             expect(vm.projectsData[0]).toBe(vm.countryProjects[0]);
-        });
-        it('update the coverages only if the filters actually modified the shown content', () => {
-            spyOn(vm, 'filterNLDProjects');
-            spyOn(vm, 'filterDLDProjects');
-            vm.countryProjects = [{}];
-            filters[0].filterMappingFn = () => ['a'];
-            vm.applyFilters(filters, oldValues);
-
-            vm.applyFilters(filters, oldValues);
-            expect(vm.filterNLDProjects).toHaveBeenCalledTimes(1);
-            expect(vm.filterDLDProjects).toHaveBeenCalledTimes(1);
         });
 
     });

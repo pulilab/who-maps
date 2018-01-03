@@ -132,6 +132,11 @@
             <div class="projectname">{{project.name}}</div>
             <div class="projectorg">{{project.organisation}}</div>
 
+            <div class="country-approved" ng-show="project.approved">
+              <i class="material-icons">assignment_turned_in</i>
+              <translate>Approved by country</translate>
+            </div>
+
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
@@ -152,6 +157,11 @@
             <div class="projectname">{{project.name}}</div>
             <div class="projectorg">{{project.organisation_name}}</div>
 
+            <div class="country-approved" ng-show="project.approved">
+              <i class="material-icons">assignment_turned_in</i>
+              <translate>Approved by country</translate>
+            </div>
+
             <div ng-show="project.isMember" class="my-star"><md-icon>grade</md-icon></div>
             <div ng-show="project.isViewer" class="my-eye"><md-icon>visibility</md-icon></div>
           </div>
@@ -162,9 +172,12 @@
   </div>
 
   <div ng-class="['zoomhandlers', {zoomhandlers2: vm.big}]" ng-hide="!vm.mapData">
-    <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
-    <br>
-    <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+    <div>
+      <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomIn()">add_circle_outline</md-icon>
+    </div>
+    <div>
+      <md-icon class="material-icons unselectable" ng-click="vm.svgZoom.zoomOut()">remove_circle_outline</md-icon>
+    </div>
   </div>
 
   <!-- Placeholder spinner -->

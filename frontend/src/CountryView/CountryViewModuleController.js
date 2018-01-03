@@ -20,7 +20,7 @@ class CountryViewModuleController {
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
         this.watchers = this.watchers.bind(this);
         this.mapState = this.mapState.bind(this);
-        this.applyFilters = this.applyFilters.bind(this);
+        this.checkIfFilterIsApplied = this.checkIfFilterIsApplied.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, CountryModule)(this);
     }
 
@@ -31,8 +31,8 @@ class CountryViewModuleController {
         const projectsData = CountryModule.getCurrentCountryProjects(state);
         const countryProjects = cloneDeep(projectsData);
         const nationalLevelCoverage = this.filterNLDProjects(projectsData, districtProjects);
-
         return {
+            countryDistrictProjects: districtProjects,
             userProfile: UserModule.getProfile(state),
             countries: CountryModule.getCountriesList(state),
             countriesLib: CountryModule.getCountriesLib(state),
@@ -49,17 +49,20 @@ class CountryViewModuleController {
     onInit() {
         this.header = this.generateHeader();
         this.lastFilter = null;
+        this.showOnlyApproved = false;
+        this.filterBit = 0;
         this.watchers();
         this.showAllCountries = { id: false, name: 'Show all countries' };
     }
 
     watchers() {
         this.scope.$watchCollection(s => s.vm.countryProjects, this.generateFilters);
-        this.scope.$watch(s => s.vm.filters, this.applyFilters, true);
+        this.scope.$watch(s => s.vm.filters, this.checkIfFilterIsApplied, true);
         this.scope.$watch(s => s.vm.selectedCountry, this.updateCountry.bind(this), true);
+        this.scope.$watchGroup([s => s.vm.showOnlyApproved, s => s.vm.filterBit], this.applyFilters.bind(this));
     }
 
-    applyFilters(filters, oldValue) {
+    checkIfFilterIsApplied(filters, oldValue) {
         if (!filters || !oldValue) {
             return;
         }
@@ -67,38 +70,44 @@ class CountryViewModuleController {
         const newOpen = filters.map(c => c.open);
         if (oldOpen.every((v, i) => v === newOpen[i]) && Array.isArray(this.countryProjects)) {
             //  this was not triggered by an open-close of the filter but by an actual selection, so we can filter here
-            const filtered = [];
-            for (const cat of filters) {
-                const selected = cat.items.filter(i => i.value).map(s => s.name);
-                const inArray = inp => {
-                    return selected.indexOf(inp) > -1;
-                };
-                if (selected && selected.length > 0) {
-                    for (const p of this.countryProjects) {
-                        const inProject = cat.filterMappingFn(p);
-                        if (inProject.some(inArray)) {
-                            if (!filtered.includes(p)) {
-                                filtered.push(p);
-                            }
+            this.filterBit += 1;
+        }
+    }
+
+    applyFilters([showOnlyApproved]) {
+        showOnlyApproved = this.selectedCountry.project_approval && showOnlyApproved;
+        const preFilter = showOnlyApproved ? this.countryProjects.filter(p => p.approved) : this.countryProjects;
+        const filtered = [];
+        let globalSelected = [];
+        for (const cat of this.filters) {
+            const selected = cat.items.filter(i => i.value).map(s => s.name);
+            globalSelected = [...globalSelected, ...selected];
+            const inArray = inp => {
+                return selected.indexOf(inp) > -1;
+            };
+            if (selected && selected.length > 0) {
+                for (const p of preFilter) {
+                    const inProject = cat.filterMappingFn(p);
+                    if (inProject.some(inArray)) {
+                        if (!filtered.includes(p)) {
+                            filtered.push(p);
                         }
                     }
                 }
             }
-            this.scope.$evalAsync(() => {
-                const oldLength = Array.isArray(this.projectsData) ? this.projectsData.length : 0;
-                if (filtered && filtered.length > 0) {
-                    this.projectsData = filtered;
-                }
-                else {
-                    this.projectsData = this.countryProjects;
-                }
-                if (this.projectsData.length !== oldLength) {
-                    this.nationalLevelCoverage = this.filterNLDProjects(this.projectsData);
-                    this.districtProjects = this.filterDLDProjects(this.projectsData);
-                }
-            });
         }
+        this.scope.$evalAsync(() => {
+            if (globalSelected && globalSelected.length > 0) {
+                this.projectsData = filtered;
+            }
+            else {
+                this.projectsData = preFilter;
+            }
+            this.nationalLevelCoverage = this.filterNLDProjects(this.projectsData);
+            this.districtProjects = this.filterDLDProjects(this.projectsData);
+        });
     }
+
 
     generateHeader() {
         return {

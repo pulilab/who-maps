@@ -528,6 +528,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
         self.assertEqual(response.json()[1].get("name"), "Test Project2")
+        self.assertEqual(response.json()[1].get("approved"), None)
 
     def test_retrieve_project_exclude_draft(self):
         project_data = copy.copy(self.project_data)
@@ -566,6 +567,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.json(), dict)
         self.assertEqual(response.json().keys(), {"dist1": None, "dist2": None}.keys())
+        self.assertEqual(response.json()['dist1'][0]['approved'], None)
 
     def test_create_project_adds_owner_to_team(self):
         url = reverse("project-create")
