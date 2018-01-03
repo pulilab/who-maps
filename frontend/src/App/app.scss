@@ -232,6 +232,11 @@ md-input-container .md-input-message-animation:not(.md-char-counter), md-input-c
   }
 
   &.md-small {
+    min-height: 30px;
+    min-width: 60px;
+    line-height: 30px;
+    padding: 0 8px;
+
     .material-icons {
       margin-top: 6px;
       font-size: 16px;

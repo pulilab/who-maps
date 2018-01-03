@@ -193,14 +193,14 @@
       line-height: 26px;
       border-bottom: 2px solid $color-white;
 
-      > span {
+      span {
         color: $color-primary !important;
       }
 
       &:hover {
         border-bottom: 2px solid $color-primary;
 
-        > span {
+        span {
           color: $color-primary !important;
         }
       }
@@ -316,7 +316,7 @@
     background-color: transparent !important;
 
     .material-icons,
-    > span {
+    span {
       width: auto;
       color: $color-primary-muted !important;
       transition: $swift-ease-out;
@@ -324,7 +324,7 @@
 
     &:hover {
       .material-icons,
-      > span {
+      span {
         color: $color-white !important;
       }
     }
@@ -363,15 +363,15 @@
   }
 
   .share-url-box {
-    padding:0 0 0 10px;
-    margin:0;
+    padding: 0 0 0 10px;
+    margin: 0;
     position: absolute;
-    outline:none;
-    border:0;
+    outline: none;
+    border: 0;
     left: 20px;
     top: 50px;
-    width:350px;
-    height:35px;
+    width: 350px;
+    height: 35px;
     background: $color-gray-lighter;
   }
 
