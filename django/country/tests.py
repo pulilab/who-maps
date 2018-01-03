@@ -726,9 +726,11 @@ class CountryAdminTests(TestCase):
         self.assertTrue('You have been selected as the Country Admin' in outgoing_en_email_text)
         self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
 
         outgoing_fr_email = mail.outbox[fr_index].message()
         outgoing_fr_email_text = outgoing_fr_email.as_string()
 
         self.assertTrue("test2@test.test" in outgoing_fr_email.values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
+        self.assertNotIn('{{', outgoing_fr_email_text)

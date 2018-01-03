@@ -1066,9 +1066,11 @@ class PermissionTests(SetupTests):
         outgoing_en_email_text = outgoing_en_email.as_string()
         self.assertEqual(mail.outbox[en_index].subject, "You were added to a project!")
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
 
         outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
+        self.assertNotIn('{{', outgoing_fr_email_text)
 
     def test_team_viewer_cannot_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
