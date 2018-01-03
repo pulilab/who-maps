@@ -1,66 +1,71 @@
-django:
-  restart: always
-  build: ./django
-  expose:
-    - "8000"
-  links:
-    - postgres
-    - celery
-    - redis
-  volumes:
-    - ./django:/src
-    - ./frontend:/frontend
-    - ./nginx/site/static:/usr/share/django/static:rw
-  command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
-#  command: python manage.py runserver 0.0.0.0:8000 # FOR DEBUG
+version: "3"
 
-celery:
-  restart: always
-  build: ./django
-  environment:
-    - C_FORCE_ROOT=true
-  links:
-    - postgres
-    - redis
-  volumes:
-    - ./django:/src
-  command: /usr/local/bin/celery -A scheduler worker -B -l info
+services:
+  django:
+    restart: always
+    build: ./django
+    expose:
+      - "8000"
+    links:
+      - postgres
+      - celery
+      - redis
+    volumes:
+      - ./django:/src
+      - ./frontend:/frontend
+      - ./nginx/site/static:/usr/share/django/static:rw
+      - log_data:/var/log/django
+      - media_data:/src/media
+    command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120
+    # command: python manage.py runserver 0.0.0.0:8000  # FOR DEBUG
 
-nginx:
-  restart: always
-  image: nginx:1.13.1
-  ports:
-    - "80:80"
-    - "443:443"
-  volumes:
-    - ./nginx/site:/usr/share/nginx/html:rw
-    - ./nginx/conf.d:/etc/nginx/conf.d:ro
-    - ./nginx/ssl:/etc/nginx/ssl:ro
-    - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./django/media:/usr/share/nginx/html/media:rw
-  links:
-    - django:django
+  celery:
+    restart: always
+    build: ./django
+    environment:
+      - C_FORCE_ROOT=true
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./django:/src
+      - log_data:/var/log/django
+    command: /usr/local/bin/celery -A scheduler worker -B -l info
 
-postgres:
-  restart: always
-  image: postgres:9.5.1
-  environment:
-    - POSTGRESQL_DB=postgres
-    - POSTGRESQL_USER=postgres
-    - POSTGRESQL_PASSWORD=postgres
-  volumes_from:
-    - postgresdata
-  expose:
-    - "5432"
+  nginx:
+    restart: always
+    image: nginx:1.13.1
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/site:/usr/share/nginx/html:rw
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./django/media:/usr/share/nginx/html/media:rw
+    links:
+      - django
 
-postgresdata:
-  image: postgres:9.5.1
-  volumes:
-    - /var/lib/postgresql
-  command: "/bin/true"
+  postgres:
+    restart: always
+    image: postgres:9.5.1
+    environment:
+      - POSTGRESQL_DB=postgres
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
 
-redis:
-  restart: always
-  image: redis:3.2.9
-  expose:
-    - "6379"
+  redis:
+    restart: always
+    image: redis:3.2.9
+    expose:
+      - "6379"
+
+volumes:
+  postgres_data:
+  log_data:
+  media_data:

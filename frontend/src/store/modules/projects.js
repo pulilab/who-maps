@@ -53,9 +53,14 @@ export const getLastVersion = state => {
     return state.projects.lastVersion;
 };
 
+
 export const getSavedProjectList = (state) => {
     if (state.projects.list) {
-        return state.projects.list.filter(p => p.id !== -1);
+        return state.projects.list.filter(p => p.id !== -1)
+          .map(pf => ({ ...pf, draft: {
+              ...exports.getVanillaProject(state), donors: [], implementing_partners: [], ...pf.draft
+          }
+          }));
     }
     return undefined;
 };
@@ -63,7 +68,7 @@ export const getSavedProjectList = (state) => {
 export const getPublishedProjects = state => {
     if (state.projects.list) {
         const list = exports.getSavedProjectList(state).map(p => {
-            p = { ...p.published, ...isMemberOrViewer(state, p) };
+            p = { ...p.published, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -74,7 +79,7 @@ export const getPublishedProjects = state => {
 export const getDraftedProjects = state => {
     if (state.projects.list) {
         const list = exports.getSavedProjectList(state).map(p => {
-            p = { ...p.draft, ...isMemberOrViewer(state, p) };
+            p = { ...p.draft, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -118,7 +123,7 @@ export const getUserProjects = state => {
             p = isPublished ? { ...p.published } : { ...p.draft };
             p = {
                 ...p,
-                ...isMemberOrViewer(state, p),
+                ...exports.isMemberOrViewer(state, p),
                 isPublished,
                 public_id,
                 ...convertIdArrayToObjectArray(p, structure, dashFieldConvertToObject)
@@ -149,7 +154,8 @@ export const getVanillaProject = state => {
     if (structure) {
         project.interoperability_links = structure.interoperability_links;
     }
-    project.organisation = UserModule.getProfile(state).organisation;
+    const profile = UserModule.getProfile(state);
+    project.organisation = profile && profile.organisation ? profile.organisation : null;
     return { ...project };
 };
 
@@ -162,7 +168,7 @@ export const getCurrentProject = state => {
     if (!project) {
         project = exports.getVanillaProject(state);
     }
-    return Object.assign({}, project);
+    return { ... project };
 };
 
 export const getCurrentPublicProject = state => {
@@ -207,7 +213,7 @@ export const parseProjectForViewMode = (state, project) => {
 export const getCurrentPublished = state => {
     const project = exports.getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
-        return parseProjectForViewMode(state, project);
+        return exports.parseProjectForViewMode(state, project);
     }
     return undefined;
 };
@@ -272,7 +278,7 @@ export const getCurrentProjectForEditing = (state, data) => {
     };
     data = {
         ...data,
-        ...isMemberOrViewer(state, data),
+        ...exports.isMemberOrViewer(state, data),
         ...convertIdArrayToObjectArray(data, structure, fieldToConvertToObject),
         ...handleInteroperabilityLinks(data, structure)
     };

@@ -186,7 +186,7 @@
         li.active,
         li:hover,
         li:active {
-          span {
+          .step {
           background-color: lighten($color-published, 7%);
           }
         }

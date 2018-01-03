@@ -3,8 +3,9 @@ from collections import namedtuple
 
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField, ArrayField
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
 
@@ -238,3 +239,16 @@ class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDele
 
 class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
+
+
+class ProjectImport(ExtendedModel):
+    user = models.ForeignKey(User)
+    csv = models.FileField()
+    headers = ArrayField(models.CharField(max_length=512), blank=True, null=True)
+    mapping = JSONField(default=dict)
+    imported = models.TextField(null=True, blank=True, default='')
+    failed = models.TextField(null=True, blank=True, default='')
+    status = models.NullBooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return self.csv.name
