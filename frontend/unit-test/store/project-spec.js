@@ -193,6 +193,7 @@ describe('Project Store Module', () => {
             spyOn(ProjectModule, 'getSavedProjectList').and.returnValue(list);
             spyOn(ProjectModule, 'isMemberOrViewer').and.returnValue(list);
             spyOn(ProjectUtils, 'convertIdArrayToObjectArray');
+            spyOn(CountryModule, 'getCountry').and.returnValue({ name : 1 });
             const state = {
                 projects: {}
             };
@@ -202,6 +203,7 @@ describe('Project Store Module', () => {
             state.projects.list = list;
             result = ProjectModule.getUserProjects(state);
             expect(ProjectModule.getFlatProjectStructure).toHaveBeenCalled();
+            expect(CountryModule.getCountry).toHaveBeenCalled();
             expect(ProjectModule.getSavedProjectList).toHaveBeenCalled();
             expect(ProjectModule.isMemberOrViewer).toHaveBeenCalledTimes(2);
             expect(ProjectUtils.convertIdArrayToObjectArray).toHaveBeenCalledTimes(2);
@@ -246,7 +248,7 @@ describe('Project Store Module', () => {
         it('getVanillaProject', () => {
             spyOn(ProjectModule, 'getEmptyProject').and.returnValue({ id: 1 });
             const structureSpy = spyOn(ProjectModule, 'getProjectStructure');
-            const countrySpy = spyOn(CountryModule, 'userCountryObject');
+            const countrySpy = spyOn(CountryModule, 'getUserCountry');
             const profileSpy = spyOn(UserModule, 'getProfile');
 
             let result = ProjectModule.getVanillaProject({});
@@ -294,20 +296,23 @@ describe('Project Store Module', () => {
         });
 
         it('getCurrentPublicProject', () => {
+            spyOn(CountryModule, 'getCountry').and.returnValue({ name : 1 });
             const state = {
                 projects: {
                 }
             };
             let result = ProjectModule.getCurrentPublicProject(state);
-            expect(result).toEqual({});
+            expect(result).toEqual({ country_name: undefined });
+
             state.projects.currentPublicProject = {
                 published: {
-                    id: 1
+                    id: 1,
+                    country: 1
                 }
             };
 
             result = ProjectModule.getCurrentPublicProject(state);
-            expect(result).toEqual(state.projects.currentPublicProject.published);
+            expect(result).toEqual({ id: 1, country_name: 1, country: 1 });
             expect(result).not.toBe(state.projects.currentPublicProject.published);
         });
 
