@@ -50,30 +50,36 @@
       </div>
 
       <div layout="row">
-        <div class="countries" ng-class="{error: vm.checkErrors('country')}" flex="50">
-          <ssmenu
-            ng-disabled="vm.editMode"
-            required
-            name="country"
-            label="{{'Country'|translate}}"
-            on-close-callback="vm.countryCloseCallback"
-            option-label="name"
-            options="vm.countriesList"
-            ng-model="vm.userProfile.country"
-            placeholder="{{'Select country from list'|translate}}">
-          </ssmenu>
-          <div ng-messages="vm.editProfileForm.country.$error">
-            <div ng-message="required"><translate>This is required.</translate></div>
-            <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}}</div>
-          </div>
+        <div class="countries" flex="50">
+          <md-input-container class="md-block">
+            <label>
+              <translate>Country</translate>
+            </label>
+            <md-select
+              ng-disabled="vm.editMode"
+              required
+              name="country"
+              options="vm.countriesList"
+              ng-model="vm.userProfile.country.id"
+              placeholder="{{'Select country from list'|translate}}">
+              <md-option ng-value="country.id" ng-repeat="country in vm.countriesList">
+                {{country.name}}
+              </md-option>
+            </md-select>
+            <div ng-messages="vm.editProfileForm.country.$error">
+              <div ng-message="required"><translate>This is required.</translate></div>
+              <div ng-message="custom" ng-repeat="error in vm.editProfileForm.country.customError">{{error}}</div>
+            </div>
+          </md-input-container>
         </div>
+
         <div class="languages" flex="50">
           <md-input-container class="md-block">
             <label>
               <translate>Site language</translate>
             </label>
             <md-select ng-model="vm.userProfile.language">
-               <md-option ng-value="lang.code" ng-repeat="lang in vm.languages">{{lang.name}}</md-option>
+              <md-option ng-value="lang.code" ng-repeat="lang in vm.languages">{{lang.name}}</md-option>
             </md-select>
             <div ng-messages="vm.editProfileForm.country.$error">
               <div ng-message="required">

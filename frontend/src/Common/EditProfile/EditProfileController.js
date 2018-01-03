@@ -15,19 +15,13 @@ class EditProfileController  {
         this.toast = $mdToast;
         this.$onInit = this.initialization.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
-        this.bindFunctions();
         this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
-    }
-
-    bindFunctions() {
-        this.countryCloseCallback = this.countryCloseCallback.bind(this);
     }
 
     mapState(state) {
         const stateProfile = UserModule.getProfile(state);
         const userProfile = this.userProfile ? this.userProfile : stateProfile;
-        userProfile.country = stateProfile.country;
         return {
             userProfile,
             countriesList: CountriesModule.getCountriesList(state),
@@ -64,12 +58,6 @@ class EditProfileController  {
             .position('bottom right')
             .hideDelay(3000)
         );
-    }
-
-
-    countryCloseCallback(name) {
-        this.setCountry(name);
-        this.handleCustomError('country');
     }
 
 
