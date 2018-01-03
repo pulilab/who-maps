@@ -10,71 +10,33 @@ class TopBar {
         this.$ngRedux = $ngRedux;
         this.commonInit = this.commonInit.bind(this);
         this.commonOnDestroy = this.commonOnDestroy.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     commonInit() {
         this.writeUserRole = this.writeUserRole.bind(this);
+        this.currentState = this.state.current.name;
     }
 
-    commonOnDestroy() {
-        this.unsubscribe();
-    }
+    commonOnDestroy() {}
 
     mapState(state) {
-
-        const userModel = state.user;
+        const profile = UserModule.getProfile(state);
         const userCountry = CountryModel.getUserCountry(state);
         const userLanguage = UserModule.getUserLanguage(state);
+        const profileValid = !!(profile && profile.country && profile.organisation && profile.name);
         return {
-            userModel,
+            profile,
+            profileValid,
+            token: state.user.token,
             userCountry,
             userLanguage
         };
     }
 
-    hasProfile() {
-        const p = this.userModel.profile;
-        return !!(p && p.country && p.organisation && p.name);
-    }
-
-    showCountryLevelViewButton() {
-        return this.hasProfile();
-    }
-
-    showGoToMyDashboardButton() {
-        return this.userModel.token;
-    }
-
-    showPersonaMenu() {
-        return this.userModel.token;
-    }
-
-    showNewProjectButton() {
-        return this.hasProfile();
-    }
-
-    showPlanningAndGuidanceButton() {
-        return this.hasProfile();
-    }
-
-
-    showSearch() {
-        return this.userModel.token;
-    }
-
-    showLogin() {
-        return this.state.current.name !== 'login' && !this.userModel.token;
-    }
-
-    showSignUp() {
-        return this.state.current.name !== 'signup' && !this.userModel.token;
-    }
-
     writeUserRole() {
         let type = null;
-        if (this.userModel && this.userModel.profile) {
-            switch (this.userModel.profile.account_type) {
+        if (this.profile) {
+            switch (this.profile.account_type) {
             case 'I':
                 type = 'Implementer';
                 break;
