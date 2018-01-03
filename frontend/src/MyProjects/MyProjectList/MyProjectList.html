@@ -14,6 +14,21 @@
   </div>
 
   <div class="wrapper" layout="column">
+    <!-- TODO -->
+    <!-- Show only if there's no project been added yet. -->
+    <!-- <md-card md-whiteframe="2" flex class="no-projects">
+      <div class="emptychild" layout="column" layout-align="start center">
+        <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">
+          <translate>add new project</translate>
+        </md-button>
+        <p>
+          <translate>
+            to include your project in the inventory and begin tracking your performance
+          </translate>
+        </p>
+      </div>
+    </md-card> -->
+    <!-- / -->
     <project-component ng-repeat="p in vm.projects"
                  show-details="true"
                  project="p"
