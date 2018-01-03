@@ -65,7 +65,7 @@ class SetupTests(APITestCase):
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
         self.country.save()
-        
+
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",

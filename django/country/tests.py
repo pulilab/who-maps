@@ -55,6 +55,9 @@ class CountryTests(APITestCase):
         with override('fr'):
             self.assertEqual(self.country.name, 'Hongrie')
 
+    def test_country_model_str(self):
+        self.assertEqual(str(self.country), 'Hungary')
+
     def test_get_countries(self):
         Country.objects.exclude(id=self.country.id).delete()
 
