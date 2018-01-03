@@ -72,6 +72,10 @@ class SetupTests(APITestCase):
         user = UserProfile.objects.get(id=self.user_profile_id)
         self.country = Country.objects.create(name="country1")
         self.country.users.add(user)
+        self.country.name_en = 'Hungary'
+        self.country.name_fr = 'Hongrie'
+        self.country.save()
+
         self.country_id = self.country.id
 
         self.project_data = {
@@ -381,7 +385,7 @@ class ProjectTests(SetupTests):
 
     def test_retrieve_project(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
@@ -389,7 +393,11 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
                          self.project_data['platforms'][0]['id'])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
-        self.assertEqual(response.json()['published'].get("country_name"), self.country.name)
+        self.assertEqual(response.json()['published'].get("country_name"), 'Hungary')
+
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published'].get("country_name"), 'Hongrie')
 
     def test_retrieve_project_government_details(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
@@ -1483,7 +1491,7 @@ class TestAdmin(TestCase):
         self.assertEqual(len(mail.outbox), initial_email_count)
 
 
-class TestPorjectImportAdmin(TestCase):
+class TestProjectImportAdmin(TestCase):
 
     def setUp(self):
         settings.MEDIA_ROOT = '/tmp/'  # so tests won't litter filesystem
