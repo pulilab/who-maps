@@ -64,7 +64,9 @@ const EE = {
 
 const $ngRedux = {
     connect: jasmine.createSpy('connect').and.returnValue(() => () => 'unsubscribeFn'),
-    dispatch: jasmine.createSpy('dispatch').and.callFake(toCall => toCall())
+    dispatch: jasmine.createSpy('dispatch').and.callFake(toCall => toCall()),
+    getState: jasmine.createSpy('getState'),
+    subscribe: jasmine.createSpy('subscribe')
 };
 
 const angularForm = {
