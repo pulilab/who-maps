@@ -21,12 +21,6 @@ export const mapData = {};
 
 // GETTERS
 
-export const userCountryObject = state => {
-    if (state.user && state.user.profile) {
-        return state.countries.list.find(c => c.name === state.user.profile.country);
-    }
-    return null;
-};
 
 export const getCountry = (state, id) => {
     return state.countries.list.find(c => c.id === id);
@@ -50,8 +44,10 @@ export const getCountriesList = state => {
 
 export const getUserCountry = (state) => {
     const profile = UserModule.getProfile(state);
-    const name = profile && profile.country ? profile.country : undefined;
-    return exports.getCountriesList(state).find(c => c.name === name || c.prettyName === name);
+    if (profile) {
+        return profile.country;
+    }
+    return undefined;
 };
 
 export const getCountryFields = state => {
@@ -61,7 +57,7 @@ export const getCountryFields = state => {
 };
 
 export const getCurrentCountry = state => {
-    return Object.assign({}, getCountriesList(state).find(c => c.id === state.countries.currentCountry));
+    return { ...getCountriesList(state).find(c => c.id === state.countries.currentCountry) };
 };
 
 export const getCountryCoverPage = state => {
