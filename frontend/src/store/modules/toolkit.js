@@ -33,16 +33,17 @@ export const getDomainStructure = (state, axis, domain) => {
 
 export const getAxisDetail = (state, axisId) => {
     const axisStructure = SystemModule.getAxis(state).find(a => a.id === axisId);
-    const domains = SystemModule.getDomains(state);
+    const systemDomains = SystemModule.getDomains(state);
     const axisData = exports.getToolkitData(state).find(a => a.id === axisId);
+    const domains = axisData ? axisData.domains.map((add, index) => ({
+        ...add,
+        ...systemDomains.find(d => d.id === add.id),
+        index
+    })) : [];
     return {
         ...axisStructure,
         ...axisData,
-        domains: axisData.domains.map((add, index) => ({
-            ...add,
-            ...domains.find(d => d.id === add.id),
-            index
-        }))
+        domains
     };
 };
 
