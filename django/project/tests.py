@@ -60,23 +60,23 @@ class SetupTests(APITestCase):
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
+        self.country = Country.objects.create(name="country1")
+        self.country_id = self.country.id
+        self.country.name_en = 'Hungary'
+        self.country.name_fr = 'Hongrie'
+        self.country.save()
+
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
-            "country": "test_country"}
+            "country": self.country_id}
         response = self.test_user_client.put(url, data)
         self.assertEqual(response.status_code, 200, response.json())
         self.user_profile_id = response.json().get('id')
 
         user = UserProfile.objects.get(id=self.user_profile_id)
-        self.country = Country.objects.create(name="country1")
         self.country.users.add(user)
-        self.country.name_en = 'Hungary'
-        self.country.name_fr = 'Hongrie'
-        self.country.save()
-
-        self.country_id = self.country.id
 
         self.project_data = {
             "date": datetime.utcnow(),
@@ -652,7 +652,7 @@ class ProjectTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": "test_country"}
+            "country": self.country_id}
         response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
@@ -704,7 +704,7 @@ class ProjectTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": "test_country"}
+            "country": self.country_id}
         response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
@@ -1108,7 +1108,7 @@ class PermissionTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": "test_country"}
+            "country": self.country_id}
         response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
@@ -1155,7 +1155,7 @@ class PermissionTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": "test_country"}
+            "country": self.country_id}
         response = test_user_client.put(url, data, format="json")
         user_profile_id = response.json()['id']
 

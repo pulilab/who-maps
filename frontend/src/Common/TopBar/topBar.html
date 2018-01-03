@@ -14,7 +14,7 @@
                title="Country Level View"
                class="view-selector"
                ui-sref="country"
-               ng-show="vm.showCountryLevelViewButton()"
+               ng-show="vm.profileValid"
                md-no-ink>
       <md-icon class="material-icons">public</md-icon>
       <translate>Country Map</translate>
@@ -24,7 +24,7 @@
                title="My Projects"
                class="view-selector"
                ui-sref="my-projects"
-               ng-show="vm.hasProfile()"
+               ng-show="vm.profileValid"
                md-no-ink>
       <md-icon class="material-icons ">toc</md-icon>
       <translate>My Projects</translate>
@@ -34,7 +34,7 @@
                title="Planning and Guidance"
                class="view-selector"
                ui-sref="cms"
-               ng-show="vm.showPlanningAndGuidanceButton()"
+               ng-show="vm.profileValid"
                md-no-ink>
       <md-icon class="material-icons ">import_contacts</md-icon>
       <translate>Planning &amp; Guidance</translate>
@@ -43,7 +43,7 @@
     <thematic
       axis="vm.axis"
       domain="vm.domain"
-      ng-show="vm.showThematic()"
+      ng-show="vm.profileValid"
       buttontitle="{{'MAPS Toolkit' | translate}}"
       buttonclass="md-primary"
       buttonicon="help_outline"
@@ -52,18 +52,18 @@
 
     <span flex></span>
 
-    <div class="language-badge">
+    <div class="language-badge" ng-show="vm.userLanguage">
       <div class="country-flag" style="{{'background-image: url(' + vm.userLanguage.flag +')'}}">
       </div>
     </div>
 
-    <searchbar compact-mode="true" ng-if="vm.showSearch()"></searchbar>
+    <searchbar compact-mode="true" ng-if="vm.profileValid"></searchbar>
 
     <md-button class="landing-link"
                ui-sref-active="active"
                ui-sref="login"
                aria-label="Login"
-               ng-show="vm.showLogin()"
+               ng-show="vm.currentState !== 'login' && !vm.token"
                md-no-ink>
       <translate>Login</translate>
     </md-button>
@@ -72,12 +72,12 @@
                ui-sref-active="active"
                ui-sref="signup"
                aria-label="Singup"
-               ng-show="vm.showSignUp()"
+               ng-show="vm.currentState !== 'signup' && !vm.token"
                md-no-ink >
       <translate>Sign Up</translate>
     </md-button>
 
-    <md-menu md-position-mode="target-right target" ng-if="vm.showPersonaMenu()">
+    <md-menu md-position-mode="target-right target" ng-if="vm.token">
       <md-button class="md-icon-button" aria-label="User" ng-click="vm.openMenu($mdOpenMenu, $event)" md-no-ink>
         <md-icon md-menu-origin class="material-icons ">person</md-icon>
       </md-button>
@@ -86,8 +86,8 @@
         <md-menu-item>
           <div class="user-name">
             <md-icon class="material-icons" md-menu-align-target>account_circle</md-icon>
-            <span ng-hide ="vm.userModel.profile.name">{{vm.userModel.username}}</span>
-            <span ng-show ="vm.userModel.profile.name">{{vm.userModel.profile.name}}</span>
+            <span ng-hide ="vm.profile.name">{{vm.profile.email}}</span>
+            <span ng-show ="vm.profile.name">{{vm.profile.name}}</span>
           </div>
         </md-menu-item>
         <md-menu-item>
@@ -112,19 +112,21 @@
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
+        <div ng-show="vm.userCountry">
         <span class="label">
           <translate>Country</translate>
         </span>
-        <md-menu-item>
-          <div class="user-lang" layout="row" layout-align="start center">
+          <md-menu-item>
+            <div class="user-lang" layout="row" layout-align="start center">
             <span class="country-flag">
                 <img ng-src="{{vm.userCountry.flag}}" alt="{{vm.userCountry.prettyName}}">
             </span>
-            <span class="country-label">
+              <span class="country-label">
               {{vm.userCountry.prettyName}}
             </span>
-          </div>
-        </md-menu-item>
+            </div>
+          </md-menu-item>
+        </div>
         <span class="label">
           <translate>Site Language</translate>
         </span>
@@ -143,7 +145,7 @@
 
     <md-button class="add-new-project" ui-sref="newProject"
                aria-label="Add new project"
-               ng-show="vm.showNewProjectButton()"
+               ng-show="vm.profileValid"
                md-no-ink>
       <md-icon class="material-icons">add</md-icon>
       <translate>New Project</translate>

@@ -2,6 +2,7 @@
 import axios from '../../plugins/axios';
 import findIndex from 'lodash/findIndex';
 import * as SystemModule from './system';
+import * as UserModule from './user';
 
 const initialState = {
     data: []
@@ -76,8 +77,10 @@ export function updateContent(resource, id) {
 
 export function saveOrUpdateContent(resource) {
     return (dispatch, getState) => {
-        resource = Object.assign({}, resource);
-        resource.author = getState().user.profile.id;
+        const state = getState();
+        resource = { ...resource };
+        const profile = UserModule.getProfile(state);
+        resource.author = profile.id;
         const id = resource.id || false;
         if (resource.cover && resource.cover.type.indexOf('image') === -1) {
             delete resource.cover;

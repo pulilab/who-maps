@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
+from country.models import Country
 from .models import Organisation, UserProfile
 
 
@@ -201,11 +202,12 @@ class UserProfileTests(APITestCase):
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
+        self.country = Country.objects.all()[0]
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
-            "country": "test_country"}
+            "country": self.country.id}
         response = self.client.put(url, data)
 
     def test_obtain_user_profile_returns_id(self):
@@ -247,12 +249,13 @@ class UserProfileTests(APITestCase):
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         data = response.json()
-        data.update(country="updated country")
+        updated_country = Country.objects.all()[2].id
+        data.update(country=updated_country)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
-        self.assertEqual(response.json().get("country"), "updated country")
+        self.assertEqual(response.json().get("country"), updated_country)
 
     def test_user_profile_update_with_empty_values(self):
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
@@ -266,11 +269,10 @@ class UserProfileTests(APITestCase):
 
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-
         self.assertEqual(response.json(),
-                         {'country': ['This field may not be null.'],
-                          'organisation': ['This field may not be null.'],
-                          'name': ['This field may not be blank.']})
+                         {'name': ['This field may not be blank.'],
+                          'country': ['This field may not be null.'],
+                          'organisation': ['This field may not be null.']})
 
     def test_create_org(self):
         url = reverse("organisation-list")
@@ -335,7 +337,7 @@ class UserProfileTests(APITestCase):
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
-            "country": "test_country",
+            "country": Country.objects.get(id=3).id,
             "account_type": "D"
         }
         response = client.put(url, data)
@@ -351,7 +353,7 @@ class UserProfileTests(APITestCase):
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
-            "country": "test_country",
+            "country": Country.objects.get(id=3).id,
             "account_type": "G"
         }
         response = self.client.put(url, data)

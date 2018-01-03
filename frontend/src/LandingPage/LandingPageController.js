@@ -1,6 +1,7 @@
 import { getSubDomain } from '../Utilities';
 import * as ProjectModule from '../store/modules/projects';
 import * as CountryModule from '../store/modules/countries';
+import * as UserModule from '../store/modules/user';
 
 class LandingPageModuleController {
 
@@ -18,7 +19,7 @@ class LandingPageModuleController {
 
     mapState(state) {
         return {
-            user: state.user,
+            profile: UserModule.getProfile(state),
             projects: ProjectModule.getUserProjects(state),
             countryData: CountryModule.getCountryCoverPage(state),
             countryCover: CountryModule.getCountryCoverPicture(state)

@@ -13,7 +13,7 @@ class SystemController {
 
     mapState(state) {
         return {
-            userProfile: state.user.profile
+            userProfile: UserModule.getProfile(state)
         };
     }
 

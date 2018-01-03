@@ -1,5 +1,6 @@
-import TopBarBehaviour  from '../TopBarBheaviour';
+import TopBarBehaviour from '../TopBarBheaviour';
 import * as CountryModule from '../../store/modules/countries';
+import * as UserModule from '../../store/modules/user';
 
 class CountryTopBarController extends TopBarBehaviour {
 
@@ -8,14 +9,14 @@ class CountryTopBarController extends TopBarBehaviour {
         this.EE = window.EE;
         this.timeout = $timeout;
         this.$onInit = this.onInit.bind(this);
-        // this has a different name because TopBarBehaviour implement is own state
-        this.unsubscribeCountry = $ngRedux.connect(this.mapCountryState, CountryModule)(this);
+        this.mapCountryState = this.mapCountryState.bind(this);
     }
 
     mapCountryState(state) {
         const countryData = CountryModule.getCountryCoverPage(state);
         const showCountryNameAndFlag = countryData && countryData.name && countryData.name !== 'WHO';
         return {
+            ...this.mapState(state),
             countryData,
             countryFlag: CountryModule.getCurrentCountry(state).flag,
             pageLoaded: !!countryData.name,
@@ -31,10 +32,13 @@ class CountryTopBarController extends TopBarBehaviour {
 
         window.onscroll = this.scrollEventHandler.bind(this);
         document.addEventListener('scroll', this.scrollEventHandler.bind(this), true);
+
+        this.unsubscribe = this.$ngRedux.connect(this.mapCountryState, UserModule)(this);
     }
 
     onDestroy() {
-        this.unsubscribeCountry();
+        this.unsubscribe();
+        this.commonOnDestroy();
     }
 
     watchers() {
@@ -57,6 +61,7 @@ class CountryTopBarController extends TopBarBehaviour {
 
     static countryTopBarControllerFactory() {
         require('./countryTopBar.scss');
+
         function countryTopBarController($state, $scope, $timeout, $ngRedux) {
             return new CountryTopBarController($state, $scope, $timeout, $ngRedux);
         }
