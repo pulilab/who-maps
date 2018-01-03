@@ -35,7 +35,7 @@ import * as SystemModule from './system';
 
 export const isMemberOrViewer = (state, project) => {
     const profile = UserModule.getProfile(state);
-    if (profile.member && profile.viewer) {
+    if (profile && profile.member && profile.viewer) {
         const isMember = profile.member.indexOf(project.id) > -1;
         const isViewer = !isMember && profile.viewer.indexOf(project.id) > -1;
         return { isMember, isViewer, isTeam: isMember || isViewer };
@@ -121,11 +121,13 @@ export const getUserProjects = state => {
             const public_id = p.public_id;
             const isPublished = !!public_id;
             p = isPublished ? { ...p.published } : { ...p.draft };
+            const country = CountryModule.getCountry(state, p.country);
             p = {
                 ...p,
                 ...exports.isMemberOrViewer(state, p),
                 isPublished,
                 public_id,
+                country_name: country ? country.name : '',
                 ...convertIdArrayToObjectArray(p, structure, dashFieldConvertToObject)
             };
             return p;
@@ -145,7 +147,7 @@ export const getEmptyProject = () => {
 };
 
 export const getVanillaProject = state => {
-    const country = CountryModule.userCountryObject(state);
+    const country = CountryModule.getUserCountry(state);
     const project = exports.getEmptyProject();
     const structure = exports.getProjectStructure(state);
     if (country) {
@@ -173,7 +175,8 @@ export const getCurrentProject = state => {
 
 export const getCurrentPublicProject = state => {
     const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
-    return { ...project };
+    const country = project.country ? CountryModule.getCountry(state, project.country) : undefined;
+    return { ...project, country_name: country ? country.name : project.country_name };
 };
 
 export const convertCountryFieldsAnswer = (fields) => {
@@ -669,7 +672,7 @@ export function publish(form, team, viewers) {
 }
 
 export async function searchProjects(query, health_topic = false, location = false,
-                              organisation = false, project_name = true, technology_platform = false) {
+                                     organisation = false, project_name = true, technology_platform = false) {
     const { data } = await axios.post('/api/search/projects/', {
         health_topic,
         location,
