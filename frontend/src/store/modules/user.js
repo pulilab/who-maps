@@ -4,6 +4,7 @@ import union from 'lodash/union';
 import Storage from '../../Common/Storage';
 import * as ProjectModule from './projects';
 import * as SystemModule from './system';
+import * as CountryModule from './countries';
 import { setLanguage } from '../../plugins/language';
 
 const storage = new Storage();
@@ -11,7 +12,15 @@ const storage = new Storage();
 // GETTERS
 
 export const getProfile = state => {
-    return Object.assign({}, state.user.profile);
+    if (state.user.profile) {
+        const countries = CountryModule.getCountriesList(state);
+        let country = undefined;
+        if (countries && countries.length > 0) {
+            country = countries.find(c => c.id === state.user.profile.country);
+        }
+        return { ...state.user.profile, country };
+    }
+    return undefined;
 };
 
 export const getUserLanguage = state => {
@@ -50,12 +59,6 @@ export const handleProfile = (data) => {
     }
     return data;
 };
-
-export function setCountry(country) {
-    return dispatch => {
-        dispatch({ type: 'SET_COUNTRY', country });
-    };
-}
 
 
 export function loadProfile() {
@@ -112,6 +115,7 @@ export function saveProfile(profile) {
         const action = id ? 'put' : 'post';
         const p = Object.assign({}, profile);
         p.organisation = p.organisation.id;
+        p.country = p.country.id;
         let { data } = await axios[action](url, p);
         data = exports.handleProfile(data);
         setLanguage(data.language);
@@ -158,6 +162,7 @@ export async function verifyEmail(key) {
     const { data } = await axios.post('/api/rest-auth/registration/verify-email/', key);
     return data;
 }
+
 export async function resetPassword(newPassword) {
     const { data } = await axios.post('/api/rest-auth/password/reset/', newPassword);
     return data;
@@ -183,10 +188,6 @@ export default function user(state = {}, action) {
     }
     case 'UNSET_USER': {
         return {};
-    }
-    case 'SET_COUNTRY': {
-        const profile = { ...state.profile, country: action.country };
-        return { ...state, profile };
     }
     default:
         return state;
