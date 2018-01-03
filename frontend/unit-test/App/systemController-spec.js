@@ -1,4 +1,5 @@
 import SystemController from '../../src/App/SystemController';
+import * as UserModel from '../../src/store/modules/user';
 import { $scope, $state, $ngRedux } from '../testUtilities';
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
@@ -27,10 +28,12 @@ describe('SystemController', () => {
     });
 
     it('maps state', () => {
-        const mockState = { user: { profile: 'PROFILE' }, unnecessary_key: 'ASDF' };
+        spyOn(UserModel, 'getProfile').and.returnValue('PROFILE');;
+        const mockState = { unnecessary_key: 'ASDF' };
         const mappedState = ac.mapState(mockState);
         expect(Object.keys(mappedState).length).toBe(1);
         expect(mappedState.userProfile).toBe('PROFILE');
+        expect(UserModel.getProfile).toHaveBeenCalled();
     });
 
     it('has onInit fn.', () => {

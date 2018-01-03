@@ -2,6 +2,7 @@ import * as SystemModule from '../../src/store/modules/system';
 import * as ProjectModule from '../../src/store/modules/projects';
 import { A, defaultAxiosSuccess, dispatch } from '../testUtilities';
 import axios from '../../src/plugins/axios';
+import * as CountriesModule from '../../src/store/modules/countries';
 
 
 /* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
@@ -27,6 +28,7 @@ describe('System Store Module', () => {
         });
 
         it('getSearchResult fn.', () => {
+            spyOn(CountriesModule, 'getCountry');
             const state = {
                 system: {
                     projectSearch: undefined
@@ -39,7 +41,7 @@ describe('System Store Module', () => {
             state.system.projectSearch = [{ id: 1 }];
             spyOn(ProjectModule, 'isMemberOrViewer').and.returnValue({ isMember: true });
             result = SystemModule.getSearchResult(state);
-            expect(result).toEqual([{ id: 1, isMember: true }]);
+            expect(result).toEqual([{ id: 1, isMember: true, country_name: '' }]);
 
         });
 

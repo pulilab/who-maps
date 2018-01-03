@@ -2,6 +2,8 @@ import json
 
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from django.utils.translation import override
+
 from django.core import mail
 from django.core.urlresolvers import reverse
 from allauth.account.models import EmailConfirmation
@@ -38,19 +40,40 @@ class CountryTests(APITestCase):
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
         self.country = Country.objects.create(name="country1", code="CC")
+        self.country.name_en = 'Hungary'
+        self.country.name_fr = 'Hongrie'
+        self.country.save()
         PartnerLogo.objects.create(country=self.country)
 
         self.cf_schema = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
         CountryField.objects.create(country=self.country, type=1, question="q1?", answer="a1", schema=False)
 
+    def test_country_model(self):
+        with override('en'):
+            self.assertEqual(self.country.name, 'Hungary')
+
+        with override('fr'):
+            self.assertEqual(self.country.name, 'Hongrie')
+
+    def test_country_model_str(self):
+        self.assertEqual(str(self.country), 'Hungary')
+
     def test_get_countries(self):
+        Country.objects.exclude(id=self.country.id).delete()
+
         url = reverse("country-list")
-        response = self.test_user_client.get(url)
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertIn("name", response.json()[0].keys())
-        self.assertIn("code", response.json()[0].keys())
-        self.assertIn("id", response.json()[0].keys())
-        self.assertIn("project_approval", response.json()[0].keys())
+        country_data = response.json()[0]
+        self.assertIn("name", country_data.keys())
+        self.assertIn("code", country_data.keys())
+        self.assertIn("id", country_data.keys())
+        self.assertIn("project_approval", country_data.keys())
+        self.assertEqual(country_data['name'], 'Hungary')
+
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['name'], 'Hongrie')
 
     def test_retrieve_landing_detail(self):
         url = reverse("country-detail", kwargs={"code": self.country.code})

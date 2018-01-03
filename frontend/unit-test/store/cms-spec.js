@@ -1,5 +1,6 @@
 import * as CmsModule from '../../src/store/modules/cms';
 import * as SystemModule from '../../src/store/modules/system';
+import * as UserModule from '../../src/store/modules/user';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
@@ -98,11 +99,13 @@ describe('CMS Store Module', () => {
 
             spyOn(CmsModule, 'addContent');
             const update = spyOn(CmsModule, 'updateContent');
+            const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
             const resource = {
                 id: 1
             };
             await CmsModule.saveOrUpdateContent(resource)(dispatch, state);
             expect(CmsModule.updateContent).toHaveBeenCalledWith({ id: 1, author: 1 }, 1);
+            expect(profileSpy).toHaveBeenCalled();
 
             resource.cover = {
                 type: ['asd']
@@ -110,15 +113,18 @@ describe('CMS Store Module', () => {
 
             await CmsModule.saveOrUpdateContent(resource)(dispatch, state);
             expect(CmsModule.updateContent).toHaveBeenCalledWith({ id: 1, author: 1 }, 1);
+            expect(profileSpy).toHaveBeenCalled();
 
             update.calls.reset();
             resource.cover.type = ['image'];
             await CmsModule.saveOrUpdateContent(resource)(dispatch, state);
             expect(CmsModule.updateContent).toHaveBeenCalledWith(jasmine.any(FormData), 1);
+            expect(profileSpy).toHaveBeenCalled();
 
             delete resource.id;
             await CmsModule.saveOrUpdateContent(resource)(dispatch, state);
             expect(CmsModule.addContent).toHaveBeenCalledWith(jasmine.any(FormData));
+            expect(profileSpy).toHaveBeenCalled();
         }));
 
         it('deleteContent', A(async () => {

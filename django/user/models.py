@@ -7,7 +7,7 @@ from core.models import NameByIDMixin, ExtendedModel
 
 
 class Organisation(NameByIDMixin, ExtendedModel):
-    name = models.CharField(unique=True, max_length=100)
+    name = models.CharField(unique=True, max_length=255)
 
     def __str__(self):  # pragma: no cover
         return self.name
@@ -33,7 +33,7 @@ class UserProfile(ExtendedModel):
     user = models.OneToOneField(User)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
+    country = models.ForeignKey('country.Country', null=True)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
 
     def __str__(self):

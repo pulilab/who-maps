@@ -1,6 +1,7 @@
 import * as UserModule from '../../src/store/modules/user';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as SystemModule from '../../src/store/modules/system';
+import * as CountryModule from '../../src/store/modules/countries';
 import Storage from '../../src/Common/Storage';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
@@ -13,15 +14,32 @@ describe('USER Store Module', () => {
 
     describe('GETTERS', () => {
         it('getProfile', () => {
+            const countrySpy = spyOn(CountryModule, 'getCountriesList');
             const state = {
                 user: {
                     profile: {
-                        id: 1
+                        id: 1,
+                        country: 1
                     }
                 }
             };
-            const result = UserModule.getProfile(state);
+            let result = UserModule.getProfile(state);
             expect(result.id).toBe(1);
+            expect(countrySpy).toHaveBeenCalled();
+
+            countrySpy.and.returnValue([]);
+            result = UserModule.getProfile(state);
+            expect(result).toEqual({ id: 1, country: undefined });
+            expect(countrySpy).toHaveBeenCalled();
+
+            countrySpy.and.returnValue([{ id: 1, name: 'a' }]);
+            result = UserModule.getProfile(state);
+            expect(result).toEqual({ id: 1, country: { id: 1, name: 'a' } });
+            expect(countrySpy).toHaveBeenCalled();
+
+            result = UserModule.getProfile({ user: {} });
+            expect(result).toEqual(undefined);
+
         });
 
         it('getUserLanguage', () => {
@@ -104,12 +122,6 @@ describe('USER Store Module', () => {
             });
         });
 
-        it('setCountry', A(async () => {
-            await UserModule.setCountry(1)(dispatch);
-            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_COUNTRY', country: 1 });
-
-        }));
-
         it('loadProfile', A(async () => {
             const spy = spyOn(Storage.prototype, 'get');
             dispatch.calls.reset();
@@ -186,14 +198,14 @@ describe('USER Store Module', () => {
             spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
             const state = { user: {} };
 
-            await UserModule.saveProfile({ organisation: { id: 1 } })(dispatch, getState(state));
-            expect(axios.post).toHaveBeenCalledWith('/api/userprofiles/', { organisation: 1 });
+            await UserModule.saveProfile({ organisation: { id: 1 }, country: { id: 1 } })(dispatch, getState(state));
+            expect(axios.post).toHaveBeenCalledWith('/api/userprofiles/', { organisation: 1, country: 1 });
             expect(UserModule.handleProfile).toHaveBeenCalledWith(1);
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
 
             state.user.user_profile_id =  1;
-            await UserModule.saveProfile({ organisation: { id: 1 } })(dispatch, getState(state));
-            expect(axios.put).toHaveBeenCalledWith('/api/userprofiles/1/', { organisation: 1 });
+            await UserModule.saveProfile({ organisation: { id: 1 }, country: { id: 1 } })(dispatch, getState(state));
+            expect(axios.put).toHaveBeenCalledWith('/api/userprofiles/1/', { organisation: 1, country: 1 });
             expect(UserModule.handleProfile).toHaveBeenCalledWith(1);
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
 
@@ -280,13 +292,6 @@ describe('USER Store Module', () => {
             const action = { type: 'UNSET_USER' };
             state = UserModule.default(state, action);
             expect(state).toEqual({});
-        });
-
-        it('SET_COUNTRY', () => {
-            let state = {};
-            const action = { type: 'SET_COUNTRY', country: 2 };
-            state = UserModule.default(state, action);
-            expect(state.profile.country).toEqual(2);
         });
 
 

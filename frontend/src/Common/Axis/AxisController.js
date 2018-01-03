@@ -8,6 +8,7 @@ class AxisController {
         this.$ngRedux = $ngRedux;
         this.EE = window.EE;
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.mapState = this.mapState.bind(this);
         this.changeDomain = this.changeDomain.bind(this);
     }
@@ -36,7 +37,11 @@ class AxisController {
         if (this.axisId === null || this.axisId === void 0) {
             this.axisId = 0;
         }
-        this.$ngRedux.connect(this.mapState, null)(this);
+        this.unsubscribe = this.$ngRedux.connect(this.mapState, null)(this);
+    }
+
+    onDestroy() {
+        this.unsubscribe();
     }
 
     setDomainActive(id) {

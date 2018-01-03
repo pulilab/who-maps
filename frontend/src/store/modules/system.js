@@ -1,6 +1,7 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 import * as ProjectModule from './projects';
+import * as CountriesModule from './countries';
 
 const initialState = {
     profiles: [],
@@ -23,7 +24,12 @@ export const getUserProfiles = state => {
 export const getSearchResult = state => {
     const search = state.system.projectSearch ? state.system.projectSearch : [];
     return search.map(s => {
-        return { ...s, ...ProjectModule.isMemberOrViewer(state, s) };
+        const country = CountriesModule.getCountry(state, s.country);
+        return {
+            ...s,
+            ...ProjectModule.isMemberOrViewer(state, s),
+            country_name: country ? country.name : ''
+        };
     });
 };
 

@@ -76,7 +76,7 @@ class ProjectSearch(ExtendedModel):
                 "id": ps.project.id,
                 "name": ps.project_name,
                 "organisation_name": ps.project.get_organisation().name,
-                "country_name": Country.objects.get(id=ps.project.data.get('country')).name
+                "country": Country.objects.only('id').get(id=ps.project.data.get('country')).id
             })
         return results
 

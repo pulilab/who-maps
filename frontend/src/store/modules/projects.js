@@ -35,7 +35,7 @@ import * as SystemModule from './system';
 
 export const isMemberOrViewer = (state, project) => {
     const profile = UserModule.getProfile(state);
-    if (profile.member && profile.viewer) {
+    if (profile && profile.member && profile.viewer) {
         const isMember = profile.member.indexOf(project.id) > -1;
         const isViewer = !isMember && profile.viewer.indexOf(project.id) > -1;
         return { isMember, isViewer, isTeam: isMember || isViewer };
@@ -53,9 +53,14 @@ export const getLastVersion = state => {
     return state.projects.lastVersion;
 };
 
+
 export const getSavedProjectList = (state) => {
     if (state.projects.list) {
-        return state.projects.list.filter(p => p.id !== -1);
+        return state.projects.list.filter(p => p.id !== -1)
+          .map(pf => ({ ...pf, draft: {
+              ...exports.getVanillaProject(state), donors: [], implementing_partners: [], ...pf.draft
+          }
+          }));
     }
     return undefined;
 };
@@ -63,7 +68,7 @@ export const getSavedProjectList = (state) => {
 export const getPublishedProjects = state => {
     if (state.projects.list) {
         const list = exports.getSavedProjectList(state).map(p => {
-            p = { ...p.published, ...isMemberOrViewer(state, p) };
+            p = { ...p.published, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -74,7 +79,7 @@ export const getPublishedProjects = state => {
 export const getDraftedProjects = state => {
     if (state.projects.list) {
         const list = exports.getSavedProjectList(state).map(p => {
-            p = { ...p.draft, ...isMemberOrViewer(state, p) };
+            p = { ...p.draft, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
         return sortBy(list, 'id');
@@ -116,11 +121,13 @@ export const getUserProjects = state => {
             const public_id = p.public_id;
             const isPublished = !!public_id;
             p = isPublished ? { ...p.published } : { ...p.draft };
+            const country = CountryModule.getCountry(state, p.country);
             p = {
                 ...p,
-                ...isMemberOrViewer(state, p),
+                ...exports.isMemberOrViewer(state, p),
                 isPublished,
                 public_id,
+                country_name: country ? country.name : '',
                 ...convertIdArrayToObjectArray(p, structure, dashFieldConvertToObject)
             };
             return p;
@@ -140,7 +147,7 @@ export const getEmptyProject = () => {
 };
 
 export const getVanillaProject = state => {
-    const country = CountryModule.userCountryObject(state);
+    const country = CountryModule.getUserCountry(state);
     const project = exports.getEmptyProject();
     const structure = exports.getProjectStructure(state);
     if (country) {
@@ -149,7 +156,8 @@ export const getVanillaProject = state => {
     if (structure) {
         project.interoperability_links = structure.interoperability_links;
     }
-    project.organisation = UserModule.getProfile(state).organisation;
+    const profile = UserModule.getProfile(state);
+    project.organisation = profile && profile.organisation ? profile.organisation : null;
     return { ...project };
 };
 
@@ -162,12 +170,13 @@ export const getCurrentProject = state => {
     if (!project) {
         project = exports.getVanillaProject(state);
     }
-    return Object.assign({}, project);
+    return { ... project };
 };
 
 export const getCurrentPublicProject = state => {
     const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
-    return { ...project };
+    const country = project.country ? CountryModule.getCountry(state, project.country) : undefined;
+    return { ...project, country_name: country ? country.name : project.country_name };
 };
 
 export const convertCountryFieldsAnswer = (fields) => {
@@ -207,7 +216,7 @@ export const parseProjectForViewMode = (state, project) => {
 export const getCurrentPublished = state => {
     const project = exports.getPublishedProjects(state).find(p=> p.id === state.projects.currentProject);
     if (project) {
-        return parseProjectForViewMode(state, project);
+        return exports.parseProjectForViewMode(state, project);
     }
     return undefined;
 };
@@ -272,7 +281,7 @@ export const getCurrentProjectForEditing = (state, data) => {
     };
     data = {
         ...data,
-        ...isMemberOrViewer(state, data),
+        ...exports.isMemberOrViewer(state, data),
         ...convertIdArrayToObjectArray(data, structure, fieldToConvertToObject),
         ...handleInteroperabilityLinks(data, structure)
     };
@@ -663,7 +672,7 @@ export function publish(form, team, viewers) {
 }
 
 export async function searchProjects(query, health_topic = false, location = false,
-                              organisation = false, project_name = true, technology_platform = false) {
+                                     organisation = false, project_name = true, technology_platform = false) {
     const { data } = await axios.post('/api/search/projects/', {
         health_topic,
         location,

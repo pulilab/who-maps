@@ -154,7 +154,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/share/django/static'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/usr/share/nginx/html/media'
 MEDIA_URL = '/media/'
 
 SITE_ID = int(os.environ.get('SITE_ID', 1))

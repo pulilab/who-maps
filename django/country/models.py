@@ -1,10 +1,10 @@
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
-from core.models import NameByIDMixin, ExtendedModel
+from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
 
 
-class Country(NameByIDMixin, ExtendedModel):
+class Country(NameByIDMixin, ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     logo = models.ImageField(blank=True, null=True)
@@ -19,7 +19,7 @@ class Country(NameByIDMixin, ExtendedModel):
     class Meta:
         verbose_name_plural = "Countries"
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return self.name
 
 
@@ -86,6 +86,9 @@ class CountryField(models.Model):
         Return all the country fields available for a country filled with the answers (if present)
         """
         country = project.get_country(draft_mode)
+        if not country:  # pragma: no cover
+            return []
+
         schema = cls.objects.get_schema(country.id)
         answers = cls.objects.get_answers(country_id=country.id, project_id=project.id)
         country_fields = []

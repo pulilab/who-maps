@@ -63,11 +63,11 @@
     </div>
 
 
-    <md-card ng-if="!vm.user.profile" class="content-main logged-out md-card" ng-hide="vm.registered" flex=60>
+    <md-card ng-if="!vm.profile" class="content-main logged-out md-card" ng-hide="vm.registered" flex=60>
       <signup landing-page="true"></signup>
     </md-card>
 
-    <md-card ng-if="vm.user.profile && vm.user.profile.name" class="content-main logged-in md-card" flex=60>
+    <md-card ng-if="vm.profile && vm.profile.name" class="content-main logged-in md-card" flex=60>
       <h2 class="md-display-3">
         <translate>
           My Projects

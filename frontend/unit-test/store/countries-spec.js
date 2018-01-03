@@ -14,24 +14,6 @@ describe('Countries Store Module', () => {
 
     describe('GETTERS', () => {
 
-        it('userCountryObject', () => {
-            const state = {
-                user: {
-                    profile: {
-                        country: 1
-                    }
-                },
-                countries: {
-                    list: [{ name: 1 }]
-                }
-            };
-            let result = CountriesModule.userCountryObject(state);
-            expect(result.name).toBe(1);
-
-            result = CountriesModule.userCountryObject({});
-            expect(result).toBe(null);
-        });
-
         it('getCountry', () => {
             const state = {
                 countries: {
@@ -58,14 +40,14 @@ describe('Countries Store Module', () => {
         });
 
         it('getUserCountry', () => {
-            spyOn(UserModule, 'getProfile').and.returnValue({ country: 1 });
-            const listSpy = spyOn(CountriesModule, 'getCountriesList').and.returnValue([{ name: 1 }]);
+            const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ country: 1 });
             let result = CountriesModule.getUserCountry({});
-            expect(result.name).toBe(1);
+            expect(result).toBe(1);
 
-            listSpy.and.returnValue([{ name: 2, prettyName: 1 }]);
+            profileSpy.and.returnValue(undefined);
             result = CountriesModule.getUserCountry({});
-            expect(result.name).toBe(2);
+            expect(result).toEqual(undefined);
+
         });
 
         it('getCountryFields', () => {
@@ -347,8 +329,8 @@ describe('Countries Store Module', () => {
             spyOn(CountriesModule, 'loadCountryLandingPageInfo');
             spyOn(CountriesModule, 'loadCurrentCountryDistrictsProject');
             let getStateSpy = getState({ countries: {
-                currentCountry: null
-            } });
+                    currentCountry: null
+                } });
 
             dispatch.calls.reset();
 
@@ -361,8 +343,8 @@ describe('Countries Store Module', () => {
             expect(CountriesModule.loadCurrentCountryDistrictsProject).not.toHaveBeenCalled();
 
             getStateSpy = getState({ countries: {
-                currentCountry: 1
-            } });
+                    currentCountry: 1
+                } });
 
             await CountriesModule.setCurrentCountry(1)(dispatch, getStateSpy);
             expect(getStateSpy).toHaveBeenCalled();
@@ -387,8 +369,8 @@ describe('Countries Store Module', () => {
         it('setCurrentCountryFromCode', A(async () => {
             spyOn(CountriesModule, 'setCurrentCountry');
             const getStateSpy = getState({ countries: {
-                list: [{ code: 'hu', id: 1 }]
-            } });
+                    list: [{ code: 'hu', id: 1 }]
+                } });
 
             await CountriesModule.setCurrentCountryFromCode('en')(dispatch, getStateSpy);
             expect(getStateSpy).toHaveBeenCalled();
