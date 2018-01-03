@@ -14,10 +14,8 @@
   </div>
 
   <div class="wrapper" layout="column">
-    <!-- TODO -->
-    <!-- Show only if there's no project been added yet. -->
-    <!-- <md-card md-whiteframe="2" flex class="no-projects">
-      <div class="emptychild" layout="column" layout-align="start center">
+    <md-card md-whiteframe="2" flex class="no-projects" ng-show="!vm.projects || vm.projects.length === 0">
+      <div class="emptychild" layout="column" layout-align="start center" >
         <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">
           <translate>add new project</translate>
         </md-button>
@@ -27,12 +25,12 @@
           </translate>
         </p>
       </div>
-    </md-card> -->
-    <!-- / -->
-    <project-component ng-repeat="p in vm.projects"
-                 show-details="true"
-                 project="p"
-                 show-version="true">
+    </md-card>
+    <project-component
+      ng-repeat="p in vm.projects"
+      show-details="true"
+      project="p"
+      show-version="true">
     </project-component>
   </div>
 
