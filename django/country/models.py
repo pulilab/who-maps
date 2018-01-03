@@ -1,10 +1,10 @@
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
-from core.models import NameByIDMixin, ExtendedModel
+from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
 
 
-class Country(NameByIDMixin, ExtendedModel):
+class Country(NameByIDMixin, ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     logo = models.ImageField(blank=True, null=True)
@@ -19,7 +19,7 @@ class Country(NameByIDMixin, ExtendedModel):
     class Meta:
         verbose_name_plural = "Countries"
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return self.name
 
 

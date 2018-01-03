@@ -10,13 +10,17 @@ from .serializers import CountryListSerializer, LandingPageSerializer, CountryFi
 
 
 class CountryListAPIView(generics.ListAPIView):
-    queryset = Country.objects.values(
-        'id',
-        'name',
-        'code',
-        'project_approval',
-    )
+    queryset = Country.objects.all()
     serializer_class = CountryListSerializer
+
+    def get_queryset(self):
+        queryset = super(CountryListAPIView, self).get_queryset()
+        return queryset.values(
+            'id',
+            'name',
+            'code',
+            'project_approval',
+        )
 
 
 class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):

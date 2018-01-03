@@ -4,7 +4,7 @@ from django.db.models.query_utils import Q
 from modeltranslation.manager import multilingual_queryset_factory, MultilingualQuerySet
 
 
-class GetObjectOrNoneManager(models.Manager):
+class GetObjectOrNoneMixin(object):
     def get_object_or_none(self, select_for_update=False, **kwargs):
         """
         Hides Exception handling boilerplate when querying for single objects.
@@ -19,6 +19,14 @@ class GetObjectOrNoneManager(models.Manager):
             return None
 
 
+class GetObjectOrNoneQueryset(GetObjectOrNoneMixin, QuerySet):
+    pass
+
+
+class GetObjectOrNoneMultilingualQueryset(GetObjectOrNoneMixin, MultilingualQuerySet):
+    pass
+
+
 class ExtendedModel(models.Model):
     """
     Adds nice to have behaviors to the Model class, such as:
@@ -28,7 +36,14 @@ class ExtendedModel(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     modified = models.DateTimeField(auto_now=True, auto_now_add=False)
 
-    objects = GetObjectOrNoneManager()
+    objects = GetObjectOrNoneQueryset.as_manager()
+
+    class Meta:
+        abstract = True
+
+
+class ExtendedMultilingualModel(ExtendedModel):
+    objects = GetObjectOrNoneMultilingualQueryset.as_manager()
 
     class Meta:
         abstract = True
