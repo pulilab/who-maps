@@ -853,7 +853,7 @@ class ProjectTests(SetupTests):
                                                           approved=True)
         link = ma.link(project_approval)
         expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&" \
-                        "is_superuser=true&email={}'>See project</a>".format(project_approval.id,
+                        "is_superuser=true&email={}'>See project</a>".format(self.project_id,
                                                                              user.auth_token,
                                                                              user.userprofile.id,
                                                                              user.email)

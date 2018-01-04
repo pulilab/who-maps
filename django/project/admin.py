@@ -123,7 +123,7 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
 
         user = TLS.request.user
         return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&"
-                         "is_superuser=true&email={}'>See project</a>".format(obj.id,
+                         "is_superuser=true&email={}'>See project</a>".format(obj.project.id,
                                                                               user.auth_token,
                                                                               user.userprofile.id,
                                                                               user.email))
