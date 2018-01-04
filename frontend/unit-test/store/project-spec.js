@@ -280,17 +280,29 @@ describe('Project Store Module', () => {
 
         it('getCurrentProject', () => {
             const currentSpy = spyOn(ProjectModule, 'getCurrentProjectIfExist');
+            const currentPublicSpy = spyOn(ProjectModule, 'getCurrentPublicProject');
             spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ id: 1 });
             let result = ProjectModule.getCurrentProject({});
             expect(result).toEqual({ id: 1 });
+            expect(ProjectModule.getCurrentPublicProject).toHaveBeenCalled();
             expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
             expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
             ProjectModule.getVanillaProject.calls.reset();
+
+            currentPublicSpy.and.returnValue({ id: 3});
+            result = ProjectModule.getCurrentProject({});
+            expect(result).toEqual({ id: 3 });
+            expect(ProjectModule.getCurrentPublicProject).toHaveBeenCalled();
+            expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
+            expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
+            ProjectModule.getVanillaProject.calls.reset();
+            ProjectModule.getCurrentPublicProject.calls.reset();
 
             currentSpy.and.returnValue({ id: 2 });
             result = ProjectModule.getCurrentProject({});
             expect(result).toEqual({ id: 2 });
             expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
+            expect(ProjectModule.getCurrentPublicProject).not.toHaveBeenCalled();
             expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
 
         });
@@ -302,7 +314,7 @@ describe('Project Store Module', () => {
                 }
             };
             let result = ProjectModule.getCurrentPublicProject(state);
-            expect(result).toEqual({ country_name: undefined });
+            expect(result).toEqual({ country_name: undefined, isPublic: true });
 
             state.projects.currentPublicProject = {
                 published: {
@@ -312,7 +324,7 @@ describe('Project Store Module', () => {
             };
 
             result = ProjectModule.getCurrentPublicProject(state);
-            expect(result).toEqual({ id: 1, country_name: 1, country: 1 });
+            expect(result).toEqual({ id: 1, country_name: 1, country: 1, isPublic: true });
             expect(result).not.toBe(state.projects.currentPublicProject.published);
         });
 
