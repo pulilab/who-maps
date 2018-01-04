@@ -168,7 +168,10 @@ export const getCurrentProjectIfExist = state => {
 export const getCurrentProject = state => {
     let project = exports.getCurrentProjectIfExist(state);
     if (!project) {
-        project = exports.getVanillaProject(state);
+        project = exports.getCurrentPublicProject(state);
+        if (!project) {
+            project = exports.getVanillaProject(state);
+        }
     }
     return { ... project };
 };
@@ -176,7 +179,16 @@ export const getCurrentProject = state => {
 export const getCurrentPublicProject = state => {
     const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
     const country = project.country ? CountryModule.getCountry(state, project.country) : undefined;
-    return { ...project, country_name: country ? country.name : project.country_name };
+    return { ...project, country_name: country ? country.name : project.country_name, isPublic: true };
+};
+
+export const getCurrentPublicProjectDetails = (state) => {
+    const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : undefined;
+    if (project)  {
+        project.disableDraft = true;
+        return exports.parseProjectForViewMode(state, project);
+    }
+    return exports.getVanillaProject(state);
 };
 
 export const convertCountryFieldsAnswer = (fields) => {

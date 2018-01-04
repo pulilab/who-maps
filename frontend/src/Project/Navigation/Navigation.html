@@ -8,14 +8,17 @@
     </div>
     <div layout="row" layout-align="stretch">
       <div>
-        <button type="button" ng-click="vm.goTo('draft')" class="draft" ng-class="{'active': vm.state.params.editMode === 'draft'}">
+        <button type="button" ng-click="vm.goTo('draft')"  class="draft" ng-class="{'active': vm.state.params.editMode === 'draft'}">
+          <md-tooltip md-autohide md-direction="top" ng-if="vm.project.disableDraft">
+            <translate>You are not allowed to access the draft</translate>
+          </md-tooltip>
           <translate>Draft</translate>
         </button>
       </div>
       <div>
         <button type="button"
                 ng-click="vm.goTo('publish')" class="publish" ng-class="{'active': vm.state.params.editMode === 'publish'}">
-          <md-tooltip md-autohide md-direction="top" ng-show="!vm.project.hasPublishedVersion">
+          <md-tooltip md-autohide md-direction="top" ng-if="!vm.project.hasPublishedVersion">
             <translate>There is no published version</translate>
           </md-tooltip>
           <translate>Published</translate>

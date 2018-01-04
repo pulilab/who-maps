@@ -56,6 +56,7 @@
   <div class="md-toolbar-tools md-toolbar-tools-mainmenu">
     <div class="project-mainmenu">
       <md-button ui-sref="dashboard"
+                 ng-hide="vm.currentProject.isPublic"
                  ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
           <translate>GO TO DASHBOARD</translate>
@@ -74,7 +75,10 @@
         </span>
       </md-button>
 
-      <md-button ui-sref="maps" ng-show="vm.userType !== 'G'" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
+      <md-button ui-sref="maps" ng-show="vm.userType !== 'G' && !vm.currentProject.isPublic"
+                 ng-if="!vm.viewMode"
+                 ng-disabled="!vm.hasProfile()"
+                 ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
           <translate >GO TO MAPS TOOLKIT</translate>
         </md-tooltip>
@@ -86,7 +90,7 @@
         </span>
       </md-button>
 
-      <md-button ui-sref="summary" ng-show="vm.userType !== 0" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
+      <md-button ui-sref="summary" ng-show="vm.userType !== 'G' && !vm.currentProject.isPublic" ng-if="!vm.viewMode" ng-disabled="!vm.hasProfile()" ui-sref-active="active" md-no-ink>
         <md-tooltip md-autohide md-direction="top">
           <translate>SHOW SCORE SUMMARY</translate>
         </md-tooltip>
