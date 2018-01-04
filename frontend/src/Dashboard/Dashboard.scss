@@ -65,11 +65,13 @@
         .dash-cardholder {
 
             .dash-subhead {
+                display: block;
                 text-align: center;
                 margin: 15px 0 25px;
                 font-size: 14px;
                 font-weight: 500;
                 color: $text-primary;
+                @include text-truncate();
             }
 
             .dash-stat-column {
@@ -123,6 +125,10 @@
                         font-weight: 500;
                         display: block;
 
+                        // Multi-lang
+                        @include button-ml($width: 100%);
+                        //
+
                         &.plus {
                             font-size: 36px;
                             line-height: 28px;
@@ -137,6 +143,10 @@
                           color: $text-primary;
                           font-size: 12px;
                           line-height: 18px;
+
+                          // Multi-lang
+                          @include button-ml($width: 100%);
+                          //
                         }
                     }
                 }

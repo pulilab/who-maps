@@ -96,6 +96,10 @@
           color: $color-primary-muted !important;
         }
       }
+
+      // Multi-lang
+      @include button-ml();
+      //
     }
 
     .add-new-project {}
@@ -180,6 +184,11 @@
       font-size: 20px;
       line-height: 36px;
       border-right: 1px solid $color-gray-lighter;
+
+      // Multi-lang
+      max-width: 25%;
+      @include text-truncate();
+      //
     }
 
     .dl-note {
@@ -202,14 +211,18 @@
 
     .dl-maps-link {
       float: right;
-      width: 165px;
       margin: 7px 100px 0 30px;
+      padding: 0 16px;
 
       md-icon {
         position: relative;
         top: -1px;
         margin-right: 3px;
       }
+
+      // Multi-lang
+      @include button-ml();
+      //
     }
   }
 

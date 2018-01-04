@@ -40,6 +40,10 @@ searchbar {
       bottom: calc(100% - 22px) !important;
       color: $color-gray-light;
       font-size: $headline-font-size-base;
+
+      // Multi-lang
+      width: 80% !important;
+      //
     }
 
     .md-input {

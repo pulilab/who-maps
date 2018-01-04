@@ -130,9 +130,11 @@ project-component {
 
             .static {
               display: block;
+              padding: 0 10px;
               color: $text-secondary;
               text-align: center;
               font-size: 12px;
+              @include text-truncate();
             }
           }
 
@@ -170,9 +172,11 @@ project-component {
 
             .static {
               display: block;
+              padding: 0 10px;
               color: $text-secondary;
               text-align: center;
               font-size: 12px;
+              @include text-truncate();
             }
           }
 
@@ -196,6 +200,11 @@ project-component {
               border-radius: 3px;
               margin-right: 8px;
               padding: 0 8px;
+
+              // Multi-lang
+              max-width: 240px;
+              @include text-truncate();
+              //
             }
 
             .draft {
@@ -217,6 +226,10 @@ project-component {
           .buttons {
             .md-button {
               margin: 6px 0 6px 16px;
+
+              // Multi-lang
+              @include button-ml($width: 180px);
+              //
             }
 
             md-icon {

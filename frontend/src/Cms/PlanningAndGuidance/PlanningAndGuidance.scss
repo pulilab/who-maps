@@ -29,6 +29,10 @@ planning-and-guidance {
       outline:none;
       transition: $swift-ease-out;
 
+      // Multi-lang
+      @include button-ml($width: 220px);
+      //
+
       &:hover {
         color: $text-primary;
         box-shadow: inset 0 -2px 0 darken(#EAEAEA, 10%);
@@ -155,9 +159,14 @@ planning-and-guidance {
 
       .add-new-content {
         .md-button.add-new {
+
           margin: 0;
           padding-left: 15px;
           padding-right: 20px;
+
+          // Multi-lang
+          @include button-ml($width: 180px);
+          //
         }
       }
 

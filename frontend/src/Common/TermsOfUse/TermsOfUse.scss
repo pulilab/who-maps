@@ -149,6 +149,17 @@
         top: -1px;
         margin-right: 3px;
       }
+
+      // Multi-lang
+      > translate {
+        max-width: 160px;
+        display: inline-flex;
+        > span {
+          display: block;
+          @include text-truncate;
+        }
+      }
+      //
     }
   }
 

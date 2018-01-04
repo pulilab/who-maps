@@ -5,6 +5,7 @@
     <div class="domain-score" flex>
       <translate>You've scored {{vm.domainScore}} % in {{vm.currentDomain.name}} domain!</translate>
     </div>
+    <div flex></div>
     <div class="domain-selector" flex>
       <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain' | translate" class="">
         <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">

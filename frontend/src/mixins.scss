@@ -121,3 +121,24 @@
 .clearfix {
   @include clearfix();
 }
+
+// Multi-lang
+
+@mixin button-ml($width: 180px) {
+  translate {
+    max-width: $width;
+    display: inline-flex;
+    // text-align: left;
+
+    span {
+      display: block;
+      @include text-truncate();
+    }
+  }
+}
+
+/*
+// Multi-lang
+@include button-ml($width: 180px);
+//
+*/
