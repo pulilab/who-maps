@@ -114,7 +114,7 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
     readonly_fields = ['link']
 
     def link(self, obj):
-        return mark_safe("<a href='/app/{}/edit-project'>See project</a>".format(obj.id))
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?token='>See project</a>".format(obj.id))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
