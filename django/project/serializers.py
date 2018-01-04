@@ -89,6 +89,13 @@ class ProjectPublishedSerializer(serializers.Serializer):
     class Meta:
         model = Project
 
+    def validate_country(self, value):
+        if self.instance:
+            project = Project.objects.get(id=self.instance.id)
+            if project.public_id and project.data['country'] != self.initial_data['country']:
+                raise serializers.ValidationError('Country cannot be altered on published projects.')
+        return value
+
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]
         instance.data = validated_data
@@ -137,6 +144,13 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
+
+    def validate_country(self, value):
+        if self.instance:
+            project = Project.objects.get(id=self.instance.id)
+            if project.public_id and project.draft['country'] != self.initial_data['country']:
+                raise serializers.ValidationError('Country cannot be altered on published projects.')
+        return value
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')

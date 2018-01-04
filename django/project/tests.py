@@ -1089,6 +1089,30 @@ class ProjectDraftTests(SetupTests):
         self.assertIsNone(response.json()['draft']['national_level_deployment'])
         self.assertIsNone(Project.objects.get(id=project_id).draft['national_level_deployment'])
 
+    def test_published_country_cannot_change(self):
+        url = reverse("project-publish", kwargs={"pk": self.project_pub_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(name='unique', country=999)
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
+
+    def test_draft_country_can_change(self):
+        url = reverse("project-draft", kwargs={"pk": self.project_draft_id})
+        data = copy.deepcopy(self.project_draft_data)
+        data.update(country=20)
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']["country"], 20)
+
+    def test_published_country_cannot_change_even_in_draft(self):
+        url = reverse("project-draft", kwargs={"pk": self.project_pub_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(country=20)
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
+
 
 class PermissionTests(SetupTests):
     def test_team_member_can_update_project_groups(self):
