@@ -89,6 +89,13 @@ class ProjectPublishedSerializer(serializers.Serializer):
     class Meta:
         model = Project
 
+    def validate_country(self, value):
+        if self.instance:
+            project = Project.objects.get(id=self.instance.id)
+            if project.data and project.data['country'] != self.initial_data['country']:
+                raise serializers.ValidationError('Country cannot be altered on published projects.')
+        return value
+
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]
         instance.data = validated_data
