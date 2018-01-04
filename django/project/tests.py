@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+from mock import patch
 
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
@@ -64,7 +65,7 @@ class SetupTests(APITestCase):
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1")
+        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True)
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
@@ -823,15 +824,76 @@ class ProjectTests(SetupTests):
         item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
         self.assertEqual(str(item), '(name) challenge')
 
-    def test_project_approval_admin_filter_country_admins(self):
+    @patch('django.contrib.admin.options.messages')
+    def test_project_approval_admin_filter_country_admins(self, mocked_messages):
+        messages = []
+        mocked_messages.add_message = lambda s, *args, **kwargs: messages.append((args, kwargs))
+
+        country_2 = Country.objects.create(name="country2", code='CTR2', project_approval=False)
+
+        user = UserProfile.objects.get(id=self.user_profile_id)
+        country_2.users.add(user)
+
+        self.project_data = {
+            "date": datetime.utcnow(),
+            "name": "Test Project2",
+            "organisation": self.org.id,
+            "contact_name": "name2",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "health_focus_areas": [1, 2],
+            "geographic_scope": "somewhere",
+            "country": country_2.id,
+            "platforms": [{
+                "id": 1,
+                "strategies": [1, 2]
+            }, {
+                "id": 2,
+                "strategies": [1, 9]
+            }],
+            "licenses": [1, 2],
+            "coverage": [
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
+            "national_level_deployment":
+                {"clients": 20000, "health_workers": 0, "facilities": 0},
+            "donors": ["donor1", "donor2"],
+            "his_bucket": [1, 2],
+            "hsc_challenges": [1, 2],
+            "government_investor": 0,
+            "implementing_partners": ["partner1", "partner2"],
+            "repository": "http://some.repo",
+            "mobile_application": "http://mobile.app.org",
+            "wiki": "http://wiki.org",
+            "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
+                                       {"id": 2, "selected": True},
+                                       {"id": 3, "selected": True, "link": "http://example.org"}],
+            "interoperability_standards": [1],
+            "start_date": str(datetime.today().date()),
+            "end_date": str(datetime.today().date())
+        }
+
+        # Create project draft
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        project_2_id = response.json().get("id")
+
+        # Publish
+        url = reverse("project-publish", kwargs={"pk": project_2_id})
+        response = self.test_user_client.put(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 200, response.json())
+
         request = MockRequest()
         site = AdminSite()
         user = UserProfile.objects.get(id=self.user_profile_id).user
         request.user = user
         ma = ProjectApprovalAdmin(ProjectApproval, site)
-        ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                       approved=True)
         self.assertEqual(ma.get_queryset(request).count(), 1)
+        self.assertEqual(len(messages), 1)
 
     def test_project_approval_admin_link_add(self):
         request = MockRequest()
@@ -849,8 +911,7 @@ class ProjectTests(SetupTests):
         request.user = user
         TLS.request = request
         ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                                          approved=True)
+        project_approval = ProjectApproval.objects.get(project_id=self.project_id)
         link = ma.link(project_approval)
         expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&" \
                         "is_superuser=true&email={}'>See project</a>".format(self.project_id,
