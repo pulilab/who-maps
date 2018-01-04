@@ -1,4 +1,5 @@
 import csv
+from threading import local
 
 from django.contrib import admin
 from django import forms
@@ -20,6 +21,9 @@ from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, H
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
     ProjectApproval
 from user.models import UserProfile, Organisation
+
+
+TLS = local()
 
 
 class ChangeNotificationMixin(object):
@@ -114,7 +118,15 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
     readonly_fields = ['link']
 
     def link(self, obj):
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?token='>See project</a>".format(obj.id))
+        if obj.id is None:
+            return '-'
+
+        user = TLS.request.user
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&"
+                         "is_superuser=true&email={}'>See project</a>".format(obj.id,
+                                                                              user.auth_token,
+                                                                              user.userprofile.id,
+                                                                              user.email))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
@@ -122,6 +134,10 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
             country_ids = Country.objects.filter(users__in=[request.user.userprofile]).values_list('id', flat=True)
             qs = qs.filter(project__data__country__contained_by=list(country_ids))
         return qs
+
+    def changeform_view(self, request, *args, **kwargs):
+        TLS.request = request
+        return super(ProjectApprovalAdmin, self).changeform_view(request, *args, **kwargs)
 
 
 def validate_csv_ext(value):
