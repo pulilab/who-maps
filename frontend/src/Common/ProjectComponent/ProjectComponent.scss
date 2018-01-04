@@ -281,9 +281,13 @@ project-component {
         }
 
         .lower {
-          height: 50px;
+          height: auto;
+          display: block;
 
           .badges {
+            padding: 15px 0;
+            width: 100%;
+
             div {
               height: 20px;
               font-size: 12px;
@@ -293,12 +297,19 @@ project-component {
           }
 
           .buttons {
+            padding: 0 0 15px;
+            width: 100%;
+
             .md-button {
-              height: 26px;
-              line-height: 26px;
+              min-height: 30px;
+              line-height: 30px;
               font-size: 12px;
-              margin: 4px 4px;
-              padding: 0 6px;
+              margin: 0 8px 0 0;
+              padding: 0 8px;
+
+              // Multi-lang
+              @include button-ml($width: 160px);
+              //
             }
 
             md-icon {

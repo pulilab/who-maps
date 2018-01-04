@@ -192,6 +192,10 @@ cms-dashboard-widget {
     margin: 20px auto 10px;
     padding-left: 12px;
     padding-right: 12px;
+
+    // Multi-lang
+    @include button-ml($width: 300px);
+    //
   }
 
   // Resize cms-list-element

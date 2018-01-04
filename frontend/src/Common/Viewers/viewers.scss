@@ -1,8 +1,6 @@
 @import "../../variables.scss";
 
 .dash-stat-card {
-
-    height: 100px;
     text-align: center;
 
     .dash-trendicon {
@@ -36,7 +34,8 @@
     }
 
     .dash-stat-label {
-        margin-top: 5px;
+        margin: 5px 0 15px;
+        padding: 0 10px;
         font-size: 12px;
     }
 
