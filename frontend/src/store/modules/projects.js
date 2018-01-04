@@ -179,7 +179,7 @@ export const getCurrentProject = state => {
 export const getCurrentPublicProject = state => {
     const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
     const country = project.country ? CountryModule.getCountry(state, project.country) : undefined;
-    return { ...project, country_name: country ? country.name : project.country_name, isPublic: true};
+    return { ...project, country_name: country ? country.name : project.country_name, isPublic: true };
 };
 
 export const getCurrentPublicProjectDetails = (state) => {
