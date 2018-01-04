@@ -33,7 +33,12 @@ instance.interceptors.response.use(response => {
     return response;
 }, error => {
     if (error && error.response) {
-        error.response.status === 401 ? instance.authProblemFunction() : instance.popUpFunction();
+        if (error.response.status === 401)  {
+            instance.authProblemFunction();
+        }
+        else {
+            instance.popUpFunction();
+        }
     }
     return Promise.reject(error);
 });

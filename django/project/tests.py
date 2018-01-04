@@ -1,6 +1,8 @@
 import copy
 from datetime import datetime
 
+from django.contrib.contenttypes.models import ContentType
+from django.template.response import TemplateResponse
 from django.utils.translation import override
 from django.core import mail
 from django.core.urlresolvers import reverse
@@ -8,13 +10,14 @@ from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.core.cache import cache
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
+from project.admin import TLS
 from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, HSCGroup, ProjectApproval
@@ -25,6 +28,7 @@ from .tasks import send_project_approval_digest
 class MockRequest():
     user = None
     GET = {}
+    COOKIES = {}
 
 
 class SetupTests(APITestCase):
@@ -829,6 +833,52 @@ class ProjectTests(SetupTests):
                                        approved=True)
         self.assertEqual(ma.get_queryset(request).count(), 1)
 
+    def test_project_approval_admin_link_add(self):
+        request = MockRequest()
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        request.user = user
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+        link = ma.link(ProjectApproval())
+        self.assertEqual(link, '-')
+
+    def test_project_approval_admin_link_edit(self):
+        request = MockRequest()
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        request.user = user
+        TLS.request = request
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
+                                                          approved=True)
+        link = ma.link(project_approval)
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&" \
+                        "is_superuser=true&email={}'>See project</a>".format(self.project_id,
+                                                                             user.auth_token,
+                                                                             user.userprofile.id,
+                                                                             user.email)
+        self.assertEqual(link, expected_link)
+
+    def test_project_approval_admin_changeform_view(self):
+        request = MockRequest()
+        request.method = 'GET'
+        request.POST = {}
+        request.META = {'SCRIPT_NAME': 'from_test'}
+        request.resolver_match = False
+
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+
+        content_type = ContentType.objects.get(app_label=ProjectApproval._meta.app_label,
+                                               model=ProjectApproval._meta.model_name)
+        add_permission = Permission.objects.get(content_type=content_type,
+                                                codename='add_{}'.format(ProjectApproval._meta.model_name))
+        user.user_permissions.add(add_permission)
+        request.user = user
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+        response = ma.changeform_view(request)
+        self.assertTrue(isinstance(response, TemplateResponse))
+
     def test_project_approval_email(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
         user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
@@ -976,14 +1026,6 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']['name'], 'Proj 2')
         self.assertEqual(response.json()['draft'], response.json()['published'])
-
-    def test_project_approval_admin(self):
-        site = AdminSite()
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                                          approved=True)
-        self.assertEqual(ma.link(project_approval),
-                         "<a href='/app/{}/edit-project'>See project</a>".format(project_approval.id))
 
     def test_healthcategory_str(self):
         hc = HealthCategory.objects.all().first()

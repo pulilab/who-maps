@@ -61,7 +61,8 @@ class NavigationController {
     }
 
     goTo(editMode) {
-        if (editMode === 'draft' || editMode === 'publish' && this.project.hasPublishedVersion) {
+        if ((editMode === 'draft' && !this.project.disableDraft)
+          || (editMode === 'publish' && this.project.hasPublishedVersion)) {
             this.state.go(this.state.current.name, { editMode });
         }
     }
