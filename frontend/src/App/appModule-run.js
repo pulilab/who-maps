@@ -64,36 +64,48 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     const showPopUp = () => {
         $mdToast.show(
-            $mdToast.simple()
-                .textContent('Ops! something went wrong, try again later.')
-                .position('bottom right')
-                .hideDelay(3000)
+          $mdToast.simple()
+            .textContent('Ops! something went wrong, try again later.')
+            .position('bottom right')
+            .hideDelay(3000)
         );
 
     };
 
-    let processingAuth = false;
-    const handleAuthProblem = async () => {
-        if (!processingAuth) {
-            processingAuth = true;
-            const token = storage.get('token');
-            const mainUi = window.document.querySelector('ui-view');
-            mainUi.style.display = 'none';
-            const message = token ? 'You session has expired, please login again.' :
-                'You need to log in to view this content';
-            await $mdDialog.show(
-                $mdDialog.alert()
-                    .clickOutsideToClose(false)
-                    .title('Authentication problem')
-                    .textContent(message)
-                    .theme('alert')
-                    .ariaLabel('Auth problem dialog')
-                    .ok('Understand')
-            );
-            mainUi.style.display = '';
-            $ngRedux.dispatch(UserModule.doLogout());
-            $state.go('landing');
-            processingAuth = false;
+    let authPopup = undefined;
+    const showCredentialsPopUp = async () => {
+        const mainUi = window.document.querySelector('ui-view');
+        mainUi.style.display = 'none';
+        const message = 'You are not logged in or your session has expired, please login again.';
+        await $mdDialog.show(
+          $mdDialog.alert()
+            .clickOutsideToClose(false)
+            .title('Authentication problem')
+            .textContent(message)
+            .theme('alert')
+            .ariaLabel('Auth problem dialog')
+            .ok('Understand')
+        );
+        mainUi.style.display = '';
+        $ngRedux.dispatch(UserModule.doLogout());
+
+        $state.go('landing');
+    };
+
+    const handleAuthProblem = () => {
+        const sp =  new window.URLSearchParams(window.location.search);
+        const r = {};
+        for (const p of sp) {
+            r[p[0]] = p[1];
+        }
+        if (r.token && r.is_superuser && r.email && r.user_profile_id) {
+            UserModule.storeData(r, r.email);
+            window.location.href = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        }
+        else {
+            if (!authPopup) {
+                authPopup = showCredentialsPopUp();
+            }
         }
     };
 
