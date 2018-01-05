@@ -7,7 +7,6 @@ import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
 import * as ToolkitModule from './toolkit';
-import { getToolkitData } from './toolkit';
 
 import {
     convertDate,
@@ -266,7 +265,7 @@ export const getStoredCountryFields = state => isDraft => {
 
 export const getProjectCountryFields = state => (isDraft) => {
     const baseCountryFields = CountryModule.getCountryFields(state);
-    const countryFields = exports.convertCountryFieldsAnswer(getStoredCountryFields(state)(isDraft));
+    const countryFields = exports.convertCountryFieldsAnswer(exports.getStoredCountryFields(state)(isDraft));
     const result = baseCountryFields.map(bc => {
         const saved = countryFields.find(cf => cf.schema_id === bc.id);
         return {
@@ -358,7 +357,7 @@ export const getMapsAxisData = state => {
     const axis = SystemModule.getAxis(state);
     const chartAxis = { labels: axis.map(a => a.name), data: [] };
     const toolkitVersion = exports.getToolkitVersion(state);
-    const toolkitData = getToolkitData(state);
+    const toolkitData = ToolkitModule.getToolkitData(state);
     const todayString = getTodayString();
     if (toolkitVersion.length > 0) {
         // Data from versions
@@ -397,7 +396,7 @@ export const getMapsDomainData = state => {
     const axes = SystemModule.getAxis(state);
     const chartData = { labels: axes.map(a => a.name) };
     const toolkitVersion = exports.getToolkitVersion(state);
-    const toolkitData = getToolkitData(state);
+    const toolkitData = ToolkitModule.getToolkitData(state);
     const todayString = getTodayString();
     axes.forEach((axis, axInd) => {
         chartData[axis.name] = { labels: domains.filter(d => d.axis === axis.id).map(df => df.name), data: [] };
