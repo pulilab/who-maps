@@ -1,6 +1,8 @@
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as UserModule from '../../src/store/modules/user';
 import * as CountryModule from '../../src/store/modules/countries';
+import * as SystemModule from '../../src/store/modules/system';
+import * as ToolkitModule from '../../src/store/modules/toolkit';
 import * as ProjectUtils from '../../src/store/project_utils';
 import { project_definition } from '../../src/store/static_data/project_definition';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
@@ -289,7 +291,7 @@ describe('Project Store Module', () => {
             expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
             ProjectModule.getVanillaProject.calls.reset();
 
-            currentPublicSpy.and.returnValue({ id: 3});
+            currentPublicSpy.and.returnValue({ id: 3 });
             result = ProjectModule.getCurrentProject({});
             expect(result).toEqual({ id: 3 });
             expect(ProjectModule.getCurrentPublicProject).toHaveBeenCalled();
@@ -326,6 +328,32 @@ describe('Project Store Module', () => {
             result = ProjectModule.getCurrentPublicProject(state);
             expect(result).toEqual({ id: 1, country_name: 1, country: 1, isPublic: true });
             expect(result).not.toBe(state.projects.currentPublicProject.published);
+        });
+
+        it('getCurrentPublicProjectDetails', () => {
+            spyOn(ProjectModule, 'parseProjectForViewMode').and.returnValue({ id: 1 });
+            spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ id: 1 });
+            const state = {
+                projects: {}
+            };
+
+            let result = ProjectModule.getCurrentPublicProjectDetails(state);
+            expect(result).toEqual({ id: 1 });
+            expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
+            expect(ProjectModule.parseProjectForViewMode).not.toHaveBeenCalled();
+
+            state.projects.currentPublicProject = {
+                published: {}
+            };
+
+            ProjectModule.getVanillaProject.calls.reset();
+
+            result = ProjectModule.getCurrentPublicProjectDetails(state);
+            expect(result).toEqual({ id: 1 });
+            expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
+            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { disableDraft: true });
+
+
         });
 
         it('convertCountryFieldsAnswer', () => {
@@ -419,6 +447,411 @@ describe('Project Store Module', () => {
 
         });
 
+        it('getStoredCountryFields', () => {
+            const draftSpy = spyOn(ProjectModule, 'getCurrentDraft').and.returnValue({ fields: 1 });
+            spyOn(ProjectModule, 'getCurrentPublished').and.returnValue({ fields: 1 });
+            const state = {
+                projects: {
+                    list: [{ id: -1, draft: { fields: 2 } }]
+                }
+            };
+
+            let result = ProjectModule.getStoredCountryFields(state)(true);
+            expect(result).toEqual(1);
+            expect(ProjectModule.getCurrentDraft).toHaveBeenCalled();
+            expect(ProjectModule.getCurrentPublished).not.toHaveBeenCalled();
+
+            ProjectModule.getCurrentDraft.calls.reset();
+
+            result = ProjectModule.getStoredCountryFields(state)(false);
+            expect(result).toEqual(1);
+            expect(ProjectModule.getCurrentDraft).not.toHaveBeenCalled();
+            expect(ProjectModule.getCurrentPublished).toHaveBeenCalled();
+
+            ProjectModule.getCurrentPublished.calls.reset();
+
+            draftSpy.and.returnValue(undefined);
+            result = ProjectModule.getStoredCountryFields(state)(true);
+            expect(result).toEqual(2);
+            expect(ProjectModule.getCurrentDraft).toHaveBeenCalled();
+            expect(ProjectModule.getCurrentPublished).not.toHaveBeenCalled();
+
+
+        });
+
+        it('getProjectCountryFields', () => {
+            spyOn(CountryModule, 'getCountryFields').and.returnValue([{ id: 1, answer: 1 }, { id: 2, answer: 1 }]);
+            spyOn(ProjectModule, 'convertCountryFieldsAnswer').and.returnValue([{ schema_id: 1, answer: 2 }]);
+            spyOn(ProjectModule, 'getStoredCountryFields').and.returnValue(() => {});
+
+            const result = ProjectModule.getProjectCountryFields({})(true);
+            expect(CountryModule.getCountryFields).toHaveBeenCalled();
+            expect(ProjectModule.convertCountryFieldsAnswer).toHaveBeenCalled();
+            expect(ProjectModule.getStoredCountryFields).toHaveBeenCalled();
+
+            expect(result).toEqual([{ id: 1, answer: 2 }, { id: 2, answer: 1 }]);
+        });
+
+        it('getCurrentProjectForEditing', () => {
+            const data = {
+                start_date: 1,
+                end_date: 1,
+                implementation_dates: 1,
+                organisation: 1,
+                organisation_name: 2
+            };
+            spyOn(ProjectModule, 'getFlatProjectStructure');
+            spyOn(ProjectModule, 'getVanillaProject').and.returnValue(data);
+            spyOn(ProjectModule, 'isMemberOrViewer');
+            spyOn(ProjectUtils, 'convertDate');
+            spyOn(ProjectUtils, 'convertStringArrayToObjectArray');
+            spyOn(ProjectUtils, 'fillEmptyCollectionsWithDefault').and.returnValue(data);
+            spyOn(ProjectUtils, 'convertIdArrayToObjectArray').and.returnValue(data);
+            spyOn(ProjectUtils, 'handleInteroperabilityLinks');
+            spyOn(ProjectUtils, 'setCoverageType');
+
+            let result = ProjectModule.getCurrentProjectForEditing({}, data);
+            expect(ProjectModule.getFlatProjectStructure).toHaveBeenCalled();
+            expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
+            expect(ProjectUtils.convertDate).toHaveBeenCalled();
+            expect(ProjectUtils.convertStringArrayToObjectArray).toHaveBeenCalled();
+            expect(ProjectUtils.fillEmptyCollectionsWithDefault).toHaveBeenCalled();
+            expect(ProjectUtils.convertIdArrayToObjectArray).toHaveBeenCalled();
+            expect(ProjectUtils.handleInteroperabilityLinks).toHaveBeenCalled();
+            expect(result).toEqual({ ...project_definition, ...data, coverageType: undefined });
+
+            result = ProjectModule.getCurrentProjectForEditing({});
+            expect(ProjectModule.getFlatProjectStructure).toHaveBeenCalled();
+            expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
+            expect(ProjectUtils.convertDate).toHaveBeenCalled();
+            expect(ProjectUtils.convertStringArrayToObjectArray).toHaveBeenCalled();
+            expect(ProjectUtils.fillEmptyCollectionsWithDefault).toHaveBeenCalled();
+            expect(ProjectUtils.convertIdArrayToObjectArray).toHaveBeenCalled();
+            expect(ProjectUtils.handleInteroperabilityLinks).toHaveBeenCalled();
+            expect(result).toEqual({ ...project_definition, ...data, coverageType: undefined });
+        });
+
+        it('getCurrentPublishedProjectForEditing', () => {
+            spyOn(ProjectModule, 'getPublishedProjects').and.returnValue([{ id: 1 }]);
+            spyOn(ProjectModule, 'getCurrentProjectForEditing').and.returnValue(1);
+            const state = {
+                projects: {
+                    currentProject: 2
+                }
+            };
+
+            let result = ProjectModule.getCurrentPublishedProjectForEditing(state);
+            expect(ProjectModule.getPublishedProjects).toHaveBeenCalled();
+            expect(ProjectModule.getCurrentProjectForEditing).not.toHaveBeenCalled();
+            expect(result).toEqual(undefined);
+
+            state.projects.currentProject = 1;
+
+            result = ProjectModule.getCurrentPublishedProjectForEditing(state);
+            expect(ProjectModule.getPublishedProjects).toHaveBeenCalled();
+            expect(ProjectModule.getCurrentProjectForEditing).toHaveBeenCalledWith(state, { id: 1 });
+            expect(result).toEqual(1);
+
+        });
+
+        it('getCurrentDraftProjectForEditing', () => {
+            spyOn(ProjectModule, 'getCurrentProjectForEditing').and.returnValue(1);
+            spyOn(ProjectModule, 'getCurrentDraft').and.returnValue(1);
+            const result = ProjectModule.getCurrentDraftProjectForEditing({});
+            expect(result).toEqual(1);
+            expect(ProjectModule.getCurrentDraft).toHaveBeenCalled();
+            expect(ProjectModule.getCurrentProjectForEditing).toHaveBeenCalledWith({}, 1);
+        });
+
+        it('getTeam', () => {
+            const state = {
+                projects: {
+                    teamViewers: {
+                        team: [1]
+                    }
+                },
+                system: {
+                    profiles: [{ id: 1, name: 2 }]
+                }
+            };
+            let result = ProjectModule.getTeam(state);
+            expect(result).toEqual([{ id: 1, name: 2 }]);
+
+            state.projects = {};
+            result = ProjectModule.getTeam(state);
+            expect(result).toEqual([]);
+        });
+
+        it('getViewers', () => {
+            const state = {
+                projects: {
+                    teamViewers: {
+                        viewers: [1]
+                    }
+                },
+                system: {
+                    profiles: [{ id: 1, name: 2 }]
+                }
+            };
+            let result = ProjectModule.getViewers(state);
+            expect(result).toEqual([{ id: 1, name: 2 }]);
+
+            state.projects = {};
+            result = ProjectModule.getViewers(state);
+            expect(result).toEqual([]);
+        });
+
+        it('getToolkitVersion', () => {
+            const state = {
+                projects: {
+                    toolkitVersions: [1]
+                }
+            };
+            let result = ProjectModule.getToolkitVersion(state);
+            expect(result).toEqual(state.projects.toolkitVersions);
+            expect(result).not.toBe(state.projects.toolkitVersions);
+
+            state.projects = {};
+            result = ProjectModule.getToolkitVersion(state);
+            expect(result).toEqual([]);
+
+        });
+        it('getCoverageVersion', () => {
+            const state = {
+                projects: {
+                    coverageVersions: [1]
+                }
+            };
+            let result = ProjectModule.getCoverageVersion(state);
+            expect(result).toEqual(state.projects.coverageVersions);
+            expect(result).not.toBe(state.projects.coverageVersions);
+
+            state.projects = {};
+            result = ProjectModule.getCoverageVersion(state);
+            expect(result).toEqual([]);
+        });
+
+        it('getCurrentVersion', () => {
+            const state = {
+                projects: {
+                    toolkitVersions: [1]
+                }
+            };
+            const result = ProjectModule.getCurrentVersion(state);
+            expect(result).toBe(1);
+
+        });
+
+        it('getCurrentVersionDate', () => {
+            const spy = spyOn(ProjectModule, 'getToolkitVersion').and.returnValue([]);
+
+            let result = ProjectModule.getCurrentVersionDate({});
+            expect(result).toEqual(null);
+
+            spy.and.returnValue([{ modified: 1 }, { modified: 2 }]);
+
+            result = ProjectModule.getCurrentVersionDate({});
+            expect(result).toEqual(2);
+
+        });
+
+        it('getMapsAxisData', () => {
+            spyOn(SystemModule, 'getAxis').and.returnValue([{ name: 'ax' }]);
+            const tv = spyOn(ProjectModule, 'getToolkitVersion').and.returnValue([]);
+            const td = spyOn(ToolkitModule, 'getToolkitData').and.returnValue([]);
+            spyOn(ProjectUtils, 'getTodayString').and.returnValue(1);
+            const data = [
+                { axis_score: 100 },
+                { axis_score: 90 },
+                { axis_score: 80 },
+                { axis_score: 70 },
+                { axis_score: 60 },
+                { axis_score: 50 }
+            ];
+
+            let result = ProjectModule.getMapsAxisData({});
+            expect(result).toEqual({ labels: ['ax'], data: [] });
+
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(ProjectModule.getToolkitVersion).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+            expect(ProjectUtils.getTodayString).toHaveBeenCalled();
+
+            tv.and.returnValue([{
+                modified: '1T2',
+                data
+            }]);
+
+            result = ProjectModule.getMapsAxisData({});
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(ProjectModule.getToolkitVersion).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+            expect(ProjectUtils.getTodayString).toHaveBeenCalled();
+            expect(result).toEqual({ labels: ['ax'],
+                data: [
+                    {
+                        date: '1',
+                        axis1: 1,
+                        axis2: 0.9,
+                        axis3: 0.8,
+                        axis4: 0.7,
+                        axis5: 0.6,
+                        axis6: 0.5
+                    }
+                ] });
+
+            tv.and.returnValue([]);
+            td.and.returnValue(data);
+            result = ProjectModule.getMapsAxisData({});
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(ProjectModule.getToolkitVersion).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+            expect(ProjectUtils.getTodayString).toHaveBeenCalled();
+            expect(result).toEqual({ labels: ['ax'],
+                data: [
+                    {
+                        date: 1,
+                        axis1: 1,
+                        axis2: 0.9,
+                        axis3: 0.8,
+                        axis4: 0.7,
+                        axis5: 0.6,
+                        axis6: 0.5
+                    }
+                ] });
+
+        });
+
+        it('getMapsDomainData', () => {
+            spyOn(SystemModule, 'getAxis').and.returnValue([{ name: 'ax', id: 1 }]);
+            spyOn(SystemModule, 'getDomains').and.returnValue([{ name: 'dm', axis: 1 }]);
+            const tv = spyOn(ProjectModule, 'getToolkitVersion').and.returnValue([]);
+            const td = spyOn(ToolkitModule, 'getToolkitData').and.returnValue([]);
+            spyOn(ProjectUtils, 'getTodayString').and.returnValue(1);
+
+            const data = [
+                { domain_percentage: 100 },
+                { domain_percentage: 90 },
+                { domain_percentage: 80 },
+                { domain_percentage: 70 },
+                { domain_percentage: 60 },
+                { domain_percentage: 50 }
+            ];
+
+            let result = ProjectModule.getMapsDomainData({});
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(SystemModule.getDomains).toHaveBeenCalled();
+            expect(ProjectModule.getToolkitVersion).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+            expect(ProjectUtils.getTodayString).toHaveBeenCalled();
+
+            expect(result).toEqual({
+                labels: ['ax'],
+                ax: {
+                    data: [],
+                    labels: ['dm']
+                }
+            });
+
+            tv.and.returnValue([
+                {
+                    modified: '1T2',
+                    data: [
+                        {
+                            domains: data
+
+                        }
+                    ]
+                }
+            ]);
+
+            result = ProjectModule.getMapsDomainData({});
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(SystemModule.getDomains).toHaveBeenCalled();
+            expect(ProjectModule.getToolkitVersion).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+            expect(ProjectUtils.getTodayString).toHaveBeenCalled();
+
+            expect(result).toEqual({
+                labels: ['ax'],
+                ax: {
+                    data: [{
+                        date: '1',
+                        axis1: 1,
+                        axis2: 0.9,
+                        axis3: 0.8,
+                        axis4: 0.7,
+                        axis5: 0.6,
+                        axis6: 0.5
+                    }],
+                    labels: ['dm']
+                }
+            });
+
+            tv.and.returnValue([]);
+            td.and.returnValue([
+                {
+                    domains: data
+                }
+            ]);
+
+            result = ProjectModule.getMapsDomainData({});
+            expect(SystemModule.getAxis).toHaveBeenCalled();
+            expect(SystemModule.getDomains).toHaveBeenCalled();
+            expect(ProjectModule.getToolkitVersion).toHaveBeenCalled();
+            expect(ToolkitModule.getToolkitData).toHaveBeenCalled();
+            expect(ProjectUtils.getTodayString).toHaveBeenCalled();
+
+            expect(result).toEqual({
+                labels: ['ax'],
+                ax: {
+                    data: [{
+                        date: 1,
+                        axis1: 1,
+                        axis2: 0.9,
+                        axis3: 0.8,
+                        axis4: 0.7,
+                        axis5: 0.6,
+                        axis6: 0.5
+                    }],
+                    labels: ['dm']
+                }
+            });
+        });
+
+        it('getCoverageData', () => {
+            spyOn(ProjectModule, 'getCoverageVersion').and.returnValue([{
+                data: [
+                    {
+                        clients: 1
+                    }
+                ]
+            }
+            ]);
+            spyOn(ProjectModule, 'getCurrentProject').and.returnValue({ national_level_deployment: {} });
+            spyOn(ProjectUtils, 'getTodayString').and.returnValue(1);
+            const result  = ProjectModule.getCoverageData({});
+            expect(result).toEqual({ labels: [], data: [{ date: 1, axis1: 1 }, { date: 1 }] });
+
+        });
+
+        it('getSimilarProject', () => {
+            spyOn(ProjectModule, 'getPublishedProjects').and.returnValue([{ id: 1 }]);
+            const state = {
+                projects: {
+                    similarProjectNames: undefined
+                }
+            };
+
+            let result = ProjectModule.getSimilarProject(state);
+            expect(result).toEqual([]);
+
+            state.projects.similarProjectNames = [{ id: 1, name: 1 }, { id: 2, name: 2 }];
+            result = ProjectModule.getSimilarProject(state);
+            expect(result).toEqual([{ id: 1, name: 1, isOwn: true }, { id: 2, name: 2, isOwn:false }]);
+        });
+
+
     });
 
     describe('ACTIONS', () => {
@@ -427,6 +860,71 @@ describe('Project Store Module', () => {
     });
 
     describe('REDUCERS', () => {
+
+        it('SET_PROJECT_LIST', () => {
+            let state = {};
+            const action = { type: 'SET_PROJECT_LIST', projects: [1] };
+            state = ProjectModule.default(state, action);
+            expect(state.list).toEqual(action.projects);
+            expect(state.list).not.toBe([action.projects]);
+
+        });
+
+        it('SET_SIMILAR_NAME_LIST', () => {
+            let state = {};
+            const action = { type: 'SET_SIMILAR_NAME_LIST', list: [1] };
+            state = ProjectModule.default(state, action);
+            expect(state.similarProjectNames).toEqual(action.list);
+            expect(state.similarProjectNames).not.toBe([action.list]);
+
+        });
+
+        it('UPDATE_SAVE_PROJECT', () => {
+            let state = {
+                list: [{
+                    id: 1
+                }]
+            };
+            const action = { type: 'UPDATE_SAVE_PROJECT', projectId: 1, project: { id: 1, name: 2 } };
+            state = ProjectModule.default(state, action);
+            expect(state.list).toEqual([{ id: 1, name: 2 }]);
+
+            state.list = [{ id: 2 }];
+
+            state = ProjectModule.default(state, action);
+            expect(state.list).toEqual([{ id: 2 }, { id: 1, name: 2 }]);
+
+        });
+
+        it('UPDATE_COUNTRY_FIELD_ANSWER', () => {
+            let state = {
+                list: [{
+                    id: 1,
+                    draft: {
+                        fields: []
+                    }
+                }]
+            };
+            let action = { type: 'UPDATE_COUNTRY_FIELD_ANSWER', countryField: { schema_id: 1 }, projectId: 1 };
+            state = ProjectModule.default(state, action);
+            expect(state.list).toEqual([{ id: 1, draft: { fields: [{ schema_id: 1 }] } }]);
+
+            action = { type: 'UPDATE_COUNTRY_FIELD_ANSWER', countryField: { schema_id: 1, name: 1 }, projectId: 1 };
+            state = ProjectModule.default(state, action);
+            expect(state.list).toEqual([{ id: 1, draft: { fields: [{ schema_id: 1, name: 1 }] } }]);
+        });
+
+        it('SET_CURRENT_PROJECT', () => {
+            let state = {
+                lastVersion: 1
+            };
+            const action = { type: 'SET_CURRENT_PROJECT', id: 1 };
+            state = ProjectModule.default(state, action);
+            expect(state.lastVersion).toEqual(0);
+            expect(state.currentProject).toEqual(1);
+
+        });
+
 
     });
 
