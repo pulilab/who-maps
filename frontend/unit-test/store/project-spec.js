@@ -925,6 +925,58 @@ describe('Project Store Module', () => {
 
         });
 
+        it('SET_CURRENT_PUBLIC_PROJECT_DETAIL', () => {
+            let state = {};
+            const action = { type: 'SET_CURRENT_PUBLIC_PROJECT_DETAIL', project: 1 };
+            state = ProjectModule.default(state, action);
+            expect(state.currentPublicProject).toEqual(1);
+        });
+
+        it('SET_PROJECT_STRUCTURE', () => {
+            let state = {};
+            const action = { type: 'SET_PROJECT_STRUCTURE', structure: 1 };
+            state = ProjectModule.default(state, action);
+            expect(state.structure).toEqual(1);
+        });
+
+        it('SET_PROJECT_INFO', () => {
+            let state = {};
+            const action = {
+                type: 'SET_PROJECT_INFO',
+                info: {
+                    toolkitVersions: 1,
+                    coverageVersions: 2,
+                    teamViewers: 3
+                }
+            };
+            state = ProjectModule.default(state, action);
+            expect(state.toolkitVersions).toEqual(1);
+            expect(state.coverageVersions).toEqual(2);
+            expect(state.teamViewers).toEqual(3);
+        });
+
+        it('BUMP_PROJECT_STATE_VERSION', () => {
+            let state = { lastVersion: 0 };
+            const action = { type: 'BUMP_PROJECT_STATE_VERSION' };
+            state = ProjectModule.default(state, action);
+            expect(state.lastVersion).toEqual(1);
+        });
+
+        it('SET_PROJECT_TEAM_VIEWERS', () => {
+            let state = {};
+            const action = { type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: 1 };
+            state = ProjectModule.default(state, action);
+            expect(state.teamViewers).toEqual(1);
+        });
+
+
+        it('CLEAR_USER_PROJECTS', () => {
+            let state = { structure: 1, a: 2, b: 2 };
+            const action = { type: 'CLEAR_USER_PROJECTS' };
+            state = ProjectModule.default(state, action);
+            expect(state).toEqual({ structure: 1 });
+        });
+
 
     });
 
