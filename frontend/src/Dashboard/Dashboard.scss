@@ -102,10 +102,12 @@
 
                             // Multi-lang
                             overflow: hidden;
-                            max-height: 60px;
+                            text-overflow: ellipsis;
                             display: -webkit-box;
                             -webkit-line-clamp: 5;
                             -webkit-box-orient: vertical;
+                            height: auto;
+                            max-height: 60px;
                             //
                         }
                     }
