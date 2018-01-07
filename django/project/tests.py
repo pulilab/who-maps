@@ -1,5 +1,8 @@
 import copy
+import csv
 from datetime import datetime
+from mock import patch
+from io import StringIO
 
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
@@ -12,6 +15,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 from django.contrib.auth.models import User, Permission
 from django.core.cache import cache
+from django.http import HttpResponse
+from django.utils.encoding import force_text
 from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
@@ -823,7 +828,75 @@ class ProjectTests(SetupTests):
         item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
         self.assertEqual(str(item), '(name) challenge')
 
-    def test_project_approval_admin_filter_country_admins(self):
+    def _create_new_project(self):
+        country, c = Country.objects.get_or_create(code='CTR2', defaults={'name': "country2",
+                                                                          'project_approval': False})
+
+        user = UserProfile.objects.get(id=self.user_profile_id)
+        country.users.add(user)
+
+        self.project_data = {
+            "date": datetime.utcnow(),
+            "name": "Test Project{}".format(Project.objects.all().count() + 1),
+            "organisation": self.org.id,
+            "contact_name": "name2",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2016",
+            "health_focus_areas": [1, 2],
+            "geographic_scope": "somewhere",
+            "country": country.id,
+            "platforms": [{
+                "id": 1,
+                "strategies": [1, 2]
+            }, {
+                "id": 2,
+                "strategies": [1, 9]
+            }],
+            "licenses": [1, 2],
+            "coverage": [
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
+            ],
+            "national_level_deployment":
+                {"clients": 20000, "health_workers": 0, "facilities": 0},
+            "donors": ["donor1", "donor2"],
+            "his_bucket": [1, 2],
+            "hsc_challenges": [1, 2],
+            "government_investor": 0,
+            "implementing_partners": ["partner1", "partner2"],
+            "repository": "http://some.repo",
+            "mobile_application": "http://mobile.app.org",
+            "wiki": "http://wiki.org",
+            "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
+                                       {"id": 2, "selected": True},
+                                       {"id": 3, "selected": True, "link": "http://example.org"}],
+            "interoperability_standards": [1],
+            "start_date": str(datetime.today().date()),
+            "end_date": str(datetime.today().date())
+        }
+
+        # Create project draft
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        project_id = response.json().get("id")
+
+        # Publish
+        url = reverse("project-publish", kwargs={"pk": project_id})
+        response = self.test_user_client.put(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 200, response.json())
+
+        return project_id
+
+    @patch('django.contrib.admin.options.messages')
+    def test_project_approval_admin_filter_country_admins(self, mocked_messages):
+        messages = []
+        mocked_messages.add_message = lambda s, *args, **kwargs: messages.append((args, kwargs))
+
+        self._create_new_project()
+
         request = MockRequest()
         site = AdminSite()
         user = UserProfile.objects.get(id=self.user_profile_id).user
@@ -878,6 +951,80 @@ class ProjectTests(SetupTests):
         ma = ProjectApprovalAdmin(ProjectApproval, site)
         response = ma.changeform_view(request)
         self.assertTrue(isinstance(response, TemplateResponse))
+
+    @patch('django.contrib.admin.options.messages')
+    def test_project_approval_admin_export(self, mocked_messages):
+        messages = []
+        mocked_messages.add_message = lambda s, *args, **kwargs: messages.append((args, kwargs))
+
+        ProjectApproval.objects.all().delete()
+        Country.objects.create(name='country2', code='CTR2', project_approval=True)
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+
+        project_1_id = self._create_new_project()
+        project_1 = Project.objects.get(id=project_1_id)
+        project_2_id = self._create_new_project()
+        project_2 = Project.objects.get(id=project_2_id)
+        project_3_id = self._create_new_project()
+        project_3 = Project.objects.get(id=project_3_id)
+
+        approval_1 = ProjectApproval.objects.get(project_id=project_1_id)
+        self.assertIsNone(approval_1.user)
+        self.assertIsNone(approval_1.approved)
+        self.assertIsNone(approval_1.reason)
+
+        approval_2 = ProjectApproval.objects.get(project_id=project_2_id)
+        approval_2.user = user.userprofile
+        approval_2.approved = True
+        approval_2.reason = "it's fine"
+        approval_2.save()
+
+        approval_3 = ProjectApproval.objects.get(project_id=project_3_id)
+        approval_3.user = user.userprofile
+        approval_3.approved = False
+        approval_3.reason = "not suitable"
+        approval_3.save()
+
+        request = MockRequest()
+        site = AdminSite()
+        request.user = user
+        TLS.request = request
+        ma = ProjectApprovalAdmin(ProjectApproval, site)
+
+        response = ma.export_project_approvals(request, ProjectApproval.objects.all())
+        self.assertTrue(isinstance(response, HttpResponse))
+        self.assertEqual(response['Content-Disposition'], 'attachment; filename=project_approval_export.csv')
+
+        f = StringIO(force_text(response.content))
+        lines = [l for l in csv.reader(f)]
+        self.assertEqual(len(lines), 4)
+        self.assertEqual(lines[0],
+                         ['Project name',
+                          'Approved by',
+                          'Status',
+                          'Country',
+                          'Reason'])
+
+        self.assertEqual(lines[1],
+                         [project_1.name,
+                          '-',
+                          'Pending',
+                          'country2',
+                          ''])
+
+        self.assertEqual(lines[2],
+                         [project_2.name,
+                          'Test Name',
+                          'Approved',
+                          'country2',
+                          "it's fine"])
+
+        self.assertEqual(lines[3],
+                         [project_3.name,
+                          'Test Name',
+                          'Rejected',
+                          'country2',
+                          'not suitable'])
 
     def test_project_approval_email(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')

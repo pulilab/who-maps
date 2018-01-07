@@ -1,11 +1,13 @@
 import csv
 from threading import local
+from io import StringIO
 
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.core import mail
 from django.utils.html import mark_safe
 from django.template import loader
@@ -116,6 +118,7 @@ class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
 class ProjectApprovalAdmin(admin.ModelAdmin):
     list_display = ['project', 'user', 'approved', 'reason']
     readonly_fields = ['link']
+    actions = ['export_project_approvals']
 
     def link(self, obj):
         if obj.id is None:
@@ -138,6 +141,37 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
     def changeform_view(self, request, *args, **kwargs):
         TLS.request = request
         return super(ProjectApprovalAdmin, self).changeform_view(request, *args, **kwargs)
+
+    def export_project_approvals(self, request, queryset):
+        f = StringIO()
+        writer = csv.writer(f)
+        writer.writerow(['Project name', 'Approved by', 'Status', 'Country', 'Reason'])
+
+        queryset = self.get_queryset(request)
+        queryset = queryset.select_related('project')
+        for project_approval in queryset:
+            if project_approval.approved:
+                status = ugettext('Approved')
+            elif project_approval.approved is None:
+                status = ugettext('Pending')
+            else:
+                status = ugettext('Rejected')
+
+            if project_approval.user:
+                user_name = project_approval.user.name
+            else:
+                user_name = '-'
+
+            writer.writerow([project_approval.project.name,
+                             user_name,
+                             status,
+                             project_approval.project.get_country().name,
+                             project_approval.reason])
+
+        f.seek(0)
+        response = HttpResponse(f, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=project_approval_export.csv'
+        return response
 
 
 def validate_csv_ext(value):
