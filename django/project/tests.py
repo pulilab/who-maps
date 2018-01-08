@@ -1586,7 +1586,7 @@ class TestAdmin(TestCase):
     def setUp(self):
         self.request = MockRequest()
         self.site = AdminSite()
-        self.user = User.objects.create(username="alma", password="korte")
+        self.user = User.objects.create_user(username="alma", password="korte")
         self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
 
         url = reverse('rest_register')
@@ -1727,7 +1727,7 @@ class TestAdmin(TestCase):
         p1 = Project.objects.create(name="Test1")
         p2 = Project.objects.create(name="Test2")
         p3 = Project.objects.create(name="Test3")
-        ProjectApproval.objects.create(project=p1)
+        ProjectApproval.objects.create(project=p1, approved=None)
         ProjectApproval.objects.create(project=p2, approved=True)
         ProjectApproval.objects.create(project=p3, approved=False)
 
