@@ -173,7 +173,7 @@ def lint():
 
 
 def makemigrations():
-    local('docker exec -it whomaps_django_1 python manage.py makemigrations --noinput')
+    local('docker exec -it whomaps_django_1 python manage.py makemigrations')
 
 
 def migrate():
