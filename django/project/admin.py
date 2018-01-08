@@ -119,6 +119,7 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
     list_display = ['project', 'user', 'approved', 'reason']
     readonly_fields = ['link']
     actions = ['export_project_approvals']
+    ordering = ['approved', 'created']
 
     def link(self, obj):
         if obj.id is None:
@@ -147,7 +148,6 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
         writer = csv.writer(f)
         writer.writerow(['Project name', 'Approved by', 'Status', 'Country', 'Reason'])
 
-        queryset = self.get_queryset(request)
         queryset = queryset.select_related('project')
         for project_approval in queryset:
             if project_approval.approved:
