@@ -96,3 +96,9 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
                 if field.required and not len(list(filter(lambda a, f=field: a['question'] == f.question, value))):
                     raise ValidationError("All required answers need to be given")
             return value
+
+
+class CountryMapDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ("id", "map_data")
