@@ -1606,6 +1606,8 @@ class TestAdmin(TestCase):
     def setUp(self):
         self.request = MockRequest()
         self.site = AdminSite()
+        self.user = User.objects.create(username="alma", password="korte")
+        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
 
         url = reverse('rest_register')
         data = {'email': 'test_user@gmail.com',
@@ -1704,6 +1706,45 @@ class TestAdmin(TestCase):
         tpa.save_form(self.request, form, True)
 
         self.assertEqual(len(mail.outbox), initial_email_count)
+
+    def test_admin_list_filters(self):
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        approval_filter_class = ma.list_filter[0]
+        approval_filter_obj = approval_filter_class(self.request, {}, ProjectApproval, ma)
+
+        self.assertEqual(
+            approval_filter_obj.lookups(self.request, ma), ((None, "Waiting for approval"), (True, "Approved"),
+                                                            (False, "Declined")))
+        self.assertFalse(ma.has_add_permission(self.request))
+        p1 = Project.objects.create(name="Test1")
+        p2 = Project.objects.create(name="Test2")
+        p3 = Project.objects.create(name="Test3")
+        ProjectApproval.objects.create(project=p1)
+        ProjectApproval.objects.create(project=p2, approved=True)
+        ProjectApproval.objects.create(project=p3, approved=False)
+
+        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
+
+        self.assertEqual(approvals.count(), 1)
+        self.assertEqual(approvals[0].project.name, "Test1")
+
+        approval_filter_obj = approval_filter_class(self.request, {"approved": True}, ProjectApproval, ma)
+
+        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
+
+        self.assertEqual(approvals.count(), 1)
+        self.assertEqual(approvals[0].project.name, "Test2")
+
+        approval_filter_obj = approval_filter_class(self.request, {"approved": False}, ProjectApproval, ma)
+
+        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
+        self.assertEqual(approvals.count(), 1)
+        self.assertEqual(approvals[0].project.name, "Test3")
 
 
 class TestProjectImportAdmin(TestCase):
