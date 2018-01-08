@@ -930,26 +930,6 @@ class ProjectTests(SetupTests):
                                                                              user.email)
         self.assertEqual(link, expected_link)
 
-    def test_project_approval_admin_changeform_view(self):
-        request = MockRequest()
-        request.method = 'GET'
-        request.POST = {}
-        request.META = {'SCRIPT_NAME': 'from_test'}
-        request.resolver_match = False
-
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-
-        content_type = ContentType.objects.get(app_label=ProjectApproval._meta.app_label,
-                                               model=ProjectApproval._meta.model_name)
-        add_permission = Permission.objects.get(content_type=content_type,
-                                                codename='add_{}'.format(ProjectApproval._meta.model_name))
-        user.user_permissions.add(add_permission)
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        response = ma.changeform_view(request)
-        self.assertTrue(isinstance(response, TemplateResponse))
-
     @patch('django.contrib.admin.options.messages')
     def test_project_approval_admin_export(self, mocked_messages):
         messages = []
@@ -1706,6 +1686,29 @@ class TestAdmin(TestCase):
         tpa.save_form(self.request, form, True)
 
         self.assertEqual(len(mail.outbox), initial_email_count)
+
+    def test_project_approval_admin_changeform_view(self):
+        request = MockRequest()
+        request.method = 'GET'
+        request.POST = {}
+        request.META = {'SCRIPT_NAME': 'from_test'}
+        request.resolver_match = False
+
+        content_type = ContentType.objects.get(app_label=ProjectApproval._meta.app_label,
+                                               model=ProjectApproval._meta.model_name)
+        change_permission = Permission.objects.get(content_type=content_type,
+                                                   codename='change_{}'.format(ProjectApproval._meta.model_name))
+
+        p = Project.objects.create(name="test change view")
+        pa = ProjectApproval.objects.create(project=p)
+        self.user.user_permissions.add(change_permission)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        request.user = self.user
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        response = ma.changeform_view(request, object_id=str(pa.id))
+        self.assertTrue(isinstance(response, TemplateResponse))
 
     def test_admin_list_filters(self):
         ma = ProjectApprovalAdmin(ProjectApproval, self.site)
