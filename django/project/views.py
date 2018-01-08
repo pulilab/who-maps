@@ -251,7 +251,7 @@ class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
 
         # Remove approval if already approved, so country admin can approve again because project has changed
         # TODO: refactor
-        if project.get_country().project_approval and hasattr(project, 'approval') and project.approval.approved:
+        if hasattr(project, 'approval') and project.approval.approved:
             project.approval.delete()
             ProjectApproval.objects.create(project=project)
 
@@ -273,10 +273,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         # Add default Toolkit structure for the new project.
         Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
 
-        # Add approval if required by the country
-        # TODO: validate this
-        if project.get_country(draft_mode=True).project_approval:
-            ProjectApproval.objects.create(project=project)
+        # Add approval
+        ProjectApproval.objects.create(project=project)
 
         data = project.to_representation(draft_mode=True)
 
