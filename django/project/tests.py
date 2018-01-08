@@ -69,7 +69,7 @@ class SetupTests(APITestCase):
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1")
+        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True)
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
@@ -902,9 +902,8 @@ class ProjectTests(SetupTests):
         user = UserProfile.objects.get(id=self.user_profile_id).user
         request.user = user
         ma = ProjectApprovalAdmin(ProjectApproval, site)
-        ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                       approved=True)
         self.assertEqual(ma.get_queryset(request).count(), 1)
+        self.assertEqual(len(messages), 1)
 
     def test_project_approval_admin_link_add(self):
         request = MockRequest()
@@ -922,8 +921,7 @@ class ProjectTests(SetupTests):
         request.user = user
         TLS.request = request
         ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.create(user_id=self.user_profile_id, project_id=self.project_id,
-                                                          approved=True)
+        project_approval = ProjectApproval.objects.get(project_id=self.project_id)
         link = ma.link(project_approval)
         expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&" \
                         "is_superuser=true&email={}'>See project</a>".format(self.project_id,

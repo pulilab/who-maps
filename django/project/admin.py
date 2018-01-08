@@ -2,7 +2,7 @@ import csv
 from threading import local
 from io import StringIO
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
@@ -135,8 +135,16 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
         if not request.user.is_superuser:
-            country_ids = Country.objects.filter(users__in=[request.user.userprofile]).values_list('id', flat=True)
-            qs = qs.filter(project__data__country__contained_by=list(country_ids))
+            country_id_qs = Country.objects.filter(users=request.user.userprofile).values_list('id', flat=True)
+
+            no_approval_ids = country_id_qs.filter(project_approval=False)
+            if qs.filter(project__data__country__contained_by=list(no_approval_ids)).exists():
+                self.message_user(request, ugettext('Some project approvals are hidden due to country configuration. '
+                                                    'Check the project approval checkbox on the country admin to make '
+                                                    'them visible.'), messages.WARNING)
+
+            approval_required_ids = country_id_qs.filter(project_approval=True)
+            qs = qs.filter(project__data__country__contained_by=list(approval_required_ids))
         return qs
 
     def changeform_view(self, request, *args, **kwargs):
