@@ -210,6 +210,9 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
         response['Content-Disposition'] = 'attachment; filename=project_approval_export.csv'
         return response
 
+    def has_add_permission(self, request):
+        return False
+
 
 def validate_csv_ext(value):
     if not value.name.endswith('.csv'):
