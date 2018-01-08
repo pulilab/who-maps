@@ -4,6 +4,7 @@ from io import StringIO
 
 from django.contrib import admin, messages
 from django import forms
+from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -115,7 +116,35 @@ class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
+class ApprovalFilter(SimpleListFilter):
+    title = 'Status'
+
+    parameter_name = 'approved'
+
+    def lookups(self, request, model_admin):
+        return (None, "Waiting for approval"), (True, "Approved"), (False, "Declined")
+
+    def choices(self, cl):  # pragma: no cover
+        for lookup, title in self.lookup_choices:
+            try:
+                selected = self.value() == lookup
+            except TypeError:
+                selected = None
+
+            yield {
+                'selected': selected,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        return queryset.filter(approved=self.value())
+
+
 class ProjectApprovalAdmin(admin.ModelAdmin):
+    list_filter = (ApprovalFilter,)
     list_display = ['project', 'user', 'approved', 'reason']
     readonly_fields = ['link']
     actions = ['export_project_approvals']
