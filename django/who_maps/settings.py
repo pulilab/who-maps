@@ -81,6 +81,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
+                'core.context_processors.from_settings',
             ],
         },
     },
@@ -313,3 +314,13 @@ LOCALE_PATHS = [
 for arg in sys.argv:
     if 'test' in arg:
         DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
+
+if SITE_ID == 3:
+    ENVIRONMENT_NAME = "PRODUCTION"
+    ENVIRONMENT_COLOR = "red"
+elif SITE_ID == 4:
+    ENVIRONMENT_NAME = "QA / STAGING"
+    ENVIRONMENT_COLOR = "orange"
+else:
+    ENVIRONMENT_NAME = "DEVELOPMENT"
+    ENVIRONMENT_COLOR = "blue"
