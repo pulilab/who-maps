@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
@@ -66,6 +67,7 @@ class CountryField(models.Model):
     schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
     schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
     required = models.BooleanField(default=False)
+    map_data = JSONField(default=dict())
 
     objects = CountryFieldManager()
 
