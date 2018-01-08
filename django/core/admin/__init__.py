@@ -23,7 +23,7 @@ class UserProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('userprofile', 'country', 'type', 'organisation', 'is_staff', 'is_superuser')
-    search_fields = ('userprofile__name', 'email', 'userprofile__country', 'userprofile__organisation__name')
+    search_fields = ('userprofile__name', 'email', 'userprofile__country__name', 'userprofile__organisation__name')
     inlines = (UserProfileInline,)
 
     def country(self, obj):
