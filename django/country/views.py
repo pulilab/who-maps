@@ -65,6 +65,6 @@ class CountryExportView(APIView):
         return Response(data)
 
 
-class CountryMapDataViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class CountryMapDataViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountryMapDataSerializer
