@@ -63,3 +63,8 @@ class CountryExportView(APIView):
             data.append(country_data)
 
         return Response(data)
+
+
+class CountryMapDataViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountryMapDataSerializer
