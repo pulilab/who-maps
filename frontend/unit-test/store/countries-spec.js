@@ -117,7 +117,7 @@ describe('Countries Store Module', () => {
         });
 
         it('getCurrentCountrySubLevelNames', () => {
-            spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
                 map_data: {
                     first_sub_level: {
                         name: 1
@@ -127,9 +127,14 @@ describe('Countries Store Module', () => {
                     }
                 }
             });
-            const result = CountriesModule.getCurrentCountrySubLevelNames({});
+            let result = CountriesModule.getCurrentCountrySubLevelNames({});
             expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
             expect(result).toEqual([1, 2]);
+
+            spy.and.returnValue({});
+            result = CountriesModule.getCurrentCountrySubLevelNames({});
+            expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+            expect(result).toEqual(['', '']);
         });
 
         it('getCurrentCountryFirstSubLevel', () => {

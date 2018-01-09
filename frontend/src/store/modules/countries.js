@@ -99,7 +99,8 @@ export const getCurrentCountrySubLevelNames = state => {
     const country = exports.getCurrentCountry(state);
     try {
         return [country.map_data.first_sub_level.name, country.map_data.second_sub_level.name];
-    } catch (e) {
+    }
+    catch (e) {
         return ['', ''];
     }
 };
