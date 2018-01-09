@@ -265,10 +265,9 @@ export function handleNationalLevelCoverage({ national_level_deployment }) {
 
 }
 
-export function handleCoverage({ coverage }) {
+export function handleCoverage(coverage) {
     coverage  = coverage ? coverage : [];
-    const cov = coverage.map(c => {
+    return coverage.map(c => {
         return defaultEmptyCoverageToZero(c);
     }).filter(c => c);
-    return { coverage : cov };
 }
