@@ -14,8 +14,11 @@ class ImplementationOverview extends CollapsibleSet {
     }
 
     mapData(state) {
+        const subLevelNames = CountriesModule.getCurrentCountrySubLevelNames(state);
         return {
-            districtList: CountriesModule.getCurrentCountryDistricts(state)
+            districtList: CountriesModule.getCurrentCountryFirstSubLevel(state),
+            secondSubLevelList:  CountriesModule.getCurrentCountrySecondSubLevel(state),
+            subLevelNames
         };
     }
 
@@ -46,6 +49,13 @@ class ImplementationOverview extends CollapsibleSet {
             this.clearDistrict(coverage);
         }, true);
 
+        this.scope.$watch(()=>{
+            return this.project.coverage_second_level;
+        }, (coverage_second_level) => {
+            this.observeCoverageSecondLevel = {};
+            this.clearDistrict(coverage_second_level);
+        }, true);
+
         this.scope.$watchGroup([() => {
             return this.observeCoverage;
         }, () => {
@@ -53,6 +63,15 @@ class ImplementationOverview extends CollapsibleSet {
         }], ([, districts]) => {
             this.setAvailableDictOptions(this.project.coverage, districts, 'district');
             this.addClearOption(this.project.coverage);
+        });
+
+        this.scope.$watchGroup([() => {
+            return this.observeCoverageSecondLevel;
+        }, () => {
+            return this.secondSubLevelList;
+        }], ([, secondSubLevel]) => {
+            this.setAvailableDictOptions(this.project.coverage_second_level, secondSubLevel, 'district');
+            this.addClearOption(this.project.coverage_second_level);
         });
 
         this.scope.$watch(s => s.vm.districtList, this.removeUnavailableDistricts.bind(this));
