@@ -66,6 +66,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
+    coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
     government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'), (
         1, 'Yes, they are contributing in-kind people or time'), (
