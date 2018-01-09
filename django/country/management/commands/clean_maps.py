@@ -26,5 +26,6 @@ class Command(BaseCommand):
                 level = c.map_data['first_sub_level']['name']
                 json_content['features'] = [f for f in json_content['features']
                                             if f['properties']['wof:placetype'] == level]
-                with open(os.path.join(settings.BASE_DIR, 'media/uploaded_maps', '{}_slim.geojson'.format(country_code)), 'w') as out:
+                with open(os.path.join(settings.BASE_DIR, 'media/uploaded_maps',
+                                       '{}_slim.geojson'.format(country_code)), 'w') as out:
                     json.dump(json_content, out)
