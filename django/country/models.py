@@ -16,6 +16,7 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
     users = models.ManyToManyField(UserProfile, help_text="User who can update the country", blank=True,
                                    related_name='+', limit_choices_to={'user__groups__name': 'Country Admin'})
     project_approval = models.BooleanField(default=False)
+    map_data = JSONField(default=dict())
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -67,7 +68,6 @@ class CountryField(models.Model):
     schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
     schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
     required = models.BooleanField(default=False)
-    map_data = JSONField(default=dict())
 
     objects = CountryFieldManager()
 
