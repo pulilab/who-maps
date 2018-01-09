@@ -630,6 +630,26 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[-1], expected_data)
 
+    def test_update_and_list_country_map_data(self):
+        url = reverse("country-detail", kwargs={"pk": Country.objects.last().id})
+        self.map_data = {"map_data": {
+            "sub_level_name": "District",
+            "sub_levels": [{
+                "name_en": "District 1",
+                "name_es": "Districto Uno"
+            }, {
+                "name_en": "Disctrict 9"
+            }]
+        }}
+        response = self.test_user_client.put(url, data=self.map_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['map_data'], self.map_data['map_data'])
+
+        url = reverse("country-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[-1]['map_data'], self.map_data['map_data'])
+
 
 class MockRequest:
     pass
