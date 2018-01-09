@@ -95,16 +95,32 @@ export const getCountriesLib = state => {
     return result;
 };
 
-export const getCurrentCountryDistricts = state => {
+export const getCurrentCountrySubLevelNames = state => {
+    const country = exports.getCurrentCountry(state);
+    try {
+        return [country.map_data.first_sub_level.name, country.map_data.second_sub_level.name];
+    } catch (e) {
+        return ['', ''];
+    }
+};
+
+export const getCurrentCountryFirstSubLevel = state => {
     const ln = getCurrentLanguage();
-    return state.countries.currentCountryDistricts
-      .map(ccd => ({ id: ccd.en || ccd.name, name: ccd[ln] || ccd.en || ccd.name }));
+    const country = exports.getCurrentCountry(state);
+    return country.map_data.first_sub_level.elements
+      .map(ccd => ({ id: ccd['name:en'] || ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+};
+export const getCurrentCountrySecondSubLevel = state => {
+    const ln = getCurrentLanguage();
+    const country = exports.getCurrentCountry(state);
+    return country.map_data.second_sub_level.elements
+      .map(ccd => ({ id: ccd['name:en'] || ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
 };
 
 export const getCurrentCountryMapData = state => {
     const currentCountry = exports.getCurrentCountry(state);
     currentCountry.mapData = mapData[currentCountry.code];
-    currentCountry.districts = exports.getCurrentCountryDistricts(state);
+    currentCountry.districts = exports.getCurrentCountryFirstSubLevel(state);
     return currentCountry;
 };
 
@@ -148,7 +164,7 @@ export function loadCountryFields(id) {
     };
 }
 
-export function loadCountryMapDataAndDistricts() {
+export function loadCountryMapData() {
     return async (dispatch, getState) => {
         const state = getState();
         const country = exports.getCurrentCountry(state);
@@ -158,17 +174,6 @@ export function loadCountryMapDataAndDistricts() {
                 const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
                 mapData[country.code] = Object.freeze(data);
             }
-            const subKey = Object.keys(mapData[country.code].objects)[0];
-            const districts = mapData[country.code].objects[subKey].geometries.map(object => {
-                return {
-                    name: object.properties.name,
-                    en: object.properties['name:en'],
-                    es: object.properties['name:es'],
-                    fr: object.properties['name:fr'],
-                    pt: object.properties['name:pt']
-                };
-            });
-            dispatch({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts });
         }
     };
 }
@@ -221,7 +226,7 @@ export function setCurrentCountry(id, waitFor = []) {
             dispatch({ type: 'SET_CURRENT_COUNTRY', country: id });
             const promiseCollection = {};
             promiseCollection.countryFields = dispatch(exports.loadCountryFields(id));
-            promiseCollection.mapData = dispatch(exports.loadCountryMapDataAndDistricts());
+            promiseCollection.mapData = dispatch(exports.loadCountryMapData());
             promiseCollection.landingPage = dispatch(exports.loadCountryLandingPageInfo());
             promiseCollection.districts = dispatch(exports.loadCurrentCountryDistrictsProject());
             return Promise.all(waitFor.map(name => promiseCollection[name]));
@@ -265,9 +270,6 @@ export default function system(state = stateDefinition, action) {
     }
     case 'UPDATE_COUNTRY_FIELDS_LIST': {
         return { ...state, countryFields: unionBy(action.fields, state.countryFields, 'id') };
-    }
-    case 'SET_CURRENT_COUNTRY_DISTRICTS': {
-        return { ...state, currentCountryDistricts: action.districts };
     }
     case 'SET_CURRENT_COUNTRY_PROJECTS': {
         return { ...state, currentCountryProjects: action.projects };
