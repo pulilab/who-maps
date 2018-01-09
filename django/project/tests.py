@@ -110,6 +110,10 @@ class SetupTests(APITestCase):
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
+            "coverage_second_level": [
+                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49},
+                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
+            ],
             "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
             "donors": ["donor1", "donor2"],
@@ -1257,6 +1261,15 @@ class ProjectDraftTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
+
+    def test_retrieve_project_with_second_sublevel(self):
+        url = reverse("project-retrieve", kwargs={"pk": self.project_pub_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']['coverage_second_level'],
+                         response.json()['published']['coverage_second_level'])
+        self.assertNotEqual(response.json()['published']['coverage_second_level'],
+                            response.json()['published']['coverage'])
 
 
 class PermissionTests(SetupTests):
