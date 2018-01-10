@@ -6,7 +6,7 @@ from core.admin import ArrayFieldMixin
 from django.core import mail, urlresolvers
 from django.contrib import admin
 from django.template import loader
-from .models import Country, PartnerLogo, CountryField
+from .models import Country, PartnerLogo, CountryField, MapFile
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
 
 
@@ -41,11 +41,17 @@ class PartnerLogoInline(admin.TabularInline):
     max_num = 4
 
 
+class MapFileInline(admin.TabularInline):
+    model = MapFile
+    extra = 0
+    max_num = 4
+
+
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
-    inlines = (PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
+    inlines = (MapFileInline, PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
     filter_horizontal = ('users',)
 
     def get_queryset(self, request):
