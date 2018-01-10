@@ -41,5 +41,5 @@ class Command(BaseCommand):
                                     if f['properties']['wof:placetype'] == level]
         folder = os.path.join(settings.MEDIA_ROOT, 'processed_maps/')
         Path(folder).mkdir(parents=True, exist_ok=True)
-        with open(os.path.join(folder,'{}_slim.geojson'.format(country_code)), 'w') as out:
+        with open(os.path.join(folder, '{}_slim.geojson'.format(country_code)), 'w') as out:
             json.dump(json_content, out)
