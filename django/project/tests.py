@@ -115,7 +115,8 @@ class SetupTests(APITestCase):
                 {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
             ],
             "national_level_deployment":
-                {"clients": 20000, "health_workers": 0, "facilities": 0},
+                {"clients": 20000, "health_workers": 0, "facilities": 0,
+                 "facilities_list": ['facility1', 'facility2', 'facility3']},
             "donors": ["donor1", "donor2"],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
@@ -1050,6 +1051,13 @@ class ProjectTests(SetupTests):
         outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
 
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
+
+    def test_project_country_facilities_list(self):
+        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['national_level_deployment']['facilities_list'],
+                         ['facility1', 'facility2', 'facility3'])
 
 
 class ProjectDraftTests(SetupTests):
