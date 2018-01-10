@@ -38,10 +38,6 @@ class MapFile(ExtendedModel):
     country = models.ForeignKey(Country)
     map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
-    @property
-    def map_url(self):
-        return self.map_file.url if self.map_file else None
-
 
 class CountryFieldManager(models.Manager):
     def get_schema(self, country_id):
