@@ -24,7 +24,8 @@ class NDPSerializer(serializers.Serializer):
     clients = serializers.IntegerField(min_value=0, max_value=100000)
     health_workers = serializers.IntegerField(min_value=0, max_value=100000)
     facilities = serializers.IntegerField(min_value=0, max_value=100000)
-
+    facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=10000,
+                                            required=False, allow_null=True)
 
 class CoverageSerializer(NDPSerializer):
     district = serializers.CharField(max_length=128)
