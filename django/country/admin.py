@@ -46,6 +46,7 @@ class MapFileInline(admin.StackedInline):
     model = MapFile
     extra = 0
     max_num = 1
+    can_delete = False
     readonly_fields = ('print_map_customizer',)
 
     class Media:
