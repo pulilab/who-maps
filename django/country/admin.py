@@ -70,6 +70,11 @@ class CountryAdmin(admin.ModelAdmin):
     ordering = ('name',)
     inlines = (MapFileInline, PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
     filter_horizontal = ('users',)
+    readonly_fields = ('code', 'name')
+
+    def get_fields(self, request, obj=None):
+        fields = super(CountryAdmin, self).get_fields(request, obj)
+        return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data']]
 
     def get_queryset(self, request):
         qs = super(CountryAdmin, self).get_queryset(request)
