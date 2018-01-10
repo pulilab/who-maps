@@ -88,8 +88,6 @@ class CountryAdmin(admin.ModelAdmin):
         fields = super(CountryAdmin, self).get_readonly_fields(request, obj)
         if request.user.is_staff and not request.user.is_superuser:
             fields += (
-                'name',
-                'code',
                 'users',
             )
         return fields
