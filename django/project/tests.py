@@ -1052,12 +1052,38 @@ class ProjectTests(SetupTests):
 
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
-    def test_project_country_facilities_list(self):
+    def test_project_country_facilities_list_retrieve(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']['national_level_deployment']['facilities_list'],
                          ['facility1', 'facility2', 'facility3'])
+
+    def test_project_country_facilities_list_update(self):
+        url = reverse("project-publish", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(
+            coverage=[
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4,
+                 "facilities_list": ['facility_district1_1', 'facility_district1_2', 'facility_district1_3']},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8,
+                 "facilities_list": ['facility_district2_1', 'facility_district2_2', 'facility_district3_3']}
+            ],
+            coverage_second_level=[
+                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49,
+                 "facilities_list": ['facility_ward1_1', 'facility_ward1_2', 'facility_ward1_3']},
+                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89,
+                 "facilities_list": ['facility_ward2_1', 'facility_ward2_2', 'facility_ward2_3']}
+            ]
+        )
+
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.json()['published']['national_level_deployment']['facilities_list'],
+                         ['facility1', 'facility2', 'facility3'])
+        self.assertEqual(response.json()['published']['coverage'][0]['facilities_list'],
+                         ['facility_district1_1', 'facility_district1_2', 'facility_district1_3'])
+        self.assertEqual(response.json()['published']['coverage_second_level'][1]['facilities_list'],
+                         ['facility_ward2_1', 'facility_ward2_2', 'facility_ward2_3'])
 
 
 class ProjectDraftTests(SetupTests):
