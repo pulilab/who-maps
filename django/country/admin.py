@@ -60,7 +60,6 @@ class MapFileInline(admin.StackedInline):
                  'country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer>'.format(obj.map_file.url,
                                                                                                  obj.country_id)
         return mark_safe(markup)
-
     print_map_customizer.short_description = 'Map'
 
 

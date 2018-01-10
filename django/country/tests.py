@@ -700,18 +700,21 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         self.assertEqual(ma.get_readonly_fields(self.request), (
-            'name',
             'code',
+            'name',
             'users',
         ))
 
-    def test_superuser_can_change_every_field(self):
+    def test_superuser_readonlies(self):
         ma = CountryAdmin(Country, self.site)
         self.user.is_superuser = True
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_readonly_fields(self.request), ())
+        self.assertEqual(ma.get_readonly_fields(self.request), (
+            'code',
+            'name'
+        ))
 
     def test_country_field_inlines(self):
         user_profile = UserProfile.objects.create(user=self.user)
@@ -777,3 +780,35 @@ class CountryAdminTests(TestCase):
         self.assertTrue("test2@test.test" in outgoing_fr_email.values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
+
+    def test_country_map_inline(self):
+        user_profile = UserProfile.objects.create(user=self.user)
+        country = Country.objects.create(name="Country1", code="CC1")
+        country.users.add(user_profile)
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        formsets_and_inlines = list(ma.get_formsets_with_inlines(self.request))
+        mapfile_formset_and_inline = formsets_and_inlines[0]
+        mapfile_inline = mapfile_formset_and_inline[1]
+
+        class MockMap:
+            class MockMapFile:
+                url = 'test_url'
+            map_file = MockMapFile()
+            country_id = 0
+
+        self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
+                         '<vue-map-customizer map-url="test_url" flag-base-url="/static/flags/" '
+                         'country-id="0" api-url="/api/country-map-data/"></vue-map-customizer>')
+
+    def test_country_get_fields(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.assertTrue('map_data' not in ma.get_fields(self.request))
