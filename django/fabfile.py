@@ -3,7 +3,7 @@ from fabric.api import local, run, cd, env
 from fabric.context_managers import warn_only
 
 # ENVIRONMENTS #
-
+PROD_HOST_STRING = 'whomaps@207.154.215.126'
 
 def dev():
     """Configure dev"""
@@ -19,7 +19,7 @@ def dev():
 
 def production():
     """Configure prod"""
-    env.host_string = 'whomaps@207.154.215.126'
+    env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
     env.branch = "tags/3.1.4"
@@ -65,12 +65,12 @@ def copy_prod(server):
         env.branch = 'tags/{}'.format(tag)
         deploy()
         # Import production database
-        run('scp whomaps@207.154.215.126:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .')
+        run('scp {}:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .'.format(PROD_HOST_STRING))
         run('tar -xzvf dump`date +%d-%m-%Y`.sql.tar.gz')
         run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
         # Import production media files
         run('rm -rf media')
-        run('scp whomaps@207.154.215.126:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .')
+        run('scp {}:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .'.format(PROD_HOST_STRING))
         run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz django/media/')
 
 
