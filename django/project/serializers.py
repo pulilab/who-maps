@@ -27,6 +27,7 @@ class NDPSerializer(serializers.Serializer):
     facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=10000,
                                             required=False, allow_null=True)
 
+
 class CoverageSerializer(NDPSerializer):
     district = serializers.CharField(max_length=128)
 
