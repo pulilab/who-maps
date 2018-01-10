@@ -19,26 +19,27 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         country_code = options['code']
 
-        if country_code:
-            country_code = country_code[0]
-            c = None
-            map_file = None
-            try:
-                c = Country.objects.get(code=country_code.upper())
-                map_file = MapFile.objects.get(country_id=c.id)
-            except ObjectDoesNotExist:
-                self.stdout.write('Selected country does not exist or it does not have an associated MapFile')
+        if not country_code:
+            self.stdout.write('No country code provided')
+            return
 
-            if c and map_file:
-                self.stdout.write('Removing unused features {} from geojson'.format(c.name))
-                with open(os.path.join(settings.MEDIA_ROOT, '{}'.format(map_file.map_file))) as f:
-                    content = f.read()
-                    json_content = json.loads(content)
+        country_code = country_code[0]
 
-                    level = c.map_data['first_sub_level']['name']
-                    json_content['features'] = [f for f in json_content['features']
-                                                if f['properties']['wof:placetype'] == level]
-                    folder = os.path.join(settings.MEDIA_ROOT, 'processed_maps/')
-                    Path(folder).mkdir(parents=True, exist_ok=True)
-                    with open(os.path.join(folder,'{}_slim.geojson'.format(country_code)), 'w') as out:
-                        json.dump(json_content, out)
+        try:
+            c = Country.objects.get(code=country_code.upper())
+            map_file = MapFile.objects.get(country_id=c.id)
+        except ObjectDoesNotExist:
+            self.stdout.write('Selected country does not exist or it does not have an associated MapFile')
+            return
+
+        self.stdout.write('Removing unused features {} from geojson'.format(c.name))
+        with open(os.path.join(settings.MEDIA_ROOT, '{}'.format(map_file.map_file))) as f:
+            json_content = json.load(f)
+
+        level = c.map_data['first_sub_level']['name']
+        json_content['features'] = [f for f in json_content['features']
+                                    if f['properties']['wof:placetype'] == level]
+        folder = os.path.join(settings.MEDIA_ROOT, 'processed_maps/')
+        Path(folder).mkdir(parents=True, exist_ok=True)
+        with open(os.path.join(folder,'{}_slim.geojson'.format(country_code)), 'w') as out:
+            json.dump(json_content, out)
