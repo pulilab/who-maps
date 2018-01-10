@@ -16,7 +16,7 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
     users = models.ManyToManyField(UserProfile, help_text="User who can update the country", blank=True,
                                    related_name='+', limit_choices_to={'user__groups__name': 'Country Admin'})
     project_approval = models.BooleanField(default=False)
-    map_data = JSONField(default=dict())
+    map_data = JSONField(default=dict(), blank=True)
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -32,6 +32,15 @@ class PartnerLogo(ExtendedModel):
     @property
     def image_url(self):
         return self.image.url if self.image else None
+
+
+class MapFile(ExtendedModel):
+    country = models.ForeignKey(Country)
+    map_file = models.FileField(null=True, upload_to='uploaded_maps/')
+
+    @property
+    def map_url(self):
+        return self.map_file.url if self.map_file else None
 
 
 class CountryFieldManager(models.Manager):
