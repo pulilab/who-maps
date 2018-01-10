@@ -1,5 +1,6 @@
 from collections import defaultdict
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
@@ -41,10 +42,25 @@ class PartnerLogoInline(admin.TabularInline):
     max_num = 4
 
 
-class MapFileInline(admin.TabularInline):
+class MapFileInline(admin.StackedInline):
     model = MapFile
     extra = 0
-    max_num = 4
+    max_num = 1
+    readonly_fields = ('print_map_customizer',)
+
+    class Media:
+        js = ('vue-map-customizer.min.js',)
+        css = {
+            'all': ('vue-map-customizer.min.css',)
+        }
+
+    def print_map_customizer(self, obj):
+        markup = '<vue-map-customizer map-url="{}" flag-base-url="/static/flags/" ' \
+                 'country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer>'.format(obj.map_file.url,
+                                                                                                 obj.country_id)
+        return mark_safe(markup)
+
+    print_map_customizer.short_description = 'Map'
 
 
 @admin.register(Country)
