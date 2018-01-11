@@ -109,7 +109,7 @@ export const getCurrentCountryFirstSubLevel = state => {
     const ln = getCurrentLanguage();
     const country = exports.getCurrentCountry(state);
     return country.map_data.first_sub_level.elements
-      .map(ccd => ({ id: ccd['name:en'] || ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+      .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
 };
 export const getCurrentCountrySecondSubLevel = state => {
     const ln = getCurrentLanguage();
