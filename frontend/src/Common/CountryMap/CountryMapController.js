@@ -149,7 +149,7 @@ class CountryMapController {
         const path = d3.geo.path().projection(projection);
 
         geoData.features.forEach((feature) => {
-            const mapName = feature.properties['wof:name'];
+            const mapName = feature.properties['wof:name'] || feature.properties.name;
             const districtsName = countryMapData.districts.find(dn => dn.id === mapName);
             this.svgLib[districtsName.id] = this.mapDOMElement
               .append('path')
