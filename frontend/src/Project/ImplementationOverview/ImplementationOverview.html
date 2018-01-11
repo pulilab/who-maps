@@ -255,11 +255,14 @@
         </div>
       </div>
 
-      <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
+      <!--NEW COVERAGE LAYER-->
+
+      <h6 class="subtitle" ng-if-start="vm.subLevelNames[1]">
+        <i class="material-icons">&#xE567;</i>
         <translate>{{vm.subLevelNames[1]}} level deployment</translate>
       </h6>
 
-      <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level">
+      <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level" ng-if-end>
         <div layout="column">
           <div layout="row">
             <md-input-container class="district" flex="50">
