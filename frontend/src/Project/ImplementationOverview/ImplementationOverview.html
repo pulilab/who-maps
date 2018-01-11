@@ -176,6 +176,26 @@
             </md-input-container>
             <div flex="50"></div>
           </div>
+          <div layout="row" ng-if="vm.facilities.length > 0">
+
+            <md-chips ng-model="cov.facilities_list" md-autocomplete-snap
+                      md-on-add="vm.updateFacilityNumber(cov)"
+                      md-on-remove="vm.updateFacilityNumber(cov)"
+                      md-require-match="true">
+              <md-autocomplete
+                md-search-text="cov.facilitySearch"
+                md-items="item in vm.searchFacility(cov.facilitySearch)"
+                md-item-text="item"
+                placeholder="{{'Search Facilities' | translate}}">
+                <span md-highlight-text="ctrl.searchText">{{item}}</span>
+              </md-autocomplete>
+              <md-chip-template>
+                <span>
+                  <strong>{{$chip}}</strong>
+                </span>
+              </md-chip-template>
+            </md-chips>
+          </div>
           <div layout="row">
             <md-input-container class="number" flex="20">
               <label>
@@ -197,7 +217,7 @@
                 </div>
               </div>
             </md-input-container>
-            <md-input-container class="number" flex="20">
+            <md-input-container class="number" flex="20" ng-show="vm.facilities.length === 0">
               <label>
                 <translate># Facilities</translate>
               </label>
@@ -292,16 +312,36 @@
             </md-input-container>
             <div flex="50"></div>
           </div>
+          <div layout="row" ng-if="vm.facilities.length > 0">
+            <md-chips ng-model="cov.facilities_list" md-autocomplete-snap
+                      md-on-add="vm.updateFacilityNumber(cov)"
+                      md-on-remove="vm.updateFacilityNumber(cov)"
+                      md-require-match="true">
+              <md-autocomplete
+                md-search-text="cov.facilitySearch"
+                md-items="item in vm.searchFacility(cov.facilitySearch)"
+                md-item-text="item"
+                placeholder="{{'Search Facilities' | translate}}">
+                <span md-highlight-text="ctrl.searchText">{{item}}</span>
+              </md-autocomplete>
+              <md-chip-template>
+                <span>
+                  <strong>{{$chip}}</strong>
+                </span>
+              </md-chip-template>
+            </md-chips>
+
+          </div>
           <div layout="row">
             <md-input-container class="number" flex="20">
               <label>
                 <translate># Health Workers</translate>
               </label>
               <input
-                     name="{{'coverage_second_level_' + $index}}.health_workers"
-                     type="number"
-                     min="0"
-                     ng-model="cov.health_workers" >
+                name="{{'coverage_second_level_' + $index}}.health_workers"
+                type="number"
+                min="0"
+                ng-model="cov.health_workers" >
               <div ng-messages="vm.form['coverage_second_level_' + $index + '.health_workers'].$error">
                 <div ng-message="required">
                   <translate>This is required.</translate>
@@ -313,15 +353,15 @@
                 </div>
               </div>
             </md-input-container>
-            <md-input-container class="number" flex="20">
+            <md-input-container class="number" flex="20" ng-show="vm.facilities.length === 0">
               <label>
                 <translate># Facilities</translate>
               </label>
               <input
-                     name="{{'coverage_second_level_' + $index}}.facilities"
-                     type="number"
-                     min="0"
-                     ng-model="cov.facilities">
+                name="{{'coverage_second_level_' + $index}}.facilities"
+                type="number"
+                min="0"
+                ng-model="cov.facilities">
               <div ng-messages="vm.form['coverage_second_level_' + $index + '.facilities'].$error">
                 <div ng-message="required">
                   <translate>This is required.</translate>
@@ -338,10 +378,10 @@
                 <translate># Clients</translate>
               </label>
               <input
-                     name="{{'coverage_second_level_' + $index}}.clients"
-                     type="number"
-                     min="0"
-                     ng-model="cov.clients">
+                name="{{'coverage_second_level_' + $index}}.clients"
+                type="number"
+                min="0"
+                ng-model="cov.clients">
               <div ng-messages="vm.form['coverage_second_level_' + $index + '.clients'].$error">
                 <div ng-message="required">
                   <translate>This is required.</translate>

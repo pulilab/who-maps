@@ -15,10 +15,12 @@ class ImplementationOverview extends CollapsibleSet {
 
     mapData(state) {
         const subLevelNames = CountriesModule.getCurrentCountrySubLevelNames(state);
+        const facilities = CountriesModule.getCurrentCountryFacilityList(state);
         return {
             districtList: CountriesModule.getCurrentCountryFirstSubLevel(state),
             secondSubLevelList:  CountriesModule.getCurrentCountrySecondSubLevel(state),
-            subLevelNames
+            subLevelNames,
+            facilities
         };
     }
 
@@ -28,6 +30,9 @@ class ImplementationOverview extends CollapsibleSet {
         this.unsubscribe = this.$ngRedux.connect(this.mapData, CountriesModule)(this);
         this.watchers();
         this.health_focus_areas = this.mapHealthFocusAreas(this.structure.health_focus_areas);
+        if (!this.optionValue) {
+            this.optionValue = this.optionLabel;
+        }
     }
 
     onDestroy() {
@@ -62,6 +67,7 @@ class ImplementationOverview extends CollapsibleSet {
             return this.districtList;
         }], ([, districts]) => {
             this.setAvailableDictOptions(this.project.coverage, districts, 'district');
+            this.initializeFacilityList(this.project.coverage);
             this.addClearOption(this.project.coverage);
         });
 
@@ -71,10 +77,21 @@ class ImplementationOverview extends CollapsibleSet {
             return this.secondSubLevelList;
         }], ([, secondSubLevel]) => {
             this.setAvailableDictOptions(this.project.coverage_second_level, secondSubLevel, 'district');
+            this.initializeFacilityList(this.project.coverage_second_level);
             this.addClearOption(this.project.coverage_second_level);
         });
 
         this.scope.$watch(s => s.vm.districtList, this.removeUnavailableDistricts.bind(this));
+    }
+
+    initializeFacilityList(collection) {
+        collection.forEach(c => {
+            c.facilities_list = c.facilities_list || [];
+        });
+    }
+
+    updateFacilityNumber(coverage) {
+        coverage.facilities = coverage.facilities_list.length;
     }
 
     addClearOption(districts) {
@@ -123,6 +140,10 @@ class ImplementationOverview extends CollapsibleSet {
             intervention.subGroups.push(grandparent);
         }
         return [intervention];
+    }
+
+    async searchFacility(name) {
+        return this.facilities.filter(f => f.includes(name)).slice(0, 100);
     }
 
 
