@@ -754,16 +754,14 @@ class CountryAdminTests(TestCase):
         user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
 
         class MockForm:
-            changed_data = ['users']
+            changed_data = ['users', 'map_activated_on']
 
         country.users.add(user_profile, user_2_profile)
         ma.save_model(self.request, country, MockForm(), True)
 
-        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
-        en_index = -2 if first_en else -1
-        fr_index = -1 if first_en else -2
-
-        outgoing_en_email = mail.outbox[en_index].message()
+        outgoing_en_email = [m for m in mail.outbox
+                             if '<meta http-equiv="content-language" content="en">' in m.message().as_string()
+                             and 'You have been selected as the Country Admin' in m.message().as_string()][0].message()
         outgoing_en_email_text = outgoing_en_email.as_string()
 
         self.assertTrue(
@@ -774,12 +772,21 @@ class CountryAdminTests(TestCase):
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_fr_email = mail.outbox[fr_index].message()
+        outgoing_fr_email = [m for m in mail.outbox
+                             if '<meta http-equiv="content-language" content="fr">' in m.message().as_string()
+                             and 'You have been selected as the Country Admin' in m.message().as_string()][0].message()
         outgoing_fr_email_text = outgoing_fr_email.as_string()
 
         self.assertTrue("test2@test.test" in outgoing_fr_email.values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
+
+        outgoing_map_email = [m for m in mail.outbox
+                              if '<meta http-equiv="content-language" content="en">' in m.message().as_string()
+                              and 'A new map for' in m.message().as_string()][0].message()
+        outgoing_map_email_text = outgoing_map_email.as_string()
+        self.assertTrue("test@test.com" in outgoing_map_email.values())
+        self.assertTrue("A new map for {} has been activated".format(country.name) in outgoing_map_email_text)
 
     def test_country_map_inline(self):
         user_profile = UserProfile.objects.create(user=self.user)
