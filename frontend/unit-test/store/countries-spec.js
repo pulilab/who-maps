@@ -139,19 +139,19 @@ describe('Countries Store Module', () => {
 
         it('getCurrentCountryFirstSubLevel', () => {
             spyOn(language, 'getCurrentLanguage').and.returnValue('pt');
-            spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
                 map_data: {
                     first_sub_level: {
                         elements: [
-                            { 'name:en': 1, 'name:fr': 2, 'name:pt': 2 },
-                            { 'name:en': 2, 'name:fr': 3 },
+                            { name: 1, 'name:en': 1, 'name:fr': 2, 'name:pt': 2 },
+                            { name: 2, 'name:en': 2, 'name:fr': 3 },
                             { name: 66 }
                         ]
                     }
                 }
             });
 
-            const result = CountriesModule.getCurrentCountryFirstSubLevel({});
+            let result = CountriesModule.getCurrentCountryFirstSubLevel({});
             expect(result[0].id).toBe(1);
             expect(result[0].name).toBe(2);
 
@@ -163,23 +163,27 @@ describe('Countries Store Module', () => {
 
             expect(language.getCurrentLanguage).toHaveBeenCalled();
             expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+
+            spy.and.returnValue({});
+            result = CountriesModule.getCurrentCountryFirstSubLevel({});
+            expect(result).toEqual([]);
         });
 
         it('getCurrentCountrySecondSubLevel', () => {
             spyOn(language, 'getCurrentLanguage').and.returnValue('pt');
-            spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
                 map_data: {
                     second_sub_level: {
                         elements: [
-                            { 'name:en': 1, 'name:fr': 2, 'name:pt': 2 },
-                            { 'name:en': 2, 'name:fr': 3 },
+                            {  name: 1, 'name:en': 1, 'name:fr': 2, 'name:pt': 2 },
+                            {  name: 2 ,'name:en': 2, 'name:fr': 3 },
                             { name: 66 }
                         ]
                     }
                 }
             });
 
-            const result = CountriesModule.getCurrentCountrySecondSubLevel({});
+            let result = CountriesModule.getCurrentCountrySecondSubLevel({});
             expect(result[0].id).toBe(1);
             expect(result[0].name).toBe(2);
 
@@ -191,6 +195,10 @@ describe('Countries Store Module', () => {
 
             expect(language.getCurrentLanguage).toHaveBeenCalled();
             expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+
+            spy.and.returnValue({});
+            result = CountriesModule.getCurrentCountrySecondSubLevel({});
+            expect(result).toEqual([]);
         });
 
         it('getCurrentCountryMapData', () => {
