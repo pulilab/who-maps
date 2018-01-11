@@ -117,9 +117,9 @@ export const getCurrentCountryFirstSubLevel = state => {
 export const getCurrentCountrySecondSubLevel = state => {
     const ln = getCurrentLanguage();
     const country = exports.getCurrentCountry(state);
-    if (country && country.map_data && country.map_data.first_sub_level) {
+    if (country && country.map_data && country.map_data.second_sub_level) {
         return country.map_data.second_sub_level.elements
-            .map(ccd => ({ id: ccd['name:en'] || ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+            .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
     }
     return [];
 };
