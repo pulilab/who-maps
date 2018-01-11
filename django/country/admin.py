@@ -94,11 +94,15 @@ class CountryAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super(CountryAdmin, self).save_model(request, obj, form, change)
         if change and 'users' in form.changed_data and obj.users:
-            self._notify_user(obj)
+            self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
+                              template_name="email/country_admin.html")
+        if change and 'map_activated_on' in form.changed_data and obj.users:
+            self._notify_user(obj, subject="A new map for {country_name} has been activated",
+                              template_name="email/country_map_activated.html")
 
     @staticmethod
-    def _notify_user(country):
-        html_template = loader.get_template("email/country_admin.html")
+    def _notify_user(country, subject, template_name):
+        html_template = loader.get_template(template_name)
         change_url = urlresolvers.reverse('admin:country_country_change', args=(country.id,))
 
         email_mapping = defaultdict(list)
@@ -107,7 +111,7 @@ class CountryAdmin(admin.ModelAdmin):
 
         for language, email_list in email_mapping.items():
             with override(language):
-                subject = ugettext("You have been selected as the Country Admin for {country_name}")
+                subject = ugettext(subject)
                 html_message = html_template.render({'change_url': change_url,
                                                      'country_name': country.name,
                                                      'language': language})
