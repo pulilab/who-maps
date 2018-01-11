@@ -124,6 +124,14 @@ export const getCurrentCountrySecondSubLevel = state => {
     return [];
 };
 
+export const getCurrentCountryFacilityList = state => {
+    const country = exports.getCurrentCountry(state);
+    if (country && country.map_data && country.map_data.facilities) {
+        return country.map_data.facilities;
+    }
+    return [];
+};
+
 export const getCurrentCountryMapData = state => {
     const currentCountry = exports.getCurrentCountry(state);
     currentCountry.mapData = mapData[currentCountry.code];
