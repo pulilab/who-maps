@@ -935,26 +935,6 @@ class ProjectTests(SetupTests):
                                                                              user.email)
         self.assertEqual(link, expected_link)
 
-    def test_project_approval_admin_changeform_view(self):
-        request = MockRequest()
-        request.method = 'GET'
-        request.POST = {}
-        request.META = {'SCRIPT_NAME': 'from_test'}
-        request.resolver_match = False
-
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-
-        content_type = ContentType.objects.get(app_label=ProjectApproval._meta.app_label,
-                                               model=ProjectApproval._meta.model_name)
-        add_permission = Permission.objects.get(content_type=content_type,
-                                                codename='add_{}'.format(ProjectApproval._meta.model_name))
-        user.user_permissions.add(add_permission)
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        response = ma.changeform_view(request)
-        self.assertTrue(isinstance(response, TemplateResponse))
-
     @patch('django.contrib.admin.options.messages')
     def test_project_approval_admin_export(self, mocked_messages):
         messages = []
@@ -1653,6 +1633,8 @@ class TestAdmin(TestCase):
     def setUp(self):
         self.request = MockRequest()
         self.site = AdminSite()
+        self.user = User.objects.create_user(username="alma", password="korte")
+        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
 
         url = reverse('rest_register')
         data = {'email': 'test_user@gmail.com',
@@ -1751,6 +1733,102 @@ class TestAdmin(TestCase):
         tpa.save_form(self.request, form, True)
 
         self.assertEqual(len(mail.outbox), initial_email_count)
+
+    def test_project_approval_admin_changeform_view(self):
+        request = MockRequest()
+        request.method = 'GET'
+        request.POST = {}
+        request.META = {'SCRIPT_NAME': 'from_test'}
+        request.resolver_match = False
+
+        content_type = ContentType.objects.get(app_label=ProjectApproval._meta.app_label,
+                                               model=ProjectApproval._meta.model_name)
+        change_permission = Permission.objects.get(content_type=content_type,
+                                                   codename='change_{}'.format(ProjectApproval._meta.model_name))
+
+        p = Project.objects.create(name="test change view")
+        pa = ProjectApproval.objects.create(project=p)
+        self.user.user_permissions.add(change_permission)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        request.user = self.user
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        response = ma.changeform_view(request, object_id=str(pa.id))
+        self.assertTrue(isinstance(response, TemplateResponse))
+
+    def test_admin_list_filters(self):
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        approval_filter_class = ma.list_filter[0]
+        approval_filter_obj = approval_filter_class(self.request, {}, ProjectApproval, ma)
+
+        self.assertEqual(
+            approval_filter_obj.lookups(self.request, ma), ((None, "Waiting for approval"), (True, "Approved"),
+                                                            (False, "Declined")))
+        self.assertFalse(ma.has_add_permission(self.request))
+        p1 = Project.objects.create(name="Test1")
+        p2 = Project.objects.create(name="Test2")
+        p3 = Project.objects.create(name="Test3")
+        ProjectApproval.objects.create(project=p1, approved=None)
+        ProjectApproval.objects.create(project=p2, approved=True)
+        ProjectApproval.objects.create(project=p3, approved=False)
+
+        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
+
+        self.assertEqual(approvals.count(), 1)
+        self.assertEqual(approvals[0].project.name, "Test1")
+
+        approval_filter_obj = approval_filter_class(self.request, {"approved": True}, ProjectApproval, ma)
+
+        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
+
+        self.assertEqual(approvals.count(), 1)
+        self.assertEqual(approvals[0].project.name, "Test2")
+
+        approval_filter_obj = approval_filter_class(self.request, {"approved": False}, ProjectApproval, ma)
+
+        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
+        self.assertEqual(approvals.count(), 1)
+        self.assertEqual(approvals[0].project.name, "Test3")
+
+    def test_approval_admin_get_country(self):
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
+        pa = ProjectApproval.objects.create(project=p)
+        self.assertEqual(ma.get_country(pa), Country.objects.get(id=1))
+
+    def test_approval_admin_save_model(self):
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
+        pa = ProjectApproval.objects.create(project=p)
+
+        mf = ma.get_form(self.request, pa)
+        data = {'project': pa.project.id,
+                'reason': 'LOL',
+                'approved': True}
+        form = mf(data, instance=pa)
+
+        self.assertIsNone(pa.user)
+        self.assertIsNone(pa.approved)
+        ma.save_model(self.request, pa, form, True)
+        pa.refresh_from_db()
+        self.assertEqual(pa.user, self.user.userprofile)
+        self.assertEqual(pa.reason, 'LOL')
+        self.assertTrue(pa.approved)
 
 
 class TestProjectImportAdmin(TestCase):

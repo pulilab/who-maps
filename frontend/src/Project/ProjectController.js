@@ -59,6 +59,8 @@ class ProjectController  {
 
         if (!project || !project.organisation) {
             project = ProjectModule.getCurrentPublicProjectDetails(state);
+            team = ProjectModule.getTeam(state);
+            viewers = ProjectModule.getViewers(state);
         }
 
         return {

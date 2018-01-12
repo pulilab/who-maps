@@ -3,11 +3,12 @@ from fabric.api import local, run, cd, env
 from fabric.context_managers import warn_only
 
 # ENVIRONMENTS #
+PROD_HOST_STRING = 'whomaps@207.154.215.126'
 
 
 def dev():
     """Configure dev"""
-    env.hosts = ['whomaps@dev.whomaps.pulilab.com']
+    env.host_string = 'whomaps@dev.whomaps.pulilab.com'
     env.name = 'dev'
     env.port = 22
     env.branch = "master"
@@ -19,7 +20,7 @@ def dev():
 
 def production():
     """Configure prod"""
-    env.hosts = ['whomaps@207.154.215.126']
+    env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
     env.branch = "tags/3.1.4"
@@ -31,10 +32,10 @@ def production():
 
 def staging():
     """Configure staging"""
-    env.hosts = ['whomaps@139.59.148.238']
+    env.host_string = 'whomaps@139.59.148.238'
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/3.2.4"
+    env.branch = "tags/3.2.5"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -42,6 +43,44 @@ def staging():
 
 
 # COMMANDS #
+
+def copy_prod(server):
+    if server not in ['dev', 'staging']:
+        print("Error. Valid servers are 'dev', 'staging'.")
+        exit(1)
+    # Dump prod data and tag
+    production()
+    tag = None
+    with cd(env.project_root):
+        # Get current tag
+        tag = run('git describe --tags')
+        # Backup production database
+        run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
+        # Backup production media files
+        run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz django/media')
+    # Load prod data and code
+    globals()[server]()
+    with cd(env.project_root):
+        # Deploy as usual, but from the production tag
+        env.branch = 'tags/{}'.format(tag)
+        deploy()
+        # Import production database
+        run('scp {}:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .'.format(PROD_HOST_STRING))
+        run('tar -xzvf dump`date +%d-%m-%Y`.sql.tar.gz')
+        run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+        # Import production media files
+        run('rm -rf media')
+        run('scp {}:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .'.format(PROD_HOST_STRING))
+        run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz django/media/')
+
+
+def backup():
+    # Backup database
+    local('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+    local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
+    # Backup media files
+    local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
 
 
 def deploy():
@@ -121,6 +160,11 @@ def deploy():
             run('yarn clean-server-folder')
             run('yarn copy-to-server')
 
+    # Set cron for backups
+    if env.name == 'production':
+        cmd = '0 4 * * * cd /home/whomaps/who-maps/django && fab backup_prod'
+        run("grep '{}' /etc/crontab || echo '{}' >> /etc/crontab".format(cmd, cmd))
+
     tear_down()
 
 
@@ -173,7 +217,7 @@ def lint():
 
 
 def makemigrations():
-    local('docker exec -it whomaps_django_1 python manage.py makemigrations --noinput')
+    local('docker exec -it whomaps_django_1 python manage.py makemigrations')
 
 
 def migrate():

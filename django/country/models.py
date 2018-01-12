@@ -23,6 +23,7 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
 
     class Meta:
         verbose_name_plural = "Countries"
+        ordering = ('id',)
 
     def __str__(self):
         return self.name

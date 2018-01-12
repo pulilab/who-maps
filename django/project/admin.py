@@ -1,9 +1,11 @@
 import csv
 from threading import local
 from io import StringIO
+import urllib.parse
 
 from django.contrib import admin, messages
 from django import forms
+from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -115,22 +117,57 @@ class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
     pass
 
 
+class ApprovalFilter(SimpleListFilter):
+    title = 'Status'
+
+    parameter_name = 'approved'
+
+    def lookups(self, request, model_admin):
+        return (None, "Waiting for approval"), (True, "Approved"), (False, "Declined")
+
+    def choices(self, cl):  # pragma: no cover
+        for lookup, title in self.lookup_choices:
+            try:
+                selected = self.value() == lookup
+            except TypeError:
+                selected = None
+
+            yield {
+                'selected': selected,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        return queryset.filter(approved=self.value())
+
+
 class ProjectApprovalAdmin(admin.ModelAdmin):
-    list_display = ['project', 'user', 'approved', 'reason']
-    readonly_fields = ['link']
+    list_filter = (ApprovalFilter,)
+    list_display = ['project', 'user', 'approved', 'get_country']
+    readonly_fields = ['link', 'user']
     actions = ['export_project_approvals']
     ordering = ['approved', 'created']
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user.userprofile
+        super(ProjectApprovalAdmin, self).save_model(request, obj, form, change)
+
+    def get_country(self, obj):
+        return obj.project.get_country()
+    get_country.short_description = "Country"
 
     def link(self, obj):
         if obj.id is None:
             return '-'
 
         user = TLS.request.user
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&"
-                         "is_superuser=true&email={}'>See project</a>".format(obj.project.id,
-                                                                              user.auth_token,
-                                                                              user.userprofile.id,
-                                                                              user.email))
+        queryString = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                       'is_superuser': 'true', 'email': user.email}
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
+                         .format(obj.project.id, urllib.parse.urlencode(queryString)))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
@@ -180,6 +217,9 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=project_approval_export.csv'
         return response
+
+    def has_add_permission(self, request):
+        return False
 
 
 def validate_csv_ext(value):
