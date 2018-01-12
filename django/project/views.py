@@ -207,7 +207,7 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             is_member = project.is_member(self.request.user)
             is_country_admin = project.is_country_admin(self.request.user)
-            if is_member or is_country_admin:  # MEMBER or Country Admin
+            if is_member or is_country_admin or self.request.user.is_superuser:  # MEMBER or Country Admin or Admin
                 data = project.get_member_data()
                 draft = project.get_member_draft()
             else:  # LOGGED IN
