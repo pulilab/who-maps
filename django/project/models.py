@@ -40,8 +40,7 @@ class ProjectManager(models.Manager):
 
 
 class Project(ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
-                               "application", "last_version")
+    FIELDS_FOR_MEMBERS_ONLY = ("last_version", "last_version_date", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255)
