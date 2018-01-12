@@ -18,7 +18,8 @@ class Command(BaseCommand):
         with open(os.path.join(settings.STATIC_ROOT, 'country-geodata', '{}.json'.format(country.code.lower()))) as f:
             json_content = json.load(f)
 
-        feature_keys = list(json_content['objects'].keys())[0] # It's a dict with one key but we don't know the key name
+        # It's a dict with one key but we don't know the key name
+        feature_keys = list(json_content['objects'].keys())[0]
         features = json_content['objects'][feature_keys]['geometries']
         first_sub_level = {
             'name': 'district',
