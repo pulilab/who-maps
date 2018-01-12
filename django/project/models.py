@@ -34,6 +34,10 @@ class ProjectManager(models.Manager):
     def published_only(self):
         return self.exclude(public_id='')
 
+    def by_country(self, country_id):
+        return self.filter(Q(data__country=country_id)
+                           | Q(draft__country=country_id)).distinct().order_by('id')
+
 
 class Project(ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
