@@ -141,7 +141,7 @@
       </div>
     </div>
 
-    <div ng-show="vm.project.coverageType === 1" class="md-block extra-margin">
+    <div ng-show="vm.project.coverageType === 1" class="md-block extra-margin-double">
       <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
         <translate>{{vm.subLevelNames[0]}} level deployment</translate>
       </h6>
@@ -149,7 +149,7 @@
       <div class="input-group" ng-repeat="cov in vm.project.coverage">
         <div layout="column">
           <div layout="row">
-            <md-input-container class="district" flex="50">
+            <md-input-container class="district" flex="45">
               <label class="text-capitalize">
                 {{vm.subLevelNames[0]}}
               </label>
@@ -174,10 +174,9 @@
                 </div>
               </div>
             </md-input-container>
-            <div flex="50"></div>
           </div>
-          <div layout="row" ng-if="vm.facilities.length > 0">
 
+          <div layout="row" ng-if="vm.facilities.length > 0" class="no-float">
             <md-chips ng-model="cov.facilities_list" md-autocomplete-snap
                       md-on-add="vm.updateFacilityNumber(cov)"
                       md-on-remove="vm.updateFacilityNumber(cov)"
@@ -191,11 +190,12 @@
               </md-autocomplete>
               <md-chip-template>
                 <span>
-                  <strong>{{$chip}}</strong>
+                  {{$chip}}
                 </span>
               </md-chip-template>
             </md-chips>
           </div>
+
           <div layout="row">
             <md-input-container class="number" flex="20">
               <label>
@@ -285,7 +285,7 @@
       <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level" ng-if-end>
         <div layout="column">
           <div layout="row">
-            <md-input-container class="district" flex="50">
+            <md-input-container class="district" flex="45">
               <label class="text-capitalize">
                 {{vm.subLevelNames[1]}}
               </label>
@@ -310,9 +310,8 @@
                 </div>
               </div>
             </md-input-container>
-            <div flex="50"></div>
           </div>
-          <div layout="row" ng-if="vm.facilities.length > 0">
+          <div layout="row" ng-if="vm.facilities.length > 0" class="no-float">
             <md-chips ng-model="cov.facilities_list" md-autocomplete-snap
                       md-on-add="vm.updateFacilityNumber(cov)"
                       md-on-remove="vm.updateFacilityNumber(cov)"
@@ -326,7 +325,7 @@
               </md-autocomplete>
               <md-chip-template>
                 <span>
-                  <strong>{{$chip}}</strong>
+                  {{$chip}}
                 </span>
               </md-chip-template>
             </md-chips>
@@ -414,7 +413,7 @@
     </div>
 
 
-    <div ng-show="vm.project.coverageType === 2" class="md-block extra-margin">
+    <div ng-show="vm.project.coverageType === 2" class="md-block extra-margin-double">
       <h6 class="subtitle first"><i class="material-icons">&#xE153;</i>
         <translate>National level deployment</translate>
       </h6>
