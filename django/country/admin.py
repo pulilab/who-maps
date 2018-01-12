@@ -10,6 +10,9 @@ from django.template import loader
 from .models import Country, PartnerLogo, CountryField, MapFile
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
 
+# This has to stay here to use the proper celery instance with the djcelery_email package
+import scheduler.celery # noqa
+
 
 class CountryFieldInline(admin.TabularInline):
     model = CountryField

@@ -16,6 +16,9 @@ from cms.models import Post, Comment, State
 from cms.permissions import IsOwnerOrReadOnly, OnlyAdminForLessons
 from cms.serializers import CmsSerializer, CommentSerializer
 
+# This has to stay here to use the proper celery instance with the djcelery_email package
+import scheduler.celery # noqa
+
 
 class FlagMixin(object):
     def partial_update(self, request, *args, **kwargs):

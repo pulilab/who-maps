@@ -1,5 +1,6 @@
 import copy
 import csv
+import urllib.parse
 from datetime import datetime
 from mock import patch
 from io import StringIO
@@ -928,11 +929,11 @@ class ProjectTests(SetupTests):
         ma = ProjectApprovalAdmin(ProjectApproval, site)
         project_approval = ProjectApproval.objects.get(project_id=self.project_id)
         link = ma.link(project_approval)
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&" \
-                        "is_superuser=true&email={}'>See project</a>".format(self.project_id,
-                                                                             user.auth_token,
-                                                                             user.userprofile.id,
-                                                                             user.email)
+
+        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                        'is_superuser': 'true', 'email': user.email}
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?{}'>" \
+                        "See project</a>".format(self.project_id, urllib.parse.urlencode(query_string))
         self.assertEqual(link, expected_link)
 
     @patch('django.contrib.admin.options.messages')
@@ -1824,6 +1825,8 @@ class TestAdmin(TestCase):
 
         self.assertIsNone(pa.user)
         self.assertIsNone(pa.approved)
+
+        ma.save_form(self.request, form, True)
         ma.save_model(self.request, pa, form, True)
         pa.refresh_from_db()
         self.assertEqual(pa.user, self.user.userprofile)
