@@ -3,6 +3,9 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template import loader
 
+# This has to stay here to use the proper celery instance with the djcelery_email package
+import scheduler.celery # noqa
+
 
 class Command(BaseCommand):
     help = """
