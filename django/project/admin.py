@@ -26,6 +26,8 @@ from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, H
     ProjectApproval
 from user.models import UserProfile, Organisation
 
+# This has to stay here to use the proper celery instance with the djcelery_email package
+import scheduler.celery # noqa
 
 TLS = local()
 

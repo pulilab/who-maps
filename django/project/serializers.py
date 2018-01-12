@@ -8,6 +8,9 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
+# This has to stay here to use the proper celery instance with the djcelery_email package
+import scheduler.celery # noqa
+
 from .models import Project
 
 
