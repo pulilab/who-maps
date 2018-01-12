@@ -60,6 +60,8 @@ class ProjectController  {
 
         if (!project || !project.name) {
             project = ProjectModule.getCurrentPublicProjectDetails(state);
+            team = ProjectModule.getTeam(state);
+            viewers = ProjectModule.getViewers(state);
         }
         return {
             newProject,
