@@ -8,4 +8,4 @@
     <ui-view name="main" id="main-view" layout="column" layout-fill></ui-view>
   </div>
 </md-content>
-<django-feedback></django-feedback>
+<django-feedback name="{{vm.user.profile.name}}" email="{{vm.user.profile.email}}"></django-feedback>
