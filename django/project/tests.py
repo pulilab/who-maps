@@ -1770,7 +1770,7 @@ class TestAdmin(TestCase):
         pa = ProjectApproval.objects.create(project=p)
 
         mf = ma.get_form(self.request, pa)
-        data = {'project': pa.project,
+        data = {'project': pa.project.id,
                 'reason': 'LOL',
                 'approved': True}
         form = mf(data, instance=pa)
@@ -1778,6 +1778,7 @@ class TestAdmin(TestCase):
         self.assertIsNone(pa.user)
         self.assertIsNone(pa.approved)
         ma.save_model(self.request, pa, form, True)
+        pa.refresh_from_db()
         self.assertEqual(pa.user, self.user.userprofile)
         self.assertEqual(pa.reason, 'LOL')
         self.assertTrue(pa.approved)
