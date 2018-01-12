@@ -145,10 +145,18 @@ class ApprovalFilter(SimpleListFilter):
 
 class ProjectApprovalAdmin(admin.ModelAdmin):
     list_filter = (ApprovalFilter,)
-    list_display = ['project', 'user', 'approved', 'reason']
-    readonly_fields = ['link']
+    list_display = ['project', 'user', 'approved', 'get_country']
+    readonly_fields = ['link', 'user']
     actions = ['export_project_approvals']
     ordering = ['approved', 'created']
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user.userprofile
+        super(ProjectApprovalAdmin, self).save_model(request, obj, form, change)
+
+    def get_country(self, obj):
+        return obj.project.get_country()
+    get_country.short_description = "Country"
 
     def link(self, obj):
         if obj.id is None:
