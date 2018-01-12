@@ -38,3 +38,6 @@ class UserProfile(ExtendedModel):
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
+
+    def is_country_admin_of(self):  # TODO: test
+        return self.objects.filter(country_admins__in=self.pk)
