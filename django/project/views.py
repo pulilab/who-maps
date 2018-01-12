@@ -183,8 +183,14 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         Retrieves list of projects user's projects.
         """
         data = []
+        if request.user.is_superuser:
+            project_list = Project.projects.all()
+        # TODO: elif self.request.user.userprofile.is_country_admin_of():
+        #     project_list = Project.projects.by_country(self.request.user.userprofile.country.id)
+        else:
+            project_list = Project.projects.member_of(request.user)
 
-        for project in Project.projects.member_of(request.user):
+        for project in project_list:
             published = project.to_representation()
             draft = project.to_representation(draft_mode=True)
             data.append(project.to_response_dict(published=published, draft=draft))
