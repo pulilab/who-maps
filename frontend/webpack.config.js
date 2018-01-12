@@ -86,6 +86,13 @@ module.exports = {
                 })
             },
             {
+                test: /\.less/,
+                use: ExtractTextPlugin.extract({
+                    use: ['css-loader', 'less-loader'],
+                    fallback: 'style-loader'
+                })
+            },
+            {
                 test: /\.css$/,
                 use: [
                     { loader: 'style-loader' },

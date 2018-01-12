@@ -106,6 +106,8 @@
     "es6-promise": "^3.1.2",
     "eventemitter3": "^1.1.1",
     "intro.js": "^2.1.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
     "moment": "^2.13.0",
     "ng-file-upload": "^12.0.4",
@@ -120,6 +122,7 @@
     "topojson": "^2.2.0",
     "trix": "https://github.com/pulilab/trix.git#0.10.1-puli",
     "vue": "^2.5.2",
+    "vue-django-feedback": "https://github.com/pulilab/vue-django-feedback.git",
     "vue-top-progress": "^0.6.0",
     "whatwg-fetch": "^0.11.0"
   }
