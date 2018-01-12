@@ -84,8 +84,8 @@ class SetupTests(APITestCase):
         self.assertEqual(response.status_code, 200, response.json())
         self.user_profile_id = response.json().get('id')
 
-        user = UserProfile.objects.get(id=self.user_profile_id)
-        self.country.users.add(user)
+        self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
+        self.country.users.add(self.userprofile)
 
         self.project_data = {
             "date": datetime.utcnow(),
@@ -1026,6 +1026,75 @@ class ProjectTests(SetupTests):
         outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
 
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
+
+    def test_country_admins_access_all_projects_in_country_as_viewer(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456",
+            "password2": "123456"}
+        self.client.post(url, data, format="json")
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456"}
+        response = self.client.post(url, data, format="json")
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+
+        # update profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        test_user_client.put(url, data, format="json")
+
+        self._create_new_project()
+
+        p_in_country = Project.objects.get(name="Test Project2")
+        p_not_in_country = Project.objects.get(name="Test Project1")
+
+        # make user country admin of CTR2
+        country = Country.objects.get(code="CTR2")
+        country.users.add(self.user_profile_id)
+        # make sure he is not a country admin of project 1's country
+        p_not_in_country.get_country().users.remove(self.user_profile_id)
+
+        # remove this user from all the projects
+        for p in Project.objects.all():
+            p.team.remove(self.user_profile_id)
+            p.team.add(user_profile_id)
+
+            # this user doesn't belong to any project anymore
+            self.assertFalse(p.team.filter(id=self.user_profile_id).exists())
+            self.assertFalse(p.viewers.filter(id=self.user_profile_id).exists())
+
+            # the project belongs to the new user now
+            self.assertTrue(p.team.filter(id=user_profile_id).exists())
+
+        url = reverse("project-retrieve", kwargs={"pk": p_in_country.id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json()['published']['start_date'], str)
+        self.assertEqual(response.json()['draft']['name'], p_in_country.name)
+
+        url = reverse("project-retrieve", kwargs={"pk": p_not_in_country.id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertIsNone(response.json()['draft'])
+        self.assertTrue('start_date' not in response.json()['published'])
+
+        # TODO:
+        # url = reverse("project-list")
+        # response = self.test_user_client.get(url)
+        # self.assertEqual(response.status_code, 200)
+        # # it should return only one project that is in CTR2
+        # self.assertEqual(len(response.json()), 1)
 
     def test_admins_access_all_projects_as_viewer(self):
         # Create a test user with profile.
