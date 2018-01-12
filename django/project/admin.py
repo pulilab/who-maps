@@ -164,10 +164,10 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
             return '-'
 
         user = TLS.request.user
-        queryString = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
-                       'is_superuser': 'true', 'email': user.email}
+        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                        'is_superuser': 'true', 'email': user.email}
         return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
-                         .format(obj.project.id, urllib.parse.urlencode(queryString)))
+                         .format(obj.project.id, urllib.parse.urlencode(query_string)))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
