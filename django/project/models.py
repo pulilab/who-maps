@@ -69,7 +69,7 @@ class Project(ExtendedModel):
 
     def is_country_admin(self, user):
         # Country admin has permissions only for the published project
-        return user in self.get_country().users.all() if self.get_country() else False
+        return user.userprofile in self.get_country().users.all() if self.get_country() else False
 
     def get_member_data(self):
         return self.data
