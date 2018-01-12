@@ -116,14 +116,42 @@ describe('Countries Store Module', () => {
             expect(result.a).toBe(1);
         });
 
-        it('getCurrentCountryDistricts', () => {
-            spyOn(language, 'getCurrentLanguage').and.returnValue('pt');
-            const state = {
-                countries: {
-                    currentCountryDistricts: [{ en: 1, fr: 2, pt: 2 }, { en: 2, fr: 3 }, { name: 66 }]
+        it('getCurrentCountrySubLevelNames', () => {
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
+                map_data: {
+                    first_sub_level: {
+                        name: 1
+                    },
+                    second_sub_level: {
+                        name: 2
+                    }
                 }
-            };
-            const result = CountriesModule.getCurrentCountryDistricts(state);
+            });
+            let result = CountriesModule.getCurrentCountrySubLevelNames({});
+            expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+            expect(result).toEqual([1, 2]);
+
+            spy.and.returnValue({});
+            result = CountriesModule.getCurrentCountrySubLevelNames({});
+            expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+            expect(result).toEqual(['', '']);
+        });
+
+        it('getCurrentCountryFirstSubLevel', () => {
+            spyOn(language, 'getCurrentLanguage').and.returnValue('pt');
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
+                map_data: {
+                    first_sub_level: {
+                        elements: [
+                            { name: 1, 'name:en': 1, 'name:fr': 2, 'name:pt': 2 },
+                            { name: 2, 'name:en': 2, 'name:fr': 3 },
+                            { name: 66 }
+                        ]
+                    }
+                }
+            });
+
+            let result = CountriesModule.getCurrentCountryFirstSubLevel({});
             expect(result[0].id).toBe(1);
             expect(result[0].name).toBe(2);
 
@@ -134,18 +162,55 @@ describe('Countries Store Module', () => {
             expect(result[2].name).toBe(66);
 
             expect(language.getCurrentLanguage).toHaveBeenCalled();
+            expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+
+            spy.and.returnValue({});
+            result = CountriesModule.getCurrentCountryFirstSubLevel({});
+            expect(result).toEqual([]);
+        });
+
+        it('getCurrentCountrySecondSubLevel', () => {
+            spyOn(language, 'getCurrentLanguage').and.returnValue('pt');
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
+                map_data: {
+                    second_sub_level: {
+                        elements: [
+                            {  name: 1, 'name:en': 1, 'name:fr': 2, 'name:pt': 2 },
+                            {  name: 2 ,'name:en': 2, 'name:fr': 3 },
+                            { name: 66 }
+                        ]
+                    }
+                }
+            });
+
+            let result = CountriesModule.getCurrentCountrySecondSubLevel({});
+            expect(result[0].id).toBe(1);
+            expect(result[0].name).toBe(2);
+
+            expect(result[1].id).toBe(2);
+            expect(result[1].name).toBe(2);
+
+            expect(result[2].id).toBe(66);
+            expect(result[2].name).toBe(66);
+
+            expect(language.getCurrentLanguage).toHaveBeenCalled();
+            expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+
+            spy.and.returnValue({});
+            result = CountriesModule.getCurrentCountrySecondSubLevel({});
+            expect(result).toEqual([]);
         });
 
         it('getCurrentCountryMapData', () => {
             spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({ code: 'en' });
-            spyOn(CountriesModule, 'getCurrentCountryDistricts').and.returnValue(2);
+            spyOn(CountriesModule, 'getCurrentCountryFirstSubLevel').and.returnValue(2);
             CountriesModule.mapData.en = 1;
             const result = CountriesModule.getCurrentCountryMapData({});
             expect(result.mapData).toBe(1);
             expect(result.districts).toBe(2);
 
             expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
-            expect(CountriesModule.getCurrentCountryDistricts).toHaveBeenCalled();
+            expect(CountriesModule.getCurrentCountryFirstSubLevel).toHaveBeenCalled();
         });
 
         it('getCurrentCountryDistrictProjects', () => {
@@ -220,7 +285,7 @@ describe('Countries Store Module', () => {
 
         }));
 
-        it('loadCountryMapDataAndDistricts', A(async () => {
+        it('loadCountryMapData', A(async () => {
             spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({ code: 'hu' });
             const getStateSpy = getState({});
             const data = {
@@ -240,19 +305,14 @@ describe('Countries Store Module', () => {
             };
             spyOn(axios, 'get').and.returnValue(Promise.resolve({ data }));
             CountriesModule.mapData.hu = undefined;
-            await CountriesModule.loadCountryMapDataAndDistricts()(dispatch, getStateSpy);
+            await CountriesModule.loadCountryMapData()(dispatch, getStateSpy);
             expect(getStateSpy).toHaveBeenCalled();
             expect(axios.get).toHaveBeenCalledWith('/static/country-geodata/hu.json');
-            expect(dispatch)
-              .toHaveBeenCalledWith({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts: jasmine.any(Object) });
-
 
             axios.get.calls.reset();
             CountriesModule.mapData.hu = data;
-            await CountriesModule.loadCountryMapDataAndDistricts()(dispatch, getStateSpy);
+            await CountriesModule.loadCountryMapData()(dispatch, getStateSpy);
             expect(axios.get).not.toHaveBeenCalled();
-            expect(dispatch)
-              .toHaveBeenCalledWith({ type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts: jasmine.any(Object) });
 
         }));
 
@@ -325,7 +385,7 @@ describe('Countries Store Module', () => {
 
         it('setCurrentCountry', A(async () => {
             spyOn(CountriesModule, 'loadCountryFields');
-            spyOn(CountriesModule, 'loadCountryMapDataAndDistricts');
+            spyOn(CountriesModule, 'loadCountryMapData');
             spyOn(CountriesModule, 'loadCountryLandingPageInfo');
             spyOn(CountriesModule, 'loadCurrentCountryDistrictsProject');
             let getStateSpy = getState({ countries: {
@@ -338,7 +398,7 @@ describe('Countries Store Module', () => {
             expect(getStateSpy).toHaveBeenCalled();
             expect(dispatch).not.toHaveBeenCalled();
             expect(CountriesModule.loadCountryFields).not.toHaveBeenCalled();
-            expect(CountriesModule.loadCountryMapDataAndDistricts).not.toHaveBeenCalled();
+            expect(CountriesModule.loadCountryMapData).not.toHaveBeenCalled();
             expect(CountriesModule.loadCountryLandingPageInfo).not.toHaveBeenCalled();
             expect(CountriesModule.loadCurrentCountryDistrictsProject).not.toHaveBeenCalled();
 
@@ -350,7 +410,7 @@ describe('Countries Store Module', () => {
             expect(getStateSpy).toHaveBeenCalled();
             expect(dispatch).not.toHaveBeenCalled();
             expect(CountriesModule.loadCountryFields).not.toHaveBeenCalled();
-            expect(CountriesModule.loadCountryMapDataAndDistricts).not.toHaveBeenCalled();
+            expect(CountriesModule.loadCountryMapData).not.toHaveBeenCalled();
             expect(CountriesModule.loadCountryLandingPageInfo).not.toHaveBeenCalled();
             expect(CountriesModule.loadCurrentCountryDistrictsProject).not.toHaveBeenCalled();
 
@@ -359,7 +419,7 @@ describe('Countries Store Module', () => {
             expect(getStateSpy).toHaveBeenCalled();
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_COUNTRY', country: 2 });
             expect(CountriesModule.loadCountryFields).toHaveBeenCalled();
-            expect(CountriesModule.loadCountryMapDataAndDistricts).toHaveBeenCalled();
+            expect(CountriesModule.loadCountryMapData).toHaveBeenCalled();
             expect(CountriesModule.loadCountryLandingPageInfo).toHaveBeenCalled();
             expect(CountriesModule.loadCurrentCountryDistrictsProject).toHaveBeenCalled();
 
@@ -430,13 +490,6 @@ describe('Countries Store Module', () => {
             const action = { type: 'UPDATE_COUNTRY_FIELDS_LIST', fields: [1] };
             state = CountriesModule.default(state, action);
             expect(state.countryFields).toEqual([1]);
-        });
-
-        it('SET_CURRENT_COUNTRY_DISTRICTS', () => {
-            let state = {};
-            const action = { type: 'SET_CURRENT_COUNTRY_DISTRICTS', districts: 1 };
-            state = CountriesModule.default(state, action);
-            expect(state.currentCountryDistricts).toBe(1);
         });
 
         it('SET_CURRENT_COUNTRY_PROJECTS', () => {

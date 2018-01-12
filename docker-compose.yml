@@ -14,6 +14,7 @@ services:
       - ./django:/src
       - ./frontend:/frontend
       - ./nginx/site/static:/usr/share/django/static:rw
+      - ./django/media:/usr/share/django/media:rw
       - log_data:/var/log/django
       - media_data:/src/media
     command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 2 -b :8000 --reload --timeout 120

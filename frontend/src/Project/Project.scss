@@ -2,14 +2,14 @@
 @import '../mixins';
 
 #custom-toast {
-  width:100%;
+  width: 100%;
 
   .md-toast-content {
-    background: $color-red;
-    width:auto;
+    width: auto;
     min-width: 20%;
     max-width: 35%;
     margin: auto;
+    background: $color-red;
     text-align: center;
   }
 }

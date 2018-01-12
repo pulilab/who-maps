@@ -18,10 +18,18 @@ describe('ImplementationOverview', () => {
     });
 
     it('mapData fn.', () => {
-        spyOn(CountriesModule, 'getCurrentCountryDistricts').and.returnValue(1);
+        spyOn(CountriesModule, 'getCurrentCountryFirstSubLevel').and.returnValue(1);
+        spyOn(CountriesModule, 'getCurrentCountrySecondSubLevel').and.returnValue(2);
+        spyOn(CountriesModule, 'getCurrentCountryFacilityList').and.returnValue(3);
+        spyOn(CountriesModule, 'getCurrentCountrySubLevelNames').and.returnValue([1, 2]);
         const result = controller.mapData({});
-        expect(CountriesModule.getCurrentCountryDistricts).toHaveBeenCalled();
+        expect(CountriesModule.getCurrentCountryFirstSubLevel).toHaveBeenCalled();
+        expect(CountriesModule.getCurrentCountrySecondSubLevel).toHaveBeenCalled();
+        expect(CountriesModule.getCurrentCountrySubLevelNames).toHaveBeenCalled();
         expect(result.districtList).toBe(1);
+        expect(result.secondSubLevelList).toBe(2);
+        expect(result.subLevelNames).toEqual([1,2]);
+        expect(result.facilities).toEqual(3);
     });
 
     it('should have an on init function', () => {
@@ -49,12 +57,14 @@ describe('ImplementationOverview', () => {
         spyOn(controller, 'setAvailableDictOptions');
         spyOn(controller, 'clearDistrict');
         spyOn(controller, 'addClearOption');
+        spyOn(controller, 'initializeFacilityList');
         controller.watchers();
         expect(controller.scope.$watch).toHaveBeenCalled();
         expect(controller.scope.$watchGroup).toHaveBeenCalled();
         expect(controller.setAvailableDictOptions).toHaveBeenCalled();
         expect(controller.clearDistrict).toHaveBeenCalled();
         expect(controller.addClearOption).toHaveBeenCalled();
+        expect(controller.initializeFacilityList).toHaveBeenCalled();
     });
 
     it('addClearOption fn', () => {

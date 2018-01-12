@@ -605,7 +605,8 @@ export function processForm(form) {
         platforms: parsePlatformCollection(form),
         ...extractIdFromObjects(form),
         ...handleNationalLevelCoverage(form),
-        ...handleCoverage(form)
+        coverage: handleCoverage(form.coverage),
+        coverage_second_level: handleCoverage(form.coverage_second_level)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };

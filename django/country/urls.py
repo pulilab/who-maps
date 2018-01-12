@@ -1,10 +1,11 @@
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
-from country.views import RetrieveLandingPageViewSet
+from country.views import RetrieveLandingPageViewSet, CountryMapDataViewSet
 from . import views
 
 router = DefaultRouter()
 router.register(r'landing', RetrieveLandingPageViewSet)
+router.register(r'country-map-data', CountryMapDataViewSet)
 urlpatterns = router.urls
 
 urlpatterns += [

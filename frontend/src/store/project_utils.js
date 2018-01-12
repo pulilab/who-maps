@@ -101,8 +101,9 @@ export function convertObjectArrayToStringArray(data) {
 
 export function fillEmptyCollectionsWithDefault(data) {
     data.coverage = isEmpty(data.coverage) ? [{}] : data.coverage;
+    data.coverage_second_level = isEmpty(data.coverage_second_level) ? [{}] : data.coverage_second_level;
     data.platforms = isEmpty(data.platforms) ? [{}] : data.platforms;
-    return Object.assign({}, data);
+    return { ...data };
 }
 
 export function setCoverageType(cov, nat) {
@@ -249,7 +250,13 @@ export function retainOnlyIds(form) {
 }
 
 function defaultEmptyCoverageToZero(item) {
-    item = { ...item };
+    item = {
+        district: item.district,
+        clients: item.clients,
+        health_workers: item.health_workers,
+        facilities: item.facilities,
+        facilities_list: item.facilities_list
+    };
     if (isNil(item.clients) && isNil(item.health_workers) && isNil(item.facilities)) {
         return undefined;
     }
@@ -265,10 +272,9 @@ export function handleNationalLevelCoverage({ national_level_deployment }) {
 
 }
 
-export function handleCoverage({ coverage }) {
+export function handleCoverage(coverage) {
     coverage  = coverage ? coverage : [];
-    const cov = coverage.map(c => {
+    return coverage.map(c => {
         return defaultEmptyCoverageToZero(c);
     }).filter(c => c);
-    return { coverage : cov };
 }

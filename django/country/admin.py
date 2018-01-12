@@ -1,12 +1,13 @@
 from collections import defaultdict
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
 from django.core import mail, urlresolvers
 from django.contrib import admin
 from django.template import loader
-from .models import Country, PartnerLogo, CountryField
+from .models import Country, PartnerLogo, CountryField, MapFile
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -44,12 +45,38 @@ class PartnerLogoInline(admin.TabularInline):
     max_num = 4
 
 
+class MapFileInline(admin.StackedInline):
+    model = MapFile
+    extra = 0
+    max_num = 1
+    can_delete = False
+    readonly_fields = ('print_map_customizer',)
+
+    class Media:
+        js = ('vue-map-customizer.min.js',)
+        css = {
+            'all': ('vue-map-customizer.min.css',)
+        }
+
+    def print_map_customizer(self, obj):
+        markup = '<vue-map-customizer map-url="{}" flag-base-url="/static/flags/" ' \
+                 'country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer>'.format(obj.map_file.url,
+                                                                                                 obj.country_id)
+        return mark_safe(markup)
+    print_map_customizer.short_description = 'Map'
+
+
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
-    inlines = (PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
+    inlines = (MapFileInline, PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
     filter_horizontal = ('users',)
+    readonly_fields = ('code', 'name')
+
+    def get_fields(self, request, obj=None):
+        fields = super(CountryAdmin, self).get_fields(request, obj)
+        return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data']]
 
     def get_queryset(self, request):
         qs = super(CountryAdmin, self).get_queryset(request)
@@ -63,8 +90,6 @@ class CountryAdmin(admin.ModelAdmin):
         fields = super(CountryAdmin, self).get_readonly_fields(request, obj)
         if request.user.is_staff and not request.user.is_superuser:
             fields += (
-                'name',
-                'code',
                 'users',
             )
         return fields
@@ -72,11 +97,15 @@ class CountryAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super(CountryAdmin, self).save_model(request, obj, form, change)
         if change and 'users' in form.changed_data and obj.users:
-            self._notify_user(obj)
+            self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
+                              template_name="email/country_admin.html")
+        if change and 'map_activated_on' in form.changed_data and obj.users:
+            self._notify_user(obj, subject="A new map for {country_name} has been activated",
+                              template_name="email/country_map_activated.html")
 
     @staticmethod
-    def _notify_user(country):
-        html_template = loader.get_template("email/country_admin.html")
+    def _notify_user(country, subject, template_name):
+        html_template = loader.get_template(template_name)
         change_url = urlresolvers.reverse('admin:country_country_change', args=(country.id,))
 
         email_mapping = defaultdict(list)
@@ -85,7 +114,7 @@ class CountryAdmin(admin.ModelAdmin):
 
         for language, email_list in email_mapping.items():
             with override(language):
-                subject = ugettext("You have been selected as the Country Admin for {country_name}")
+                subject = ugettext(subject)
                 html_message = html_template.render({'change_url': change_url,
                                                      'country_name': country.name,
                                                      'language': language})
