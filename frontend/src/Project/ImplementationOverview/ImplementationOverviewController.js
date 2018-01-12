@@ -142,8 +142,8 @@ class ImplementationOverview extends CollapsibleSet {
         return [intervention];
     }
 
-    async searchFacility(name) {
-        return this.facilities.filter(f => f.includes(name)).slice(0, 100);
+    async searchFacility(name, facilities_list) {
+        return this.facilities.filter(f => f.includes(name) && !facilities_list.includes(f)).slice(0, 100);
     }
 
 

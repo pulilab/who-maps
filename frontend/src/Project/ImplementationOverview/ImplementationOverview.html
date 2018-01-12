@@ -182,8 +182,9 @@
                       md-on-remove="vm.updateFacilityNumber(cov)"
                       md-require-match="true">
               <md-autocomplete
+                md-no-cache
                 md-search-text="cov.facilitySearch"
-                md-items="item in vm.searchFacility(cov.facilitySearch)"
+                md-items="item in vm.searchFacility(cov.facilitySearch, cov.facilities_list)"
                 md-item-text="item"
                 placeholder="{{'Search Facilities' | translate}}">
                 <span md-highlight-text="ctrl.searchText">{{item}}</span>
@@ -317,8 +318,9 @@
                       md-on-remove="vm.updateFacilityNumber(cov)"
                       md-require-match="true">
               <md-autocomplete
+                md-no-cache
                 md-search-text="cov.facilitySearch"
-                md-items="item in vm.searchFacility(cov.facilitySearch)"
+                md-items="item in vm.searchFacility(cov.facilitySearch, cov.facilities_list)"
                 md-item-text="item"
                 placeholder="{{'Search Facilities' | translate}}">
                 <span md-highlight-text="ctrl.searchText">{{item}}</span>
