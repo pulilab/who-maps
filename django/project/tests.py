@@ -1089,12 +1089,11 @@ class ProjectTests(SetupTests):
         self.assertIsNone(response.json()['draft'])
         self.assertTrue('start_date' not in response.json()['published'])
 
-        # TODO:
-        # url = reverse("project-list")
-        # response = self.test_user_client.get(url)
-        # self.assertEqual(response.status_code, 200)
-        # # it should return only one project that is in CTR2
-        # self.assertEqual(len(response.json()), 1)
+        # Only works for retrieve, the list won't list any project that are not his/her
+        url = reverse("project-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 0)
 
     def test_admins_access_all_projects_as_viewer(self):
         # Create a test user with profile.
@@ -1166,11 +1165,11 @@ class ProjectTests(SetupTests):
         # access draft which is only for members only by default
         self.assertEqual(response.json()['draft']['name'], p_not_in_country.name)
 
-        # superuser lists all projects in the system
+        # Only works for retrieve, the list won't list any project that are not his/her
         url = reverse("project-list")
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), Project.objects.all().count())
+        self.assertEqual(len(response.json()), 0)
 
 
 class ProjectDraftTests(SetupTests):
