@@ -1,6 +1,7 @@
 import csv
 from threading import local
 from io import StringIO
+import urllib.parse
 
 from django.contrib import admin, messages
 from django import forms
@@ -25,6 +26,8 @@ from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, H
     ProjectApproval
 from user.models import UserProfile, Organisation
 
+# This has to stay here to use the proper celery instance with the djcelery_email package
+import scheduler.celery # noqa
 
 TLS = local()
 
@@ -163,11 +166,10 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
             return '-'
 
         user = TLS.request.user
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&"
-                         "is_superuser=true&email={}'>See project</a>".format(obj.project.id,
-                                                                              user.auth_token,
-                                                                              user.userprofile.id,
-                                                                              user.email))
+        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                        'is_superuser': 'true', 'email': user.email}
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
+                         .format(obj.project.id, urllib.parse.urlencode(query_string)))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)

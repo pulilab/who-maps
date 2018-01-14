@@ -1,5 +1,6 @@
 import copy
 import csv
+import urllib.parse
 from datetime import datetime
 from mock import patch
 from io import StringIO
@@ -110,8 +111,13 @@ class SetupTests(APITestCase):
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
+            "coverage_second_level": [
+                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49},
+                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
+            ],
             "national_level_deployment":
-                {"clients": 20000, "health_workers": 0, "facilities": 0},
+                {"clients": 20000, "health_workers": 0, "facilities": 0,
+                 "facilities_list": ['facility1', 'facility2', 'facility3']},
             "donors": ["donor1", "donor2"],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
@@ -923,11 +929,11 @@ class ProjectTests(SetupTests):
         ma = ProjectApprovalAdmin(ProjectApproval, site)
         project_approval = ProjectApproval.objects.get(project_id=self.project_id)
         link = ma.link(project_approval)
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?token={}&user_profile_id={}&" \
-                        "is_superuser=true&email={}'>See project</a>".format(self.project_id,
-                                                                             user.auth_token,
-                                                                             user.userprofile.id,
-                                                                             user.email)
+
+        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                        'is_superuser': 'true', 'email': user.email}
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?{}'>" \
+                        "See project</a>".format(self.project_id, urllib.parse.urlencode(query_string))
         self.assertEqual(link, expected_link)
 
     @patch('django.contrib.admin.options.messages')
@@ -1171,6 +1177,39 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 0)
 
+    def test_project_country_facilities_list_retrieve(self):
+        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['national_level_deployment']['facilities_list'],
+                         ['facility1', 'facility2', 'facility3'])
+
+    def test_project_country_facilities_list_update(self):
+        url = reverse("project-publish", kwargs={"pk": self.project_id})
+        data = copy.deepcopy(self.project_data)
+        data.update(
+            coverage=[
+                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4,
+                 "facilities_list": ['facility_district1_1', 'facility_district1_2', 'facility_district1_3']},
+                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8,
+                 "facilities_list": ['facility_district2_1', 'facility_district2_2', 'facility_district3_3']}
+            ],
+            coverage_second_level=[
+                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49,
+                 "facilities_list": ['facility_ward1_1', 'facility_ward1_2', 'facility_ward1_3']},
+                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89,
+                 "facilities_list": ['facility_ward2_1', 'facility_ward2_2', 'facility_ward2_3']}
+            ]
+        )
+
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.json()['published']['national_level_deployment']['facilities_list'],
+                         ['facility1', 'facility2', 'facility3'])
+        self.assertEqual(response.json()['published']['coverage'][0]['facilities_list'],
+                         ['facility_district1_1', 'facility_district1_2', 'facility_district1_3'])
+        self.assertEqual(response.json()['published']['coverage_second_level'][1]['facilities_list'],
+                         ['facility_ward2_1', 'facility_ward2_2', 'facility_ward2_3'])
+
 
 class ProjectDraftTests(SetupTests):
     def setUp(self):
@@ -1381,6 +1420,15 @@ class ProjectDraftTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
+
+    def test_retrieve_project_with_second_sublevel(self):
+        url = reverse("project-retrieve", kwargs={"pk": self.project_pub_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['draft']['coverage_second_level'],
+                         response.json()['published']['coverage_second_level'])
+        self.assertNotEqual(response.json()['published']['coverage_second_level'],
+                            response.json()['published']['coverage'])
 
 
 class PermissionTests(SetupTests):
@@ -1921,6 +1969,8 @@ class TestAdmin(TestCase):
 
         self.assertIsNone(pa.user)
         self.assertIsNone(pa.approved)
+
+        ma.save_form(self.request, form, True)
         ma.save_model(self.request, pa, form, True)
         pa.refresh_from_db()
         self.assertEqual(pa.user, self.user.userprofile)

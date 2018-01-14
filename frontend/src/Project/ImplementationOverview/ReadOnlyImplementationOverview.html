@@ -78,15 +78,52 @@
 
     <div ng-show="vm.project.coverageType === 1">
       <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
-        <translate>District level deployment</translate>
+        <translate> {{vm.subLevelNames[0]}} level deployment</translate>
       </h6>
 
       <div class="input-group" ng-repeat="cov in vm.project.coverage">
         <div layout="column">
           <div layout="row">
             <div class="district" flex="50">
+              <h6 class="text-capitalize">
+                {{vm.subLevelNames[0]}}
+              </h6>
+              <p>{{cov.district}}</p>
+            </div>
+            <div flex="50"></div>
+          </div>
+          <div layout="row">
+            <div class="number" flex="20">
               <h6>
-                <translate>District</translate>
+                <translate># Health Workers</translate>
+              </h6>
+              <p>{{cov.health_workers}}</p>
+            </div>
+            <div class="number" flex="20">
+              <h6>
+                <translate># Facilities</translate>
+              </h6>
+              <p>{{cov.facilities}}</p>
+            </div>
+            <div class="number" flex="20">
+              <h6>
+                <translate># Clients</translate>
+              </h6>
+              <p>{{cov.clients}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
+        <translate> {{vm.subLevelNames[1]}} level deployment</translate>
+      </h6>
+      <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level">
+        <div layout="column">
+          <div layout="row">
+            <div class="district" flex="50">
+              <h6 class="text-capitalize">
+                {{vm.subLevelNames[1]}}
               </h6>
               <p>{{cov.district}}</p>
             </div>

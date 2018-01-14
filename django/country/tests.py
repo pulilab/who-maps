@@ -630,6 +630,26 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[-1], expected_data)
 
+    def test_update_and_list_country_map_data(self):
+        url = reverse("country-detail", kwargs={"pk": Country.objects.last().id})
+        self.map_data = {"map_data": {
+            "sub_level_name": "District",
+            "sub_levels": [{
+                "name_en": "District 1",
+                "name_es": "Districto Uno"
+            }, {
+                "name_en": "Disctrict 9"
+            }]
+        }}
+        response = self.test_user_client.put(url, data=self.map_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['map_data'], self.map_data['map_data'])
+
+        url = reverse("country-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[-1]['map_data'], self.map_data['map_data'])
+
 
 class MockRequest:
     pass
@@ -680,18 +700,21 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         self.assertEqual(ma.get_readonly_fields(self.request), (
-            'name',
             'code',
+            'name',
             'users',
         ))
 
-    def test_superuser_can_change_every_field(self):
+    def test_superuser_readonlies(self):
         ma = CountryAdmin(Country, self.site)
         self.user.is_superuser = True
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_readonly_fields(self.request), ())
+        self.assertEqual(ma.get_readonly_fields(self.request), (
+            'code',
+            'name'
+        ))
 
     def test_country_field_inlines(self):
         user_profile = UserProfile.objects.create(user=self.user)
@@ -709,7 +732,7 @@ class CountryAdminTests(TestCase):
         countryfield_formset_and_inline = formsets_and_inlines[-1]
         countryfield_inline = countryfield_formset_and_inline[1]
 
-        addcountryfield_formset_and_inline = formsets_and_inlines[1]
+        addcountryfield_formset_and_inline = formsets_and_inlines[-2]
         addcountryfield_inline = addcountryfield_formset_and_inline[1]
 
         self.assertEqual(countryfield_inline.get_readonly_fields(self.request), ('type', 'question'))
@@ -731,16 +754,14 @@ class CountryAdminTests(TestCase):
         user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
 
         class MockForm:
-            changed_data = ['users']
+            changed_data = ['users', 'map_activated_on']
 
         country.users.add(user_profile, user_2_profile)
         ma.save_model(self.request, country, MockForm(), True)
 
-        first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
-        en_index = -2 if first_en else -1
-        fr_index = -1 if first_en else -2
-
-        outgoing_en_email = mail.outbox[en_index].message()
+        outgoing_en_email = [m for m in mail.outbox
+                             if '<meta http-equiv="content-language" content="en">' in m.message().as_string()
+                             and 'You have been selected as the Country Admin' in m.message().as_string()][0].message()
         outgoing_en_email_text = outgoing_en_email.as_string()
 
         self.assertTrue(
@@ -751,9 +772,50 @@ class CountryAdminTests(TestCase):
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_fr_email = mail.outbox[fr_index].message()
+        outgoing_fr_email = [m for m in mail.outbox
+                             if '<meta http-equiv="content-language" content="fr">' in m.message().as_string()
+                             and 'You have been selected as the Country Admin' in m.message().as_string()][0].message()
         outgoing_fr_email_text = outgoing_fr_email.as_string()
 
         self.assertTrue("test2@test.test" in outgoing_fr_email.values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
+
+        outgoing_map_email = [m for m in mail.outbox
+                              if '<meta http-equiv="content-language" content="en">' in m.message().as_string()
+                              and 'A new map for' in m.message().as_string()][0].message()
+        outgoing_map_email_text = outgoing_map_email.as_string()
+        self.assertTrue("test@test.com" in outgoing_map_email.values())
+        self.assertTrue("A new map for {} has been activated".format(country.name) in outgoing_map_email_text)
+
+    def test_country_map_inline(self):
+        user_profile = UserProfile.objects.create(user=self.user)
+        country = Country.objects.create(name="Country1", code="CC1")
+        country.users.add(user_profile)
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        formsets_and_inlines = list(ma.get_formsets_with_inlines(self.request))
+        mapfile_formset_and_inline = formsets_and_inlines[0]
+        mapfile_inline = mapfile_formset_and_inline[1]
+
+        class MockMap:
+            class MockMapFile:
+                url = 'test_url'
+            map_file = MockMapFile()
+            country_id = 0
+
+        self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
+                         '<vue-map-customizer map-url="test_url" flag-base-url="/static/flags/" '
+                         'country-id="0" api-url="/api/country-map-data/"></vue-map-customizer>')
+
+    def test_country_get_fields(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.assertTrue('map_data' not in ma.get_fields(self.request))

@@ -525,6 +525,8 @@ export function setCurrentProject(id) {
                 return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
             }
             const { data } = await axios.get(`/api/projects/${id}/`);
+            const teamViewers = await axios.get(`/api/projects/${id}/groups/`);
+            dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: teamViewers.data });
             dispatch({ type: 'SET_CURRENT_PUBLIC_PROJECT_DETAIL', project: data });
         }
         else if (id === -1) {
@@ -536,6 +538,7 @@ export function setCurrentProject(id) {
                 },
                 public: {}
             };
+            dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: { team: [], viewers: [] } });
             dispatch({ type: 'UPDATE_SAVE_PROJECT', project: newProject });
         }
         return Promise.resolve();
@@ -602,7 +605,8 @@ export function processForm(form) {
         platforms: parsePlatformCollection(form),
         ...extractIdFromObjects(form),
         ...handleNationalLevelCoverage(form),
-        ...handleCoverage(form)
+        coverage: handleCoverage(form.coverage),
+        coverage_second_level: handleCoverage(form.coverage_second_level)
     };
     form = { ...form, ...retainOnlyIds(form) };
     form = { ...form, ...removeEmptyChildObjects(form) };

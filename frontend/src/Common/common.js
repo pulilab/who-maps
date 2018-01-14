@@ -1,7 +1,6 @@
 import angular from 'angular';
 import ngFileUpload from 'ng-file-upload';
 import Storage from './Storage';
-import SearchableSelectionMenu from './SearchableSelectionMenu/searchableSelectionMenuComponent';
 import projectComponent from './ProjectComponent/projectComponent';
 import searchBarComponent from './Searchbar/searchbarComponent';
 import BadgeComponent from './Badge/badgeComponent';
@@ -39,7 +38,6 @@ angular.module(moduleName,
         ngFileUpload
     ]
 )
-    .component(SearchableSelectionMenu.name, SearchableSelectionMenu)
     .component(BadgeComponent.name, BadgeComponent)
     .component(projectComponent.name, projectComponent)
     .component(searchBarComponent.name, searchBarComponent)

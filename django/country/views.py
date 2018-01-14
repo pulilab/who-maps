@@ -1,4 +1,3 @@
-
 from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,21 +5,12 @@ from rest_framework.response import Response
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .models import Country, CountryField
 from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsWriteSerializer
+    CountryFieldsWriteSerializer, CountryMapDataSerializer
 
 
 class CountryListAPIView(generics.ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountryListSerializer
-
-    def get_queryset(self):
-        queryset = super(CountryListAPIView, self).get_queryset()
-        return queryset.values(
-            'id',
-            'name',
-            'code',
-            'project_approval',
-        )
 
 
 class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -73,3 +63,8 @@ class CountryExportView(APIView):
             data.append(country_data)
 
         return Response(data)
+
+
+class CountryMapDataViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountryMapDataSerializer

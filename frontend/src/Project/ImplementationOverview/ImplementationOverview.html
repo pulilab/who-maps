@@ -141,17 +141,17 @@
       </div>
     </div>
 
-    <div ng-show="vm.project.coverageType === 1" class="md-block extra-margin">
+    <div ng-show="vm.project.coverageType === 1" class="md-block extra-margin-double">
       <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
-        <translate>District level deployment</translate>
+        <translate>{{vm.subLevelNames[0]}} level deployment</translate>
       </h6>
 
       <div class="input-group" ng-repeat="cov in vm.project.coverage">
         <div layout="column">
           <div layout="row">
-            <md-input-container class="district" flex="50">
-              <label>
-                <translate>District</translate>
+            <md-input-container class="district" flex="45">
+              <label class="text-capitalize">
+                {{vm.subLevelNames[0]}}
               </label>
               <md-select ng-model="cov.district"
                          name="{{'coverage_' + $index + '.district'}}"
@@ -174,8 +174,29 @@
                 </div>
               </div>
             </md-input-container>
-            <div flex="50"></div>
           </div>
+
+          <div layout="row" ng-if="vm.facilities.length > 0" class="no-float">
+            <md-chips ng-model="cov.facilities_list" md-autocomplete-snap
+                      md-on-add="vm.updateFacilityNumber(cov)"
+                      md-on-remove="vm.updateFacilityNumber(cov)"
+                      md-require-match="true">
+              <md-autocomplete
+                md-no-cache
+                md-search-text="cov.facilitySearch"
+                md-items="item in vm.searchFacility(cov.facilitySearch, cov.facilities_list)"
+                md-item-text="item"
+                placeholder="{{'Search Facilities' | translate}}">
+                <span md-highlight-text="ctrl.searchText">{{item}}</span>
+              </md-autocomplete>
+              <md-chip-template>
+                <span>
+                  {{$chip}}
+                </span>
+              </md-chip-template>
+            </md-chips>
+          </div>
+
           <div layout="row">
             <md-input-container class="number" flex="20">
               <label>
@@ -197,7 +218,7 @@
                 </div>
               </div>
             </md-input-container>
-            <md-input-container class="number" flex="20">
+            <md-input-container class="number" flex="20" ng-show="vm.facilities.length === 0">
               <label>
                 <translate># Facilities</translate>
               </label>
@@ -254,9 +275,147 @@
           </div>
         </div>
       </div>
+
+      <!--NEW COVERAGE LAYER-->
+
+      <h6 class="subtitle" ng-if-start="vm.subLevelNames[1]">
+        <i class="material-icons">&#xE567;</i>
+        <translate>{{vm.subLevelNames[1]}} level deployment</translate>
+      </h6>
+
+      <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level" ng-if-end>
+        <div layout="column">
+          <div layout="row">
+            <md-input-container class="district" flex="45">
+              <label class="text-capitalize">
+                {{vm.subLevelNames[1]}}
+              </label>
+              <md-select ng-model="cov.district"
+                         name="{{'coverage_second_level_' + $index + '.district'}}"
+                         ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
+                <md-option value="{{district.id}}" ng-repeat="district in cov.available">
+                  {{district.name}}
+                </md-option>
+                <md-option md-option-empty ng-hide="vm.secondSubLevelList.length">
+                  <translate>Select a country </translate>
+                </md-option>
+              </md-select>
+              <div ng-messages="vm.form['coverage_second_level_' + $index + '.district'].$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+                <div ng-message="custom">
+                  <div ng-repeat="message in vm.form['coverage_second_level_' + $index + '.district'].customError">
+                    {{message}}
+                  </div>
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+          <div layout="row" ng-if="vm.facilities.length > 0" class="no-float">
+            <md-chips ng-model="cov.facilities_list" md-autocomplete-snap
+                      md-on-add="vm.updateFacilityNumber(cov)"
+                      md-on-remove="vm.updateFacilityNumber(cov)"
+                      md-require-match="true">
+              <md-autocomplete
+                md-no-cache
+                md-search-text="cov.facilitySearch"
+                md-items="item in vm.searchFacility(cov.facilitySearch, cov.facilities_list)"
+                md-item-text="item"
+                placeholder="{{'Search Facilities' | translate}}">
+                <span md-highlight-text="ctrl.searchText">{{item}}</span>
+              </md-autocomplete>
+              <md-chip-template>
+                <span>
+                  {{$chip}}
+                </span>
+              </md-chip-template>
+            </md-chips>
+
+          </div>
+          <div layout="row">
+            <md-input-container class="number" flex="20">
+              <label>
+                <translate># Health Workers</translate>
+              </label>
+              <input
+                name="{{'coverage_second_level_' + $index}}.health_workers"
+                type="number"
+                min="0"
+                ng-model="cov.health_workers" >
+              <div ng-messages="vm.form['coverage_second_level_' + $index + '.health_workers'].$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+                <div ng-message="custom">
+                  <div ng-repeat="message in vm.form['coverage_second_level_' + $index + '.health_workers'].customError">
+                    {{message}}
+                  </div>
+                </div>
+              </div>
+            </md-input-container>
+            <md-input-container class="number" flex="20" ng-show="vm.facilities.length === 0">
+              <label>
+                <translate># Facilities</translate>
+              </label>
+              <input
+                name="{{'coverage_second_level_' + $index}}.facilities"
+                type="number"
+                min="0"
+                ng-model="cov.facilities">
+              <div ng-messages="vm.form['coverage_second_level_' + $index + '.facilities'].$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+                <div ng-message="custom">
+                  <div ng-repeat="message in vm.form['coverage_second_level_' + $index + '.facilities'].customError">
+                    {{message}}
+                  </div>
+                </div>
+              </div>
+            </md-input-container>
+            <md-input-container class="number" flex="20">
+              <label>
+                <translate># Clients</translate>
+              </label>
+              <input
+                name="{{'coverage_second_level_' + $index}}.clients"
+                type="number"
+                min="0"
+                ng-model="cov.clients">
+              <div ng-messages="vm.form['coverage_second_level_' + $index + '.clients'].$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+                <div ng-message="custom">
+                  <div ng-repeat="message in vm.form['coverage_second_level_' + $index + '.clients'].customError">
+                    {{message}}
+                  </div>
+                </div>
+              </div>
+            </md-input-container>
+            <div class="add-more-item" flex="40">
+              <md-button class="md-warn" aria-label="Remove"
+                         ng-show="vm.showRemove($index, vm.project.coverage_second_level)"
+                         ng-click="vm.removeChild($index, 'coverage_second_level')">
+                <md-icon><i class="material-icons">&#xE15B;</i></md-icon>
+                <translate>Remove</translate>
+              </md-button>
+              <md-button class="md-primary" aria-label="Add more"
+                         ng-show="vm.showAddMore($index, vm.project.coverage_second_level)"
+                         ng-click="vm.addChild('coverage_second_level')">
+                <md-icon><i class="material-icons">&#xE145;</i></md-icon>
+                <translate>Add more</translate>
+              </md-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <div ng-show="vm.project.coverageType === 2" class="md-block extra-margin">
+
+    <div ng-show="vm.project.coverageType === 2" class="md-block extra-margin-double">
       <h6 class="subtitle first"><i class="material-icons">&#xE153;</i>
         <translate>National level deployment</translate>
       </h6>

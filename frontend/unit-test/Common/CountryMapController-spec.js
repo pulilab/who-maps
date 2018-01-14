@@ -1,3 +1,4 @@
+/* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, document */
 import CountryMapController from '../../src/Common/CountryMap/CountryMapController';
 import d3 from 'd3';
 import angular from 'angular';
@@ -166,11 +167,10 @@ describe('CountryMapController', () => {
     });
 
     it('has fillDistrictData fn.', () => {
-        const mapData = { ...SLCountryMapData, districts: SLCountryMapData.districts.map((name, id) => ({ id, name })) };
-        cc.drawMapShape(mapData);
+        cc.drawMapShape(SLCountryMapData);
         const districtLevelCoverage = {
-            0 : { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
-            1 : { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
+            'Bo District': { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
+            'Kono District' : { 'clients': 1, 'health_workers': 2, 'facilities': 4 }
         };
         cc.fillDistrictData(districtLevelCoverage);
         expect(document.querySelectorAll('.d3district-data').length).toBe(2);

@@ -1,5 +1,7 @@
+from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
+
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
 
@@ -16,6 +18,9 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
                                    related_name='country_admins',
                                    limit_choices_to={'user__groups__name': 'Country Admin'})
     project_approval = models.BooleanField(default=False)
+    map_data = JSONField(default=dict(), blank=True)
+    map_activated_on = models.DateTimeField(blank=True, null=True,
+                                            help_text="WARNING: this field is for developers only")
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -32,6 +37,11 @@ class PartnerLogo(ExtendedModel):
     @property
     def image_url(self):
         return self.image.url if self.image else None
+
+
+class MapFile(ExtendedModel):
+    country = models.ForeignKey(Country)
+    map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
 
 class CountryFieldManager(models.Manager):
