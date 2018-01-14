@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
 
-from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel
 from country.models import Country, CountryField
 from user.models import UserProfile, Organisation
 
@@ -35,7 +35,7 @@ class ProjectManager(models.Manager):
         return self.exclude(public_id='')
 
 
-class Project(ExtendedModel):
+class Project(SoftDeleteModel, ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("last_version", "last_version_date", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
