@@ -36,8 +36,7 @@ class ProjectManager(models.Manager):
 
 
 class Project(ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("strategy", "pipeline", "anticipated_time", "date", "last_version_date", "started",
-                               "application", "last_version")
+    FIELDS_FOR_MEMBERS_ONLY = ("last_version", "last_version_date", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255)
@@ -66,7 +65,7 @@ class Project(ExtendedModel):
 
     def is_country_admin(self, user):
         # Country admin has permissions only for the published project
-        return user in self.get_country().users.all() if self.get_country() else False
+        return user.userprofile in self.get_country().users.all() if self.get_country() else False
 
     def get_member_data(self):
         return self.data
