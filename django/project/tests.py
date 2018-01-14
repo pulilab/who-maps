@@ -1894,6 +1894,40 @@ class TestAdmin(TestCase):
         self.assertEqual(approvals.count(), 1)
         self.assertEqual(approvals[0].project.name, "Test3")
 
+    def test_approval_admin_get_country(self):
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
+        pa = ProjectApproval.objects.create(project=p)
+        self.assertEqual(ma.get_country(pa), Country.objects.get(id=1))
+
+    def test_approval_admin_save_model(self):
+        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
+        pa = ProjectApproval.objects.create(project=p)
+
+        mf = ma.get_form(self.request, pa)
+        data = {'project': pa.project.id,
+                'reason': 'LOL',
+                'approved': True}
+        form = mf(data, instance=pa)
+
+        self.assertIsNone(pa.user)
+        self.assertIsNone(pa.approved)
+        ma.save_model(self.request, pa, form, True)
+        pa.refresh_from_db()
+        self.assertEqual(pa.user, self.user.userprofile)
+        self.assertEqual(pa.reason, 'LOL')
+        self.assertTrue(pa.approved)
+
 
 class TestProjectImportAdmin(TestCase):
 
