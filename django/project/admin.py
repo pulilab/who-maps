@@ -9,6 +9,7 @@ from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.http import HttpResponse
 from django.core import mail
 from django.utils.html import mark_safe
@@ -420,6 +421,50 @@ class ProjectImportAdmin(admin.ModelAdmin):
         return user, password
 
 
+class ProjectAdmin(AllObjectsAdmin):
+    list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
+    readonly_fields = ['name', 'team', 'viewers', 'link']
+    fields = ['is_active', 'name', 'team', 'viewers', 'link']
+
+    def get_country(self, obj):
+        return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
+    get_country.short_description = "Country"
+
+    def get_team(self, obj):
+        return ", ".join([str(p) for p in obj.team.all()])
+    get_team.short_description = 'Team members'
+
+    def get_published(self, obj):
+        return True if obj.public_id else False
+    get_published.short_description = "Is published?"
+    get_published.boolean = True
+
+    def link(self, obj):
+        if obj.id is None:
+            return '-'
+
+        user = TLS.request.user
+        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                        'is_superuser': 'true', 'email': user.email}
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
+                         .format(obj.id, urllib.parse.urlencode(query_string)))
+
+    def changeform_view(self, request, *args, **kwargs):
+        TLS.request = request
+        return super(ProjectAdmin, self).changeform_view(request, *args, **kwargs)
+
+    def get_queryset(self, request):
+        qs = super(ProjectAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            country_id_qs = Country.objects.filter(users=request.user.userprofile).values_list('id', flat=True)
+            qs = qs.filter(Q(data__country__contained_by=list(country_id_qs)) |
+                           Q(draft__country__contained_by=list(country_id_qs)))
+        return qs
+
+    def has_add_permission(self, request):
+        return False
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
@@ -432,3 +477,4 @@ admin.site.register(HISBucket, HISBucketAdmin)
 admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(ProjectImport, ProjectImportAdmin)
+admin.site.register(Project, ProjectAdmin)
