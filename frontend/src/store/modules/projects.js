@@ -478,7 +478,7 @@ export function loadUserProjects() {
         }
         catch (error) {
             console.log(error);
-            return Promise.reject();
+            return Promise.reject(error);
         }
     };
 }
@@ -507,7 +507,7 @@ export function loadProjectDetails() {
         }
         catch (error) {
             console.log(error);
-            return Promise.reject();
+            return Promise.reject(error);
         }
     };
 }
@@ -517,10 +517,10 @@ export function setCurrentProject(id) {
         id = parseInt(id, 10);
         if (id && id !== -1 && id !== getState().projects.currentProject) {
             dispatch({ type: 'SET_CURRENT_PROJECT', id });
-            const project = getCurrentProjectIfExist(getState());
+            const project = exports.getCurrentProjectIfExist(getState());
             if (project) {
                 const mapDataPromise = dispatch(CountryModule.setCurrentCountry(project.country, ['mapData']));
-                const detailPromise = dispatch(loadProjectDetails());
+                const detailPromise = dispatch(exports.loadProjectDetails());
                 const toolkitPromise = dispatch(ToolkitModule.loadToolkitData());
                 return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
             }
@@ -549,7 +549,7 @@ export function snapShotProject() {
     return async (dispatch, getState) => {
         const id = getState().projects.currentProject;
         await axios.post(`/api/projects/${id}/version/`);
-        await dispatch(loadProjectDetails());
+        await dispatch(exports.loadProjectDetails());
     };
 }
 export function loadProjectStructure() {
