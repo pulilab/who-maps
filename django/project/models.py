@@ -137,6 +137,10 @@ class ProjectApproval(ExtendedModel):
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return "Approval for {}".format(self.project.name)
+
+
 
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project)
