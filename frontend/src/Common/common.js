@@ -1,15 +1,11 @@
 import angular from 'angular';
 import ngFileUpload from 'ng-file-upload';
-import Storage from './Storage';
 import projectComponent from './ProjectComponent/projectComponent';
 import searchBarComponent from './Searchbar/searchbarComponent';
-import BadgeComponent from './Badge/badgeComponent';
 import LoginComponent from './Login/loginComponent';
 import ResetComponent from './Reset/resetComponent';
 import SignupComponent from './Signup/signupComponent';
 import AxisComponent from './Axis/axisComponent';
-import viewersComponent from './Viewers/viewersComponent';
-import followersComponent from './Followers/followersComponent';
 import donorsComponent from './Donors/donorsComponent';
 import EditProfileComponent from './EditProfile/editProfileComponent';
 import countrymap from './CountryMap/countrymap.js';
@@ -38,15 +34,12 @@ angular.module(moduleName,
         ngFileUpload
     ]
 )
-    .component(BadgeComponent.name, BadgeComponent)
     .component(projectComponent.name, projectComponent)
     .component(searchBarComponent.name, searchBarComponent)
     .component(LoginComponent.name, LoginComponent)
     .component(ResetComponent.name, ResetComponent)
     .component(SignupComponent.name, SignupComponent)
     .component(AxisComponent.name, AxisComponent)
-    .component(viewersComponent.name, viewersComponent)
-    .component(followersComponent.name, followersComponent)
     .component(donorsComponent.name, donorsComponent)
     .component(EditProfileComponent.name, EditProfileComponent)
     .component(countrymap.name, countrymap)
@@ -64,5 +57,4 @@ angular.module(moduleName,
 
 
 export { EE };
-export { Storage };
 export { moduleName as Components };
