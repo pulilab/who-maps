@@ -1,4 +1,6 @@
 import PDFExportController from '../../src/CountryView/PDFExport/PDFExportController';
+import pdfMake from 'pdfmake/build/pdfmake';
+import { A } from '../testUtilities';
 
 /* global define, it, describe, xit, expect, beforeEach, jasmine, spyOn */
 let pef = {};
@@ -28,9 +30,9 @@ describe('PDFExport Controller', () => {
         expect(pef.exportDate).toBeDefined();
     });
 
-    it('should have a function to generate a PDF with the pdfmake lib', () => {
-        spyOn(pef, 'pdfMake').and.returnValue(pdfMakeReturn);
-        pef.makePDF();
+    it('should have a function to generate a PDF with the pdfmake lib', A(async () => {
+        spyOn(pdfMake, 'createPdf').and.returnValue(pdfMakeReturn);
+        await pef.makePDF();
         expect(pef.pdfMake).toHaveBeenCalled();
-    });
+    }));
 });
