@@ -1,7 +1,7 @@
 /* eslint-disable no-warning-comments */
 import axios from '../../plugins/axios';
 import union from 'lodash/union';
-import Storage from '../../Common/Storage';
+import Storage from '../../Storage';
 import * as ProjectModule from './projects';
 import * as SystemModule from './system';
 import * as CountryModule from './countries';

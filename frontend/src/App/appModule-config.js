@@ -4,7 +4,7 @@ import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
 import * as SystemModule from '../store/modules/system';
 import * as CountriesModule from '../store/modules/countries';
-import Storage from '../Common/Storage';
+import Storage from '../Storage';
 import { reducers, middleware } from '../store/index';
 
 const storage = new Storage();

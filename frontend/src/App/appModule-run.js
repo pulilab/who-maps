@@ -2,7 +2,7 @@ import { getLanguage, setCatalog, setScope } from '../plugins/language';
 import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
 import axios from '../plugins/axios';
-import Storage from '../Common/Storage';
+import Storage from '../Storage';
 
 const storage = new Storage();
 

@@ -1,7 +1,7 @@
 /* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, fdescribe */
 import { $state, toast, dialog, $ngRedux, $timeout } from '../testUtilities';
 import axios from '../../src/plugins/axios';
-import Storage from '../../src/Common/Storage';
+import Storage from '../../src/Storage';
 
 import { run, handleStateChange, checkProfile, setAxiosBaseTokenIfInStorage } from '../../src/App/appModule-run';
 const spyScope = {};
