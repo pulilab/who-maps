@@ -8,7 +8,6 @@ import 'angular-password';
 import angularMd from 'angular-material';
 import ngRedux from 'ng-redux';
 import angularGettext from 'angular-gettext';
-
 import { config } from './appModule-config';
 import { run } from './appModule-run';
 
@@ -46,7 +45,7 @@ angular.module('app',
         'ngHtmlCompile',
         ngRedux,
         angularGettext,
-        require('../Common/').Components,
+        'Components',
         require('../Project/'),
         require('../Cms/'),
         require('../CountryView/'),
