@@ -1,23 +1,13 @@
 import angular from 'angular';
-import newProjectComponent from './projectComponent';
-import interoperability from './Interoperability/interoperabilityComponent';
-import navigation from './Navigation/navigationComponent';
-import generalOverview from './GeneralOverview/generalOverviewComponent';
-import implementationOverview from './ImplementationOverview/implementationOverviewComponent';
-import technology from './Technology/technologyComponent';
-import countryFields from './CountryFields/countryFieldsComponent';
-import dialogMultiSelection from './DialogMultiSelector/dialogMultiSelectorComponent';
-import { readOnlyCountryFields } from './CountryFields/countryFieldsComponent';
-import { readOnlyGeneralOverview } from './GeneralOverview/generalOverviewComponent';
-import { readOnlyImplementationOverview } from './ImplementationOverview/implementationOverviewComponent';
-import { readOnlyInteroperability } from './Interoperability/interoperabilityComponent';
-import { readOnlyTechnology } from './Technology/technologyComponent';
 import * as ProjectsModule from '../store/modules/projects';
+import { StaticUtilities } from '../Utilities';
 
 const moduleName = 'Project';
 
+const su = new StaticUtilities('Project');
 
-function config($stateProvider) {
+
+function config($stateProvider, $compileProvider) {
     $stateProvider.state('newProject', {
         url: '/new-project/:editMode/',
         parent: 'app',
@@ -27,6 +17,26 @@ function config($stateProvider) {
             }
         },
         resolve: {
+            'components': () => {
+                const component =  su.lazyLoader($compileProvider, 'projectComponent');
+                const interoperability = su.lazyLoader($compileProvider,
+                  'Interoperability/interoperabilityComponent.js');
+                const generalOverview = su.lazyLoader($compileProvider,
+                  'GeneralOverview/generalOverviewComponent.js');
+                const navigation = su.lazyLoader($compileProvider,
+                  'Navigation/navigationComponent.js');
+                const implementationOverview = su.lazyLoader($compileProvider,
+                  'ImplementationOverview/implementationOverviewComponent.js');
+                const technology = su.lazyLoader($compileProvider,
+                  'Technology/technologyComponent.js');
+                const countryFields = su.lazyLoader($compileProvider,
+                  'CountryFields/countryFieldsComponent.js');
+                const dialogMultiSelection = su.lazyLoader($compileProvider,
+                  'DialogMultiSelector/dialogMultiSelectorComponent.js');
+
+                return Promise.all([component, interoperability, generalOverview, navigation,
+                    implementationOverview, technology, countryFields, dialogMultiSelection]);
+            },
             user: ['$ngRedux', ($ngRedux) => {
                 return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
             }]
@@ -48,6 +58,26 @@ function config($stateProvider) {
               }
           },
           resolve: {
+              'components': () => {
+                  const component =  su.lazyLoader($compileProvider, 'projectComponent');
+                  const interoperability = su.lazyLoader($compileProvider,
+                  'Interoperability/interoperabilityComponent.js');
+                  const generalOverview = su.lazyLoader($compileProvider,
+                  'GeneralOverview/generalOverviewComponent.js');
+                  const navigation = su.lazyLoader($compileProvider,
+                  'Navigation/navigationComponent.js');
+                  const implementationOverview = su.lazyLoader($compileProvider,
+                  'ImplementationOverview/implementationOverviewComponent.js');
+                  const technology = su.lazyLoader($compileProvider,
+                  'Technology/technologyComponent.js');
+                  const countryFields = su.lazyLoader($compileProvider,
+                  'CountryFields/countryFieldsComponent.js');
+                  const dialogMultiSelection = su.lazyLoader($compileProvider,
+                  'DialogMultiSelector/dialogMultiSelectorComponent.js');
+
+                  return Promise.all([component, interoperability, generalOverview, navigation,
+                      implementationOverview, technology, countryFields, dialogMultiSelection]);
+              },
               user: ['$ngRedux', ($ngRedux) => {
                   return $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
               }]
@@ -57,22 +87,9 @@ function config($stateProvider) {
 }
 
 
-config.$inject = ['$stateProvider'];
+config.$inject = ['$stateProvider', '$compileProvider'];
 
 angular.module(moduleName, [])
-  .component(newProjectComponent.name, newProjectComponent)
-  .component(interoperability.name, interoperability)
-  .component(navigation.name, navigation)
-  .component(generalOverview.name, generalOverview)
-  .component(implementationOverview.name, implementationOverview)
-  .component(countryFields.name, countryFields)
-  .component(dialogMultiSelection.name, dialogMultiSelection)
-  .component(technology.name, technology)
-  .component(readOnlyCountryFields.name, readOnlyCountryFields)
-  .component(readOnlyGeneralOverview.name, readOnlyGeneralOverview)
-  .component(readOnlyImplementationOverview.name, readOnlyImplementationOverview)
-  .component(readOnlyInteroperability.name, readOnlyInteroperability)
-  .component(readOnlyTechnology.name, readOnlyTechnology)
   .config(config);
 
 
