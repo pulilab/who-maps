@@ -59,7 +59,7 @@ class NameByIDMixin(object):
         return obj.name if obj else ""
 
 
-class ActiveQuerySet(QuerySet):
+class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
     def __init__(self, *args, **kwargs):
         super(ActiveQuerySet, self).__init__(*args, **kwargs)
 
@@ -84,8 +84,8 @@ class SoftDeleteModel(models.Model):
 
     # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
     #            as a default queryset
-    all_objects = MultilingualQuerySet.as_manager()
-    objects = MultilingualActiveQuerySet.as_manager()
+    all_objects = QuerySet.as_manager()
+    objects = ActiveQuerySet.as_manager()
 
     class Meta:
         abstract = True
@@ -95,7 +95,17 @@ class SoftDeleteModel(models.Model):
         self.save()
 
 
-class ExtendedNameOrderedSoftDeletedModel(SoftDeleteModel, ExtendedModel):
+class MultiLingualSoftDeleteModel(SoftDeleteModel):
+    # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
+    #            as a default queryset
+    all_objects = MultilingualQuerySet.as_manager()
+    objects = MultilingualActiveQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
+
+
+class ExtendedNameOrderedSoftDeletedModel(MultiLingualSoftDeleteModel, ExtendedModel):
     name = models.CharField(max_length=512)
 
     class Meta:
