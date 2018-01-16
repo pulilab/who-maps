@@ -416,6 +416,9 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             p.data.get('wiki'),
             ", ".join([str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
                 p.data.get("interoperability_standards", []))]),
+            p.str_national_level_deployment(),
+            p.str_coverage(),
+            p.str_coverage(second_level=True)
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
@@ -429,7 +432,8 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
             "Implementing Partners", "Point of Contact", "Overview of digital health implementation",
             "Geographical scope", "Health Focus Areas", "Software", 'Health System Challenges',
             'Health Information System Support', 'Government Approved', 'Government Investor', 'Licenses', 'Repository',
-            'Mobile Application', 'Wiki', 'Interoperability Standards'
+            'Mobile Application', 'Wiki', 'Interoperability Standards', 'National Level Deployment',
+            'First Level Coverage', 'Second Level Coverage'
         ])
 
         # PROJECTS
