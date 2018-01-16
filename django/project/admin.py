@@ -333,6 +333,19 @@ class ProjectImportAdmin(admin.ModelAdmin):
                 recipient_list=[email],
                 html_message=html_message)
 
+    def _notify_superusers(self):
+        superusers_emails = User.objects.filter(is_superuser=True).values_list('email')
+        html_template = loader.get_template("email/project_import_list.html")
+        html_message = html_template.render({'projects': self._projects_created})
+
+        mail.send_mail(
+            subject='New projects have been imported',
+            message='',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=superusers_emails,
+            html_message=html_message,
+            fail_silently=True)
+
     def _is_row_valid(self, row, line_no, project_import):
         valid = True
         # Validate owner email
