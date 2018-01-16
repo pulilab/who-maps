@@ -96,6 +96,17 @@ class Project(ExtendedModel):
                                                                           nld.get('health_workers'),
                                                                           nld.get('facilities'))
 
+    def str_coverage(self, second_level=False):
+        coverage = self.data.get('coverage' if not second_level else 'coverage_second_level', [])
+        if not coverage:
+            return ''
+        return ", ".join(["District: {} "
+                          "[Clients: {}, Health Workers: {}, Facilities: {}]".format(c.get('district'),
+                                                                                     c.get('clients'),
+                                                                                     c.get('health_workers'),
+                                                                                     c.get('facilities'))
+                         for c in coverage])
+
     def remove_keys(self, keys):
         d = self.data
         for key in keys:
