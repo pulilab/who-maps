@@ -28,4 +28,4 @@ flake8
 redis==2.10.5
 django-redis-cache==1.7.1
 django-rosetta
-puli-woof
+puli-woof==0.3

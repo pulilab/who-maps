@@ -23,6 +23,10 @@ def send_project_approval_digest():
                                                     created__day=timezone.now().day)
             projects_earlier = Project.objects.filter(
                 data__country=country.id, approval__approved__isnull=True).exclude(id__in=projects_today.values('id'))
+
+            if not projects_today and not projects_earlier:
+                return
+
             html_template = loader.get_template('email/status_report_inline.html')
 
             email_mapping = defaultdict(list)
