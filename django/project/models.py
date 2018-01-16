@@ -87,6 +87,15 @@ class Project(ExtendedModel):
             return None
         return Organisation.objects.filter(id=organisation_id).first()
 
+    def str_national_level_deployment(self):
+        nld = self.data.get('national_level_deployment', {})
+        if not nld:
+            return ''
+        return "National Level Deployment: " \
+               "[Clients: {}, Health Workers: {}, Facilities: {}]".format(nld.get('clients'),
+                                                                          nld.get('health_workers'),
+                                                                          nld.get('facilities'))
+
     def remove_keys(self, keys):
         d = self.data
         for key in keys:
