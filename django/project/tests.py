@@ -1969,6 +1969,7 @@ class TestAdmin(TestCase):
 
         self.assertIsNone(pa.user)
         self.assertIsNone(pa.approved)
+        self.assertEqual(str(pa), "Approval for {}".format(p.name))
 
         ma.save_form(self.request, form, True)
         ma.save_model(self.request, pa, form, True)
