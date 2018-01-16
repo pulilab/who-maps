@@ -1033,6 +1033,14 @@ class ProjectTests(SetupTests):
 
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
+    def test_project_approval_email_not_sent(self):
+        pa = Project.objects.get(id=self.project_id).approval
+        pa.approved = True
+        pa.save()
+        send_project_approval_digest()
+        for m in mail.outbox:
+            self.assertFalse('<meta http-equiv="content-language" content="en">' in m.message().as_string())
+
     def test_country_admins_access_all_projects_in_country_as_viewer(self):
         # Create a test user with profile.
         url = reverse("rest_register")
