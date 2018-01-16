@@ -32,7 +32,7 @@ import scheduler.celery # noqa
 TLS = local()
 
 
-class ChangeNotificationMixin(object):
+class ChangeNotificationMixin(object):  # pragma: no cover
     def save_form(self, request, form, change):
         if change:
             if form.has_changed():
