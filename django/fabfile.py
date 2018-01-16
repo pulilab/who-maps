@@ -11,7 +11,7 @@ def dev():
     env.host_string = 'whomaps@dev.whomaps.pulilab.com'
     env.name = 'dev'
     env.port = 22
-    env.branch = "master"
+    env.branch = "tags/3.5.0"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'

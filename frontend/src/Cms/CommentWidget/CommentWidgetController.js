@@ -1,5 +1,5 @@
 import { prettifyDate, postProcessHtml } from '../utilities';
-import { Storage } from '../../Common/';
+import Storage from '../../Storage';
 import * as CmsModule from '../../store/modules/cms';
 import * as UserModule from '../../store/modules/user';
 import * as SystemModule from '../../store/modules/system';

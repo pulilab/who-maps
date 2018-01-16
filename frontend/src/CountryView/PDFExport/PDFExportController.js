@@ -1,21 +1,20 @@
 import forEach from 'lodash/forEach';
 import moment from 'moment';
-import pdfMake from 'pdfmake-browserified/';
 import base64Images from './images/base64Images';
+
 
 class PDFExportController {
 
     constructor(gettextCatalog) {
         this.onInit();
         this.makePDF = this.makePDF.bind(this, gettextCatalog);
-        this.pdfMake = pdfMake;
     }
 
     onInit() {
         this.logo = require('./images/dha-logo.svg');
         this.exportDate = moment().format('Do MMM, YYYY');
-        this.isAllCountry = this.country && this.country.name === 'Show all countries';
     }
+
 
     printDate(dateString) {
         const mom = moment(dateString);
@@ -25,10 +24,16 @@ class PDFExportController {
     setData(projectList, country, countryFlag) {
         this.projectList = projectList;
         this.country = country;
+        this.isAllCountry = country && country.id === false;
         this.countryFlag = countryFlag;
     }
 
-    makePDF(gettextCatalog) {
+    async makePDF(gettextCatalog) {
+        const pdfMakePromise = import('pdfmake/build/pdfmake');
+        const pdfFontsPromise = import('pdfmake/build/vfs_fonts.js');
+        const [pdfMake, pdfFonts] = await Promise.all([pdfMakePromise, pdfFontsPromise]);
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+        this.pdfMake = pdfMake.createPdf;
         const docDefinition = {
             content: [
                 {

@@ -10,19 +10,24 @@ class StaticUtilities {
         this.path = _path;
     }
 
-    lazyLoader(provider, element) {
+    async lazyLoader(provider, element) {
         const vm = this;
-        const prom = new Promise((resolve) => {
-            require([], require => {
-                const ctrl = require(`./${vm.path}/${element}`);
-                if (!components[element]) {
-                    components[element] = true;
-                    provider.component(ctrl.name, ctrl);
+        const ctrl = await import(`./${vm.path}/${element}`);
+        if (ctrl.default) {
+            const keys = Object.keys(ctrl);
+            keys.forEach(key => {
+                const name = `${element}.${key}`;
+                if (!components[name]) {
+                    components[name] = true;
+                    provider.component(ctrl[key].name, ctrl[key]);
                 }
-                resolve();
             });
-        });
-        return prom;
+
+        }
+        else if (!components[element]) {
+            components[element] = true;
+            provider.component(ctrl.name, ctrl);
+        }
     }
 
     static getComponents() {

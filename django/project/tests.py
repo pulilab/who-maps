@@ -1033,6 +1033,14 @@ class ProjectTests(SetupTests):
 
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
+    def test_project_approval_email_not_sent(self):
+        pa = Project.objects.get(id=self.project_id).approval
+        pa.approved = True
+        pa.save()
+        send_project_approval_digest()
+        for m in mail.outbox:
+            self.assertFalse('<meta http-equiv="content-language" content="en">' in m.message().as_string())
+
     def test_country_admins_access_all_projects_in_country_as_viewer(self):
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -1649,6 +1657,32 @@ class PermissionTests(SetupTests):
         self.assertEqual(headers['Content-Disposition'], 'attachment; filename="csv.csv"')
         self.assertContains(response, "Test Project1")
         self.assertContains(response, "a@a.com")
+        self.assertContains(response, "National Level Deployment: [Clients: 20000, Health Workers: 0, Facilities: 0]")
+        self.assertContains(response, "District: dist1 [Clients: 20, Health Workers: 5, Facilities: 4], "
+                                      "District: dist2 [Clients: 10, Health Workers: 2, Facilities: 8]")
+        self.assertContains(response, "District: ward1 [Clients: 209, Health Workers: 59, Facilities: 49], "
+                                      "District: ward2 [Clients: 109, Health Workers: 29, Facilities: 89]")
+
+    def test_csv_export_success_without_coverage(self):
+        url = reverse("csv-export")
+        p = Project.objects.get()
+        p.data.pop('coverage')
+        p.data.pop('coverage_second_level')
+        p.data.pop('national_level_deployment')
+        p.save()
+        response = self.test_user_client.post(url, [1, 2, Project.objects.get().id], format="json")
+        self.assertEqual(response.status_code, 200)
+        headers = dict(response.items())
+        self.assertEqual(headers['Content-Type'], 'text/csv')
+        self.assertEqual(headers['Content-Disposition'], 'attachment; filename="csv.csv"')
+        self.assertContains(response, "Test Project1")
+        self.assertContains(response, "a@a.com")
+        self.assertNotContains(response, "National Level Deployment: [Clients: 20000, Health Workers: 0, "
+                                         "Facilities: 0]")
+        self.assertNotContains(response, "District: dist1 [Clients: 20, Health Workers: 5, Facilities: 4], "
+                                         "District: dist2 [Clients: 10, Health Workers: 2, Facilities: 8]")
+        self.assertNotContains(response, "District: ward1 [Clients: 209, Health Workers: 59, Facilities: 49], "
+                                         "District: ward2 [Clients: 109, Health Workers: 29, Facilities: 89]")
 
     def test_retrieve_project_with_country_fields(self):
         schema_1 = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
@@ -1969,6 +2003,7 @@ class TestAdmin(TestCase):
 
         self.assertIsNone(pa.user)
         self.assertIsNone(pa.approved)
+        self.assertEqual(str(pa), "Approval for {}".format(p.name))
 
         ma.save_form(self.request, form, True)
         ma.save_model(self.request, pa, form, True)

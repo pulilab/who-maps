@@ -209,11 +209,12 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
                 user_name = project_approval.user.name
             else:
                 user_name = '-'
-
+            country = project_approval.project.get_country() if project_approval.project.public_id \
+                else project_approval.project.get_country(draft_mode=True)
             writer.writerow([project_approval.project.name,
                              user_name,
                              status,
-                             project_approval.project.get_country().name,
+                             getattr(country, 'name', '-'),
                              project_approval.reason])
 
         f.seek(0)

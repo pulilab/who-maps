@@ -8,6 +8,11 @@
 top-bar {
   position: relative;
   z-index: 49;
+  .main-toolbar {
+    &.toolbar-global {
+      background-color: #1A237E;
+    }
+  }
 }
 //
 

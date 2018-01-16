@@ -87,6 +87,26 @@ class Project(SoftDeleteModel, ExtendedModel):
             return None
         return Organisation.objects.filter(id=organisation_id).first()
 
+    def str_national_level_deployment(self):
+        nld = self.data.get('national_level_deployment', {})
+        if not nld:
+            return ''
+        return "National Level Deployment: " \
+               "[Clients: {}, Health Workers: {}, Facilities: {}]".format(nld.get('clients'),
+                                                                          nld.get('health_workers'),
+                                                                          nld.get('facilities'))
+
+    def str_coverage(self, second_level=False):
+        coverage = self.data.get('coverage' if not second_level else 'coverage_second_level', [])
+        if not coverage:
+            return ''
+        return ", ".join(["District: {} "
+                          "[Clients: {}, Health Workers: {}, Facilities: {}]".format(c.get('district'),
+                                                                                     c.get('clients'),
+                                                                                     c.get('health_workers'),
+                                                                                     c.get('facilities'))
+                         for c in coverage])
+
     def remove_keys(self, keys):
         d = self.data
         for key in keys:
@@ -136,6 +156,9 @@ class ProjectApproval(ExtendedModel):
     user = models.ForeignKey(UserProfile, blank=True, null=True, help_text="Administrator who approved the project")
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return "Approval for {}".format(self.project.name)
 
 
 class CoverageVersion(ExtendedModel):

@@ -1,10 +1,6 @@
 import angular from 'angular';
-import 'whatwg-fetch';
 import './plugins/index';
 import { StaticUtilities } from './Utilities';
-import EE from './Common/EE';
-
-EE.initialize();
 
 /* global define LIVE */
 
@@ -19,11 +15,14 @@ if (LIVE) {
 }
 
 
-// import { default as app } from './App/';
-require.ensure([], require => {
-    const app = require('./App/');
+const appPromise = import('./App/');
+const commonPromise = import('./Common/');
+
+Promise.all([appPromise, commonPromise]).then(([app, common]) => {
+    common.EE.initialize();
     angular.bootstrap(document, [app]);
 });
+
 
 StaticUtilities.prefixHtml();
 

@@ -1,4 +1,4 @@
-import SessionStorage from '../../src/Common/Storage';
+import SessionStorage from '../../src/Storage';
 
 /* global define, it, describe, expect, xit, spyOn */
 

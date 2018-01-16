@@ -5,6 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
+
 // Determine if is a production build based on environment variable
 const production = process.env.NODE_ENV === 'production';
 const live = process.env.LIVE_FLAG === 'live';
@@ -24,30 +25,37 @@ const basePlugins = [
         LIVE: live,
         NODE_ENV: production ? '"production"' : ''
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js', minChunks: Infinity }),
-    new ExtractTextPlugin({
-        filename: '[name].[contenthash].css',
-        allChunks: true,
-        disable: !production
-    }),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
         title: 'Digital Health Atlas',
         inject: false
-    })
+    }),
+    new ExtractTextPlugin({
+        filename: '[name].[chunkhash].css',
+        allChunks: true,
+        disable: !production
+    }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js', minChunks: Infinity })
 ];
 
 const distPlugins = basePlugins.concat([
     new CleanPlugin(PATH.build),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'common',
+        chunks: ['app'],
+        filename: 'common.js',
+        minChunks: 2
+    }),
+    new webpack.optimize.MinChunkSizePlugin({
+        minChunkSize: 50000 // Minimum number of characters
+    }),
     new UglifyJsPlugin({
         sourceMap: false
     })
 ]);
 
-const devPlugins = basePlugins.concat([]);
 
-
-module.exports = {
+const config  = {
     entry: {
         app: ['babel-polyfill', './src/index.js'],
         vendor: [
@@ -55,18 +63,15 @@ module.exports = {
             'eventemitter3', 'angular-material',
             'angular-messages', 'angular-password',
             'angular-aria', 'angular-ui-router',
-            'd3', 'es6-promise', 'trix', 'moment'
+            'd3', 'es6-promise', 'trix', 'vue',
+            'ng-file-upload', 'moment', 'angular-gettext',
+            'redux'
         ]
     },
     output: {
         path: PATH.build,
         filename: 'build.[chunkhash].js',
         chunkFilename: '[chunkhash].js'
-    },
-    resolve: {
-        alias: {
-            Common: 'src/Common/'
-        }
     },
     module: {
         rules: [
@@ -164,6 +169,14 @@ module.exports = {
             }
         }
     },
-    devtool: production ? false : 'cheap-module-eval-source-map',
-    plugins: production ? distPlugins : devPlugins
+    devtool: 'cheap-module-eval-source-map',
+    plugins: basePlugins
 };
+
+if (production) {
+    config.entry.common = ['./src/Common/', './src/store/', './src/plugins/'];
+    config.devtool = false;
+    config.plugins = distPlugins;
+}
+
+module.exports = config;

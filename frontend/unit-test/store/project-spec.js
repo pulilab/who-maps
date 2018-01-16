@@ -855,8 +855,187 @@ describe('Project Store Module', () => {
     });
 
     describe('ACTIONS', () => {
+        it('loadUserProjects', A(async () => {
+            const spy = spyOn(ProjectModule, 'getSavedProjectList').and.returnValue([]);
+            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            const state = {
+                user: {
+                }
+            };
+            await ProjectModule.loadUserProjects()(dispatch, getState(state));
+            expect(ProjectModule.getSavedProjectList).not.toHaveBeenCalled();
+            expect(axios.get).not.toHaveBeenCalled();
+
+            state.user.profile = {};
+            await ProjectModule.loadUserProjects()(dispatch, getState(state));
+            expect(ProjectModule.getSavedProjectList).toHaveBeenCalled();
+            expect(axios.get).not.toHaveBeenCalled();
+
+            spy.and.returnValue(undefined);
+            await ProjectModule.loadUserProjects()(dispatch, getState(state));
+            expect(ProjectModule.getSavedProjectList).toHaveBeenCalled();
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/member-of/');
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_LIST', projects: 1 });
+
+            spy.and.throwError('error');
+            spyOn(console, 'log');
+
+            try {
+                await ProjectModule.loadUserProjects()(dispatch, getState(state));
+            }
+            catch (e) {
+                expect(console.log).toHaveBeenCalledWith(e);
+                expect('' + e).toBe('Error: error');
+            }
+        }));
+
+        it('loadProjectDetails', A(async () => {
+            const spy = spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            const state = {
+                projects: {
+                    currentProject: null
+                }
+            };
+            dispatch.calls.reset();
+
+            await ProjectModule.loadProjectDetails()(dispatch, getState(state));
+            expect(dispatch).not.toHaveBeenCalled();
+            expect(axios.get).not.toHaveBeenCalled();
+
+            state.projects.currentProject = -1;
+            dispatch.calls.reset();
+            await ProjectModule.loadProjectDetails()(dispatch, getState(state));
+            expect(dispatch).not.toHaveBeenCalled();
+            expect(axios.get).not.toHaveBeenCalled();
+
+            state.projects.currentProject = 2;
+            await ProjectModule.loadProjectDetails()(dispatch, getState(state));
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/2/toolkit/versions/');
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/2/coverage/versions/');
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/2/groups/');
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'SET_PROJECT_INFO',
+                info : {
+                    toolkitVersions: 1,
+                    coverageVersions: 1
+                }
+            });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: 1 });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'BUMP_PROJECT_STATE_VERSION' });
 
 
+            spy.and.throwError('error');
+            spyOn(console, 'log');
+            try {
+                await ProjectModule.loadProjectDetails()(dispatch, getState(state));
+            }
+            catch (e) {
+                expect(console.log).toHaveBeenCalledWith(e);
+                expect('' + e).toEqual('Error: error');
+            }
+        }));
+
+        it('setCurrentProject', A(async () => {
+            const state = {
+                projects: {
+                    currentProject: 1
+                }
+            };
+            const spy = spyOn(ProjectModule, 'getCurrentProjectIfExist').and.returnValue(undefined);
+            spyOn(CountryModule, 'setCurrentCountry');
+            spyOn(ProjectModule, 'loadProjectDetails');
+            spyOn(ToolkitModule, 'loadToolkitData');
+            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            dispatch.calls.reset();
+            await ProjectModule.setCurrentProject()(dispatch, getState(state));
+            expect(dispatch).not.toHaveBeenCalled();
+
+            await ProjectModule.setCurrentProject(1)(dispatch, getState(state));
+            expect(dispatch).not.toHaveBeenCalled();
+
+            await ProjectModule.setCurrentProject(-1)(dispatch, getState(state));
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_PROJECT', id: -1 });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_TEAM_VIEWERS',
+                teamViewers: { team: [], viewers: [] } });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_SAVE_PROJECT', project: jasmine.any(Object) });
+
+            dispatch.calls.reset();
+            await ProjectModule.setCurrentProject(2)(dispatch, getState(state));
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_PROJECT', id: 2 });
+            expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
+            expect(CountryModule.setCurrentCountry).not.toHaveBeenCalled();
+            expect(ProjectModule.loadProjectDetails).not.toHaveBeenCalled();
+            expect(ToolkitModule.loadToolkitData).not.toHaveBeenCalled();
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/2/');
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/2/groups/');
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: 1 });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_PUBLIC_PROJECT_DETAIL', project: 1 });
+
+            dispatch.calls.reset();
+            axios.get.calls.reset();
+            spy.and.returnValue(1);
+            await ProjectModule.setCurrentProject(2)(dispatch, getState(state));
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_PROJECT', id: 2 });
+            expect(ProjectModule.getCurrentProjectIfExist).toHaveBeenCalled();
+            expect(CountryModule.setCurrentCountry).toHaveBeenCalled();
+            expect(ProjectModule.loadProjectDetails).toHaveBeenCalled();
+            expect(ToolkitModule.loadToolkitData).toHaveBeenCalled();
+            expect(axios.get).not.toHaveBeenCalled();
+        }));
+
+        it('snapShotProject', A(async () => {
+            spyOn(ProjectModule, 'loadProjectDetails');
+            spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
+            const state = {
+                projects: {
+                    currentProject: 1
+                }
+            };
+            dispatch.calls.reset();
+            await ProjectModule.snapShotProject()(dispatch, getState(state));
+            expect(axios.post).toHaveBeenCalledWith('/api/projects/1/version/');
+            expect(dispatch).toHaveBeenCalled();
+            expect(ProjectModule.loadProjectDetails).toHaveBeenCalled();
+        }));
+
+        it('loadProjectStructure', A(async () => {
+            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            const spy = spyOn(ProjectModule, 'getProjectStructure').and.returnValue(1);
+            dispatch.calls.reset();
+            await ProjectModule.loadProjectStructure()(dispatch, getState({}));
+            expect(axios.get).not.toHaveBeenCalled();
+            expect(dispatch).not.toHaveBeenCalled();
+
+            spy.and.returnValue(false);
+            await ProjectModule.loadProjectStructure()(dispatch, getState({}));
+            expect(axios.get).toHaveBeenCalledWith('/api/projects/structure/');
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_STRUCTURE', structure: 1 });
+        }));
+
+        it('saveTeamViewers', A(async () => {
+            spyOn(axios, 'put').and.returnValue(defaultAxiosSuccess);
+            const result = await ProjectModule.saveTeamViewers({ id: 1 }, [{ id: 1 }], [{ id: 2 }]);
+            expect(axios.put).toHaveBeenCalledWith('/api/projects/1/groups/', { team: [1], viewers: [2] });
+            expect(result).toEqual({ team: [1], viewers: [2] });
+        }));
+
+        it('saveCountryFields', A(async () => {
+            const spy = spyOn(axios, 'post').and.returnValue({ data: { fields: 1 } });
+            const fields = [{ country: 1, answer: 1, type: 1, question:1, project:1, gibberish:2 }];
+            let result = await ProjectModule.saveCountryFields(fields, 1, 2, 'published');
+            expect(result).toEqual(1);
+            expect(axios.post).toHaveBeenCalledWith('/api/country-fields/1/2/publish/',
+              { fields: [{ country: 1, answer: 1, type: 1, question:1, project:2 }] });
+
+            result = await ProjectModule.saveCountryFields(fields, 1, 2, 'asd');
+            expect(result).toEqual(1);
+            expect(axios.post).toHaveBeenCalledWith('/api/country-fields/1/2/draft/',
+              { fields: [{ country: 1, answer: 1, type: 1, question:1, project:2 }] });
+
+            spy.and.throwError('error');
+            result = await ProjectModule.saveCountryFields(fields, 1, 2, 'asd');
+            expect(result).toEqual(false);
+        }));
     });
 
     describe('REDUCERS', () => {

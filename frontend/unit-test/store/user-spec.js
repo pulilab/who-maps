@@ -2,7 +2,7 @@ import * as UserModule from '../../src/store/modules/user';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as SystemModule from '../../src/store/modules/system';
 import * as CountryModule from '../../src/store/modules/countries';
-import Storage from '../../src/Common/Storage';
+import Storage from '../../src/Storage';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 

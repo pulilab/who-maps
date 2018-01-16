@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 import { prettifyDate, itemType, postProcessHtml } from '../utilities';
-import { Storage } from '../../Common/';
+import Storage  from '../../Storage';
 import * as CmsModule from '../../store/modules/cms';
 import * as UserModule from '../../store/modules/user';
 

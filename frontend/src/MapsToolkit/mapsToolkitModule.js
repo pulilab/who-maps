@@ -3,7 +3,6 @@ import ngSanitize from 'angular-sanitize';
 /* global define  Promise, $compileProvider */
 
 import uiRoute from 'angular-ui-router';
-import { Components } from '../Common/';
 import { StaticUtilities } from '../Utilities';
 import * as CmsModule from '../store/modules/cms';
 import * as ToolkitModule from '../store/modules/toolkit';
@@ -84,8 +83,7 @@ config.$inject = ['$stateProvider', '$compileProvider'];
 angular.module(moduleName,
     [
         uiRoute,
-        ngSanitize,
-        Components
+        ngSanitize
     ]
 )
   .config(config);
