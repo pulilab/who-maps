@@ -141,7 +141,6 @@ class ProjectApproval(ExtendedModel):
         return "Approval for {}".format(self.project.name)
 
 
-
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project)
     version = models.IntegerField()
