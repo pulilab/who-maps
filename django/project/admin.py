@@ -272,6 +272,7 @@ class ProjectImportStatusForm(forms.ModelForm):
 class ProjectImportAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'created', 'status']
     _users_to_notify = {}
+    _projects_created = []
 
     def get_queryset(self, request):
         qs = super(ProjectImportAdmin, self).get_queryset(request)
@@ -320,7 +321,11 @@ class ProjectImportAdmin(admin.ModelAdmin):
             obj.save()
 
             # Notify users
-            self._notify_users()
+            if self._projects_created:
+                self._notify_users()
+
+            # Notify superusers
+            self._notify_superusers()
 
     def _notify_users(self):
         html_template = loader.get_template('email/import_projects.html')
@@ -412,6 +417,9 @@ class ProjectImportAdmin(admin.ModelAdmin):
         # Log success
         project_import.imported += '{}\n'.format(project.name)
         project_import.save()
+
+        # Append to projects created
+        self._projects_created.append(project)
 
         # Gather notification data
         if user.email in self._users_to_notify:
