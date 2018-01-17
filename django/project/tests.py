@@ -23,7 +23,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
-from project.admin import TLS
+from project.admin import TLS, ProjectAdmin
 from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, HSCGroup, ProjectApproval
@@ -934,6 +934,31 @@ class ProjectTests(SetupTests):
                         'is_superuser': 'true', 'email': user.email}
         expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?{}'>" \
                         "See project</a>".format(self.project_id, urllib.parse.urlencode(query_string))
+        self.assertEqual(link, expected_link)
+
+    def test_project_admin_link_add(self):
+        request = MockRequest()
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        request.user = user
+        pa = ProjectAdmin(Project, site)
+        link = pa.link(Project())
+        self.assertEqual(link, '-')
+
+    def test_project_admin_link_edit(self):
+        request = MockRequest()
+        site = AdminSite()
+        user = UserProfile.objects.get(id=self.user_profile_id).user
+        request.user = user
+        TLS.request = request
+        pa = ProjectAdmin(Project, site)
+        p = Project.objects.create(name="test link")
+        link = pa.link(p)
+
+        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
+                        'is_superuser': 'true', 'email': user.email}
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?{}'>" \
+                        "See project</a>".format(p.id, urllib.parse.urlencode(query_string))
         self.assertEqual(link, expected_link)
 
     @patch('django.contrib.admin.options.messages')
@@ -2011,6 +2036,75 @@ class TestAdmin(TestCase):
         self.assertEqual(pa.user, self.user.userprofile)
         self.assertEqual(pa.reason, 'LOL')
         self.assertTrue(pa.approved)
+
+    def test_project_admin_custom_fields(self):
+        pa = ProjectAdmin(Project, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        p = Project.objects.create(name="test change view", draft=dict(country=Country.objects.get(id=1).id))
+        p.team.add(self.userprofile.id)
+
+        self.assertEqual(pa.get_country(p), Country.objects.get(id=1))
+        self.assertEqual(pa.get_team(p), str(self.userprofile))
+        self.assertFalse(pa.get_published(p))
+        self.assertFalse(pa.has_add_permission(self.request))
+
+    def test_project_admin_queryset(self):
+        pa = ProjectAdmin(Project, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        country = Country.objects.get(id=1)
+        country_id = country.id
+        p_not_in_country = Project.objects.create(name="not in country")
+        p1_draft = Project.objects.create(name="draft in country")
+        p1_draft.draft['country'] = country_id
+        p1_draft.save()
+        p2_published = Project.objects.create(name="published in country")
+        p2_published.draft['country'] = country_id
+        p2_published.data['country'] = country_id
+        p2_published.save()
+
+        # superuser sees it all
+        self.assertEqual(pa.get_queryset(self.request).count(), 3)
+
+        # let's degrade him to a country admin
+        self.user.is_superuser = False
+        self.user.is_staff = False
+        self.user.save()
+        country.users.add(self.user.userprofile)
+
+        self.assertEqual(pa.get_queryset(self.request).count(), 2)
+        self.assertTrue(pa.get_queryset(self.request).filter(name=p1_draft.name).exists())
+        self.assertTrue(pa.get_queryset(self.request).filter(name=p2_published.name).exists())
+        self.assertFalse(pa.get_queryset(self.request).filter(name=p_not_in_country.name).exists())
+
+    def test_project_admin_changeform_view(self):
+        request = MockRequest()
+        request.method = 'GET'
+        request.POST = {}
+        request.META = {'SCRIPT_NAME': 'from_test'}
+        request.resolver_match = False
+
+        content_type = ContentType.objects.get(app_label=Project._meta.app_label,
+                                               model=Project._meta.model_name)
+        change_permission = Permission.objects.get(content_type=content_type,
+                                                   codename='change_{}'.format(Project._meta.model_name))
+
+        p = Project.objects.create(name="test change view")
+        self.user.user_permissions.add(change_permission)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        request.user = self.user
+        pa = ProjectAdmin(Project, self.site)
+        response = pa.changeform_view(request, object_id=str(p.id))
+        self.assertTrue(isinstance(response, TemplateResponse))
 
 
 class TestProjectImportAdmin(TestCase):

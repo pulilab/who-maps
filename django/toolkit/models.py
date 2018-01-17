@@ -8,7 +8,7 @@ from project.models import Project
 
 
 class Toolkit(ExtendedModel):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
     data = JSONField()
 
     def update_score(self, axis, domain, question, answer, value):
