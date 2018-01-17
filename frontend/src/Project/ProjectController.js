@@ -57,7 +57,7 @@ class ProjectController  {
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
-        if (!project || !project.organisation) {
+        if (!project || !project.organisation || !project.organisation.id ) {
             project = ProjectModule.getCurrentPublicProjectDetails(state);
             team = ProjectModule.getTeam(state);
             viewers = ProjectModule.getViewers(state);

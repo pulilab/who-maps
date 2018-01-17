@@ -35,21 +35,21 @@ describe('ProjectController', () => {
     it('mapData fn', () => {
         const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
         spyOn(ProjectModule, 'getLastVersion').and.returnValue(1);
-        spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ name:'vanilla', organisation: 1 });
-        spyOn(ProjectModule, 'getCurrentPublished').and.returnValue({ name:'cps', organisation: 1 });
+        spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ name:'vanilla', organisation: { id: 1 } });
+        spyOn(ProjectModule, 'getCurrentPublished').and.returnValue({ name:'cps', organisation: { id: 1 } });
         const currentDraftForEditing =
-          spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').and.returnValue({ name:'gcdpfe', organisation: 1 });
+          spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').and.returnValue({ name:'gcdpfe', organisation: { id: 1 } });
         spyOn(ProjectModule, 'getTeam').and.returnValue(['gt']);
         spyOn(ProjectModule, 'getViewers').and.returnValue(['gv']);
-        spyOn(ProjectModule, 'getEmptyProject').and.returnValue({ name:'gep', organisation: 1 });
-        spyOn(ProjectModule, 'getCurrentDraftInViewMode').and.returnValue({ name:'gcdivm', organisation: 1 });
+        spyOn(ProjectModule, 'getEmptyProject').and.returnValue({ name:'gep', organisation: { id: 1 } });
+        spyOn(ProjectModule, 'getCurrentDraftInViewMode').and.returnValue({ name:'gcdivm', organisation: { id: 1 } });
         spyOn(ProjectModule, 'getProjectStructure').and.returnValue('gps');
         spyOn(ProjectModule, 'getPublishedProjects').and.returnValue('gpps');
         spyOn(SystemModule, 'getUserProfiles').and.returnValue('gups');
         spyOn(ProjectModule, 'getCurrentPublicProjectDetails').and.returnValue('gcppd');
 
         sc.lastVersion = 1;
-        sc.project = { organisation: 1 };
+        sc.project = { organisation: { id: 1 } };
         sc.team = [{ id: 1 }];
         sc.viewers = [{ id: 1 }];
         sc.state.current.name = 'newProject';
@@ -67,7 +67,7 @@ describe('ProjectController', () => {
         expect(result.publishMode).toBe(false);
         expect(result.readOnlyMode).toBe(false);
         expect(result.lastVersion).toBe(1);
-        expect(result.project).toEqual({ organisation: 1 });
+        expect(result.project).toEqual({ organisation: { id: 1 } });
         expect(result.team[0].id).toBe(1);
         expect(result.viewers[0].id).toBe(1);
         expect(result.structure).toBe('gps');
@@ -87,7 +87,7 @@ describe('ProjectController', () => {
         expect(ProjectModule.getPublishedProjects).toHaveBeenCalledTimes(2);
         expect(ProjectModule.getCurrentDraftInViewMode).toHaveBeenCalledTimes(1);
 
-        expect(result.project).toEqual({ name:'gcdivm', organisation: 1 });
+        expect(result.project).toEqual({ name:'gcdivm', organisation: { id: 1 } });
 
         sc.lastVersion = 2;
         result = sc.mapData({});
@@ -96,7 +96,7 @@ describe('ProjectController', () => {
         expect(ProjectModule.getLastVersion).toHaveBeenCalledTimes(3);
         expect(ProjectModule.getVanillaProject).toHaveBeenCalledTimes(1);
 
-        expect(result.project).toEqual({ name:'vanilla', organisation: 1 });
+        expect(result.project).toEqual({ name:'vanilla', organisation: { id: 1 } });
         expect(result.team[0].id).toBe(2);
         expect(result.viewers.length).toBe(0);
 
@@ -112,7 +112,7 @@ describe('ProjectController', () => {
         expect(ProjectModule.getViewers).toHaveBeenCalledTimes(1);
         expect(ProjectModule.getCurrentPublished).toHaveBeenCalledTimes(1);
 
-        expect(result.project).toEqual({ name:'cps', organisation: 1 });
+        expect(result.project).toEqual({ name:'cps', organisation: { id: 1 } });
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
 
@@ -128,7 +128,7 @@ describe('ProjectController', () => {
         expect(ProjectModule.getCurrentPublished).toHaveBeenCalledTimes(1);
         expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(1);
 
-        expect(result.project).toEqual({ name:'gcdpfe', organisation: 1 });
+        expect(result.project).toEqual({ name:'gcdpfe', organisation: { id: 1 } });
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
     });
