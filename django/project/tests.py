@@ -2276,6 +2276,16 @@ class TestProjectImportAdmin(TestCase):
                       mail.outbox[0].alternatives[0][0])
         self.assertIn('app/{}/edit-project'.format(Project.objects.get(name='Proj2').id),
                       mail.outbox[1].alternatives[0][0])
+        # notifying the superusers about every successful project import
+        # should be 3, Proj1, Proj2 and Proj11
+        self.assertIn('Imported projects',
+                      mail.outbox[-1].alternatives[0][0])
+        self.assertIn('project/project/{}/change'.format(Project.objects.get(name='Proj1').id),
+                      mail.outbox[-1].alternatives[0][0])
+        self.assertIn('project/project/{}/change'.format(Project.objects.get(name='Proj2').id),
+                      mail.outbox[-1].alternatives[0][0])
+        self.assertIn('project/project/{}/change'.format(Project.objects.get(name='Proj11').id),
+                      mail.outbox[-1].alternatives[0][0])
         self.assertIn('Proj1', project_import.imported)
         self.assertIn('Proj2', project_import.imported)
         self.assertIn('Line 3, Invalidcountry: No such country.', project_import.failed)

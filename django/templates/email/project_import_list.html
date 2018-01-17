@@ -48,44 +48,25 @@
               <tr>
                 <td>
                   <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >{% trans "Dear Admin!" %}</h3>
-                  <p class="first" style="margin-bottom:20px;font-weight:normal;font-size:14px;line-height:1.6;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >{% trans "The projects listed below are waiting for your approval:" %}</p>
+                  <p class="first" style="margin-bottom:20px;font-weight:normal;font-size:14px;line-height:1.6;margin-top:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >{% trans "The following projects have been imported" %}</p>
 
-                  <!-- today -->
                   <table class="group-title" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;margin-top:40px;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:8px;padding-bottom:8px;padding-right:50px;padding-left:50px;background-color:#B0BEC5;color:#FFFFFF;width:100%;" >
                     <tr>
                       <td class="title" style="font-size:16px;font-weight:bold;" >
-                        Today
+                        Imported projects
                       </td>
                       <td class="number" style="text-align:right;font-size:12px;" >
-                        {{ projects_today.count }} {% trans "project(s)" %}
+                        {{ projects|length }} {% trans "project(s)" %}
                       </td>
                     </tr>
                   </table>
-                  <!-- /today -->
 
                   <ul class="project-list" style="font-weight:normal;font-size:14px;line-height:1.6;list-style-type:none;list-style-position:outside;list-style-image:none;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
-                  {% for project in projects_today %}
-                    <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ project.name }}</a></li>
+                  {% for project in projects %}
+                    <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="{% site_url %}/admin/project/project/{{project.id}}/change" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ project.name }}</a></li>
                   {% endfor %}
                   </ul>
 
-                  <!-- earlier -->
-                  <table class="group-title" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;margin-top:40px;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:8px;padding-bottom:8px;padding-right:50px;padding-left:50px;background-color:#B0BEC5;color:#FFFFFF;width:100%;" >
-                    <tr>
-                      <td class="title" style="font-size:16px;font-weight:bold;" >
-                        Earlier
-                      </td>
-                      <td class="number" style="text-align:right;font-size:12px;" >
-                        {{ projects_earlier.count }} {% trans "project(s)" %}
-                      </td>
-                    </tr>
-                  </table>
-                  <!-- /earlier -->
-
-                  <ul class="project-list" style="font-weight:normal;font-size:14px;line-height:1.6;list-style-type:none;list-style-position:outside;list-style-image:none;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
-                  {% for project in projects_earlier %}
-                    <li style="list-style-position:inside;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;line-height:24px;font-weight:bold;color:#283593;" ><a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ project.name }}</a></li>
-                  {% endfor %}
 
                   <!-- button -->
                   <table class="btn-primary center last" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;margin-top:40px;margin-bottom:0;margin-left:auto;margin-right:auto;width:auto !important;padding-top:0;padding-bottom:0;padding-right:50px;padding-left:50px;" >
