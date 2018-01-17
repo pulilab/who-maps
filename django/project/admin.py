@@ -33,7 +33,7 @@ import scheduler.celery # noqa
 TLS = local()
 
 
-class ChangeNotificationMixin(object):
+class ChangeNotificationMixin(object):  # pragma: no cover
     def save_form(self, request, form, change):
         if change:
             if form.has_changed():
@@ -73,50 +73,50 @@ class ChangeNotificationMixin(object):
                            html_message=html_message)
 
 
-class TechnologyPlatformAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
         'name',
     ]
 
 
-class InteroperabilityLinkAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class InteroperabilityLinkAdmin(AllObjectsAdmin):
     list_display = [
         'pre',
         'name',
     ]
 
 
-class DigitalStrategyAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class DigitalStrategyAdmin(AllObjectsAdmin):
     list_display = [
         '__str__'
     ]
 
 
-class HealthFocusAreaAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class HealthFocusAreaAdmin(AllObjectsAdmin):
     pass
 
 
-class HealthCategoryAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class HealthCategoryAdmin(AllObjectsAdmin):
     pass
 
 
-class LicenceAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class LicenceAdmin(AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class InteroperabilityStandardAdmin(AllObjectsAdmin):
     pass
 
 
-class HISBucketAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class HISBucketAdmin(AllObjectsAdmin):
     pass
 
 
-class HSCGroupAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class HSCGroupAdmin(AllObjectsAdmin):
     pass
 
 
-class HSCChallengeAdmin(ChangeNotificationMixin, AllObjectsAdmin):
+class HSCChallengeAdmin(AllObjectsAdmin):
     pass
 
 
