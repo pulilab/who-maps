@@ -79,7 +79,14 @@ const config  = {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components|unit-test)/,
                 use: [
-                    'babel-loader',
+                    {
+                        loader: 'babel-loader', options: {
+                            plugins: [
+                                'dynamic-import-webpack',
+                                'remove-webpack'
+                            ]
+                        }
+                    },
                     'eslint-loader'
                 ]
             },
@@ -177,6 +184,7 @@ if (production) {
     config.entry.common = ['./src/Common/', './src/store/', './src/plugins/'];
     config.devtool = false;
     config.plugins = distPlugins;
+    config.module.rules[0].use[0].options.plugins = [];
 }
 
 module.exports = config;
