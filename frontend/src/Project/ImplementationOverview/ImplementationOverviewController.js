@@ -122,7 +122,10 @@ class ImplementationOverview extends CollapsibleSet {
           && districts && districts.length > 0) {
             this.project.coverage.forEach(cov => {
                 if (districts.map(d => d.id).indexOf(cov.district) === -1) {
-                    cov.district = undefined;
+                    if (cov.district) {
+                        console.warn(`The selected location: ${cov.district} is not available anymore`);
+                        cov.district = undefined;
+                    }
                 }
             });
         }
