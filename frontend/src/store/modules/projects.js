@@ -182,12 +182,17 @@ export const getCurrentPublicProject = state => {
 };
 
 export const getCurrentPublicProjectDetails = (state) => {
-    const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : undefined;
+    let project = exports.getCurrentPublishedProjectForEditing(state);
+    if (project) {
+        return project;
+    }
+    project = state.projects.currentPublicProject ?
+      state.projects.currentPublicProject.published : undefined;
     if (project)  {
         project.disableDraft = true;
         return exports.parseProjectForViewMode(state, project);
     }
-    return exports.getVanillaProject(state);
+    return { ...exports.getVanillaProject(state), disableDraft: true };
 };
 
 export const convertCountryFieldsAnswer = (fields) => {
@@ -215,7 +220,8 @@ export const parseProjectForViewMode = (state, project) => {
         ...project,
         country_name: country ? country.name : '',
         ...convertIdArrayToObjectArray(project, structure, dashFieldConvertToObject),
-        coverageType: setCoverageType(project.coverage, project.national_level_deployment)
+        coverageType: setCoverageType(project.coverage, project.national_level_deployment),
+        coverage_second_level: project.coverage_second_level ? project.coverage_second_level : [{}]
     };
     return {
         ...project,

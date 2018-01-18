@@ -338,7 +338,7 @@ describe('Project Store Module', () => {
             };
 
             let result = ProjectModule.getCurrentPublicProjectDetails(state);
-            expect(result).toEqual({ id: 1 });
+            expect(result).toEqual({ id: 1, disableDraft: true });
             expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
             expect(ProjectModule.parseProjectForViewMode).not.toHaveBeenCalled();
 
@@ -349,7 +349,7 @@ describe('Project Store Module', () => {
             ProjectModule.getVanillaProject.calls.reset();
 
             result = ProjectModule.getCurrentPublicProjectDetails(state);
-            expect(result).toEqual({ id: 1 });
+            expect(result).toEqual({ id: 1  });
             expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
             expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { disableDraft: true });
 

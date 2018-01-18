@@ -108,11 +108,10 @@ describe('ProjectController', () => {
 
         expect(UserModule.getProfile).toHaveBeenCalledTimes(4);
         expect(ProjectModule.getLastVersion).toHaveBeenCalledTimes(4);
-        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(1);
-        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(1);
-        expect(ProjectModule.getCurrentPublished).toHaveBeenCalledTimes(1);
+        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(2);
+        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(2);
 
-        expect(result.project).toEqual({ name:'cps', organisation: { id: 1 } });
+        expect(result.project).toEqual('gcppd');
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
 
@@ -123,10 +122,9 @@ describe('ProjectController', () => {
 
         expect(UserModule.getProfile).toHaveBeenCalledTimes(5);
         expect(ProjectModule.getLastVersion).toHaveBeenCalledTimes(5);
-        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(2);
-        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(2);
-        expect(ProjectModule.getCurrentPublished).toHaveBeenCalledTimes(1);
-        expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(1);
+        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(3);
+        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(3);
+        expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(2);
 
         expect(result.project).toEqual({ name:'gcdpfe', organisation: { id: 1 } });
         expect(result.team[0]).toBe('gt');

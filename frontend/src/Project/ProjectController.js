@@ -47,8 +47,7 @@ class ProjectController  {
                 viewers = [];
             }
             else {
-                project = publishMode ? ProjectModule.getCurrentPublished(state) :
-                  ProjectModule.getCurrentDraftProjectForEditing(state);
+                project = ProjectModule.getCurrentDraftProjectForEditing(state);
                 team = ProjectModule.getTeam(state);
                 viewers = ProjectModule.getViewers(state);
             }
@@ -57,12 +56,11 @@ class ProjectController  {
           (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
-        if (!project || !project.organisation || !project.organisation.id ) {
+        if (publishMode) {
             project = ProjectModule.getCurrentPublicProjectDetails(state);
             team = ProjectModule.getTeam(state);
             viewers = ProjectModule.getViewers(state);
         }
-
         return {
             newProject,
             publishMode,
