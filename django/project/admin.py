@@ -30,7 +30,7 @@ from user.models import UserProfile, Organisation
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
 
-TLS = local()
+
 
 
 class ChangeNotificationMixin(object):  # pragma: no cover
@@ -166,11 +166,8 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
         if obj.id is None:
             return '-'
 
-        user = TLS.request.user
-        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
-                        'is_superuser': 'true', 'email': user.email}
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
-                         .format(obj.project.id, urllib.parse.urlencode(query_string)))
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>"
+                         .format(obj.project.id))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
@@ -188,7 +185,6 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
         return qs
 
     def changeform_view(self, request, *args, **kwargs):
-        TLS.request = request
         return super(ProjectApprovalAdmin, self).changeform_view(request, *args, **kwargs)
 
     def export_project_approvals(self, request, queryset):
@@ -465,14 +461,12 @@ class ProjectAdmin(AllObjectsAdmin):
         if obj.id is None:
             return '-'
 
-        user = TLS.request.user
         query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
                         'is_superuser': 'true', 'email': user.email}
         return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
                          .format(obj.id, urllib.parse.urlencode(query_string)))
 
     def changeform_view(self, request, *args, **kwargs):
-        TLS.request = request
         return super(ProjectAdmin, self).changeform_view(request, *args, **kwargs)
 
     def get_queryset(self, request):
