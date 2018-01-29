@@ -33,7 +33,7 @@ instance.interceptors.response.use(response => {
     return response;
 }, error => {
     if (error && error.response) {
-        if (error.response.status === 401)  {
+        if (error.response.status === 401 || error.response.status === 403)  {
             instance.authProblemFunction();
         }
         else {
