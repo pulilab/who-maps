@@ -30,7 +30,6 @@
         },
         mounted() {
             const progress = this.$refs.progress;
-            const instance = this;
             const listener = {
                 tempOpen: XMLHttpRequest.prototype.open,
                 tempSend: XMLHttpRequest.prototype.send,
@@ -42,7 +41,7 @@
 
             const end = debounce(() => {
                     progress.done();
-            }, 250);
+            }, 750);
 
             XMLHttpRequest.prototype.open = function(a = '', b = '') {
                 start()
