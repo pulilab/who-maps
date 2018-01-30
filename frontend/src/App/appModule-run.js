@@ -34,11 +34,13 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     setCatalog(gettextCatalog);
     setScope($rootScope);
     getLanguage();
-
+    const transitionStart = new Event('RouterTransitionStart');
+    const transitionDone = new Event('RouterTransitionDone');
     setAxiosBaseTokenIfInStorage();
 
     $transitions.onStart({}, () => {
         handleStateChange('start');
+        window.dispatchEvent(transitionStart);
         return Promise.resolve();
     });
 
@@ -54,6 +56,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
 
     $transitions.onFinish({}, (t) => {
         const to = t.to();
+        window.dispatchEvent(transitionDone);
         $ngRedux.dispatch(ProjectsModule.setCurrentProject(t.params().appName));
         const state = $ngRedux.getState();
         if (to && to.profileRequired) {
