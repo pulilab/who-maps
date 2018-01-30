@@ -1,6 +1,5 @@
 import flatMap from 'lodash/flatMap';
 import findIndex from 'lodash/findIndex';
-import { normalizeName } from '../utilities';
 import * as CmsModule from '../../store/modules/cms';
 import * as SystemModule from '../../store/modules/system';
 
@@ -55,25 +54,15 @@ class DashboardWidgetController {
     }
 
     setDomainVariables(domain, scores) {
-        const axis = this.axes.find(ax => {
-            return ax.domains.some(d => {
-                return d.id === domain.id;
-            });
-        });
-        this.axisColor = normalizeName(axis.name);
-        this.domainIcon = normalizeName(domain.name);
+        this.axisColor = `axis-${domain.axis}`;
+        this.domainIcon = `domain-${domain.id}`;
         if (scores) {
             const domainScores = flatMap(scores, score => {
-                return score.domains.map(dom => {
-                    const domainNameParts = dom.domain.split(':');
-                    dom.name = domainNameParts.pop().toLowerCase().trim();
-                    return dom;
-                });
+                return score.domains;
             });
             const selectedDomain = domainScores.find(score => {
-                return score.name === domain.name.toLowerCase();
+                return score.id === domain.id;
             });
-
             this.domainScore = Math.round((selectedDomain.domain_sum * 100) / selectedDomain.domain_max);
         }
     }

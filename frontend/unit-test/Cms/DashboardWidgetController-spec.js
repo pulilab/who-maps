@@ -55,11 +55,9 @@ describe('DashboardWidgetController', () => {
     });
 
     it('should have a function that set the domain Variables', () => {
-        controller.scores = scores;
-        controller.axes = require('./domains');
-        controller.setDomainVariables({ id: 1, name: 'Parameters of Scale' }, scores);
-        expect(controller.axisColor).toBe('groundwork');
-        expect(controller.domainIcon).toBe('parameters-of-scale');
+        controller.setDomainVariables({ id: 1, name: 'Parameters of Scale', axis:1, domain:1 }, scores);
+        expect(controller.axisColor).toBe('axis-1');
+        expect(controller.domainIcon).toBe('domain-1');
         const score = Math.round((scores[0].domains[0].domain_sum * 100) / scores[0].domains[0].domain_max);
         expect(controller.domainScore).toBe(score);
 

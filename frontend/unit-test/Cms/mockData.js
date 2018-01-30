@@ -111,7 +111,8 @@ const scores = [
                 'domain_max': 2,
                 'domain_sum': 1.3,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id': 1
             },
             {
                 'domain': 'DOMAIN 2: CONTEXTUAL ENVIRONMENT',
@@ -152,7 +153,8 @@ const scores = [
                 'domain_max': 22,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 2
             },
             {
                 'domain': 'DOMAIN 3: SCIENTIFIC BASIS',
@@ -194,7 +196,8 @@ const scores = [
                 'domain_max': 30,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 3
             }
         ],
         'axis_score': 0,
@@ -247,7 +250,8 @@ const scores = [
                 'domain_max': 48,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 4
             },
             {
                 'domain': 'DOMAIN 5: PARTNERSHIP SUSTAINABILITY',
@@ -311,7 +315,8 @@ const scores = [
                 'domain_max': 50,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 5
             }
         ],
         'axis_score': 0,
@@ -370,7 +375,8 @@ const scores = [
                 'domain_max': 45,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 6
             },
             {
                 'domain': 'DOMAIN 7: FINANCIAL MODEL',
@@ -412,7 +418,8 @@ const scores = [
                 'domain_max': 36,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 7
             }
         ],
         'axis_score': 0,
@@ -471,7 +478,8 @@ const scores = [
                 'domain_max': 43,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 8
             },
             {
                 'domain': 'DOMAIN 9: INTEROPERABILITY',
@@ -500,7 +508,8 @@ const scores = [
                 'domain_max': 18,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 1
             },
             {
                 'domain': 'DOMAIN 10: ADAPTABILITY',
@@ -539,7 +548,8 @@ const scores = [
                 'domain_max': 30,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 9
             }
         ],
         'axis_score': 0,
@@ -580,7 +590,8 @@ const scores = [
                 'domain_max': 33,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 10
             },
             {
                 'domain': 'DOMAIN 12: TRAINING AND SUPPORT',
@@ -632,7 +643,8 @@ const scores = [
                 'domain_max': 45,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 11
             },
             {
                 'domain': 'DOMAIN 13: OUTREACH AND SENSITIZATION',
@@ -660,7 +672,8 @@ const scores = [
                 'domain_max': 15,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 12
             },
             {
                 'domain': 'DOMAIN 14: CONTINGENCY PLANNING',
@@ -689,7 +702,8 @@ const scores = [
                 'domain_max': 18,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 13
             }
         ],
         'axis_score': 0,
@@ -735,7 +749,8 @@ const scores = [
                 'domain_max': 25,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 14
             },
             {
                 'domain': 'DOMAIN 16: EVALUATION RESEARCH',
@@ -816,7 +831,8 @@ const scores = [
                 'domain_max': 66,
                 'domain_sum': 0,
                 'domain_completion': 0,
-                'domain_percentage': 0
+                'domain_percentage': 0,
+                'id:': 15
             }
         ],
         'axis_score': 0,

@@ -13,27 +13,27 @@ cms-dashboard-widget {
     color: $color-white;
     box-shadow: inset 0 -2px 5px rgba(0,0,0,.2);
 
-    &.groundwork {
+    &.axis-1 {
       background-color: $color-axis1;
     }
-    &.partnership {
+    &.axis-2 {
       background-color: $color-axis2;
     }
-    &.financial-health {
+    &.axis-3 {
       background-color: $color-axis3;
     }
-    &.technology-and-architecture {
+    &.axis-4 {
       background-color: $color-axis4;
     }
-    &.operations {
+    &.axis-5 {
       background-color: $color-axis5;
     }
-    &.monitoring-and-evaluation {
+    &.axis-6 {
       background-color: $color-axis6;
     }
 
     .domain-icon {
-      max-width: 40px;
+      width: 40px;
       height: 40px;
       margin-left: 6px;
       margin-right: 2px;
@@ -41,52 +41,52 @@ cms-dashboard-widget {
       background-size: 80% 80%;
       background-position: center center;
 
-      &.parameters-of-scale {
+      &.domain-1 {
         background-image: url('./images/icon-domain-1.svg');
       }
-      &.contextual-environment {
+      &.domain-2 {
         background-image: url('./images/icon-domain-2.svg');
       }
-      &.scientific-basis {
+      &.domain-3 {
         background-image: url('./images/icon-domain-3.svg');
       }
-      &.strategic-engagement {
+      &.domain-4 {
         background-image: url('./images/icon-domain-4.svg');
       }
-      &.partnership-sustainability {
+      &.domain-5 {
         background-image: url('./images/icon-domain-5.svg');
       }
-      &.financial-management {
+      &.domain-6 {
         background-image: url('./images/icon-domain-6.svg');
       }
-      &.financial-model {
+      &.domain-7 {
         background-image: url('./images/icon-domain-7.svg');
       }
-      &.data {
+      &.domain-8 {
         background-image: url('./images/icon-domain-8.svg');
       }
-      &.interoperability {
+      &.domain-9 {
         background-image: url('./images/icon-domain-9.svg');
       }
-      &.adaptability {
+      &.domain-10 {
         background-image: url('./images/icon-domain-10.svg');
       }
-      &.personnel {
+      &.domain-11 {
         background-image: url('./images/icon-domain-11.svg');
       }
-      &.training-and-support {
+      &.domain-12 {
         background-image: url('./images/icon-domain-12.svg');
       }
-      &.outreach-and-sensitization {
+      &.domain-13 {
         background-image: url('./images/icon-domain-13.svg');
       }
-      &.contingency-planning {
+      &.domain-14 {
         background-image: url('./images/icon-domain-14.svg');
       }
-      &.process-monitoring {
+      &.domain-15 {
         background-image: url('./images/icon-domain-15.svg');
       }
-      &.evaluation-research {
+      &.domain-16 {
         background-image: url('./images/icon-domain-16.svg');
       }
     }
