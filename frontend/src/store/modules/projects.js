@@ -558,11 +558,11 @@ export function snapShotProject() {
         await dispatch(exports.loadProjectDetails());
     };
 }
-export function loadProjectStructure() {
+export function loadProjectStructure(force) {
     return async (dispatch, getState) => {
         const state = getState();
         const structure = exports.getProjectStructure(state);
-        if (!structure) {
+        if (!structure || force) {
             const { data } = await axios.get('/api/projects/structure/');
             await dispatch({ type: 'SET_PROJECT_STRUCTURE', structure: data });
         }
@@ -809,4 +809,3 @@ export default function projects(state = { lastVersion: 0 }, action) {
 
     }
 }
-
