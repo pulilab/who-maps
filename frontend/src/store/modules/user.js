@@ -121,6 +121,7 @@ export function saveProfile(profile) {
         setLanguage(data.language);
         dispatch({ type: 'SET_PROFILE', profile: data });
         dispatch(SystemModule.loadStaticData());
+        dispatch(ProjectModule.loadProjectStructure(true));
     };
 }
 
@@ -194,4 +195,3 @@ export default function user(state = {}, action) {
 
     }
 }
-
