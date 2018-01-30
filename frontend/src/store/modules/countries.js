@@ -37,7 +37,7 @@ export const getCountriesList = state => {
                 flag: `/static/flags/${code}.png`,
                 prettyName: c.name.split('-').join(' ')
             };
-        }).sort((a, b) => a.name.localeCompare(b.name));
+        });
     }
     return [];
 };
@@ -53,7 +53,7 @@ export const getUserCountry = (state) => {
 export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry).map(cf =>{
         return { ...cf };
-    }).sort((a, b) => a.id - b.id);
+    });
 };
 
 export const getCurrentCountry = state => {
@@ -164,6 +164,7 @@ export function loadCountries() {
         const list = getState().countries.list;
         if (list.length === 0) {
             const { data } = await axios.get('/api/countries/');
+            data.sort((a, b) => a.name.localeCompare(b.name));
             dispatch({ type: 'SET_COUNTRIES_LIST', countries: data });
         }
     };
@@ -174,6 +175,7 @@ export function loadCountryFields(id) {
         const countryCountryFields = getState().countries.countryFields.filter(cf =>  cf.country === id);
         if (!countryCountryFields || countryCountryFields.length === 0) {
             const { data } = await axios.get(`/api/country-fields/${id}/`);
+            data.sort((a, b) => a.id - b.id);
             dispatch({ type: 'UPDATE_COUNTRY_FIELDS_LIST', fields: data });
         }
     };
@@ -296,4 +298,3 @@ export default function system(state = stateDefinition, action) {
         return state;
     }
 }
-
