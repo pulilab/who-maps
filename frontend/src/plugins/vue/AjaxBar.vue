@@ -1,12 +1,14 @@
 <template>
   <div v-show="showContainer" :style="containerStyle">
-    <vue-topprogress color="#FFBB00" ref="progress"></vue-topprogress>
+    <vue-topprogress color="#FFBB00" :speed="100" ref="progress"></vue-topprogress>
   </div>
 </template>
 
 
 <script>
     import { vueTopprogress } from 'vue-top-progress';
+    import debounce from 'lodash/debounce';
+
     export default {
         components: {
             vueTopprogress
@@ -14,15 +16,16 @@
         data() {
             return {
                 containerStyle: {
-                    width: '100%',
+                    width: 'calc(100% - 17px)',
                     height: '3px',
                     position: 'fixed',
                     top: 0,
                     left: 0,
                     right: 0,
-                    backgroundColor: '#080D43'
+                    backgroundColor: '#1A237E',
+                    'z-index': 9999
                 },
-                showContainer: false
+                showContainer: true
             };
         },
         mounted() {
@@ -33,9 +36,16 @@
                 tempSend: XMLHttpRequest.prototype.send,
                 callback() { }
             };
-            XMLHttpRequest.prototype.open = function(a = '', b = '') {
-                instance.showContainer = true;
+            const start = () => {
                 progress.start();
+            }
+
+            const end = debounce(() => {
+                    progress.done();
+            }, 250);
+
+            XMLHttpRequest.prototype.open = function(a = '', b = '') {
+                start()
                 listener.tempOpen.apply(this, arguments);
                 listener.method = a;
                 listener.url = b;
@@ -45,14 +55,14 @@
                 }
             };
             XMLHttpRequest.prototype.send = function(a = '') {
-                setTimeout(()=>{
-                    progress.done();
-                    instance.showContainer = false;
-                }, 500);
                 listener.tempSend.apply(this, arguments);
+                end();
                 if (listener.method.toLowerCase() === 'post') { listener.data = a; }
                 listener.callback();
             };
+
+            window.addEventListener('RouterTransitionStart', start)
+            window.addEventListener('RouterTransitionDone', end)
         }
     }
 </script>
