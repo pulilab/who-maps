@@ -4,23 +4,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:222
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:308
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:245
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:381
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:469
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:110
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:140
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:147
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:177
 msgid "# Clients"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:202
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:288
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:225
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:361
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:449
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:104
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:134
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:141
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:171
 msgid "# Facilities"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:182
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:268
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:128
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:205
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:341
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:429
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:135
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:165
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:98
 msgid "# Health Workers"
 msgstr ""
@@ -177,7 +183,7 @@ msgstr ""
 msgid "<strong>{{question.question_sum}}</strong> / {{question.question_max}} points"
 msgstr ""
 
-#: ./src/Common/CountryTopBar/countryTopBar.html:140
+#: ./src/Common/CountryTopBar/countryTopBar.html:141
 msgid "A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions."
 msgstr ""
 
@@ -340,10 +346,11 @@ msgstr ""
 msgid "Add experience"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:251
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:274
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:41
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:412
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:458
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:410
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:552
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:598
 msgid "Add more"
 msgstr ""
 
@@ -481,11 +488,14 @@ msgstr ""
 msgid "Apply filters to list:"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:195
+#: ./src/CountryView/CountryViewModule.html:210
 msgid "Apply filters to map:"
 msgstr ""
 
+#: ./src/Common/CountryMap/Countrymap.html:137
+#: ./src/Common/CountryMap/Countrymap.html:162
 #: ./src/Common/ProjectComponent/ProjectComponent.html:45
+#: ./src/CountryView/CountryViewModule.html:154
 msgid "Approved by country"
 msgstr ""
 
@@ -560,6 +570,10 @@ msgstr ""
 msgid "COUNTRY LEVEL VIEW"
 msgstr ""
 
+#: ./src/CountryView/CountryViewModule.html:74
+msgid "CSV"
+msgstr ""
+
 #: ./src/Common/Thematic/static/-1-3.html:125
 msgid "CT Systematized Nomenclature of Medicine – Clinical Terms"
 msgstr ""
@@ -614,7 +628,7 @@ msgstr ""
 msgid "Clinton Health Access Initiative"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:123
+#: ./src/Common/SubBar/subBar.html:131
 msgid "Close"
 msgstr ""
 
@@ -664,11 +678,11 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:105
+#: ./src/CountryView/CountryViewModule.html:108
 msgid "Contact Name"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:39
+#: ./src/Common/SubBar/subBar.html:40
 msgid "Contact Person"
 msgstr ""
 
@@ -682,11 +696,11 @@ msgstr ""
 msgid "Contact name"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:120
+#: ./src/Common/SubBar/subBar.html:128
 msgid "Copied"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:115
+#: ./src/Common/SubBar/subBar.html:123
 msgid "Copy URL"
 msgstr ""
 
@@ -703,13 +717,13 @@ msgid "Costs that change according to the level of scale (e.g. training, mainten
 msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:97
-#: ./src/Common/EditProfile/EditProfile.html:58
-#: ./src/Common/TopBar/topBar.html:116
-#: ./src/CountryView/CountryViewModule.html:90
+#: ./src/Common/EditProfile/EditProfile.html:56
+#: ./src/Common/TopBar/topBar.html:133
+#: ./src/CountryView/CountryViewModule.html:93
 msgid "Country"
 msgstr ""
 
-#: ./src/Common/TopBar/topBar.html:20
+#: ./src/Common/TopBar/topBar.html:25
 msgid "Country Map"
 msgstr ""
 
@@ -717,7 +731,7 @@ msgstr ""
 msgid "Country View"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:65
+#: ./src/Project/Navigation/Navigation.html:68
 msgid "Country fields"
 msgstr ""
 
@@ -764,7 +778,7 @@ msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:57
 #: ./src/Common/ProjectComponent/ProjectComponent.html:77
-#: ./src/Common/SubBar/subBar.html:60
+#: ./src/Common/SubBar/subBar.html:65
 msgid "Dashboard"
 msgstr ""
 
@@ -786,10 +800,6 @@ msgstr ""
 
 #: ./src/Common/Thematic/static/-1-4.html:17
 msgid "Data standards:"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:129
-msgid "Date of:"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-0.html:16
@@ -816,18 +826,17 @@ msgstr ""
 msgid "Development of the MAPS Toolkit was initiated within the context of the World Health Organization (WHO) and United Nations Foundation (UNF)-led Innovation Working Group (IWG) Catalytic mHealth Grant Mechanism initiative, which provides financial, technical and joint learning support to RMNCH projects. The team developed MAPS over several years, engaging with numerous mHealth projects and drawing on the experience of experts in the mHealth, implementation science, and maternal and child health fields. Additionally, Toolkit authors facilitated technical workshops and conducted field research at country level, using key informant interviews to explore and understand the different factors affecting the scaling up and sustainability of projects. The network of IWG mHealth project grantees played a fundamental role in informing and validating the Toolkit throughout its development."
 msgstr ""
 
-#: ./src/Common/TopBar/topBar.html:9
-#: ./src/CountryView/PDFExport/PDFExportController.js:41
+#: ./src/Common/TopBar/topBar.html:12
 msgid "Digital Health Atlas"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:151
+#: ./src/CountryView/CountryViewModuleController.js:160
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:56
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:21
 msgid "Digital Health Interventions"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:83
+#: ./src/Project/Navigation/Navigation.html:86
 msgid "Discard draft"
 msgstr ""
 
@@ -843,22 +852,12 @@ msgstr ""
 msgid "Disclosure"
 msgstr ""
 
-#: ./src/Common/EditProfile/EditProfile.html:91
+#: ./src/Common/EditProfile/EditProfile.html:97
 msgid "Dismiss Changes"
-msgstr ""
-
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:154
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:89
-msgid "District"
 msgstr ""
 
 #: ./src/Common/Thematic/static/-1-3.html:17
 msgid "District Health Information Software"
-msgstr ""
-
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:146
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:81
-msgid "District level deployment"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-2.html:27
@@ -951,27 +950,23 @@ msgstr ""
 msgid "Domain {{domian.id}} total"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:435
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:575
 msgid "Donor's name"
 msgstr ""
 
 #: ./src/Common/Donors/donors.html:6
 #: ./src/Common/ProjectComponent/ProjectComponent.html:20
 #: ./src/Common/Thematic/static/2-0.html:44
-#: ./src/CountryView/CountryViewModule.html:100
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:187
+#: ./src/CountryView/CountryViewModule.html:103
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:213
 msgid "Donors"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:418
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:558
 msgid "Donors (Add one at least)"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:133
-msgid "Donors:"
-msgstr ""
-
-#: ./src/Common/CountryTopBar/countryTopBar.html:149
+#: ./src/Common/CountryTopBar/countryTopBar.html:150
 #: ./src/Common/TermsOfUse/TermsOfUse.html:248
 msgid "Download Pdf"
 msgstr ""
@@ -984,7 +979,7 @@ msgstr ""
 #: ./src/Common/ProjectComponent/ProjectComponent.html:39
 #: ./src/Common/SubBar/subBar.html:28
 #: ./src/Dashboard/Statistics/Statistics.html:16
-#: ./src/Project/Navigation/Navigation.html:12
+#: ./src/Project/Navigation/Navigation.html:15
 #: ./src/Project/Project.html:12
 msgid "Draft"
 msgstr ""
@@ -993,11 +988,11 @@ msgstr ""
 msgid "During the process of scaling up, several components of an mHealth product and its associated technologies will emerge. The challenges associated with technology and architecture tend to be unique to eHealth and mHealth deployments. These concerns involve the capacity of the technology to meet the demands of increasing volumes of data, to interoperate with external systems, and to adapt to changing conditions and needs."
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:66
+#: ./src/Common/SubBar/subBar.html:71
 msgid "EDIT PROJECT DETAILS"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:46
+#: ./src/Common/SubBar/subBar.html:49
 msgid "EMAIL"
 msgstr ""
 
@@ -1027,7 +1022,7 @@ msgstr ""
 msgid "Edit Draft"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:69
+#: ./src/Common/SubBar/subBar.html:74
 msgid "Edit Project"
 msgstr ""
 
@@ -1040,7 +1035,7 @@ msgid "Edit User profile"
 msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:85
-#: ./src/Common/TopBar/topBar.html:105
+#: ./src/Common/TopBar/topBar.html:121
 msgid "Edit my Profile"
 msgstr ""
 
@@ -1122,18 +1117,10 @@ msgid "Expansion (geo-political)"
 msgstr ""
 
 #: ./src/Cms/AddNewContent/AddNewContentDialog.html:36
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:69
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:70
 #: ./src/Cms/ListElement/ListElement.html:41
 #: ./src/Cms/PlanningAndGuidance/PlanningAndGuidance.html:26
 msgid "Experiences"
-msgstr ""
-
-#: ./src/CountryView/CountryViewModule.html:51
-msgid "Export (CSV)"
-msgstr ""
-
-#: ./src/CountryView/CountryViewModule.html:55
-msgid "Export (PDF)"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-0.html:36
@@ -1211,10 +1198,6 @@ msgstr ""
 msgid "Flavia Bustreo"
 msgstr ""
 
-#: ./src/Common/Followers/followers.html:6
-msgid "Followers"
-msgstr ""
-
 #: ./src/Common/TermsOfUse/TermsOfUse.html:127
 msgid "For internal review."
 msgstr ""
@@ -1240,11 +1223,11 @@ msgstr ""
 msgid "Furthermore, <b><em>user and technical support</em></b> systems must be in place for identifying and troubleshooting hardware and software problems during implementation. Project leaders should assemble a technical support team with a strong understanding of user needs and operating constraints based in the local setting. There are many advantages to having a local first-line technical support team: it will minimize costs (compared with paying for external support), create local ownership of the project, and promote sustainability. However, it is also critical to have higher-level support available for technical issues that require greater expertise."
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:57
+#: ./src/Common/SubBar/subBar.html:62
 msgid "GO TO DASHBOARD"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:75
+#: ./src/Common/SubBar/subBar.html:83
 msgid "GO TO MAPS TOOLKIT"
 msgstr ""
 
@@ -1260,7 +1243,7 @@ msgstr ""
 msgid "GSMA"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:33
+#: ./src/Project/Navigation/Navigation.html:36
 msgid "General"
 msgstr ""
 
@@ -1268,17 +1251,13 @@ msgstr ""
 msgid "General info"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:120
+#: ./src/CountryView/CountryViewModule.html:123
 #: ./src/Project/GeneralOverview/GeneralOverview.html:80
 #: ./src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:32
 msgid "Geographic scope"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:159
-msgid "Geographical coverage:"
-msgstr ""
-
-#: ./src/Common/CountryTopBar/countryTopBar.html:136
+#: ./src/Common/CountryTopBar/countryTopBar.html:137
 msgid "Get MAPS Toolkit"
 msgstr ""
 
@@ -1307,7 +1286,7 @@ msgid "Go back to login"
 msgstr ""
 
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:199
-#: ./src/Project/Navigation/Navigation.html:93
+#: ./src/Project/Navigation/Navigation.html:96
 msgid "Go to dashboard"
 msgstr ""
 
@@ -1435,21 +1414,13 @@ msgstr ""
 msgid "Harnessing the collective experiences of those developing and implementing digital health system and interventions in the field: to offer suggestion and considerations."
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:150
-msgid "Has the government approved the project?"
-msgstr ""
-
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:354
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:161
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:494
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:187
 msgid "Has the government financially invested in the project?"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:139
-msgid "Health Focus Area:"
-msgstr ""
-
-#: ./src/CountryView/CountryViewModule.html:125
-#: ./src/CountryView/CountryViewModuleController.js:160
+#: ./src/CountryView/CountryViewModule.html:128
+#: ./src/CountryView/CountryViewModuleController.js:169
 msgid "Health Focus Areas"
 msgstr ""
 
@@ -1461,7 +1432,7 @@ msgstr ""
 msgid "Health Information System Links"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:168
+#: ./src/CountryView/CountryViewModuleController.js:177
 msgid "Health Information Systems"
 msgstr ""
 
@@ -1473,7 +1444,7 @@ msgstr ""
 msgid "Health Level 7 (data standard)"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:177
+#: ./src/CountryView/CountryViewModuleController.js:186
 msgid "Health System Challenges"
 msgstr ""
 
@@ -1500,7 +1471,7 @@ msgid "Health focus area(s)"
 msgstr ""
 
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:72
-msgid "Health focus area(s) &ndash; select all that apply:"
+msgid "Health focus area(s) - select all that apply:"
 msgstr ""
 
 #: ./src/Common/Thematic/static/-1-4.html:33
@@ -1605,7 +1576,7 @@ msgstr ""
 msgid "If you want to see world map for the geographical and historic view please subscribe first!"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:41
+#: ./src/Project/Navigation/Navigation.html:44
 msgid "Implementation"
 msgstr ""
 
@@ -1618,14 +1589,10 @@ msgstr ""
 msgid "Implementers:"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:115
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:381
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:177
+#: ./src/CountryView/CountryViewModule.html:118
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:521
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:203
 msgid "Implementing partners"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:136
-msgid "Implementing partners:"
 msgstr ""
 
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:204
@@ -1758,7 +1725,7 @@ msgstr ""
 msgid "International Telecommunication Union"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:57
+#: ./src/Project/Navigation/Navigation.html:60
 msgid "Interoperability"
 msgstr ""
 
@@ -1888,10 +1855,6 @@ msgstr ""
 msgid "Link to wiki page:"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:58
-msgid "List exported on"
-msgstr ""
-
 #: ./src/MyProjects/MyProjectList/MyProjectList.html:8
 msgid "List of all the projects you are a"
 msgstr ""
@@ -1903,7 +1866,7 @@ msgstr ""
 #: ./src/Common/CountryTopBar/countryTopBar.html:29
 #: ./src/Common/Login/Login.html:4
 #: ./src/Common/Login/Login.html:52
-#: ./src/Common/TopBar/topBar.html:68
+#: ./src/Common/TopBar/topBar.html:81
 msgid "Login"
 msgstr ""
 
@@ -1912,7 +1875,7 @@ msgid "Login here"
 msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:91
-#: ./src/Common/TopBar/topBar.html:111
+#: ./src/Common/TopBar/topBar.html:127
 msgid "Logout"
 msgstr ""
 
@@ -1929,7 +1892,7 @@ msgid "MAPS"
 msgstr ""
 
 #: ./src/Common/Thematic/modal-skeleton.html:14
-#: ./src/Common/TopBar/topBar.html:47
+#: ./src/Common/TopBar/topBar.html:57
 msgid "MAPS Toolkit"
 msgstr ""
 
@@ -1986,10 +1949,6 @@ msgstr ""
 #: ./src/MapsToolkit/Resource/template/1-1-3.html:29
 #: ./src/MapsToolkit/Resource/template/1-2-1.html:29
 msgid "Maternal health and infancy/childhood (e.g. exclusive breastfeeding, routine immunizations, growth monitoring and nutrition)."
-msgstr ""
-
-#: ./src/Common/SearchableSelectionMenu/SearchableSelectionMenu.html:19
-msgid "Maximum allowed:"
 msgstr ""
 
 #: ./src/Common/TrixComponent/TrixComponent.html:8
@@ -2083,19 +2042,19 @@ msgstr ""
 msgid "Monitoring &amp; evaluation: Decisions and activities that enable effective process monitoring and in-depth outcome evaluation, based on project and stakeholder needs"
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:81
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:82
 msgid "More Experiences"
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:60
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:61
 msgid "More Resources"
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:42
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:43
 msgid "More Tips &amp; Considerations"
 msgstr ""
 
-#: ./src/Common/TopBar/topBar.html:30
+#: ./src/Common/TopBar/topBar.html:37
 #: ./src/LandingPage/LandingPageModule.html:72
 msgid "My Projects"
 msgstr ""
@@ -2124,14 +2083,14 @@ msgstr ""
 msgid "NOTION OF VALUE"
 msgstr ""
 
-#: ./src/Common/CountryMap/Countrymap.html:143
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:131
+#: ./src/Common/CountryMap/Countrymap.html:147
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:133
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:74
 msgid "National"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:261
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:121
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:422
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:158
 msgid "National level deployment"
 msgstr ""
 
@@ -2139,8 +2098,8 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
-#: ./src/Common/CountryTopBar/countryTopBar.html:131
-#: ./src/Common/TopBar/topBar.html:149
+#: ./src/Common/CountryTopBar/countryTopBar.html:132
+#: ./src/Common/TopBar/topBar.html:168
 msgid "New Project"
 msgstr ""
 
@@ -2163,7 +2122,6 @@ msgstr ""
 #: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:22
 #: ./src/Common/Thematic/static/0-2.html:38
 #: ./src/Project/CountryFields/CountryFields.html:73
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:340
 msgid "No"
 msgstr ""
 
@@ -2179,11 +2137,11 @@ msgstr ""
 msgid "No experience has been added yet..."
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:78
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:79
 msgid "No experiences have been added yet..."
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:38
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:39
 msgid "No lessons have been added yet..."
 msgstr ""
 
@@ -2191,8 +2149,8 @@ msgstr ""
 msgid "No national coverage"
 msgstr ""
 
-#: ./src/Common/CountryMap/Countrymap.html:139
-#: ./src/Common/CountryMap/Countrymap.html:159
+#: ./src/Common/CountryMap/Countrymap.html:143
+#: ./src/Common/CountryMap/Countrymap.html:168
 msgid "No projects available"
 msgstr ""
 
@@ -2207,12 +2165,12 @@ msgid ""
 "                  or marketing purposes."
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:57
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:58
 msgid "No resources have been added yet..."
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:361
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:166
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:501
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:192
 msgid "No, they have not yet contributed"
 msgstr ""
 
@@ -2244,12 +2202,8 @@ msgstr ""
 msgid "Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:178
+#: ./src/CountryView/CountryViewModule.html:193
 msgid "Number of Projects"
-msgstr ""
-
-#: ./src/Common/Viewers/viewers.html:10
-msgid "Number of unique views ever; arrow indicates change since the last month."
 msgstr ""
 
 #: ./src/Dashboard/Dashboard.html:136
@@ -2309,13 +2263,9 @@ msgid "Organisation"
 msgstr ""
 
 #: ./src/Common/OrganisationAutocomplete/Organisation.html:14
-#: ./src/CountryView/CountryViewModule.html:95
+#: ./src/CountryView/CountryViewModule.html:98
 #: ./src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:18
 msgid "Organisation name"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:131
-msgid "Organisation name:"
 msgstr ""
 
 #: ./src/Common/TermsOfUse/TermsOfUse.html:211
@@ -2330,17 +2280,17 @@ msgstr ""
 msgid "Overhead expenses that are not dependent on the scale of the operation (e.g. general administrative costs, rent)."
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:110
+#: ./src/CountryView/CountryViewModule.html:113
 msgid "Overview of digital health implementation"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:150
-msgid "Overview of digital health implementation:"
 msgstr ""
 
 #: ./src/Project/GeneralOverview/GeneralOverview.html:104
 #: ./src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:40
 msgid "Overview of the digital health implementation"
+msgstr ""
+
+#: ./src/CountryView/CountryViewModule.html:70
+msgid "PDF"
 msgstr ""
 
 #: ./src/Common/Thematic/static/-1-3.html:111
@@ -2364,7 +2314,7 @@ msgstr ""
 msgid "PROJECT PERFORMANCE"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:398
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:538
 msgid "Partner's name"
 msgstr ""
 
@@ -2373,17 +2323,14 @@ msgid "Partnerships: Collaborations with external groups to support the process 
 msgstr ""
 
 #: ./src/Common/Login/Login.html:29
+#: ./src/Common/Signup/Signup.html:199
+#: ./src/Common/Signup/Signup.html:61
 msgid "Password"
 msgstr ""
 
 #: ./src/Common/Signup/Signup.html:214
 #: ./src/Common/Signup/Signup.html:76
 msgid "Password (Again)"
-msgstr ""
-
-#: ./src/Common/Signup/Signup.html:199
-#: ./src/Common/Signup/Signup.html:61
-msgid "Password}"
 msgstr ""
 
 #: ./src/Common/Thematic/static/3-1.html:9
@@ -2423,7 +2370,7 @@ msgid "Pilot testing:"
 msgstr ""
 
 #: ./src/Cms/PlanningAndGuidance/PlanningAndGuidance.html:5
-#: ./src/Common/TopBar/topBar.html:40
+#: ./src/Common/TopBar/topBar.html:49
 msgid "Planning &amp; Guidance"
 msgstr ""
 
@@ -2433,10 +2380,6 @@ msgstr ""
 
 #: ./src/Project/GeneralOverview/GeneralOverview.html:97
 msgid "Please describe where your implementation is currently taking place"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:143
-msgid "Point of contact:"
 msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:47
@@ -2489,8 +2432,8 @@ msgstr ""
 msgid "Programme fidelity:"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:145
-#: ./src/CountryView/CountryViewModule.html:146
+#: ./src/CountryView/CountryViewModule.html:158
+#: ./src/CountryView/CountryViewModule.html:159
 msgid "Project Dashboard"
 msgstr ""
 
@@ -2508,7 +2451,7 @@ msgstr ""
 msgid "Project leaders and staff also need appropriate training, supervision and support. <b><em>User training</em></b>, which involves end-users and secondary users, must be tailored specifically to the needs and levels of experience of the participants. It is widely recognized that effective engagement with health workers and other end-users is the key to successful adoption of mHealth products. Training programmes should also aim to foster a sense of perceived value of the product among end-users. The scaling-up process will be hampered if health workers fail to see the benefits of the application on their workload, or if they feel overwhelmed by the complexity of the technology."
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:85
+#: ./src/CountryView/CountryViewModule.html:88
 #: ./src/Project/GeneralOverview/GeneralOverview.html:12
 #: ./src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:11
 msgid "Project name"
@@ -2543,12 +2486,12 @@ msgstr ""
 msgid "Projects using MAPS should meet the following basic criteria:"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:73
+#: ./src/Project/Navigation/Navigation.html:76
 msgid "Publish"
 msgstr ""
 
 #: ./src/Common/ProjectComponent/ProjectComponent.html:42
-#: ./src/Project/Navigation/Navigation.html:21
+#: ./src/Project/Navigation/Navigation.html:24
 #: ./src/Project/Project.html:15
 msgid "Published"
 msgstr ""
@@ -2605,10 +2548,11 @@ msgstr ""
 msgid "Relevance to national health strategy, value for money, health, system benefits, reduced health expenditure"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:245
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:406
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:452
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:268
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:404
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:47
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:546
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:592
 msgid "Remove"
 msgstr ""
 
@@ -2629,7 +2573,7 @@ msgid "Reset password"
 msgstr ""
 
 #: ./src/Cms/AddNewContent/AddNewContentDialog.html:30
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:48
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:49
 #: ./src/Cms/ListElement/ListElement.html:11
 #: ./src/Cms/PlanningAndGuidance/PlanningAndGuidance.html:22
 msgid "Resources"
@@ -2648,7 +2592,7 @@ msgid "Review &amp;<br> Publish"
 msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:77
-#: ./src/Common/TopBar/topBar.html:97
+#: ./src/Common/TopBar/topBar.html:113
 msgid "Role: {{vm.writeUserRole()}}"
 msgstr ""
 
@@ -2668,7 +2612,7 @@ msgstr ""
 msgid "SERP"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:87
+#: ./src/Common/SubBar/subBar.html:95
 msgid "SHOW SCORE SUMMARY"
 msgstr ""
 
@@ -2706,12 +2650,12 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: ./src/Common/EditProfile/EditProfile.html:94
+#: ./src/Common/EditProfile/EditProfile.html:100
 msgid "Save Profile"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:78
-#: ./src/Project/Navigation/Navigation.html:88
+#: ./src/Project/Navigation/Navigation.html:81
+#: ./src/Project/Navigation/Navigation.html:91
 msgid "Save draft"
 msgstr ""
 
@@ -2733,8 +2677,12 @@ msgid "Scorecard"
 msgstr ""
 
 #: ./src/Cms/PlanningAndGuidance/PlanningAndGuidance.html:97
-#: ./src/Common/SearchableSelectionMenu/SearchableSelectionMenu.html:16
 msgid "Search"
+msgstr ""
+
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:191
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:327
+msgid "Search Facilities"
 msgstr ""
 
 #: ./src/Common/Thematic/static/5-0.html:9
@@ -2746,13 +2694,14 @@ msgid "Secondary users:"
 msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:22
-#: ./src/CountryView/CountryViewModule.html:70
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:163
+#: ./src/CountryView/CountryViewModule.html:54
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:165
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:302
 msgid "Select a country"
 msgstr ""
 
 #: ./src/Cms/AddNewContent/AddNewContentDialog.html:47
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:9
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:10
 msgid "Select a domain"
 msgstr ""
 
@@ -2760,7 +2709,7 @@ msgstr ""
 msgid "Select a type"
 msgstr ""
 
-#: ./src/Common/EditProfile/EditProfile.html:63
+#: ./src/Common/EditProfile/EditProfile.html:64
 msgid "Select country from list"
 msgstr ""
 
@@ -2772,8 +2721,8 @@ msgstr ""
 msgid "Set filters:"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:103
-#: ./src/Common/SubBar/subBar.html:98
+#: ./src/Common/SubBar/subBar.html:106
+#: ./src/Common/SubBar/subBar.html:111
 msgid "Share Public Link"
 msgstr ""
 
@@ -2789,7 +2738,7 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:73
+#: ./src/CountryView/CountryViewModule.html:58
 msgid "Show all countries"
 msgstr ""
 
@@ -2811,6 +2760,10 @@ msgstr ""
 msgid "Show more..."
 msgstr ""
 
+#: ./src/CountryView/CountryViewModule.html:215
+msgid "Show only approved projects"
+msgstr ""
+
 #: ./src/MapsToolkit/MapsToolkitModule.html:99
 msgid "Show scorecard"
 msgstr ""
@@ -2822,7 +2775,7 @@ msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:38
 #: ./src/Common/Signup/Signup.html:4
-#: ./src/Common/TopBar/topBar.html:77
+#: ./src/Common/TopBar/topBar.html:92
 msgid "Sign Up"
 msgstr ""
 
@@ -2843,12 +2796,12 @@ msgstr ""
 msgid "Since every team has different needs, dynamics and organizational structures, project managers should choose the approach that makes most sense to them. Regardless of the route chosen, the self-assessment process will create a space for critical internal reflection, and for team discussions about future course corrections."
 msgstr ""
 
-#: ./src/Common/CountryTopBar/countryTopBar.html:110
-#: ./src/Common/TopBar/topBar.html:129
+#: ./src/Common/CountryTopBar/countryTopBar.html:111
+#: ./src/Common/TopBar/topBar.html:147
 msgid "Site Language"
 msgstr ""
 
-#: ./src/Common/EditProfile/EditProfile.html:73
+#: ./src/Common/EditProfile/EditProfile.html:79
 msgid "Site language"
 msgstr ""
 
@@ -2856,7 +2809,7 @@ msgstr ""
 msgid "Society for the Elimination of Rural Poverty (India)"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:186
+#: ./src/CountryView/CountryViewModuleController.js:195
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:15
 msgid "Software"
 msgstr ""
@@ -2926,7 +2879,7 @@ msgid "Strong, sustainable partnerships are essential for successfully scaling u
 msgstr ""
 
 #: ./src/Common/CountryMap/Countrymap.html:120
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:128
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:130
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:71
 msgid "Sub-national"
 msgstr ""
@@ -2935,7 +2888,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:90
+#: ./src/Common/SubBar/subBar.html:98
 msgid "Summary Score"
 msgstr ""
 
@@ -2983,7 +2936,7 @@ msgstr ""
 msgid "Table 4: Data standards"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:61
+#: ./src/CountryView/CountryViewModule.html:80
 msgid "Team member"
 msgstr ""
 
@@ -2991,7 +2944,7 @@ msgstr ""
 msgid "Technical Working Group (Rwanda)"
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:49
+#: ./src/Project/Navigation/Navigation.html:52
 msgid "Technology"
 msgstr ""
 
@@ -3285,11 +3238,11 @@ msgid ""
 "                  its own discretion and without giving any notice."
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:166
+#: ./src/CountryView/CountryViewModule.html:181
 msgid "There is no project to show in this country."
 msgstr ""
 
-#: ./src/Project/Navigation/Navigation.html:19
+#: ./src/Project/Navigation/Navigation.html:22
 msgid "There is no published version"
 msgstr ""
 
@@ -3345,7 +3298,7 @@ msgstr ""
 msgid "This field has to be less than 500 characters long."
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:442
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:582
 msgid "This field has to be less than 64 characters long."
 msgstr ""
 
@@ -3379,8 +3332,8 @@ msgstr ""
 #: ./src/Cms/ExperiencesList/ExperiencesList.html:29
 #: ./src/Common/EditProfile/EditProfile.html:24
 #: ./src/Common/EditProfile/EditProfile.html:38
-#: ./src/Common/EditProfile/EditProfile.html:66
-#: ./src/Common/EditProfile/EditProfile.html:80
+#: ./src/Common/EditProfile/EditProfile.html:70
+#: ./src/Common/EditProfile/EditProfile.html:86
 #: ./src/Common/Reset/Reset.html:16
 #: ./src/Project/CountryFields/CountryFields.html:105
 #: ./src/Project/CountryFields/CountryFields.html:134
@@ -3394,18 +3347,21 @@ msgstr ""
 #: ./src/Project/GeneralOverview/GeneralOverview.html:206
 #: ./src/Project/GeneralOverview/GeneralOverview.html:67
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:116
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:137
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:168
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:191
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:211
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:231
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:139
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:170
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:214
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:234
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:25
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:277
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:297
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:317
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:346
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:373
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:439
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:254
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:307
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:350
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:370
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:390
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:438
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:458
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:478
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:513
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:579
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:98
 #: ./src/Project/Technology/Technology.html:21
 msgid "This is required."
@@ -3458,7 +3414,7 @@ msgstr ""
 msgid "Tips &amp; Considerations"
 msgstr ""
 
-#: ./src/Cms/DashboardWidget/DashboardWidget.html:29
+#: ./src/Cms/DashboardWidget/DashboardWidget.html:30
 msgid "Tips and Considerations"
 msgstr ""
 
@@ -3509,7 +3465,7 @@ msgstr ""
 msgid "To provide information or services to you as requested by you."
 msgstr ""
 
-#: ./src/Common/TopBar/topBar.html:50
+#: ./src/Common/TopBar/topBar.html:60
 msgid "Toolkit"
 msgstr ""
 
@@ -3561,11 +3517,6 @@ msgstr ""
 msgid "UUID"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:122
-#: ./src/CountryView/PDFExport/PDFExportController.js:125
-msgid "UUID:"
-msgstr ""
-
 #: ./src/Project/Technology/ReadOnlyTechnology.html:17
 #: ./src/Project/Technology/Technology.html:31
 msgid "Under what license is the project governed?"
@@ -3592,7 +3543,7 @@ msgstr ""
 msgid "United States Agency for International Development"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:81
+#: ./src/Common/SubBar/subBar.html:89
 msgid "Update Score"
 msgstr ""
 
@@ -3647,19 +3598,15 @@ msgstr ""
 msgid "View instructions"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:60
+#: ./src/CountryView/CountryViewModule.html:79
 msgid "Viewer"
-msgstr ""
-
-#: ./src/Common/Viewers/viewers.html:6
-msgid "Viewers"
 msgstr ""
 
 #: ./src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:89
 msgid "Viewers (only Viewer role)"
 msgstr ""
 
-#: ./src/Common/SubBar/subBar.html:78
+#: ./src/Common/SubBar/subBar.html:86
 msgid "Visualize Score"
 msgstr ""
 
@@ -3776,6 +3723,7 @@ msgstr ""
 msgid "What is your experience about (title)"
 msgstr ""
 
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:123
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:65
 msgid "What kind of coverage does your project have?"
 msgstr ""
@@ -3852,18 +3800,21 @@ msgstr ""
 
 #: ./src/Cms/ReportDeleteButton/ReportDeleteButton.html:26
 #: ./src/Project/CountryFields/CountryFields.html:70
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:337
 msgid "Yes"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:367
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:172
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:507
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:198
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:364
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:169
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:504
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:195
 msgid "Yes, they are contributing in-kind people or time"
+msgstr ""
+
+#: ./src/Project/Navigation/Navigation.html:13
+msgid "You are not allowed to access the draft"
 msgstr ""
 
 #: ./src/Project/Project.html:10
@@ -3946,6 +3897,7 @@ msgid "a systems administrator to manage the technology"
 msgstr ""
 
 #: ./src/Dashboard/Dashboard.html:18
+#: ./src/MyProjects/MyProjectList/MyProjectList.html:20
 msgid "add new project"
 msgstr ""
 
@@ -4638,7 +4590,7 @@ msgstr ""
 msgid "in progress"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:182
+#: ./src/CountryView/CountryViewModule.html:197
 msgid "in selected country"
 msgstr ""
 
@@ -4897,6 +4849,7 @@ msgid "the overall score (total score combining all axes)"
 msgstr ""
 
 #: ./src/Dashboard/Dashboard.html:21
+#: ./src/MyProjects/MyProjectList/MyProjectList.html:23
 msgid "to include your project in the inventory and begin tracking your performance"
 msgstr ""
 
@@ -4946,7 +4899,7 @@ msgid "v) We have explored cost-share opportunities"
 msgstr ""
 
 #: ./src/Project/Project.html:17
-msgid "version of the project>/"
+msgid "version of the project."
 msgstr ""
 
 #: ./src/MapsToolkit/Resource/template/6-1-6.html:2
@@ -5008,6 +4961,16 @@ msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:67
 msgid "{{vm.printAnswer(answer)}} points"
+msgstr ""
+
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:148
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:81
+msgid "{{vm.subLevelNames[0]}} level deployment"
+msgstr ""
+
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:285
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:119
+msgid "{{vm.subLevelNames[1]}} level deployment"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-0.html:8
