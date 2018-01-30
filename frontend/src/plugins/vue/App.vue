@@ -2,7 +2,7 @@
   <ajax-bar></ajax-bar>
 </template>
 
-<script >
+<script>
   import 'vue-django-feedback';
 
   import AjaxBar from './AjaxBar.vue';
