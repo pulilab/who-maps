@@ -107,7 +107,7 @@ describe('Project Store Module', () => {
             expect(ProjectModule.getSavedProjectList).toHaveBeenCalled();
             expect(ProjectModule.isMemberOrViewer).toHaveBeenCalledTimes(2);
 
-            expect(result[0].id).toBe(1);
+            expect(result[0].id).toBe(2);
 
         });
 
@@ -126,7 +126,7 @@ describe('Project Store Module', () => {
             expect(ProjectModule.getSavedProjectList).toHaveBeenCalled();
             expect(ProjectModule.isMemberOrViewer).toHaveBeenCalledTimes(2);
 
-            expect(result[0].id).toBe(1);
+            expect(result[0].id).toBe(2);
 
         });
 
@@ -185,8 +185,6 @@ describe('Project Store Module', () => {
 
             const result = ProjectModule.getProjectStructure(state);
             expect(result).toEqual(state.projects.structure);
-            expect(result).not.toBe(state.projects.structure);
-
         });
 
         it('getUserProjects', () => {
@@ -219,25 +217,26 @@ describe('Project Store Module', () => {
         });
 
         it('getUserDefaultProject', () => {
-            const spy = spyOn(ProjectModule, 'getUserProjects');
+            const state = {};
             let result = ProjectModule.getUserDefaultProject();
             expect(result).toEqual(null);
 
-            result = ProjectModule.getUserDefaultProject({});
+            result = ProjectModule.getUserDefaultProject(state);
             expect(result).toEqual(null);
-            expect(ProjectModule.getUserProjects).toHaveBeenCalled();
 
-            spy.and.returnValue([]);
 
-            result = ProjectModule.getUserDefaultProject({});
+            state.projects = {};
+            result = ProjectModule.getUserDefaultProject(state);
             expect(result).toEqual(null);
-            expect(ProjectModule.getUserProjects).toHaveBeenCalled();
 
-            spy.and.returnValue([{ id: 1 }]);
 
-            result = ProjectModule.getUserDefaultProject({});
+            state.projects.list = [];
+            result = ProjectModule.getUserDefaultProject(state);
+            expect(result).toEqual(null);
+
+            state.projects.list.push({ id: 1 });
+            result = ProjectModule.getUserDefaultProject(state);
             expect(result).toEqual('1');
-            expect(ProjectModule.getUserProjects).toHaveBeenCalled();
 
         });
 
@@ -857,7 +856,7 @@ describe('Project Store Module', () => {
     describe('ACTIONS', () => {
         it('loadUserProjects', A(async () => {
             const spy = spyOn(ProjectModule, 'getSavedProjectList').and.returnValue([]);
-            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            spyOn(axios, 'get').and.returnValue({ data: [{ id: 1 }, { id: 2 }] });
             const state = {
                 user: {
                 }
@@ -875,7 +874,7 @@ describe('Project Store Module', () => {
             await ProjectModule.loadUserProjects()(dispatch, getState(state));
             expect(ProjectModule.getSavedProjectList).toHaveBeenCalled();
             expect(axios.get).toHaveBeenCalledWith('/api/projects/member-of/');
-            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_LIST', projects: 1 });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_LIST', projects: [{ id: 2 }, { id: 1 }] });
 
             spy.and.throwError('error');
             spyOn(console, 'log');

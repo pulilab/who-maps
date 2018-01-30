@@ -31,9 +31,9 @@ describe('Countries Store Module', () => {
                 }
             };
             let result = CountriesModule.getCountriesList(state);
-            expect(result[0].prettyName).toEqual('a a');
-            expect(result[0].code).toEqual('hu');
-            expect(result[0].flag).toEqual('/static/flags/hu.png');
+            expect(result[0].prettyName).toEqual('b b');
+            expect(result[0].code).toEqual('en');
+            expect(result[0].flag).toEqual('/static/flags/en.png');
 
             result = CountriesModule.getCountriesList({ countries: {} });
             expect(result).toEqual([]);
@@ -58,7 +58,7 @@ describe('Countries Store Module', () => {
                 }
             };
             const result = CountriesModule.getCountryFields(state);
-            expect(result[0].id).toBe(2);
+            expect(result[0].id).toBe(3);
             expect(result).not.toContain({ country: 2, id: 1 });
         });
 
@@ -258,7 +258,7 @@ describe('Countries Store Module', () => {
     describe('ACTIONS', () => {
 
         it('loadCountries', A(async () => {
-            const spy = spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            const spy = spyOn(axios, 'get').and.returnValue({ data: [{ name: 'b' }, { name: 'a' }] });
             let state = getState({
                 countries: {
                     list: []
@@ -266,7 +266,7 @@ describe('Countries Store Module', () => {
             });
             await CountriesModule.loadCountries()(dispatch, state);
             expect(axios.get).toHaveBeenCalledWith('/api/countries/');
-            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_COUNTRIES_LIST', countries: 1 });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'SET_COUNTRIES_LIST', countries: [{ name: 'a' }, { name: 'b' }] });
 
             spy.calls.reset();
             dispatch.calls.reset();
@@ -283,7 +283,7 @@ describe('Countries Store Module', () => {
         }));
 
         it('loadCountryFields', A(async () => {
-            spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
+            spyOn(axios, 'get').and.returnValue({ data: [{ id: 2 }, { id: 1 }] });
             const state = getState({
                 countries: {
                     countryFields: [{ country: 1 }]
@@ -296,7 +296,7 @@ describe('Countries Store Module', () => {
 
             await CountriesModule.loadCountryFields(2)(dispatch, state);
             expect(axios.get).toHaveBeenCalledWith('/api/country-fields/2/');
-            expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COUNTRY_FIELDS_LIST', fields: 1 });
+            expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COUNTRY_FIELDS_LIST', fields: [{ id: 1 }, { id: 2 }] });
 
         }));
 
