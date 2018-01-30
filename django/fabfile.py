@@ -11,7 +11,7 @@ def dev():
     env.host_string = 'whomaps@dev.whomaps.pulilab.com'
     env.name = 'dev'
     env.port = 22
-    env.branch = "tags/3.5.1"
+    env.branch = "tags/3.5.2"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -35,7 +35,7 @@ def staging():
     env.host_string = 'whomaps@139.59.148.238'
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/3.5.1"
+    env.branch = "tags/3.5.2"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
