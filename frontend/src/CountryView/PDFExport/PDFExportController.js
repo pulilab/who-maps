@@ -131,9 +131,9 @@ class PDFExportController {
                                 style: 'subHeader' }
                         ],
                         [
-                            [{ text: gettextCatalog.getString('Date of: '), style: 'subHeader' },
+                            [{ text: gettextCatalog.getString('Date of:'), style: 'subHeader' },
                                 this.printDate(project.implementation_dates)],
-                            [{ text: gettextCatalog.getString('Organisation name: '), style: 'subHeader' },
+                            [{ text: gettextCatalog.getString('Organisation name:'), style: 'subHeader' },
                                 project.organisation_name || ''],
                             [{ text: gettextCatalog.getString('Donors:'), style: 'subHeader' },
                                 project.donors.join(', ')],
@@ -152,7 +152,7 @@ class PDFExportController {
                         [
                             {
                                 stack: [
-                                    { text: gettextCatalog.getString('Overview of digital health implementation: '),
+                                    { text: gettextCatalog.getString('Overview of digital health implementation:'),
                                         style: 'subHeader' },
                                     { text: project.implementation_overview || '' }
                                 ],
@@ -161,7 +161,7 @@ class PDFExportController {
                             '', '',
                             {
                                 stack: [
-                                    { text: gettextCatalog.getString('Geographical coverage: '), style: 'subHeader' },
+                                    { text: gettextCatalog.getString('Geographical coverage:'), style: 'subHeader' },
                                     project.geographic_scope || ''
                                 ],
                                 colSpan: 3
