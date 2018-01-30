@@ -4,10 +4,11 @@ import { calculateHeight } from '../../Utilities';
 
 class LoginModuleController {
 
-    constructor($scope, $state, $ngRedux) {
+    constructor($scope, $state, $ngRedux, $urlService) {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
+        this.$urlService = $urlService;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.mapState = this.mapState.bind(this);
@@ -40,9 +41,16 @@ class LoginModuleController {
         if (this.loginForm.$valid) {
             try {
                 await this.doLogin(this.user);
-                this.state.go('dashboard');
+                if (this.state.params.location) {
+                    const rule  = this.$urlService.match({ path: this.state.params.location });
+                    this.state.go(rule.rule.state.name, rule.match);
+                }
+                else {
+                    this.state.go('my-projects');
+                }
             }
             catch (e) {
+                console.warn(e);
                 this.handleDataError(e);
             }
         }
@@ -77,11 +85,11 @@ class LoginModuleController {
     static loginFactory() {
         require('./Login.scss');
 
-        function loginController($scope, $state, $ngRedux) {
-            return new LoginModuleController($scope, $state, $ngRedux);
+        function loginController($scope, $state, $ngRedux, $urlService) {
+            return new LoginModuleController($scope, $state, $ngRedux, $urlService);
         }
 
-        loginController.$inject = ['$scope', '$state', '$ngRedux'];
+        loginController.$inject = ['$scope', '$state', '$ngRedux', '$urlService'];
 
         return loginController;
     }

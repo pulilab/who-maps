@@ -55,9 +55,12 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     $transitions.onFinish({}, (t) => {
         const to = t.to();
         $ngRedux.dispatch(ProjectsModule.setCurrentProject(t.params().appName));
+        const state = $ngRedux.getState();
         if (to && to.profileRequired) {
-            const state = $ngRedux.getState();
             return checkProfile(state.user.profile, t);
+        }
+        if (to && to.forbidAuthenticated && state.user.token) {
+            return t.router.stateService.target('my-projects');
         }
         return Promise.resolve();
     });
@@ -88,24 +91,12 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         );
         mainUi.style.display = '';
         $ngRedux.dispatch(UserModule.doLogout());
-
-        $state.go('landing');
+        $state.go('login', { location: window.location.pathname });
     };
 
     const handleAuthProblem = () => {
-        const sp =  new window.URLSearchParams(window.location.search);
-        const r = {};
-        for (const p of sp) {
-            r[p[0]] = p[1];
-        }
-        if (r.token && r.is_superuser && r.email && r.user_profile_id) {
-            UserModule.storeData(r, r.email);
-            window.location.href = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        }
-        else {
-            if (!authPopup) {
-                authPopup = showCredentialsPopUp();
-            }
+        if (!authPopup) {
+            authPopup = showCredentialsPopUp();
         }
     };
 

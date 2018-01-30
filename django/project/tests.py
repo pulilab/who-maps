@@ -1,6 +1,5 @@
 import copy
 import csv
-import urllib.parse
 from datetime import datetime
 from mock import patch
 from io import StringIO
@@ -23,7 +22,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from country.models import Country, CountryField
-from project.admin import TLS, ProjectAdmin
+from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, HSCGroup, ProjectApproval
@@ -925,15 +924,12 @@ class ProjectTests(SetupTests):
         site = AdminSite()
         user = UserProfile.objects.get(id=self.user_profile_id).user
         request.user = user
-        TLS.request = request
         ma = ProjectApprovalAdmin(ProjectApproval, site)
         project_approval = ProjectApproval.objects.get(project_id=self.project_id)
         link = ma.link(project_approval)
 
-        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
-                        'is_superuser': 'true', 'email': user.email}
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?{}'>" \
-                        "See project</a>".format(self.project_id, urllib.parse.urlencode(query_string))
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>"\
+            .format(self.project_id)
         self.assertEqual(link, expected_link)
 
     def test_project_admin_link_add(self):
@@ -950,15 +946,11 @@ class ProjectTests(SetupTests):
         site = AdminSite()
         user = UserProfile.objects.get(id=self.user_profile_id).user
         request.user = user
-        TLS.request = request
         pa = ProjectAdmin(Project, site)
         p = Project.objects.create(name="test link")
         link = pa.link(p)
 
-        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
-                        'is_superuser': 'true', 'email': user.email}
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/?{}'>" \
-                        "See project</a>".format(p.id, urllib.parse.urlencode(query_string))
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>".format(p.id)
         self.assertEqual(link, expected_link)
 
     @patch('django.contrib.admin.options.messages')
@@ -997,7 +989,6 @@ class ProjectTests(SetupTests):
         request = MockRequest()
         site = AdminSite()
         request.user = user
-        TLS.request = request
         ma = ProjectApprovalAdmin(ProjectApproval, site)
 
         response = ma.export_project_approvals(request, ProjectApproval.objects.all())

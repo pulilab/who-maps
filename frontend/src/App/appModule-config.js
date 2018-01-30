@@ -91,6 +91,10 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
         .state('login', {
             url: '/login',
             parent: 'base',
+            params: {
+                location: null
+            },
+            forbidAuthenticated: true,
             views: {
                 main: {
                     template: '<login></login>'
@@ -100,6 +104,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
         .state('reset', {
             url: '/reset',
             parent: 'base',
+            forbidAuthenticated: true,
             views: {
                 main: {
                     template: '<reset></reset>'
@@ -109,6 +114,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
         .state('signup', {
             url: '/signup',
             parent: 'base',
+            forbidAuthenticated: true,
             views: {
                 main: {
                     template: '<signup></signup>'

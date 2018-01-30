@@ -1,7 +1,5 @@
 import csv
-from threading import local
 from io import StringIO
-import urllib.parse
 
 from django.contrib import admin, messages
 from django import forms
@@ -29,8 +27,6 @@ from user.models import UserProfile, Organisation
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
-
-TLS = local()
 
 
 class ChangeNotificationMixin(object):  # pragma: no cover
@@ -166,11 +162,8 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
         if obj.id is None:
             return '-'
 
-        user = TLS.request.user
-        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
-                        'is_superuser': 'true', 'email': user.email}
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
-                         .format(obj.project.id, urllib.parse.urlencode(query_string)))
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>"
+                         .format(obj.project.id))
 
     def get_queryset(self, request):
         qs = super(ProjectApprovalAdmin, self).get_queryset(request)
@@ -186,10 +179,6 @@ class ProjectApprovalAdmin(admin.ModelAdmin):
             approval_required_ids = country_id_qs.filter(project_approval=True)
             qs = qs.filter(project__data__country__contained_by=list(approval_required_ids))
         return qs
-
-    def changeform_view(self, request, *args, **kwargs):
-        TLS.request = request
-        return super(ProjectApprovalAdmin, self).changeform_view(request, *args, **kwargs)
 
     def export_project_approvals(self, request, queryset):
         f = StringIO()
@@ -465,15 +454,8 @@ class ProjectAdmin(AllObjectsAdmin):
         if obj.id is None:
             return '-'
 
-        user = TLS.request.user
-        query_string = {'token': user.auth_token, 'user_profile_id': user.userprofile.id,
-                        'is_superuser': 'true', 'email': user.email}
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/?{}'>See project</a>"
-                         .format(obj.id, urllib.parse.urlencode(query_string)))
-
-    def changeform_view(self, request, *args, **kwargs):
-        TLS.request = request
-        return super(ProjectAdmin, self).changeform_view(request, *args, **kwargs)
+        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>"
+                         .format(obj.id))
 
     def get_queryset(self, request):
         qs = super(ProjectAdmin, self).get_queryset(request)
