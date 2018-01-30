@@ -1,7 +1,5 @@
 import axios from '../../plugins/axios';
-import sortBy from 'lodash/sortBy';
 import forOwn from 'lodash/forOwn';
-import cloneDeep from 'lodash/cloneDeep';
 import findIndex from 'lodash/findIndex';
 import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
@@ -66,22 +64,20 @@ export const getSavedProjectList = (state) => {
 
 export const getPublishedProjects = state => {
     if (state.projects.list) {
-        const list = exports.getSavedProjectList(state).map(p => {
+        return exports.getSavedProjectList(state).map(p => {
             p = { ...p.published, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
-        return sortBy(list, 'id');
     }
     return [];
 };
 
 export const getDraftedProjects = state => {
     if (state.projects.list) {
-        const list = exports.getSavedProjectList(state).map(p => {
+        return exports.getSavedProjectList(state).map(p => {
             p = { ...p.draft, ...exports.isMemberOrViewer(state, p) };
             return p;
         });
-        return sortBy(list, 'id');
     }
     return [];
 };
@@ -110,13 +106,13 @@ export const getFlatProjectStructure = state => {
 
 export const getProjectStructure = state => {
     const structure = state.projects.structure;
-    return cloneDeep(structure);
+    return structure;
 };
 
 export const getUserProjects = state => {
     const structure = exports.getFlatProjectStructure(state);
     if (state.projects.list) {
-        const list = exports.getSavedProjectList(state).map(p => {
+        return exports.getSavedProjectList(state).map(p => {
             const public_id = p.public_id;
             const isPublished = !!public_id;
             p = isPublished ? { ...p.published } : { ...p.draft };
@@ -131,13 +127,12 @@ export const getUserProjects = state => {
             };
             return p;
         });
-        return sortBy(list, 'id');
     }
     return [];
 };
 
 export const getUserDefaultProject = state => {
-    const pp = state ? exports.getUserProjects(state) : null;
+    const pp = state && state.projects ? state.projects.list : null;
     return pp && pp[0] ? '' + pp[0].id : null;
 };
 
@@ -478,6 +473,7 @@ export function loadUserProjects() {
             const state = getState();
             if (state.user.profile && !exports.getSavedProjectList(state)) {
                 const { data } = await axios.get('/api/projects/member-of/');
+                data.sort((a, b) => b.id - a.id);
                 dispatch({ type: 'SET_PROJECT_LIST', projects: data });
             }
             return Promise.resolve();
