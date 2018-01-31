@@ -117,6 +117,7 @@
     "raven-js": "^3.0.5",
     "redux": "^3.7.2",
     "redux-async-thunk": "^1.0.5",
+    "reselect": "^3.0.1",
     "svg-pan-zoom": "^3.2.6",
     "topojson": "^2.2.0",
     "trix": "https://github.com/pulilab/trix.git#0.10.1-puli",
