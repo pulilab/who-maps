@@ -168,7 +168,7 @@ msgid "<b>Viewer</b> of."
 msgstr ""
 
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:104
-msgid "<span> {{vm.data.axis}} score</span>"
+msgid "<span> {{vm.data.name}} score</span>"
 msgstr ""
 
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:88
@@ -415,7 +415,7 @@ msgstr ""
 msgid "African Network for Digital Health"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:142
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:144
 msgid ""
 "After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to\n"
 "        this sheet. This will allow you to compare your progress across the six axes, and to identify the domains\n"
@@ -802,6 +802,10 @@ msgstr ""
 msgid "Data standards:"
 msgstr ""
 
+#: ./src/CountryView/PDFExport/PDFExportController.js:134
+msgid "Date of:"
+msgstr ""
+
 #: ./src/Common/Thematic/static/1-0.html:16
 msgid "Define the metrics (e.g. growth, adoption, or expansion of geo-political area, as described in Table 2)."
 msgstr ""
@@ -827,6 +831,7 @@ msgid "Development of the MAPS Toolkit was initiated within the context of the W
 msgstr ""
 
 #: ./src/Common/TopBar/topBar.html:12
+#: ./src/CountryView/PDFExport/PDFExportController.js:46
 msgid "Digital Health Atlas"
 msgstr ""
 
@@ -964,6 +969,10 @@ msgstr ""
 
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:558
 msgid "Donors (Add one at least)"
+msgstr ""
+
+#: ./src/CountryView/PDFExport/PDFExportController.js:138
+msgid "Donors:"
 msgstr ""
 
 #: ./src/Common/CountryTopBar/countryTopBar.html:150
@@ -1257,6 +1266,10 @@ msgstr ""
 msgid "Geographic scope"
 msgstr ""
 
+#: ./src/CountryView/PDFExport/PDFExportController.js:164
+msgid "Geographical coverage:"
+msgstr ""
+
 #: ./src/Common/CountryTopBar/countryTopBar.html:137
 msgid "Get MAPS Toolkit"
 msgstr ""
@@ -1285,7 +1298,7 @@ msgstr ""
 msgid "Go back to login"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:199
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:201
 #: ./src/Project/Navigation/Navigation.html:96
 msgid "Go to dashboard"
 msgstr ""
@@ -1417,6 +1430,10 @@ msgstr ""
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:494
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:187
 msgid "Has the government financially invested in the project?"
+msgstr ""
+
+#: ./src/CountryView/PDFExport/PDFExportController.js:144
+msgid "Health Focus Area:"
 msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:128
@@ -1595,7 +1612,11 @@ msgstr ""
 msgid "Implementing partners"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:204
+#: ./src/CountryView/PDFExport/PDFExportController.js:141
+msgid "Implementing partners:"
+msgstr ""
+
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:206
 msgid "Improve project"
 msgstr ""
 
@@ -1853,6 +1874,10 @@ msgstr ""
 
 #: ./src/Dashboard/Dashboard.html:207
 msgid "Link to wiki page:"
+msgstr ""
+
+#: ./src/CountryView/PDFExport/PDFExportController.js:63
+msgid "List exported on"
 msgstr ""
 
 #: ./src/MyProjects/MyProjectList/MyProjectList.html:8
@@ -2268,6 +2293,10 @@ msgstr ""
 msgid "Organisation name"
 msgstr ""
 
+#: ./src/CountryView/PDFExport/PDFExportController.js:136
+msgid "Organisation name:"
+msgstr ""
+
 #: ./src/Common/TermsOfUse/TermsOfUse.html:211
 msgid "Other Terms"
 msgstr ""
@@ -2282,6 +2311,10 @@ msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:113
 msgid "Overview of digital health implementation"
+msgstr ""
+
+#: ./src/CountryView/PDFExport/PDFExportController.js:155
+msgid "Overview of digital health implementation:"
 msgstr ""
 
 #: ./src/Project/GeneralOverview/GeneralOverview.html:104
@@ -2380,6 +2413,10 @@ msgstr ""
 
 #: ./src/Project/GeneralOverview/GeneralOverview.html:97
 msgid "Please describe where your implementation is currently taking place"
+msgstr ""
+
+#: ./src/CountryView/PDFExport/PDFExportController.js:148
+msgid "Point of contact:"
 msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:47
@@ -2742,7 +2779,7 @@ msgstr ""
 msgid "Show all countries"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:180
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:182
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:55
 msgid "Show help"
 msgstr ""
@@ -2890,6 +2927,10 @@ msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:98
 msgid "Summary Score"
+msgstr ""
+
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:141
+msgid "Summary scorecard"
 msgstr ""
 
 #: ./src/Common/Thematic/static/0-0.html:4
@@ -3517,6 +3558,11 @@ msgstr ""
 msgid "UUID"
 msgstr ""
 
+#: ./src/CountryView/PDFExport/PDFExportController.js:127
+#: ./src/CountryView/PDFExport/PDFExportController.js:130
+msgid "UUID:"
+msgstr ""
+
 #: ./src/Project/Technology/ReadOnlyTechnology.html:17
 #: ./src/Project/Technology/Technology.html:31
 msgid "Under what license is the project governed?"
@@ -3547,7 +3593,7 @@ msgstr ""
 msgid "Update Score"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:174
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:176
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:49
 msgid "Update score"
 msgstr ""
@@ -4942,9 +4988,9 @@ msgstr ""
 msgid "www.digitalhealthatlas.org"
 msgstr ""
 
-#: ./src/MapsToolkit/Scorecard/Scorecard.html:165
+#: ./src/MapsToolkit/Scorecard/Scorecard.html:167
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:43
-msgid "{{domain.domain}} ({{domain.domain_max}} points)"
+msgid "{{domain.name}} ({{domain.domain_max}} points)"
 msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:41
@@ -4952,7 +4998,7 @@ msgid "{{question.id}}.{{question.text}} ({{question.question_max}} Points)"
 msgstr ""
 
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:33
-msgid "{{vm.data.axis}} (Scorecard)"
+msgid "{{vm.data.name}} (Scorecard)"
 msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:22
