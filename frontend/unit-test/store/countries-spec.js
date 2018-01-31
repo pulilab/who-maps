@@ -39,17 +39,6 @@ describe('Countries Store Module', () => {
             expect(result).toEqual([]);
         });
 
-        it('getUserCountry', () => {
-            const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ country: 1 });
-            let result = CountriesModule.getUserCountry({});
-            expect(result).toBe(1);
-
-            profileSpy.and.returnValue(undefined);
-            result = CountriesModule.getUserCountry({});
-            expect(result).toEqual(undefined);
-
-        });
-
         it('getCountryFields', () => {
             const state = {
                 countries: {

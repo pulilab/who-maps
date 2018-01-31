@@ -249,13 +249,12 @@ describe('Project Store Module', () => {
         it('getVanillaProject', () => {
             spyOn(ProjectModule, 'getEmptyProject').and.returnValue({ id: 1 });
             const structureSpy = spyOn(ProjectModule, 'getProjectStructure');
-            const countrySpy = spyOn(CountryModule, 'getUserCountry');
             const profileSpy = spyOn(UserModule, 'getProfile');
 
             let result = ProjectModule.getVanillaProject({});
-            expect(result).toEqual({ id: 1, organisation: null });
+            expect(result).toEqual({ id: 1 });
 
-            countrySpy.and.returnValue({ id: 1 });
+            profileSpy.and.returnValue({ country: { id: 1 } });
             result = ProjectModule.getVanillaProject({});
             expect(result).toEqual({ id: 1, organisation: null, country: 1 });
 
@@ -263,7 +262,7 @@ describe('Project Store Module', () => {
             result = ProjectModule.getVanillaProject({});
             expect(result).toEqual({ id: 1, organisation: null, country: 1, interoperability_links: 1 });
 
-            profileSpy.and.returnValue({ organisation: 1 });
+            profileSpy.and.returnValue({ organisation: 1, country: { id: 1 } });
             result = ProjectModule.getVanillaProject({});
             expect(result).toEqual({ id: 1, organisation: 1, country: 1, interoperability_links: 1 });
         });

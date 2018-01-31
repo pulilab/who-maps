@@ -1,5 +1,4 @@
 import * as UserModule from '../store/modules/user';
-import * as CountryModel from '../store/modules/countries';
 
 class TopBar {
 
@@ -21,14 +20,12 @@ class TopBar {
 
     mapState(state) {
         const profile = UserModule.getProfile(state);
-        const userCountry = CountryModel.getUserCountry(state);
         const userLanguage = UserModule.getUserLanguage(state);
         const profileValid = !!(profile && profile.country && profile.organisation && profile.name);
         return {
             profile,
             profileValid,
             token: state.user.token,
-            userCountry,
             userLanguage
         };
     }

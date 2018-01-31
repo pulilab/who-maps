@@ -146,17 +146,17 @@ export const getEmptyProject = () => {
 };
 
 export const getVanillaProject = state => {
-    const country = CountryModule.getUserCountry(state);
     const project = exports.getEmptyProject();
     const structure = exports.getProjectStructure(state);
-    if (country) {
-        project.country = country.id;
+    const profile = UserModule.getProfile(state);
+
+    if (profile) {
+        project.country = profile.country ? profile.country.id : null;
+        project.organisation = profile.organisation ? profile.organisation : null;
     }
     if (structure) {
         project.interoperability_links = structure.interoperability_links;
     }
-    const profile = UserModule.getProfile(state);
-    project.organisation = profile && profile.organisation ? profile.organisation : null;
     return { ...project };
 };
 

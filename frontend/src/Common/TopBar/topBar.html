@@ -128,17 +128,17 @@
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
-        <div ng-show="vm.userCountry">
+        <div ng-show="vm.profile.country">
         <span class="label">
           <translate>Country</translate>
         </span>
           <md-menu-item>
             <div class="user-lang" layout="row" layout-align="start center">
             <span class="country-flag">
-                <img ng-src="{{vm.userCountry.flag}}" alt="{{vm.userCountry.prettyName}}">
+                <img ng-src="{{vm.profile.country.flag}}" alt="{{vm.profile.country.prettyName}}">
             </span>
               <span class="country-label">
-              {{vm.userCountry.prettyName}}
+              {{vm.profile.country.prettyName}}
             </span>
             </div>
           </md-menu-item>

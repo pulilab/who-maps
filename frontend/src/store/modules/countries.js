@@ -5,7 +5,6 @@ import forEach from 'lodash/forEach';
 import { createSelector } from 'reselect';
 
 import { isMemberOrViewer } from './projects';
-import * as UserModule from './user';
 import * as SystemModule from './system';
 import { getCurrentLanguage } from '../../plugins/language';
 
@@ -43,16 +42,6 @@ export const getCountriesList = createSelector(
         }
         return [];
     });
-
-export const getUserCountry = createSelector(
-    state => UserModule.getProfile(state),
-    profile => {
-        if (profile) {
-            return profile.country;
-        }
-        return undefined;
-    });
-
 export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry).map(cf =>{
         return { ...cf };
