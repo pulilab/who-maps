@@ -23,7 +23,8 @@ const basePlugins = [
         DEV: !production,
         DEBUG: debug,
         LIVE: live,
-        NODE_ENV: production ? '"production"' : ''
+        NODE_ENV: production ? '"production"' : '',
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
     new HtmlWebpackPlugin({
         template: 'index.ejs',
