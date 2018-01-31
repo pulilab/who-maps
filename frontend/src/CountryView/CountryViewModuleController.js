@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import forEach from 'lodash/forEach';
+import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 
 import moment from 'moment';
@@ -27,7 +28,8 @@ class CountryViewModuleController {
     mapState(state) {
         const mapData = CountryModule.getCurrentCountryMapData(state);
         const districtProjects = CountryModule.getCurrentCountryDistrictProjects(state);
-        const selectedCountry = this.selectedCountry ? this.selectedCountry : CountryModule.getCurrentCountry(state);
+        const selectedCountry = !isEmpty(this.selectedCountry) ?
+            this.selectedCountry : CountryModule.getCurrentCountry(state);
         const projectsData = CountryModule.getCurrentCountryProjects(state);
         const countryProjects = cloneDeep(projectsData);
         const nationalLevelCoverage = this.filterNLDProjects(projectsData, districtProjects);
