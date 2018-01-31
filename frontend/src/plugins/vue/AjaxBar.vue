@@ -16,13 +16,13 @@
         data() {
             return {
                 containerStyle: {
-                    width: 'calc(100% - 17px)',
+                    width: '100%',
                     height: '3px',
                     position: 'fixed',
                     top: 0,
                     left: 0,
                     right: 0,
-                    backgroundColor: '#1A237E',
+                    backgroundColor: 'transparent',
                     'z-index': 9999
                 },
                 showContainer: true
