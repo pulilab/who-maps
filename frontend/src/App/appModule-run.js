@@ -1,12 +1,13 @@
 import { getLanguage, setCatalog, setScope } from '../plugins/language';
 import * as ProjectsModule from '../store/modules/projects';
 import * as UserModule from '../store/modules/user';
+import * as CountryModule from '../store/modules/countries';
 import axios from '../plugins/axios';
 import Storage from '../Storage';
 
 const storage = new Storage();
 
-function handleStateChange(type, from, to) {
+function scrollToTopOnSuccess(type, from, to) {
     if (type === 'success' && (from.name !== to.name || to.name === 'editProject')) {
         const mainContent = document.getElementsByClassName('main-content')[0];
         if (mainContent) {
@@ -21,6 +22,13 @@ function checkProfile(profile, t) {
         return t.router.stateService.target('editProfile');
     }
     return Promise.resolve();
+}
+
+function setCountryIfEmpty(to, $ngRedux) {
+    const state = $ngRedux.getState();
+    if (to.name === 'country' && state.countries.currentCountry === null) {
+        $ngRedux.dispatch(CountryModule.setCurrentCountry(state.user.profile.country));
+    }
 }
 
 function setAxiosBaseTokenIfInStorage() {
@@ -39,18 +47,17 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     setAxiosBaseTokenIfInStorage();
 
     $transitions.onStart({}, () => {
-        handleStateChange('start');
         window.dispatchEvent(transitionStart);
         return Promise.resolve();
     });
 
     $transitions.onSuccess({}, (t) => {
-        handleStateChange('success', t.from(), t.to());
+        scrollToTopOnSuccess(t.from(), t.to());
+        setCountryIfEmpty(t.to(), $ngRedux);
         return Promise.resolve();
     });
 
     $transitions.onError({}, () => {
-        handleStateChange('error');
         return Promise.resolve();
     });
 
@@ -123,4 +130,4 @@ run.$inject = [
     'gettextCatalog'
 ];
 
-export { run, handleStateChange, checkProfile, setAxiosBaseTokenIfInStorage };
+export { run, scrollToTopOnSuccess, checkProfile, setAxiosBaseTokenIfInStorage };

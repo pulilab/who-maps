@@ -3,7 +3,7 @@ import { $state, toast, dialog, $ngRedux, $timeout } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 import Storage from '../../src/Storage';
 
-import { run, handleStateChange, checkProfile, setAxiosBaseTokenIfInStorage } from '../../src/App/appModule-run';
+import { run, scrollToTopOnSuccess, checkProfile, setAxiosBaseTokenIfInStorage } from '../../src/App/appModule-run';
 const spyScope = {};
 const $rootScope = {};
 spyScope.setAxiosBaseTokenIfInStorage = setAxiosBaseTokenIfInStorage;
@@ -49,19 +49,18 @@ describe('AppModule - run submodule', () => {
     });
 
     it('scrolls to top on stateChange', () => {
-        handleStateChange('success', { name: 'a' }, { name: 'b' });
-        handleStateChange('failure_or_something');
+        scrollToTopOnSuccess({ name: 'a' }, { name: 'b' });
 
         const mainContent = document.createElement('div');
         mainContent.className = 'main-content';
         document.body.appendChild(mainContent);
         mainContent.scrollTop = 10;
 
-        handleStateChange('success', { name: 'a' },  { name: 'b' });
+        scrollToTopOnSuccess({ name: 'a' },  { name: 'b' });
         expect(mainContent.scrollTop).toBe(0);
         mainContent.scrollTop = 10;
 
-        handleStateChange('success', { name: 'editProject' },  { name: 'editProject' });
+        scrollToTopOnSuccess({ name: 'editProject' },  { name: 'editProject' });
         expect(mainContent.scrollTop).toBe(0);
         mainContent.scrollTop = 10;
     });
