@@ -30,7 +30,7 @@
     <div layout="row" flex="auto" layout-align="start center">
       <img ng-src="{{vm.data.axisPicture}}" />
       <span>
-        <translate>{{vm.data.axis}} (Scorecard)</translate>
+        <translate>{{vm.data.name}} (Scorecard)</translate>
       </span>
     </div>
   </div>
@@ -40,7 +40,7 @@
       <div layout="row" class="domain-header">
         <div layout="row" flex="auto" layout-align="start center">
           <h4>
-            <translate>{{domain.domain}} ({{domain.domain_max}} points)</translate>
+            <translate>{{domain.name}} ({{domain.domain_max}} points)</translate>
           </h4>
         </div>
         <div layout="row" flex="auto" layout-align="end center">
@@ -102,7 +102,7 @@
     <div layout="row" flex="auto" layout-align="start center">
       <img ng-src="{{vm.data.axisPicture}}" />
       <translate>
-        <span> {{vm.data.axis}} score</span>
+        <span> {{vm.data.name}} score</span>
       </translate>
     </div>
     <div layout="row" flex="auto" layout-align="end center">
@@ -137,7 +137,9 @@
 
 <div ng-if="vm.dataLoaded && vm.summary" layout="column" class="axes-scorecard">
   <div class="page-title">
-    <h1 class="md-display-1 text-center">Summary scorecard</h1>
+    <h1 class="md-display-1 text-center">
+      <translate>Summary scorecard</translate>
+    </h1>
     <h6  class="md-subhead text-center">
       <translate>
         After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to
@@ -152,7 +154,7 @@
         <div layout="row" class="axis-header" ng-class="axis.axisClass">
           <div layout="row" flex="auto" layout-align="start center">
             <img ng-src="{{ axis.axisPicture }}"/>
-            <span>{{ axis.axis }}</span>
+            <span>{{ axis.name }}</span>
           </div>
           <div layout="row" flex="auto" layout-align="end center">
             <span>{{ axis.axis_score | number: 0 }}%</span>
@@ -160,14 +162,14 @@
 
         </div>
         <div layout="row" ng-repeat="(domIndex, domain) in axis.domains" class="domain">
-          <div layout="row" flex="65" layout-align="start center">
+          <div layout="row" flex="60" layout-align="start center">
             <h4>
               <translate>
-                {{domain.domain}} ({{domain.domain_max}} points)
+                {{domain.name}} ({{domain.domain_max}} points)
               </translate>
             </h4>
           </div>
-          <div layout="row" flex="35" layout-align="end center">
+          <div layout="row" flex="40" layout-align="end center">
             <div layout="row" layout-align="end center" flex="auto">
               <md-button ng-click="vm.updateScore(domain, axis)">
                 <md-icon>playlist_add_check</md-icon>
