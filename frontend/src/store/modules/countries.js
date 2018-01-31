@@ -2,6 +2,8 @@
 import axios from '../../plugins/axios';
 import unionBy from 'lodash/unionBy';
 import forEach from 'lodash/forEach';
+import { createSelector } from 'reselect';
+
 import { isMemberOrViewer } from './projects';
 import * as UserModule from './user';
 import * as SystemModule from './system';
@@ -21,34 +23,35 @@ export const mapData = {};
 
 // GETTERS
 
-
 export const getCountry = (state, id) => {
     return state.countries.list.find(c => c.id === id);
 };
 
+export const getCountriesList = createSelector(
+    state => state.countries.list,
+    countries => {
+        if (countries) {
+            return countries.map(c=> {
+                const code = c.code.toLocaleLowerCase();
+                return {
+                    ...c,
+                    code,
+                    flag: `/static/flags/${code}.png`,
+                    prettyName: c.name.split('-').join(' ')
+                };
+            });
+        }
+        return [];
+    });
 
-export const getCountriesList = state => {
-    if (state.countries.list) {
-        return state.countries.list.map(c=> {
-            const code = c.code.toLocaleLowerCase();
-            return {
-                ...c,
-                code,
-                flag: `/static/flags/${code}.png`,
-                prettyName: c.name.split('-').join(' ')
-            };
-        });
-    }
-    return [];
-};
-
-export const getUserCountry = (state) => {
-    const profile = UserModule.getProfile(state);
-    if (profile) {
-        return profile.country;
-    }
-    return undefined;
-};
+export const getUserCountry = createSelector(
+    state => UserModule.getProfile(state),
+    profile => {
+        if (profile) {
+            return profile.country;
+        }
+        return undefined;
+    });
 
 export const getCountryFields = state => {
     return state.countries.countryFields.filter(cf =>  cf.country === state.countries.currentCountry).map(cf =>{
