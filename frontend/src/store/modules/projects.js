@@ -1,10 +1,11 @@
 import axios from '../../plugins/axios';
 import forOwn from 'lodash/forOwn';
-import findIndex from 'lodash/findIndex';
+import isEmpty from 'lodash/isEmpty';
 import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
 import * as ToolkitModule from './toolkit';
+import { createSelector } from 'reselect';
 
 import {
     convertDate,
@@ -51,16 +52,19 @@ export const getLastVersion = state => {
 };
 
 
-export const getSavedProjectList = (state) => {
-    if (state.projects.list) {
-        return state.projects.list.filter(p => p.id !== -1)
+export const getSavedProjectList = createSelector(
+    state => state.projects.list,
+    state => exports.getVanillaProject(state),
+    (savedProjects, vanilla) => {
+        if (savedProjects) {
+            return savedProjects.filter(p => p.id !== -1)
           .map(pf => ({ ...pf, draft: {
-              ...exports.getVanillaProject(state), donors: [], implementing_partners: [], ...pf.draft
+              ...vanilla, donors: [], implementing_partners: [], ...pf.draft
           }
           }));
-    }
-    return undefined;
-};
+        }
+        return undefined;
+    });
 
 export const getPublishedProjects = state => {
     if (state.projects.list) {
@@ -104,10 +108,11 @@ export const getFlatProjectStructure = state => {
     return {};
 };
 
-export const getProjectStructure = state => {
-    const structure = state.projects.structure;
-    return structure;
-};
+export const getProjectStructure = createSelector(
+    state => state.projects.structure,
+    structure => {
+        return { ...structure };
+    });
 
 export const getUserProjects = state => {
     const structure = exports.getFlatProjectStructure(state);
@@ -558,7 +563,7 @@ export function loadProjectStructure(force) {
     return async (dispatch, getState) => {
         const state = getState();
         const structure = exports.getProjectStructure(state);
-        if (!structure || force) {
+        if (isEmpty(structure) || force) {
             const { data } = await axios.get('/api/projects/structure/');
             await dispatch({ type: 'SET_PROJECT_STRUCTURE', structure: data });
         }
@@ -748,7 +753,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
     }
     case 'UPDATE_SAVE_PROJECT': {
         const list = [...state.list];
-        const index = findIndex(list, pj => pj.id === action.project.id);
+        const index = list.findIndex(pj => pj.id === action.project.id);
         if (index !== -1) {
             list.splice(index, 1, { ...action.project });
         }
@@ -759,9 +764,9 @@ export default function projects(state = { lastVersion: 0 }, action) {
     }
     case 'UPDATE_COUNTRY_FIELD_ANSWER': {
         const list = [...state.list];
-        const index = findIndex(list, pj => pj.id === action.projectId);
+        const index = list.findIndex(pj => pj.id === action.projectId);
         const fields = [...list[index].draft.fields];
-        const fieldIndex = findIndex(fields, f => f.schema_id === action.countryField.schema_id);
+        const fieldIndex = fields.findIndex(f => f.schema_id === action.countryField.schema_id);
         if (fieldIndex !== -1) {
             fields.splice(fieldIndex, 1, { ...action.countryField });
         }

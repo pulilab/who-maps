@@ -77,7 +77,7 @@ describe('Project Store Module', () => {
         });
 
         it('getSavedProjectList', () => {
-            spyOn(ProjectModule, 'getVanillaProject');
+            spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ vanillaProp: 1 });
             const state = {
                 projects: {}
             };
@@ -86,8 +86,8 @@ describe('Project Store Module', () => {
             expect(result).toBe(undefined);
 
             state.projects.list = [{ id: -1 }, { id: 1 }];
-            result = ProjectModule.getSavedProjectList(state);
-            expect(result).toEqual([{ id: 1, draft: { donors: [], implementing_partners: [] } }]);
+            result = ProjectModule.getSavedProjectList({ ...state });
+            expect(result).toEqual([{ id: 1, draft: { donors: [], implementing_partners: [], vanillaProp: 1  } }]);
             expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
 
         });
@@ -999,13 +999,13 @@ describe('Project Store Module', () => {
 
         it('loadProjectStructure', A(async () => {
             spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
-            const spy = spyOn(ProjectModule, 'getProjectStructure').and.returnValue(1);
+            const spy = spyOn(ProjectModule, 'getProjectStructure').and.returnValue({ id: 1 });
             dispatch.calls.reset();
             await ProjectModule.loadProjectStructure()(dispatch, getState({}));
             expect(axios.get).not.toHaveBeenCalled();
             expect(dispatch).not.toHaveBeenCalled();
 
-            spy.and.returnValue(false);
+            spy.and.returnValue({});
             await ProjectModule.loadProjectStructure()(dispatch, getState({}));
             expect(axios.get).toHaveBeenCalledWith('/api/projects/structure/');
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_STRUCTURE', structure: 1 });
