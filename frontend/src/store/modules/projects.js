@@ -221,7 +221,8 @@ export const parseProjectForViewMode = (state, project) => {
         country_name: country ? country.name : '',
         ...convertIdArrayToObjectArray(project, structure, dashFieldConvertToObject),
         coverageType: setCoverageType(project.coverage, project.national_level_deployment),
-        coverage_second_level: project.coverage_second_level ? project.coverage_second_level : [{}]
+        coverage_second_level: project.coverage_second_level ? project.coverage_second_level : [{}],
+        coverage: project.coverage ? project.coverage : [{}]
     };
     return {
         ...project,
