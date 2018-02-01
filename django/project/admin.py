@@ -436,6 +436,7 @@ class ProjectAdmin(AllObjectsAdmin):
     list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
     readonly_fields = ['name', 'team', 'viewers', 'link']
     fields = ['is_active', 'name', 'team', 'viewers', 'link']
+    search_fields = ['name']
 
     def get_country(self, obj):
         return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
