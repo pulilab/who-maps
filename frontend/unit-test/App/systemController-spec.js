@@ -29,9 +29,9 @@ describe('SystemController', () => {
 
     it('maps state', () => {
         spyOn(UserModel, 'getProfile').and.returnValue('PROFILE');;
-        const mockState = { unnecessary_key: 'ASDF' };
+        const mockState = { unnecessary_key: 'ASDF', user: {} };
         const mappedState = ac.mapState(mockState);
-        expect(Object.keys(mappedState).length).toBe(1);
+        expect(Object.keys(mappedState).length).toBe(4);
         expect(mappedState.userProfile).toBe('PROFILE');
         expect(UserModel.getProfile).toHaveBeenCalled();
     });

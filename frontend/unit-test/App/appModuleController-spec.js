@@ -30,7 +30,7 @@ describe('AppModuleController', () => {
     it('maps state', () => {
         const mockState = { user: 'USER', projects: 'PROJECTS', unnecessary_key: 'ASDF' };
         const mappedState = ac.mapState(mockState);
-        expect(Object.keys(mappedState).length).toBe(2);
+        expect(Object.keys(mappedState).length).toBe(4);
         expect(mappedState.user).toBe('USER');
         expect(mappedState.projects).toBe('PROJECTS');
     });
