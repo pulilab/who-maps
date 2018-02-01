@@ -6,13 +6,22 @@ class SystemController {
         this.EE = window.EE;
         this.state = $state;
         this.scope = $scope;
-        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
+        this.mapState = this.mapState.bind(this);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
     }
 
     mapState(state) {
+        const meta = {
+            location: { ...this.state.current },
+            store: state
+        };
+        const token = state.user.token ? `Token ${state.user.token}` : '';
         return {
+            meta,
+            token,
+            user: state.user,
             userProfile: UserModule.getProfile(state)
         };
     }
