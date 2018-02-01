@@ -115,7 +115,8 @@
         </div>
       </div>
 
-      <h6 class="subtitle"><i class="material-icons">&#xE567;</i>
+      <h6 class="subtitle" ng-show="vm.project.coverage_second_level && vm.project.coverage_second_level.length > 0">
+        <i class="material-icons">&#xE567;</i>
         <translate> {{vm.subLevelNames[1]}} level deployment</translate>
       </h6>
       <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level">
