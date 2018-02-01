@@ -182,7 +182,7 @@ export const getCurrentPublicProject = state => {
 };
 
 export const getCurrentPublicProjectDetails = (state) => {
-    let project = exports.getCurrentPublishedProjectForEditing(state);
+    let project = exports.getCurrentPublished(state);
     if (project) {
         return project;
     }
