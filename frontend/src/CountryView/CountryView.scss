@@ -355,9 +355,15 @@
     .projectcont {
       padding: 0 0 10px;
       background-color: $color-gray-lightest;
+      overflow: hidden;
+
+      .scroll-wrapper {
+        max-height: calc(100vh - 400px);
+        overflow: scroll;
+        display: block;
+      }
 
       .headerrow {
-
         width: 2000px;
         border-bottom: 1px solid $color-gray-light;
         background-color: white;

@@ -82,103 +82,104 @@
           </div>
 
           <md-content class="projectcont">
+            <div class="scroll-wrapper">
+              <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
+                <div flex="30" ng-click="vm.orderTable('name')">
+                  <translate>Project name</translate>
+                  <md-icon ng-show="vm.header.name.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.name.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('country')">
+                  <translate>Country</translate>
+                  <md-icon ng-show="vm.header.country.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.country.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('organisation_name')">
+                  <translate>Organisation name</translate>
+                  <md-icon ng-show="vm.header.organisation_name.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.organisation_name.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('donors')">
+                  <translate>Donors</translate>
+                  <md-icon ng-show="vm.header.donors.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.donors.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('contact_name')">
+                  <translate>Contact Name</translate>
+                  <md-icon ng-show="vm.header.contact_name.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.contact_name.down" >expand_less</md-icon>
+                </div>
+                <div flex="30" ng-click="vm.orderTable('implementation_overview')">
+                  <translate>Overview of digital health implementation</translate>
+                  <md-icon ng-show="vm.header.implementation_overview.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.implementation_overview.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('implementing_partners')">
+                  <translate>Implementing partners</translate>
+                  <md-icon ng-show="vm.header.implementing_partners.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.implementing_partners.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('geographic_scope')">
+                  <translate>Geographic scope</translate>
+                  <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
+                  <translate>Health Focus Areas</translate>
+                  <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
+                </div>
+              </div>
 
-            <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
-              <div flex="30" ng-click="vm.orderTable('name')">
-                <translate>Project name</translate>
-                <md-icon ng-show="vm.header.name.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.name.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('country')">
-                <translate>Country</translate>
-                <md-icon ng-show="vm.header.country.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.country.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('organisation_name')">
-                <translate>Organisation name</translate>
-                <md-icon ng-show="vm.header.organisation_name.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.organisation_name.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('donors')">
-                <translate>Donors</translate>
-                <md-icon ng-show="vm.header.donors.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.donors.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('contact_name')">
-                <translate>Contact Name</translate>
-                <md-icon ng-show="vm.header.contact_name.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.contact_name.down" >expand_less</md-icon>
-              </div>
-              <div flex="30" ng-click="vm.orderTable('implementation_overview')">
-                <translate>Overview of digital health implementation</translate>
-                <md-icon ng-show="vm.header.implementation_overview.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.implementation_overview.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('implementing_partners')">
-                <translate>Implementing partners</translate>
-                <md-icon ng-show="vm.header.implementing_partners.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.implementing_partners.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('geographic_scope')">
-                <translate>Geographic scope</translate>
-                <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
-              </div>
-              <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
-                <translate>Health Focus Areas</translate>
-                <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
-                <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
-              </div>
-            </div>
+              <div
+                class="projectrow"
+                layout="row"
+                layout-padding
+                ng-repeat="project in vm.projectsData track by $index"
+                ng-class="{'member': project.isMember, 'viewer': project.isViewer}">
 
-            <div
-              class="projectrow"
-              layout="row"
-              layout-padding
-              ng-repeat="project in vm.projectsData track by $index"
-              ng-class="{'member': project.isMember, 'viewer': project.isViewer}">
-
-              <div flex="30" class="projectlink" layout="row">
-                <div layout="row" flex class="name">
-                  <div>
-                    <md-icon class="member" ng-show="project.isMember">grade</md-icon>
-                    <md-icon class="viewer" ng-show="project.isViewer">visibility</md-icon>
-                  </div>
-                  <div>
-                    <div class="name">
-                      {{project.name}}
+                <div flex="30" class="projectlink" layout="row">
+                  <div layout="row" flex class="name">
+                    <div>
+                      <md-icon class="member" ng-show="project.isMember">grade</md-icon>
+                      <md-icon class="viewer" ng-show="project.isViewer">visibility</md-icon>
                     </div>
+                    <div>
+                      <div class="name">
+                        {{project.name}}
+                      </div>
 
-                    <div class="country-approved" ng-show="project.approved">
-                      <i class="material-icons">assignment_turned_in</i>
-                      <translate>Approved by country</translate>
-                    </div>
+                      <div class="country-approved" ng-show="project.approved">
+                        <i class="material-icons">assignment_turned_in</i>
+                        <translate>Approved by country</translate>
+                      </div>
 
-                    <div class="links">
-                      <md-button ng-hide="project.isTeam" ui-sref="public-dashboard({ appName: project.id })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
-                      <md-button ng-show="project.isTeam" ui-sref="dashboard({ appName: project.id })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
+                      <div class="links">
+                        <md-button ng-hide="project.isTeam" ui-sref="public-dashboard({ appName: project.id })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
+                        <md-button ng-show="project.isTeam" ui-sref="dashboard({ appName: project.id })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div flex="20" class="cap">
-                {{vm.countriesLib[project.country]}}
-              </div>
-              <div flex="20">{{project.organisation_name}}</div>
-              <div flex="20">
-                      <span ng-repeat="donor in project.donors">
-                          {{donor}}{{$last ? '' : ', '}}
-                      </span>
-              </div>
-              <div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
-              <div flex="30">{{project.implementation_overview}}</div>
-              <div flex="20">{{vm.printImplementingPartners(project)}}</div>
-              <div flex="20">{{project.geographic_scope}}</div>
-              <div flex="20">{{project.health_focus_areas.join(', ')}}</div>
+                <div flex="20" class="cap">
+                  {{vm.countriesLib[project.country]}}
+                </div>
+                <div flex="20">{{project.organisation_name}}</div>
+                <div flex="20">
+                        <span ng-repeat="donor in project.donors">
+                            {{donor}}{{$last ? '' : ', '}}
+                        </span>
+                </div>
+                <div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
+                <div flex="30">{{project.implementation_overview}}</div>
+                <div flex="20">{{vm.printImplementingPartners(project)}}</div>
+                <div flex="20">{{project.geographic_scope}}</div>
+                <div flex="20">{{project.health_focus_areas.join(', ')}}</div>
 
-            </div>
-            <div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>
-              <div flex><translate>There is no project to show in this country.</translate></div>
+              </div>
+              <div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>
+                <div flex><translate>There is no project to show in this country.</translate></div>
+              </div>
             </div>
           </md-content>
         </div>
