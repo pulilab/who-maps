@@ -9924,8 +9924,8 @@ vue-custom-element@^2.0.0:
   resolved "https://registry.yarnpkg.com/vue-custom-element/-/vue-custom-element-2.0.4.tgz#7aae503042eed7afdb61601ebda5cda76a66b503"
 
 "vue-django-feedback@https://github.com/pulilab/vue-django-feedback.git":
-  version "1.0"
-  resolved "https://github.com/pulilab/vue-django-feedback.git#6ea1e5b6a8a9cdcec070245f9119707a3868cbbc"
+  version "1.1"
+  resolved "https://github.com/pulilab/vue-django-feedback.git#60b844648551172b8c59a20c4bda52e328ebaecb"
   dependencies:
     axios "^0.17.1"
     less "^2.7.3"

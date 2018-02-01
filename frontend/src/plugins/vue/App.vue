@@ -23,7 +23,7 @@
   @import "~vue-django-feedback/dist/styles/main.less";
   @import "~vue-django-feedback/dist/styles/variables-dha.less";
 
-  django-feedback {
+  vue-django-feedback {
     position: relative;
     z-index: 1000;
   }
