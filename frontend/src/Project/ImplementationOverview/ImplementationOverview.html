@@ -156,6 +156,7 @@
                 {{vm.subLevelNames[0]}}
               </label>
               <md-select ng-model="cov.district"
+                         aria-label="{{'coverage_' + $index + '.district'}}"
                          name="{{'coverage_' + $index + '.district'}}"
                          ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
                 <md-option value="{{district.id}}" ng-repeat="district in cov.available">
@@ -293,6 +294,7 @@
                 {{vm.subLevelNames[1]}}
               </label>
               <md-select ng-model="cov.district"
+                         aria-label="{{'coverage_second_level_' + $index + '.district'}}"
                          name="{{'coverage_second_level_' + $index + '.district'}}"
                          ng-required="vm.isSubLevelCoverageDistrictRequired(cov)">
                 <md-option value="{{district.id}}" ng-repeat="district in cov.available">
