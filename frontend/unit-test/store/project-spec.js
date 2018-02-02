@@ -317,14 +317,16 @@ describe('Project Store Module', () => {
             expect(result).toEqual({ country_name: undefined, isPublic: true });
 
             state.projects.currentPublicProject = {
+                id: 1,
                 published: {
                     id: 1,
+                    name: 'a',
                     country: 1
                 }
             };
 
             result = ProjectModule.getCurrentPublicProject(state);
-            expect(result).toEqual({ id: 1, country_name: 1, country: 1, isPublic: true });
+            expect(result).toEqual({ id: 1, country_name: 1, country: 1, isPublic: true, name: 'a' });
             expect(result).not.toBe(state.projects.currentPublicProject.published);
         });
 
@@ -336,7 +338,7 @@ describe('Project Store Module', () => {
             };
 
             let result = ProjectModule.getCurrentPublicProjectDetails(state);
-            expect(result).toEqual({ id: 1, disableDraft: true });
+            expect(result).toEqual({ id: 1 });
             expect(ProjectModule.getVanillaProject).toHaveBeenCalled();
             expect(ProjectModule.parseProjectForViewMode).not.toHaveBeenCalled();
 
@@ -349,7 +351,7 @@ describe('Project Store Module', () => {
             result = ProjectModule.getCurrentPublicProjectDetails(state);
             expect(result).toEqual({ id: 1  });
             expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
-            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { disableDraft: true });
+            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { hasPublishedVersion: false });
 
 
         });

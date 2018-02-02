@@ -52,12 +52,18 @@ class ProjectController  {
                 viewers = ProjectModule.getViewers(state);
             }
         }
-        const readOnlyMode = publishMode ||
-          (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+        const isViewer = (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+        const isTeam = team.some(v => v.id === userProfile.id);
+        const readOnlyMode = publishMode || isViewer;
         project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
         if (publishMode) {
-            project = ProjectModule.getCurrentPublicProjectDetails(state);
+            project = ProjectModule.getCurrentPublicProjectDetails(state, false);
+            team = ProjectModule.getTeam(state);
+            viewers = ProjectModule.getViewers(state);
+        }
+        else if (!isViewer && !isTeam && !newProject) {
+            project = ProjectModule.getCurrentPublicProjectDetails(state, true);
             team = ProjectModule.getTeam(state);
             viewers = ProjectModule.getViewers(state);
         }
@@ -65,6 +71,8 @@ class ProjectController  {
             newProject,
             publishMode,
             readOnlyMode,
+            isViewer,
+            isTeam,
             lastVersion,
             project,
             team,

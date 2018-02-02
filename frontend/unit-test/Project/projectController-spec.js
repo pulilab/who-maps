@@ -122,11 +122,11 @@ describe('ProjectController', () => {
 
         expect(UserModule.getProfile).toHaveBeenCalledTimes(5);
         expect(ProjectModule.getLastVersion).toHaveBeenCalledTimes(5);
-        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(3);
-        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(3);
+        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(4);
+        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(4);
         expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(2);
 
-        expect(result.project).toEqual({ name:'gcdpfe', organisation: { id: 1 } });
+        expect(result.project).toEqual('gcppd');
         expect(result.team[0]).toBe('gt');
         expect(result.viewers[0]).toBe('gv');
     });

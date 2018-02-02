@@ -176,24 +176,30 @@ export const getCurrentProject = state => {
 };
 
 export const getCurrentPublicProject = state => {
-    const project = state.projects.currentPublicProject ? state.projects.currentPublicProject.published : {};
+    let project = state.projects.currentPublicProject ? state.projects.currentPublicProject : {};
+    if (project && project.id) {
+        project = project.published && project.published.name ? project.published : project.draft;
+    }
     const country = project.country ? CountryModule.getCountry(state, project.country) : undefined;
     return { ...project, country_name: country ? country.name : project.country_name, isPublic: true };
 };
 
-export const getCurrentPublicProjectDetails = (state) => {
-    let project = exports.getCurrentPublished(state);
+export const getCurrentPublicProjectDetails = (state, isDraft) => {
+    let project = isDraft ? exports.getCurrentDraft(state) : exports.getCurrentPublished(state);
+    const type = isDraft ? 'draft' : 'published';
     if (project) {
         return project;
     }
     project = state.projects.currentPublicProject ?
-      state.projects.currentPublicProject.published : undefined;
+      state.projects.currentPublicProject[type] : undefined;
     if (project)  {
-        project.disableDraft = true;
+        project.hasPublishedVersion = !!(state.projects.currentPublicProject.published &&
+            state.projects.currentPublicProject.published.name);
         return exports.parseProjectForViewMode(state, project);
     }
-    return { ...exports.getVanillaProject(state), disableDraft: true };
+    return { ...exports.getVanillaProject(state) };
 };
+
 
 export const convertCountryFieldsAnswer = (fields) => {
     return fields.map(f => {
@@ -227,7 +233,7 @@ export const parseProjectForViewMode = (state, project) => {
     return {
         ...project,
         ...convertIdArrayToObjectArray(project, structure, secondPhaseCheck),
-        hasPublishedVersion: true
+        hasPublishedVersion: project.hasPublishedVersion !== undefined ? project.hasPublishedVersion : true
     };
 };
 
