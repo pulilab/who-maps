@@ -125,7 +125,10 @@ class CollapsibleSet {
     }
 
     printDate(date) {
-        return moment(date).format('DD-MM-YYYY');
+        if (date) {
+            return moment(date).format('DD-MM-YYYY');
+        }
+        return '';
     }
 
     setAvailableOptions(category, options, fieldName) {
