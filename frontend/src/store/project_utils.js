@@ -79,7 +79,10 @@ export function convertStringArrayToObjectArray(data) {
             return;
         }
         data[key] = data[key].map(value => {
-            return { value };
+            if (typeof value === 'string') {
+                return { value };
+            }
+            return value;
         });
         if (data[key].length === 0) {
             data[key].push({});
