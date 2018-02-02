@@ -160,11 +160,6 @@ def deploy():
             run('yarn clean-server-folder')
             run('yarn copy-to-server')
 
-    # Set cron for backups
-    if env.name == 'production':
-        cmd = '0 4 * * * cd /home/whomaps/who-maps/django && fab backup_prod'
-        run("grep '{}' /etc/crontab || sudo echo '{}' >> /etc/crontab".format(cmd, cmd))
-
     tear_down()
 
 
