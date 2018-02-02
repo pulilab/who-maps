@@ -950,7 +950,7 @@ class ProjectTests(SetupTests):
         p = Project.objects.create(name="test link")
         link = pa.link(p)
 
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>".format(p.id)
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
         self.assertEqual(link, expected_link)
 
     @patch('django.contrib.admin.options.messages')
