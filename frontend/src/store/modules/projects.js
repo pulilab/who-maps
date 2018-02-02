@@ -58,10 +58,10 @@ export const getSavedProjectList = createSelector(
     (savedProjects, vanilla) => {
         if (savedProjects) {
             return savedProjects.filter(p => p.id !== -1)
-          .map(pf => ({ ...pf, draft: {
-              ...vanilla, donors: [], implementing_partners: [], ...pf.draft
-          }
-          }));
+                .map(pf => ({ ...pf, draft: {
+                    ...vanilla, donors: [], implementing_partners: [], ...pf.draft
+                }
+                }));
         }
         return undefined;
     });
@@ -219,9 +219,11 @@ export const convertCountryFieldsAnswer = (fields) => {
 };
 
 export const parseProjectForViewMode = (state, project) => {
+    const base = exports.getEmptyProject();
     const structure = exports.getFlatProjectStructure(state);
     const country = CountryModule.getCountry(state, project.country);
     const secondPhaseCheck = [{ key: 'platforms.strategies', structure_key: 'strategies' }];
+    project = { ...base, ...project };
     project =  {
         ...project,
         country_name: country ? country.name : '',
