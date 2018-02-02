@@ -70,7 +70,7 @@
       </li>
     </ul>
   </div>
-  <div layout="column" class="edit-buttons" ng-if="!vm.readOnlyMode">
+  <div layout="column" class="edit-buttons" ng-if="vm.isTeam || vm.state.current.name === 'newProject'">
     <div class="primary-buttons" ng-if-start="vm.state.params.editMode === 'draft' && vm.state.current.name === 'editProject'">
       <md-button type="submit" class="md-primary md-raised">
         <translate>Publish</translate>
