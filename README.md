@@ -42,3 +42,10 @@ UPDATED ON 2017.06.29 -- you don't need geodata_import.py or any other python sc
 8. (optional) Make a backup if the country json was present before, rename it to <COUNTRY_CODE>_backup_<DATE>.json
 9. Commit changes, deploy
 10. Go to the country admin page and set map_activated_on to now. (This will also send the country admins an email that the new map is active)
+
+
+## Production settings
+
+On production, install a cron for the user (`crontab -e`) to autobackup the DB
+
+```0 4 * * * cd /home/whomaps/who-maps/django && fab backup_prod```
