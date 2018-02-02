@@ -54,8 +54,9 @@ class ProjectController  {
         }
         const isViewer = (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         const isTeam = team.some(v => v.id === userProfile.id);
-        const readOnlyMode = publishMode || isViewer;
-        project = readOnlyMode && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
+        const readOnlyMode = publishMode || !isTeam;
+
+        project = isViewer && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
         if (publishMode) {
             project = ProjectModule.getCurrentPublicProjectDetails(state, false);
