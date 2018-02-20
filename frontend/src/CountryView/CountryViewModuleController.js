@@ -17,6 +17,7 @@ class CountryViewModuleController {
         this.gettextCatalog = gettextCatalog;
         this.pdfExport = new PDFExportController(gettextCatalog);
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
         this.watchers = this.watchers.bind(this);
@@ -55,6 +56,10 @@ class CountryViewModuleController {
         this.filterBit = 0;
         this.watchers();
         this.showAllCountries = { id: false, name: 'Show all countries' };
+    }
+
+    onDestroy() {
+        this.unsubscribe();
     }
 
     watchers() {
@@ -231,14 +236,22 @@ class CountryViewModuleController {
 
 
     updateCountry(newVal, oldVal) {
-        if (oldVal && (newVal.name !== oldVal.name)) {
-            if (newVal.name !== 'Show all countries') {
+        if (oldVal && (newVal.id !== oldVal.id)) {
+            if (newVal.id) {
                 this.setCurrentCountry(newVal.id);
+            }
+            else {
+                this.setCurrentCountry(null);
             }
             this.loadCountryProjectsOrAll(newVal.id);
         }
 
         if (this.projectsData.length === 0) {
+            this.loadCountryProjectsOrAll(newVal.id);
+        }
+
+        // if we have stale global project but the country is set refresh the list
+        if (newVal.id && this.projectsData.some(p => p.country !== newVal.id)) {
             this.loadCountryProjectsOrAll(newVal.id);
         }
 
