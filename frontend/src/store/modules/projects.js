@@ -138,7 +138,7 @@ export const getUserProjects = state => {
 
 export const getUserDefaultProject = state => {
     const pp = state && state.projects ? state.projects.list : null;
-    return pp && pp[0] ? '' + pp[0].id : null;
+    return pp && pp[0] && pp[0].id !== -1 ? '' + pp[0].id : null;
 };
 
 export const getEmptyProject = () => {
