@@ -238,7 +238,7 @@ describe('Project Store Module', () => {
             result = ProjectModule.getUserDefaultProject(state);
             expect(result).toEqual(null);
 
-            state.projects.list.push({ id: 1 });
+            state.projects.list = [{ id: 1 }];
             result = ProjectModule.getUserDefaultProject(state);
             expect(result).toEqual('1');
 
