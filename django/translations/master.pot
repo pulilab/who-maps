@@ -4,34 +4,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:245
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:381
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:469
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:246
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:383
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:471
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:110
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:147
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:177
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:148
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:178
 msgid "# Clients"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:225
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:361
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:449
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:226
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:363
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:451
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:104
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:141
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:171
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:142
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:172
 msgid "# Facilities"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:205
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:341
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:429
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:135
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:165
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:206
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:343
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:431
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:136
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:166
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:98
 msgid "# Health Workers"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:26
+#: ./src/Common/TermsOfUse/TermsOfUse.html:27
 msgid ""
 "(“Website”), including without limitation participation in its forums, blog, and all linked\n"
 "                  pages owned and operated by Results for Development Institute (“HRP,” “we,” or “our”)."
@@ -232,7 +232,7 @@ msgstr ""
 msgid "A model with potential for profit and seeking to be delivered through the private sector."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:240
+#: ./src/Common/TermsOfUse/TermsOfUse.html:241
 msgid "A new toolkit has been launched to help mHealth implementers<br> to successfully and sustainably scale-up their innovations."
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Academia"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:37
+#: ./src/Common/TermsOfUse/TermsOfUse.html:38
 msgid "Accuracy of Content"
 msgstr ""
 
@@ -346,11 +346,11 @@ msgstr ""
 msgid "Add experience"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:274
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:275
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:41
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:410
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:552
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:598
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:412
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:554
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:600
 msgid "Add more"
 msgstr ""
 
@@ -476,7 +476,7 @@ msgstr ""
 msgid "Another key feature of scalable technology is the extent to which various components are able to accommodate changes and improvements in response to needs that emerge during the scale-up process. The <b><em>adaptability of technology</em></b> involves changes in the usage of the product across different types of users and/or different health domains. This capacity to adapt to new health system needs requires processes to be defined and documentation to be in place for local developers."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:123
+#: ./src/Common/TermsOfUse/TermsOfUse.html:124
 msgid "Any personal information that you provide to us will be used only for the following purposes:"
 msgstr ""
 
@@ -488,7 +488,7 @@ msgstr ""
 msgid "Apply filters to list:"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:210
+#: ./src/CountryView/CountryViewModule.html:211
 msgid "Apply filters to map:"
 msgstr ""
 
@@ -519,7 +519,7 @@ msgstr ""
 msgid "Assistant Director General"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:207
+#: ./src/Common/TermsOfUse/TermsOfUse.html:208
 msgid ""
 "At any time and without notice, we may suspend, cancel, or terminate your right to use this\n"
 "                  Website or any portion of the Website. In the event of a suspension, cancellation, or\n"
@@ -673,8 +673,8 @@ msgstr ""
 msgid "Consolidating various repositories and resources that may inform landscape mapping of mHealth deployments"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:227
-#: ./src/Common/TermsOfUse/TermsOfUse.html:229
+#: ./src/Common/TermsOfUse/TermsOfUse.html:228
+#: ./src/Common/TermsOfUse/TermsOfUse.html:230
 msgid "Contact"
 msgstr ""
 
@@ -802,10 +802,6 @@ msgstr ""
 msgid "Data standards:"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:134
-msgid "Date of:"
-msgstr ""
-
 #: ./src/Common/Thematic/static/1-0.html:16
 msgid "Define the metrics (e.g. growth, adoption, or expansion of geo-political area, as described in Table 2)."
 msgstr ""
@@ -831,11 +827,10 @@ msgid "Development of the MAPS Toolkit was initiated within the context of the W
 msgstr ""
 
 #: ./src/Common/TopBar/topBar.html:12
-#: ./src/CountryView/PDFExport/PDFExportController.js:46
 msgid "Digital Health Atlas"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:160
+#: ./src/CountryView/CountryViewModuleController.js:162
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:56
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:21
 msgid "Digital Health Interventions"
@@ -849,11 +844,11 @@ msgstr ""
 msgid "Disclaimer:"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:166
+#: ./src/Common/TermsOfUse/TermsOfUse.html:167
 msgid "Disclaimers"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:135
+#: ./src/Common/TermsOfUse/TermsOfUse.html:136
 msgid "Disclosure"
 msgstr ""
 
@@ -955,7 +950,7 @@ msgstr ""
 msgid "Domain {{domian.id}} total"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:575
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:577
 msgid "Donor's name"
 msgstr ""
 
@@ -963,20 +958,16 @@ msgstr ""
 #: ./src/Common/ProjectComponent/ProjectComponent.html:20
 #: ./src/Common/Thematic/static/2-0.html:44
 #: ./src/CountryView/CountryViewModule.html:103
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:213
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:214
 msgid "Donors"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:558
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:560
 msgid "Donors (Add one at least)"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:138
-msgid "Donors:"
-msgstr ""
-
 #: ./src/Common/CountryTopBar/countryTopBar.html:150
-#: ./src/Common/TermsOfUse/TermsOfUse.html:248
+#: ./src/Common/TermsOfUse/TermsOfUse.html:249
 msgid "Download Pdf"
 msgstr ""
 
@@ -1080,7 +1071,7 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:231
+#: ./src/Common/TermsOfUse/TermsOfUse.html:232
 msgid "Email:"
 msgstr ""
 
@@ -1207,7 +1198,7 @@ msgstr ""
 msgid "Flavia Bustreo"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:127
+#: ./src/Common/TermsOfUse/TermsOfUse.html:128
 msgid "For internal review."
 msgstr ""
 
@@ -1266,15 +1257,11 @@ msgstr ""
 msgid "Geographic scope"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:164
-msgid "Geographical coverage:"
-msgstr ""
-
 #: ./src/Common/CountryTopBar/countryTopBar.html:137
 msgid "Get MAPS Toolkit"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:238
+#: ./src/Common/TermsOfUse/TermsOfUse.html:239
 msgid "Get MAPS Toolkit now!"
 msgstr ""
 
@@ -1383,7 +1370,7 @@ msgstr ""
 msgid "HRP"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:97
+#: ./src/Common/TermsOfUse/TermsOfUse.html:98
 msgid ""
 "HRP reserves the right, but has no obligation, to monitor the content of the message boards,\n"
 "                  bulletin boards, blogs, and other services available on the Website to determine compliance with\n"
@@ -1402,7 +1389,7 @@ msgid ""
 "                  boards, bulletin boards, blogs, or other services on this Website."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:172
+#: ./src/Common/TermsOfUse/TermsOfUse.html:173
 msgid ""
 "HRP, TO THE FULLEST EXTENT PERMITTED BY LAW,\n"
 "                    DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF\n"
@@ -1412,7 +1399,7 @@ msgid ""
 "                    CORRECTED."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:44
+#: ./src/Common/TermsOfUse/TermsOfUse.html:45
 msgid ""
 "HRP, its contributors, sponsors, administrators, or anyone else connected with HRP in any way\n"
 "                  whatsoever, cannot be responsible for any inaccurate or libelous information or for your use of\n"
@@ -1427,17 +1414,13 @@ msgstr ""
 msgid "Harnessing the collective experiences of those developing and implementing digital health system and interventions in the field: to offer suggestion and considerations."
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:494
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:187
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:496
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:188
 msgid "Has the government financially invested in the project?"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:144
-msgid "Health Focus Area:"
-msgstr ""
-
 #: ./src/CountryView/CountryViewModule.html:128
-#: ./src/CountryView/CountryViewModuleController.js:169
+#: ./src/CountryView/CountryViewModuleController.js:171
 msgid "Health Focus Areas"
 msgstr ""
 
@@ -1449,7 +1432,7 @@ msgstr ""
 msgid "Health Information System Links"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:177
+#: ./src/CountryView/CountryViewModuleController.js:179
 msgid "Health Information Systems"
 msgstr ""
 
@@ -1461,7 +1444,7 @@ msgstr ""
 msgid "Health Level 7 (data standard)"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:186
+#: ./src/CountryView/CountryViewModuleController.js:188
 msgid "Health System Challenges"
 msgstr ""
 
@@ -1500,7 +1483,7 @@ msgstr ""
 msgid "Health workers or other clients who interact directly with the technology."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:230
+#: ./src/Common/TermsOfUse/TermsOfUse.html:231
 msgid "Here comes the contact data..."
 msgstr ""
 
@@ -1607,13 +1590,9 @@ msgid "Implementers:"
 msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:118
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:521
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:203
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:523
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:204
 msgid "Implementing partners"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:141
-msgid "Implementing partners:"
 msgstr ""
 
 #: ./src/MapsToolkit/Scorecard/Scorecard.html:206
@@ -1640,7 +1619,7 @@ msgstr ""
 msgid "In considering evidence in relation to relevant stakeholders, projects will want to articulate the types of <b><em>evidence claims</em></b> that are needed at various levels of the health system. The mHealth product may affect three areas: (1) the <b>health system</b>; (2) <b>provider/health service delivery</b> performance; and (3) <b>individual health status</b>. Furthermore, cost-effectiveness analyses demonstrate value for money and cost-savings of the product over standard care."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:198
+#: ./src/Common/TermsOfUse/TermsOfUse.html:199
 msgid ""
 "In no event will HRP or its directors, employees, or agents be liable to you or any third person\n"
 "                  for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages,\n"
@@ -1718,7 +1697,7 @@ msgstr ""
 msgid "Insurers"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:47
+#: ./src/Common/TermsOfUse/TermsOfUse.html:48
 msgid "Intellectual Property Rights"
 msgstr ""
 
@@ -1858,7 +1837,7 @@ msgstr ""
 msgid "License"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:197
+#: ./src/Common/TermsOfUse/TermsOfUse.html:198
 msgid "Limitations on Liability"
 msgstr ""
 
@@ -1874,10 +1853,6 @@ msgstr ""
 
 #: ./src/Dashboard/Dashboard.html:207
 msgid "Link to wiki page:"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:63
-msgid "List exported on"
 msgstr ""
 
 #: ./src/MyProjects/MyProjectList/MyProjectList.html:8
@@ -1965,7 +1940,7 @@ msgstr ""
 msgid "Make sure your URL is valid."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:138
+#: ./src/Common/TermsOfUse/TermsOfUse.html:139
 msgid "Marketing and Advertising"
 msgstr ""
 
@@ -1989,11 +1964,11 @@ msgstr ""
 msgid "Mechanisms for evaluating data within the mHealth system for inconsistencies, errors or missing elements."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:83
+#: ./src/Common/TermsOfUse/TermsOfUse.html:84
 msgid "Message Boards and Other Interactive Features"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:84
+#: ./src/Common/TermsOfUse/TermsOfUse.html:85
 msgid ""
 "Message boards, bulletin boards, blogs, and other services may be available on or through the\n"
 "                  Website. In addition to any other rules or regulations that HRP posts in connection with these\n"
@@ -2114,8 +2089,8 @@ msgstr ""
 msgid "National"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:422
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:158
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:424
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:159
 msgid "National level deployment"
 msgstr ""
 
@@ -2183,7 +2158,7 @@ msgstr ""
 msgid "No projects have been added yet."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:139
+#: ./src/Common/TermsOfUse/TermsOfUse.html:140
 msgid ""
 "No promotional offers or advertising will appear on the Website nor will your personal contact\n"
 "                  information ever be given, sold, or otherwise shared by HRP with third parties for advertising\n"
@@ -2194,8 +2169,8 @@ msgstr ""
 msgid "No resources have been added yet..."
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:501
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:192
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:503
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:193
 msgid "No, they have not yet contributed"
 msgstr ""
 
@@ -2227,7 +2202,7 @@ msgstr ""
 msgid "Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:193
+#: ./src/CountryView/CountryViewModule.html:194
 msgid "Number of Projects"
 msgstr ""
 
@@ -2293,11 +2268,7 @@ msgstr ""
 msgid "Organisation name"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:136
-msgid "Organisation name:"
-msgstr ""
-
-#: ./src/Common/TermsOfUse/TermsOfUse.html:211
+#: ./src/Common/TermsOfUse/TermsOfUse.html:212
 msgid "Other Terms"
 msgstr ""
 
@@ -2311,10 +2282,6 @@ msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:113
 msgid "Overview of digital health implementation"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:155
-msgid "Overview of digital health implementation:"
 msgstr ""
 
 #: ./src/Project/GeneralOverview/GeneralOverview.html:104
@@ -2347,7 +2314,7 @@ msgstr ""
 msgid "PROJECT PERFORMANCE"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:538
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:540
 msgid "Partner's name"
 msgstr ""
 
@@ -2390,7 +2357,7 @@ msgstr ""
 msgid "Performance Monitoring Plan"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:117
+#: ./src/Common/TermsOfUse/TermsOfUse.html:118
 msgid "Personal Information"
 msgstr ""
 
@@ -2415,8 +2382,11 @@ msgstr ""
 msgid "Please describe where your implementation is currently taking place"
 msgstr ""
 
-#: ./src/CountryView/PDFExport/PDFExportController.js:148
-msgid "Point of contact:"
+#: ./src/Common/TermsOfUse/TermsOfUse.html:20
+msgid ""
+"Please read these Terms of Use before using the Website or any of its features. By using the\n"
+"                  Website, you accept and agree to be bound by these Terms. If you do not agree to the Terms,\n"
+"                  please exit the Website and do not access or otherwise use the Website."
 msgstr ""
 
 #: ./src/MapsToolkit/MapsToolkitModule.html:47
@@ -2445,7 +2415,7 @@ msgstr ""
 msgid "Presenting frameworks to articulate a project's endgame strategy and establish links between mHealth strategies and health system constraints"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:112
+#: ./src/Common/TermsOfUse/TermsOfUse.html:113
 msgid "Privacy Policy"
 msgstr ""
 
@@ -2533,7 +2503,7 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:122
+#: ./src/Common/TermsOfUse/TermsOfUse.html:123
 msgid "Purposes for which Personal Information May Be Used"
 msgstr ""
 
@@ -2577,7 +2547,7 @@ msgstr ""
 msgid "Reduced health expenditures"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:152
+#: ./src/Common/TermsOfUse/TermsOfUse.html:153
 msgid "Registration and Passwords"
 msgstr ""
 
@@ -2585,11 +2555,11 @@ msgstr ""
 msgid "Relevance to national health strategy, value for money, health, system benefits, reduced health expenditure"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:268
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:404
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:269
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:406
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:47
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:546
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:592
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:548
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:594
 msgid "Remove"
 msgstr ""
 
@@ -2717,8 +2687,8 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:191
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:327
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:192
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:329
 msgid "Search Facilities"
 msgstr ""
 
@@ -2732,8 +2702,8 @@ msgstr ""
 
 #: ./src/CountryView/CountryViewModule.html:22
 #: ./src/CountryView/CountryViewModule.html:54
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:165
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:302
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:166
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:304
 msgid "Select a country"
 msgstr ""
 
@@ -2797,7 +2767,7 @@ msgstr ""
 msgid "Show more..."
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:215
+#: ./src/CountryView/CountryViewModule.html:216
 msgid "Show only approved projects"
 msgstr ""
 
@@ -2846,7 +2816,7 @@ msgstr ""
 msgid "Society for the Elimination of Rural Poverty (India)"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModuleController.js:195
+#: ./src/CountryView/CountryViewModuleController.js:197
 #: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:15
 msgid "Software"
 msgstr ""
@@ -3002,7 +2972,7 @@ msgstr ""
 msgid "Technology platforms"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:206
+#: ./src/Common/TermsOfUse/TermsOfUse.html:207
 msgid "Terminations"
 msgstr ""
 
@@ -3075,7 +3045,7 @@ msgstr ""
 msgid "The UNDP/UNFPA/UNICEF/WHO/World Bank Special Programme of Research, Development and Research Training in Human Reproduction"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:171
+#: ./src/Common/TermsOfUse/TermsOfUse.html:172
 msgid "The Website and any content, materials, features, or products available or sold on or through the Website are available on an “as is” basis."
 msgstr ""
 
@@ -3107,7 +3077,7 @@ msgstr ""
 msgid "The capacity to guarantee that patients’ personal data will be protected against intentional and unintentional exposure."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:48
+#: ./src/Common/TermsOfUse/TermsOfUse.html:49
 msgid ""
 "The contents of the Website are protected by copyright, trademark, and other intellectual\n"
 "                  property laws. The Website may not be used in any manner that violates the privacy rights,\n"
@@ -3122,7 +3092,7 @@ msgid ""
 "                  use."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:32
+#: ./src/Common/TermsOfUse/TermsOfUse.html:33
 msgid ""
 "The contents of the Website such as texts, graphics, images, and all other information, whether\n"
 "                  provided by HRP or its users, are for informational purposes only. The content is not intended\n"
@@ -3153,6 +3123,10 @@ msgstr ""
 
 #: ./src/Common/Thematic/static/3-0.html:16
 msgid "The first step to managing a project’s financial health is to understand the costs of operating at the current level of implementation, and then to forecast future costs. Project teams must consider the costs of the mHealth product from a programme perspective, a user perspective and a health system perspective in order to fully capture the costs that will be associated with scaling up."
+msgstr ""
+
+#: ./src/Common/TermsOfUse/TermsOfUse.html:23
+msgid "The following Terms of Use (“Terms”) govern the use of"
 msgstr ""
 
 #: ./src/Common/Thematic/static/1-2.html:8
@@ -3196,7 +3170,7 @@ msgstr ""
 msgid "The name has to be less than 120 characters long."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:118
+#: ./src/Common/TermsOfUse/TermsOfUse.html:119
 msgid ""
 "The only personal information that we will collect is the personal information that you provide\n"
 "                  to us when you register with us or when you communicate with us through our website. We will at\n"
@@ -3269,7 +3243,7 @@ msgstr ""
 msgid "The use of primarily qualitative research methods to inform the development of effective intervention strategies. Formative research helps programme planners and researchers understand the factors that influence health outcomes, including the traits of target populations, such as their behaviours, attitudes and needs, in order to develop mHealth products that are appropriate to a particular context."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:38
+#: ./src/Common/TermsOfUse/TermsOfUse.html:39
 msgid ""
 "The use of the Website and its content is at your own risk. HRP makes a reasonable effort to\n"
 "                  ensure that the content of the Website is accurate and up-to-date, but does not offer any\n"
@@ -3295,7 +3269,7 @@ msgstr ""
 msgid "Therefore, each question is worth a certain number of points depending on the number of sub-statements accompanying the question. The maximum number of points that can be allocated is indicated beside each question and each domain title (see Figure 4)."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:212
+#: ./src/Common/TermsOfUse/TermsOfUse.html:213
 msgid ""
 "These Terms constitute the entire agreement between you and HRP regarding the use of the Website\n"
 "                  and supersede any prior agreements between you and HRP relating to your use of the Website. The\n"
@@ -3311,7 +3285,7 @@ msgid ""
 "                  right to asset and enforce provisions of the Terms directly and on their own behalf."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:142
+#: ./src/Common/TermsOfUse/TermsOfUse.html:143
 msgid "Third Party Sites"
 msgstr ""
 
@@ -3319,11 +3293,11 @@ msgstr ""
 msgid "Third, an evaluation framework (such as a theory of change or a logical framework) must be devopeloped that details the links among the mHealth product inputs, activities, outputs and outcomes or impacts. This evaluation requires quality data streams from both system-generated and human-collected data. The data collection methods need to be aligned with stakeholder priorities and with the evaluation framework. Finally, evaluation preparatory activities involve applying for and securing ethical approval for research activities."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:31
+#: ./src/Common/TermsOfUse/TermsOfUse.html:32
 msgid "This Site Does Not Provide Medical Advice, Diagnosis or Treatment."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:167
+#: ./src/Common/TermsOfUse/TermsOfUse.html:168
 msgid ""
 "This Website provides links to websites maintained by third parties. Any information, products,\n"
 "                  or services provided by the third-party sites are maintained by the operators of such sites and\n"
@@ -3339,7 +3313,7 @@ msgstr ""
 msgid "This field has to be less than 500 characters long."
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:582
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:584
 msgid "This field has to be less than 64 characters long."
 msgstr ""
 
@@ -3389,20 +3363,20 @@ msgstr ""
 #: ./src/Project/GeneralOverview/GeneralOverview.html:67
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:116
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:139
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:170
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:214
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:234
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:171
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:215
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:235
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:25
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:254
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:307
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:350
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:370
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:390
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:438
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:458
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:478
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:513
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:579
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:255
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:309
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:352
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:372
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:392
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:440
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:460
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:480
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:515
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:581
 #: ./src/Project/ImplementationOverview/ImplementationOverview.html:98
 #: ./src/Project/Technology/Technology.html:21
 msgid "This is required."
@@ -3459,7 +3433,7 @@ msgstr ""
 msgid "Tips and Considerations"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:153
+#: ./src/Common/TermsOfUse/TermsOfUse.html:154
 msgid ""
 "To access certain services of the Website, you may need to provide information such as your name,\n"
 "                  email address, street address, and zip code. By use of these services, you agree to: (a) provide\n"
@@ -3476,21 +3450,21 @@ msgid ""
 "                  password is governed by the terms of our Privacy Policy."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:131
+#: ./src/Common/TermsOfUse/TermsOfUse.html:132
 msgid ""
 "To compile and disclose statistics about our users and their preferences. However, these\n"
 "                      statistics are anonymous and do not identify individual users."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:129
+#: ./src/Common/TermsOfUse/TermsOfUse.html:130
 msgid "To customize the content and /or layout of the website for each individual user."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:128
+#: ./src/Common/TermsOfUse/TermsOfUse.html:129
 msgid "To improve the content of the website."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:126
+#: ./src/Common/TermsOfUse/TermsOfUse.html:127
 msgid "To let you know about information and services from HRP in which you may be interested."
 msgstr ""
 
@@ -3498,11 +3472,11 @@ msgstr ""
 msgid "To mobilize global commitment and spur progress towards the Millennium Development Goals, the United Nations Secretary General Ban Ki-moon launched the Global Strategy for Women’s and Children’s Health in 2010. The Strategy called all partners to action, resulting in the unprecedented movement Every Woman Every Child (EWEC), which generated hundreds of financial, policy and service delivery commitments from governments, civil society, donors, and the private sector. Innovation was among the key areas highlighted in the Strategy where action was urgently required. The EWEC Innovation Working Group (IWG) has been instrumental in taking this agenda forward, not least by supporting the adoption and scaling up of mHealth solutions that strengthen the availability of essential health interventions that save women and children’s lives."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:130
+#: ./src/Common/TermsOfUse/TermsOfUse.html:131
 msgid "To notify users about updates to the website."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:125
+#: ./src/Common/TermsOfUse/TermsOfUse.html:126
 msgid "To provide information or services to you as requested by you."
 msgstr ""
 
@@ -3556,11 +3530,6 @@ msgstr ""
 
 #: ./src/Common/SubBar/subBar.html:15
 msgid "UUID"
-msgstr ""
-
-#: ./src/CountryView/PDFExport/PDFExportController.js:127
-#: ./src/CountryView/PDFExport/PDFExportController.js:130
-msgid "UUID:"
 msgstr ""
 
 #: ./src/Project/Technology/ReadOnlyTechnology.html:17
@@ -3656,7 +3625,7 @@ msgstr ""
 msgid "Visualize Score"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:178
+#: ./src/Common/TermsOfUse/TermsOfUse.html:179
 msgid ""
 "WE MAKE NO WARRANTY THAT THE WEBSITE OR THE PROVIDED SERVICES WILL MEET USERS' REQUIREMENTS. NO\n"
 "                    ADVICE, RESULTS OR INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED BY YOU FROM US OR THROUGH THE\n"
@@ -3667,7 +3636,7 @@ msgid ""
 "                    DISSATISFIED WITH THE WEBSITE, YOUR SOLE REMEDY IS TO DISCONTINUE USING THE WEBSITE."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:185
+#: ./src/Common/TermsOfUse/TermsOfUse.html:186
 msgid ""
 "WE TRY TO ENSURE THAT THE INFORMATION POSTED ON THE WEBSITE IS CORRECT AND UP-TO-DATE. WE RESERVE\n"
 "                    THE RIGHT TO CHANGE OR MAKE CORRECTIONS TO ANY OF THE INFORMATION PROVIDED ON THE WEBSITE AT ANY\n"
@@ -3699,7 +3668,7 @@ msgstr ""
 msgid "We are proud to present this mHealth Assessment and Planning for Scale (MAPS) Toolkit to help advance discussions on how to scale up mobile health (mHealth) innovations and maximize their impact on outcomes for women’s, children’s and adolescents’ health."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:113
+#: ./src/Common/TermsOfUse/TermsOfUse.html:114
 msgid ""
 "We know that you care how information about you is used and shared and we are careful to ensure\n"
 "                  that any such information that comes into our possession is properly looked after. This Privacy\n"
@@ -3707,14 +3676,14 @@ msgid ""
 "                  secure and confidential and is used only for the purposes for which it is provided."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:28
+#: ./src/Common/TermsOfUse/TermsOfUse.html:29
 msgid ""
 "We reserve the right to modify, add, or delete any of these Terms at any time. Continued use of\n"
 "                  the Website after any modifications, additions, or deletions to the Terms will constitute your\n"
 "                  acceptance of the Terms, as modified."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:73
+#: ./src/Common/TermsOfUse/TermsOfUse.html:74
 msgid ""
 "We respect the intellectual property rights of others and require that people who use the Website\n"
 "                  and services available on the Website do the same. If you believe your work has been copied in a\n"
@@ -3728,7 +3697,7 @@ msgid ""
 "                  that you are the copyright owner or are authorized to act on the copyright owner's behalf."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:136
+#: ./src/Common/TermsOfUse/TermsOfUse.html:137
 msgid ""
 "We will not pass any of your personal information to any third party, other than members of HRP,\n"
 "                  without your consent."
@@ -3795,7 +3764,7 @@ msgstr ""
 msgid "When should I use the toolkit?"
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:59
+#: ./src/Common/TermsOfUse/TermsOfUse.html:60
 msgid ""
 "When you post or submit any material to this Website, you represent and warrant that you are the\n"
 "                  owner of the material or have express permission from the owner of the material to post, use, or\n"
@@ -3849,13 +3818,13 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:507
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:198
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:509
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:199
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:504
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:195
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:506
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:196
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
 
@@ -3899,7 +3868,7 @@ msgstr ""
 msgid "You have not considered the issues associated with electricity coverage at all."
 msgstr ""
 
-#: ./src/Common/TermsOfUse/TermsOfUse.html:143
+#: ./src/Common/TermsOfUse/TermsOfUse.html:144
 msgid ""
 "You may be able to link from HRP's Website to third-party websites; conversely, third-party\n"
 "                  websites may link to HRP’s Website. You acknowledge and agree that HRP's Website has no\n"
@@ -4636,7 +4605,7 @@ msgstr ""
 msgid "in progress"
 msgstr ""
 
-#: ./src/CountryView/CountryViewModule.html:197
+#: ./src/CountryView/CountryViewModule.html:198
 msgid "in selected country"
 msgstr ""
 
@@ -5014,8 +4983,8 @@ msgstr ""
 msgid "{{vm.subLevelNames[0]}} level deployment"
 msgstr ""
 
-#: ./src/Project/ImplementationOverview/ImplementationOverview.html:285
-#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:119
+#: ./src/Project/ImplementationOverview/ImplementationOverview.html:286
+#: ./src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:120
 msgid "{{vm.subLevelNames[1]}} level deployment"
 msgstr ""
 
