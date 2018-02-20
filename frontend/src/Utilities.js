@@ -9,7 +9,7 @@ class StaticUtilities {
     constructor(_path) {
         this.path = _path;
     }
-
+    /* translation-unfriendly-code */
     async lazyLoader(provider, element) {
         const vm = this;
         const ctrl = await import(`./${vm.path}/${element}`);
@@ -29,7 +29,7 @@ class StaticUtilities {
             provider.component(ctrl.name, ctrl);
         }
     }
-
+    /* end-translation-unfriendly-code */
     static getComponents() {
         return components;
     }

@@ -14,7 +14,7 @@ if (LIVE) {
     };
 }
 
-
+/* translation-unfriendly-code */
 const appPromise = import('./App/');
 const commonPromise = import('./Common/');
 
@@ -23,7 +23,7 @@ Promise.all([appPromise, commonPromise]).then(([app, common]) => {
     angular.bootstrap(document, [app]);
 });
 
+/* end-translation-unfriendly-code */
+
 
 StaticUtilities.prefixHtml();
-
-

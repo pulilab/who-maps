@@ -29,9 +29,11 @@ class PDFExportController {
     }
 
     async makePDF(gettextCatalog) {
+        /* translation-unfriendly-code */
         const pdfMakePromise = import('pdfmake/build/pdfmake');
         const pdfFontsPromise = import('pdfmake/build/vfs_fonts.js');
         const [pdfMake, pdfFonts] = await Promise.all([pdfMakePromise, pdfFontsPromise]);
+        /* end-translation-unfriendly-code */
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
         this.pdfMake = pdfMake.createPdf;
         const docDefinition = {
