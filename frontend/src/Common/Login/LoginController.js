@@ -64,7 +64,7 @@ class LoginModuleController {
             };
         }
         forEach(data, (item, key) => {
-            if (vm.loginForm[key]) {
+            if (vm.loginForm[key] && key !== 'non_field_errors') {
                 vm.loginForm[key].customError = item;
                 vm.loginForm[key].$setValidity('custom', false);
 
