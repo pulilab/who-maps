@@ -1,8 +1,8 @@
 import axios from './axios';
 import moment from 'moment';
-import fr from 'moment/locale/fr';
-import es from 'moment/locale/es';
-import pt from 'moment/locale/pt';
+import 'moment/locale/fr';
+import 'moment/locale/pt';
+import 'moment/locale/es';
 
 const navigator = window.navigator;
 const language  = navigator.languages && navigator.languages[0] ||
@@ -28,17 +28,14 @@ export const setDateLocaleProvider = provider => {
     config.mdDateLocaleProvider  = provider;
 };
 
-export const configureDates = ln => {
-    const locales = {
-        fr,
-        es,
-        pt
-    };
-    const localised = moment().locale(ln, locales[ln]);
+export const configureDates = async ln => {
+    moment.locale(ln);
+    const localised = moment();
     config.mdDateLocaleProvider.months = localised.localeData().months();
     config.mdDateLocaleProvider.shortMonths  = localised.localeData().monthsShort();
     config.mdDateLocaleProvider.days  = localised.localeData().weekdays();
     config.mdDateLocaleProvider.shortDays  = localised.localeData().weekdaysShort();
+    window.moment = localised;
 };
 
 export const getLanguage = async () => {
@@ -58,5 +55,3 @@ export const setLanguage = ln => {
 export const getCurrentLanguage = () => {
     return config.language;
 };
-
-
