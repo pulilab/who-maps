@@ -301,10 +301,12 @@ export const getCurrentProjectForEditing = (state, data) => {
     data.end_date = convertDate(data.end_date);
     data = convertStringArrayToObjectArray(data);
     data = fillEmptyCollectionsWithDefault(data);
-    data.organisation = {
-        id: data.organisation,
-        name: data.organisation_name
-    };
+    if (typeof data.organisation !== 'object') {
+        data.organisation = {
+            id: data.organisation,
+            name: data.organisation_name
+        };
+    }
     data = {
         ...data,
         ...exports.isMemberOrViewer(state, data),
