@@ -139,11 +139,11 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         health_focus_areas = []
-        for category in HealthCategory.objects.all():
+        for category in HealthCategory.objects.filter(is_active=True):
             health_focus_areas.append(dict(
                 id=category.id,
                 name=category.name,
-                health_focus_areas=category.health_focus_areas.values('id', 'name')
+                health_focus_areas=category.health_focus_areas.filter(is_active=True).values('id', 'name')
             ))
 
         hsc_challenges = []
