@@ -126,3 +126,9 @@ class CountryAdmin(admin.ModelAdmin):
                 recipient_list=email_list,
                 html_message=html_message,
                 fail_silently=True)
+
+    def has_add_permission(self, request):  # pragma: no cover
+        return False
+
+    def has_delete_permission(self, request, obj=None):  # pragma: no cover
+        return False
