@@ -17,6 +17,7 @@ class CountryViewModuleController {
         this.gettextCatalog = gettextCatalog;
         this.pdfExport = new PDFExportController(gettextCatalog);
         this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.generateFilters = this.generateFilters.bind(this);
         this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
         this.watchers = this.watchers.bind(this);
@@ -57,11 +58,16 @@ class CountryViewModuleController {
         this.showAllCountries = { id: false, name: 'Show all countries' };
     }
 
+    onDestroy() {
+        this.unsubscribe();
+    }
+
     watchers() {
         this.scope.$watchCollection(s => s.vm.countryProjects, this.generateFilters);
         this.scope.$watch(s => s.vm.filters, this.checkIfFilterIsApplied, true);
         this.scope.$watch(s => s.vm.selectedCountry, this.updateCountry.bind(this), true);
         this.scope.$watchGroup([s => s.vm.showOnlyApproved, s => s.vm.filterBit], this.applyFilters.bind(this));
+        this.scope.$watch(s => s.vm.currentTab, this.handleTabSwitch.bind(this));
     }
 
     checkIfFilterIsApplied(filters, oldValue) {
@@ -73,6 +79,13 @@ class CountryViewModuleController {
         if (oldOpen.every((v, i) => v === newOpen[i]) && Array.isArray(this.countryProjects)) {
             //  this was not triggered by an open-close of the filter but by an actual selection, so we can filter here
             this.filterBit += 1;
+        }
+    }
+
+    handleTabSwitch(tabIndex, oldIndex) {
+        if (tabIndex === 0 && oldIndex === 1 && this.selectedCountry.id === false) {
+            // we need to reset the project to the one from the country and not show all.
+            this.loadCountryProjectsOrAll(this.mapData.id);
         }
     }
 
@@ -231,14 +244,22 @@ class CountryViewModuleController {
 
 
     updateCountry(newVal, oldVal) {
-        if (oldVal && (newVal.name !== oldVal.name)) {
-            if (newVal.name !== 'Show all countries') {
+        if (oldVal && (newVal.id !== oldVal.id)) {
+            if (newVal.id) {
                 this.setCurrentCountry(newVal.id);
+            }
+            else {
+                this.setCurrentCountry(null);
             }
             this.loadCountryProjectsOrAll(newVal.id);
         }
 
         if (this.projectsData.length === 0) {
+            this.loadCountryProjectsOrAll(newVal.id);
+        }
+
+        // if we have stale global project but the country is set refresh the list
+        if (newVal.id && this.projectsData.some(p => p.country !== newVal.id)) {
             this.loadCountryProjectsOrAll(newVal.id);
         }
 
