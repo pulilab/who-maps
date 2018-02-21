@@ -67,6 +67,7 @@ class CountryViewModuleController {
         this.scope.$watch(s => s.vm.filters, this.checkIfFilterIsApplied, true);
         this.scope.$watch(s => s.vm.selectedCountry, this.updateCountry.bind(this), true);
         this.scope.$watchGroup([s => s.vm.showOnlyApproved, s => s.vm.filterBit], this.applyFilters.bind(this));
+        this.scope.$watch(s => s.vm.currentTab, this.handleTabSwitch.bind(this));
     }
 
     checkIfFilterIsApplied(filters, oldValue) {
@@ -78,6 +79,13 @@ class CountryViewModuleController {
         if (oldOpen.every((v, i) => v === newOpen[i]) && Array.isArray(this.countryProjects)) {
             //  this was not triggered by an open-close of the filter but by an actual selection, so we can filter here
             this.filterBit += 1;
+        }
+    }
+
+    handleTabSwitch(tabIndex, oldIndex) {
+        if (tabIndex === 0 && oldIndex === 1 && this.selectedCountry.id === false) {
+            // we need to reset the project to the one from the country and not show all.
+            this.loadCountryProjectsOrAll(this.mapData.id);
         }
     }
 

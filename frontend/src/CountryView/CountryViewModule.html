@@ -6,9 +6,10 @@
       <translate>COUNTRY LEVEL VIEW</translate>
     </div>
 
-    <md-tabs md-border-bottom md-center-tabs="true" flex class="clv-tab-container">
+    <md-tabs md-border-bottom md-center-tabs="true" flex class="clv-tab-container" md-selected="vm.currentTab">
 
       <!-- MAP VIEW -->
+
       <md-tab label="{{'map view' | translate }}">
 
         <div class="tab-wrap map" id="map" ng-class="{'emptyy': !vm.projectsData}">

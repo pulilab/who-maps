@@ -84,6 +84,21 @@ describe('CountryViewModuleController', () => {
     });
 
 
+    it('handleTabSwitch fn.', () => {
+        vm.selectedCountry = { id: 1 };
+        vm.loadCountryProjectsOrAll = jasmine.createSpy('loadCountryProjectsOrAll');
+        vm.handleTabSwitch(0, 1);
+        expect(vm.loadCountryProjectsOrAll).not.toHaveBeenCalled();
+
+        vm.selectedCountry = { id: false };
+        vm.handleTabSwitch(1, 0);
+        expect(vm.loadCountryProjectsOrAll).not.toHaveBeenCalled();
+
+        vm.mapData = { id: 1 };
+        vm.handleTabSwitch(0, 1);
+        expect(vm.loadCountryProjectsOrAll).toHaveBeenCalledWith(1);
+    });
+
     it('updateCountry fn.', () => {
         vm.projectsData = [];
         vm.setCurrentCountry = jasmine.createSpy('setCurrentCountry');
