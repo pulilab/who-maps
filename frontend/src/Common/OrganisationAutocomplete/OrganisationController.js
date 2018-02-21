@@ -1,35 +1,11 @@
-import first from 'lodash/first';
 import { searchOrganisation, addOrganisation } from '../../store/modules/system';
 
 export default class OrganisationController {
 
     constructor($scope) {
         this.scope = $scope;
-        this.$onInit = this.onInit.bind(this);
         this.addOrganisationName = this.addOrganisationName.bind(this);
         this.organisationSearch = this.organisationSearch.bind(this);
-        this.handleOrganisationBlur = this.handleOrganisationBlur.bind(this);
-    }
-
-    onInit() {
-        this.createBlurHandler();
-    }
-
-    createBlurHandler() {
-        this.scope.$$postDigest(() => {
-            document.querySelector('#organisation')
-              .querySelector('input')
-              .addEventListener('blur', this.handleOrganisationBlur);
-        });
-    }
-
-    handleOrganisationBlur() {
-        const typed = first(this.latestOrgs);
-        if (typed) {
-            if (!this.organisation || (this.organisation && typed.name !== this.organisation.name)) {
-                this.addOrganisationName(typed);
-            }
-        }
     }
 
     async organisationSearch(name) {
