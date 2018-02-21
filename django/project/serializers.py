@@ -24,10 +24,10 @@ def url_validator(value):
 
 
 class NDPSerializer(serializers.Serializer):
-    clients = serializers.IntegerField(min_value=0, max_value=100000)
-    health_workers = serializers.IntegerField(min_value=0, max_value=100000)
-    facilities = serializers.IntegerField(min_value=0, max_value=100000)
-    facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=10000,
+    clients = serializers.IntegerField(min_value=0, max_value=2000000000)
+    health_workers = serializers.IntegerField(min_value=0, max_value=2000000000)
+    facilities = serializers.IntegerField(min_value=0, max_value=2000000000)
+    facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=20000,
                                             required=False, allow_null=True)
 
 
