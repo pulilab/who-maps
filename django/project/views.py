@@ -125,17 +125,17 @@ class ProjectPublicViewSet(ViewSet):
     def _get_project_structure(self):
         strategies = []
         for group, group_name in DigitalStrategy.GROUP_CHOICES:
-            subGroups = []
+            sub_groups = []
             for parent in DigitalStrategy.objects.filter(group=group, parent=None).all():
-                subGroups.append(dict(
+                sub_groups.append(dict(
                     id=parent.id,
                     name=parent.name,
-                    strategies=parent.strategies.values('id', 'name')
+                    strategies=parent.strategies.filter(is_active=True).values('id', 'name')
                 )
                 )
             strategies.append(dict(
                 name=group_name,
-                subGroups=subGroups
+                subGroups=sub_groups
             ))
 
         health_focus_areas = []
@@ -143,7 +143,7 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas.append(dict(
                 id=category.id,
                 name=category.name,
-                health_focus_areas=category.health_focus_areas.values('id', 'name')
+                health_focus_areas=category.health_focus_areas.filter(is_active=True).values('id', 'name')
             ))
 
         hsc_challenges = []
