@@ -153,7 +153,7 @@
 
                       <div class="country-approved" ng-show="project.approved">
                         <i class="material-icons">assignment_turned_in</i>
-                        <translate>Approved by country</translate>
+                        <translate>Verified by country</translate>
                       </div>
 
                       <div class="links">
@@ -213,9 +213,9 @@
           <div class="description"><translate>Apply filters to map:</translate></div>
 
           <div class="country-approval-switch" layout="row" layout-align="start center" ng-show="vm.selectedCountry.project_approval">
-            <md-switch class="md-primary" ng-model="vm.showOnlyApproved" aria-label="show only approved"></md-switch>
+            <md-switch class="md-primary" ng-model="vm.showOnlyApproved" aria-label="show only verified"></md-switch>
             <span class="md-label">
-              <translate>Show only approved projects</translate>
+              <translate>Show only verified projects</translate>
             </span>
           </div>
 
