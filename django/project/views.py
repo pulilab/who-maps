@@ -43,7 +43,7 @@ class ProjectPublicViewSet(ViewSet):
 
         # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
 
-        projects = Project.projects.published_only().filter(data__country=int(country_id))
+        projects = Project.objects.published_only().filter(data__country=int(country_id))
 
         # get district names
         district_names = set()
@@ -85,7 +85,7 @@ class ProjectPublicViewSet(ViewSet):
                 ds_names.extend([x.name for x in DigitalStrategy.objects.get_names_for_ids(platform['strategies'])])
             return list(set(ds_names))
 
-        projects = Project.projects.published_only()  # lazy QuerySet
+        projects = Project.objects.published_only()  # lazy QuerySet
 
         if kwargs.get("country_id"):
             projects = projects.filter(data__country=int(kwargs.get("country_id")))
@@ -183,7 +183,7 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         Retrieves list of projects user's projects.
         """
         data = []
-        for project in Project.projects.member_of(request.user):
+        for project in Project.objects.member_of(request.user):
             published = project.to_representation()
             draft = project.to_representation(draft_mode=True)
             data.append(project.to_response_dict(published=published, draft=draft))
