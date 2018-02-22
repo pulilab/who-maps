@@ -160,7 +160,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
-        instance = self.Meta.model.projects.create(name=validated_data["name"], draft=validated_data)
+        instance = self.Meta.model.objects.create(name=validated_data["name"], draft=validated_data)
         instance.team.add(owner)
 
         return instance
