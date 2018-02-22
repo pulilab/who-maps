@@ -217,12 +217,7 @@ class CountryMapController {
     }
 
     goToProject(project) {
-        if (project.isMember) {
-            this.state.go('dashboard', { appName: project.id });
-        }
-        else {
-            this.state.go('public-dashboard', { appName: project.id });
-        }
+        this.state.go('editProject', { appName: project.id, editMode: 'publish' });
     }
 
     static countrymapFactory() {

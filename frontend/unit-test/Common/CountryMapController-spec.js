@@ -177,10 +177,7 @@ describe('CountryMapController', () => {
     });
 
     it('has goToProject fn.', () => {
-        cc.goToProject({ isMember: true, id: 1 });
-        expect(cc.state.go).toHaveBeenCalledWith('dashboard', { appName: 1 });
-
-        cc.goToProject({ isMember: false, id: 2 });
-        expect(cc.state.go).toHaveBeenCalledWith('public-dashboard', { appName: 2 });
+        cc.goToProject({ id: 1 });
+        expect(cc.state.go).toHaveBeenCalledWith('editProject', { appName: 1, editMode: 'publish' });
     });
 });
