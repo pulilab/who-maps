@@ -37,7 +37,7 @@ class CountryExportView(APIView):
             country_data = {'country': country.name, 'country_code': country.code}
             country_data['platforms'] = {}
             country_data['interoperability_links'] = {}
-            for project in Project.projects.filter(data__country=country.id):
+            for project in Project.objects.filter(data__country=country.id):
                 # get platforms
                 for platform in project.data['platforms']:
                     platform_id = str(TechnologyPlatform.objects.get(name=platform['name']).id)

@@ -35,6 +35,10 @@ class ProjectManager(models.Manager):
         return self.exclude(public_id='')
 
 
+class ProjectQuerySet(ActiveQuerySet, ProjectManager):
+    pass
+
+
 class Project(SoftDeleteModel, ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("last_version", "last_version_date", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
@@ -47,7 +51,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
 
-    projects = ProjectManager()
+    projects = ProjectManager  # deprecated, use objects instead
+    objects = ProjectQuerySet.as_manager()
 
     def __str__(self):  # pragma: no cover
         return self.name

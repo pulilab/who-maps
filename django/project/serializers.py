@@ -24,10 +24,10 @@ def url_validator(value):
 
 
 class NDPSerializer(serializers.Serializer):
-    clients = serializers.IntegerField(min_value=0, max_value=100000)
-    health_workers = serializers.IntegerField(min_value=0, max_value=100000)
-    facilities = serializers.IntegerField(min_value=0, max_value=100000)
-    facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=10000,
+    clients = serializers.IntegerField(min_value=0, max_value=2000000000)
+    health_workers = serializers.IntegerField(min_value=0, max_value=2000000000)
+    facilities = serializers.IntegerField(min_value=0, max_value=2000000000)
+    facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=20000,
                                             required=False, allow_null=True)
 
 
@@ -160,7 +160,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
-        instance = self.Meta.model.projects.create(name=validated_data["name"], draft=validated_data)
+        instance = self.Meta.model.objects.create(name=validated_data["name"], draft=validated_data)
         instance.team.add(owner)
 
         return instance
