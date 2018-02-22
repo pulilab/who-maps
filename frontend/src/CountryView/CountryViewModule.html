@@ -157,8 +157,7 @@
                       </div>
 
                       <div class="links">
-                        <md-button ng-hide="project.isTeam" ui-sref="public-dashboard({ appName: project.id })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
-                        <md-button ng-show="project.isTeam" ui-sref="dashboard({ appName: project.id })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
+                        <md-button  ui-sref="editProject({ appName: project.id, editMode: 'publish' })" class="md-primary md-raised md-small"><translate>Project Dashboard</translate></md-button>
                       </div>
                     </div>
                   </div>
