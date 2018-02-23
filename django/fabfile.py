@@ -251,3 +251,11 @@ def up_debug():
 
 def update_translations():
     local("docker-compose exec django python manage.py update_translations master.pot")
+
+
+def shell():
+    local("docker-compose exec django python manage.py shell")
+
+
+def log():
+    local("docker-compose logs -f django")
