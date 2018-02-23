@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel
 from country.models import Country, CountryField
+from project.cache import InvalidateCacheMixin
 from user.models import UserProfile, Organisation
 
 
@@ -177,15 +178,6 @@ class File(ExtendedModel):
     type = models.CharField(max_length=255)
     filename = models.CharField(max_length=255)
     data = models.BinaryField()
-
-
-class InvalidateCacheMixin(object):
-
-    def save(self, *args, **kwargs):
-        for language in settings.LANGUAGES:
-            cache_key = 'project-structure-data-{}'.format(language[0])
-            cache.delete(cache_key)
-        return super(InvalidateCacheMixin, self).save(*args, **kwargs)
 
 
 class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):

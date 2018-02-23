@@ -3,14 +3,13 @@ import csv
 
 from django.db import transaction
 from django.http import HttpResponse
-from django.core.cache import cache
-from django.utils.translation import get_language
 from rest_framework import status
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from project.cache import cache_structure
 from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
@@ -20,18 +19,6 @@ from country.models import Country
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
-
-
-def cache_structure(fn):
-    def wrapper(*args, **kwargs):
-        cache_key = 'project-structure-data-{}'.format(get_language())
-        data = cache.get(cache_key)
-        if not data:
-            data = fn(*args, **kwargs)
-            cache.set(cache_key, data)
-        return data
-
-    return wrapper
 
 
 class ProjectPublicViewSet(ViewSet):
