@@ -397,7 +397,8 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
                                     TechnologyPlatform.objects.get_names_for_ids(
                                         [x['id'] for x in p.data.get("platforms", [])])])},
             {'Health System Challenges': ", ".join(
-                ['({}) {}'.format(x.name, x.challenge) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))])},
+                ['({}) {}'.format(x.name, x.challenge) for x in
+                 HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))])},
             {'Health Information System Support': ", ".join(
                 [str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))])},
             {'Government Investor': INVESTOR_CHOICES[p.data.get('government_investor', 0)][1]},
