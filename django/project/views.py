@@ -406,7 +406,8 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
                 {'Health Information System Support': ", ".join(
                     [str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))])},
                 {'Government Investor': INVESTOR_CHOICES[p.data.get('government_investor', 0)][1]},
-                {'Licenses': ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))])},
+                {'Licenses': ", ".join(
+                    [str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))])},
                 {'Repository': p.data.get('repository')},
                 {'Mobile Application': p.data.get('mobile_application')},
                 {'Wiki': p.data.get('wiki')},
