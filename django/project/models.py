@@ -5,8 +5,6 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
-from django.conf import settings
-from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel
