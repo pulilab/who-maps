@@ -125,6 +125,10 @@ class ProjectPublishedSerializer(serializers.Serializer):
         return url_validator(value)
 
 
+INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
+                    (2, 'Yes, there is a financial contribution through MOH budget')]
+
+
 class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
     Override fields that are not required for draft project.
@@ -142,10 +146,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
-    government_investor = serializers.ChoiceField(
-        choices=[(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
-                 (2, 'Yes, there is a financial contribution through MOH budget')],
-        required=False)
+    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32, required=False)
 
     # SECTION 3 Technology Overview
