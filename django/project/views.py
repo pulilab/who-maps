@@ -16,7 +16,7 @@ from toolkit.models import Toolkit, ToolkitVersion
 from toolkit.toolkit_data import toolkit_default
 from country.models import Country
 
-from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer
+from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
 
@@ -66,6 +66,7 @@ class ProjectPublicViewSet(ViewSet):
         """
         Retrieves list of projects (optionally by country)
         """
+
         def get_strategies(platforms):
             ds_names = []
             for platform in platforms:
@@ -378,52 +379,49 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         projects = Project.objects.filter(id__in=request.data)
 
         results = [[
-            p.name,
-            p.public_id,
-            Country.get_name_by_id(p.data.get('country')),
-            p.data.get('implementation_dates'),
-            p.data.get('start_date'),
-            p.data.get('end_date'),
-            Organisation.get_name_by_id(p.data.get('organisation')),
-            ", ".join(p.data.get('donors')),
-            ", ".join(p.data.get('implementing_partners', [])),
-            " - ".join((p.data.get('contact_name'), p.data.get('contact_email'))),
-            p.data.get('implementation_overview'),
-            p.data.get('geographic_scope'),
-            ", ".join(
-                [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))]),
-            ", ".join([str(x) for x in
-                       TechnologyPlatform.objects.get_names_for_ids([x['id'] for x in p.data.get("platforms", [])])]),
-            ", ".join([str(x) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))]),
-            ", ".join([str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))]),
-            p.data.get('government_investor'),
-            ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))]),
-            p.data.get('repository'),
-            p.data.get('mobile_application'),
-            p.data.get('wiki'),
-            ", ".join([str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
-                p.data.get("interoperability_standards", []))]),
-            p.str_national_level_deployment(),
-            p.str_coverage(),
-            p.str_coverage(second_level=True)
+            {'Name': p.name},
+            {'UUID': p.public_id},
+            {'Country': Country.get_name_by_id(p.data.get('country'))},
+            {'Implementation Date': p.data.get('implementation_dates')},
+            {'Start Date': p.data.get('start_date')},
+            {'End Date': p.data.get('end_date')},
+            {'Organisation Name': Organisation.get_name_by_id(p.data.get('organisation'))},
+            {'Donors': ", ".join(p.data.get('donors'))},
+            {"Implementing Partners": ", ".join(p.data.get('implementing_partners', []))},
+            {"Point of Contact": ", ".join((p.data.get('contact_name'), p.data.get('contact_email')))},
+            {"Overview of digital health implementation": p.data.get('implementation_overview')},
+            {"Geographical scope": p.data.get('geographic_scope')},
+            {"Health Focus Areas": ", ".join(
+                [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))])},
+            {"Software": ", ".join([str(x) for x in
+                                    TechnologyPlatform.objects.get_names_for_ids(
+                                        [x['id'] for x in p.data.get("platforms", [])])])},
+            {'Health System Challenges': ", ".join(
+                ['({}) {}'.format(x.name, x.challenge) for x in HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))])},
+            {'Health Information System Support': ", ".join(
+                [str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))])},
+            {'Government Investor': INVESTOR_CHOICES[p.data.get('government_investor', 0)][1]},
+            {'Licenses': ", ".join([str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))])},
+            {'Repository': p.data.get('repository')},
+            {'Mobile Application': p.data.get('mobile_application')},
+            {'Wiki': p.data.get('wiki')},
+            {'Interoperability Standards': ", ".join(
+                [str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
+                    p.data.get("interoperability_standards", []))])},
+            {'National Level Deployment': p.str_national_level_deployment()},
+            {'First Level Coverage': p.str_coverage()},
+            {'Second Level Coverage': p.str_coverage(second_level=True)}
         ] for p in projects]
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="csv.csv"'
 
-        writer = csv.writer(response)
+        writer = csv.writer(response, delimiter=';')
 
         # HEADER
-        writer.writerow([
-            'Name', 'UUID', 'Country', 'Implementation Date', 'Start Date', 'End Date', 'Organisation Name', 'Donors',
-            "Implementing Partners", "Point of Contact", "Overview of digital health implementation",
-            "Geographical scope", "Health Focus Areas", "Software", 'Health System Challenges',
-            'Health Information System Support', 'Government Approved', 'Government Investor', 'Licenses', 'Repository',
-            'Mobile Application', 'Wiki', 'Interoperability Standards', 'National Level Deployment',
-            'First Level Coverage', 'Second Level Coverage'
-        ])
+        writer.writerow([list(field.keys())[0] for field in results[0]])
 
         # PROJECTS
-        [writer.writerow([field for field in project]) for project in results]
+        [writer.writerow([list(field.values())[0] for field in project]) for project in results]
 
         return response
