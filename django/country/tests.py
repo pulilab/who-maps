@@ -166,6 +166,9 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['fields'][0]['question'], self.country_fields_data['fields'][0]['question'])
         self.assertEqual(response.json()['fields'][0]['answer'], self.country_fields_data['fields'][0]['answer'])
 
+        cfs = CountryField.get_for_project(self.project)
+        self.assertEqual(cfs[0].to_csv(), {'q2?': 'a2'})
+
     def test_create_country_fields_missing_answer(self):
         schema = CountryField.objects.create(country=self.country, type=1, question="q2?", schema=True)
         project = Project.objects.create(name="project1", data={"country": self.country.id})

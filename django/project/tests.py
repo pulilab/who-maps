@@ -1787,11 +1787,8 @@ class PermissionTests(SetupTests):
         response = self.test_user_client.get(url)
 
         self.assertEqual(len(response.data['interoperability_links']), 8)
-        self.assertEqual(response.data['interoperability_links'][0], {'id': 1, 'name': 'Client Registry'})
         self.assertEqual(len(response.data['technology_platforms']), 48)
-        self.assertEqual(response.data['technology_platforms'][0], {'id': 1, 'name': 'Adobe Forms'})
         self.assertEqual(len(response.data['digital_strategies']), 117)
-        self.assertEqual(response.data['digital_strategies'][0], {'id': 112, 'name': 'Targeted client communication'})
 
 
 class TestSoftDelete(APITestCase):
