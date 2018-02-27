@@ -151,11 +151,17 @@
 
                         .text {
                           color: $text-primary;
-                          font-size: 12px;
-                          line-height: 18px;
 
                           // Multi-lang
-                          @include button-ml($width: 100%);
+                          // @include button-ml($width: 100%);
+                          // special multi-line case
+                          translate {
+                            display: block;
+
+                            br {
+                              display: none;
+                            }
+                          }
                           //
                         }
                     }
