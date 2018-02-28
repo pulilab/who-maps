@@ -492,13 +492,6 @@ msgstr ""
 msgid "Apply filters to map:"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryMap/Countrymap.html:137
-#: ./toTranslate/src/Common/CountryMap/Countrymap.html:162
-#: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:45
-#: ./toTranslate/src/CountryView/CountryViewModule.html:155
-msgid "Approved by country"
-msgstr ""
-
 #: ./toTranslate/src/Common/Thematic/static/-1-4.html:1
 msgid "Architecture:"
 msgstr ""
@@ -570,7 +563,7 @@ msgstr ""
 msgid "COUNTRY LEVEL VIEW"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:75
+#: ./toTranslate/src/CountryView/CountryViewModule.html:76
 msgid "CSV"
 msgstr ""
 
@@ -678,7 +671,7 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:109
+#: ./toTranslate/src/CountryView/CountryViewModule.html:110
 msgid "Contact Name"
 msgstr ""
 
@@ -719,7 +712,7 @@ msgstr ""
 #: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:97
 #: ./toTranslate/src/Common/EditProfile/EditProfile.html:56
 #: ./toTranslate/src/Common/TopBar/topBar.html:133
-#: ./toTranslate/src/CountryView/CountryViewModule.html:94
+#: ./toTranslate/src/CountryView/CountryViewModule.html:95
 msgid "Country"
 msgstr ""
 
@@ -835,7 +828,7 @@ msgstr ""
 msgid "Digital Health Atlas"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:162
+#: ./toTranslate/src/CountryView/CountryViewModuleController.js:175
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:56
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:21
 msgid "Digital Health Interventions"
@@ -962,7 +955,7 @@ msgstr ""
 #: ./toTranslate/src/Common/Donors/donors.html:6
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:20
 #: ./toTranslate/src/Common/Thematic/static/2-0.html:44
-#: ./toTranslate/src/CountryView/CountryViewModule.html:104
+#: ./toTranslate/src/CountryView/CountryViewModule.html:105
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:214
 msgid "Donors"
 msgstr ""
@@ -1132,7 +1125,7 @@ msgstr ""
 msgid "Experiences"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:68
+#: ./toTranslate/src/CountryView/CountryViewModule.html:69
 msgid "Export list:"
 msgstr ""
 
@@ -1264,7 +1257,7 @@ msgstr ""
 msgid "General info"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:124
+#: ./toTranslate/src/CountryView/CountryViewModule.html:125
 #: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:80
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:32
 msgid "Geographic scope"
@@ -1440,8 +1433,8 @@ msgstr ""
 msgid "Health Focus Area:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:129
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:171
+#: ./toTranslate/src/CountryView/CountryViewModule.html:130
+#: ./toTranslate/src/CountryView/CountryViewModuleController.js:184
 msgid "Health Focus Areas"
 msgstr ""
 
@@ -1453,7 +1446,7 @@ msgstr ""
 msgid "Health Information System Links"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:179
+#: ./toTranslate/src/CountryView/CountryViewModuleController.js:192
 msgid "Health Information Systems"
 msgstr ""
 
@@ -1465,7 +1458,7 @@ msgstr ""
 msgid "Health Level 7 (data standard)"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:188
+#: ./toTranslate/src/CountryView/CountryViewModuleController.js:201
 msgid "Health System Challenges"
 msgstr ""
 
@@ -1610,7 +1603,7 @@ msgstr ""
 msgid "Implementers:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:119
+#: ./toTranslate/src/CountryView/CountryViewModule.html:120
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:523
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:204
 msgid "Implementing partners"
@@ -2291,8 +2284,8 @@ msgstr ""
 msgid "Organisation"
 msgstr ""
 
-#: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:14
-#: ./toTranslate/src/CountryView/CountryViewModule.html:99
+#: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:16
+#: ./toTranslate/src/CountryView/CountryViewModule.html:100
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:18
 msgid "Organisation name"
 msgstr ""
@@ -2313,7 +2306,7 @@ msgstr ""
 msgid "Overhead expenses that are not dependent on the scale of the operation (e.g. general administrative costs, rent)."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:114
+#: ./toTranslate/src/CountryView/CountryViewModule.html:115
 msgid "Overview of digital health implementation"
 msgstr ""
 
@@ -2326,7 +2319,7 @@ msgstr ""
 msgid "Overview of the digital health implementation"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:71
+#: ./toTranslate/src/CountryView/CountryViewModule.html:72
 msgid "PDF"
 msgstr ""
 
@@ -2480,7 +2473,6 @@ msgstr ""
 msgid "Programme fidelity:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:159
 #: ./toTranslate/src/CountryView/CountryViewModule.html:160
 msgid "Project Dashboard"
 msgstr ""
@@ -2499,7 +2491,7 @@ msgstr ""
 msgid "Project leaders and staff also need appropriate training, supervision and support. <b><em>User training</em></b>, which involves end-users and secondary users, must be tailored specifically to the needs and levels of experience of the participants. It is widely recognized that effective engagement with health workers and other end-users is the key to successful adoption of mHealth products. Training programmes should also aim to foster a sense of perceived value of the product among end-users. The scaling-up process will be hampered if health workers fail to see the benefits of the application on their workload, or if they feel overwhelmed by the complexity of the technology."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:89
+#: ./toTranslate/src/CountryView/CountryViewModule.html:90
 #: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:12
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:11
 msgid "Project name"
@@ -2741,8 +2733,8 @@ msgstr ""
 msgid "Secondary users:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:22
-#: ./toTranslate/src/CountryView/CountryViewModule.html:54
+#: ./toTranslate/src/CountryView/CountryViewModule.html:23
+#: ./toTranslate/src/CountryView/CountryViewModule.html:55
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:166
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:304
 msgid "Select a country"
@@ -2786,7 +2778,7 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:58
+#: ./toTranslate/src/CountryView/CountryViewModule.html:59
 msgid "Show all countries"
 msgstr ""
 
@@ -2809,7 +2801,7 @@ msgid "Show more..."
 msgstr ""
 
 #: ./toTranslate/src/CountryView/CountryViewModule.html:217
-msgid "Show only approved projects"
+msgid "Show only verified projects"
 msgstr ""
 
 #: ./toTranslate/src/MapsToolkit/MapsToolkitModule.html:99
@@ -2857,7 +2849,7 @@ msgstr ""
 msgid "Society for the Elimination of Rural Poverty (India)"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:197
+#: ./toTranslate/src/CountryView/CountryViewModuleController.js:210
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:15
 msgid "Software"
 msgstr ""
@@ -2988,7 +2980,7 @@ msgstr ""
 msgid "Table 4: Data standards"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:81
+#: ./toTranslate/src/CountryView/CountryViewModule.html:82
 msgid "Team member"
 msgstr ""
 
@@ -3346,7 +3338,7 @@ msgid ""
 "                  your own risk."
 msgstr ""
 
-#: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:22
+#: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:24
 msgid "This field has to be less than 100 characters long."
 msgstr ""
 
@@ -3358,7 +3350,7 @@ msgstr ""
 msgid "This field has to be less than 64 characters long."
 msgstr ""
 
-#: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:21
+#: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:23
 msgid "This field is required"
 msgstr ""
 
@@ -3637,6 +3629,13 @@ msgstr ""
 msgid "Variable costs"
 msgstr ""
 
+#: ./toTranslate/src/Common/CountryMap/Countrymap.html:137
+#: ./toTranslate/src/Common/CountryMap/Countrymap.html:162
+#: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:45
+#: ./toTranslate/src/CountryView/CountryViewModule.html:156
+msgid "Verified by country"
+msgstr ""
+
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:31
 #: ./toTranslate/src/Common/SubBar/subBar.html:21
 #: ./toTranslate/src/Dashboard/Statistics/Statistics.html:19
@@ -3659,7 +3658,7 @@ msgstr ""
 msgid "View instructions"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:80
+#: ./toTranslate/src/CountryView/CountryViewModule.html:81
 msgid "Viewer"
 msgstr ""
 
@@ -4777,7 +4776,7 @@ msgstr ""
 msgid "joint learning and technical assistance workshops with IWG grantee mHealth projects and technical experts;"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:44
+#: ./toTranslate/src/CountryView/CountryViewModule.html:45
 msgid "list view"
 msgstr ""
 
@@ -4821,7 +4820,7 @@ msgstr ""
 msgid "mNDCC"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:12
+#: ./toTranslate/src/CountryView/CountryViewModule.html:13
 msgid "map view"
 msgstr ""
 
