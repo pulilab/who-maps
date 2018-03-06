@@ -53,7 +53,7 @@ export function mergeCustomAndDefault(collection) {
 export function parsePlatformCollection({ platforms }) {
     return platforms.map(p => {
         const id = p.id;
-        const strategies = p.strategies && p.strategies.length > 0 ? p.strategies : undefined;
+        const strategies = p.strategies && p.strategies.length > 0 ? p.strategies : [];
         p = {};
         if (id) {
             p.id = id;
