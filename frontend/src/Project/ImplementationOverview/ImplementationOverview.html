@@ -438,6 +438,7 @@
             <input type="number"
                    min="0"
                    name="national_level_deployment.health_workers"
+                   ng-change="vm.dispatchChange('national_level_deployment', vm.project.national_level_deployment)"
                    ng-required="vm.isNationalLevelCoverageRequired()"
                    ng-model="vm.project.national_level_deployment.health_workers">
             <div ng-messages="vm.form['national_level_deployment.health_workers'].$error">
@@ -459,6 +460,7 @@
                    min="0"
                    name="national_level_deployment.facilities"
                    ng-required="vm.isNationalLevelCoverageRequired()"
+                   ng-change="vm.dispatchChange('national_level_deployment', vm.project.national_level_deployment)"
                    ng-model="vm.project.national_level_deployment.facilities">
             <div ng-messages="vm.form['national_level_deployment.facilities'].$error">
               <div ng-message="required">
@@ -479,6 +481,7 @@
                    min="0"
                    name="national_level_deployment.clients"
                    ng-required="vm.isNationalLevelCoverageRequired()"
+                   ng-change="vm.dispatchChange('national_level_deployment', vm.project.national_level_deployment)"
                    ng-model="vm.project.national_level_deployment.clients">
             <div ng-messages="vm.form['national_level_deployment.clients'].$error">
               <div ng-message="required">
