@@ -5,8 +5,7 @@ import * as CountriesModule from '../../store/modules/countries';
 class ImplementationOverview extends CollapsibleSet {
 
     constructor($scope, $element, $ngRedux) {
-        super($element, $scope, 'project');
-        this.$ngRedux = $ngRedux;
+        super($element, $scope, 'project', [], [], $ngRedux);
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.setAvailableOptions = this.setAvailableOptions.bind(this);
@@ -44,7 +43,8 @@ class ImplementationOverview extends CollapsibleSet {
         this.scope.$watch(() => {
             return this.project.platforms;
         }, (platform) => {
-            this.setAvailableDictOptions(platform, this.structure.technology_platforms, 'name');
+            this.setAvailableDictOptions(platform, this.structure.technology_platforms);
+            this.dispatchChange('platforms', platform);
         }, true);
 
         this.scope.$watch(()=>{
@@ -52,6 +52,7 @@ class ImplementationOverview extends CollapsibleSet {
         }, (coverage) => {
             this.observeCoverage = {};
             this.clearDistrict(coverage);
+            this.dispatchChange('coverage', coverage);
         }, true);
 
         this.scope.$watch(()=>{
@@ -59,6 +60,7 @@ class ImplementationOverview extends CollapsibleSet {
         }, (coverage_second_level) => {
             this.observeCoverageSecondLevel = {};
             this.clearDistrict(coverage_second_level);
+            this.dispatchChange('coverage_second_level', coverage_second_level);
         }, true);
 
         this.scope.$watchGroup([() => {

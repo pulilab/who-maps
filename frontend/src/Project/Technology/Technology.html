@@ -11,6 +11,7 @@
       </label>
       <md-datepicker
         ng-model="vm.project.implementation_dates"
+        ng-change="vm.dispatchChange('implementation_dates', vm.project.implementation_dates)"
         md-open-on-focus
         name="implementation_dates"
         md-current-view="year"
@@ -50,6 +51,7 @@
       </label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
       <input  name="repository" ng-model="vm.project.repository"
+              ng-change="vm.dispatchChange('repository', vm.project.repository)"
               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200" >
       <div ng-messages="vm.form.repository.$error">
@@ -65,6 +67,7 @@
       </label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
       <input  name="mobile_application" ng-model="vm.project.mobile_application"
+              ng-change="vm.dispatchChange('mobile_application', vm.project.mobile_application)"
               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200">
       <div ng-messages="vm.form.mobile_application.$error">
@@ -80,6 +83,7 @@
       </label>
       <md-icon><i class="material-icons">&#xE157;</i></md-icon>
       <input  name="wiki" ng-model="vm.project.wiki"
+              ng-change="vm.dispatchChange('wiki', vm.project.wiki)"
               ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/"
               md-maxlength="200">
       <div ng-messages="vm.form.wiki.$error">

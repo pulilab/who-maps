@@ -1,5 +1,4 @@
 import forEach from 'lodash/forEach';
-import isNil from 'lodash/isNil';
 import isPlainObject from 'lodash/isPlainObject';
 import * as ProjectModule from '../store/modules/projects';
 import * as SystemModule from '../store/modules/system';
@@ -31,27 +30,20 @@ class ProjectController  {
         const userProfile = UserModule.getProfile(state);
         const newProject = this.state.current.name === 'newProject';
         const publishMode = this.state.params.editMode === 'publish';
-        const lastVersion = ProjectModule.getLastVersion(state);
         let project = null;
         let team = null;
         let viewers = null;
-        if (!isNil(this.lastVersion) && this.lastVersion === lastVersion) {
-            project = this.project;
-            team = this.team;
-            viewers = this.viewers;
+        if (newProject) {
+            project = ProjectModule.getNewProjectForEditing(state);
+            team = [userProfile];
+            viewers = [];
         }
         else {
-            if (newProject) {
-                project = ProjectModule.getVanillaProject(state);
-                team = [userProfile];
-                viewers = [];
-            }
-            else {
-                project = ProjectModule.getCurrentDraftProjectForEditing(state);
-                team = ProjectModule.getTeam(state);
-                viewers = ProjectModule.getViewers(state);
-            }
+            project = ProjectModule.getCurrentDraftProjectForEditing(state);
+            team = ProjectModule.getTeam(state);
+            viewers = ProjectModule.getViewers(state);
         }
+
         const isViewer = (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
         const isTeam = team.some(v => v.id === userProfile.id);
         const readOnlyMode = publishMode || !isTeam;
@@ -74,7 +66,6 @@ class ProjectController  {
             readOnlyMode,
             isViewer,
             isTeam,
-            lastVersion,
             project,
             team,
             viewers,
@@ -106,9 +97,11 @@ class ProjectController  {
 
     onDestroy() {
         this.unsubscribe();
+        this.$ngRedux.dispatch(ProjectModule.resetEditedProject());
         this.EE.removeAllListeners('projectScrollTo', this.scrollToFieldSet);
         this.EE.removeAllListeners('projectSaveDraft', this.saveDraftHandler);
         this.EE.removeAllListeners('projectDiscardDraft', this.discardDraftHandler);
+
     }
 
     createDialogs() {

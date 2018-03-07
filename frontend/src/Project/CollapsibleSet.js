@@ -1,17 +1,22 @@
+import angular from 'angular';
 import remove from 'lodash/remove';
 import moment from 'moment';
+import debounce from 'lodash/debounce';
 import { fixUrl } from '../Utilities';
+import * as ProjectModule from '../store/modules/projects';
 
 class CollapsibleSet {
-    constructor(element, scope, collectionName, resetDefaultList = [], emptyCheckableArray = []) {
+    constructor(element, scope, collectionName, resetDefaultList = [], emptyCheckableArray = [], $ngRedux) {
         this.EE = window.EE;
         this.element = element;
         this.scope = scope;
+        this.$ngRedux = $ngRedux;
         this.toggleClass = 'collapsed';
         this.activateClass = 'active';
         this.collectionName = collectionName;
         this.resetDefaultList = resetDefaultList;
         this.emptyCheckableArray = emptyCheckableArray;
+        this.dispatchChange = debounce(this.dispatchChange.bind(this), 300);
     }
 
     defaultOnInit() {
@@ -40,7 +45,12 @@ class CollapsibleSet {
                 });
             });
         }
+    }
 
+    dispatchChange(field, change) {
+        const project = {};
+        project[field] = angular.copy(change);
+        this.$ngRedux.dispatch(ProjectModule.updateEditedProject(project));
     }
 
     emptyCustom(field, checkbox) {
@@ -81,7 +91,9 @@ class CollapsibleSet {
         child.push(toAdd);
     }
     removeChild(index, childName) {
-        return this[this.collectionName][childName].splice(index, 1);
+        const collection =  this[this.collectionName][childName].splice(index, 1);
+        this.dispatchChange(childName, this[this.collectionName][childName]);
+        return collection;
     }
 
     showAddMore(index, collection) {
@@ -114,6 +126,7 @@ class CollapsibleSet {
         else {
             field.push(t.id);
         }
+        this.dispatchChange(key, field);
     }
 
     checkboxChecked(t, key) {

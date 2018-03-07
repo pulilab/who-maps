@@ -1,6 +1,7 @@
 import axios from '../../plugins/axios';
 import forOwn from 'lodash/forOwn';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import { project_definition } from '../static_data/project_definition';
 import * as CountryModule from './countries';
 import * as UserModule from './user';
@@ -45,10 +46,6 @@ export const isMemberOrViewer = (state, project) => {
 
 export const getCurrentProjectId = state => {
     return state.projects.currentProject;
-};
-
-export const getLastVersion = state => {
-    return state.projects.lastVersion;
 };
 
 
@@ -326,9 +323,18 @@ export const getCurrentPublishedProjectForEditing = state => {
     return undefined;
 };
 
+export const getCurrentEdits = state => {
+    return state.projects.editedProject ;
+};
+
 export const getCurrentDraftProjectForEditing = state => {
-    const project = exports.getCurrentDraft(state);
+    const project = { ...exports.getCurrentDraft(state), ...exports.getCurrentEdits(state) };
     return exports.getCurrentProjectForEditing(state, project);
+};
+
+export const getNewProjectForEditing = state => {
+    const vanilla = exports.getVanillaProject(state);
+    return { ...vanilla, ...exports.getCurrentEdits(state) };
 };
 
 
@@ -519,7 +525,6 @@ export function loadProjectDetails() {
                     }
                 });
                 dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: teamViewers.data });
-                dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
             }
             return Promise.resolve();
         }
@@ -631,7 +636,7 @@ export function processForm(form) {
     return removeKeysWithoutValues(form);
 }
 
-export async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate, method) {
+export async function postProjectSaveActions(data, team, viewers, dispatch, state, toUpdate) {
     const user = UserModule.getProfile(state).id;
     const countryFields = exports.getStoredCountryFields(state)(true);
     const cfPromise = exports.saveCountryFields(countryFields, data.draft.country, data.id, toUpdate);
@@ -652,9 +657,6 @@ export async function postProjectSaveActions(data, team, viewers, dispatch, stat
     data.draft.fields = fields;
     dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
     dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers });
-    if (method === 'put') {
-        dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
-    }
     dispatch(UserModule.updateTeamViewers(updateMember, updateViewer));
     dispatch(CountryModule.loadCurrentCountryProjects());
     dispatch(CountryModule.loadCurrentCountryDistrictsProject());
@@ -668,7 +670,7 @@ export function saveDraft(form, team, viewers) {
         const url = form.id ? `/api/projects/draft/${form.id}/` : '/api/projects/draft/';
         try {
             const { data } = await axios[method](url, form);
-            return exports.postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'draft', method);
+            return exports.postProjectSaveActions(data, team, viewers,  dispatch, getState(), 'draft');
         }
         catch (e) {
             console.log(e);
@@ -685,7 +687,6 @@ export function discardDraft() {
         const { data } = await axios.put(`/api/projects/draft/${published.id}/`, form);
         data.draft.fields = await exports.saveCountryFields(countryFields, data.draft.country, data.id, 'published');
         dispatch({ type: 'UPDATE_SAVE_PROJECT', project: data });
-        dispatch({ type: 'BUMP_PROJECT_STATE_VERSION' });
         return Promise.resolve(data);
     };
 }
@@ -749,10 +750,32 @@ export function updateProjectCountryFields({ id, answer, question, type, country
     };
 }
 
+export function updateEditedProject(project) {
+    return (dispatch, getState) => {
+        const update = {};
+        const current = getState().projects.editedProject;
+        Object.keys(project).forEach(k => {
+            const eq = isEqual(current[k], project[k]);
+            if (!eq) {
+                update[k] = project[k];
+            }
+        });
+        if (Object.keys(update).length > 0) {
+            dispatch({ type: 'EDITED_PROJECT_UPDATE', update });
+        }
+    };
+}
+
+export function resetEditedProject() {
+    return dispatch => {
+        dispatch({ type: 'EDITED_PROJECT_RESET' });
+    };
+}
+
 
 // Reducers
 
-export default function projects(state = { lastVersion: 0 }, action) {
+export default function projects(state = { editedProject: {} }, action) {
     switch (action.type) {
     case 'SET_PROJECT_LIST': {
         const list = action.projects.slice();
@@ -789,7 +812,7 @@ export default function projects(state = { lastVersion: 0 }, action) {
     }
     case 'SET_CURRENT_PROJECT': {
         const currentProject = action.id;
-        return { ...state, currentProject, lastVersion: 0 };
+        return { ...state, currentProject };
     }
     case 'SET_CURRENT_PUBLIC_PROJECT_DETAIL': {
         const currentPublicProject = action.project;
@@ -805,16 +828,18 @@ export default function projects(state = { lastVersion: 0 }, action) {
         const teamViewers = action.info.teamViewers;
         return { ...state, toolkitVersions, coverageVersions, teamViewers };
     }
-    case 'BUMP_PROJECT_STATE_VERSION': {
-        const lastVersion = state.lastVersion += 1;
-        return { ...state, lastVersion };
-    }
     case 'SET_PROJECT_TEAM_VIEWERS': {
         const teamViewers = action.teamViewers;
         return { ...state, teamViewers };
     }
     case 'CLEAR_USER_PROJECTS': {
         return { structure: state.structure };
+    }
+    case 'EDITED_PROJECT_UPDATE': {
+        return { ...state, editedProject: { ...state.editedProject, ...action.update } };
+    }
+    case 'EDITED_PROJECT_RESET': {
+        return { ...state, editedProject: {} };
     }
     default:
         return state;
