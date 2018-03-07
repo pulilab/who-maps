@@ -324,7 +324,7 @@ export const getCurrentPublishedProjectForEditing = state => {
 };
 
 export const getCurrentEdits = state => {
-    return state.projects.editedProject ;
+    return state.projects.editedProject;
 };
 
 export const getCurrentDraftProjectForEditing = state => {
