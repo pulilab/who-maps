@@ -135,6 +135,9 @@ class DialogMultiSelector {
             this.scope.$evalAsync(() => {
                 this.modalOpen = false;
                 this.selection = selection;
+                if (this.onClose && this.onClose instanceof Function) {
+                    this.onClose(this.collectionName, selection);
+                }
             });
         }).catch(()=> {
             this.scope.$evalAsync(() => {
