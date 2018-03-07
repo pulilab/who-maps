@@ -12,7 +12,7 @@
           <translate>Project name</translate>
         </label>
         <input md-maxlength="100" required name="name"
-               ng-model="vm.project.name"
+               ng-model="vm.projectName"
                ng-model-options="{debounce: 200}"
                ng-change="vm.checkName()">
         <div ng-messages="vm.form.name.$error">
@@ -42,6 +42,7 @@
     <div layout="row">
       <organisation-autocomplete
         flex="60"
+        call-on-change="vm.dispatchChange"
         organisation="vm.project.organisation"
         not-required="!vm.activateValidation"
         form="vm.form">
@@ -54,7 +55,7 @@
           <translate>Project country</translate>
         </label>
         <md-icon><i class="material-icons">&#xE80B;</i></md-icon>
-        <md-select ng-model="vm.project.country" name="country" ng-disabled="vm.project.hasPublishedVersion" required>
+        <md-select ng-model="vm.project.country" ng-change="vm.dispatchChange('country', vm.project.country)" name="country" ng-disabled="vm.project.hasPublishedVersion" required>
           <md-tooltip md-autohide md-direction="top" ng-show="vm.project.hasPublishedVersion">
             <translat>You can not change the country of a published project</translate>
           </md-tooltip>
@@ -82,6 +83,7 @@
       <textarea ng-model="vm.project.geographic_scope"
                 md-maxlength="500"
                 name="geographic_scope"
+                ng-change="vm.dispatchChange('geographic_scope', vm.project.geographic_scope)"
                 rows="1"
                 md-select-on-focus>
       </textarea>
@@ -106,6 +108,7 @@
       <textarea ng-model="vm.project.implementation_overview"
                 md-maxlength="500"
                 rows="1"
+                ng-change="vm.dispatchChange('implementation_overview', vm.project.implementation_overview)"
                 ng-required="vm.activateValidation"
                 name="implementation_overview"
                 md-select-on-focus></textarea>
@@ -141,6 +144,7 @@
           ng-model="vm.project.start_date"
           md-open-on-focus
           name="start_date"
+          ng-change="vm.dispatchChange('start_date', vm.project.start_date)"
           md-current-view="year">
         </md-datepicker>
         <div ng-messages="vm.form.start_date.$error">
@@ -159,6 +163,7 @@
         <md-datepicker
           ng-model="vm.project.end_date"
           md-open-on-focus
+          ng-change="vm.dispatchChange('end_date', vm.project.end_date)"
           name="end_date"
           md-current-view="year">
         </md-datepicker>
@@ -177,7 +182,9 @@
         <label>
           <translate>Contact name</translate>
         </label>
-        <input ng-required="vm.activateValidation" name="contact_name" ng-model="vm.project.contact_name"
+        <input ng-required="vm.activateValidation" name="contact_name"
+               ng-change="vm.dispatchChange('contact_name', vm.project.contact_name)"
+               ng-model="vm.project.contact_name"
                md-maxlength="250">
         <div ng-messages="vm.form.contact_name.$error">
           <div ng-message="required">
@@ -200,6 +207,7 @@
                ng-pattern="/.{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+/"
                md-minlength="4"
                md-maxlength="256"
+               ng-change="vm.dispatchChange('contact_email', vm.project.contact_email)"
                ng-model="vm.project.contact_email">
         <div ng-messages="vm.form.contact_email.$error">
           <div ng-message="required">

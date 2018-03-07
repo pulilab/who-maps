@@ -8,11 +8,10 @@ import * as CountriesModule from '../../store/modules/countries';
 class GeneralOverviewController extends CollapsibleSet {
 
     constructor($scope, $element, $state, $ngRedux) {
-        super($element, $scope, 'project');
+        super($element, $scope, 'project', [], [], $ngRedux);
         this.state = $state;
-        this.$ngRedux = $ngRedux;
         this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.defaultOnDestroy.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
         this.mapData = this.mapData.bind(this);
         this.getUsers = this.getUsers.bind(this);
         this.checkName = this.checkName.bind(this);
@@ -35,19 +34,24 @@ class GeneralOverviewController extends CollapsibleSet {
         this.watchers();
     }
 
-    watchers() {
-        const self = this;
-        self.scope.$watch(() => {
-            return this.project.name;
-        }, name => {
-            self.currentName = self.currentName || name;
-        });
+    onDestroy() {
+        this.defaultOnDestroy();
+        this.unsubscribe();
+    }
 
-        self.scope.$watchGroup([() => {
-            return this.project.start_date;
-        }, () => {
-            return this.project.end_date;
-        }], self.validateDateRange);
+    watchers() {
+        this.scope.$watch(
+            s => s.vm.project.name,
+            name => {
+                this.projectName = name;
+                this.currentName = this.currentName || name;
+            }
+        );
+
+        this.scope.$watchGroup(
+             [s => s.vm.project.start_date, s => s.vm.project.end_date],
+             this.validateDateRange
+        );
     }
 
     validateDateRange([start, end]) {
@@ -79,11 +83,15 @@ class GeneralOverviewController extends CollapsibleSet {
 
     async checkName() {
         this.handleCustomError('name');
-        if (this.project.name && this.project.name.length > 0 && this.project.name !== this.currentName) {
-            await this.searchDuplicateProjectName(this.project.name);
+        if (this.projectName && this.projectName.length > 0 && this.projectName !== this.currentName) {
+            await this.searchDuplicateProjectName(this.projectName);
             if (this.similarProject && this.similarProject[0]
-              && this.similarProject[0].name.toLowerCase() === this.project.name.toLowerCase()) {
+              && this.similarProject[0].name.toLowerCase() === this.projectName.toLowerCase()) {
                 this.setCustomError('name', 'Project name is not unique');
+                this.dispatchChange('name', null);
+            }
+            else {
+                this.dispatchChange('name', this.projectName);
             }
         }
     }

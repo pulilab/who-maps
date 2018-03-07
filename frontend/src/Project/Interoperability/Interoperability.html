@@ -12,7 +12,7 @@
     </h6>
 
     <md-input-container class="md-block error-placeholder">
-      <input  name="interoperability_links" ng-model="vm.hiddenFields" aria-label="hidden">
+      <input  name="interoperability_links" ng-model="vm.hiddenFields" aria-label="hidden" >
       <div ng-messages="vm.form.interoperability_links.$error">
         <div ng-message="custom">
           <div ng-repeat="message in vm.form.interoperability_links.customError">
@@ -36,6 +36,7 @@
         <input ng-disabled="!vm.project.interoperability_links[$index].selected"
                name="{{'interoperability_links_' + $index + '_link'}}"
                md-maxlength="200"
+               ng-change="vm.dispatchChange('interoperability_links', vm.project.interoperability_links)"
                ng-model="vm.project.interoperability_links[$index].link"
                ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[\.]{0,1}/">
         <div ng-messages="vm.form['interoperability_links_' + $index + '_link'].$error">

@@ -61,7 +61,7 @@ export function parsePlatformCollection({ platforms }) {
         if (strategies) {
             p.strategies = strategies.map(s => s.id).filter(s => s);
         }
-        return p;
+        return id ? p : undefined;
     });
 }
 

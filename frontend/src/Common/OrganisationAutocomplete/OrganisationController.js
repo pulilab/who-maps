@@ -6,6 +6,18 @@ export default class OrganisationController {
         this.scope = $scope;
         this.addOrganisationName = this.addOrganisationName.bind(this);
         this.organisationSearch = this.organisationSearch.bind(this);
+        this.$onInit = this.onInit.bind(this);
+    }
+
+    onInit() {
+        this.scope.$watch(s => s.vm.organisation, (organisation, old) => {
+            if ((!old && organisation && organisation.id)
+            || (organisation && organisation.id && organisation.id !== old.id)) {
+                if (this.callOnChange && this.callOnChange instanceof Function) {
+                    this.callOnChange('organisation', this.organisation);
+                }
+            }
+        });
     }
 
     async organisationSearch(name) {

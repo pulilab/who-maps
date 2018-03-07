@@ -17,7 +17,8 @@ const component = {
         name: '<',
         formElement: '<',
         isRequired: '<',
-        showTitle: '<'
+        showTitle: '<',
+        onClose: '<'
     }
 };
 
