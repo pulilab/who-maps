@@ -126,8 +126,10 @@ describe('CollapsibleSet class', () => {
     });
 
     it('should have a function that remove on item from a target collection', ()=> {
+        spyOn(controller, 'dispatchChange');
         controller.removeChild(0, 'a');
         expect(controller.test.a.length).toBe(0);
+        expect(controller.dispatchChange).toHaveBeenCalled();
     });
 
     it('should have a function that regulate if to show the add more button', () => {
@@ -163,9 +165,11 @@ describe('CollapsibleSet class', () => {
 
     it('should have a function that toggle a checkbox', () => {
         spyOn(controller, 'findField').and.callThrough();
-        expect(controller.findField).not.toHaveBeenCalled();
+        spyOn(controller, 'dispatchChange');
         controller.checkboxToggle();
+        expect(controller.findField).not.toHaveBeenCalled();
         controller.checkboxToggle({ id: 1 }, 'c');
+        expect(controller.dispatchChange).toHaveBeenCalled();
         expect(controller.test.c.standard).toContain(1);
         controller.checkboxToggle({ id:1 }, 'c');
         expect(controller.test.c.standard).not.toContain(1);
@@ -174,6 +178,7 @@ describe('CollapsibleSet class', () => {
 
     it('should have a function that return true if a value is present in a field', () => {
         spyOn(controller, 'findField').and.callThrough();
+        spyOn(controller, 'dispatchChange');
         controller.checkboxChecked();
         expect(controller.findField).not.toHaveBeenCalled();
         let result = controller.checkboxChecked(1, 'c');

@@ -80,9 +80,7 @@ describe('GeneralOverviewController', () => {
     it(' async checkName fn.', A(async () => {
         spyOn(controller, 'handleCustomError');
         spyOn(controller, 'setCustomError');
-        controller.project = {
-            name: 'a'
-        };
+        controller.projectName = 'a'
         controller.currentName = 'a';
         controller.searchDuplicateProjectName = jasmine.createSpy('searchDuplicateProjectName');
 

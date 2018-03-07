@@ -66,15 +66,6 @@ describe('Project Store Module', () => {
             expect(result).toBe(1);
         });
 
-        it('getLastVersion', () => {
-            const state = {
-                projects: {
-                    lastVersion: 1
-                }
-            };
-            const result = ProjectModule.getLastVersion(state);
-            expect(result).toBe(1);
-        });
 
         it('getSavedProjectList', () => {
             spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ vanillaProp: 1 });
@@ -561,10 +552,11 @@ describe('Project Store Module', () => {
         it('getCurrentDraftProjectForEditing', () => {
             spyOn(ProjectModule, 'getCurrentProjectForEditing').and.returnValue(1);
             spyOn(ProjectModule, 'getCurrentDraft').and.returnValue(1);
+            spyOn(ProjectModule, 'getCurrentEdits').and.returnValue({});
             const result = ProjectModule.getCurrentDraftProjectForEditing({});
             expect(result).toEqual(1);
             expect(ProjectModule.getCurrentDraft).toHaveBeenCalled();
-            expect(ProjectModule.getCurrentProjectForEditing).toHaveBeenCalledWith({}, 1);
+            expect(ProjectModule.getCurrentProjectForEditing).toHaveBeenCalledWith({}, {});
         });
 
         it('getTeam', () => {
@@ -925,7 +917,7 @@ describe('Project Store Module', () => {
                 }
             });
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: 1 });
-            expect(dispatch).toHaveBeenCalledWith({ type: 'BUMP_PROJECT_STATE_VERSION' });
+
 
 
             spy.and.throwError('error');
@@ -1098,12 +1090,9 @@ describe('Project Store Module', () => {
         });
 
         it('SET_CURRENT_PROJECT', () => {
-            let state = {
-                lastVersion: 1
-            };
+            let state = {};
             const action = { type: 'SET_CURRENT_PROJECT', id: 1 };
             state = ProjectModule.default(state, action);
-            expect(state.lastVersion).toEqual(0);
             expect(state.currentProject).toEqual(1);
 
         });
@@ -1136,13 +1125,6 @@ describe('Project Store Module', () => {
             expect(state.toolkitVersions).toEqual(1);
             expect(state.coverageVersions).toEqual(2);
             expect(state.teamViewers).toEqual(3);
-        });
-
-        it('BUMP_PROJECT_STATE_VERSION', () => {
-            let state = { lastVersion: 0 };
-            const action = { type: 'BUMP_PROJECT_STATE_VERSION' };
-            state = ProjectModule.default(state, action);
-            expect(state.lastVersion).toEqual(1);
         });
 
         it('SET_PROJECT_TEAM_VIEWERS', () => {
