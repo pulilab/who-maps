@@ -8,7 +8,7 @@ import {
     appDataResolver,
     publicDataResolver,
     appNameMapper
-} from '../../src/App/appModule-config';
+} from '../../src/App/app-config';
 
 describe('AppModule - configuration submodule', () => {
 
