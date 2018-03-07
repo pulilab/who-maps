@@ -9,7 +9,7 @@ import * as CountryModule from '../store/modules/countries';
 
 class ProjectController  {
 
-    constructor($scope, $state, toast, $timeout, $mdDialog, $ngRedux) {
+    constructor($scope, $state, toast, $timeout, $mdDialog, $ngRedux, gettextCatalog) {
         this.EE = window.EE;
         this.scope = $scope;
         this.state = $state;
@@ -23,7 +23,7 @@ class ProjectController  {
         this.eventListeners = this.eventListeners.bind(this);
         this.toast = toast;
         this.mapData = this.mapData.bind(this);
-        this.createDialogs = this.createDialogs.bind(this);
+        this.createDialogs = this.createDialogs.bind(this, gettextCatalog);
     }
 
     mapData(state) {
@@ -104,22 +104,52 @@ class ProjectController  {
 
     }
 
-    createDialogs() {
+    createDialogs(gettextCatalog) {
         this.confirmDraftDiscard = this.$mdDialog.confirm({
-            title: 'Attention',
-            textContent: 'The current draft will be overwritten by the published version',
-            ok: 'Ok',
-            cancel: 'Cancel',
+            title: gettextCatalog.getString('Attention'),
+            textContent: gettextCatalog.getString('The current draft will be overwritten by the published version'),
+            ok: gettextCatalog.getString('Ok'),
+            cancel: gettextCatalog.getString('Cancel'),
             theme: 'alert'
         });
 
         this.publishAlert = this.$mdDialog.alert({
-            title: 'Attention',
-            textContent: 'You can\'t publish until all the required' +
-            ' fields are filled, you can however save the draft',
-            ok: 'Close',
+            title: gettextCatalog.getString('Attention'),
+            textContent: gettextCatalog.getString('You can\'t publish until all the required' +
+            ' fields are filled, you can however save the draft'),
+            ok: gettextCatalog.getString('Close'),
             theme: 'alert'
         });
+
+        this.savingError = this.$mdDialog.alert({
+            title: gettextCatalog.getString('Attention'),
+            textContent: gettextCatalog.getString('An error occured while saving your project, your data is NOT saved'),
+            ok: gettextCatalog.getString('Close'),
+            theme: 'alert'
+        });
+
+        this.draftCongratulation = this.$mdDialog.alert({
+            title: gettextCatalog.getString('Congratulation'),
+            textContent: gettextCatalog.getString('Your draft has been saved successfully'),
+            ok: gettextCatalog.getString('Close'),
+            theme: 'alert'
+        });
+
+        this.draftDiscardCongratulation = this.$mdDialog.alert({
+            title: gettextCatalog.getString('Congratulation'),
+            textContent: gettextCatalog.getString('Your draft has been discarded successfully'),
+            ok: gettextCatalog.getString('Close'),
+            theme: 'alert'
+        });
+
+        this.publishCongratulation = this.$mdDialog.alert({
+            title: gettextCatalog.getString('Congratulation'),
+            textContent: gettextCatalog.getString('Your draft has been published successfully'),
+            ok: gettextCatalog.getString('Close'),
+            theme: 'alert'
+        });
+
+
     }
 
     watchers() {
@@ -179,7 +209,7 @@ class ProjectController  {
             if (this.form.$valid) {
                 try {
                     const project = await this.saveDraft(this.project, this.team, this.viewers);
-                    this.showToast('Draft updated');
+                    this.$mdDialog.show(this.draftCongratulation);
                     if (this.newProject) {
                         this.state.go('editProject', { appName: project.id }, {
                             location: 'replace',
@@ -202,11 +232,10 @@ class ProjectController  {
         try {
             await this.$mdDialog.show(this.confirmDraftDiscard);
             await this.discardDraft();
-            this.showToast('Draft discarded');
+            await this.$mdDialog.show(this.draftDiscardCongratulation);
         }
         catch (e) {
             console.log(e);
-            this.showToast('Discard draft process canceled');
         }
     }
 
@@ -221,24 +250,8 @@ class ProjectController  {
         }, 100);
     }
 
-
-    showToast(text) {
-        const toast = {
-            template:
-              `<md-toast id="custom-toast">
-                <div class="md-toast-content">
-                  <span>${text}</span>
-                </div>
-              </md-toast>`,
-            autoWrap: false,
-            hideDelay: 3000
-        };
-
-        this.toast.show(toast);
-    }
-
-    postPublishAction({ id }) {
-        this.showToast('Project Published');
+    async postPublishAction({ id }) {
+        this.$mdDialog.show(this.publishCongratulation);
         this.state.go('editProject', { appName: id, editMode: 'publish' }, {
             location: 'replace',
             reload: true
@@ -258,6 +271,7 @@ class ProjectController  {
     handleResponse(response) {
         if (response && response.status === 500) {
             console.error('500 from the API', response);
+            this.$mdDialog.show(this.savingError);
             return;
         }
         if (response.custom) {
@@ -288,7 +302,7 @@ class ProjectController  {
                 console.error(e);
             }
         });
-
+        this.$mdDialog.show(this.savingError);
         this.scope.$evalAsync(()=>{
             this.focusInvalidField();
         });
@@ -297,10 +311,10 @@ class ProjectController  {
 
     static newProjectFactory() {
         require('./Project.scss');
-        function newProject($scope, $state, $mdToast, $timeout, $mdDialog, $ngRedux) {
-            return new ProjectController($scope, $state, $mdToast, $timeout, $mdDialog, $ngRedux);
+        function newProject($scope, $state, $mdToast, $timeout, $mdDialog, $ngRedux, gettextCatalog) {
+            return new ProjectController($scope, $state, $mdToast, $timeout, $mdDialog, $ngRedux, gettextCatalog);
         }
-        newProject.$inject = ['$scope', '$state', '$mdToast', '$timeout', '$mdDialog', '$ngRedux'];
+        newProject.$inject = ['$scope', '$state', '$mdToast', '$timeout', '$mdDialog', '$ngRedux', 'gettextCatalog'];
         return newProject;
     }
 }

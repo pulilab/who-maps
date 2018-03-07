@@ -88,6 +88,10 @@ const getState = state =>  jasmine.createSpy('getState').and.returnValue(state);
 
 const defaultAxiosSuccess = Promise.resolve({ data: 1 });
 
+const gettextCatalog = {
+    getString: jasmine.createSpy('gettextCatalog')
+};
+
 export {
     dialog,
     $state,
@@ -104,5 +108,6 @@ export {
     $location,
     dispatch,
     defaultAxiosSuccess,
-    getState
+    getState,
+    gettextCatalog
 };
