@@ -10,7 +10,8 @@ const component = {
     bindings: {
         organisation: '=',
         form: '<',
-        notRequired: '<'
+        notRequired: '<',
+        callOnChange: '<'
     }
 };
 
