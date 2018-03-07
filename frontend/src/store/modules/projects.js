@@ -310,8 +310,12 @@ export const getCurrentProjectForEditing = (state, data) => {
         ...convertIdArrayToObjectArray(data, structure, fieldToConvertToObject),
         ...handleInteroperabilityLinks(data, structure)
     };
-
-    data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
+    if (!data.forceSetCoverage) {
+        data.coverageType = setCoverageType(data.coverage, data.national_level_deployment);
+    }
+    else {
+        data.forceSetCoverage = undefined;
+    }
     return { ...project_definition, ...data };
 };
 
@@ -324,7 +328,8 @@ export const getCurrentPublishedProjectForEditing = state => {
 };
 
 export const getCurrentEdits = state => {
-    return state.projects.editedProject;
+    const edited = state.projects.editedProject;
+    return { ...edited, forceSetCoverage: !!edited.coverageType };
 };
 
 export const getCurrentDraftProjectForEditing = state => {
