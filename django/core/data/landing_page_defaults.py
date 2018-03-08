@@ -9,13 +9,13 @@ LANDING_PAGE_DEFAULTS = {
     'cover_text': _('The Digital Health Atlas is a WHO global technology registry platform aiming to strengthen the '
                     'value and impact of digital health investments, improve coordination, and facilitate '
                     'institutionalization and scale.'),
-    'footer_title': _(''),
+    'footer_title': '',
     'permanent_footer': _('The DHA is led by WHO RHR/HRP, for the Health Data Collaborative Working Group on Digital '
                           'Health and Interoperability, with support from USAID, Digital Square, UN Foundation,' 
                           'Johns Hopkins University Global mHealth Initiative, '
                           'mPowering, developed as a global good software in response to the proliferation of '
                           'uncoordinated duplicative investments into digital health.'),
-    'footer_text': _(''),
+    'footer_text': '',
     'default_partners': [],
     'partner_logos': []
 }
