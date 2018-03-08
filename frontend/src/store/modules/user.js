@@ -16,7 +16,7 @@ export const getProfile = state => {
         const countries = CountryModule.getCountriesList(state);
         let country = undefined;
         if (countries && countries.length > 0) {
-            country = countries.find(c => c.id === state.user.profile.country);
+            country = { ...countries.find(c => c.id === state.user.profile.country) };
         }
         return { ...state.user.profile, country };
     }

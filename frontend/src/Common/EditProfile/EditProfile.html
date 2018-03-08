@@ -62,7 +62,7 @@
               options="vm.countriesList"
               ng-model="vm.userProfile.country.id"
               placeholder="{{'Select country from list'|translate}}">
-              <md-option ng-value="country.id" ng-repeat="country in vm.countriesList">
+              <md-option ng-value="country.id" ng-repeat="country in vm.countriesList track by country.id">
                 {{country.name}}
               </md-option>
             </md-select>
