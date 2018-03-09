@@ -53,15 +53,15 @@ class MapFileInline(admin.StackedInline):
     readonly_fields = ('print_map_customizer',)
 
     class Media:
-        js = ('vue-map-customizer.min.js',)
+        js = ('https://unpkg.com/vue', 'vue-map-customizer.umd.min.js', )
         css = {
-            'all': ('vue-map-customizer.min.css',)
+            'all': ('vue-map-customizer.css',)
         }
 
     def print_map_customizer(self, obj):
-        markup = '<vue-map-customizer map-url="{}" flag-base-url="/static/flags/" ' \
-                 'country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer>'.format(obj.map_file.url,
-                                                                                                 obj.country_id)
+        markup = ('<div id="app"><vue-map-customizer map-url="{}" flag-base-url="/static/flags/"'
+                  ':country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer></div>'
+                  '<script src="/static/vue-map-customiser-entrypoint.js"/>').format(obj.map_file.url, obj.country_id)
         return mark_safe(markup)
     print_map_customizer.short_description = 'Map'
 

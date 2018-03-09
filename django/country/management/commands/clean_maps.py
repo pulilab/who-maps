@@ -36,9 +36,9 @@ class Command(BaseCommand):
         with open(os.path.join(settings.MEDIA_ROOT, '{}'.format(map_file.map_file))) as f:
             json_content = json.load(f)
 
-        level = c.map_data['first_sub_level']['name']
+        level = c.map_data['first_sub_level']['admin_level']
         json_content['features'] = [f for f in json_content['features']
-                                    if f['properties']['wof:placetype'] == level]
+                                    if f['properties']['admin_level'] == level]
         folder = os.path.join(settings.MEDIA_ROOT, 'processed_maps/')
         Path(folder).mkdir(parents=True, exist_ok=True)
         with open(os.path.join(folder, '{}_slim.geojson'.format(country_code)), 'w') as out:
