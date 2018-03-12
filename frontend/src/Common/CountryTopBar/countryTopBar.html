@@ -38,17 +38,7 @@
       <translate>Sign Up</translate>
     </md-button>
 
-    {{vm.profileValid}}
-    <md-button aria-label="Country Level View"
-               class="view-selector"
-               ui-sref="country"
-               ng-show="vm.profileValid"
-               md-no-ink>
-      <md-icon class="material-icons">public</md-icon>
-      <translate>Country View</translate>
-    </md-button>
-
-    <md-button aria-label="Go to my Dashboard"
+    <md-button aria-label="Go to Dashboard"
                class="view-selector"
                ui-sref="dashboard"
                ng-show="vm.token"
