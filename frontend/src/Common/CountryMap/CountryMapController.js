@@ -149,7 +149,7 @@ class CountryMapController {
         const path = d3.geo.path().projection(projection);
 
         geoData.features.forEach((feature) => {
-            const mapName = feature.properties.name;
+            const mapName = feature.properties.name || feature.properties['wof:name'];
             const districtsName = countryMapData.districts.find(dn => dn.id === mapName);
             this.svgLib[districtsName.id] = this.mapDOMElement
               .append('path')
@@ -176,31 +176,10 @@ class CountryMapController {
             return this.mapDOMElement.node();
         });
 
-        // this.drawDistricNames(countryMapData, this.mapDOMElement);
         this.makeSvgPannableAndZoomable(this.mapDOMElement.node());
 
         this.showPlaceholder = false;
     }
-
-    // Currently unused, because of font scaling and district name length inconsistencies
-    // drawDistricNames(countryMapData, element) {
-    //     countryMapData.districts.forEach((name, i) => {
-
-    //         const districtPath = document.getElementsByClassName('d3district')[i];
-    //         if (districtPath) {
-    //             const box = districtPath.getBBox();
-    //             element
-    //                 .append('text')
-    //                 .attr('x', box.x + box.width / 2)
-    //                 .attr('y', box.y + box.height / 2)
-    //                 .text(name)
-    //                 .attr('font-family', 'Roboto, sans-serif')
-    //                 .attr('font-size', '40px')
-    //                 .attr('fill', 'black');
-    //         }
-    //     });
-    // }
-
 
     fillDistrictData(districtLevelCoverage) {
         for (const district in this.svgLib) {
