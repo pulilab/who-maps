@@ -8,8 +8,8 @@ import 'angular-password';
 import angularMd from 'angular-material';
 import ngRedux from 'ng-redux';
 import angularGettext from 'angular-gettext';
-import { config } from './appModule-config';
-import { run } from './appModule-run';
+import { config } from './app-config';
+import { run } from './app-run';
 
 import './app.scss';
 

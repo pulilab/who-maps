@@ -3,7 +3,7 @@ import { $state, toast, dialog, $ngRedux, $timeout } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 import Storage from '../../src/Storage';
 
-import { run, scrollToTopOnSuccess, checkProfile, setAxiosBaseTokenIfInStorage } from '../../src/App/appModule-run';
+import { run, scrollToTopOnSuccess, checkProfile, setAxiosBaseTokenIfInStorage } from '../../src/App/app-run';
 const spyScope = {};
 const $rootScope = {};
 spyScope.setAxiosBaseTokenIfInStorage = setAxiosBaseTokenIfInStorage;

@@ -1,5 +1,5 @@
 import ProjectController from '../../src/Project/ProjectController';
-import { $state, $scope, toast, $ngRedux, dialog, $timeout, EE, A } from '../testUtilities';
+import { $state, $scope, toast, $ngRedux, dialog, $timeout, EE, A, gettextCatalog } from '../testUtilities';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as UserModule from '../../src/store/modules/user';
 import * as SystemModule from '../../src/store/modules/system';
@@ -17,7 +17,7 @@ const scope = $scope(sc);
 describe('ProjectController', () => {
 
     beforeEach(() => {
-        sc = new ProjectController(scope, $state(), toast, $timeout, dialog, $ngRedux);
+        sc = new ProjectController(scope, $state(), toast, $timeout, dialog, $ngRedux, gettextCatalog);
         sc.newProjectForm = {
             $valid: true,
             $setValidity: jasmine.createSpy('$setValidity')
@@ -176,6 +176,10 @@ describe('ProjectController', () => {
         expect(sc.$mdDialog.alert).toHaveBeenCalledWith(jasmine.any(Object));
         expect(sc.confirmDraftDiscard.type).toBe('confirm');
         expect(sc.publishAlert.type).toBe('alert');
+        expect(sc.savingError.type).toBe('alert');
+        expect(sc.draftCongratulation.type).toBe('alert');
+        expect(sc.draftDiscardCongratulation.type).toBe('alert');
+        expect(sc.publishCongratulation.type).toBe('alert');
     });
 
     it('watchers fn', () => {
@@ -260,7 +264,6 @@ describe('ProjectController', () => {
 
     it('saveDraftHandler fn.', A(async () => {
         sc.saveDraft = jasmine.createSpy('saveDraft').and.returnValue(Promise.resolve({ id: 1 }));
-        spyOn(sc, 'showToast');
         spyOn(sc, 'handleResponse');
         sc.newProject = false;
         sc.form = {
@@ -272,13 +275,11 @@ describe('ProjectController', () => {
         sc.form.$valid = true;
         await sc.saveDraftHandler();
         expect(sc.saveDraft).toHaveBeenCalled();
-        expect(sc.showToast).toHaveBeenCalled();
         expect(sc.state.go).not.toHaveBeenCalled();
 
         sc.newProject = true;
         await sc.saveDraftHandler();
         expect(sc.saveDraft).toHaveBeenCalledTimes(2);
-        expect(sc.showToast).toHaveBeenCalledTimes(2);
         expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
 
         sc.saveDraft.and.returnValue(Promise.reject({ response: 1 }));
@@ -289,15 +290,12 @@ describe('ProjectController', () => {
 
     it('discardDraftHandler fn.', A(async () => {
         sc.discardDraft = jasmine.createSpy('disacrdDraft§').and.returnValue(Promise.resolve());
-        spyOn(sc, 'showToast');
         await sc.discardDraftHandler();
         expect(sc.$mdDialog.show).toHaveBeenCalled();
         expect(sc.discardDraft).toHaveBeenCalled();
-        expect(sc.showToast).toHaveBeenCalledWith('Draft discarded');
 
         sc.discardDraft.and.returnValue(Promise.reject(1));
         await sc.discardDraftHandler();
-        expect(sc.showToast).toHaveBeenCalledWith('Discard draft process canceled');
     }));
 
     it('focusInvalidField fn.', () => {
@@ -315,20 +313,9 @@ describe('ProjectController', () => {
         window.document.body.removeChild(a);
     });
 
-    it('should have a function that open a simple toast', () => {
-        sc.showToast('a');
-        expect(sc.toast.show).toHaveBeenCalled();
-    });
-
-    it('showToast fn.', () => {
-        sc.showToast();
-        expect(sc.toast.show).toHaveBeenCalled();
-    });
 
     it('postPublishAction', () => {
-        spyOn(sc, 'showToast');
         sc.postPublishAction({ id: 1 });
-        expect(sc.showToast).toHaveBeenCalled();
         expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
     });
 

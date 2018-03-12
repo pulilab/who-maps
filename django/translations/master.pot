@@ -4,27 +4,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:246
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:383
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:471
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:251
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:388
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:476
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:110
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:148
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:178
 msgid "# Clients"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:226
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:363
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:451
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:231
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:368
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:456
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:104
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:142
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:172
 msgid "# Facilities"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:206
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:343
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:431
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:211
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:348
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:436
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:136
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:166
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:98
@@ -314,11 +314,11 @@ msgstr ""
 msgid "Add New Digital Health Project"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:223
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:231
 msgid "Add Team members (Editor role)"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:250
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:258
 msgid "Add Viewers (only Viewer role)"
 msgstr ""
 
@@ -346,11 +346,11 @@ msgstr ""
 msgid "Add experience"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:275
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:280
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:41
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:412
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:554
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:600
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:417
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:562
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:609
 msgid "Add more"
 msgstr ""
 
@@ -383,7 +383,7 @@ msgstr ""
 msgid "Add selected"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:256
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:264
 msgid "Add viewers"
 msgstr ""
 
@@ -455,6 +455,10 @@ msgstr ""
 msgid "An email with instructions to reset your password have been sent."
 msgstr ""
 
+#: ./toTranslate/src/Project/ProjectController.js:126
+msgid "An error occured while saving your project, your data is NOT saved"
+msgstr ""
+
 #: ./toTranslate/src/Common/Thematic/static/-1-4.html:79
 #: ./toTranslate/src/Common/Thematic/static/3-1.html:8
 msgid "An evaluation of the relationships between relevant stakeholders based on the product’s value proposition (“the promoted utility of the product”) from each stakeholder’s perspective."
@@ -520,6 +524,12 @@ msgid ""
 "                  suspension, cancellation, or termination."
 msgstr ""
 
+#: ./toTranslate/src/Project/ProjectController.js:109
+#: ./toTranslate/src/Project/ProjectController.js:117
+#: ./toTranslate/src/Project/ProjectController.js:125
+msgid "Attention"
+msgstr ""
+
 #: ./toTranslate/src/Dashboard/Linechart/Linechart.html:28
 msgid "Axis to show:"
 msgstr ""
@@ -580,6 +590,7 @@ msgstr ""
 #: ./toTranslate/src/Cms/DetailElement/DetailElementDialog.html:101
 #: ./toTranslate/src/Cms/DetailElement/DetailElementDialog.html:58
 #: ./toTranslate/src/Project/DialogMultiSelector/DialogMultiSelectorDialog.html:63
+#: ./toTranslate/src/Project/ProjectController.js:112
 msgid "Cancel"
 msgstr ""
 
@@ -622,6 +633,11 @@ msgid "Clinton Health Access Initiative"
 msgstr ""
 
 #: ./toTranslate/src/Common/SubBar/subBar.html:131
+#: ./toTranslate/src/Project/ProjectController.js:120
+#: ./toTranslate/src/Project/ProjectController.js:127
+#: ./toTranslate/src/Project/ProjectController.js:134
+#: ./toTranslate/src/Project/ProjectController.js:141
+#: ./toTranslate/src/Project/ProjectController.js:148
 msgid "Close"
 msgstr ""
 
@@ -630,7 +646,7 @@ msgid "Close all"
 msgstr ""
 
 #: ./toTranslate/src/Project/Technology/ReadOnlyTechnology.html:28
-#: ./toTranslate/src/Project/Technology/Technology.html:49
+#: ./toTranslate/src/Project/Technology/Technology.html:50
 msgid "Code documentation or download link"
 msgstr ""
 
@@ -648,6 +664,12 @@ msgstr ""
 
 #: ./toTranslate/src/MapsToolkit/Resource/template/16-2b-4.html:7
 msgid "Comparators may involve a comparison/control group or, if the study design is pre- and post-, then comparators may involve the baseline characteristics."
+msgstr ""
+
+#: ./toTranslate/src/Project/ProjectController.js:132
+#: ./toTranslate/src/Project/ProjectController.js:139
+#: ./toTranslate/src/Project/ProjectController.js:146
+msgid "Congratulation"
 msgstr ""
 
 #: ./toTranslate/src/Common/Signup/Signup.html:239
@@ -679,12 +701,12 @@ msgstr ""
 msgid "Contact Person"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:197
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:204
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:70
 msgid "Contact email"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:178
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:183
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:63
 msgid "Contact name"
 msgstr ""
@@ -815,7 +837,7 @@ msgstr ""
 msgid "Department for International Development (United Kingdom)"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:128
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:131
 msgid "Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment."
 msgstr ""
 
@@ -948,7 +970,7 @@ msgstr ""
 msgid "Domain {{domian.id}} total"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:577
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:586
 msgid "Donor's name"
 msgstr ""
 
@@ -960,7 +982,7 @@ msgstr ""
 msgid "Donors"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:560
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:568
 msgid "Donors (Add one at least)"
 msgstr ""
 
@@ -1045,7 +1067,7 @@ msgstr ""
 msgid "Edit selection"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:229
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:237
 msgid "Editors of this project"
 msgstr ""
 
@@ -1258,7 +1280,7 @@ msgid "General info"
 msgstr ""
 
 #: ./toTranslate/src/CountryView/CountryViewModule.html:125
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:80
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:81
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:32
 msgid "Geographic scope"
 msgstr ""
@@ -1424,7 +1446,7 @@ msgstr ""
 msgid "Harnessing the collective experiences of those developing and implementing digital health system and interventions in the field: to offer suggestion and considerations."
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:496
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:501
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:188
 msgid "Has the government financially invested in the project?"
 msgstr ""
@@ -1604,7 +1626,7 @@ msgid "Implementers:"
 msgstr ""
 
 #: ./toTranslate/src/CountryView/CountryViewModule.html:120
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:523
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:530
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:204
 msgid "Implementing partners"
 msgstr ""
@@ -1860,12 +1882,12 @@ msgid "Limitations on Liability"
 msgstr ""
 
 #: ./toTranslate/src/Project/Technology/ReadOnlyTechnology.html:37
-#: ./toTranslate/src/Project/Technology/Technology.html:64
+#: ./toTranslate/src/Project/Technology/Technology.html:66
 msgid "Link to the application"
 msgstr ""
 
 #: ./toTranslate/src/Project/Technology/ReadOnlyTechnology.html:46
-#: ./toTranslate/src/Project/Technology/Technology.html:79
+#: ./toTranslate/src/Project/Technology/Technology.html:82
 msgid "Link to the wiki page"
 msgstr ""
 
@@ -1955,10 +1977,10 @@ msgstr ""
 msgid "MOTECH"
 msgstr ""
 
-#: ./toTranslate/src/Project/Interoperability/Interoperability.html:43
-#: ./toTranslate/src/Project/Technology/Technology.html:57
-#: ./toTranslate/src/Project/Technology/Technology.html:72
-#: ./toTranslate/src/Project/Technology/Technology.html:87
+#: ./toTranslate/src/Project/Interoperability/Interoperability.html:44
+#: ./toTranslate/src/Project/Technology/Technology.html:59
+#: ./toTranslate/src/Project/Technology/Technology.html:75
+#: ./toTranslate/src/Project/Technology/Technology.html:91
 msgid "Make sure your URL is valid."
 msgstr ""
 
@@ -2106,12 +2128,12 @@ msgid "NOTION OF VALUE"
 msgstr ""
 
 #: ./toTranslate/src/Common/CountryMap/Countrymap.html:147
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:133
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:138
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:74
 msgid "National"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:424
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:429
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:159
 msgid "National level deployment"
 msgstr ""
@@ -2191,7 +2213,7 @@ msgstr ""
 msgid "No resources have been added yet..."
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:503
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:510
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:193
 msgid "No, they have not yet contributed"
 msgstr ""
@@ -2216,11 +2238,11 @@ msgstr ""
 msgid "Note: Government adoption, commercial adoption, and hybrid models are discussed in greater detail under Axis 1."
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:242
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:250
 msgid "Note: if you wish to add members who are not already registered, they will need to be registered before you may add them"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:269
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:277
 msgid "Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them"
 msgstr ""
 
@@ -2242,6 +2264,10 @@ msgstr ""
 
 #: ./toTranslate/src/Cms/StaticInfoWidget/StaticInfoWidget.html:30
 msgid "Offering resources for planning and designing an mHealth project, including ways to assess the contextual environment, to ensure the project has a solid foundation"
+msgstr ""
+
+#: ./toTranslate/src/Project/ProjectController.js:111
+msgid "Ok"
 msgstr ""
 
 #: ./toTranslate/src/Common/Thematic/static/2-1.html:11
@@ -2314,7 +2340,7 @@ msgstr ""
 msgid "Overview of digital health implementation:"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:104
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:106
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:40
 msgid "Overview of the digital health implementation"
 msgstr ""
@@ -2344,7 +2370,7 @@ msgstr ""
 msgid "PROJECT PERFORMANCE"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:540
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:548
 msgid "Partner's name"
 msgstr ""
 
@@ -2408,7 +2434,7 @@ msgstr ""
 msgid "Planning and Guidance"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:97
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:99
 msgid "Please describe where your implementation is currently taking place"
 msgstr ""
 
@@ -2477,12 +2503,12 @@ msgstr ""
 msgid "Project Dashboard"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:54
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:55
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:25
 msgid "Project country"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:157
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:161
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:54
 msgid "Project end date"
 msgstr ""
@@ -2501,7 +2527,7 @@ msgstr ""
 msgid "Project not found or server not available"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:138
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:141
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:48
 msgid "Project start date"
 msgstr ""
@@ -2588,11 +2614,11 @@ msgstr ""
 msgid "Relevance to national health strategy, value for money, health, system benefits, reduced health expenditure"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:269
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:406
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:274
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:411
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:47
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:548
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:594
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:556
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:603
 msgid "Remove"
 msgstr ""
 
@@ -2720,8 +2746,8 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:192
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:329
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:197
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:334
 msgid "Search Facilities"
 msgstr ""
 
@@ -2735,8 +2761,8 @@ msgstr ""
 
 #: ./toTranslate/src/CountryView/CountryViewModule.html:23
 #: ./toTranslate/src/CountryView/CountryViewModule.html:55
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:166
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:304
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:171
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:309
 msgid "Select a country"
 msgstr ""
 
@@ -2919,7 +2945,7 @@ msgid "Strong, sustainable partnerships are essential for successfully scaling u
 msgstr ""
 
 #: ./toTranslate/src/Common/CountryMap/Countrymap.html:120
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:130
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:135
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:71
 msgid "Sub-national"
 msgstr ""
@@ -3134,6 +3160,10 @@ msgid ""
 "                  licensed or knowledgeable in that area."
 msgstr ""
 
+#: ./toTranslate/src/Project/ProjectController.js:110
+msgid "The current draft will be overwritten by the published version"
+msgstr ""
+
 #: ./toTranslate/src/Common/Thematic/static/-1-4.html:61
 msgid "The degree to which the product is implemented as it was intended."
 msgstr ""
@@ -3342,11 +3372,11 @@ msgstr ""
 msgid "This field has to be less than 100 characters long."
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:118
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:121
 msgid "This field has to be less than 500 characters long."
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:584
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:593
 msgid "This field has to be less than 64 characters long."
 msgstr ""
 
@@ -3389,29 +3419,29 @@ msgstr ""
 #: ./toTranslate/src/Project/CountryFields/CountryFields.html:48
 #: ./toTranslate/src/Project/CountryFields/CountryFields.html:79
 #: ./toTranslate/src/Project/DialogMultiSelector/DialogMultiSelector.html:25
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:115
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:184
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:118
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:191
 #: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:20
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:206
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:67
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:116
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:139
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:171
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:215
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:235
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:214
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:68
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:100
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:119
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:144
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:176
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:220
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:240
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:25
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:255
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:309
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:352
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:372
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:392
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:440
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:460
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:480
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:515
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:581
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:98
-#: ./toTranslate/src/Project/Technology/Technology.html:21
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:260
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:314
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:357
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:377
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:397
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:445
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:465
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:485
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:522
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:590
+#: ./toTranslate/src/Project/Technology/Technology.html:22
 msgid "This is required."
 msgstr ""
 
@@ -3437,7 +3467,7 @@ msgstr ""
 msgid "This should be a valid email"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:209
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:217
 msgid "This should be a valid email address"
 msgstr ""
 
@@ -3571,7 +3601,7 @@ msgid "UUID:"
 msgstr ""
 
 #: ./toTranslate/src/Project/Technology/ReadOnlyTechnology.html:17
-#: ./toTranslate/src/Project/Technology/Technology.html:31
+#: ./toTranslate/src/Project/Technology/Technology.html:32
 msgid "Under what license is the project governed?"
 msgstr ""
 
@@ -3752,7 +3782,7 @@ msgstr ""
 msgid "Welcome!"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:87
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:88
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:45
 msgid "What are the Health System Challenges (HSC) your project addresses?"
 msgstr ""
@@ -3766,7 +3796,7 @@ msgstr ""
 msgid "What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio."
 msgstr ""
 
-#: ./toTranslate/src/Project/Interoperability/Interoperability.html:51
+#: ./toTranslate/src/Project/Interoperability/Interoperability.html:52
 #: ./toTranslate/src/Project/Interoperability/ReadOnlyInteroperability.html:29
 msgid "What data standards does your digital health project use?"
 msgstr ""
@@ -3783,12 +3813,12 @@ msgstr ""
 msgid "What is your experience about (title)"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:123
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:126
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:65
 msgid "What kind of coverage does your project have?"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:107
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:109
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:55
 msgid "What part(s) of the Health Information System (HIS) does this project support?"
 msgstr ""
@@ -3863,12 +3893,12 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:509
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:516
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:199
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:506
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:513
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:196
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
@@ -3879,6 +3909,10 @@ msgstr ""
 
 #: ./toTranslate/src/Project/Project.html:10
 msgid "You are viewing the"
+msgstr ""
+
+#: ./toTranslate/src/Project/ProjectController.js:118
+msgid "You can't publish until all the required fields are filled, you can however save the draft"
 msgstr ""
 
 #: ./toTranslate/src/Common/EmailConfirmation/EmailConfirmation.html:9
@@ -3930,6 +3964,18 @@ msgstr ""
 msgid "You've scored {{vm.domainScore}} % in {{vm.currentDomain.name}} domain!"
 msgstr ""
 
+#: ./toTranslate/src/Project/ProjectController.js:140
+msgid "Your draft has been discarded successfully"
+msgstr ""
+
+#: ./toTranslate/src/Project/ProjectController.js:147
+msgid "Your draft has been published successfully"
+msgstr ""
+
+#: ./toTranslate/src/Project/ProjectController.js:133
+msgid "Your draft has been saved successfully"
+msgstr ""
+
 #: ./toTranslate/src/Common/Signup/Signup.html:222
 #: ./toTranslate/src/Common/Signup/Signup.html:84
 msgid "Your passwords do not match."
@@ -3961,11 +4007,11 @@ msgstr ""
 msgid "add new project"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:230
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:238
 msgid "add new team member"
 msgstr ""
 
-#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:257
+#: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:265
 msgid "add new viewer"
 msgstr ""
 
@@ -5023,12 +5069,12 @@ msgstr ""
 msgid "{{vm.printAnswer(answer)}} points"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:148
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:153
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:81
 msgid "{{vm.subLevelNames[0]}} level deployment"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:286
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:291
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:120
 msgid "{{vm.subLevelNames[1]}} level deployment"
 msgstr ""

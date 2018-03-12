@@ -70,7 +70,7 @@ module.exports = function(config) {
                         ]
                     },
                     {
-                        test: /.js$/,
+                        test: /^(?!.*(Module|Component).*\.js$).*\.js$/,
                         enforce: 'post',
                         include: /src/,
                         exclude: /node_modules/,
