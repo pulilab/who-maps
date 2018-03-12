@@ -49,7 +49,7 @@ angular.module('app',
         require('../Project/'),
         require('../Cms/'),
         require('../CountryView/'),
-        require('../Assesment/'),
+        require('../Assessment/'),
         require('../LandingPage/'),
         require('../MapsToolkit/'),
         require('../MyProjects/')

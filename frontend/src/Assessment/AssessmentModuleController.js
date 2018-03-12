@@ -6,7 +6,7 @@ import * as  UserModule from '../store/modules/user';
 
 import { fixUrl } from '../Utilities';
 
-class AssesmentModuleController {
+class AssessmentModuleController {
 
     constructor($scope, $state, $timeout, $ngRedux) {
         this.scope = $scope;
@@ -23,7 +23,7 @@ class AssesmentModuleController {
     }
 
     mapData(state) {
-        this.isPublic = this.state.current.name === 'public-assesment';
+        this.isPublic = this.state.current.name === 'public-assessment';
         const projectData = this.isPublic ? ProjectModule.getCurrentPublicProject(state)
           : ProjectModule.getCurrentProject(state);
         return {
@@ -173,15 +173,15 @@ class AssesmentModuleController {
 
 
     static factory() {
-        function assesmentController($scope, $state, $timeout, $ngRedux) {
+        function assessmentController($scope, $state, $timeout, $ngRedux) {
 
-            return new AssesmentModuleController($scope, $state, $timeout, $ngRedux);
+            return new AssessmentModuleController($scope, $state, $timeout, $ngRedux);
         }
 
-        assesmentController.$inject = ['$scope', '$state', '$timeout', '$ngRedux'];
+        assessmentController.$inject = ['$scope', '$state', '$timeout', '$ngRedux'];
 
-        return assesmentController;
+        return assessmentController;
     }
 }
 
-export default AssesmentModuleController;
+export default AssessmentModuleController;
