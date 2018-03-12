@@ -1,5 +1,6 @@
 import os
 import json
+import shutil
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
@@ -8,6 +9,7 @@ from django.conf import settings
 from country.models import Country
 from country.models import MapFile
 from pathlib import Path
+from datetime import datetime
 
 
 class Command(BaseCommand):
@@ -41,5 +43,15 @@ class Command(BaseCommand):
                                     if f['properties']['admin_level'] == level]
         folder = os.path.join(settings.MEDIA_ROOT, 'processed_maps/')
         Path(folder).mkdir(parents=True, exist_ok=True)
-        with open(os.path.join(folder, '{}_slim.geojson'.format(country_code)), 'w') as out:
+        filename = '{}_slim.geojson'.format(country_code)
+        with open(os.path.join(folder, filename), 'w') as out:
             json.dump(json_content, out)
+
+        os.chdir(folder)
+        static_name = '{}.json'.format(country_code);
+        static_maps = os.path.join(settings.STATIC_ROOT, 'country-geodata')
+        final_destination = os.path.join(static_maps, static_name)
+        if os.path.isfile(final_destination):
+            backup = os.path.join(settings.MEDIA_ROOT, 'topojson-backups', '{}-{}'.format(str(datetime.now()), static_name))
+            shutil.move(final_destination, backup)
+        os.system("mapshaper {} -o {} format=topojson".format(filename, final_destination))  
