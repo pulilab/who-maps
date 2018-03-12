@@ -62,7 +62,8 @@ class MapFileInline(admin.StackedInline):
     def print_map_customizer(self, obj):
         markup = ('<div id="app"><vue-map-customizer map-url="{}" flag-base-url="/static/flags/"'
                   ':country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer></div>'
-                  '<script src="/static/vue-map-customiser-entrypoint.js"></script>').format(obj.map_file.url, obj.country_id)
+                  '<script src="/static/vue-map-customiser-entrypoint.js">'
+                  '</script>').format(obj.map_file.url, obj.country_id)
         return mark_safe(markup)
     print_map_customizer.short_description = 'Map'
 
@@ -89,7 +90,8 @@ class CountryAdmin(admin.ModelAdmin):
 
     def map_download(self, obj):
         complete_country = pycountry.countries.get(alpha_2=obj.code)
-        #  clikey this should be a private value but at the moment is not that important since the quota system is not operative
+        #  clikey should be a private value but at the moment is not that
+        # important since the quota system is not operative
         url = ("https://wambachers-osm.website/boundaries/exportBoundaries?"
                "cliVersion=1.0&cliKey=a9ea45b5-ab37-4323-8263-767aa5896113&exportFormat=json&exportLayout=single"
                "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected={}").format(complete_country.alpha_3)
@@ -103,7 +105,7 @@ class CountryAdmin(admin.ModelAdmin):
                 'users',
             )
         return fields
-        
+
     def save_model(self, request, obj, form, change):
         super(CountryAdmin, self).save_model(request, obj, form, change)
         if change and 'users' in form.changed_data and obj.users:

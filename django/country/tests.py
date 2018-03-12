@@ -842,4 +842,3 @@ class CountryAdminTests(TestCase):
                          "&cliKey=a9ea45b5-ab37-4323-8263-767aa5896113&exportFormat=json&exportLayout=single"
                          "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected=SLE'>"
                          " Sierra Leone map download </a>")
-    

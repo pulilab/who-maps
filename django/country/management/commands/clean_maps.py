@@ -48,10 +48,11 @@ class Command(BaseCommand):
             json.dump(json_content, out)
 
         os.chdir(folder)
-        static_name = '{}.json'.format(country_code);
+        static_name = '{}.json'.format(country_code)
         static_maps = os.path.join(settings.STATIC_ROOT, 'country-geodata')
         final_destination = os.path.join(static_maps, static_name)
         if os.path.isfile(final_destination):
-            backup = os.path.join(settings.MEDIA_ROOT, 'topojson-backups', '{}-{}'.format(str(datetime.now()), static_name))
+            backup = os.path.join(settings.MEDIA_ROOT, 'topojson-backups',
+                                  '{}-{}'.format(str(datetime.now()), static_name))
             shutil.move(final_destination, backup)
-        os.system("mapshaper {} -o {} format=topojson".format(filename, final_destination))  
+        os.system("mapshaper {} -o {} format=topojson".format(filename, final_destination))
