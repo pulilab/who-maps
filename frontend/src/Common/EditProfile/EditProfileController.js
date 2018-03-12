@@ -39,7 +39,7 @@ class EditProfileController  {
     }
 
     handleDataLoad() {
-        this.rawName = this.userProfile.name;
+        this.rawName = this.userProfile ? this.userProfile.name : '';
 
         this.dataLoaded = true;
         this.scope.$watch(() => {
