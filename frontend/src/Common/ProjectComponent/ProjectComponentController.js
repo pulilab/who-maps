@@ -20,13 +20,13 @@ class ProjectComponentController {
 
     cardClick() {
         if (!this.showDetails) {
-            this.goToDashboard();
+            this.goToAssessment();
         }
     }
 
-    goToDashboard() {
+    goToAssessment() {
         this.state.go(this.project.isMember || this.project.isViewer ?
-          'dashboard' : 'public-dashboard', { appName: this.project.id });
+          'assessment' : 'public-assessment', { appName: this.project.id });
     }
 
     viewDraft() {
