@@ -104,8 +104,8 @@ describe('ProjectController', () => {
         result = sc.mapData({});
 
         expect(UserModule.getProfile).toHaveBeenCalledTimes(4);
-        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(3);
-        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(3);
+        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(2);
+        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(2);
 
         expect(result.project).toEqual('gcppd');
         expect(result.team[0]).toEqual({ id: 1 });
@@ -117,13 +117,16 @@ describe('ProjectController', () => {
         result = sc.mapData({});
 
         expect(UserModule.getProfile).toHaveBeenCalledTimes(5);
-        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(5);
-        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(5);
-        expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(3);
+        expect(ProjectModule.getTeam).toHaveBeenCalledTimes(3);
+        expect(ProjectModule.getViewers).toHaveBeenCalledTimes(3);
 
         expect(result.project).toEqual('gcppd');
         expect(result.team[0]).toEqual({ id: 1 });
         expect(result.viewers[0]).toEqual({ id: 2 });
+
+        profileSpy.and.returnValue({ id: 1 });
+        result = sc.mapData({});
+        expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(1);
     });
 
     it('onInit fn', () => {

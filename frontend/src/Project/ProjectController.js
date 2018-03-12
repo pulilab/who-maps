@@ -33,32 +33,37 @@ class ProjectController  {
         let project = null;
         let team = null;
         let viewers = null;
+        let isViewer = false;
+        let isTeam = false;
+        let readOnlyMode = false;
         if (newProject) {
             project = ProjectModule.getNewProjectForEditing(state);
             team = [userProfile];
             viewers = [];
+            isTeam = true;
         }
         else {
-            project = ProjectModule.getCurrentDraftProjectForEditing(state);
             team = ProjectModule.getTeam(state);
             viewers = ProjectModule.getViewers(state);
-        }
 
-        const isViewer = (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
-        const isTeam = team.some(v => v.id === userProfile.id);
-        const readOnlyMode = publishMode || !isTeam;
+            isViewer = (team.every(t => t.id !== userProfile.id) && viewers.some(v => v.id === userProfile.id));
+            isTeam = team.some(v => v.id === userProfile.id);
+            readOnlyMode = publishMode || !isTeam;
 
-        project = isViewer && !publishMode ? ProjectModule.getCurrentDraftInViewMode(state) : project;
 
-        if (publishMode) {
-            project = ProjectModule.getCurrentPublicProjectDetails(state, false);
-            team = ProjectModule.getTeam(state);
-            viewers = ProjectModule.getViewers(state);
-        }
-        else if (!isViewer && !isTeam && !newProject) {
-            project = ProjectModule.getCurrentPublicProjectDetails(state, true);
-            team = ProjectModule.getTeam(state);
-            viewers = ProjectModule.getViewers(state);
+            if (!publishMode && isTeam) {
+                project = ProjectModule.getCurrentDraftProjectForEditing(state);
+            }
+            else if (!publishMode && !isTeam) {
+                project = ProjectModule.getCurrentDraftInViewMode(state);
+            }
+
+            if (publishMode) {
+                project = ProjectModule.getCurrentPublicProjectDetails(state, false);
+            }
+            else if (!isViewer && !isTeam && !newProject) {
+                project = ProjectModule.getCurrentPublicProjectDetails(state, true);
+            }
         }
         return {
             newProject,
