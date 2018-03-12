@@ -186,12 +186,19 @@ class CollapsibleSet {
     }
 
     setCustomError(key, error) {
-        const errors = this.form[key].customError || [];
-        if (errors.indexOf(error) === -1) {
-            errors.push(error);
+        key = key.trim();
+        const element = this.form[key];
+        if (element) {
+            const errors = element.customError || [];
+            if (errors.indexOf(error) === -1) {
+                errors.push(error);
+            }
+            element.$setValidity('custom', false);
+            element.customError = errors;
         }
-        this.form[key].$setValidity('custom', false);
-        this.form[key].customError = errors;
+        else {
+            console.warn('trying to set an error on an unexisting form element: ', key);
+        }
     }
 
 }
