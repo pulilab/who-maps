@@ -1,4 +1,4 @@
-import LinechartController from '../../src/Dashboard/Linechart/LinechartController';
+import LinechartController from '../../src/Assesment/Linechart/LinechartController';
 import { default as axisdata } from './Mocks/chartmock.js';
 import { default as axisdata2 } from './Mocks/chartmock2.js';
 import { default as axisdata3 } from './Mocks/chartmock3.js';

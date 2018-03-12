@@ -1,4 +1,4 @@
-import DashboardModuleController from '../../src/Dashboard/DashboardModuleController';
+import AssesmentModuleController from '../../src/Assesment/AssesmentModuleController';
 import { $scope, $state, $timeout, $ngRedux, EE } from '../testUtilities';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise */
@@ -34,10 +34,10 @@ const projectData = {
 };
 
 
-describe('DashboardModuleController', () => {
+describe('AssesmentModuleController', () => {
 
     beforeEach(() => {
-        vm = DashboardModuleController.dashboardControllerFactory()({}, $state(), $timeout, $ngRedux);
+        vm = AssesmentModuleController.factory()({}, $state(), $timeout, $ngRedux);
         vm.scope = $scope(vm);
         vm.EE = EE;
         vm.state.params = {

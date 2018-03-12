@@ -5,24 +5,24 @@ import * as CmsModule from '../store/modules/cms';
 import * as ProjectModule from '../store/modules/projects';
 /* global Promise */
 
-const moduleName = 'dashboard';
-const su = new StaticUtilities('Dashboard');
+const moduleName = 'assesment';
+const su = new StaticUtilities('Assesment');
 
 
 function config($stateProvider, $compileProvider) {
     $stateProvider
       .state(moduleName, {
-          url: '/dashboard',
+          url: '/assesment',
           parent: 'app',
           profileRequired: true,
           views: {
               main: {
-                  template: '<dashboard></dashboard>'
+                  template: '<assesment></assesment>'
               }
           },
           resolve: {
-              'dashboard': () => {
-                  return su.lazyLoader($compileProvider, 'dashboardComponent');
+              'assesment': () => {
+                  return su.lazyLoader($compileProvider, 'assesmentComponent');
               },
               'linechart': () => {
                   return su.lazyLoader($compileProvider, 'Linechart/linechart');
@@ -38,17 +38,17 @@ function config($stateProvider, $compileProvider) {
               }]
           }
       })
-      .state('public-dashboard', {
-          url: '/dashboard',
+      .state('public-assesment', {
+          url: '/assesment',
           parent: 'public',
           views: {
               main: {
-                  template: '<dashboard view-mode="true"></dashboard>'
+                  template: '<assesment view-mode="true"></assesment>'
               }
           },
           resolve: {
-              'dashboard': () => {
-                  return su.lazyLoader($compileProvider, 'dashboardComponent');
+              'assesment': () => {
+                  return su.lazyLoader($compileProvider, 'assesmentComponent');
               },
               'linechart': () => {
                   return su.lazyLoader($compileProvider, 'Linechart/linechart');
