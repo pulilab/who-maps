@@ -812,8 +812,9 @@ class CountryAdminTests(TestCase):
             country_id = 0
 
         self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
-                         '<vue-map-customizer map-url="test_url" flag-base-url="/static/flags/" '
-                         'country-id="0" api-url="/api/country-map-data/"></vue-map-customizer>')
+                         '<div id="app"><vue-map-customizer map-url="test_url" flag-base-url="/static/flags/"'
+                         ':country-id="0" api-url="/api/country-map-data/"></vue-map-customizer></div>'
+                         '<script src="/static/vue-map-customiser-entrypoint.js"/>')
 
     def test_country_get_fields(self):
         ma = CountryAdmin(Country, self.site)
