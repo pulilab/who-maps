@@ -705,7 +705,8 @@ class CountryAdminTests(TestCase):
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'code',
             'name',
-            'users',
+            'map_download',
+            'users'
         ))
 
     def test_superuser_readonlies(self):
@@ -716,7 +717,8 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'code',
-            'name'
+            'name',
+            'map_download'
         ))
 
     def test_country_field_inlines(self):
@@ -823,3 +825,21 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         self.assertTrue('map_data' not in ma.get_fields(self.request))
+
+    def test_country_map_download(self):
+        ma = CountryAdmin(Country, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+
+        class MockCountry:
+            code = "SL"
+            name = "Sierra Leone"
+
+        self.assertEqual(ma.map_download(MockCountry),
+                         "<a href='https://wambachers-osm.website/boundaries/exportBoundaries?cliVersion=1.0"
+                         "&cliKey=a9ea45b5-ab37-4323-8263-767aa5896113&exportFormat=json&exportLayout=single"
+                         "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected=SLE'>"
+                         " Sierra Leone map download </a>")
+    

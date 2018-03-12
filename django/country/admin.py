@@ -12,6 +12,7 @@ from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptio
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
+import pycountry
 
 
 class CountryFieldInline(admin.TabularInline):
@@ -72,11 +73,11 @@ class CountryAdmin(admin.ModelAdmin):
     ordering = ('name',)
     inlines = (MapFileInline, PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
     filter_horizontal = ('users',)
-    readonly_fields = ('code', 'name')
+    readonly_fields = ('code', 'name', 'map_download')
 
     def get_fields(self, request, obj=None):
         fields = super(CountryAdmin, self).get_fields(request, obj)
-        return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data']]
+        return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data', 'map_download']]
 
     def get_queryset(self, request):
         qs = super(CountryAdmin, self).get_queryset(request)
@@ -86,6 +87,15 @@ class CountryAdmin(admin.ModelAdmin):
 
         return qs
 
+    def map_download(self, obj):
+        complete_country = pycountry.countries.get(alpha_2=obj.code)
+        #  clikey this should be a private value but at the moment is not that important since the quota system is not operative
+        url = ("https://wambachers-osm.website/boundaries/exportBoundaries?"
+               "cliVersion=1.0&cliKey=a9ea45b5-ab37-4323-8263-767aa5896113&exportFormat=json&exportLayout=single"
+               "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected={}").format(complete_country.alpha_3)
+        markup = "<a href='{}'> {} map download </a>".format(url, obj.name)
+        return mark_safe(markup)
+
     def get_readonly_fields(self, request, obj=None):
         fields = super(CountryAdmin, self).get_readonly_fields(request, obj)
         if request.user.is_staff and not request.user.is_superuser:
@@ -93,7 +103,7 @@ class CountryAdmin(admin.ModelAdmin):
                 'users',
             )
         return fields
-
+        
     def save_model(self, request, obj, form, change):
         super(CountryAdmin, self).save_model(request, obj, form, change)
         if change and 'users' in form.changed_data and obj.users:

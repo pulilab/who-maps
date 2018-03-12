@@ -29,3 +29,4 @@ redis==2.10.5
 django-redis-cache==1.7.1
 django-rosetta
 django-simplefeedback==0.3
+pycountry
