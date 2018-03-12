@@ -8,7 +8,7 @@ import PDFExportController from './PDFExport/PDFExportController';
 import * as CountryModule from '../store/modules/countries';
 import * as UserModule from '../store/modules/user';
 
-class CountryViewModuleController {
+class DashboardModuleController {
 
     constructor($scope, $filter, $state, $ngRedux, gettextCatalog) {
         this.scope = $scope;
@@ -311,16 +311,16 @@ class CountryViewModuleController {
         return '';
     }
 
-    static countryControllerFactory() {
-        function countryController($scope, $filter, $state, $ngRedux, gettextCatalog) {
-            return new CountryViewModuleController($scope, $filter, $state, $ngRedux, gettextCatalog);
+    static factory() {
+        function dashboardController($scope, $filter, $state, $ngRedux, gettextCatalog) {
+            return new DashboardModuleController($scope, $filter, $state, $ngRedux, gettextCatalog);
         }
 
-        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux', 'gettextCatalog'];
+        dashboardController.$inject = ['$scope', '$filter', '$state', '$ngRedux', 'gettextCatalog'];
 
-        return countryController;
+        return dashboardController;
     }
 
 }
 
-export default CountryViewModuleController;
+export default DashboardModuleController;

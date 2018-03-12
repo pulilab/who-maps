@@ -1,4 +1,4 @@
-import CountryViewModuleController from '../../src/CountryView/CountryViewModuleController';
+import DashboardModuleController from '../../src/Dashboard/DashboardModuleController';
 import { $scope, EE, $state, $ngRedux } from '../testUtilities';
 
 /* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
@@ -6,10 +6,10 @@ import { $scope, EE, $state, $ngRedux } from '../testUtilities';
 let vm = {};
 
 
-describe('CountryViewModuleController', () => {
+describe('DashboardModuleController', () => {
 
     beforeEach(() => {
-        vm = CountryViewModuleController.countryControllerFactory()({}, {}, $state(), $ngRedux);
+        vm = DashboardModuleController.factory()({}, {}, $state(), $ngRedux);
         vm.scope = $scope(vm);
         vm.EE = EE;
     });
