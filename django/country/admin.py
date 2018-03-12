@@ -61,7 +61,7 @@ class MapFileInline(admin.StackedInline):
     def print_map_customizer(self, obj):
         markup = ('<div id="app"><vue-map-customizer map-url="{}" flag-base-url="/static/flags/"'
                   ':country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer></div>'
-                  '<script src="/static/vue-map-customiser-entrypoint.js"/>').format(obj.map_file.url, obj.country_id)
+                  '<script src="/static/vue-map-customiser-entrypoint.js"></script>').format(obj.map_file.url, obj.country_id)
         return mark_safe(markup)
     print_map_customizer.short_description = 'Map'
 
