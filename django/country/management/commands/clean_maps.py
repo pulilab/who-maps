@@ -34,7 +34,7 @@ class Command(BaseCommand):
             self.stdout.write('Selected country does not exist or it does not have an associated MapFile')
             return
 
-        self.stdout.write('Removing unused features {} from geojson'.format(c.name))
+        self.stdout.write('Removing unused features from {} geojson'.format(c.name))
         with open(os.path.join(settings.MEDIA_ROOT, '{}'.format(map_file.map_file))) as f:
             json_content = json.load(f)
 
