@@ -861,7 +861,7 @@ class CountryManagementCommandTest(TestCase):
             pass
 
     def tearDown(self):
-        if os.path.isfile(self.null_topo):
+        if os.path.isfile(self.null_topo):  # pragma: no cover
             os.remove(self.null_topo)
         for file in os.listdir(self.backup_folder):
             if fnmatch(file, '*null.json'):
