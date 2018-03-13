@@ -346,7 +346,7 @@ describe('Project Store Module', () => {
             result = ProjectModule.getCurrentPublicProjectDetails(state);
             expect(result).toEqual({ id: 1  });
             expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
-            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { hasPublishedVersion: false });
+            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { hasPublishedVersion: false, disableDraft: true });
 
 
         });

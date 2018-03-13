@@ -192,6 +192,7 @@ export const getCurrentPublicProjectDetails = (state, isDraft) => {
     if (project)  {
         project.hasPublishedVersion = !!(state.projects.currentPublicProject.published &&
             state.projects.currentPublicProject.published.name);
+        project.disableDraft = !state.projects.currentPublicProject.draft;
         return exports.parseProjectForViewMode(state, project);
     }
     return { ...exports.getVanillaProject(state) };
