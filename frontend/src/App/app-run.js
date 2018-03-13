@@ -26,7 +26,7 @@ function checkProfile(profile, t) {
 
 function setCountryIfEmpty(to, $ngRedux) {
     const state = $ngRedux.getState();
-    if (to.name === 'country' && state.countries.currentCountry === null) {
+    if (to.name === 'dashboard' && state.countries.currentCountry === null) {
         $ngRedux.dispatch(CountryModule.setCurrentCountry(state.user.profile.country));
     }
 }

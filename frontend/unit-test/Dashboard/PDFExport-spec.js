@@ -1,4 +1,4 @@
-import PDFExportController from '../../src/CountryView/PDFExport/PDFExportController';
+import PDFExportController from '../../src/Dashboard/PDFExport/PDFExportController';
 import pdfMake from 'pdfmake/build/pdfmake';
 import { A } from '../testUtilities';
 

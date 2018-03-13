@@ -1,75 +1,121 @@
 import DashboardModuleController from '../../src/Dashboard/DashboardModuleController';
-import { $scope, $state, $timeout, $ngRedux, EE } from '../testUtilities';
+import { $scope, EE, $state, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise */
+/* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
+
 let vm = {};
-
-const projectData = {
-    'name': 'Some test project',
-    'id': 7,
-    'detailPromise': {},
-    'filePromise': {},
-    'anticipated_time': 'I have all the time on the Earth, but still, it would be good to win ASAP.',
-    'application': [],
-    'licenses': [],
-    'goals_to_scale': 'Winning the freakin lottery',
-    'country': 3,
-    'coverage': [
-        { 'Boss': 1, 'district': 'Narok' }
-    ],
-    'organisation': 'test_org',
-    'pre_assessment': [1, 1, 1, 1, 1, 1],
-    'started': '2016-05-15T22:00:00.000Z',
-    'reports': ['www.paragonhex.hu'],
-    'technology_platforms': [],
-    'date': '2016-05-23T14:53:24.943Z',
-    'publications': ['www.google.com'],
-    'donors': ['Donor 1', 'Donor 2', 'Donor 3', 'Donor 4'],
-    'strategy': ['Service Delivery'],
-    'files': [
-        { 'filename': '7e4cae13d23.jpg', 'id': 2, 'type': 'report' },
-        { 'filename': '1bb3923a6f4.jpg', 'id': 1, 'type': 'report' }
-    ],
-    'countryName': 'Kenya'
-};
 
 
 describe('DashboardModuleController', () => {
 
     beforeEach(() => {
-        vm = DashboardModuleController.dashboardControllerFactory()({}, $state(), $timeout, $ngRedux);
+        vm = DashboardModuleController.factory()({}, {}, $state(), $ngRedux);
         vm.scope = $scope(vm);
         vm.EE = EE;
-        vm.state.params = {
-            appName: '1'
-        };
     });
 
-    it('is defined', () => {
-        expect(vm).toBeDefined();
-        expect(typeof vm).toBe('object');
+    it('onInit fn.', () => {
+        spyOn(vm, 'watchers');
+        vm.$onInit();
+        expect(vm.watchers).toHaveBeenCalled();
     });
 
-    it('emits an event on window resize', () => {
-        vm.resizeEvent();
-        vm.resizedw();
-        expect(vm.EE.emit).toHaveBeenCalledWith('dashResized');
+    it('watcher fn.', () => {
+        vm.countryProjects = [];
+        spyOn(vm, 'applyFilters');
+        spyOn(vm, 'generateFilters');
+        spyOn(vm, 'updateCountry');
+        vm.watchers();
+        expect(vm.applyFilters).toHaveBeenCalled();
+        expect(vm.generateFilters).toHaveBeenCalled();
+        expect(vm.updateCountry).toHaveBeenCalled();
     });
 
-    it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
-        vm.snapShotProject = jasmine.createSpy('snapShotProject');
-        vm.snapShot();
-        expect(vm.snapShotProject).toHaveBeenCalled();
+    describe('apply filters function', () => {
+
+        let filters = [];
+        let oldValues = [];
+        const filterMappingFn = jasmine.createSpy('filterMappingFn').and.returnValue([]);
+
+        beforeEach(() => {
+            filters = [
+                {
+                    open: true,
+                    filterMappingFn,
+                    items: [{ value: true, name: 'a' }]
+                },
+                {
+                    open: true,
+                    filterMappingFn,
+                    items: [{ value: true, name: 'b' }]
+                }
+            ];
+            oldValues = filters.slice();
+        });
+
+
+        it('should not run if the only change is on the open - close ', ()  => {
+            vm.filterBit = 0;
+            oldValues[0].open = false;
+            vm.checkIfFilterIsApplied(filters, oldValues);
+            expect(vm.filterBit).toBe(0);
+        });
+
+        it('should call the mappingFilter fn on the filter object', () => {
+            vm.countryProjects = [{}];
+            vm.selectedCountry = {
+                project_approval: true
+            };
+            vm.filters = filters;
+            vm.applyFilters([false]);
+            expect(filterMappingFn).toHaveBeenCalled();
+        });
+        it('should show only project that contain one or more enabled filters', () => {
+            vm.countryProjects = [{}];
+            vm.selectedCountry = {
+                project_approval: true
+            };
+            filters[0].filterMappingFn = () => ['a'];
+            vm.filters = filters;
+            vm.applyFilters([false]);
+            expect(vm.projectsData[0]).toBe(vm.countryProjects[0]);
+        });
+
     });
 
-    it('handleChangeDomain fn.', () => {
-        vm.handleChangeDomain(1, 1);
-        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 1 });
+
+    it('handleTabSwitch fn.', () => {
+        vm.selectedCountry = { id: 1 };
+        vm.loadCountryProjectsOrAll = jasmine.createSpy('loadCountryProjectsOrAll');
+        vm.handleTabSwitch(0, 1);
+        expect(vm.loadCountryProjectsOrAll).not.toHaveBeenCalled();
+
+        vm.selectedCountry = { id: false };
+        vm.handleTabSwitch(1, 0);
+        expect(vm.loadCountryProjectsOrAll).not.toHaveBeenCalled();
+
+        vm.mapData = { id: 1 };
+        vm.handleTabSwitch(0, 1);
+        expect(vm.loadCountryProjectsOrAll).toHaveBeenCalledWith(1);
     });
 
-    it('handleChangeAxis fn.', () => {
-        vm.handleChangeAxis(1);
-        expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1,  'domainId': 0 });
+    it('updateCountry fn.', () => {
+        vm.projectsData = [];
+        vm.setCurrentCountry = jasmine.createSpy('setCurrentCountry');
+        vm.loadCountryProjectsOrAll = jasmine.createSpy('loadCountryProjectsOrAll');
+
+        vm.updateCountry({ id: 1 });
+        expect(vm.loadCountryProjectsOrAll).toHaveBeenCalled();
+
+        vm.updateCountry({ id: 1, name: 'a' }, { id: 2, name: 'b' });
+        expect(vm.loadCountryProjectsOrAll).toHaveBeenCalled();
+        expect(vm.setCurrentCountry).toHaveBeenCalled();
+
+    });
+
+    it('has a print implementing_partners fn', () => {
+        const result = vm.printImplementingPartners({ implementing_partners: [1, 2] });
+        expect(result).toBe('1, 2');
     });
 
 });

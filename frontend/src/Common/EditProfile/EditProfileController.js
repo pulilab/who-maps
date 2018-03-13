@@ -39,7 +39,7 @@ class EditProfileController  {
     }
 
     handleDataLoad() {
-        this.rawName = this.userProfile.name;
+        this.rawName = this.userProfile ? this.userProfile.name : '';
 
         this.dataLoaded = true;
         this.scope.$watch(() => {
@@ -73,7 +73,7 @@ class EditProfileController  {
         if (this.editProfileForm.$valid && this.userProfile.organisation) {
             try {
                 await this.saveProfile(this.userProfile);
-                this.state.go('country');
+                this.state.go('dashboard');
             }
             catch (data) {
                 this.handleResponse(data);

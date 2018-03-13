@@ -21,7 +21,7 @@ function config($stateProvider, $compileProvider) {
       .state(moduleName,
         {
             url: '/cms',
-            parent: 'app',
+            parent: 'base',
             views: {
                 main: {
                     template: '<planning-and-guidance></planning-and-guidance>'

@@ -46,7 +46,7 @@ class LoginModuleController {
                     this.state.go(rule.rule.state.name, rule.match);
                 }
                 else {
-                    this.state.go('country');
+                    this.state.go('dashboard');
                 }
             }
             catch (e) {

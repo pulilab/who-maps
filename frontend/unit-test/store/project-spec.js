@@ -346,7 +346,7 @@ describe('Project Store Module', () => {
             result = ProjectModule.getCurrentPublicProjectDetails(state);
             expect(result).toEqual({ id: 1  });
             expect(ProjectModule.getVanillaProject).not.toHaveBeenCalled();
-            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { hasPublishedVersion: false });
+            expect(ProjectModule.parseProjectForViewMode).toHaveBeenCalledWith(state, { hasPublishedVersion: false, disableDraft: true });
 
 
         });
@@ -941,6 +941,7 @@ describe('Project Store Module', () => {
             spyOn(CountryModule, 'setCurrentCountry');
             spyOn(ProjectModule, 'loadProjectDetails');
             spyOn(ToolkitModule, 'loadToolkitData');
+            spyOn(UserModule, 'getProfile').and.returnValue({});
             spyOn(axios, 'get').and.returnValue(defaultAxiosSuccess);
             dispatch.calls.reset();
             await ProjectModule.setCurrentProject()(dispatch, getState(state));

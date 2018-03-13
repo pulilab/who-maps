@@ -192,6 +192,7 @@ export const getCurrentPublicProjectDetails = (state, isDraft) => {
     if (project)  {
         project.hasPublishedVersion = !!(state.projects.currentPublicProject.published &&
             state.projects.currentPublicProject.published.name);
+        project.disableDraft = !state.projects.currentPublicProject.draft;
         return exports.parseProjectForViewMode(state, project);
     }
     return { ...exports.getVanillaProject(state) };
@@ -553,8 +554,11 @@ export function setCurrentProject(id) {
                 return Promise.all([mapDataPromise, detailPromise, toolkitPromise]);
             }
             const { data } = await axios.get(`/api/projects/${id}/`);
-            const teamViewers = await axios.get(`/api/projects/${id}/groups/`);
-            dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: teamViewers.data });
+            const profile = UserModule.getProfile(getState());
+            if (profile) {
+                const teamViewers = await axios.get(`/api/projects/${id}/groups/`);
+                dispatch({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: teamViewers.data });
+            }
             dispatch({ type: 'SET_CURRENT_PUBLIC_PROJECT_DETAIL', project: data });
         }
         else if (id === -1) {

@@ -1,337 +1,242 @@
-<div id="dashcontainer" layout="column">
 
-  <div layout="row" class="dashrow dashrow-upper">
+<div id="dashboard-container" layout="column">
 
-    <!-- vm.userType rights: 0: ANON, 1: LOGGEDIN, 2: VIEWER, 3: OWNER -->
+  <md-card md-whiteframe="2" class="rel" layout="row">
+    <div class="littleheader">
+      <translate>DASHBOARD</translate>
+    </div>
 
-    <div flex class="dashsection dashsection-left" layout="row">
+    <md-tabs md-border-bottom md-center-tabs="true" flex class="dashboard-tab-container" md-selected="vm.currentTab">
 
-      <div ng-show="vm.showEmpty" flex class="dashsection dash-cardholder">
+      <!-- MAP VIEW -->
 
-        <div class="dash-subhead">
-          <translate>PROJECT DETAILS</translate>
+      <md-tab label="{{'map view' | translate }}">
+
+        <div class="tab-wrap map" id="map" ng-class="{'emptyy': !vm.projectsData}">
+
+          <md-card md-whiteframe="2" class="countrychoser">
+            <md-input-container>
+              <md-select
+                class="no-border"
+                md-container-class="country-chooser topalign"
+                ng-model-options="{trackBy: '$value.id', allowInvalid: true}"
+                placeholder="{{'Select a country'|translate}}"
+                ng-model="vm.selectedCountry">
+
+                <md-option ng-repeat="country in vm.countries track by $index" ng-value="country">{{country.name}}</md-option>
+
+              </md-select>
+            </md-input-container>
+          </md-card>
+
+          <countrymap
+            big="true"
+            district-level-coverage="vm.districtProjects"
+            national-level-coverage="vm.nationalLevelCoverage"
+            map-data="vm.mapData">
+          </countrymap>
+
         </div>
 
-        <md-card md-whiteframe="2" flex class="dash-emptyleft">
-          <div class="emptychild" layout="column" layout-align="start center">
-            <md-button class="md-raised" aria-label="start new project" ui-sref="newProject">
-              <translate>add new project</translate>
-            </md-button>
-            <p>
-              <translate>
-                to include your project in the inventory and begin tracking your performance
-              </translate>
-            </p>
+      </md-tab>
+
+
+      <!-- LIST VIEW -->
+      <md-tab label="{{'list view' | translate }}">
+        <div class="tab-wrap" id="list">
+
+          <div class="headercont" layout="row">
+            <md-card md-whiteframe="2" class="countrychoser" flex="nogrow">
+              <md-input-container>
+                <md-select
+                  class="no-border"
+                  md-container-class="country-chooser topalign"
+                  ng-model-options="{trackBy: '$value.id'}"
+                  placeholder="{{'Select a country'|translate}}"
+                  ng-model="vm.selectedCountry">
+
+                  <md-option ng-value="vm.showAllCountries">
+                    <translate>Show all countries</translate>
+                  </md-option>
+                  <md-option ng-repeat="country in vm.countries track by $index" ng-value="{{country}}">{{country.name}}</md-option>
+
+                </md-select>
+              </md-input-container>
+            </md-card>
+
+            <div class="exports" layout="row" flex="grow" layout-align="end center" ng-show="vm.projectsData && vm.projectsData.length > 0">
+              <span class="exports-label">
+                <translate>Export list:</translate></span>
+              <md-button class="md-primary md-raised md-small" ng-click="vm.exportPDF()">
+                <md-icon>file_download</md-icon>
+                <translate>PDF</translate>
+              </md-button>
+              <md-button class="md-primary md-raised md-small" ng-click="vm.exportCSV()">
+                <md-icon>file_download</md-icon>
+                <translate>CSV</translate>
+              </md-button>
+            </div>
+
+            <div class="starry" layout="row" flex="nogrow" layout-align="end center">
+              <span><md-icon>visibility</md-icon><translate>Viewer</translate></span>
+              <span><md-icon>grade</md-icon><translate>Team member</translate></span>
+            </div>
           </div>
-        </md-card>
-      </div>
 
-      <div class="dashsection dashsection-left dash-cardholder" layout="column" id="dashsection-stats" ng-hide="vm.showEmpty">
-
-        <div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
-          <statistics></statistics>
-        </div>
-      </div>
-
-      <div flex class="dashsection dash-cardholder" layout="column" ng-if="!vm.showEmpty">
-
-        <div class="dash-subhead">
-          <translate>PROJECT DETAILS</translate>
-        </div>
-
-        <md-card md-whiteframe="2" flex>
-
-          <md-tabs md-border-bottom md-dynamic-height>
-
-            <md-tab label="{{'overview' | translate}}">
-
-              <div class="dash-cardcontent" layout="column" ng-if="!vm.viewMode">
-
-                <axis flex ng-repeat="axis in vm.rawToolkitData" axis-index="$index"></axis>
-
-                <div layout="row" class="dash-overview-tooltips">
-                  <div class="dash-overview-tooltip">
-                    <img src="../Common/Axis/images/flag-started.svg" />
-                    <span>
-                      <translate>Already started</translate>
-                    </span>
-                  </div>
-                  <div class="dash-overview-tooltip">
-                    <img src="../Common/Axis/images/flag-notstarted.svg" />
-                    <span>
-                      <translate>Not started yet</translate>
-                    </span>
-                  </div>
-                  <div class="dash-overview-tooltip">
-                    <span>
-                      <translate>
-                      <b>P</b> - Progress
-                      </translate>
-                    </span>
-                  </div>
-                  <div class="dash-overview-tooltip">
-                    <span>
-                      <translate>
-                      <b>S</b> - Score
-                      </translate>
-                    </span>
-                  </div>
-                  <div class="dash-overview-tooltip">
-                    <md-icon class="material-icons dash-overw-toolkit-ball1">fiber_manual_record</md-icon>
-                    <span>
-                      <translate>0-49%</translate>
-                    </span>
-                  </div>
-                  <div class="dash-overview-tooltip">
-                    <md-icon class="material-icons dash-overw-toolkit-ball2">fiber_manual_record</md-icon>
-                    <span>
-                      <translate>50-99%</translate>
-                    </span>
-                  </div>
-                  <div class="dash-overview-tooltip">
-                    <md-icon class="material-icons dash-overw-toolkit-ball3">fiber_manual_record</md-icon>
-                    <span>
-                      <translate>100%</translate>
-                    </span>
-                  </div>
+          <md-content class="projectcont">
+            <div class="scroll-wrapper">
+              <div class="headerrow" layout="row" layout-padding md-whiteframe="2">
+                <div flex="30" ng-click="vm.orderTable('name')">
+                  <translate>Project name</translate>
+                  <md-icon ng-show="vm.header.name.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.name.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('country')">
+                  <translate>Country</translate>
+                  <md-icon ng-show="vm.header.country.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.country.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('organisation_name')">
+                  <translate>Organisation name</translate>
+                  <md-icon ng-show="vm.header.organisation_name.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.organisation_name.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('donors')">
+                  <translate>Donors</translate>
+                  <md-icon ng-show="vm.header.donors.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.donors.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('contact_name')">
+                  <translate>Contact Name</translate>
+                  <md-icon ng-show="vm.header.contact_name.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.contact_name.down" >expand_less</md-icon>
+                </div>
+                <div flex="30" ng-click="vm.orderTable('implementation_overview')">
+                  <translate>Overview of digital health implementation</translate>
+                  <md-icon ng-show="vm.header.implementation_overview.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.implementation_overview.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('implementing_partners')">
+                  <translate>Implementing partners</translate>
+                  <md-icon ng-show="vm.header.implementing_partners.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.implementing_partners.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('geographic_scope')">
+                  <translate>Geographic scope</translate>
+                  <md-icon ng-show="vm.header.geographic_scope.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.geographic_scope.down" >expand_less</md-icon>
+                </div>
+                <div flex="20" ng-click="vm.orderTable('health_focus_areas')">
+                  <translate>Health Focus Areas</translate>
+                  <md-icon ng-show="vm.header.health_focus_areas.up" >expand_more</md-icon>
+                  <md-icon ng-show="vm.header.health_focus_areas.down" >expand_less</md-icon>
                 </div>
               </div>
 
-              <div class="dash-cardcontent infoview" layout="column" ng-if="vm.viewMode" layout="column" layout-align="space-between stretch">
-                <div layout="row" layout-align="start center" class="roww">
-                  <div flex="25" class='label'>
-                    <translate>NAME</translate>
-                  </div>
-                  <div class="data">{{vm.projectData.name}}</div>
-                </div>
+              <div
+                class="projectrow"
+                layout="row"
+                layout-padding
+                ng-repeat="project in vm.projectsData track by $index"
+                ng-class="{'member': project.isMember, 'viewer': project.isViewer}">
 
-                <div layout="row" layout-align="start center" class="roww">
-                  <div flex="25" class='label'>
-                    <translate>LOCATION</translate>
-                  </div>
-                  <div class="data">{{vm.projectData.country_name}}</div>
-                </div>
+                <div flex="30" class="projectlink" layout="row">
+                  <div layout="row" flex class="name">
+                    <div>
+                      <md-icon class="member" ng-show="project.isMember">grade</md-icon>
+                      <md-icon class="viewer" ng-show="project.isViewer">visibility</md-icon>
+                    </div>
+                    <div>
+                      <div class="name">
+                        {{project.name}}
+                      </div>
 
-                <div layout="row" layout-align="start center" class="roww">
-                  <div flex="25" class='label'>
-                    <translate>ORGANISATION</translate>
-                  </div>
-                  <div class="data">{{vm.projectData.organisation_name}}</div>
-                </div>
+                      <div class="country-approved" ng-show="project.approved">
+                        <i class="material-icons">assignment_turned_in</i>
+                        <translate>Verified by country</translate>
+                      </div>
 
-                <div layout="row" layout-align="start center" class="roww borderless">
-                  <div flex="25" class='label'>
-                    <translate>CONTACT</translate>
-                  </div>
-                  <div class="data">
-                    {{vm.projectData.contact_name}}
-                    <a ng-href="mailto:{{vm.projectData.contact_email + '?subject=Request for approval'}}">
-                      <translate>Request to be part of this project</translate>
-                    </a>
-                  </div>
-                </div>
-
-                <div flex class="gray">
-                  <div class='label labelobj'>
-                    <translate>OBJECTIVES</translate>
-                  </div>
-                  <div class="data data2">{{vm.projectData.goals_to_scale}}</div>
-                </div>
-
-              </div>
-
-            </md-tab>
-
-            <md-tab label="{{'axis' | translate}}" ng-if="!vm.viewMode">
-              <div>
-                <linechart
-                  showdotted="vm.projectData.isMember">
-                </linechart>
-              </div>
-            </md-tab>
-
-            <md-tab label="{{'domains' | translate}}" ng-if="!vm.viewMode">
-              <div>
-                <linechart
-                  showdotted="vm.projectData.isMember"
-                  datachooser="true"
-                ></linechart>
-              </div>
-            </md-tab>
-
-            <md-tab label="{{'technology' | translate}}">
-
-              <div class="dash-tech">
-                <div
-                  class="upper"
-                  layout="column">
-
-                  <div layout="row" layout-align="start start">
-                    <span flex>
-                      <md-icon class="material-icons">device_hub</md-icon>
-                      <translate>Technology platforms</translate>
-                    </span>
-                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.platforms">
-                      <md-chip-template>
-                        <span>
-                          {{$chip.name}}
-                        </span>
-                      </md-chip-template>
-                    </md-chips>
-                  </div>
-                  <div layout="row">
-                    <span flex>
-                      <md-icon class="material-icons">playlist_add_check</md-icon>
-                      <translate>License</translate>
-                    </span>
-                    <md-chips flex="66" readonly="true" ng-model="vm.projectData.licenses">
-                      <md-chip-template>
-                        <span>{{ $chip.name }}</span>
-                      </md-chip-template>
-                    </md-chips>
-                  </div>
-                </div>
-
-                <div class="lower">
-                  <span>
-                    <translate>Code documentations &amp; download:</translate>
-                  </span>
-                  <a ng-href="{{vm.fixUrl(vm.projectData.repository)}}" target="_blank">{{vm.projectData.repository}}</a>
-
-                  <span>
-                    <translate>Download applications:</translate>
-                  </span>
-                  <a ng-href="{{vm.fixUrl(vm.projectData.mobile_application)}}" target="_blank">{{vm.projectData.mobile_application}}</a>
-
-                  <span>
-                    <translate>Link to wiki page:</translate>
-                  </span>
-                  <a ng-href="{{vm.fixUrl(vm.projectData.wiki)}}" target="_blank">{{vm.projectData.wiki}}</a>
-                </div>
-              </div>
-            </md-tab>
-
-            <md-tab label="{{'interoperability' | translate}}">
-              <md-content class="dash-res">
-
-
-                <h3>
-                  <translate>Health Information System Links</translate>
-                </h3>
-                <md-card
-                  class="resource"
-                  ng-repeat="link in vm.projectData.interoperability_links | filter:'!!' track by $index "
-                  ng-if="link.selected"
-                  layout="row"
-                  layout-align="start center">
-                  <div flex>
-                    <div class="res-title">{{link.name}}</div>
-                    <div class="res-text">
-                      <h4>{{vm.structure.interoperability_links[$index].name}} : {{link.link}}</h4>
+                      <div class="links">
+                        <md-button  ui-sref="editProject({ appName: project.id, editMode: 'publish' })" class="md-primary md-raised md-small"><translate>Project Details</translate></md-button>
+                      </div>
                     </div>
                   </div>
-                  <a ng-if="link.link" ng-href="{{vm.fixUrl(link.link)}}" target="_blank" flex>
-                    <md-icon>launch</md-icon>
-                  </a>
-                </md-card>
+                </div>
+                <div flex="20" class="cap">
+                  {{vm.countriesLib[project.country]}}
+                </div>
+                <div flex="20">{{project.organisation_name}}</div>
+                <div flex="20">
+                        <span ng-repeat="donor in project.donors">
+                            {{donor}}{{$last ? '' : ', '}}
+                        </span>
+                </div>
+                <div flex="20">{{project.contact_name}}, <a ng-href="mailto:{{project.contact_email}}">{{project.contact_email}}</a></div>
+                <div flex="30">{{project.implementation_overview}}</div>
+                <div flex="20">{{vm.printImplementingPartners(project)}}</div>
+                <div flex="20">{{project.geographic_scope}}</div>
+                <div flex="20">{{project.health_focus_areas.join(', ')}}</div>
 
+              </div>
+              <div ng-if="!vm.projectsData.length" class="projectrow" layout="row" layout-padding>
+                <div flex><translate>There is no project to show in this country.</translate></div>
+              </div>
+            </div>
+          </md-content>
+        </div>
+      </md-tab>
+    </md-tabs>
 
-                <h3>
-                  <translate>Health Information Exchange Standards</translate>
-                </h3>
-                <md-card
-                  class="resource"
-                  ng-repeat="standard in vm.projectData.interoperability_standards track by $index"
-                  layout="row"
-                  layout-align="space-around stretch">
-
-                  <div flex class="res-text" layout="column" layout-align="space-around start">
-                    <h4>{{standard.name}}</h4>
-                  </div>
-                </md-card>
-
-
-              </md-content>
-            </md-tab>
-
-          </md-tabs>
-
-        </md-card>
-      </div>
-
-    </div>
-
-    <div flex="40" class="dashsection dash-cardholder" layout="column">
-      <div class="dash-subhead">
-        <translate>PROJECT PERFORMANCE</translate>
-      </div>
-      <md-card md-whiteframe="2" flex class="dash-perf">
-
-        <div flex class="emptyright" layout="column" ng-show="vm.showEmpty">
-          <p class="afteri">
-            <md-icon class="material-icons unselectable">info</md-icon>
-            <translate>What will you find here?</translate>
-          </p>
-          <p class="detail">
-            <translate>
-            By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up.
-            </translate>
-          </p>
+    <div class="dashboard-filter-container" flex layout="row">
+      <div class="filter-wrapper" layout="row" flex="100">
+        <div class="filter-project-counter" md-whiteframe="2">
+          <div class="project-counter-name">
+            <div class="description">
+              <translate>Number of Projects</translate>
+            </div>
+            <div class="country-name">
+              <!-- in {{vm.selectedCountry.name}} -->
+              <translate>in selected country</translate>
+            </div>
+          </div>
+          <div class="project-counter-arrow">
+            <img src="img/after-white.svg" />
+          </div>
+          <div class="project-counter-number">
+            {{ vm.projectsData.length}}
+          </div>
         </div>
 
-        <md-tabs ng-if="!vm.showEmpty && vm.profile.name" md-border-bottom class="perf-tab">
+        <div class="filter-list">
 
-          <md-tab label="{{'geographical view' | translate}}">
-            <countrymap
-              flex
-              big="false"
-              district-level-coverage="vm.districtProjects"
-              national-level-coverage="vm.nationalLevelCoverage"
-              map-data="vm.mapData">
-            </countrymap>
-          </md-tab>
+          <div class="description"><translate>Apply filters to map:</translate></div>
 
-          <md-tab label="{{'historical view' | translate}}" ng-if="!vm.showEmpty && vm.state.current.parent !== 'public'">
-            <linechart
-              showdotted="vm.projectData.isMember"
-              datachooser="false"
-              notpercentage="true">
-            </linechart>
-          </md-tab>
+          <div class="country-approval-switch" layout="row" layout-align="start center" ng-show="vm.selectedCountry.project_approval">
+            <md-switch class="md-primary" ng-model="vm.showOnlyApproved" aria-label="show only verified"></md-switch>
+            <span class="md-label">
+              <translate>Show only verified projects</translate>
+            </span>
+          </div>
 
-        </md-tabs>
+          <div class="list-headers" ng-repeat="header in vm.filters">
 
-        <div flex ng-if="!vm.profile.name" class="perfloggedout dash-cardcontent" layout="column" layout-align="center center">
-          <p class="loggedout">
-            <translate>
-            If you want to see world map for the geographical and historic view please subscribe first!
-            </translate>
-          </p>
-          <md-button class="md-raised" ui-sref="signup">
-            <translate>sign up now</translate>
-          </md-button>
+            <div class="header" ng-click="header.open = !header.open">
+              <md-icon ng-hide="header.open" >expand_more</md-icon>
+              <md-icon ng-show="header.open" >expand_less</md-icon>
+              {{header.name}} ({{header.items.length}})
+            </div>
+
+            <div class="list-item" ng-repeat="item in header.items  | orderBy: 'name' " ng-show="header.open">
+              <md-checkbox class="md-primary small" ng-model="item.value" aria-label="item.name">
+                {{item.name}}
+              </md-checkbox>
+            </div>
+
+          </div>
         </div>
-
-      </md-card>
-    </div>
-
-  </div>
-
-  <!-- LOWER PART -->
-
-  <div layout="row" class="dashrow dashrow-lower" ng-if="vm.rawToolkitData && !vm.viewMode && vm.state.params.appName !== null">
-
-    <div flex class="dashsection dash-cardholder" layout="column">
-
-      <div class="dash-subhead">
-        <translate>IMPROVE PROJECT</translate>
       </div>
-
-      <cms-dashboard-widget scores="vm.rawToolkitData" ></cms-dashboard-widget>
     </div>
+  </md-card>
 
-  </div>
-
+  <disclaimer></disclaimer>
 </div>
-
-<disclaimer></disclaimer>

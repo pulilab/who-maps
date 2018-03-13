@@ -123,7 +123,7 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
         })
         .state('editProfile', {
             url: '/edit-profile',
-            parent: 'app',
+            parent: 'base',
             views: {
                 main: {
                     template: '<edit-profile ></edit-profile>'

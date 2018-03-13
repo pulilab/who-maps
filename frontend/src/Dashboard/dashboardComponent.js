@@ -1,15 +1,12 @@
-import DashboardModuleController from './DashboardModuleController';
+import DashboardModuleController from './DashboardModuleController.js';
 import _template from './Dashboard.html';
 import './Dashboard.scss';
 
-const hssComponent = {
-    controller: DashboardModuleController.dashboardControllerFactory(),
+const dashboardComponent = {
+    controller: DashboardModuleController.factory(),
     template: _template,
     controllerAs: 'vm',
-    name: 'dashboard',
-    bindings: {
-        viewMode: '@'
-    }
+    name: 'dashboard'
 };
 
-export default hssComponent;
+export default dashboardComponent;
