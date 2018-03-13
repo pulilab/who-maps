@@ -1,10 +1,13 @@
 import json
+import os
+from fnmatch import fnmatch
 
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.utils.translation import override
 
 from django.core import mail
+from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from allauth.account.models import EmailConfirmation
 from django.test import TestCase
@@ -15,6 +18,8 @@ from country.admin import CountryAdmin
 from country.models import Country, PartnerLogo, CountryField
 from project.models import Project
 from user.models import UserProfile
+from django.utils.six import StringIO
+from django.conf import settings
 
 
 class CountryTests(APITestCase):
@@ -842,3 +847,42 @@ class CountryAdminTests(TestCase):
                          "&cliKey=a9ea45b5-ab37-4323-8263-767aa5896113&exportFormat=json&exportLayout=single"
                          "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected=SLE'>"
                          " Sierra Leone map download </a>")
+
+
+class CountryManagementCommandTest(TestCase):
+    null_topo = os.path.join(settings.STATIC_ROOT, 'country-geodata', 'null.json')
+    backup_folder = os.path.join(settings.MEDIA_ROOT, 'topojson-backups')
+
+    def setUp(self):
+        call_command('loaddata', 'null_land.json', verbosity=0)
+        try:
+            open(self.null_topo, 'x')
+        except FileExistsError:  # pragma: no cover
+            pass
+
+    def tearDown(self):
+        if os.path.isfile(self.null_topo):
+            os.remove(self.null_topo)
+        for file in os.listdir(self.backup_folder):
+            if fnmatch(file, '*null.json'):
+                os.remove(os.path.join(self.backup_folder, file))
+
+    def test_country_management_command_clean_maps(self):
+
+        out = StringIO()
+        call_command('clean_maps', stdout=out)
+        output = out.getvalue().strip()
+        self.assertEqual(output, 'No country code provided')
+
+        out = StringIO()
+        call_command('clean_maps', 'something', stdout=out)
+        output = out.getvalue().strip()
+        self.assertEqual(output, 'Selected country does not exist or it does not have an associated MapFile')
+
+        out = StringIO()
+        call_command('clean_maps', 'NULL', stdout=out)
+        output = out.getvalue().strip()
+        self.assertEqual(output, 'Removing unused features from Null Land geojson')
+
+        topo_stats = os.stat(self.null_topo)
+        self.assertTrue(topo_stats.st_size > 10)
