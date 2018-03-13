@@ -112,7 +112,7 @@ class CountryAdmin(admin.ModelAdmin):
             self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
                               template_name="email/country_admin.html")
         if change and 'map_activated_on' in form.changed_data and obj.users:
-            management.call_command('clean_maps', obj.code);
+            management.call_command('clean_maps', obj.code)
             self._notify_user(obj, subject="A new map for {country_name} has been activated",
                               template_name="email/country_map_activated.html")
 
