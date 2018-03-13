@@ -73,7 +73,7 @@ class EditProfileController  {
         if (this.editProfileForm.$valid && this.userProfile.organisation) {
             try {
                 await this.saveProfile(this.userProfile);
-                this.state.go('country');
+                this.state.go('dashboard');
             }
             catch (data) {
                 this.handleResponse(data);
