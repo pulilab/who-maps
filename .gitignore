@@ -7,6 +7,7 @@ node_modules/
 frontend/builds/
 .cache/
 .coverage
+.lcoveragerc
 */.cache/
 npm-debug.log
 *.cache*

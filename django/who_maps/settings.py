@@ -161,6 +161,7 @@ MEDIA_ROOT = '/usr/share/django/media'
 MEDIA_URL = '/media/'
 
 SITE_ID = int(os.environ.get('SITE_ID', 1))
+CI_RUN = bool(os.environ.get('CI_RUN', False))
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -326,3 +327,8 @@ elif SITE_ID == 4:
 else:
     ENVIRONMENT_NAME = "DEVELOPMENT"
     ENVIRONMENT_COLOR = "blue"
+
+
+if CI_RUN:
+    STATIC_ROOT = "/home/ubuntu/who-maps/nginx/site/static/"
+    MEDIA_ROOT = "/home/ubuntu/who-maps/django/media/"

@@ -29,6 +29,7 @@ dependencies:
     # - sudo pip install docker-compose
     - cd frontend && yarn
     #- cd frontend && npm install -g webpack
+    - npm install -g mapshaper
     - cd django && pip install -r requirements.txt
     - cd django && python manage.py migrate
 #    - cd frontend && npm run e2e-server-circleci:
@@ -38,7 +39,7 @@ dependencies:
 test:
   pre:
     - cd django && flake8
-    - cd django && py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+    - cd django && CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
     - cd frontend && yarn test_ci
     # - docker build ./django
     # - docker-compose up -d

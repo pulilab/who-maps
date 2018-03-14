@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
-from django.core import mail, urlresolvers
+from django.core import mail, urlresolvers, management
 from django.contrib import admin
 from django.template import loader
 from .models import Country, PartnerLogo, CountryField, MapFile
@@ -112,6 +112,7 @@ class CountryAdmin(admin.ModelAdmin):
             self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
                               template_name="email/country_admin.html")
         if change and 'map_activated_on' in form.changed_data and obj.users:
+            management.call_command('clean_maps', obj.code)
             self._notify_user(obj, subject="A new map for {country_name} has been activated",
                               template_name="email/country_map_activated.html")
 

@@ -259,3 +259,10 @@ def shell():
 
 def log():
     local("docker-compose logs -f django")
+
+
+def single_coverage(folder, test_to_run):
+    local("touch .lcoveragerc")
+    local("printf '[run]\nsource = {}' > .lcoveragerc".format(folder))
+    local("docker-compose exec django py.test --cov --cov-report term-missing -k"
+          " '{}' --cov-config .lcoveragerc".format(test_to_run))
