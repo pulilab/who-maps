@@ -35,7 +35,7 @@ class Command(BaseCommand):
             return
 
         self.stdout.write('Removing unused features from {} geojson'.format(c.name))
-        with open(os.path.join(settings.MEDIA_ROOT, '{}'.format(map_file.map_file))) as f:
+        with open(os.path.join(settings.MEDIA_ROOT, '{}'.format(map_file.map_file)), encoding="utf-8") as f:
             json_content = json.load(f)
 
         level = c.map_data['first_sub_level']['admin_level']
