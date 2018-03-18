@@ -3,23 +3,23 @@ from django.utils.translation import ugettext_lazy as _
 
 SUB_LEVEL_TYPES = [
   {
-    'id': 1,
+    'name': 'region',
     'displayName': _('Region')
   },
   {
-    'id': 2,
+    'name': 'province',
     'displayName': _('Province')
   },
   {
-    'id': 3,
+    'name': 'district',
     'displayName': _('District')
   },
   {
-    'id': 4,
+    'name': 'county',
     'displayName': _('County')
   },
   {
-    'id': 5,
+    'name': 'locality',
     'displayName': _('Locality')
   },
 ]
