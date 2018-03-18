@@ -15,6 +15,7 @@ from .data.domains import AXIS, DOMAINS
 from .data.search_filters import SEARCH_FILTERS
 from .data.thematic_overview import THEMATIC_OVERVIEW
 from .data.toolkit_questions import TOOLKIT_QUESTIONS
+from .data.sub_level_types import SUB_LEVEL_TYPES
 
 
 class TokenAuthMixin(object):
@@ -86,6 +87,7 @@ class StaticDataView(GenericAPIView):
         data['domains'] = DOMAINS
         data['thematic_overview'] = THEMATIC_OVERVIEW
         data['toolkit_questions'] = TOOLKIT_QUESTIONS
+        data['sub_level_types'] = SUB_LEVEL_TYPES
 
         return Response(data)
 
