@@ -20,6 +20,7 @@ from project.models import Project
 from user.models import UserProfile
 from django.utils.six import StringIO
 from django.conf import settings
+from mock import patch
 
 
 class CountryTests(APITestCase):
@@ -817,11 +818,13 @@ class CountryAdminTests(TestCase):
                 url = 'test_url'
             map_file = MockMapFile()
             country_id = 0
-
-        self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
-                         '<div id="app"><vue-map-customizer map-url="test_url" flag-base-url="/static/flags/"'
-                         ':country-id="0" api-url="/api/country-map-data/"></vue-map-customizer></div>'
-                         '<script src="/static/vue-map-customiser-entrypoint.js"></script>')
+        with patch('country.admin.lazyJSONDumps', return_value=[{"name": "a", "displayName": "b"}]):
+            self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
+                             '<div id="app"><vue-map-customizer map-url="test_url" flag-base-url="/static/flags/"'
+                             ':country-id="0" api-url="/api/country-map-data/"'
+                             ' :sub-level-types=\'[{\'name\': \'a\', \'displayName\': \'b\'}]\'>'
+                             '</vue-map-customizer></div>'
+                             '<script src="/static/vue-map-customiser-entrypoint.js"></script>')
 
     def test_country_get_fields(self):
         ma = CountryAdmin(Country, self.site)

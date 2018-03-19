@@ -106,24 +106,34 @@ describe('Countries Store Module', () => {
         });
 
         it('getCurrentCountrySubLevelNames', () => {
-            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({
-                map_data: {
-                    first_sub_level: {
-                        name: 1
-                    },
-                    second_sub_level: {
-                        name: 2
-                    }
+            const map_data = {
+                first_sub_level: {
+                    name: 'a'
+                },
+                second_sub_level: {
+                    name: 'b'
                 }
-            });
+            };
+            const spy = spyOn(CountriesModule, 'getCurrentCountry').and.returnValue({ map_data });
+            const subLevelTypes = [{ name: 'a', displayName: 'A' }, { name: 'b', displayName: 'B' }];
+            spyOn(SystemModule, 'getSubLevelTypes').and.returnValue(subLevelTypes);
             let result = CountriesModule.getCurrentCountrySubLevelNames({});
             expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
-            expect(result).toEqual([1, 2]);
+            expect(result).toEqual(['A', 'B']);
+
+            map_data.first_sub_level.name = 'c';
+            map_data.second_sub_level.name = 'c';
+            spy.and.returnValue({ map_data });
+            result = CountriesModule.getCurrentCountrySubLevelNames({});
+            expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
+            expect(result).toEqual(['c', 'c']);
 
             spy.and.returnValue({});
             result = CountriesModule.getCurrentCountrySubLevelNames({});
             expect(CountriesModule.getCurrentCountry).toHaveBeenCalled();
             expect(result).toEqual(['', '']);
+
+            expect(SystemModule.getSubLevelTypes).toHaveBeenCalledTimes(3);
         });
 
         it('getCurrentCountryFirstSubLevel', () => {

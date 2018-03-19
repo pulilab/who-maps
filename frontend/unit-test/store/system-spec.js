@@ -140,6 +140,17 @@ describe('System Store Module', () => {
             expect(SystemModule.getThematicOverview).toHaveBeenCalled();
         });
 
+        it('getSubLevelTypes', () => {
+            const state = {
+                system: {
+                    sub_level_types: [{ a: 1 }]
+                }
+            };
+            const result = SystemModule.getSubLevelTypes(state);
+            expect(result).toEqual(state.system.sub_level_types);
+            expect(result).not.toBe(state.system.sub_level_types);
+        });
+
 
     });
 

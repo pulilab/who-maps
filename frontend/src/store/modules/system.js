@@ -12,7 +12,8 @@ const initialState = {
     axis: [],
     domains: [],
     landing_page_defaults: {},
-    toolkit_questions: []
+    toolkit_questions: [],
+    sub_level_types: []
 };
 
 // GETTERS
@@ -78,6 +79,10 @@ export const getDomainsForThematic = state => {
 
 };
 
+export const getSubLevelTypes = state => {
+    return [...state.system.sub_level_types.map(t => ({ ...t }))];
+};
+
 // ACTIONS
 
 export function loadUserProfiles() {
@@ -100,6 +105,7 @@ export function loadStaticData() {
         dispatch({ type: 'SET_SEARCH_FILTERS', search_filters: data.search_filters });
         dispatch({ type: 'SET_THEMATIC_OVERVIEW', thematic_overview: data.thematic_overview });
         dispatch({ type: 'SET_TOOLKIT_QUESTIONS', toolkit_questions: data.toolkit_questions });
+        dispatch({ type: 'SET_SUB_LEVEL_TYPES', sub_level_types: data.sub_level_types });
     };
 }
 
@@ -167,6 +173,9 @@ export default function system(state = initialState, action) {
     }
     case 'SET_TOOLKIT_QUESTIONS': {
         return { ...state, toolkit_questions: action.toolkit_questions };
+    }
+    case 'SET_SUB_LEVEL_TYPES': {
+        return { ...state, sub_level_types: action.sub_level_types };
     }
     default:
         return state;

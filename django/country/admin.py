@@ -9,10 +9,12 @@ from django.contrib import admin
 from django.template import loader
 from .models import Country, PartnerLogo, CountryField, MapFile
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
+from core.data.sub_level_types import SUB_LEVEL_TYPES
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
 import pycountry
+from core.utils import lazyJSONDumps
 
 
 class CountryFieldInline(admin.TabularInline):
@@ -60,10 +62,12 @@ class MapFileInline(admin.StackedInline):
         }
 
     def print_map_customizer(self, obj):
+        sub_level_types = lazyJSONDumps(SUB_LEVEL_TYPES)
         markup = ('<div id="app"><vue-map-customizer map-url="{}" flag-base-url="/static/flags/"'
-                  ':country-id="{}" api-url="/api/country-map-data/"></vue-map-customizer></div>'
+                  ':country-id="{}" api-url="/api/country-map-data/" :sub-level-types=\'{}\'>'
+                  '</vue-map-customizer></div>'
                   '<script src="/static/vue-map-customiser-entrypoint.js">'
-                  '</script>').format(obj.map_file.url, obj.country_id)
+                  '</script>').format(obj.map_file.url, obj.country_id, sub_level_types)
         return mark_safe(markup)
     print_map_customizer.short_description = 'Map'
 
