@@ -69,7 +69,6 @@ class MapFileInline(admin.StackedInline):
                   '<script src="/static/vue-map-customiser-entrypoint.js">'
                   '</script>').format(obj.map_file.url, obj.country_id, sub_level_types)
         return mark_safe(markup)
-        # return sub_level_types
     print_map_customizer.short_description = 'Map'
 
 
