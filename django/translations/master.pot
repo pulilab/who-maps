@@ -6,7 +6,7 @@ msgstr ""
 
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:251
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:388
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:476
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:478
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:110
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:148
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:178
@@ -15,7 +15,7 @@ msgstr ""
 
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:231
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:368
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:456
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:457
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:104
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:142
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:172
@@ -41,7 +41,7 @@ msgstr ""
 msgid "...Read less"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:82
+#: ./toTranslate/src/Assessment/Assessment.html:82
 msgid "0-49%"
 msgstr ""
 
@@ -55,7 +55,7 @@ msgstr ""
 msgid "1. Select your role"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:94
+#: ./toTranslate/src/Assessment/Assessment.html:94
 msgid "100%"
 msgstr ""
 
@@ -83,7 +83,7 @@ msgstr ""
 msgid "5. Country fields"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:88
+#: ./toTranslate/src/Assessment/Assessment.html:88
 msgid "50-99%"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "<b>Member</b> or"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:67
+#: ./toTranslate/src/Assessment/Assessment.html:67
 msgid "<b>P</b> - Progress"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 msgid "<b>Resources:</b> Provides links to relevant websites, reports and other tools that project teams may find useful."
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:74
+#: ./toTranslate/src/Assessment/Assessment.html:74
 msgid "<b>S</b> - Score"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "<strong>{{question.question_sum}}</strong> / {{question.question_max}} points"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:141
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:131
 msgid "A WHO toolkit for measuring and facilitating scale-up and national institutionalization of digital health solutions."
 msgstr ""
 
@@ -349,8 +349,8 @@ msgstr ""
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:280
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:41
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:417
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:562
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:609
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:565
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:612
 msgid "Add more"
 msgstr ""
 
@@ -442,7 +442,7 @@ msgstr ""
 msgid "Already signed up?"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:56
+#: ./toTranslate/src/Assessment/Assessment.html:56
 msgid "Already started"
 msgstr ""
 
@@ -455,7 +455,7 @@ msgstr ""
 msgid "An email with instructions to reset your password have been sent."
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:126
+#: ./toTranslate/src/Project/ProjectController.js:131
 msgid "An error occured while saving your project, your data is NOT saved"
 msgstr ""
 
@@ -492,7 +492,7 @@ msgstr ""
 msgid "Apply filters to list:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:212
+#: ./toTranslate/src/Dashboard/Dashboard.html:212
 msgid "Apply filters to map:"
 msgstr ""
 
@@ -506,6 +506,14 @@ msgstr ""
 
 #: ./toTranslate/src/Common/Thematic/static/-1-3.html:3
 msgid "Asia eHealth Information Network"
+msgstr ""
+
+#: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:77
+msgid "Assesment"
+msgstr ""
+
+#: ./toTranslate/src/Common/SubBar/subBar.html:65
+msgid "Assessment"
 msgstr ""
 
 #: ./toTranslate/src/Common/Thematic/static/-1-4.html:27
@@ -524,13 +532,13 @@ msgid ""
 "                  suspension, cancellation, or termination."
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:109
-#: ./toTranslate/src/Project/ProjectController.js:117
-#: ./toTranslate/src/Project/ProjectController.js:125
+#: ./toTranslate/src/Project/ProjectController.js:114
+#: ./toTranslate/src/Project/ProjectController.js:122
+#: ./toTranslate/src/Project/ProjectController.js:130
 msgid "Attention"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Linechart/Linechart.html:28
+#: ./toTranslate/src/Assessment/Linechart/Linechart.html:28
 msgid "Axis to show:"
 msgstr ""
 
@@ -549,7 +557,7 @@ msgstr ""
 msgid "Birth (e.g. transport, skilled attendance at birth)"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:276
+#: ./toTranslate/src/Assessment/Assessment.html:276
 msgid "By adding your project, you will be able to see where and who else is implementing in your country, and globally. You can also track your implementation performance over time and assess your efforts in scaling up."
 msgstr ""
 
@@ -565,15 +573,11 @@ msgstr ""
 msgid "CHAI"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:124
+#: ./toTranslate/src/Assessment/Assessment.html:124
 msgid "CONTACT"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:6
-msgid "COUNTRY LEVEL VIEW"
-msgstr ""
-
-#: ./toTranslate/src/CountryView/CountryViewModule.html:76
+#: ./toTranslate/src/Dashboard/Dashboard.html:76
 msgid "CSV"
 msgstr ""
 
@@ -590,7 +594,7 @@ msgstr ""
 #: ./toTranslate/src/Cms/DetailElement/DetailElementDialog.html:101
 #: ./toTranslate/src/Cms/DetailElement/DetailElementDialog.html:58
 #: ./toTranslate/src/Project/DialogMultiSelector/DialogMultiSelectorDialog.html:63
-#: ./toTranslate/src/Project/ProjectController.js:112
+#: ./toTranslate/src/Project/ProjectController.js:117
 msgid "Cancel"
 msgstr ""
 
@@ -618,7 +622,7 @@ msgstr ""
 msgid "Client beneficiaries:"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Linechart/LinechartController.js:78
+#: ./toTranslate/src/Assessment/Linechart/LinechartController.js:78
 msgid "Clients"
 msgstr ""
 
@@ -633,11 +637,11 @@ msgid "Clinton Health Access Initiative"
 msgstr ""
 
 #: ./toTranslate/src/Common/SubBar/subBar.html:131
-#: ./toTranslate/src/Project/ProjectController.js:120
-#: ./toTranslate/src/Project/ProjectController.js:127
-#: ./toTranslate/src/Project/ProjectController.js:134
-#: ./toTranslate/src/Project/ProjectController.js:141
-#: ./toTranslate/src/Project/ProjectController.js:148
+#: ./toTranslate/src/Project/ProjectController.js:125
+#: ./toTranslate/src/Project/ProjectController.js:132
+#: ./toTranslate/src/Project/ProjectController.js:139
+#: ./toTranslate/src/Project/ProjectController.js:146
+#: ./toTranslate/src/Project/ProjectController.js:153
 msgid "Close"
 msgstr ""
 
@@ -650,7 +654,7 @@ msgstr ""
 msgid "Code documentation or download link"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:197
+#: ./toTranslate/src/Assessment/Assessment.html:197
 msgid "Code documentations &amp; download:"
 msgstr ""
 
@@ -666,9 +670,9 @@ msgstr ""
 msgid "Comparators may involve a comparison/control group or, if the study design is pre- and post-, then comparators may involve the baseline characteristics."
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:132
-#: ./toTranslate/src/Project/ProjectController.js:139
-#: ./toTranslate/src/Project/ProjectController.js:146
+#: ./toTranslate/src/Project/ProjectController.js:137
+#: ./toTranslate/src/Project/ProjectController.js:144
+#: ./toTranslate/src/Project/ProjectController.js:151
 msgid "Congratulation"
 msgstr ""
 
@@ -693,7 +697,7 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:110
+#: ./toTranslate/src/Dashboard/Dashboard.html:110
 msgid "Contact Name"
 msgstr ""
 
@@ -731,23 +735,19 @@ msgstr ""
 msgid "Costs that change according to the level of scale (e.g. training, maintenance, community mobilization activities)."
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:97
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:87
 #: ./toTranslate/src/Common/EditProfile/EditProfile.html:56
 #: ./toTranslate/src/Common/TopBar/topBar.html:133
-#: ./toTranslate/src/CountryView/CountryViewModule.html:95
+#: ./toTranslate/src/Dashboard/Dashboard.html:95
 msgid "Country"
-msgstr ""
-
-#: ./toTranslate/src/Common/TopBar/topBar.html:25
-msgid "Country Map"
-msgstr ""
-
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:48
-msgid "Country View"
 msgstr ""
 
 #: ./toTranslate/src/Project/Navigation/Navigation.html:68
 msgid "Country fields"
+msgstr ""
+
+#: ./toTranslate/src/Dashboard/Dashboard.html:6
+msgid "DASHBOARD"
 msgstr ""
 
 #: ./toTranslate/src/Common/Thematic/static/4-0.html:12
@@ -791,9 +791,8 @@ msgstr ""
 msgid "DHISDHIS"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:57
-#: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:77
-#: ./toTranslate/src/Common/SubBar/subBar.html:65
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:47
+#: ./toTranslate/src/Common/TopBar/topBar.html:25
 msgid "Dashboard"
 msgstr ""
 
@@ -817,7 +816,7 @@ msgstr ""
 msgid "Data standards:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:131
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:131
 msgid "Date of:"
 msgstr ""
 
@@ -846,11 +845,11 @@ msgid "Development of the MAPS Toolkit was initiated within the context of the W
 msgstr ""
 
 #: ./toTranslate/src/Common/TopBar/topBar.html:12
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:43
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:43
 msgid "Digital Health Atlas"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:175
+#: ./toTranslate/src/Dashboard/DashboardModuleController.js:175
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:56
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:21
 msgid "Digital Health Interventions"
@@ -970,39 +969,39 @@ msgstr ""
 msgid "Domain {{domian.id}} total"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:586
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:589
 msgid "Donor's name"
 msgstr ""
 
 #: ./toTranslate/src/Common/Donors/donors.html:6
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:20
 #: ./toTranslate/src/Common/Thematic/static/2-0.html:44
-#: ./toTranslate/src/CountryView/CountryViewModule.html:105
+#: ./toTranslate/src/Dashboard/Dashboard.html:105
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:214
 msgid "Donors"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:568
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:571
 msgid "Donors (Add one at least)"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:135
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:135
 msgid "Donors:"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:150
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:140
 #: ./toTranslate/src/Common/TermsOfUse/TermsOfUse.html:249
 msgid "Download Pdf"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:202
+#: ./toTranslate/src/Assessment/Assessment.html:202
 msgid "Download applications:"
 msgstr ""
 
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:16
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:28
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:39
 #: ./toTranslate/src/Common/SubBar/subBar.html:28
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:16
 #: ./toTranslate/src/Project/Navigation/Navigation.html:15
 #: ./toTranslate/src/Project/Project.html:12
 msgid "Draft"
@@ -1058,7 +1057,7 @@ msgstr ""
 msgid "Edit User profile"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:85
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:75
 #: ./toTranslate/src/Common/TopBar/topBar.html:121
 msgid "Edit my Profile"
 msgstr ""
@@ -1147,7 +1146,7 @@ msgstr ""
 msgid "Experiences"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:69
+#: ./toTranslate/src/Dashboard/Dashboard.html:69
 msgid "Export list:"
 msgstr ""
 
@@ -1155,7 +1154,7 @@ msgstr ""
 msgid "FHI 360: Goal of scale-up is to achieve 300 000 unique users for Mobile for Reproductive Health (m4RH) in the United Republic of Tanzania"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Linechart/LinechartController.js:80
+#: ./toTranslate/src/Assessment/Linechart/LinechartController.js:80
 msgid "Facilities"
 msgstr ""
 
@@ -1235,7 +1234,7 @@ msgid "For the second step, project teams should keep in mind the need to gather
 msgstr ""
 
 #: ./toTranslate/src/Common/Login/Login.html:47
-msgid "Forgot password?\""
+msgid "Forgot password?"
 msgstr ""
 
 #: ./toTranslate/src/Common/Thematic/static/-1-4.html:29
@@ -1252,7 +1251,7 @@ msgid "Furthermore, <b><em>user and technical support</em></b> systems must be i
 msgstr ""
 
 #: ./toTranslate/src/Common/SubBar/subBar.html:62
-msgid "GO TO DASHBOARD"
+msgid "GO TO ASSESSMENT"
 msgstr ""
 
 #: ./toTranslate/src/Common/SubBar/subBar.html:83
@@ -1279,17 +1278,17 @@ msgstr ""
 msgid "General info"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:125
+#: ./toTranslate/src/Dashboard/Dashboard.html:125
 #: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:81
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:32
 msgid "Geographic scope"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:161
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:161
 msgid "Geographical coverage:"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:137
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:127
 msgid "Get MAPS Toolkit"
 msgstr ""
 
@@ -1341,7 +1340,7 @@ msgstr ""
 msgid "Go to prev domain"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:37
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:37
 msgid "Go to the edit project page to review and publish your project"
 msgstr ""
 
@@ -1446,29 +1445,29 @@ msgstr ""
 msgid "Harnessing the collective experiences of those developing and implementing digital health system and interventions in the field: to offer suggestion and considerations."
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:501
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:504
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:188
 msgid "Has the government financially invested in the project?"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:141
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:141
 msgid "Health Focus Area:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:130
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:184
+#: ./toTranslate/src/Dashboard/Dashboard.html:130
+#: ./toTranslate/src/Dashboard/DashboardModuleController.js:184
 msgid "Health Focus Areas"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:240
+#: ./toTranslate/src/Assessment/Assessment.html:240
 msgid "Health Information Exchange Standards"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:219
+#: ./toTranslate/src/Assessment/Assessment.html:219
 msgid "Health Information System Links"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:192
+#: ./toTranslate/src/Dashboard/DashboardModuleController.js:192
 msgid "Health Information Systems"
 msgstr ""
 
@@ -1480,7 +1479,7 @@ msgstr ""
 msgid "Health Level 7 (data standard)"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:201
+#: ./toTranslate/src/Dashboard/DashboardModuleController.js:201
 msgid "Health System Challenges"
 msgstr ""
 
@@ -1488,7 +1487,7 @@ msgstr ""
 msgid "Health System Contraints"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Linechart/LinechartController.js:79
+#: ./toTranslate/src/Assessment/Linechart/LinechartController.js:79
 msgid "Health Workers"
 msgstr ""
 
@@ -1560,7 +1559,7 @@ msgstr ""
 msgid "IICD"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:327
+#: ./toTranslate/src/Assessment/Assessment.html:327
 msgid "IMPROVE PROJECT"
 msgstr ""
 
@@ -1608,7 +1607,7 @@ msgstr ""
 msgid "IWG Catalytic mHealth Grant Mechanism"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:306
+#: ./toTranslate/src/Assessment/Assessment.html:306
 msgid "If you want to see world map for the geographical and historic view please subscribe first!"
 msgstr ""
 
@@ -1625,13 +1624,13 @@ msgstr ""
 msgid "Implementers:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:120
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:530
+#: ./toTranslate/src/Dashboard/Dashboard.html:120
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:533
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:204
 msgid "Implementing partners"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:138
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:138
 msgid "Implementing partners:"
 msgstr ""
 
@@ -1845,7 +1844,7 @@ msgstr ""
 msgid "LMIS"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:110
+#: ./toTranslate/src/Assessment/Assessment.html:110
 msgid "LOCATION"
 msgstr ""
 
@@ -1873,7 +1872,7 @@ msgstr ""
 msgid "Lianne Gonsalves, Abigail Manz, Reid Miller, Tim Nichols and Lavanya Vasudevan also contributed valuable insights through their engagement in the IWG programme. WHO also thank Yorghos Carabas for his creative input throughout the development of MAPS."
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:185
+#: ./toTranslate/src/Assessment/Assessment.html:185
 msgid "License"
 msgstr ""
 
@@ -1891,11 +1890,11 @@ msgstr ""
 msgid "Link to the wiki page"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:207
+#: ./toTranslate/src/Assessment/Assessment.html:207
 msgid "Link to wiki page:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:60
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:60
 msgid "List exported on"
 msgstr ""
 
@@ -1918,7 +1917,7 @@ msgstr ""
 msgid "Login here"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:91
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:81
 #: ./toTranslate/src/Common/TopBar/topBar.html:127
 msgid "Logout"
 msgstr ""
@@ -2115,7 +2114,7 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:103
+#: ./toTranslate/src/Assessment/Assessment.html:103
 msgid "NAME"
 msgstr ""
 
@@ -2142,7 +2141,7 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:132
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:122
 #: ./toTranslate/src/Common/TopBar/topBar.html:168
 msgid "New Project"
 msgstr ""
@@ -2213,7 +2212,7 @@ msgstr ""
 msgid "No resources have been added yet..."
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:510
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:513
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:193
 msgid "No, they have not yet contributed"
 msgstr ""
@@ -2226,7 +2225,7 @@ msgstr ""
 msgid "Norwegian Agency for Development Cooperation"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:62
+#: ./toTranslate/src/Assessment/Assessment.html:62
 msgid "Not started yet"
 msgstr ""
 
@@ -2246,11 +2245,11 @@ msgstr ""
 msgid "Note: if you wish to add viewers who are not already registered, they will need to be registered before you may add them"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:195
+#: ./toTranslate/src/Dashboard/Dashboard.html:195
 msgid "Number of Projects"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:136
+#: ./toTranslate/src/Assessment/Assessment.html:136
 msgid "OBJECTIVES"
 msgstr ""
 
@@ -2258,7 +2257,7 @@ msgstr ""
 msgid "OCL"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:117
+#: ./toTranslate/src/Assessment/Assessment.html:117
 msgid "ORGANISATION"
 msgstr ""
 
@@ -2266,7 +2265,7 @@ msgstr ""
 msgid "Offering resources for planning and designing an mHealth project, including ways to assess the contextual environment, to ensure the project has a solid foundation"
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:111
+#: ./toTranslate/src/Project/ProjectController.js:116
 msgid "Ok"
 msgstr ""
 
@@ -2311,12 +2310,12 @@ msgid "Organisation"
 msgstr ""
 
 #: ./toTranslate/src/Common/OrganisationAutocomplete/Organisation.html:16
-#: ./toTranslate/src/CountryView/CountryViewModule.html:100
+#: ./toTranslate/src/Dashboard/Dashboard.html:100
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:18
 msgid "Organisation name"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:133
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:133
 msgid "Organisation name:"
 msgstr ""
 
@@ -2332,11 +2331,11 @@ msgstr ""
 msgid "Overhead expenses that are not dependent on the scale of the operation (e.g. general administrative costs, rent)."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:115
+#: ./toTranslate/src/Dashboard/Dashboard.html:115
 msgid "Overview of digital health implementation"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:152
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:152
 msgid "Overview of digital health implementation:"
 msgstr ""
 
@@ -2345,7 +2344,7 @@ msgstr ""
 msgid "Overview of the digital health implementation"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:72
+#: ./toTranslate/src/Dashboard/Dashboard.html:72
 msgid "PDF"
 msgstr ""
 
@@ -2361,16 +2360,16 @@ msgstr ""
 msgid "POTENTIAL PARTNER"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:12
-#: ./toTranslate/src/Dashboard/Dashboard.html:39
+#: ./toTranslate/src/Assessment/Assessment.html:12
+#: ./toTranslate/src/Assessment/Assessment.html:39
 msgid "PROJECT DETAILS"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:266
+#: ./toTranslate/src/Assessment/Assessment.html:266
 msgid "PROJECT PERFORMANCE"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:548
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:551
 msgid "Partner's name"
 msgstr ""
 
@@ -2445,7 +2444,7 @@ msgid ""
 "                  please exit the Website and do not access or otherwise use the Website."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:145
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:145
 msgid "Point of contact:"
 msgstr ""
 
@@ -2499,8 +2498,8 @@ msgstr ""
 msgid "Programme fidelity:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:160
-msgid "Project Dashboard"
+#: ./toTranslate/src/Dashboard/Dashboard.html:160
+msgid "Project Details"
 msgstr ""
 
 #: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:55
@@ -2517,7 +2516,7 @@ msgstr ""
 msgid "Project leaders and staff also need appropriate training, supervision and support. <b><em>User training</em></b>, which involves end-users and secondary users, must be tailored specifically to the needs and levels of experience of the participants. It is widely recognized that effective engagement with health workers and other end-users is the key to successful adoption of mHealth products. Training programmes should also aim to foster a sense of perceived value of the product among end-users. The scaling-up process will be hampered if health workers fail to see the benefits of the application on their workload, or if they feel overwhelmed by the complexity of the technology."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:90
+#: ./toTranslate/src/Dashboard/Dashboard.html:90
 #: ./toTranslate/src/Project/GeneralOverview/GeneralOverview.html:12
 #: ./toTranslate/src/Project/GeneralOverview/ReadOnlyGeneralOverview.html:11
 msgid "Project name"
@@ -2566,7 +2565,7 @@ msgstr ""
 msgid "Purposes for which Personal Information May Be Used"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:24
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:24
 msgid "Push to save your current stats as a new version:"
 msgstr ""
 
@@ -2617,8 +2616,8 @@ msgstr ""
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:274
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:411
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:47
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:556
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:603
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:559
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:606
 msgid "Remove"
 msgstr ""
 
@@ -2626,7 +2625,7 @@ msgstr ""
 msgid "Report"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:129
+#: ./toTranslate/src/Assessment/Assessment.html:129
 msgid "Request to be part of this project"
 msgstr ""
 
@@ -2653,11 +2652,11 @@ msgstr ""
 msgid "Return on investment, brand awareness, new customer segments"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:41
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:41
 msgid "Review &amp;<br> Publish"
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:77
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:67
 #: ./toTranslate/src/Common/TopBar/topBar.html:113
 msgid "Role: {{vm.writeUserRole()}}"
 msgstr ""
@@ -2702,7 +2701,7 @@ msgstr ""
 msgid "SOP"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:3
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:3
 msgid "STATISTICS"
 msgstr ""
 
@@ -2759,8 +2758,8 @@ msgstr ""
 msgid "Secondary users:"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:23
-#: ./toTranslate/src/CountryView/CountryViewModule.html:55
+#: ./toTranslate/src/Dashboard/Dashboard.html:23
+#: ./toTranslate/src/Dashboard/Dashboard.html:55
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:171
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:309
 msgid "Select a country"
@@ -2804,7 +2803,7 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:59
+#: ./toTranslate/src/Dashboard/Dashboard.html:59
 msgid "Show all countries"
 msgstr ""
 
@@ -2826,7 +2825,7 @@ msgstr ""
 msgid "Show more..."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:217
+#: ./toTranslate/src/Dashboard/Dashboard.html:217
 msgid "Show only verified projects"
 msgstr ""
 
@@ -2862,7 +2861,7 @@ msgstr ""
 msgid "Since every team has different needs, dynamics and organizational structures, project managers should choose the approach that makes most sense to them. Regardless of the route chosen, the self-assessment process will create a space for critical internal reflection, and for team discussions about future course corrections."
 msgstr ""
 
-#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:111
+#: ./toTranslate/src/Common/CountryTopBar/countryTopBar.html:101
 #: ./toTranslate/src/Common/TopBar/topBar.html:147
 msgid "Site Language"
 msgstr ""
@@ -2875,7 +2874,7 @@ msgstr ""
 msgid "Society for the Elimination of Rural Poverty (India)"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModuleController.js:210
+#: ./toTranslate/src/Dashboard/DashboardModuleController.js:210
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:15
 msgid "Software"
 msgstr ""
@@ -3006,7 +3005,7 @@ msgstr ""
 msgid "Table 4: Data standards"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:82
+#: ./toTranslate/src/Dashboard/Dashboard.html:82
 msgid "Team member"
 msgstr ""
 
@@ -3027,7 +3026,7 @@ msgstr ""
 msgid "Technology deployment date"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:172
+#: ./toTranslate/src/Assessment/Assessment.html:172
 msgid "Technology platforms"
 msgstr ""
 
@@ -3160,7 +3159,7 @@ msgid ""
 "                  licensed or knowledgeable in that area."
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:110
+#: ./toTranslate/src/Project/ProjectController.js:115
 msgid "The current draft will be overwritten by the published version"
 msgstr ""
 
@@ -3316,7 +3315,7 @@ msgid ""
 "                  its own discretion and without giving any notice."
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:182
+#: ./toTranslate/src/Dashboard/Dashboard.html:182
 msgid "There is no project to show in this country."
 msgstr ""
 
@@ -3376,7 +3375,7 @@ msgstr ""
 msgid "This field has to be less than 500 characters long."
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:593
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:596
 msgid "This field has to be less than 64 characters long."
 msgstr ""
 
@@ -3436,11 +3435,11 @@ msgstr ""
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:357
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:377
 #: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:397
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:445
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:465
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:485
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:522
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:590
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:446
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:467
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:488
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:525
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:593
 #: ./toTranslate/src/Project/Technology/Technology.html:22
 msgid "This is required."
 msgstr ""
@@ -3595,8 +3594,8 @@ msgstr ""
 msgid "UUID"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:124
-#: ./toTranslate/src/CountryView/PDFExport/PDFExportController.js:127
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:124
+#: ./toTranslate/src/Dashboard/PDFExport/PDFExportController.js:127
 msgid "UUID:"
 msgstr ""
 
@@ -3662,13 +3661,13 @@ msgstr ""
 #: ./toTranslate/src/Common/CountryMap/Countrymap.html:137
 #: ./toTranslate/src/Common/CountryMap/Countrymap.html:162
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:45
-#: ./toTranslate/src/CountryView/CountryViewModule.html:156
+#: ./toTranslate/src/Dashboard/Dashboard.html:156
 msgid "Verified by country"
 msgstr ""
 
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:19
 #: ./toTranslate/src/Common/ProjectComponent/ProjectComponent.html:31
 #: ./toTranslate/src/Common/SubBar/subBar.html:21
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:19
 msgid "Version"
 msgstr ""
 
@@ -3688,7 +3687,7 @@ msgstr ""
 msgid "View instructions"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:81
+#: ./toTranslate/src/Dashboard/Dashboard.html:81
 msgid "Viewer"
 msgstr ""
 
@@ -3827,7 +3826,7 @@ msgstr ""
 msgid "What should I do with the results?"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:273
+#: ./toTranslate/src/Assessment/Assessment.html:273
 msgid "What will you find here?"
 msgstr ""
 
@@ -3893,12 +3892,12 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:516
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:519
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:199
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
-#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:513
+#: ./toTranslate/src/Project/ImplementationOverview/ImplementationOverview.html:516
 #: ./toTranslate/src/Project/ImplementationOverview/ReadOnlyImplementationOverview.html:196
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
@@ -3911,7 +3910,7 @@ msgstr ""
 msgid "You are viewing the"
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:118
+#: ./toTranslate/src/Project/ProjectController.js:123
 msgid "You can't publish until all the required fields are filled, you can however save the draft"
 msgstr ""
 
@@ -3964,15 +3963,15 @@ msgstr ""
 msgid "You've scored {{vm.domainScore}} % in {{vm.currentDomain.name}} domain!"
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:140
+#: ./toTranslate/src/Project/ProjectController.js:145
 msgid "Your draft has been discarded successfully"
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:147
+#: ./toTranslate/src/Project/ProjectController.js:152
 msgid "Your draft has been published successfully"
 msgstr ""
 
-#: ./toTranslate/src/Project/ProjectController.js:133
+#: ./toTranslate/src/Project/ProjectController.js:138
 msgid "Your draft has been saved successfully"
 msgstr ""
 
@@ -4002,7 +4001,7 @@ msgstr ""
 msgid "a systems administrator to manage the technology"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:18
+#: ./toTranslate/src/Assessment/Assessment.html:18
 #: ./toTranslate/src/MyProjects/MyProjectList/MyProjectList.html:20
 msgid "add new project"
 msgstr ""
@@ -4027,7 +4026,7 @@ msgstr ""
 msgid "application programming interface"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:145
+#: ./toTranslate/src/Assessment/Assessment.html:145
 msgid "axis"
 msgstr ""
 
@@ -4045,7 +4044,7 @@ msgstr ""
 msgid "by {{vm.item.author_name}} at {{vm.prettifyDate(vm.item)}}"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Linechart/Linechart.html:6
+#: ./toTranslate/src/Assessment/Linechart/Linechart.html:6
 msgid "closed"
 msgstr ""
 
@@ -4069,7 +4068,7 @@ msgstr ""
 msgid "domain scores (specific scores for the domains within each axis of scale)."
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:153
+#: ./toTranslate/src/Assessment/Assessment.html:153
 msgid "domains"
 msgstr ""
 
@@ -4101,7 +4100,7 @@ msgstr ""
 msgid "general packet radio service"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:284
+#: ./toTranslate/src/Assessment/Assessment.html:284
 msgid "geographical view"
 msgstr ""
 
@@ -4117,7 +4116,7 @@ msgstr ""
 msgid "health management information system"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:294
+#: ./toTranslate/src/Assessment/Assessment.html:294
 msgid "historical view"
 msgstr ""
 
@@ -4692,11 +4691,11 @@ msgstr ""
 msgid "iii) We have quantified the intangible/non-monetary costs and benefits of the status quo (e.g. efficiency, access to care)"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Linechart/Linechart.html:9
+#: ./toTranslate/src/Assessment/Linechart/Linechart.html:9
 msgid "in progress"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:199
+#: ./toTranslate/src/Dashboard/Dashboard.html:199
 msgid "in selected country"
 msgstr ""
 
@@ -4713,7 +4712,7 @@ msgstr ""
 msgid "interactive voice response"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:214
+#: ./toTranslate/src/Assessment/Assessment.html:214
 msgid "interoperability"
 msgstr ""
 
@@ -4822,7 +4821,7 @@ msgstr ""
 msgid "joint learning and technical assistance workshops with IWG grantee mHealth projects and technical experts;"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:45
+#: ./toTranslate/src/Dashboard/Dashboard.html:45
 msgid "list view"
 msgstr ""
 
@@ -4866,7 +4865,7 @@ msgstr ""
 msgid "mNDCC"
 msgstr ""
 
-#: ./toTranslate/src/CountryView/CountryViewModule.html:13
+#: ./toTranslate/src/Dashboard/Dashboard.html:13
 msgid "map view"
 msgstr ""
 
@@ -4902,7 +4901,7 @@ msgstr ""
 msgid "not applicable"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:46
+#: ./toTranslate/src/Assessment/Assessment.html:46
 msgid "overview"
 msgstr ""
 
@@ -4926,7 +4925,7 @@ msgstr ""
 msgid "short messaging service (also known as text messages)"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:311
+#: ./toTranslate/src/Assessment/Assessment.html:311
 msgid "sign up now"
 msgstr ""
 
@@ -4934,7 +4933,7 @@ msgstr ""
 msgid "site visits and interviews with mHealth projects and key partners;"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Statistics/Statistics.html:31
+#: ./toTranslate/src/Assessment/Statistics/Statistics.html:31
 msgid "snapshot"
 msgstr ""
 
@@ -4942,7 +4941,7 @@ msgstr ""
 msgid "standard operating procedures"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:162
+#: ./toTranslate/src/Assessment/Assessment.html:162
 msgid "technology"
 msgstr ""
 
@@ -4954,7 +4953,7 @@ msgstr ""
 msgid "the overall score (total score combining all axes)"
 msgstr ""
 
-#: ./toTranslate/src/Dashboard/Dashboard.html:21
+#: ./toTranslate/src/Assessment/Assessment.html:21
 #: ./toTranslate/src/MyProjects/MyProjectList/MyProjectList.html:23
 msgid "to include your project in the inventory and begin tracking your performance"
 msgstr ""
