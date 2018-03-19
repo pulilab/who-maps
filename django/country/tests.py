@@ -822,7 +822,7 @@ class CountryAdminTests(TestCase):
             self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
                              '<div id="app"><vue-map-customizer map-url="test_url" flag-base-url="/static/flags/"'
                              ':country-id="0" api-url="/api/country-map-data/"'
-                             ' sub-level-types=\'[{\'name\': \'a\', \'displayName\': \'b\'}]\'></vue-map-customizer></div>'
+                             ' :sub-level-types=\'[{\'name\': \'a\', \'displayName\': \'b\'}]\'></vue-map-customizer></div>'
                              '<script src="/static/vue-map-customiser-entrypoint.js"></script>')
 
     def test_country_get_fields(self):
