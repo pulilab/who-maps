@@ -11,6 +11,10 @@ from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadO
 from country.forms import CountryFieldAdminForm
 from country.models import CountryField, Country
 from user.models import UserProfile
+from django.utils.translation import ugettext_lazy as _
+from .utils import lazyJSONDumps, LazyEncoder
+from mock import patch
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 class AuthTest(TestCase):
@@ -200,3 +204,22 @@ class TestStaticDataEndpoint(TestCase):
         self.assertEqual(response.status_code, 200)
         name_list = [l['name'] for l in response.json()['languages']]
         self.assertEqual(name_list, ['Anglais', 'Français', 'Espagnol', 'Portugais'])
+
+
+class TestUtils(TestCase):
+
+    def test_lazy_encoder_default(self):
+        with patch('django.core.serializers.json.DjangoJSONEncoder.default') as mock:
+            le = LazyEncoder()
+            le.default(1)
+            self.assertTrue(mock.called)
+
+    def test_lazy_json_dumps_normal_json(self):
+        obj = dict(a=1, b=2)
+        json = lazyJSONDumps(obj)
+        self.assertEqual(json, '{"a": 1, "b": 2}')
+
+    def test_lazy_json_dumps_translated_json(self):
+        obj = dict(a=_('test1'), b=_('test2'))
+        json = lazyJSONDumps(obj)
+        self.assertEqual(json, '{"a": "test1", "b": "test2"}')
