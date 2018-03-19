@@ -818,7 +818,7 @@ class CountryAdminTests(TestCase):
                 url = 'test_url'
             map_file = MockMapFile()
             country_id = 0
-        with patch('json.dumps', return_value=[{"name": "a", "displayName": "b"}]):
+        with patch('country.admin.lazyJSONDumps', return_value=[{"name": "a", "displayName": "b"}]):
             self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
                              '<div id="app"><vue-map-customizer map-url="test_url" flag-base-url="/static/flags/"'
                              ':country-id="0" api-url="/api/country-map-data/"'
