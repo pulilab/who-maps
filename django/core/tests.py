@@ -14,7 +14,7 @@ from user.models import UserProfile
 from django.utils.translation import ugettext_lazy as _
 from .utils import lazyJSONDumps, LazyEncoder
 from mock import patch
-from django.core.serializers.json import DjangoJSONEncoder
+from django.core.serializers.json import DjangoJSONEncoder # noqa
 
 
 class AuthTest(TestCase):
