@@ -23,7 +23,7 @@ def production():
     env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/3.5.15"
+    env.branch = "tags/3.5.17"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
