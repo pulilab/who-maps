@@ -88,9 +88,14 @@ export const getCountriesLib = state => {
 };
 
 export const getCurrentCountrySubLevelNames = state => {
-    const country = exports.getCurrentCountry(state);
+    const c = exports.getCurrentCountry(state);
+    const types = SystemModule.getSubLevelTypes(state);
     try {
-        return [country.map_data.first_sub_level.name, country.map_data.second_sub_level.name];
+        let firstSubLevelName = types.find(t => t.name === c.map_data.first_sub_level.name);
+        let secondSubLevelName = types.find(t => t.name === c.map_data.second_sub_level.name);
+        firstSubLevelName = firstSubLevelName ? firstSubLevelName.displayName : c.map_data.first_sub_level.name;
+        secondSubLevelName = secondSubLevelName ? secondSubLevelName.displayName : c.map_data.second_sub_level.name;
+        return [firstSubLevelName, secondSubLevelName];
     }
     catch (e) {
         return ['', ''];
