@@ -117,6 +117,10 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
         $timeout(() => { $rootScope.$apply(() => { }); }, 100);
     });
 
+    const storeReadyEvent = new CustomEvent('storeSetupReady', { detail: $ngRedux });
+
+    window.dispatchEvent(storeReadyEvent);
+
 };
 
 run.$inject = [
