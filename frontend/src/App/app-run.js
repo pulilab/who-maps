@@ -78,7 +78,7 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     const showPopUp = () => {
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Ops! something went wrong, try again later.')
+            .textContent(gettextCatalog.getString('Ops! something went wrong, try again later.'))
             .position('bottom right')
             .hideDelay(3000)
         );
@@ -89,15 +89,16 @@ const run = ($rootScope, $state, $mdToast, $mdDialog, $ngRedux, $timeout, $trans
     const showCredentialsPopUp = async () => {
         const mainUi = window.document.querySelector('ui-view');
         mainUi.style.display = 'none';
-        const message = 'You are not logged in or your session has expired, please login again.';
+        const message = gettextCatalog.getString('You are not logged in or your session' +
+        ' has expired, please login again.');
         await $mdDialog.show(
           $mdDialog.alert()
             .clickOutsideToClose(false)
-            .title('Authentication problem')
+            .title(gettextCatalog.getString('Authentication problem'))
             .textContent(message)
             .theme('alert')
             .ariaLabel('Auth problem dialog')
-            .ok('Understand')
+            .ok(gettextCatalog.getString('Understand'))
         );
         mainUi.style.display = '';
         $ngRedux.dispatch(UserModule.doLogout());

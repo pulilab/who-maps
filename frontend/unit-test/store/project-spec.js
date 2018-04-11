@@ -848,6 +848,32 @@ describe('Project Store Module', () => {
         });
 
 
+        it('checkCurrentProjectValidity', () => {
+            const state = {
+                projects: {}
+            };
+            let result = ProjectModule.checkCurrentProjectValidity(state);
+            expect(result.isValid).toBe(true);
+
+            state.projects.currentPublicProject = {};
+            result = ProjectModule.checkCurrentProjectValidity(state);
+            expect(result.isValid).toBe(true);
+
+            state.projects.currentPublicProject.public_id = '';
+            result = ProjectModule.checkCurrentProjectValidity(state);
+            expect(result.isValid).toBe(true);
+
+            state.projects.currentPublicProject.draft = '';
+            result = ProjectModule.checkCurrentProjectValidity(state);
+            expect(result.isValid).toBe(true);
+
+            state.projects.currentPublicProject.draft = null;
+            state.projects.currentPublicProject.id = 1;
+            result = ProjectModule.checkCurrentProjectValidity(state);
+            expect(result).toEqual({ isValid: false, id: 1 });
+        });
+
+
     });
 
     describe('ACTIONS', () => {
@@ -917,7 +943,6 @@ describe('Project Store Module', () => {
                 }
             });
             expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_TEAM_VIEWERS', teamViewers: 1 });
-
 
 
             spy.and.throwError('error');
