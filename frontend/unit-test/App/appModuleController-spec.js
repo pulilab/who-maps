@@ -1,5 +1,5 @@
 import AppModuleController from '../../src/App/AppModuleController';
-import { $scope, $state, toast, $ngRedux } from '../testUtilities';
+import { $scope, $state, dialog, $ngRedux, gettextCatalog } from '../testUtilities';
 
 /* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
@@ -8,19 +8,19 @@ let ac = {};
 describe('AppModuleController', () => {
 
     beforeEach(() => {
-        ac = AppModuleController.appControllerFactory()($state, $scope, {}, toast, $ngRedux);
+        ac = AppModuleController.appControllerFactory()($state, $scope, {}, dialog, $ngRedux, gettextCatalog);
     });
 
     it('should have a factory function', () => {
         expect(AppModuleController.appControllerFactory).toBeDefined();
-        const onSpot = AppModuleController.appControllerFactory()($state, $scope, {}, toast, $ngRedux);
+        const onSpot = AppModuleController.appControllerFactory()($state, $scope, {}, dialog, $ngRedux, gettextCatalog);
         expect(onSpot.constructor.name).toBe(ac.constructor.name);
     });
 
     it('has a constructor, that defines 7 keys', () => {
         expect(ac.state).toBeDefined();
         expect(ac.scope).toBeDefined();
-        expect(ac.dialog).toBeDefined();
+        expect(ac.$mdDialog).toBeDefined();
         expect(ac.rootScope).toBeDefined();
         expect(ac.$onInit).toBeDefined();
         expect(ac.$onDestroy).toBeDefined();

@@ -1,16 +1,20 @@
+import debounce from 'lodash/debounce';
 import * as SystemModule from '../store/modules/system';
+import * as ProjectModule from '../store/modules/projects';
 
 class AppModuleController {
 
-    constructor($state, $scope, $rootScope, $mdToast, $ngRedux) {
+    constructor($state, $scope, $rootScope, $mdDialog, $ngRedux, gettextCatalog) {
         this.state = $state;
         this.scope = $scope;
-        this.dialog = $mdToast;
+        this.$mdDialog = $mdDialog;
         this.rootScope = $rootScope;
         this.$onInit = this.onInit.bind(this);
         this.$onDestroy = this.onDestroy.bind(this);
         this.mapState = this.mapState.bind(this);
         this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
+        this.invalidProjectHandler = debounce(this.invalidProjectHandler.bind(this), 300);
+        this.dialogManager(gettextCatalog);
     }
 
     mapState(state) {
@@ -19,6 +23,8 @@ class AppModuleController {
             store: state
         };
         const token = state.user.token ? `Token ${state.user.token}` : '';
+        const isProjectValid = ProjectModule.checkCurrentProjectValidity(state);
+        this.invalidProjectHandler(isProjectValid);
         return {
             meta,
             token,
@@ -38,6 +44,23 @@ class AppModuleController {
         this.unsubscribe();
     }
 
+    invalidProjectHandler(validity) {
+        if (!validity.isValid && validity.id === parseInt(this.state.params.appName, 10)) {
+            this.state.go('dashboard', null, { location: 'replace' });
+            this.$mdDialog.show(this.savingError);
+        }
+    }
+
+    dialogManager(gettextCatalog) {
+        this.savingError = this.$mdDialog.alert({
+            title: gettextCatalog.getString('Attention'),
+            textContent: gettextCatalog.getString('You do not have access to this project and ' +
+            'you have been redirected to the dashboard '),
+            ok: gettextCatalog.getString('Close'),
+            theme: 'alert'
+        });
+    }
+
     computeShowSubBar() {
         return !this.showCountryTopBar
           && this.user && this.projects
@@ -54,13 +77,14 @@ class AppModuleController {
         });
     }
 
+
     static appControllerFactory() {
 
-        function appController($state, $scope, $rootScope, $mdToast, $ngRedux) {
-            return new AppModuleController($state, $scope, $rootScope, $mdToast, $ngRedux);
+        function appController($state, $scope, $rootScope, $mdDialog, $ngRedux, gettextCatalog) {
+            return new AppModuleController($state, $scope, $rootScope, $mdDialog, $ngRedux, gettextCatalog);
         }
 
-        appController.$inject = ['$state', '$scope', '$rootScope', '$mdToast', '$ngRedux'];
+        appController.$inject = ['$state', '$scope', '$rootScope', '$mdDialog', '$ngRedux', 'gettextCatalog'];
 
         return appController;
     }
