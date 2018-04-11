@@ -177,6 +177,10 @@ export const getCurrentPublicProject = state => {
     if (project && project.id) {
         project = project.published && project.published.name ? project.published : project.draft;
     }
+    if (project === null) {
+        // This can happen if the draft is missing
+        return null;
+    }
     const country = project.country ? CountryModule.getCountry(state, project.country) : undefined;
     return { ...project, country_name: country ? country.name : project.country_name, isPublic: true };
 };
@@ -490,6 +494,14 @@ export const getSimilarProject = state => {
         });
     }
     return [];
+};
+
+export const checkCurrentProjectValidity = state => {
+    const project = state.projects.currentPublicProject;
+    if (project && project.public_id === '' && project.draft === null) {
+        return { isValid: false, id: project.id };
+    }
+    return { isValid: true };
 };
 
 // ACTIONS
