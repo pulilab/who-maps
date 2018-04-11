@@ -83,6 +83,7 @@ export function doSignup({ account_type, password1, password2, email }) {
             data.is_superuser = false;
             exports.storeData(data, email);
             dispatch({ type: 'SET_USER', user: data });
+            await dispatch(exports.loadProfile());
             return Promise.resolve();
         }
         catch ({ response }) {
