@@ -532,10 +532,15 @@ msgid ""
 "                  suspension, cancellation, or termination."
 msgstr ""
 
+#: ./toTranslate/src/App/AppModuleController.js:56
 #: ./toTranslate/src/Project/ProjectController.js:114
 #: ./toTranslate/src/Project/ProjectController.js:122
 #: ./toTranslate/src/Project/ProjectController.js:130
 msgid "Attention"
+msgstr ""
+
+#: ./toTranslate/src/App/app-run.js:97
+msgid "Authentication problem"
 msgstr ""
 
 #: ./toTranslate/src/Assessment/Linechart/Linechart.html:28
@@ -636,6 +641,7 @@ msgstr ""
 msgid "Clinton Health Access Initiative"
 msgstr ""
 
+#: ./toTranslate/src/App/AppModuleController.js:59
 #: ./toTranslate/src/Common/SubBar/subBar.html:131
 #: ./toTranslate/src/Project/ProjectController.js:125
 #: ./toTranslate/src/Project/ProjectController.js:132
@@ -2305,6 +2311,10 @@ msgstr ""
 msgid "Operations: Organizational and programmatic measures for supporting implementation, use and maintenance of the product throughout the scaling-up process"
 msgstr ""
 
+#: ./toTranslate/src/App/app-run.js:81
+msgid "Ops! something went wrong, try again later."
+msgstr ""
+
 #: ./toTranslate/src/Common/SubBar/subBar.html:33
 msgid "Organisation"
 msgstr ""
@@ -3604,6 +3614,10 @@ msgstr ""
 msgid "Under what license is the project governed?"
 msgstr ""
 
+#: ./toTranslate/src/App/app-run.js:101
+msgid "Understand"
+msgstr ""
+
 #: ./toTranslate/src/Common/Thematic/static/-1-3.html:141
 msgid "United Nations Children’s Fund"
 msgstr ""
@@ -3906,12 +3920,20 @@ msgstr ""
 msgid "You are not allowed to access the draft"
 msgstr ""
 
+#: ./toTranslate/src/App/app-run.js:92
+msgid "You are not logged in or your session has expired, please login again."
+msgstr ""
+
 #: ./toTranslate/src/Project/Project.html:10
 msgid "You are viewing the"
 msgstr ""
 
 #: ./toTranslate/src/Project/ProjectController.js:123
 msgid "You can't publish until all the required fields are filled, you can however save the draft"
+msgstr ""
+
+#: ./toTranslate/src/App/AppModuleController.js:57
+msgid "You do not have access to this project and you have been redirected to the dashboard"
 msgstr ""
 
 #: ./toTranslate/src/Common/EmailConfirmation/EmailConfirmation.html:9
