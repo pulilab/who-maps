@@ -296,7 +296,8 @@ LOGGING = {
     },
 }
 
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/login'
 
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 ROSETTA_WSGI_AUTO_RELOAD = True
