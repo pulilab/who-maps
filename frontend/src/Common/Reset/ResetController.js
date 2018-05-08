@@ -23,10 +23,12 @@ class ResetModuleController {
     }
 
     async reset() {
+        const vm = this;
         if (this.resetForm.$valid) {
             try {
                 await resetPassword({ email: this.email });
                 this.sent = true;
+                vm.scope.$evalAsync();
             }
             catch (e) {
                 this.handleDataError(e.data);
