@@ -165,8 +165,8 @@ export async function verifyEmail(key) {
     return data;
 }
 
-export async function resetPassword(newPassword) {
-    const { data } = await axios.post('/api/rest-auth/password/reset/', newPassword);
+export async function resetPassword(emailObj) {
+    const { data } = await axios.post('/api/rest-auth/password/reset/', emailObj);
     return data;
 }
 
