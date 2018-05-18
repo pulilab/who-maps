@@ -8,7 +8,7 @@ import { project_definition } from '../../src/store/static_data/project_definiti
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, FormData */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, FormData */
 
 describe('Project Store Module', () => {
   describe('GETTERS', () => {

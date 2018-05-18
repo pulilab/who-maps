@@ -2,7 +2,7 @@ import PDFExportController from '../../src/Dashboard/PDFExport/PDFExportControll
 import pdfMake from 'pdfmake/build/pdfmake';
 import { A } from '../testUtilities';
 
-/* global define, it, describe, xit, expect, beforeEach, jasmine, spyOn */
+/* global it, describe, xit, expect, beforeEach, jasmine, spyOn */
 let pef = {};
 
 const pdfMakeReturn = {

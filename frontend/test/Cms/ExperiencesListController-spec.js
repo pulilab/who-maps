@@ -1,7 +1,7 @@
 import ExperienceListController from '../../src/Cms/ExperiencesList/ExperiencesListController';
 import { $scope, $ngRedux, angularForm } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 

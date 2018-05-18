@@ -1,6 +1,6 @@
 import ListElementController from '../../src/Cms/ListElement/ListElementController';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, Promise */
 
 let controller = null;
 

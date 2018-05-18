@@ -2,7 +2,7 @@ import GeneralOverviewController from '../../src/Project/GeneralOverview/General
 import { $scope, $element, $state, $ngRedux, A } from '../testUtilities';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as CountriesModule from '../../src/store/modules/countries';
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = {};
 

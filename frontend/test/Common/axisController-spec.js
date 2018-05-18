@@ -1,7 +1,7 @@
 import AxisController from '../../src/Common/Axis/AxisController';
 import { $scope, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 let ac = {};
 
 describe('axisController', () => {

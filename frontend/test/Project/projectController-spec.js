@@ -5,7 +5,7 @@ import * as UserModule from '../../src/store/modules/user';
 import * as SystemModule from '../../src/store/modules/system';
 import * as CountryModule from '../../src/store/modules/countries';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let sc = {
   project: {}
@@ -34,8 +34,7 @@ describe('ProjectController', () => {
     const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
     spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ name: 'vanilla', organisation: { id: 1 } });
     spyOn(ProjectModule, 'getCurrentPublished').and.returnValue({ name: 'cps', organisation: { id: 1 } });
-    const currentDraftForEditing =
-          spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').and.returnValue({ name: 'gcdpfe', organisation: { id: 1 } });
+    spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').and.returnValue({ name: 'gcdpfe', organisation: { id: 1 } });
     const teamSpy = spyOn(ProjectModule, 'getTeam').and.returnValue(['gt']);
     spyOn(ProjectModule, 'getCurrentEdits').and.returnValue({ ce: 1 });
     const viewersSpy = spyOn(ProjectModule, 'getViewers').and.returnValue(['gv']);
@@ -249,8 +248,8 @@ describe('ProjectController', () => {
     expect(sc.clearCustomErrors).toHaveBeenCalledTimes(2);
     expect(sc.publish).toHaveBeenCalledTimes(1);
     expect(sc.postPublishAction).toHaveBeenCalledTimes(1);
-
-    sc.publish.and.returnValue(Promise.reject({ response: {} }));
+    const error = new Error({response: {}});
+    sc.publish.and.returnValue(Promise.reject(error));
     await sc.publishProject();
     expect(sc.clearCustomErrors).toHaveBeenCalledTimes(3);
     expect(sc.publish).toHaveBeenCalledTimes(2);
@@ -278,8 +277,9 @@ describe('ProjectController', () => {
     await sc.saveDraftHandler();
     expect(sc.saveDraft).toHaveBeenCalledTimes(2);
     expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
-
-    sc.saveDraft.and.returnValue(Promise.reject({ response: 1 }));
+    const error = new Error();
+    error.response = 1;
+    sc.saveDraft.and.returnValue(Promise.reject(error));
     await sc.saveDraftHandler();
     expect(sc.handleResponse).toHaveBeenCalledWith(1);
   }));
@@ -289,8 +289,8 @@ describe('ProjectController', () => {
     await sc.discardDraftHandler();
     expect(sc.$mdDialog.show).toHaveBeenCalled();
     expect(sc.discardDraft).toHaveBeenCalled();
-
-    sc.discardDraft.and.returnValue(Promise.reject(1));
+    const error = new Error(1);
+    sc.discardDraft.and.returnValue(Promise.reject(error));
     await sc.discardDraftHandler();
   }));
 

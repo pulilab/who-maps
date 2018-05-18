@@ -652,12 +652,11 @@ export async function postProjectSaveActions (data, team, viewers, dispatch, sta
   const updateMember = teamViewers.team.some(t => t === user) ? [data.id] : [];
   const updateViewer = teamViewers.viewers.some(t => t === user) ? [data.id] : [];
   if (fields === false) {
-    const error = new Error({
-      response: {
-        custom: true,
-        message: 'Failed to save country fields'
-      }
-    });
+    const error = new Error();
+    error.response = {
+      custom: true,
+      message: 'Failed to save country fields'
+    };
     return Promise.reject(error);
   }
   if (toUpdate === 'published') {

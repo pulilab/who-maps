@@ -1,7 +1,7 @@
 import ResetController from '../../src/Common/Reset/ResetController';
 import { $scope, A } from '../testUtilities';
 import * as UserModule from '../../src/store/modules/user';
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
 let rc = {};
 

@@ -1,12 +1,11 @@
 import * as CountriesModule from '../../src/store/modules/countries';
-import * as UserModule from '../../src/store/modules/user';
 import * as SystemModule from '../../src/store/modules/system';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as language from '../../src/plugins/language';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, FormData */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise, FormData */
 
 describe('Countries Store Module', () => {
   describe('GETTERS', () => {

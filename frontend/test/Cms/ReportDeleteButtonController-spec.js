@@ -1,7 +1,7 @@
 import ReportButtonController from '../../src/Cms/ReportDeleteButton/ReportDeleteButtonController';
 import {$ngRedux} from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, Promise */
 
 let controller = null;
 

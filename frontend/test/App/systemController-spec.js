@@ -2,7 +2,7 @@ import SystemController from '../../src/App/SystemController';
 import * as UserModel from '../../src/store/modules/user';
 import { $scope, $state, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
+/* global it, describe, beforeEach, expect, jasmine, spyOn, Promise */
 
 let ac = {};
 

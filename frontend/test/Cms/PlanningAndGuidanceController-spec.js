@@ -1,7 +1,7 @@
 import PlanningAndGuidanceController from '../../src/Cms/PlanningAndGuidance/PlanningAndGuidanceController';
 import { $ngRedux, $scope, $state } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
 let controller = null;
 

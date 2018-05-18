@@ -2,7 +2,7 @@ import AxisFooterController from '../../src/MapsToolkit/AxisFooter/AxisFooterCon
 import EventEmitter from 'eventemitter3';
 import { $scope, $state } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, spyOn, Promise */
+/* global it, describe, expect, beforeEach, spyOn, Promise */
 
 let afc = {};
 
@@ -10,7 +10,7 @@ describe('AxisFooterController', () => {
   beforeEach(() => {
     window.EE = new EventEmitter();
     spyOn(AxisFooterController.prototype, 'onInit').and.callThrough();
-    afc = new AxisFooterController.axisFooterFactory()({}, $state());
+    afc = AxisFooterController.axisFooterFactory()({}, $state());
     afc.scope = $scope(afc);
     afc.state.params = {
       axisId: 0,

@@ -1,12 +1,11 @@
 import LinechartController from '../../src/Assessment/Linechart/LinechartController';
 import { default as axisdata } from './Mocks/chartmock.js';
 import { default as axisdata2 } from './Mocks/chartmock2.js';
-import { default as axisdata3 } from './Mocks/chartmock3.js';
 import { $scope, $timeout, $ngRedux, EE } from '../testUtilities';
 require('d3');
 require('angular');
 
-/* global define, it, describe, expect, spyOn, beforeEach, afterEach, d3, angular, xit, xdescribe */
+/* global , it, describe, expect, spyOn, beforeEach, afterEach, d3, jasmine, angular, xit, xdescribe */
 
 const el = angular.element(document.body);
 let vm = {};

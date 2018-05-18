@@ -1,7 +1,7 @@
 import ProjectComponentController from '../../src/Common/ProjectComponent/ProjectComponentController';
 import {$ngRedux, $state} from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
 let pcc = {};
 

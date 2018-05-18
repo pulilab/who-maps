@@ -2,7 +2,7 @@ import { default as LandingPageModuleController } from '../../src/LandingPage/La
 import { $anchorScroll, $location, $scope, $state, EE, $ngRedux } from '../testUtilities';
 import * as Utilities from '../../src/Utilities';
 
-/* global define, it, describe, expect, beforeEach, spyOn, jasmine, Promise */
+/* global it, describe, expect, beforeEach, spyOn, jasmine, Promise */
 
 let landing = {};
 

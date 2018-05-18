@@ -1,7 +1,7 @@
 import { default as SubBarController } from '../../src/Common/SubBar/SubBarController';
 import { $state, $scope, $ngRedux, EE } from '../testUtilities';
 
-/* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
+/* global it, describe, beforeEach, expect, jasmine, Promise */
 
 let ac = {};
 

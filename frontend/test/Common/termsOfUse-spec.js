@@ -1,6 +1,6 @@
 import termsOfUseController from '../../src/Common/TermsOfUse/TermsOfUseController';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, Promise */
 
 let lc = {};
 

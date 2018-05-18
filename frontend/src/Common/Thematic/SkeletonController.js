@@ -64,7 +64,7 @@ class SkeletonController {
     this.data[axisId + 2].domains[domainId].active = state;
   }
 
-  static skeletonFactory (data, axis, domain, icons) {
+  static factory (data, axis, domain, icons) {
     const skeleton = ($scope, $interpolate, $anchorScroll) => {
       return new SkeletonController($scope, $interpolate, $anchorScroll, data, axis, domain, icons);
     };

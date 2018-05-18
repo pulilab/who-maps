@@ -1,7 +1,7 @@
 import DashboardModuleController from '../../src/Dashboard/DashboardModuleController';
 import { $scope, EE, $state, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
+/* global  it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
 
 let vm = {};
 

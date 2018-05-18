@@ -1,7 +1,7 @@
 import EditProfileController from '../../src/Common/EditProfile/EditProfileController';
-import { $state, $scope, $ngRedux, EE, toast } from '../testUtilities';
+import { $state, $scope, $ngRedux, toast } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let sc = {};
 

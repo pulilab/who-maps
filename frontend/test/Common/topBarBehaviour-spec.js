@@ -1,7 +1,7 @@
 import TopBar from '../../src/Common/TopBarBheaviour';
 import { $state, $ngRedux, $scope, EE } from '../testUtilities';
 
-/* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
+/* global  it, describe, beforeEach, expect, Promise */
 
 let controller = {};
 

@@ -1,6 +1,6 @@
 import NavigationController from '../../src/Project/Navigation/NavigationController';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let controller = {};
 

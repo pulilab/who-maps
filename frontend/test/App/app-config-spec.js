@@ -1,4 +1,4 @@
-/* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, fdescribe */
+/* global  it, describe, beforeEach, afterEach, expect, Promise, fdescribe */
 import { $ngRedux } from '../testUtilities';
 
 import {

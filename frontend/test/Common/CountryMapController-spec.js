@@ -1,4 +1,4 @@
-/* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, document */
+/* global  it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, document */
 import CountryMapController from '../../src/Common/CountryMap/CountryMapController';
 import d3 from 'd3';
 import angular from 'angular';

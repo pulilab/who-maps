@@ -1,6 +1,6 @@
 import CollapsibleSet from '../../src/Project/CollapsibleSet';
 import { $scope } from '../testUtilities';
-/* global define, it, describe, beforeEach, afterEach, expect, xit, spyOn, Promise, jasmine */
+/* global it, describe, beforeEach, afterEach, expect, xit, spyOn, Promise, jasmine */
 
 let controller = {};
 

@@ -1,6 +1,6 @@
 import TrixComponentController from '../../src/Common/TrixComponent/TrixComponentController';
 
-/* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise */
+/* global  it, describe, beforeEach, afterEach, expect, jasmine, Promise */
 
 let controller = {};
 

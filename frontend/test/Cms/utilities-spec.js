@@ -1,9 +1,8 @@
 import utilities from '../../src/Cms/utilities';
 import * as mom from 'moment';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
-const axes = require('./domains');
 describe('CMS Utilities', () => {
   it('should have a prettifyDate fn', () => {
     spyOn(mom, 'default').and.callThrough();

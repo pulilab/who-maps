@@ -1,7 +1,7 @@
 import CommentWidgetController from '../../src/Cms/CommentWidget/CommentWidgetController';
 import { $scope, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let controller = null;
 

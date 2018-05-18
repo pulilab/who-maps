@@ -1,4 +1,4 @@
-/* global define, it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, fdescribe */
+/* global it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, fdescribe */
 import { $state, toast, dialog, $ngRedux, $timeout } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 import Storage from '../../src/Storage';

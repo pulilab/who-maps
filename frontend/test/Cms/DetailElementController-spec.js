@@ -1,8 +1,7 @@
-import DetailElementController from '../../src/Cms/DetailElement/DetailElementController';
-import { DetailElementDialog } from '../../src/Cms/DetailElement/DetailElementController';
+import { default as DetailElementController, DetailElementDialog } from '../../src/Cms/DetailElement/DetailElementController';
 import { dialog, $scope, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 

@@ -2,7 +2,7 @@ import ImplementationOverviewController from '../../src/Project/ImplementationOv
 import { $scope, $element, $ngRedux } from '../testUtilities';
 import * as CountriesModule from '../../src/store/modules/countries';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = null;
 

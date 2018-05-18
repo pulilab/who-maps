@@ -2,7 +2,7 @@ import DashboardWidgetController from '../../src/Cms/DashboardWidget/DashboardWi
 import { scores } from './mockData';
 import { $scope, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
 let controller = {};
 

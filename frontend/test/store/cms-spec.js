@@ -4,7 +4,7 @@ import * as UserModule from '../../src/store/modules/user';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, FormData */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, FormData */
 
 describe('CMS Store Module', () => {
   describe('GETTERS', () => {

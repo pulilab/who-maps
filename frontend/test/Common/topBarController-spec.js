@@ -1,7 +1,7 @@
 import { default as TopBarController } from '../../src/Common/TopBar/TopBarController';
 import { $scope, $state, $ngRedux, EE } from '../testUtilities';
 
-/* global define, it, describe, beforeEach, expect, jasmine, spyOn, Promise */
+/* global  it, describe, beforeEach, expect,  spyOn, Promise */
 
 let ac = {};
 

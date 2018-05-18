@@ -1,6 +1,6 @@
 import UUIDLoadController from '../../src/Common/UUIDLoad/UUIDLoadController';
 import { $state, $ngRedux, EE, A } from '../testUtilities';
-/* global Promise, define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
+/* global Promise,  it, describe, expect, beforeEach, afterEach, jasmine */
 
 let ulc = {};
 

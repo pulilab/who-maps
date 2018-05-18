@@ -2,7 +2,7 @@ import ScorecardController from '../../src/MapsToolkit/Scorecard/ScorecardContro
 import { $scope, $state, $ngRedux } from '../testUtilities';
 import * as ToolkitModule from '../../src/store/modules/toolkit';
 
-/* global define, it, describe, expect, beforeEach, afterEach, spyOn, Promise, jasmine */
+/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise, jasmine */
 
 let sc = {};
 

@@ -4,7 +4,7 @@ import { A, defaultAxiosSuccess, dispatch } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 import * as CountriesModule from '../../src/store/modules/countries';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
 describe('System Store Module', () => {
   describe('GETTERS', () => {

@@ -6,7 +6,7 @@ import Storage from '../../src/Storage';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, console */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, console */
 
 describe('USER Store Module', () => {
   describe('GETTERS', () => {
@@ -147,8 +147,9 @@ describe('USER Store Module', () => {
 
       expect(axios.post).toHaveBeenCalledWith('/api/rest-auth/registration/', signup);
       expect(UserModule.storeData).toHaveBeenCalledWith({ token: 'a', key: 'a', is_superuser: false }, 3);
-
-      spy.and.returnValue(Promise.reject({ response: { data: 1 } }));
+      const error = new Error();
+      error.response = { data: 1 };
+      spy.and.returnValue(Promise.reject(error));
 
       try {
         await UserModule.doSignup(signup)(dispatch);
@@ -168,8 +169,9 @@ describe('USER Store Module', () => {
       expect(UserModule.storeData).toHaveBeenCalledWith(1, 1);
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_USER', user: 1 });
       expect(UserModule.loadProfile).toHaveBeenCalled();
-
-      spy.and.returnValue(Promise.reject({ response: { data: 1 } }));
+      const error = new Error();
+      error.response = { data: 1 };
+      spy.and.returnValue(Promise.reject(error));
       try {
         await UserModule.doLogin({ username: 1, password: 2 })(dispatch);
       } catch (e) {

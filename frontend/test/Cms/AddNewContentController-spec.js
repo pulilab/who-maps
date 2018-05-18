@@ -1,7 +1,6 @@
-import AddNewContentController from '../../src/Cms/AddNewContent/AddNewContentController';
-import { AddNewContentDialog } from '../../src/Cms/AddNewContent/AddNewContentController';
+import { default as AddNewContentController, AddNewContentDialog } from '../../src/Cms/AddNewContent/AddNewContentController';
 import { dialog, $scope, toast, $ngRedux } from '../testUtilities';
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let controller = null;
 

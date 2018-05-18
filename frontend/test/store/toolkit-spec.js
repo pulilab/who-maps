@@ -1,10 +1,9 @@
 import * as ToolkitModule from '../../src/store/modules/toolkit';
-import * as ProjectModule from '../../src/store/modules/projects';
 import * as SystemModule from '../../src/store/modules/system';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, console */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, console */
 
 describe('TOOLKIT Store Module', () => {
   describe('GETTERS', () => {

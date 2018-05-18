@@ -1,6 +1,6 @@
 import SearchbarController from '../../src/Common/Searchbar/SearchbarController';
 import { $state, $scope, $ngRedux, EE } from '../testUtilities';
-/* global Promise, define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn */
+/* global Promise,  it, describe, expect, beforeEach, afterEach, jasmine */
 
 let sb = {};
 

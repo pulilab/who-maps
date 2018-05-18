@@ -2,7 +2,7 @@ import _ from 'lodash';
 import MapsToolkitController from '../../src/MapsToolkit/MapsToolkitController';
 import { $scope, $state, $ngRedux } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, spyOn, jasmine,  Promise */
 let mc = {};
 
 const mockData = require('./mockData.json');
@@ -13,7 +13,7 @@ const mockInvariantData = () => {
 
 describe('MapsToolkitController', () => {
   beforeEach(() => {
-    mc = new MapsToolkitController.mapsControllerFactory()({}, $state(), $ngRedux);
+    mc = MapsToolkitController.mapsControllerFactory()({}, $state(), $ngRedux);
     mc.scope = $scope(mc);
     mc.state.params.axisId = 0;
     mc.state.params.domainId = 0;

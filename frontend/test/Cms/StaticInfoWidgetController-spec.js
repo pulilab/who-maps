@@ -1,6 +1,6 @@
 import StaticInfoWidgetController from '../../src/Cms/StaticInfoWidget/StaticInfoWidgetController';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, Promise */
 
 let controller = null;
 

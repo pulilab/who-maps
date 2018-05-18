@@ -1,7 +1,7 @@
 import loginController from '../../src/Common/Login/LoginController';
 import { $state, $scope, $ngRedux, EE } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let lc = {};
 

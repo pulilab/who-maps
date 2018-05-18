@@ -1,7 +1,6 @@
-import DialogMultiSelectorController from '../../src/Project/DialogMultiSelector/DialogMultiSelectorController';
-import { DialogMultiSelectorDialog } from '../../src/Project/DialogMultiSelector/DialogMultiSelectorController';
+import { default as DialogMultiSelectorController, DialogMultiSelectorDialog } from '../../src/Project/DialogMultiSelector/DialogMultiSelectorController';
 import { dialog, $scope } from '../testUtilities';
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global  it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = {};
 

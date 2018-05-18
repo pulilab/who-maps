@@ -1,7 +1,7 @@
 import signupController from '../../src/Common/Signup/SignupController';
 import { $state, $scope, $location, $anchorScroll, $ngRedux, EE } from '../testUtilities';
 
-/* global define, it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
+/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let sc = {};
 
