@@ -2,12 +2,12 @@
 
 // General imports
 import angular from 'angular';
-import uiRoute from 'angular-ui-router';
-import ngMessages from 'angular-messages';
+import 'angular-ui-router';
+import 'angular-messages';
 import 'angular-password';
-import angularMd from 'angular-material';
-import ngRedux from 'ng-redux';
-import angularGettext from 'angular-gettext';
+import 'angular-material';
+import 'ng-redux';
+import 'angular-gettext';
 import { config } from './app-config';
 import { run } from './app-run';
 
@@ -21,6 +21,7 @@ window.addEventListener('singletonRegistered', evt => {
 
 const AppComponent = require('./appComponent');
 const SystemController = require('./SystemController');
+
 
 // MODULE REGISTRATION
 angular.module('ngHtmlCompile', [])
@@ -38,13 +39,13 @@ angular.module('ngHtmlCompile', [])
 
 angular.module('app',
     [
-        uiRoute,
-        angularMd,
-        ngMessages,
+        'ui.router',
+        'ngMaterial',
+        'ngMessages',
         'ngPassword',
         'ngHtmlCompile',
-        ngRedux,
-        angularGettext,
+        'ngRedux',
+        'gettext',
         'Components',
         require('../Project/'),
         require('../Cms/'),

@@ -20,8 +20,8 @@
 
 
 <style lang="less">
-  @import "~vue-django-feedback/dist/styles/main.less";
-  @import "~vue-django-feedback/dist/styles/variables-dha.less";
+  // @import "~vue-django-feedback/dist/styles/main.less";
+  // @import "~vue-django-feedback/dist/styles/variables-dha.less";
 
   vue-django-feedback {
     position: relative;
