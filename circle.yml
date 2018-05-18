@@ -40,7 +40,7 @@ test:
   pre:
     - cd django && flake8
     - cd django && CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
-    - cd frontend && yarn test_ci
+    # - cd frontend && yarn test_ci
     # - docker build ./django
     # - docker-compose up -d
     # - docker exec -it whomaps_django_1 python manage.py migrate
