@@ -6,29 +6,28 @@ import * as Utilities from '../../src/Utilities';
 
 let landing = {};
 
-
 describe('LandingPageModuleController', () => {
-    beforeEach(() => {
-        landing = LandingPageModuleController
-          .landingControllerFactory()({}, $state(), $location, $anchorScroll, $ngRedux);
-        landing.scope = $scope(landing);
-        landing.EE = EE;
-    });
+  beforeEach(() => {
+    landing = LandingPageModuleController
+      .landingControllerFactory()({}, $state(), $location, $anchorScroll, $ngRedux);
+    landing.scope = $scope(landing);
+    landing.EE = EE;
+  });
 
-    it('onInit function', () => {
-        spyOn(Utilities, 'getSubDomain');
-        landing.setCurrentCountryFromCode = jasmine.createSpy('setCurrentCountryFromCode');
-        landing.onInit();
-        expect(Utilities.getSubDomain).toHaveBeenCalled();
-        expect(landing.setCurrentCountryFromCode).toHaveBeenCalled();
-    });
+  it('onInit function', () => {
+    spyOn(Utilities, 'getSubDomain');
+    landing.setCurrentCountryFromCode = jasmine.createSpy('setCurrentCountryFromCode');
+    landing.onInit();
+    expect(Utilities.getSubDomain).toHaveBeenCalled();
+    expect(landing.setCurrentCountryFromCode).toHaveBeenCalled();
+  });
 
-    it('should have an onDestroy function', () => {
-        expect(landing.$onDestroy).toBeDefined();
-        landing.$onDestroy();
-    });
-    it('should have an function to scroll to an anchor', () => {
-        landing.scrollTo('asd');
-        expect(landing.$anchorScroll).toHaveBeenCalled();
-    });
+  it('should have an onDestroy function', () => {
+    expect(landing.$onDestroy).toBeDefined();
+    landing.$onDestroy();
+  });
+  it('should have an function to scroll to an anchor', () => {
+    landing.scrollTo('asd');
+    expect(landing.$anchorScroll).toHaveBeenCalled();
+  });
 });

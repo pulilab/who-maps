@@ -6,20 +6,18 @@ import * as UserModule from '../../src/store/modules/user';
 let rc = {};
 
 describe('ResetController', () => {
+  beforeEach(() => {
+    rc = ResetController.resetFactory()({});
+    rc.scope = $scope(rc);
+    rc.resetForm = {
+      $valid: true
+    };
+  });
 
-    beforeEach(() => {
-        rc = ResetController.resetFactory()({});
-        rc.scope = $scope(rc);
-        rc.resetForm = {
-            $valid: true
-        };
-    });
-
-    it('should have a function that execute the reset service', A( async () => {
-        rc.email = 'alma@korte.com';
-        spyOn(UserModule, 'resetPassword').and.returnValue(Promise.resolve());
-        await rc.reset();
-        expect(UserModule.resetPassword).toHaveBeenCalled();
-    }));
-
+  it('should have a function that execute the reset service', A(async () => {
+    rc.email = 'alma@korte.com';
+    spyOn(UserModule, 'resetPassword').and.returnValue(Promise.resolve());
+    await rc.reset();
+    expect(UserModule.resetPassword).toHaveBeenCalled();
+  }));
 });

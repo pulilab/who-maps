@@ -6,33 +6,31 @@ import { A } from '../testUtilities';
 let pef = {};
 
 const pdfMakeReturn = {
-    download: jasmine.createSpy('pdfdownload')
+  download: jasmine.createSpy('pdfdownload')
 };
 
 const gettextCatalogMock = {
-    getString: jasmine.createSpy('getString')
+  getString: jasmine.createSpy('getString')
 };
 
-
 describe('PDFExport Controller', () => {
+  beforeEach(() => {
+    pef = new PDFExportController(gettextCatalogMock);
+    pef.country = {
+      name: 'a'
+    };
+  });
 
-    beforeEach(() => {
-        pef = new PDFExportController(gettextCatalogMock);
-        pef.country = {
-            name: 'a'
-        };
-    });
+  it('should have an init function', () => {
+    expect(pef.onInit).toBeDefined();
+    pef.onInit();
+    expect(pef.logo).toBeDefined();
+    expect(pef.exportDate).toBeDefined();
+  });
 
-    it('should have an init function', () => {
-        expect(pef.onInit).toBeDefined();
-        pef.onInit();
-        expect(pef.logo).toBeDefined();
-        expect(pef.exportDate).toBeDefined();
-    });
-
-    it('should have a function to generate a PDF with the pdfmake lib', A(async () => {
-        spyOn(pdfMake, 'createPdf').and.returnValue(pdfMakeReturn);
-        await pef.makePDF();
-        expect(pef.pdfMake).toHaveBeenCalled();
-    }));
+  it('should have a function to generate a PDF with the pdfmake lib', A(async () => {
+    spyOn(pdfMake, 'createPdf').and.returnValue(pdfMakeReturn);
+    await pef.makePDF();
+    expect(pef.pdfMake).toHaveBeenCalled();
+  }));
 });

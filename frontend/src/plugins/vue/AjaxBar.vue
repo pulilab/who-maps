@@ -1,67 +1,71 @@
 <template>
-  <div v-show="showContainer" :style="containerStyle">
-    <vue-topprogress color="#FFBB00" :speed="100" ref="progress"></vue-topprogress>
+  <div
+    v-show="showContainer"
+    :style="containerStyle">
+    <vue-topprogress
+      ref="progress"
+      :speed="100"
+      color="#FFBB00"/>
   </div>
 </template>
 
-
 <script>
-    import { vueTopprogress } from 'vue-top-progress';
-    import debounce from 'lodash/debounce';
+import { vueTopprogress } from 'vue-top-progress';
+import debounce from 'lodash/debounce';
 
-    export default {
-        components: {
-            vueTopprogress
-        },
-        data() {
-            return {
-                containerStyle: {
-                    width: '100%',
-                    height: '3px',
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    backgroundColor: 'transparent',
-                    'z-index': 9999
-                },
-                showContainer: true
-            };
-        },
-        mounted() {
-            const progress = this.$refs.progress;
-            const listener = {
-                tempOpen: XMLHttpRequest.prototype.open,
-                tempSend: XMLHttpRequest.prototype.send,
-                callback() { }
-            };
-            const start = () => {
-                progress.start();
-            }
+export default {
+  components: {
+    vueTopprogress
+  },
+  data () {
+    return {
+      containerStyle: {
+        width: '100%',
+        height: '3px',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'transparent',
+        'z-index': 9999
+      },
+      showContainer: true
+    };
+  },
+  mounted () {
+    const progress = this.$refs.progress;
+    const listener = {
+      tempOpen: XMLHttpRequest.prototype.open,
+      tempSend: XMLHttpRequest.prototype.send,
+      callback () { }
+    };
+    const start = () => {
+      progress.start();
+    };
 
-            const end = debounce(() => {
-                    progress.done();
-            }, 750);
+    const end = debounce(() => {
+      progress.done();
+    }, 750);
 
-            XMLHttpRequest.prototype.open = function(a = '', b = '') {
-                start()
-                listener.tempOpen.apply(this, arguments);
-                listener.method = a;
-                listener.url = b;
-                if (a.toLowerCase() === 'get') {
-                    listener.data = b.split('?');
-                    listener.data = listener.data[1];
-                }
-            };
-            XMLHttpRequest.prototype.send = function(a = '') {
-                listener.tempSend.apply(this, arguments);
-                end();
-                if (listener.method.toLowerCase() === 'post') { listener.data = a; }
-                listener.callback();
-            };
+    XMLHttpRequest.prototype.open = function (a = '', b = '') {
+      start();
+      listener.tempOpen.apply(this, arguments);
+      listener.method = a;
+      listener.url = b;
+      if (a.toLowerCase() === 'get') {
+        listener.data = b.split('?');
+        listener.data = listener.data[1];
+      }
+    };
+    XMLHttpRequest.prototype.send = function (a = '') {
+      listener.tempSend.apply(this, arguments);
+      end();
+      if (listener.method.toLowerCase() === 'post') { listener.data = a; }
+      listener.callback();
+    };
 
-            window.addEventListener('RouterTransitionStart', start)
-            window.addEventListener('RouterTransitionDone', end)
-        }
-    }
+    window.addEventListener('RouterTransitionStart', start);
+    window.addEventListener('RouterTransitionDone', end);
+  }
+};
 </script>

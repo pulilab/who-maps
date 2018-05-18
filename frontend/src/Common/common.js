@@ -24,37 +24,36 @@ import Thematic from './Thematic/thematicComponent';
 import EE from './EE';
 
 if (!window.EE) {
-    EE.initialize();
+  EE.initialize();
 }
 
 const moduleName = 'Components';
 
 angular.module(moduleName,
-    [
-        ngFileUpload
-    ]
+  [
+    ngFileUpload
+  ]
 )
-    .component(projectComponent.name, projectComponent)
-    .component(searchBarComponent.name, searchBarComponent)
-    .component(LoginComponent.name, LoginComponent)
-    .component(ResetComponent.name, ResetComponent)
-    .component(SignupComponent.name, SignupComponent)
-    .component(AxisComponent.name, AxisComponent)
-    .component(donorsComponent.name, donorsComponent)
-    .component(EditProfileComponent.name, EditProfileComponent)
-    .component(countrymap.name, countrymap)
-    .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
-    .component(disclaimerComponent.name, disclaimerComponent)
-    .component(UUILoadComponent.name, UUILoadComponent)
-    .component(TopBarComponent.name, TopBarComponent)
-    .component(SubBarComponent.name, SubBarComponent)
-    .component(CountryTopBarComponent.name, CountryTopBarComponent)
-    .component(CountryPartners.name, CountryPartners)
-    .component(OrganisationAutocomplete.name, OrganisationAutocomplete)
-    .component(TrixComponent.name, TrixComponent)
-    .component(Thematic.name, Thematic)
-    .component(TermsOfUseComponent.name, TermsOfUseComponent);
-
+  .component(projectComponent.name, projectComponent)
+  .component(searchBarComponent.name, searchBarComponent)
+  .component(LoginComponent.name, LoginComponent)
+  .component(ResetComponent.name, ResetComponent)
+  .component(SignupComponent.name, SignupComponent)
+  .component(AxisComponent.name, AxisComponent)
+  .component(donorsComponent.name, donorsComponent)
+  .component(EditProfileComponent.name, EditProfileComponent)
+  .component(countrymap.name, countrymap)
+  .component(EmailConfirmationComponent.name, EmailConfirmationComponent)
+  .component(disclaimerComponent.name, disclaimerComponent)
+  .component(UUILoadComponent.name, UUILoadComponent)
+  .component(TopBarComponent.name, TopBarComponent)
+  .component(SubBarComponent.name, SubBarComponent)
+  .component(CountryTopBarComponent.name, CountryTopBarComponent)
+  .component(CountryPartners.name, CountryPartners)
+  .component(OrganisationAutocomplete.name, OrganisationAutocomplete)
+  .component(TrixComponent.name, TrixComponent)
+  .component(Thematic.name, Thematic)
+  .component(TermsOfUseComponent.name, TermsOfUseComponent);
 
 export { EE };
 export { moduleName as Components };

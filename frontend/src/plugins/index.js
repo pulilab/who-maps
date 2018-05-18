@@ -3,6 +3,6 @@ import Vue from 'vue';
 import App from './vue/App.vue';
 
 new Vue({
-    el: '#v-base',
-    render: h => h(App)
+  el: '#v-base',
+  render: h => h(App)
 });
