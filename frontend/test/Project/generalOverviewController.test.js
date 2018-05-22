@@ -2,7 +2,6 @@ import GeneralOverviewController from '../../src/Project/GeneralOverview/General
 import { $scope, $element, $state, $ngRedux, A } from '../testUtilities';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as CountriesModule from '../../src/store/modules/countries';
-/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = {};
 
@@ -12,9 +11,9 @@ describe('GeneralOverviewController', () => {
     controller.scope = $scope(controller);
   });
 
-  it('mapData fn', () => {
-    spyOn(ProjectModule, 'getSimilarProject').and.returnValue([{ id: 1 }, { id: 2 }]);
-    spyOn(CountriesModule, 'getCountriesList').and.returnValue(1);
+  test('mapData fn', () => {
+    jest.spyOn(ProjectModule, 'getSimilarProject').mockReturnValue([{ id: 1 }, { id: 2 }]);
+    jest.spyOn(CountriesModule, 'getCountriesList').mockReturnValue(1);
     controller.project = { id: 1 };
     const result = controller.mapData({});
     expect(ProjectModule.getSimilarProject).toHaveBeenCalled();
@@ -23,9 +22,9 @@ describe('GeneralOverviewController', () => {
     expect(result.countriesList).toEqual(1);
   });
 
-  it('should have an onInit function', () => {
-    spyOn(controller, 'watchers');
-    spyOn(controller, 'defaultOnInit');
+  test('should have an onInit function', () => {
+    jest.spyOn(controller, 'watchers').mockReturnValue(undefined);
+    jest.spyOn(controller, 'defaultOnInit').mockReturnValue(undefined);
 
     controller.onInit();
     expect(controller.defaultOnInit).toHaveBeenCalled();
@@ -33,17 +32,17 @@ describe('GeneralOverviewController', () => {
     expect(controller.$ngRedux.connect).toHaveBeenCalled();
   });
 
-  it('should have a watcher function', () => {
+  test('should have a watcher function', () => {
     controller.project = {};
-    spyOn(controller, 'validateDateRange');
+    jest.spyOn(controller, 'validateDateRange').mockReturnValue(undefined);
     controller.watchers();
     expect(controller.scope.$watch).toHaveBeenCalled();
     expect(controller.scope.$watchGroup).toHaveBeenCalled();
     expect(controller.validateDateRange).toHaveBeenCalled();
   });
-  it('validateDateRange fn', () => {
-    spyOn(controller, 'setCustomError');
-    spyOn(controller, 'handleCustomError');
+  test('validateDateRange fn', () => {
+    jest.spyOn(controller, 'setCustomError').mockReturnValue(undefined);
+    jest.spyOn(controller, 'handleCustomError').mockReturnValue(undefined);
     const dates = [new Date(), new Date()];
     controller.validateDateRange(dates);
     expect(controller.handleCustomError).toHaveBeenCalled();
@@ -55,7 +54,7 @@ describe('GeneralOverviewController', () => {
     expect(result).toBe(undefined);
   });
 
-  it('getUsers fn.', () => {
+  test('getUsers fn.', () => {
     expect(controller.getUsers).toBeDefined();
     controller.users = [
       {
@@ -74,12 +73,12 @@ describe('GeneralOverviewController', () => {
     expect(controller.getUsers('E').length).toBe(2);
   });
 
-  it(' async checkName fn.', A(async () => {
-    spyOn(controller, 'handleCustomError');
-    spyOn(controller, 'setCustomError');
+  test(' async checkName fn.', A(async () => {
+    jest.spyOn(controller, 'handleCustomError').mockReturnValue(undefined);
+    jest.spyOn(controller, 'setCustomError').mockReturnValue(undefined);
     controller.projectName = 'a';
     controller.currentName = 'a';
-    controller.searchDuplicateProjectName = jasmine.createSpy('searchDuplicateProjectName');
+    controller.searchDuplicateProjectName = jest.fn();
 
     await controller.checkName();
     expect(controller.handleCustomError).toHaveBeenCalledWith('name');
@@ -105,7 +104,7 @@ describe('GeneralOverviewController', () => {
     expect(controller.setCustomError).toHaveBeenCalledWith('name', 'Project name is not unique');
   }));
 
-  it('openSimilarProject fn.', () => {
+  test('openSimilarProject fn.', () => {
     const event = {
       preventDefault: jasmine.createSpy('preventDefault')
     };
@@ -116,11 +115,11 @@ describe('GeneralOverviewController', () => {
 
     controller.openSimilarProject(project, event);
     expect(event.preventDefault).toHaveBeenCalled();
-    expect(controller.state.go).toHaveBeenCalledWith('dashboard', jasmine.any(Object));
+    expect(controller.state.go).toHaveBeenCalledWith('dashboard', expect.any(Object));
 
     project.isOwn = false;
     controller.openSimilarProject(project, event);
     expect(event.preventDefault).toHaveBeenCalled();
-    expect(controller.state.go).toHaveBeenCalledWith('public-dashboard', jasmine.any(Object));
+    expect(controller.state.go).toHaveBeenCalledWith('public-dashboard', expect.any(Object));
   });
 });
