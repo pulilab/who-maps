@@ -16,5 +16,11 @@ module.exports = {
   },
   transform: {
     '^.+\\.js$': 'babel-jest'
+  },
+  moduleFileExtensions: ['js'],
+  moduleDirectories: ['node_modules'],
+  moduleNameMapper: {
+    '\\.(css|less|scss)$': '<rootDir>/test/__mocks__/styleMock.js',
+    '\\.(gif|ttf|eot|svg|html)$': '<rootDir>/test/__mocks__/fileMock.js'
   }
 };
