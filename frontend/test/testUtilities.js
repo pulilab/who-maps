@@ -1,11 +1,9 @@
-/* global jasmine */
-
 const dialog = {
-  cancel: jasmine.createSpy('cancel'),
-  hide: jasmine.createSpy('hide'),
-  alert: jasmine.createSpy('alert').and.returnValue({ type: 'alert' }),
-  confirm: jasmine.createSpy('confirm').and.returnValue({ type: 'confirm' }),
-  show: jasmine.createSpy('show').and.callFake((config) => {
+  cancel: jest.fn(),
+  hide: jest.fn(),
+  alert: jest.fn().mockReturnValue({ type: 'alert' }),
+  confirm: jest.fn().mockReturnValue({ type: 'confirm' }),
+  show: jest.fn().mockImplementation((config) => {
     if (config.onComplete) {
       config.onComplete();
     }
@@ -16,21 +14,21 @@ const dialog = {
 const $state = () => ({
   params: {},
   current: {},
-  go: jasmine.createSpy('stateGo')
+  go: jest.fn()
 });
 
 const $scope = (controller) => {
   return {
-    $watchGroup: jasmine.createSpy('watchGroup').and.callFake((toCallArray, action) => {
+    $watchGroup: jest.fn().mockImplementation((toCallArray, action) => {
       action(toCallArray.map(call => call({ vm: controller })));
     }),
-    $watchCollection: jasmine.createSpy('$watchCollection').and.callFake((toCall, action) => action(toCall({
+    $watchCollection: jest.fn().mockImplementation((toCall, action) => action(toCall({
       vm: controller
     }))),
-    $watch: jasmine.createSpy('$watch').and.callFake((toCall, action) => action(toCall({
+    $watch: jest.fn().mockImplementation((toCall, action) => action(toCall({
       vm: controller
     }))),
-    $evalAsync: jasmine.createSpy('evalAsync').and.callFake(toCall => {
+    $evalAsync: jest.fn().mockImplementation(toCall => {
       if (toCall) {
         toCall();
       }
@@ -40,36 +38,36 @@ const $scope = (controller) => {
 
 const toast = {};
 
-toast.show = jasmine.createSpy('showToast').and.returnValue(toast);
-toast.simple = jasmine.createSpy('simple').and.returnValue(toast);
-toast.parent = jasmine.createSpy('parent').and.returnValue(toast);
-toast.position = jasmine.createSpy('position').and.returnValue(toast);
-toast.textContent = jasmine.createSpy('textContent').and.returnValue(toast);
-toast.hideDelay = jasmine.createSpy('hideDelay').and.returnValue(toast);
+toast.show = jest.fn().mockReturnValue(toast);
+toast.simple = jest.fn().mockReturnValue(toast);
+toast.parent = jest.fn().mockReturnValue(toast);
+toast.position = jest.fn().mockReturnValue(toast);
+toast.textContent = jest.fn().mockReturnValue(toast);
+toast.hideDelay = jest.fn().mockReturnValue(toast);
 
 const $timeout = toCall => {
   return toCall();
 };
 
-const $interpolate = jasmine.createSpy('interpolate').and.returnValue(() => {});
-const $anchorScroll = jasmine.createSpy('$anchorScroll').and.callFake(a => a);
+const $interpolate = jest.fn().mockReturnValue(() => {});
+const $anchorScroll = jest.fn().mockImplementation(a => a);
 
 const EE = {
-  emit: jasmine.createSpy('emit'),
-  on: jasmine.createSpy('on'),
-  removeAllListeners: jasmine.createSpy('removeAllListeners')
+  emit: jest.fn(),
+  on: jest.fn(),
+  removeAllListeners: jest.fn()
 };
 
 const $ngRedux = {
-  connect: jasmine.createSpy('connect').and.returnValue(() => () => 'unsubscribeFn'),
-  dispatch: jasmine.createSpy('dispatch').and.callFake(toCall => toCall()),
-  getState: jasmine.createSpy('getState'),
-  subscribe: jasmine.createSpy('subscribe')
+  connect: jest.fn().mockReturnValue(() => () => 'unsubscribeFn'),
+  dispatch: jest.fn().mockImplementation(toCall => toCall()),
+  getState: jest.fn(),
+  subscribe: jest.fn()
 };
 
 const angularForm = {
-  $setUntouched: jasmine.createSpy('$setUntouched'),
-  $setPristine: jasmine.createSpy('$setPristine')
+  $setUntouched: jest.fn(),
+  $setPristine: jest.fn()
 };
 
 const A = f => done => f().then(done).catch(done.fail);
@@ -77,16 +75,16 @@ const A = f => done => f().then(done).catch(done.fail);
 const $element = {};
 
 const $location = {
-  hash: jasmine.createSpy('locationHash').and.callFake(input => input)
+  hash: jest.fn().mockImplementation(input => input)
 };
 
-const dispatch = jasmine.createSpy('dispatch');
-const getState = state => jasmine.createSpy('getState').and.returnValue(state);
+const dispatch = jest.fn();
+const getState = state => jest.fn().mockReturnValue(state);
 
 const defaultAxiosSuccess = Promise.resolve({ data: 1 });
 
 const gettextCatalog = {
-  getString: jasmine.createSpy('gettextCatalog')
+  getString: jest.fn()
 };
 
 export {

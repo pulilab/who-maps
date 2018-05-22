@@ -4,11 +4,9 @@ import * as UserModule from '../../src/store/modules/user';
 import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
-/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise, FormData */
-
 describe('CMS Store Module', () => {
   describe('GETTERS', () => {
-    it('getCmsData', () => {
+    test('getCmsData', () => {
       const state = {
         cms: {
           data: []
@@ -19,9 +17,9 @@ describe('CMS Store Module', () => {
       expect(result).toEqual(state.cms.data);
     });
 
-    it('getDomainStructureForCms', () => {
-      spyOn(SystemModule, 'getAxis').and.returnValue([{ id: 1 }]);
-      spyOn(SystemModule, 'getDomains').and.returnValue([{ axis: 1, name: 1 }]);
+    test('getDomainStructureForCms', () => {
+      jest.spyOn(SystemModule, 'getAxis').mockReturnValue([{ id: 1 }]);
+      jest.spyOn(SystemModule, 'getDomains').mockReturnValue([{ axis: 1, name: 1 }]);
 
       const result = CmsModule.getDomainStructureForCms({});
       expect(result[0].id).toBe(1);
@@ -31,25 +29,25 @@ describe('CMS Store Module', () => {
       expect(SystemModule.getDomains).toHaveBeenCalled();
     });
 
-    it('getAxisName', () => {
-      spyOn(SystemModule, 'getAxis').and.returnValue([{ id: 1, name: 'a' }]);
+    test('getAxisName', () => {
+      jest.spyOn(SystemModule, 'getAxis').mockReturnValue([{ id: 1, name: 'a' }]);
       const result = CmsModule.getAxisName({}, 0);
       expect(result).toBe('a');
 
       expect(SystemModule.getAxis).toHaveBeenCalled();
     });
 
-    it('getDomain', () => {
-      spyOn(SystemModule, 'getDomains').and.returnValue([{ axis: 1, name: 1, id: 1 }]);
+    test('getDomain', () => {
+      jest.spyOn(SystemModule, 'getDomains').mockReturnValue([{ axis: 1, name: 1, id: 1 }]);
       const result = CmsModule.getDomain({}, 1);
       expect(result.name).toBe(1);
       expect(SystemModule.getDomains).toHaveBeenCalled();
     });
 
-    it('getAxisAndDomainName', () => {
-      spyOn(CmsModule, 'getDomain').and.returnValue({ name: 'domain', id: 1 });
-      spyOn(CmsModule, 'getDomainStructureForCms')
-        .and.returnValue([{ name: 'axis', domains: [{ id: 1 }] }, { name: 'wrong', domains: [{ id: 2 }] }]);
+    test('getAxisAndDomainName', () => {
+      jest.spyOn(CmsModule, 'getDomain').mockReturnValue({ name: 'domain', id: 1 });
+      jest.spyOn(CmsModule, 'getDomainStructureForCms')
+        .mockReturnValue([{ name: 'axis', domains: [{ id: 1 }] }, { name: 'wrong', domains: [{ id: 2 }] }]);
 
       const result = CmsModule.getAxisAndDomainName({}, 1);
       expect(result.axisName).toBe('axis');
@@ -61,28 +59,28 @@ describe('CMS Store Module', () => {
   });
 
   describe('ACTIONS', () => {
-    it('loadCmsData', A(async () => {
-      spyOn(axios, 'get').and.returnValue(Promise.resolve({ data: [{}] }));
+    test('loadCmsData', A(async () => {
+      jest.spyOn(axios, 'get').mockReturnValue(Promise.resolve({ data: [{}] }));
       await CmsModule.loadCmsData()(dispatch);
       expect(axios.get).toHaveBeenCalledWith('/api/cms/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CMS_DATA', data: [{ searchOccurrences: 0 }] });
     }));
 
-    it('addContent', A(async () => {
-      spyOn(axios, 'post').and.returnValue(Promise.resolve({ data: {} }));
+    test('addContent', A(async () => {
+      jest.spyOn(axios, 'post').mockReturnValue(Promise.resolve({ data: {} }));
       await CmsModule.addContent({ a: 1 })(dispatch);
       expect(axios.post).toHaveBeenCalledWith('/api/cms/', { a: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'ADD_CMS_ENTRY', item: { searchOccurrences: 0 } });
     }));
 
-    it('updateContent', A(async () => {
-      spyOn(axios, 'put').and.returnValue(Promise.resolve({ data: {} }));
+    test('updateContent', A(async () => {
+      jest.spyOn(axios, 'put').mockReturnValue(Promise.resolve({ data: {} }));
       await CmsModule.updateContent({ a: 1 }, 1)(dispatch);
       expect(axios.put).toHaveBeenCalledWith('/api/cms/1/', { a: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_CMS_ENTRY', item: { searchOccurrences: 0 } });
     }));
 
-    it('saveOrUpdateContent', A(async () => {
+    test('saveOrUpdateContent', A(async () => {
       const state = getState({
         user: {
           profile: {
@@ -91,9 +89,9 @@ describe('CMS Store Module', () => {
         }
       });
 
-      spyOn(CmsModule, 'addContent');
-      const update = spyOn(CmsModule, 'updateContent');
-      const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
+      jest.spyOn(CmsModule, 'addContent');
+      const update = jest.spyOn(CmsModule, 'updateContent');
+      const profileSpy = jest.spyOn(UserModule, 'getProfile').mockReturnValue({ id: 1 });
       const resource = {
         id: 1
       };
@@ -109,7 +107,7 @@ describe('CMS Store Module', () => {
       expect(CmsModule.updateContent).toHaveBeenCalledWith({ id: 1, author: 1 }, 1);
       expect(profileSpy).toHaveBeenCalled();
 
-      update.calls.reset();
+      update.mockClear()
       resource.cover.type = ['image'];
       await CmsModule.saveOrUpdateContent(resource)(dispatch, state);
       expect(CmsModule.updateContent).toHaveBeenCalledWith(jasmine.any(FormData), 1);
@@ -121,36 +119,36 @@ describe('CMS Store Module', () => {
       expect(profileSpy).toHaveBeenCalled();
     }));
 
-    it('deleteContent', A(async () => {
-      spyOn(axios, 'delete').and.returnValue(defaultAxiosSuccess);
+    test('deleteContent', A(async () => {
+      jest.spyOn(axios, 'delete').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.deleteContent({ id: 1 })(dispatch);
       expect(axios.delete).toHaveBeenCalledWith('/api/cms/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'DELETE_CMS_ENTRY', id: 1 });
     }));
 
-    it('reportContent', A(async () => {
-      spyOn(axios, 'patch').and.returnValue(defaultAxiosSuccess);
+    test('reportContent', A(async () => {
+      jest.spyOn(axios, 'patch').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.reportContent({ id: 1 })(dispatch);
       expect(axios.patch).toHaveBeenCalledWith('/api/cms/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_CMS_ENTRY', item: { id: 1, state: 2 } });
     }));
 
-    it('reportComment', A(async () => {
-      spyOn(axios, 'patch').and.returnValue(defaultAxiosSuccess);
+    test('reportComment', A(async () => {
+      jest.spyOn(axios, 'patch').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.reportComment({ id: 1 })(dispatch);
       expect(axios.patch).toHaveBeenCalledWith('/api/comment/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COMMENT', comment: { id: 1, state: 2 } });
     }));
 
-    it('deleteComment', A(async () => {
-      spyOn(axios, 'delete').and.returnValue(defaultAxiosSuccess);
+    test('deleteComment', A(async () => {
+      jest.spyOn(axios, 'delete').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.deleteComment({ id: 1 })(dispatch);
       expect(axios.delete).toHaveBeenCalledWith('/api/comment/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'DELETE_COMMENT', comment: { id: 1 } });
     }));
 
-    it('addNewComment', A(async () => {
-      spyOn(axios, 'post').and.returnValue(defaultAxiosSuccess);
+    test('addNewComment', A(async () => {
+      jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const state = getState({
         user: {
           profile: {
@@ -163,8 +161,8 @@ describe('CMS Store Module', () => {
       expect(dispatch).toHaveBeenCalledWith({ type: 'ADD_COMMENT', comment: 1 });
     }));
 
-    it('updateComment', A(async () => {
-      spyOn(axios, 'put').and.returnValue(defaultAxiosSuccess);
+    test('updateComment', A(async () => {
+      jest.spyOn(axios, 'put').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.updateComment({ id: 1 })(dispatch);
       expect(axios.put).toHaveBeenCalledWith('/api/comment/1/', { id: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COMMENT', comment: 1 });
@@ -172,14 +170,14 @@ describe('CMS Store Module', () => {
   });
 
   describe('REDUCERS', () => {
-    it('SET_CMS_DATA', () => {
+    test('SET_CMS_DATA', () => {
       let state = {};
       const action = { type: 'SET_CMS_DATA', data: 1 };
       state = CmsModule.default(state, action);
       expect(state.data).toBe(1);
     });
 
-    it('ADD_CMS_ENTRY', () => {
+    test('ADD_CMS_ENTRY', () => {
       let state = {
         data: []
       };
@@ -188,7 +186,7 @@ describe('CMS Store Module', () => {
       expect(state.data[0]).toBe(1);
     });
 
-    it('UPDATE_CMS_ENTRY', () => {
+    test('UPDATE_CMS_ENTRY', () => {
       let state = {
         data: [{ id: 1, name: 3 }]
       };
@@ -197,7 +195,7 @@ describe('CMS Store Module', () => {
       expect(state.data[0].name).toBe(2);
     });
 
-    it('DELETE_CMS_ENTRY', () => {
+    test('DELETE_CMS_ENTRY', () => {
       let state = {
         data: [{ id: 1, name: 3 }]
       };
@@ -206,7 +204,7 @@ describe('CMS Store Module', () => {
       expect(state.data[0]).toEqual(undefined);
     });
 
-    it('ADD_COMMENT', () => {
+    test('ADD_COMMENT', () => {
       let state = {
         data: [{ id: 1, comments: [] }]
       };
@@ -215,7 +213,7 @@ describe('CMS Store Module', () => {
       expect(state.data[0].comments[0].id).toEqual(2);
     });
 
-    it('UPDATE_COMMENT', () => {
+    test('UPDATE_COMMENT', () => {
       let state = {
         data: [{ id: 1, comments: [{ id: 2, post: 1, name: 3 }] }]
       };
@@ -224,7 +222,7 @@ describe('CMS Store Module', () => {
       expect(state.data[0].comments[0].name).toEqual(4);
     });
 
-    it('DELETE_COMMENT', () => {
+    test('DELETE_COMMENT', () => {
       let state = {
         data: [{ id: 1, comments: [{ id: 2, post: 1, name: 3 }] }]
       };
@@ -233,7 +231,7 @@ describe('CMS Store Module', () => {
       expect(state.data[0].comments[0]).toEqual(undefined);
     });
 
-    it('CLEAR_CMS_DATA', () => {
+    test('CLEAR_CMS_DATA', () => {
       let state = {
         data: [{ id: 1, comments: [{ id: 2, post: 1, name: 3 }] }]
       };
