@@ -5,8 +5,6 @@ import * as UserModule from '../../src/store/modules/user';
 import * as SystemModule from '../../src/store/modules/system';
 import * as CountryModule from '../../src/store/modules/countries';
 
-/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
-
 let sc = {
   project: {}
 };
@@ -18,36 +16,37 @@ describe('ProjectController', () => {
     sc = new ProjectController(scope, $state(), toast, $timeout, dialog, $ngRedux, gettextCatalog);
     sc.newProjectForm = {
       $valid: true,
-      $setValidity: jasmine.createSpy('$setValidity')
+      $setValidity: jest.fn()
     };
     sc.EE = EE;
     sc.$onInit();
+    jest.restoreAllMocks();
   });
 
-  it('should have a factory  fn.', () => {
+  test('should have a factory  fn.', () => {
     expect(ProjectController.newProjectFactory).toBeDefined();
     const onSpot = ProjectController.newProjectFactory()($scope(sc), $state(), toast, $timeout, dialog, $ngRedux);
     expect(onSpot.constructor.name).toBe(sc.constructor.name);
   });
 
-  it('mapData fn', () => {
-    const profileSpy = spyOn(UserModule, 'getProfile').and.returnValue({ id: 1 });
-    spyOn(ProjectModule, 'getVanillaProject').and.returnValue({ name: 'vanilla', organisation: { id: 1 } });
-    spyOn(ProjectModule, 'getCurrentPublished').and.returnValue({ name: 'cps', organisation: { id: 1 } });
-    spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').and.returnValue({ name: 'gcdpfe', organisation: { id: 1 } });
-    const teamSpy = spyOn(ProjectModule, 'getTeam').and.returnValue(['gt']);
-    spyOn(ProjectModule, 'getCurrentEdits').and.returnValue({ ce: 1 });
-    const viewersSpy = spyOn(ProjectModule, 'getViewers').and.returnValue(['gv']);
-    spyOn(ProjectModule, 'getEmptyProject').and.returnValue({ name: 'gep', organisation: { id: 1 } });
-    spyOn(ProjectModule, 'getCurrentDraftInViewMode').and.returnValue({ name: 'gcdivm', organisation: { id: 1 } });
-    spyOn(ProjectModule, 'getProjectStructure').and.returnValue('gps');
-    spyOn(ProjectModule, 'getPublishedProjects').and.returnValue('gpps');
-    spyOn(SystemModule, 'getUserProfiles').and.returnValue('gups');
-    spyOn(ProjectModule, 'getCurrentPublicProjectDetails').and.returnValue('gcppd');
+  test('mapData fn', () => {
+    const profileSpy = jest.spyOn(UserModule, 'getProfile').mockReturnValue({ id: 1 });
+    jest.spyOn(ProjectModule, 'getVanillaProject').mockReturnValue({ name: 'vanilla', organisation: { id: 1 } });
+    jest.spyOn(ProjectModule, 'getCurrentPublished').mockReturnValue({ name: 'cps', organisation: { id: 1 } });
+    jest.spyOn(ProjectModule, 'getCurrentDraftProjectForEditing').mockReturnValue({ name: 'gcdpfe', organisation: { id: 1 } });
+    const teamSpy = jest.spyOn(ProjectModule, 'getTeam').mockReturnValue(['gt']);
+    jest.spyOn(ProjectModule, 'getCurrentEdits').mockReturnValue({ ce: 1 });
+    const viewersSpy = jest.spyOn(ProjectModule, 'getViewers').mockReturnValue(['gv']);
+    jest.spyOn(ProjectModule, 'getEmptyProject').mockReturnValue({ name: 'gep', organisation: { id: 1 } });
+    jest.spyOn(ProjectModule, 'getCurrentDraftInViewMode').mockReturnValue({ name: 'gcdivm', organisation: { id: 1 } });
+    jest.spyOn(ProjectModule, 'getProjectStructure').mockReturnValue('gps');
+    jest.spyOn(ProjectModule, 'getPublishedProjects').mockReturnValue('gpps');
+    jest.spyOn(SystemModule, 'getUserProfiles').mockReturnValue('gups');
+    jest.spyOn(ProjectModule, 'getCurrentPublicProjectDetails').mockReturnValue('gcppd');
 
     sc.project = { organisation: { id: 1 } };
-    teamSpy.and.returnValue([{ id: 1 }]);
-    viewersSpy.and.returnValue([{ id: 1 }]);
+    teamSpy.mockReturnValue([{ id: 1 }]);
+    viewersSpy.mockReturnValue([{ id: 1 }]);
     sc.state.current.name = 'newProject';
     sc.state.params.editMode = 'draft';
 
@@ -69,8 +68,8 @@ describe('ProjectController', () => {
     expect(result.userProjects).toBe('gpps');
 
     sc.state.current.name = 'editProject';
-    profileSpy.and.returnValue({ id: 2 });
-    viewersSpy.and.returnValue([{ id: 2 }]);
+    profileSpy.mockReturnValue({ id: 2 });
+    viewersSpy.mockReturnValue([{ id: 2 }]);
     sc.state.params.editMode = 'draft';
     result = sc.mapData({});
 
@@ -82,7 +81,7 @@ describe('ProjectController', () => {
 
     expect(result.project).toEqual({ name: 'gcdivm', organisation: { id: 1 } });
 
-    profileSpy.and.returnValue({ id: 1 });
+    profileSpy.mockReturnValue({ id: 1 });
     sc.state.current.name = 'newProject';
     result = sc.mapData({});
 
@@ -95,7 +94,7 @@ describe('ProjectController', () => {
 
     sc.state.current.name = 'editMode';
     sc.state.params.editMode = 'publish';
-    profileSpy.and.returnValue({ id: 10 });
+    profileSpy.mockReturnValue({ id: 10 });
 
     result = sc.mapData({});
 
@@ -119,17 +118,17 @@ describe('ProjectController', () => {
     expect(result.team[0]).toEqual({ id: 1 });
     expect(result.viewers[0]).toEqual({ id: 2 });
 
-    profileSpy.and.returnValue({ id: 1 });
+    profileSpy.mockReturnValue({ id: 1 });
     result = sc.mapData({});
     expect(ProjectModule.getCurrentDraftProjectForEditing).toHaveBeenCalledTimes(1);
   });
 
-  it('onInit fn', () => {
-    spyOn(sc, 'eventListeners');
-    spyOn(sc, 'watchers');
-    spyOn(sc, 'createDialogs');
-    spyOn(ProjectModule, 'clearSimilarNameList').and.returnValue(() => {});
-    spyOn(ProjectModule, 'setCurrentProject').and.returnValue(() => {});
+  test('onInit fn', () => {
+    jest.spyOn(sc, 'eventListeners');
+    jest.spyOn(sc, 'watchers');
+    jest.spyOn(sc, 'createDialogs');
+    jest.spyOn(ProjectModule, 'clearSimilarNameList').mockReturnValue(() => {});
+    jest.spyOn(ProjectModule, 'setCurrentProject').mockReturnValue(() => {});
     sc.activateValidation = undefined;
     sc.districtList = undefined;
     sc.unsubcribe = undefined;
@@ -152,26 +151,28 @@ describe('ProjectController', () => {
     expect(ProjectModule.setCurrentProject).toHaveBeenCalled();
   });
 
-  it('onDestroy fn.', () => {
-    sc.unsubscribe = jasmine.createSpy('unsubscribe');
+  test('onDestroy fn.', () => {
+    sc.unsubscribe = jest.fn();
+    jest.spyOn(ProjectModule, 'resetEditedProject').mockReturnValue(() => {});
     sc.onDestroy();
-    expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectDiscardDraft', jasmine.any(Function));
-    expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectScrollTo', jasmine.any(Function));
-    expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectSaveDraft', jasmine.any(Function));
+    expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectDiscardDraft', expect.any(Function));
+    expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectScrollTo', expect.any(Function));
+    expect(sc.EE.removeAllListeners).toHaveBeenCalledWith('projectSaveDraft', expect.any(Function));
     expect(sc.unsubscribe).toHaveBeenCalled();
+    expect(ProjectModule.resetEditedProject).toHaveBeenCalled();
   });
 
-  it('has a eventListeners fn', () => {
+  test('has a eventListeners fn', () => {
     sc.eventListeners();
-    expect(sc.EE.on).toHaveBeenCalledWith('projectScrollTo', jasmine.any(Function), jasmine.anything());
-    expect(sc.EE.on).toHaveBeenCalledWith('projectSaveDraft', jasmine.any(Function), jasmine.anything());
-    expect(sc.EE.on).toHaveBeenCalledWith('projectDiscardDraft', jasmine.any(Function), jasmine.anything());
+    expect(sc.EE.on).toHaveBeenCalledWith('projectScrollTo', expect.any(Function), expect.anything());
+    expect(sc.EE.on).toHaveBeenCalledWith('projectSaveDraft', expect.any(Function), expect.anything());
+    expect(sc.EE.on).toHaveBeenCalledWith('projectDiscardDraft', expect.any(Function), expect.anything());
   });
 
-  it('createDialogs fn.', () => {
+  test('createDialogs fn.', () => {
     sc.createDialogs();
-    expect(sc.$mdDialog.confirm).toHaveBeenCalledWith(jasmine.any(Object));
-    expect(sc.$mdDialog.alert).toHaveBeenCalledWith(jasmine.any(Object));
+    expect(sc.$mdDialog.confirm).toHaveBeenCalledWith(expect.any(Object));
+    expect(sc.$mdDialog.alert).toHaveBeenCalledWith(expect.any(Object));
     expect(sc.confirmDraftDiscard.type).toBe('confirm');
     expect(sc.publishAlert.type).toBe('alert');
     expect(sc.savingError.type).toBe('alert');
@@ -180,14 +181,14 @@ describe('ProjectController', () => {
     expect(sc.publishCongratulation.type).toBe('alert');
   });
 
-  it('watchers fn', () => {
-    spyOn(sc, 'getCountryFields');
+  test('watchers fn', () => {
+    jest.spyOn(sc, 'getCountryFields');
     sc.watchers();
     expect(sc.getCountryFields).toHaveBeenCalled();
   });
 
-  it('getCountryFields fn.', A(async () => {
-    spyOn(CountryModule, 'setCurrentCountry').and.returnValue(() => Promise.resolve());
+  test('getCountryFields fn.', A(async () => {
+    jest.spyOn(CountryModule, 'setCurrentCountry').mockReturnValue(() => Promise.resolve());
     await sc.getCountryFields();
     expect(CountryModule.setCurrentCountry).not.toHaveBeenCalled();
 
@@ -195,7 +196,7 @@ describe('ProjectController', () => {
     expect(CountryModule.setCurrentCountry).toHaveBeenCalled();
   }));
 
-  it('scrollToFieldSet fn.', () => {
+  test('scrollToFieldSet fn.', () => {
     const a = document.createElement('div');
     const mainElement = document.createElement('div');
     mainElement.setAttribute('class', 'main-content');
@@ -204,7 +205,7 @@ describe('ProjectController', () => {
     window.document.body.appendChild(a);
     window.document.body.appendChild(mainElement);
 
-    sc.EE.emit.calls.reset();
+    sc.EE.emit.mockClear();
     sc.scrollToFieldSet();
     expect(sc.EE.emit).not.toHaveBeenCalled();
 
@@ -212,11 +213,11 @@ describe('ProjectController', () => {
     expect(sc.EE.emit).toHaveBeenCalled();
   });
 
-  it('clearCustomErrors fn.', () => {
+  test('clearCustomErrors fn.', () => {
     const formItem = {};
     sc.form = [formItem];
     sc.clearCustomErrors();
-    formItem.$setValidity = jasmine.createSpy('setValidity');
+    formItem.$setValidity = jest.fn();
     expect(formItem.$setValidity).not.toHaveBeenCalled();
 
     formItem.customError = [];
@@ -229,12 +230,12 @@ describe('ProjectController', () => {
     expect(formItem.$setValidity).toHaveBeenCalledWith('custom', true);
   });
 
-  it('publishProject async fn.', A(async () => {
-    spyOn(sc, 'clearCustomErrors');
-    spyOn(sc, 'focusInvalidField');
-    spyOn(sc, 'postPublishAction');
-    spyOn(sc, 'handleResponse');
-    sc.publish = jasmine.createSpy('publish').and.returnValue(Promise.resolve());
+  test('publishProject async fn.', A(async () => {
+    jest.spyOn(sc, 'clearCustomErrors').mockReturnValue(undefined);
+    jest.spyOn(sc, 'focusInvalidField').mockReturnValue(undefined);
+    jest.spyOn(sc, 'postPublishAction').mockReturnValue(undefined);
+    jest.spyOn(sc, 'handleResponse');
+    sc.publish = jest.fn().mockReturnValue(Promise.resolve());
     sc.form = {
       $valid: false
     };
@@ -249,7 +250,7 @@ describe('ProjectController', () => {
     expect(sc.publish).toHaveBeenCalledTimes(1);
     expect(sc.postPublishAction).toHaveBeenCalledTimes(1);
     const error = new Error({response: {}});
-    sc.publish.and.returnValue(Promise.reject(error));
+    sc.publish.mockReturnValue(Promise.reject(error));
     await sc.publishProject();
     expect(sc.clearCustomErrors).toHaveBeenCalledTimes(3);
     expect(sc.publish).toHaveBeenCalledTimes(2);
@@ -258,9 +259,9 @@ describe('ProjectController', () => {
     expect(sc.$mdDialog.show).toHaveBeenCalled();
   }));
 
-  it('saveDraftHandler fn.', A(async () => {
-    sc.saveDraft = jasmine.createSpy('saveDraft').and.returnValue(Promise.resolve({ id: 1 }));
-    spyOn(sc, 'handleResponse');
+  test('saveDraftHandler fn.', A(async () => {
+    sc.saveDraft = jest.fn().mockReturnValue(Promise.resolve({ id: 1 }));
+    jest.spyOn(sc, 'handleResponse');
     sc.newProject = false;
     sc.form = {
       $valid: false
@@ -276,31 +277,33 @@ describe('ProjectController', () => {
     sc.newProject = true;
     await sc.saveDraftHandler();
     expect(sc.saveDraft).toHaveBeenCalledTimes(2);
-    expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
+    expect(sc.state.go).toHaveBeenCalledWith('editProject', expect.any(Object), expect.any(Object));
     const error = new Error();
     error.response = 1;
-    sc.saveDraft.and.returnValue(Promise.reject(error));
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    sc.saveDraft.mockReturnValue(Promise.reject(error));
     await sc.saveDraftHandler();
     expect(sc.handleResponse).toHaveBeenCalledWith(1);
   }));
 
-  it('discardDraftHandler fn.', A(async () => {
-    sc.discardDraft = jasmine.createSpy('disacrdDraft§').and.returnValue(Promise.resolve());
+  test('discardDraftHandler fn.', A(async () => {
+    sc.discardDraft = jest.fn().mockReturnValue(Promise.resolve());
     await sc.discardDraftHandler();
     expect(sc.$mdDialog.show).toHaveBeenCalled();
     expect(sc.discardDraft).toHaveBeenCalled();
     const error = new Error(1);
-    sc.discardDraft.and.returnValue(Promise.reject(error));
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    sc.discardDraft.mockReturnValue(Promise.reject(error));
     await sc.discardDraftHandler();
   }));
 
-  it('focusInvalidField fn.', () => {
+  test('focusInvalidField fn.', () => {
     const a = document.createElement('div');
     a.setAttribute('id', 'npf');
     window.document.body.appendChild(a);
     const errorDom = document.createElement('div');
     errorDom.setAttribute('class', 'ng-invalid');
-    errorDom.focus = jasmine.createSpy('focus');
+    errorDom.focus = jest.fn();
     sc.focusInvalidField();
 
     a.appendChild(errorDom);
@@ -309,16 +312,16 @@ describe('ProjectController', () => {
     window.document.body.removeChild(a);
   });
 
-  it('postPublishAction', () => {
+  test('postPublishAction', () => {
     sc.postPublishAction({ id: 1 });
-    expect(sc.state.go).toHaveBeenCalledWith('editProject', jasmine.any(Object), jasmine.any(Object));
+    expect(sc.state.go).toHaveBeenCalledWith('editProject', expect.any(Object), expect.any(Object));
   });
 
-  it('addErrorArray fn. ', () => {
+  test('addErrorArray fn. ', () => {
     sc.form = {
       a: {
         customError: null,
-        $setValidity: jasmine.createSpy('setValidity')
+        $setValidity: jest.fn()
       }
     };
     sc.addErrorArray(1, 'b');
@@ -329,10 +332,10 @@ describe('ProjectController', () => {
     expect(sc.form.a.customError).toBe(1);
   });
 
-  it('handleResponse fn', () => {
-    spyOn(console, 'error');
-    const errorSpy = spyOn(sc, 'addErrorArray');
-    spyOn(sc, 'focusInvalidField');
+  test('handleResponse fn', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = jest.spyOn(sc, 'addErrorArray').mockReturnValue(undefined);
+    jest.spyOn(sc, 'focusInvalidField').mockReturnValue(undefined);
     const response = {
       status: 500
     };
@@ -360,8 +363,9 @@ describe('ProjectController', () => {
     sc.handleResponse(response);
     expect(sc.addErrorArray).toHaveBeenCalledWith(1, 'a');
 
-    errorSpy.and.throwError();
+    const error = new Error('custom crafter error');
+    errorSpy.mockReturnValue(Promise.reject(error));
     sc.handleResponse(response);
-    expect(console.error).toHaveBeenCalledTimes(2);
+    expect(console.error).toHaveBeenCalledTimes(1);
   });
 });

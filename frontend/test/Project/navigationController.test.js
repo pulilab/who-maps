@@ -14,12 +14,12 @@ describe('NavigationController', () => {
     controller.EE = EEmock;
   });
 
-  it('should have a function that emit a scroll request', () => {
+  test('should have a function that emit a scroll request', () => {
     expect(controller.scrollTo).toBeDefined();
     controller.scrollTo();
     expect(controller.EE.emit).toHaveBeenCalled();
   });
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(NavigationController.navigationFactory).toBeDefined();
     const factored = NavigationController.navigationFactory()();
     expect(factored instanceof NavigationController).toBeTruthy();
