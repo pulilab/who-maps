@@ -11,7 +11,7 @@ class StaticUtilities {
   /* translation-unfriendly-code */
   async lazyLoader (provider, element) {
     const vm = this;
-    const ctrl = await import(`./${vm.path}/${element}`);
+    const ctrl = await require(`./${vm.path}/${element}`);
     if (ctrl.default) {
       const keys = Object.keys(ctrl);
       keys.forEach(key => {

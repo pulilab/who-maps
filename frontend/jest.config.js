@@ -1,7 +1,7 @@
 module.exports = {
-  verbose: true,
+  verbose: false,
   bail: true,
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: [
     '**/*.js'
   ],
@@ -14,7 +14,7 @@ module.exports = {
       statements: 100
     }
   },
-  moduleNameMapper: {
-    '~(.*)$': '<rootDir>/$1'
+  transform: {
+    '^.+\\.js$': 'babel-jest'
   }
 };

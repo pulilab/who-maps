@@ -1,6 +1,6 @@
 import CollapsibleSet from '../../src/Project/CollapsibleSet';
 import { $scope } from '../testUtilities';
-/* global it, describe, beforeEach, afterEach, expect, xit, spyOn, Promise, jasmine */
+import EventEmitter from 'eventemitter3';
 
 let controller = {};
 
@@ -11,6 +11,8 @@ projectSection.classList.add('project-section');
 el.appendChild(projectSection);
 window.document.body.appendChild(el);
 const element = [el];
+
+window.EE = new EventEmitter();
 
 const timeoutFunc = window.setTimeout;
 
@@ -28,17 +30,18 @@ describe('CollapsibleSet class', () => {
     window.setTimeout = toCall => {
       toCall();
     };
+    jest.restoreAllMocks();
   });
 
   afterEach(() => {
     window.setTimeout = timeoutFunc;
   });
 
-  it('should have a default on init function', () => {
-    spyOn(controller, 'bindElementClick');
-    spyOn(controller, 'defaultWatchers');
-    spyOn(controller.EE, 'emit');
-    spyOn(controller.EE, 'on');
+  test('should have a default on init function', () => {
+    jest.spyOn(controller, 'bindElementClick').mockReturnValue(undefined);
+    jest.spyOn(controller, 'defaultWatchers').mockReturnValue(undefined);
+    jest.spyOn(controller.EE, 'emit').mockReturnValue(undefined);
+    jest.spyOn(controller.EE, 'on').mockReturnValue(undefined);
     controller.defaultOnInit();
     expect(controller.bindElementClick).toHaveBeenCalled();
     expect(controller.defaultWatchers).toHaveBeenCalled();
@@ -47,9 +50,9 @@ describe('CollapsibleSet class', () => {
     expect(controller.elementId).toBe('a');
   });
 
-  it('defaultWatchers fn', () => {
-    spyOn(controller, 'emptyCustom');
-    spyOn(controller, 'emptyCheckable');
+  test('defaultWatchers fn', () => {
+    jest.spyOn(controller, 'emptyCustom').mockReturnValue(undefined);
+    jest.spyOn(controller, 'emptyCheckable').mockReturnValue(undefined);
     controller.resetDefaultList = [{ toWatch: 'toWatchTest', field: 'a' }];
     controller.toWatchTest = {};
     controller.emptyCheckableArray = [{ toWatch: 'toWatchTestDeep', field: 'a', check: 'b' }];
@@ -62,7 +65,7 @@ describe('CollapsibleSet class', () => {
     expect(controller.emptyCheckable).toHaveBeenCalledWith('b', 'a', 1);
   });
 
-  it('emptyCustom fn.', () => {
+  test('emptyCustom fn.', () => {
     controller.project = {
       a: {
         custom: 1
@@ -75,7 +78,7 @@ describe('CollapsibleSet class', () => {
     expect(controller.project.a.custom).toBe(undefined);
   });
 
-  it('emptyCheckable fn', () => {
+  test('emptyCheckable fn', () => {
     const item = {
       check: true,
       field: 1
@@ -88,20 +91,20 @@ describe('CollapsibleSet class', () => {
     expect(item.field).toBe(undefined);
   });
 
-  it('should have a default on destroy function', () => {
-    spyOn(controller.EE, 'removeListener');
+  test('should have a default on destroy function', () => {
+    jest.spyOn(controller.EE, 'removeListener');
     controller.defaultOnDestroy();
     expect(controller.EE.removeListener).toHaveBeenCalledTimes(1);
   });
 
-  it('should have a function that bind the click of the fieldset', () => {
-    spyOn(controller.EE, 'emit');
+  test('should have a function that bind the click of the fieldset', () => {
+    jest.spyOn(controller.EE, 'emit');
     controller.bindElementClick();
     el.click();
     expect(controller.EE.emit).toHaveBeenCalled();
   });
 
-  it('should have a function that toggle the class active on the fieldset', () => {
+  test('should have a function that toggle the class active on the fieldset', () => {
     controller.defaultOnInit();
     let hash = 'b';
     controller.activateFieldSet(hash);
@@ -113,21 +116,21 @@ describe('CollapsibleSet class', () => {
     expect(result).toBeTruthy();
   });
 
-  it('should have a function that properly add a child to a collection ', () => {
+  test('should have a function that properly add a child to a collection ', () => {
     controller.addChild('a');
     expect(controller.test.a[1]).toBe('');
     controller.addChild('b');
     expect(controller.test.b[1]).toBeDefined();
   });
 
-  it('should have a function that remove on item from a target collection', () => {
-    spyOn(controller, 'dispatchChange');
+  test('should have a function that remove on item from a target collection', () => {
+    jest.spyOn(controller, 'dispatchChange').mockReturnValue(undefined);
     controller.removeChild(0, 'a');
     expect(controller.test.a.length).toBe(0);
     expect(controller.dispatchChange).toHaveBeenCalled();
   });
 
-  it('should have a function that regulate if to show the add more button', () => {
+  test('should have a function that regulate if to show the add more button', () => {
     let result = controller.showAddMore(0, controller.test.a);
     expect(result).toBeTruthy();
     controller.addChild('a');
@@ -135,14 +138,14 @@ describe('CollapsibleSet class', () => {
     expect(result).toBeFalsy();
   });
 
-  it('should have a function that regulate if to show the remove child button', () => {
+  test('should have a function that regulate if to show the remove child button', () => {
     let result = controller.showRemove(0, [1]);
     expect(result).toBeFalsy();
     result = controller.showRemove(0, [1, 2]);
     expect(result).toBeTruthy();
   });
 
-  it('should have a function to add the collapse class to the main section', () => {
+  test('should have a function to add the collapse class to the main section', () => {
     controller.defaultOnInit();
     let result = controller.elementMainSection.classList.contains(controller.toggleClass);
     expect(result).toBeFalsy();
@@ -151,16 +154,16 @@ describe('CollapsibleSet class', () => {
     expect(result).toBeTruthy();
   });
 
-  it('should have a function that find the appropriate array where to write standard results ', () => {
+  test('should have a function that find the appropriate array where to write standard results ', () => {
     let result = controller.findField('b');
     expect(result instanceof Object).toBeTruthy();
     result = controller.findField('c');
     expect(result instanceof Array).toBeTruthy();
   });
 
-  it('should have a function that toggle a checkbox', () => {
-    spyOn(controller, 'findField').and.callThrough();
-    spyOn(controller, 'dispatchChange');
+  test('should have a function that toggle a checkbox', () => {
+    jest.spyOn(controller, 'findField');
+    jest.spyOn(controller, 'dispatchChange').mockReturnValue(undefined);
     controller.checkboxToggle();
     expect(controller.findField).not.toHaveBeenCalled();
     controller.checkboxToggle({ id: 1 }, 'c');
@@ -170,10 +173,12 @@ describe('CollapsibleSet class', () => {
     expect(controller.test.c.standard).not.toContain(1);
   });
 
-  it('should have a function that return true if a value is present in a field', () => {
-    spyOn(controller, 'findField').and.callThrough();
-    spyOn(controller, 'dispatchChange');
+  test('should have a function that return true if a value is present in a field', () => {
+    jest.spyOn(controller, 'findField').mockReturnValue([]);
+    jest.spyOn(controller, 'dispatchChange').mockReturnValue(undefined);
+
     controller.checkboxChecked();
+
     expect(controller.findField).not.toHaveBeenCalled();
     let result = controller.checkboxChecked(1, 'c');
     expect(result).toBeFalsy();
@@ -182,12 +187,12 @@ describe('CollapsibleSet class', () => {
     expect(result).toBeTruthy();
   });
 
-  it('printDate fn', () => {
+  test('printDate fn', () => {
     const result = controller.printDate('2017-12-31T23:00:00');
     expect(result).toBe('31-12-2017');
   });
 
-  it('should have a function that remove already selected platforms', () => {
+  test('should have a function that remove already selected platforms', () => {
     const options = ['a', 'b', 'c'];
     const platforms = [
       {
@@ -205,7 +210,7 @@ describe('CollapsibleSet class', () => {
     expect(platforms[0].available).toEqual(['a', 'c']);
   });
 
-  it('setAvailableDictOptions fn', () => {
+  test('setAvailableDictOptions fn', () => {
     const options = [{ name: 'a', id: 1 }, { name: 'b', id: 2 }, { name: 'c', id: 3 }];
     const platforms = [
       {
@@ -224,7 +229,7 @@ describe('CollapsibleSet class', () => {
     expect(platforms[0].available).toEqual([{ name: 'a', id: 1 }, { name: 'c', id: 3 }]);
   });
 
-  it('handleCustomError fn', () => {
+  test('handleCustomError fn', () => {
     controller.form = {
       a: {
         $setValidity: jasmine.createSpy('.$setValidity'),
@@ -241,7 +246,7 @@ describe('CollapsibleSet class', () => {
     expect(controller.form.a.customError).toEqual([]);
   });
 
-  it('setCustomError fn', () => {
+  test('setCustomError fn', () => {
     controller.form = {
       a: {
         $setValidity: jasmine.createSpy('.$setValidity'),
