@@ -1,8 +1,6 @@
 import DashboardModuleController from '../../src/Dashboard/DashboardModuleController';
 import { $scope, EE, $state, $ngRedux } from '../testUtilities';
 
-/* global  it, describe, expect, spyOn, beforeEach, jasmine, Promise, xit */
-
 let vm = {};
 
 describe('DashboardModuleController', () => {
@@ -12,17 +10,17 @@ describe('DashboardModuleController', () => {
     vm.EE = EE;
   });
 
-  it('onInit fn.', () => {
-    spyOn(vm, 'watchers');
+  test('onInit fn.', () => {
+    jest.spyOn(vm, 'watchers').mockReturnValue(undefined);
     vm.$onInit();
     expect(vm.watchers).toHaveBeenCalled();
   });
 
-  it('watcher fn.', () => {
+  test('watcher fn.', () => {
     vm.countryProjects = [];
-    spyOn(vm, 'applyFilters');
-    spyOn(vm, 'generateFilters');
-    spyOn(vm, 'updateCountry');
+    jest.spyOn(vm, 'applyFilters').mockReturnValue(undefined);
+    jest.spyOn(vm, 'generateFilters').mockReturnValue(undefined);
+    jest.spyOn(vm, 'updateCountry').mockReturnValue(undefined);
     vm.watchers();
     expect(vm.applyFilters).toHaveBeenCalled();
     expect(vm.generateFilters).toHaveBeenCalled();
@@ -32,7 +30,7 @@ describe('DashboardModuleController', () => {
   describe('apply filters function', () => {
     let filters = [];
     let oldValues = [];
-    const filterMappingFn = jasmine.createSpy('filterMappingFn').and.returnValue([]);
+    const filterMappingFn = jest.fn().mockReturnValue([]);
 
     beforeEach(() => {
       filters = [
@@ -50,14 +48,14 @@ describe('DashboardModuleController', () => {
       oldValues = filters.slice();
     });
 
-    it('should not run if the only change is on the open - close ', () => {
+    test('should not run if the only change is on the open - close ', () => {
       vm.filterBit = 0;
       oldValues[0].open = false;
       vm.checkIfFilterIsApplied(filters, oldValues);
       expect(vm.filterBit).toBe(0);
     });
 
-    it('should call the mappingFilter fn on the filter object', () => {
+    test('should call the mappingFilter fn on the filter object', () => {
       vm.countryProjects = [{}];
       vm.selectedCountry = {
         project_approval: true
@@ -66,7 +64,7 @@ describe('DashboardModuleController', () => {
       vm.applyFilters([false]);
       expect(filterMappingFn).toHaveBeenCalled();
     });
-    it('should show only project that contain one or more enabled filters', () => {
+    test('should show only project that contain one or more enabled filters', () => {
       vm.countryProjects = [{}];
       vm.selectedCountry = {
         project_approval: true
@@ -78,9 +76,9 @@ describe('DashboardModuleController', () => {
     });
   });
 
-  it('handleTabSwitch fn.', () => {
+  test('handleTabSwitch fn.', () => {
     vm.selectedCountry = { id: 1 };
-    vm.loadCountryProjectsOrAll = jasmine.createSpy('loadCountryProjectsOrAll');
+    vm.loadCountryProjectsOrAll = jest.fn();
     vm.handleTabSwitch(0, 1);
     expect(vm.loadCountryProjectsOrAll).not.toHaveBeenCalled();
 
@@ -93,10 +91,10 @@ describe('DashboardModuleController', () => {
     expect(vm.loadCountryProjectsOrAll).toHaveBeenCalledWith(1);
   });
 
-  it('updateCountry fn.', () => {
+  test('updateCountry fn.', () => {
     vm.projectsData = [];
-    vm.setCurrentCountry = jasmine.createSpy('setCurrentCountry');
-    vm.loadCountryProjectsOrAll = jasmine.createSpy('loadCountryProjectsOrAll');
+    vm.setCurrentCountry = jest.fn()
+    vm.loadCountryProjectsOrAll = jest.fn()
 
     vm.updateCountry({ id: 1 });
     expect(vm.loadCountryProjectsOrAll).toHaveBeenCalled();
@@ -106,7 +104,7 @@ describe('DashboardModuleController', () => {
     expect(vm.setCurrentCountry).toHaveBeenCalled();
   });
 
-  it('has a print implementing_partners fn', () => {
+  test('has a print implementing_partners fn', () => {
     const result = vm.printImplementingPartners({ implementing_partners: [1, 2] });
     expect(result).toBe('1, 2');
   });

@@ -2,15 +2,14 @@ import PDFExportController from '../../src/Dashboard/PDFExport/PDFExportControll
 import pdfMake from 'pdfmake/build/pdfmake';
 import { A } from '../testUtilities';
 
-/* global it, describe, xit, expect, beforeEach, jasmine, spyOn */
 let pef = {};
 
 const pdfMakeReturn = {
-  download: jasmine.createSpy('pdfdownload')
+  download: jest.fn()
 };
 
 const gettextCatalogMock = {
-  getString: jasmine.createSpy('getString')
+  getString: jest.fn()
 };
 
 describe('PDFExport Controller', () => {
@@ -21,15 +20,15 @@ describe('PDFExport Controller', () => {
     };
   });
 
-  it('should have an init function', () => {
+  test('should have an init function', () => {
     expect(pef.onInit).toBeDefined();
     pef.onInit();
     expect(pef.logo).toBeDefined();
     expect(pef.exportDate).toBeDefined();
   });
 
-  it('should have a function to generate a PDF with the pdfmake lib', A(async () => {
-    spyOn(pdfMake, 'createPdf').and.returnValue(pdfMakeReturn);
+  test('should have a function to generate a PDF with the pdfmake lib', A(async () => {
+    jest.spyOn(pdfMake, 'createPdf').mockReturnValue(pdfMakeReturn);
     await pef.makePDF();
     expect(pef.pdfMake).toHaveBeenCalled();
   }));
