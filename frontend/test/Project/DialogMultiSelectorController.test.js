@@ -1,6 +1,5 @@
 import { default as DialogMultiSelectorController, DialogMultiSelectorDialog } from '../../src/Project/DialogMultiSelector/DialogMultiSelectorController';
 import { dialog, $scope } from '../testUtilities';
-/* global  it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
 
 let controller = {};
 
@@ -9,15 +8,15 @@ describe('DialogMultiSelector', () => {
     controller = DialogMultiSelectorController.factory()($scope(controller), dialog);
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(DialogMultiSelectorController.factory).toBeDefined();
     const onSpot = DialogMultiSelectorController.factory()($scope(controller), dialog);
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should have a watcher function', () => {
-    spyOn(controller, 'openDialog');
-    spyOn(controller, 'checkDuplicates');
+  test('should have a watcher function', () => {
+    jest.spyOn(controller, 'openDialog').mockReturnValue(undefined);
+    jest.spyOn(controller, 'checkDuplicates').mockReturnValue(undefined);
     controller.scope.$watch = (feed, action) => {
       action(true, false);
     };
@@ -26,8 +25,8 @@ describe('DialogMultiSelector', () => {
     expect(controller.checkDuplicates).toHaveBeenCalled();
   });
 
-  it('should have a showModal Fn', () => {
-    const preventDefault = jasmine.createSpy('preventDefault');
+  test('should have a showModal Fn', () => {
+    const preventDefault = jest.fn();
     expect(controller.modalOpen).toBeFalsy();
     controller.showModal({
       preventDefault
@@ -36,7 +35,7 @@ describe('DialogMultiSelector', () => {
     expect(preventDefault).toHaveBeenCalled();
   });
 
-  it('should have a openDialog fn', () => {
+  test('should have a openDialog fn', () => {
     controller.openDialog();
     expect(controller.dialog.show).toHaveBeenCalled();
   });
@@ -47,13 +46,13 @@ describe('DialogMultiSelectorDialog', () => {
     controller = DialogMultiSelectorDialog.factory()($scope(controller), dialog);
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(DialogMultiSelectorDialog.factory).toBeDefined();
     const onSpot = DialogMultiSelectorDialog.factory()($scope(controller));
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should have a fn that set toggle all group', () => {
+  test('should have a fn that set toggle all group', () => {
     controller.elements = [
       {
         'name': 'Client',
@@ -83,18 +82,18 @@ describe('DialogMultiSelectorDialog', () => {
     });
   });
 
-  it('should have a cancel function', () => {
+  test('should have a cancel function', () => {
     controller.cancel();
     expect(controller.dialog.cancel).toHaveBeenCalled();
   });
 
-  it('should have a function that add the selected strategies to the project model', () => {
+  test('should have a function that add the selected strategies to the project model', () => {
     controller.selection = [1];
     controller.addSelected();
     expect(controller.dialog.hide).toHaveBeenCalledWith([1]);
   });
 
-  it('should have a function tha toggle the open status on an object', () => {
+  test('should have a function tha toggle the open status on an object', () => {
     const item = {
       open: false
     };
@@ -104,14 +103,14 @@ describe('DialogMultiSelectorDialog', () => {
     expect(item.open).toBe(false);
   });
 
-  it('should have a function that return true if an item is present in the selection', () => {
+  test('should have a function that return true if an item is present in the selection', () => {
     controller.selection = [{ id: 1 }];
     let res = controller.itemChecked({ id: 2 });
     expect(res).toBeFalsy();
     res = controller.itemChecked({ id: 1 });
     expect(res).toBeTruthy();
   });
-  it('should have a function that add or remove an element form the selection', () => {
+  test('should have a function that add or remove an element form the selection', () => {
     controller.selection = [{ id: 1 }];
     controller.itemToggle({ id: 2 });
     expect(controller.selection[1].id).toBe(2);
@@ -119,7 +118,7 @@ describe('DialogMultiSelectorDialog', () => {
     expect(controller.selection.length).toBe(1);
   });
 
-  it('should have a fn that set open and open all accordingly to the selected items', () => {
+  test('should have a fn that set open and open all accordingly to the selected items', () => {
     const ele = [
       {
         name: 'a',
@@ -156,7 +155,7 @@ describe('DialogMultiSelectorDialog', () => {
     expect(ele[0].subGroups[1].open).toBe(true);
   });
 
-  it('should have a fn that return the correct class string for a subGroup', () => {
+  test('should have a fn that return the correct class string for a subGroup', () => {
     const subGroup = {
       open: false,
       class: 'a'
