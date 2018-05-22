@@ -10,7 +10,7 @@ class EditProfileController {
     this.scope = $scope;
     this.state = $state;
     this.toast = $mdToast;
-    this.$onInit = this.initialization.bind(this);
+    this.$onInit = this.onInit.bind(this);
     this.$onDestroy = this.onDestroy.bind(this);
     this.mapState = this.mapState.bind(this);
     this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
@@ -30,7 +30,7 @@ class EditProfileController {
     this.unsubscribe();
   }
 
-  initialization () {
+  onInit () {
     this.dataLoaded = false;
     this.handleDataLoad();
   }
