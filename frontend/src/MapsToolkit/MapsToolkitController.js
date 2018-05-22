@@ -7,6 +7,8 @@ import * as UserModule from '../store/modules/user';
 import * as ToolkitModule from '../store/modules/toolkit';
 import * as ProjectModule from '../store/modules/projects';
 
+import { loadHtmlTemplates } from '../webpackRequires';
+
 class MapsToolkitController {
   constructor ($scope, $state, $ngRedux, $sce) {
     this.state = $state;
@@ -67,7 +69,7 @@ class MapsToolkitController {
   importHtmlTemplates () {
     // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
     const templates = {};
-    const templateRequire = require.context('./Resource/template/', true, /\.html$/);
+    const templateRequire = loadHtmlTemplates();
     templateRequire.keys().forEach((item) => {
       const key = item.split('.')[1].replace('/', '');
       templates[key] = templateRequire(item);

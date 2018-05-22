@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import forEach from 'lodash/forEach';
 
 import * as ToolkitModule from '../../store/modules/toolkit';
+import { loadScorecardImages } from '../../webpackRequires';
 
 class ScorecardController {
   constructor ($scope, $state, $ngRedux) {
@@ -30,7 +31,7 @@ class ScorecardController {
   importIconTemplates () {
     // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
     const templates = {};
-    const templateRequire = require.context('./images/', true, /\.svg$/);
+    const templateRequire = loadScorecardImages();
     templateRequire.keys().forEach((item) => {
       const key = item.split('.')[1].replace('/', '');
       templates[key] = templateRequire(item);
