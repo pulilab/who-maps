@@ -55,11 +55,12 @@ const $anchorScroll = jest.fn().mockImplementation(a => a);
 const EE = {
   emit: jest.fn(),
   on: jest.fn(),
-  removeAllListeners: jest.fn()
+  removeAllListeners: jest.fn(),
+  removeListener: jest.fn()
 };
 
 const $ngRedux = {
-  connect: jest.fn().mockReturnValue(() => () => 'unsubscribeFn'),
+  connect: jest.fn().mockReturnValue(() => jest.fn()),
   dispatch: jest.fn().mockImplementation(toCall => toCall()),
   getState: jest.fn(),
   subscribe: jest.fn()
