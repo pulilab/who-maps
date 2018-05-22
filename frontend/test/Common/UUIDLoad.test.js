@@ -1,6 +1,5 @@
 import UUIDLoadController from '../../src/Common/UUIDLoad/UUIDLoadController';
 import { $state, $ngRedux, EE, A } from '../testUtilities';
-/* global Promise,  it, describe, expect, beforeEach, afterEach, jasmine */
 
 let ulc = {};
 
@@ -14,14 +13,14 @@ describe('UUID Project load Components controller', () => {
     ulc.$onInit();
   });
 
-  it('can be initiated', () => {
+  test('can be initiated', () => {
     expect(ulc).toBeDefined();
     expect(typeof ulc).toBe('object');
   });
 
-  it('should have a function that can transform an UUID in a projectID', A(async () => {
+  test('should have a function that can transform an UUID in a projectID', A(async () => {
     expect(ulc.handleProjectLoad).toBeDefined();
-    ulc.searchProjects = jasmine.createSpy('searchProjects').and.returnValue(Promise.resolve());
+    ulc.searchProjects = jest.fn().mockReturnValue(Promise.resolve());
     ulc.search = [];
     await ulc.handleProjectLoad();
     expect(ulc.state.go).not.toHaveBeenCalled();

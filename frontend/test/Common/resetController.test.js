@@ -1,7 +1,6 @@
 import ResetController from '../../src/Common/Reset/ResetController';
 import { $scope, A } from '../testUtilities';
 import * as UserModule from '../../src/store/modules/user';
-/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 
 let rc = {};
 
@@ -14,9 +13,9 @@ describe('ResetController', () => {
     };
   });
 
-  it('should have a function that execute the reset service', A(async () => {
+  test('should have a function that execute the reset service', A(async () => {
     rc.email = 'alma@korte.com';
-    spyOn(UserModule, 'resetPassword').and.returnValue(Promise.resolve());
+    jest.spyOn(UserModule, 'resetPassword').mockReturnValue(Promise.resolve());
     await rc.reset();
     expect(UserModule.resetPassword).toHaveBeenCalled();
   }));

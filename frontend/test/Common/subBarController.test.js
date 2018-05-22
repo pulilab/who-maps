@@ -1,8 +1,6 @@
 import { default as SubBarController } from '../../src/Common/SubBar/SubBarController';
 import { $state, $scope, $ngRedux, EE } from '../testUtilities';
 
-/* global it, describe, beforeEach, expect, jasmine, Promise */
-
 let ac = {};
 
 describe('SubBarController', () => {
@@ -12,14 +10,14 @@ describe('SubBarController', () => {
     ac.EE = EE;
   });
 
-  it('should have a function that update the selected project', () => {
+  test('should have a function that update the selected project', () => {
     ac.projects = [{ name: 'asd', id: 1 }];
     ac.navigateToProject('asd');
     expect(ac.state.go).toHaveBeenCalled();
   });
 
-  it('should have a function to open a modal menu', () => {
-    const spy = jasmine.createSpy('menuOpener');
+  test('should have a function to open a modal menu', () => {
+    const spy = jest.fn();
     ac.openMenu(spy, {});
     expect(spy).toHaveBeenCalled();
   });

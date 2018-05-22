@@ -1,8 +1,6 @@
 import TopBar from '../../src/Common/TopBarBheaviour';
 import { $state, $ngRedux, $scope, EE } from '../testUtilities';
 
-/* global  it, describe, beforeEach, expect, Promise */
-
 let controller = {};
 
 describe('TopBarBehaviour', () => {
@@ -12,7 +10,7 @@ describe('TopBarBehaviour', () => {
     controller.EE = EE;
   });
 
-  it('should have an init function', () => {
+  test('should have an init function', () => {
     expect(controller.commonInit).toBeDefined();
   });
 });

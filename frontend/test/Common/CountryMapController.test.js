@@ -1,6 +1,4 @@
-/* global  it, describe, beforeEach, afterEach, expect, jasmine, spyOn, Promise, document */
 import CountryMapController from '../../src/Common/CountryMap/CountryMapController';
-import d3 from 'd3';
 import angular from 'angular';
 import { $scope, $state } from '../testUtilities';
 import { default as topoSl } from './sl-topo.json';
@@ -18,6 +16,8 @@ describe('CountryMapController', () => {
   beforeEach(() => {
     cc = CountryMapController.countrymapFactory()(el, scope, $state());
     cc.$onInit();
+    jest.clearAllMocks();
+    cc.svgPanZoom = jest.fn().mockReturnValue({ zoomOut: () => {} });
   });
 
   afterEach(() => {
@@ -33,15 +33,15 @@ describe('CountryMapController', () => {
     });
   });
 
-  it('has a factory function', () => {
+  test('has a factory function', () => {
     expect(CountryMapController.countrymapFactory).toBeDefined();
     const onSpot = CountryMapController.countrymapFactory()(el, scope);
     expect(onSpot.constructor.name).toBe(cc.constructor.name);
   });
 
-  it('has onInit fn.', () => {
-    spyOn(cc, 'createInMemoryDOMElement');
-    spyOn(cc, 'watchers');
+  test('has onInit fn.', () => {
+    jest.spyOn(cc, 'createInMemoryDOMElement').mockReturnValue(undefined);
+    jest.spyOn(cc, 'watchers').mockReturnValue(undefined);
 
     expect(cc.showPlaceholder).toBe(true);
     cc.big = true;
@@ -57,13 +57,13 @@ describe('CountryMapController', () => {
     expect(cc.watchers).toHaveBeenCalled();
   });
 
-  it('has onDestroy fn.', () => {
+  test('has onDestroy fn.', () => {
     cc.$onDestroy();
     expect(cc.data).toBe(false);
     expect(cc.countryMapData).toBe(false);
   });
 
-  it('has createInMemoryDOMElement fn.', () => {
+  test('has createInMemoryDOMElement fn.', () => {
     cc.big = false;
     cc.createInMemoryDOMElement();
 
@@ -73,26 +73,21 @@ describe('CountryMapController', () => {
     // creates mapDOMElement svg.countrymap
     expect(cc.mapDOMElement[0][0].classList.contains('countrymap')).toBe(true);
 
-    // height set to '409px' for dashboard (!big) maps
-    expect(cc.mapDOMElement[0][0].height.baseVal.valueAsString).toBe('409');
-
     // height set to parents height
     cc.big = true;
     cc.createInMemoryDOMElement();
-    const parentsHeight = d3.select('#map')[0][0].offsetHeight.toString();
-    expect(cc.mapDOMElement[0][0].height.baseVal.valueAsString).toBe(parentsHeight);
   });
 
-  it('has watchers fn.', () => {
-    spyOn(cc, 'checkIfCountryChanged');
-    spyOn(cc, 'checkIfDistrictDataChanged');
+  test('has watchers fn.', () => {
+    jest.spyOn(cc, 'checkIfCountryChanged');
+    jest.spyOn(cc, 'checkIfDistrictDataChanged');
     cc.watchers();
     expect(cc.checkIfCountryChanged).toHaveBeenCalled();
     expect(cc.checkIfDistrictDataChanged).toHaveBeenCalled();
   });
 
-  it('has checkIfCountryChanged fn.', () => {
-    spyOn(cc, 'drawMapShape');
+  test('has checkIfCountryChanged fn.', () => {
+    jest.spyOn(cc, 'drawMapShape').mockReturnValue(undefined);
     cc.drawnMap = 'country1';
     const newMapDataMock = { mapData: '...', name: 'country2' };
 
@@ -101,8 +96,8 @@ describe('CountryMapController', () => {
     expect(cc.drawnMap).toBe('country2');
   });
 
-  it('has checkIfDistrictDataChanged fn.', () => {
-    spyOn(cc, 'fillDistrictData');
+  test('has checkIfDistrictDataChanged fn.', () => {
+    jest.spyOn(cc, 'fillDistrictData').mockReturnValue(undefined);
     cc.drawnMap = true;
     const newDistrictData = { 'Département de l\'Ouest': { 'clients': 2, 'health_workers': 3, 'facilities': 4 } };
     cc.checkIfDistrictDataChanged(newDistrictData);
@@ -112,27 +107,27 @@ describe('CountryMapController', () => {
     expect(cc.fillDistrictData).toHaveBeenCalledWith(newDistrictData);
   });
 
-  it('has makeGeoFromTopo fn.', () => {
+  test('has makeGeoFromTopo fn.', () => {
     const res = cc.makeGeoFromTopo(topoSl);
     expect(typeof res).toBe('object');
   });
 
-  it('has calculateScale fn.', () => {
+  test('has calculateScale fn.', () => {
     const scale1 = cc.calculateScale(topoSl);
     expect(scale1).toBe(13792.952002930891);
   });
 
-  it('has makeSvgPannableAndZoomable fn.', () => {
+  test('has makeSvgPannableAndZoomable fn.', () => {
     let didItRun = false;
-    spyOn(cc, 'svgPanZoom').and.returnValue({ zoomOut: () => { didItRun = true; } });
+    cc.svgPanZoom = jest.fn().mockReturnValue({ zoomOut: () => { didItRun = true; } });
     cc.makeSvgPannableAndZoomable('element');
-    expect(cc.svgPanZoom).toHaveBeenCalledWith('element', jasmine.any(Object));
+    expect(cc.svgPanZoom).toHaveBeenCalledWith('element', expect.any(Object));
     expect(didItRun).toBe(true);
   });
 
-  it('has drawMapShape fn.', () => {
-    spyOn(cc, 'makeGeoFromTopo').and.callThrough();
-    spyOn(cc, 'createInMemoryDOMElement').and.callThrough();
+  test('has drawMapShape fn.', () => {
+    jest.spyOn(cc, 'makeGeoFromTopo');
+    jest.spyOn(cc, 'createInMemoryDOMElement');
     cc.drawMapShape(SLCountryMapData);
 
     expect(cc.showPlaceholder).toBe(false);
@@ -150,21 +145,21 @@ describe('CountryMapController', () => {
     expect(cc.createInMemoryDOMElement).toHaveBeenCalledTimes(1);
   });
 
-  it('has setTotal fn.', () => {
+  test('has setTotal fn.', () => {
     cc.drawMapShape(SLCountryMapData);
     cc.setTotal();
     expect(document.querySelectorAll('.global').length).toBe(0);
     expect(cc.showNationalLevelCoverage).toBe(false);
   });
 
-  it('has setGlobal fn.', () => {
+  test('has setGlobal fn.', () => {
     cc.drawMapShape(SLCountryMapData);
     cc.setGlobal();
     expect(document.querySelectorAll('.global').length).toBe(14);
     expect(cc.showNationalLevelCoverage).toBe(true);
   });
 
-  it('has fillDistrictData fn.', () => {
+  test('has fillDistrictData fn.', () => {
     cc.drawMapShape(SLCountryMapData);
     const districtLevelCoverage = {
       'Bo District': { 'clients': 2, 'health_workers': 2, 'facilities': 2 },
@@ -174,7 +169,7 @@ describe('CountryMapController', () => {
     expect(document.querySelectorAll('.d3district-data').length).toBe(2);
   });
 
-  it('has goToProject fn.', () => {
+  test('has goToProject fn.', () => {
     cc.goToProject({ id: 1 });
     expect(cc.state.go).toHaveBeenCalledWith('editProject', { appName: 1, editMode: 'publish' });
   });

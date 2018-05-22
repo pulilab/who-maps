@@ -1,7 +1,5 @@
 import TrixComponentController from '../../src/Common/TrixComponent/TrixComponentController';
 
-/* global  it, describe, beforeEach, afterEach, expect, jasmine, Promise */
-
 let controller = {};
 
 const $scope = {
@@ -20,24 +18,21 @@ describe('TrixComponentController', () => {
     controller = TrixComponentController.factory()($scope, element);
     controller.editorInstance = {
       editor: {
-        getDocument: jasmine.createSpy('getDocument').and.returnValue({
-          toString: jasmine.createSpy('toString').and.returnValue('some string')
+        getDocument: jest.fn().mockReturnValue({
+          toString: jest.fn().mockReturnValue('some string')
         })
       }
     };
   });
 
-  afterEach(() => {
-  });
-
-  it('should have an onInit Fn.', () => {
+  test('should have an onInit Fn.', () => {
     expect(controller.onInit).toBeDefined();
     controller.onInit();
   });
-  it('should have an postLink Fn.', () => {
+  test('should have an postLink Fn.', () => {
     expect(controller.postLink).toBeDefined();
   });
-  it('should have a Fn. that update the bound value', () => {
+  test('should have a Fn. that update the bound value', () => {
     controller.editorInstance.editor.element = {
       value: 1
     };

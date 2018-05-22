@@ -1,32 +1,35 @@
+
 import SkeletonController from '../../src/Common/Thematic/SkeletonController.js';
 import { $scope, $interpolate, $anchorScroll } from '../testUtilities';
 import mock from './mockStructure.js';
+import * as webpackRequires from '../../src/webpackRequires';
 import _ from 'lodash';
 
-/* global it, describe, expect, beforeEach, spyOn, Promise  */
-let vm;
+let vm = {};
 const scope = $scope(vm);
 
 describe('SkeletonController', () => {
   beforeEach(() => {
+    const webpackFn = () => (1);
+    webpackFn.keys = () => ['something.icon'];
+    jest.spyOn(webpackRequires, 'loadSkeletonImages').mockReturnValue(webpackFn);
+    jest.spyOn(webpackRequires, 'loadSkeletonStatic').mockReturnValue(webpackFn);
     vm = SkeletonController.factory(mock, 0, 0)(scope, $interpolate, $anchorScroll);
   });
 
-  it('is defined', () => {
+  test('is defined', () => {
     expect(vm).toBeDefined();
   });
 
-  it('has a fn. which returns the raw HTML content from the static "help" files', () => {
+  test('has a fn. which returns the raw HTML content from the static "help" files', () => {
     expect(vm.importHtmlTemplates).toBeDefined();
     const test = vm.importHtmlTemplates();
-
-    // Actual nr. can change, if static site counts change
-    expect(_.keys(test).length).toBe(32);
+    expect(_.keys(test).length).toBe(1);
   });
 
-  it('has a fn. which changes Id\'s, and calls domain activator toggler', () => {
+  test('has a fn. which changes Id\'s, and calls domain activator toggler', () => {
     expect(vm.changeSpot).toBeDefined();
-    spyOn(vm, 'domainActivationSetter');
+    jest.spyOn(vm, 'domainActivationSetter').mockReturnValue(undefined);
 
     vm.changeSpot(0, 0);
     expect(vm.axis).toBe(0);
@@ -39,7 +42,7 @@ describe('SkeletonController', () => {
     expect(vm.domainActivationSetter).toHaveBeenCalled();
   });
 
-  it('has a fn. which toggles domains bindable attribute', () => {
+  test('has a fn. which toggles domains bindable attribute', () => {
     expect(vm.data[3].domains[1].active).toBeFalsy();
     vm.domainActivationSetter(1, 1, true);
     expect(vm.data[3].domains[1].active).toBeTruthy();

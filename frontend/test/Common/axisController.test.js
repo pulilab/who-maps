@@ -1,7 +1,6 @@
 import AxisController from '../../src/Common/Axis/AxisController';
-import { $scope, $ngRedux } from '../testUtilities';
+import { $scope, $ngRedux, EE } from '../testUtilities';
 
-/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
 let ac = {};
 
 describe('axisController', () => {
@@ -10,15 +9,16 @@ describe('axisController', () => {
     ac.scope = $scope(ac);
     ac.axisData = require('./axisMockData');
     ac.$onInit();
+    ac.EE = EE
   });
 
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(AxisController.axisFactory).toBeDefined();
     const onSpot = AxisController.axisFactory()({}, $ngRedux);
     expect(onSpot.constructor.name).toBe(ac.constructor.name);
   });
 
-  it('has initialization == $onInit fn.', () => {
+  test('has initialization == $onInit fn.', () => {
     ac.axisData = undefined;
     ac.axisId = null;
     ac.$onInit();
@@ -26,7 +26,7 @@ describe('axisController', () => {
     ac.$onInit();
   });
 
-  it('has setDomainActive fn.', () => {
+  test('has setDomainActive fn.', () => {
     ac.domainIndex = '15';
     const res1 = ac.setDomainActive(15);
     expect(res1).toBe(true);
@@ -40,21 +40,19 @@ describe('axisController', () => {
     expect(res3).toBe(false);
   });
 
-  it('has a fn, that emit a domain change event', () => {
-    spyOn(window.EE, 'emit');
+  test('has a fn, that emit a domain change event', () => {
     ac.axisIndex = 'mock axisId';
     ac.changeDomain({ index: 12 });
-    expect(window.EE.emit).toHaveBeenCalledWith('mapsDomainChange', 'mock axisId', 12);
+    expect(ac.EE.emit).toHaveBeenCalledWith('mapsDomainChange', 'mock axisId', 12);
   });
 
-  it('has a fn, that emit an axis change event', () => {
-    spyOn(window.EE, 'emit');
+  test('has a fn, that emit an axis change event', () => {
     ac.axisId = '2';
     ac.goToAxis();
-    expect(window.EE.emit).toHaveBeenCalledWith('mapsAxisChange', 1);
+    expect(ac.EE.emit).toHaveBeenCalledWith('mapsAxisChange', 1);
   });
 
-  it('has a class generator fn', () => {
+  test('has a class generator fn', () => {
     const res0 = ac.advanceClassGenerator(-10);
     const res1 = ac.advanceClassGenerator(20);
     const res2 = ac.advanceClassGenerator(50);

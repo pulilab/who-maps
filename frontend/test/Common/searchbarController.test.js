@@ -1,6 +1,5 @@
 import SearchbarController from '../../src/Common/Searchbar/SearchbarController';
 import { $state, $scope, $ngRedux, EE } from '../testUtilities';
-/* global Promise,  it, describe, expect, beforeEach, afterEach, jasmine */
 
 let sb = {};
 
@@ -12,23 +11,23 @@ describe('Searchbar Components controller', () => {
     sb.$onInit();
   });
 
-  it('can be initiated', () => {
+  test('can be initiated', () => {
     expect(sb).toBeDefined();
     expect(typeof sb).toBe('object');
   });
 
-  it('fetches basic information about search results', () => {
+  test('fetches basic information about search results', () => {
     expect(typeof sb.resultNr).toBe('number');
   });
 
-  it('should have a function that toggle the showSearch', () => {
+  test('should have a function that toggle the showSearch', () => {
     expect(sb.showSearch).toBe(false);
     sb.toggleSearch();
     expect(sb.showSearch).toBe(true);
   });
 
-  it('should have a function that perform a search', () => {
-    sb.searchProjects = jasmine.createSpy('searchProjects').and.returnValue(Promise.resolve());
+  test('should have a function that perform a search', () => {
+    sb.searchProjects = jest.fn().mockReturnValue(Promise.resolve());
     sb.filters = [{
       active: false,
       value: 1

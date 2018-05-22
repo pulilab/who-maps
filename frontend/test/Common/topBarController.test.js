@@ -1,8 +1,6 @@
 import { default as TopBarController } from '../../src/Common/TopBar/TopBarController';
 import { $scope, $state, $ngRedux, EE } from '../testUtilities';
 
-/* global  it, describe, beforeEach, expect,  spyOn, Promise */
-
 let ac = {};
 
 describe('TopBarController', () => {
@@ -12,13 +10,13 @@ describe('TopBarController', () => {
     ac.EE = EE;
   });
 
-  it('should have a watcher function', () => {
-    spyOn(ac, 'setAxisDomain');
+  test('should have a watcher function', () => {
+    jest.spyOn(ac, 'setAxisDomain');
     ac.watchers();
     expect(ac.setAxisDomain).toHaveBeenCalled();
   });
 
-  it('should have a function that set domain and axis when appropriate', () => {
+  test('should have a function that set domain and axis when appropriate', () => {
     const params = {
       axisId: null,
       domainId: null

@@ -1,8 +1,6 @@
 import EditProfileController from '../../src/Common/EditProfile/EditProfileController';
 import { $state, $scope, $ngRedux, toast } from '../testUtilities';
 
-/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
-
 let sc = {};
 
 describe('EditProfileController', () => {
@@ -11,7 +9,14 @@ describe('EditProfileController', () => {
     sc.scope = $scope(sc);
     sc.newProjectForm = {
       $valid: true,
-      $setValidity: jasmine.createSpy('$setValidity')
+      $setValidity: jest.fn()
     };
+  });
+
+  test('onInit', () => {
+    sc.handleDataLoad = jest.fn();
+    sc.$onInit();
+    expect(sc.handleDataLoad).toHaveBeenCalled();
+    expect(sc.dataLoaded).toBe(false);
   });
 });
