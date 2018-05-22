@@ -2,8 +2,6 @@ import ImplementationOverviewController from '../../src/Project/ImplementationOv
 import { $scope, $element, $ngRedux } from '../testUtilities';
 import * as CountriesModule from '../../src/store/modules/countries';
 
-/* global  it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
-
 let controller = null;
 
 const structure = {
@@ -16,11 +14,11 @@ describe('ImplementationOverview', () => {
     controller.scope = $scope(controller);
   });
 
-  it('mapData fn.', () => {
-    spyOn(CountriesModule, 'getCurrentCountryFirstSubLevel').and.returnValue(1);
-    spyOn(CountriesModule, 'getCurrentCountrySecondSubLevel').and.returnValue(2);
-    spyOn(CountriesModule, 'getCurrentCountryFacilityList').and.returnValue(3);
-    spyOn(CountriesModule, 'getCurrentCountrySubLevelNames').and.returnValue([1, 2]);
+  test('mapData fn.', () => {
+    jest.spyOn(CountriesModule, 'getCurrentCountryFirstSubLevel').mockReturnValue(1);
+    jest.spyOn(CountriesModule, 'getCurrentCountrySecondSubLevel').mockReturnValue(2);
+    jest.spyOn(CountriesModule, 'getCurrentCountryFacilityList').mockReturnValue(3);
+    jest.spyOn(CountriesModule, 'getCurrentCountrySubLevelNames').mockReturnValue([1, 2]);
     const result = controller.mapData({});
     expect(CountriesModule.getCurrentCountryFirstSubLevel).toHaveBeenCalled();
     expect(CountriesModule.getCurrentCountrySecondSubLevel).toHaveBeenCalled();
@@ -31,32 +29,32 @@ describe('ImplementationOverview', () => {
     expect(result.facilities).toEqual(3);
   });
 
-  it('should have an on init function', () => {
-    spyOn(controller, 'watchers');
-    spyOn(controller, 'defaultOnInit');
+  test('should have an on init function', () => {
+    jest.spyOn(controller, 'watchers').mockReturnValue(undefined);
+    jest.spyOn(controller, 'defaultOnInit').mockReturnValue(undefined);
     controller.structure = structure;
     controller.onInit();
     expect(controller.watchers).toHaveBeenCalled();
     expect(controller.defaultOnInit).toHaveBeenCalled();
   });
 
-  it('onDestroy fn.', () => {
-    controller.unsubscribe = jasmine.createSpy('unsubscribe');
-    controller.defaultOnDestroy = jasmine.createSpy('defaultOnDestroy');
+  test('onDestroy fn.', () => {
+    controller.unsubscribe = jest.fn();
+    controller.defaultOnDestroy = jest.fn();
     controller.onDestroy();
     expect(controller.unsubscribe).toHaveBeenCalled();
     expect(controller.defaultOnDestroy).toHaveBeenCalled();
   });
 
-  it('watchers fn.', () => {
+  test('watchers fn.', () => {
     controller.project = {};
     controller.project.platforms = [];
     controller.structure = {};
     controller.structure.technology_platform = [];
-    spyOn(controller, 'setAvailableDictOptions');
-    spyOn(controller, 'clearDistrict');
-    spyOn(controller, 'addClearOption');
-    spyOn(controller, 'initializeFacilityList');
+    jest.spyOn(controller, 'setAvailableDictOptions').mockReturnValue(undefined);
+    jest.spyOn(controller, 'clearDistrict').mockReturnValue(undefined);
+    jest.spyOn(controller, 'addClearOption').mockReturnValue(undefined);
+    jest.spyOn(controller, 'initializeFacilityList').mockReturnValue(undefined);
     controller.watchers();
     expect(controller.scope.$watch).toHaveBeenCalled();
     expect(controller.scope.$watchGroup).toHaveBeenCalled();
@@ -66,7 +64,7 @@ describe('ImplementationOverview', () => {
     expect(controller.initializeFacilityList).toHaveBeenCalled();
   });
 
-  it('addClearOption fn', () => {
+  test('addClearOption fn', () => {
     let district = null;
     controller.addClearOption(district);
     expect(district).toEqual(null);
@@ -99,7 +97,7 @@ describe('ImplementationOverview', () => {
     expect(district[0].available[0]).toEqual('Clear selection');
   });
 
-  it('clearDistrict Fn.', () => {
+  test('clearDistrict Fn.', () => {
     let coverage = null;
     controller.clearDistrict(coverage);
     expect(coverage).toEqual(null);
@@ -134,7 +132,7 @@ describe('ImplementationOverview', () => {
     });
   });
 
-  it('removeUnavailableDistricts fn', () => {
+  test('removeUnavailableDistricts fn', () => {
     controller.project = {};
     let districts = null;
     controller.removeUnavailableDistricts(districts);
@@ -161,7 +159,7 @@ describe('ImplementationOverview', () => {
     expect(controller.project.coverage).toEqual([{ district: undefined }]);
   });
 
-  it('should have a mapping fn for interventions', () => {
+  test('should have a mapping fn for interventions', () => {
     const health_focus_areas = [
       {
         name: 'a',
