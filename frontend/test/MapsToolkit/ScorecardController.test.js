@@ -1,14 +1,16 @@
 import ScorecardController from '../../src/MapsToolkit/Scorecard/ScorecardController';
-import { $scope, $state, $ngRedux } from '../testUtilities';
+import { $scope, $state, $ngRedux, EE } from '../testUtilities';
 import * as ToolkitModule from '../../src/store/modules/toolkit';
-
-/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise, jasmine */
-
+import * as webpackRequires from '../../src/webpackRequires';
 let sc = {};
 
 describe('ScorecardController', () => {
   beforeEach(() => {
-    spyOn(ScorecardController.prototype, 'onInit').and.callThrough();
+    const webpackFn = () => (1);
+    webpackFn.keys = () => ['something.icon'];
+    jest.spyOn(webpackRequires, 'loadScorecardImages').mockReturnValue(webpackFn);
+
+    jest.spyOn(ScorecardController.prototype, 'onInit');
     sc = ScorecardController.scorecardFactory()({}, $state(), $ngRedux);
     sc.scope = $scope(sc);
     sc.state.params = {
@@ -16,12 +18,13 @@ describe('ScorecardController', () => {
       domainId: 0,
       appName: 1
     };
+    sc.EE = EE;
     sc.$onInit();
   });
 
   it('mapData fn.', () => {
-    spyOn(ToolkitModule, 'getStructure').and.returnValue(1);
-    spyOn(ToolkitModule, 'getToolkitData').and.returnValue([1]);
+    jest.spyOn(ToolkitModule, 'getStructure').mockReturnValue(1);
+    jest.spyOn(ToolkitModule, 'getToolkitData').mockReturnValue([1]);
     const result = sc.mapData({});
     expect(result.structure).toBe(1);
     expect(result.rawData[0]).toBe(1);
@@ -29,8 +32,8 @@ describe('ScorecardController', () => {
   });
 
   it('onInit fn. ', () => {
-    spyOn(sc, 'importIconTemplates');
-    spyOn(sc, 'watchers');
+    jest.spyOn(sc, 'importIconTemplates');
+    jest.spyOn(sc, 'watchers');
 
     sc.onInit();
 
@@ -40,12 +43,9 @@ describe('ScorecardController', () => {
   });
 
   it('onDestroy fn.', () => {
-    sc.unsubscribe = jasmine.createSpy('unsubscribe');
-    spyOn(sc.EE, 'removeListener');
-
+    sc.unsubscribe = jest.fn();
     sc.onDestroy();
-
     expect(sc.unsubscribe).toHaveBeenCalled();
-    expect(sc.EE.removeListener).toHaveBeenCalledWith('mapsAxisChange', jasmine.any(Function), jasmine.any(Object));
+    expect(sc.EE.removeListener).toHaveBeenCalledWith('mapsAxisChange', expect.any(Function), expect.any(Object));
   });
 });

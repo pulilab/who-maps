@@ -2,14 +2,12 @@ import AxisFooterController from '../../src/MapsToolkit/AxisFooter/AxisFooterCon
 import EventEmitter from 'eventemitter3';
 import { $scope, $state } from '../testUtilities';
 
-/* global it, describe, expect, beforeEach, spyOn, Promise */
-
 let afc = {};
 
 describe('AxisFooterController', () => {
   beforeEach(() => {
     window.EE = new EventEmitter();
-    spyOn(AxisFooterController.prototype, 'onInit').and.callThrough();
+    jest.spyOn(AxisFooterController.prototype, 'onInit');
     afc = AxisFooterController.axisFooterFactory()({}, $state());
     afc.scope = $scope(afc);
     afc.state.params = {
@@ -19,7 +17,7 @@ describe('AxisFooterController', () => {
     afc.axes = require('./mockData.json');
   });
 
-  it('should have an initialization function that get fired through $onInit', () => {
+  test('should have an initialization function that get fired through $onInit', () => {
     afc.$onInit();
     expect(afc.onInit).toHaveBeenCalled();
     expect(afc.activeAxis).toBe(0);
@@ -30,14 +28,14 @@ describe('AxisFooterController', () => {
     expect(p.axisName).toBeDefined();
   });
 
-  it('should have a function that generates an array of classes', () => {
+  test('should have a function that generates an array of classes', () => {
     afc.$onInit();
     const c = afc.classGenerator(afc.processedAxis[0]);
     expect(c).toBe('axis_1 notActive');
   });
 
-  it('should have a function that emit a mapsAxisChange event', () => {
-    spyOn(window.EE, 'emit');
+  test('should have a function that emit a mapsAxisChange event', () => {
+    jest.spyOn(window.EE, 'emit');
     afc.changeAxis({ isActive: false, id: 0 });
     expect(window.EE.emit).toHaveBeenCalledWith('mapsAxisChange', 0);
     afc.changeAxis({ isActive: true, id: 0 });
