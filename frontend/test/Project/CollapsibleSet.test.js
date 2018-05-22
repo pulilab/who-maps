@@ -1,6 +1,5 @@
 import CollapsibleSet from '../../src/Project/CollapsibleSet';
-import { $scope } from '../testUtilities';
-import EventEmitter from 'eventemitter3';
+import { $scope, EE } from '../testUtilities';
 
 let controller = {};
 
@@ -12,7 +11,7 @@ el.appendChild(projectSection);
 window.document.body.appendChild(el);
 const element = [el];
 
-window.EE = new EventEmitter();
+window.EE = EE;
 
 const timeoutFunc = window.setTimeout;
 
