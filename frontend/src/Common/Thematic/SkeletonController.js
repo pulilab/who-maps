@@ -1,4 +1,4 @@
-
+import { loadSkeletonImages, loadSkeletonStatic } from '../../webpackRequires';
 class SkeletonController {
   constructor ($scope, $interpolate, $anchorScroll, data, axis, domain, icons) {
     this.scope = $scope;
@@ -22,7 +22,7 @@ class SkeletonController {
   importImages () {
     // Import the whole folder in an collection of string templates, needed for proper webpack optimizations
     const templates = {};
-    const templateRequire = require.context('./images/', true, /\.svg$/);
+    const templateRequire = loadSkeletonImages();
     templateRequire.keys().forEach((item) => {
       const key = item.split('.')[1].replace('/', '');
       templates[key] = templateRequire(item);
@@ -38,7 +38,7 @@ class SkeletonController {
       }
     };
     const templates = {};
-    const templateRequire = require.context('./static/', true, /\.html$/);
+    const templateRequire = loadSkeletonStatic();
     templateRequire.keys().forEach((item) => {
       templates[item.slice(2)] = this.interpolate(templateRequire(item))(scope);
     });
