@@ -4453,9 +4453,15 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
 
-follow-redirects@^1.0.0, follow-redirects@^1.2.3, follow-redirects@^1.2.5:
+follow-redirects@^1.0.0, follow-redirects@^1.2.3:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.1.tgz#d8120f4518190f55aac65bb6fc7b85fcd666d6aa"
+  dependencies:
+    debug "^3.1.0"
+
+follow-redirects@^1.2.5:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.0.tgz#234f49cf770b7f35b40e790f636ceba0c3a0ab77"
   dependencies:
     debug "^3.1.0"
 
@@ -9644,7 +9650,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.0"
     tough-cookie ">=2.3.3"
 
-request@2, request@^2.81.0, request@^2.83.0:
+request@2, request@^2.81.0:
   version "2.86.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.86.0.tgz#2b9497f449b0a32654c081a5cf426bbfb5bf5b69"
   dependencies:
@@ -9696,6 +9702,31 @@ request@2.81.0:
     tough-cookie "~2.3.0"
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
+
+request@^2.83.0:
+  version "2.87.0"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.87.0.tgz#32f00235cd08d482b4d0d68db93a829c0ed5756e"
+  dependencies:
+    aws-sign2 "~0.7.0"
+    aws4 "^1.6.0"
+    caseless "~0.12.0"
+    combined-stream "~1.0.5"
+    extend "~3.0.1"
+    forever-agent "~0.6.1"
+    form-data "~2.3.1"
+    har-validator "~5.0.3"
+    http-signature "~1.2.0"
+    is-typedarray "~1.0.0"
+    isstream "~0.1.2"
+    json-stringify-safe "~5.0.1"
+    mime-types "~2.1.17"
+    oauth-sign "~0.8.2"
+    performance-now "^2.1.0"
+    qs "~6.5.1"
+    safe-buffer "^5.1.1"
+    tough-cookie "~2.3.3"
+    tunnel-agent "^0.6.0"
+    uuid "^3.1.0"
 
 request@~2.79.0:
   version "2.79.0"
@@ -11575,8 +11606,8 @@ vue-custom-element@^2.0.0:
   resolved "https://registry.yarnpkg.com/vue-custom-element/-/vue-custom-element-2.1.0.tgz#bf1b8a031d60cdd43055ecbc4f70726aa904bdbc"
 
 vue-django-feedback@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/vue-django-feedback/-/vue-django-feedback-1.3.1.tgz#865bbe0655a491c18088ddb317fffc4e41c5e079"
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/vue-django-feedback/-/vue-django-feedback-1.3.2.tgz#370013dbbfc71618089e318953bc0fe6dbebe1e5"
   dependencies:
     axios "^0.17.1"
     document-register-element "^1.7.2"
