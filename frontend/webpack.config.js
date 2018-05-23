@@ -51,8 +51,7 @@ const config = {
       name: 'vendor',
       minChunks: 2
     },
-    noEmitOnErrors: true,
-    concatenateModules: true
+    noEmitOnErrors: true
   },
   module: {
     rules: [
