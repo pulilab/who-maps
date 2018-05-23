@@ -1,24 +1,23 @@
 import SystemController from '../../src/App/SystemController';
 import * as UserModel from '../../src/store/modules/user';
-import { $scope, $state, $ngRedux } from '../testUtilities';
-
-/* global it, describe, beforeEach, expect, jasmine, spyOn, Promise */
+import { $scope, $state, $ngRedux, EE } from '../testUtilities';
 
 let ac = {};
 
 describe('SystemController', () => {
   beforeEach(() => {
-    ac = SystemController.systemControllerFactory()($state, $scope, $ngRedux);
+    ac = SystemController.systemControllerFactory()($state, {}, $ngRedux);
+    ac.scope = $scope(ac);
+    ac.EE = EE;
   });
 
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(SystemController.systemControllerFactory).toBeDefined();
-    const onSpot = SystemController.systemControllerFactory()($state, $scope, $ngRedux);
+    const onSpot = SystemController.systemControllerFactory()($state, {}, $ngRedux);
     expect(onSpot.constructor.name).toBe(ac.constructor.name);
   });
 
-  it('has a constructor, that defines 7 keys', () => {
-    expect(ac.EE).toBeDefined();
+  test('has a constructor, that defines 7 keys', () => {
     expect(ac.state).toBeDefined();
     expect(ac.scope).toBeDefined();
     expect(ac.unsubscribe).toBeDefined();
@@ -26,8 +25,8 @@ describe('SystemController', () => {
     expect(ac.$onDestroy).toBeDefined();
   });
 
-  it('maps state', () => {
-    spyOn(UserModel, 'getProfile').and.returnValue('PROFILE'); ;
+  test('maps state', () => {
+    jest.spyOn(UserModel, 'getProfile').mockReturnValue('PROFILE'); ;
     const mockState = { unnecessary_key: 'ASDF', user: {} };
     const mappedState = ac.mapState(mockState);
     expect(Object.keys(mappedState).length).toBe(4);
@@ -35,27 +34,27 @@ describe('SystemController', () => {
     expect(UserModel.getProfile).toHaveBeenCalled();
   });
 
-  it('has onInit fn.', () => {
-    spyOn(ac, 'watchers');
+  test('has onInit fn.', () => {
+    jest.spyOn(ac, 'watchers').mockReturnValue(undefined);
     ac.$onInit();
     expect(ac.watchers).toHaveBeenCalled();
   });
 
-  it('has onDestroy fn.', () => {
+  test('has onDestroy fn.', () => {
     expect(typeof ac.$onDestroy).toBe('function');
-    spyOn(ac, 'unsubscribe');
+    jest.spyOn(ac, 'unsubscribe');
     ac.$onDestroy();
     expect(ac.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
-  it('has watchers fn.', () => {
+  test('has watchers fn.', () => {
     ac.state.current = { name: 'NAME' };
     let a, b;
     ac.scope.$watch = (aa, bb) => {
       a = aa;
       b = bb;
     };
-    spyOn(ac.scope, '$watch').and.callThrough();
+    jest.spyOn(ac.scope, '$watch');
 
     ac.watchers();
 
@@ -69,12 +68,12 @@ describe('SystemController', () => {
     expect(ac.showCountryTopBar).toBe(false);
   });
 
-  it('has hasProfile fn.', () => {
+  test('has hasProfile fn.', () => {
     ac.userProfile = 'USERPROFILE';
     expect(ac.hasProfile()).toBe('USERPROFILE');
   });
 
-  it('proxies $mdOpenMenu event', () => {
+  test('proxies $mdOpenMenu event', () => {
     const $mdOpenMenu = jasmine.createSpy('$mdOpenMenu');
     ac.openMenu($mdOpenMenu, 'EVENT');
     expect($mdOpenMenu).toHaveBeenCalledWith('EVENT');

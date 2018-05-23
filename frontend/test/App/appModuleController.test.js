@@ -1,8 +1,6 @@
 import AppModuleController from '../../src/App/AppModuleController';
 import { $scope, $state, dialog, $ngRedux, gettextCatalog } from '../testUtilities';
 
-/* global it, describe, beforeEach, expect, spyOn, Promise */
-
 let ac = {};
 
 describe('AppModuleController', () => {
@@ -10,13 +8,13 @@ describe('AppModuleController', () => {
     ac = AppModuleController.appControllerFactory()($state, $scope, {}, dialog, $ngRedux, gettextCatalog);
   });
 
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(AppModuleController.appControllerFactory).toBeDefined();
     const onSpot = AppModuleController.appControllerFactory()($state, $scope, {}, dialog, $ngRedux, gettextCatalog);
     expect(onSpot.constructor.name).toBe(ac.constructor.name);
   });
 
-  it('has a constructor, that defines 7 keys', () => {
+  test('has a constructor, that defines 7 keys', () => {
     expect(ac.state).toBeDefined();
     expect(ac.scope).toBeDefined();
     expect(ac.$mdDialog).toBeDefined();
@@ -26,7 +24,7 @@ describe('AppModuleController', () => {
     expect(ac.unsubscribe).toBeDefined();
   });
 
-  it('maps state', () => {
+  test('maps state', () => {
     const mockState = { user: 'USER', projects: 'PROJECTS', unnecessary_key: 'ASDF' };
     const mappedState = ac.mapState(mockState);
     expect(Object.keys(mappedState).length).toBe(4);
@@ -34,8 +32,8 @@ describe('AppModuleController', () => {
     expect(mappedState.projects).toBe('PROJECTS');
   });
 
-  it('has onInit fn.', () => {
-    spyOn(ac, 'watchers');
+  test('has onInit fn.', () => {
+    jest.spyOn(ac, 'watchers').mockReturnValue(undefined);
     ac.state.params = { appName: 'APPNAME' };
     ac.state.current = { name: 'NAME' };
 
@@ -46,14 +44,14 @@ describe('AppModuleController', () => {
     expect(ac.showCountryTopBar).toBe(false);
   });
 
-  it('has onDestroy fn.', () => {
+  test('has onDestroy fn.', () => {
     expect(typeof ac.$onDestroy).toBe('function');
-    spyOn(ac, 'unsubscribe');
+    jest.spyOn(ac, 'unsubscribe').mockReturnValue(undefined);
     ac.$onDestroy();
     expect(ac.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
-  it('has computeShowSubBar fn.', () => {
+  test('has computeShowSubBar fn.', () => {
     ac.showCountryTopBar = false;
     ac.user = true;
     ac.projects = [0, 1, 2];
@@ -67,15 +65,15 @@ describe('AppModuleController', () => {
     expect(no).toBe(false);
   });
 
-  it('has watchers fn.', () => {
+  test('has watchers fn.', () => {
     ac.state.current = { name: 'NAME' };
     let a, b;
     ac.scope.$watch = (aa, bb) => {
       a = aa;
       b = bb;
     };
-    spyOn(ac.scope, '$watch').and.callThrough();
-    spyOn(ac, 'computeShowSubBar');
+    jest.spyOn(ac.scope, '$watch');
+    jest.spyOn(ac, 'computeShowSubBar').mockReturnValue(undefined);
 
     ac.watchers();
 

@@ -1,7 +1,6 @@
 import AssessmentModuleController from '../../src/Assessment/AssessmentModuleController';
 import { $scope, $state, $timeout, $ngRedux, EE } from '../testUtilities';
 
-/* global , it, describe, expect, , beforeEach, jasmine, Promise */
 let vm = {};
 
 describe('AssessmentModuleController', () => {
@@ -14,29 +13,29 @@ describe('AssessmentModuleController', () => {
     };
   });
 
-  it('is defined', () => {
+  test('is defined', () => {
     expect(vm).toBeDefined();
     expect(typeof vm).toBe('object');
   });
 
-  it('emits an event on window resize', () => {
+  test('emits an event on window resize', () => {
     vm.resizeEvent();
     vm.resizedw();
     expect(vm.EE.emit).toHaveBeenCalledWith('dashResized');
   });
 
-  it('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
-    vm.snapShotProject = jasmine.createSpy('snapShotProject');
+  test('\'s .snapShot fn. reaches out to the save snapshot via service', () => {
+    vm.snapShotProject = jest.fn();
     vm.snapShot();
     expect(vm.snapShotProject).toHaveBeenCalled();
   });
 
-  it('handleChangeDomain fn.', () => {
+  test('handleChangeDomain fn.', () => {
     vm.handleChangeDomain(1, 1);
     expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1, 'domainId': 1 });
   });
 
-  it('handleChangeAxis fn.', () => {
+  test('handleChangeAxis fn.', () => {
     vm.handleChangeAxis(1);
     expect(vm.state.go).toHaveBeenCalledWith('maps', { 'axisId': 1, 'domainId': 0 });
   });
