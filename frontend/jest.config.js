@@ -1,23 +1,32 @@
 module.exports = {
-  verbose: false,
+  verbose: true,
   bail: false,
   clearMocks: true,
-  collectCoverage: false,
+  collectCoverage: true,
   collectCoverageFrom: [
-    '**/*.js'
+    'src/**/*.js'
   ],
-  coverageDirectory: 'coverage',
+  coverageDirectory: '.coverage/',
   coverageThreshold: {
     global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100
+      branches: 40,
+      functions: 40,
+      lines: 40,
+      statements: 40
+    },
+    'src/store/': {
+      branches: 65,
+      functions: 65,
+      lines: 65,
+      statements: 65
     }
   },
   transform: {
     '^.+\\.js$': 'babel-jest'
   },
+  transformIgnorePatterns: [
+    '/node_modules/(?!redux-async-thunk).+(js|jsx)$'
+  ],
   moduleFileExtensions: ['js'],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
