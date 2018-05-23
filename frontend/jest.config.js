@@ -1,6 +1,7 @@
 module.exports = {
   verbose: false,
-  bail: true,
+  bail: false,
+  clearMocks: true,
   collectCoverage: false,
   collectCoverageFrom: [
     '**/*.js'
