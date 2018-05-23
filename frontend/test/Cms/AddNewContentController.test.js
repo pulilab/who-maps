@@ -1,6 +1,5 @@
 import { default as AddNewContentController, AddNewContentDialog } from '../../src/Cms/AddNewContent/AddNewContentController';
 import { dialog, $scope, toast, $ngRedux } from '../testUtilities';
-/* global it, describe, expect, beforeEach, afterEach, jasmine, Promise */
 
 let controller = null;
 
@@ -11,7 +10,7 @@ describe('AddNewContentController', () => {
     controller = AddNewContentController.factory()();
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(AddNewContentController.factory).toBeDefined();
     const onSpot = AddNewContentController.factory()();
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
@@ -23,19 +22,19 @@ describe('AddNewContentDialog', () => {
     controller = AddNewContentDialog.factory()($scope(controller), dialog, upload, toast, $ngRedux);
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(AddNewContentDialog.factory).toBeDefined();
     const onSpot = AddNewContentDialog.factory()($scope(controller), dialog, upload, toast, $ngRedux);
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should have a cancel function', () => {
+  test('should have a cancel function', () => {
     controller.cancel();
     expect(controller.dialog.cancel).toHaveBeenCalled();
   });
 
-  it('should have a submit function', () => {
-    controller.saveOrUpdateContent = jasmine.createSpy('saveOrUpdateContent').and.returnValue(Promise.resolve());
+  test('should have a submit function', () => {
+    controller.saveOrUpdateContent = jest.fn().mockReturnValue(Promise.resolve());
     controller.form = {
       $valid: false
     };
@@ -58,12 +57,12 @@ describe('AddNewContentDialog', () => {
     expect(controller.dialog.hide).toHaveBeenCalledTimes(2);
   });
 
-  it('should have a beforeChange function that disable the submit', () => {
+  test('should have a beforeChange function that disable the submit', () => {
     expect(controller.disableSubmit).toBeFalsy();
     controller.beforeImageSelect();
     expect(controller.disableSubmit).toBeTruthy();
   });
-  it('should have an onChange function that enable the submit', () => {
+  test('should have an onChange function that enable the submit', () => {
     controller.beforeImageSelect();
     expect(controller.disableSubmit).toBeTruthy();
     controller.imageSelected();

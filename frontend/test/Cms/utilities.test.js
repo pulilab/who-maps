@@ -1,11 +1,9 @@
 import utilities from '../../src/Cms/utilities';
 import * as mom from 'moment';
 
-/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
-
 describe('CMS Utilities', () => {
-  it('should have a prettifyDate fn', () => {
-    spyOn(mom, 'default').and.callThrough();
+  test('should have a prettifyDate fn', () => {
+    jest.spyOn(mom, 'default');
     const objWithDate = {
       created: new Date('2017-01-01')
     };
@@ -16,7 +14,7 @@ describe('CMS Utilities', () => {
     expect(result).toBe(expectedString);
   });
 
-  it('should have an itemType Fn.', () => {
+  test('should have an itemType Fn.', () => {
     const types = [null, 'Resources', 'Tips & Considerations', 'Experiences'];
     for (let i = 1; i < 4; i += 1) {
       const item = {
@@ -29,7 +27,7 @@ describe('CMS Utilities', () => {
     expect(result).toBe('');
   });
 
-  it('should have a levenshtein Fn.', () => {
+  test('should have a levenshtein Fn.', () => {
     let result = utilities.levenshtein('lol', 'l');
     expect(result).toBe(2);
     result = utilities.levenshtein('lol', '');
@@ -38,11 +36,11 @@ describe('CMS Utilities', () => {
     expect(result).toBe(1);
   });
 
-  it('should have a fn that normalize a name', () => {
+  test('should have a fn that normalize a name', () => {
     const test = 'a & b';
     expect(utilities.normalizeName(test)).toBe('a-and-b');
   });
-  it('should have a fn that add target="_blank" to every valid <a> tag', () => {
+  test('should have a fn that add target="_blank" to every valid <a> tag', () => {
     let result = utilities.postProcessHtml('<div></div>');
     expect(result).toBe('<div></div>');
     result = utilities.postProcessHtml('<a></a>');

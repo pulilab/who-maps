@@ -1,8 +1,6 @@
 import PlanningAndGuidanceController from '../../src/Cms/PlanningAndGuidance/PlanningAndGuidanceController';
 import { $ngRedux, $scope, $state } from '../testUtilities';
 
-/* global it, describe, expect, beforeEach, afterEach, spyOn, Promise */
-
 let controller = null;
 
 describe('PlanningAndGuidanceController', () => {
@@ -11,26 +9,26 @@ describe('PlanningAndGuidanceController', () => {
     controller.scope = $scope(controller);
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(PlanningAndGuidanceController.factory).toBeDefined();
     const onSpot = PlanningAndGuidanceController.factory()($scope(controller), $state(), $ngRedux);
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
-  it('should have an on init function', () => {
-    spyOn(controller, 'createFilters');
-    spyOn(controller, 'watchers');
+  test('should have an on init function', () => {
+    jest.spyOn(controller, 'createFilters').mockReturnValue(undefined);
+    jest.spyOn(controller, 'watchers').mockReturnValue(undefined);
     controller.onInit();
     expect(controller.createFilters).toHaveBeenCalled();
     expect(controller.watchers).toHaveBeenCalled();
   });
 
-  it('should have anDestroy fn', () => {
-    spyOn(controller, 'unsubscribe');
+  test('should have anDestroy fn', () => {
+    jest.spyOn(controller, 'unsubscribe');
     controller.onDestroy();
     expect(controller.unsubscribe).toHaveBeenCalled();
   });
 
-  it('should have a function that create a filter object for the UI', () => {
+  test('should have a function that create a filter object for the UI', () => {
     controller.axes = [
       {
         name: 1,
@@ -49,12 +47,12 @@ describe('PlanningAndGuidanceController', () => {
     expect(controller.filters[0].domains[0].open).toBeFalsy();
   });
 
-  it('should have a function that activate the tabs', () => {
+  test('should have a function that activate the tabs', () => {
     controller.activate('LOL');
     expect(controller.active).toBe('LOL');
   });
 
-  it('should have a function that toggle the open status', () => {
+  test('should have a function that toggle the open status', () => {
     const group = {
       open: false
     };
@@ -64,7 +62,7 @@ describe('PlanningAndGuidanceController', () => {
     expect(group.open).toBeFalsy();
   });
 
-  it('should have a function that toggle the main category and all the sub ones', () => {
+  test('should have a function that toggle the main category and all the sub ones', () => {
     const group = {
       selected: true,
       open: false,

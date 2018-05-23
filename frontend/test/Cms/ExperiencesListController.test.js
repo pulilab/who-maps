@@ -1,8 +1,6 @@
 import ExperienceListController from '../../src/Cms/ExperiencesList/ExperiencesListController';
 import { $scope, $ngRedux, angularForm } from '../testUtilities';
 
-/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
-
 let controller = null;
 
 describe('ExperienceListController', () => {
@@ -13,19 +11,19 @@ describe('ExperienceListController', () => {
     controller.form = angularForm;
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(ExperienceListController.factory).toBeDefined();
     const onSpot = ExperienceListController.factory()($scope(controller), $ngRedux);
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should have an on init fn', () => {
-    spyOn(controller, 'watchers');
+  test('should have an on init fn', () => {
+    jest.spyOn(controller, 'watchers').mockReturnValue(undefined);
     controller.onInit();
     expect(controller.watchers).toHaveBeenCalled();
   });
 
-  it('should have a watcher function', () => {
+  test('should have a watcher function', () => {
     controller.data = [{ domain: 1, type: 3 }, { domain: 2, type: 3 }, { domain: 1, type: 2 }, { domain: 2, type: 2 }];
     controller.domain = {
       id: 1
@@ -34,8 +32,8 @@ describe('ExperienceListController', () => {
     expect(controller.experiences.length).toBe(1);
   });
 
-  it('should have a saveExperience fn', async (done) => {
-    controller.saveOrUpdateContent = jasmine.createSpy('saveOrUpdateContent').and.returnValue(Promise.resolve());
+  test('should have a saveExperience fn', async (done) => {
+    controller.saveOrUpdateContent = jest.fn().mockReturnValue(Promise.resolve());
     controller.newExperience = {};
     await controller.saveExperience();
     expect(controller.saveOrUpdateContent).toHaveBeenCalled();

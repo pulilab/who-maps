@@ -1,8 +1,6 @@
 import { default as DetailElementController, DetailElementDialog } from '../../src/Cms/DetailElement/DetailElementController';
 import { dialog, $scope, $ngRedux } from '../testUtilities';
 
-/* global it, describe, expect, beforeEach, afterEach, jasmine, spyOn, Promise */
-
 let controller = null;
 
 describe('DetailElementController', () => {
@@ -11,23 +9,23 @@ describe('DetailElementController', () => {
     controller.scope = $scope(controller);
   });
 
-  it('should have a scroll-to-comment fn', () => {
-    spyOn(window.document, 'querySelector').and.returnValue({
-      scrollIntoView: jasmine.createSpy('scrollIntoView')
+  test('should have a scroll-to-comment fn', () => {
+    jest.spyOn(window.document, 'querySelector').mockReturnValue({
+      scrollIntoView: jest.fn()
     });
     controller.scrollToAddNewComment(true);
     controller.scrollToAddNewComment(false);
     expect(window.document.querySelector).toHaveBeenCalledTimes(1);
   });
 
-  it('should have a showDialog function', () => {
-    spyOn(controller, 'scrollToAddNewComment');
+  test('should have a showDialog function', () => {
+    jest.spyOn(controller, 'scrollToAddNewComment');
     controller.showDetailDialog();
     expect(controller.dialog.show).toHaveBeenCalled();
     expect(controller.scrollToAddNewComment).toHaveBeenCalled();
   });
 
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(DetailElementController.factory).toBeDefined();
     const onSpot = DetailElementController.factory()();
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
@@ -39,44 +37,44 @@ describe('DetailElementDialogController', () => {
     controller = DetailElementDialog.factory({ id: 1 })($scope(controller), dialog, $ngRedux);
   });
 
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(DetailElementDialog.factory).toBeDefined();
     const onSpot = DetailElementDialog.factory()($scope(controller), dialog, $ngRedux);
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should have an init function', () => {
-    spyOn(controller, 'watchers');
+  test('should have an init function', () => {
+    jest.spyOn(controller, 'watchers');
     controller.init();
     expect(controller.watchers).toHaveBeenCalled();
     expect(controller.editMode).toBe(false);
   });
 
-  it('should have a watchers fn', () => {
-    spyOn(controller, 'checkExistence');
+  test('should have a watchers fn', () => {
+    jest.spyOn(controller, 'checkExistence');
     controller.watchers();
     expect(controller.checkExistence).toHaveBeenCalled();
   });
 
-  it('should have a function that close the dialog if the element is not in the model anymore', () => {
+  test('should have a function that close the dialog if the element is not in the model anymore', () => {
     controller.checkExistence([{ id: 1 }]);
     controller.checkExistence([{ id: 2 }]);
     expect(controller.dialog.cancel).toHaveBeenCalled();
   });
 
-  it('should have a scroll-to-comment fn', () => {
-    spyOn(window.document, 'querySelector').and.returnValue({
-      scrollIntoView: jasmine.createSpy('scrollIntoView')
+  test('should have a scroll-to-comment fn', () => {
+    jest.spyOn(window.document, 'querySelector').mockReturnValue({
+      scrollIntoView: jest.fn()
     });
     controller.scrollToAddNewComment();
     expect(window.document.querySelector).toHaveBeenCalled();
   });
 
-  it('should have a cancel fn', () => {
+  test('should have a cancel fn', () => {
     controller.cancel();
     expect(controller.dialog.cancel).toHaveBeenCalled();
   });
-  it('should have and Edit fn', () => {
+  test('should have and Edit fn', () => {
     controller.content = { id: 1 };
     controller.edit();
     expect(controller.editMode).toBe(true);
@@ -89,8 +87,8 @@ describe('DetailElementDialogController', () => {
     expect(controller.modified.id).toBe(2);
   });
 
-  it('should have and Update fn', async (done) => {
-    controller.saveOrUpdateContent = jasmine.createSpy('saveOrUpdateContent').and.returnValue(Promise.resolve());
+  test('should have and Update fn', async (done) => {
+    controller.saveOrUpdateContent = jest.fn();
     controller.modified = { id: 1 };
     await controller.update();
     expect(controller.saveOrUpdateContent).toHaveBeenCalled();
@@ -98,7 +96,7 @@ describe('DetailElementDialogController', () => {
     done();
   });
 
-  it('should have a function that return true if the user is the author ', () => {
+  test('should have a function that return true if the user is the author ', () => {
     controller.userProfile = {
       id: 1
     };
@@ -111,10 +109,10 @@ describe('DetailElementDialogController', () => {
     expect(controller.isAuthor()).toBe(false);
   });
 
-  it('should have an addComment fn', async (done) => {
+  test('should have an addComment fn', async (done) => {
     controller.init();
     controller.newComment = {};
-    controller.addNewComment = jasmine.createSpy('addNewComment').and.returnValue(Promise.resolve());
+    controller.addNewComment = jest.fn();
     await controller.addComment();
     expect(controller.addNewComment).toHaveBeenCalled();
     expect(controller.newComment.text).toBe(false);

@@ -2,8 +2,6 @@ import DashboardWidgetController from '../../src/Cms/DashboardWidget/DashboardWi
 import { scores } from './mockData';
 import { $scope, $ngRedux } from '../testUtilities';
 
-/* global  it, describe, expect, beforeEach, afterEach, spyOn, Promise */
-
 let controller = {};
 
 describe('DashboardWidgetController', () => {
@@ -12,25 +10,24 @@ describe('DashboardWidgetController', () => {
     controller.scope = $scope(controller);
   });
 
-  it('should have a factory function', () => {
+  test('should have a factory function', () => {
     expect(DashboardWidgetController.factory).toBeDefined();
     const onSpot = DashboardWidgetController.factory()($scope(controller), $ngRedux);
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should have an onInit function', () => {
-    spyOn(controller, 'watchers');
+  test('should have an onInit function', () => {
+    jest.spyOn(controller, 'watchers');
     controller.$onInit();
     expect(controller.watchers).toHaveBeenCalled();
   });
 
-  it('should have a watcher function', () => {
-    const watcherSpy = spyOn(controller, 'watchers');
-    spyOn(controller, 'mapState');
+  test('should have a watcher function', () => {
+    jest.spyOn(controller, 'watchers');
+    jest.spyOn(controller, 'mapState').mockReturnValue(undefined);
     controller.$onInit();
-    watcherSpy.and.callThrough();
-    spyOn(controller, 'setDomainVariables');
-    spyOn(controller, 'splitType');
+    jest.spyOn(controller, 'setDomainVariables').mockReturnValue(undefined);
+    jest.spyOn(controller, 'splitType').mockReturnValue(undefined);
     controller.scores = [1];
     controller.currentDomain = 2;
     controller.watchers();
@@ -39,7 +36,7 @@ describe('DashboardWidgetController', () => {
     expect(controller.setDomainVariables).toHaveBeenCalled();
   });
 
-  it('should have a function that divide the data in it\'s category', () => {
+  test('should have a function that divide the data in it\'s category', () => {
     const data = [{ type: 1, domain: 1 }, { type: 1, domain: 2 }, { type: 2, domain: 1 }, { type: 3, domain: 1 }];
     controller.currentDomain = {
       id: 1,
@@ -51,7 +48,7 @@ describe('DashboardWidgetController', () => {
     expect(controller.experiences.length).toBe(1);
   });
 
-  it('should have a function that set the domain Variables', () => {
+  test('should have a function that set the domain Variables', () => {
     controller.setDomainVariables({ id: 1, name: 'Parameters of Scale', axis: 1, domain: 1 }, scores);
     expect(controller.axisColor).toBe('axis-1');
     expect(controller.domainIcon).toBe('domain-1');
@@ -59,8 +56,8 @@ describe('DashboardWidgetController', () => {
     expect(controller.domainScore).toBe(score);
   });
 
-  it('should have a next domain fn', () => {
-    spyOn(controller, 'watchers');
+  test('should have a next domain fn', () => {
+    jest.spyOn(controller, 'watchers').mockReturnValue(undefined);
     controller.domains = [{ id: 1 }, { id: 2 }];
     controller.currentDomain = controller.domains[0];
     controller.nextDomain();
@@ -71,8 +68,8 @@ describe('DashboardWidgetController', () => {
     expect(controller.currentDomain.id).toBe(controller.domains[0].id);
   });
 
-  it('should have a prev domain fn', () => {
-    spyOn(controller, 'watchers');
+  test('should have a prev domain fn', () => {
+    jest.spyOn(controller, 'watchers').mockReturnValue(undefined);
     controller.domains = [{ id: 1 }, { id: 2 }];
     controller.currentDomain = controller.domains[1];
     controller.prevDomain();

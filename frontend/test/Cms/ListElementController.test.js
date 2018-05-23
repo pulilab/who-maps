@@ -1,7 +1,5 @@
 import ListElementController from '../../src/Cms/ListElement/ListElementController';
 
-/* global  it, describe, expect, beforeEach, afterEach, Promise */
-
 let controller = null;
 
 describe('ListElementController', () => {
@@ -12,18 +10,18 @@ describe('ListElementController', () => {
     };
   });
 
-  it('should have a factory  function', () => {
+  test('should have a factory  function', () => {
     expect(ListElementController.factory).toBeDefined();
     const onSpot = ListElementController.factory()();
     expect(onSpot.constructor.name).toBe(controller.constructor.name);
   });
 
-  it('should import a prettifyDate fn. and a itemType fn', () => {
+  test('should import a prettifyDate fn. and a itemType fn', () => {
     expect(controller.prettifyDate).toBeDefined();
     expect(controller.itemType).toBeDefined();
   });
 
-  it('should have a fn that compose axis and domain name', () => {
+  test('should have a fn that compose axis and domain name', () => {
     controller.axisAndDomainName = {
       axisName: 'Groundwork',
       domainName: 'Parameters of Scale'
@@ -32,7 +30,7 @@ describe('ListElementController', () => {
     expect(result).toBe('Groundwork - Parameters of Scale');
   });
 
-  it('should have a fn that export class according to domains and axis', () => {
+  test('should have a fn that export class according to domains and axis', () => {
     controller.axisAndDomainName = {
       axisName: 'Groundwork',
       domainName: 'Parameters of Scale'
