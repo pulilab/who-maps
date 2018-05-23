@@ -7,8 +7,21 @@
     }],
     "stage-2"
   ],
+  "env": {
+    "test": {
+      "plugins": [
+        "dynamic-import-webpack",
+        "remove-webpack"
+      ]
+    },
+    "dev": {
+      "plugins": [
+        "dynamic-import-webpack",
+        "remove-webpack"
+      ]
+    }
+  },
   "plugins": [
-    "add-module-exports",
     "transform-runtime"
   ]
 }

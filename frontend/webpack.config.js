@@ -62,15 +62,7 @@ const config = {
           path.resolve(__dirname, 'src')
         ],
         use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              plugins: [
-                'dynamic-import-webpack',
-                'remove-webpack'
-              ]
-            }
-          },
+          'babel-loader',
           'eslint-loader'
         ]
       },
