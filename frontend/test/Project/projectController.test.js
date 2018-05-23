@@ -20,7 +20,6 @@ describe('ProjectController', () => {
     };
     sc.EE = EE;
     sc.$onInit();
-    jest.restoreAllMocks();
   });
 
   test('should have a factory  fn.', () => {

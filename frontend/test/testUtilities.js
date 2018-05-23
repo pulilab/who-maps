@@ -60,7 +60,7 @@ const EE = {
 };
 
 const $ngRedux = {
-  connect: jest.fn().mockReturnValue(() => jest.fn()),
+  connect: jest.fn().mockReturnValue(() => jest.fn().mockReturnValue('unsubscribeFn')),
   dispatch: jest.fn().mockImplementation(toCall => toCall()),
   getState: jest.fn(),
   subscribe: jest.fn()
