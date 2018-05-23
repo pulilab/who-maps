@@ -3,19 +3,19 @@ import _readOnlyTemplate from './ReadOnlyGeneralOverview.html';
 import ProjectDetailsController from './GeneralOverviewController';
 
 const component = {
-    template: _template,
-    controller: ProjectDetailsController.factory(),
-    controllerAs: 'vm',
-    name: 'generalOverview',
-    bindings: {
-        form: '<',
-        project: '<',
-        structure: '<',
-        team: '<',
-        viewers: '<',
-        users: '<',
-        activateValidation: '<'
-    }
+  template: _template,
+  controller: ProjectDetailsController.factory(),
+  controllerAs: 'vm',
+  name: 'generalOverview',
+  bindings: {
+    form: '<',
+    project: '<',
+    structure: '<',
+    team: '<',
+    viewers: '<',
+    users: '<',
+    activateValidation: '<'
+  }
 };
 
 export default component;

@@ -1,58 +1,54 @@
 
 class ProjectComponentController {
+  constructor ($state, $ngRedux) {
+    this.state = $state;
+    this.$ngRedux = $ngRedux;
+    this.$onInit = this.onInit.bind(this);
+    this.$onDestroy = this.ondDestroy.bind(this);
+  }
 
-    constructor($state, $ngRedux) {
-        this.state = $state;
-        this.$ngRedux = $ngRedux;
-        this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.ondDestroy.bind(this);
+  onInit () {
+    if (!this.project) {
+      this.project = {};
+    }
+  }
+
+  ondDestroy () {
+  }
+
+  cardClick () {
+    if (!this.showDetails) {
+      this.goToAssessment();
+    }
+  }
+
+  goToAssessment () {
+    this.state.go(this.project.isMember || this.project.isViewer
+      ? 'assessment' : 'public-assessment', { appName: this.project.id });
+  }
+
+  viewDraft () {
+    this.state.go('editProject', { appName: this.project.id });
+  }
+
+  editDraft () {
+    this.state.go('editProject', { appName: this.project.id });
+  }
+
+  viewPublished () {
+    this.state.go('editProject', { appName: this.project.id, editMode: 'publish' });
+  }
+
+  static projectComponentFactory () {
+    require('./ProjectComponent.scss');
+    function projectCp ($state, $ngRedux) {
+      return new ProjectComponentController($state, $ngRedux);
     }
 
+    projectCp.$inject = ['$state', '$ngRedux'];
 
-    onInit() {
-        if (!this.project) {
-            this.project = {};
-        }
-    }
-
-    ondDestroy() {
-    }
-
-    cardClick() {
-        if (!this.showDetails) {
-            this.goToAssessment();
-        }
-    }
-
-    goToAssessment() {
-        this.state.go(this.project.isMember || this.project.isViewer ?
-          'assessment' : 'public-assessment', { appName: this.project.id });
-    }
-
-    viewDraft() {
-        this.state.go('editProject', { appName: this.project.id });
-    }
-
-    editDraft() {
-        this.state.go('editProject', { appName: this.project.id });
-    }
-
-    viewPublished() {
-        this.state.go('editProject', { appName: this.project.id, editMode: 'publish' });
-    }
-
-
-    static projectComponentFactory() {
-        require('./ProjectComponent.scss');
-        function projectCp($state, $ngRedux) {
-            return new ProjectComponentController($state, $ngRedux);
-        }
-
-        projectCp.$inject = ['$state', '$ngRedux'];
-
-        return projectCp;
-    }
-
+    return projectCp;
+  }
 }
 
 export default ProjectComponentController;

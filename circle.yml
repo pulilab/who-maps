@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.6.0
   node:
-    version: 6.10.0
+    version: 9.0.0
   environment:
     DATABASE_URL: localhost
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
@@ -40,7 +40,7 @@ test:
   pre:
     - cd django && flake8
     - cd django && CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
-    - cd frontend && yarn test_ci
+    - cd frontend && yarn test:ci
     # - docker build ./django
     # - docker-compose up -d
     # - docker exec -it whomaps_django_1 python manage.py migrate

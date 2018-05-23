@@ -3,70 +3,68 @@ import * as UserModule from '../../store/modules/user';
 import { calculateHeight } from '../../Utilities';
 
 class UUIDLoadController {
+  constructor ($state, $ngRedux) {
+    this.EE = window.EE;
+    this.state = $state;
+    this.$onInit = this.onInit.bind(this);
+    this.$onDestroy = this.onDestroy.bind(this);
+    this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
+  }
 
-    constructor($state, $ngRedux) {
-        this.EE = window.EE;
-        this.state = $state;
-        this.$onInit = this.onInit.bind(this);
-        this.$onDestroy = this.onDestroy.bind(this);
-        this.unsubscribe = $ngRedux.connect(this.mapState, SystemModule)(this);
+  onInit () {
+    this.style = {
+      height: calculateHeight()
+    };
+    this.errorMessage = false;
+    this.handleProjectLoad();
+  }
+
+  onDestroy () {
+    this.unsubscribe();
+  }
+
+  mapState (state) {
+    return {
+      search: SystemModule.getSearchResult(state),
+      profile: UserModule.getProfile(state)
+    };
+  }
+
+  async handleProjectLoad () {
+    const uuid = this.state.params.projectUUID;
+    const filters = {
+      all: true
+    };
+    await this.searchProjects(uuid, filters);
+    const project = this.search.slice().pop();
+    const id = project && project.id ? project.id : false;
+
+    let state = 'public-dashboard';
+
+    if (id === false) {
+      this.errorMessage = true;
+      return;
     }
 
-    onInit() {
-        this.style = {
-            height: calculateHeight()
-        };
-        this.errorMessage = false;
-        this.handleProjectLoad();
+    if (this.profile && this.profile.member) {
+      if (this.profile.member.indexOf(id) > -1 ||
+              this.profile.viewer.indexOf(id) > -1) {
+        state = 'dashboard';
+      }
+    }
+    this.state.go(state, { appName: id });
+  }
+
+  static uuidLoadFactory () {
+    require('./UUIDLoad.scss');
+    function uuidLoadController ($state, $ngRedux) {
+      return new UUIDLoadController($state, $ngRedux);
     }
 
-    onDestroy() {
-        this.unsubscribe();
-    }
+    uuidLoadController.$inject = ['$state', '$ngRedux'];
 
-    mapState(state) {
-        return {
-            search: SystemModule.getSearchResult(state),
-            profile: UserModule.getProfile(state)
-        };
-    }
-
-    async handleProjectLoad() {
-        const uuid =  this.state.params.projectUUID;
-        const filters = {
-            all: true
-        };
-        await this.searchProjects(uuid, filters);
-        const project = this.search.slice().pop();
-        const id = project && project.id ? project.id : false;
-
-        let state = 'public-dashboard';
-
-        if (id === false) {
-            this.errorMessage = true;
-            return;
-        }
-
-        if (this.profile && this.profile.member) {
-            if (this.profile.member.indexOf(id) > -1
-              || this.profile.viewer.indexOf(id) > -1) {
-                state = 'dashboard';
-            }
-        }
-        this.state.go(state, { appName: id });
-    }
-
-    static uuidLoadFactory() {
-        require('./UUIDLoad.scss');
-        function uuidLoadController($state, $ngRedux) {
-            return new UUIDLoadController($state, $ngRedux);
-        }
-
-        uuidLoadController.$inject = ['$state', '$ngRedux'];
-
-        return uuidLoadController;
-    }
-
+    return uuidLoadController;
+  }
 }
 
 export default UUIDLoadController;

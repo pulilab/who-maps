@@ -35,3 +35,4 @@ errorShots/
 /frontend/djangojs.pot
 *.po
 *.mo
+yarn-error.log

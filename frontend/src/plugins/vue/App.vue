@@ -1,23 +1,21 @@
 <template>
-  <ajax-bar></ajax-bar>
+  <ajax-bar/>
 </template>
 
 <script>
-  import 'vue-django-feedback';
+import 'vue-django-feedback';
 
-  import AjaxBar from './AjaxBar.vue';
+import AjaxBar from './AjaxBar.vue';
 
-
-  export default {
-    components: {
-      AjaxBar
-    },
-    data () {
-      return {};
-    }
-  };
+export default {
+  components: {
+    AjaxBar
+  },
+  data () {
+    return {};
+  }
+};
 </script>
-
 
 <style lang="less">
   @import "~vue-django-feedback/dist/styles/main.less";

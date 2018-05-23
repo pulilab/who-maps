@@ -16,30 +16,30 @@ import reportButton from './ReportDeleteButton/reportDeleteButtonComponent';
 const moduleName = 'cms';
 const su = new StaticUtilities('Cms');
 
-function config($stateProvider, $compileProvider) {
-    $stateProvider
-      .state(moduleName,
-        {
-            url: '/cms',
-            parent: 'base',
-            views: {
-                main: {
-                    template: '<planning-and-guidance></planning-and-guidance>'
-                }
-            },
-            resolve: {
-                'main': () => {
-                    return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
-                },
-                system: ['$ngRedux', ($ngRedux) => {
-                    return $ngRedux.dispatch(SystemModule.loadUserProfiles());
-                }],
-                cms: ['$ngRedux', ($ngRedux) => {
-                    return $ngRedux.dispatch(CmsModule.loadCmsData());
-                }]
-            },
-            profileRequired: true
-        });
+function config ($stateProvider, $compileProvider) {
+  $stateProvider
+    .state(moduleName,
+      {
+        url: '/cms',
+        parent: 'base',
+        views: {
+          main: {
+            template: '<planning-and-guidance></planning-and-guidance>'
+          }
+        },
+        resolve: {
+          'main': () => {
+            return su.lazyLoader($compileProvider, 'PlanningAndGuidance/planningAndGuidanceComponent');
+          },
+          system: ['$ngRedux', ($ngRedux) => {
+            return $ngRedux.dispatch(SystemModule.loadUserProfiles());
+          }],
+          cms: ['$ngRedux', ($ngRedux) => {
+            return $ngRedux.dispatch(CmsModule.loadCmsData());
+          }]
+        },
+        profileRequired: true
+      });
 }
 
 config.$inject = ['$stateProvider', '$compileProvider'];
