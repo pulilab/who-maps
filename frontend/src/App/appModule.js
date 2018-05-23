@@ -8,7 +8,15 @@ import 'ng-redux';
 import 'angular-gettext';
 import { config } from './app-config';
 import { run } from './app-run';
-
+import Project from '../Project/';
+import Cms from '../Cms/';
+import Dashboard from '../Dashboard/';
+import Assessment from '../Assessment/';
+import LandingPage from '../LandingPage/';
+import MapsToolkit from '../MapsToolkit/';
+import MyProjects from '../MyProjects/';
+import AppComponent from './appComponent';
+import SystemController from './SystemController';
 import './app.scss';
 
 const singletonCollection = [];
@@ -16,9 +24,6 @@ const singletonCollection = [];
 window.addEventListener('singletonRegistered', evt => {
   singletonCollection.push(evt.detail);
 });
-
-const AppComponent = require('./appComponent');
-const SystemController = require('./SystemController');
 
 // MODULE REGISTRATION
 angular.module('ngHtmlCompile', [])
@@ -44,13 +49,13 @@ angular.module('app',
     'ngRedux',
     'gettext',
     'Components',
-    require('../Project/'),
-    require('../Cms/'),
-    require('../Dashboard/'),
-    require('../Assessment/'),
-    require('../LandingPage/'),
-    require('../MapsToolkit/'),
-    require('../MyProjects/')
+    Project,
+    Cms,
+    Dashboard,
+    Assessment,
+    LandingPage,
+    MapsToolkit,
+    MyProjects
   ]
 )
   .controller('systemController', SystemController.systemControllerFactory())

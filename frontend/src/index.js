@@ -62,7 +62,7 @@ const commonPromise = import('./Common/');
 
 Promise.all([appPromise, commonPromise]).then(([app, common]) => {
   common.EE.initialize();
-  angular.bootstrap(document, [app]);
+  angular.bootstrap(document, ['app']);
 });
 
 /* end-translation-unfriendly-code */

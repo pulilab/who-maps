@@ -1,4 +1,4 @@
-import utilities from '../../src/Cms/utilities';
+import * as utilities from '../../src/Cms/utilities';
 import * as mom from 'moment';
 
 describe('CMS Utilities', () => {

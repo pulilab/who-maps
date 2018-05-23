@@ -838,7 +838,7 @@ const scores = [
   }
 ];
 
-export default {
+export {
   resources,
   lessons,
   experiences,

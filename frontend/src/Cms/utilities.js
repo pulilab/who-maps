@@ -64,7 +64,7 @@ const postProcessHtml = (html) => {
   });
 };
 
-export default {
+export {
   prettifyDate,
   itemType,
   levenshtein,
