@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest",
     "test:w": "jest --watch",
-    "test:ci": "jest --maxWorkers=3"
+    "test:ci": "jest --maxWorkers=3",
     "lint": "eslint --ext .js,.vue ./src ./test",
     "dev": "yarn serve",
     "css_2": "cross-env NODE_ENV=production node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline --port 8100",
