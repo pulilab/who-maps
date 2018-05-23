@@ -27,7 +27,7 @@ dependencies:
     - "~/.cache/yarn"
   override:
     # - sudo pip install docker-compose
-    # - cd frontend && yarn
+    - cd frontend && yarn
     #- cd frontend && npm install -g webpack
     - npm install -g mapshaper
     - cd django && pip install -r requirements.txt
