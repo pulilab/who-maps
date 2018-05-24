@@ -1,9 +1,8 @@
-import { searchOrganisation, addOrganisation } from '../../store/modules/system';
+import { searchOrganisation } from '../../store/modules/system';
 
 export default class OrganisationController {
   constructor ($scope) {
     this.scope = $scope;
-    this.addOrganisationName = this.addOrganisationName.bind(this);
     this.organisationSearch = this.organisationSearch.bind(this);
     this.$onInit = this.onInit.bind(this);
   }
@@ -21,24 +20,16 @@ export default class OrganisationController {
 
   async organisationSearch (name) {
     const data = await searchOrganisation(name);
-    const input = { id: null, name, manual: true };
-    if (!data.some(item => item.name === name)) {
+    const input = { id: null, name };
+    const match = data.find(item => item.name === name);
+    if (!match) {
       data.splice(0, 0, input);
+      this.organisation = input;
+    } else {
+      this.organisation = match;
     }
     this.latestOrgs = data;
     return Promise.resolve(data);
-  }
-
-  async addOrganisationName (organisation) {
-    if (organisation && organisation.manual && organisation.name.length < 101) {
-      const response = await addOrganisation(organisation.name);
-      this.scope.$evalAsync(() => {
-        this.organisation = response;
-        Object.assign(this.latestOrgs[0], response);
-      });
-    } else {
-      this.organisation = organisation;
-    }
   }
 
   static organisationFactory () {
