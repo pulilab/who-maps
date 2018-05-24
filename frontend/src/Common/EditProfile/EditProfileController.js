@@ -66,6 +66,10 @@ class EditProfileController {
 
   async save () {
     if (this.editProfileForm.$valid && this.userProfile.organisation) {
+      if (this.userProfile.organisation.id === null) {
+        const organisation = await SystemModule.addOrganisation(this.userProfile.organisation.name);
+        this.userProfile.organisation = {...organisation};
+      }
       try {
         await this.saveProfile(this.userProfile);
         this.state.go('dashboard');

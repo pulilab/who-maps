@@ -19,6 +19,7 @@ describe('ProjectController', () => {
       $setValidity: jest.fn()
     };
     sc.EE = EE;
+    jest.spyOn(ProjectModule, 'clearSimilarNameList').mockReturnValue(() => {});
     sc.$onInit();
   });
 
@@ -186,14 +187,15 @@ describe('ProjectController', () => {
     expect(sc.getCountryFields).toHaveBeenCalled();
   });
 
-  test('getCountryFields fn.', A(async () => {
+  test('getCountryFields fn.', async (done) => {
     jest.spyOn(CountryModule, 'setCurrentCountry').mockReturnValue(() => Promise.resolve());
     await sc.getCountryFields();
     expect(CountryModule.setCurrentCountry).not.toHaveBeenCalled();
 
     await sc.getCountryFields(1);
     expect(CountryModule.setCurrentCountry).toHaveBeenCalled();
-  }));
+    done();
+  });
 
   test('scrollToFieldSet fn.', () => {
     const a = document.createElement('div');
@@ -229,63 +231,91 @@ describe('ProjectController', () => {
     expect(formItem.$setValidity).toHaveBeenCalledWith('custom', true);
   });
 
-  test('publishProject async fn.', A(async () => {
+  test('publishProject', () => {
     jest.spyOn(sc, 'clearCustomErrors').mockReturnValue(undefined);
+    jest.spyOn(sc, 'doPublishProject').mockReturnValue(undefined);
+    sc.publishProject();
+
+    expect(sc.activateValidation).toEqual(true);
+    expect(sc.clearCustomErrors).toHaveBeenCalled();
+    expect(sc.doPublishProject).toHaveBeenCalled();
+  });
+
+  test('doPublishProject', async (done) => {
     jest.spyOn(sc, 'focusInvalidField').mockReturnValue(undefined);
     jest.spyOn(sc, 'postPublishAction').mockReturnValue(undefined);
-    jest.spyOn(sc, 'handleResponse');
-    sc.publish = jest.fn().mockReturnValue(Promise.resolve());
+    jest.spyOn(sc, 'handleResponse').mockReturnValue(undefined);
+    jest.spyOn(sc, 'saveOrganisationIfNeeded').mockReturnValue(Promise.resolve(1));
+
+    sc.publish = jest.fn().mockReturnValue(Promise.resolve(1));
     sc.form = {
       $valid: false
     };
-    await sc.publishProject();
-    expect(sc.clearCustomErrors).toHaveBeenCalledTimes(1);
+
+    await sc.doPublishProject();
+
     expect(sc.focusInvalidField).toHaveBeenCalledTimes(1);
     expect(sc.$mdDialog.show).toHaveBeenCalled();
 
     sc.form.$valid = true;
-    await sc.publishProject();
-    expect(sc.clearCustomErrors).toHaveBeenCalledTimes(2);
+    await sc.doPublishProject();
+
     expect(sc.publish).toHaveBeenCalledTimes(1);
     expect(sc.postPublishAction).toHaveBeenCalledTimes(1);
+
     const error = new Error({response: {}});
     sc.publish.mockReturnValue(Promise.reject(error));
-    await sc.publishProject();
-    expect(sc.clearCustomErrors).toHaveBeenCalledTimes(3);
+    await sc.doPublishProject();
+
     expect(sc.publish).toHaveBeenCalledTimes(2);
     expect(sc.handleResponse).toHaveBeenCalledTimes(1);
     expect(sc.postPublishAction).toHaveBeenCalledTimes(1);
     expect(sc.$mdDialog.show).toHaveBeenCalled();
-  }));
+    done();
+  });
 
-  test('saveDraftHandler fn.', A(async () => {
+  test('saveDraftHandler', () => {
+    jest.spyOn(sc, 'clearCustomErrors').mockReturnValue(undefined);
+    jest.spyOn(sc, 'doSaveDraftHandler').mockReturnValue(undefined);
+    sc.saveDraftHandler();
+
+    expect(sc.activateValidation).toEqual(false);
+    expect(sc.clearCustomErrors).toHaveBeenCalled();
+    expect(sc.doSaveDraftHandler).toHaveBeenCalled();
+  });
+
+  test('doSaveDraftHandler', async done => {
+    jest.spyOn(sc, 'focusInvalidField').mockReturnValue(undefined);
     sc.saveDraft = jest.fn().mockReturnValue(Promise.resolve({ id: 1 }));
-    jest.spyOn(sc, 'handleResponse');
+    sc.saveOrganisationIfNeeded = jest.fn().mockReturnValue(Promise.resolve());
+    jest.spyOn(sc, 'handleResponse').mockReturnValue(undefined);
     sc.newProject = false;
     sc.form = {
       $valid: false
     };
-    await sc.saveDraftHandler();
+    await sc.doSaveDraftHandler();
     expect(sc.saveDraft).not.toHaveBeenCalled();
 
     sc.form.$valid = true;
-    await sc.saveDraftHandler();
+    await sc.doSaveDraftHandler();
     expect(sc.saveDraft).toHaveBeenCalled();
     expect(sc.state.go).not.toHaveBeenCalled();
 
     sc.newProject = true;
-    await sc.saveDraftHandler();
+    await sc.doSaveDraftHandler();
     expect(sc.saveDraft).toHaveBeenCalledTimes(2);
     expect(sc.state.go).toHaveBeenCalledWith('editProject', expect.any(Object), expect.any(Object));
     const error = new Error();
     error.response = 1;
+
     jest.spyOn(console, 'log').mockImplementation(() => {});
     sc.saveDraft.mockReturnValue(Promise.reject(error));
-    await sc.saveDraftHandler();
+    await sc.doSaveDraftHandler();
     expect(sc.handleResponse).toHaveBeenCalledWith(1);
-  }));
+    done();
+  });
 
-  test('discardDraftHandler fn.', A(async () => {
+  test('discardDraftHandler fn.', async (done) => {
     sc.discardDraft = jest.fn().mockReturnValue(Promise.resolve());
     await sc.discardDraftHandler();
     expect(sc.$mdDialog.show).toHaveBeenCalled();
@@ -294,7 +324,8 @@ describe('ProjectController', () => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
     sc.discardDraft.mockReturnValue(Promise.reject(error));
     await sc.discardDraftHandler();
-  }));
+    done()
+  });
 
   test('focusInvalidField fn.', () => {
     const a = document.createElement('div');

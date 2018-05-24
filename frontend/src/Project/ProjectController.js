@@ -23,6 +23,9 @@ class ProjectController {
     this.toast = toast;
     this.mapData = this.mapData.bind(this);
     this.createDialogs = this.createDialogs.bind(this, gettextCatalog);
+    this.saveOrganisationIfNeeded = this.saveOrganisationIfNeeded.bind(this);
+    this.doPublishProject = this.doPublishProject.bind(this);
+    this.doSaveDraftHandler = this.doSaveDraftHandler.bind(this);
   }
 
   mapData (state) {
@@ -177,47 +180,65 @@ class ProjectController {
     });
   }
 
+  async saveOrganisationIfNeeded () {
+    console.log('inside save organisation');
+    if (this.project.organisation && this.project.organisation.id === null) {
+      try {
+        const organisation = await SystemModule.addOrganisation(this.project.organisation.name);
+        this.project.organisation = { ...organisation };
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
   publishProject () {
     this.clearCustomErrors();
     this.activateValidation = true;
-    this.timeout(async () => {
-      if (this.form.$valid) {
-        try {
-          const data = await this.publish(this.project, this.team, this.viewers);
-          this.postPublishAction(data);
-        } catch (e) {
-          this.handleResponse(e.response);
-          this.$mdDialog.show(this.publishAlert);
-        }
-      } else {
-        await this.$mdDialog.show(this.publishAlert);
-        this.focusInvalidField();
+    this.timeout(this.doPublishProject);
+  }
+
+  async doPublishProject () {
+    if (this.form.$valid) {
+      await this.saveOrganisationIfNeeded();
+      try {
+        const data = await this.publish(this.project, this.team, this.viewers);
+        this.postPublishAction(data);
+      } catch (e) {
+        this.handleResponse(e.response);
+        this.$mdDialog.show(this.publishAlert);
       }
-    });
+    } else {
+      await this.$mdDialog.show(this.publishAlert);
+      this.focusInvalidField();
+    }
   }
 
   saveDraftHandler () {
     this.clearCustomErrors();
     this.activateValidation = false;
-    this.timeout(async () => {
-      if (this.form.$valid) {
-        try {
-          const project = await this.saveDraft(this.project, this.team, this.viewers);
-          this.$mdDialog.show(this.draftCongratulation);
-          if (this.newProject) {
-            this.state.go('editProject', { appName: project.id }, {
-              location: 'replace',
-              reload: false
-            });
-          }
-        } catch (e) {
-          console.log(e);
-          this.handleResponse(e.response);
+    this.timeout(this.doSaveDraftHandler);
+  }
+
+  async doSaveDraftHandler () {
+    if (this.form.$valid) {
+      await this.saveOrganisationIfNeeded();
+      try {
+        const project = await this.saveDraft(this.project, this.team, this.viewers);
+        this.$mdDialog.show(this.draftCongratulation);
+        if (this.newProject) {
+          this.state.go('editProject', { appName: project.id }, {
+            location: 'replace',
+            reload: false
+          });
         }
-      } else {
-        this.focusInvalidField();
+      } catch (e) {
+        console.log(e);
+        this.handleResponse(e.response);
       }
-    });
+    } else {
+      this.focusInvalidField();
+    }
   }
 
   async discardDraftHandler () {
