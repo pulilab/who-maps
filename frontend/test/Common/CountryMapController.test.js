@@ -1,6 +1,6 @@
 import CountryMapController from '../../src/Common/CountryMap/CountryMapController';
 import angular from 'angular';
-import { $scope, $state } from '../testUtilities';
+import { $scope, $state, dialog, gettextCatalog } from '../testUtilities';
 import { default as topoSl } from './sl-topo.json';
 import { default as SLCountryMapData } from './sl-countrymapdata.json';
 
@@ -14,7 +14,7 @@ const scope = $scope(cc);
 
 describe('CountryMapController', () => {
   beforeEach(() => {
-    cc = CountryMapController.countrymapFactory()(el, scope, $state());
+    cc = CountryMapController.countrymapFactory()(el, scope, $state(), dialog, gettextCatalog );
     cc.$onInit();
     jest.clearAllMocks();
     cc.svgPanZoom = jest.fn().mockReturnValue({ zoomOut: () => {} });

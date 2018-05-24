@@ -7,10 +7,11 @@ import svgPanZoom from 'svg-pan-zoom';
 import d3 from 'd3';
 
 class CountryMapController {
-  constructor ($element, $scope, $state) {
+  constructor ($element, $scope, $state, $mdDialog, gettextCatalog) {
     this.el = $element;
     this.scope = $scope;
     this.state = $state;
+    this.$mdDialog = $mdDialog;
     this.EE = window.EE;
     this.tooltipOver = false;
     this.preventMouseOut = false;
@@ -20,6 +21,8 @@ class CountryMapController {
     this.drawMapShape = this.drawMapShape.bind(this);
     this.$onInit = this.onInit;
     this.$onDestroy = this.onDestroy;
+    this.createDialogs = this.createDialogs.bind(this, gettextCatalog);
+    this.showErrorDialog = this.showErrorDialog.bind(this);
   }
 
   onInit () {
@@ -30,6 +33,16 @@ class CountryMapController {
     this.drawnMap = null;
     this.createInMemoryDOMElement();
     this.watchers();
+    this.createDialogs();
+    this.showMapErrorDialog = false;
+  }
+  createDialogs (gettextCatalog) {
+    this.mapError = this.$mdDialog.alert({
+      title: gettextCatalog.getString('Attention'),
+      textContent: gettextCatalog.getString('The map failed to load or loaded partially'),
+      ok: gettextCatalog.getString('Close'),
+      theme: 'alert'
+    });
   }
 
   createInMemoryDOMElement () {
@@ -56,12 +69,20 @@ class CountryMapController {
   watchers () {
     this.scope.$watch(s => s.vm.mapData, this.checkIfCountryChanged);
     this.scope.$watch(s => s.vm.districtLevelCoverage, this.checkIfDistrictDataChanged, true);
+    this.scope.$watch(s => s.vm.showMapErrorDialog, this.showErrorDialog);
   }
 
   checkIfCountryChanged (newMapData) {
     if (newMapData && newMapData.mapData && newMapData.name !== this.drawnMap) {
       this.drawMapShape(newMapData);
       this.drawnMap = newMapData.name;
+    }
+  }
+
+  async showErrorDialog (show) {
+    if (show) {
+      await this.$mdDialog.show(this.mapError);
+      this.showMapErrorDialog = false;
     }
   }
 
@@ -139,41 +160,51 @@ class CountryMapController {
     this.countryName = countryMapData.name;
     this.flagUrl = countryMapData.flag;
 
-    const geoData = this.makeGeoFromTopo(countryMapData.mapData);
-    const projection = d3.geo.mercator()
-      .scale(this.calculateScale(countryMapData.mapData));
+    try {
+      const geoData = this.makeGeoFromTopo(countryMapData.mapData);
+      const projection = d3.geo.mercator()
+        .scale(this.calculateScale(countryMapData.mapData));
 
-    const path = d3.geo.path().projection(projection);
+      const path = d3.geo.path().projection(projection);
 
-    geoData.features.forEach((feature) => {
-      const mapName = feature.properties.name || feature.properties['wof:name'];
-      const districtsName = countryMapData.districts.find(dn => dn.id === mapName);
-      this.svgLib[districtsName.id] = this.mapDOMElement
-        .append('path')
-        .datum({
-          type: geoData.type,
-          geocoding: geoData.geocoding,
-          features: [feature],
-          name: districtsName.name
-        })
-        .attr('d', path)
-        .classed('d3district', true)
-        .classed('global', this.showNationalLevelCoverage)
-        .classed(`name-${districtsName.id}`, true).on('click', () => {
-          this.scope.$evalAsync(() => {
-            this.activeDistrict = {
-              name: districtsName.name,
-              data: self.svgLib[districtsName.id] ? self.svgLib[districtsName.id].districtData : null
-            };
-          });
-        });
-    });
+      geoData.features.forEach((feature) => {
+        try {
+          const mapName = feature.properties.name || feature.properties['wof:name'];
+          const districtsName = countryMapData.districts.find(dn => dn.id === mapName);
+          this.svgLib[districtsName.id] = this.mapDOMElement
+            .append('path')
+            .datum({
+              type: geoData.type,
+              geocoding: geoData.geocoding,
+              features: [feature],
+              name: districtsName.name
+            })
+            .attr('d', path)
+            .classed('d3district', true)
+            .classed('global', this.showNationalLevelCoverage)
+            .classed(`name-${districtsName.id}`, true).on('click', () => {
+              this.scope.$evalAsync(() => {
+                this.activeDistrict = {
+                  name: districtsName.name,
+                  data: self.svgLib[districtsName.id] ? self.svgLib[districtsName.id].districtData : null
+                };
+              });
+            });
+        } catch (e) {
+          this.showMapErrorDialog = true;
+          console.error(e);
+        }
+      });
 
-    this.elementContainer.append(() => {
-      return this.mapDOMElement.node();
-    });
+      this.elementContainer.append(() => {
+        return this.mapDOMElement.node();
+      });
 
-    this.makeSvgPannableAndZoomable(this.mapDOMElement.node());
+      this.makeSvgPannableAndZoomable(this.mapDOMElement.node());
+    } catch (e) {
+      console.error(e);
+      this.showMapErrorDialog = true;
+    }
 
     this.showPlaceholder = false;
   }
@@ -198,11 +229,11 @@ class CountryMapController {
   static countrymapFactory () {
     require('./Countrymap.scss');
 
-    function countrymap ($element, $scope, $state) {
-      return new CountryMapController($element, $scope, $state);
+    function countrymap ($element, $scope, $state, $mdDialog, gettextCatalog) {
+      return new CountryMapController($element, $scope, $state, $mdDialog, gettextCatalog);
     }
 
-    countrymap.$inject = ['$element', '$scope', '$state'];
+    countrymap.$inject = ['$element', '$scope', '$state', '$mdDialog', 'gettextCatalog'];
 
     return countrymap;
   }
