@@ -1,6 +1,6 @@
 import * as ToolkitModule from '../../src/store/modules/toolkit';
 import * as SystemModule from '../../src/store/modules/system';
-import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
+import { defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
 describe('TOOLKIT Store Module', () => {
@@ -61,7 +61,7 @@ describe('TOOLKIT Store Module', () => {
     beforeEach(() => {
       jest.restoreAllMocks();
     });
-    test('loadToolkitData', A(async () => {
+    test('loadToolkitData', async (done) => {
       dispatch.mockClear();
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       const state = {
@@ -84,9 +84,10 @@ describe('TOOLKIT Store Module', () => {
       } catch (e) {
         expect(e).toEqual(expect.any(Error));
       }
-    }));
+      done();
+    });
 
-    test('saveAnswer', A(async () => {
+    test('saveAnswer', async (done) => {
       dispatch.mockClear();
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const state = {
@@ -110,7 +111,8 @@ describe('TOOLKIT Store Module', () => {
       } catch (e) {
         expect(e).toEqual(expect.any(Error));
       }
-    }));
+      done();
+    });
   });
 
   describe('REDUCERS', () => {

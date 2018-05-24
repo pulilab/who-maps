@@ -120,7 +120,7 @@ describe('USER Store Module', () => {
       });
     });
 
-    test('loadProfile', A(async () => {
+    test('loadProfile', async (done) => {
       const spy = jest.spyOn(Storage.prototype, 'get').mockReturnValue(undefined);
       dispatch.mockClear();
 
@@ -142,9 +142,10 @@ describe('USER Store Module', () => {
       await UserModule.loadProfile()(dispatch, getState({ user: {} }));
       expect(axios.get).toHaveBeenCalledWith('/api/userprofiles/99/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
-    }));
+      done();
+    });
 
-    test('doSignup', A(async () => {
+    test('doSignup', async (done) => {
       const spy = jest.spyOn(axios, 'post').mockReturnValue(
         Promise.resolve({ data: { key: 'a', is_superuser: false } }));
       jest.spyOn(UserModule, 'storeData').mockReturnValue(undefined);
@@ -163,9 +164,10 @@ describe('USER Store Module', () => {
       } catch (e) {
         expect(e).toEqual(1);
       }
-    }));
+      done();
+    });
 
-    test('doLogin', A(async () => {
+    test('doLogin', async (done) => {
       const spy = jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       jest.spyOn(UserModule, 'storeData').mockReturnValue(undefined);
       jest.spyOn(UserModule, 'loadProfile').mockReturnValue(undefined);
@@ -184,9 +186,10 @@ describe('USER Store Module', () => {
       } catch (e) {
         expect(e).toBe(1);
       }
-    }));
+      done();
+    });
 
-    test('saveProfile', A(async () => {
+    test('saveProfile', async (done) => {
       jest.spyOn(Storage.prototype, 'get').mockReturnValue(null);
       jest.spyOn(UserModule, 'handleProfile').mockReturnValue(1);
       jest.spyOn(axios, 'put').mockReturnValue(defaultAxiosSuccess);
@@ -203,7 +206,8 @@ describe('USER Store Module', () => {
       expect(axios.put).toHaveBeenCalledWith('/api/userprofiles/1/', { organisation: 1, country: 1 });
       expect(UserModule.handleProfile).toHaveBeenCalledWith(1);
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROFILE', profile: 1 });
-    }));
+      done();
+    });
 
     test('doLogout', () => {
       jest.spyOn(Storage.prototype, 'clear').mockReturnValue(undefined);
@@ -232,19 +236,21 @@ describe('USER Store Module', () => {
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_TEAM_VIEWER', member: [1, 3], viewer: [2, 4] });
     });
 
-    test('verifyEmail', A(async () => {
+    test('verifyEmail', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const result = await UserModule.verifyEmail('a');
       expect(axios.post).toHaveBeenCalledWith('/api/rest-auth/registration/verify-email/', 'a');
       expect(result).toBe(1);
-    }));
+      done();
+    });
 
-    test('resetPassword', A(async () => {
+    test('resetPassword', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const result = await UserModule.resetPassword('a');
       expect(axios.post).toHaveBeenCalledWith('/api/rest-auth/password/reset/', 'a');
       expect(result).toBe(1);
-    }));
+      done();
+    });
   });
 
   describe('REDUCERS', () => {

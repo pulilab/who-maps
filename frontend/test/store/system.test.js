@@ -1,6 +1,6 @@
 import * as SystemModule from '../../src/store/modules/system';
 import * as ProjectModule from '../../src/store/modules/projects';
-import { A, defaultAxiosSuccess, dispatch } from '../testUtilities';
+import { defaultAxiosSuccess, dispatch } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 import * as CountriesModule from '../../src/store/modules/countries';
 
@@ -153,45 +153,51 @@ describe('System Store Module', () => {
       jest.restoreAllMocks();
     });
 
-    test('loadUserProfiles fn', A(async () => {
+    test('loadUserProfiles fn', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       await SystemModule.loadUserProfiles()(dispatch);
       expect(axios.get).toHaveBeenCalledWith('/api/userprofiles/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_USER_PROFILES', profiles: 1 });
-    }));
+      done();
+    });
 
-    test('loadStaticData', A(async () => {
+    test('loadStaticData', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       await SystemModule.loadStaticData()(dispatch);
       expect(axios.get).toHaveBeenCalledWith('/api/static-data/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_LANGUAGES', languages: undefined });
-    }));
+      done();
+    });
 
-    test('searchProjects', A(async () => {
+    test('searchProjects', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       await SystemModule.searchProjects('a', { a: { name: 'b', value: 2 } })(dispatch);
       expect(axios.post).toHaveBeenCalledWith('/api/search/projects/', { query: 'a', b: 2 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_SEARCH_RESULT', projects: 1 });
-    }));
+      done();
+    });
 
-    test('unsetSearchedProjects', A(async () => {
+    test('unsetSearchedProjects', async (done) => {
       await SystemModule.unsetSearchedProjects()(dispatch);
       expect(dispatch).toHaveBeenCalledWith({ type: 'UNSET_PROJECT_SEARCH_RESULT' });
-    }));
+      done();
+    });
 
-    test('searchOrganisation', A(async () => {
+    test('searchOrganisation', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       const result = await SystemModule.searchOrganisation('a');
       expect(axios.get).toHaveBeenCalledWith('/api/organisations/?name=a');
       expect(result).toBe(1);
-    }));
+      done();
+    });
 
-    test('addOrganisation', A(async () => {
+    test('addOrganisation', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const result = await SystemModule.addOrganisation('a');
       expect(axios.post).toHaveBeenCalledWith('/api/organisations/', { name: 'a' });
       expect(result).toBe(1);
-    }));
+      done();
+    });
   });
 
   describe('REDUCERS', () => {

@@ -1,7 +1,7 @@
 import * as CmsModule from '../../src/store/modules/cms';
 import * as SystemModule from '../../src/store/modules/system';
 import * as UserModule from '../../src/store/modules/user';
-import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
+import { defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
 describe('CMS Store Module', () => {
@@ -59,28 +59,31 @@ describe('CMS Store Module', () => {
   });
 
   describe('ACTIONS', () => {
-    test('loadCmsData', A(async () => {
+    test('loadCmsData', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(Promise.resolve({ data: [{}] }));
       await CmsModule.loadCmsData()(dispatch);
       expect(axios.get).toHaveBeenCalledWith('/api/cms/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CMS_DATA', data: [{ searchOccurrences: 0 }] });
-    }));
+      done();
+    });
 
-    test('addContent', A(async () => {
+    test('addContent', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(Promise.resolve({ data: {} }));
       await CmsModule.addContent({ a: 1 })(dispatch);
       expect(axios.post).toHaveBeenCalledWith('/api/cms/', { a: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'ADD_CMS_ENTRY', item: { searchOccurrences: 0 } });
-    }));
+      done();
+    });
 
-    test('updateContent', A(async () => {
+    test('updateContent', async (done) => {
       jest.spyOn(axios, 'put').mockReturnValue(Promise.resolve({ data: {} }));
       await CmsModule.updateContent({ a: 1 }, 1)(dispatch);
       expect(axios.put).toHaveBeenCalledWith('/api/cms/1/', { a: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_CMS_ENTRY', item: { searchOccurrences: 0 } });
-    }));
+      done();
+    });
 
-    test('saveOrUpdateContent', A(async () => {
+    test('saveOrUpdateContent', async (done) => {
       const state = getState({
         user: {
           profile: {
@@ -117,37 +120,42 @@ describe('CMS Store Module', () => {
       await CmsModule.saveOrUpdateContent(resource)(dispatch, state);
       expect(CmsModule.addContent).toHaveBeenCalledWith(jasmine.any(FormData));
       expect(profileSpy).toHaveBeenCalled();
-    }));
+      done();
+    });
 
-    test('deleteContent', A(async () => {
+    test('deleteContent', async (done) => {
       jest.spyOn(axios, 'delete').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.deleteContent({ id: 1 })(dispatch);
       expect(axios.delete).toHaveBeenCalledWith('/api/cms/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'DELETE_CMS_ENTRY', id: 1 });
-    }));
+      done();
+    });
 
-    test('reportContent', A(async () => {
+    test('reportContent', async (done) => {
       jest.spyOn(axios, 'patch').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.reportContent({ id: 1 })(dispatch);
       expect(axios.patch).toHaveBeenCalledWith('/api/cms/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_CMS_ENTRY', item: { id: 1, state: 2 } });
-    }));
+      done();
+    });
 
-    test('reportComment', A(async () => {
+    test('reportComment', async (done) => {
       jest.spyOn(axios, 'patch').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.reportComment({ id: 1 })(dispatch);
       expect(axios.patch).toHaveBeenCalledWith('/api/comment/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COMMENT', comment: { id: 1, state: 2 } });
-    }));
+      done();
+    });
 
-    test('deleteComment', A(async () => {
+    test('deleteComment', async (done) => {
       jest.spyOn(axios, 'delete').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.deleteComment({ id: 1 })(dispatch);
       expect(axios.delete).toHaveBeenCalledWith('/api/comment/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'DELETE_COMMENT', comment: { id: 1 } });
-    }));
+      done();
+    });
 
-    test('addNewComment', A(async () => {
+    test('addNewComment', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const state = getState({
         user: {
@@ -159,14 +167,16 @@ describe('CMS Store Module', () => {
       await CmsModule.addNewComment({}, { id: 1 })(dispatch, state);
       expect(axios.post).toHaveBeenCalledWith('/api/comment/', { post: 1, user: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'ADD_COMMENT', comment: 1 });
-    }));
+      done();
+    });
 
-    test('updateComment', A(async () => {
+    test('updateComment', async (done) => {
       jest.spyOn(axios, 'put').mockReturnValue(defaultAxiosSuccess);
       await CmsModule.updateComment({ id: 1 })(dispatch);
       expect(axios.put).toHaveBeenCalledWith('/api/comment/1/', { id: 1 });
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COMMENT', comment: 1 });
-    }));
+      done();
+    });
   });
 
   describe('REDUCERS', () => {

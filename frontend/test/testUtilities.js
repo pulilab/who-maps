@@ -71,8 +71,6 @@ const angularForm = {
   $setPristine: jest.fn()
 };
 
-const A = f => done => f().then(done).catch(done.fail);
-
 const $element = {};
 
 const $location = {
@@ -99,7 +97,6 @@ export {
   EE,
   $ngRedux,
   angularForm,
-  A,
   $element,
   $location,
   dispatch,

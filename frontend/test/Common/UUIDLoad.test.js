@@ -1,5 +1,5 @@
 import UUIDLoadController from '../../src/Common/UUIDLoad/UUIDLoadController';
-import { $state, $ngRedux, EE, A } from '../testUtilities';
+import { $state, $ngRedux, EE } from '../testUtilities';
 
 let ulc = {};
 
@@ -18,7 +18,7 @@ describe('UUID Project load Components controller', () => {
     expect(typeof ulc).toBe('object');
   });
 
-  test('should have a function that can transform an UUID in a projectID', A(async () => {
+  test('should have a function that can transform an UUID in a projectID', async (done) => {
     expect(ulc.handleProjectLoad).toBeDefined();
     ulc.searchProjects = jest.fn().mockReturnValue(Promise.resolve());
     ulc.search = [];
@@ -34,5 +34,6 @@ describe('UUID Project load Components controller', () => {
     };
     await ulc.handleProjectLoad();
     expect(ulc.state.go).toHaveBeenCalledWith('dashboard', { appName: 1 });
-  }));
+    done();
+  });
 });

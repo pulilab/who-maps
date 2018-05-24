@@ -27,9 +27,10 @@ describe('PDFExport Controller', () => {
     expect(pef.exportDate).toBeDefined();
   });
 
-  test('should have a function to generate a PDF with the pdfmake lib', A(async () => {
+  test('should have a function to generate a PDF with the pdfmake lib', async (done) => {
     jest.spyOn(pdfMake, 'createPdf').mockReturnValue(pdfMakeReturn);
     await pef.makePDF();
     expect(pef.pdfMake).toHaveBeenCalled();
-  }));
+    done();
+  });
 });

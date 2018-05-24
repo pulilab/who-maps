@@ -5,7 +5,7 @@ import * as SystemModule from '../../src/store/modules/system';
 import * as ToolkitModule from '../../src/store/modules/toolkit';
 import * as ProjectUtils from '../../src/store/project_utils';
 import { project_definition } from '../../src/store/static_data/project_definition';
-import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
+import { defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
 describe('Project Store Module', () => {
@@ -853,7 +853,7 @@ describe('Project Store Module', () => {
       jest.restoreAllMocks();
     });
 
-    test('loadUserProjects', A(async () => {
+    test('loadUserProjects', async (done) => {
       const spy = jest.spyOn(ProjectModule, 'getSavedProjectList').mockReturnValue([]);
 
       jest.spyOn(axios, 'get').mockReturnValue({ data: [{ id: 1 }, { id: 2 }] });
@@ -887,9 +887,10 @@ describe('Project Store Module', () => {
         expect(console.log).toHaveBeenCalledWith(e);
         expect('' + e).toBe('Error: error');
       }
-    }));
+      done();
+    });
 
-    test('loadProjectDetails', A(async () => {
+    test('loadProjectDetails', async (done) => {
       const spy = jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       const state = {
         projects: {
@@ -932,9 +933,10 @@ describe('Project Store Module', () => {
         expect(console.log).toHaveBeenCalledWith(e);
         expect('' + e).toEqual('Error: error');
       }
-    }));
+      done();
+    });
 
-    test('setCurrentProject', A(async () => {
+    test('setCurrentProject', async (done) => {
       const state = {
         projects: {
           currentProject: 1
@@ -982,9 +984,10 @@ describe('Project Store Module', () => {
       expect(ProjectModule.loadProjectDetails).toHaveBeenCalled();
       expect(ToolkitModule.loadToolkitData).toHaveBeenCalled();
       expect(axios.get).not.toHaveBeenCalled();
-    }));
+      done();
+    });
 
-    test('snapShotProject', A(async () => {
+    test('snapShotProject', async (done) => {
       jest.spyOn(ProjectModule, 'loadProjectDetails');
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const state = {
@@ -997,9 +1000,10 @@ describe('Project Store Module', () => {
       expect(axios.post).toHaveBeenCalledWith('/api/projects/1/version/');
       expect(dispatch).toHaveBeenCalled();
       expect(ProjectModule.loadProjectDetails).toHaveBeenCalled();
-    }));
+      done();
+    });
 
-    test('loadProjectStructure', A(async () => {
+    test('loadProjectStructure', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       const spy = jest.spyOn(ProjectModule, 'getProjectStructure').mockReturnValue({ id: 1 });
       dispatch.mockClear();
@@ -1011,16 +1015,18 @@ describe('Project Store Module', () => {
       await ProjectModule.loadProjectStructure()(dispatch, getState({}));
       expect(axios.get).toHaveBeenCalledWith('/api/projects/structure/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_PROJECT_STRUCTURE', structure: 1 });
-    }));
+      done();
+    });
 
-    test('saveTeamViewers', A(async () => {
+    test('saveTeamViewers', async (done) => {
       jest.spyOn(axios, 'put').mockReturnValue(defaultAxiosSuccess);
       const result = await ProjectModule.saveTeamViewers({ id: 1 }, [{ id: 1 }], [{ id: 2 }]);
       expect(axios.put).toHaveBeenCalledWith('/api/projects/1/groups/', { team: [1], viewers: [2] });
       expect(result).toEqual({ team: [1], viewers: [2] });
-    }));
+      done();
+    });
 
-    test('saveCountryFields', A(async () => {
+    test('saveCountryFields', async (done) => {
       const spy = jest.spyOn(axios, 'post').mockReturnValue({ data: { fields: 1 } });
       const fields = [{ country: 1, answer: 1, type: 1, question: 1, project: 1, gibberish: 2 }];
       let result = await ProjectModule.saveCountryFields(fields, 1, 2, 'published');
@@ -1039,7 +1045,8 @@ describe('Project Store Module', () => {
       jest.spyOn(console, 'log').mockImplementation(() => {});
       result = await ProjectModule.saveCountryFields(fields, 1, 2, 'asd');
       expect(result).toEqual(false);
-    }));
+      done();
+    });
   });
 
   describe('REDUCERS', () => {

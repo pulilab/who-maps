@@ -1,5 +1,5 @@
 import GeneralOverviewController from '../../src/Project/GeneralOverview/GeneralOverviewController';
-import { $scope, $element, $state, $ngRedux, A } from '../testUtilities';
+import { $scope, $element, $state, $ngRedux } from '../testUtilities';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as CountriesModule from '../../src/store/modules/countries';
 
@@ -73,7 +73,7 @@ describe('GeneralOverviewController', () => {
     expect(controller.getUsers('E').length).toBe(2);
   });
 
-  test(' async checkName fn.', A(async () => {
+  test(' async checkName fn.', async (done) => {
     jest.spyOn(controller, 'handleCustomError').mockReturnValue(undefined);
     jest.spyOn(controller, 'setCustomError').mockReturnValue(undefined);
     controller.projectName = 'a';
@@ -102,11 +102,12 @@ describe('GeneralOverviewController', () => {
     expect(controller.handleCustomError).toHaveBeenCalledWith('name');
     expect(controller.searchDuplicateProjectName).toHaveBeenCalledWith('a');
     expect(controller.setCustomError).toHaveBeenCalledWith('name', 'Project name is not unique');
-  }));
+    done()
+  });
 
   test('openSimilarProject fn.', () => {
     const event = {
-      preventDefault: jasmine.createSpy('preventDefault')
+      preventDefault: jest.fn()
     };
 
     const project = {

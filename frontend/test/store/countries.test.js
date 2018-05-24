@@ -2,7 +2,7 @@ import * as CountriesModule from '../../src/store/modules/countries';
 import * as SystemModule from '../../src/store/modules/system';
 import * as ProjectModule from '../../src/store/modules/projects';
 import * as language from '../../src/plugins/language';
-import { A, defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
+import { defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 
 describe('Countries Store Module', () => {
@@ -247,7 +247,7 @@ describe('Countries Store Module', () => {
   });
 
   describe('ACTIONS', () => {
-    test('loadCountries', A(async () => {
+    test('loadCountries', async (done) => {
       const spy = jest.spyOn(axios, 'get').mockReturnValue({ data: [{ name: 'b' }, { name: 'a' }] });
       let state = getState({
         countries: {
@@ -269,9 +269,10 @@ describe('Countries Store Module', () => {
       await CountriesModule.loadCountries()(dispatch, state);
       expect(axios.get).not.toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
-    }));
+      done();
+    });
 
-    test('loadCountryFields', A(async () => {
+    test('loadCountryFields', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue({ data: [{ id: 2 }, { id: 1 }] });
       const state = getState({
         countries: {
@@ -286,9 +287,10 @@ describe('Countries Store Module', () => {
       await CountriesModule.loadCountryFields(2)(dispatch, state);
       expect(axios.get).toHaveBeenCalledWith('/api/country-fields/2/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_COUNTRY_FIELDS_LIST', fields: [{ id: 1 }, { id: 2 }] });
-    }));
+      done();
+    });
 
-    test('loadCountryMapData', A(async () => {
+    test('loadCountryMapData', async (done) => {
       jest.spyOn(CountriesModule, 'getCurrentCountry').mockReturnValue({ code: 'hu' });
       const getStateSpy = getState({});
       const data = {
@@ -316,9 +318,10 @@ describe('Countries Store Module', () => {
       CountriesModule.mapData.hu = data;
       await CountriesModule.loadCountryMapData()(dispatch, getStateSpy);
       expect(axios.get).not.toHaveBeenCalled();
-    }));
+      done();
+    });
 
-    test('loadCountryLandingPageInfo', A(async () => {
+    test('loadCountryLandingPageInfo', async (done) => {
       const getStateSpy = getState({});
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
       const spy = jest.spyOn(CountriesModule, 'getCurrentCountry').mockReturnValue(undefined);
@@ -334,9 +337,10 @@ describe('Countries Store Module', () => {
       expect(getStateSpy).toHaveBeenCalled();
       expect(axios.get).toHaveBeenCalledWith('/api/landing/HU/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_COUNTRY_COVER_DATA', cover: 1 });
-    }));
+      done();
+    });
 
-    test('loadCurrentCountryDistrictsProject', A(async () => {
+    test('loadCurrentCountryDistrictsProject', async (done) => {
       const spy = jest.spyOn(CountriesModule, 'getCurrentCountry').mockReturnValue(undefined);;
       const getStateSpy = getState({});
       axios.get = jest.fn().mockReturnValue(defaultAxiosSuccess);
@@ -353,9 +357,10 @@ describe('Countries Store Module', () => {
       expect(getStateSpy).toHaveBeenCalled();
       expect(axios.get).toHaveBeenCalledWith('/api/projects/by-view/map/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_COUNTRY_DISTRICT_PROJECTS', projects: 1 });
-    }));
+      done();
+    });
 
-    test('loadCountryProjectsOrAll', A(async () => {
+    test('loadCountryProjectsOrAll', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
 
       await CountriesModule.loadCountryProjectsOrAll()(dispatch);
@@ -365,9 +370,10 @@ describe('Countries Store Module', () => {
       await CountriesModule.loadCountryProjectsOrAll(1)(dispatch);
       expect(axios.get).toHaveBeenCalledWith('/api/projects/by-view/list/1/');
       expect(dispatch).toHaveBeenCalledWith({ type: 'SET_CURRENT_COUNTRY_PROJECTS', projects: 1 });
-    }));
+      done();
+    });
 
-    test('loadCurrentCountryProjects', A(async () => {
+    test('loadCurrentCountryProjects', async (done) => {
       const getStateSpy = getState({});
       const currentSpy = jest.spyOn(CountriesModule, 'getCurrentCountry').mockReturnValue(undefined);
       jest.spyOn(CountriesModule, 'loadCountryProjectsOrAll');
@@ -382,9 +388,10 @@ describe('Countries Store Module', () => {
       expect(getStateSpy).toHaveBeenCalled();
       expect(currentSpy).toHaveBeenCalled();
       expect(CountriesModule.loadCountryProjectsOrAll).toHaveBeenCalledWith(1);
-    }));
+      done();
+    });
 
-    test('setCurrentCountry', A(async () => {
+    test('setCurrentCountry', async (done) => {
       jest.spyOn(CountriesModule, 'loadCountryFields');
       jest.spyOn(CountriesModule, 'loadCountryMapData');
       jest.spyOn(CountriesModule, 'loadCountryLandingPageInfo');
@@ -422,9 +429,10 @@ describe('Countries Store Module', () => {
       expect(CountriesModule.loadCountryMapData).toHaveBeenCalled();
       expect(CountriesModule.loadCountryLandingPageInfo).toHaveBeenCalled();
       expect(CountriesModule.loadCurrentCountryDistrictsProject).toHaveBeenCalled();
-    }));
+      done();
+    });
 
-    test('setCurrentCountryFromCode', A(async () => {
+    test('setCurrentCountryFromCode', async (done) => {
       jest.spyOn(CountriesModule, 'setCurrentCountry');
       const getStateSpy = getState({ countries: {
         list: [{ code: 'hu', id: 1 }]
@@ -439,14 +447,16 @@ describe('Countries Store Module', () => {
       expect(getStateSpy).toHaveBeenCalled();
       expect(dispatch).toHaveBeenCalled();
       expect(CountriesModule.setCurrentCountry).toHaveBeenCalledWith(1, ['landingPage']);
-    }));
+      done();
+    });
 
-    test('csvExport', A(async () => {
+    test('csvExport', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
       const result = await CountriesModule.csvExport(1);
       expect(axios.post).toHaveBeenCalledWith('/api/projects/csv-export/', 1);
       expect(result).toBe(1);
-    }));
+      done();
+    });
   });
 
   describe('REDUCERS', () => {
