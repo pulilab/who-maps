@@ -55,7 +55,7 @@ def copy_prod(server):
         # Get current tag
         tag = run('git describe --tags')
         # Backup production database
-        run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+        run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
         run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
         # Backup production media files
         run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz django/media')
@@ -68,7 +68,7 @@ def copy_prod(server):
         # Import production database
         run('scp {}:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .'.format(PROD_HOST_STRING))
         run('tar -xzvf dump`date +%d-%m-%Y`.sql.tar.gz')
-        run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+        run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker-compose exec  postgres psql -Upostgres')
         # Import production media files
         run('rm -rf media')
         run('scp {}:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .'.format(PROD_HOST_STRING))
@@ -77,7 +77,7 @@ def copy_prod(server):
 
 def backup():
     # Backup database
-    local('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+    local('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
     # Backup media files
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
@@ -169,24 +169,24 @@ def tear_down():
 
 
 def _drop_db():
-    run('docker exec -it whomaps_postgres_1 dropdb -U postgres postgres')
+    run('docker-compose exec postgres dropdb -U postgres postgres')
 
 
 def _create_db():
-    run('docker exec -it whomaps_postgres_1 createdb -U postgres postgres')
+    run('docker-compose exec postgres createdb -U postgres postgres')
 
 
 def _backup_db():
-    run('docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+    run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
 
 
 def _restore_db():
-    run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i whomaps_postgres_1 psql -Upostgres')
+    run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i postgres psql -Upostgres')
     # run('cat ../dump.json | docker exec -i whomaps_django_1 python manage.py loaddata_stdin')
 
 
 def _migrate_db():
-    run('docker exec -it whomaps_django_1 python manage.py migrate --noinput')
+    run('docker-compose exec who-maps_django_1 python manage.py migrate --noinput')
 
 
 def _import_geodata():
@@ -212,11 +212,11 @@ def lint():
 
 
 def makemigrations():
-    local('docker exec -it whomaps_django_1 python manage.py makemigrations')
+    local('docker-compose exec django python manage.py makemigrations')
 
 
 def migrate():
-    local("docker exec -it whomaps_django_1 python manage.py migrate --noinput")
+    local("docker-compose exec django python manage.py migrate --noinput")
 
 
 def import_geodata():
@@ -224,13 +224,13 @@ def import_geodata():
 
 
 def rebuild_db():
-    local("docker exec -it whomaps_postgres_1 dropdb -U postgres postgres")
-    local("docker exec -it whomaps_postgres_1 createdb -U postgres postgres")
-    local("cat ./dump.sql | docker exec -i whomaps_postgres_1 psql -Upostgres")
+    local("docker-compose exec postgres dropdb -U postgres postgres")
+    local("docker-compose exec postgres createdb -U postgres postgres")
+    local("cat ./dump.sql | docker-compose exec postgres psql -Upostgres")
 
 
 def backup_db():
-    local("docker exec -it whomaps_postgres_1 pg_dumpall -U postgres -c > ./dump.sql")
+    local("docker-compose exec postgres pg_dumpall -U postgres -c > ./dump.sql")
 
 
 def down():
