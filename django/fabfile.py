@@ -181,7 +181,7 @@ def _backup_db():
 
 
 def _restore_db():
-    run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker-compose exec postgres psql -Upostgres')
+    run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker exec -i $(docker-compose ps -q postgres) psql -Upostgres')
     # run('cat ../dump.json | docker exec -i whomaps_django_1 python manage.py loaddata_stdin')
 
 
