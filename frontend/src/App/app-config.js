@@ -153,14 +153,25 @@ const config = ($stateProvider, $urlRouterProvider, $locationProvider,
   $locationProvider.html5Mode(true);
   $anchorScrollProvider.disableAutoScrolling();
 
-  const initialState = {
-    user: {
-      token: storage.get('token') || undefined
+  const storeState = {
+    state: {
+      user: {
+        token: storage.get('token') || undefined
+      }
     }
   };
+
+  if (process.env.NODE_ENV === 'DEBUG_STORE') {
+    try {
+      const debugState = require('./reduxDebugState');
+      storeState.state = { ...debugState.store, user: { ...debugState.store.user, ...storeState.state.user } };
+    } catch (e) {
+      console.error('Missing debug state, please create a js file called: reduxDebugState  exporting a store module in the app folder');
+    }
+  }
   const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
   const storeExtension = reduxDevTools ? [reduxDevTools()] : undefined;
-  $ngReduxProvider.createStoreWith(reducers, middleware, storeExtension, initialState);
+  $ngReduxProvider.createStoreWith(reducers, middleware, storeExtension, storeState.state);
 };
 
 config.$inject = [

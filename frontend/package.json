@@ -10,6 +10,7 @@
     "dev": "yarn serve",
     "css_2": "cross-env NODE_ENV=production node --max-old-space-size=4096 ./node_modules/webpack-dev-server/bin/webpack-dev-server --progress --colors --hot --inline --port 8100",
     "serve": "cross-env NODE_ENV=dev webpack-serve webpack-serve.config.js --no-clipboard",
+    "debug_store": "cross-env NODE_ENV=DEBUG_STORE webpack-serve webpack-serve.config.js --no-clipboard",
     "dist": "cross-env NODE_ENV=production webpack --progress",
     "build": "yarn dist && yarn clean-server-folder && yarn copy-to-server",
     "dist-analyze": "cross-env NODE_ENV=production webpack --profile --json --display-chunks --progress > stats.json",

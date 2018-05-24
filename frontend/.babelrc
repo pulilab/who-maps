@@ -19,6 +19,12 @@
         "dynamic-import-webpack",
         "remove-webpack"
       ]
+    },
+    "DEBUG_STORE": {
+      "plugins": [
+        "dynamic-import-webpack",
+        "remove-webpack"
+      ]
     }
   },
   "plugins": [
