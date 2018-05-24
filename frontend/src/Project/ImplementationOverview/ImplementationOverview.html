@@ -153,7 +153,7 @@
         <translate>{{vm.subLevelNames[0]}} level deployment</translate>
       </h6>
 
-      <div class="input-group" ng-repeat="cov in vm.project.coverage">
+      <div class="input-group" ng-repeat="cov in vm.project.coverage track by $index">
         <div layout="column">
           <div layout="row">
             <md-input-container class="district" flex="45">
@@ -291,7 +291,7 @@
         <translate>{{vm.subLevelNames[1]}} level deployment</translate>
       </h6>
 
-      <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level" ng-if-end>
+      <div class="input-group" ng-repeat="cov in vm.project.coverage_second_level track by $index" ng-if-end>
         <div layout="column">
           <div layout="row">
             <md-input-container class="district" flex="45">
