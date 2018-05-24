@@ -286,7 +286,7 @@
 
       <!--NEW COVERAGE LAYER-->
 
-      <h6 class="subtitle" ng-if-start="vm.subLevelNames[1]">
+      <h6 class="subtitle" ng-if-start="vm.showSecondLevel">
         <i class="material-icons">&#xE567;</i>
         <translate>{{vm.subLevelNames[1]}} level deployment</translate>
       </h6>
@@ -306,7 +306,7 @@
                   {{district.name}}
                 </md-option>
                 <md-option md-option-empty ng-hide="vm.secondSubLevelList.length">
-                  <translate>Select a country </translate>
+                  <translate>Select a {{vm.subLevelNames[1]}} </translate>
                 </md-option>
               </md-select>
               <div ng-messages="vm.form['coverage_second_level_' + $index + '.district'].$error">

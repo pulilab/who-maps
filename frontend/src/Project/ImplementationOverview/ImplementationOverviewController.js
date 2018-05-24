@@ -9,6 +9,7 @@ class ImplementationOverview extends CollapsibleSet {
     this.$onDestroy = this.onDestroy.bind(this);
     this.setAvailableOptions = this.setAvailableOptions.bind(this);
     this.mapHealthFocusAreas = this.mapHealthFocusAreas.bind(this);
+    this.checkSecondLevelData = this.checkSecondLevelData.bind(this);
   }
 
   mapData (state) {
@@ -58,6 +59,7 @@ class ImplementationOverview extends CollapsibleSet {
       return this.project.coverage_second_level;
     }, (coverage_second_level) => {
       this.observeCoverageSecondLevel = {};
+      this.showSecondLevel = this.checkSecondLevelData(coverage_second_level);
       this.clearDistrict(coverage_second_level);
       this.dispatchChange('coverage_second_level', coverage_second_level);
     }, true);
@@ -83,6 +85,13 @@ class ImplementationOverview extends CollapsibleSet {
     });
 
     this.scope.$watch(s => s.vm.districtList, this.removeUnavailableDistricts.bind(this));
+  }
+
+  checkSecondLevelData (coverage_second_level) {
+    return coverage_second_level &&
+    coverage_second_level.length > 0 &&
+    coverage_second_level[0].available &&
+    coverage_second_level[0].available.length > 0;
   }
 
   initializeFacilityList (collection) {
