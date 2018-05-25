@@ -291,7 +291,7 @@ describe('Countries Store Module', () => {
     });
 
     test('loadCountryMapData', async (done) => {
-      jest.spyOn(CountriesModule, 'getCurrentCountry').mockReturnValue({ code: 'hu' });
+      jest.spyOn(CountriesModule, 'getCurrentCountry').mockReturnValue({ code: 'hu', map_version: 3 });
       const getStateSpy = getState({});
       const data = {
         objects: {
@@ -312,7 +312,7 @@ describe('Countries Store Module', () => {
       CountriesModule.mapData.hu = undefined;
       await CountriesModule.loadCountryMapData()(dispatch, getStateSpy);
       expect(getStateSpy).toHaveBeenCalled();
-      expect(axios.get).toHaveBeenCalledWith('/static/country-geodata/hu.json');
+      expect(axios.get).toHaveBeenCalledWith('/static/country-geodata/hu.json?version=3');
 
       axios.get.mockClear();
       CountriesModule.mapData.hu = data;

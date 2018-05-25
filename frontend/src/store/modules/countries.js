@@ -184,7 +184,7 @@ export function loadCountryMapData () {
     if (country && country.code) {
       const countryData = mapData[country.code];
       if (!countryData) {
-        const { data } = await axios.get(`/static/country-geodata/${country.code}.json`);
+        const { data } = await axios.get(`/static/country-geodata/${country.code}.json?version=${country.map_version}`);
         mapData[country.code] = Object.freeze(data);
       }
     }
