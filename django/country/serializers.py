@@ -12,7 +12,8 @@ class CountryListSerializer(serializers.ModelSerializer):
             "name",
             "code",
             "project_approval",
-            "map_data"
+            "map_data",
+            "map_version"
         )
 
 
