@@ -1,10 +1,13 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from django.utils.dateformat import format
 
 from .models import Country, PartnerLogo, CountryField
 
 
 class CountryListSerializer(serializers.ModelSerializer):
+    map_version = serializers.SerializerMethodField()
+
     class Meta:
         model = Country
         fields = (
@@ -12,8 +15,15 @@ class CountryListSerializer(serializers.ModelSerializer):
             "name",
             "code",
             "project_approval",
-            "map_data"
+            "map_data",
+            "map_version"
         )
+
+    @staticmethod
+    def get_map_version(obj):
+        if obj.map_activated_on:
+            return format(obj.map_activated_on, 'U')
+        return 0
 
 
 class LandingPageSerializer(serializers.ModelSerializer):

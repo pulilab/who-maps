@@ -75,6 +75,7 @@ class CountryTests(APITestCase):
         self.assertIn("code", country_data.keys())
         self.assertIn("id", country_data.keys())
         self.assertIn("project_approval", country_data.keys())
+        self.assertIn("map_version", country_data.keys())
         self.assertEqual(country_data['name'], 'Hungary')
 
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
