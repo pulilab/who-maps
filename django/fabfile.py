@@ -186,7 +186,7 @@ def _restore_db():
 
 
 def _migrate_db():
-    run('docker-compose exec who-maps_django_1 python manage.py migrate --noinput')
+    run('docker-compose exec django python manage.py migrate --noinput')
 
 
 def _import_geodata():
