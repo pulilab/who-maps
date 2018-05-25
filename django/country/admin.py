@@ -78,7 +78,7 @@ class CountryAdmin(admin.ModelAdmin):
     ordering = ('name',)
     inlines = (MapFileInline, PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
     filter_horizontal = ('users',)
-    readonly_fields = ('code', 'name', 'map_download', 'map_version')
+    readonly_fields = ('code', 'name', 'map_download')
 
     def get_fields(self, request, obj=None):
         fields = super(CountryAdmin, self).get_fields(request, obj)
@@ -116,7 +116,6 @@ class CountryAdmin(admin.ModelAdmin):
             self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
                               template_name="email/country_admin.html")
         if change and 'map_activated_on' in form.changed_data and obj.users:
-            obj.increment_map_version()
             management.call_command('clean_maps', obj.code)
             self._notify_user(obj, subject="A new map for {country_name} has been activated",
                               template_name="email/country_map_activated.html")

@@ -21,11 +21,6 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
     map_data = JSONField(default=dict(), blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
-    map_version = models.IntegerField(default=0)
-
-    def increment_map_version(self):
-        self.map_version += 1
-        self.save()
 
     class Meta:
         verbose_name_plural = "Countries"

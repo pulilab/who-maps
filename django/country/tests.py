@@ -660,11 +660,6 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[-1]['map_data'], self.map_data['map_data'])
 
-    def test_incremet_map_version_method(self):
-        expected = self.country.map_version + 1
-        self.country.increment_map_version()
-        self.assertEqual(self.country.map_version, expected)
-
 
 class MockRequest:
     pass
@@ -718,7 +713,6 @@ class CountryAdminTests(TestCase):
             'code',
             'name',
             'map_download',
-            'map_version',
             'users'
         ))
 
@@ -731,8 +725,7 @@ class CountryAdminTests(TestCase):
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'code',
             'name',
-            'map_download',
-            'map_version'
+            'map_download'
         ))
 
     def test_country_field_inlines(self):

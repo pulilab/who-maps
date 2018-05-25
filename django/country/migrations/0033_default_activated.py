@@ -3,7 +3,13 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+from django.utils import timezone
 
+def add_default_activated(apps, schema_editor):
+    Country = apps.get_model('country', 'Country')
+    for cf in Country.objects.filter(map_activated_on=None):
+        cf.map_activated_on = timezone.now()
+        cf.save()
 
 class Migration(migrations.Migration):
 
@@ -12,9 +18,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='country',
-            name='map_version',
-            field=models.IntegerField(default=0),
-        ),
+        migrations.RunPython(add_default_activated)
     ]
