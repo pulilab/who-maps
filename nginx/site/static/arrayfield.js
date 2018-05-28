@@ -33,8 +33,17 @@
         clonedItem.insertBefore(liElement.find('li:last'))
     }
 
-    function checkOptionsVisibility(element) {
-        console.log(element)
+    function showHideOptionsField(selector) {
+        var showValues = [4, 5];
+        var row = selector.closest('.form-row');
+        var list = row.querySelector('.field-options .arrayfield-list');
+        var value = parseInt(selector.value, 10);
+
+        if (showValues.includes(value)) {
+            list.style.display = 'block';
+        } else {
+            list.style.display = 'none'
+        }
     }
 
 
@@ -48,20 +57,13 @@
         deleteTextInput(e.target)
     })
 
-    $(document).on("change", '#fields-group td.field-type select', function(e) {
-        var parent = e.target.parentNode.parentNode
-        var list = $('.arrayfield-list', parent)
-        var value = +e.target.value
-
-        if (value === 4 || value === 5 ) {
-            list.show()
-        }
-        else {
-            list.hide()
-        }
+    $(document).on("change", '#fields-group .form-row td.field-type select', function(e) {
+        showHideOptionsField(e.target);
     })
 
     $( document ).ready(function() {
         $('#fields-2-group .arrayfield-list').show()
+        document.querySelectorAll('#fields-group .form-row.dynamic-fields td.field-type select')
+            .forEach(showHideOptionsField)
     })
 })()
