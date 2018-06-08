@@ -138,7 +138,7 @@ export const getUserDefaultProject = state => {
 };
 
 export const getEmptyProject = () => {
-  return { ...project_definition };
+  return { ...project_definition() };
 };
 
 export const getVanillaProject = state => {

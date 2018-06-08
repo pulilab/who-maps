@@ -226,8 +226,8 @@ describe('Project Store Module', () => {
 
     test('getEmptyProject', () => {
       const result = ProjectModule.getEmptyProject();
-      expect(result).toEqual(project_definition);
-      expect(result).not.toBe(project_definition);
+      expect(result).toEqual(project_definition());
+      expect(result).not.toBe(project_definition());
     });
 
     test('getVanillaProject', () => {

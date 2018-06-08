@@ -1,4 +1,4 @@
-export const project_definition = {
+export const project_definition = () => ({
   name: null,
   organisation: {
     id: undefined,
@@ -38,4 +38,4 @@ export const project_definition = {
   hsc_challenges: [],
   health_focus_areas: [],
   government_investor: undefined
-};
+});
