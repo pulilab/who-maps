@@ -14,7 +14,8 @@ async function baseUserResolver ($ngRedux) {
   await $ngRedux.dispatch(SystemModule.loadStaticData());
   const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
-  return Promise.all([countries, structure]);
+  const organisation = $ngRedux.dispatch(SystemModule.loadOrganisations());
+  return Promise.all([countries, structure, organisation]);
 }
 
 async function shareUserResolver ($ngRedux) {
@@ -28,7 +29,8 @@ async function appDataResolver ($ngRedux) {
   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
   const profiles = $ngRedux.dispatch(SystemModule.loadUserProfiles());
   const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
-  return Promise.all([projects, profiles, countries, structure]);
+  const organisation = $ngRedux.dispatch(SystemModule.loadOrganisations());
+  return Promise.all([projects, profiles, countries, structure, organisation]);
 }
 
 async function publicDataResolver ($ngRedux) {
@@ -37,7 +39,8 @@ async function publicDataResolver ($ngRedux) {
   const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
   const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
   const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
-  return Promise.all([projects, countries, structure]);
+  const organisation = $ngRedux.dispatch(SystemModule.loadOrganisations());
+  return Promise.all([projects, countries, structure, organisation]);
 }
 
 function appNameMapper ($ngRedux) {
