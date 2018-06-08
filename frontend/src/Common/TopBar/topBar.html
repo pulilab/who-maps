@@ -15,8 +15,8 @@
     </div>
 
     <div>
-      <md-button aria-label="Dashboard"
-                 title="Dashboard"
+      <md-button aria-label="{{ 'Dashboard' | translate}}"
+                 title="{{ 'Dashboard' | translate}}"
                  class="view-selector"
                  ui-sref="dashboard"
                  ng-show="vm.profileValid"
@@ -27,8 +27,8 @@
     </div>
 
     <div>
-      <md-button aria-label="My Projects"
-                 title="My Projects"
+      <md-button aria-label="{{ 'My Projects' | translate }}"
+                 title="{{ 'My Projects' | translate }}"
                  class="view-selector"
                  ui-sref="my-projects"
                  ng-show="vm.profileValid"
@@ -39,8 +39,8 @@
     </div>
 
     <div>
-      <md-button aria-label="Planning and Guidance"
-                 title="Planning and Guidance"
+      <md-button aria-label="{{ 'Planning and Guidance' | translate }}"
+                 title="{{ 'Planning and Guidance' | translate }}"
                  class="view-selector"
                  ui-sref="cms"
                  ng-show="vm.profileValid"
