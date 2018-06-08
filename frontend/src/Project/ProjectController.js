@@ -181,10 +181,9 @@ class ProjectController {
   }
 
   async saveOrganisationIfNeeded () {
-    console.log('inside save organisation');
     if (this.project.organisation && this.project.organisation.id === null) {
       try {
-        const organisation = await SystemModule.addOrganisation(this.project.organisation.name);
+        const organisation = await this.$ngRedux.dispatch(SystemModule.addOrganisation(this.project.organisation.name));
         this.project.organisation = { ...organisation };
       } catch (e) {
         console.error(e);
