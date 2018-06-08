@@ -25,11 +25,10 @@ class PDFExportController {
     this.countryFlag = countryFlag;
   }
 
-  async makePDF (gettextCatalog) {
+  makePDF (gettextCatalog) {
     /* translation-unfriendly-code */
-    const pdfMakePromise = import('pdfmake/build/pdfmake');
-    const pdfFontsPromise = import('pdfmake/build/vfs_fonts.js');
-    const [pdfMake, pdfFonts] = await Promise.all([pdfMakePromise, pdfFontsPromise]);
+    const pdfMake = require('pdfmake/build/pdfmake');
+    const pdfFonts = require('pdfmake/build/vfs_fonts.js');
     /* end-translation-unfriendly-code */
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
     this.pdfMake = pdfMake.createPdf;
