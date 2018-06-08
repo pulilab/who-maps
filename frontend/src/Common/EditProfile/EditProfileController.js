@@ -10,10 +10,10 @@ class EditProfileController {
     this.scope = $scope;
     this.state = $state;
     this.toast = $mdToast;
+    this.$ngRedux = $ngRedux;
     this.$onInit = this.onInit.bind(this);
     this.$onDestroy = this.onDestroy.bind(this);
     this.mapState = this.mapState.bind(this);
-    this.unsubscribe = $ngRedux.connect(this.mapState, UserModule)(this);
   }
 
   mapState (state) {
@@ -31,6 +31,7 @@ class EditProfileController {
   }
 
   onInit () {
+    this.unsubscribe = this.$ngRedux.connect(this.mapState, UserModule)(this);
     this.dataLoaded = false;
     this.handleDataLoad();
   }
@@ -67,7 +68,7 @@ class EditProfileController {
   async save () {
     if (this.editProfileForm.$valid && this.userProfile.organisation) {
       if (this.userProfile.organisation.id === null) {
-        const organisation = await SystemModule.addOrganisation(this.userProfile.organisation.name);
+        const organisation = await this.$ngRedux.dispatch(SystemModule.addOrganisation(this.project.organisation.name));
         this.userProfile.organisation = {...organisation};
       }
       try {

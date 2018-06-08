@@ -183,17 +183,17 @@ describe('System Store Module', () => {
       done();
     });
 
-    test('searchOrganisation', async (done) => {
+    test('loadOrganisations', async (done) => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
-      const result = await SystemModule.searchOrganisation('a');
-      expect(axios.get).toHaveBeenCalledWith('/api/organisations/?name=a');
-      expect(result).toBe(1);
+      await SystemModule.loadOrganisations()(dispatch);
+      expect(axios.get).toHaveBeenCalledWith('/api/organisations/');
+      expect(dispatch).toHaveBeenLastCalledWith({type: 'SET_SYSTEM_ORGANISATIONS', data: 1});
       done();
     });
 
     test('addOrganisation', async (done) => {
       jest.spyOn(axios, 'post').mockReturnValue(defaultAxiosSuccess);
-      const result = await SystemModule.addOrganisation('a');
+      const result = await SystemModule.addOrganisation('a')(dispatch);
       expect(axios.post).toHaveBeenCalledWith('/api/organisations/', { name: 'a' });
       expect(result).toBe(1);
       done();

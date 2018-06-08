@@ -13,7 +13,8 @@ const initialState = {
   domains: [],
   landing_page_defaults: {},
   toolkit_questions: [],
-  sub_level_types: []
+  sub_level_types: [],
+  organisations: []
 };
 
 // GETTERS
@@ -81,6 +82,10 @@ export const getSubLevelTypes = state => {
   return [...state.system.sub_level_types.map(t => ({ ...t }))];
 };
 
+export const getOrganisations = state => {
+  return [...state.system.organisations.map(o => ({...o}))];
+};
+
 // ACTIONS
 
 export function loadUserProfiles () {
@@ -127,14 +132,25 @@ export function unsetSearchedProjects () {
   };
 }
 
-export async function searchOrganisation (name) {
-  const { data } = await axios.get(`/api/organisations/?name=${name}`);
-  return data;
+export function loadOrganisations (name) {
+  return async dispatch => {
+    const { data } = await axios.get(`/api/organisations/`);
+    dispatch({type: 'SET_SYSTEM_ORGANISATIONS', data});
+  };
 }
 
-export async function addOrganisation (name) {
-  const { data } = await axios.post('/api/organisations/', { name });
-  return data;
+export function addOrganisation (name) {
+  return async (dispatch, getState) => {
+    try {
+      const { data } = await axios.post('/api/organisations/', { name });
+      return data;
+    } catch (e) {
+      console.log('This organisation exist already, re-fetching the list');
+    }
+    dispatch(exports.loadOrganisations());
+    const organisation = exports.getOrganisations(getState());
+    return organisation.find(o => o.name.toLowerCase() === name.toLowerCase());
+  };
 }
 
 // Reducers
@@ -173,6 +189,9 @@ export default function system (state = initialState, action) {
   }
   case 'SET_SUB_LEVEL_TYPES': {
     return { ...state, sub_level_types: action.sub_level_types };
+  }
+  case 'SET_SYSTEM_ORGANISATIONS': {
+    return { ...state, organisations: action.data };
   }
   default:
     return state;

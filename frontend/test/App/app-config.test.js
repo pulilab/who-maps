@@ -25,9 +25,9 @@ describe('AppModule - configuration submodule', () => {
 
   test('resolves base/user via $stateProvider', async (done) => {
     const res = await baseUserResolver($ngRedux);
-    expect($ngRedux.dispatch).toHaveBeenCalledTimes(4);
+    expect($ngRedux.dispatch).toHaveBeenCalledTimes(5);
     expect(Array.isArray(res)).toBe(true);
-    expect(res.length).toBe(2);
+    expect(res.length).toBe(3);
     expect(res[0]).toBe('resolvedPromiseMock');
     expect(res[1]).toBe('resolvedPromiseMock');
     done();
@@ -42,9 +42,9 @@ describe('AppModule - configuration submodule', () => {
 
   test('resolves app/data via $stateProvider', async (done) => {
     const res = await appDataResolver($ngRedux);
-    expect($ngRedux.dispatch).toHaveBeenCalledTimes(6);
+    expect($ngRedux.dispatch).toHaveBeenCalledTimes(7);
     expect(Array.isArray(res)).toBe(true);
-    expect(res.length).toBe(4);
+    expect(res.length).toBe(5);
     expect(res[0]).toBe('resolvedPromiseMock');
     expect(res[1]).toBe('resolvedPromiseMock');
     expect(res[2]).toBe('resolvedPromiseMock');
@@ -54,9 +54,9 @@ describe('AppModule - configuration submodule', () => {
 
   test('resolves public/data via $stateProvider', async (done) => {
     const res = await publicDataResolver($ngRedux);
-    expect($ngRedux.dispatch).toHaveBeenCalledTimes(5);
+    expect($ngRedux.dispatch).toHaveBeenCalledTimes(6);
     expect(Array.isArray(res)).toBe(true);
-    expect(res.length).toBe(3);
+    expect(res.length).toBe(4);
     expect(res[0]).toBe('resolvedPromiseMock');
     expect(res[1]).toBe('resolvedPromiseMock');
     expect(res[2]).toBe('resolvedPromiseMock');
