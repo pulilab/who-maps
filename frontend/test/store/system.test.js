@@ -1,6 +1,6 @@
 import * as SystemModule from '../../src/store/modules/system';
 import * as ProjectModule from '../../src/store/modules/projects';
-import { defaultAxiosSuccess, dispatch } from '../testUtilities';
+import { defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
 import axios from '../../src/plugins/axios';
 import * as CountriesModule from '../../src/store/modules/countries';
 
@@ -183,12 +183,15 @@ describe('System Store Module', () => {
       done();
     });
 
-    test('loadOrganisations', async (done) => {
+    test('loadOrganisations', async () => {
       jest.spyOn(axios, 'get').mockReturnValue(defaultAxiosSuccess);
-      await SystemModule.loadOrganisations()(dispatch);
+      await SystemModule.loadOrganisations()(dispatch, getState({user: {}}));
+      expect(axios.get).not.toHaveBeenCalledWith('/api/organisations/');
+      expect(dispatch).not.toHaveBeenLastCalledWith({type: 'SET_SYSTEM_ORGANISATIONS', data: 1});
+
+      await SystemModule.loadOrganisations()(dispatch, getState({user: {profile: 1}}));
       expect(axios.get).toHaveBeenCalledWith('/api/organisations/');
       expect(dispatch).toHaveBeenLastCalledWith({type: 'SET_SYSTEM_ORGANISATIONS', data: 1});
-      done();
     });
 
     test('addOrganisation', async (done) => {

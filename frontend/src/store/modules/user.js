@@ -97,6 +97,7 @@ export function doLogin ({ username, password }) {
       dispatch({ type: 'SET_USER', user: data });
       await dispatch(exports.loadProfile());
       await dispatch(ProjectModule.loadUserProjects());
+      await dispatch(SystemModule.loadOrganisations())
       return Promise.resolve();
     } catch ({ response }) {
       return Promise.reject(response.data);

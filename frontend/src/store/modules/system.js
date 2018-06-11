@@ -133,9 +133,12 @@ export function unsetSearchedProjects () {
 }
 
 export function loadOrganisations (name) {
-  return async dispatch => {
-    const { data } = await axios.get(`/api/organisations/`);
-    dispatch({type: 'SET_SYSTEM_ORGANISATIONS', data});
+  return async (dispatch, getState) => {
+    const user = getState().user.profile;
+    if (user) {
+      const { data } = await axios.get(`/api/organisations/`);
+      dispatch({type: 'SET_SYSTEM_ORGANISATIONS', data});
+    }
   };
 }
 
