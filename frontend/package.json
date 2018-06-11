@@ -14,7 +14,7 @@
     "dist": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/.bin/webpack --progress",
     "build": "yarn dist && yarn clean-server-folder && yarn copy-to-server",
     "dist-analyze": "cross-env NODE_ENV=production webpack --profile --json --display-chunks --progress > stats.json",
-    "dist-live": "cross-env NODE_ENV=production LIVE_FLAG=live webpack",
+    "dist-live": "cross-env NODE_ENV=production LIVE_FLAG=live --max_old_space_size=4096 node_modules/.bin/webpack --progress",
     "clean-server-folder": "rm -rf ../nginx/site/html/public/ && rm ../nginx/site/html/*.*",
     "copy-to-server": "cp -R builds/* ../nginx/site/html/",
     "extract_po": "grunt"
