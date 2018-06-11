@@ -8,4 +8,54 @@
     <ui-view name="main" id="main-view" layout="column" layout-fill></ui-view>
   </div>
 </md-content>
-<vue-django-feedback meta="{{vm.meta}}" name="{{vm.user.profile.name}}" email="{{vm.user.profile.email}}" auth-token="{{vm.token}}"></vue-django-feedback>
+<vue-django-feedback
+  meta="{{vm.meta}}"
+  name="{{vm.user.profile.name}}"
+  email="{{vm.user.profile.email}}"
+  auth-token="{{vm.token}}"
+  submit-button-text="{{'SUBMIT' | translate }}"
+  global-error-warning="{{'ERROR' | translate }}"
+  name-label="{{'Your name' | translate }}"
+  email-label="{{'Your email' | translate }}"
+  subject-label="{{'Subject' | translate }}"
+  message-label="{{'Message / Question' | translate }}"
+>
+  <span vue-slot="header-text">
+    <translate>
+        Ask our experts!
+    </translate>
+  </span>
+
+  <span vue-slot="success-header">
+    <translate>
+        Thank you!
+    </translate>
+  </span>
+
+  <span vue-slot="success-message">
+    <translate>
+        Your message has been successfully sent!
+        We will be back to you soon!
+    </translate>
+  </span>
+
+  <span vue-slot="error-header">
+    <translate>
+      Sorry
+    </translate>
+  </span>
+
+  <span vue-slot="error-message">
+    <translate>
+      There was a problem processing your ticket,
+      please try again
+    </translate>
+  </span>
+
+  <span vue-slot="hint-text">
+   <translate>
+      Click here if you are experiencing any issues or have suggestion for improving the website!
+   </translate>
+ </span>
+
+</vue-django-feedback>
