@@ -68,7 +68,7 @@ class EditProfileController {
   async save () {
     if (this.editProfileForm.$valid && this.userProfile.organisation) {
       if (this.userProfile.organisation.id === null) {
-        const organisation = await this.$ngRedux.dispatch(SystemModule.addOrganisation(this.project.organisation.name));
+        const organisation = await this.$ngRedux.dispatch(SystemModule.addOrganisation(this.userProfile.organisation.name));
         this.userProfile.organisation = {...organisation};
       }
       try {
