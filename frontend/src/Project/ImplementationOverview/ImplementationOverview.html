@@ -544,7 +544,7 @@
       </div>
     </md-input-container>
 
-    <div layout="row" ng-repeat="partner in vm.project.implementing_partners" ng-class="{last: $last}" class="no-float">
+    <div layout="row" ng-repeat="partner in vm.project.implementing_partners track by $index" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
         <input ng-model="partner.value"
                ng-change="vm.dispatchChange('implementing_partners', vm.project.implementing_partners)"
@@ -582,7 +582,7 @@
       </div>
     </md-input-container>
 
-    <div layout="row" ng-repeat="donor in vm.project.donors" ng-class="{last: $last}" class="no-float">
+    <div layout="row" ng-repeat="donor in vm.project.donors track by $index" ng-class="{last: $last}" class="no-float">
       <md-input-container md-no-float flex="50">
         <input ng-model="donor.value"
                ng-change="vm.dispatchChange('donors', vm.project.donors)"
