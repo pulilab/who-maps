@@ -106,6 +106,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
+        instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
 
         instance.save()
@@ -166,20 +167,33 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
+        odk_etag = validated_data.pop('odk_etag')
+        odk_id = validated_data.pop('odk_id')
+        odk_extra_data = validated_data.pop('odk_extra_data')
         instance = self.Meta.model.objects.create(
             name=validated_data["name"],
             draft=validated_data,
-            odk_etag=validated_data["odk_etag"],
-            odk_id=validated_data["odk_id"],
-            odk_extra_data=validated_data["odk_extra_data"]
+            odk_etag=odk_etag,
+            odk_id=odk_id,
+            odk_extra_data=odk_extra_data
         )
         instance.team.add(owner)
 
         return instance
 
     def update(self, instance, validated_data):
+        odk_etag = validated_data.pop('odk_etag', None)
+        odk_id = validated_data.pop('odk_id', None)
+        odk_extra_data = validated_data.pop('odk_extra_data', dict())
+
         if not instance.public_id:
             instance.name = validated_data["name"]
+        if self.context.get('preserve_etag', False):
+            instance.odk_etag = odk_etag
+        else:
+            instance.odk_etag = None
+        instance.odk_id = odk_id
+        instance.odk_extra_data = odk_extra_data
         instance.draft = validated_data
         instance.save()
 
