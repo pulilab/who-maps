@@ -31,3 +31,4 @@ django-rosetta
 django-simplefeedback==0.7.1
 pycountry
 requests
+paramiko
