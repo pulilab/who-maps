@@ -152,6 +152,11 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
 
+    # ODK DATA
+    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64)
+    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64)
+    odk_extra_data = serializers.JSONField()
+
     def validate_country(self, value):
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
@@ -161,7 +166,13 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
-        instance = self.Meta.model.objects.create(name=validated_data["name"], draft=validated_data)
+        instance = self.Meta.model.objects.create(
+            name=validated_data["name"],
+            draft=validated_data,
+            odk_etag=validated_data["odk_etag"],
+            odk_id=validated_data["odk_id"],
+            odk_extra_data=validated_data["odk_extra_data"]
+        )
         instance.team.add(owner)
 
         return instance
