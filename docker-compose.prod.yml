@@ -6,7 +6,21 @@ services:
             - SITE_ID=3
         # Current DO instance has 2 cores so (2 Workers * CPU Cores) + 1 = 5
         command: /usr/local/bin/gunicorn who_maps.wsgi:application -w 5 -b :8000 --timeout 120
+        volumes:
+            - ./django:/src
+            - ./frontend:/frontend
+            - ./nginx/site/static:/usr/share/django/static:rw
+            - ./django/media:/usr/share/django/media:rw
+            - log_data:/var/log/django
+            - media_data:/src/media
+            - ssh_data:/root/.ssh
 
     celery:
         environment:
             - SITE_ID=3
+
+volumes:
+  postgres_data:
+  log_data:
+  media_data:
+  ssh_data:
