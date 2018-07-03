@@ -210,6 +210,8 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
+ODK_SYNC_PERIOD = 1  # hours
+
 
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
@@ -221,6 +223,10 @@ if SITE_ID in [3, 4]:
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
             "schedule": datetime.timedelta(days=1),
+        },
+        "sync_from_odk_server": {
+            "task": 'sync_from_odk_server',
+            "schedule": datetime.timedelta(sync_from_odk_server=ODK_SYNC_PERIOD),
         },
     }
     RAVEN_CONFIG = {
@@ -333,3 +339,10 @@ else:
 if CI_RUN:
     STATIC_ROOT = "/home/ubuntu/who-maps/nginx/site/static/"
     MEDIA_ROOT = "/home/ubuntu/who-maps/django/media/"
+
+
+ODK_SERVER_URL = "http://localhost:8000/static/odk.json"
+ODK_CREDENTIALS = {
+    'username': '',
+    'password': ''
+}
