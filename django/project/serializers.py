@@ -153,9 +153,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     implementation_dates = serializers.CharField(max_length=128, required=False)
 
     # ODK DATA
-    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64)
-    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64)
-    odk_extra_data = serializers.JSONField()
+    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
+    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
+    odk_extra_data = serializers.JSONField(required=False)
 
     def validate_country(self, value):
         if self.instance:
