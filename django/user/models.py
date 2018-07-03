@@ -35,6 +35,7 @@ class UserProfile(ExtendedModel):
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
     country = models.ForeignKey('country.Country', null=True)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
+    odk_sync = models.BooleanField(default=False, verbose_name="Whether user has been synced with ODK")
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
