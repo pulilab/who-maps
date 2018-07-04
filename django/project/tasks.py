@@ -77,7 +77,9 @@ def sync_project_from_odk():
         return value.replace('uuid:', '')
 
     def escaped_int_converter(value):
-        return int(value.replace("'", ''))
+        if isinstance(value, str) and value.startswith("'"):
+            value = value.replace("'", '')
+        return int(value)
 
     def list_parser(list):
         return json.loads(list)
@@ -154,9 +156,9 @@ def sync_project_from_odk():
             project['start_date'] = value
         elif type == 'wiki':
             project['wiki'] = value
-        elif type == 'data_standards':
+        elif type == 'interoperability_standards':
             as_list = list_parser(value)
-            project['data_standards'] = list(map(lambda s: escaped_int_converter(s), as_list))
+            project['interoperability_standards'] = list(map(lambda s: escaped_int_converter(s), as_list))
         elif 'interoperability_link_' in type and '_url' not in type:
             id = None
             try:
