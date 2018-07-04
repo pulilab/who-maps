@@ -291,7 +291,7 @@ def sync_project_from_odk():
             logging.error('\n')
         logging.error('ODK IMPORT TASK END: {}'.format(datetime.now()))
 
-    with open('project/static-json/odk.json') as odk_file:
-        rows = json.load(odk_file)
-        start_sync(rows, interoperability_links)
-    # start_sync(res.json())
+    # with open('project/static-json/odk.json') as odk_file:
+    #     rows = json.load(odk_file)
+    #     start_sync(rows, interoperability_links)
+    start_sync(res.json())
