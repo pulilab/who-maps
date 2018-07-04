@@ -63,8 +63,8 @@ def send_project_approval_digest():
 
 @app.task(name="sync_project_from_odk")
 def sync_project_from_odk():
-    login_url = urljoin(settings.ODK_SERVER_URL, '/web-ui/login')
-    import_url = urljoin(settings.ODK_SERVER_URL, '/web-ui/tables/form_sheet/export/JSON/showDeleted/false')
+    login_url = urljoin(settings.ODK_SERVER_HOST, '/web-ui/login')
+    import_url = urljoin(settings.ODK_SERVER_HOST, '/web-ui/tables/form_sheet/export/JSON/showDeleted/false')
     s = requests.Session()
     s.post(login_url, data=settings.ODK_CREDENTIALS)
     res = s.get(import_url)
