@@ -69,7 +69,7 @@ def sync_project_from_odk():
     import_url = urljoin(base_url, form_url)
     s = requests.Session()
     s.post(login_url, data=settings.ODK_CREDENTIALS)
-    # res = s.get(import_url)
+    res = s.get(import_url)
 
     interoperability_links = InteroperabilityLink.objects.all()
 
@@ -294,4 +294,4 @@ def sync_project_from_odk():
     # with open('project/static-json/odk.json') as odk_file:
     #     rows = json.load(odk_file)
     #     start_sync(rows, interoperability_links)
-    start_sync(res.json())
+    start_sync(res.json(), interoperability_links)
