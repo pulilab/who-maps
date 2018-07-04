@@ -18,6 +18,10 @@ services:
     celery:
         environment:
             - SITE_ID=3
+        volumes:
+            - ./django:/src
+            - log_data:/var/log/django
+            - ssh_data:/root/.ssh
 
 volumes:
   postgres_data:
