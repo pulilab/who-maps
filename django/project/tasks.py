@@ -171,12 +171,13 @@ def sync_project_from_odk():
                 il_obj['odk_name'] = '{}_url'.format(type)
 
     def second_level_converter(value, type, project, int_link_collection):
+        dhi_index = 0
         if 'dhi' in type:
-            index = int(type.replace('dhi', '')) - 1
-            platform = project['platforms'][index]
+            platform = project['platforms'][dhi_index]
             if platform:
                 as_list = list_parser(value)
                 platform['strategies'] = list(map(lambda s: escaped_int_converter(s), as_list))
+            dhi_index += 1
         elif 'interoperability_link_' in type and '_url' in type:
             il_obj = next((item for item in int_link_collection if item["odk_name"] == type), None)
             if il_obj:
@@ -201,7 +202,7 @@ def sync_project_from_odk():
                 try:
                     second_level_converter(value, type, project, int_link_collection)
                 except IndexError:
-                    logging.log('{} has invalid / missing value: {}'.format(type, value))
+                    logging.error('{} has invalid / missing value: {}'.format(type, value))
                 except Exception:
                     traceback.print_exc()
 
