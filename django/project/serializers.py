@@ -13,7 +13,6 @@ import scheduler.celery # noqa
 
 from .models import Project
 
-
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
 
@@ -183,17 +182,17 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def update(self, instance, validated_data):
         odk_etag = validated_data.pop('odk_etag', None)
-        odk_id = validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', dict())
+        validated_data.pop('odk_id', None)
+        odk_extra_data = validated_data.pop('odk_extra_data', None)
 
         if not instance.public_id:
             instance.name = validated_data["name"]
-        if self.context.get('preserve_etag', False):
+        if self.context.get('preserve_etag'):
             instance.odk_etag = odk_etag
         else:
             instance.odk_etag = None
-        instance.odk_id = odk_id
-        instance.odk_extra_data = odk_extra_data
+        if odk_extra_data:
+            instance.odk_extra_data = odk_extra_data
         instance.draft = validated_data
         instance.save()
 
