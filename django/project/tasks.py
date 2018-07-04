@@ -198,7 +198,6 @@ def sync_project_from_odk():
                     traceback.print_exc()
 
         for column in columns:
-            logging.error(context["dhi_index"])
             column_type = column.get('column', None)
             value = column.get('value', None)
             if column_type and value:
