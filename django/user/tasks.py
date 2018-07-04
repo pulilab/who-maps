@@ -28,6 +28,10 @@ def sync_user_to_odk(user_profile_id):
 
         out = ssh_stdout.read().decode('utf-8')
         error = ssh_stderr.read().decode('utf-8')
+
+        if "created" in out:
+            profile.odk_sync = True
+            profile.save()
         print(out)
         print(error)
     ssh.close()
