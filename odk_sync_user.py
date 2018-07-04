@@ -79,7 +79,7 @@ def get_ldap_sync_container_id():
                                       'label=com.docker.swarm.service.name=syncldap_ldap-service', "--format",
                                       "'{{.ID}}'"], stdout=subprocess.PIPE)
     docker_ps_cmd.wait()
-    ldap_sync_container_id = docker_ps_cmd.stdout.read().strip().replace("'", "")
+    ldap_sync_container_id = docker_ps_cmd.stdout.read().decode('utf-8').strip().replace("'", "")
     return ldap_sync_container_id
 
 
