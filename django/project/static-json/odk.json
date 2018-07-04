@@ -1,6 +1,6 @@
 [
     {
-      "rowETag": "uuid:fa1f37a4-2b6e-4535-b751-d35f1c2296ce",
+      "rowETag": "uuid:fa1f37a4-2b6e-4535-b751-d35f1c2296c0",
       "dataETagAtModification": "uuid:7ef6a8af-82c4-4103-9d79-74da0e916b86",
       "deleted": false,
       "createUser": "nico@pulilab.com",
@@ -12,8 +12,8 @@
       "savepointCreator": "anonymous",
       "orderedColumns": [
         {
-          "column": "client_registry_url",
-          "value": null
+          "column": "interoperability_link_client_registry_url",
+          "value": "http://www.google.com"
         },
         {
           "column": "clients",
@@ -28,20 +28,16 @@
           "value": "Sff"
         },
         {
-          "column": "country1",
-          "value": "'54"
-        },
-        {
-          "column": "country2",
-          "value": "'14"
-        },
-        {
-          "column": "country3",
-          "value": "'71"
+          "column": "country",
+          "value": "'55"
         },
         {
           "column": "coverage_type",
           "value": "Sub-national"
+        },
+        {
+          "column": "data_standards",
+          "value": "[\"'1\"]"
         },
         {
           "column": "dhi1",
@@ -68,7 +64,7 @@
           "value": "555"
         },
         {
-          "column": "facility_registry_url",
+          "column": "interoperability_link_facility_registry_url",
           "value": null
         },
         {
@@ -80,35 +76,35 @@
           "value": "'1"
         },
         {
-          "column": "has_client_registry",
+          "column": "interoperability_link_client_registry",
+          "value": "'1"
+        },
+        {
+          "column": "interoperability_link_facility_registry",
           "value": null
         },
         {
-          "column": "has_facility_registry",
-          "value": null
+          "column": "interoperability_link_hmis",
+          "value": "'2"
         },
         {
-          "column": "has_hmis",
-          "value": null
-        },
-        {
-          "column": "has_hwr",
+          "column": "interoperability_link_hwr",
           "value": "No"
         },
         {
-          "column": "has_lis",
+          "column": "interoperability_link_lis",
           "value": "Yes"
         },
         {
-          "column": "has_lmis",
+          "column": "interoperability_link_lmis",
           "value": null
         },
         {
-          "column": "has_shh",
+          "column": "interoperability_link_shr",
           "value": null
         },
         {
-          "column": "has_ts",
+          "column": "interoperability_link_ts",
           "value": null
         },
         {
@@ -128,11 +124,11 @@
           "value": "855"
         },
         {
-          "column": "hmis_url",
+          "column": "interoperability_link_hmis_url",
           "value": null
         },
         {
-          "column": "hwr_url",
+          "column": "interoperability_link_hwr_url",
           "value": "Stgdf"
         },
         {
@@ -156,11 +152,11 @@
           "value": "[\"'4\"]"
         },
         {
-          "column": "lis_url",
+          "column": "interoperability_link_lis_url",
           "value": "Fgsg"
         },
         {
-          "column": "lmis_url",
+          "column": "interoperability_link_lmis_url",
           "value": null
         },
         {
@@ -169,7 +165,7 @@
         },
         {
           "column": "name",
-          "value": "Dgg"
+          "value": "FRAFFO"
         },
         {
           "column": "organization",
@@ -192,7 +188,7 @@
           "value": "Gsdg"
         },
         {
-          "column": "shh_url",
+          "column": "interoperability_link_shr_url",
           "value": null
         },
         {
@@ -200,7 +196,7 @@
           "value": "2064-05-06T05:00:00.000000000"
         },
         {
-          "column": "ts_url",
+          "column": "interoperability_link_ts_url",
           "value": null
         },
         {
@@ -209,7 +205,7 @@
         }
       ],
       "selfUri": "http://sync:8080/odktables/default/tables/form_sheet/ref/uuid:bd90da9b-e531-447c-b4cc-407c0db53f5e/rows/uuid:f46d5ff8-e12f-4ebd-b333-354a76551742",
-      "id": "uuid:f46d5ff8-e12f-4ebd-b333-354a76551744",
+      "id": "uuid:f46d5ff8-e12f-4ebd-b333-354a76551747",
       "filterScope": {
         "defaultAccess": "FULL",
         "rowOwner": "anonymous",
@@ -231,7 +227,7 @@
       "savepointCreator": "username:nico@pulilab.com",
       "orderedColumns": [
         {
-          "column": "client_registry_url",
+          "column": "interoperability_link_client_registry_url",
           "value": null
         },
         {
@@ -287,7 +283,7 @@
           "value": null
         },
         {
-          "column": "facility_registry_url",
+          "column": "interoperability_link_facility_registry_url",
           "value": null
         },
         {
@@ -299,35 +295,35 @@
           "value": null
         },
         {
-          "column": "has_client_registry",
+          "column": "interoperability_link_client_registry",
+          "value": "'1"
+        },
+        {
+          "column": "interoperability_link_facility_registry",
           "value": null
         },
         {
-          "column": "has_facility_registry",
+          "column": "interoperability_link_hmis",
           "value": null
         },
         {
-          "column": "has_hmis",
+          "column": "interoperability_link_hwr",
           "value": null
         },
         {
-          "column": "has_hwr",
+          "column": "interoperability_link_lis",
           "value": null
         },
         {
-          "column": "has_lis",
+          "column": "interoperability_link_lmis",
           "value": null
         },
         {
-          "column": "has_lmis",
+          "column": "interoperability_link_shr",
           "value": null
         },
         {
-          "column": "has_shh",
-          "value": null
-        },
-        {
-          "column": "has_ts",
+          "column": "interoperability_link_ts",
           "value": null
         },
         {
@@ -347,11 +343,11 @@
           "value": null
         },
         {
-          "column": "hmis_url",
+          "column": "interoperability_link_hmis_url",
           "value": null
         },
         {
-          "column": "hwr_url",
+          "column": "interoperability_link_hwr_url",
           "value": null
         },
         {
@@ -375,11 +371,11 @@
           "value": null
         },
         {
-          "column": "lis_url",
+          "column": "interoperability_link_lis_url",
           "value": null
         },
         {
-          "column": "lmis_url",
+          "column": "interoperability_link_lmis_url",
           "value": null
         },
         {
@@ -411,7 +407,7 @@
           "value": null
         },
         {
-          "column": "shh_url",
+          "column": "interoperability_link_shr_url",
           "value": null
         },
         {
@@ -419,7 +415,7 @@
           "value": null
         },
         {
-          "column": "ts_url",
+          "column": "interoperability_link_ts_url",
           "value": null
         },
         {
@@ -428,7 +424,7 @@
         }
       ],
       "selfUri": "http://sync:8080/odktables/default/tables/form_sheet/ref/uuid:bd90da9b-e531-447c-b4cc-407c0db53f5e/rows/uuid:2c358e37-3cbd-41a1-bcf9-fc2b70c0d26b",
-      "id": "uuid:2c358e37-3cbd-41a1-bcf9-fc2b70c0d26b",
+      "id": "uuid:2c358e37-3cbd-41a1-bcf9-fc2b70c0d26c",
       "filterScope": {
         "defaultAccess": "FULL",
         "rowOwner": "username:nico@pulilab.com",
@@ -450,7 +446,7 @@
       "savepointCreator": "username:nico@pulilab.com",
       "orderedColumns": [
         {
-          "column": "client_registry_url",
+          "column": "interoperability_link_client_registry_url",
           "value": null
         },
         {
@@ -506,7 +502,7 @@
           "value": null
         },
         {
-          "column": "facility_registry_url",
+          "column": "interoperability_link_facility_registry_url",
           "value": null
         },
         {
@@ -518,35 +514,35 @@
           "value": null
         },
         {
-          "column": "has_client_registry",
+          "column": "interoperability_link_client_registry",
           "value": null
         },
         {
-          "column": "has_facility_registry",
+          "column": "interoperability_link_facility_registry",
           "value": null
         },
         {
-          "column": "has_hmis",
+          "column": "interoperability_link_hmis",
           "value": null
         },
         {
-          "column": "has_hwr",
+          "column": "interoperability_link_hwr",
           "value": null
         },
         {
-          "column": "has_lis",
+          "column": "interoperability_link_lis",
           "value": null
         },
         {
-          "column": "has_lmis",
+          "column": "interoperability_link_lmis",
           "value": null
         },
         {
-          "column": "has_shh",
+          "column": "interoperability_link_shr",
           "value": null
         },
         {
-          "column": "has_ts",
+          "column": "interoperability_link_ts",
           "value": null
         },
         {
@@ -566,11 +562,11 @@
           "value": null
         },
         {
-          "column": "hmis_url",
+          "column": "interoperability_link_hmis_url",
           "value": null
         },
         {
-          "column": "hwr_url",
+          "column": "interoperability_link_hwr_url",
           "value": null
         },
         {
@@ -594,11 +590,11 @@
           "value": null
         },
         {
-          "column": "lis_url",
+          "column": "interoperability_link_lis_url",
           "value": null
         },
         {
-          "column": "lmis_url",
+          "column": "interoperability_link_lmis_url",
           "value": null
         },
         {
@@ -630,7 +626,7 @@
           "value": null
         },
         {
-          "column": "shh_url",
+          "column": "interoperability_link_shr_url",
           "value": null
         },
         {
@@ -638,7 +634,7 @@
           "value": null
         },
         {
-          "column": "ts_url",
+          "column": "interoperability_link_ts_url",
           "value": null
         },
         {
@@ -647,7 +643,7 @@
         }
       ],
       "selfUri": "http://sync:8080/odktables/default/tables/form_sheet/ref/uuid:bd90da9b-e531-447c-b4cc-407c0db53f5e/rows/uuid:554f2aa2-744d-4410-8190-7b16132a8d2f",
-      "id": "uuid:554f2aa2-744d-4410-8190-7b16132a8d2f",
+      "id": "uuid:554f2aa2-744d-4410-8190-7b16132a8d2g",
       "filterScope": {
         "defaultAccess": "HIDDEN",
         "rowOwner": "username:nico@pulilab.com",

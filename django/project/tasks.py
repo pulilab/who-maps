@@ -2,7 +2,7 @@ from collections import defaultdict
 from django.conf import settings
 from django.utils.translation import ugettext, override
 
-from django.core import mail, exceptions, validators
+from django.core import mail, exceptions
 from django.template import loader
 from django.utils import timezone
 from celery.utils.log import get_task_logger
@@ -13,14 +13,14 @@ from user.models import Organisation
 from country.models import Country
 from toolkit.models import Toolkit
 
-from .models import Project, ProjectApproval
+from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
-
-from toolkit.toolkit_data import toolkit_default
 
 from scheduler.celery import app
 import json
 import traceback
+import logging
+from datetime import datetime
 
 logger = get_task_logger(__name__)
 
@@ -59,13 +59,9 @@ def send_project_approval_digest():
                     html_message=html_message)
 
 
-@app.task(name="sync_from_odk_server")
-def sync_from_odk_server():
-    default_nld = {
-        'clients': 0,
-        'facilities': 0,
-        'health_workers': 0
-    }
+@app.task(name="sync_project_from_odk")
+def sync_project_from_odk():
+    interoperability_links = InteroperabilityLink.objects.all()
 
     def uuid_parser(value):
         return value.replace('uuid:', '')
@@ -79,7 +75,7 @@ def sync_from_odk_server():
     def string_to_list(text):
         return text.split(',')
 
-    def first_level_converter(value, type, project):
+    def first_level_converter(value, type, project, int_link_collection):
         if type == 'name':
             project['name'] = value
         elif type == 'organization':
@@ -88,6 +84,8 @@ def sync_from_odk_server():
             except ValueError:
                 (org, success) = Organisation.objects.get_or_create(name=value)
                 project['organisation'] = org.id
+        elif type == 'country':
+            project['country'] = escaped_int_converter(value)
         elif 'platforms' in type:
                 platforms = project.get('platforms', [])
                 project['platforms'] = platforms + [{'id': escaped_int_converter(value)}]
@@ -141,23 +139,41 @@ def sync_from_odk_server():
             project['start_date'] = value
         elif type == 'wiki':
             project['wiki'] = value
+        elif type == 'data_standards':
+            as_list = list_parser(value)
+            project['data_standards'] = list(map(lambda s: escaped_int_converter(s), as_list))
+        elif 'interoperability_link_' in type and '_url' not in type:
+            id = None
+            try:
+                id = escaped_int_converter(value)
+            except ValueError:
+                pass
+            if id:
+                il_obj = next((item for item in int_link_collection if item["id"] == id), None)
+                il_obj['selected'] = True
+                il_obj['odk_name'] = '{}_url'.format(type)
 
-    def second_level_converter(value, type, project):
+    def second_level_converter(value, type, project, int_link_collection):
         if 'dhi' in type:
             index = int(type.replace('dhi', '')) - 1
             platform = project['platforms'][index]
             if platform:
                 as_list = list_parser(value)
                 platform['strategies'] = list(map(lambda s: escaped_int_converter(s), as_list))
+        elif 'interoperability_link_' in type and '_url' in type:
+            il_obj = next((item for item in int_link_collection if item["odk_name"] == type), None)
+            if il_obj:
+                il_obj['link'] = value
 
     def odk_columns_parser(columns):
+        int_link_collection = list(map(lambda il: {'id': il.id, 'odk_name': None}, interoperability_links))
         project = dict()
         for column in columns:
             type = column.get('column', None)
             value = column.get('value', None)
             if type and value:
                 try:
-                    first_level_converter(value, type, project)
+                    first_level_converter(value, type, project, int_link_collection)
                 except Exception:
                     traceback.print_exc()
 
@@ -166,11 +182,15 @@ def sync_from_odk_server():
             value = column.get('value', None)
             if type and value:
                 try:
-                    second_level_converter(value, type, project)
+                    second_level_converter(value, type, project, int_link_collection)
                 except IndexError:
-                    print('{} has invalid / missing value: {}'.format(type, value))
+                    logging.log('{} has invalid / missing value: {}'.format(type, value))
                 except Exception:
                     traceback.print_exc()
+
+        for int_link_dict in int_link_collection:
+            int_link_dict.pop('odk_name', None)
+        project['interoperability_links'] = int_link_collection
         return project
 
     def parse_odk_data(row, odk_etag, odk_id, odk_extra_data):
@@ -203,10 +223,10 @@ def sync_from_odk_server():
                 project.post_save_initializations(Toolkit)
 
         except exceptions.ObjectDoesNotExist:
-            print('No user with following email: {}'.format(user_email))
+            logging.error('No user with following email: {}'.format(user_email))
         except ValidationError:
-            print('Validation error on project: {}'.format(odk_id))
-            print(serialized.errors)
+            logging.warning('Validation error/s:')
+            logging.warning(serialized.errors)
 
     def save_or_update_project(row, user_email, odk_etag, odk_id, odk_extra_data):
         existing = None
@@ -215,15 +235,26 @@ def sync_from_odk_server():
         except exceptions.ObjectDoesNotExist:
             pass
         if not existing:
+            logging.error('Does not exist in DHA database: importing')
             serialize_and_save(row, odk_etag, odk_id, odk_extra_data, None, user_email)
-        elif existing.odk_etag and existing.odk_etag != odk_etag:
+        elif existing.odk_etag is None:
+            logging.error('Overridden by ui: nothing to do')
+        elif existing.odk_etag != odk_etag:
+            logging.error('Exist in DHA database, but new version found in ODK: updating')
             serialize_and_save(row, odk_etag, odk_id, odk_extra_data, existing, None)
         else:
-            print('present, same version: nothing to do ')
+            logging.error('Already present and same version: nothing to do')
 
     with open('project/static-json/odk.json') as odk_file:
         rows = json.load(odk_file)
+        logging.error('ODK IMPORT TASK START: {}'.format(datetime.now()))
+        logging.error('\n')
         for row in rows:
+            default_nld = {
+                'clients': 0,
+                'facilities': 0,
+                'health_workers': 0
+            }
             odk_etag = uuid_parser(row.get('rowETag'))
             odk_id = uuid_parser(row.get('id'))
             savepoint_type = row.get('savepointType', 'INCOMPLETE')
@@ -237,7 +268,10 @@ def sync_from_odk_server():
                 'savepoint_creator': row.get('savepointCreator', None),
                 'filterScope': row.get('filterScope', None)
             }
+            logging.error('Processing odk_id {} with odk_etag {} START'.format(odk_id, odk_etag))
             if savepoint_type.lower() == 'complete' and deleted != 'true':
                 save_or_update_project(row, user_email, odk_etag, odk_id, odk_extra_data)
             else:
-                print('row either incomplete or deleted: {}'.format(odk_id))
+                logging.error('Incomplete or deleted: nothing to do')
+            logging.error('\n')
+        logging.error('ODK IMPORT TASK END: {}'.format(datetime.now()))
