@@ -92,7 +92,7 @@ def copy_user_ldif_to_container(ldap_sync_container_id):
 def import_user_ldif_to_ldap(ldap_sync_container_id):
     docker_exec_cmd = subprocess.Popen(["docker", "exec", ldap_sync_container_id,
                                         "ldapadd", "-cxD", "cn=admin,dc=example,dc=org",
-                                        "-w", "admin",
+                                        "-w", LDAP_ADMIN_PASS,
                                         "-f", "{}/{}".format(LDAP_SYNC_PATH, USER_ACCOUNT_FILENAME)])
     docker_exec_cmd.wait()
 
