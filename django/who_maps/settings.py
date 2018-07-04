@@ -226,7 +226,7 @@ if SITE_ID in [3, 4]:
         },
         "sync_project_from_odk": {
             "task": 'sync_project_from_odk',
-            "schedule": datetime.timedelta(sync_project_from_odk=ODK_SYNC_PERIOD),
+            "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD),
         },
     }
     RAVEN_CONFIG = {
