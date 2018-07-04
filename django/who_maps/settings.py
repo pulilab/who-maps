@@ -344,5 +344,6 @@ ODK_CREDENTIALS = {
     'username': 'f1987_final@pulilab.com',
     'password': 'secret'
 }
+ODK_SERVER_PROTOCOL = "http"
 ODK_SERVER_HOST = "165.227.153.78"
 ODK_SERVER_USER = "odk"
