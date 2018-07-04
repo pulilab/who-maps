@@ -56,7 +56,7 @@ def make_user_account_ldif():
                     "objectClass: inetOrgPerson",
                     "objectClass: posixAccount",
                     "userPassword: {}".format(hash),
-                    "\n"
+                    "",
                     "dn: gidNumber=503,ou=default_prefix,ou=groups,dc=example,dc=org",
                     "changetype: modify",
                     "add: memberUid",
