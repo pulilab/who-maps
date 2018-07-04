@@ -21,6 +21,8 @@ import json
 import traceback
 import logging
 from datetime import datetime
+import requests
+from urllib.parse import urljoin
 
 logger = get_task_logger(__name__)
 
@@ -61,6 +63,12 @@ def send_project_approval_digest():
 
 @app.task(name="sync_project_from_odk")
 def sync_project_from_odk():
+    login_url = urljoin(settings.ODK_SERVER_URL, '/web-ui/login')
+    import_url = urljoin(settings.ODK_SERVER_URL, '/web-ui/tables/form_sheet/export/JSON/showDeleted/false')
+    s = requests.Session()
+    s.post(login_url, data=settings.ODK_CREDENTIALS)
+    res = s.get(import_url)
+
     interoperability_links = InteroperabilityLink.objects.all()
 
     def uuid_parser(value):
@@ -76,6 +84,11 @@ def sync_project_from_odk():
         return text.split(',')
 
     def first_level_converter(value, type, project, int_link_collection):
+        default_nld = {
+            'clients': 0,
+            'facilities': 0,
+            'health_workers': 0
+        }
         if type == 'name':
             project['name'] = value
         elif type == 'organization':
@@ -245,16 +258,10 @@ def sync_project_from_odk():
         else:
             logging.error('Already present and same version: nothing to do')
 
-    with open('project/static-json/odk.json') as odk_file:
-        rows = json.load(odk_file)
+    def start_sync(rows):
         logging.error('ODK IMPORT TASK START: {}'.format(datetime.now()))
         logging.error('\n')
         for row in rows:
-            default_nld = {
-                'clients': 0,
-                'facilities': 0,
-                'health_workers': 0
-            }
             odk_etag = uuid_parser(row.get('rowETag'))
             odk_id = uuid_parser(row.get('id'))
             savepoint_type = row.get('savepointType', 'INCOMPLETE')
@@ -275,3 +282,8 @@ def sync_project_from_odk():
                 logging.error('Incomplete or deleted: nothing to do')
             logging.error('\n')
         logging.error('ODK IMPORT TASK END: {}'.format(datetime.now()))
+
+    # with open('project/static-json/odk.json') as odk_file:
+    #     rows = json.load(odk_file)
+    #     start_sync(rows)
+    start_sync(res.json())
