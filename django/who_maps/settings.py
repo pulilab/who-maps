@@ -340,9 +340,10 @@ if CI_RUN:
     STATIC_ROOT = "/home/ubuntu/who-maps/nginx/site/static/"
     MEDIA_ROOT = "/home/ubuntu/who-maps/django/media/"
 
-
 ODK_SERVER_URL = "http://localhost:8000/static/odk.json"
 ODK_CREDENTIALS = {
     'username': '',
     'password': ''
 }
+ODK_SERVER_HOST = "165.227.153.78"
+ODK_SERVER_USER = "odk"
