@@ -50,6 +50,12 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
         return url_validator(value)
 
 
+class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
+    @staticmethod
+    def validate_link(value):
+        return value
+
+
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
@@ -152,6 +158,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
 
+    # SECTION 4
+    interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
+
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
     odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
@@ -197,6 +206,18 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         instance.save()
 
         return instance
+
+    @staticmethod
+    def validate_wiki(value):
+        return value
+
+    @staticmethod
+    def validate_mobile_application(value):
+        return value
+
+    @staticmethod
+    def validate_repository(value):
+        return value
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):
