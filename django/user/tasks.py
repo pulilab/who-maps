@@ -8,7 +8,7 @@ logger = get_task_logger(__name__)
 
 
 @app.task(name="sync_users_to_odk")
-def sync_user_to_odk(user_profile_id):
+def sync_user_to_odk(user_profile_id):  # pragma: no cover
     from .models import UserProfile
 
     ssh = paramiko.SSHClient()
