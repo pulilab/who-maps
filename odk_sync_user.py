@@ -6,7 +6,9 @@ from passlib.utils import ab64_encode, ab64_decode
 
 UID_PATH = './uidnumber'
 USER_ACCOUNT_FILENAME = "user_account.ldif"
+CHANGE_PASS_FILENAME = "change_password.ldif"
 ACCOUNT_LDIF_PATH = './' + USER_ACCOUNT_FILENAME
+CHANGE_LDIF_PATH = './' + CHANGE_PASS_FILENAME
 LDAP_ADMIN_PASS = "admin"
 LDAP_SYNC_PATH = '/container/service/slapd/assets'
 
