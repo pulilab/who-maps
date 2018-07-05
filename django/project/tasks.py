@@ -246,7 +246,7 @@ def sync_project_from_odk():  # pragma: no cover
 
     def serialize_and_save(row, odk_etag, odk_id, odk_extra_data, existing, user_email, interoperability_links):
         parsed = parse_odk_data(row, odk_etag, odk_id, odk_extra_data, interoperability_links)
-        serialized = new_or_updated_serializer(parsed, existing,)
+        serialized = new_or_updated_serializer(parsed, existing)
         try:
             if not serialized.is_valid():
                 logging.error(serialized.errors)
@@ -254,7 +254,8 @@ def sync_project_from_odk():  # pragma: no cover
                     parsed.pop(error, None)
                 serialized = new_or_updated_serializer(parsed, existing)
                 serialized.is_valid(raise_exception=True)
-            if(existing):
+
+            if existing:
                 serialized.save()
             else:
                 u = User.objects.get(email=user_email)
