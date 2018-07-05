@@ -31,7 +31,7 @@ def convert_django_SHA256_to_ldap(django_hash):
     return ldap_alg + '{}${}${}'.format(ldap_rounds, ldap_salt, ldap_dk)
 
 
-def make_user_account_ldif():
+def make_user_account_ldif(username, password_hash):
     try:
         with open(UID_PATH, "r+") as u:
             uid_number = int(u.read())
@@ -39,8 +39,7 @@ def make_user_account_ldif():
             with open(ACCOUNT_LDIF_PATH, "w") as f:
                 f.truncate()
 
-                username = args.username
-                hash = convert_django_SHA256_to_ldap(args.hash)
+                ldap_hash = convert_django_SHA256_to_ldap(password_hash)
                 uid_number += 1
 
                 ldap_account_ldif = [
@@ -56,7 +55,7 @@ def make_user_account_ldif():
                     "objectClass: top",
                     "objectClass: inetOrgPerson",
                     "objectClass: posixAccount",
-                    "userPassword: {}".format(hash),
+                    "userPassword: {}".format(ldap_hash),
                     "",
                     "dn: gidNumber=503,ou=default_prefix,ou=groups,dc=example,dc=org",
                     "changetype: modify",
