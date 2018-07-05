@@ -74,6 +74,27 @@ def make_user_account_ldif(username, password_hash):
         return False, traceback.format_exc()
 
 
+def change_user_password_ldif(username, password_hash):
+    try:
+        with open(CHANGE_LDIF_PATH, "w") as f:
+            f.truncate()
+
+            ldap_hash = convert_django_SHA256_to_ldap(password_hash)
+
+            ldap_pass_ldif = [
+                "dn: uid={},ou=people,dc=example,dc=org".format(username),
+                "changetype: modify",
+                "replace: userPassword",
+                "userPassword: {}".format(ldap_hash),
+            ]
+            lines = '\n'.join(ldap_pass_ldif)
+            f.writelines(lines)
+
+        return True, "Password changed: {}".format(username)
+    except:
+        return False, traceback.format_exc()
+
+
 def get_ldap_sync_container_id():
     docker_ps_cmd = subprocess.Popen(["docker", "ps", "-f",
                                       'label=com.docker.swarm.service.name=syncldap_ldap-service', "--format",
