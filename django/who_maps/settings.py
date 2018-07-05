@@ -210,11 +210,22 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
+
 ODK_SYNC_PERIOD = 1  # hours
+ODK_CREDENTIALS = {
+    'username': 'f1987_final@pulilab.com',
+    'password': 'secret'
+}
+ODK_SERVER_PROTOCOL = "http"
+ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
+ODK_SERVER_USER = "odk"
+ODK_TABLE_NAME = 'dha_form'
+ODK_SYNC_ENABLED = True
 
 
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
+    ODK_SYNC_ENABLED = True
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
@@ -339,12 +350,3 @@ else:
 if CI_RUN:
     STATIC_ROOT = "/home/ubuntu/who-maps/nginx/site/static/"
     MEDIA_ROOT = "/home/ubuntu/who-maps/django/media/"
-
-ODK_CREDENTIALS = {
-    'username': 'f1987_final@pulilab.com',
-    'password': 'secret'
-}
-ODK_SERVER_PROTOCOL = "http"
-ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
-ODK_SERVER_USER = "odk"
-ODK_TABLE_NAME = 'dha_form'
