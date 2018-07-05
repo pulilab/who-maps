@@ -15,6 +15,7 @@ def set_password(self, raw_password):  # pragma: no cover
     self._password = raw_password
     self._set_password = True  # inject this to detect password change
 
+
 User.set_password = set_password
 
 
