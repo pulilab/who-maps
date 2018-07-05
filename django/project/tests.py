@@ -192,21 +192,29 @@ class ProjectTests(SetupTests):
         data = copy.deepcopy(self.project_data)
         data.update(dict(
             wiki="wikiorg",
+            name="testing_wiki_validation"
         ))
         # Create project draft
         url = reverse("project-create")
         response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        project_id = response.json()['id']
+
+        # Publish project
+        url = reverse("project-publish", kwargs={'pk': project_id})
+        response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'wiki': ['Enter a valid URL.']})
 
         data.update(dict(
             wiki="wiki.cancerresearch",
         ))
-        # Create project draft
-        url = reverse("project-create")
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201)
+
+        # Try to publish it again
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']['wiki'], 'wiki.cancerresearch')
+        self.assertEqual(response.json()['published']['wiki'], 'wiki.cancerresearch')
 
     def test_create_new_project_approval_required(self):
         c = Country.objects.get(id=self.country_id)
