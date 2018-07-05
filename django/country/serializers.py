@@ -86,7 +86,7 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
                     "schema": False,
                     "schema_instance": CountryField.get_schema_for_answer(country=field["country"],
                                                                           question=field["question"])
-                },
+                }
             )[0] for field in validated_data['fields']
         ]
 
