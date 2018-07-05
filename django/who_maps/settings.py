@@ -2,6 +2,8 @@ import os
 import datetime
 import sys
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -348,3 +350,12 @@ ODK_SERVER_PROTOCOL = "http"
 ODK_SERVER_HOST = "165.227.153.78"
 ODK_SERVER_USER = "odk"
 ODK_TABLE_NAME = 'dha_form'
+
+old_set_password = User.set_password
+
+def set_password(self, raw_password):
+    self.password = make_password(raw_password)
+    self._password = raw_password
+    self._set_password = True  # inject this to detect password change
+
+User.set_password = set_password
