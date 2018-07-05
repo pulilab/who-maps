@@ -72,6 +72,7 @@ def sync_project_from_odk():  # pragma: no cover
     s = requests.Session()
     s.post(login_url, data=settings.ODK_CREDENTIALS)
     res = s.get(import_url)
+    res.raise_for_status()
 
     interoperability_links = InteroperabilityLink.objects.all()
 
