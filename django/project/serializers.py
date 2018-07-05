@@ -175,9 +175,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
-        odk_etag = validated_data.pop('odk_etag')
-        odk_id = validated_data.pop('odk_id')
-        odk_extra_data = validated_data.pop('odk_extra_data')
+        odk_etag = validated_data.pop('odk_etag', None)
+        odk_id = validated_data.pop('odk_id', None)
+        odk_extra_data = validated_data.pop('odk_extra_data', dict())
         instance = self.Meta.model.objects.create(
             name=validated_data["name"],
             draft=validated_data,
