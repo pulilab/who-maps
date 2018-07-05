@@ -130,9 +130,9 @@ def import_change_ldif_to_ldap(ldap_sync_container_id):
 
 if __name__ == '__main__':
     if args.update:
-        success, msg = make_user_account_ldif(username=args.username, password_hash=args.hash)
-    else:
         success, msg = change_user_password_ldif(username=args.username, password_hash=args.hash)
+    else:
+        success, msg = make_user_account_ldif(username=args.username, password_hash=args.hash)
 
     if success:
         ldap_sync_container_id = get_ldap_sync_container_id()
