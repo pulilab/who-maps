@@ -54,9 +54,17 @@ class UserProfile(ExtendedModel):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
 
 
+@receiver(post_save, sender=UserProfile)
+def odk_sync_on_created(sender, instance, created, **kwargs):
+    if settings.ODK_SYNC_ENABLED:
+        if created:
+            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.user.pk, False)))
+
+
 @receiver(post_save, sender=User)
-def odk_sync_on_save(sender, instance, created, **kwargs):
-    if created:
-        transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.userprofile.pk, False)))
-    elif getattr(instance, '_set_password', False):
-        transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.userprofile.pk, True)))
+def odk_sync_on_pass_update(sender, instance, created, **kwargs):
+    if settings.ODK_SYNC_ENABLED:
+        if created:
+            instance._set_password = False
+        elif getattr(instance, '_set_password', False):
+            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.pk, True)))
