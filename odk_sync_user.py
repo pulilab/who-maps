@@ -127,12 +127,20 @@ def import_change_ldif_to_ldap(ldap_sync_container_id):
                                         "-f", "{}/{}".format(LDAP_SYNC_PATH, CHANGE_PASS_FILENAME)])
     docker_exec_cmd.wait()
 
+
 if __name__ == '__main__':
-    success, msg = make_user_account_ldif()
+    if args.update:
+        success, msg = make_user_account_ldif(username=args.username, password_hash=args.hash)
+    else:
+        success, msg = change_user_password_ldif(username=args.username, password_hash=args.hash)
 
     if success:
         ldap_sync_container_id = get_ldap_sync_container_id()
-        copy_user_ldif_to_container(ldap_sync_container_id)
-        import_user_ldif_to_ldap(ldap_sync_container_id)
+        if args.update:
+            copy_ldif_to_container(ldap_sync_container_id, CHANGE_PASS_FILENAME)
+            import_change_ldif_to_ldap(ldap_sync_container_id)
+        else:
+            copy_ldif_to_container(ldap_sync_container_id, USER_ACCOUNT_FILENAME)
+            import_user_ldif_to_ldap(ldap_sync_container_id)
 
     print(msg)
