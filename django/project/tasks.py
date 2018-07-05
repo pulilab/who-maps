@@ -69,12 +69,27 @@ def sync_project_from_odk():  # pragma: no cover
     form_url = '/web-ui/tables/{}/export/JSON/showDeleted/false'.format(settings.ODK_TABLE_NAME)
     login_url = urljoin(base_url, '/web-ui/login')
     import_url = urljoin(base_url, form_url)
-    s = requests.Session()
-    s.post(login_url, data=settings.ODK_CREDENTIALS)
-    res = s.get(import_url)
-    res.raise_for_status()
+
+    email_html_template = loader.get_template('email/odk_import_email.html')
+    email_subject = ugettext('Projects imported from ODK')
+
+    # s = requests.Session()
+    # s.post(login_url, data=settings.ODK_CREDENTIALS)
+    # res = s.get(import_url)
+    # res.raise_for_status()
 
     interoperability_links = InteroperabilityLink.objects.all()
+
+    def send_imported_email(project, user):
+        html_message = email_html_template.render({'project': project,
+                                                   'user_email': user.email,
+                                                   'language': user.userprofile.language})
+        mail.send_mail(
+                    subject=email_subject,
+                    message='',
+                    from_email=settings.FROM_EMAIL,
+                    recipient_list=[user.email],
+                    html_message=html_message)
 
     def uuid_parser(value):
         return value.replace('uuid:', '')
@@ -245,7 +260,7 @@ def sync_project_from_odk():  # pragma: no cover
                 u = User.objects.get(email=user_email)
                 project = serialized.save(owner=u.userprofile)
                 project.post_save_initializations(Toolkit)
-
+                send_imported_email(project, u)
         except exceptions.ObjectDoesNotExist:
             logging.error('No user with following email: {}'.format(user_email))
         except ValidationError:
@@ -294,7 +309,7 @@ def sync_project_from_odk():  # pragma: no cover
             logging.error('\n')
         logging.error('ODK IMPORT TASK END: {}'.format(datetime.now()))
 
-    # with open('project/static-json/odk.json') as odk_file:
-    #     rows = json.load(odk_file)
-    #     start_sync(rows, interoperability_links)
-    start_sync(res.json(), interoperability_links)
+    with open('project/static-json/odk.json') as odk_file:
+        rows = json.load(odk_file)
+        start_sync(rows, interoperability_links)
+    # start_sync(res.json(), interoperability_links)
