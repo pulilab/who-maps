@@ -83,9 +83,9 @@ def get_ldap_sync_container_id():
     return ldap_sync_container_id
 
 
-def copy_user_ldif_to_container(ldap_sync_container_id):
+def copy_ldif_to_container(ldap_sync_container_id, filename):
     docker_cp_cmd = subprocess.Popen(
-        ["docker", "cp", USER_ACCOUNT_FILENAME, "{}:{}".format(ldap_sync_container_id, LDAP_SYNC_PATH)])
+        ["docker", "cp", filename, "{}:{}".format(ldap_sync_container_id, LDAP_SYNC_PATH)])
     docker_cp_cmd.wait()
 
 
