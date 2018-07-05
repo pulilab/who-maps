@@ -8,7 +8,7 @@ logger = get_task_logger(__name__)
 
 
 @app.task(name="sync_users_to_odk")
-def sync_user_to_odk(user_profile_id):  # pragma: no cover
+def sync_user_to_odk(user_profile_id, update_user=False):  # pragma: no cover
     from .models import UserProfile
 
     ssh = paramiko.SSHClient()
@@ -23,8 +23,8 @@ def sync_user_to_odk(user_profile_id):  # pragma: no cover
 
     for profile in queryset:
         user_line = "{} '{}'".format(profile.user.email, profile.user.password)
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
-            "python odk_sync_user.py {}".format(user_line))
+        command = "python odk_sync_user.py {} {}".format(user_line, "update" if update_user else "")
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(command)
 
         out = ssh_stdout.read().decode('utf-8')
         error = ssh_stderr.read().decode('utf-8')
