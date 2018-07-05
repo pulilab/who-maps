@@ -15,7 +15,7 @@ LDAP_SYNC_PATH = '/container/service/slapd/assets'
 parser = argparse.ArgumentParser()
 parser.add_argument("username", help="username")
 parser.add_argument("hash", help="password hash value")
-parser.add_argument("update", help="user update only", default=False, required=False)
+parser.add_argument("--update", action='store_true', help="user update only")
 args = parser.parse_args()
 
 
