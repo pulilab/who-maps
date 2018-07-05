@@ -196,12 +196,12 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
         if not instance.public_id:
             instance.name = validated_data["name"]
-        if self.context.get('preserve_etag'):
-            instance.odk_etag = odk_etag
-        else:
-            instance.odk_etag = None
+
+        instance.odk_etag = odk_etag if self.context.get('preserve_etag') else None
+
         if odk_extra_data:
             instance.odk_extra_data = odk_extra_data
+
         instance.draft = validated_data
         instance.save()
 
