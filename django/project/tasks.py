@@ -1,3 +1,10 @@
+import json
+import traceback
+import logging
+import requests
+
+from datetime import datetime
+
 from collections import defaultdict
 from django.conf import settings
 from django.utils.translation import ugettext, override
@@ -17,11 +24,6 @@ from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
 
 from scheduler.celery import app
-import json
-import traceback
-import logging
-from datetime import datetime
-import requests
 from urllib.parse import urljoin
 
 logger = get_task_logger(__name__)
@@ -62,7 +64,7 @@ def send_project_approval_digest():
 
 
 @app.task(name="sync_project_from_odk")
-def sync_project_from_odk():
+def sync_project_from_odk():  # pragma: no cover
     base_url = '{}://{}'.format(settings.ODK_SERVER_PROTOCOL, settings.ODK_SERVER_HOST)
     form_url = '/web-ui/tables/{}/export/JSON/showDeleted/false'.format(settings.ODK_TABLE_NAME)
     login_url = urljoin(base_url, '/web-ui/login')
