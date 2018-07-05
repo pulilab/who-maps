@@ -2462,6 +2462,7 @@ class TestModelTranslations(TestCase):
                                'challenge': 'Third failure here'}
                           ]})
 
+
 class ODKProjectTests(SetupTests):
     def test_post_draft_with_odk_stuff(self):
         url = reverse("project-create")
@@ -2498,4 +2499,3 @@ class ODKProjectTests(SetupTests):
         self.assertIsNone(project.odk_etag)
         self.assertEqual(project.odk_id, odk_id)
         self.assertEqual(project.odk_extra_data, odk_extra_data)
-
