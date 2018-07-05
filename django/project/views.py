@@ -13,7 +13,6 @@ from project.cache import cache_structure
 from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from toolkit.toolkit_data import toolkit_default
 from country.models import Country, CountryField
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES
@@ -256,13 +255,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
         project = data_serializer.save(owner=request.user.userprofile)
-
-        # Add default Toolkit structure for the new project.
-        Toolkit.objects.get_or_create(project_id=project.id, defaults=dict(data=toolkit_default))
-
-        # Add approval
-        ProjectApproval.objects.create(project=project)
-
+        project.post_save_initializations(Toolkit)
         data = project.to_representation(draft_mode=True)
 
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)

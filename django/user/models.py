@@ -1,9 +1,22 @@
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import NameByIDMixin, ExtendedModel
+from .tasks import sync_user_to_odk
+
+
+def set_password(self, raw_password):  # pragma: no cover
+    self.password = make_password(raw_password)
+    self._password = raw_password
+    self._set_password = True  # inject this to detect password change
+
+
+User.set_password = set_password
 
 
 class Organisation(NameByIDMixin, ExtendedModel):
@@ -35,6 +48,23 @@ class UserProfile(ExtendedModel):
     organisation = models.ForeignKey(Organisation, blank=True, null=True)
     country = models.ForeignKey('country.Country', null=True)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
+    odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
+
+
+@receiver(post_save, sender=UserProfile)
+def odk_sync_on_created(sender, instance, created, **kwargs):
+    if settings.ODK_SYNC_ENABLED:
+        if created:
+            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.user.pk, False)))
+
+
+@receiver(post_save, sender=User)
+def odk_sync_on_pass_update(sender, instance, created, **kwargs):
+    if settings.ODK_SYNC_ENABLED:
+        if created:
+            instance._set_password = False
+        elif getattr(instance, '_set_password', False):
+            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.pk, True)))

@@ -434,8 +434,8 @@ class ProjectImportAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(AllObjectsAdmin):
     list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
-    readonly_fields = ['name', 'team', 'viewers', 'link']
-    fields = ['is_active', 'name', 'team', 'viewers', 'link']
+    readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
+    fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
     search_fields = ['name']
 
     def get_country(self, obj):

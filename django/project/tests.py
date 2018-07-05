@@ -192,21 +192,29 @@ class ProjectTests(SetupTests):
         data = copy.deepcopy(self.project_data)
         data.update(dict(
             wiki="wikiorg",
+            name="testing_wiki_validation"
         ))
         # Create project draft
         url = reverse("project-create")
         response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        project_id = response.json()['id']
+
+        # Publish project
+        url = reverse("project-publish", kwargs={'pk': project_id})
+        response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'wiki': ['Enter a valid URL.']})
 
         data.update(dict(
             wiki="wiki.cancerresearch",
         ))
-        # Create project draft
-        url = reverse("project-create")
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201)
+
+        # Try to publish it again
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']['wiki'], 'wiki.cancerresearch')
+        self.assertEqual(response.json()['published']['wiki'], 'wiki.cancerresearch')
 
     def test_create_new_project_approval_required(self):
         c = Country.objects.get(id=self.country_id)
@@ -2453,3 +2461,41 @@ class TestModelTranslations(TestCase):
                               {'id': hsc_3.id,
                                'challenge': 'Third failure here'}
                           ]})
+
+
+class ODKProjectTests(SetupTests):
+    def test_post_draft_with_odk_stuff(self):
+        url = reverse("project-create")
+        data = copy.deepcopy(self.project_data)
+
+        odk_etag = "59605878-6a6a-4f5f-9262-256939398333"
+        odk_id = "dfdsfk-dsfsdf-sd-f-sdf-sdfafdsf"
+        odk_extra_data = {"dict": {"of": "dicts"}}
+
+        data.update(dict(
+            name="Test Project From ODK",
+            odk_etag=odk_etag,
+            odk_id=odk_id,
+            odk_extra_data=odk_extra_data
+        ))
+
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        project_draft_id = response.json()['id']
+        project = Project.objects.get(id=project_draft_id)
+
+        self.assertEqual(project.odk_etag, odk_etag)
+        self.assertEqual(project.odk_id, odk_id)
+        self.assertEqual(project.odk_extra_data, odk_extra_data)
+
+        url = reverse("project-draft", kwargs={"pk": project_draft_id})
+        data.update(odk_etag="59605878-6a6a-4f5f-9262-256939398334")
+
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        project.refresh_from_db()
+        self.assertIsNone(project.odk_etag)
+        self.assertEqual(project.odk_id, odk_id)
+        self.assertEqual(project.odk_extra_data, odk_extra_data)

@@ -39,8 +39,8 @@ class Command(BaseCommand):
             json_content = json.load(f)
 
         level = c.map_data['first_sub_level']['admin_level']
-        json_content['features'] = [f for f in json_content['features']
-                                    if f['properties']['admin_level'] == level]
+        json_content['features'] = [fe for fe in json_content['features']
+                                    if fe['properties']['admin_level'] == level]
         folder = os.path.join(settings.MEDIA_ROOT, 'processed_maps/')
         Path(folder).mkdir(parents=True, exist_ok=True)
         filename = '{}_slim.geojson'.format(country_code)

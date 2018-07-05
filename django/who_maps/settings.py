@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'corsheaders',
     'djcelery_email',
-    'core',
     'user',
+    'core',
     'project',
     'toolkit',
     'country',
@@ -211,8 +211,21 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 TOOLKIT_DIGEST_PERIOD = 1  # hours
 
+ODK_SYNC_PERIOD = 1  # hours
+ODK_CREDENTIALS = {
+    'username': 'f1987_final@pulilab.com',
+    'password': 'secret'
+}
+ODK_SERVER_PROTOCOL = "http"
+ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
+ODK_SERVER_USER = "odk"
+ODK_TABLE_NAME = 'dha_form'
+ODK_SYNC_ENABLED = False
+
+
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
+    ODK_SYNC_ENABLED = True
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
@@ -221,6 +234,10 @@ if SITE_ID in [3, 4]:
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
             "schedule": datetime.timedelta(days=1),
+        },
+        "sync_project_from_odk": {
+            "task": 'sync_project_from_odk',
+            "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD),
         },
     }
     RAVEN_CONFIG = {

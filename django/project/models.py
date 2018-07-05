@@ -11,6 +11,7 @@ from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, Acti
 from country.models import Country, CountryField
 from project.cache import InvalidateCacheMixin
 from user.models import UserProfile, Organisation
+from toolkit.toolkit_data import toolkit_default
 
 
 class ProjectManager(models.Manager):
@@ -49,6 +50,9 @@ class Project(SoftDeleteModel, ExtendedModel):
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
+    odk_etag = models.CharField(null=True, blank=True, max_length=64)
+    odk_id = models.CharField(null=True, blank=True, max_length=64)
+    odk_extra_data = JSONField(default=dict())
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
@@ -153,6 +157,12 @@ class Project(SoftDeleteModel, ExtendedModel):
         project_country = Country.objects.filter(id=country_id).first()
         if project_country:
             self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
+
+    def post_save_initializations(self, Toolkit):
+        # Add default Toolkit structure for the new project.
+        Toolkit.objects.get_or_create(project_id=self.id, defaults=dict(data=toolkit_default))
+        # Add approval
+        ProjectApproval.objects.create(project=self)
 
 
 class ProjectApproval(ExtendedModel):

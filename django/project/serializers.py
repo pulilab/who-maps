@@ -13,7 +13,6 @@ import scheduler.celery # noqa
 
 from .models import Project
 
-
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
 
@@ -49,6 +48,12 @@ class InteroperabilityLinksSerializer(serializers.Serializer):
     @staticmethod
     def validate_link(value):
         return url_validator(value)
+
+
+class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
+    @staticmethod
+    def validate_link(value):
+        return value
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -106,6 +111,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
+        instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
 
         instance.save()
@@ -152,6 +158,14 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
 
+    # SECTION 4
+    interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
+
+    # ODK DATA
+    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
+    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
+    odk_extra_data = serializers.JSONField(required=False)
+
     def validate_country(self, value):
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
@@ -161,18 +175,49 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner')
-        instance = self.Meta.model.objects.create(name=validated_data["name"], draft=validated_data)
+        odk_etag = validated_data.pop('odk_etag', None)
+        odk_id = validated_data.pop('odk_id', None)
+        odk_extra_data = validated_data.pop('odk_extra_data', dict())
+        instance = self.Meta.model.objects.create(
+            name=validated_data["name"],
+            draft=validated_data,
+            odk_etag=odk_etag,
+            odk_id=odk_id,
+            odk_extra_data=odk_extra_data
+        )
         instance.team.add(owner)
 
         return instance
 
     def update(self, instance, validated_data):
+        odk_etag = validated_data.pop('odk_etag', None)
+        validated_data.pop('odk_id', None)
+        odk_extra_data = validated_data.pop('odk_extra_data', None)
+
         if not instance.public_id:
             instance.name = validated_data["name"]
+
+        instance.odk_etag = odk_etag if self.context.get('preserve_etag') else None
+
+        if odk_extra_data:
+            instance.odk_extra_data = odk_extra_data
+
         instance.draft = validated_data
         instance.save()
 
         return instance
+
+    @staticmethod
+    def validate_wiki(value):
+        return value
+
+    @staticmethod
+    def validate_mobile_application(value):
+        return value
+
+    @staticmethod
+    def validate_repository(value):
+        return value
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):
