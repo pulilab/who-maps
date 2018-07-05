@@ -97,6 +97,13 @@ def import_user_ldif_to_ldap(ldap_sync_container_id):
     docker_exec_cmd.wait()
 
 
+def import_change_ldif_to_ldap(ldap_sync_container_id):
+    docker_exec_cmd = subprocess.Popen(["docker", "exec", ldap_sync_container_id,
+                                        "ldapmodify", "-H", "ldap://", "-x", "-D", "cn=admin,dc=example,dc=org",
+                                        "-w", LDAP_ADMIN_PASS,
+                                        "-f", "{}/{}".format(LDAP_SYNC_PATH, CHANGE_PASS_FILENAME)])
+    docker_exec_cmd.wait()
+
 if __name__ == '__main__':
     success, msg = make_user_account_ldif()
 
