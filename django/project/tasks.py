@@ -71,7 +71,7 @@ def sync_project_from_odk():  # pragma: no cover
     import_url = urljoin(base_url, form_url)
 
     email_html_template = loader.get_template('email/odk_import_email.html')
-    email_subject = ugettext('Projects imported from ODK')
+    email_subject = ugettext('Project imported from ODK')
 
     s = requests.Session()
     s.post(login_url, data=settings.ODK_CREDENTIALS)
