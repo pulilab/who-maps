@@ -220,7 +220,7 @@ ODK_SERVER_PROTOCOL = "http"
 ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
 ODK_SERVER_USER = "odk"
 ODK_TABLE_NAME = 'dha_form'
-ODK_SYNC_ENABLED = True
+ODK_SYNC_ENABLED = False
 
 
 # PRODUCTION SETTINGS
