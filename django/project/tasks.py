@@ -73,10 +73,10 @@ def sync_project_from_odk():  # pragma: no cover
     email_html_template = loader.get_template('email/odk_import_email.html')
     email_subject = ugettext('Projects imported from ODK')
 
-    # s = requests.Session()
-    # s.post(login_url, data=settings.ODK_CREDENTIALS)
-    # res = s.get(import_url)
-    # res.raise_for_status()
+    s = requests.Session()
+    s.post(login_url, data=settings.ODK_CREDENTIALS)
+    res = s.get(import_url)
+    res.raise_for_status()
 
     interoperability_links = InteroperabilityLink.objects.all()
 
@@ -309,7 +309,7 @@ def sync_project_from_odk():  # pragma: no cover
             logging.error('\n')
         logging.error('ODK IMPORT TASK END: {}'.format(datetime.now()))
 
-    with open('project/static-json/odk.json') as odk_file:
-        rows = json.load(odk_file)
-        start_sync(rows, interoperability_links)
-    # start_sync(res.json(), interoperability_links)
+    # with open('project/static-json/odk.json') as odk_file:
+    #     rows = json.load(odk_file)
+    #     start_sync(rows, interoperability_links)
+    start_sync(res.json(), interoperability_links)
