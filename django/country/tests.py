@@ -861,7 +861,7 @@ class CountryManagementCommandTest(TestCase):
         call_command('loaddata', 'null_land.json', verbosity=0)
         try:
             open(self.null_topo, 'x')
-        except FileExistsError:  # pragma: no cover
+        except Exception:  # pragma: no cover
             pass
 
     def tearDown(self):
