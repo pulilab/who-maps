@@ -74,7 +74,8 @@ def sync_project_from_odk():  # pragma: no cover
     email_subject = ugettext('Project imported from ODK')
 
     s = requests.Session()
-    s.post(login_url, data=settings.ODK_CREDENTIALS)
+    login_response = s.post(login_url, data=settings.ODK_CREDENTIALS)
+    login_response.raise_for_status()
     res = s.get(import_url)
     res.raise_for_status()
 
