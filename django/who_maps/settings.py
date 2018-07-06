@@ -216,7 +216,7 @@ ODK_CREDENTIALS = {
     'username': 'f1987_final@pulilab.com',
     'password': 'secret'
 }
-ODK_SERVER_PROTOCOL = "http"
+ODK_SERVER_PROTOCOL = "https"
 ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
 ODK_SERVER_USER = "odk"
 ODK_TABLE_NAME = 'dha_form'
