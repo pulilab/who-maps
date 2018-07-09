@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[252],{"./src/MapsToolkit/Resource/template/4-2-1.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    i) We are able to articulate the value proposition (i.e. the advantages of the mHealth product compared with alternatives) specifically to each partner\r\n  </translate>\r\n</p>"}}]);

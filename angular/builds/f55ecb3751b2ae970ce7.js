@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[189],{"./src/MapsToolkit/Resource/template/8-3a-4.html":function(n,a){n.exports="<p>\r\n  <translate>\r\n    iv) A protocol is in place for responding to breaches in compliance and guaranteeing accountability\r\n  </translate>\r\n</p>"}}]);

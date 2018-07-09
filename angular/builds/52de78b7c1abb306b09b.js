@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[358],{"./src/MapsToolkit/Resource/template/10-3-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) The application can run on different types of mobile devices (e.g. basic phone, feature phone, smartphone, personal data assistant [PDA], tablet)\r\n  </translate>\r\n</p>"}}]);

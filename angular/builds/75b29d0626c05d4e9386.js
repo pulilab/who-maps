@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[225],{"./src/MapsToolkit/Resource/template/6-1-4.html":function(n,e){n.exports="<p>\r\n  <translate>\r\n    iv) We have quantified in-kind contributions and other intangible assets (e.g. office space, Internet)\r\n  </translate>\r\n</p>"}}]);

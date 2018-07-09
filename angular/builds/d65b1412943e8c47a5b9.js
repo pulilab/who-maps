@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[466],{"./src/Common/Thematic/images/icon-axis2.svg":function(o,s,i){o.exports=i.p+"public/fonts/icon-axis2.svg"}}]);

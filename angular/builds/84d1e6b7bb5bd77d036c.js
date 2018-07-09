@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[221],{"./src/MapsToolkit/Resource/template/6-2-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) We have considered non-technology costs incurred by users (e.g. care-seeking and/or engagement)\r\n  </translate>\r\n</p>"}}]);

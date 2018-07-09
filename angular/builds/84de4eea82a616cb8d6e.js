@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[226],{"./src/MapsToolkit/Resource/template/6-1-3.html":function(e,s){e.exports="<p>\r\n  <translate>\r\n    iii) We have categorized costs in terms of one-time capital costs, recurring costs and variable costs\r\n  </translate>\r\n</p>"}}]);

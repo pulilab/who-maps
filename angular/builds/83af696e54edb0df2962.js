@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[345],{"./src/MapsToolkit/Resource/template/12-1a-1.html":function(n,e){n.exports="<p>\r\n  <translate>\r\n    i) Initial training is in place for end-users of the application (e.g. health workers using the product, and clients)\r\n  </translate>\r\n</p>"}}]);

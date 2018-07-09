@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[303],{"./src/MapsToolkit/Resource/template/16-1c-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) Methods for assembling human-collected data and accessing it for evaluation and reporting purposes have been established\r\n  </translate>\r\n</p>"}}]);

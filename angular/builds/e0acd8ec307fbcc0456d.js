@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[290],{"./src/MapsToolkit/Resource/template/16-2c-5.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    v) The cost-effectiveness and/or cost-utility of the product has been demonstrated (Does the product offer a greater value for impact compared to existing alternatives?)\r\n  </translate>\r\n</p>\r\n"}}]);

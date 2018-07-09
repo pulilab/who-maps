@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[316],{"./src/MapsToolkit/Resource/template/15-1b-2.html":function(n,e){n.exports="<p>\r\n  <translate>\r\n    ii) Performance indicators and information sources have been defined\r\n  </translate>\r\n</p>"}}]);

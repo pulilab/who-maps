@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[218],{"./src/MapsToolkit/Resource/template/6-3-3.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    iii) We have estimated the additional costs of commodities, equipment and/or supplies as a result of the mHealth project activities\r\n  </translate>\r\n</p>"}}]);

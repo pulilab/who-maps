@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[335],{"./src/MapsToolkit/Resource/template/12-2-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) Required resources have been allocated for routine field supervision or monitoring end-users’ interactions with the system\r\n  </translate>\r\n</p>"}}]);

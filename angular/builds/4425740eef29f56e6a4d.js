@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[287],{"./src/MapsToolkit/Resource/template/2-1-1.html":function(t,e){t.exports="<p>\n  <translate>\n    i) We can describe how the product fits into national health or health system priority area(s)\n  </translate>\n</p>\n"}}]);

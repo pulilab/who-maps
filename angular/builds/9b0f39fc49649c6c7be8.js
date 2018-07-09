@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[288],{"./src/MapsToolkit/Resource/template/16-3-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) Opportunities for wider dissemination have been identified (e.g. publications, poster sessions, websites)\r\n  </translate>\r\n</p>\r\n"}}]);

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[265],{"./src/MapsToolkit/Resource/template/3-2-6.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    vi) We have assessed local sociocultural norms (including gender norms), and can describe them in terms of barriers and opportunities for the use and scaling up of the mHealth product\r\n  </translate>\r\n</p>"}}]);

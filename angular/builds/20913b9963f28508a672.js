@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[186],{"./src/MapsToolkit/Resource/template/9-1-1.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    i) We have identified the types of systems with which the mHealth product will need to interoperate (e.g. DHIS2, eLMIS, HRIS)*\r\n  </translate>\r\n</p>"}}]);

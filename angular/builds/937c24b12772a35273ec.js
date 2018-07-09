@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[284],{"./src/MapsToolkit/Resource/template/2-2-1.html":function(e,t){e.exports="<p>\n  <translate>\n    i) We have assessed the reach of network coverage, and can articulate it in terms of daily operational requirements for the mHealth product and deployments\n  </translate>\n</p>\n"}}]);

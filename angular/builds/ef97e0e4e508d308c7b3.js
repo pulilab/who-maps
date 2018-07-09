@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[346],{"./src/MapsToolkit/Resource/template/11-2-4.html":function(n,a){n.exports="<p>\r\n  <translate>\r\n    iv) A financial manager for tracking costs and expenditures has been appointed\r\n  </translate>\r\n</p>"}}]);

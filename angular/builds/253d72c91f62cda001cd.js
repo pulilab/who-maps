@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[201],{"./src/MapsToolkit/Resource/template/8-1-1.html":function(a,e){a.exports="<p>\r\n  <translate>\r\n    i) The application includes data quality assurance measures, such as validation rules and logic checks, to reduce data entry errors and increase accuracy\r\n  </translate>\r\n</p>"}}]);
