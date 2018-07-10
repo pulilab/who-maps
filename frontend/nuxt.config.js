@@ -51,12 +51,18 @@ const config = {
     }
   },
   router: {
-    middleware: ['auth']
+    middleware: ['auth'],
+    base: '/'
   },
   loading: { color: '#3B8070' },
   build: {
     extractCSS: true,
     extend (config, { isDev, isClient }) {
+      config.module.rules.push({
+        test: /\.html$/,
+        loader: 'html-loader',
+        exclude: /(node_modules)/
+      });
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',

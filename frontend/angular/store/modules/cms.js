@@ -1,0 +1,204 @@
+/* eslint-disable no-warning-comments */
+// import axios from '../../plugins/axios';
+import axios from 'axios';
+import findIndex from 'lodash/findIndex';
+// import * as SystemModule from './system';
+// import * as UserModule from './user';
+
+const initialState = {
+  data: []
+};
+
+// GETTERS
+
+export const getCmsData = state => {
+  return [...state.cms.data];
+};
+
+export const getDomainStructureForCms = state => {
+  // const axes = SystemModule.getAxis(state);
+  // const domains = SystemModule.getDomains(state);
+  // return axes.map(a => ({ ...a, domains: domains.filter(d => d.axis === a.id) }));
+};
+
+export const getAxisName = (state, index) => {
+  // const axes = SystemModule.getAxis(state);
+  // return axes[index].name;
+};
+
+export const getDomain = (state, id) => {
+  // const domains = SystemModule.getDomains(state);
+  // return domains.find(domain => {
+  //   return domain.id === id;
+  // });
+};
+
+export const getAxisAndDomainName = (state, domainId) => {
+  const domain = exports.getDomain(state, domainId);
+  const axes = exports.getDomainStructureForCms(state);
+  const axis = axes.find(ax => {
+    return ax.domains.some(dom => {
+      return dom.id === domain.id;
+    });
+  });
+  return {
+    axisName: axis.name, domainName: domain.name
+  };
+};
+
+// ACTIONS
+
+export function loadCmsData () {
+  return async dispatch => {
+    let { data } = await window.$nuxt.$axios.get('/api/cms/');
+    data = data.map(d => {
+      d.searchOccurrences = 0;
+      return d;
+    });
+    dispatch({ type: 'SET_CMS_DATA', data });
+  };
+}
+
+export function addContent (resource) {
+  return async (dispatch) => {
+    const { data } = await axios.post('/api/cms/', resource);
+    data.searchOccurrences = 0;
+    dispatch({ type: 'ADD_CMS_ENTRY', item: data });
+  };
+}
+
+export function updateContent (resource, id) {
+  return async (dispatch) => {
+    const { data } = await axios.put(`/api/cms/${id}/`, resource);
+    data.searchOccurrences = 0;
+    dispatch({ type: 'UPDATE_CMS_ENTRY', item: data });
+  };
+}
+
+export function saveOrUpdateContent (resource) {
+  return (dispatch, getState) => {
+    // const state = getState();
+    // resource = { ...resource };
+    // const profile = UserModule.getProfile(state);
+    // resource.author = profile.id;
+    // const id = resource.id || false;
+    // if (resource.cover && resource.cover.type.indexOf('image') === -1) {
+    //   delete resource.cover;
+    // }
+    // if (resource.cover) {
+    //   const formData = new FormData();
+    //   for (const key in resource) {
+    //     formData.append(key, resource[key]);
+    //   }
+    //   resource = formData;
+    // }
+
+    // if (id) {
+    //   dispatch(exports.updateContent(resource, id));
+    // } else {
+    //   dispatch(exports.addContent(resource));
+    // }
+  };
+}
+
+export function deleteContent ({ id }) {
+  return async dispatch => {
+    await axios.delete(`/api/cms/${id}/`);
+    dispatch({ type: 'DELETE_CMS_ENTRY', id });
+  };
+}
+
+export function reportContent (resource) {
+  return async dispatch => {
+    await axios.patch(`/api/cms/${resource.id}/`);
+    resource.state = 2;
+    dispatch({ type: 'UPDATE_CMS_ENTRY', item: resource });
+  };
+}
+
+export function reportComment (resource) {
+  return async dispatch => {
+    await axios.patch(`/api/comment/${resource.id}/`);
+    resource.state = 2;
+    dispatch({ type: 'UPDATE_COMMENT', comment: resource });
+  };
+}
+
+export function deleteComment (comment) {
+  return async dispatch => {
+    await axios.delete(`/api/comment/${comment.id}/`);
+    dispatch({ type: 'DELETE_COMMENT', comment });
+  };
+}
+
+export function addNewComment (comment, { id }) {
+  return async (dispatch, getState) => {
+    comment.post = id;
+    comment.user = getState().user.profile.id;
+    const { data } = await axios.post('/api/comment/', comment);
+    dispatch({ type: 'ADD_COMMENT', comment: data });
+  };
+}
+
+export function updateComment (comment) {
+  return async (dispatch) => {
+    const { data } = await axios.put(`/api/comment/${comment.id}/`, comment);
+    dispatch({ type: 'UPDATE_COMMENT', comment: data });
+  };
+}
+
+// Reducers
+
+export default function cms (state = initialState, action) {
+  switch (action.type) {
+  case 'SET_CMS_DATA': {
+    return { ...state, data: action.data };
+  }
+  case 'ADD_CMS_ENTRY': {
+    return { ...state, data: [...state.data, action.item] };
+  }
+  case 'UPDATE_CMS_ENTRY': {
+    const current = [...state.data];
+    const index = findIndex(current, i => i.id === action.item.id);
+    current.splice(index, 1, action.item);
+    return { ...state, data: current };
+  }
+  case 'DELETE_CMS_ENTRY': {
+    const current = [...state.data];
+    const index = findIndex(current, i => i.id === action.id);
+    current.splice(index, 1);
+    return { ...state, data: current };
+  }
+  case 'ADD_COMMENT': {
+    const current = [...state.data];
+    const index = findIndex(current, i => i.id === action.comment.post);
+    const item = current[index];
+    item.comments.push(action.comment);
+    current.splice(index, 1, item);
+    return { ...state, data: current };
+  }
+  case 'UPDATE_COMMENT': {
+    const current = [...state.data];
+    const index = findIndex(current, i => i.id === action.comment.post);
+    const item = current[index];
+    const commentIndex = findIndex(item.comments, com => com.id === action.comment.id);
+    item.comments.splice(commentIndex, 1, action.comment);
+    current.splice(index, 1, item);
+    return { ...state, data: current };
+  }
+  case 'DELETE_COMMENT': {
+    const current = [...state.data];
+    const index = findIndex(current, i => i.id === action.comment.post);
+    const item = current[index];
+    const commentIndex = findIndex(item.comments, com => com.id === action.comment.id);
+    item.comments.splice(commentIndex, 1);
+    current.splice(index, 1, item);
+    return { ...state, data: current };
+  }
+  case 'CLEAR_CMS_DATA': {
+    return { ...initialState };
+  }
+  default:
+    return state;
+  }
+}
