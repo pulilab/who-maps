@@ -22,12 +22,10 @@
     "date-fns": "^1.29.0",
     "django-channels": "^1.1.6",
     "dotenv": "^5.0.1",
+    "element-ui": "^2.4.3",
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.10",
-    "node-sass": "^4.9.2",
     "nuxt": "^1.0.0",
-    "sass": "^1.9.0",
-    "sass-loader": "^7.0.3",
     "vee-validate": "^2.0.6",
     "vue-django-feedback": "^1.5.1",
     "vue-no-ssr": "^0.2.2",
@@ -51,6 +49,9 @@
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.0.0",
     "jest": "^22.4.3",
-    "regenerator-runtime": "^0.11.1"
+    "node-sass": "^4.9.2",
+    "regenerator-runtime": "^0.11.1",
+    "sass": "^1.9.0",
+    "sass-loader": "^7.0.3"
   }
 }
