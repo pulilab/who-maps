@@ -56,14 +56,14 @@ class UserProfile(ExtendedModel):
 
 @receiver(post_save, sender=UserProfile)
 def odk_sync_on_created(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:
+    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
         if created:
             transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.user.pk, False)))
 
 
 @receiver(post_save, sender=User)
 def odk_sync_on_pass_update(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:
+    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
         if created:
             instance._set_password = False
         elif getattr(instance, '_set_password', False):
