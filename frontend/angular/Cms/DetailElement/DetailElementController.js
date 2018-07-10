@@ -3,7 +3,7 @@ import angular from 'angular';
 import { prettifyDate, itemType, postProcessHtml } from '../utilities';
 // import Storage from '../../Storage';
 import * as CmsModule from '../../store/modules/cms';
-import * as UserModule from '../../store/modules/user';
+// import * as UserModule from '../../store/modules/user';
 
 class DetailElementDialog {
   constructor ($scope, $mdDialog, $ngRedux, content) {
@@ -30,8 +30,8 @@ class DetailElementDialog {
 
   mapState (state) {
     return {
-      global: CmsModule.getCmsData(state),
-      userProfile: UserModule.getProfile(state)
+      global: CmsModule.getCmsData(state)
+      // userProfile: UserModule.getProfile(state)
     };
   }
 

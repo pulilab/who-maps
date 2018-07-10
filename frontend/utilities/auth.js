@@ -9,15 +9,17 @@ export const safeSaveToken = (name, value) => {
   }
 };
 
-export const saveToken = token => {
+export const saveToken = (token, profileId) => {
   if (process.SERVER_BUILD) return;
   safeSaveToken('jwt_token', token);
+  safeSaveToken('profile_id', profileId);
 };
 
 export const deleteToken = () => {
   if (process.SERVER_BUILD) { return; }
   if (process.client) {
     window.localStorage.removeItem('jwt_token');
+    window.localStorage.removeItem('profile_id');
   }
   Cookie.remove('jwt_token');
 };
@@ -30,10 +32,12 @@ export const getValueFromCookie = (req, value) => {
 export const getTokenFromCookie = (req) => {
   if (!req.headers.cookie) { return; }
   const jwt = getValueFromCookie(req, 'jwt_token');
-  return jwt;
+  const profileId = getValueFromCookie(req, 'profile_id');
+  return { jwt, profileId };
 };
 
 export const getTokenFromLocalStorage = () => {
   const jwt = window.localStorage.getItem('jwt_token');
-  return jwt;
+  const profileId = window.localStorage.getItem('profile_id');
+  return { jwt, profileId };
 };

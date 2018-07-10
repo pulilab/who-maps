@@ -155,7 +155,7 @@ export const mutations = {
   },
 
   SET_DOMAINS: (state, value) => {
-    state.domain = value;
+    state.domains = value;
   },
 
   SET_LANDING_PAGE_DEFAULTS: (state, value) => {

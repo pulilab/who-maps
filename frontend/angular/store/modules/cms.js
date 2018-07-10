@@ -1,6 +1,6 @@
 /* eslint-disable no-warning-comments */
 // import axios from '../../plugins/axios';
-import axios from 'axios';
+// import axios from 'axios';
 import findIndex from 'lodash/findIndex';
 // import * as SystemModule from './system';
 // import * as UserModule from './user';
@@ -16,26 +16,26 @@ export const getCmsData = state => {
 };
 
 export const getDomainStructureForCms = state => {
-  // const axes = SystemModule.getAxis(state);
-  // const domains = SystemModule.getDomains(state);
-  // return axes.map(a => ({ ...a, domains: domains.filter(d => d.axis === a.id) }));
+  const axes = window.$nuxt.$store.getters['system/getAxis'];
+  const domains = window.$nuxt.$store.getters['system/getDomains'];
+  return axes.map(a => ({ ...a, domains: domains.filter(d => d.axis === a.id) }));
 };
 
 export const getAxisName = (state, index) => {
-  // const axes = SystemModule.getAxis(state);
-  // return axes[index].name;
+  const axes = window.$nuxt.$store.getters['system/getAxis'];
+  return axes[index].name;
 };
 
 export const getDomain = (state, id) => {
-  // const domains = SystemModule.getDomains(state);
-  // return domains.find(domain => {
-  //   return domain.id === id;
-  // });
+  const domains = window.$nuxt.$store.getters['system/getDomains'];
+  return domains.find(domain => {
+    return domain.id === id;
+  });
 };
 
 export const getAxisAndDomainName = (state, domainId) => {
-  const domain = exports.getDomain(state, domainId);
-  const axes = exports.getDomainStructureForCms(state);
+  const domain = getDomain(state, domainId);
+  const axes = getDomainStructureForCms(state);
   const axis = axes.find(ax => {
     return ax.domains.some(dom => {
       return dom.id === domain.id;
@@ -61,7 +61,7 @@ export function loadCmsData () {
 
 export function addContent (resource) {
   return async (dispatch) => {
-    const { data } = await axios.post('/api/cms/', resource);
+    const { data } = await window.$nuxt.$axios.post('/api/cms/', resource);
     data.searchOccurrences = 0;
     dispatch({ type: 'ADD_CMS_ENTRY', item: data });
   };
@@ -69,48 +69,47 @@ export function addContent (resource) {
 
 export function updateContent (resource, id) {
   return async (dispatch) => {
-    const { data } = await axios.put(`/api/cms/${id}/`, resource);
+    const { data } = await window.$nuxt.$axios.put(`/api/cms/${id}/`, resource);
     data.searchOccurrences = 0;
     dispatch({ type: 'UPDATE_CMS_ENTRY', item: data });
   };
 }
 
 export function saveOrUpdateContent (resource) {
-  return (dispatch, getState) => {
-    // const state = getState();
-    // resource = { ...resource };
-    // const profile = UserModule.getProfile(state);
-    // resource.author = profile.id;
-    // const id = resource.id || false;
-    // if (resource.cover && resource.cover.type.indexOf('image') === -1) {
-    //   delete resource.cover;
-    // }
-    // if (resource.cover) {
-    //   const formData = new FormData();
-    //   for (const key in resource) {
-    //     formData.append(key, resource[key]);
-    //   }
-    //   resource = formData;
-    // }
+  return async (dispatch) => {
+    resource = { ...resource };
+    const profile = window.$nuxt.$store.getters['user/getProfile'];
+    resource.author = profile.id;
+    const id = resource.id || false;
+    if (resource.cover && resource.cover.type.indexOf('image') === -1) {
+      delete resource.cover;
+    }
+    if (resource.cover) {
+      const formData = new FormData();
+      for (const key in resource) {
+        formData.append(key, resource[key]);
+      }
+      resource = formData;
+    }
 
-    // if (id) {
-    //   dispatch(exports.updateContent(resource, id));
-    // } else {
-    //   dispatch(exports.addContent(resource));
-    // }
+    if (id) {
+      dispatch(updateContent(resource, id));
+    } else {
+      dispatch(addContent(resource));
+    }
   };
 }
 
 export function deleteContent ({ id }) {
   return async dispatch => {
-    await axios.delete(`/api/cms/${id}/`);
+    await window.$nuxt.$axios.delete(`/api/cms/${id}/`);
     dispatch({ type: 'DELETE_CMS_ENTRY', id });
   };
 }
 
 export function reportContent (resource) {
   return async dispatch => {
-    await axios.patch(`/api/cms/${resource.id}/`);
+    await window.$nuxt.$axios.patch(`/api/cms/${resource.id}/`);
     resource.state = 2;
     dispatch({ type: 'UPDATE_CMS_ENTRY', item: resource });
   };
@@ -118,7 +117,7 @@ export function reportContent (resource) {
 
 export function reportComment (resource) {
   return async dispatch => {
-    await axios.patch(`/api/comment/${resource.id}/`);
+    await window.$nuxt.$axios.patch(`/api/comment/${resource.id}/`);
     resource.state = 2;
     dispatch({ type: 'UPDATE_COMMENT', comment: resource });
   };
@@ -126,23 +125,23 @@ export function reportComment (resource) {
 
 export function deleteComment (comment) {
   return async dispatch => {
-    await axios.delete(`/api/comment/${comment.id}/`);
+    await window.$nuxt.$axios.delete(`/api/comment/${comment.id}/`);
     dispatch({ type: 'DELETE_COMMENT', comment });
   };
 }
 
 export function addNewComment (comment, { id }) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     comment.post = id;
-    comment.user = getState().user.profile.id;
-    const { data } = await axios.post('/api/comment/', comment);
+    comment.user = window.$nuxt.$store.getters['user/getProfile'].id;
+    const { data } = await window.$nuxt.$axios.post('/api/comment/', comment);
     dispatch({ type: 'ADD_COMMENT', comment: data });
   };
 }
 
 export function updateComment (comment) {
   return async (dispatch) => {
-    const { data } = await axios.put(`/api/comment/${comment.id}/`, comment);
+    const { data } = await window.$nuxt.$axios.put(`/api/comment/${comment.id}/`, comment);
     dispatch({ type: 'UPDATE_COMMENT', comment: data });
   };
 }

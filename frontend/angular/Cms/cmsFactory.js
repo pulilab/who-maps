@@ -13,12 +13,13 @@ import { reducers, middleware } from '../store/index';
 import addNewContent from './AddNewContent/addNewContentComponent';
 // import commentWidget from './CommentWidget/commentWidgetComponent';
 // import dashboardWidget from './DashboardWidget/dashboardWidgetComponent';
-// import detailElement from './DetailElement/detailElementComponent';
+import detailElement from './DetailElement/detailElementComponent';
 // import experiencesList from './ExperiencesList/experiencesListComponent';
-// import listElement from './ListElement/listElementComponent';
+import listElement from './ListElement/listElementComponent';
 // import staticInfoWidget from './StaticInfoWidget/staticInfoWidgetComponent';
 // import reportButton from './ReportDeleteButton/reportDeleteButtonComponent';
 import planningAndGuidanceComponent from './PlanningAndGuidance/planningAndGuidanceComponent';
+import trixComponent from '../Common/TrixComponent/trixComponent';
 
 const moduleName = 'cms';
 
@@ -63,12 +64,13 @@ export const cmsFactory = () => {
     .component(addNewContent.name, addNewContent)
     // .component(commentWidget.name, commentWidget)
     // .component(dashboardWidget.name, dashboardWidget)
-    // .component(detailElement.name, detailElement)
+    .component(detailElement.name, detailElement)
     // .component(experiencesList.name, experiencesList)
-    // .component(listElement.name, listElement)
+    .component(listElement.name, listElement)
     // .component(reportButton.name, reportButton)
     // .component(staticInfoWidget.name, staticInfoWidget)
     .component(planningAndGuidanceComponent.name, planningAndGuidanceComponent)
+    .component(trixComponent.name, trixComponent)
     .config(config);
 
   const cmsjs = document.querySelector('#cmsjs');

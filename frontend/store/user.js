@@ -34,8 +34,8 @@ export const actions = {
     // exports.storeData(data, username);
     commit('SET_USER', data);
     commit('SET_TOKEN', data.token);
-    saveToken(data.token);
-    await dispatch('loadProfile');
+    saveToken(data.token, data.user_profile_id);
+    await dispatch('loadProfile', data.user_profile_id);
     // await dispatch(ProjectModule.loadUserProjects());
     await dispatch('system/loadOrganisations', {}, {root: true});
   },
@@ -50,12 +50,16 @@ export const actions = {
     commit('SET_TOKEN', null);
   },
 
-  async loadProfile ({ commit, getters }) {
+  async loadProfile ({ commit, getters }, profileId) {
     if (getters.getToken && !getters.getProfile) {
-      const profileId = getters.getUser.user_profile_id;
       let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
       commit('SET_PROFILE', data);
     }
+  },
+
+  async setToken ({ commit, dispatch }, tokens) {
+    commit('SET_TOKEN', tokens.jwt);
+    await dispatch('loadProfile', tokens.profileId);
   }
 };
 
