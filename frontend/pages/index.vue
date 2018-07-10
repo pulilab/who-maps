@@ -1,6 +1,7 @@
 <template>
   <div class="">
-    Landing
+    Main component
+    <router-view />
   </div>
 </template>
 
@@ -14,8 +15,11 @@ export default {
     ...mapGetters({
     })
   },
-  async fetch ({store}) {
-
+  async fetch ({ store }) {
+    await Promise.all([
+      store.dispatch('system/loadStaticData')
+      // store.dispatch('system/loadUserProfiles')
+    ]);
   }
 };
 </script>

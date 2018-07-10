@@ -1,8 +1,8 @@
-import { getTokensFromCookie, getTokensFromLocalStorage } from '../utilities/auth';
+import { getTokenFromCookie, getTokenFromLocalStorage } from '../utilities/auth';
 
 export default async function ({store, req}) {
-  const tokens = process.server ? getTokensFromCookie(req) : getTokensFromLocalStorage();
-  if (tokens && tokens.csrftoken) {
-    await store.dispatch('user/setCsrfToken', tokens.csrftoken);
+  const token = process.server ? getTokenFromCookie(req) : getTokenFromLocalStorage();
+  if (token) {
+    await store.commit('user/SET_TOKEN', token);
   }
 }
