@@ -1,5 +1,7 @@
 <template>
-  <div/>
+  <div>
+    Dashboard component
+  </div>
 </template>
 
 <script>
