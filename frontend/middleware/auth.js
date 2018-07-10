@@ -5,4 +5,5 @@ export default async function ({store, req}) {
   if (token) {
     await store.commit('user/SET_TOKEN', token);
   }
+  return token;
 }
