@@ -36,3 +36,4 @@ errorShots/
 *.po
 *.mo
 yarn-error.log
+.vscode/
