@@ -78,7 +78,6 @@ class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
 
 MultilingualActiveQuerySet = multilingual_queryset_factory(ActiveQuerySet)
 
-
 class SoftDeleteModel(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -98,7 +97,8 @@ class SoftDeleteModel(models.Model):
 class MultiLingualSoftDeleteModel(SoftDeleteModel):
     # IMPORTANT: The order of these two queryset is important. The normal queryset has to be defined first to have that
     #            as a default queryset
-    all_objects = MultilingualQuerySet.as_manager()
+    # all_objects = MultilingualQuerySet.as_manager()
+    all_objects = QuerySet.as_manager()  # modeltranslation seems to be patching it anyway
     objects = MultilingualActiveQuerySet.as_manager()
 
     class Meta:
