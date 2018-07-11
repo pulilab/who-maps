@@ -35,7 +35,7 @@ export default {
       if (this.username && this.password) {
         try {
           await this.login({username: this.username, password: this.password});
-          this.$router.push('/dashboard');
+          this.$router.push(this.localePath('index-dashboard'));
         } catch (e) {
           console.log(e);
         }

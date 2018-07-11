@@ -1,7 +1,6 @@
 <template>
   <div class="">
     <dha-login />
-    <button @click="$router.push('/cms')"/>
   </div>
 </template>
 

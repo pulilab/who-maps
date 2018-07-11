@@ -28,11 +28,42 @@ const config = {
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/vue-django-feedback.js', ssr: false },
-    { src: '~plugins/element.js', ssr: true }
+    { src: '~plugins/element.js', ssr: true },
+    { src: '~plugins/i18n.js', ssr: true }
   ],
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    ['nuxt-i18n', {
+      locales: [
+        {
+          code: 'en',
+          iso: 'en-GB'
+        },
+        {
+          code: 'fr',
+          iso: 'fr-FR'
+        },
+        {
+          code: 'es',
+          iso: 'es-ES'
+        },
+        {
+          code: 'pt',
+          iso: 'pt-PT'
+        }
+      ],
+      strategy: 'prefix',
+      rootRedirect: 'en',
+      defaultLocale: 'en',
+      vueI18n: {
+        fallbackLocale: 'en'
+      },
+      detectBrowserLanguage: {
+        useCookie: true,
+        cookieKey: 'i18n_redirected'
+      }
+    }]
   ],
   proxy: {},
   axios: {
@@ -40,15 +71,6 @@ const config = {
     browserBaseURL: '/',
     credentials: true,
     retry: false
-  },
-  mq: {
-    breakpoints: {
-      xs: 320,
-      sm: 480,
-      md: 768,
-      lg: 1024,
-      xl: Infinity
-    }
   },
   router: {
     middleware: ['auth'],
@@ -82,7 +104,8 @@ if (process.env.NODE_ENV !== 'production') {
   };
   config.proxy = {
     '/api/': { target: 'https://localhost/', secure: false },
-    '/media/': { target: 'https://localhost/', secure: false }
+    '/media/': { target: 'https://localhost/', secure: false },
+    '/translation/': { target: 'https://localhost/', secure: false }
   };
 }
 module.exports = config;

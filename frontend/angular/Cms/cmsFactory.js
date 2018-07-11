@@ -24,7 +24,7 @@ function config ($stateProvider, $locationProvider, $ngReduxProvider) {
   $stateProvider
     .state(moduleName,
       {
-        url: '/cms',
+        url: '/:lng/cms',
         template: '<planning-and-guidance></planning-and-guidance>',
         resolve: {
           cms: ['$ngRedux', ($ngRedux) => {
