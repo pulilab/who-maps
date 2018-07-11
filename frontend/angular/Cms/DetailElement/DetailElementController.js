@@ -1,14 +1,11 @@
 import angular from 'angular';
 
 import { prettifyDate, itemType, postProcessHtml } from '../utilities';
-// import Storage from '../../Storage';
 import * as CmsModule from '../../store/modules/cms';
-// import * as UserModule from '../../store/modules/user';
 
 class DetailElementDialog {
   constructor ($scope, $mdDialog, $ngRedux, content) {
     this.scope = $scope;
-    // this.storage = new Storage();
     this.dialog = $mdDialog;
     this.prettifyDate = prettifyDate;
     this.postProcessHtml = postProcessHtml;
@@ -20,6 +17,7 @@ class DetailElementDialog {
   }
 
   init () {
+    this.userProfile = window.$nuxt.$store.getters['user/getProfile'];
     this.editMode = false;
     this.newComment = {
       valid: true,
@@ -31,7 +29,6 @@ class DetailElementDialog {
   mapState (state) {
     return {
       global: CmsModule.getCmsData(state)
-      // userProfile: UserModule.getProfile(state)
     };
   }
 

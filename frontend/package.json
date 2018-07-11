@@ -25,6 +25,7 @@
     "angular-gettext": "^2.3.10",
     "angular-material": "https://github.com/pulilab/material.git#p1.1.2",
     "angular-messages": "1.5.0",
+    "angular-sanitize": "1.5.5",
     "angular-ui-router": "^1.0.18",
     "date-fns": "^1.29.0",
     "django-channels": "^1.1.6",

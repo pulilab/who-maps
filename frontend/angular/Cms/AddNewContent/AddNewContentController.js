@@ -12,14 +12,14 @@ class AddNewContentDialog {
     this.disableSubmit = false;
     this.newContent = content;
     this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+    this.userProfile = window.$nuxt.$store.getters['user/getProfile'];
+    this.isSuperUser = this.userProfile.is_superuser;
   }
 
   mapState (state) {
     return {
       axes: CmsModule.getDomainStructureForCms(state),
       global: CmsModule.getCmsData(state)
-      // userProfile: UserModule.getProfile(state),
-      // isSuperUser: UserModule.isSuperUser(state)
     };
   }
 

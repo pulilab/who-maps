@@ -81,7 +81,8 @@ if (process.env.NODE_ENV !== 'production') {
     credentials: true
   };
   config.proxy = {
-    '/api/': { target: 'https://localhost/', secure: false }
+    '/api/': { target: 'https://localhost/', secure: false },
+    '/media/': { target: 'https://localhost/', secure: false }
   };
 }
 module.exports = config;

@@ -18,10 +18,10 @@
             </span>
           </md-button>
           <cms-report-delete-button type="delete" item="vm.comment"></cms-report-delete-button>
-          <span class="sep">|</span>
+          <span ng-hide="vm.isAuthor()" class="sep">|</span>
         </span>
         <!-- / -->
-        <cms-report-delete-button item="vm.comment"></cms-report-delete-button>
+        <cms-report-delete-button ng-hide="vm.isAuthor()" item="vm.comment"></cms-report-delete-button>
       </small>
     </div>
     <div class="comment-text" ng-if="!vm.editMode">

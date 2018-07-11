@@ -1,4 +1,5 @@
 import angular from 'angular';
+import ngSanitize from 'angular-sanitize';
 import 'angular-ui-router';
 import 'angular-messages';
 import 'angular-material';
@@ -6,18 +7,14 @@ import 'ng-redux';
 import 'angular-gettext';
 import ngFileUpload from 'ng-file-upload';
 
-// import * as SystemModule from '../store/modules/system';
 import * as CmsModule from '../store/modules/cms';
 import { reducers, middleware } from '../store/index';
 
 import addNewContent from './AddNewContent/addNewContentComponent';
-// import commentWidget from './CommentWidget/commentWidgetComponent';
-// import dashboardWidget from './DashboardWidget/dashboardWidgetComponent';
+import commentWidget from './CommentWidget/commentWidgetComponent';
 import detailElement from './DetailElement/detailElementComponent';
-// import experiencesList from './ExperiencesList/experiencesListComponent';
 import listElement from './ListElement/listElementComponent';
-// import staticInfoWidget from './StaticInfoWidget/staticInfoWidgetComponent';
-// import reportButton from './ReportDeleteButton/reportDeleteButtonComponent';
+import reportButton from './ReportDeleteButton/reportDeleteButtonComponent';
 import planningAndGuidanceComponent from './PlanningAndGuidance/planningAndGuidanceComponent';
 import trixComponent from '../Common/TrixComponent/trixComponent';
 
@@ -28,16 +25,8 @@ function config ($stateProvider, $locationProvider, $ngReduxProvider) {
     .state(moduleName,
       {
         url: '/cms',
-        // views: {
-        // main: {
-        //     template: '<planning-and-guidance></planning-and-guidance>'
-        //   }
-        // },
         template: '<planning-and-guidance></planning-and-guidance>',
         resolve: {
-          system: ['$ngRedux', ($ngRedux) => {
-            // return $ngRedux.dispatch(SystemModule.loadUserProfiles());
-          }],
           cms: ['$ngRedux', ($ngRedux) => {
             return $ngRedux.dispatch(CmsModule.loadCmsData());
           }]
@@ -59,16 +48,14 @@ export const cmsFactory = () => {
     'ngMessages',
     'ngRedux',
     'gettext',
+    ngSanitize,
     ngFileUpload
   ])
     .component(addNewContent.name, addNewContent)
-    // .component(commentWidget.name, commentWidget)
-    // .component(dashboardWidget.name, dashboardWidget)
+    .component(commentWidget.name, commentWidget)
     .component(detailElement.name, detailElement)
-    // .component(experiencesList.name, experiencesList)
     .component(listElement.name, listElement)
-    // .component(reportButton.name, reportButton)
-    // .component(staticInfoWidget.name, staticInfoWidget)
+    .component(reportButton.name, reportButton)
     .component(planningAndGuidanceComponent.name, planningAndGuidanceComponent)
     .component(trixComponent.name, trixComponent)
     .config(config);

@@ -31,7 +31,7 @@
                 <cms-report-delete-button type="delete" item="vm.content"></cms-report-delete-button>
               </span>
               <!-- / -->
-              <span ng-if="vm.content.type === 1">
+              <span ng-if="vm.content.type === 1" ng-hide="vm.isAuthor()">
                 <span class="sep">|</span>
                 <cms-report-delete-button type="report"  item="vm.content"></cms-report-delete-button>
               </span>
@@ -80,10 +80,10 @@
                   <translate>Edit</translate>
                 </md-button>
                 <cms-report-delete-button type="delete" item="vm.content"></cms-report-delete-button>
-                <span class="sep">|</span>
+                <span ng-hide="vm.isAuthor()" class="sep">|</span>
               </span>
               <!-- / -->
-              <cms-report-delete-button type="report" item="vm.content"></cms-report-delete-button>
+              <cms-report-delete-button ng-hide="vm.isAuthor()" type="report" item="vm.content"></cms-report-delete-button>
             </div>
 
           </div>

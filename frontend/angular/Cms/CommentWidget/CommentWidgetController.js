@@ -1,8 +1,5 @@
 import { prettifyDate, postProcessHtml } from '../utilities';
-// import Storage from '../../Storage';
 import * as CmsModule from '../../store/modules/cms';
-import * as UserModule from '../../store/modules/user';
-import * as SystemModule from '../../store/modules/system';
 
 class CommentWidgetController {
   constructor ($scope, $ngRedux) {
@@ -11,12 +8,13 @@ class CommentWidgetController {
     this.postProcessHtml = postProcessHtml;
     this.$onInit = this.onInit.bind(this);
     this.$onDestroy = this.onDestroy.bind(this);
-    // this.storage = new Storage();
     this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
   }
   onInit () {
     this.expanded = false;
     this.editMode = false;
+    this.userProfile = window.$nuxt.$store.getters['user/getProfile'];
+    this.profiles = window.$nuxt.$store.getters['system/getUserProfiles'];
   }
 
   onDestroy () {
@@ -25,9 +23,7 @@ class CommentWidgetController {
 
   mapState (state) {
     return {
-      global: CmsModule.getCmsData(state),
-      userProfile: UserModule.getProfile(state),
-      profiles: SystemModule.getUserProfiles(state)
+      global: CmsModule.getCmsData(state)
     };
   }
 
