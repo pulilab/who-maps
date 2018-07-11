@@ -7,13 +7,14 @@ from datetime import datetime
 
 from collections import defaultdict
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext, override
-
-from django.core import mail, exceptions
 from django.template import loader
 from django.utils import timezone
+
 from celery.utils.log import get_task_logger
-from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
 
 from user.models import Organisation
@@ -55,7 +56,7 @@ def send_project_approval_digest():
                                                          'projects_earlier': projects_earlier,
                                                          'language': language})
 
-                mail.send_mail(
+                send_mail(
                     subject=subject,
                     message='',
                     from_email=settings.FROM_EMAIL,
@@ -263,7 +264,7 @@ def sync_project_from_odk():  # pragma: no cover
                 project = serialized.save(owner=u.userprofile)
                 project.post_save_initializations(Toolkit)
                 send_imported_email(project, u)
-        except exceptions.ObjectDoesNotExist:
+        except ObjectDoesNotExist:
             logging.error('No user with following email: {}'.format(user_email))
         except ValidationError:
             logging.warning('Validation error/s:')
@@ -273,7 +274,7 @@ def sync_project_from_odk():  # pragma: no cover
         existing = None
         try:
             existing = Project.objects.get(odk_id=odk_id)
-        except exceptions.ObjectDoesNotExist:
+        except ObjectDoesNotExist:
             pass
         if not existing:
             logging.error('Does not exist in DHA database: importing')
