@@ -88,7 +88,7 @@ class Post(State):
     type = models.IntegerField(choices=TYPE_CHOICES)
     domain = models.IntegerField(choices=DOMAIN_CHOICES)
     cover = models.ImageField(null=True, blank=True)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey(UserProfile, null=True, on_delete=models.SET(UserProfile.get_sentinel_user))
 
     class Meta:
         verbose_name = "Planning & Guidance post"
@@ -112,8 +112,8 @@ class Post(State):
 
 class Comment(State):
     text = models.TextField(max_length=5000)
-    user = models.ForeignKey(UserProfile)
-    post = models.ForeignKey(Post, related_name='comments')
+    user = models.ForeignKey(UserProfile, null=True, on_delete=models.SET(UserProfile.get_sentinel_user))
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.text

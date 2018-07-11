@@ -13,7 +13,7 @@ from user.models import Organisation
 
 
 class ProjectSearch(ExtendedModel):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     location = models.TextField(blank=True)
     project_name = models.TextField(blank=True)
     organisation = models.TextField(blank=True)

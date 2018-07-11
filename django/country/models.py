@@ -31,7 +31,7 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
 
 
 class PartnerLogo(ExtendedModel):
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
     image = models.ImageField(null=True)
 
     @property
@@ -40,7 +40,7 @@ class PartnerLogo(ExtendedModel):
 
 
 class MapFile(ExtendedModel):
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
     map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
 
@@ -67,13 +67,13 @@ class CountryField(models.Model):
         (MULTI, "Multiple choice"),
     )
 
-    country = models.ForeignKey(Country, related_name='fields')
+    country = models.ForeignKey(Country, related_name='fields', on_delete=models.CASCADE)
     type = models.IntegerField(choices=TYPE_CHOICES)
     question = models.CharField(max_length=256, blank=False)
     options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
     answer = models.TextField(max_length=2000, blank=True)
     draft = models.TextField(max_length=2000, blank=True)
-    project = models.ForeignKey('project.Project', null=True)
+    project = models.ForeignKey('project.Project', null=True, on_delete=models.CASCADE)
     enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
     schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
     schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
