@@ -53,10 +53,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_organisation_name(obj):
         return obj.organisation.name if obj.organisation else None
 
-    @staticmethod
-    def get_is_superuser(obj):
-        return obj.user.is_superuser
-
 
 class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     member = serializers.SerializerMethodField()
