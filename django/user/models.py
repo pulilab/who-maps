@@ -1,5 +1,6 @@
 from django.db import models, transaction
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, PBKDF2PasswordHasher
 from django.db.models.signals import post_save
@@ -44,15 +45,20 @@ class UserProfile(ExtendedModel):
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
-    organisation = models.ForeignKey(Organisation, blank=True, null=True)
-    country = models.ForeignKey('country.Country', null=True)
+    organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey('country.Country', null=True, on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
+
+    def get_sentinel_user(self):
+        user, _ = get_user_model().objects.get_or_create(username='deleted')
+        profile, _ = self.objects.get_or_create(name='delete', user=user)
+        return profile
 
 
 @receiver(post_save, sender=UserProfile)
