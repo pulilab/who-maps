@@ -2,7 +2,7 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateMo
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_auth.models import TokenModel
-from rest_framework_expiring_authtoken.views import ObtainExpiringAuthToken
+from drf_expiring_tokens.views import ObtainExpiringAuthToken
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileWithGroupsSerializer

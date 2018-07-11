@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
-    'rest_framework_expiring_authtoken',
+    'drf_expiring_tokens',
     'rosetta',
     'allauth',
     'allauth.account',
@@ -168,7 +168,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_expiring_authtoken.authentication.ExpiringTokenAuthentication',
+        'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
     ),
 }
 
@@ -191,7 +191,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
-# EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(minutes=1)
+# ALWAYS_RESET_TOKEN = False
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
