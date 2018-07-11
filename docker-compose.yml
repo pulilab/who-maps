@@ -35,7 +35,7 @@ services:
 
   nginx:
     restart: always
-    image: nginx:1.13.1
+    image: nginx:1.15.1
     ports:
       - "80:80"
       - "443:443"
@@ -52,7 +52,7 @@ services:
 
   postgres:
     restart: always
-    image: postgres:9.5.1
+    image: postgres:10.4
     environment:
       - POSTGRESQL_DB=postgres
       - POSTGRESQL_USER=postgres
@@ -64,7 +64,7 @@ services:
 
   redis:
     restart: always
-    image: redis:3.2.9
+    image: redis:4.0.10
     expose:
       - "6379"
 
