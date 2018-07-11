@@ -1,6 +1,5 @@
 import angular from 'angular';
-import * as CmsModule from '../../store/modules/cms';
-// import * as UserModule from '../../store/modules/user';
+import { getters, actions } from '../../store/modules/cms';
 
 class AddNewContentDialog {
   constructor ($scope, $mdDialog, Upload, toast, $ngRedux, content) {
@@ -11,15 +10,16 @@ class AddNewContentDialog {
     this.showTrixError = false;
     this.disableSubmit = false;
     this.newContent = content;
-    this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+    this.unsubscribe = $ngRedux.connect(this.mapState, actions)(this);
     this.userProfile = window.$nuxt.$store.getters['user/getProfile'];
     this.isSuperUser = this.userProfile.is_superuser;
+    window.THIS = this;
   }
 
   mapState (state) {
     return {
-      axes: CmsModule.getDomainStructureForCms(state),
-      global: CmsModule.getCmsData(state)
+      axes: getters.getDomainStructureForCms(state),
+      global: getters.getCmsData(state)
     };
   }
 

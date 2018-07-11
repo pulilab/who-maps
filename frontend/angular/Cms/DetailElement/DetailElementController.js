@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 import { prettifyDate, itemType, postProcessHtml } from '../utilities';
-import * as CmsModule from '../../store/modules/cms';
+import { getters, actions } from '../../store/modules/cms';
 
 class DetailElementDialog {
   constructor ($scope, $mdDialog, $ngRedux, content) {
@@ -12,7 +12,7 @@ class DetailElementDialog {
     this.itemType = itemType;
     this.content = content;
     this.checkExistence = this.checkExistence.bind(this);
-    this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+    this.unsubscribe = $ngRedux.connect(this.mapState, actions)(this);
     this.init();
   }
 
@@ -28,7 +28,7 @@ class DetailElementDialog {
 
   mapState (state) {
     return {
-      global: CmsModule.getCmsData(state)
+      global: getters.getCmsData(state)
     };
   }
 

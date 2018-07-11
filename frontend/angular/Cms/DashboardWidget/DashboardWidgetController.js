@@ -1,7 +1,6 @@
 import flatMap from 'lodash/flatMap';
 import findIndex from 'lodash/findIndex';
-import * as CmsModule from '../../store/modules/cms';
-import * as SystemModule from '../../store/modules/system';
+import { getters, actions } from '../../store/modules/cms';
 
 class DashboardWidgetController {
   constructor ($scope, $ngRedux) {
@@ -24,8 +23,8 @@ class DashboardWidgetController {
     const domains = SystemModule.getDomains(state);
     const currentDomain = domains[Math.floor(Math.random() * domains.length)];
     return {
-      axes: CmsModule.getDomainStructureForCms(state),
-      all: CmsModule.getCmsData(state),
+      axes: CmsModule.getters.getDomainStructureForCms(state),
+      all: CmsModule.getters.getCmsData(state),
       domains,
       currentDomain
     };

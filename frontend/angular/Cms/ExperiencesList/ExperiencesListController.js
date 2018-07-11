@@ -1,4 +1,4 @@
-import * as CmsModule from '../../store/modules/cms';
+import { getters, actions } from '../../store/modules/cms';
 
 class ExperienceListController {
   constructor ($scope, $ngRedux) {
@@ -10,11 +10,11 @@ class ExperienceListController {
 
   onInit () {
     this.watchers();
-    this.unsubscribe = this.$ngRedux.connect(this.mapState, CmsModule)(this);
+    this.unsubscribe = this.$ngRedux.connect(this.mapState, actions)(this);
   }
 
   mapState (state) {
-    const domains = CmsModule.getDomainStructureForCms(state);
+    const domains = getters.getDomainStructureForCms(state);
     const axisIndex = parseInt(this.axisId, 10);
     const domainIndex = parseInt(this.domainId, 10);
     const domain = domains[axisIndex].domains[domainIndex];
@@ -28,7 +28,7 @@ class ExperienceListController {
     };
 
     return {
-      data: CmsModule.getCmsData(state),
+      data: getters.getCmsData(state),
       domains,
       domain,
       newExperience

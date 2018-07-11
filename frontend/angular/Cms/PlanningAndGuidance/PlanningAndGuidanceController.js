@@ -1,5 +1,5 @@
 import flatMap from 'lodash/flatMap';
-import * as CmsModule from '../../store/modules/cms';
+import { getters, actions } from '../../store/modules/cms';
 
 class PlanningAndGuidanceController {
   constructor ($scope, $state, $ngRedux) {
@@ -11,7 +11,7 @@ class PlanningAndGuidanceController {
     this.applyFilters = this.applyFilters.bind(this);
     this.extractDomainSelection = this.extractDomainSelection.bind(this);
     this.applyLimitOrSearch = this.applyLimitOrSearch.bind(this);
-    this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+    this.unsubscribe = $ngRedux.connect(this.mapState, actions)(this);
   }
 
   onInit () {
@@ -30,8 +30,8 @@ class PlanningAndGuidanceController {
 
   mapState (state) {
     return {
-      axes: CmsModule.getDomainStructureForCms(state),
-      all: CmsModule.getCmsData(state)
+      axes: getters.getDomainStructureForCms(state),
+      all: getters.getCmsData(state)
     };
   }
 

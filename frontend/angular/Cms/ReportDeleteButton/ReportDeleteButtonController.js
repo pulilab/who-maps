@@ -1,9 +1,9 @@
-import * as CmsModule from '../../store/modules/cms';
+import { actions } from '../../store/modules/cms';
 
 class ReportDeleteButtonController {
   constructor ($ngRedux) {
     this.$onInit = this.onInit.bind(this);
-    this.unsubscribe = $ngRedux.connect(() => { return {}; }, CmsModule)(this);
+    this.unsubscribe = $ngRedux.connect(() => { return {}; }, actions)(this);
   }
 
   onInit () {

@@ -1,5 +1,5 @@
 import { prettifyDate, postProcessHtml } from '../utilities';
-import * as CmsModule from '../../store/modules/cms';
+import { getters, actions } from '../../store/modules/cms';
 
 class CommentWidgetController {
   constructor ($scope, $ngRedux) {
@@ -8,7 +8,7 @@ class CommentWidgetController {
     this.postProcessHtml = postProcessHtml;
     this.$onInit = this.onInit.bind(this);
     this.$onDestroy = this.onDestroy.bind(this);
-    this.unsubscribe = $ngRedux.connect(this.mapState, CmsModule)(this);
+    this.unsubscribe = $ngRedux.connect(this.mapState, actions)(this);
   }
   onInit () {
     this.expanded = false;
@@ -23,7 +23,7 @@ class CommentWidgetController {
 
   mapState (state) {
     return {
-      global: CmsModule.getCmsData(state)
+      global: getters.getCmsData(state)
     };
   }
 

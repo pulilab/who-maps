@@ -1,5 +1,5 @@
 import { prettifyDate, itemType, normalizeName, postProcessHtml } from '../utilities';
-import * as CmsModule from '../../store/modules/cms';
+import { getters, actions } from '../../store/modules/cms';
 
 class ListElementController {
   constructor ($ngRedux) {
@@ -13,12 +13,12 @@ class ListElementController {
 
   mapState (state) {
     return {
-      axisAndDomainName: CmsModule.getAxisAndDomainName(state, this.item.domain)
+      axisAndDomainName: getters.getAxisAndDomainName(state, this.item.domain)
     };
   }
 
   onInit () {
-    this.$ngRedux.connect(this.mapState, CmsModule)(this);
+    this.$ngRedux.connect(this.mapState, actions)(this);
   }
 
   typeClass (item) {

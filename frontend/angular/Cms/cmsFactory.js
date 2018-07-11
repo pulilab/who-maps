@@ -7,7 +7,7 @@ import 'ng-redux';
 import 'angular-gettext';
 import ngFileUpload from 'ng-file-upload';
 
-import * as CmsModule from '../store/modules/cms';
+import { actions } from '../store/modules/cms';
 import { reducers, middleware } from '../store/index';
 
 import addNewContent from './AddNewContent/addNewContentComponent';
@@ -28,7 +28,7 @@ function config ($stateProvider, $locationProvider, $ngReduxProvider) {
         template: '<planning-and-guidance></planning-and-guidance>',
         resolve: {
           cms: ['$ngRedux', ($ngRedux) => {
-            return $ngRedux.dispatch(CmsModule.loadCmsData());
+            return $ngRedux.dispatch(actions.loadCmsData());
           }]
         }
       });
