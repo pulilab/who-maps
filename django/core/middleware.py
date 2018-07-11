@@ -1,7 +1,9 @@
 import logging
 
+from django.utils.deprecation import MiddlewareMixin
 
-class ExceptionLoggingMiddleware(object):
+
+class ExceptionLoggingMiddleware(MiddlewareMixin):
     """
     This Middleware enables proper exception stacktrace logging under Gunicorn.
     """
