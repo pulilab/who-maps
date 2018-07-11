@@ -1,7 +1,7 @@
 from django.db import models, transaction
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, PBKDF2PasswordHasher
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -17,6 +17,7 @@ def set_password(self, raw_password):  # pragma: no cover
 
 
 User.set_password = set_password
+PBKDF2PasswordHasher.iterations = 30000
 
 
 class Organisation(NameByIDMixin, ExtendedModel):
