@@ -1,4 +1,4 @@
-from django.core import mail
+from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template import loader
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         email = options['email']
         html_template = loader.get_template(html_file)
         html_message = html_template.render()
-        mail.send_mail(
+        send_mail(
             subject="Test HTML templates",
             message="",
             from_email=settings.FROM_EMAIL,

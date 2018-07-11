@@ -5,7 +5,7 @@ from PIL import Image
 from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
-from django.core import urlresolvers, mail
+from django.core import mail
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
@@ -971,7 +971,7 @@ class CmsAdminTests(TestCase):
         self.assertEqual(Comment.objects.flagged().count(), 2)
         self.assertEqual(Comment.objects.banned().count(), 0)
 
-        change_url = urlresolvers.reverse('admin:cms_comment_changelist')
+        change_url = reverse('admin:cms_comment_changelist')
         data = {
             'action': 'ban',
             '_selected_action': Comment.objects.filter(state=State.FLAGGED).values_list('pk', flat=True)

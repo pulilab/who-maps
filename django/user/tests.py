@@ -1,9 +1,9 @@
 from datetime import timedelta
 
+from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
 from django.core import mail
-from django.core.urlresolvers import reverse
 from mock import patch
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase

@@ -2,9 +2,10 @@ from collections import defaultdict
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+from django.urls import reverse
 from django.utils.translation import ugettext, override
 
-from django.core import mail, urlresolvers
 from django.template import loader
 
 from rest_framework import mixins, status
@@ -34,7 +35,7 @@ class FlagMixin(object):
     @staticmethod
     def _notify_admins(instance):
         html_template = loader.get_template("email/flag_content.html")
-        change_url = urlresolvers.reverse('admin:cms_{}_change'.format(instance._meta.model_name), args=(instance.id,))
+        change_url = reverse('admin:cms_{}_change'.format(instance._meta.model_name), args=(instance.id,))
 
         admins = User.objects.filter(is_superuser=True)
         if admins:
@@ -51,7 +52,7 @@ class FlagMixin(object):
                     html_message = html_template.render({'change_url': change_url,
                                                          'language': language})
 
-                mail.send_mail(
+                send_mail(
                     subject=subject,
                     message="",
                     from_email=settings.FROM_EMAIL,
