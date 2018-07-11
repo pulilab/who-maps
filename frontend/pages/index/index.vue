@@ -5,8 +5,8 @@
     <landing-map />
     <welcome-box />
     <info-box />
+    <about-section />
     <signup-box />
-    <!-- {{ $i18n.locale }} landing page -->
   </div>
 </template>
 
