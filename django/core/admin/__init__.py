@@ -1,4 +1,4 @@
-from allauth.account.models import EmailAddress, EmailConfirmation
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
 from django.conf import settings
 from django.contrib import admin
@@ -113,7 +113,6 @@ admin.site.login_form = CustomAuthenticationForm
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(EmailAddress)
-admin.site.unregister(EmailConfirmation)
 admin.site.unregister(SocialAccount)
 admin.site.unregister(SocialToken)
 admin.site.unregister(SocialApp)
