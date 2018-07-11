@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// NOTE: This is only a router view wrapper, for common fetches
 import { mapGetters } from 'vuex';
 
 export default {

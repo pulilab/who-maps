@@ -38,19 +38,23 @@ const config = {
       locales: [
         {
           code: 'en',
-          iso: 'en-GB'
+          iso: 'en-GB',
+          name: 'English'
         },
         {
           code: 'fr',
-          iso: 'fr-FR'
+          iso: 'fr-FR',
+          name: 'Français'
         },
         {
           code: 'es',
-          iso: 'es-ES'
+          iso: 'es-ES',
+          name: 'Español'
         },
         {
           code: 'pt',
-          iso: 'pt-PT'
+          iso: 'pt-PT',
+          name: 'Português'
         }
       ],
       strategy: 'prefix',
