@@ -1,6 +1,9 @@
 <template>
   <div class="LandingPage">
-    <top-bar logo-url="/placeholder-who-logo.jpg" />
+    <top-bar />
+    <!-- <top-bar
+      country-specific
+      country-logo-url="/placeholder-sl.png" /> For countries -->
     <action-bar />
 
     <div class="MapBoxContainer">

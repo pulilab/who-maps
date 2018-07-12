@@ -3,14 +3,24 @@
 
     <div class="LogoHolder">
       <img
-        :src="logoURL"
-        :alt="logoURL === '/placeholder-who-logo.jpg' ? 'WHO logo' : 'Country logo'"
+        :src="countrySpecific ? countryLogoURL : '/placeholder-who-logo.jpg'"
+        :alt="countrySpecific ? 'Country logo' : 'WHO Logo'"
         class="Logo">
     </div>
 
     <div class="RightPart">
 
-      <language-selector />
+      <div
+        v-if="countrySpecific"
+        class="CountryHolder">
+        <img
+          src="/static/flags/sl.png"
+          alt="country flag"
+          class="CountryFlag">
+        <div class="CountryName">Sierra Leone</div>
+      </div>
+
+      <language-selector v-if="!countrySpecific"/>
 
       <div class="Separator" />
 
@@ -28,6 +38,16 @@
         </div>
       </div>
 
+      <div
+        v-if="countrySpecific"
+        class="Separator" />
+
+      <img
+        v-if="countrySpecific"
+        class="SmallWHOLogo"
+        alt="WHO logo small"
+        src="/placeholder-who-logo.jpg">
+
     </div>
 
   </div>
@@ -40,9 +60,13 @@ export default {
     LanguageSelector
   },
   props: {
-    logoURL: {
+    countrySpecific: {
+      type: Boolean,
+      default: false
+    },
+    countryLogoURL: {
       type: String,
-      default: '/placeholder-who-logo.jpg'
+      default: '/placeholder-sl.png'
     }
   }
 };
@@ -77,6 +101,19 @@ export default {
     margin: 0 4px;
   }
 
+  .CountryHolder {
+    display: flex;
+    justify-content: flex-end;
+
+    .CountryFlag {
+      height: 20px;
+    }
+
+    .CountryName {
+
+    }
+  }
+
   .AuthLinks {
     display: flex;
     justify-content: flex-end;
@@ -84,6 +121,11 @@ export default {
     div {
       margin: 0 4px;
     }
+  }
+
+  .SmallWHOLogo {
+    height: 20px;
+    margin: 5px 0;
   }
 }
 </style>
