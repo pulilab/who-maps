@@ -2,11 +2,18 @@
   <div class="LandingPage">
     <top-bar />
     <action-bar />
-    <landing-map />
-    <welcome-box />
-    <info-box />
+
+    <div class="MapBoxContainer">
+      <landing-map />
+      <welcome-box />
+    </div>
+
+    <div class="InfoSignupContainer">
+      <info-box />
+      <signup-box />
+    </div>
+
     <about-section />
-    <signup-box />
   </div>
 </template>
 
@@ -33,6 +40,23 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+  .LandingPage {
+    .MapBoxContainer {
+      position: relative;
+
+      .WelcomeBox {
+        position: absolute;
+        bottom:0;
+      }
+    }
+    .InfoSignupContainer {
+      height: 500px;
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 
 </style>
