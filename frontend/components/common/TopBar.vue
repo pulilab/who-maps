@@ -1,15 +1,35 @@
 <template>
   <div class="TopBar">
-    <language-selector />
-    <div class="separator" />
-    <div class="AuthLinks">
-      <div>
-        <nuxt-link :to="localePath('index-signup')">Signup</nuxt-link>
-      </div>
-      <div>
-        <nuxt-link :to="localePath('index-login')">Login</nuxt-link>
-      </div>
+
+    <div class="LogoHolder">
+      <img
+        :src="logoURL"
+        :alt="logoURL === '/placeholder-who-logo.jpg' ? 'WHO logo' : 'Country logo'"
+        class="Logo">
     </div>
+
+    <div class="RightPart">
+
+      <language-selector />
+
+      <div class="Separator" />
+
+      <div class="AuthLinks">
+        <div>
+          <nuxt-link
+            :to="localePath('index-signup')"
+            class="HeaderBtn">Signup</nuxt-link>
+        </div>
+
+        <div>
+          <nuxt-link
+            :to="localePath('index-login')"
+            class="HeaderBtn">Login</nuxt-link>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </template>
 
@@ -18,31 +38,52 @@ import LanguageSelector from './LanguageSelector';
 export default {
   components: {
     LanguageSelector
+  },
+  props: {
+    logoURL: {
+      type: String,
+      default: '/placeholder-who-logo.jpg'
+    }
   }
 };
 </script>
 
 <style lang="scss">
-  .TopBar {
+@import "../../assets/style/main";
+
+.TopBar {
+
+  @include limitWidthWithPadding;
+  display: flex;
+  justify-content: space-between;
+
+  .RightPart {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: space-between;
+  }
 
-    .separator {
-      width: 1px;
-      height: 18px;
-      background-color: gray;
-      margin: 0 4px;
-    }
+  .LogoHolder {
+    padding: 20px 0;
 
-    .AuthLinks {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-
-      div {
-        margin: 0 4px;
-      }
+    .Logo {
+      height: 50px;
     }
   }
+
+  .Separator {
+    width: 1px;
+    height: 18px;
+    background-color: gray;
+    margin: 0 4px;
+  }
+
+  .AuthLinks {
+    display: flex;
+    justify-content: flex-end;
+
+    div {
+      margin: 0 4px;
+    }
+  }
+}
 </style>

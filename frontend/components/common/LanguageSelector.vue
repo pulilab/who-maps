@@ -1,13 +1,14 @@
 <template>
-  <div
-    class="LanguageSelector"
-  >
+  <div class="LanguageSelector">
     <div
       v-for="locale in $i18n.locales"
       :key="locale.code"
-      class="LanguageLink"
-    >
-      <nuxt-link :to="switchLocalePath(locale.code)">{{ locale.name }}</nuxt-link>
+      class="LanguageLink">
+
+      <nuxt-link
+        :to="switchLocalePath(locale.code)"
+        class="HeaderBtn">{{ locale.name }}</nuxt-link>
+
     </div>
   </div>
 </template>
@@ -23,7 +24,6 @@ export default {
 .LanguageSelector {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
 
   .LanguageLink {
     margin: 0 4px;
