@@ -73,4 +73,7 @@ urlpatterns = [
     url(r"^projects/csv-export/$", view=views.CSVExportViewSet.as_view({
         'post': 'create'
     }), name="csv-export"),
+    url(r"^projects/map/$", view=views.MapProjectViewSet.as_view({
+        'get': 'list_all'
+    }), name="project-map"),
 ]

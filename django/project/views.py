@@ -4,7 +4,7 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
@@ -18,6 +18,18 @@ from country.models import Country, CountryField
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
+
+
+class MapProjectViewSet(ViewSet):
+    def list_all(request, *args, **kwargs):
+        projects = Project.objects.published_only()
+        result_list = functools.reduce(
+                lambda acc, p: acc + [{
+                    "id": p.id,
+                    "name": p.name,
+                    "country": p.data.get('country')
+                }], projects, [])
+        return Response(result_list)
 
 
 class ProjectPublicViewSet(ViewSet):
