@@ -27,6 +27,7 @@
     "angular-messages": "1.5.0",
     "angular-sanitize": "1.5.5",
     "angular-ui-router": "^1.0.18",
+    "d3": "^5.5.0",
     "date-fns": "^1.29.0",
     "django-channels": "^1.1.6",
     "dotenv": "^5.0.1",
@@ -39,6 +40,7 @@
     "ng-redux": "^4.0.3",
     "nuxt": "^1.0.0",
     "nuxt-i18n": "^4.1.0",
+    "papaparse": "^4.5.0",
     "redux": "^4.0.0",
     "redux-async-thunk": "^1.0.5",
     "reselect": "^3.0.1",
@@ -48,6 +50,7 @@
     "vue-no-ssr": "^0.2.2",
     "vue2-leaflet": "^1.0.2",
     "vue2-leaflet-markercluster": "^2.0.0",
+    "vuedraggable": "^2.16.0",
     "vuetify": "^1.0.10",
     "vuex-geolocation": "^1.1.0"
   },
