@@ -1,5 +1,5 @@
 <template>
-  <ediv
+  <div
     class="LanguageSelector"
   >
     <div
@@ -9,7 +9,7 @@
     >
       <nuxt-link :to="switchLocalePath(locale.code)">{{ locale.name }}</nuxt-link>
     </div>
-  </ediv>
+  </div>
 </template>
 
 <script>
