@@ -156,9 +156,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import * as d3 from 'd3';
-
+import polylabel from '@mapbox/polylabel';
 import FacilityImport from './FacilityImport';
 
 export default {
@@ -191,6 +190,7 @@ export default {
       mapUrl: null,
       mapData: {},
       country: {},
+      polylabel: [],
       projection: null,
       path: null,
       svg: null,
@@ -300,7 +300,7 @@ export default {
       immediate: true,
       async handler (url) {
         if (url) {
-          const { data } = await axios.get(url);
+          const { data } = await this.$axios.get(url);
           this.mapData = {
             type: data.type,
             features: data.features.filter(
@@ -321,6 +321,10 @@ export default {
             [this.mapBox.width, this.mapBox.width],
             countryData
           );
+          // since this is a multipolygon, take the biggest one.
+          const coordinates = countryData.geometry.coordinates.sort((a, b) => b[0].length - a[0].length);
+          const r = polylabel(coordinates[0]);
+          this.polylabel = {lat: r[1], lon: r[0]};
           this.mapLayer
             .append('path')
             .data([countryData])
@@ -382,7 +386,7 @@ export default {
         if (url) {
           this.loadingSavedState = true;
 
-          const { data } = await axios.get(url);
+          const { data } = await this.$axios.get(url);
           this.mapUrl = data.map_file;
           try {
             this.firstSubLevel = data.map_data.first_sub_level.admin_level;
@@ -471,6 +475,7 @@ export default {
         };
       });
       const mapData = {
+        polylabel: this.polylabel,
         first_sub_level: {
           admin_level: this.firstSubLevel,
           name: this.firstSubLevelType,
@@ -484,7 +489,7 @@ export default {
         facilities: this.$refs.facilityImporter.simpleFacilities
       };
       try {
-        await axios.put(this.countryApiUrl, { map_data: mapData });
+        await this.$axios.put(this.countryApiUrl, { map_data: mapData });
         this.showSuccessMessage = true;
       } catch (e) {
         console.error(e);
