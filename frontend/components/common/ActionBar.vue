@@ -1,21 +1,37 @@
 <template>
-  <div class="ActionBar"/>
+  <div class="ActionBar">
+    <div class="InnerActionBar">
+      <div class="Title">Digital Health Atlas</div>
+
+      <search-component />
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
+import SearchComponent from '../common/SearchComponent.vue';
 
+export default {
+  components: {
+    SearchComponent
+  }
 };
 </script>
 
 <style lang="scss">
+@import "../../assets/style/main";
 
-  .ActionBar {
+.ActionBar {
+  background-color: lightblue;
+
+  .InnerActionBar {
+    @include limitWidthWithPadding;
     height: 50px;
-    background-color: lightblue;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
   }
 
+  .Title {}
+}
 </style>
