@@ -61,7 +61,15 @@ const config = {
       rootRedirect: 'en',
       defaultLocale: 'en',
       vueI18n: {
-        fallbackLocale: 'en'
+        fallbackLocale: 'en',
+        silentTranslationWarn: true
+      },
+      vuex: {
+        moduleName: 'i18n',
+        mutations: {
+          setLocale: 'I18N_SET_LOCALE',
+          setMessages: false
+        }
       },
       detectBrowserLanguage: {
         useCookie: true,
