@@ -16,6 +16,7 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@mapbox/polylabel": "^1.0.2",
     "@nuxtjs/axios": "^5.1.1",
     "@nuxtjs/google-analytics": "^2.0.2",
     "@nuxtjs/proxy": "^1.1.4",
@@ -44,6 +45,7 @@
     "redux": "^4.0.0",
     "redux-async-thunk": "^1.0.5",
     "reselect": "^3.0.1",
+    "topojson": "^3.0.2",
     "trix": "^0.11.4",
     "vee-validate": "^2.0.6",
     "vue-django-feedback": "^1.5.1",
