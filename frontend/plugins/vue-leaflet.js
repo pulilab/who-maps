@@ -17,3 +17,4 @@ Vue.component('l-marker', Vue2Leaflet.LMarker);
 Vue.component('l-tooltip', Vue2Leaflet.LTooltip);
 Vue.component('l-control-zoom', Vue2Leaflet.LControlZoom);
 Vue.component('v-marker-cluster', Vue2LeafletMarkerCluster);
+Vue.component('l-geo-json', Vue2Leaflet.LGeoJson);
