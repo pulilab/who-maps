@@ -17,7 +17,9 @@ export default {
   },
   async fetch ({ store }) {
     await Promise.all([
-      store.dispatch('system/loadStaticData')
+      store.dispatch('system/loadStaticData'),
+      store.dispatch('landing/loadMapData'),
+      store.dispatch('landing/loadPublicProjectList')
       // store.dispatch('system/loadUserProfiles')
     ]);
   }
