@@ -1,10 +1,26 @@
 <template>
-  <div class="WelcomeBox" />
+  <div
+    v-show="visible"
+    class="WelcomeBox"
+  >
+    <button @click="closeWelcomeBox">
+      <i class="el-icon-close" />
+    </button>
+  </div>
 </template>
 
 <script>
 export default {
-
+  data () {
+    return {
+      visible: true
+    };
+  },
+  methods: {
+    closeWelcomeBox () {
+      this.visible = false;
+    }
+  }
 };
 </script>
 
@@ -16,7 +32,7 @@ export default {
     background-color: blue;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    align-items: start;
   }
 
 </style>
