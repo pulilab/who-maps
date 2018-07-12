@@ -17,11 +17,16 @@
           :options="clusterOptions"
         >
           <map-marker
-            v-for="pin in pins"
+            v-for="pin in countriesPin"
             :key="pin.id"
             :pin="pin"
+            @marker-click="toggleCountry(pin.id)"
           />
         </v-marker-cluster>
+
+        <geo-json-layer
+          :list="selectedCountries"
+          :collection="geoJson"/>
 
         <l-control-zoom
           position="bottomright"
@@ -32,10 +37,16 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import NoSSR from 'vue-no-ssr';
+import MapMarker from './MapMarker';
+import GeoJsonLayer from './GeoJsonLayer';
+
 export default {
   components: {
-    'no-ssr': NoSSR
+    'no-ssr': NoSSR,
+    MapMarker,
+    GeoJsonLayer
   },
   data () {
     return {
@@ -44,6 +55,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      countriesPin: 'landing/getLandingPagePins',
+      geoJson: 'landing/getGeoJsonLibrary',
+      selectedCountries: 'landing/getSelectedCountries'
+    }),
     clusterOptions () {
       return {
         disableClusteringAtZoom: 8,
@@ -56,6 +72,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      toggleCountry: 'landing/toggleCountry'
+    }),
     mapReady () {
       console.log('map ready');
     }
