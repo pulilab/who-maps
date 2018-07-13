@@ -1,24 +1,33 @@
 <template>
-  <l-marker
-    :options="pin.options"
-    :lat-lng="pin.latlng"
-    :icon="icon"
-    @mouseenter="markerHoverEnter($event)"
-    @mouseleave="markerHoverExit"
-    @click="emitMarkerClick"
-  >
-    <l-tooltip
-      v-if="paintTooltip"
-      :options="tooltipOptions"
+  <div>
+    <l-marker
+      :options="pin.options"
+      :lat-lng="pin.latlng"
+      :icon="icon"
+      class="MapMarker"
     >
-      <slot />
-    </l-tooltip>
-  </l-marker>
+      <l-popup
+        :options="popupOptions"
+      >
+        <el-button
+          class="CountryViewBtn"
+          icon="el-icon-search"
+          @click="openCountryView">
+          Country View
+        </el-button>
+      </l-popup>
+    </l-marker>
+  </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+import GeoJsonLayer from './GeoJsonLayer';
 
 export default {
+  components: {
+    GeoJsonLayer
+  },
   props: {
     pin: {
       type: Object,
@@ -39,47 +48,37 @@ export default {
     }
   },
   data () {
-    const iconY = this.icon ? -this.icon.options.iconSize[1] - 3 : -15;
     return {
-      hovered: false,
-      tooltipOptions: {
-        className: `dha-tooltip ${this.additionalTooltipClass}`,
-        permanent: false,
-        direction: 'top',
-        offset: [0, iconY]
+      popupOptions: {
+        className: `DetailsPopup ${this.additionalTooltipClass}`
       }
     };
   },
   computed: {
+    ...mapGetters({
+      geoJson: 'landing/getGeoJsonLibrary'
+
+    }),
     paintTooltip () {
       return this.$slots.default && (this.hovered || this.forceHovered);
     }
   },
   methods: {
+    ...mapActions({
+      toggleCountry: 'landing/toggleCountry'
+    }),
     emitMarkerClick () {
       this.$emit('marker-click');
     },
-    markerHoverEnter (event) {
-      if (this.$slots.default) {
-        this.hovered = true;
-        const m = event.target;
-        window.setTimeout(() => {
-          if (m && !m.isTooltipOpen()) {
-            try {
-              m.toggleTooltip();
-            } catch (e) {
-              console.log(e);
-            }
-          }
-        }, 100);
-      }
-    },
-    markerHoverExit () {
-      this.hovered = false;
+    openCountryView () {
+      this.toggleCountry(this.pin.id);
     }
   }
 };
 </script>
 
-<style lang="less">
+<style lang="scss">
+    .CountryViewBtn {
+    }
+
 </style>
