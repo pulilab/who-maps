@@ -16,6 +16,21 @@ export const getters = {
       latlng: {...c.map_data.polylabel}
     }));
   },
+  getDistrictPins (state, getters) {
+    const selectedPolyLabeled = getters.getCountries.filter(c => c.map_data.polylabel && state.selectedCountries.includes(c.id));
+    const pins = [];
+    selectedPolyLabeled.forEach(sp => {
+      if (sp.map_data && sp.map_data.first_sub_level && sp.map_data.first_sub_level.elements) {
+        sp.map_data.first_sub_level.elements.forEach((e, index) => {
+          if (e && e.polyCenter) {
+            const id = `${sp.id}-${index}`;
+            pins.push({latlng: e.polyCenter, id});
+          }
+        });
+      }
+    });
+    return pins;
+  },
   getGeoJsonLibrary (state) {
     return state.geoJsonLibrary;
   },
@@ -23,6 +38,7 @@ export const getters = {
     return state.selectedCountries;
   }
 };
+
 export const actions = {
   async loadMapData ({commit}) {
     const { data } = await this.$axios.get('/api/countries/');
