@@ -1,10 +1,14 @@
 <template>
   <div class="GeoJsonLayer">
-    <l-geo-json
+    <l-feature-group
       v-for="geojson in geojsonList"
       :key="geojson.id"
-      :geojson="geojson"
-    />
+      @layeradd="layerAddHandler"
+    >
+      <l-geo-json
+        :geojson="geojson"
+      />
+    </l-feature-group>
   </div>
 </template>
 
@@ -24,10 +28,8 @@ export default {
   },
   computed: {
     geojsonList () {
-      console.log(this.list);
       return this.list.map(id => {
         const topo = this.collection[id];
-        console.log(topo);
         if (topo) {
           const subKey = Object.keys(topo.objects)[0];
           const geo = topojson.feature(topo, topo.objects[subKey]);
@@ -35,6 +37,13 @@ export default {
           return geo;
         }
       });
+    }
+  },
+  methods: {
+    layerAddHandler (event) {
+      if (event && event.layer) {
+        this.$root.$emit('map:fit-on', event.layer.getBounds());
+      }
     }
   }
 };

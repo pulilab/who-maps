@@ -257,7 +257,10 @@ export default {
       ) {
         return this.mapData.features
           .filter(f => f.properties.admin_level === this.firstSubLevel)
-          .map(i => i.properties);
+          .map(i => {
+            const polyCenter = this.calculatePolyCenter(i.geometry);
+            return { ...i.properties, polyCenter };
+          });
       }
       return [];
     },
@@ -321,10 +324,7 @@ export default {
             [this.mapBox.width, this.mapBox.width],
             countryData
           );
-          // since this is a multipolygon, take the biggest one.
-          const coordinates = countryData.geometry.coordinates.sort((a, b) => b[0].length - a[0].length);
-          const r = polylabel(coordinates[0]);
-          this.polylabel = {lat: r[1], lon: r[0]};
+          this.polylabel = this.calculatePolyCenter(countryData.geometry);
           this.mapLayer
             .append('path')
             .data([countryData])
@@ -465,6 +465,7 @@ export default {
       const first = this.firstSubLevelList.map(f => {
         return {
           name: f.name,
+          polyCenter: f.polyCenter,
           ...this.parseNames(f.alltags)
         };
       });
@@ -496,6 +497,14 @@ export default {
         this.showFailureMessage = true;
       }
       this.saving = false;
+    },
+    calculatePolyCenter (geometry) {
+      let coordinates = [...geometry.coordinates];
+      if (geometry.type !== 'Polygon') {
+        coordinates = coordinates.sort((a, b) => b[0].length - a[0].length)[0];
+      }
+      const r = polylabel(coordinates);
+      return {lat: r[1], lon: r[0]};
     }
   }
 };
