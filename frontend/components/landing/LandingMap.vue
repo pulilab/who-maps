@@ -20,9 +20,14 @@
             v-for="pin in countriesPin"
             :key="pin.id"
             :pin="pin"
-            @marker-click="toggleCountry(pin.id)"
           />
         </v-marker-cluster>
+
+        <map-marker
+          v-for="pin in districtPins"
+          :key="pin.id"
+          :pin="pin"
+        />
 
         <geo-json-layer
           :list="selectedCountries"
@@ -38,6 +43,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+
 import NoSSR from 'vue-no-ssr';
 import MapMarker from './MapMarker';
 import GeoJsonLayer from './GeoJsonLayer';
@@ -58,8 +64,10 @@ export default {
     ...mapGetters({
       countriesPin: 'landing/getLandingPagePins',
       geoJson: 'landing/getGeoJsonLibrary',
-      selectedCountries: 'landing/getSelectedCountries'
+      selectedCountries: 'landing/getSelectedCountries',
+      districtPins: 'landing/getDistrictPins'
     }),
+
     clusterOptions () {
       return {
         disableClusteringAtZoom: 8,
@@ -71,12 +79,25 @@ export default {
       };
     }
   },
+  mounted () {
+    this.$root.$on('map:center-on', this.centerOn);
+    this.$root.$on('map:fit-on', this.fitOn);
+  },
+  beforeDestroy () {
+    this.$root.$off(['map:center-on', 'map:fit-on']);
+  },
   methods: {
-    ...mapActions({
-      toggleCountry: 'landing/toggleCountry'
-    }),
-    mapReady () {
-      console.log('map ready');
+    ...mapActions({}),
+    mapReady () {},
+    centerOn (latlng, zoom = 13) {
+      if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
+        this.$refs.mainMap.mapObject.flyTo(latlng, zoom);
+      }
+    },
+    fitOn (bounds) {
+      if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
+        this.$refs.mainMap.mapObject.fitBounds(bounds);
+      }
     }
   }
 };
