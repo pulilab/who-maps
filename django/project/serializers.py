@@ -231,11 +231,11 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         # don't allow empty team, so no orphan projects
         if 'team' in validated_data and isinstance(validated_data['team'], list):
-            instance.team = validated_data.get('team') or instance.team.all()
+            instance.team.set(validated_data.get('team') or instance.team.all())
 
         # a project however can exist without viewers
         if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
-            instance.viewers = validated_data['viewers']
+            instance.viewers.set(validated_data['viewers'])
 
         instance.save()
 
