@@ -116,9 +116,9 @@ if (process.env.NODE_ENV !== 'production') {
   };
   config.proxy = {
     '/api/': { target: 'https://localhost/', secure: false },
-    '/media/': { target: 'https://localhost/', secure: false },
-    '/translation/': { target: 'https://localhost/', secure: false },
-    '/static/flags/': { target: 'https://localhost/', secure: false }
+    '/media/': { target: 'http://localhost/', secure: false },
+    '/static/': { target: 'http://localhost/', secure: false },
+    '/translation/': { target: 'https://localhost/', secure: false }
   };
 }
 module.exports = config;
