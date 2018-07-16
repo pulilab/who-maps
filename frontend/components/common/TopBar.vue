@@ -3,7 +3,7 @@
 
     <div class="LogoHolder">
       <img
-        :src="countrySpecific ? countryLogoURL : '/placeholder-who-logo.jpg'"
+        :src="countrySpecific ? countryLogoURL : '/mock/placeholder-who-logo.jpg'"
         :alt="countrySpecific ? 'Country logo' : 'WHO Logo'"
         class="Logo">
     </div>
@@ -46,7 +46,7 @@
         v-if="countrySpecific"
         class="SmallWHOLogo"
         alt="WHO logo small"
-        src="/placeholder-who-logo.jpg">
+        src="/mock/placeholder-who-logo.jpg">
 
     </div>
 
@@ -66,7 +66,7 @@ export default {
     },
     countryLogoURL: {
       type: String,
-      default: '/placeholder-sl.png'
+      default: '/mock/placeholder-sl.png'
     }
   }
 };
