@@ -5,7 +5,7 @@
       class="WelcomeBox">
 
       <h2>Welcome!</h2>
-      <h5>vm.countryData.cover_text</h5>
+      <h5>{{ $store.state.system.landing_page_defaults.cover_text }}</h5>
 
       <button @click="closeWelcomeBox">
         <i class="el-icon-close" />
