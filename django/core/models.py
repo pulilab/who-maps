@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import QuerySet
 from django.db.models.query_utils import Q
-from modeltranslation.manager import multilingual_queryset_factory, MultilingualQuerySet
+from modeltranslation.manager import MultilingualQuerySet
 
 
 class GetObjectOrNoneMixin(object):
