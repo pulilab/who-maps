@@ -1,6 +1,8 @@
 import copy
 import csv
 from datetime import datetime
+
+from django.urls import reverse
 from mock import patch
 from io import StringIO
 
@@ -8,7 +10,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
 from django.utils.translation import override
 from django.core import mail
-from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -42,8 +43,8 @@ class SetupTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -60,7 +61,7 @@ class SetupTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
         self.test_user_key = response.json().get("token")
@@ -656,15 +657,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -708,15 +709,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1070,15 +1071,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1138,15 +1139,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1507,15 +1508,15 @@ class PermissionTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1554,15 +1555,15 @@ class PermissionTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1615,15 +1616,15 @@ class PermissionTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1838,8 +1839,8 @@ class TestAdmin(TestCase):
 
         url = reverse('rest_register')
         data = {'email': 'test_user@gmail.com',
-                'password1': '123456',
-                'password2': '123456'}
+                'password1': '123456hetNYOLC',
+                'password2': '123456hetNYOLC'}
         self.client.post(url, data)
 
         key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
@@ -2295,8 +2296,8 @@ class TestModelTranslations(TestCase):
         url = reverse('rest_register')
         data = {
             'email': 'test_user@gmail.com',
-            'password1': '123456',
-            'password2': '123456'}
+            'password1': '123456hetNYOLC',
+            'password2': '123456hetNYOLC'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
@@ -2320,7 +2321,7 @@ class TestModelTranslations(TestCase):
         # Log in the user.
         data = {
             'username': 'test_user@gmail.com',
-            'password': '123456'}
+            'password': '123456hetNYOLC'}
         response = self.client.post(reverse('api_token_auth'), data)
         self.assertEqual(response.status_code, 200)
         self.test_user_key = response.json().get('token')

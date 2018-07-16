@@ -20,8 +20,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user1@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
         self.test_user_key = response.json().get("key")
@@ -40,8 +40,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -52,8 +52,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user3@gmail.com",
-            "password1": "123456",
-            "password2": "123456"
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
@@ -63,8 +63,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user1@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["email"][0], "A user is already registered with this e-mail address.")
@@ -73,8 +73,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user@gmail",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["email"][0], "Enter a valid email address.")
@@ -93,7 +93,7 @@ class UserTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user1@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.json())
@@ -103,7 +103,7 @@ class UserTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "aaaaaa@gmail.com",
-            "password": "12345"}
+            "password": "123456hetNYOLCs"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(response.json()["non_field_errors"][0], "Unable to log in with provided credentials.")
@@ -120,8 +120,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user3@gmail.com",
-            "password1": "123456",
-            "password2": "123456"
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
@@ -134,8 +134,8 @@ class UserTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user3@gmail.com",
-            "password1": "123456",
-            "password2": "123456",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC",
             "account_type": "G"
         }
         response = self.client.post(url, data)
@@ -163,8 +163,8 @@ class UserProfileTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user1@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
 
         # Validate the account.
@@ -179,8 +179,8 @@ class UserProfileTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
 
         # Validate the account.
@@ -195,7 +195,7 @@ class UserProfileTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.user_profile_id = response.json().get('user_profile_id')
         self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
@@ -214,7 +214,7 @@ class UserProfileTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('user_profile_id'),
@@ -224,7 +224,7 @@ class UserProfileTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.json())
@@ -235,7 +235,7 @@ class UserProfileTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         user_profile_id = response.json().get('user_profile_id')
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
@@ -329,7 +329,7 @@ class UserProfileTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user1@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         user_profile_id = response.json().get('user_profile_id')
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
