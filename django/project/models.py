@@ -167,7 +167,8 @@ class Project(SoftDeleteModel, ExtendedModel):
 
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval', on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile, blank=True, null=True, help_text="Administrator who approved the project", on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, blank=True, null=True,
+                             help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
 
@@ -196,7 +197,8 @@ class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         ('Data service', _('Data service'))
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
-    parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey('DigitalStrategy', related_name='strategies',
+                               blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''

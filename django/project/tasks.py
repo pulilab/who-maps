@@ -86,12 +86,12 @@ def sync_project_from_odk():  # pragma: no cover
         html_message = email_html_template.render({'project': project,
                                                    'user_email': user.email,
                                                    'language': user.userprofile.language})
-        mail.send_mail(
-                    subject=email_subject,
-                    message='',
-                    from_email=settings.FROM_EMAIL,
-                    recipient_list=[user.email],
-                    html_message=html_message)
+        send_mail(
+            subject=email_subject,
+            message='',
+            from_email=settings.FROM_EMAIL,
+            recipient_list=[user.email],
+            html_message=html_message)
 
     def uuid_parser(value):
         return value.replace('uuid:', '')
