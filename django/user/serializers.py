@@ -43,6 +43,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
                                                       allow_null=False)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = UserProfile

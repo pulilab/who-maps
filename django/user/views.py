@@ -22,8 +22,6 @@ class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, Upd
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
-        if not serializer.initial_data.get('user'):
-            serializer.initial_data.update({"user": request.user.id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
