@@ -130,6 +130,24 @@ class CmsTest(TestCase):
         self.assertEqual(self.post.comments.flagged().count(), 1)
         self.assertEqual(self.post.comments.banned().count(), 1)
 
+    def test_sentinel_user_on_deleted_post(self):
+        self.post.author.delete()
+        self.post.refresh_from_db()
+        self.post.author.refresh_from_db()
+        self.assertNotEqual(self.post.author, self.userprofile)
+        self.assertEqual(self.post.author.name, 'Deleted user')
+
+    def test_sentinel_user_on_deleted_comment(self):
+        comment = self.post.comments.create(user=self.userprofile, text="Test Comment 1")
+        comment.user.delete()
+        comment.refresh_from_db()
+        self.assertNotEqual(comment.user, self.userprofile)
+        self.assertEqual(comment.user.name, 'Deleted user')
+
+        self.post.refresh_from_db()
+        self.post.author.refresh_from_db()
+        self.assertEqual(comment.user, self.post.author)
+
 
 class CmsApiTest(APITestCase):
     def setUp(self):
