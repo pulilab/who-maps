@@ -167,11 +167,11 @@ class TestCountryFieldAdmin(TestCase):
 
 class TestStaticDataEndpoint(TestCase):
     def test_url(self):
-        url = reverse('core:static-data')
+        url = reverse('static-data')
         self.assertEqual(url, '/api/static-data/')
 
     def test_payload_keys(self):
-        response = self.client.get(reverse('core:static-data'))
+        response = self.client.get(reverse('static-data'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('languages', response.json())
         self.assertIn('search_filters', response.json())
@@ -183,7 +183,7 @@ class TestStaticDataEndpoint(TestCase):
         self.assertIn('sub_level_types', response.json())
 
     def test_language_payload(self):
-        response = self.client.get(reverse('core:static-data'))
+        response = self.client.get(reverse('static-data'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('languages', response.json())
         self.assertEqual(response.json()['languages'],
@@ -193,12 +193,12 @@ class TestStaticDataEndpoint(TestCase):
                           {'code': 'pt', 'flag': 'pt.png', 'name': 'Portuguese'}])
 
     def test_name_translation(self):
-        response = self.client.get(reverse('core:static-data'), HTTP_ACCEPT_LANGUAGE='en')
+        response = self.client.get(reverse('static-data'), HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         name_list = [l['name'] for l in response.json()['languages']]
         self.assertEqual(name_list, ['English', 'French', 'Spanish', 'Portuguese'])
 
-        response = self.client.get(reverse('core:static-data'), HTTP_ACCEPT_LANGUAGE='fr')
+        response = self.client.get(reverse('static-data'), HTTP_ACCEPT_LANGUAGE='fr')
         self.assertEqual(response.status_code, 200)
         name_list = [l['name'] for l in response.json()['languages']]
         self.assertEqual(name_list, ['Anglais', 'Français', 'Espagnol', 'Portugais'])
