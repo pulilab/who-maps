@@ -16,7 +16,7 @@
       <signup-box />
     </div>
 
-    <about-section />
+    <about-section class="AboutSection" />
   </div>
 </template>
 
