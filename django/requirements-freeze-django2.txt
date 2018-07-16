@@ -28,7 +28,7 @@ django-appconf==1.0.2
 django-celery-email==2.0.0
 django-cors-headers==2.3.0
 django-modeltranslation==0.13-beta1
-django-redis-cache==1.7.1
+django-redis==4.9.0
 django-rest-auth==0.9.3
 django-rosetta==0.8.1
 django-simplefeedback==0.8
