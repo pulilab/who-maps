@@ -57,27 +57,25 @@ class TestAdminWidgets(TestCase):
         rendered_output = self.widget.render('test', [])
         self.assertEqual(rendered_output,
                          '<ul id="test" data-element-counter="1" class="arrayfield-list"style="padding: 0; margin: 0; '
-                         'display: none;"><li style="list-style-type: none;"><input class="vTextField" name="test_0" '
-                         'type="text" /><a href="#" class="delete-arraywidget-item" style="color: #CC3434; '
-                         'padding-left: 8px">Delete</a></li><li style="list-style-type: none;"><a href="#" '
+                         'display: none;"><input type="text" name="test_0" class="vTextField" />'
+                         '<li style="list-style-type: none;"><a href="#" '
                          'class="add-arraywidget-item">Add new entry</a></li></ul>')
 
     def test_render_values(self):
         rendered_output = self.widget.render('test', ['first value'])
         self.assertEqual(rendered_output,
                          '<ul id="test" data-element-counter="1" class="arrayfield-list"style="padding: 0; margin: 0; '
-                         'display: none;"><li style="list-style-type: none;"><input class="vTextField" name="test_0" '
-                         'type="text" value="first value" /><a href="#" class="delete-arraywidget-item" style="color: '
-                         '#CC3434; padding-left: 8px">Delete</a></li><li style="list-style-type: none;"><a href="#" '
+                         'display: none;"><input type="text" name="test_0" value="first value" class="vTextField" />'
+                         '<li style="list-style-type: none;"><a href="#" '
                          'class="add-arraywidget-item">Add new entry</a></li></ul>')
 
     def test_format_output(self):
         formatted_output = self.widget.format_output(['First widget', 'Second widget'])
         self.assertEqual(formatted_output,
                          '<li style="list-style-type: none;">First widget<a href="#" class="delete-arraywidget-item" '
-                         'style="color: #CC3434; padding-left: 8px">Delete</a></li>\n<li style="list-style-type: none;'
-                         '">Second widget<a href="#" class="delete-arraywidget-item" style="color: #CC3434; '
-                         'padding-left: 8px">Delete</a></li>')
+                         'style="color: #CC3434; padding-left: 8px">Delete</a></li>\n'
+                         '<li style="list-style-type: none;">Second widget<a href="#" class="delete-arraywidget-item" '
+                         'style="color: #CC3434; padding-left: 8px">Delete</a></li>')
 
     def test_values_from_datadict(self):
         data = {'country_0': '0',
