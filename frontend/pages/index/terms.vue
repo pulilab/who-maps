@@ -1,13 +1,11 @@
 <template>
-  <div class="SignupPage">
-    <div>Sign up page component</div>
+  <div class="TermsPage">
+    Terms of use
   </div>
 </template>
 
 <script>
-
 export default {
-  components: {}
 };
 </script>
 

@@ -77,7 +77,6 @@ export default {
         background-position: center center;
       }
     }
-
   }
 }
 
