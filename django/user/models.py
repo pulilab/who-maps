@@ -55,9 +55,10 @@ class UserProfile(ExtendedModel):
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
 
-    def get_sentinel_user(self):
+    @staticmethod
+    def get_sentinel_user():
         user, _ = get_user_model().objects.get_or_create(username='deleted')
-        profile, _ = self.objects.get_or_create(name='delete', user=user)
+        profile, _ = UserProfile.objects.get_or_create(name='Deleted user', user=user)
         return profile
 
 
