@@ -87,7 +87,7 @@ class UserTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(response.json()["message"], "ok")
+        self.assertIn(response.json()["detail"], "ok")
 
     def test_login_user(self):
         url = reverse("api_token_auth")
@@ -152,7 +152,7 @@ class UserTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("success", response.json())
+        self.assertEqual(response.json()['detail'], 'Password reset e-mail has been sent.')
         self.assertIn("Password reset", mail.outbox[2].subject)
 
 
