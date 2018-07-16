@@ -188,7 +188,7 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def _get_permission_based_data(self, project):
         draft = None
 
-        if not self.request.user.is_authenticated():  # ANON
+        if not self.request.user.is_authenticated:  # ANON
             data = project.get_anon_data()
         else:
             is_member = project.is_member(self.request.user)
