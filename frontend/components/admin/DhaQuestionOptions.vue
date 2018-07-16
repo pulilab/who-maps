@@ -43,7 +43,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      getOptions: 'questions/getQuestionOptionsById'
+      getOptions: 'admin/questions/getQuestionOptionsById'
     }),
 
     options () {

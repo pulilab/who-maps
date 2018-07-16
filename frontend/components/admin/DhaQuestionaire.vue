@@ -121,10 +121,10 @@ export default {
   methods: {
 
     ...mapActions({
-      restoreQuestions: 'questions/restoreQuestions',
-      addQuestion: 'questions/addQuestion',
-      patchQuestions: 'questions/patchQuestions',
-      draggedQuestions: 'questions/draggedQuestions'
+      restoreQuestions: 'admin/questions/restoreQuestions',
+      addQuestion: 'admin/questions/addQuestion',
+      patchQuestions: 'admin/questions/patchQuestions',
+      draggedQuestions: 'admin/questions/draggedQuestions'
     }),
 
     eraseChanges () {

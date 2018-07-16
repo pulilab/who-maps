@@ -75,7 +75,7 @@ export default {
   computed: {
 
     ...mapGetters({
-      questionById: 'questions/getQuestionById'
+      questionById: 'admin/questions/getQuestionById'
     }),
 
     thisQuestion () {
