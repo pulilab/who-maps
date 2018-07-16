@@ -19,7 +19,8 @@ const config = {
     ]
   },
   css: [
-    '~/assets/style/main.sass'
+    '~/assets/style/main.sass',
+    '~/assets/style/main.less'
   ],
   env: {
   },

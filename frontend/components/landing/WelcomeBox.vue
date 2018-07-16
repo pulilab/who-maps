@@ -1,11 +1,16 @@
 <template>
-  <div
-    v-show="visible"
-    class="WelcomeBox"
-  >
-    <button @click="closeWelcomeBox">
-      <i class="el-icon-close" />
-    </button>
+  <div class="WelcomeBox-holder">
+    <div
+      v-show="visible"
+      class="WelcomeBox">
+
+      <h2>Welcome!</h2>
+      <h5>{{ $store.state.system.landing_page_defaults.cover_text }}</h5>
+
+      <button @click="closeWelcomeBox">
+        <i class="el-icon-close" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -24,15 +29,16 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
+@import "../../assets/style/main.less";
+
+.WelcomeBox-holder {
+  .limitWidthWithPadding ();
 
   .WelcomeBox {
     height: 300px;
     width: 300px;
     background-color: blue;
-    display: flex;
-    justify-content: flex-end;
-    align-items: start;
   }
-
+}
 </style>

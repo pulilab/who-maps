@@ -1,6 +1,6 @@
 <template>
   <div class="SingupBox" >
-    <div />
+    <div>Signup box</div>
   </div>
 </template>
 
@@ -10,16 +10,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
 
   .SingupBox {
-    height: 500px;
     flex: 1;
     background-color: blue;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
   }
 
 </style>

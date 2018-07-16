@@ -12,11 +12,11 @@
     </div>
 
     <div class="InfoSignupContainer">
-      <info-box />
+      <info-box class="InfoBox" />
       <signup-box />
     </div>
 
-    <about-section />
+    <about-section class="AboutSection" />
   </div>
 </template>
 
@@ -43,7 +43,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
+@import "../../assets/style/main.less";
+
 .LandingPage {
   .MapBoxContainer {
     position: relative;
@@ -51,14 +53,20 @@ export default {
     .WelcomeBox {
       position: absolute;
       bottom: 0;
+      z-index: 400;
     }
   }
   .InfoSignupContainer {
-    height: 500px;
-    background-color: white;
+    .limitWidthWithPadding();
+    margin-top: 36px;
+    margin-bottom: 36px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
+
+    .InfoBox {
+      margin-right: 28px;
+    }
   }
 }
 
