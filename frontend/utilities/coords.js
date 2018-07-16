@@ -1,3 +1,5 @@
+import polylabel from '@mapbox/polylabel';
+
 export const circleOfCoords = ({ lat, lng }, amount) => {
   const radius = 1000; // meters
   const result = [];
@@ -11,4 +13,12 @@ export const circleOfCoords = ({ lat, lng }, amount) => {
     result.push(latlng);
   }
   return result;
+};
+export const calculatePolyCenter = (geometry) => {
+  let coordinates = [...geometry.coordinates];
+  if (geometry.type !== 'Polygon') {
+    coordinates = coordinates.sort((a, b) => b[0].length - a[0].length)[0];
+  }
+  const r = polylabel(coordinates);
+  return {lat: r[1], lng: r[0]};
 };

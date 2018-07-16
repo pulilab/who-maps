@@ -3,30 +3,26 @@
 
     <el-header :span="24">
       <el-card class="box-card title-bar">
-        <div class="page-title">
-          <img
-            v-if="flagUrl"
-            :src="flagUrl"
-          >
-          <span>Country Map:</span>
-          <span>{{ countryName }}</span>
-        </div>
-        <el-alert
-          v-show="showSuccessMessage"
-          type="success"
-          title="Your country map and sub levels are now saved"
-        />
-        <el-alert
-          v-show="showFailureMessage"
-          type="error"
-          title="An error occurred please contact the admins"
-        />
+        <el-switch
+          v-model="showCenterPin"
+          active-text="Show country center pin"
+          inactive-text="Hide country center pin"/>
+        <el-switch
+          v-model="showSubLevelsPins"
+          active-text="Show districts center pin"
+          inactive-text="Hide districts center pin"/>
+        <el-button
+          @click.prevent="polycenterCalculation"
+        >
+          Set / Reset Markers
+        </el-button>
         <el-button
           v-show="showSaveButton"
-          :loading="saving"
           type="primary"
           @click.prevent="save"
-        >Save</el-button>
+        >
+          Save
+        </el-button>
       </el-card>
 
     </el-header>
@@ -35,120 +31,151 @@
       <el-row :gutter="20">
         <el-col :span="16">
           <el-card class="box-card">
-            <div class="map-container">
-              <svg/>
-            </div>
+            <no-ssr>
+              <l-map
+                ref="mainMap"
+                :zoom="zoom"
+                :world-copy-jump="true"
+                :options="mapOptions"
+                class="MapContainer"
+              >
+                <l-tilelayer
+                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+                />
+                <l-feature-group @layeradd="geoJsonLoadHandler">
+                  <l-geo-json
+                    v-if="firstSubLevelMap && firstSubLevelMap.length > 0"
+                    ref="geoJsonLayer"
+                    :geojson="firstSubLevelMap"
+                  />
+                </l-feature-group>
+                <l-marker
+                  v-if="showCenterPin"
+                  :lat-lng="countryCenter"
+                  :draggable="true"
+                  @moveend="countryCenterMoveHandler"
+                >
+                  <l-tooltip> Country Central Pin </l-tooltip>
+                </l-marker>
+
+                <l-feature-group v-if="showSubLevelsPins">
+                  <l-marker
+                    v-for="pin in subLevelsPolyCenters"
+                    :key="pin.name"
+                    :lat-lng="pin.latlng"
+                    :draggable="true"
+                    @moveend="subLevelsPinsMoveHandler($event, pin.name)"
+                  >
+                    <l-tooltip> {{ pin.name }} </l-tooltip>
+                  </l-marker>
+                </l-feature-group>
+              </l-map>
+            </no-ssr>
           </el-card>
         </el-col>
 
         <el-col
           :span="8"
           class="side-selector">
-          <template v-show="!loading">
-            <el-card class="box-card">
-              <div
-                slot="header"
-                class="">
-                <span>Sub Level I (Displayed on the map) </span>
-              </div>
-              <div class="input-container">
-                <el-select
-                  v-model="firstSubLevel"
-                  placeholder="Admin level">
-                  <el-option
-                    v-for="level in subLevels"
-                    :key="level"
-                    :label="`admin-level-${level}`"
-                    :value="level"/>
-                </el-select>
-                <el-select
-                  v-model="firstSubLevelType"
-                  placeholder="Sub level name">
-                  <el-option
-                    v-for="name in firstSubLevelTypes"
-                    :key="name.name"
-                    :label="name.displayName"
-                    :value="name.name"/>
-                </el-select>
-              </div>
-              <div
-                v-show="showFirstSubLevelList"
-                class="sub-level-list"
-              >
-                <h5> List of {{ firstSubLevelType }}</h5>
-                <p>Hover on a {{ firstSubLevelType }} name to see the name on the map</p>
-                <ul>
-                  <li
-                    v-for="item in firstSubLevelList"
-                    :key="item.id"
-                    @mouseenter="firstSubLevelEnter(item.name)"
-                    @mouseleave="firstSubLevelLeave">
-                    {{ item.name }}
-                  </li>
-                </ul>
-              </div>
-            </el-card>
-            <el-card
+          <el-card class="box-card">
+            <div
+              slot="header"
+              class="">
+              <span>Sub Level I (Displayed on the map) </span>
+            </div>
+            <div class="input-container">
+              <el-select
+                v-model="firstSubLevel"
+                placeholder="Admin level">
+                <el-option
+                  v-for="level in subLevels"
+                  :key="level"
+                  :label="`admin-level-${level}`"
+                  :value="level"/>
+              </el-select>
+              <el-select
+                v-model="firstSubLevelType"
+                placeholder="Sub level name">
+                <el-option
+                  v-for="name in firstSubLevelTypes"
+                  :key="name.name"
+                  :label="name.displayName"
+                  :value="name.name"/>
+              </el-select>
+            </div>
+            <div
               v-show="showFirstSubLevelList"
-              class="box-card"
+              class="sub-level-list"
             >
-              <div
-                slot="header"
-                class="clearfix">
-                <span>Sub Level II (Only for selection) </span>
-              </div>
-              <div class="input-container">
-                <el-select
-                  v-model="secondSubLevel"
-                  placeholder="Admin Level"
-                  clearable>
-                  <el-option
-                    v-for="level in availableSubLevels"
-                    :key="level"
-                    :label="`admin-level-${level}`"
-                    :value="level"/>
-                </el-select>
-                <el-select
-                  v-model="secondSubLevelType"
-                  placeholder="Sub level name"
-                  clearable>
-                  <el-option
-                    v-for="name in secondSubLevelTypes"
-                    :key="name.name"
-                    :label="name.displayName"
-                    :value="name.name"/>
-                </el-select>
-              </div>
-              <div
-                v-show="showSecondSubLevelList"
-                class="sub-level-list"
-              >
-                <h5> List of {{ secondSubLevelType }}</h5>
-                <p>Hover on the name to see the {{ secondSubLevelType }} drawn on the map</p>
-                <ul>
-                  <li
-                    v-for="item in secondSubLevelList"
-                    :key="item.id"
-                    @mouseenter="secondSubLevelEnter(item)"
-                    @mouseleave="secondSubLevelLeave">
-                    {{ item.name }}
-                  </li>
-                </ul>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div slot="header">
-                <span>Facility Import</span>
-              </div>
-              <facility-import
-                v-show="showFirstSubLevelList"
-                ref="facilityImporter"
-                :places="places"
-                :initial-data="facilities"/>
-              <div v-show="!showFirstSubLevelList"> Select at least one level to use the facility import </div>
-            </el-card>
+              <h5> List of {{ firstSubLevelType }}</h5>
+              <ul>
+                <li
+                  v-for="item in firstSubLevelList"
+                  :key="item.id"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+          </el-card>
+          <el-card
+            v-show="showFirstSubLevelList"
+            class="box-card"
+          >
+            <div
+              slot="header"
+              class="clearfix">
+              <span>Sub Level II (Only for selection) </span>
+            </div>
+            <div class="input-container">
+              <el-select
+                v-model="secondSubLevel"
+                placeholder="Admin Level"
+                clearable>
+                <el-option
+                  v-for="level in availableSubLevels"
+                  :key="level"
+                  :label="`admin-level-${level}`"
+                  :value="level"/>
+              </el-select>
+              <el-select
+                v-model="secondSubLevelType"
+                placeholder="Sub level name"
+                clearable>
+                <el-option
+                  v-for="name in secondSubLevelTypes"
+                  :key="name.name"
+                  :label="name.displayName"
+                  :value="name.name"/>
+              </el-select>
+            </div>
+            <div
+              v-show="showSecondSubLevelList"
+              class="sub-level-list"
+            >
+              <h5> List of {{ secondSubLevelType }}</h5>
+              <ul>
+                <li
+                  v-for="item in secondSubLevelList"
+                  :key="item.id"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+          </el-card>
+          <el-card class="box-card">
+            <div slot="header">
+              <span>Facility Import</span>
+            </div>
+            <facility-import
+              v-show="showFirstSubLevelList"
+              ref="facilityImporter"
+              :places="places"
+            />
+            <div v-show="!showFirstSubLevelList"> Select at least one level to use the facility import </div>
+          </el-card>
 
-          </template>
         </el-col>
       </el-row>
     </el-main>
@@ -156,135 +183,86 @@
 </template>
 
 <script>
-import * as d3 from 'd3';
-import polylabel from '@mapbox/polylabel';
+import { mapGetters, mapActions } from 'vuex';
+import { calculatePolyCenter } from '../../utilities/coords';
 import FacilityImport from './FacilityImport';
+import NoSSR from 'vue-no-ssr';
 
 export default {
   name: 'VueMapCustomizer',
   components: {
+    'no-ssr': NoSSR,
     FacilityImport
-  },
-  props: {
-    flagBaseUrl: {
-      type: String,
-      default: ''
-    },
-    countryId: {
-      type: Number,
-      required: true
-    },
-    apiUrl: {
-      type: String,
-      default: ''
-    },
-    subLevelTypes: {
-      type: Array,
-      default () {
-        return [];
-      }
-    }
   },
   data () {
     return {
-      mapUrl: null,
-      mapData: {},
-      country: {},
-      polylabel: [],
-      projection: null,
-      path: null,
-      svg: null,
-      mapLayer: null,
-      firstSubLevel: null,
-      secondSubLevel: null,
-      facilities: [],
-      saving: false,
-      showSuccessMessage: false,
-      showFailureMessage: false,
-      loadingSavedState: false,
-      firstSubLevelType: null,
-      secondSubLevelType: null
+      zoom: 3,
+      mapOptions: { zoomControl: false, attributionControl: false },
+      showCenterPin: true,
+      showSubLevelsPins: true
     };
   },
   computed: {
-    loading () {
-      return !this.mapData.features || this.loadingSavedState;
-    },
-    countryName () {
-      return this.country.properties ? this.country.properties.name : '';
-    },
-    countryCode () {
-      return this.country.properties
-        ? this.country.properties.alltags['ISO3166-1']
-        : null;
-    },
-    flagUrl () {
-      if (this.flagBaseUrl && this.countryCode) {
-        return `${this.flagBaseUrl}${this.countryCode.toLocaleLowerCase()}.png`;
-      }
-      return null;
-    },
+    ...mapGetters({
+      subLevelTypes: 'system/getSubLevelTypes',
+      firstSubLevelList: 'admin/map/getFirstSubLevelList',
+      secondSubLevelList: 'admin/map/getSecondSubLevelList',
+      subLevels: 'admin/map/getSubLevels',
+      firstSubLevelMap: 'admin/map/getFirstSubLevelMap',
+      getFirstSubLevel: 'admin/map/getFirstSubLevel',
+      getFirstSubLevelType: 'admin/map/getFirstSubLevelType',
+      getSecondSubLevel: 'admin/map/getSecondSubLevel',
+      getSecondSubLevelType: 'admin/map/getSecondSubLevelType',
+      countryCenter: 'admin/map/getCountryCenter',
+      countryBorder: 'admin/map/getCountryBorder',
+      subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters'
+    }),
     firstSubLevelTypes () {
       return this.subLevelTypes.filter(n => n.name !== this.secondSubLevelType);
     },
-    secondSubLevelTypes () {
+    secondSubLevelTypes  () {
       return this.subLevelTypes.filter(n => n.name !== this.firstSubLevelType);
     },
-    subLevels () {
-      const levels = [];
-      const features = this.mapData.features || [];
-      for (const f of features) {
-        if (!levels.includes(f.properties.admin_level)) {
-          levels.push(f.properties.admin_level);
-        }
+    firstSubLevel: {
+      get () {
+        return this.getFirstSubLevel;
+      },
+      set (value) {
+        this.setFirstSubLevel(value);
       }
-      return levels;
+    },
+    firstSubLevelType: {
+      get () {
+        return this.getFirstSubLevelType;
+      },
+      set (value) {
+        this.setFirstSubLevelType(value);
+      }
+    },
+    secondSubLevel: {
+      get () {
+        return this.getSecondSubLevel;
+      },
+      set (value) {
+        this.setSecondSubLevel(value);
+      }
+    },
+    secondSubLevelType: {
+      get () {
+        return this.getSecondSubLevelType;
+      },
+      set (value) {
+        this.setSecondSubLevelType(value);
+      }
     },
     availableSubLevels () {
       return this.subLevels.filter(sb => sb !== this.firstSubLevel);
     },
-    firstSubLevelMap () {
-      const features = this.mapData.features || [];
-      return features.filter(
-        f => f.properties.admin_level === this.firstSubLevel
-      );
-    },
-    firstSubLevelList () {
-      if (
-        this.mapData.features &&
-        this.firstSubLevel &&
-        this.firstSubLevelType
-      ) {
-        return this.mapData.features
-          .filter(f => f.properties.admin_level === this.firstSubLevel)
-          .map(i => {
-            const polyCenter = this.calculatePolyCenter(i.geometry);
-            return { ...i.properties, polyCenter };
-          });
-      }
-      return [];
-    },
     showFirstSubLevelList () {
-      return (
-        this.mapData.features && this.firstSubLevel && this.firstSubLevelType
-      );
-    },
-    secondSubLevelList () {
-      if (
-        this.mapData.features &&
-        this.secondSubLevel &&
-        this.secondSubLevelType
-      ) {
-        return this.mapData.features
-          .filter(f => f.properties.admin_level === this.secondSubLevel)
-          .map(i => i.properties);
-      }
-      return [];
+      return (this.firstSubLevel && this.firstSubLevelType);
     },
     showSecondSubLevelList () {
-      return (
-        this.mapData.features && this.secondSubLevel && this.secondSubLevelType
-      );
+      return (this.secondSubLevel && this.secondSubLevelType);
     },
     places () {
       return this.secondSubLevel
@@ -293,218 +271,41 @@ export default {
     },
     showSaveButton () {
       return this.showFirstSubLevelList;
-    },
-    countryApiUrl () {
-      return `${this.apiUrl}${this.countryId}/`;
     }
-  },
-  watch: {
-    mapUrl: {
-      immediate: true,
-      async handler (url) {
-        if (url) {
-          const { data } = await this.$axios.get(url);
-          this.mapData = {
-            type: data.type,
-            features: data.features.filter(
-              f => f.properties['admin_level'] !== '2'
-            )
-          };
-          this.country = data.features.find(
-            f => f.properties['admin_level'] === '2'
-          );
-        }
-      }
-    },
-    country: {
-      immediate: true,
-      handler (countryData) {
-        if (countryData && this.mapLayer) {
-          this.projection.fitSize(
-            [this.mapBox.width, this.mapBox.width],
-            countryData
-          );
-          this.polylabel = this.calculatePolyCenter(countryData.geometry);
-          this.mapLayer
-            .append('path')
-            .data([countryData])
-            .attr('d', this.path)
-            .classed('country', true);
-        }
-      }
-    },
-    firstSubLevelMap: {
-      immediate: true,
-      handler (subLevelData) {
-        if (subLevelData && this.mapLayer) {
-          this.firstSubLevelSvg.forEach(svg => svg.remove());
-          this.labelList.forEach(lb => lb.remove());
-          this.firstSubLevelSvg = [];
-          this.labelList = [];
-          subLevelData.forEach(sl => {
-            const name = sl.properties.name;
-            const svg = this.mapLayer.insert('path', '.first-sub-level + *');
-            svg
-              .data([sl])
-              .attr('d', this.path)
-              .classed('first-sub-level', true);
-
-            svg.on('mouseenter', this.firstSubLevelEnter.bind(this, name));
-            svg.on('mouseleave', this.firstSubLevelLeave);
-
-            this.firstSubLevelSvg.push(svg);
-
-            const labelContainer = this.mapLayer.append('g');
-            labelContainer
-              .attr('pointer-events', 'none')
-              .attr('transform', () => {
-                const centroid = this.path.centroid(sl);
-                return `translate(${centroid[0]}, ${centroid[1]})`;
-              })
-              .attr('class', 'label')
-              .classed('hidden', true);
-
-            labelContainer.append('text').text(name);
-
-            const labelBBox = labelContainer.node().getBBox();
-            labelContainer
-              .select('text')
-              .attr('dx', -(labelBBox.width / 2))
-              .attr('dy', labelBBox.height / 2)
-              .attr('font-size', '16px')
-              .attr('fill', 'black');
-
-            labelContainer.name = name;
-            this.labelList.push(labelContainer);
-          });
-        }
-      }
-    },
-    countryApiUrl: {
-      immediate: true,
-      async handler (url) {
-        if (url) {
-          this.loadingSavedState = true;
-
-          const { data } = await this.$axios.get(url);
-          this.mapUrl = data.map_file;
-          try {
-            this.firstSubLevel = data.map_data.first_sub_level.admin_level;
-            this.secondSubLevel = data.map_data.second_sub_level.admin_level;
-            this.firstSubLevelType = data.map_data.first_sub_level.name;
-            this.secondSubLevelType = data.map_data.second_sub_level.name;
-            this.facilities = data.map_data.facilities;
-            this.loadingSavedState = false;
-          } catch (e) {
-            console.error(
-              'Error parsing the saved data, no saved data or corrupted one'
-            );
-          }
-          this.loadingSavedState = false;
-        }
-      }
-    }
-  },
-  mounted () {
-    this.mapDOMContainer = this.$el.querySelector('.map-container');
-    this.mapBox = this.mapDOMContainer.getBoundingClientRect();
-    this.firstSubLevelSvg = [];
-    this.labelList = [];
-    this.hoveredSecondSubLevel = null;
-    this.projection = d3.geoMercator();
-    this.path = d3.geoPath(this.projection);
-    this.zoom = d3
-      .zoom()
-      .on('zoom', this.zoomed)
-      .scaleExtent([0, 20]);
-    this.svg = d3
-      .select('svg')
-      .attr('width', this.mapBox.width)
-      .attr('height', this.mapBox.width)
-      .call(this.zoom);
-    this.mapLayer = this.svg.append('g').classed('map-layer', true);
   },
   methods: {
-    zoomed () {
-      const t = d3.event.transform;
-      this.mapLayer.attr('transform', `translate(${[t.x, t.y]})scale(${t.k})`);
-    },
-    firstSubLevelEnter (name) {
-      this.labelList.forEach(l => l.classed('hidden', true));
-      const svgLabel = this.labelList.find(ll => ll.name === name);
-      svgLabel.classed('hidden', false);
-    },
-    firstSubLevelLeave () {
-      this.labelList.forEach(l => l.classed('hidden', true));
-    },
-    secondSubLevelEnter (item) {
-      const levelMapData = this.mapData.features.find(
-        f => f.properties.id === item.id
-      );
-      this.hoveredSecondSubLevel = this.mapLayer
-        .append('path')
-        .data([levelMapData])
-        .attr('d', this.path)
-        .classed('second-sub-level', true);
-    },
-    secondSubLevelLeave () {
-      if (this.hoveredSecondSubLevel) {
-        this.hoveredSecondSubLevel.remove();
-        this.hoveredSecondSubLevel = null;
-      }
-    },
-    parseNames (collection) {
-      const result = {};
-      const nameKeys = Object.keys(collection).filter(k => k.includes('name:'));
+    ...mapActions({
+      setFirstSubLevel: 'admin/map/setFirstSubLevel',
+      setFirstSubLevelType: 'admin/map/setFirstSubLevelType',
+      setSecondSubLevel: 'admin/map/setSecondSubLevel',
+      setSecondSubLevelType: 'admin/map/setSecondSubLevelType',
+      setCountryCenter: 'admin/map/setCountryCenter',
+      setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
+      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter',
+      save: 'admin/map/saveMapData'
 
-      nameKeys.forEach(nk => (result[nk] = collection[nk]));
-      return result;
+    }),
+    geoJsonLoadHandler () {
+      this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds());
     },
-    async save () {
-      this.saving = true;
-      const first = this.firstSubLevelList.map(f => {
+    countryCenterMoveHandler (event) {
+      const newLatLng = event.target.getLatLng();
+      this.setCountryCenter(newLatLng);
+    },
+    polycenterCalculation () {
+      const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
+      this.setCountryCenter(countryCenter);
+      const subLevelsPolycenter = this.firstSubLevelMap.map(sb => {
         return {
-          name: f.name,
-          polyCenter: f.polyCenter,
-          ...this.parseNames(f.alltags)
+          name: sb.properties.name,
+          latlng: calculatePolyCenter(sb.geometry)
         };
       });
-      const second = this.secondSubLevelList.map(s => {
-        return {
-          name: s.name,
-          ...this.parseNames(s.alltags)
-        };
-      });
-      const mapData = {
-        polylabel: this.polylabel,
-        first_sub_level: {
-          admin_level: this.firstSubLevel,
-          name: this.firstSubLevelType,
-          elements: first
-        },
-        second_sub_level: {
-          admin_level: this.secondSublevel,
-          name: this.secondSubLevelType,
-          elements: second
-        },
-        facilities: this.$refs.facilityImporter.simpleFacilities
-      };
-      try {
-        await this.$axios.put(this.countryApiUrl, { map_data: mapData });
-        this.showSuccessMessage = true;
-      } catch (e) {
-        console.error(e);
-        this.showFailureMessage = true;
-      }
-      this.saving = false;
+      this.setSubLevelsPolyCenters(subLevelsPolycenter);
     },
-    calculatePolyCenter (geometry) {
-      let coordinates = [...geometry.coordinates];
-      if (geometry.type !== 'Polygon') {
-        coordinates = coordinates.sort((a, b) => b[0].length - a[0].length)[0];
-      }
-      const r = polylabel(coordinates);
-      return {lat: r[1], lon: r[0]};
+    subLevelsPinsMoveHandler (event, name) {
+      const latlng = event.target.getLatLng();
+      this.updateSubLevelPolyCenter({name, latlng});
     }
   }
 };
@@ -557,6 +358,9 @@ export default {
     margin-top: 70px;
   }
 
+  .MapContainer {
+    height: 500px;
+  }
   .map-container {
     height: 500px;
 

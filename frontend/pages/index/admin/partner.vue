@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import DhaQuestionaire from '../../components/admin/DhaQuestionaire.vue';
+import DhaQuestionaire from '../../../components/admin/DhaQuestionaire.vue';
 
 export default {
   name: 'Donor',
@@ -15,8 +15,8 @@ export default {
   },
 
   async fetch ({store}) {
-    store.dispatch('setQuestionaireId', 'partner');
-    store.dispatch('fetchQuestions');
+    store.dispatch('admin/questions/setQuestionaireId', 'partner');
+    store.dispatch('admin/questions/fetchQuestions');
   }
 };
 </script>
