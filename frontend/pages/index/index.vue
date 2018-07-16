@@ -51,6 +51,7 @@ export default {
     .WelcomeBox {
       position: absolute;
       bottom: 0;
+      z-index: 400;
     }
   }
   .InfoSignupContainer {

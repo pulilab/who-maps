@@ -72,12 +72,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../../assets/style/main";
+<style lang="less">
+@import "../../assets/style/main.less";
 
 .TopBar {
 
-  @include limitWidthWithPadding;
+  .limitWidthWithPadding();
   display: flex;
   justify-content: space-between;
 
@@ -109,9 +109,7 @@ export default {
       height: 20px;
     }
 
-    .CountryName {
-
-    }
+    // .CountryName {}
   }
 
   .AuthLinks {

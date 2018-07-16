@@ -18,20 +18,21 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../../assets/style/main";
+<style lang="less">
+@import "../../assets/style/main.less";
 
 .ActionBar {
   background-color: lightblue;
 
   .InnerActionBar {
-    @include limitWidthWithPadding;
+    .limitWidthWithPadding();
+
     height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .Title {}
+  // .Title {}
 }
 </style>

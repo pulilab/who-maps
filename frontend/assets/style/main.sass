@@ -1,32 +1,5 @@
-// --------------------------------------------------
-// Import: core stuff
-// --------------------------------------------------
-@import "variables.sass";
-@import "mixins.sass";
+// Used for  theming & styling element-ui
 
-
-// --------------------------------------------------
-// Import: other stuff
-// --------------------------------------------------
-@import "../../node_modules/leaflet/dist/leaflet.css";
-@import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
-@import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
-
-
-// --------------------------------------------------
-// General layout
-// --------------------------------------------------
-body
-  margin: 0 0;
-
-.HeaderBtn
-  display: block;
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  width: 80px;
-  text-decoration: none;
-
-// ZOLI, Keep this as the last one!
+// Keep this as last
 $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 @import "../../node_modules/element-ui/packages/theme-chalk/src/index";
