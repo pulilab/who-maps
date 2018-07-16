@@ -1,6 +1,9 @@
 <template>
   <div class="LandingPage">
     <top-bar />
+    <!-- <top-bar
+      country-specific
+      country-logo-url="/placeholder-sl.png" /> For countries -->
     <action-bar />
 
     <div class="MapBoxContainer">
@@ -41,22 +44,22 @@ export default {
 </script>
 
 <style lang="scss">
-  .LandingPage {
-    .MapBoxContainer {
-      position: relative;
+.LandingPage {
+  .MapBoxContainer {
+    position: relative;
 
-      .WelcomeBox {
-        position: absolute;
-        bottom:0;
-      }
-    }
-    .InfoSignupContainer {
-      height: 500px;
-      background-color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .WelcomeBox {
+      position: absolute;
+      bottom: 0;
     }
   }
+  .InfoSignupContainer {
+    height: 500px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
 
 </style>

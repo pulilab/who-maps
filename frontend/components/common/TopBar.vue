@@ -1,15 +1,55 @@
 <template>
   <div class="TopBar">
-    <language-selector />
-    <div class="separator" />
-    <div class="AuthLinks">
-      <div>
-        <nuxt-link :to="localePath('index-signup')">Signup</nuxt-link>
-      </div>
-      <div>
-        <nuxt-link :to="localePath('index-login')">Login</nuxt-link>
-      </div>
+
+    <div class="LogoHolder">
+      <img
+        :src="countrySpecific ? countryLogoURL : '/placeholder-who-logo.jpg'"
+        :alt="countrySpecific ? 'Country logo' : 'WHO Logo'"
+        class="Logo">
     </div>
+
+    <div class="RightPart">
+
+      <div
+        v-if="countrySpecific"
+        class="CountryHolder">
+        <img
+          src="/static/flags/sl.png"
+          alt="country flag"
+          class="CountryFlag">
+        <div class="CountryName">Sierra Leone</div>
+      </div>
+
+      <language-selector v-if="!countrySpecific"/>
+
+      <div class="Separator" />
+
+      <div class="AuthLinks">
+        <div>
+          <nuxt-link
+            :to="localePath('index-signup')"
+            class="HeaderBtn">Signup</nuxt-link>
+        </div>
+
+        <div>
+          <nuxt-link
+            :to="localePath('index-login')"
+            class="HeaderBtn">Login</nuxt-link>
+        </div>
+      </div>
+
+      <div
+        v-if="countrySpecific"
+        class="Separator" />
+
+      <img
+        v-if="countrySpecific"
+        class="SmallWHOLogo"
+        alt="WHO logo small"
+        src="/placeholder-who-logo.jpg">
+
+    </div>
+
   </div>
 </template>
 
@@ -18,31 +58,74 @@ import LanguageSelector from './LanguageSelector';
 export default {
   components: {
     LanguageSelector
+  },
+  props: {
+    countrySpecific: {
+      type: Boolean,
+      default: false
+    },
+    countryLogoURL: {
+      type: String,
+      default: '/placeholder-sl.png'
+    }
   }
 };
 </script>
 
 <style lang="scss">
-  .TopBar {
+@import "../../assets/style/main";
+
+.TopBar {
+
+  @include limitWidthWithPadding;
+  display: flex;
+  justify-content: space-between;
+
+  .RightPart {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: space-between;
+  }
 
-    .separator {
-      width: 1px;
-      height: 18px;
-      background-color: gray;
-      margin: 0 4px;
-    }
+  .LogoHolder {
+    padding: 20px 0;
 
-    .AuthLinks {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-
-      div {
-        margin: 0 4px;
-      }
+    .Logo {
+      height: 50px;
     }
   }
+
+  .Separator {
+    width: 1px;
+    height: 18px;
+    background-color: gray;
+    margin: 0 4px;
+  }
+
+  .CountryHolder {
+    display: flex;
+    justify-content: flex-end;
+
+    .CountryFlag {
+      height: 20px;
+    }
+
+    .CountryName {
+
+    }
+  }
+
+  .AuthLinks {
+    display: flex;
+    justify-content: flex-end;
+
+    div {
+      margin: 0 4px;
+    }
+  }
+
+  .SmallWHOLogo {
+    height: 20px;
+    margin: 5px 0;
+  }
+}
 </style>
