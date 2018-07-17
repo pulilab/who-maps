@@ -113,12 +113,6 @@ export default {
     }),
 
     async signup () {
-      console.log('Doing signup with:', {
-        account_type: this.accountType,
-        password1: this.password,
-        password2: this.password2,
-        email: this.email
-      });
       await this.doSignup({
         account_type: this.accountType,
         password1: this.password,

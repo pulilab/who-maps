@@ -4,7 +4,6 @@ export default function ({ app, store, $axios }) {
     if (!app.i18n.messages[ln]) {
       const { data } = await $axios.get('/translation/json/');
       app.i18n.setLocaleMessage(ln, data.catalog);
-      console.log('LOADING: ', ln);
     }
   };
   loadLocales(store.state.i18n.locale);

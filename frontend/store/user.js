@@ -44,7 +44,6 @@ export const actions = {
     const { data } = await this.$axios.post('/api/rest-auth/registration/',
       { account_type, password1, password2, email });
     data.token = data.key;
-    console.log('signup POST data:', data);
     // data.is_superuser = false;
     // exports.storeData(data, email);
     commit('SET_USER', data);
