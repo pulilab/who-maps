@@ -35,20 +35,29 @@
         <div class="Inputs">
           <div class="SubHeading">2. Fill out the form below</div>
 
-          <el-input
-            v-model="email"
-            placeholder="Email address"
-            type="email" />
+          <el-form
+            :model="signupForm"
+            @submit.native.prevent>
 
-          <el-input
-            v-model="password"
-            placeholder="Password"
-            type="password" />
+            <el-form-item label="Email address">
+              <el-input
+                v-model="signupForm.email"
+                type="email" />
+            </el-form-item>
 
-          <el-input
-            v-model="password2"
-            placeholder="Password (Again)"
-            type="password" />
+            <el-form-item label="Password">
+              <el-input
+                v-model="signupForm.password"
+                type="password" />
+            </el-form-item>
+
+            <el-form-item label="Password (Again)">
+              <el-input
+                v-model="signupForm.password2"
+                type="password" />
+            </el-form-item>
+
+          </el-form>
 
           <div class="Actions">
             <div class="Left">
@@ -90,9 +99,11 @@ export default {
     return {
       showSuccess: false,
       accountType: '',
-      email: '',
-      password: '',
-      password2: ''
+      signupForm: {
+        email: '',
+        password: '',
+        password2: ''
+      }
     };
   },
 
@@ -100,10 +111,10 @@ export default {
     inputsFilledOkay () {
       // eslint-disable-next-line
       const validatorRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-      const validEmail = validatorRegex.test(this.email);
-      const matchingPasswords = Boolean(this.password === this.password2);
+      const validEmail = validatorRegex.test(this.signupForm.email);
+      const matchingPasswords = Boolean(this.signupForm.password === this.signupForm.password2);
 
-      return this.accountType && this.password && validEmail && matchingPasswords;
+      return this.accountType && this.signupForm.password && validEmail && matchingPasswords;
     }
   },
 
@@ -115,9 +126,9 @@ export default {
     async signup () {
       await this.doSignup({
         account_type: this.accountType,
-        password1: this.password,
-        password2: this.password2,
-        email: this.email
+        password1: this.signupForm.password,
+        password2: this.signupForm.password2,
+        email: this.signupForm.email
       });
       this.showSuccess = true;
       setTimeout(() => {
