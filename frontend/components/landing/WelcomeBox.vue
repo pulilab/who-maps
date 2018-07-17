@@ -33,7 +33,7 @@ export default {
 @import "../../assets/style/main.less";
 
 .WelcomeBox-holder {
-  .limitWidthWithPadding ();
+  .limitWidthWithPadding;
 
   .WelcomeBox {
     height: 300px;
