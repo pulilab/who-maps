@@ -40,6 +40,20 @@ export const actions = {
     await dispatch('system/loadOrganisations', {}, {root: true});
   },
 
+  async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {
+    const { data } = await this.$axios.post('/api/rest-auth/registration/',
+      { account_type, password1, password2, email });
+    data.token = data.key;
+    console.log('signup POST data:', data);
+    // data.is_superuser = false;
+    // exports.storeData(data, email);
+    commit('SET_USER', data);
+    commit('SET_TOKEN', data.token);
+    saveToken(data.token, data.user_profile_id);
+    await dispatch('loadProfile', data.user_profile_id);
+    await dispatch('system/loadOrganisations', {}, {root: true});
+  },
+
   doLogout ({ commit }) {
     deleteToken();
     // dispatch({ type: 'CLEAR_USER_PROJECTS' });
@@ -48,6 +62,7 @@ export const actions = {
     commit('SET_USER', null);
     commit('SET_PROFILE', null);
     commit('SET_TOKEN', null);
+    deleteToken();
   },
 
   async loadProfile ({ commit, getters }, profileId) {
@@ -125,23 +140,6 @@ export const mutations = {
 //   }
 //   return data;
 // };
-
-// export function doSignup ({ account_type, password1, password2, email }) {
-//   return async dispatch => {
-//     try {
-//       const { data } = await axios.post('/api/rest-auth/registration/',
-//         { account_type, password1, password2, email });
-//       data.token = data.key;
-//       data.is_superuser = false;
-//       exports.storeData(data, email);
-//       dispatch({ type: 'SET_USER', user: data });
-//       await dispatch(exports.loadProfile());
-//       return Promise.resolve();
-//     } catch ({ response }) {
-//       return Promise.reject(response.data);
-//     }
-//   };
-// }
 
 // export function saveProfile (profile) {
 //   return async (dispatch, getState) => {

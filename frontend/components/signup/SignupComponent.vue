@@ -1,7 +1,7 @@
 <template>
   <div class="SingupComponent" >
 
-    <div class="Heading">Sign Up</div>
+    <h1 class="Heading">Sign Up</h1>
 
     <el-card>
       <!-- Form -->
@@ -12,7 +12,7 @@
           <div
             :class="['AccountTypeSelector', {'active': accountType === 'I', 'inactive': accountType && accountType !== 'I'}]"
             @click="accountType = 'I'">
-            <div class="TypeTitle">Implementer or technologist</div>
+            <div class="TypeTitle">Implementer or Technologist</div>
             <div class="TypeDescription">How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation.</div>
           </div>
 
@@ -20,6 +20,7 @@
             :class="['AccountTypeSelector', {'active': accountType === 'D', 'inactive': accountType && accountType !== 'D'}]"
             @click="accountType = 'D'">
             <div class="TypeTitle">Financial Investor</div>
+            <!-- FYI: In next line @col97: Irregular whitespace was found by linter in the translateable text, it was corrected, but... -->
             <div class="TypeDescription">What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio.</div>
           </div>
 
@@ -36,17 +37,17 @@
 
           <el-input
             v-model="email"
-            placeholder="email"
+            placeholder="Email address"
             type="email" />
 
           <el-input
             v-model="password"
-            placeholder="password"
+            placeholder="Password"
             type="password" />
 
           <el-input
             v-model="password2"
-            placeholder="password2"
+            placeholder="Password (Again)"
             type="password" />
 
           <div class="Actions">
@@ -54,15 +55,26 @@
               <p>Already signed up?</p>
               <nuxt-link :to="localePath('index-login')">Login here</nuxt-link>
             </div>
-            <el-button :disabled="!inputsFilledOkay">Sign up now</el-button>
+            <el-button
+              :disabled="!inputsFilledOkay"
+              @click="signup">Sign up now</el-button>
           </div>
 
         </div>
       </div>
 
+      <!-- <translate>This is required</translate>
+      <translate>This should be a valid email</translate>
+      <translate>Your passwords do not match.</translate>
+      <translate>This need to be at least 6 chars</translate>
+      ng-repeat="error in signupForm.password1.customError"
+      ng-repeat="error in signupForm.email.customError" -->
+
       <!-- Feedback -->
       <div v-if="showSuccess">
-        <p>#User feedback info should be shown here</p>
+        <!-- Translated -->
+        <h4>Go to next step</h4>
+        <p>Your registration is successful, you will receive an email with the instructions to activate your account, you will be automatically logged in in 5 seconds...</p>
       </div>
 
     </el-card>
@@ -70,7 +82,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
+
   data () {
     return {
       showSuccess: false,
@@ -80,6 +95,7 @@ export default {
       password2: ''
     };
   },
+
   computed: {
     inputsFilledOkay () {
       // eslint-disable-next-line
@@ -88,6 +104,28 @@ export default {
       const matchingPasswords = Boolean(this.password === this.password2);
 
       return this.accountType && this.password && validEmail && matchingPasswords;
+    }
+  },
+
+  methods: {
+    ...mapActions({
+      'doSignup': 'user/doSignup'
+    }),
+
+    async signup () {
+      console.log('Doing signup with:', {
+        account_type: this.accountType,
+        password1: this.password,
+        password2: this.password2,
+        email: this.email
+      });
+      await this.doSignup({
+        account_type: this.accountType,
+        password1: this.password,
+        password2: this.password2,
+        email: this.email
+      });
+      this.showSuccess = true;
     }
   }
 };
