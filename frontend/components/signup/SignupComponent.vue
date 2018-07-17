@@ -126,6 +126,9 @@ export default {
         email: this.email
       });
       this.showSuccess = true;
+      setTimeout(() => {
+        this.$router.push(this.localePath('index-edit-profile'));
+      }, 5000);
     }
   }
 };
