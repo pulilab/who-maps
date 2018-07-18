@@ -228,7 +228,6 @@ export const mutations = {
   },
   SET_SECOND_SUB_LEVEL: (state, data) => {
     state.secondSubLevel = data;
-    console.log(state);
   },
   SET_SECOND_SUB_LEVEL_TYPE: (state, data) => {
     state.secondSubLevelType = data;
