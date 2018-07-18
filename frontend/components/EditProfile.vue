@@ -81,6 +81,13 @@
       </div>
     </el-card>
 
+    <h3>TODO</h3>
+    <ul>
+      <li>E-mail binding</li>
+      <li>Validations / requireds</li>
+      <li>Strings mapping to the already translated ones</li>
+    </ul>
+
   </div>
 </template>
 
