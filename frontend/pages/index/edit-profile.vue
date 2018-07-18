@@ -1,12 +1,16 @@
 <template>
   <div class="ProfilePage">
-    Profile page
+    <edit-profile />
   </div>
 </template>
 
 <script>
+import EditProfile from '../../components/EditProfile.vue';
+
 export default {
-  components: {}
+  components: {
+    EditProfile
+  }
 };
 </script>
 
