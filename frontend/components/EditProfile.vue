@@ -41,7 +41,7 @@
             @select="handleSelect" />
         </el-form-item>
 
-        <p v-if="newOrganisation">You're about to make a new organisation, are you sure you couldnt find the one you were looking for?</p>
+        <p v-if="newOrganisation">You're about to make a new organisation. Are you sure you can't find the one you were looking for?</p>
         <el-button
           v-if="newOrganisation"
           @click="addOrganisation(organisation)">Make new organisation: {{ organisation }}</el-button>
@@ -49,16 +49,20 @@
         <el-form-item>
           <el-col :span="11">
             <el-form-item label="Country">
-              <el-input
-                v-model="country"
-                type="text" />
+              <el-select v-model="country">
+                <el-option
+                  v-for="ctr in countries"
+                  :key="ctr.id"
+                  :label="ctr.name"
+                  :value="ctr.id" />
+              </el-select>
             </el-form-item>
           </el-col>
 
           <el-col :span="2"><br></el-col>
 
           <el-col :span="11">
-            <el-form-item label="Language">
+            <el-form-item label="Site language">
               <el-select v-model="language">
                 <el-option
                   v-for="lng in languages"
@@ -97,7 +101,8 @@ export default {
       profile: 'user/getProfile',
       user: 'user/getUser',
       organisations: 'system/getOrganisations',
-      languages: 'system/getLanguages'
+      languages: 'system/getLanguages',
+      countries: 'landing/getCountries'
     }),
 
     lastModifiedDateStr () {
