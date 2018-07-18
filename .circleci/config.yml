@@ -1,0 +1,39 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.11
+    working_directory: ~/who-maps
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-f-{{ checksum "frontend/package.json" }}
+          - v1-dependencies-f-
+          - v1-dependencies-b-{{ checksum "django/requirements.txt" }}
+          - v1-dependencies-b-
+
+      - run:
+          working_directory: ~/who-maps/frontend
+          command: yarn install
+
+      - run:
+          working_directory: ~/who-maps/django
+          command: pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - frontend/node_modules
+          key: v1-dependencies-f-{{ checksum "frontend/package.json" }}
+
+
+      # run tests!
+      - run:
+          working_directory: ~/who-maps/frontend
+          command: yarn test
+
