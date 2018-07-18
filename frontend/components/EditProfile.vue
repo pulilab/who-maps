@@ -59,9 +59,13 @@
 
           <el-col :span="11">
             <el-form-item label="Language">
-              <el-input
-                v-model="language"
-                type="text" />
+              <el-select v-model="language">
+                <el-option
+                  v-for="lng in languages"
+                  :key="lng.name"
+                  :label="lng.name"
+                  :value="lng.code" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-form-item>
@@ -92,7 +96,8 @@ export default {
     ...mapGetters({
       profile: 'user/getProfile',
       user: 'user/getUser',
-      organisations: 'system/getOrganisations'
+      organisations: 'system/getOrganisations',
+      languages: 'system/getLanguages'
     }),
 
     lastModifiedDateStr () {
