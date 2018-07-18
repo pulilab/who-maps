@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: pulilab/who-maps-circleci:0.0.1
+      - image: pulilab/who-maps-circleci
     working_directory: ~/who-maps
 
     steps:
