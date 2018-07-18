@@ -24,7 +24,7 @@ jobs:
 
       - run:
           working_directory: ~/who-maps/django
-          command: pip install -r requirements.txt
+          command: pip3 install -r requirements.txt
 
       - save_cache:
           paths:
