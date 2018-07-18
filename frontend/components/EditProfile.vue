@@ -27,7 +27,7 @@
           <el-col :span="11">
             <el-form-item label="My email address">
               <el-input
-                v-model="innerProfile.email"
+                v-model="email"
                 disabled
                 type="text" />
             </el-form-item>
@@ -37,8 +37,7 @@
         <el-form-item label="Organisation name">
           <el-autocomplete
             v-model="organisation"
-            :fetch-suggestions="orgSuggestions"
-            @select="handleSelect" />
+            :fetch-suggestions="orgSuggestions" />
         </el-form-item>
 
         <p v-if="newOrganisation">You're about to make a new organisation. Are you sure you can't find the one you were looking for?</p>
@@ -75,6 +74,11 @@
         </el-form-item>
 
       </el-form>
+
+      <div class="Actions">
+        <el-button @click="dismissChanges">dismiss changes</el-button>
+        <el-button @click="updateProfile">save profile</el-button>
+      </div>
     </el-card>
 
   </div>
@@ -86,9 +90,9 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   data () {
     return {
+      email: 'TODO: get it!',
       innerProfile: {
         name: '', // 'Takacs Andras Tamas'
-        email: 'TODO: get it...',
         organisation: '', // code
         country: '', // code
         language: '' // string like 'en'
@@ -124,7 +128,12 @@ export default {
 
     organisation: {
       get () {
-        return this.innerProfile.organisation || this.profile.organisation;
+        if (this.innerProfile.organisation) {
+          return this.innerProfile.organisation;
+        } else {
+          const mappedOrg = this.organisations.find(org => +org.id === +this.profile.organisation);
+          return mappedOrg && mappedOrg.name;
+        }
       },
       set (value) {
         this.innerProfile.organisation = value;
@@ -150,14 +159,15 @@ export default {
     }
   },
 
-  created () {
-    this.loadOrganisations();
+  async created () {
+    await this.loadOrganisations();
   },
 
   methods: {
     ...mapActions({
       addOrganisation: 'system/addOrganisation',
-      loadOrganisations: 'system/loadOrganisations'
+      loadOrganisations: 'system/loadOrganisations',
+      updateUserProfile: 'user/updateUserProfile'
     }),
 
     dismissChanges () {
@@ -179,8 +189,28 @@ export default {
       }
     },
 
-    handleSelect (item) {
-      console.log('Selected', item);
+    updateProfile () {
+      const put = {};
+
+      put.name = this.innerProfile.name || this.profile.name;
+      put.country = this.innerProfile.country || this.profile.country;
+
+      if (this.innerProfile.organisation) {
+        put.organisation = this.organisations.find(org => {
+          return org.name === this.innerProfile.organisation;
+        }).id;
+      } else {
+        put.organisation = this.profile.organisation;
+      }
+
+      if (this.innerProfile.language) {
+        put.language = this.innerProfile.language;
+      }
+
+      if (Object.keys(put).length) {
+        console.log('Updating profile with:', put);
+        this.updateUserProfile(put);
+      }
     }
 
   }
