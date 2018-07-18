@@ -7,6 +7,7 @@ planning-and-guidance {
   margin: 0 auto;
   padding: 0 30px;
   max-width: $page-max-width;
+  min-width: $page-min-width;
 
   .cms-tabs {
     ul {
@@ -14,17 +15,16 @@ planning-and-guidance {
       margin: 0;
       padding: 0;
       text-align: center;
-      box-shadow: inset 0 -2px 0 #EAEAEA;
+      box-shadow: inset 0 -1px 0 $color-gray-lighter;
     }
 
     li {
       display: inline-block;
-      padding: 0 15px;
-      margin: 0 5px;
+      padding: 0 10px;
+      margin: 0 10px;
       line-height: 40px;
       font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
+      font-weight: 700;
       color: $text-disabled;
       cursor: pointer;
       outline:none;
@@ -36,13 +36,13 @@ planning-and-guidance {
 
       &:hover {
         color: $text-primary;
-        box-shadow: inset 0 -2px 0 darken(#EAEAEA, 10%);
+        box-shadow: inset 0 -3px 0 darken($color-gray-lighter, 10%);
       }
 
       &.active {
-        color: $text-primary;
+        color: $color-primary;
         cursor: default;
-        box-shadow: inset 0 -2px 0 $color-primary;
+        box-shadow: inset 0 -3px 0 $color-primary;
       }
     }
   }
@@ -53,15 +53,14 @@ planning-and-guidance {
 
     .wrapper-inner {
       width: 100%;
-      background-color: #F6F6F6;
     }
 
     .cms-list {
-      padding: 0 40px 40px;
+      padding: 0 30px 30px;
       text-align: center;
 
       &.all {
-        padding-top: 20px;
+        padding-top: 12px;
       }
 
       &.lessons .intro-lessons,
@@ -74,9 +73,10 @@ planning-and-guidance {
         position: relative;
         top: 20px;
         display: block;
-        font-size: 18px;
-        line-height: 26px;
+        font-size: 16px;
+        line-height: 24px;
         text-align: left;
+        color: $text-secondary;
 
         > div {
           display: none;
@@ -122,7 +122,7 @@ planning-and-guidance {
 
       cms-list-element {
         display: block;
-        margin-top: 20px;
+        margin-top: 18px;
         text-align: left;
 
         &:first-child {
@@ -132,10 +132,9 @@ planning-and-guidance {
 
       .empty-card {
         margin-top: 20px;
-        padding: 40px;
+        padding: 30px;
         text-align: left;
         color: $text-disabled;
-        background-color: #fff;
 
         .material-icons {
           font-size: 48px;
@@ -155,18 +154,16 @@ planning-and-guidance {
     .cms-aside {
       min-width: 320px;
       padding: 40px;
-      background-color: #EEEEEE;
-      border-left: 1px solid #E0E0E0;
+      background-color: $color-lightblue;
+      border-left: 1px solid $color-gray-lighter;
 
       .add-new-content {
         .md-button.add-new {
-
+          width: 240px;
           margin: 0;
-          padding-left: 15px;
-          padding-right: 20px;
 
           // Multi-lang
-          @include button-ml($width: 180px);
+          @include button-ml($width: 240px);
           //
         }
       }
@@ -202,12 +199,12 @@ planning-and-guidance {
 
       .filter-content {
         h5 {
-          font-weight: 500;
+          color: $text-primary;
         }
 
         .filter-list {
           .group-title {
-            font-weight: 500;
+            font-weight: 700;
           }
 
           dt {

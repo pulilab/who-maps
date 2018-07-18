@@ -25,12 +25,12 @@
       display: inline-block;
       width: 120px;
       height: 120px;
-      background-color: $color-gray-lightest;
+      background-color: $color-lightblue;
 
       &::after {
         content: "info";
         @include md-icon($font-size: 64px);
-        color: #BDBDBD;
+        color: $color-primary;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -54,9 +54,9 @@
     h3 {
       margin: 0 0 20px;
       padding-right: 180px;
-      font-size: 24px;
-      line-height: 32px;
-      color: $color-primary;
+      font-size: 20px;
+      line-height: 28px;
+      color: $text-primary;
       word-break: normal;
       hyphens: auto;
       //word-break: break-all;
@@ -64,16 +64,16 @@
 
     h6 {
       position: absolute;
-      top: 5px;
+      top: 10px;
       right: 30px;
-      padding: 3px 7px;
-      font-size: 12px;
-      font-weight: 500;
+      padding: 5px 7px;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      background-color: #BDBDBD;
-      color: $color-white;
+      background-color: $color-gray-lightest;
+      color: $text-secondary;
       white-space: nowrap;
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
     .metadata {
@@ -83,12 +83,12 @@
 
     .author {
       position: relative;
-      font-size: 14px;
+      font-size: 12px;
       color: $text-secondary;
 
       i {
         position: relative;
-        top: -5px;
+        top: -7px;
         left: -3px;
         float: left;
         margin-right: 2px;
@@ -98,13 +98,13 @@
 
     .axis-domain {
       position: relative;
-      font-size: 14px;
+      font-size: 12px;
       color: $text-secondary;
 
       &:before {
         content: "";
         position: relative;
-        top: -2px;
+        top: -4px;
         float: left;
         display: block;
         margin-right: 8px;
@@ -187,18 +187,16 @@
       }
     }
 
-     .body {
+     .md-body-1 {
       color: $text-primary;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
-      font-size: 16px;
-      line-height: 24px;
       height: auto;
-      max-height: 48px;
-      margin: 18px 0 24px;
+      max-height: 40px;
+      margin: 16px 0;
     }
 
     ul, ol {

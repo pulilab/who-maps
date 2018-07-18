@@ -2,9 +2,8 @@
 @import '../../mixins';
 
 cms-detail-element {
-  .md-button {
-    float: right;
-    margin: 10px 0 0 20px;
+  md-card-actions {
+    margin: 0 !important;
   }
 }
 
