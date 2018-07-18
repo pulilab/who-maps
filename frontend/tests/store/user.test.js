@@ -15,8 +15,8 @@ describe('getters', () => {
     s = state();
   });
 
-  test('getCsrfToken', () => {
-    expect(getters.getCsrfToken(s)).toEqual(s.csrfToken);
+  test('getToken', () => {
+    expect(getters.getToken(s)).toEqual(s.token);
   });
 });
 
@@ -31,19 +31,19 @@ describe('actions', () => {
     actions.$axios = mockAxios();
   });
 
-  test('setCsrfToken', async () => {
-    await actions.setCsrfToken(vuex, null);
-    expect(vuex.commit.mock.calls[0]).toEqual(['SET_CSRF_TOKEN', null]);
+  test('setToken', async () => {
+    await actions.setToken(vuex, {jwt: null});
+    expect(vuex.commit.mock.calls[0]).toEqual(['SET_TOKEN', null]);
 
-    await actions.setCsrfToken(vuex, 1);
-    expect(vuex.commit.mock.calls[1]).toEqual(['SET_CSRF_TOKEN', 1]);
+    await actions.setToken(vuex, {jwt: 1});
+    expect(vuex.commit.mock.calls[1]).toEqual(['SET_TOKEN', 1]);
   });
 });
 
 describe('mutations', () => {
-  test('SET_CSRF_TOKEN', () => {
+  test('SET_TOKEN', () => {
     const s = {};
-    mutations.SET_CSRF_TOKEN(s, 1);
-    expect(s.csrfToken).toEqual(1);
+    mutations.SET_TOKEN(s, 1);
+    expect(s.token).toEqual(1);
   });
 });
