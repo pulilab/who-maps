@@ -112,6 +112,12 @@ export const actions = {
       const { data } = await this.$axios.get(`/api/organisations/`);
       commit('SET_SYSTEM_ORGANISATIONS', data);
     }
+  },
+
+  async addOrganisation ({ commit, dispatch }, name) {
+    const { data } = await this.$axios.post('/api/organisations/', { name });
+    await dispatch('loadOrganisations');
+    return Promise.resolve(data);
   }
 
   // searchProjects ({commit }, query, searchFilters) {
@@ -131,20 +137,6 @@ export const actions = {
   //     dispatch({ type: 'UNSET_PROJECT_SEARCH_RESULT' });
   //   };
   // },
-
-  // addOrganisation (name) {
-  //   return async (dispatch, getState) => {
-  //     try {
-  //       const { data } = await this.$axios.post('/api/organisations/', { name });
-  //       return data;
-  //     } catch (e) {
-  //       console.log('This organisation exist already, re-fetching the list');
-  //     }
-  //     dispatch(exports.loadOrganisations());
-  //     const organisation = exports.getOrganisations(getState());
-  //     return organisation.find(o => o.name.toLowerCase() === name.toLowerCase());
-  //   };
-  // }
 };
 
 export const mutations = {

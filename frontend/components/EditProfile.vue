@@ -35,10 +35,16 @@
         </el-form-item>
 
         <el-form-item label="Organisation name">
-          <el-input
+          <el-autocomplete
             v-model="organisation"
-            type="text" />
+            :fetch-suggestions="orgSuggestions"
+            @select="handleSelect" />
         </el-form-item>
+
+        <p v-if="newOrganisation">You're about to make a new organisation, are you sure you couldnt find the one you were looking for?</p>
+        <el-button
+          v-if="newOrganisation"
+          @click="addOrganisation(organisation)">Make new organisation: {{ organisation }}</el-button>
 
         <el-form-item>
           <el-col :span="11">
@@ -67,7 +73,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data () {
@@ -85,11 +91,16 @@ export default {
   computed: {
     ...mapGetters({
       profile: 'user/getProfile',
-      user: 'user/getUser'
+      user: 'user/getUser',
+      organisations: 'system/getOrganisations'
     }),
 
     lastModifiedDateStr () {
       return this.profile.modified.split('T')[0];
+    },
+
+    newOrganisation () {
+      return this.organisation && !this.organisations.find(org => org.name === this.organisation);
     },
 
     name: {
@@ -129,13 +140,39 @@ export default {
     }
   },
 
+  created () {
+    this.loadOrganisations();
+  },
+
   methods: {
+    ...mapActions({
+      addOrganisation: 'system/addOrganisation',
+      loadOrganisations: 'system/loadOrganisations'
+    }),
+
     dismissChanges () {
       this.innerProfile.name = '';
       this.innerProfile.organisation = '';
       this.innerProfile.country = '';
       this.innerProfile.language = '';
+    },
+
+    orgSuggestions (queryStr, cb) {
+      if (queryStr) {
+        const filtered = this.organisations
+          .map(org => ({value: org.name, id: org.id}))
+          .filter(org => org.value.toLowerCase().includes(queryStr.toLowerCase()));
+
+        cb(filtered);
+      } else {
+        cb(this.organisations.map(org => ({value: org.name, id: org.id})));
+      }
+    },
+
+    handleSelect (item) {
+      console.log('Selected', item);
     }
+
   }
 
 };
