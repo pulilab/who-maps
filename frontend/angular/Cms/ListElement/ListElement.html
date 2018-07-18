@@ -1,5 +1,4 @@
-
-<md-card ng-if="vm.item.type !== 3" class="cms-list-element md-card-nomargin" layout="row" layout-align="start stretch">
+<md-card ng-if="vm.item.type !== 3" class="cms-list-element md-card-nomargin md-card-rounded" layout="row" layout-align="start stretch">
   <div class="cover-img">
     <span class="no-cover" ng-class="vm.typeClass(vm.item)" ng-hide="vm.item.cover"></span>
     <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">

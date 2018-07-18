@@ -153,17 +153,17 @@ planning-and-guidance {
 
     .cms-aside {
       min-width: 320px;
-      padding: 40px;
+      padding: 30px;
       background-color: $color-lightblue;
       border-left: 1px solid $color-gray-lighter;
 
       .add-new-content {
         .md-button.add-new {
-          width: 240px;
+          width: 260px;
           margin: 0;
 
           // Multi-lang
-          @include button-ml($width: 240px);
+          @include button-ml($width: 260px);
           //
         }
       }

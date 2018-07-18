@@ -249,26 +249,6 @@ md-input-container .md-input-message-animation:not(.md-char-counter), md-input-c
     margin-top: -2px;
   }
 
-  &.md-primary {
-    color: $color-primary;
-
-    md-icon {
-      color: $color-primary !important;
-    }
-
-    &.md-raised {
-      background-color: $color-accent !important;
-    }
-  }
-
-  &.md-raised {
-    color: $color-white !important;
-
-    md-icon {
-      color: $color-white !important;
-    }
-  }
-
   &.md-small {
     min-height: 34px;
     min-width: 60px;
@@ -322,6 +302,12 @@ md-backdrop {
   .md-dialog-content {
     height: auto;
   }
+}
+
+// Md-dialog
+
+md-dialog {
+  border-radius: 0;
 }
 
 .md-dialog-container {
@@ -579,16 +565,53 @@ p.global-error {
 md-card {
   border: 1px solid $color-gray-lighter;
   box-shadow: 0 1px 0 $color-gray-lighter;
-  border-radius: 3px;
+  border-radius: 0;
 
   &.md-card-nomargin {
     margin: 0;
+  }
+
+  &.md-card-rounded {
+    border-radius: 3px;
   }
 }
 
 
 /* CUSTOM COLORS
    ============================= */
+
+.md-primary {
+
+  // Button
+  &.md-button {
+    color: $color-primary;
+
+    md-icon {
+      color: $color-primary !important;
+    }
+
+  &.md-raised {
+    color: $color-white;
+    background-color: $color-accent !important;
+
+    md-icon {
+      color: $color-white !important;
+      }
+    }
+  }
+
+  // Checkbox
+  &.md-checked {
+    .md-icon {
+      border-color: $color-primary!important;
+      background-color: $color-primary !important;
+    }
+    .md-ink-ripple {
+      color: $color-primary !important;
+    }
+  }
+}
+
 
 .md-gray {
 
