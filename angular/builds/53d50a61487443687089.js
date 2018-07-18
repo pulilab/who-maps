@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[235],{"./src/MapsToolkit/Resource/template/5-2a-1.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    i) A steering committee or decision-making board that is representative of partners, as appropriate, has been created\r\n  </translate>\r\n</p>"}}]);

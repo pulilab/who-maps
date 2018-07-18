@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[533],{"./src/Common/Axis/images/flag-started.svg":function(s,o,n){s.exports=n.p+"public/fonts/flag-started.svg"}}]);

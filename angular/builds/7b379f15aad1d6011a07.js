@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[182],{"./src/MapsToolkit/Resource/template/9-2-2.html":function(e,r){e.exports="<p>\r\n  <translate>\r\n    ii) The mHealth product adheres to clinical terminology standards where appropriate (e.g. ICD-10, SNOMED CT)*\r\n  </translate>\r\n</p>"}}]);

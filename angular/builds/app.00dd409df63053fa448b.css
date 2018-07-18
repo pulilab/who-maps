@@ -1,0 +1,582 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500);
+
+vue-django-feedback input,
+vue-django-feedback label,
+vue-django-feedback select,
+vue-django-feedback textarea {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  display: inline-block;
+  font-weight: 400;
+  vertical-align: middle;
+  white-space: normal;
+  background: none;
+  line-height: 1;
+  -webkit-appearance: none;
+}
+vue-django-feedback input,
+vue-django-feedback textarea {
+  background-color: #FFFFFF;
+}
+vue-django-feedback textarea {
+  vertical-align: top;
+  overflow: auto;
+  resize: none;
+}
+vue-django-feedback input:focus,
+vue-django-feedback button:focus,
+vue-django-feedback select:focus,
+vue-django-feedback textarea:focus {
+  outline: 0;
+}
+vue-django-feedback label {
+  font-weight: 500;
+}
+vue-django-feedback button {
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: inherit;
+  font: inherit;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+}
+vue-django-feedback button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+vue-django-feedback .vue-django-feedback {
+  position: fixed;
+  bottom: 40px;
+  width: 56px;
+  height: 56px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  font-style: normal;
+  color: rgba(0, 0, 0, 0.87);
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+vue-django-feedback .vue-django-feedback.left {
+  left: 40px;
+}
+vue-django-feedback .vue-django-feedback.left .hint-container {
+  right: auto;
+  left: 86px;
+  transform: translate3d(-20px, 0, 0);
+}
+vue-django-feedback .vue-django-feedback.left .hint-container::after {
+  right: auto;
+  left: -10px;
+  border-left: 0;
+  border-right: 10px solid #FFFFFF;
+  filter: drop-shadow(-6px 0 4px rgba(0, 0, 0, 0.24));
+}
+vue-django-feedback .vue-django-feedback.left .hint-container.open {
+  transform: translate3d(0, 0, 0);
+}
+vue-django-feedback .vue-django-feedback.left .pop-up-container {
+  left: 0;
+  transform: translate3d(calc((400px + 56px) * -1), 0, 0);
+}
+vue-django-feedback .vue-django-feedback.right {
+  right: 40px;
+}
+vue-django-feedback .vue-django-feedback.right .pop-up-container {
+  right: 0;
+  opacity: 0;
+  transform: translate3d(calc(400px + 56px), 0, 0);
+}
+vue-django-feedback .vue-django-feedback.opened .feedback-button .icon-opened > span {
+  transform: translate3d(0, -56px, 0);
+}
+vue-django-feedback .vue-django-feedback.opened .feedback-button .icon-opened::before,
+vue-django-feedback .vue-django-feedback.opened .feedback-button .icon-opened::after {
+  transform: translate3d(0, 56px, 0);
+}
+vue-django-feedback .vue-django-feedback.opened .feedback-button .icon-closed {
+  transform: scale3d(1, 1, 1);
+}
+vue-django-feedback .vue-django-feedback.opened.left .pop-up-container,
+vue-django-feedback .vue-django-feedback.opened.right .pop-up-container {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+vue-django-feedback .feedback-button {
+  z-index: 11000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  display: block;
+  min-width: 56px;
+  min-height: 56px;
+  width: 56px;
+  height: 56px;
+  background-color: #283593;
+  text-align: center;
+  color: #FFFFFF;
+  border-radius: 56px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.12), 0 6px 12px 0 rgba(0, 0, 0, 0.24);
+  transition: all 350ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+vue-django-feedback .feedback-button:hover {
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.12), 0 6px 24px 0 rgba(0, 0, 0, 0.24);
+  transform: scale3d(1.15, 1.15, 1);
+}
+vue-django-feedback .feedback-button .icon.icon-opened,
+vue-django-feedback .feedback-button .icon.icon-closed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -12px 0 0 -12px;
+}
+vue-django-feedback .feedback-button .icon.icon-opened > span,
+vue-django-feedback .feedback-button .icon.icon-closed > span,
+vue-django-feedback .feedback-button .icon.icon-opened::before,
+vue-django-feedback .feedback-button .icon.icon-closed::before,
+vue-django-feedback .feedback-button .icon.icon-opened::after,
+vue-django-feedback .feedback-button .icon.icon-closed::after {
+  transform: translate3d(0, 0, 0);
+}
+vue-django-feedback .feedback-button .icon.icon-closed {
+  transform: scale3d(0, 0, 1);
+}
+vue-django-feedback .hint-container {
+  opacity: 0;
+  z-index: 0;
+  position: absolute;
+  bottom: 0;
+  right: 86px;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-content: center;
+  -moz-align-content: center;
+  -ms-align-content: center;
+  align-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -ms-flex-align: center;
+  pointer-events: none;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: calc(100vh - 56px - 40px - 50px);
+  min-height: 56px;
+  padding: 10px 16px;
+  background-color: #FFFFFF;
+  border-left: 4px solid #FF8F00;
+  border-radius: 4px;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.12), 0 6px 24px 0 rgba(0, 0, 0, 0.24);
+  transform: translate3d(20px, 0, 0);
+  transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+vue-django-feedback .hint-container::after {
+  content: "";
+  position: absolute;
+  z-index: 11002;
+  right: -10px;
+  bottom: 17px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-left: 10px solid #FFFFFF;
+  border-bottom: 10px solid transparent;
+  filter: drop-shadow(6px 0 4px rgba(0, 0, 0, 0.24));
+}
+vue-django-feedback .hint-container > div {
+  font-size: 12px;
+  line-height: 1.5;
+}
+vue-django-feedback .hint-container.open {
+  opacity: 1;
+  z-index: 11001;
+  transform: translate3d(0, 0, 0);
+}
+vue-django-feedback .pop-up-container {
+  z-index: 10000;
+  position: absolute;
+  bottom: 76px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 400px;
+  max-height: calc(100vh - 56px - 40px - 40px);
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.12), 0 24px 48px 0 rgba(0, 0, 0, 0.24);
+  transition: all 1000ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+vue-django-feedback .pop-up-container .header {
+  z-index: 12000;
+  position: sticky;
+  top: 0;
+  width: 400px;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -ms-flex-align: center;
+  height: 56px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  background-color: #283593;
+  border-radius: 5px 5px 0 0;
+}
+vue-django-feedback .pop-up-container .header h2 {
+  padding: 0 10px;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+}
+vue-django-feedback .pop-up-container .form-container {
+  padding: 40px 40px 20px;
+}
+vue-django-feedback .pop-up-container .input-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+vue-django-feedback .pop-up-container .message-container {
+  padding: 40px;
+}
+vue-django-feedback .pop-up-container .message-container h4 {
+  margin: 0;
+  font-size: 20px;
+  color: #7CB342;
+}
+vue-django-feedback .pop-up-container .message-container h4.error {
+  color: #F44336;
+}
+vue-django-feedback .pop-up-container .message-container p {
+  color: rgba(0, 0, 0, 0.54);
+}
+vue-django-feedback .pop-up-controls {
+  position: sticky;
+  bottom: 0;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -ms-flex-align: center;
+  -webkit-align-content: stretch;
+  -moz-align-content: stretch;
+  -ms-align-content: stretch;
+  align-content: stretch;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  width: 400px;
+  height: 57px;
+  padding: 0 40px;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+  border-radius: 0 0 5px 5px;
+}
+vue-django-feedback .pop-up-controls .error-info {
+  padding-left: 40px;
+  font-weight: 500;
+  color: #F44336;
+}
+vue-django-feedback .pop-up-controls .error-info .icon {
+  float: left;
+  margin-right: 5px;
+}
+vue-django-feedback .pop-up-controls .actions {
+  -webkit-flex-grow: 1;
+  -moz-flex-grow: 1;
+  -ms-flex-grow: 1;
+  flex-grow: 1;
+}
+vue-django-feedback .pop-up-controls .actions button {
+  text-transform: uppercase;
+  color: #283593;
+  transition: color 350ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+vue-django-feedback .pop-up-controls .actions button:hover {
+  color: #3343bb;
+}
+vue-django-feedback .pop-up-controls .actions button:disabled {
+  color: #7985db;
+}
+vue-django-feedback .input-container label {
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.87);
+}
+vue-django-feedback .input-container input,
+vue-django-feedback .input-container textarea {
+  min-height: 24px;
+  padding: 6px 8px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  transition: border-color 350ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+vue-django-feedback .input-container input:hover,
+vue-django-feedback .input-container textarea:hover,
+vue-django-feedback .input-container input:focus,
+vue-django-feedback .input-container textarea:focus {
+  border-color: rgba(0, 0, 0, 0.38);
+}
+vue-django-feedback .input-container input.error,
+vue-django-feedback .input-container textarea.error {
+  border-color: #F44336;
+}
+vue-django-feedback .input-container .feedback {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.38);
+}
+vue-django-feedback .input-container .feedback .char-count {
+  padding-left: 40px;
+  white-space: nowrap;
+}
+vue-django-feedback .input-container .feedback .errors {
+  width: 100%;
+  color: #F44336;
+}
+vue-django-feedback .user-block {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  margin-bottom: 40px;
+}
+vue-django-feedback .user-block .avatar {
+  position: relative;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+}
+vue-django-feedback .user-block .avatar .avatar-img {
+  z-index: 10001;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  float: left;
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+  box-shadow: 0 0 0 1px #FFFFFF;
+}
+vue-django-feedback .user-block .avatar .avatar-placeholder {
+  z-index: 10002;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+}
+vue-django-feedback .user-block .user {
+  padding: 0 13.33333333px;
+}
+vue-django-feedback .user-block .user .name {
+  display: block;
+  font-weight: 500;
+}
+vue-django-feedback .user-block .user .email {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.54);
+}
+vue-django-feedback .icon.icon-opened {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+vue-django-feedback .icon.icon-opened > span {
+  z-index: 11003;
+  position: relative;
+  display: block;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #283593;
+  font-style: normal;
+  text-align: center;
+  transition: all 350ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+vue-django-feedback .icon.icon-opened::before {
+  content: "";
+  z-index: 11002;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  transition: all 350ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+vue-django-feedback .icon.icon-opened::after {
+  content: "";
+  z-index: 11001;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-top: -1px;
+  margin-left: -5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #FFFFFF;
+  transition: all 350ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+vue-django-feedback .icon.icon-closed {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: all 350ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+vue-django-feedback .icon.icon-closed > span {
+  position: relative;
+  display: block;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #FFFFFF;
+  font-style: normal;
+  text-align: center;
+  transition: all 350ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+vue-django-feedback .icon.icon-danger {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+vue-django-feedback .icon.icon-danger > span {
+  z-index: 3;
+  position: relative;
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #FFFFFF;
+  font-style: normal;
+  text-align: center;
+}
+vue-django-feedback .icon.icon-danger::before {
+  content: "";
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -11px;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-bottom: 18px solid #F44336;
+}
+vue-django-feedback .icon.icon-avatar {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-color: #999999;
+  border-radius: 32px;
+  border: calc(32px/8) solid #999999;
+  box-sizing: content-box;
+}
+vue-django-feedback .icon.icon-avatar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: calc(30px * -1);
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: calc(30px / 1.1);
+  height: calc(30px / 1.1);
+  background: rgba(0, 0, 0, 0);
+  border-radius: 30%;
+  border: calc(30px/6) solid transparent;
+  border-top: calc(30px / 3) solid #FFFFFF;
+  box-sizing: border-box;
+}
+vue-django-feedback .icon.icon-avatar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: calc(30px / 2.25);
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: calc(30px / 2.5);
+  height: calc(30px / 2.5);
+  background-color: #FFFFFF;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+vue-django-feedback {
+  position: relative;
+  z-index: 1000;
+}
+

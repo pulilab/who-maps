@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[480],{"./src/Common/Thematic/Thematic.html":function(t,n){t.exports='<md-button ng-class="vm.buttonclass" ng-click="vm.showModal()" title="{{vm.buttontitle}}">\n    <md-icon>{{vm.buttonicon || \'help\'}}</md-icon>\n    {{vm.buttontext}}\n</md-button>\n'}}]);

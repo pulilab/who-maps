@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[119],{"./src/Assessment/Img/wmap.svg":function(s,p,n){s.exports=n.p+"public/fonts/wmap.svg"}}]);

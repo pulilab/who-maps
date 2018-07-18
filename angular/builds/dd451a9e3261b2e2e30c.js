@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[215],{"./src/MapsToolkit/Resource/template/6-4-3.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    iii) We have identified areas for achieving economies of scale or other means of cost savings\r\n  </translate>\r\n</p>"}}]);

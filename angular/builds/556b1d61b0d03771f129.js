@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[320],{"./src/MapsToolkit/Resource/template/14-2-3.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    iii) Methods for preventing the misuse of mobile devices are in place (e.g. preventing specific weblinks or application usage)\r\n  </translate>\r\n</p>"}}]);

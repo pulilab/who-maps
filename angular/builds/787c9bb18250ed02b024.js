@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[31],{"./src/App/package.json":function(p){p.exports={name:"App",version:"0.0.0",private:!0,main:"./appModule.js"}}}]);

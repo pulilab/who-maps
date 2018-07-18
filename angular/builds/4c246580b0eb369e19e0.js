@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[321],{"./src/MapsToolkit/Resource/template/14-2-2.html":function(e,a){e.exports="<p>\r\n  <translate>\r\n    ii) Policies (and contracts, if appropriate) for replacing lost or damaged mobile devices have been developed and vetted with appropriate stakeholders\r\n  </translate>\r\n</p>"}}]);

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[210],{"./src/MapsToolkit/Resource/template/7-1-4.html":function(t,e){t.exports="<p>\r\n  <translate>\r\n    iv) We can articulate our project’s value proposition to each potential payer\r\n  </translate>\r\n</p>"}}]);

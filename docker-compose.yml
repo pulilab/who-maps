@@ -12,7 +12,6 @@ services:
       - redis
     volumes:
       - ./django:/src
-      - ./frontend:/frontend
       - ./nginx/site/static:/usr/share/django/static:rw
       - ./django/media:/usr/share/django/media:rw
       - log_data:/var/log/django

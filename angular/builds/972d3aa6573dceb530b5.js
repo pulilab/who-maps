@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[181],{"./src/MapsToolkit/Resource/template/9-2-3.html":function(e,r){e.exports="<p>\r\n  <translate>\r\n    iii) The mHealth product adheres to other terminology standards where appropriate (e.g. INN)*\r\n  </translate>\r\n</p>"}}]);

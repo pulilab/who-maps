@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[44],{"./src/LandingPage/images/icon-role-investor.svg":function(n,o,s){n.exports=s.p+"public/fonts/icon-role-investor.svg"}}]);

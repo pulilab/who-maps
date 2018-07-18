@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[187],{"./src/MapsToolkit/Resource/template/8-3b-2.html":function(t,a){t.exports="<p>\r\n  <translate>\r\n    ii) The mHealth product adheres to national data privacy policies and standards for protecting client data (e.g. HIPAA in the United States)*\r\n  </translate>\r\n</p>"}}]);

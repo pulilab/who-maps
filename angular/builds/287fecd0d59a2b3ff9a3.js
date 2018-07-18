@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[269],{"./src/MapsToolkit/Resource/template/3-2-2.html":function(t,n){t.exports="<p>\r\n  <translate>\r\n    ii) A pilot study has been conducted in this setting (or in settings that are similar in terms of sociocultural, geographic and institutional features)\r\n  </translate>\r\n</p>"}}]);

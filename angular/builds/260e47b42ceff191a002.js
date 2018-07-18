@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[317],{"./src/MapsToolkit/Resource/template/15-1b-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) A Performance Monitoring Plan (PMP) or the equivalent, which defines data collection procedures and intervals, has been developed\r\n  </translate>\r\n</p>"}}]);

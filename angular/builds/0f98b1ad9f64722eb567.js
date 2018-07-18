@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[261],{"./src/MapsToolkit/Resource/template/4-1b-1.html":function(n,e){n.exports="<p>\r\n  <translate>\r\n    i) MOH/government entities\r\n  </translate>\r\n</p>"}}]);

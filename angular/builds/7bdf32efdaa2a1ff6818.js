@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[195],{"./src/MapsToolkit/Resource/template/8-2-4.html":function(e,a){e.exports="<p>\r\n  <translate>\r\n    iv) The data storage system has been configured to accommodate anticipated increases in data volume\r\n  </translate>\r\n</p>"}}]);

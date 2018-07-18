@@ -59,6 +59,7 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
     organisation_name = serializers.SerializerMethodField()
+    is_superuser = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
@@ -75,6 +76,12 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_viewer(obj):
         return Project.objects.viewer_of(obj.user).values_list('id', flat=True)
+
+    @staticmethod
+    def get_is_superuser(obj):
+        if hasattr(obj, 'user'):
+            return obj.user.is_superuser
+
 
 
 class OrganisationSerializer(serializers.ModelSerializer):

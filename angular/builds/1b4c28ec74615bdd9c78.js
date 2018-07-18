@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[264],{"./src/MapsToolkit/Resource/template/4-1a-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) We can clearly define our project team’s internal competencies, and based on these considerations, can identify our external need for partners\r\n  </translate>\r\n</p>"}}]);

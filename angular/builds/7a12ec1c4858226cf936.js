@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[330],{"./src/MapsToolkit/Resource/template/13-1-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) Orientation for implementing partners (e.g. NGOs, CBOs) that will be involved directly in the scaling-up implementation has been established\r\n  </translate>\r\n</p>"}}]);

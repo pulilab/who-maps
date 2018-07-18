@@ -1,0 +1,205 @@
+linechart {
+  margin-bottom: -65px;
+  position: relative; }
+  linechart .linechart-labels {
+    color: #757575;
+    background-color: #F5F5F5;
+    font-size: 12px;
+    cursor: default;
+    height: 60px;
+    padding-left: 20px;
+    padding-right: 5px; }
+    linechart .linechart-labels ul {
+      list-style-type: none;
+      padding-left: 5px;
+      display: flex;
+      flex-flow: column wrap;
+      height: 35px; }
+      linechart .linechart-labels ul li {
+        flex-basis: 50%;
+        height: 100%; }
+        linechart .linechart-labels ul li .smallness {
+          position: relative;
+          font-weight: 500;
+          top: -4px;
+          color: #757575; }
+        linechart .linechart-labels ul li.labelhov {
+          text-transform: capitalize; }
+        linechart .linechart-labels ul li .material-icons {
+          font-size: 12px;
+          transform: translate(0, 2px); }
+          linechart .linechart-labels ul li .material-icons.labelicon1 {
+            color: #7C3AA4; }
+          linechart .linechart-labels ul li .material-icons.labelicon2 {
+            color: #D84315; }
+          linechart .linechart-labels ul li .material-icons.labelicon3 {
+            color: #0097A7; }
+          linechart .linechart-labels ul li .material-icons.labelicon4 {
+            color: #FAA806; }
+          linechart .linechart-labels ul li .material-icons.labelicon5 {
+            color: #558B2F; }
+          linechart .linechart-labels ul li .material-icons.labelicon6 {
+            color: #744E42; }
+    linechart .linechart-labels .chosercontainer {
+      border-left: 1px solid #E0E0E0; }
+      linechart .linechart-labels .chosercontainer md-input-container, linechart .linechart-labels .chosercontainer .axischooser, linechart .linechart-labels .chosercontainer label {
+        margin: 0 8px; }
+      linechart .linechart-labels .chosercontainer .axischooser {
+        color: #212121; }
+      linechart .linechart-labels .chosercontainer md-input-container {
+        min-width: 175px;
+        margin-top: 15px; }
+        linechart .linechart-labels .chosercontainer md-input-container label {
+          font-size: 14px;
+          transform: translate3d(2px, 10px, 0) scale(0.75); }
+          linechart .linechart-labels .chosercontainer md-input-container label:select, linechart .linechart-labels .chosercontainer md-input-container label:focus {
+            color: #283593; }
+  linechart .linechartcontainer {
+    height: 350px;
+    min-width: 500px; }
+    linechart .linechartcontainer .visualization.activelabel1 .line-axis, linechart .linechartcontainer .visualization.activelabel1 .dot-axis {
+      opacity: 0.2; }
+    linechart .linechartcontainer .visualization.activelabel1 .line-axis1, linechart .linechartcontainer .visualization.activelabel1 .dot-axis1 {
+      opacity: 1; }
+    linechart .linechartcontainer .visualization.activelabel2 .line-axis, linechart .linechartcontainer .visualization.activelabel2 .dot-axis {
+      opacity: 0.2; }
+    linechart .linechartcontainer .visualization.activelabel2 .line-axis2, linechart .linechartcontainer .visualization.activelabel2 .dot-axis2 {
+      opacity: 1; }
+    linechart .linechartcontainer .visualization.activelabel3 .line-axis, linechart .linechartcontainer .visualization.activelabel3 .dot-axis {
+      opacity: 0.2; }
+    linechart .linechartcontainer .visualization.activelabel3 .line-axis3, linechart .linechartcontainer .visualization.activelabel3 .dot-axis3 {
+      opacity: 1; }
+    linechart .linechartcontainer .visualization.activelabel4 .line-axis, linechart .linechartcontainer .visualization.activelabel4 .dot-axis {
+      opacity: 0.2; }
+    linechart .linechartcontainer .visualization.activelabel4 .line-axis4, linechart .linechartcontainer .visualization.activelabel4 .dot-axis4 {
+      opacity: 1; }
+    linechart .linechartcontainer .visualization.activelabel5 .line-axis, linechart .linechartcontainer .visualization.activelabel5 .dot-axis {
+      opacity: 0.2; }
+    linechart .linechartcontainer .visualization.activelabel5 .line-axis5, linechart .linechartcontainer .visualization.activelabel5 .dot-axis5 {
+      opacity: 1; }
+    linechart .linechartcontainer .visualization.activelabel6 .line-axis, linechart .linechartcontainer .visualization.activelabel6 .dot-axis {
+      opacity: 0.2; }
+    linechart .linechartcontainer .visualization.activelabel6 .line-axis6, linechart .linechartcontainer .visualization.activelabel6 .dot-axis6 {
+      opacity: 1; }
+    linechart .linechartcontainer .visualization .axis path {
+      fill: none;
+      stroke: #777;
+      shape-rendering: crispEdges; }
+    linechart .linechartcontainer .visualization .axis text {
+      font-family: Roboto, 'Helvetica Neue', sans-serif;
+      fill: #9D9D9D;
+      font-size: 12px; }
+    linechart .linechartcontainer .visualization .axis .domain {
+      display: none; }
+    linechart .linechartcontainer .visualization .axis.x-axis text {
+      transform: translate(0, 40px); }
+    linechart .linechartcontainer .visualization .linechart-ruler {
+      stroke: #9D9D9D;
+      stroke-width: 0.4px;
+      fill: none; }
+    linechart .linechartcontainer .visualization .line-axis {
+      opacity: 1;
+      transition: opacity 0.2s ease-in;
+      cursor: default;
+      stroke-width: 3px;
+      fill: none; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis1 {
+        stroke: #7C3AA4; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis2 {
+        stroke: #D84315; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis3 {
+        stroke: #0097A7; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis4 {
+        stroke: #FAA806; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis5 {
+        stroke: #558B2F; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis6 {
+        stroke: #744E42; }
+      linechart .linechartcontainer .visualization .line-axis.line-axis-dashed {
+        stroke-linecap: round;
+        stroke-dasharray: 2 7; }
+    linechart .linechartcontainer .visualization .dot-axis {
+      stroke-width: 1px;
+      stroke: white;
+      opacity: 1;
+      transition: opacity 0.2s ease-in;
+      cursor: default; }
+      linechart .linechartcontainer .visualization .dot-axis:hover {
+        stroke-width: 3px;
+        r: 6px; }
+      linechart .linechartcontainer .visualization .dot-axis.dot-axis1 {
+        fill: #7C3AA4; }
+      linechart .linechartcontainer .visualization .dot-axis.dot-axis2 {
+        fill: #D84315; }
+      linechart .linechartcontainer .visualization .dot-axis.dot-axis3 {
+        fill: #0097A7; }
+      linechart .linechartcontainer .visualization .dot-axis.dot-axis4 {
+        fill: #FAA806; }
+      linechart .linechartcontainer .visualization .dot-axis.dot-axis5 {
+        fill: #558B2F; }
+      linechart .linechartcontainer .visualization .dot-axis.dot-axis6 {
+        fill: #744E42; }
+  linechart .secondary-colors .line-axis1 {
+    stroke: #7CB342 !important; }
+  linechart .secondary-colors .line-axis2 {
+    stroke: #039BE5 !important; }
+  linechart .secondary-colors .line-axis3 {
+    stroke: #FB8C00 !important; }
+  linechart .secondary-colors .line-axis4 {
+    stroke: #EF5350 !important; }
+  linechart .secondary-colors .line-axis5 {
+    stroke: #AB47BC !important; }
+  linechart .secondary-colors .line-axis6 {
+    stroke: #7E57C2 !important; }
+  linechart .secondary-colors .line-axis7 {
+    stroke: #2196F3 !important; }
+  linechart .secondary-colors .line-axis8 {
+    stroke: #009688 !important; }
+  linechart .secondary-colors .dot-axis1 {
+    fill: #7CB342 !important; }
+  linechart .secondary-colors .dot-axis2 {
+    fill: #039BE5 !important; }
+  linechart .secondary-colors .dot-axis3 {
+    fill: #FB8C00 !important; }
+  linechart .secondary-colors .dot-axis4 {
+    fill: #EF5350 !important; }
+  linechart .secondary-colors .dot-axis5 {
+    fill: #AB47BC !important; }
+  linechart .secondary-colors .dot-axis6 {
+    fill: #7E57C2 !important; }
+  linechart .secondary-colors .dot-axis7 {
+    fill: #2196F3 !important; }
+  linechart .secondary-colors .dot-axis8 {
+    fill: #009688 !important; }
+  linechart .secondary-labelcolors .labelicon1 {
+    color: #7CB342 !important; }
+  linechart .secondary-labelcolors .labelicon2 {
+    color: #039BE5 !important; }
+  linechart .secondary-labelcolors .labelicon3 {
+    color: #FB8C00 !important; }
+  linechart .secondary-labelcolors .labelicon4 {
+    color: #EF5350 !important; }
+  linechart .secondary-labelcolors .labelicon5 {
+    color: #AB47BC !important; }
+  linechart .secondary-labelcolors .labelicon6 {
+    color: #7E57C2 !important; }
+  linechart .secondary-labelcolors .labelicon7 {
+    color: #2196F3 !important; }
+  linechart .secondary-labelcolors .labelicon8 {
+    color: #009688 !important; }
+
+.chart-tooltip {
+  position: fixed;
+  min-width: 80px;
+  padding: 4px;
+  font-weight: 500;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity .25s ease-in-out;
+  -webkit-transform: translateZ(0);
+  z-index: 300;
+  pointer-events: none;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.541176);
+  color: #FFF; }
+

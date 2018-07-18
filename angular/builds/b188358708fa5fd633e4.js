@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[194],{"./src/MapsToolkit/Resource/template/8-2-5.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    v) The project operations adhere to government requirements on data storage/hosting\r\n  </translate>\r\n</p>"}}]);

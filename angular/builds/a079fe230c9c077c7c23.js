@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[296],{"./src/MapsToolkit/Resource/template/16-2b-3.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    iii) Data collection methods (quantitative and qualitative, as needed) are appropriate and sufficient to capture evidence priorities\r\n  </translate>\r\n</p>"}}]);

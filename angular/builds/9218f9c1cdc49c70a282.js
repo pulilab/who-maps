@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[331],{"./src/MapsToolkit/Resource/template/12-3-3.html":function(e,r){e.exports="<p>\r\n  <translate>\r\n    iii) There are strategies in place for providing user support through peer assistance (e.g. having champions within the health workforce cadre)\r\n  </translate>\r\n</p>"}}]);

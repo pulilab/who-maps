@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[55],{"./src/Dashboard/package.json":function(a){a.exports={name:"DashboardModule",version:"0.0.0",private:!0,main:"./dashboardModule.js"}}}]);

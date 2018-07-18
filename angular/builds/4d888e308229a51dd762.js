@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[185],{"./src/MapsToolkit/Resource/template/9-1-2.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    ii) We have identified the types of applications/software/functions with which the mHealth product will ideally interoperate (e.g. mobile money applications)\r\n  </translate>\r\n</p>"}}]);

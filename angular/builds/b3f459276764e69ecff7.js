@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[344],{"./src/MapsToolkit/Resource/template/12-1a-2.html":function(a,e){a.exports="<p>\r\n  <translate>\r\n    ii) Operational guides (e.g. standard operating procedures [SOPs], job aid) with instructions for managing the application is available and accessible to all project team members\r\n  </translate>\r\n</p>"}}]);

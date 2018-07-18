@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[183],{"./src/MapsToolkit/Resource/template/9-2-1.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    i) The mHealth product meets the data standards (e.g. HL7) used by the government health information systems (e.g. DHIS2, eLMIS)*\r\n  </translate>\r\n</p>"}}]);

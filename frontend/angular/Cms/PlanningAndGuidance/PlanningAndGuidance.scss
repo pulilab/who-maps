@@ -1,0 +1,255 @@
+// @import '../../variables';
+// @import '../../mixins';
+@import '../../app';
+
+planning-and-guidance {
+  display: block;
+  margin: 0 auto;
+  padding: 0 30px;
+  max-width: $page-max-width;
+
+  .cms-tabs {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      box-shadow: inset 0 -2px 0 #EAEAEA;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0 15px;
+      margin: 0 5px;
+      line-height: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: $text-disabled;
+      cursor: pointer;
+      outline:none;
+      transition: $swift-ease-out;
+
+      // Multi-lang
+      @include button-ml($width: 220px);
+      //
+
+      &:hover {
+        color: $text-primary;
+        box-shadow: inset 0 -2px 0 darken(#EAEAEA, 10%);
+      }
+
+      &.active {
+        color: $text-primary;
+        cursor: default;
+        box-shadow: inset 0 -2px 0 $color-primary;
+      }
+    }
+  }
+
+  .wrapper {
+    width: 100%;
+    background-color: $color-white;
+
+    .wrapper-inner {
+      width: 100%;
+      background-color: #F6F6F6;
+    }
+
+    .cms-list {
+      padding: 0 40px 40px;
+      text-align: center;
+
+      &.all {
+        padding-top: 20px;
+      }
+
+      &.lessons .intro-lessons,
+      &.resources .intro-resources,
+      &.experiences .intro-experiences {
+        display: flex;
+      }
+
+      .cms-intro {
+        position: relative;
+        top: 20px;
+        display: block;
+        font-size: 18px;
+        line-height: 26px;
+        text-align: left;
+
+        > div {
+          display: none;
+          padding-left: 40px;
+          > div {
+            position: relative;
+            &:last-child {
+              height: 180px;
+              background-repeat: no-repeat;
+            }
+            p {
+              position: relative;
+              top: -10px;
+              margin: 0;
+            }
+          }
+        }
+
+        .intro-lessons {
+          > div:last-child {
+            background-image: url('./images/illustration-1.svg');
+            background-size: 249px 201px;
+            background-position: 60% 10px;
+          }
+        }
+
+        .intro-resources {
+          > div:last-child {
+            background-image: url('./images/illustration-2.svg');
+            background-size: 375px 196px;
+            background-position: 60% 18px;
+          }
+        }
+
+        .intro-experiences {
+          > div:last-child {
+            background-image: url('./images/illustration-3.svg');
+            background-size: 329px 182px;
+            background-position: 60% 14px;
+          }
+        }
+      }
+
+      cms-list-element {
+        display: block;
+        margin-top: 20px;
+        text-align: left;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .empty-card {
+        margin-top: 20px;
+        padding: 40px;
+        text-align: left;
+        color: $text-disabled;
+        background-color: #fff;
+
+        .material-icons {
+          font-size: 48px;
+        }
+
+        > span:last-child {
+          padding: 0 20px;
+        }
+      }
+
+      .show-more {
+        min-width: 160px;
+        margin: 40px auto 0;
+      }
+    }
+
+    .cms-aside {
+      min-width: 320px;
+      padding: 40px;
+      background-color: #EEEEEE;
+      border-left: 1px solid #E0E0E0;
+
+      .add-new-content {
+        .md-button.add-new {
+
+          margin: 0;
+          padding-left: 15px;
+          padding-right: 20px;
+
+          // Multi-lang
+          @include button-ml($width: 180px);
+          //
+        }
+      }
+
+      .search-content {
+        display: block;
+        padding: 40px 0 0;
+
+        .cms-search {
+          position: relative;
+
+          md-icon {
+            top: 5px;
+          }
+        }
+
+        .clear-search {
+          position: absolute;
+          top: 4px;
+          right: 0;
+          margin: 0;
+          padding: 0;
+          width: 24px !important;
+          min-height: 24px !important;
+          height: 24px !important;
+
+          md-icon {
+            font-size: 20px;
+            line-height: 24px;
+          }
+        }
+      }
+
+      .filter-content {
+        h5 {
+          font-weight: 500;
+        }
+
+        .filter-list {
+          .group-title {
+            font-weight: 500;
+          }
+
+          dt {
+            i {
+              position: relative;
+              top: 4px;
+              float: left;
+              margin-right: 10px;
+              position: relative;
+              cursor: pointer;
+              color: $color-gray;
+              outline: none;
+              transform: rotate(-90deg);
+              transition: $swift-ease-out;
+
+              &:hover {
+                color: $text-primary;
+              }
+
+              &.toggled {
+                color: $text-primary;
+                transform: rotate(0deg);
+              }
+            }
+          }
+
+          dd {
+            margin-left: 60px;
+          }
+
+          .domains {
+            overflow: hidden;
+            display: block;
+            height: 0;
+
+            &.show {
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+
+}
