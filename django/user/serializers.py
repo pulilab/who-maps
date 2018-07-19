@@ -83,7 +83,6 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
             return obj.user.is_superuser
 
 
-
 class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organisation

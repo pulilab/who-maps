@@ -4,7 +4,7 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
+from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
