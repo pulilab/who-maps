@@ -350,5 +350,5 @@ else:
 
 
 if CI_RUN:
-    STATIC_ROOT = "/home/ubuntu/who-maps/nginx/site/static/"
-    MEDIA_ROOT = "/home/ubuntu/who-maps/django/media/"
+    STATIC_ROOT = "~/who-maps/nginx/site/static/"
+    MEDIA_ROOT = "~/who-maps/django/media/"
