@@ -60,13 +60,12 @@ class Project(SoftDeleteModel, ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
+    def get_country_id(self, draft_mode=False):
+        return self.draft.get('country') if draft_mode else self.data.get('country')
+
     def get_country(self, draft_mode=False):
-        try:
-            country_id = self.draft.get('country') if draft_mode else self.data.get('country')
-            country_id = int(country_id)
-        except TypeError:  # pragma: no cover
-            return None
-        return Country.objects.get(id=country_id)
+        country_id = self.get_country_id(draft_mode)
+        return Country.objects.get(id=int(country_id)) if country_id else None
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
