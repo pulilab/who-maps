@@ -39,7 +39,6 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install wheel
-            pip install fabric
             pip install -r django/requirements.txt
 
       - save_cache:
@@ -88,7 +87,14 @@ jobs:
 
   deploy:
     machine: true
-    steps:
+      docker:
+        - image: pulilab/who-maps-circleci
+      - checkout
+      - run:
+          name: Install fabric
+          command: |
+            pip install fabric
+
       - run:
           name: Deploy Over SSH
           working_directory: ~/who-maps/django
