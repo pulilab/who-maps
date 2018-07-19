@@ -21,7 +21,7 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 
 class MapProjectViewSet(ViewSet):
-    def list_all(request, *args, **kwargs):
+    def list_all(request, *args, **kwargs):   # pragma: no cover
         projects = Project.objects.published_only()
         result_list = functools.reduce(
                 lambda acc, p: acc + [{
