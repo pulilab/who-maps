@@ -204,8 +204,10 @@ DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+REDIS_URL = os.environ.get('REDIS_URL', 'redis')
+
 # Celery settings
-BROKER_URL = 'redis://redis:6379/0'
+BROKER_URL = 'redis://{}:6379/0'.format(REDIS_URL)
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -220,12 +222,11 @@ ODK_SERVER_PROTOCOL = "https"
 ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
 ODK_SERVER_USER = "odk"
 ODK_TABLE_NAME = 'dha_form'
-ODK_SYNC_ENABLED = False
+ODK_SYNC_ENABLED = bool(os.environ.get('ODK_SYNC_ENABLED', False))
 
 
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
-    ODK_SYNC_ENABLED = True
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
@@ -248,7 +249,7 @@ if SITE_ID in [3, 4]:
 
     ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
-                     '.digitalhealthatlas.com']
+                     '.digitalhealthatlas.com', '.v3.dha.pulilab.com']
 
     EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
@@ -264,7 +265,7 @@ if SITE_ID in [3, 4]:
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
+        "LOCATION": "redis://{}:6379/1".format(REDIS_URL),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
