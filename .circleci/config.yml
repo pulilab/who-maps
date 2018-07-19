@@ -32,6 +32,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip install wheel
             pip install -r django/requirements.txt
 
       - save_cache:
@@ -58,19 +59,25 @@ jobs:
             flake8
 
       - run:
+          name: setup postgres
+          working_directory: ~/who-maps/django
+          command: |
+            service postgresql start
+            su - postgres -c "psql -U postgres -d postgres -c \"alter user postgres with password 'postgres';\""
+            cp /etc/postgresql/10/main/pg_hba.conf_2 /etc/postgresql/10/main/pg_hba.conf
+            service postgresql restart
+
+      - run:
           name: backend migrations
           working_directory: ~/who-maps/django
           command: |
             . ../venv/bin/activate
-            service postgresql start
-            DATABASE_URL=localhost python3 manage.py migrate
+            DATABASE_URL='' python3 manage.py migrate
 
       - run:
           name: backend unit tests
           working_directory: ~/who-maps/django
           command: |
             . ../venv/bin/activate
-            service postgresql start
-
             DATABASE_URL=localhost CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 

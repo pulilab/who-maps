@@ -14,3 +14,5 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get update
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential yarn postgresql-10
+COPY --chown=postgres:postgres  pg_hba.conf_2 /etc/postgresql/10/main
+RUN chmod 644 /etc/postgresql/10/main/pg_hba.conf_2
