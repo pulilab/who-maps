@@ -283,3 +283,11 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
+
+
+class MapProjectCountrySerializer(serializers.ModelSerializer):
+    country = ReadOnlyField(source='get_country_id')
+
+    class Meta:
+        model = Project
+        fields = ("id", "name", "country")
