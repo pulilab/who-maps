@@ -37,7 +37,7 @@ jobs:
             - frontend/node_modules
           key: v1-dependencies-f-{{ checksum "frontend/package.json" }}
           paths:
-            - /usr/lib/python3/dist-packages
+            - /usr/local/lib/python3.6/dist-packages
           key: v1-dependencies-b-{{ checksum "django/requirements.txt" }}
 
 
