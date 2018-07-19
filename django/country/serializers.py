@@ -117,7 +117,7 @@ class CountryMapDataSerializer(serializers.ModelSerializer):
         fields = ("id", "map_data", "map_file")
 
     @staticmethod
-    def get_map_file(obj):
+    def get_map_file(obj):  # pragma: no cover
         file = MapFile.objects.filter(country=obj.id).first()
         if file and file.map_file:
             return file.map_file.url
