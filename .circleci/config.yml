@@ -63,9 +63,6 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             service postgresql start
-            su - postgres -c "psql -U postgres -d postgres -c \"alter user postgres with password 'postgres';\""
-            cp /etc/postgresql/10/main/pg_hba.conf_2 /etc/postgresql/10/main/pg_hba.conf
-            service postgresql restart
 
       - run:
           name: backend migrations
