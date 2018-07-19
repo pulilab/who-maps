@@ -1243,6 +1243,14 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published']['coverage_second_level'][1]['facilities_list'],
                          ['facility_ward2_1', 'facility_ward2_2', 'facility_ward2_3'])
 
+    def test_map_project_country_view(self):
+        url = reverse("project-map")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['id'], self.project_id)
+        self.assertEqual(response.json()[0]['name'], self.project_data['name'])
+        self.assertEqual(response.json()[0]['country'], self.country_id)
+
 
 class ProjectDraftTests(SetupTests):
     def setUp(self):
