@@ -4,7 +4,7 @@ RUN export DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y tzdata
 RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN dpkg-reconfigure --frontend noninteractive tzdata
-RUN apt-get install -y wget gnupg python3-dev  curl git ssh tar gzip ca-certificates
+RUN apt-get install -y wget gnupg python3-dev python3-venv curl git ssh tar gzip ca-certificates
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash
 RUN curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -

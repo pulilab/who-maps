@@ -29,35 +29,48 @@ jobs:
 
       - run:
           working_directory: ~/who-maps/django
-          command: pip3 install -r requirements.txt
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip3 install -r requirements.txt
 
       - save_cache:
           paths:
             - frontend/node_modules
           key: v1-dependencies-f-{{ checksum "frontend/package.json" }}
           paths:
-            - /usr/local/lib/python3.6/dist-packages
+            - ~/who-maps/django/venv
           key: v2-dependencies-b-{{ checksum "django/requirements.txt" }}
 
 
       # run tests!
 
       - run:
-          command: service postgresql start
-
-      - run:
+          name: frontend unit tests
           working_directory: ~/who-maps/frontend
           command: yarn test
 
       - run:
+          name: backend flake8
           working_directory: ~/who-maps/django
-          command: flake8
+          command: |
+            . venv/bin/activate
+            flake8
 
       - run:
+          name: backend migrations
           working_directory: ~/who-maps/django
-          command: DATABASE_URL=localhost python3 manage.py migrate
+          command: |
+            . venv/bin/activate
+            service postgresql start
+            DATABASE_URL=localhost python3 manage.py migrate
 
       - run:
+          name: backend unit tests
           working_directory: ~/who-maps/django
-          command: DATABASE_URL=localhost CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+          command: |
+            . venv/bin/activate
+            service postgresql start
+
+            DATABASE_URL=localhost CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 
