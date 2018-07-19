@@ -2,9 +2,9 @@
 @import '../../mixins';
 
 .comment {
-  background-color: $color-white;
-  margin-bottom: 20px;
-  padding: 20px 45px 30px 15px;
+  margin: 0 0 18px;
+  padding: 20px;
+  color: $text-primary;
 
   .avatar-img {
     margin-right: 15px;
@@ -22,7 +22,7 @@
       height: 50px;
       overflow: hidden;
       border-radius: 50px;
-      background-color: #BDBDBD;
+      background-color: $text-disabled;
 
       &::before {
         content: "person";
@@ -42,39 +42,58 @@
 
     .md-title {
       font-size: 14px;
+      color: $text-primary;
       margin: 5px 0 8px;
     }
+
     .comment-info {
       display: block;
-      margin: 0 0 15px;
+      margin: 0 0 10px;
 
       .time {
         position: relative;
         display: block;
-        color: $text-disabled;
+        color: $text-secondary;
 
         .sep {
+          position: relative;
           display: inline-block;
-          width: 12px;
-          text-align: center;
+          width: 25px;
+          height: 10px;
+
+
+          &:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: inline-block;
+            width: 1px;
+            height: 20px;
+            background-color: $color-gray-lighter;
+          }
         }
 
         .edit-button {
           position: relative;
-          left: 0;
+          top: -1px;
+          left: -6px;
           min-width: auto;
           width: auto;
           min-height: 24px;
           max-height: 24px;
-          margin: 0 6px 0 0;
+          margin: 0;
           padding: 0;
           font-size: 12px;
           line-height: 24px;
+          color: $text-disabled;
           background-color: transparent !important;
           transition: $swift-ease-out;
 
           md-icon {
             float: left;
+            margin: 0;
             font-size: 16px;
             line-height: 24px;
             color: $text-disabled;
@@ -88,14 +107,14 @@
         }
 
         .flag-button {
+          position: relative;
+          top: -1px;
           min-height: 24px;
           max-height: 24px;
-          margin: 0;
 
           md-icon {
-            float: left;
             font-size: 16px;
-            line-height: 22px;
+            line-height: 24px;
           }
 
           .report-text {
@@ -112,7 +131,6 @@
 
       .active {
         .warning-zone {
-          top: 0;
           height: 24px;
           padding: 0 8px;
 
@@ -149,6 +167,7 @@
     .comment-text {
       font-size: 14px;
       line-height: 20px;
+      margin-right: 40px;
 
       .comment-text-wrapper {
         // display: inline;
@@ -177,6 +196,8 @@
         cursor: pointer;
         color: $color-primary;
         outline: none;
+        font-size: 12px;
+        font-weight: 700;
       }
     }
   }

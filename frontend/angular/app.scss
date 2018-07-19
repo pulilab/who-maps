@@ -36,6 +36,15 @@
 //
 //
 
+button, select, html, textarea, input {
+  font-family: Arial, sans-serif;
+}
+
+button,
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700 !important;
+}
+
 app {
   margin: 0;
   width: 100%;
@@ -105,13 +114,14 @@ md-tooltip {
    ============================= */
 
 .page-title {
-  color: $color-primary;
+  color: $text-primary;
   max-width: $page-max-width;
   margin: 0 auto;
 
   .md-display-1 {
-    margin: 50px 0 50px;
-    font-size: 40px;
+    margin: 40px 0;
+    font-size: 32px;
+    letter-spacing: -1px;
   }
 
   .md-subhead {
@@ -178,16 +188,34 @@ md-select-menu {
   }
 }
 
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-focused .md-input, md-input-container:not(.md-input-invalid).md-input-focused .md-input, md-input-container.md-default-theme:not(.md-input-invalid).md-input-resized .md-input, md-input-container:not(.md-input-invalid).md-input-resized .md-input {
+  border-color: $color-primary;
+}
+
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-focused label, md-input-container:not(.md-input-invalid).md-input-focused label, md-input-container.md-default-theme:not(.md-input-invalid).md-input-focused md-icon, md-input-container:not(.md-input-invalid).md-input-focused md-icon {
+  color: $color-primary;
+}
+
+md-select.md-default-theme:not([disabled]):focus .md-select-value, md-select:not([disabled]):focus .md-select-value {
+  border-color: $color-primary;
+  color: $text-primary;
+}
+
+md-select-menu.md-default-theme md-content md-option[selected], md-select-menu md-content md-option[selected],
+md-select-menu.md-default-theme md-content md-option[selected]:focus, md-select-menu md-content md-option[selected]:focus {
+  color: $color-primary;
+}
+
 md-input-container.md-input-focused label:not(.md-no-float):not(.md-container-ignore), md-input-container.md-input-focused .md-placeholder {
   color: $text-primary;
-  font-weight: 500;
+  font-weight: 700;
   transform: translate3d(0, 0, 0) scale(0.75);
 }
 
 md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float),
 md-input-container.md-input-has-value label:not(.md-no-float) {
   color: $text-primary;
-  font-weight: 500 !important;
+  font-weight: 700 !important;
   transform: translate3d(0, 0, 0) scale(0.75);
 }
 
@@ -196,7 +224,7 @@ md-input-container.md-input-has-value .md-select-placeholder:not(.md-no-float) {
 
   > span:first-child {
     color: $text-primary;
-    font-weight: 500;
+    font-weight: 700;
     transform: translate3d(0, -27px, 0) scale(0.75);
   }
 }
@@ -210,7 +238,7 @@ md-input-container.md-input-focused.md-icon-float .md-select-placeholder:not(.md
 
 md-input-container.md-input-focused.md-icon-float label:not(.md-no-float), md-input-container.md-input-has-placeholder.md-icon-float label:not(.md-no-float),
 md-input-container.md-input-has-value.md-icon-float label:not(.md-no-float) {
-  font-weight: 500;
+  font-weight: 700;
   transform: translate3d(-36px, 0, 0) scale(0.75);
 }
 
@@ -227,21 +255,33 @@ md-input-container .md-input-message-animation:not(.md-char-counter), md-input-c
 }
 
 .md-button {
-  &.wide {
-    padding: $button-padding-wide;
+  padding: 0 20px;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  height: 42px;
+  border-radius: 0;
+  box-shadow: none !important;
+
+  .material-icons {
+    margin-top: -2px;
   }
 
   &.md-small {
-    min-height: 30px;
+    min-height: 34px;
     min-width: 60px;
-    line-height: 30px;
-    padding: 0 8px;
+    font-size: 14px;
+    line-height: 34px;
+    padding: 0 12px;
 
     .material-icons {
       margin-top: 6px;
       font-size: 16px;
     }
   }
+
+  &.md-tiny {}
+  &.md-large {}
 
   &.md-fab {
     &.md-tiny {
@@ -280,6 +320,12 @@ md-backdrop {
   .md-dialog-content {
     height: auto;
   }
+}
+
+// Md-dialog
+
+md-dialog {
+  border-radius: 0;
 }
 
 .md-dialog-container {
@@ -532,9 +578,58 @@ p.global-error {
 .md-scroll-mask {
 }
 
+// Md-card
+
+md-card {
+  border: 1px solid $color-gray-lighter;
+  box-shadow: 0 1px 0 $color-gray-lighter;
+  border-radius: 0;
+
+  &.md-card-nomargin {
+    margin: 0;
+  }
+
+  &.md-card-rounded {
+    border-radius: 3px;
+  }
+}
+
 
 /* CUSTOM COLORS
    ============================= */
+
+.md-primary {
+
+  // Button
+  &.md-button {
+    color: $color-primary;
+
+    md-icon {
+      color: $color-primary !important;
+    }
+
+  &.md-raised {
+    color: $color-white;
+    background-color: $color-accent !important;
+
+    md-icon {
+      color: $color-white !important;
+      }
+    }
+  }
+
+  // Checkbox
+  &.md-checked {
+    .md-icon {
+      border-color: $color-primary!important;
+      background-color: $color-primary !important;
+    }
+    .md-ink-ripple {
+      color: $color-primary !important;
+    }
+  }
+}
+
 
 .md-gray {
 
@@ -610,6 +705,24 @@ p.global-error {
   }
 }
 
+.md-blue {
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    color: $color-white !important;
+    background-color: $color-primary !important;
+  }
+}
+
+.md-cancel {
+
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    color: $text-secondary !important;
+  }
+}
+
 
 /* GLOBAL LOADER
    ============================= */
@@ -620,14 +733,3 @@ p.global-error {
  .main-loader .md-bar {
      height: 3px !important;
  }
-
-/* FOOTER - DISCLAIMER
-   ============================= */
-
-footer.disclaimer {
-  padding: 36px;
-  color: $color-gray-light;
-  text-align: center;
-  font-size: 10px;
-  line-height: 14px;
-}
