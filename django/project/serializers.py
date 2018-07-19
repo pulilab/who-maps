@@ -1,11 +1,12 @@
 import re
 
-from django.core import mail
 from django.conf import settings
+from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import ugettext, override
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import ReadOnlyField
 from rest_framework.validators import UniqueValidator
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -257,7 +258,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                     "language": profile.language
                 })
 
-            mail.send_mail(
+            send_mail(
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
@@ -275,7 +276,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                     "language": profile.language
                 })
 
-            mail.send_mail(
+            send_mail(
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
