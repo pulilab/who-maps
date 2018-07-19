@@ -19,7 +19,6 @@ jobs:
           keys:
           - v2-dependencies-b-{{ checksum "django/requirements.txt" }}
           - v2-dependencies-b-
-
       - run:
           working_directory: ~/who-maps/frontend
           command: yarn install
@@ -42,6 +41,10 @@ jobs:
 
 
       # run tests!
+
+      - run:
+          command: service postgresql start
+
       - run:
           working_directory: ~/who-maps/frontend
           command: yarn test
@@ -52,9 +55,9 @@ jobs:
 
       - run:
           working_directory: ~/who-maps/django
-          command: python3 manage.py migrate
+          command: DATABASE_URL=localhost python3 manage.py migrate
 
       - run:
           working_directory: ~/who-maps/django
-          command: CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+          command: DATABASE_URL=localhost CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 
