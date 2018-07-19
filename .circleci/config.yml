@@ -44,3 +44,15 @@ jobs:
           working_directory: ~/who-maps/frontend
           command: yarn test
 
+      - run:
+          working_directory: ~/who-maps/django
+          command: flake8
+
+      - run:
+          working_directory: ~/who-maps/django
+          command: python manage.py migrate
+
+      - run:
+          working_directory: ~/who-maps/django
+          command: CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+
