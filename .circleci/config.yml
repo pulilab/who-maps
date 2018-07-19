@@ -55,7 +55,7 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             . ../venv/bin/activate
-            flake8 ./
+            flake8
 
       - run:
           name: backend migrations
