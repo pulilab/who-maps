@@ -17,8 +17,8 @@ jobs:
           - v1-dependencies-f-
       - restore_cache:
           keys:
-          - v3-dependencies-b-{{ checksum "django/requirements.txt" }}
-          - v3-dependencies-b-
+          - v4-dependencies-b-{{ checksum "django/requirements.txt" }}
+          - v4-dependencies-b-
       - run:
           working_directory: ~/who-maps/frontend
           command: yarn install
@@ -40,7 +40,7 @@ jobs:
           key: v1-dependencies-f-{{ checksum "frontend/package.json" }}
           paths:
             - ~/who-maps/venv
-          key: v3-dependencies-b-{{ checksum "django/requirements.txt" }}
+          key: v4-dependencies-b-{{ checksum "django/requirements.txt" }}
 
 
       # run tests!
