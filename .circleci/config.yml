@@ -17,8 +17,8 @@ jobs:
           - v1-dependencies-f-
       - restore_cache:
           keys:
-          - v1-dependencies-b-{{ checksum "django/requirements.txt" }}
-          - v1-dependencies-b-
+          - v2-dependencies-b-{{ checksum "django/requirements.txt" }}
+          - v2-dependencies-b-
 
       - run:
           working_directory: ~/who-maps/frontend
@@ -38,7 +38,7 @@ jobs:
           key: v1-dependencies-f-{{ checksum "frontend/package.json" }}
           paths:
             - /usr/local/lib/python3.6/dist-packages
-          key: v1-dependencies-b-{{ checksum "django/requirements.txt" }}
+          key: v2-dependencies-b-{{ checksum "django/requirements.txt" }}
 
 
       # run tests!
