@@ -16,3 +16,5 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential yarn postgresql-10 redis-server
 COPY --chown=postgres:postgres  pg_hba.conf /etc/postgresql/10/main
 RUN chmod 644 /etc/postgresql/10/main/pg_hba.conf
+COPY --chown=redis:redis  redis.conf /etc/redis/
+RUN chmod 640 /etc/redis/redis.conf

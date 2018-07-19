@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: pulilab/who-maps-circleci
         environment:
-            REDIS_URL: localhost
+            REDIS_URL: 127.0.0.1
             DATABASE_URL: ''
             CI_RUN: True
             ODK_SYNC_ENABLED: False
