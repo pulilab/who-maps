@@ -7,6 +7,12 @@ jobs:
   build:
     docker:
       - image: pulilab/who-maps-circleci
+        environment:
+            REDIS_URL: localhost
+            DATABASE_URL:
+            CI_RUN: True
+            ODK_SYNC_ENABLED: False
+
     working_directory: ~/who-maps
 
     steps:
@@ -59,22 +65,23 @@ jobs:
             flake8
 
       - run:
-          name: setup postgres
+          name: start services
           working_directory: ~/who-maps/django
           command: |
             service postgresql start
+            service redis start
 
       - run:
           name: backend migrations
           working_directory: ~/who-maps/django
           command: |
             . ../venv/bin/activate
-            DATABASE_URL='' python3 manage.py migrate
+            python3 manage.py migrate
 
       - run:
           name: backend unit tests
           working_directory: ~/who-maps/django
           command: |
             . ../venv/bin/activate
-            DATABASE_URL=localhost CI_RUN=True py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+            py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 

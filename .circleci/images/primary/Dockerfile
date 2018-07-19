@@ -13,6 +13,6 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update
 RUN apt-get install -y nodejs
-RUN apt-get install -y build-essential yarn postgresql-10
+RUN apt-get install -y build-essential yarn postgresql-10 redis-server
 COPY --chown=postgres:postgres  pg_hba.conf /etc/postgresql/10/main
 RUN chmod 644 /etc/postgresql/10/main/pg_hba.conf
