@@ -1,14 +1,15 @@
 <template>
-  <div class="SingupComponent" >
-
-    <h1 class="Heading">Sign Up</h1>
-
-    <el-card>
+  <div class="SingupComponent">
+    <el-card :body-style="{ padding: '0px' }">
+      <div slot="header">
+        Sign up for Digital Health Atlas
+      </div>
       <!-- Form -->
-      <div v-if="!showSuccess">
-        <div class="SubHeading">1. Select your role</div>
-
-        <div class="Type">
+      <div
+        v-if="!showSuccess"
+        class="Roles">
+        <fieldset class="Type">
+          <div class="Legend">1. Select your role</div>
           <div
             :class="['AccountTypeSelector', {'active': accountType === 'I', 'inactive': accountType && accountType !== 'I'}]"
             @click="accountType = 'I'">
@@ -30,10 +31,10 @@
             <div class="TypeTitle">Government</div>
             <div class="TypeDescription">Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country.</div>
           </div>
-        </div>
+        </fieldset>
 
-        <div class="Inputs">
-          <div class="SubHeading">2. Fill out the form below</div>
+        <fieldset class="Inputs">
+          <div class="Legend">2. Fill out the form below</div>
 
           <el-form
             :model="signupForm"
@@ -56,20 +57,30 @@
                 v-model="signupForm.password2"
                 type="password" />
             </el-form-item>
-
           </el-form>
-
-          <div class="Actions">
-            <div class="Left">
-              <p>Already signed up?</p>
-              <nuxt-link :to="localePath('index-login')">Login here</nuxt-link>
-            </div>
+        </fieldset>
+        <el-row
+          type="flex"
+          justify="space-between"
+          align="middle"
+          class="cardActions">
+          <el-col
+            :span="6"
+            class="secondaryAction">
+            <h6>Already signed up?</h6>
+            <nuxt-link :to="localePath('index-login')">Login here</nuxt-link>
+          </el-col>
+          <el-col
+            :span="6"
+            class="primaryAction">
             <el-button
               :disabled="!inputsFilledOkay"
-              @click="signup">Sign up now</el-button>
-          </div>
-
-        </div>
+              type="primary"
+              @click="signup">
+              Sign up now
+            </el-button>
+          </el-col>
+        </el-row>
       </div>
 
       <!-- <translate>This is required</translate>
@@ -140,28 +151,19 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
   .SingupComponent {
-    width: 500px;
-    margin: 0 auto 48px auto;
+    width: @cardSizeSmall;
+    margin: 0 auto;
 
-    .Heading, .SubHeading {
-      text-align: center;
-    }
-
-    .Heading {
-      font-size: 32px;
-      margin: 48px 0;
-    }
-
-    .SubHeading {
-      text-transform: uppercase;
-      font-size: 22px;
-      margin: 24px 0;
+    fieldset {
+      padding: 40px 80px;
     }
 
     .AccountTypeSelector {
       cursor: pointer;
-      height: 200px;
 
       .TypeTitle {
         font-size: 18px;
@@ -181,11 +183,20 @@ export default {
       }
     }
 
-    .Actions {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+    .cardActions {
+      .secondaryAction {
+        h6 {
+          margin: 0 0 2px;
+          font-size: @fontSizeSmall;
+          font-weight: 400;
+          color: @colorTextSecondary;
+        }
+        a {
+          font-size: @fontSizeSmall;
+          font-weight: 700;
+          color: @colorBrandPrimary;
+        }
+      }
     }
   }
 </style>
