@@ -9,7 +9,7 @@ jobs:
       - image: pulilab/who-maps-circleci
         environment:
             REDIS_URL: localhost
-            DATABASE_URL:
+            DATABASE_URL: ''
             CI_RUN: True
             ODK_SYNC_ENABLED: False
 
