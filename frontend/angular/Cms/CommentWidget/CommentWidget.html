@@ -1,4 +1,4 @@
-<div md-whiteframe="2" class="comment" ng-class="{'expanded': vm.expanded}" layout="row" layout-align="start start">
+<md-card class="comment md-card-rounded" ng-class="{'expanded': vm.expanded}" layout="row" layout-align="start start">
   <div class="avatar-img">
     <span ng-hide="vm.item.avatar" class="no-avatar"></span>
     <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
@@ -8,7 +8,7 @@
     <div class="comment-info">
       <small class="time">
         {{vm.prettifyDate(vm.comment)}}
-        <span class="sep">|</span>
+        <span class="sep"></span>
         <!-- visible if user is able to edit -->
         <span ng-show="vm.isAuthor()">
           <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
@@ -47,5 +47,4 @@
       </md-button>
     </div>
   </div>
-
-</div>
+</md-card>

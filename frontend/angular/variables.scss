@@ -5,30 +5,28 @@
 
 $page-min-width:         1140px;
 $page-max-width:         1440px;
-
 $navigation-width:       280px;
 
-$color-primary:          #283593;
-$color-accent:           #FF8F00;
-$color-primary-muted:    #BEC2DE;
-
-$color-page-background:  #E3EAEF;
+$color-primary:          #008DC9;
+$color-accent:           #D86422;
+$color-primary-muted:    #1C5F89;
 
 $color-black:            #000000;
 $color-gray:             #757575;
 $color-gray-light:       #9D9D9D;
-$color-gray-lighter:     #E0E0E0;
-$color-gray-lightest:    #F5F5F5;
+$color-gray-lighter:     #D6D6D6;
+$color-gray-lightest:    #F2F2F2;
 $color-white:            #FFFFFF;
 
-$text-primary:           #212121;
-$text-secondary:         #757575;
-$text-disabled:          #9D9D9D;
+$text-primary:           #474747;
+$text-secondary:         #6D6D6D;
+$text-disabled:          #B9B9B9;
 
 $color-red:              #F44336;
 $color-red-green:        #FB8C00;
 $color-green:            #7CB342;
 $color-blue:             #039BE5;
+$color-lightblue:        #E9F1F7;
 
 $color-map-light:        #E3E5EE;
 $color-map-dark:         #C8CAD5;
@@ -46,7 +44,7 @@ $color-axis4:            #FAA806;
 $color-axis5:            #558B2F;
 $color-axis6:            #744E42;
 
-$button-padding-wide: 0 rem(1.600) !default;
+$color-page-background:  $color-gray-lightest;
 
 $button-fab-tiny-width: rem(2.400) !default;
 $button-fab-tiny-height: rem(2.400) !default;

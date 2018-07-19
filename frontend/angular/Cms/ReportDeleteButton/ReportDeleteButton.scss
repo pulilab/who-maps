@@ -6,24 +6,22 @@
 cms-report-delete-button {
   display: inline-block;
 
-
   .button-wrapper {
 
     .flag-button {
-      position: relative;
-      left: -4px;
       min-width: auto;
       width: auto;
       margin: 0;
-      padding: 0 4px;
-      line-height: 20px;
+      padding: 0;
+      font-size: 12px;
+      line-height: 24px;
       background-color: transparent !important;
 
       md-icon {
-        position: relative;
-        top: 1px;
         float: left;
-        font-size: 20px;
+        margin: 0;
+        font-size: 16px;
+        line-height: 24px;
         color: $text-disabled;
         transition: $swift-ease-out;
       }
@@ -32,14 +30,14 @@ cms-report-delete-button {
         width: 0;
         overflow: hidden;
         color: $text-disabled;
-        line-height: 22px;
+        line-height: 24px;
         opacity: 0;
         transition: $swift-ease-out;
       }
 
       .delete-text {
-        line-height: 22px;
-        display: inline-block;
+        font-size: 12px;
+        line-height: 24px;
         color: $text-disabled;
         transition: $swift-ease-out;
       }
@@ -82,9 +80,9 @@ cms-report-delete-button {
 
       .warning-text {
         @include text-truncate();
-        font-weight: 500;
-        line-height: 36px;
-        color: #fff;
+        font-weight: 700;
+        line-height: 42px;
+        color: $color-white;
       }
 
       .warning-actions {
@@ -102,7 +100,7 @@ cms-report-delete-button {
 
           md-icon {
             font-size: 20px;
-            color: #fff;
+            color: $color-white;
           }
         }
       }

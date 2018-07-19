@@ -80,7 +80,7 @@
             <div class="selected-file-thumbnail">
               <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
             </div>
-            <div class="md-button md-gray" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
+            <div class="md-button md-small" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
                  ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100" ngf-before-model-change="vm.beforeImageSelect()" ng-change="vm.imageSelected()">
               <md-icon>insert_photo</md-icon>
               <translate>Add cover image</translate>
@@ -96,11 +96,11 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <md-button ng-click="vm.cancel()">
+      <md-button class="md-cancel" ng-click="vm.cancel()">
         <translate>Cancel</translate>
       </md-button>
       <span flex></span>
-      <md-button  class="md-primary md-raised" ng-disabled="vm.disableSubmit" type="submit">
+      <md-button class="md-primary md-raised" ng-disabled="vm.disableSubmit" type="submit">
         <translate>Submit</translate>
       </md-button>
     </md-dialog-actions>
