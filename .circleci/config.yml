@@ -32,14 +32,14 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r django/requirements.txt
 
       - save_cache:
           paths:
             - frontend/node_modules
           key: v1-dependencies-f-{{ checksum "frontend/package.json" }}
           paths:
-            - ~/who-maps/django/venv
+            - ~/who-maps/venv
           key: v3-dependencies-b-{{ checksum "django/requirements.txt" }}
 
 
