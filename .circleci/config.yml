@@ -69,7 +69,7 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             service postgresql start
-            service redis start
+            service redis-server start
 
       - run:
           name: backend migrations
