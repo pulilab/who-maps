@@ -86,9 +86,10 @@ jobs:
             py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 
   deploy:
-    machine: true
-      docker:
-        - image: pulilab/who-maps-circleci
+
+    docker:
+      - image: pulilab/who-maps-circleci
+    steps:
       - checkout
       - run:
           name: Install fabric
