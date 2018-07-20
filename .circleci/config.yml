@@ -87,14 +87,14 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:2-jessie
+      - image: pulilab/who-maps-circleci
     working_directory: ~/who-maps
     steps:
       - checkout
       - run:
           name: Install fabric
           command: |
-            pip install fabric
+            pip install Fabric3==1.10.2.post3
 
       - run:
           name: Deploy Over SSH
