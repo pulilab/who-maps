@@ -87,7 +87,7 @@ jobs:
 
   deploy:
     docker:
-      - image: pulilab/who-maps-circleci
+      - image: circleci/python:2-jessie
     working_directory: ~/who-maps
     steps:
       - checkout
