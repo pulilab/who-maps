@@ -194,7 +194,7 @@ export default {
 
     .AccountTypeSelector {
       float: left;
-      margin: 10px 0 30px;
+      margin: 15px 0 30px;
       cursor: pointer;
       transition: @transitionFade;
 

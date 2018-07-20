@@ -85,7 +85,5 @@ export default {
     fieldset {
       padding: 40px 80px;
     }
-
   }
-
 </style>
