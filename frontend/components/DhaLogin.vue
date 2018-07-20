@@ -2,7 +2,7 @@
   <div class="LoginComponent">
     <el-card :body-style="{ padding: '0px' }">
       <div slot="header">
-        Login to Digital Health Atlas
+        Log in to Digital Health Atlas
       </div>
 
       <el-form>
