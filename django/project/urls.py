@@ -15,8 +15,8 @@ urlpatterns = [
         name="project-publish"),
     url(r"^projects/draft/$",
         view=views.ProjectDraftViewSet.as_view({
-        'post': 'create'
-    }), name="project-create"),
+            'post': 'create'
+        }), name="project-create"),
     url(r"^projects/draft/(?P<pk>\d+)/$",
         view=views.ProjectDraftViewSet.as_view({
             'put': 'update'
@@ -24,8 +24,8 @@ urlpatterns = [
         name="project-draft"),
     url(r"^projects/member-of/$",
         view=views.ProjectListViewSet.as_view({
-        'get': 'list'
-    }), name="project-list"),
+            'get': 'list'
+        }), name="project-list"),
     url(r"^projects/by-view/map/(?P<country_id>\d+)/$",
         view=views.ProjectPublicViewSet.as_view({
             'get': 'by_district'
@@ -74,11 +74,11 @@ urlpatterns = [
         name="project-groups"),
     url(r"^projects/csv-export/$",
         view=views.CSVExportViewSet.as_view({
-        'post': 'create'
-    }), name="csv-export"),
+            'post': 'create'
+        }), name="csv-export"),
     url(r"^projects/map/$",
         view=views.MapProjectCountryViewSet.as_view({
-        'get': 'list',
-    }),
+            'get': 'list',
+        }),
         name="project-map"),
 ]
