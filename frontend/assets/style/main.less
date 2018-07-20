@@ -23,7 +23,7 @@
 
 body {
   margin: 0;
-  background-color: @colorGrayLighter;
+  background-color: @colorGrayLightest;
   // Brand typo
   font-family: Arial, sans-serif;
   text-rendering: optimizeLegibility;
@@ -62,7 +62,7 @@ body {
   .cardActions {
     padding: 12px;
     border-top: 1px solid @colorGrayLight;
-    background-color: @colorGrayLighter;
+    background-color: @colorGrayLightest;
 
     button, .el-button {
       margin: 0;
@@ -76,9 +76,7 @@ body {
 
 // Button
 
-.el-button {
-  border-radius: 0 !important;
-}
+.el-button {}
 
 // Form
 
@@ -92,11 +90,20 @@ fieldset {
     font-size: @fontSizeBase;
     font-weight: 700;
     color: @colorTextMuted;
+    text-transform: uppercase;
   }
 }
 
 .el-form {
+  .el-form-item__label {
+    color: @colorTextSecondary;
+  }
+
   .el-input {
     font-family: Arial, sans-serif;
+
+    .el-input__inner {
+      font-weight: 700;
+    }
   }
 }

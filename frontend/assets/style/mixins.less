@@ -1,3 +1,27 @@
+.textTruncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noTextTruncate() {
+  overflow: visible;
+  text-overflow: inherit;
+  white-space: normal;
+}
+
+.clearfix() {
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+}
+
+.hidden {
+  display: none;
+}
+
 .limitWidthWithPadding() {
   max-width: @screenWidthLimit;
   margin: 0 auto;

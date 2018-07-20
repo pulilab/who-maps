@@ -10,17 +10,33 @@
         class="Roles">
         <fieldset class="Type">
           <div class="Legend">1. Select your role</div>
+          <!-- TODO -->
+          <!-- Add class '.active' one of these initially -->
           <div
             :class="['AccountTypeSelector', {'active': accountType === 'I', 'inactive': accountType && accountType !== 'I'}]"
             @click="accountType = 'I'">
-            <div class="TypeTitle">Implementer or Technologist</div>
+            <div class="CheckboxRole">
+              <span class="IconRole">
+                <img src="/icon-role-implementer.svg">
+              </span>
+              <i class="el-icon-circle-check-outline"/>
+              <i class="el-icon-circle-check"/>
+              <div class="TypeTitle">I'm an <b>Implementer <span>or</span> Technologist</b></div>
+            </div>
             <div class="TypeDescription">How can I better scale-up my implementation? Are there tips and resources that I should consider to improve my implementation? Sign up to complete the digital version of the MAPS toolkit and track the performance of your implementation.</div>
           </div>
 
           <div
             :class="['AccountTypeSelector', {'active': accountType === 'D', 'inactive': accountType && accountType !== 'D'}]"
             @click="accountType = 'D'">
-            <div class="TypeTitle">Financial Investor</div>
+            <div class="CheckboxRole">
+              <span class="IconRole">
+                <img src="/icon-role-investor.svg">
+              </span>
+              <i class="el-icon-circle-check-outline"/>
+              <i class="el-icon-circle-check"/>
+              <div class="TypeTitle">I'm a <b>Financial Investor</b></div>
+            </div>
             <!-- FYI: In next line @col97: Irregular whitespace was found by linter in the translateable text, it was corrected, but... -->
             <div class="TypeDescription">What are the different projects within your portfolio? Sign up to access a visual dashboard displaying the performance metrics of projects within your portfolio.</div>
           </div>
@@ -28,7 +44,14 @@
           <div
             :class="['AccountTypeSelector', {'active': accountType === 'G', 'inactive': accountType && accountType !== 'G'}]"
             @click="accountType = 'G'">
-            <div class="TypeTitle">Government</div>
+            <div class="CheckboxRole">
+              <span class="IconRole">
+                <img src="/icon-role-government.svg">
+              </span>
+              <i class="el-icon-circle-check-outline"/>
+              <i class="el-icon-circle-check"/>
+              <div class="TypeTitle">I work within <b>Government</b></div>
+            </div>
             <div class="TypeDescription">Who is implementing digital health interventions in your country? Sign up to access interactive maps and performance metrics on the different implementation in your country.</div>
           </div>
         </fieldset>
@@ -76,6 +99,7 @@
             <el-button
               :disabled="!inputsFilledOkay"
               type="primary"
+              size="medium"
               @click="signup">
               Sign up now
             </el-button>
@@ -160,22 +184,90 @@ export default {
 
     fieldset {
       padding: 40px 80px;
+      border-bottom: 1px solid @colorGrayLighter;
+      .clearfix();
+
+      &:last-of-type {
+        border: 0;
+      }
     }
 
     .AccountTypeSelector {
+      float: left;
+      margin: 10px 0 30px;
       cursor: pointer;
+      transition: @transitionFade;
+
+      &:last-of-type {
+        margin: 0;
+      }
+
+      .CheckboxRole {
+        position: relative;
+      }
 
       .TypeTitle {
-        font-size: 18px;
+        font-size: @fontSizeMedium;
+        margin: 0 0 20px 80px;
+
+        b span {
+          font-weight: 400;
+        }
       }
 
       .TypeDescription {
-        font-size: 14px;
+        font-size: @fontSizeSmall;
+        line-height: 18px;
+        color: @colorTextSecondary;
+      }
+
+      .IconRole {
+        position: absolute;
+        top: 50%;
+        left: 30px;
+        display: inline-block;
+        transform: translateY(-50%);
+
+        img {
+          -webkit-filter: grayscale(1);
+          filter: grayscale(1);
+        }
+      }
+
+      i {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: @transitionFade;
+
+        &.el-icon-circle-check-outline {
+          z-index: 1;
+          opacity: 1;
+          color: @colorGrayLight;
+        }
+
+        &.el-icon-circle-check {
+          z-index: 2;
+          opacity: 0;
+          color: @colorBrandPrimary;
+        }
       }
 
       &.active {
-        // active properties
         opacity: 1;
+
+        .el-icon-circle-check-outline {
+          opacity: 0;
+        }
+
+        .el-icon-circle-check {
+          opacity: 1;
+        }
+
+        .IconRole img {
+          -webkit-filter: grayscale(0);
+          filter: grayscale(0);
+        }
       }
 
       &.inactive {
@@ -191,6 +283,7 @@ export default {
           font-weight: 400;
           color: @colorTextSecondary;
         }
+
         a {
           font-size: @fontSizeSmall;
           font-weight: 700;
