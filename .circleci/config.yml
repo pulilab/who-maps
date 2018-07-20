@@ -86,9 +86,9 @@ jobs:
             py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 
   deploy:
-
     docker:
       - image: pulilab/who-maps-circleci
+    working_directory: ~/who-maps
     steps:
       - checkout
       - run:
