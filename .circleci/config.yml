@@ -92,8 +92,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install fabric
+          name: Install fabric and pycrypto
           command: |
+            pip install pycrypto
             pip install Fabric3==1.10.2.post3
 
       - run:
