@@ -271,7 +271,11 @@ export default {
       }
 
       &.inactive {
-        opacity: .6;
+        opacity: .5;
+
+        &:hover {
+          opacity: .8;
+        }
       }
     }
 
