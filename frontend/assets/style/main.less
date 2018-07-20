@@ -1,28 +1,109 @@
 // --------------------------------------------------
-// Import: core stuff
+// Import core stuff
 // --------------------------------------------------
+
 @import "variables.less";
 @import "mixins.less";
 
+
+
 // --------------------------------------------------
-// Import: other stuff
+// Import other stuff
 // --------------------------------------------------
+
 @import "../../node_modules/leaflet/dist/leaflet.css";
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
 
+
+
 // --------------------------------------------------
 // General layout
 // --------------------------------------------------
+
 body {
-  margin: 0 0;
+  margin: 0;
+  background-color: @colorGrayLightest;
+  // Brand typo
+  font-family: Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-.HeaderBtn {
-  display: block;
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  width: 80px;
-  text-decoration: none;
+
+
+// --------------------------------------------------
+// Components customisation
+// --------------------------------------------------
+
+// Card
+
+.el-card {
+  border: 1px solid  @colorGrayLight;
+  border-radius: 0;
+  box-shadow: 0 1px 0 @colorGrayLight !important;
+
+  &.rounded {
+    border-radius: 3px;
+  }
+
+  .el-card__header {
+    padding: 0 20px;
+    height: 48px;
+    line-height: 48px;
+    font-size: @fontSizeLarge;
+    font-weight: 700;
+    text-align: center;
+    color: @colorWhite;
+    border: none;
+    background-color: @colorBrandPrimary;
+  }
+
+  .cardActions {
+    padding: 12px;
+    border-top: 1px solid @colorGrayLight;
+    background-color: @colorGrayLightest;
+
+    button, .el-button {
+      margin: 0;
+    }
+
+    .primaryAction .el-button {
+      float: right;
+    }
+  }
+}
+
+// Button
+
+.el-button {}
+
+// Form
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  .Legend {
+    margin: 0 0 20px;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    color: @colorTextMuted;
+    text-transform: uppercase;
+  }
+}
+
+.el-form {
+  .el-form-item__label {
+    color: @colorTextSecondary;
+  }
+
+  .el-input {
+    font-family: Arial, sans-serif;
+
+    .el-input__inner {
+      font-weight: 700;
+    }
+  }
 }
