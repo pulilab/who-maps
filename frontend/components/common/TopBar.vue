@@ -178,7 +178,10 @@ export default {
     }
 
     .LogoSmall {
+      position: relative;
+      top: -3px;
       height: 30px;
+      margin-left: 20px;
     }
   }
 </style>
