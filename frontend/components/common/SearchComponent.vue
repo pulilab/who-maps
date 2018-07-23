@@ -19,7 +19,6 @@ export default {
 
     .el-icon-search {
       font-size: 24px;
-      font-weight: 700;
       color: @colorWhite;
     }
   }

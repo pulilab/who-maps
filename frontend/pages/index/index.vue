@@ -12,8 +12,14 @@
     </div>
 
     <div class="InfoSignupContainer">
-      <info-box class="InfoBox" />
-      <signup-box />
+      <el-row type="flex">
+        <el-col class="InfoBoxWrapper">
+          <info-box />
+        </el-col>
+        <el-col class="SignupBoxWrapper">
+          <signup-box />
+        </el-col>
+      </el-row>
     </div>
 
     <about-section class="AboutSection" />
@@ -54,15 +60,45 @@ export default {
 
     .InfoSignupContainer {
       .limitPageWidth();
-      margin-top: 36px;
-      margin-bottom: 36px;
-      display: flex;
-      justify-content: space-between;
-      align-items: stretch;
+      margin: 40px 0;
+
+      > .el-row {
+        align-items: stretch;
+      }
+
+      .InfoBoxWrapper {
+        min-width: 360px;
+        max-width: 360px;
+        margin-right: 30px;
+        background-color: @colorWhite;
+      }
+
+      .SignupBoxWrapper {
+        background-color: @colorBrandPrimary;
+      }
 
       .InfoBox {
-        margin-right: 28px;
       }
+
+      .SignupBox {
+        padding: 0 40px;
+      }
+    }
+
+    h2 {
+      font-size: @fontSizeHeading;
+    }
+
+    h3 {
+      font-size: @fontSizeTitle;
+    }
+
+    h4 {
+      font-size: @fontSizeLarger;
+    }
+
+    h6 {
+      font-size: @fontSizeMedium;
     }
   }
 </style>

@@ -122,6 +122,7 @@ export default {
       margin: 0 10px;
       padding: 0 10px;
       font-size: @fontSizeBase;
+      font-weight: 700;
       line-height: 24px;
       color: @colorBrandPrimary;
       text-decoration: none;

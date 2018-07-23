@@ -5,7 +5,7 @@
       class="WelcomeBox">
 
       <h2>Welcome!</h2>
-      <h5>{{ $store.state.system.landing_page_defaults.cover_text }}</h5>
+      <h6>{{ $store.state.system.landing_page_defaults.cover_text }}</h6>
 
       <el-button
         icon="el-icon-close"
@@ -52,18 +52,19 @@ export default {
 
       h2 {
         font-size: @fontSizeHeading;
+        margin: 20px 0;
       }
 
-      h5 {
-        font-size: @fontSizeMedium;
+      h6 {
         line-height: 24px;
         font-weight: 400;
+        margin: 10px 0 15px;
       }
 
       .CloseWelcomeBox {
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 16px;
+        right: 16px;
       }
     }
   }

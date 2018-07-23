@@ -1,6 +1,6 @@
 <template>
-  <div class="SingupBox" >
-    <div>Signup box</div>
+  <div class="SingupBox">
+    &nbsp;
   </div>
 </template>
 
@@ -13,8 +13,6 @@ export default {
 <style lang="less">
 
   .SingupBox {
-    flex: 1;
-    background-color: blue;
   }
 
 </style>
