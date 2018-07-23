@@ -141,13 +141,14 @@ export const actions = {
       await dispatch('loadGeoJSON');
     }
   },
-  async loadGeoJSON ({commit, getters}, id) {
+  async loadGeoJSON ({commit, getters}) {
     const country = getters.getCountry;
     const { data } = await this.$axios.get(country.map_file);
     Object.freeze(data);
     commit('UPDATE_GEO_JSON', data);
   },
   setCountryCenter ({commit}, value) {
+    value = value ? { ...value } : null;
     commit('SET_COUNTRY_CENTER', value);
   },
   setFirstSubLevel ({commit}, value) {
@@ -220,7 +221,7 @@ export const mutations = {
     state.country = {id, map_file};
   },
   SET_COUNTRY_CENTER: (state, data) => {
-    state.countryCenter = { ...data };
+    state.countryCenter = data;
   },
   SET_FIRST_SUB_LEVEL: (state, data) => {
     state.firstSubLevel = data;
