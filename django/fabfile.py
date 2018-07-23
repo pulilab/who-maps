@@ -152,13 +152,6 @@ def deploy():
             time.sleep(1)
             # _import_geodata()
 
-        # handle frontend
-        with cd(env.frontend_root):
-            run('yarn')
-            run('yarn dist{}'.format(env.webpack_options))
-            run('yarn clean-server-folder')
-            run('yarn copy-to-server')
-
     tear_down()
 
 
