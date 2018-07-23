@@ -44,30 +44,30 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/main.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.LandingPage {
-  .MapBoxContainer {
-    position: relative;
+  .LandingPage {
+    .MapBoxContainer {
+      position: relative;
 
-    .WelcomeBox {
-      position: absolute;
-      bottom: 0;
-      z-index: 400;
+      .WelcomeBox {
+        position: absolute;
+        bottom: 0;
+        z-index: 400;
+      }
+    }
+    .InfoSignupContainer {
+      .limitPageWidth();
+      margin-top: 36px;
+      margin-bottom: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+
+      .InfoBox {
+        margin-right: 28px;
+      }
     }
   }
-  .InfoSignupContainer {
-    .limitPageWidth();
-    margin-top: 36px;
-    margin-bottom: 36px;
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-
-    .InfoBox {
-      margin-right: 28px;
-    }
-  }
-}
-
 </style>

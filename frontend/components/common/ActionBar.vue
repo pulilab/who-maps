@@ -1,10 +1,17 @@
 <template>
   <div class="ActionBar">
-    <div class="InnerActionBar">
-      <div class="Title">Digital Health Atlas</div>
-
-      <search-component />
-    </div>
+    <el-row
+      type="flex"
+      justify="space-between"
+      align="middle"
+      class="InnerActionBar">
+      <el-col class="Title">
+        <h3>Digital Health Atlas</h3>
+      </el-col>
+      <el-col class="SearchComponent">
+        <search-component />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -19,20 +26,27 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/main.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.ActionBar {
-  background-color: lightblue;
+  .ActionBar {
+    background-color: @colorBrandPrimary;
 
-  .InnerActionBar {
-    .limitPageWidth();
+    .InnerActionBar {
+      .limitPageWidth();
+      height: 48px;
+    }
 
-    height: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    .Title {
+      h3 {
+        margin: 0;
+        font-size: @fontSizeLarge;
+        color: @colorWhite;
+      }
+    }
+
+    .SearchComponent {
+      width: auto;
+    }
   }
-
-  // .Title {}
-}
 </style>

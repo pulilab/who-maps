@@ -21,9 +21,18 @@
 // General layout
 // --------------------------------------------------
 
+html {
+  min-width: 100%;
+  min-height: 100%;
+  background-color: @colorWhite;
+}
+
 body {
-  margin: 0;
+  .limitPageWidth();
+  min-height: 100%;
+  padding: 0;
   background-color: @colorGrayLightest;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   // Brand typo
   font-family: Arial, sans-serif;
   text-rendering: optimizeLegibility;

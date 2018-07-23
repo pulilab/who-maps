@@ -19,19 +19,17 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.LanguageSelector {
-  display: flex;
-  justify-content: flex-end;
+  .LanguageSelector {
+    .clearfix();
 
-  .LanguageLink {
-    margin: 0 4px;
-
-    .nuxt-link-exact-active {
-      color: red;
+    .LanguageLink {
+      display: inline-block;
+      float: left;
     }
   }
-}
 
 </style>

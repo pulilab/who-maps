@@ -19,15 +19,24 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/main.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.FooterBg {
-  background-color: lightgray;
+  .FooterBg {
+    background-color: @colorBrandGrayDark;
+    align-items: flex-end;
 
-  .Footer {
-    .limitPageWidth();
-    padding: 24px 0;
-    text-align: center;
+    .Footer {
+      .limitPageWidth();
+      padding: 40px;
+      font-size: @fontSizeSmall;
+      line-height: 18px;
+      text-align: center;
+      color: @colorTextMuted;
+
+      a {
+        color: inherit;
+      }
+    }
   }
-}
 </style>
