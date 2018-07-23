@@ -137,7 +137,9 @@ export const actions = {
     } catch (e) {
       console.log('Saved data is corrupted or missing');
     }
-    await dispatch('loadGeoJSON');
+    if (data.map_file) {
+      await dispatch('loadGeoJSON');
+    }
   },
   async loadGeoJSON ({commit, getters}, id) {
     const country = getters.getCountry;
