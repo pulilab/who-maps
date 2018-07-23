@@ -10,7 +10,7 @@ COPY . /usr/src/app/
 RUN echo "NODE_ENV=production" >> .env
 
 ADD package.json yarn.lock /tmp/
-RUN cd /tmp && yarn --production
+RUN cd /tmp && yarn
 RUN cd /usr/src/app && ln -s /tmp/node_modules
 
 RUN yarn build
