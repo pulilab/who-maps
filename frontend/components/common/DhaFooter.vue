@@ -28,7 +28,7 @@ export default {
 
     .Footer {
       .limitPageWidth();
-      padding: 40px;
+      padding: 40px 160px;
       font-size: @fontSizeSmall;
       line-height: 18px;
       text-align: center;

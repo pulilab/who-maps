@@ -50,13 +50,8 @@ export default {
   .LandingPage {
     .MapBoxContainer {
       position: relative;
-
-      .WelcomeBox {
-        position: absolute;
-        bottom: 0;
-        z-index: 400;
-      }
     }
+
     .InfoSignupContainer {
       .limitPageWidth();
       margin-top: 36px;

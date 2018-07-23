@@ -45,6 +45,12 @@ body {
 // Components customisation
 // --------------------------------------------------
 
+// Icon
+
+i[class*="el-icon-"] {
+  font-weight: 700;
+}
+
 // Card
 
 .el-card {
@@ -85,7 +91,15 @@ body {
 
 // Button
 
-.el-button {}
+.el-button {
+  &.el-button--default {
+    &:hover {
+      color: @colorWhite;
+      border-color: lighten(@colorBrandPrimary, 10%);
+      background-color: lighten(@colorBrandPrimary, 10%);
+    }
+  }
+}
 
 // Form
 

@@ -103,14 +103,13 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
   .LandingMap {
+    display: block;
     height: 500px;
-    background-color: lightgray;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    background-color: @colorGrayLight;
   }
-
 </style>

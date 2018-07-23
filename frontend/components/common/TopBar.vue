@@ -1,6 +1,7 @@
 <template>
+  <!-- TODO -->
+  <!-- Add toggle class '.TopBarMin' if user scrolled down more than 180px -->
   <div class="TopBar">
-
     <el-row
       type="flex"
       justify="space-between"
@@ -122,7 +123,6 @@ export default {
       padding: 0 10px;
       font-size: @fontSizeBase;
       line-height: 24px;
-      font-weight: 700;
       color: @colorBrandPrimary;
       text-decoration: none;
 
