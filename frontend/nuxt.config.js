@@ -80,7 +80,7 @@ const config = {
   ],
   proxy: {},
   axios: {
-    baseURL: 'http://django:8000/',
+    baseURL: 'http://nginx:9010/',
     browserBaseURL: '/',
     credentials: true,
     retry: false
