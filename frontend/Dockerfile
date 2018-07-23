@@ -1,4 +1,4 @@
-FROM node:8.11.1-alpine
+FROM node:9.10.0-alpine
 # This is to allow yarn to install from github
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
@@ -6,13 +6,12 @@ RUN apk update && apk upgrade && \
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-RUN echo "NODE_ENV=production" >> .env
-
 ADD package.json yarn.lock /tmp/
-RUN cd /tmp && yarn
+RUN cd /tmp && yarn --silent --non-interactive
 RUN cd /usr/src/app && ln -s /tmp/node_modules
 
 COPY . /usr/src/app/
+RUN echo "NODE_ENV=production" >> .env
 RUN yarn build
 
 # start command
