@@ -14,12 +14,6 @@ export const getters = {
 
   getProfile: state => {
     if (state.profile) {
-      // const countries = CountryModule.getCountriesList(state);
-      // let country;
-      // if (countries && countries.length > 0) {
-      //   country = { ...countries.find(c => c.id === state.profile.country) };
-      // }
-      // return { ...state.profile, country };
       return { ...state.profile };
     }
   },
@@ -31,12 +25,10 @@ export const actions = {
 
   async doLogin ({ commit, dispatch }, { username, password }) {
     const { data } = await this.$axios.post('/api/api-token-auth/', { username, password });
-    // exports.storeData(data, username);
     commit('SET_USER', data);
     commit('SET_TOKEN', data.token);
     saveToken(data.token, data.user_profile_id);
     await dispatch('loadProfile', data.user_profile_id);
-    // await dispatch(ProjectModule.loadUserProjects());
     await dispatch('system/loadOrganisations', {}, {root: true});
   },
 
@@ -44,8 +36,6 @@ export const actions = {
     const { data } = await this.$axios.post('/api/rest-auth/registration/',
       { account_type, password1, password2, email });
     data.token = data.key;
-    // data.is_superuser = false;
-    // exports.storeData(data, email);
     commit('SET_USER', data);
     commit('SET_TOKEN', data.token);
     saveToken(data.token, data.user_profile_id);
@@ -54,10 +44,6 @@ export const actions = {
   },
 
   doLogout ({ commit }) {
-    deleteToken();
-    // dispatch({ type: 'CLEAR_USER_PROJECTS' });
-    // dispatch({ type: 'CLEAR_TOOLKIT_DATA' });
-    // dispatch({ type: 'CLEAR_CMS_DATA' });
     commit('SET_USER', null);
     commit('SET_PROFILE', null);
     commit('SET_TOKEN', null);
