@@ -7,5 +7,6 @@ RUN npm install -g mapshaper
 
 RUN mkdir /src
 WORKDIR /src
-ADD . /src/
+ADD requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+ADD . /src/
