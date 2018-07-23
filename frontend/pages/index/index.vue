@@ -57,7 +57,7 @@ export default {
     }
   }
   .InfoSignupContainer {
-    .limitWidthWithPadding();
+    .limitPageWidth();
     margin-top: 36px;
     margin-bottom: 36px;
     display: flex;

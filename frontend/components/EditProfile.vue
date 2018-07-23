@@ -235,7 +235,7 @@ export default {
 }
 
 .ProfileCard {
-  .limitWidthWithPadding;
+  .limitPageWidth;
   margin-bottom: 48px;
 
   .ProfileCardHeader {

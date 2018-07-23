@@ -43,7 +43,7 @@ export default {
 @import "../../assets/style/main.less";
 
 .AboutSection {
-  .limitWidthWithPadding();
+  .limitPageWidth();
   height: 300px;
   display: flex;
   justify-content: space-between;

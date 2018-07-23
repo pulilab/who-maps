@@ -77,7 +77,7 @@ export default {
 
 .TopBar {
 
-  .limitWidthWithPadding();
+  .limitPageWidth();
   display: flex;
   justify-content: space-between;
 

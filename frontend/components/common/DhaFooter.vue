@@ -25,7 +25,7 @@ export default {
   background-color: lightgray;
 
   .Footer {
-    .limitWidthWithPadding();
+    .limitPageWidth();
     padding: 24px 0;
     text-align: center;
   }

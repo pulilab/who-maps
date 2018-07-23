@@ -25,7 +25,7 @@ export default {
   background-color: lightblue;
 
   .InnerActionBar {
-    .limitWidthWithPadding();
+    .limitPageWidth();
 
     height: 50px;
     display: flex;
