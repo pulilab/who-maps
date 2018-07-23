@@ -42,6 +42,7 @@
                 <l-tilelayer
                   url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
                 />
+
                 <l-feature-group @layeradd="geoJsonLoadHandler">
                   <l-geo-json
                     v-if="firstSubLevelMap && firstSubLevelMap.length > 0"
@@ -49,8 +50,9 @@
                     :geojson="firstSubLevelMap"
                   />
                 </l-feature-group>
+
                 <l-marker
-                  v-if="showCenterPin"
+                  v-if="showCenterPin && countryCenter"
                   :lat-lng="countryCenter"
                   :draggable="true"
                   @moveend="countryCenterMoveHandler"
