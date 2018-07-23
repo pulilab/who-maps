@@ -1,55 +1,69 @@
 <template>
+  <!-- TODO -->
+  <!-- Add toggle class '.TopBarMin' if user scrolled down more than 180px -->
   <div class="TopBar">
+    <el-row
+      type="flex"
+      justify="space-between"
+      class="TopBarInner"
+    >
 
-    <div class="LogoHolder">
-      <img
-        :src="countrySpecific ? countryLogoURL : '/mock/placeholder-who-logo.jpg'"
-        :alt="countrySpecific ? 'Country logo' : 'WHO Logo'"
-        class="Logo">
-    </div>
-
-    <div class="RightPart">
-
-      <div
-        v-if="countrySpecific"
-        class="CountryHolder">
-        <img
-          src="/static/flags/sl.png"
-          alt="country flag"
-          class="CountryFlag">
-        <div class="CountryName">Sierra Leone</div>
-      </div>
-
-      <language-selector v-if="!countrySpecific"/>
-
-      <div class="Separator" />
-
-      <div class="AuthLinks">
+      <el-col class="LogoHolder">
         <div>
-          <nuxt-link
-            :to="localePath('index-signup')"
-            class="HeaderBtn">Signup</nuxt-link>
+          <img
+            :src="countrySpecific ? countryLogoURL : '/logo-who-blue.svg'"
+            :alt="countrySpecific ? 'Country logo' : 'WHO logo'"
+            class="Logo">
         </div>
+      </el-col>
 
-        <div>
-          <nuxt-link
-            :to="localePath('index-login')"
-            class="HeaderBtn">Login</nuxt-link>
-        </div>
-      </div>
+      <el-col class="RightPart">
+        <el-row
+          type="flex"
+          justify="end">
+          <el-col
+            v-if="countrySpecific"
+            class="CountryHolder">
+            <img
+              src="/static/flags/sl.png"
+              alt="country flag"
+              class="CountryFlag">
+            <div class="CountryName">Sierra Leone</div>
+          </el-col>
 
-      <div
-        v-if="countrySpecific"
-        class="Separator" />
+          <el-col v-if="!countrySpecific">
+            <language-selector />
+          </el-col>
 
-      <img
-        v-if="countrySpecific"
-        class="SmallWHOLogo"
-        alt="WHO logo small"
-        src="/mock/placeholder-who-logo.jpg">
+          <el-col class="AuthLinks">
+            <div class="Separator" />
+            <div>
+              <nuxt-link
+                :to="localePath('index-signup')"
+                class="HeaderBtn">Signup</nuxt-link>
+            </div>
 
-    </div>
+            <div>
+              <nuxt-link
+                :to="localePath('index-login')"
+                class="HeaderBtn">Login</nuxt-link>
+            </div>
+          </el-col>
 
+          <el-col
+            v-if="countrySpecific"
+            class="CountrySpecificMenu">
+            <div class="Separator" />
+            <div>
+              <img
+                class="LogoSmall"
+                alt="WHO logo small"
+                src="/logo-who-blue.svg">
+            </div>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -73,57 +87,101 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/main.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.TopBar {
+  .TopBar {
 
-  .limitWidthWithPadding();
-  display: flex;
-  justify-content: space-between;
-
-  .RightPart {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .LogoHolder {
-    padding: 20px 0;
-
-    .Logo {
-      height: 50px;
-    }
-  }
-
-  .Separator {
-    width: 1px;
-    height: 18px;
-    background-color: gray;
-    margin: 0 4px;
-  }
-
-  .CountryHolder {
-    display: flex;
-    justify-content: flex-end;
-
-    .CountryFlag {
-      height: 20px;
+    .TopBarInner {
+      .limitPageWidth();
+      height: 130px;
+      background-color: @colorWhite;
+      align-items: stretch;
     }
 
-    // .CountryName {}
-  }
+    .LogoHolder {
+      align-self: center;
+      width: auto;
 
-  .AuthLinks {
-    display: flex;
-    justify-content: flex-end;
+      .Logo {
+        height: 54px;
+      }
+    }
 
-    div {
-      margin: 0 4px;
+    .RightPart {
+      padding: 16px 0;
+
+      > .el-row > .el-col {
+        width: auto;
+      }
+    }
+
+    .HeaderBtn {
+      position: relative;
+      height: 24px;
+      margin: 0 10px;
+      padding: 0 10px;
+      font-size: @fontSizeBase;
+      font-weight: 700;
+      line-height: 24px;
+      color: @colorBrandPrimary;
+      text-decoration: none;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        display: inline-block;
+        width: 100%;
+        height: 4px;
+        background-color: @colorWhite;
+        transform: translateY(-4px);
+        transition: @transitionAll;
+      }
+
+      &:hover {
+        &::before {
+          background-color: @colorBrandPrimary;
+          transform: translateY(0);
+        }
+      }
+
+      &.nuxt-link-exact-active {
+        color: @colorBrandAccent;
+
+        &::before {
+          background-color: @colorBrandAccent;
+          transform: translateY(0);
+        }
+      }
+    }
+
+    .Separator {
+      .SeparatorStyle();
+      margin: 0 10px;
+    }
+
+    .CountryHolder {
+      .CountryFlag {
+        height: 20px;
+      }
+    }
+
+    .AuthLinks,
+    .CountrySpecificMenu {
+      .clearfix();
+
+      > div {
+        float: left;
+      }
+    }
+
+    .LogoSmall {
+      position: relative;
+      top: -3px;
+      height: 30px;
+      margin-left: 20px;
     }
   }
-
-  .SmallWHOLogo {
-    height: 20px;
-    margin: 5px 0;
-  }
-}
 </style>

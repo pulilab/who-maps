@@ -7,16 +7,24 @@
     <action-bar />
 
     <div class="MapBoxContainer">
+      <!-- TODO -->
+      <!-- Here I strongly recommend to disable the zooming by mousewheel option on map... -->
       <landing-map />
       <welcome-box />
     </div>
 
     <div class="InfoSignupContainer">
-      <info-box class="InfoBox" />
-      <signup-box />
+      <el-row type="flex">
+        <el-col class="InfoBoxWrapper">
+          <info-box />
+        </el-col>
+        <el-col class="SignupBoxWrapper">
+          <signup-box />
+        </el-col>
+      </el-row>
     </div>
 
-    <about-section class="AboutSection" />
+    <about-section />
   </div>
 </template>
 
@@ -44,30 +52,57 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/main.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.LandingPage {
-  .MapBoxContainer {
-    position: relative;
+  .LandingPage {
+    .MapBoxContainer {
+      position: relative;
+    }
 
-    .WelcomeBox {
-      position: absolute;
-      bottom: 0;
-      z-index: 400;
+    .InfoSignupContainer {
+      .limitPageWidth();
+      margin: 40px 0;
+
+      > .el-row {
+        align-items: stretch;
+      }
+
+      .InfoBoxWrapper {
+        min-width: 360px;
+        max-width: 360px;
+        margin-right: 30px;
+        background-color: @colorWhite;
+      }
+
+      .SignupBoxWrapper {
+        background-color: @colorBrandPrimary;
+      }
+
+      .InfoBox {
+      }
+
+      .SignupBox {
+        padding: 0 40px;
+      }
+    }
+
+    h2 {
+      font-size: @fontSizeHeading;
+    }
+
+    h3 {
+      font-size: @fontSizeTitle;
+    }
+
+    h4 {
+      font-size: @fontSizeLarge;
+    }
+
+    h6 {
+      font-size: @fontSizeMedium;
+      line-height: 24px;
+      font-weight: 400;
     }
   }
-  .InfoSignupContainer {
-    .limitWidthWithPadding();
-    margin-top: 36px;
-    margin-bottom: 36px;
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-
-    .InfoBox {
-      margin-right: 28px;
-    }
-  }
-}
-
 </style>
