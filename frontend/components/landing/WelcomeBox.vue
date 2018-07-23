@@ -51,13 +51,10 @@ export default {
       box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
 
       h2 {
-        font-size: @fontSizeHeading;
         margin: 20px 0;
       }
 
       h6 {
-        line-height: 24px;
-        font-weight: 400;
         margin: 10px 0 15px;
       }
 

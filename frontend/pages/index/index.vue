@@ -7,6 +7,8 @@
     <action-bar />
 
     <div class="MapBoxContainer">
+      <!-- TODO -->
+      <!-- Here I strongly recommend to disable the zooming by mousewheel option on map... -->
       <landing-map />
       <welcome-box />
     </div>
@@ -22,7 +24,7 @@
       </el-row>
     </div>
 
-    <about-section class="AboutSection" />
+    <about-section />
   </div>
 </template>
 
@@ -94,11 +96,13 @@ export default {
     }
 
     h4 {
-      font-size: @fontSizeLarger;
+      font-size: @fontSizeLarge;
     }
 
     h6 {
       font-size: @fontSizeMedium;
+      line-height: 24px;
+      font-weight: 400;
     }
   }
 </style>

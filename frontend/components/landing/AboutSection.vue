@@ -1,35 +1,36 @@
 <template>
   <div class="AboutSection">
-    <div class="Left">
-      <h4>About DHA</h4>
-      <p>{{ $store.state.system.landing_page_defaults.permanent_footer }}</p>
-    </div>
-    <div class="Right">
-      <h4>Global Support to DHA</h4>
-      <div class="SupporterLogos">
-
-        <div class="Partner">
-          <span
-            class="PartnerLogo"
-            style="background-image: url('/static/partners/who-logo.png')" />
+    <el-row type="flex">
+      <el-col class="AboutSectionLeft">
+        <h4>About DHA</h4>
+        <p>{{ $store.state.system.landing_page_defaults.permanent_footer }}</p>
+      </el-col>
+      <el-col class="AboutSectionRight">
+        <h4>Global Support to DHA</h4>
+        <div class="SupporterLogos">
+          <div class="Partner">
+            <img
+              src="/static/partners/who-logo.png"
+              alt="WHO">
+          </div>
+          <div class="Partner">
+            <img
+              src="static/partners/logo-hrp-new-cropped.png"
+              alt="HRP">
+          </div>
+          <div class="Partner">
+            <img
+              src="/static/partners/logo-path-color.png"
+              alt="PATH">
+          </div>
+          <div class="Partner">
+            <img
+              src="/static/partners/logo-digital_square.png"
+              alt="Digital Square">
+          </div>
         </div>
-        <div class="Partner">
-          <span
-            class="PartnerLogo"
-            style="background-image: url('/static/partners/logo-hrp-new-cropped.png')" />
-        </div>
-        <div class="Partner">
-          <span
-            class="PartnerLogo"
-            style="background-image: url('/static/partners/logo-path-color.png')" />
-        </div>
-        <div class="Partner">
-          <span
-            class="PartnerLogo"
-            style="background-image: url('/static/partners/logo-digital_square.png')" />
-        </div>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -40,44 +41,51 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/main.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-.AboutSection {
-  .limitPageWidth();
-  height: 300px;
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  .AboutSection {
+    .limitPageWidth();
+    background-color: @colorWhite;
 
-  .Left {
-    width: 300px;
-    background-color: lightblue;
-    margin-right: 28px;
-  }
+    > .el-row {
+      align-items: stretch;
+    }
 
-  .Right {
-    flex: 1 0;
-    background-color: lightgreen;
+    h4 {
+      color: @colorTextPrimary;
+      margin: 0 0 20px;
+    }
 
-    .Partner {
-      box-sizing: border-box;
-      float: left;
-      width: 25%;
-      height: 80px;
-      margin: 0 0 50px;
-      padding: 0 50px 0 0;
+    p {
+      font-size: @fontSizeSmall;
+      line-height: 18px;
+      color: @colorTextPrimary;
+    }
 
-      .PartnerLogo {
-        float: left;
-        display: block;
-        width: 100%;
-        height: 100%;
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center center;
+    .AboutSectionLeft {
+      min-width: 360px;
+      max-width: 360px;
+      margin-right: 30px;
+      padding: 40px;
+    }
+
+    .AboutSectionRight {
+      padding: 40px 30px;
+
+      .SupporterLogos {
+        .clearfix();
+
+        .Partner {
+          float: left;
+          margin: 20px 80px 40px 0;
+
+          img {
+            width: auto;
+            height: 60px;
+          }
+        }
       }
     }
   }
-}
-
 </style>
