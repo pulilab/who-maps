@@ -13,7 +13,7 @@ export default function ({ $axios, store: { state, getters, dispatch } }) {
   $axios.interceptors.response.use(res => {
     return res;
   }, error => {
-    if (error.response.status === 401) {
+    if (error && error.response && error.response.status === 401) {
       dispatch('user/doLogout');
     }
     return Promise.reject(error);
