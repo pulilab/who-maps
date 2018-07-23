@@ -44,6 +44,7 @@ export default {
         font-size: @fontSizeSmall;
         line-height: 18px;
         color: @colorTextPrimary;
+        margin: 0 0 20px;
       }
     }
   }

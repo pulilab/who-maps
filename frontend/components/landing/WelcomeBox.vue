@@ -55,7 +55,7 @@ export default {
       }
 
       h6 {
-        margin: 10px 0 15px;
+        margin: 10px 0 20px;
       }
 
       .CloseWelcomeBox {
