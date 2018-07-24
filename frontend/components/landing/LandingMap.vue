@@ -57,7 +57,11 @@ export default {
   data () {
     return {
       zoom: 3,
-      mapOptions: { zoomControl: false, attributionControl: false }
+      mapOptions: {
+        zoomControl: false,
+        attributionControl: false,
+        scrollWheelZoom: false
+      }
     };
   },
   computed: {
