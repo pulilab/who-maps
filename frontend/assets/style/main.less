@@ -21,9 +21,18 @@
 // General layout
 // --------------------------------------------------
 
+html {
+  min-width: 100%;
+  min-height: 100%;
+  background-color: @colorWhite;
+}
+
 body {
-  margin: 0;
+  .limitPageWidth();
+  min-height: 100%;
+  padding: 0;
   background-color: @colorGrayLightest;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   // Brand typo
   font-family: Arial, sans-serif;
   text-rendering: optimizeLegibility;
@@ -33,8 +42,28 @@ body {
 
 
 // --------------------------------------------------
+// Leaflet plugin customisation
+// --------------------------------------------------
+
+.leaflet-right .leaflet-control {
+  margin-right: 40px;
+}
+
+.leaflet-bottom .leaflet-control {
+  margin-bottom: 40px;
+}
+
+
+
+// --------------------------------------------------
 // Components customisation
 // --------------------------------------------------
+
+// Icon
+
+i[class*="el-icon-"] {
+  font-weight: 700;
+}
 
 // Card
 
@@ -76,7 +105,15 @@ body {
 
 // Button
 
-.el-button {}
+.el-button {
+  &.el-button--default {
+    &:hover {
+      color: @colorWhite;
+      border-color: lighten(@colorBrandPrimary, 10%);
+      background-color: lighten(@colorBrandPrimary, 10%);
+    }
+  }
+}
 
 // Form
 
