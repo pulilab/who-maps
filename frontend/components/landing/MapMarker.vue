@@ -7,14 +7,23 @@
       class="MapMarker"
     >
       <l-popup
+        ref="tooltip"
         :options="popupOptions"
       >
-        <el-button
-          class="CountryViewBtn"
-          icon="el-icon-search"
-          @click="openCountryView">
-          Country View
-        </el-button>
+        <div
+          class="MouseEventSpy"
+          @mouseenter="mouseEnterHandler"
+          @mouseleave="mouseLeaveHandler"
+        >
+          <el-button
+            class="CountryViewBtn"
+            icon="el-icon-search"
+            @click="openCountryView">
+            <span v-show="popUpHover">
+              Country View
+            </span>
+          </el-button>
+        </div>
       </l-popup>
     </l-marker>
   </div>
@@ -49,8 +58,10 @@ export default {
   },
   data () {
     return {
+      popUpHover: false,
       popupOptions: {
-        className: `DetailsPopup ${this.additionalTooltipClass}`
+        className: `DetailsPopup ${this.additionalTooltipClass}`,
+        closeButton: false
       }
     };
   },
@@ -72,6 +83,18 @@ export default {
     },
     openCountryView () {
       this.toggleCountry(this.pin.id);
+    },
+    mouseEnterHandler (event) {
+      this.popUpHover = true;
+      this.$nextTick(() => {
+        this.$refs.tooltip.mapObject.update();
+      });
+    },
+    mouseLeaveHandler (event) {
+      this.popUpHover = false;
+      this.$nextTick(() => {
+        this.$refs.tooltip.mapObject.update();
+      });
     }
   }
 };
@@ -80,5 +103,7 @@ export default {
 <style lang="scss">
     .CountryViewBtn {
     }
+
+    .MouseEventSpy {}
 
 </style>
