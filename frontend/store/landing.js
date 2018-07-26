@@ -2,7 +2,8 @@ export const state = () => ({
   countries: [],
   projects: [],
   geoJsonLibrary: {},
-  selectedCountries: []
+  selectedCountries: [],
+  currentZoom: 3
 });
 
 export const getters = {
@@ -36,6 +37,12 @@ export const getters = {
   },
   getSelectedCountries (state) {
     return state.selectedCountries;
+  },
+  getCurrentZoom (state) {
+    return state.currentZoom;
+  },
+  getCountryDetails: (state, getters) => id => {
+    return getters.getCountries.find(c => c.id === id);
   }
 };
 
@@ -64,6 +71,9 @@ export const actions = {
       Object.freeze(data);
       commit('UPDATE_JSON_LIBRARY', {id, data});
     }
+  },
+  setCurrentZoom ({commit}, value) {
+    commit('SET_CURRENT_ZOOM', value);
   }
 };
 export const mutations = {
@@ -81,5 +91,8 @@ export const mutations = {
   },
   RM_SELECTED_COUNTRY: (state, index) => {
     state.selectedCountries.splice(index, 1);
+  },
+  SET_CURRENT_ZOOM: (state, value) => {
+    state.currentZoom = value;
   }
 };
