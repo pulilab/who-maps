@@ -3,41 +3,32 @@
 
     <h1 class="Heading">Edit User profile</h1>
 
-    <el-card class="ProfileCard">
-      <div
-        slot="header"
-        class="ProfileCardHeader">
-        <div class="Title">General info</div>
-        <div class="Update">Last update: {{ lastModifiedDateStr }}</div>
-      </div>
+    <el-card
+      :body-style="{ padding: '0px' }"
+      class="ProfileCard">
 
-      <el-form @submit.native.prevent>
+      <el-form
+        label-position="top"
+        class="FormPart"
+        @submit.native.prevent>
+        <el-form-item label="My name">
+          <el-input
+            v-model="name"
+            type="text" />
+        </el-form-item>
 
-        <el-form-item>
-          <el-col :span="11">
-            <el-form-item label="My name">
-              <el-input
-                v-model="name"
-                type="text" />
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="2"><br></el-col>
-
-          <el-col :span="11">
-            <el-form-item label="My email address">
-              <el-input
-                v-model="email"
-                disabled
-                type="text" />
-            </el-form-item>
-          </el-col>
+        <el-form-item label="My email address">
+          <el-input
+            v-model="email"
+            disabled
+            type="text" />
         </el-form-item>
 
         <el-form-item label="Organisation name">
           <el-autocomplete
             v-model="organisation"
-            :fetch-suggestions="orgSuggestions" />
+            :fetch-suggestions="orgSuggestions"
+            class="full-width" />
         </el-form-item>
 
         <p v-if="newOrganisation">You're about to make a new organisation. Are you sure you can't find the one you were looking for?</p>
@@ -45,39 +36,34 @@
           v-if="newOrganisation"
           @click="addOrganisation(organisation)">Make new organisation: {{ organisation }}</el-button>
 
-        <el-form-item>
-          <el-col :span="11">
-            <el-form-item label="Country">
-              <el-select v-model="country">
-                <el-option
-                  v-for="ctr in countries"
-                  :key="ctr.id"
-                  :label="ctr.name"
-                  :value="ctr.id" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="2"><br></el-col>
-
-          <el-col :span="11">
-            <el-form-item label="Site language">
-              <el-select v-model="language">
-                <el-option
-                  v-for="lng in languages"
-                  :key="lng.name"
-                  :label="lng.name"
-                  :value="lng.code" />
-              </el-select>
-            </el-form-item>
-          </el-col>
+        <el-form-item label="Country">
+          <el-select
+            v-model="country"
+            class="full-width">
+            <el-option
+              v-for="ctr in countries"
+              :key="ctr.id"
+              :label="ctr.name"
+              :value="ctr.id" />
+          </el-select>
         </el-form-item>
 
+        <el-form-item label="Site language">
+          <el-select
+            v-model="language"
+            class="full-width">
+            <el-option
+              v-for="lng in languages"
+              :key="lng.name"
+              :label="lng.name"
+              :value="lng.code" />
+          </el-select>
+        </el-form-item>
       </el-form>
 
       <div class="Actions">
-        <el-button @click="dismissChanges">dismiss changes</el-button>
-        <el-button @click="updateProfile">save profile</el-button>
+        <el-button @click="dismissChanges">Dismiss changes</el-button>
+        <el-button @click="updateProfile">Save</el-button>
       </div>
     </el-card>
 
@@ -115,10 +101,6 @@ export default {
       languages: 'system/getLanguages',
       countries: 'landing/getCountries'
     }),
-
-    lastModifiedDateStr () {
-      return this.profile.modified.split('T')[0];
-    },
 
     newOrganisation () {
       return this.organisation && !this.organisations.find(org => org.name === this.organisation);
@@ -228,20 +210,33 @@ export default {
 <style lang="less">
 @import "../assets/style/main.less";
 
-.Heading {
-  text-align: center;
-  font-size: 32px;
-  margin: 48px 0;
-}
+.EditProfile {
 
-.ProfileCard {
-  .limitPageWidth;
-  margin-bottom: 48px;
+  .Heading {
+    text-align: center;
+    font-size: 32px;
+    margin: 48px 0;
+  }
 
-  .ProfileCardHeader {
+  .ProfileCard {
+    margin-bottom: 48px;
+  }
+
+  .FormPart {
+    padding: 60px 100px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .Actions {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 15px;
+    background-color: gray;
   }
 }
 </style>
