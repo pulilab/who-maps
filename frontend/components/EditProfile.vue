@@ -1,7 +1,7 @@
 <template>
   <div class="EditProfile">
 
-    <h1 class="Heading">Edit User profile</h1>
+    <h1 class="Heading">Edit my profile</h1>
 
     <el-card
       :body-style="{ padding: '0px' }"
