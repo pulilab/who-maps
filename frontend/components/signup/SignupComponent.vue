@@ -10,7 +10,6 @@
         class="Roles">
         <fieldset class="Type">
           <div class="Legend">1. Select your role</div>
-          <!-- TODO -->
           <div
             :class="['AccountTypeSelector', {'active': accountType === 'I', 'inactive': accountType && accountType !== 'I'}]"
             @click="accountType = 'I'">
