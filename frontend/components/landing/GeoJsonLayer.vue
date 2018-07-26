@@ -1,11 +1,12 @@
 <template>
   <div class="GeoJsonLayer">
     <l-feature-group
-      v-for="geojson in geojsonList"
-      :key="geojson.id"
+      ref="geoJsonGroup"
       @layeradd="layerAddHandler"
     >
       <l-geo-json
+        v-for="geojson in geojsonList"
+        :key="geojson.id"
         :geojson="geojson"
       />
     </l-feature-group>
@@ -14,6 +15,7 @@
 
 <script>
 import * as topojson from 'topojson';
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -27,6 +29,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currentZoom: 'landing/getCurrentZoom'
+    }),
     geojsonList () {
       return this.list.map(id => {
         const topo = this.collection[id];
@@ -37,6 +42,17 @@ export default {
           return geo;
         }
       });
+    },
+    showGeoJsonLayer () {
+      return this.currentZoom > 5;
+    }
+  },
+  watch: {
+    showGeoJsonLayer: {
+      immediate: false,
+      handler (show) {
+        this.computeGeoJsonLayerStyle(show);
+      }
     }
   },
   methods: {
@@ -44,6 +60,11 @@ export default {
       if (event && event.layer) {
         this.$root.$emit('map:fit-on', event.layer.getBounds());
       }
+    },
+    computeGeoJsonLayerStyle (show) {
+      const fill = show;
+      const stroke = show;
+      this.$refs.geoJsonGroup.mapObject.setStyle(() => ({fill, stroke}));
     }
   }
 };

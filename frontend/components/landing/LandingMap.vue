@@ -6,6 +6,7 @@
         :zoom="zoom"
         :world-copy-jump="true"
         :options="mapOptions"
+        @zoomend="zoomChangeHandler"
       >
         <l-tilelayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
@@ -16,22 +17,14 @@
           ref="markerCluster"
           :options="clusterOptions"
         >
-          <map-marker
+          <country-center-marker
             v-for="pin in countriesPin"
             :key="pin.id"
             :pin="pin"
           />
         </v-marker-cluster>
 
-        <map-marker
-          v-for="pin in districtPins"
-          :key="pin.id"
-          :pin="pin"
-        />
-
-        <geo-json-layer
-          :list="selectedCountries"
-          :collection="geoJson"/>
+        <country-details-overlay />
 
         <l-control-zoom
           position="bottomright"
@@ -45,14 +38,14 @@
 import { mapGetters, mapActions } from 'vuex';
 
 import NoSSR from 'vue-no-ssr';
-import MapMarker from './MapMarker';
-import GeoJsonLayer from './GeoJsonLayer';
+import CountryCenterMarker from './CountryCenterMarker';
+import CountryDetailsOverlay from './CountryDetailsOverlay';
 
 export default {
   components: {
     'no-ssr': NoSSR,
-    MapMarker,
-    GeoJsonLayer
+    CountryCenterMarker,
+    CountryDetailsOverlay
   },
   data () {
     return {
@@ -67,11 +60,8 @@ export default {
   computed: {
     ...mapGetters({
       countriesPin: 'landing/getLandingPagePins',
-      geoJson: 'landing/getGeoJsonLibrary',
-      selectedCountries: 'landing/getSelectedCountries',
-      districtPins: 'landing/getDistrictPins'
+      selectedCountries: 'landing/getSelectedCountries'
     }),
-
     clusterOptions () {
       return {
         disableClusteringAtZoom: 8,
@@ -91,7 +81,9 @@ export default {
     this.$root.$off(['map:center-on', 'map:fit-on']);
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      setCurrentZoom: 'landing/setCurrentZoom'
+    }),
     mapReady () {},
     centerOn (latlng, zoom = 13) {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
@@ -102,6 +94,9 @@ export default {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
         this.$refs.mainMap.mapObject.fitBounds(bounds);
       }
+    },
+    zoomChangeHandler (event) {
+      this.setCurrentZoom(event.target.getZoom())
     }
   }
 };
