@@ -27,7 +27,7 @@ export default {
     align-items: flex-end;
 
     .Footer {
-      .limitPageWidth();
+      // .limitPageWidth();
       padding: 40px 160px;
       font-size: @fontSizeSmall;
       line-height: 18px;

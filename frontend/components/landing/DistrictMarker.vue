@@ -1,20 +1,17 @@
 <template>
   <div>
     <l-marker
+      v-if="currentZoom > 5"
       :options="pin.options"
       :lat-lng="pin.latlng"
       :icon="icon"
       class="MapMarker"
     >
       <l-popup
+        ref="tooltip"
         :options="popupOptions"
       >
-        <el-button
-          class="CountryViewBtn"
-          icon="el-icon-search"
-          @click="openCountryView">
-          Country View
-        </el-button>
+        10
       </l-popup>
     </l-marker>
   </div>
@@ -49,29 +46,38 @@ export default {
   },
   data () {
     return {
+      popUpHover: false,
       popupOptions: {
-        className: `DetailsPopup ${this.additionalTooltipClass}`
+        className: `DetailsPopup ${this.additionalTooltipClass}`,
+        closeButton: false
       }
     };
   },
   computed: {
     ...mapGetters({
-      geoJson: 'landing/getGeoJsonLibrary'
-
+      geoJson: 'landing/getGeoJsonLibrary',
+      currentZoom: 'landing/getCurrentZoom'
     }),
     paintTooltip () {
       return this.$slots.default && (this.hovered || this.forceHovered);
     }
   },
   methods: {
-    ...mapActions({
-      toggleCountry: 'landing/toggleCountry'
-    }),
+    ...mapActions({}),
     emitMarkerClick () {
       this.$emit('marker-click');
     },
-    openCountryView () {
-      this.toggleCountry(this.pin.id);
+    mouseEnterHandler (event) {
+      this.popUpHover = true;
+      this.$nextTick(() => {
+        this.$refs.tooltip.mapObject.update();
+      });
+    },
+    mouseLeaveHandler (event) {
+      this.popUpHover = false;
+      this.$nextTick(() => {
+        this.$refs.tooltip.mapObject.update();
+      });
     }
   }
 };
@@ -80,5 +86,7 @@ export default {
 <style lang="scss">
     .CountryViewBtn {
     }
+
+    .MouseEventSpy {}
 
 </style>

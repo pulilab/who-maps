@@ -7,8 +7,6 @@
     <action-bar />
 
     <div class="MapBoxContainer">
-      <!-- TODO -->
-      <!-- Here I strongly recommend to disable the zooming by mousewheel option on map... -->
       <landing-map />
       <welcome-box />
     </div>
@@ -79,8 +77,7 @@ export default {
         background-color: @colorBrandPrimary;
       }
 
-      .InfoBox {
-      }
+      // .InfoBox {}
 
       .SignupBox {
         padding: 0 40px;
