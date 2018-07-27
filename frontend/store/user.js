@@ -24,12 +24,18 @@ export const getters = {
 export const actions = {
 
   async doLogin ({ commit, dispatch }, { username, password }) {
-    const { data } = await this.$axios.post('/api/api-token-auth/', { username, password });
-    commit('SET_USER', data);
-    commit('SET_TOKEN', data.token);
-    saveToken(data.token, data.user_profile_id);
-    await dispatch('loadProfile', data.user_profile_id);
-    await dispatch('system/loadOrganisations', {}, {root: true});
+    await this.$axios.post('/api/api-token-auth/', { username, password })
+      .then(async data => {
+        commit('SET_USER', data);
+        commit('SET_TOKEN', data.token);
+        saveToken(data.token, data.user_profile_id);
+        await dispatch('loadProfile', data.user_profile_id);
+        await dispatch('system/loadOrganisations', {}, {root: true});
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject(error);
+      });
   },
 
   async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {
