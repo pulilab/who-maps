@@ -91,17 +91,16 @@ export default {
       this.deleteFormAPIErrors();
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
-          await this.login({
-            username: this.username,
-            password: this.password
-          })
-            .then(() => {
-              this.$router.push(this.localePath('/'));
-            })
-            .catch(err => {
-              this.setFormAPIErrors(err);
-              this.$refs.loginForm.validate(() => {});
+          try {
+            await this.login({
+              username: this.username,
+              password: this.password
             });
+            this.$router.push(this.localePath('/'));
+          } catch (err) {
+            this.setFormAPIErrors(err);
+            this.$refs.loginForm.validate(() => {});
+          }
         }
       });
     }
