@@ -1,6 +1,6 @@
 <template>
   <div class="CountryAdmin">
-
+    <country-chooser />
     <dha-questionaire :label="'Country specific questionaire'"/>
 
     <vue-map-customizer/>
@@ -11,13 +11,15 @@
 <script>
 import VueMapCustomizer from '../../../components/admin/VueMapCustomizer';
 import DhaQuestionaire from '../../../components/admin/DhaQuestionaire';
+import CountryChooser from '../../../components/admin/CountryChooser';
 
 export default {
 
   name: 'CountryAdministrator',
   components: {
     VueMapCustomizer,
-    DhaQuestionaire
+    DhaQuestionaire,
+    CountryChooser
   },
 
   async fetch ({store}) {
