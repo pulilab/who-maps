@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      geoJson: 'landing/getGeoJsonLibrary',
+      geoJson: 'countries/getGeoJsonLibrary',
       currentZoom: 'landing/getCurrentZoom'
     }),
     paintTooltip () {

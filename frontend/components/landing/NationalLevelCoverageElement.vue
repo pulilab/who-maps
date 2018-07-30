@@ -1,7 +1,11 @@
 <template>
   <div class="NationalLevelCoverageElement">
     <el-row type="flex">
-      <el-col :span="4">
+      <el-col
+        :span="4"
+        type="flex"
+        justify="center"
+        align="middle">
         <country-flag
           :code="country.code"
           small
@@ -11,7 +15,7 @@
         +3 National Project
       </el-col>
       <el-col :span="4">
-        <el-btn type="text">Show</el-btn>
+        <el-button type="text">Show</el-button>
       </el-col>
     </el-row>
   </div>
@@ -33,7 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCountryDetails: 'landing/getCountryDetails'
+      getCountryDetails: 'countries/getCountryDetails'
     }),
     country () {
       return this.getCountryDetails(this.id);

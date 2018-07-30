@@ -99,7 +99,7 @@ export default {
       user: 'user/getUser',
       organisations: 'system/getOrganisations',
       languages: 'system/getLanguages',
-      countries: 'landing/getCountries'
+      countries: 'countries/getCountries'
     }),
 
     newOrganisation () {
