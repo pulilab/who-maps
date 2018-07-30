@@ -166,9 +166,7 @@ export default {
         email: this.signupForm.email
       });
       this.showSuccess = true;
-      setTimeout(() => {
-        this.$router.push(this.localePath('index-edit-profile'));
-      }, 5000);
+      this.$router.push(this.localePath('index-edit-profile'));
     }
   }
 };
