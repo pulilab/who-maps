@@ -8,7 +8,8 @@
       <el-form
         ref="loginForm"
         :rules="rules"
-        :model="{ username, password }">
+        :model="{ username, password }"
+        status-icon>
         <fieldset>
           <el-form-item
             label="E-mail"
