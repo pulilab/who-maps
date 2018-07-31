@@ -1,4 +1,4 @@
-@import '../../../node_modules/angular-material/dist/angular-material.scss';
+@import '../../node_modules/angular-material/dist/angular-material.scss';
 @import './variables';
 @import './mixins';
 
@@ -35,6 +35,10 @@
 //
 //
 //
+
+body {
+  margin: 0 auto;
+}
 
 button, select, html, textarea, input {
   font-family: Arial, sans-serif;
