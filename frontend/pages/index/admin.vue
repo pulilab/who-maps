@@ -3,7 +3,7 @@
     <top-bar />
     <action-bar />
     <div :class="['Narrower', {'ForProfile': $route.path.split('/')[3] === 'edit-profile'} ]">
-      <router-view />
+      <nuxt-child />
     </div>
   </div>
 </template>
