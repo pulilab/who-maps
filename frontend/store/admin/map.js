@@ -15,6 +15,9 @@ export const state = () => ({
 export const getters = {
   getSelectedCountry (state, getters, rootState, rootGetters) {
     const user = rootGetters['user/getProfile'];
+    if (!user) {
+      return undefined;
+    }
     if (user.is_superuser) {
       return state.id ? state.id : user.country;
     }
