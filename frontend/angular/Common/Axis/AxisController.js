@@ -23,6 +23,7 @@ class AxisController {
     this.axisScoreClass = this.advanceClassGenerator(axisScorePercentage);
     this.axisCompletionClass = this.advanceClassGenerator(axisCompletion);
     this.domains = this.axis.domains;
+    this.axisName = this.axis.name;
   }
 
   onDestroy () {}
