@@ -36,7 +36,7 @@ class AxisController {
   }
 
   changeDomain (domain) {
-    window.$nuxt.$root.$emit('angularjs:mapsDomainChange', {axisIndex: this.axisIndex, domainIndex: domain.index});
+    window.$nuxt.$root.$emit('angularjs:mapsDomainChange', this.axisIndex, domain.index);
   }
 
   goToAxis () {
