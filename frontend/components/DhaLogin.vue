@@ -30,7 +30,8 @@
               (transformed down 14px to fit next to client error) -->
             <div
               v-if="nonFieldErrors"
-              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}</div>
+              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+            </div>
           </el-form-item>
         </fieldset>
 
