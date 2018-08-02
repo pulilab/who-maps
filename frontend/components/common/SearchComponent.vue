@@ -1,6 +1,6 @@
 <template>
   <div class="SearchDropdown">
-    <i class="el-icon-search" />
+    <i class="el-icon-search bold" />
   </div>
 </template>
 
