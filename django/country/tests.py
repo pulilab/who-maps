@@ -139,7 +139,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['users'], [self.test_user['user_profile_id']])
 
-    def test_country_parnter_logos_create(self):
+    def test_country_partner_logos_create(self):
         url = reverse("partner-logo-list")
         logo = get_temp_image("logo")
         data = {
@@ -149,7 +149,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
-    def test_country_parnter_logos_list(self):
+    def test_country_partner_logos_list(self):
         url = reverse("partner-logo-list")
         logo1 = get_temp_image("logo1")
         data = {
@@ -176,7 +176,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['partner_logos'][2]['country'], self.country.id)
         self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/logo2.png')
 
-    def test_country_parnter_logos_delete(self):
+    def test_country_partner_logos_delete(self):
         url = reverse("partner-logo-list")
         logo = get_temp_image("logo")
         data = {
