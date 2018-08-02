@@ -26,6 +26,37 @@ class CountryListSerializer(serializers.ModelSerializer):
         return 0
 
 
+class PartnerLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PartnerLogo
+        fields = ("id", "country", "image", "image_url",)
+        read_only_fields = ("image_url",)
+
+
+class CountryAdminSerializer(serializers.ModelSerializer):
+    partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Country
+        fields = (
+            "id",
+            "name",
+            "code",
+            "logo",
+            "cover",
+            "cover_text",
+            "footer_title",
+            "footer_text",
+            "users",
+            "partner_logos",
+            "project_approval",
+            "region",
+            "map_data",
+            "map_activated_on",
+        )
+        read_only_fields = ("name", "code", "project_approval", "map_data", "map_activated_on")
+
+
 class LandingPageSerializer(serializers.ModelSerializer):
     partner_logos = serializers.SerializerMethodField()
 

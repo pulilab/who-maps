@@ -1,3 +1,6 @@
+from io import BytesIO
+from PIL import Image
+
 from django.contrib.admin import AdminSite
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.forms.fields import CharField
@@ -223,3 +226,12 @@ class TestUtils(TestCase):
         obj = dict(a=_('test1'), b=_('test2'))
         json = lazyJSONDumps(obj)
         self.assertEqual(json, '{"a": "test1", "b": "test2"}')
+
+
+def get_temp_image(name='test', ext='png'):
+    cover = BytesIO()
+    image = Image.new('RGBA', size=(100, 100))
+    image.save(cover, 'png')
+    cover.name = '{}.{}'.format(name, ext)
+    cover.seek(0)
+    return cover

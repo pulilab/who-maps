@@ -1,16 +1,30 @@
 from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import FormParser, MultiPartParser
 
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
-from .models import Country, CountryField
+from .models import Country, CountryField, PartnerLogo
 from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsWriteSerializer, CountryMapDataSerializer
+    CountryFieldsWriteSerializer, CountryMapDataSerializer, CountryAdminSerializer, PartnerLogoSerializer
 
 
 class CountryListAPIView(generics.ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountryListSerializer
+
+
+class CountryAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountryAdminSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class PartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
+    queryset = PartnerLogo.objects.all()
+    serializer_class = PartnerLogoSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
 
 class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
