@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      geoJson: 'landing/getGeoJsonLibrary'
+      geoJson: 'countries/getGeoJsonLibrary'
 
     }),
     paintTooltip () {

@@ -23,11 +23,8 @@ export const getters = {
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : [];
     return search.map(s => {
-      // const country = CountriesModule.getCountry(state, s.country);
       return {
         ...s
-        // ...ProjectModule.isMemberOrViewer(state, s),
-        // country_name: country ? country.name : ''
       };
     });
   },
@@ -99,14 +96,12 @@ export const actions = {
     commit('SET_DOMAINS', data.domains);
     commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
     commit('SET_LANGUAGES', data.languages);
-    // commit('SET_SEARCH_FILTERS', data.search_filters);
     commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
     commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
     commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
   },
 
   async loadOrganisations ({ commit, rootGetters }) {
-    // const user = getState().user.profile;
     const profile = rootGetters['user/getProfile'];
     if (profile) {
       const { data } = await this.$axios.get(`/api/organisations/`);
@@ -119,24 +114,6 @@ export const actions = {
     await dispatch('loadOrganisations');
     return Promise.resolve(data);
   }
-
-  // searchProjects ({commit }, query, searchFilters) {
-  //     const filters = {
-  //       query
-  //     };
-  //     for (const f in searchFilters) {
-  //       const item = searchFilters[f];
-  //       filters[item.name] = item.value;
-  //     }
-  //     const { data } = await this.$axios.post('/api/search/projects/', filters);
-  //     dispatch({ type: 'SET_PROJECT_SEARCH_RESULT', projects: data });
-  // },
-
-  // unsetSearchedProjects () {
-  //   return dispatch => {
-  //     dispatch({ type: 'UNSET_PROJECT_SEARCH_RESULT' });
-  //   };
-  // },
 };
 
 export const mutations = {

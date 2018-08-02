@@ -96,7 +96,7 @@ export default {
       }
     },
     zoomChangeHandler (event) {
-      this.setCurrentZoom(event.target.getZoom())
+      this.setCurrentZoom(event.target.getZoom());
     }
   }
 };

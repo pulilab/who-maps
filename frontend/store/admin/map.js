@@ -13,6 +13,13 @@ export const state = () => ({
 });
 
 export const getters = {
+  getSelectedCountry (state, getters, rootState, rootGetters) {
+    const user = rootGetters['user/getProfile'];
+    if (user.is_superuser) {
+      return state.id ? state.id : user.country;
+    }
+    return user.country;
+  },
   getCountry (state) {
     return state.country;
   },
@@ -121,10 +128,13 @@ const parseNames = (collection) => {
 };
 
 export const actions = {
-  async loadMapData ({commit, dispatch, rootGetters}) {
-    const id = rootGetters['user/getProfile'].country;
+  async setSelectedCountry ({commit, dispatch}, id) {
+    commit('SET_SELECTED_COUNTRY', id);
+    await dispatch('loadMapData');
+  },
+  async loadMapData ({commit, dispatch, getters}) {
+    const id = getters.getSelectedCountry;
     const { data } = await this.$axios.get(`/api/country-map-data/${id}/`);
-    commit('SET_COUNTRY_ID', id);
     commit('SET_COUNTRY_DATA', data);
     try {
       dispatch('setCountryCenter', data.map_data.polylabel);
@@ -175,7 +185,7 @@ export const actions = {
     const index = current.findIndex(c => c.name === name);
     commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, data: { name, latlng } });
   },
-  async saveMapData ({getters, rootGetters}) {
+  async saveMapData ({getters}) {
     const first = getters.getFirstSubLevelList.map(f => {
       return {
         name: f.name,
@@ -205,7 +215,7 @@ export const actions = {
     };
 
     try {
-      const id = rootGetters['user/getProfile'].country;
+      const id = getters.getSelectedCountry;
       await this.$axios.put(`/api/country-map-data/${id}/`, { map_data: mapData });
     } catch (e) {
       console.error(e);
@@ -214,7 +224,7 @@ export const actions = {
   }
 };
 export const mutations = {
-  SET_COUNTRY_ID: (state, id) => {
+  SET_SELECTED_COUNTRY: (state, id) => {
     state.id = id;
   },
   SET_COUNTRY_DATA: (state, {id, map_file}) => {
